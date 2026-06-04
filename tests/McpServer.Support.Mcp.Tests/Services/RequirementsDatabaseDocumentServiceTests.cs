@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
@@ -134,6 +135,46 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Equal("FR-MCP-903", (await service.GetFrAsync("FR-MCP-903").ConfigureAwait(true))?.Id);
         Assert.Equal("TR-MCP-BATCH-903", (await service.GetTrAsync("TR-MCP-BATCH-903").ConfigureAwait(true))?.Id);
         Assert.Equal("TEST-MCP-903", (await service.GetTestAsync("TEST-MCP-903").ConfigureAwait(true))?.Id);
+    }
+
+    /// <summary>Atomic batch updates preserve structured acceptance criteria through database storage.</summary>
+    [Fact]
+    public async Task UpdateBatchAsync_PreservesAcceptanceCriteria()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("batch-update-ac"));
+        var service = fixture.CreateService();
+        await service.AddFrAsync(new FrEntry("FR-MCP-906", "Existing", "Existing body")).ConfigureAwait(true);
+
+        var result = await service.UpdateBatchAsync(new RequirementsBatchEntries(
+            [
+                new FrEntry(
+                    "FR-MCP-906",
+                    "Updated",
+                    "Updated body",
+                    AcceptanceCriteria:
+                    [
+                        new AcceptanceCriterion
+                        {
+                            Id = "FR-MCP-906-AC001",
+                            Text = "Batch update preserves criteria.",
+                            IsSatisfied = false
+                        }
+                    ])
+            ],
+            [],
+            [])).ConfigureAwait(true);
+
+        var resultCriteria = Assert.Single(Assert.Single(result.Functional).AcceptanceCriteria!);
+        Assert.Equal("FR-MCP-906-AC001", resultCriteria.Id);
+        Assert.Equal("Batch update preserves criteria.", resultCriteria.Text);
+        Assert.False(resultCriteria.IsSatisfied);
+
+        var reloaded = await service.GetFrAsync("FR-MCP-906").ConfigureAwait(true);
+        var persistedCriteria = Assert.Single(reloaded!.AcceptanceCriteria!);
+        Assert.Equal("FR-MCP-906-AC001", persistedCriteria.Id);
+        Assert.Equal("Batch update preserves criteria.", persistedCriteria.Text);
+        Assert.False(persistedCriteria.IsSatisfied);
     }
 
     /// <summary>Atomic batch creation rejects conflicts before committing any later record.</summary>

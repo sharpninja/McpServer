@@ -504,10 +504,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-TEST-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-111 | Tracked | Functional-Requirements.md |
 | FR-MCP-112 | Tracked | Functional-Requirements.md |
+| FR-MCP-113 | Tracked | Functional-Requirements.md |
 | FR-MCP-AGENT-PARITY-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-AGENT-PARITY-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-BATCH-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-LIVE-CODEX-20260603T2014Z | Tracked | Functional-Requirements.md |
 | FR-MCP-LIVE-CODEX-20260603T2015Z | Tracked | Functional-Requirements.md |
+| FR-MCP-PLUGIN-BATCH-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGIN-SKILLS-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-REQAC-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-REQAC-002 | Tracked | Functional-Requirements.md |
@@ -521,6 +524,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-AGENT-PARITY-020..027 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-030 | Tracked | Technical-Requirements.md |
+| TR-MCP-BATCH-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-BATCHTS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-SKILLS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-002 | Tracked | Technical-Requirements.md |
@@ -534,6 +539,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-150 | Tracked | Testing-Requirements.md |
 | TEST-MCP-151 | Tracked | Testing-Requirements.md |
 | TEST-MCP-152 | Tracked | Testing-Requirements.md |
+| TEST-MCP-153 | Tracked | Testing-Requirements.md |
+| TEST-MCP-BATCH-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-002 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-003 | Tracked | Testing-Requirements.md |

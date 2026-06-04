@@ -258,6 +258,125 @@ public class YamlPipeExecutionTests
     }
 
     /// <summary>
+    /// Verifies FR batch update dispatch preserves structured acceptance criteria.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_UpdateFrBatch_PreservesAcceptanceCriteria()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        requirements
+            .UpdateFrBatchAsync(Arg.Any<UpdateFrBatchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new RequirementsBatchResult
+            {
+                Success = true,
+                Operation = "update",
+                Kind = "fr",
+                Total = 1,
+            }));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-batch-update-ac",
+                Method = RequirementsCommandShapes.UpdateFrBatchMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["records"] = new[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["id"] = "FR-MCP-113",
+                            ["title"] = "Plugin requirement batch payload parsing",
+                            ["description"] = "The system SHALL preserve nested acceptance criteria in requirement batch updates.",
+                            ["acceptanceCriteria"] = new[]
+                            {
+                                new Dictionary<string, object?>
+                                {
+                                    ["id"] = "FR-MCP-113-AC001",
+                                    ["text"] = "Batch update preserves nested acceptance criteria.",
+                                    ["isSatisfied"] = false,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await requirements.Received(1).UpdateFrBatchAsync(
+            Arg.Is<UpdateFrBatchRequest>(request =>
+                request != null &&
+                request.Records.Count == 1 &&
+                request.Records[0].Id == "FR-MCP-113" &&
+                request.Records[0].AcceptanceCriteria != null &&
+                request.Records[0].AcceptanceCriteria!.Count == 1 &&
+                request.Records[0].AcceptanceCriteria![0].Id == "FR-MCP-113-AC001" &&
+                request.Records[0].AcceptanceCriteria![0].Text == "Batch update preserves nested acceptance criteria." &&
+                request.Records[0].AcceptanceCriteria![0].IsSatisfied == false),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// Verifies YAML request envelopes preserve nested acceptance criteria booleans in typed batch dispatch.
+    /// </summary>
+    [Fact]
+    public async Task AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        requirements
+            .UpdateFrBatchAsync(Arg.Any<UpdateFrBatchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new RequirementsBatchResult
+            {
+                Success = true,
+                Operation = "update",
+                Kind = "fr",
+                Total = 1,
+            }));
+        var sut = new AgentStdioProtocol(new YamlSerializer(), new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements));
+
+        var input = new StringBuilder()
+            .AppendLine("type: request")
+            .AppendLine("payload:")
+            .AppendLine("  requestId: req-batch-update-yaml-ac")
+            .AppendLine("  method: workflow.requirements.updateFrBatch")
+            .AppendLine("  params:")
+            .AppendLine("    records:")
+            .AppendLine("    - id: FR-MCP-113")
+            .AppendLine("      title: Plugin requirement batch payload parsing")
+            .AppendLine("      description: The system SHALL preserve nested acceptance criteria in requirement batch updates.")
+            .AppendLine("      acceptanceCriteria:")
+            .AppendLine("      - id: FR-MCP-113-AC001")
+            .AppendLine("        text: Batch update preserves nested acceptance criteria.")
+            .AppendLine("        isSatisfied: false")
+            .AppendLine()
+            .ToString();
+
+        using var reader = new StringReader(input);
+        using var writer = new StringWriter();
+
+        await sut.RunAsync(reader, writer, CancellationToken.None);
+
+        var output = writer.ToString();
+        Assert.Contains("type: result", output, StringComparison.Ordinal);
+        await requirements.Received(1).UpdateFrBatchAsync(
+            Arg.Is<UpdateFrBatchRequest>(request =>
+                request != null &&
+                request.Records.Count == 1 &&
+                request.Records[0].AcceptanceCriteria != null &&
+                request.Records[0].AcceptanceCriteria!.Count == 1 &&
+                request.Records[0].AcceptanceCriteria![0].IsSatisfied == false),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
     /// A workflow.sessionlog.importRecovery request is routed to the session-log workflow
     /// with the recovered turns parsed from YAML params. This route performs the safe
     /// query-merge-submit behavior in the workflow layer.

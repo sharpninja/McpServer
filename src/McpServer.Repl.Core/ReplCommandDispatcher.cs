@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using McpServer.Client.Models;
 
 namespace McpServer.Repl.Core;
@@ -62,6 +63,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true,
+        Converters = { new FlexibleBooleanJsonConverter() },
     };
 
     private readonly IGenericClientPassthrough _passthrough;
@@ -925,6 +927,25 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             JsonValueKind.Null => null,
             _ => element.ToString(),
         };
+    }
+
+    private sealed class FlexibleBooleanJsonConverter : JsonConverter<bool>
+    {
+        public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return reader.TokenType switch
+            {
+                JsonTokenType.True => true,
+                JsonTokenType.False => false,
+                JsonTokenType.String when bool.TryParse(reader.GetString(), out var value) => value,
+                _ => throw new JsonException($"The JSON value could not be converted to {typeToConvert}.")
+            };
+        }
+
+        public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
+        {
+            writer.WriteBooleanValue(value);
+        }
     }
 
     private static bool? GetBool(IReadOnlyDictionary<string, object?> args, string name)

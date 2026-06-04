@@ -771,6 +771,19 @@ Unit and integration validation shall prove generated requirements exports rende
 - [x] Focused tests pass after the renderer change and assert AC bullets in both GitHub and Azure wiki outputs. (evidence: Focused service test run passed 10 of 10; combined requirements service and AC run passed 15 of 15.)
 - [x] Final validation has zero failures and zero skips in the executed scope. (evidence: build Compile succeeded; focused RequirementsDocumentService and RequirementAcceptanceCriteria tests passed 15 of 15; RequirementsControllerTests passed 7 of 7; no skipped tests were reported.)
 
+### TEST-MCP-153
+
+Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
+
+
+
+## TEST-MCP-BATCH
+
+### TEST-MCP-BATCH-001
+
+Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
+
+
 
 ## TEST-MCP-REPL
 

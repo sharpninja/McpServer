@@ -129,6 +129,132 @@ public sealed class RequirementsClientTests
         Assert.Equal("test", Assert.Single(result.Items).Kind);
     }
 
+    /// <summary>
+    /// Verifies batch update requests preserve structured acceptance criteria in all update record shapes.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateBatchRequests_PostAcceptanceCriteriaArrays()
+    {
+        async System.Threading.Tasks.Task AssertRequestAsync(
+            Func<RequirementsClient, System.Threading.Tasks.Task<RequirementsBatchResult>> send,
+            string expectedPath,
+            string expectedId)
+        {
+            var handler = new MockHttpHandler(
+                HttpStatusCode.OK,
+                """{"success":true,"operation":"update","total":1,"items":[],"errors":[]}""");
+            using var http = new HttpClient(handler);
+            var client = new RequirementsClient(http, DefaultOptions);
+
+            var result = await send(client);
+
+            Assert.True(result.Success);
+            Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
+            Assert.Contains(expectedPath, handler.LastRequest.RequestUri!.AbsolutePath);
+            Assert.Contains($"\"id\":\"{expectedId}\"", handler.LastRequestBody!, StringComparison.Ordinal);
+            Assert.Contains("\"acceptanceCriteria\"", handler.LastRequestBody!, StringComparison.Ordinal);
+            Assert.Contains("\"text\":\"Batch criterion\"", handler.LastRequestBody!, StringComparison.Ordinal);
+            Assert.Contains("\"isSatisfied\":false", handler.LastRequestBody!, StringComparison.Ordinal);
+        }
+
+        await AssertRequestAsync(
+            client => client.UpdateFrBatchAsync(new UpdateFrBatchRequest
+            {
+                Records =
+                [
+                    new UpdateFrBatchRecord
+                    {
+                        Id = "FR-MCP-920",
+                        Description = "Updated",
+                        AcceptanceCriteria =
+                        [
+                            new AcceptanceCriterion
+                            {
+                                Id = "FR-MCP-920-AC001",
+                                Text = "Batch criterion",
+                                IsSatisfied = false
+                            }
+                        ]
+                    }
+                ]
+            }),
+            "/mcpserver/requirements/fr/batch",
+            "FR-MCP-920");
+
+        await AssertRequestAsync(
+            client => client.UpdateTrBatchAsync(new UpdateTrBatchRequest
+            {
+                Records =
+                [
+                    new UpdateTrBatchRecord
+                    {
+                        Id = "TR-MCP-920",
+                        Description = "Updated",
+                        AcceptanceCriteria =
+                        [
+                            new AcceptanceCriterion
+                            {
+                                Id = "TR-MCP-920-AC001",
+                                Text = "Batch criterion",
+                                IsSatisfied = false
+                            }
+                        ]
+                    }
+                ]
+            }),
+            "/mcpserver/requirements/tr/batch",
+            "TR-MCP-920");
+
+        await AssertRequestAsync(
+            client => client.UpdateTestBatchAsync(new UpdateTestBatchRequest
+            {
+                Records =
+                [
+                    new UpdateTestBatchRecord
+                    {
+                        Id = "TEST-MCP-920",
+                        Description = "Updated",
+                        AcceptanceCriteria =
+                        [
+                            new AcceptanceCriterion
+                            {
+                                Id = "TEST-MCP-920-AC001",
+                                Text = "Batch criterion",
+                                IsSatisfied = false
+                            }
+                        ]
+                    }
+                ]
+            }),
+            "/mcpserver/requirements/test/batch",
+            "TEST-MCP-920");
+
+        await AssertRequestAsync(
+            client => client.UpdateBatchAsync(new UpdateRequirementsBatchRequest
+            {
+                Records =
+                [
+                    new UpdateRequirementBatchRecord
+                    {
+                        Kind = "fr",
+                        Id = "FR-MCP-921",
+                        Description = "Updated",
+                        AcceptanceCriteria =
+                        [
+                            new AcceptanceCriterion
+                            {
+                                Id = "FR-MCP-921-AC001",
+                                Text = "Batch criterion",
+                                IsSatisfied = false
+                            }
+                        ]
+                    }
+                ]
+            }),
+            "/mcpserver/requirements/batch",
+            "FR-MCP-921");
+    }
+
     [Fact]
     public async System.Threading.Tasks.Task UpdateTestAsync_PutsBody()
     {

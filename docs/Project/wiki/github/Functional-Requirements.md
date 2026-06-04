@@ -749,6 +749,12 @@ Requirements exports shall render requirement descriptions as readable Markdown 
 - [x] Wiki exports render structured acceptance criteria under an Acceptance Criteria label as Markdown checklist bullets. (evidence: The same focused test asserts unchecked and checked AC bullets, including evidence text.)
 - [x] Azure and GitHub wiki exports use the same requirement description and AC formatting. (evidence: The focused service test asserts GitHub and Azure Testing-Requirements.md output are equal.)
 
+## FR-MCP-113 Plugin requirement batch payload parsing
+
+The system SHALL accept valid YAML and JSON records arrays for requirement batch operations while preserving nested acceptance criteria.
+**Acceptance Criteria:**
+- [ ] workflow.requirements.updateFrBatch accepts unindented records YAML and preserves nested acceptance criteria.
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.
@@ -757,6 +763,10 @@ Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-002.
 
+## FR-MCP-BATCH-001 Plugin requirement batch payload parsing
+
+All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+
 ## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.
@@ -764,6 +774,10 @@ Temporary live verification for plugin acceptanceCriteria rollout.
 ## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
+
+All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
 
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
 

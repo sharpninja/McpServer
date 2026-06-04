@@ -258,9 +258,17 @@ ASP.NET Core 9 server with HTTP and STDIO MCP transport.
 **Device Authorization Flow for CLI Clients** — OIDC `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures `mcp-server-api` appears in token audience and includes `realm_roles`.
 **Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `McpServer.Director`
 
+## TR-MCP-BATCH-001
+
+**Robust Bash plugin batch records normalization** — Bash-style MCP server plugin wrappers SHALL normalize requirement batch records from unindented YAML sequences, indented YAML sequences, and inline JSON arrays before schema validation and typed request conversion.
+
 ## TR-MCP-BATCH-109
 
 **Requirements batch endpoint and workflow support** — REST controllers, RequirementsClient, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
+
+## TR-MCP-BATCHTS-001
+
+**Robust TypeScript plugin batch records normalization** — TypeScript MCP server plugin tools SHALL normalize requirement batch records from object arrays and string YAML or JSON arrays before bridge request conversion while preserving nested acceptanceCriteria booleans.
 
 ## TR-MCP-BYRD-001
 

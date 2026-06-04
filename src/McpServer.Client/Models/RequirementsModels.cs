@@ -394,6 +394,10 @@ public sealed class UpdateFrBatchRecord
     /// <summary>Optional operator notes. Null preserves the current value.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for creating multiple technical requirements atomically.</summary>
@@ -478,6 +482,10 @@ public sealed class UpdateTrBatchRecord
     /// <summary>Optional operator notes. Null preserves the current value.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for creating multiple testing requirements atomically.</summary>
@@ -562,6 +570,10 @@ public sealed class UpdateTestBatchRecord
     /// <summary>Optional operator notes. Null preserves the current value.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for creating mixed FR/TR/TEST requirements atomically.</summary>
@@ -662,6 +674,10 @@ public sealed class UpdateRequirementBatchRecord
     /// <summary>Optional operator notes. Null preserves the current value.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Structured response returned by requirements batch endpoints.</summary>
