@@ -17,6 +17,7 @@ using System.Linq;
 
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using McpServer.Client;
@@ -38,7 +39,8 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     private static readonly JsonSerializerOptions _jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Converters = { new FlexibleBooleanJsonConverter() }
     };
 
     /// <summary>
@@ -301,7 +303,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         // Handle complex objects via JSON serialization
         try
         {
-            var json = JsonSerializer.Serialize(value, _jsonOptions);
+            var json = JsonSerializer.Serialize(NormalizeForJson(value), _jsonOptions);
             return JsonSerializer.Deserialize(json, underlyingType, _jsonOptions);
         }
         catch (Exception ex)
@@ -317,8 +319,93 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     /// </summary>
     private object? CoerceCollection(object? value, Type targetType, string? parameterName)
     {
-        var json = JsonSerializer.Serialize(value, _jsonOptions);
+        var json = JsonSerializer.Serialize(NormalizeForJson(value), _jsonOptions);
         return JsonSerializer.Deserialize(json, targetType, _jsonOptions);
+    }
+
+    /// <summary>
+    /// Normalizes raw YAML structures into JSON-compatible dictionaries and lists before model binding.
+    /// </summary>
+    private static object? NormalizeForJson(object? value)
+    {
+        if (value is null)
+        {
+            return null;
+        }
+
+        if (value is JsonElement element)
+        {
+            return element.ValueKind switch
+            {
+                JsonValueKind.Object => NormalizeJsonObject(element),
+                JsonValueKind.Array => element.EnumerateArray().Select(v => NormalizeForJson(v)).ToList(),
+                JsonValueKind.String => element.GetString(),
+                JsonValueKind.Number when element.TryGetInt64(out var integer) => integer,
+                JsonValueKind.Number when element.TryGetDouble(out var number) => number,
+                JsonValueKind.True => true,
+                JsonValueKind.False => false,
+                JsonValueKind.Null => null,
+                _ => element.ToString(),
+            };
+        }
+
+        if (value is System.Collections.IDictionary dictionary)
+        {
+            var normalized = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+            foreach (System.Collections.DictionaryEntry entry in dictionary)
+            {
+                var key = Convert.ToString(entry.Key, System.Globalization.CultureInfo.InvariantCulture);
+                if (!string.IsNullOrWhiteSpace(key))
+                {
+                    normalized[key] = NormalizeForJson(entry.Value);
+                }
+            }
+
+            return normalized;
+        }
+
+        if (value is System.Collections.IEnumerable sequence and not string)
+        {
+            var normalized = new List<object?>();
+            foreach (var item in sequence)
+            {
+                normalized.Add(NormalizeForJson(item));
+            }
+
+            return normalized;
+        }
+
+        return value;
+    }
+
+    private static Dictionary<string, object?> NormalizeJsonObject(JsonElement element)
+    {
+        var normalized = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+        foreach (var property in element.EnumerateObject())
+        {
+            normalized[property.Name] = NormalizeForJson(property.Value);
+        }
+
+        return normalized;
+    }
+
+    private sealed class FlexibleBooleanJsonConverter : JsonConverter<bool>
+    {
+        public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return reader.TokenType switch
+            {
+                JsonTokenType.True => true,
+                JsonTokenType.False => false,
+                JsonTokenType.String when bool.TryParse(reader.GetString(), out var value) => value,
+                _ => throw new JsonException($"The JSON value could not be converted to {typeToConvert}.")
+            };
+        }
+
+        public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
+        {
+            writer.WriteBooleanValue(value);
+        }
     }
 
     /// <summary>
