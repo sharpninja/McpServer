@@ -737,6 +737,10 @@ The MCP Server shall allow agents and API clients to create or update multiple f
 
 Nuke build and deployment automation SHALL run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
 
+## FR-MCP-111 Package workflow closeout skills across McpServer plugins
+
+All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit and push interrupted work, and close out MCP-backed work consistently across plugin families.
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.
@@ -744,6 +748,18 @@ Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.
 ## FR-MCP-AGENT-PARITY-002 FR-MCP-AGENT-PARITY-002
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-002.
+
+## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
+
+All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
@@ -811,6 +827,28 @@ All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are c
 `mcpserver-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `McpServerClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
+
+## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
+
+FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
+
+## FR-MCP-REQAC-002 Copy acceptance criteria from a TODO to a requirement
+
+A copy operation populates a requirement's acceptance criteria from a TODO's acceptance criteria verbatim (field-for-field).
+
+## FR-MCP-REQAC-PLUGIN-001 Plugin acceptanceCriteria rollout
+
+All Bash and TypeScript MCP plugin families expose structured acceptanceCriteria on FR/TR/TEST create and update flows, including copy-from-TODO support where applicable.
+**Acceptance Criteria:**
+- [x] Bash and TypeScript plugin live gates preserve structured acceptanceCriteria through workflow and REST round-trip verification. (evidence: Live FR-CODEXBIND-001 workflow create/get plus REST GET returned AC-CODEXBIND-001 after service and REPL tool updates.)
+
+## FR-MCP-REQACPLUGIN-001 Plugins expose AcceptanceCriteria on requirements surface
+
+Every MCP server plugin (bash and TypeScript families) lets its agent set and read structured acceptanceCriteria ({id,text,isSatisfied,evidence}) on FR/TR/TEST create/update via the plugin command surface, including hydration on partial updates.
+**Acceptance Criteria:**
+- [ ] Bash family typed-params builder emits acceptanceCriteria block on create+update for FR/TR/TEST
+- [ ] TypeScript family tool inputSchema declares acceptanceCriteria + typedParams forwards it
+- [ ] Plugin tests cover both create and partial-update hydration paths
 
 ## FR-SUPPORT-010 MCP Context Unification
 

@@ -154,6 +154,9 @@
 | TEST-MCP-146 | Plugin validation shall include shell syntax checks, Cline bridge JSON-stdio tests, Cline schema preflight tests, and JSON Schema parse checks for the published REPL request schema. |
 | TEST-MCP-147 | Given agent-facing documentation, marker templates, pipeline references, and generated requirements wiki outputs, automated tests shall verify single-line JSON stdio guidance, current plugin registry guidance, existing pipeline file references, and Azure/GitHub wiki output file parity. |
 | TEST-MCP-148 | Build.Tests SHALL verify build.ps1 relaunches through a PowerShell host with -NoLogo, -NoProfile, and -NonInteractive, Build.Tests pwsh.exe helpers include those flags, and live deployment guidance examples include those flags. |
+| TEST-MCP-149 | Bats validation covers AC-SKILLS-001 through AC-SKILLS-006 for mcpserver-codex-plugin, mcpserver-claude-code-plugin, mcpserver-claude-cowork-plugin, mcpserver-copilot-plugin, and mcpserver-grok-plugin. |
+| TEST-MCP-150 | Jest validation covers AC-SKILLS-001 through AC-SKILLS-006 for mcpserver-cline-plugin, mcpserver-cline-v2-plugin, and mcpserver-opencode-plugin. |
+| TEST-MCP-151 | Process validation covers red/green/final evidence and the zero-failure zero-skip focused validation gate for the workflow-skill rollout. |
 
 ## TEST-MCP-REPL
 
@@ -183,6 +186,57 @@
 | TEST-MCP-REPL-018 | ✅ **Complete** - Given orchestration rules for trust and auth, when workflows execute, then trust-before-auth and nonce-validation rules are enforced. **Covered by:** `OrchestrationRulesTests`, `TrustBootstrapFlowTests` |
 | TEST-MCP-REPL-019 | ✅ **Complete** - Given namespace-organized command shapes, when workflows execute, then operations delegate to typed client contracts without duplicating business logic. **Covered by:** `TodoWorkflowTests`, `SessionLogWorkflowTests`, `RequirementsWorkflowTests`, `GenericClientPassthroughTests` |
 | TEST-MCP-REPL-020 | ✅ **Complete** - Given concurrent REPL operations, when workflows maintain stateful context, then session state and TODO selection are properly isolated per workflow instance. **Covered by:** `SessionLogWorkflowTests` (state management), `TodoWorkflowTests` (selection state) |
+
+## TEST-MCP-REQAC
+
+| ID | Requirement |
+| --- | --- |
+| TEST-MCP-REQAC-001 | Creating FR/TR/TEST with acceptanceCriteria and reading them back returns an identical AcceptanceCriterion list (id/text/isSatisfied/evidence), workspace-scoped. |
+| TEST-MCP-REQAC-002 | Null or empty acceptanceCriteria round-trips as an empty list with no null leakage. |
+| TEST-MCP-REQAC-003 | The requirements document renderer emits a deterministic Acceptance Criteria block and the parser tolerates it without throwing. |
+| TEST-MCP-REQAC-004 | copy-from-todo copies a TODO's acceptance criteria onto a requirement verbatim. |
+
+## TEST-MCP-REQAC-PLUGIN-BASH
+
+| ID | Requirement |
+| --- | --- |
+| TEST-MCP-REQAC-PLUGIN-BASH | Bash plugin repl-invoke shim tests cover acceptanceCriteria create/update blocks and copyAcceptanceCriteriaFromTodo dispatch, with focused Bats gates passing for all five Bash plugins. |
+
+## TEST-MCP-REQAC-PLUGIN-TS
+
+| ID | Requirement |
+| --- | --- |
+| TEST-MCP-REQAC-PLUGIN-TS | TypeScript plugin tests cover requirements acceptanceCriteria schemas, typed parameter shaping, and live-equivalent request handling for Cline, Cline v2, and Opencode. |
+
+## TEST-MCP-REQACPLUGIN
+
+| ID | Requirement |
+| --- | --- |
+| TEST-MCP-REQACPLUGIN-001 | Validate the Bash plugin family emits and hydrates acceptanceCriteria on FR/TR/TEST requirement create/update commands and exposes copyAcceptanceCriteriaFromTodo. |
+
+## TEST-MCP-REQACPLUGIN-BASH
+
+| ID | Requirement |
+| --- | --- |
+| TEST-MCP-REQACPLUGIN-BASH | In each bash plugin, tests/repl-invoke-shim.bats (or tests/plugin-helpers.bats) proves typed-params emits acceptanceCriteria on create and hydrates it from existing on partial update with zero failures and zero skips. |
+
+## TEST-MCP-REQACPLUGIN-LIVE
+
+| ID | Requirement |
+| --- | --- |
+| TEST-MCP-REQACPLUGIN-LIVE | Per plugin family, a live invocation of workflow.requirements.createFr with acceptanceCriteria populated round-trips through the deployed server (commit 6d376ea+) and the resulting REST GET returns the structured criteria. |
+
+## TEST-MCP-REQACPLUGIN-TS
+
+| ID | Requirement |
+| --- | --- |
+| TEST-MCP-REQACPLUGIN-TS | In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) proves req_create_fr/req_update_fr/req_create_test forward acceptanceCriteria into the request payload with zero failures and zero skips. |
+
+## TEST-REQAC-LIVE
+
+| ID | Requirement |
+| --- | --- |
+| TEST-REQAC-LIVE-001 | Live criteria round-trip works |
 
 ## TEST-SUPPORT
 
