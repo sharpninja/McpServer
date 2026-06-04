@@ -205,7 +205,8 @@ public sealed class RequirementsControllerTests : IDisposable
         using var testingReader = new StreamReader(testingEntry!.Open());
         var testingMarkdown = await testingReader.ReadToEndAsync().ConfigureAwait(true);
         Assert.Contains("## TEST-MCP", testingMarkdown, StringComparison.Ordinal);
-        Assert.Contains("| ID | Requirement |", testingMarkdown, StringComparison.Ordinal);
+        Assert.Contains("### TEST-MCP-", testingMarkdown, StringComparison.Ordinal);
+        Assert.DoesNotContain("| ID | Requirement |", testingMarkdown, StringComparison.Ordinal);
         Assert.DoesNotContain("- TEST-MCP-", testingMarkdown, StringComparison.Ordinal);
     }
 

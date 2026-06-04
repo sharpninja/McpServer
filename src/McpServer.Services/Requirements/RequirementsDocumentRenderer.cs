@@ -88,7 +88,7 @@ internal static class RequirementsDocumentRenderer
     /// <param name="sb">Target builder.</param>
     /// <param name="criteria">Criteria to render; null or empty produces no output.</param>
     /// <param name="listItemIndent">Optional indent applied to nested lists (e.g. "  " when the parent entry is a list item).</param>
-    private static void AppendAcceptanceCriteria(StringBuilder sb, IReadOnlyList<AcceptanceCriterion>? criteria, string listItemIndent = "")
+    internal static void AppendAcceptanceCriteria(StringBuilder sb, IReadOnlyList<AcceptanceCriterion>? criteria, string listItemIndent = "")
     {
         if (criteria is null || criteria.Count == 0)
             return;

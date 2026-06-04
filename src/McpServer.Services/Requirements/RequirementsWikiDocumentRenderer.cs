@@ -122,16 +122,19 @@ internal static class RequirementsWikiDocumentRenderer
         {
             sb.Append("## ").AppendLine(group.Key);
             sb.AppendLine();
-            sb.AppendLine("| ID | Requirement |");
-            sb.AppendLine("| --- | --- |");
 
             foreach (var entry in group.OrderBy(static item => item.Id, StringComparer.Ordinal))
             {
-                sb.Append("| ")
-                    .Append(EscapeTableCell(entry.Id))
-                    .Append(" | ")
-                    .Append(EscapeTableCell(entry.Condition))
-                    .AppendLine(" |");
+                sb.Append("### ").AppendLine(entry.Id);
+                sb.AppendLine();
+                if (!string.IsNullOrWhiteSpace(entry.Condition))
+                {
+                    sb.AppendLine(entry.Condition.Trim());
+                    sb.AppendLine();
+                }
+
+                RequirementsDocumentRenderer.AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria);
+                sb.AppendLine();
             }
 
             sb.AppendLine();
@@ -161,19 +164,6 @@ internal static class RequirementsWikiDocumentRenderer
         return groupSegments.Count == 0
             ? id.Trim()
             : string.Join('-', groupSegments);
-    }
-
-    private static string EscapeTableCell(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-            return string.Empty;
-
-        return value
-            .Replace("\r\n", "\n", StringComparison.Ordinal)
-            .Replace('\r', '\n')
-            .Trim()
-            .Replace("\n", "<br>", StringComparison.Ordinal)
-            .Replace("|", "\\|", StringComparison.Ordinal);
     }
 
     private static string RenderAzureOrder() =>

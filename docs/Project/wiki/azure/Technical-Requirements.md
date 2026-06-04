@@ -895,6 +895,13 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Plugin-side schema + shaper changes for AcceptanceCriteria** — Bash plugins gain _repl_emit_acceptance_criteria_block helper and per-method emit/hydrate calls in _repl_requirements_typed_params for createFr/createTr/createTest/updateFr/updateTr/updateTest. TS plugins gain shared AcceptanceCriterion JSON schemas and typedParams pass-through for the same six methods plus per-kind/mixed batch records items.
 
+## TR-MCP-REQEXPORT-001
+
+**Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC** — The requirements wiki renderer shall preserve TEST grouping while emitting each TEST requirement as a heading with description text and a nested Acceptance Criteria checklist generated from the structured acceptanceCriteria field.
+**Acceptance Criteria:**
+- [x] Wiki testing export output contains per-TEST headings and description paragraphs. (evidence: RequirementsWikiDocumentRenderer now renders grouped TEST entries as Markdown sections headed by TEST requirement IDs.)
+- [x] Structured acceptanceCriteria entries render as bullet/checklist list items with evidence when supplied. (evidence: RequirementsDocumentRenderer.AppendAcceptanceCriteria is reused by wiki rendering and focused tests assert checklist output.)
+
 ## TR-MCP-SCHEMA-109
 
 **REPL request schema enforcement** — Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.

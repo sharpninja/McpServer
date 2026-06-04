@@ -741,6 +741,14 @@ Nuke build and deployment automation SHALL run PowerShell child hosts with non-i
 
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit and push interrupted work, and close out MCP-backed work consistently across plugin families.
 
+## FR-MCP-112 Requirements export description and AC formatting
+
+Requirements exports shall render requirement descriptions as readable Markdown text and shall display structured acceptance criteria as a bulleted list instead of hiding or flattening AC into dense table cells.
+**Acceptance Criteria:**
+- [x] Wiki exports render TEST requirement descriptions outside dense table cells so long descriptions remain readable. (evidence: RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria asserts per-TEST headings and paragraphs.)
+- [x] Wiki exports render structured acceptance criteria under an Acceptance Criteria label as Markdown checklist bullets. (evidence: The same focused test asserts unchecked and checked AC bullets, including evidence text.)
+- [x] Azure and GitHub wiki exports use the same requirement description and AC formatting. (evidence: The focused service test asserts GitHub and Azure Testing-Requirements.md output are equal.)
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.

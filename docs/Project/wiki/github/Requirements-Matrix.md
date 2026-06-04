@@ -503,6 +503,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-TEST-001 | Tracked | Technical-Requirements.md |
 | FR-TEST-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-111 | Tracked | Functional-Requirements.md |
+| FR-MCP-112 | Tracked | Functional-Requirements.md |
 | FR-MCP-AGENT-PARITY-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-AGENT-PARITY-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-LIVE-CODEX-20260603T2014Z | Tracked | Functional-Requirements.md |
@@ -525,12 +526,14 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REQAC-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-PLUGIN-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQACPLUGIN-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQEXPORT-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-SKILLS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-SKILLS-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-SKILLS-003 | Tracked | Technical-Requirements.md |
 | TEST-MCP-149 | Tracked | Testing-Requirements.md |
 | TEST-MCP-150 | Tracked | Testing-Requirements.md |
 | TEST-MCP-151 | Tracked | Testing-Requirements.md |
+| TEST-MCP-152 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-002 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-003 | Tracked | Testing-Requirements.md |
