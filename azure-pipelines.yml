@@ -75,7 +75,6 @@ pr:
       - tools/**
 
 variables:
-  AgentPoolName: Default
   BuildConfiguration: Release
   TestProject: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj
   ServerProject: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
@@ -98,7 +97,7 @@ jobs:
   - job: build_test_publish
     displayName: build-test-publish
     pool:
-      name: $(AgentPoolName)
+      name: Default
     steps:
       - checkout: self
         fetchDepth: 0
@@ -185,7 +184,7 @@ jobs:
   # - job: docs_quality
   #   displayName: docs-quality
   #   pool:
-  #     name: $(AgentPoolName)
+  #     name: Default
   #   steps:
   #     - checkout: self
   #
@@ -221,7 +220,7 @@ jobs:
     displayName: docs-build
     # docs_quality job disabled above; docs_build no longer depends on it
     pool:
-      name: $(AgentPoolName)
+      name: Default
     steps:
       - checkout: self
 
@@ -248,7 +247,7 @@ jobs:
     dependsOn: build_test_publish
     continueOnError: true
     pool:
-      name: $(AgentPoolName)
+      name: Default
     steps:
       - checkout: self
 
@@ -278,7 +277,7 @@ jobs:
     dependsOn: build_test_publish
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     pool:
-      name: $(AgentPoolName)
+      name: Default
     variables:
       PackageVersion: $[ dependencies.build_test_publish.outputs['setPackageVersion.PackageVersion'] ]
     steps:
@@ -373,7 +372,7 @@ jobs:
   #   dependsOn: docs_build
   #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['DocsAzureServiceConnection'], ''), ne(variables['DocsStorageAccount'], ''))
   #   pool:
-  #     name: $(AgentPoolName)
+  #     name: Default
   #   steps:
   #     - download: current
   #       artifact: $(DocsArtifactName)
@@ -398,7 +397,7 @@ jobs:
     condition: and( eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest') )
     continueOnError: true   # Publishing failures (missing secrets, version already exists, etc.) should not fail the main CI build
     pool:
-      name: $(AgentPoolName)
+      name: Default
     steps:
       - checkout: self
 
@@ -526,4 +525,3 @@ jobs:
             npm publish --access public
 
             Remove-Item $npmrcPath -ErrorAction SilentlyContinue
-
