@@ -37,7 +37,8 @@ Agents must verify marker signature and health nonce first. During bootstrap, ac
 - Grok uses `mcpserver-grok-plugin`.
   - Repository: https://github.com/sharpninja/mcpserver-grok-plugin
   - Typical local root: `F:\GitHub\mcpserver-grok-plugin`
-  - Runtime: Grok skills plus PowerShell helpers from the plugin root.
+  - Runtime: Grok-compatible plugin manifests, enabled plugin skills, a Streamable HTTP MCP declaration, and PowerShell helpers from the plugin root.
+  - Discovery check: `grok inspect`, `grok mcp doctor mcpserver`, or the `/mcps` TUI view should show the plugin MCP server when the plugin is loaded. The discoverable MCP tools are the server's native names, including `sessionlog_*`, `todo_*`, and `requirements_*`. `mcp_*` names are hosted-agent aliases, and `workflow.sessionlog.*`, `workflow.todo.*`, and `workflow.requirements.*` are plugin shim/REPL method names, not literal Grok `search_tool` results. When those workflow names are needed, invoke the plugin helper (`lib\repl-invoke.ps1` or `lib/repl-invoke.sh`) through the Grok plugin instructions instead of treating their absence from tool discovery as proof that the plugin is unavailable.
 
 ## Codex Quick Check
 

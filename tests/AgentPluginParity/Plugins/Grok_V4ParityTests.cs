@@ -162,4 +162,37 @@ public class Grok_V4ParityTests
         var path = Path.Combine(PluginRoot, ".grok-plugin", "plugin.json");
         Assert.True(File.Exists(path), ".grok-plugin/plugin.json missing (required for Grok agent auto-discovery)");
     }
+
+    /// <summary>Grok-native plugin descriptor must expose skills, hooks, and the MCP server bridge.</summary>
+    [Fact]
+    public void Grok_PluginDescriptor_DeclaresSkillsHooksAndMcpServer()
+    {
+        var path = Path.Combine(PluginRoot, ".grok-plugin", "plugin.json");
+        var json = File.ReadAllText(path);
+
+        Assert.Contains("\"skills\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"hooks\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"mcpServers\"", json, StringComparison.Ordinal);
+        Assert.Contains(".mcp.json", json, StringComparison.Ordinal);
+
+        var mcpJson = File.ReadAllText(Path.Combine(PluginRoot, ".mcp.json"));
+        Assert.Contains("\"mcpserver\"", mcpJson, StringComparison.Ordinal);
+        Assert.Contains("\"type\": \"http\"", mcpJson, StringComparison.Ordinal);
+        Assert.Contains("mcp-transport", mcpJson, StringComparison.Ordinal);
+        Assert.DoesNotContain("mcpserver-repl", mcpJson, StringComparison.Ordinal);
+        Assert.DoesNotContain("--agent-stdio", mcpJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>Claude-compatible descriptor must also expose skills and MCP server config for Grok compatibility loading.</summary>
+    [Fact]
+    public void Grok_ClaudeCompatibleDescriptor_DeclaresSkillsAndMcpServer()
+    {
+        var path = Path.Combine(PluginRoot, ".claude-plugin", "plugin.json");
+        Assert.True(File.Exists(path), ".claude-plugin/plugin.json missing");
+
+        var json = File.ReadAllText(path);
+        Assert.Contains("\"skills\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"mcpServers\"", json, StringComparison.Ordinal);
+        Assert.Contains(".mcp.json", json, StringComparison.Ordinal);
+    }
 }
