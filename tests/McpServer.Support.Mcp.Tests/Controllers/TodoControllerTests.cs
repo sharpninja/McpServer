@@ -186,7 +186,7 @@ public sealed class TodoControllerTests
                 false,
                 "2026-03-21T00:00:00.0000000Z",
                 LastProjectedToYamlUtc: "2026-03-21T00:00:00.0000000Z",
-                Message: "TODO.yaml matches authoritative SQLite state."));
+                Message: "TODO.yaml matches authoritative database state."));
 
         var controller = CreateController(todoService);
         var actionResult = await controller.GetProjectionStatusAsync(CancellationToken.None).ConfigureAwait(true);
@@ -208,7 +208,7 @@ public sealed class TodoControllerTests
         var todoService = Substitute.For<ITodoService>();
         todoService.GetProjectionStatusAsync(Arg.Any<CancellationToken>())
             .Returns(_ => Task.FromException<TodoProjectionStatusResult>(
-                new NotSupportedException("Projection status requires sqlite-backed TODO storage.")));
+                new NotSupportedException("Projection status requires database-backed TODO storage.")));
 
         var controller = CreateController(todoService);
         var actionResult = await controller.GetProjectionStatusAsync(CancellationToken.None).ConfigureAwait(true);

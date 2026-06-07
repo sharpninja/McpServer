@@ -176,4 +176,160 @@ public sealed class EfTodoServiceTests : IDisposable
         Assert.Contains(audit.Entries, e => e.Action == "deleted");
     }
 
+    /// <summary>
+    /// TR-MCP-TODO-005 / TR-MCP-TODO-006: EF mutations project deterministic TODO.yaml content
+    /// and report a consistent projection after create, update, and delete.
+    /// </summary>
+    [Fact]
+    public async Task CreateUpdateDelete_ProjectsYamlAndReportsConsistentStatus()
+    {
+        var created = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-PROJ-001",
+            Title = "Before projection",
+            Section = "mvp-support",
+            Priority = "high",
+            Description = ["Preserve this line"],
+            ImplementationTasks = [new TodoFlatTask("write projection", false)],
+        }).ConfigureAwait(true);
+
+        Assert.True(created.Success, created.Error);
+        Assert.True(File.Exists(_tempYamlPath));
+        Assert.Contains("EF-PROJ-001", File.ReadAllText(_tempYamlPath));
+
+        var createdStatus = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        Assert.True(createdStatus.ProjectionConsistent, createdStatus.Message);
+        Assert.False(createdStatus.RepairRequired);
+
+        var updated = await _sut.UpdateAsync("EF-PROJ-001", new TodoUpdateRequest
+        {
+            Title = "After projection",
+        }).ConfigureAwait(true);
+
+        Assert.True(updated.Success, updated.Error);
+        Assert.Contains("After projection", File.ReadAllText(_tempYamlPath));
+
+        var deleted = await _sut.DeleteAsync("EF-PROJ-001").ConfigureAwait(true);
+        Assert.True(deleted.Success, deleted.Error);
+        Assert.DoesNotContain("EF-PROJ-001", File.ReadAllText(_tempYamlPath));
+
+        var finalStatus = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        Assert.True(finalStatus.ProjectionConsistent, finalStatus.Message);
+        Assert.False(finalStatus.RepairRequired);
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-006: EF projection status detects missing projected YAML and asks for repair.
+    /// </summary>
+    [Fact]
+    public async Task GetProjectionStatusAsync_WhenProjectedYamlIsMissing_RequiresRepair()
+    {
+        var created = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-MISS-001",
+            Title = "Missing projection",
+            Section = "mvp-support",
+            Priority = "medium",
+        }).ConfigureAwait(true);
+        Assert.True(created.Success, created.Error);
+        File.Delete(_tempYamlPath);
+
+        var status = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+
+        Assert.False(status.ProjectionTargetExists);
+        Assert.False(status.ProjectionConsistent);
+        Assert.True(status.RepairRequired);
+        Assert.Contains("does not exist", status.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-006: EF repair rebuilds a drifted TODO.yaml projection from authoritative DB rows.
+    /// </summary>
+    [Fact]
+    public async Task RepairProjectionAsync_AfterProjectionDrift_RebuildsYaml()
+    {
+        var created = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-REPAIR-001",
+            Title = "Repair target",
+            Section = "mvp-support",
+            Priority = "low",
+        }).ConfigureAwait(true);
+        Assert.True(created.Success, created.Error);
+
+        File.WriteAllText(_tempYamlPath, "mvp-support:\n  high-priority: []\n");
+        var drifted = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        Assert.False(drifted.ProjectionConsistent);
+        Assert.True(drifted.RepairRequired);
+
+        var repair = await _sut.RepairProjectionAsync().ConfigureAwait(true);
+
+        Assert.True(repair.Success, repair.Error);
+        Assert.True(repair.Status.ProjectionConsistent, repair.Status.Message);
+        Assert.False(repair.Status.RepairRequired);
+        Assert.Contains("EF-REPAIR-001", File.ReadAllText(_tempYamlPath));
+    }
+
+    /// <summary>
+    /// TEST-MCP-097: EF create returns a projection-failure classification when the DB commit succeeds
+    /// but TODO.yaml cannot be written, and operator repair later rebuilds the projection.
+    /// </summary>
+    [Fact]
+    public async Task Create_WhenYamlProjectionFails_ReturnsProjectionFailureButKeepsAuthoritativeState()
+    {
+        Directory.CreateDirectory(_tempYamlPath);
+
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-FAIL-001",
+            Title = "Projection failure",
+            Section = "mvp-support",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Equal(TodoMutationFailureKind.ProjectionFailed, result.FailureKind);
+        Assert.NotNull(await _sut.GetByIdAsync("EF-FAIL-001").ConfigureAwait(true));
+
+        var failedStatus = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        Assert.True(failedStatus.RepairRequired);
+        Assert.NotNull(failedStatus.LastProjectionFailure);
+
+        Directory.Delete(_tempYamlPath);
+        var repair = await _sut.RepairProjectionAsync().ConfigureAwait(true);
+
+        Assert.True(repair.Success, repair.Error);
+        Assert.True(repair.Status.ProjectionConsistent, repair.Status.Message);
+        Assert.Contains("EF-FAIL-001", File.ReadAllText(_tempYamlPath));
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-005: EF projection stores code-review remediation references on the document section
+    /// metadata row so the projected YAML preserves the source TODO shape.
+    /// </summary>
+    [Fact]
+    public async Task UpdateAsync_CodeReviewPhaseReference_ProjectsCodeReviewSectionReference()
+    {
+        var created = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-REVIEW-001",
+            Title = "Review phase",
+            Section = "code-review-remediation",
+            Priority = "high",
+            Phase = "pass-1",
+        }).ConfigureAwait(true);
+        Assert.True(created.Success, created.Error);
+
+        var updated = await _sut.UpdateAsync("EF-REVIEW-001", new TodoUpdateRequest
+        {
+            Reference = "docs/reviews/example.md",
+        }).ConfigureAwait(true);
+
+        Assert.True(updated.Success, updated.Error);
+        var yaml = File.ReadAllText(_tempYamlPath);
+        Assert.Contains("code-review-remediation", yaml);
+        Assert.Contains("reference: docs/reviews/example.md", yaml);
+        Assert.Contains("phase: pass-1", yaml);
+    }
+
 }

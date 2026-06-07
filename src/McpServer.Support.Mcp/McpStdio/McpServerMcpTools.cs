@@ -762,8 +762,8 @@ public sealed class FwhMcpTools
         }
     }
 
-    /// <summary>TR-MCP-TODO-006: Get SQLite-authoritative TODO projection status.</summary>
-    [McpServerTool(Name = "todo_projection_status"), Description("Get projection status for SQLite-backed TODO storage.")]
+    /// <summary>TR-MCP-TODO-006: Get database-authoritative TODO projection status.</summary>
+    [McpServerTool(Name = "todo_projection_status"), Description("Get projection status for database-backed TODO storage.")]
     public async Task<string> TodoProjectionStatus(
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
@@ -785,8 +785,8 @@ public sealed class FwhMcpTools
         }
     }
 
-    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
-    [McpServerTool(Name = "todo_projection_repair"), Description("Repair TODO.yaml projection from authoritative SQLite-backed TODO storage.")]
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from database-authoritative TODO storage.</summary>
+    [McpServerTool(Name = "todo_projection_repair"), Description("Repair TODO.yaml projection from authoritative database-backed TODO storage.")]
     public async Task<string> TodoProjectionRepair(
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)

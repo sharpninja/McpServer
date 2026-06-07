@@ -97,7 +97,7 @@ public sealed class TodoController : ControllerBase
         }
     }
 
-    /// <summary>TR-MCP-TODO-006: Get SQLite-authoritative TODO projection status and repair guidance.</summary>
+    /// <summary>TR-MCP-TODO-006: Get database-authoritative TODO projection status and repair guidance.</summary>
     [HttpGet("projection/status")]
     public async Task<ActionResult<TodoProjectionStatusResult>> GetProjectionStatusAsync(CancellationToken cancellationToken)
     {
@@ -112,7 +112,7 @@ public sealed class TodoController : ControllerBase
         }
     }
 
-    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from database-authoritative TODO storage.</summary>
     [HttpPost("projection/repair")]
     public async Task<ActionResult<TodoProjectionRepairResult>> RepairProjectionAsync(CancellationToken cancellationToken)
     {

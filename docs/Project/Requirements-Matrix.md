@@ -168,11 +168,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-071 | ✅ Complete | IssueTodoSyncService, TodoUpdateService, GitHubController, TodoController |
 | TR-MCP-GH-007 | ✅ Complete | IssueTodoSyncService |
 | TEST-MCP-095 | ✅ Complete | IssueTodoSyncServiceTests, IssueTodoGitHubRoundTripIntegrationTests |
-| FR-MCP-072 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoController, TodoClient, McpServerMcpTools, TodoServiceFactory |
-| TR-MCP-TODO-005 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoServiceFactory, TodoStorageOptions, McpInstanceResolver, appsettings*.yaml |
-| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, SqliteTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
-| TEST-MCP-096 | ✅ Complete | SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
-| TEST-MCP-097 | ✅ Complete | SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
+| FR-MCP-072 | ✅ Complete | EfTodoService, TodoYamlFileSerializer, TodoController, TodoClient, McpServerMcpTools, TodoServiceFactory, TodoBootstrapImporter |
+| TR-MCP-TODO-005 | ✅ Complete | EfTodoService, TodoItemEntity, TodoAuditHistoryEntity, TodoDocumentMetadataEntity, McpDbContext, TodoYamlFileSerializer, TodoServiceFactory, TodoStorageOptions, McpInstanceResolver, appsettings*.yaml |
+| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, EfTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
+| TEST-MCP-096 | ✅ Complete | EfTodoServiceTests, TodoBootstrapImporterTests, SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
+| TEST-MCP-097 | ✅ Complete | EfTodoServiceTests, SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
 | FR-MCP-073 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
 | TR-MCP-LOG-003 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
 | TEST-MCP-098 | ✅ Complete | ParseableEventFormatterTests |
@@ -254,7 +254,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/McpServer.GraphRag |
 | TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md, tests/Build.Tests/DocumentationGuidanceTests.cs |
 | TR-MCP-TODO-007 | ✅ Complete | src/McpServer.Support.Mcp/Services/TodoCreationService.cs |
-| TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Support.Mcp/Services/SqliteTodoService.cs |
+| TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Storage/McpDbContext.cs, EfTodoService, TodoBootstrapImporter, AddTodoWorkspaceScoping migrations |
 | TEST-MCP-001 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Configuration |
 | TEST-MCP-002 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs |
 | TEST-MCP-003 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests (workspace isolation), src/McpServer.Storage/McpDbContext.cs (HasQueryFilter) |

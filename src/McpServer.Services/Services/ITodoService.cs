@@ -26,10 +26,10 @@ public interface ITodoService
     /// <summary>Get append-only audit history for a TODO item.</summary>
     Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default);
 
-    /// <summary>TR-MCP-TODO-006: Get projection status for SQLite-authoritative TODO storage.</summary>
+    /// <summary>TR-MCP-TODO-006: Get projection status for database-authoritative TODO storage.</summary>
     Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default);
 
-    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from database-authoritative TODO storage.</summary>
     Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default);
 }
 
@@ -253,7 +253,7 @@ public sealed record TodoMutationResult(
 /// <summary>TR-MCP-TODO-005: Result of querying TODO audit history.</summary>
 public sealed record TodoAuditQueryResult(IReadOnlyList<TodoAuditEntry> Entries, int TotalCount);
 
-/// <summary>TR-MCP-TODO-006: Status of SQLite-authoritative TODO.yaml projection health and consistency.</summary>
+/// <summary>TR-MCP-TODO-006: Status of database-authoritative TODO.yaml projection health and consistency.</summary>
 public sealed record TodoProjectionStatusResult(
     string AuthoritativeStore,
     string AuthoritativeDataSource,
