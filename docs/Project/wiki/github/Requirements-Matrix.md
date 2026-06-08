@@ -543,6 +543,15 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-MEMORY-006 | Tracked | Technical-Requirements.md |
 | TR-MCP-MEMORY-007 | Tracked | Technical-Requirements.md |
 | TR-MCP-MEMORY-008 | Tracked | Technical-Requirements.md |
+| TEST-MCP-MEMORY-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-004 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-005 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-006 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-007 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-008 | Tracked | Testing-Requirements.md |
+| TEST-MCP-MEMORY-009 | Tracked | Testing-Requirements.md |
 | TR-MCP-PLUGIN-009 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-SKILLS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-001 | Tracked | Technical-Requirements.md |
@@ -575,8 +584,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
 | FR-MCP-116 | Tracked | Functional-Requirements.md |
 | FR-MCP-117 | Tracked | Functional-Requirements.md |
-| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TR-MCP-GH-008 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-010 | Tracked | Technical-Requirements.md |
 | TEST-MCP-156 | Tracked | Testing-Requirements.md |
 | TEST-MCP-157 | Tracked | Testing-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
