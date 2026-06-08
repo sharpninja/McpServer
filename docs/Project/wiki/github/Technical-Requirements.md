@@ -626,6 +626,30 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 **Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
 
+## TR-MCP-MEMORY-001
+
+**TR-MCP-MEMORY-001** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-001.
+
+## TR-MCP-MEMORY-002
+
+**TR-MCP-MEMORY-002** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-002.
+
+## TR-MCP-MEMORY-003
+
+**TR-MCP-MEMORY-003** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-003.
+
+## TR-MCP-MEMORY-004
+
+**TR-MCP-MEMORY-004** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-004.
+
+## TR-MCP-MEMORY-005
+
+**TR-MCP-MEMORY-005** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-005.
+
+## TR-MCP-MEMORY-006
+
+**TR-MCP-MEMORY-006** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-006.
+
 ## TR-MCP-MT-001
 
 **WorkspaceContext Scoped Per-Request Service** — `WorkspaceContext` is a scoped service holding resolved workspace identity: `WorkspacePath`, `WorkspaceName`, `DataDirectory`, `TodoFilePath`, `SessionsPath`, `ExternalDocsPath`, `IsDefaultKey`, `IsResolved`. Populated by `WorkspaceResolutionMiddleware` before downstream services execute. Downstream services inject `WorkspaceContext` instead of reading `IConfiguration["Mcp:RepoRoot"]`.

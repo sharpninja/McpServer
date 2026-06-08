@@ -775,6 +775,26 @@ Temporary live verification for plugin acceptanceCriteria rollout.
 
 Temporary live verification for plugin acceptanceCriteria rollout.
 
+## FR-MCP-MEMORY-001 FR-MCP-MEMORY-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-001.
+
+## FR-MCP-MEMORY-002 FR-MCP-MEMORY-002
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-002.
+
+## FR-MCP-MEMORY-003 FR-MCP-MEMORY-003
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-003.
+
+## FR-MCP-MEMORY-004 FR-MCP-MEMORY-004
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-004.
+
+## FR-MCP-MEMORY-005 FR-MCP-MEMORY-005
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-005.
+
 ## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.

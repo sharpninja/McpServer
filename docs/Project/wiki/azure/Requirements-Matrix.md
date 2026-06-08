@@ -510,6 +510,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-BATCH-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-LIVE-CODEX-20260603T2014Z | Tracked | Functional-Requirements.md |
 | FR-MCP-LIVE-CODEX-20260603T2015Z | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-003 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-004 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-005 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGIN-BATCH-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGIN-SKILLS-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-REQAC-001 | Tracked | Functional-Requirements.md |
@@ -526,6 +531,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-AGENT-PARITY-030 | Tracked | Technical-Requirements.md |
 | TR-MCP-BATCH-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-BATCHTS-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-006 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-SKILLS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-002 | Tracked | Technical-Requirements.md |
