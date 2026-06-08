@@ -29,9 +29,9 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     private readonly RequirementsClient _client;
     private RequirementsSelectionState? _selection = null;
 
-    private static readonly Regex FrIdPattern = new(@"^FR-[A-Z]+-\d{3}$", RegexOptions.Compiled);
-    private static readonly Regex TrIdPattern = new(@"^TR-[A-Z]+-[A-Z]+-\d{3}$", RegexOptions.Compiled);
-    private static readonly Regex TestIdPattern = new(@"^TEST-[A-Z]+-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex FrIdPattern = new(@"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex TrIdPattern = new(@"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex TestIdPattern = new(@"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
 
     /// <summary>
     /// Initializes a new instance of RequirementsWorkflow with the specified client.
@@ -746,7 +746,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         if (!TrIdPattern.IsMatch(id))
         {
-            throw new ArgumentException($"Invalid TR ID format: {id}. Expected format: TR-<AREA>-<SUBAREA>-###");
+            throw new ArgumentException($"Invalid TR ID format: {id}. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###");
         }
     }
 
@@ -759,7 +759,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         if (!TestIdPattern.IsMatch(id))
         {
-            throw new ArgumentException($"Invalid TEST ID format: {id}. Expected format: TEST-<AREA>-###");
+            throw new ArgumentException($"Invalid TEST ID format: {id}. Expected format: TEST-<AREA>[-<QUALIFIER>]-###");
         }
     }
 

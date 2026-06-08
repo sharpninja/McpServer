@@ -797,33 +797,73 @@ Temporary live verification for plugin acceptanceCriteria rollout.
 
 Temporary live verification for plugin acceptanceCriteria rollout.
 
-## FR-MCP-MEMORY-001 FR-MCP-MEMORY-001
+## FR-MCP-MEMORY-001 Global and workspace memory storage
 
-Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-001.
+The MCP Server SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.
+**Acceptance Criteria:**
+- [x] A memory record has a stable ID, scope, category, raw text, version, author metadata, and created/updated timestamps.
+- [x] Global memories are returned for every workspace and are not stamped with a workspace owner.
+- [x] Workspace memories require an owning workspace and are not returned for any other workspace.
+- [x] Removed memories are hidden from normal reads and lists without physically deleting the row.
+- [x] Memory text round-trips exactly, including internal newlines and punctuation.
 
-## FR-MCP-MEMORY-002 FR-MCP-MEMORY-002
+## FR-MCP-MEMORY-002 Memory CRUD tools
 
-Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-002.
+The MCP Server SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.
+**Acceptance Criteria:**
+- [x] Add creates a memory and returns ID, text, scope, category, version, and timestamps.
+- [x] List returns the effective memory set for the active workspace by default.
+- [x] Update replaces raw text, increments version, and can change scope under validated rules.
+- [x] Remove soft-deletes a memory by ID.
+- [x] Invalid IDs, duplicate active IDs, invalid scopes, empty text, and unauthorized scope changes return clear errors.
 
-## FR-MCP-MEMORY-003 FR-MCP-MEMORY-003
+## FR-MCP-MEMORY-003 Required memories injection format
 
-Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-003.
+Supported agents SHALL receive active memories at each host-supported request boundary in a deterministic `REQUIRED MEMORIES` block. Memory text SHALL be raw text and SHALL NOT be summarized, decorated, or rewritten.
+**Acceptance Criteria:**
+- [x] The injected block header is exactly `REQUIRED MEMORIES`.
+- [x] Each memory renders as `- MEMORY-CATEGORY-001: Raw memory text`.
+- [x] An empty memory set renders exactly `REQUIRED MEMORIES` followed by `- None`.
+- [x] Scope labels, timestamps, source metadata, confidence, and summaries do not appear in the injected block.
+- [x] Hosts without request-boundary injection document the limitation and expose the best available explicit memory-list fallback without claiming automatic injection.
 
-## FR-MCP-MEMORY-004 FR-MCP-MEMORY-004
+## FR-MCP-MEMORY-004 Marker template memory guidance
 
-Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-004.
+Generated `AGENTS-README-FIRST.yaml` instructions SHALL explain MCP memories, the memory tools, the ID format, scope behavior, and the exact `REQUIRED MEMORIES` rendering contract.
+**Acceptance Criteria:**
+- [x] `templates/prompt-templates.yaml` contains an MCP Memories section in the default marker prompt.
+- [x] The section names `memory_add`, `memory_list`, `memory_update`, and `memory_remove`.
+- [x] The section documents Global versus Workspace scope and the `MEMORY-{CATEGORY}-{NNN}` ID format.
+- [x] The section states that memory text is raw text, not a secret store, and must not be silently generated.
+- [x] A marker-template contract test fails if the required section, tools, or render format are missing.
 
-## FR-MCP-MEMORY-005 FR-MCP-MEMORY-005
+## FR-MCP-MEMORY-005 REPL memory namespace
 
-Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-005.
+The REPL SHALL expose typed `workflow.memory.*` operations for memory add, list, update, and remove.
+**Acceptance Criteria:**
+- [x] `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, and `workflow.memory.remove` dispatch through typed workflow code.
+- [x] Valid REPL memory commands return standard result envelopes.
+- [x] Invalid memory method names return the normal method-not-found envelope.
+- [x] Invalid request payloads return standard structured error envelopes without crashing the REPL process.
 
-## FR-MCP-MEMORY-006 FR-MCP-MEMORY-006
+## FR-MCP-MEMORY-006 Memory scope management and ordering
 
-Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-006.
+The MCP Server SHALL allow memories to be marked Global or Workspace and SHALL return Global memories before Workspace memories, with each group sorted by ID ascending.
+**Acceptance Criteria:**
+- [x] Add supports explicit `Scope` and defaults to Workspace only when omitted.
+- [x] Update can change a memory between Global and Workspace under validated rules.
+- [x] List APIs, REPL methods, stdio tools, and required-memory injection all use Global-first grouping.
+- [x] Each scope group sorts by ID ascending using ordinal string comparison.
+- [x] Global rows never appear after workspace rows, and workspace rows from other workspaces are excluded.
 
-## FR-MCP-MEMORY-007 FR-MCP-MEMORY-007
+## FR-MCP-MEMORY-007 Agent plugin memory integration
 
-Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-007.
+Official McpServer agent plugins SHALL expose memory tools and SHALL inject the `REQUIRED MEMORIES` block at host-supported request boundaries, or SHALL document a host limitation and expose an explicit memory-list fallback.
+**Acceptance Criteria:**
+- [x] Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline v1, Cline v2, and OpenCode plugin lanes validate memory tool availability.
+- [x] Plugins with request-boundary injection hooks render `REQUIRED MEMORIES` on every supported user prompt boundary.
+- [x] Plugins without a usable request-boundary injection hook document the host limitation without claiming automatic injection.
+- [x] Plugin validation identifies the host hook or fallback, workspace marker path, and example `REQUIRED MEMORIES` output.
 
 ## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
 

@@ -84,6 +84,55 @@ public sealed class RequirementsWorkflowMetadataTests
         Assert.Equal("test metadata", testResult.Item.Notes);
     }
 
+    [Fact]
+    public async Task HierarchicalRequirementIds_AreAcceptedByWorkflowValidators()
+    {
+        var frHandler = new CapturingHttpHandler("""{"id":"FR-MCP-MEMORY-001","title":"FR","body":"Body","priority":"high","status":"completed"}""");
+        using var frHttp = new HttpClient(frHandler);
+        var frWorkflow = new RequirementsWorkflow(new RequirementsClient(frHttp, Options));
+        var frRequest = Substitute.For<IFrUpdateRequest>();
+        frRequest.Id.Returns("FR-MCP-MEMORY-001");
+        frRequest.Title.Returns("FR");
+        frRequest.Description.Returns("Body");
+        frRequest.Priority.Returns("high");
+        frRequest.Status.Returns("completed");
+
+        var frResult = await frWorkflow.UpdateFrAsync(frRequest);
+
+        Assert.Equal("FR-MCP-MEMORY-001", frResult.Item.Id);
+        Assert.Contains("\"status\":\"completed\"", frHandler.LastRequestBody);
+
+        var trHandler = new CapturingHttpHandler("""{"id":"TR-MCP-MEMORY-001","title":"TR","body":"Body","priority":"high","status":"completed"}""");
+        using var trHttp = new HttpClient(trHandler);
+        var trWorkflow = new RequirementsWorkflow(new RequirementsClient(trHttp, Options));
+        var trRequest = Substitute.For<ITrUpdateRequest>();
+        trRequest.Id.Returns("TR-MCP-MEMORY-001");
+        trRequest.Title.Returns("TR");
+        trRequest.Description.Returns("Body");
+        trRequest.Priority.Returns("high");
+        trRequest.Status.Returns("completed");
+
+        var trResult = await trWorkflow.UpdateTrAsync(trRequest);
+
+        Assert.Equal("TR-MCP-MEMORY-001", trResult.Item.Id);
+        Assert.Contains("\"status\":\"completed\"", trHandler.LastRequestBody);
+
+        var testHandler = new CapturingHttpHandler("""{"id":"TEST-MCP-MEMORY-001","title":"TEST","condition":"Condition","priority":"high","status":"completed"}""");
+        using var testHttp = new HttpClient(testHandler);
+        var testWorkflow = new RequirementsWorkflow(new RequirementsClient(testHttp, Options));
+        var testRequest = Substitute.For<ITestUpdateRequest>();
+        testRequest.Id.Returns("TEST-MCP-MEMORY-001");
+        testRequest.Title.Returns("TEST");
+        testRequest.Description.Returns("Condition");
+        testRequest.Priority.Returns("high");
+        testRequest.Status.Returns("completed");
+
+        var testResult = await testWorkflow.UpdateTestAsync(testRequest);
+
+        Assert.Equal("TEST-MCP-MEMORY-001", testResult.Item.Id);
+        Assert.Contains("\"status\":\"completed\"", testHandler.LastRequestBody);
+    }
+
     private sealed class CapturingHttpHandler : HttpMessageHandler
     {
         private readonly string _responseBody;

@@ -17,19 +17,19 @@ namespace McpServer.Repl.Core;
 /// <list type="bullet">
 /// <item>
 /// <term>Functional Requirement ID</term>
-/// <description>Format: <c>FR-&lt;AREA&gt;-###</c>. Regex: <c>^FR-[A-Z]+-\d{3}$</c></description>
+/// <description>Format: <c>FR-&lt;AREA&gt;[-&lt;QUALIFIER&gt;]-###</c>. Regex: <c>^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$</c></description>
 /// </item>
 /// <item>
 /// <term>Technical Requirement ID</term>
-/// <description>Format: <c>TR-&lt;AREA&gt;-&lt;SUBAREA&gt;-###</c>. Regex: <c>^TR-[A-Z]+-[A-Z]+-\d{3}$</c></description>
+/// <description>Format: <c>TR-&lt;AREA&gt;-&lt;SUBAREA&gt;[-&lt;QUALIFIER&gt;]-###</c>. Regex: <c>^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\d{3}$</c></description>
 /// </item>
 /// <item>
 /// <term>Test Requirement ID</term>
-/// <description>Format: <c>TEST-&lt;AREA&gt;-###</c>. Regex: <c>^TEST-[A-Z]+-\d{3}$</c></description>
+/// <description>Format: <c>TEST-&lt;AREA&gt;[-&lt;QUALIFIER&gt;]-###</c>. Regex: <c>^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$</c></description>
 /// </item>
 /// <item>
 /// <term>Valid examples</term>
-/// <description><c>FR-MCP-001</c>, <c>TR-MCP-ARCH-001</c>, <c>TEST-MCP-001</c></description>
+/// <description><c>FR-MCP-001</c>, <c>FR-MCP-MEMORY-001</c>, <c>TR-MCP-ARCH-001</c>, <c>TR-MCP-MEMORY-001</c>, <c>TEST-MCP-001</c>, <c>TEST-MCP-MEMORY-001</c></description>
 /// </item>
 /// <item>
 /// <term>Invalid examples</term>
