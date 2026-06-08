@@ -650,6 +650,14 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 **TR-MCP-MEMORY-006** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-006.
 
+## TR-MCP-MEMORY-007
+
+**TR-MCP-MEMORY-007** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-007.
+
+## TR-MCP-MEMORY-008
+
+**TR-MCP-MEMORY-008** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-008.
+
 ## TR-MCP-MT-001
 
 **WorkspaceContext Scoped Per-Request Service** — `WorkspaceContext` is a scoped service holding resolved workspace identity: `WorkspacePath`, `WorkspaceName`, `DataDirectory`, `TodoFilePath`, `SessionsPath`, `ExternalDocsPath`, `IsDefaultKey`, `IsResolved`. Populated by `WorkspaceResolutionMiddleware` before downstream services execute. Downstream services inject `WorkspaceContext` instead of reading `IConfiguration["Mcp:RepoRoot"]`.
@@ -684,6 +692,12 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-PLUGIN-008
 
 **Codex requirements update command fallback parity** — The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
+
+## TR-MCP-PLUGIN-009
+
+**Session and compaction hook output contract** — Bash-family MCP plugins SHALL implement SessionStart, SessionEnd, PreCompact, and PostCompact scripts so that status-only execution paths return {}. Hook-specific output may be emitted only for event schemas that support it, and every hookSpecificOutput payload SHALL include the matching hookEventName. PostCompact history reload side effects SHALL NOT attempt context injection via additionalContext.
+**Acceptance Criteria:**
+- [x] Affected session and compact hook scripts no longer contain hookSpecificOutput or additionalContext emissions for status-only paths. (evidence: Targeted rg search over the affected session and compact scripts found no hookSpecificOutput or additionalContext after the fix.)
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
@@ -1044,6 +1058,12 @@ The `LegacyTodoSqliteMigrator` (TR-MCP-TODO-007) SHALL stamp imported rows with 
 ## TR-MCP-TODO-009
 
 **Preserve TODO description Markdown** — TODO persistence, plugin/client update paths, database storage, audit rows, and informational projections must treat description as Markdown, preserving blank lines, indentation, code fences, list spacing, and trailing content without trimming meaningful formatting.
+
+## TR-MCP-TODO-010
+
+**Root-scoped TODO done serialization** — TODO update serializers in MCP plugin wrappers SHALL read the parent done field only from the request root and SHALL NOT derive it from nested implementationTasks[].done values. Structured root-level parsing is required for boolean root fields when building HTTP or workflow update bodies.
+**Acceptance Criteria:**
+- [x] Root-level done serialization ignores nested implementationTasks[].done values. (evidence: Plugin tests/repl-invoke-shim.bats now asserts no top-level done is emitted when only implementation task done values are present.)
 
 ## TR-MCP-TPL-001
 

@@ -733,21 +733,97 @@ TODO create, update, read, audit, and projection paths shall preserve descriptio
 
 The MCP Server shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
 
-**Status:** ✅ Complete
-
-**Technical Implementation:** [TR-MCP-BATCH-109](./Technical-Requirements.md#tr-mcp-batch-109) | [TR-MCP-SCHEMA-109](./Technical-Requirements.md#tr-mcp-schema-109) | [TR-MCP-STDIO-109](./Technical-Requirements.md#tr-mcp-stdio-109) | [Mapping](./TR-per-FR-Mapping.md)
-
-**Covered by:** `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `ReplCommandDispatcher`, `ReplYamlMessageValidator`, plugin REPL bridges and schema copies
-
 ## FR-MCP-110 Deterministic Nuke PowerShell execution
 
-Nuke build and deployment automation shall run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
+Nuke build and deployment automation SHALL run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
 
-**Status:** ✅ Complete
+## FR-MCP-111 Package workflow closeout skills across McpServer plugins
 
-**Technical Implementation:** [TR-MCP-NUKE-001](./Technical-Requirements.md#tr-mcp-nuke-001) | [Mapping](./TR-per-FR-Mapping.md)
+All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit and push interrupted work, and close out MCP-backed work consistently across plugin families.
 
-**Covered by:** `build.ps1`, `PowerShellInvocationTests`, `RequirementsWikiPublishScriptTests`, live deployment guidance in `docs/` and `scripts/Manage-McpService.ps1`
+## FR-MCP-112 Requirements export description and AC formatting
+
+Requirements exports shall render requirement descriptions as readable Markdown text and shall display structured acceptance criteria as a bulleted list instead of hiding or flattening AC into dense table cells.
+**Acceptance Criteria:**
+- [x] Wiki exports render TEST requirement descriptions outside dense table cells so long descriptions remain readable. (evidence: RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria asserts per-TEST headings and paragraphs.)
+- [x] Wiki exports render structured acceptance criteria under an Acceptance Criteria label as Markdown checklist bullets. (evidence: The same focused test asserts unchecked and checked AC bullets, including evidence text.)
+- [x] Azure and GitHub wiki exports use the same requirement description and AC formatting. (evidence: The focused service test asserts GitHub and Azure Testing-Requirements.md output are equal.)
+
+## FR-MCP-113 Plugin requirement batch payload parsing
+
+The system SHALL accept valid YAML and JSON records arrays for requirement batch operations while preserving nested acceptance criteria.
+**Acceptance Criteria:**
+- [ ] workflow.requirements.updateFrBatch accepts unindented records YAML and preserves nested acceptance criteria.
+
+## FR-MCP-114 Parent TODO completion isolation
+
+The system SHALL keep a TODO item's top-level done state independent from nested implementation task done state. Updating implementationTasks[].done SHALL NOT mark the parent TODO done unless the update request explicitly sets the parent done field or the TODO completion workflow deliberately satisfies the parent completion criteria.
+**Acceptance Criteria:**
+- [x] Updating a nested implementation task done value does not include or change the top-level TODO done field when the caller did not explicitly set it. (evidence: Focused Bats test TODO HTTP body does not promote implementation task done to parent done passed in all five Bash plugin repos.)
+- [x] A live TODO update can mark one implementation task done while the parent TODO remains not done. (evidence: Temporary live TODO TEMP-ISSUE39-001 remained done=false after updating one implementation task to done=true, then was deleted.)
+
+## FR-MCP-115 Session and compaction hook output schema compliance
+
+MCP plugin session and compaction hooks SHALL emit schema-valid hook outputs for their event type. Status-only SessionStart, SessionEnd, PreCompact, and PostCompact outcomes SHALL emit an empty JSON object; hooks that emit hookSpecificOutput SHALL include the matching hookEventName and only fields supported by that event. PostCompact SHALL NOT emit additionalContext because that event cannot inject context.
+**Acceptance Criteria:**
+- [x] SessionStart, SessionEnd, PreCompact, and PostCompact status-only hook scripts emit {} instead of non-spec hookSpecificOutput status payloads. (evidence: Hook Bats suites assert exact {} output for the affected session and compact hooks.)
+- [x] PostCompact does not emit additionalContext. (evidence: Hook Bats suites assert post-compact output is {} and does not contain additionalContext.)
+
+## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.
+
+## FR-MCP-AGENT-PARITY-002 FR-MCP-AGENT-PARITY-002
+
+Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-002.
+
+## FR-MCP-BATCH-001 Plugin requirement batch payload parsing
+
+All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+
+## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-MEMORY-001 FR-MCP-MEMORY-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-001.
+
+## FR-MCP-MEMORY-002 FR-MCP-MEMORY-002
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-002.
+
+## FR-MCP-MEMORY-003 FR-MCP-MEMORY-003
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-003.
+
+## FR-MCP-MEMORY-004 FR-MCP-MEMORY-004
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-004.
+
+## FR-MCP-MEMORY-005 FR-MCP-MEMORY-005
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-005.
+
+## FR-MCP-MEMORY-006 FR-MCP-MEMORY-006
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-006.
+
+## FR-MCP-MEMORY-007 FR-MCP-MEMORY-007
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-007.
+
+## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
+
+All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+
+## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
+
+All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
@@ -816,6 +892,28 @@ All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are c
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
 
+## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
+
+FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
+
+## FR-MCP-REQAC-002 Copy acceptance criteria from a TODO to a requirement
+
+A copy operation populates a requirement's acceptance criteria from a TODO's acceptance criteria verbatim (field-for-field).
+
+## FR-MCP-REQAC-PLUGIN-001 Plugin acceptanceCriteria rollout
+
+All Bash and TypeScript MCP plugin families expose structured acceptanceCriteria on FR/TR/TEST create and update flows, including copy-from-TODO support where applicable.
+**Acceptance Criteria:**
+- [x] Bash and TypeScript plugin live gates preserve structured acceptanceCriteria through workflow and REST round-trip verification. (evidence: Live FR-CODEXBIND-001 workflow create/get plus REST GET returned AC-CODEXBIND-001 after service and REPL tool updates.)
+
+## FR-MCP-REQACPLUGIN-001 Plugins expose AcceptanceCriteria on requirements surface
+
+Every MCP server plugin (bash and TypeScript families) lets its agent set and read structured acceptanceCriteria ({id,text,isSatisfied,evidence}) on FR/TR/TEST create/update via the plugin command surface, including hydration on partial updates.
+**Acceptance Criteria:**
+- [ ] Bash family typed-params builder emits acceptanceCriteria block on create+update for FR/TR/TEST
+- [ ] TypeScript family tool inputSchema declares acceptanceCriteria + typedParams forwards it
+- [ ] Plugin tests cover both create and partial-update hydration paths
+
 ## FR-SUPPORT-010 MCP Context Unification
 
 Local MCP server providing context retrieval, TODO management, repository access, session logging, and ingestion capabilities for AI agent integration.
@@ -836,7 +934,7 @@ Session log POST shall return RFC 7807 ProblemDetails on body-binding or validat
 
 ## FR-SUPPORT-010C SessionLog REST Surface Completion
 
-Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header. Closing a turn through the turn endpoint shall require at least one decision, action, or commit item; otherwise the endpoint returns a detailed validation error stating that compliance with session logging requirements is not optional.
+Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
 

@@ -157,6 +157,38 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 **Covered by:** `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
 
+## TR-MCP-AGENT-PARITY-010
+
+**TR-MCP-AGENT-PARITY-010** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-010.
+
+## TR-MCP-AGENT-PARITY-011
+
+**TR-MCP-AGENT-PARITY-011** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-011.
+
+## TR-MCP-AGENT-PARITY-012
+
+**TR-MCP-AGENT-PARITY-012** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-012.
+
+## TR-MCP-AGENT-PARITY-013
+
+**TR-MCP-AGENT-PARITY-013** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-013.
+
+## TR-MCP-AGENT-PARITY-020
+
+**TR-MCP-AGENT-PARITY-020** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020.
+
+## TR-MCP-AGENT-PARITY-020..027
+
+**TR-MCP-AGENT-PARITY-020..027** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020..027.
+
+## TR-MCP-AGENT-PARITY-020-027
+
+**TR-MCP-AGENT-PARITY-020-027** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020-027.
+
+## TR-MCP-AGENT-PARITY-030
+
+**TR-MCP-AGENT-PARITY-030** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-030.
+
 ## TR-MCP-API-001
 
 REST routes for todo/session/context/repo/github with OpenAPI.
@@ -226,6 +258,18 @@ ASP.NET Core 9 server with HTTP and STDIO MCP transport.
 **Device Authorization Flow for CLI Clients** — OIDC `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures `mcp-server-api` appears in token audience and includes `realm_roles`.
 **Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `McpServer.Director`
 
+## TR-MCP-BATCH-001
+
+**Robust Bash plugin batch records normalization** — Bash-style MCP server plugin wrappers SHALL normalize requirement batch records from unindented YAML sequences, indented YAML sequences, and inline JSON arrays before schema validation and typed request conversion.
+
+## TR-MCP-BATCH-109
+
+**Requirements batch endpoint and workflow support** — REST controllers, RequirementsClient, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
+
+## TR-MCP-BATCHTS-001
+
+**Robust TypeScript plugin batch records normalization** — TypeScript MCP server plugin tools SHALL normalize requirement batch records from object arrays and string YAML or JSON arrays before bridge request conversion while preserving nested acceptanceCriteria booleans.
+
 ## TR-MCP-BYRD-001
 
 **Workspace-Scoped Byrd Execution Store** — The server SHALL persist Byrd iteration phases, execution TODOs, and TODO checkpoints in a workspace-scoped durable store under `.mcpServer`, with stable IDs for phases, TODOs, and checkpoints. The execution store SHALL coexist with the existing TODO providers without breaking legacy TODO CRUD behavior.
@@ -256,7 +300,7 @@ ASP.NET Core 9 server with HTTP and STDIO MCP transport.
 
 ## TR-MCP-BYRD-005
 
-**Byrd process plan creation requirements** — The Byrd Development Process V4 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
+**Byrd process plan creation requirements** — The Byrd Development Process V3 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
 
 ## TR-MCP-CFG-001
 
@@ -441,16 +485,7 @@ SQLite FTS5 full-text search support and hybrid ranking.
 
 ## TR-MCP-DOC-001
 
-### Marketing Documentation Coverage
-- Define a marketing-focused McpServer narrative that explains platform purpose, problem/need, and adopter value proposition.
-- Document key capabilities and differentiators in concise adoption-oriented language aligned with existing FR feature areas.
-- Maintain a supported UI tooling section covering available user surfaces (including VS extension, Web UI, and Director/TUI where applicable) with current support status.
-- Keep the documentation in version control under `docs/` so updates are reviewed and traceable with product changes.
-- Maintain an executable documentation guidance guard that verifies agent STDIO, plugin acquisition, pipeline, and generated requirements wiki guidance stays aligned with current workspace contracts.
-
-**Status:** ✅ Complete
-
-**Covered by:** `docs/`, `docs/AGENT-PLUGIN-AVAILABILITY.md`, `docs/REPL-AGENT-GUIDE.md`, `templates/prompt-templates.yaml`, `tests/Build.Tests/DocumentationGuidanceTests.cs`
+**Marketing documentation coverage** — Marketing and agent-facing documentation shall explain McpServer purpose, supported UI and agent surfaces, plugin acquisition through the MCP tool registry, single-line JSON stdio guidance, current pipeline references, and generated requirements wiki parity.
 
 ## TR-MCP-DOC-002
 
@@ -591,6 +626,38 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 **Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
 
+## TR-MCP-MEMORY-001
+
+**TR-MCP-MEMORY-001** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-001.
+
+## TR-MCP-MEMORY-002
+
+**TR-MCP-MEMORY-002** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-002.
+
+## TR-MCP-MEMORY-003
+
+**TR-MCP-MEMORY-003** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-003.
+
+## TR-MCP-MEMORY-004
+
+**TR-MCP-MEMORY-004** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-004.
+
+## TR-MCP-MEMORY-005
+
+**TR-MCP-MEMORY-005** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-005.
+
+## TR-MCP-MEMORY-006
+
+**TR-MCP-MEMORY-006** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-006.
+
+## TR-MCP-MEMORY-007
+
+**TR-MCP-MEMORY-007** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-007.
+
+## TR-MCP-MEMORY-008
+
+**TR-MCP-MEMORY-008** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-008.
+
 ## TR-MCP-MT-001
 
 **WorkspaceContext Scoped Per-Request Service** — `WorkspaceContext` is a scoped service holding resolved workspace identity: `WorkspacePath`, `WorkspaceName`, `DataDirectory`, `TodoFilePath`, `SessionsPath`, `ExternalDocsPath`, `IsDefaultKey`, `IsResolved`. Populated by `WorkspaceResolutionMiddleware` before downstream services execute. Downstream services inject `WorkspaceContext` instead of reading `IConfiguration["Mcp:RepoRoot"]`.
@@ -610,17 +677,13 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 `SessionLogService` injects an optional `WorkspaceContext` and stamps `WorkspaceId` on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on `McpDbContext.SaveChangesAsync` to auto-fill `WorkspaceId` for Added entities from the DbContext's resolved `_workspaceId`. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
 
+## TR-MCP-NUKE-001
+
+**Non-interactive PowerShell hosts for Nuke automation** — The root Nuke PowerShell bootstrap and any build-owned pwsh.exe or powershell.exe child process SHALL include -NoLogo, -NoProfile, and -NonInteractive unless an invocation is explicitly documented as interactive. Live deployment guidance SHALL use the same flags.
+
 ## TR-MCP-OPS-001
 
 Operational scripts for startup, health checks, packaging, config validation, and migration.
-
-## TR-MCP-BATCH-109
-
-**Requirements batch endpoint and workflow support** — REST controllers, `RequirementsClient`, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
-
-**Status:** ✅ Complete
-
-**Covered by:** `RequirementsController`, `RequirementsClient`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsWorkflow`
 
 ## TR-MCP-PLAN-001
 
@@ -630,29 +693,15 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Codex requirements update command fallback parity** — The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
 
-## TR-MCP-SCHEMA-109
+## TR-MCP-PLUGIN-009
 
-**REPL request schema enforcement** — Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.
+**Session and compaction hook output contract** — Bash-family MCP plugins SHALL implement SessionStart, SessionEnd, PreCompact, and PostCompact scripts so that status-only execution paths return {}. Hook-specific output may be emitted only for event schemas that support it, and every hookSpecificOutput payload SHALL include the matching hookEventName. PostCompact history reload side effects SHALL NOT attempt context injection via additionalContext.
+**Acceptance Criteria:**
+- [x] Affected session and compact hook scripts no longer contain hookSpecificOutput or additionalContext emissions for status-only paths. (evidence: Targeted rg search over the affected session and compact scripts found no hookSpecificOutput or additionalContext after the fix.)
 
-**Status:** ✅ Complete
+## TR-MCP-PLUGIN-SKILLS-001
 
-**Covered by:** `docs/context/repl-yaml-message.schema.json`, `ReplYamlMessageValidator`, `ReplCommandDispatcher`, plugin `schemas/repl-yaml-message.schema.json` copies
-
-## TR-MCP-STDIO-109
-
-**Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
-
-**Status:** ✅ Complete
-
-**Covered by:** Codex/Claude/Copilot requirement skill docs and `repl-invoke.sh`, Cline `repl-bridge.ts`, Cline schema preflight validation
-
-## TR-MCP-NUKE-001
-
-**Non-interactive PowerShell hosts for Nuke automation** — The root Nuke PowerShell bootstrap and any build-owned `pwsh.exe` or `powershell.exe` child process shall include `-NoLogo`, `-NoProfile`, and `-NonInteractive` unless an invocation is explicitly documented as interactive. Live deployment guidance shall use the same flags.
-
-**Status:** ✅ Complete
-
-**Covered by:** `build.ps1`, `PowerShellInvocationTests`, `RequirementsWikiPublishScriptTests`, `scripts/Manage-McpService.ps1`, `docs/USER-GUIDE.md`, `docs/FAQ.md`, `docs/MCP-SERVER.md`, `docs/AGENT-PLUGIN-AVAILABILITY.md`
+**Probe TR id pattern** — Probe only; should not be created if id validation fails or duplicate cleanup is needed.
 
 ## TR-MCP-POL-001
 
@@ -871,6 +920,38 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Wiki Import Selection and Authoritative Sync** — Requirements ingest SHALL accept sourceFormat=auto|canonical|wiki, preferredWikiFormat=azure|github, path-keyed documents, and optional per-document lastModifiedUtc. Wiki import SHALL compare both platform manifest generatedAtUtc values and latest file modified UTC values, fail on disagreement unless a preferred wiki format is supplied, and authoritatively create, update, delete, or ignore FR/TR/TEST/mapping records from the selected folder.
 
+## TR-MCP-REQAC-001
+
+**Acceptance criteria persistence** — Persist requirement acceptance criteria as a nullable AcceptanceCriteriaJson column on RequirementEntity (JSON-column pattern like TodoItemEntity); add migrations for SQLite, SqlServer, PostgreSql; reuse the existing AcceptanceCriterion type.
+**Acceptance Criteria:**
+- [ ] Source criterion 1
+- [ ] Source criterion 2
+
+## TR-MCP-REQAC-002
+
+**Acceptance criteria markdown rendering** — Render acceptance criteria into Functional/Technical/Testing-Requirements.md; the parser remains tolerant of the block; the database remains authoritative.
+
+## TR-MCP-REQAC-PLUGIN-001
+
+**Plugin typed request shaping preserves acceptanceCriteria** — Plugin typed-parameter builders and REPL passthrough binding must emit structured acceptanceCriteria without flattening or dropping nested boolean/list fields.
+**Acceptance Criteria:**
+- [x] Nested YAML acceptanceCriteria is normalized into typed client request models and persisted by the requirements REST API. (evidence: GenericClientPassthroughYamlBindingTests passed and live workflow/REST round-trip returned AC-CODEXBIND-001.)
+
+## TR-MCP-REQACPLUGIN-001
+
+**Plugin-side schema + shaper changes for AcceptanceCriteria** — Bash plugins gain _repl_emit_acceptance_criteria_block helper and per-method emit/hydrate calls in _repl_requirements_typed_params for createFr/createTr/createTest/updateFr/updateTr/updateTest. TS plugins gain shared AcceptanceCriterion JSON schemas and typedParams pass-through for the same six methods plus per-kind/mixed batch records items.
+
+## TR-MCP-REQEXPORT-001
+
+**Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC** — The requirements wiki renderer shall preserve TEST grouping while emitting each TEST requirement as a heading with description text and a nested Acceptance Criteria checklist generated from the structured acceptanceCriteria field.
+**Acceptance Criteria:**
+- [x] Wiki testing export output contains per-TEST headings and description paragraphs. (evidence: RequirementsWikiDocumentRenderer now renders grouped TEST entries as Markdown sections headed by TEST requirement IDs.)
+- [x] Structured acceptanceCriteria entries render as bullet/checklist list items with evidence when supplied. (evidence: RequirementsDocumentRenderer.AppendAcceptanceCriteria is reused by wiki rendering and focused tests assert checklist output.)
+
+## TR-MCP-SCHEMA-109
+
+**REPL request schema enforcement** — Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.
+
 ## TR-MCP-SEC-001
 
 **Per-Workspace Auth Tokens** — `WorkspaceResolutionMiddleware` resolves workspace identity per-request using a three-tier chain: (1) `X-Workspace-Path` header, (2) API key reverse lookup via `WorkspaceTokenService`, (3) default workspace from config. `WorkspaceAuthMiddleware` then validates the token against the resolved workspace. `WorkspaceTokenService` generates per-workspace cryptographic tokens (32-byte base64url) on startup and maintains reverse-lookup maps for API key → workspace resolution.
@@ -892,6 +973,22 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Status:** ✅ In Progress
 
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`
+
+## TR-MCP-SKILLS-001
+
+**Use supported plugin MCP bridge paths** — Skill content uses each plugin's supported MCP bridge or wrapper path and forbids raw REST for normal MCP mutations.
+
+## TR-MCP-SKILLS-002
+
+**Preserve commit-sync pause acknowledgement contract** — commit-sync skill content preserves the pause-and-acknowledge contract before staging, committing, or pushing.
+
+## TR-MCP-SKILLS-003
+
+**Package skills through existing plugin distribution metadata** — Plugin manifests and package metadata expose or package the new skills according to each plugin's existing distribution model.
+
+## TR-MCP-STDIO-109
+
+**Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
 
 ## TR-MCP-SVC-001
 
@@ -961,6 +1058,12 @@ The `LegacyTodoSqliteMigrator` (TR-MCP-TODO-007) SHALL stamp imported rows with 
 ## TR-MCP-TODO-009
 
 **Preserve TODO description Markdown** — TODO persistence, plugin/client update paths, database storage, audit rows, and informational projections must treat description as Markdown, preserving blank lines, indentation, code fences, list spacing, and trailing content without trimming meaningful formatting.
+
+## TR-MCP-TODO-010
+
+**Root-scoped TODO done serialization** — TODO update serializers in MCP plugin wrappers SHALL read the parent done field only from the request root and SHALL NOT derive it from nested implementationTasks[].done values. Structured root-level parsing is required for boolean root fields when building HTTP or workflow update bodies.
+**Acceptance Criteria:**
+- [x] Root-level done serialization ignores nested implementationTasks[].done values. (evidence: Plugin tests/repl-invoke-shim.bats now asserts no top-level done is emitted when only implementation task done values are present.)
 
 ## TR-MCP-TPL-001
 
@@ -1111,7 +1214,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-PLANNED-013A
 
-`AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform. `SessionLogService.UpsertTurnAsync` rejects terminal turn statuses when the turn lacks decision, action, and commit evidence so `SessionLogController.UpsertTurnAsync` returns a detailed ProblemDetails response for audit-empty closes.
+`AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
 
 ## TR-TEST-001
 

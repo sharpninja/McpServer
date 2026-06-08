@@ -776,6 +776,21 @@ Unit and integration validation shall prove generated requirements exports rende
 Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
 
 
+### TEST-MCP-154
+
+Given a TODO update payload that changes implementationTasks[].done and omits top-level done, when the plugin wrapper builds the TODO update HTTP body, then the body preserves nested task done values and omits parent done so the server cannot accidentally complete the TODO.
+
+**Acceptance Criteria:**
+- [x] Regression test fails if nested implementation task completion is promoted to top-level done. (evidence: Bats output reported ok 1 TODO HTTP body does not promote implementation task done to parent done in all five plugin repositories.)
+
+### TEST-MCP-155
+
+Given mocked successful and failed session/compact hook dependencies, when SessionStart, SessionEnd, PreCompact, and PostCompact scripts run, then each status-only path emits {} and PostCompact emits no additionalContext.
+
+**Acceptance Criteria:**
+- [x] Hook regression tests assert exact {} output for session-start, session-end, pre-compact, and post-compact. (evidence: tests/hooks.bats passed in the affected plugin repositories with exact-output assertions.)
+- [x] Copilot has hook regression coverage equivalent to the affected script surface. (evidence: Added F:\GitHub\mcpserver-copilot-plugin\tests\hooks.bats and passed 6/6.)
+
 
 ## TEST-MCP-BATCH
 

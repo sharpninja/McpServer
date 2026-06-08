@@ -505,6 +505,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-111 | Tracked | Functional-Requirements.md |
 | FR-MCP-112 | Tracked | Functional-Requirements.md |
 | FR-MCP-113 | Tracked | Functional-Requirements.md |
+| FR-MCP-114 | Tracked | Functional-Requirements.md |
+| FR-MCP-115 | Tracked | Functional-Requirements.md |
 | FR-MCP-AGENT-PARITY-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-AGENT-PARITY-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-BATCH-001 | Tracked | Functional-Requirements.md |
@@ -515,6 +517,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-MEMORY-003 | Tracked | Functional-Requirements.md |
 | FR-MCP-MEMORY-004 | Tracked | Functional-Requirements.md |
 | FR-MCP-MEMORY-005 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-006 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-007 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGIN-BATCH-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGIN-SKILLS-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-REQAC-001 | Tracked | Functional-Requirements.md |
@@ -537,6 +541,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-MEMORY-004 | Tracked | Technical-Requirements.md |
 | TR-MCP-MEMORY-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-MEMORY-006 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-007 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-009 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-SKILLS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-002 | Tracked | Technical-Requirements.md |
@@ -546,11 +553,14 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-SKILLS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-SKILLS-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-SKILLS-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-TODO-010 | Tracked | Technical-Requirements.md |
 | TEST-MCP-149 | Tracked | Testing-Requirements.md |
 | TEST-MCP-150 | Tracked | Testing-Requirements.md |
 | TEST-MCP-151 | Tracked | Testing-Requirements.md |
 | TEST-MCP-152 | Tracked | Testing-Requirements.md |
 | TEST-MCP-153 | Tracked | Testing-Requirements.md |
+| TEST-MCP-154 | Tracked | Testing-Requirements.md |
+| TEST-MCP-155 | Tracked | Testing-Requirements.md |
 | TEST-MCP-BATCH-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-002 | Tracked | Testing-Requirements.md |
@@ -563,3 +573,4 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REQAC-PLUGIN-TS | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQACPLUGIN-TS | Tracked | Testing-Requirements.md |
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

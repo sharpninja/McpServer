@@ -755,6 +755,20 @@ The system SHALL accept valid YAML and JSON records arrays for requirement batch
 **Acceptance Criteria:**
 - [ ] workflow.requirements.updateFrBatch accepts unindented records YAML and preserves nested acceptance criteria.
 
+## FR-MCP-114 Parent TODO completion isolation
+
+The system SHALL keep a TODO item's top-level done state independent from nested implementation task done state. Updating implementationTasks[].done SHALL NOT mark the parent TODO done unless the update request explicitly sets the parent done field or the TODO completion workflow deliberately satisfies the parent completion criteria.
+**Acceptance Criteria:**
+- [x] Updating a nested implementation task done value does not include or change the top-level TODO done field when the caller did not explicitly set it. (evidence: Focused Bats test TODO HTTP body does not promote implementation task done to parent done passed in all five Bash plugin repos.)
+- [x] A live TODO update can mark one implementation task done while the parent TODO remains not done. (evidence: Temporary live TODO TEMP-ISSUE39-001 remained done=false after updating one implementation task to done=true, then was deleted.)
+
+## FR-MCP-115 Session and compaction hook output schema compliance
+
+MCP plugin session and compaction hooks SHALL emit schema-valid hook outputs for their event type. Status-only SessionStart, SessionEnd, PreCompact, and PostCompact outcomes SHALL emit an empty JSON object; hooks that emit hookSpecificOutput SHALL include the matching hookEventName and only fields supported by that event. PostCompact SHALL NOT emit additionalContext because that event cannot inject context.
+**Acceptance Criteria:**
+- [x] SessionStart, SessionEnd, PreCompact, and PostCompact status-only hook scripts emit {} instead of non-spec hookSpecificOutput status payloads. (evidence: Hook Bats suites assert exact {} output for the affected session and compact hooks.)
+- [x] PostCompact does not emit additionalContext. (evidence: Hook Bats suites assert post-compact output is {} and does not contain additionalContext.)
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.
@@ -794,6 +808,14 @@ Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-004.
 ## FR-MCP-MEMORY-005 FR-MCP-MEMORY-005
 
 Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-005.
+
+## FR-MCP-MEMORY-006 FR-MCP-MEMORY-006
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-006.
+
+## FR-MCP-MEMORY-007 FR-MCP-MEMORY-007
+
+Placeholder requirement backfilled for TODO link FR-MCP-MEMORY-007.
 
 ## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
 
