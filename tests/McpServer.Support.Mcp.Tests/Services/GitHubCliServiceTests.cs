@@ -451,4 +451,76 @@ public sealed class GitHubCliServiceTests
                 && request.WorkingDirectory == Path.GetFullPath("C:\\repo\\workspace")),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
+
+    /// <summary>
+    /// BUG-GITHUB-001: Verifies service-account GitHub CLI calls pass a command-scoped
+    /// <c>safe.directory</c> override for the active workspace instead of requiring a
+    /// global Git configuration mutation under the Windows service account.
+    /// </summary>
+    [Fact]
+    public async Task ListIssuesAsync_WithWorkspaceAccessor_AddsCommandScopedSafeDirectory()
+    {
+        _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "[]", null));
+
+        var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-gh-safe-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(workspacePath);
+        try
+        {
+            var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: workspacePath);
+            var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
+
+            var result = await sut.ListIssuesAsync("open", 5).ConfigureAwait(true);
+
+            Assert.True(result.Success);
+            await _processRunner.Received(1).RunAsync(
+                Arg.Is<ProcessRunRequest>(request => HasSafeDirectoryEnvironment(request, workspacePath)),
+                Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        }
+        finally
+        {
+            Directory.Delete(workspacePath, true);
+        }
+    }
+
+    /// <summary>
+    /// BUG-GITHUB-001: Verifies an explicit GitHub repository selector uses
+    /// <c>gh --repo</c> and avoids local repository discovery entirely.
+    /// </summary>
+    [Fact]
+    public async Task CreateIssueAsync_WithConfiguredRepository_AddsRepoOptionAndAvoidsWorkspaceCwd()
+    {
+        _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "https://github.com/sharpninja/McpServer/issues/123\n", null));
+
+        var options = Substitute.For<IOptionsMonitor<GitHubIntegrationOptions>>();
+        options.CurrentValue.Returns(new GitHubIntegrationOptions
+        {
+            Repository = "https://github.com/sharpninja/McpServer.git"
+        });
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, githubOptions: options, workspaceAccessor: workspaceAccessor);
+
+        var result = await sut.CreateIssueAsync("New issue", "Body").ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        Assert.Equal(123, result.Number);
+        await _processRunner.Received(1).RunAsync(
+            "gh",
+            Arg.Is<string>(arguments => arguments != null
+                && arguments.Contains("issue create", StringComparison.Ordinal)
+                && arguments.Contains("--repo sharpninja/McpServer", StringComparison.Ordinal)),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    private static bool HasSafeDirectoryEnvironment(ProcessRunRequest? request, string workspacePath)
+        => request != null
+           && request.WorkingDirectory == Path.GetFullPath(workspacePath)
+           && request.EnvironmentVariables is not null
+           && request.EnvironmentVariables.TryGetValue("GIT_CONFIG_COUNT", out var count)
+           && count == "1"
+           && request.EnvironmentVariables.TryGetValue("GIT_CONFIG_KEY_0", out var key)
+           && key == "safe.directory"
+           && request.EnvironmentVariables.TryGetValue("GIT_CONFIG_VALUE_0", out var value)
+           && value == Path.GetFullPath(workspacePath);
 }

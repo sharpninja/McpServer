@@ -791,6 +791,16 @@ Given mocked successful and failed session/compact hook dependencies, when Sessi
 - [x] Hook regression tests assert exact {} output for session-start, session-end, pre-compact, and post-compact. (evidence: tests/hooks.bats passed in the affected plugin repositories with exact-output assertions.)
 - [x] Copilot has hook regression coverage equivalent to the affected script surface. (evidence: Added F:\GitHub\mcpserver-copilot-plugin\tests\hooks.bats and passed 6/6.)
 
+### TEST-MCP-156
+
+Verify GitHubCliService passes command-scoped safe.directory environment variables for workspace-scoped calls and uses gh --repo without workspace cwd when a repository is configured.
+
+
+### TEST-MCP-157
+
+Verify the PowerShell wrapper returns a non-zero result with a timeout diagnostic when a plugin helper command hangs beyond TimeoutSeconds, while normal helper wrapper tests still pass.
+
+
 
 ## TEST-MCP-BATCH
 

@@ -574,3 +574,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REQACPLUGIN-TS | Tracked | Testing-Requirements.md |
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| FR-MCP-116 | Tracked | Functional-Requirements.md |
+| FR-MCP-117 | Tracked | Functional-Requirements.md |
+| TR-MCP-GH-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-010 | Tracked | Technical-Requirements.md |
+| TEST-MCP-156 | Tracked | Testing-Requirements.md |
+| TEST-MCP-157 | Tracked | Testing-Requirements.md |

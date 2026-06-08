@@ -941,3 +941,19 @@ Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (s
 ## FR-TEST-002 FR-TEST-002
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
+
+## FR-MCP-116 GitHub CLI service-account ownership resilience
+
+The system SHALL allow GitHub-backed TODO and issue operations to run under service accounts even when Git rejects the workspace repository as dubious ownership, without requiring an untracked global Git configuration mutation.
+
+**Status:** ✅ Complete
+
+**Covered by:** `GitHubCliService`, `GitHubIntegrationOptions`, `ProcessRunner`, `GitHubCliServiceTests`
+
+## FR-MCP-117 Codex plugin wrapper bounded execution
+
+The Codex MCP plugin wrapper SHALL return successful workflow responses promptly or fail within a caller-controlled bounded timeout with actionable diagnostics instead of forcing raw REST fallback.
+
+**Status:** ✅ Complete
+
+**Covered by:** `Invoke-CodexMcpPlugin.ps1`, `tests/plugin-helpers.bats`

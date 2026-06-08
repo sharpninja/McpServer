@@ -1219,3 +1219,19 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-TEST-001
 
 **TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
+
+## TR-MCP-GH-008
+
+**Ownership-safe GitHub CLI Repository Selection** — GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through `gh --repo` without local repository discovery, or pass a command-scoped `safe.directory` Git configuration for the active workspace when a workspace working directory is required.
+
+**Status:** ✅ Complete
+
+**Covered by:** `GitHubCliService.ResolveRepositoryArgument`, `GitHubCliService.BuildGitSafeDirectoryEnvironment`, `ProcessRunRequest.EnvironmentVariables`, `ProcessRunner.RunAsync`
+
+## TR-MCP-PLUGIN-010
+
+**PowerShell Wrapper Process Timeout Control** — `Invoke-CodexMcpPlugin.ps1` SHALL expose a `TimeoutSeconds` parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and drain stdout/stderr without read ordering that can deadlock the wrapper.
+
+**Status:** ✅ Complete
+
+**Covered by:** `Invoke-CodexMcpPlugin.ps1`, `tests/plugin-helpers.bats`

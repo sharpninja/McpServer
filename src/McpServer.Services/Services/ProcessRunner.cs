@@ -51,6 +51,21 @@ public sealed class ProcessRunner(
                 ? opts.GitHubToken
                 : request.GitHubTokenOverride;
             processEnvironment.ApplyAll(process.StartInfo, runAsUser: null, token);
+            if (request.EnvironmentVariables is not null)
+            {
+                foreach (var variable in request.EnvironmentVariables)
+                {
+                    if (variable.Value is null)
+                    {
+                        process.StartInfo.Environment.Remove(variable.Key);
+                    }
+                    else
+                    {
+                        process.StartInfo.Environment[variable.Key] = variable.Value;
+                    }
+                }
+            }
+
             process.StartInfo.FileName = processEnvironment.ResolveExecutable(process.StartInfo, request.FileName);
 
             logger.LogDebug("Running {FileName} {Arguments} (cwd: {WorkingDirectory})", request.FileName, request.Arguments, process.StartInfo.WorkingDirectory);

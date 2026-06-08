@@ -769,6 +769,14 @@ MCP plugin session and compaction hooks SHALL emit schema-valid hook outputs for
 - [x] SessionStart, SessionEnd, PreCompact, and PostCompact status-only hook scripts emit {} instead of non-spec hookSpecificOutput status payloads. (evidence: Hook Bats suites assert exact {} output for the affected session and compact hooks.)
 - [x] PostCompact does not emit additionalContext. (evidence: Hook Bats suites assert post-compact output is {} and does not contain additionalContext.)
 
+## FR-MCP-116 GitHub CLI service-account ownership resilience
+
+The system SHALL allow GitHub-backed TODO and issue operations to run under service accounts even when Git rejects the workspace repository as dubious ownership, without requiring an untracked global Git configuration mutation.
+
+## FR-MCP-117 Codex plugin wrapper bounded execution
+
+The Codex MCP plugin wrapper SHALL return successful workflow responses promptly or fail within a caller-controlled bounded timeout with actionable diagnostics instead of forcing raw REST fallback.
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.

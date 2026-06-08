@@ -585,6 +585,10 @@ SQLite FTS5 full-text search support and hybrid ranking.
 
 **Covered by:** `IssueTodoSyncService`
 
+## TR-MCP-GH-008
+
+**Ownership-safe GitHub CLI repository selection** — GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through gh --repo without local repository discovery, or pass a command-scoped safe.directory Git configuration for the active workspace when a workspace working directory is required.
+
 ## TR-MCP-HTTP-001
 
 **MCP Streamable HTTP Endpoint** — `app.MapMcp("/mcp-transport")` maps the native MCP protocol handler at a path separate from the REST routes (`/mcpserver/*`). The endpoint requires an `Accept: application/json, text/event-stream` header and returns HTTP 406 without it. Uses `ModelContextProtocol.AspNetCore` 0.9.0-preview.1.
@@ -698,6 +702,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Session and compaction hook output contract** — Bash-family MCP plugins SHALL implement SessionStart, SessionEnd, PreCompact, and PostCompact scripts so that status-only execution paths return {}. Hook-specific output may be emitted only for event schemas that support it, and every hookSpecificOutput payload SHALL include the matching hookEventName. PostCompact history reload side effects SHALL NOT attempt context injection via additionalContext.
 **Acceptance Criteria:**
 - [x] Affected session and compact hook scripts no longer contain hookSpecificOutput or additionalContext emissions for status-only paths. (evidence: Targeted rg search over the affected session and compact scripts found no hookSpecificOutput or additionalContext after the fix.)
+
+## TR-MCP-PLUGIN-010
+
+**PowerShell wrapper process timeout control** — Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
