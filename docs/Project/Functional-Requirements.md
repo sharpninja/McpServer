@@ -707,6 +707,13 @@ FAQ wiki page: the documentation wiki output (Azure DevOps wiki under `docs/Proj
 
 The server shall support hub-and-spoke federation where a `Hub` instance is authoritative for enrolled `LocalProxy` servers, global workspace inventory, operation intake, sync fanout, queue status, and conflicts. Existing point-to-point federation remains supported as `DirectProxy`; `Standalone` continues to serve only local workspaces. A LocalProxy shall forward MCP requests to the configured hub, queue mutating requests durably during hub outages, replay queued operations when connectivity returns, and expose role, hub URL, proxy id, queue depth, stale/queued status, and conflict status to agents and operators.
 
+**Acceptance Criteria:**
+- [ ] Adapter diagnostics enumerate every required mutable state domain and distinguish covered, local-only, and apply-supported domains.
+- [ ] LocalProxy live forwarding continues to route `/mcpserver/*` requests, including `/mcpserver/memory`, through existing proxy middleware when the hub is reachable.
+- [ ] Mutating LocalProxy requests that are eligible for replay are queued durably during hub outages with operation id, domain, resource id, workspace id, headers, body, and base version.
+- [ ] Queued operations replay through signed envelopes when signing is configured.
+- [ ] Stale base-version operations create federation conflicts and do not overwrite authoritative hub state.
+
 **Covered by:** `FederationOptions`, `FederationRegistry`, `FederationMiddleware`, `FederationProxyService`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, provider migrations, `templates/prompt-templates.yaml`
 
 ## FR-MCP-104 Decision-complete agent plans
@@ -864,6 +871,19 @@ Official McpServer agent plugins SHALL expose memory tools and SHALL inject the 
 - [ ] Plugins without a usable request-boundary injection hook document the host limitation without claiming automatic injection.
 - [ ] Plugin validation identifies the host hook or fallback, workspace marker path, and example `REQUIRED MEMORIES` output.
 
+## FR-MCP-MEMORY-008 Federated Memory State
+
+The MCP Server SHALL federate Memory as a first-class mutable federation domain. Memory federation uses the existing `/mcpserver/memory` REST surface and federation operation envelope pipeline, not new public memory endpoints. Adapter diagnostics, LocalProxy outage queueing, signed replay, hub conflict detection, and fanout apply semantics SHALL include the `memory` domain.
+
+**Acceptance Criteria:**
+- [ ] Federation adapter diagnostics list `memory` as covered, non-local-only, and apply-supported.
+- [ ] `/mcpserver/memory` maps to federation domain `memory`.
+- [ ] LocalProxy live forwarding of memory REST requests continues through existing proxy middleware.
+- [ ] Offline queued memory creates require an explicit valid `MEMORY-*` ID.
+- [ ] Offline memory creates without an explicit valid ID are not queued.
+- [ ] Offline queued memory update and delete operations replay through signed envelopes.
+- [ ] Stale memory base-version operations create federation conflicts and do not overwrite hub state.
+
 ## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
@@ -960,6 +980,14 @@ Every MCP server plugin (bash and TypeScript families) lets its agent set and re
 - [ ] Bash family typed-params builder emits acceptanceCriteria block on create+update for FR/TR/TEST
 - [ ] TypeScript family tool inputSchema declares acceptanceCriteria + typedParams forwards it
 - [ ] Plugin tests cover both create and partial-update hydration paths
+
+## FR-MCP-REQACPLUGIN-002 Plugins fail on proven AcceptanceCriteria loss
+
+Every MCP server plugin that accepts caller-supplied requirement acceptanceCriteria must either preserve the supplied criteria or fail loudly when the mutation response proves the criteria were dropped.
+**Acceptance Criteria:**
+- [x] Criteria-only requirement updates preserve the caller-supplied acceptanceCriteria block instead of replacing it with an empty or stale hydrated list. (evidence: direct sourced shell assertions passed for Codex, Claude Code, Claude Cowork, Copilot, and Grok; Jest criteria-only update tests passed for Cline, Cline v2, and OpenCode.)
+- [x] If a caller supplies acceptanceCriteria and a successful mutation response explicitly returns `acceptanceCriteria: []`, the plugin reports `requirements_acceptance_criteria_not_captured` instead of success. (evidence: direct sourced shell assertions and focused Jest tests exercise the explicit empty-response case.)
+- [x] Requirement create/update calls without acceptanceCriteria continue to work without injecting an empty criteria list. (evidence: shell no-AC create assertions passed and existing TypeScript focused tests remain green.)
 
 ## FR-SUPPORT-010 MCP Context Unification
 

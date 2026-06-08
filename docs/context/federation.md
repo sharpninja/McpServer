@@ -64,6 +64,11 @@ Agents should retrieve federation status through their required plugin or typed 
 
 LocalProxy writes are optimistic until acknowledged by the hub. If the hub is unreachable and queueing is enabled, a queueable mutating request returns `202 Accepted`, `X-Mcp-Queued: true`, and `X-Mcp-Operation-Id`. The replay worker submits queued operations to the hub signed-envelope endpoint when signing is configured, otherwise to operation intake, and marks the local row acknowledged, failed, blocked, or conflicted.
 
+Memory writes are queueable only for deterministic operations:
+
+- `POST /mcpserver/memory` queues only when the JSON body supplies an explicit valid `MEMORY-*` id. Creates without an explicit id are forwarded live when the hub is reachable but are not accepted into the offline queue.
+- `PUT /mcpserver/memory/{id}`, `PATCH /mcpserver/memory/{id}`, and `DELETE /mcpserver/memory/{id}` queue with domain `memory` and `{id}` as the resource id.
+
 Queue-exempt domains include `context_metadata`, `github_metadata`, `repo_file_changes`, `marker_state`, `mcp_transport`, and `unknown`. These are either derived/local-only, externally sourced, security-sensitive, or too broad to replay safely from an opaque offline operation body.
 
 Hub fanout uses recipient-specific outbox rows. A proxy acknowledges `sync/{sequence}/ack`; this must not drain other proxies' pending rows for the same operation.
@@ -73,6 +78,8 @@ Conflict handling is hub-authoritative by default. When an adapter exposes a cur
 ## Adapter Coverage
 
 Adapter diagnostics expose `covered`, `localOnly`, and `applySupported` per domain. `covered` means the domain can be snapshotted or explicitly exempted. `applySupported` means the LocalProxy can apply a signed operation for that domain during hub fanout. Do not treat a snapshot-only adapter as full replication support.
+
+Adapter-backed replicated domains include `workspace`, `memory`, `todo`, `session_log`, `requirements`, `tools_buckets`, and `agents`. The `memory` adapter reads by globally unique memory id, uses `MemoryEntity.Version` as its version token, preserves scope/category/raw text/timestamps, enforces workspace ownership for Workspace-scoped rows, and applies deletes as idempotent soft deletes.
 
 ## Local Execution
 

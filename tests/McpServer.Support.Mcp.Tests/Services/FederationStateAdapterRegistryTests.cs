@@ -38,6 +38,7 @@ public sealed class FederationStateAdapterRegistryTests
             localOnlyDomains);
 
         Assert.Contains(coverage, row => row.Domain == "todo" && row.ApplySupported);
+        Assert.Contains(coverage, row => row.Domain == "memory" && row.Covered && row.ApplySupported && !row.LocalOnly);
         Assert.Contains(coverage, row => row.Domain == "session_log" && row.Covered && row.ApplySupported);
         Assert.Contains(coverage, row => row.Domain == "mcp_transport" && row.LocalOnly && !row.ApplySupported);
         Assert.Collection(
@@ -47,6 +48,7 @@ public sealed class FederationStateAdapterRegistryTests
             row => Assert.Equal(("github_metadata", true, false), row),
             row => Assert.Equal(("marker_state", true, false), row),
             row => Assert.Equal(("mcp_transport", true, false), row),
+            row => Assert.Equal(("memory", false, true), row),
             row => Assert.Equal(("repo_file_changes", true, false), row),
             row => Assert.Equal(("requirements", false, true), row),
             row => Assert.Equal(("session_log", false, true), row),
@@ -54,6 +56,7 @@ public sealed class FederationStateAdapterRegistryTests
             row => Assert.Equal(("tools_buckets", false, true), row),
             row => Assert.Equal(("workspace", false, true), row));
         Assert.True(registry.CanApply("todo"));
+        Assert.True(registry.CanApply("memory"));
         Assert.True(registry.CanApply("session_log"));
         Assert.False(registry.CanApply("mcp_transport"));
     }

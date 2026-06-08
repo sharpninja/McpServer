@@ -166,4 +166,51 @@ public sealed class RequirementAcceptanceCriteriaTests
         Assert.Contains("- TEST-REQAC-REND-002: Condition only", rendered, StringComparison.Ordinal);
         Assert.DoesNotContain("Acceptance Criteria", rendered, StringComparison.Ordinal);
     }
+
+    /// <summary>
+    /// TEST-MCP-MEMORY-FED-001: the memory-federation slice requires non-empty
+    /// structured acceptance criteria on every touched FR, TR, and TEST entry so
+    /// BDPv4 gates can fail before implementation evidence drifts.
+    /// </summary>
+    [Fact]
+    public void TouchedMemoryFederationRequirements_HaveStructuredAcceptanceCriteria()
+    {
+        var root = FindRepositoryRoot();
+        var functional = RequirementsDocumentParser
+            .ParseFunctional(File.ReadAllText(Path.Combine(root, "docs", "Project", "Functional-Requirements.md")))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+        var technical = RequirementsDocumentParser
+            .ParseTechnical(File.ReadAllText(Path.Combine(root, "docs", "Project", "Technical-Requirements.md")))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+        var testing = RequirementsDocumentParser
+            .ParseTesting(File.ReadAllText(Path.Combine(root, "docs", "Project", "Testing-Requirements.md")))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+
+        AssertCriteria("FR-MCP-103", functional["FR-MCP-103"].AcceptanceCriteria);
+        AssertCriteria("FR-MCP-MEMORY-008", functional["FR-MCP-MEMORY-008"].AcceptanceCriteria);
+        AssertCriteria("TR-MCP-FED-001", technical["TR-MCP-FED-001"].AcceptanceCriteria);
+        AssertCriteria("TR-MCP-FED-MEMORY-001", technical["TR-MCP-FED-MEMORY-001"].AcceptanceCriteria);
+        AssertCriteria("TEST-MCP-136", testing["TEST-MCP-136"].AcceptanceCriteria);
+        AssertCriteria("TEST-MCP-MEMORY-FED-001", testing["TEST-MCP-MEMORY-FED-001"].AcceptanceCriteria);
+    }
+
+    private static void AssertCriteria(string requirementId, IReadOnlyList<AcceptanceCriterion>? criteria)
+    {
+        Assert.True(criteria is { Count: > 0 }, $"{requirementId} must have structured acceptance criteria.");
+        Assert.All(criteria!, criterion => Assert.False(string.IsNullOrWhiteSpace(criterion.Text)));
+    }
+
+    private static string FindRepositoryRoot()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            if (File.Exists(Path.Combine(directory.FullName, "docs", "Project", "Functional-Requirements.md")))
+                return directory.FullName;
+
+            directory = directory.Parent;
+        }
+
+        throw new DirectoryNotFoundException("Could not locate repository root containing docs/Project/Functional-Requirements.md.");
+    }
 }

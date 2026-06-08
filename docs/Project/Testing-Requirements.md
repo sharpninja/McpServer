@@ -132,7 +132,22 @@
 - TEST-MCP-133: Voter-history endpoint: posting N votes from M distinct actors produces N audit rows; `GET /questions/{id}/voters` returns exactly those rows projected to `{ actor, action, createdAt }`; same for answers; workspace isolation enforced.
 - TEST-MCP-134: One-vote-per-user enforcement: same actor posts vote_up twice -> second call is no-op (no counter change, no second audit row); actor posts vote_up then vote_down -> counter delta is -2, audit row recorded with action `vote_change`; actor revokes vote -> counter delta is -1, audit row `vote_revoke`; unique index prevents duplicate `QaVoteEntity` rows under concurrent calls (test with parallel writes against in-memory SQLite using `Task.WhenAll`).
 - TEST-MCP-135: Current vote state endpoint: `GET /questions/{id}/votes` returns one row per active voter from `QaVoteEntity` after a sequence of apply / change / revoke calls; revoked voters do not appear; workspace isolation enforced.
-- TEST-MCP-136: Hub-and-spoke federation tests: config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy `/mcp-transport` routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation. **Covered by:** `FederationMiddlewareTests`, `FederationTopologyServiceTests`, `FederationProxyServiceTests`, `FederationEntityModelTests`
+- TEST-MCP-136: Hub-and-spoke federation tests: config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy `/mcp-transport` routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation. **Covered by:** `FederationMiddlewareTests`, `FederationTopologyServiceTests`, `FederationProxyServiceTests`, `FederationStateAdapterRegistryTests`, `FederationEntityModelTests`
+  **Acceptance Criteria:**
+  - [ ] Adapter diagnostics tests fail if any required domain is uncovered or reports incorrect local-only/apply-supported status.
+  - [ ] Proxy tests prove live-forwarded domains keep working and only replayable mutating requests are queued during hub outage.
+  - [ ] Topology tests prove stale base-version operations create conflicts and suppress fanout.
+  - [ ] Replay and fanout tests prove signed envelopes are verified before local apply.
+- TEST-MCP-MEMORY-FED-001: Memory federation tests SHALL prove memory adapter diagnostics, `/mcpserver/memory` domain inference, explicit-ID queued create eligibility, no-ID create rejection, queued memory update/delete replay metadata, signed envelope apply, stale base-version conflict behavior, fanout row creation, recipient apply, workspace ownership enforcement, invalid payload conflicts, version behavior, timestamp preservation, and idempotent soft-delete semantics.
+  **Acceptance Criteria:**
+  - [ ] Registry coverage includes `memory` as covered, non-local-only, and apply-supported.
+  - [ ] Proxy tests prove explicit-ID memory creates queue and no-ID memory creates do not queue.
+  - [ ] Proxy tests prove memory update/delete operations queue with domain `memory` and the path resource ID.
+  - [ ] Adapter tests prove create preserves ID, scope, workspace ownership, category, raw text, timestamps, and version.
+  - [ ] Adapter tests prove update increments version and preserves workspace ownership.
+  - [ ] Adapter tests prove delete soft-deletes and replayed delete is idempotent.
+  - [ ] Adapter tests prove cross-workspace operations, invalid JSON, and invalid IDs conflict without mutation.
+  - [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
 - TEST-MCP-137: Given templates/prompt-templates.yaml, when the marker-template contract tests run, then default-marker-prompt contains the frontier-to-implementation planning guidance, explicit requirements capture guidance, and TDD unit-test planning guidance.
 - TEST-MCP-138: Unit tests must fail red until WorkspaceService is database-authoritative and DbForeignKeyContractTests prove every WorkspaceId entity has a Workspaces FK with non-cascade delete behavior.
 - TEST-MCP-139: Unit tests must fail red until persistent delete paths preserve rows through soft-delete metadata and every mutable entity writes DataAuditLog rows for create, update, and soft-delete operations.
@@ -217,6 +232,11 @@
   **Acceptance Criteria:**
   - [x] Cline, Cline v2, and Opencode build/test gates pass with acceptanceCriteria coverage. (evidence: Cline and Cline v2 npm build/test passed; Opencode npm build and full Jest passed with coverage thresholds.)
 - TEST-MCP-REQACPLUGIN-TS: In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) proves req_create_fr/req_update_fr/req_create_test forward acceptanceCriteria into the request payload with zero failures and zero skips.
+- TEST-MCP-REQACPLUGIN-002: Plugin regression tests prove caller-supplied acceptanceCriteria is not silently lost when requirement create/update responses explicitly report an empty criteria list.
+  **Acceptance Criteria:**
+  - [x] Direct sourced shell assertions pass for Codex, Claude Code, Claude Cowork, Copilot, and Grok: criteria-only update emits caller criteria, no-criteria create omits criteria, and explicit empty response returns `requirements_acceptance_criteria_not_captured`. (evidence: focused shell assertions passed for all five Bash plugin repos.)
+  - [x] Focused Jest tests pass for Cline, Cline v2, and OpenCode covering criteria-only update forwarding and explicit empty-response failure. (evidence: `npm test -- --runTestsByPath tests/requirements.test.ts --runInBand` passed for Cline and Cline v2; `npm test -- --runTestsByPath tests/complex-tools.test.ts --runInBand --coverage=false` passed for OpenCode.)
+  - [x] TypeScript plugin builds pass after the guard is added. (evidence: `npm run build` passed for Cline, Cline v2, and OpenCode.)
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   **Acceptance Criteria:**
   - [ ] Criterion A

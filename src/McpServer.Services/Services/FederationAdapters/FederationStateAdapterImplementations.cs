@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -505,6 +506,385 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
         return markerIndex < 0
             ? null
             : Uri.UnescapeDataString(pathOnly[(markerIndex + marker.Length)..]);
+    }
+}
+
+/// <summary>TR-MCP-FED-MEMORY-001: Federation adapter for authoritative memory state.</summary>
+public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapterBase
+{
+    private static readonly Regex s_memoryIdRegex = new(
+        "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$",
+        RegexOptions.CultureInvariant | RegexOptions.Compiled,
+        TimeSpan.FromMilliseconds(100));
+
+    private static readonly Regex s_categoryUnsafeCharactersRegex = new(
+        "[^A-Z0-9]+",
+        RegexOptions.CultureInvariant | RegexOptions.Compiled,
+        TimeSpan.FromMilliseconds(100));
+
+    private static readonly Regex s_repeatedHyphenRegex = new(
+        "-+",
+        RegexOptions.CultureInvariant | RegexOptions.Compiled,
+        TimeSpan.FromMilliseconds(100));
+
+    /// <summary>Initializes a new instance of the <see cref="MemoryFederationStateAdapter"/> class.</summary>
+    /// <param name="scopeFactory">Scope factory used to resolve <see cref="McpDbContext"/>.</param>
+    public MemoryFederationStateAdapter(IServiceScopeFactory scopeFactory)
+        : base("memory", scopeFactory)
+    {
+    }
+
+    /// <inheritdoc />
+    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+
+        try
+        {
+            var method = (operation.HttpMethod ?? string.Empty).Trim().ToUpperInvariant();
+            await using var scope = ScopeFactory.CreateAsyncScope();
+            var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            return method switch
+            {
+                "POST" => await ApplyCreateAsync(db, operation, cancellationToken).ConfigureAwait(false),
+                "PUT" or "PATCH" => await ApplyUpdateAsync(db, operation, cancellationToken).ConfigureAwait(false),
+                "DELETE" => await ApplyDeleteAsync(db, operation, cancellationToken).ConfigureAwait(false),
+                _ => Conflict($"Memory federation apply does not support HTTP method '{operation.HttpMethod ?? "<none>"}'."),
+            };
+        }
+        catch (JsonException ex)
+        {
+            return Conflict($"Memory federation payload is invalid JSON: {ex.Message}");
+        }
+    }
+
+    /// <inheritdoc />
+    protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    {
+        var id = NormalizeId(resourceId);
+        if (!IsValidMemoryId(id))
+            return null;
+
+        var row = await db.Memories
+            .IgnoreQueryFilters()
+            .Where(memory => memory.Id == id)
+            .Select(memory => new
+            {
+                memory.Id,
+                memory.Category,
+                memory.Scope,
+                memory.WorkspaceId,
+                memory.Text,
+                memory.Version,
+                memory.CreatedAtUtc,
+                memory.UpdatedAtUtc,
+                memory.UpdatedBy,
+                IsDeleted = EF.Property<bool>(memory, "IsDeleted"),
+            })
+            .FirstOrDefaultAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        if (row is null || row.IsDeleted)
+            return null;
+
+        return new MemoryItem
+        {
+            Id = row.Id,
+            Category = row.Category,
+            Scope = ToMemoryScope(row.Scope),
+            WorkspacePath = row.WorkspaceId,
+            Text = row.Text,
+            Version = row.Version,
+            CreatedAtUtc = row.CreatedAtUtc,
+            UpdatedAtUtc = row.UpdatedAtUtc,
+            UpdatedBy = row.UpdatedBy,
+        };
+    }
+
+    /// <inheritdoc />
+    protected override async Task<string?> ReadExplicitVersionAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    {
+        var id = NormalizeId(resourceId);
+        if (!IsValidMemoryId(id))
+            return null;
+
+        var row = await db.Memories
+            .IgnoreQueryFilters()
+            .Where(memory => memory.Id == id)
+            .Select(memory => new
+            {
+                memory.Version,
+                IsDeleted = EF.Property<bool>(memory, "IsDeleted"),
+            })
+            .FirstOrDefaultAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        return row is null || row.IsDeleted
+            ? null
+            : row.Version.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static async Task<FederationApplyResult> ApplyCreateAsync(
+        McpDbContext db,
+        FederationStateOperation operation,
+        CancellationToken cancellationToken)
+    {
+        var payload = DeserializePayload(operation.PayloadJson);
+        var id = NormalizeId(payload.Id);
+        if (!IsValidMemoryId(id))
+            return Conflict("Memory create payload must include an explicit id matching MEMORY-{CATEGORY}-{NNN}.");
+
+        var category = NormalizeCategory(payload.Category);
+        if (category is null)
+            return Conflict("Memory create payload must include a non-empty category.");
+
+        if (string.IsNullOrWhiteSpace(payload.Text))
+            return Conflict("Memory create payload must include non-empty text.");
+
+        var scope = payload.Scope ?? MemoryScope.Workspace;
+        var workspaceId = ResolveWorkspaceId(scope, operation);
+        if (scope == MemoryScope.Workspace && workspaceId is null)
+            return Conflict("Workspace memory create requires a global workspace id.");
+
+        var existing = await db.Memories
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(memory => memory.Id == id, cancellationToken)
+            .ConfigureAwait(false);
+        if (existing is not null)
+        {
+            var version = existing.Version.ToString(CultureInfo.InvariantCulture);
+            if (IsDeleted(db, existing))
+                return Conflict($"Memory '{id}' already exists as a deleted row.", version);
+
+            return IsEquivalentCreate(existing, category, scope, workspaceId, payload.Text)
+                ? new FederationApplyResult { Applied = false, AlreadyApplied = true, Version = version }
+                : Conflict($"Memory '{id}' already exists with different state.", version);
+        }
+
+        var now = DateTimeOffset.UtcNow;
+        var createdAt = payload.CreatedAtUtc ?? now;
+        var updatedAt = payload.UpdatedAtUtc ?? createdAt;
+        db.Memories.Add(new MemoryEntity
+        {
+            Id = id,
+            Category = category,
+            Scope = ToEntityScope(scope),
+            WorkspaceId = workspaceId,
+            Text = payload.Text,
+            Version = payload.Version is > 0 ? payload.Version.Value : 1,
+            CreatedAtUtc = createdAt,
+            UpdatedAtUtc = updatedAt,
+            UpdatedBy = NormalizeOptional(payload.UpdatedBy),
+        });
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return new FederationApplyResult
+        {
+            Applied = true,
+            Version = await ReadCurrentVersionAsync(db, id, cancellationToken).ConfigureAwait(false),
+        };
+    }
+
+    private static async Task<FederationApplyResult> ApplyUpdateAsync(
+        McpDbContext db,
+        FederationStateOperation operation,
+        CancellationToken cancellationToken)
+    {
+        var id = ResolveMemoryId(operation);
+        if (!IsValidMemoryId(id))
+            return Conflict("Memory update operation does not identify a valid memory id.");
+
+        var entity = await db.Memories
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(memory => memory.Id == id, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null || IsDeleted(db, entity))
+            return Conflict($"Memory '{id}' is missing or deleted.");
+
+        if (!OwnsWorkspace(entity, operation.GlobalWorkspaceId))
+            return Conflict(
+                $"Workspace memory '{id}' cannot be applied to global workspace '{operation.GlobalWorkspaceId ?? "<none>"}'.",
+                entity.Version.ToString(CultureInfo.InvariantCulture));
+
+        var payload = DeserializePayload(operation.PayloadJson);
+        if (payload.Category is not null)
+        {
+            var category = NormalizeCategory(payload.Category);
+            if (category is null)
+                return Conflict("Memory update category cannot be empty.");
+
+            entity.Category = category;
+        }
+
+        if (payload.Scope is { } scope)
+        {
+            var workspaceId = ResolveWorkspaceId(scope, operation);
+            if (scope == MemoryScope.Workspace && workspaceId is null)
+                return Conflict("Workspace memory update requires a global workspace id.");
+
+            entity.Scope = ToEntityScope(scope);
+            entity.WorkspaceId = workspaceId;
+        }
+
+        if (payload.Text is not null)
+        {
+            if (string.IsNullOrWhiteSpace(payload.Text))
+                return Conflict("Memory update text cannot be empty.");
+
+            entity.Text = payload.Text;
+        }
+
+        entity.Version++;
+        entity.UpdatedAtUtc = payload.UpdatedAtUtc ?? DateTimeOffset.UtcNow;
+        if (payload.UpdatedBy is not null)
+            entity.UpdatedBy = NormalizeOptional(payload.UpdatedBy);
+
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return new FederationApplyResult
+        {
+            Applied = true,
+            Version = entity.Version.ToString(CultureInfo.InvariantCulture),
+        };
+    }
+
+    private static async Task<FederationApplyResult> ApplyDeleteAsync(
+        McpDbContext db,
+        FederationStateOperation operation,
+        CancellationToken cancellationToken)
+    {
+        var id = ResolveMemoryId(operation);
+        if (!IsValidMemoryId(id))
+            return Conflict("Memory delete operation does not identify a valid memory id.");
+
+        var entity = await db.Memories
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(memory => memory.Id == id, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null || IsDeleted(db, entity))
+            return new FederationApplyResult { Applied = true, Version = null };
+
+        if (!OwnsWorkspace(entity, operation.GlobalWorkspaceId))
+            return Conflict(
+                $"Workspace memory '{id}' cannot be deleted from global workspace '{operation.GlobalWorkspaceId ?? "<none>"}'.",
+                entity.Version.ToString(CultureInfo.InvariantCulture));
+
+        db.Memories.Remove(entity);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return new FederationApplyResult { Applied = true, Version = null };
+    }
+
+    private static async Task<string?> ReadCurrentVersionAsync(McpDbContext db, string id, CancellationToken cancellationToken)
+    {
+        var version = await db.Memories
+            .IgnoreQueryFilters()
+            .Where(memory => memory.Id == id && !EF.Property<bool>(memory, "IsDeleted"))
+            .Select(memory => (int?)memory.Version)
+            .FirstOrDefaultAsync(cancellationToken)
+            .ConfigureAwait(false);
+        return version?.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static MemoryApplyPayload DeserializePayload(string payloadJson)
+        => JsonSerializer.Deserialize<MemoryApplyPayload>(payloadJson, JsonOptions) ?? new MemoryApplyPayload();
+
+    private static bool IsEquivalentCreate(
+        MemoryEntity existing,
+        string category,
+        MemoryScope scope,
+        string? workspaceId,
+        string text)
+        => string.Equals(existing.Category, category, StringComparison.Ordinal) &&
+           string.Equals(existing.Scope, ToEntityScope(scope), StringComparison.Ordinal) &&
+           string.Equals(existing.WorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase) &&
+           string.Equals(existing.Text, text, StringComparison.Ordinal);
+
+    private static bool OwnsWorkspace(MemoryEntity entity, string? globalWorkspaceId)
+        => !string.Equals(entity.Scope, MemoryEntity.WorkspaceScope, StringComparison.Ordinal) ||
+           (!string.IsNullOrWhiteSpace(globalWorkspaceId) &&
+            string.Equals(entity.WorkspaceId, globalWorkspaceId.Trim(), StringComparison.OrdinalIgnoreCase));
+
+    private static string? ResolveWorkspaceId(MemoryScope scope, FederationStateOperation operation)
+        => scope == MemoryScope.Global ? null : NormalizeOptional(operation.GlobalWorkspaceId);
+
+    private static string ResolveMemoryId(FederationStateOperation operation)
+    {
+        if (!string.IsNullOrWhiteSpace(operation.ResourceId) &&
+            !operation.ResourceId.StartsWith("/mcpserver/memory", StringComparison.OrdinalIgnoreCase))
+        {
+            return NormalizeId(operation.ResourceId);
+        }
+
+        var path = operation.Path;
+        if (string.IsNullOrWhiteSpace(path))
+            path = operation.ResourceId;
+        if (string.IsNullOrWhiteSpace(path))
+            return string.Empty;
+
+        var pathOnly = path.Split('?', 2)[0].TrimEnd('/');
+        var marker = "/mcpserver/memory/";
+        var markerIndex = pathOnly.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+        return markerIndex < 0
+            ? string.Empty
+            : NormalizeId(Uri.UnescapeDataString(pathOnly[(markerIndex + marker.Length)..]));
+    }
+
+    private static bool IsDeleted(McpDbContext db, MemoryEntity entity)
+        => db.Entry(entity).Property<bool>("IsDeleted").CurrentValue;
+
+    private static string NormalizeId(string? id)
+        => (id ?? string.Empty).Trim().ToUpperInvariant();
+
+    private static bool IsValidMemoryId(string? id)
+        => !string.IsNullOrWhiteSpace(id) && s_memoryIdRegex.IsMatch(NormalizeId(id));
+
+    private static string? NormalizeCategory(string? category)
+    {
+        var trimmed = NormalizeOptional(category);
+        if (trimmed is null)
+            return null;
+
+        var normalized = s_categoryUnsafeCharactersRegex.Replace(trimmed.ToUpperInvariant(), "-").Trim('-');
+        normalized = s_repeatedHyphenRegex.Replace(normalized, "-");
+        return normalized.Length == 0 ? null : normalized;
+    }
+
+    private static string? NormalizeOptional(string? value)
+    {
+        var trimmed = value?.Trim();
+        return string.IsNullOrEmpty(trimmed) ? null : trimmed;
+    }
+
+    private static string ToEntityScope(MemoryScope scope)
+        => scope == MemoryScope.Global ? MemoryEntity.GlobalScope : MemoryEntity.WorkspaceScope;
+
+    private static MemoryScope ToMemoryScope(string scope)
+        => string.Equals(scope, MemoryEntity.GlobalScope, StringComparison.Ordinal) ? MemoryScope.Global : MemoryScope.Workspace;
+
+    private static FederationApplyResult Conflict(string message, string? version = null)
+        => new()
+        {
+            Applied = false,
+            Conflict = true,
+            Version = version,
+            Message = message,
+        };
+
+    private sealed record MemoryApplyPayload
+    {
+        public string? Id { get; init; }
+
+        public string? Category { get; init; }
+
+        public MemoryScope? Scope { get; init; }
+
+        public string? Text { get; init; }
+
+        public int? Version { get; init; }
+
+        public DateTimeOffset? CreatedAtUtc { get; init; }
+
+        public DateTimeOffset? UpdatedAtUtc { get; init; }
+
+        public string? UpdatedBy { get; init; }
     }
 }
 

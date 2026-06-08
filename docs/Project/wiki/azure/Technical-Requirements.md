@@ -533,8 +533,28 @@ SQLite FTS5 full-text search support and hybrid ranking.
 
 ## TR-MCP-FED-001
 
-**Hub Proxy Federation Contract** — Federation configuration SHALL include `Role`, `HubBaseUrl`, `ProxyId`, `EnrollmentToken`, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
-**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationHeaders`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, `McpDbContext`, `Federation*Entity`, provider migrations, `FederationMiddleware`, `FederationProxyService`
+**Hub Proxy Federation Contract** — Federation configuration SHALL include Role, HubBaseUrl, ProxyId, EnrollmentToken, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
+**Acceptance Criteria:**
+- [ ] FederationStateAdapterRegistry.RequiredDomains lists every required mutable state domain, including memory.
+- [ ] Adapter diagnostics report covered, local-only, and apply-supported status for each required domain.
+- [ ] FederationStateOperation carries the operation GlobalWorkspaceId into adapter apply calls.
+- [ ] LocalProxy queue eligibility rejects local-only, unknown, and non-replayable routes.
+- [ ] Queued replay preserves domain, resource id, body, headers, base version, operation id, source operation id, and global workspace id.
+- [ ] Hub stale-version detection records conflicts and suppresses fanout for stale operations.
+
+## TR-MCP-FED-MEMORY-001
+
+**Memory Federation Adapter Contract** — Memory federation SHALL register a memory state adapter that snapshots active memory rows by globally unique memory ID and applies signed REST-originated memory operations. The adapter SHALL preserve memory ID, scope, workspace ownership, category, raw text, timestamps, soft-delete semantics, and version tokens based on MemoryEntity.Version. Workspace-scoped memory rows SHALL only apply when the operation GlobalWorkspaceId matches the row owner. LocalProxy queueing SHALL accept POST /mcpserver/memory only when the JSON body supplies an explicit valid MEMORY-* ID, and SHALL accept PUT, PATCH, and DELETE /mcpserver/memory/{id} as replayable memory operations.
+**Acceptance Criteria:**
+- [ ] AddFederationStateAdapters registers MemoryFederationStateAdapter.
+- [ ] FederationProxyService infers domain memory for /mcpserver/memory.
+- [ ] Memory POST replay eligibility requires a valid explicit id in the JSON body.
+- [ ] Memory PUT/PATCH/DELETE replay eligibility reads id from /mcpserver/memory/{id}.
+- [ ] Memory adapter version tokens use MemoryEntity.Version.ToString(CultureInfo.InvariantCulture).
+- [ ] Memory create applies only with an explicit valid ID and conflicts on invalid JSON, invalid IDs, deleted duplicates, or duplicate non-identical rows.
+- [ ] Memory update applies only to an existing visible/non-deleted row and increments version.
+- [ ] Memory delete is an idempotent soft delete; missing or already deleted rows return applied success.
+- [ ] Workspace-scoped memory rows cannot be applied to a different workspace.
 
 ## TR-MCP-GH-001
 
@@ -998,6 +1018,14 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-REQACPLUGIN-001
 
 **Plugin-side schema + shaper changes for AcceptanceCriteria** — Bash plugins gain _repl_emit_acceptance_criteria_block helper and per-method emit/hydrate calls in _repl_requirements_typed_params for createFr/createTr/createTest/updateFr/updateTr/updateTest. TS plugins gain shared AcceptanceCriterion JSON schemas and typedParams pass-through for the same six methods plus per-kind/mixed batch records items.
+
+## TR-MCP-REQACPLUGIN-002
+
+**Plugin-side AcceptanceCriteria capture verification** — Bash and TypeScript plugin requirement mutation dispatchers SHALL reject successful-looking create/update responses that explicitly show an empty acceptanceCriteria list when the caller supplied a non-null criteria array, while preserving backward compatibility for responses that omit the field.
+**Acceptance Criteria:**
+- [x] Bash plugins enforce the check after workflow and typed successful create/update responses through a shared helper. (evidence: Codex, Claude Code, Claude Cowork, Copilot, and Grok direct sourced shell assertions passed.)
+- [x] TypeScript plugins enforce the same check after workflow and typed successful create/update responses through shared response inspection. (evidence: Cline, Cline v2, and OpenCode focused Jest tests passed.)
+- [x] The guard is scoped to FR/TR/TEST create/update mutations with caller-supplied acceptanceCriteria and keeps no-criteria mutations compatible. (evidence: Focused shell no-AC assertions, focused Jest files, and npm builds passed.)
 
 ## TR-MCP-REQEXPORT-001
 

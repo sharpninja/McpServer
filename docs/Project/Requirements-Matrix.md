@@ -406,6 +406,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
 | TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
 | TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
+| FR-MCP-MEMORY-008 | 🟡 Partial | Federated memory state |
+| TR-MCP-FED-MEMORY-001 | 🟡 Partial | Memory federation adapter contract |
+| TEST-MCP-MEMORY-FED-001 | 🟡 Partial | Memory federation tests |
 | FR-MCP-109 | ✅ Complete | Requirements batch mutation |
 | TR-MCP-BATCH-109 | ✅ Complete | Requirements batch endpoint and workflow support |
 | TR-MCP-SCHEMA-109 | ✅ Complete | REPL request schema enforcement |
@@ -525,6 +528,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-REQAC-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-REQAC-PLUGIN-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-REQACPLUGIN-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-REQACPLUGIN-002 | Tracked | Functional-Requirements.md |
 | TR-MCP-AGENT-PARITY-010 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-011 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-012 | Tracked | Technical-Requirements.md |
@@ -558,6 +562,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REQAC-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQAC-PLUGIN-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQACPLUGIN-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQACPLUGIN-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-REQEXPORT-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-SKILLS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-SKILLS-002 | Tracked | Technical-Requirements.md |
@@ -581,6 +586,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REQACPLUGIN-LIVE | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-PLUGIN-TS | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQACPLUGIN-TS | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQACPLUGIN-002 | Tracked | Testing-Requirements.md |
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | FR-MCP-116 | Tracked | Functional-Requirements.md |

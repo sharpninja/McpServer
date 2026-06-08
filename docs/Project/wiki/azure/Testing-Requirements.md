@@ -667,8 +667,13 @@ Current vote state endpoint: `GET /questions/{id}/votes` returns one row per act
 
 ### TEST-MCP-136
 
-Hub-and-spoke federation tests: config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy `/mcp-transport` routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation. **Covered by:** `FederationMiddlewareTests`, `FederationTopologyServiceTests`, `FederationProxyServiceTests`, `FederationEntityModelTests`
+Hub-and-spoke federation tests cover config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy /mcp-transport routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation.
 
+**Acceptance Criteria:**
+- [ ] Adapter diagnostics tests fail if any required domain is uncovered or reports incorrect local-only/apply-supported status.
+- [ ] Proxy tests prove live-forwarded domains keep working and only replayable mutating requests are queued during hub outage.
+- [ ] Topology tests prove stale base-version operations create conflicts and suppress fanout.
+- [ ] Replay and fanout tests prove signed envelopes are verified before local apply.
 
 ### TEST-MCP-137
 
@@ -858,6 +863,23 @@ Agent plugin validation SHALL prove each supported plugin exposes memory tools a
 
 
 
+## TEST-MCP-MEMORY-FED
+
+### TEST-MCP-MEMORY-FED-001
+
+Memory federation tests SHALL prove memory adapter diagnostics, /mcpserver/memory domain inference, explicit-ID queued create eligibility, no-ID create rejection, queued memory update/delete replay metadata, signed envelope apply, stale base-version conflict behavior, fanout row creation, recipient apply, workspace ownership enforcement, invalid payload conflicts, version behavior, timestamp preservation, and idempotent soft-delete semantics.
+
+**Acceptance Criteria:**
+- [ ] Registry coverage includes memory as covered, non-local-only, and apply-supported.
+- [ ] Proxy tests prove explicit-ID memory creates queue and no-ID memory creates do not queue.
+- [ ] Proxy tests prove memory update/delete operations queue with domain memory and the path resource ID.
+- [ ] Adapter tests prove create preserves ID, scope, workspace ownership, category, raw text, timestamps, and version.
+- [ ] Adapter tests prove update increments version and preserves workspace ownership.
+- [ ] Adapter tests prove delete soft-deletes and replayed delete is idempotent.
+- [ ] Adapter tests prove cross-workspace operations, invalid JSON, and invalid IDs conflict without mutation.
+- [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
+
+
 ## TEST-MCP-REPL
 
 ### TEST-MCP-REPL-001
@@ -1031,12 +1053,29 @@ TypeScript plugin tests cover requirements acceptanceCriteria schemas, typed par
 Validate the Bash plugin family emits and hydrates acceptanceCriteria on FR/TR/TEST requirement create/update commands and exposes copyAcceptanceCriteriaFromTodo.
 
 
+### TEST-MCP-REQACPLUGIN-002
+
+Plugin regression tests prove caller-supplied acceptanceCriteria is not silently lost when requirement create/update responses explicitly report an empty criteria list.
+
+**Acceptance Criteria:**
+- [x] Direct sourced shell assertions pass for all five Bash plugin repos: criteria-only update emits caller criteria, no-criteria create omits criteria, and explicit empty response returns requirements_acceptance_criteria_not_captured. (evidence: Focused shell assertions passed for Codex, Claude Code, Claude Cowork, Copilot, and Grok.)
+- [x] Focused Jest tests pass for Cline, Cline v2, and OpenCode covering criteria-only update forwarding and explicit empty-response failure. (evidence: Cline and Cline v2 requirements.test.ts passed; OpenCode complex-tools.test.ts passed with coverage disabled for focused scope after full file tests passed.)
+- [x] TypeScript plugin builds pass after the guard is added. (evidence: npm run build passed for Cline, Cline v2, and OpenCode.)
+
 
 ## TEST-MCP-REQACPLUGIN-BASH
 
 ### TEST-MCP-REQACPLUGIN-BASH
 
 In each bash plugin, tests/repl-invoke-shim.bats (or tests/plugin-helpers.bats) proves typed-params emits acceptanceCriteria on create and hydrates it from existing on partial update with zero failures and zero skips.
+
+
+
+## TEST-MCP-REQACPLUGIN-CAPTURE
+
+### TEST-MCP-REQACPLUGIN-CAPTURE
+
+Plugin regression tests prove caller-supplied acceptanceCriteria is not silently lost when requirement create/update responses explicitly report an empty criteria list.
 
 
 

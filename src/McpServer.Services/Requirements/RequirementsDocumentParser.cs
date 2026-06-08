@@ -43,11 +43,11 @@ internal static class RequirementsDocumentParser
 
             var id = match.Groups["id"].Value.Trim();
             var title = CleanHeadingTitle(match.Groups["title"].Value);
-            var body = NormalizeBody(match.Groups["body"].Value);
+            var (body, acceptanceCriteria) = SplitAcceptanceCriteria(NormalizeBody(match.Groups["body"].Value));
             if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(title))
                 continue;
 
-            list.Add(new FrEntry(id, title, body));
+            list.Add(new FrEntry(id, title, body, AcceptanceCriteria: acceptanceCriteria));
         }
 
         return list;
@@ -69,8 +69,9 @@ internal static class RequirementsDocumentParser
                 continue;
 
             var bodyRaw = NormalizeBody(match.Groups["body"].Value);
-            var (title, body) = SplitTechnicalTitle(bodyRaw);
-            list.Add(new TrEntry(id, title, body));
+            var (title, bodyWithCriteria) = SplitTechnicalTitle(bodyRaw);
+            var (body, acceptanceCriteria) = SplitAcceptanceCriteria(bodyWithCriteria);
+            list.Add(new TrEntry(id, title, body, AcceptanceCriteria: acceptanceCriteria));
         }
 
         return list;
@@ -225,6 +226,37 @@ internal static class RequirementsDocumentParser
                 : $"{firstLineRemainder}\n{remainder}";
 
         return (title, NormalizeBody(rebuiltBody));
+    }
+
+    private static (string Body, IReadOnlyList<AcceptanceCriterion> AcceptanceCriteria) SplitAcceptanceCriteria(string body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return (string.Empty, []);
+
+        var bodyLines = new List<string>();
+        var criteria = new List<AcceptanceCriterion>();
+        var readingCriteria = false;
+        foreach (var line in NormalizeLines(body))
+        {
+            var trimmed = line.Trim();
+            if (trimmed.Equals("**Acceptance Criteria:**", StringComparison.OrdinalIgnoreCase))
+            {
+                readingCriteria = true;
+                continue;
+            }
+
+            if (readingCriteria)
+            {
+                var criterion = ParseAcceptanceCriterion(line);
+                if (criterion is not null)
+                    criteria.Add(criterion);
+                continue;
+            }
+
+            bodyLines.Add(line);
+        }
+
+        return (NormalizeBody(string.Join('\n', bodyLines)), criteria);
     }
 
     private static string NormalizeBody(string body)

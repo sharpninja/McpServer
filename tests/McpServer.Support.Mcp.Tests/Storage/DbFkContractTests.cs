@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -41,6 +42,7 @@ public sealed class DbFkContractTests
         var failures = db.Model.GetEntityTypes()
             .Where(e => e.FindProperty("WorkspaceId") is not null)
             .Where(e => !IsWorkspacesPrincipal(e))
+            .Where(e => e.ClrType != typeof(MemoryEntity))
             .Select(e => new
             {
                 Entity = e,

@@ -295,7 +295,7 @@ public sealed class FederationProxyService
         }
 
         var domain = InferDomain(context.Request.Path);
-        if (!CanQueueDomain(domain) || !CanReplayQueuedDomain(domain) || !CanReplayQueuedRequest(context.Request, domain))
+        if (!CanQueueDomain(domain) || !CanReplayQueuedDomain(domain) || !CanReplayQueuedRequest(context.Request, domain, bodyCapture))
             return false;
 
         var response = await _topologyService.QueueLocalOperationAsync(new FederationOperationRequest
@@ -305,7 +305,7 @@ public sealed class FederationProxyService
             SourceOperationId = sourceOperationId,
             GlobalWorkspaceId = globalWorkspaceId,
             Domain = domain,
-            ResourceId = InferResourceId(context.Request),
+            ResourceId = InferResourceId(context.Request, bodyCapture),
             HttpMethod = context.Request.Method,
             Path = BuildReplayPath(context.Request),
             HeadersJson = SerializeReplayHeaders(context.Request),
@@ -340,12 +340,13 @@ public sealed class FederationProxyService
     private bool CanReplayQueuedDomain(string domain)
         => _adapterRegistry is null || _adapterRegistry.CanApply(domain);
 
-    private static bool CanReplayQueuedRequest(HttpRequest request, string domain)
+    private static bool CanReplayQueuedRequest(HttpRequest request, string domain, RequestBodyCapture bodyCapture)
     {
         var path = (request.Path.Value ?? string.Empty).TrimEnd('/');
         return domain switch
         {
             "todo" => IsTodoReplayPath(request.Method, path),
+            "memory" => IsMemoryReplayPath(request.Method, path, bodyCapture.Body),
             "session_log" => HttpMethods.IsPost(request.Method) &&
                              string.Equals(path, "/mcpserver/sessionlog", StringComparison.OrdinalIgnoreCase),
             "workspace" => IsWorkspaceReplayPath(request.Method, path),
@@ -381,6 +382,21 @@ public sealed class FederationProxyService
                string.Equals(segments[0], "mcpserver", StringComparison.OrdinalIgnoreCase) &&
                string.Equals(segments[1], "workspace", StringComparison.OrdinalIgnoreCase) &&
                !string.IsNullOrWhiteSpace(segments[2]);
+    }
+
+    private static bool IsMemoryReplayPath(string method, string path, byte[]? body)
+    {
+        if (HttpMethods.IsPost(method))
+        {
+            return string.Equals(path, "/mcpserver/memory", StringComparison.OrdinalIgnoreCase) &&
+                   TryReadMemoryId(body, out var id) &&
+                   IsValidMemoryId(id);
+        }
+
+        if (!HttpMethods.IsPut(method) && !HttpMethods.IsPatch(method) && !HttpMethods.IsDelete(method))
+            return false;
+
+        return TryReadMemoryPathId(path, out var pathId) && IsValidMemoryId(pathId);
     }
 
     private async Task<RequestBodyCapture> CaptureBodyForQueueAsync(
@@ -434,6 +450,8 @@ public sealed class FederationProxyService
         var value = path.Value ?? string.Empty;
         if (value.StartsWith("/mcpserver/todo", StringComparison.OrdinalIgnoreCase))
             return "todo";
+        if (value.StartsWith("/mcpserver/memory", StringComparison.OrdinalIgnoreCase))
+            return "memory";
         if (value.StartsWith("/mcpserver/sessionlog", StringComparison.OrdinalIgnoreCase))
             return "session_log";
         if (value.StartsWith("/mcpserver/requirements", StringComparison.OrdinalIgnoreCase))
@@ -458,8 +476,18 @@ public sealed class FederationProxyService
         return "unknown";
     }
 
-    private static string? InferResourceId(HttpRequest request)
+    private static string? InferResourceId(HttpRequest request, RequestBodyCapture bodyCapture)
     {
+        var path = (request.Path.Value ?? string.Empty).TrimEnd('/');
+        if (path.StartsWith("/mcpserver/memory", StringComparison.OrdinalIgnoreCase))
+        {
+            if (HttpMethods.IsPost(request.Method) && TryReadMemoryId(bodyCapture.Body, out var bodyId))
+                return NormalizeMemoryId(bodyId);
+
+            if (TryReadMemoryPathId(path, out var pathId))
+                return NormalizeMemoryId(pathId);
+        }
+
         if (request.RouteValues.TryGetValue("id", out var routeId) && routeId is not null)
             return Convert.ToString(routeId, System.Globalization.CultureInfo.InvariantCulture);
 
@@ -467,6 +495,59 @@ public sealed class FederationProxyService
             return queryId.FirstOrDefault();
 
         return request.Path.Value;
+    }
+
+    private static bool TryReadMemoryId(byte[]? body, out string? id)
+    {
+        id = null;
+        if (body is null || body.Length == 0)
+            return false;
+
+        try
+        {
+            using var document = JsonDocument.Parse(body.AsMemory());
+            if (!document.RootElement.TryGetProperty("id", out var idProperty))
+                return false;
+
+            id = NormalizeMemoryId(idProperty.GetString());
+            return !string.IsNullOrWhiteSpace(id);
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
+    private static bool TryReadMemoryPathId(string path, out string? id)
+    {
+        id = null;
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Length != 3 ||
+            !string.Equals(segments[0], "mcpserver", StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(segments[1], "memory", StringComparison.OrdinalIgnoreCase) ||
+            string.IsNullOrWhiteSpace(segments[2]))
+        {
+            return false;
+        }
+
+        id = NormalizeMemoryId(Uri.UnescapeDataString(segments[2]));
+        return !string.IsNullOrWhiteSpace(id);
+    }
+
+    private static string NormalizeMemoryId(string? id)
+        => (id ?? string.Empty).Trim().ToUpperInvariant();
+
+    private static bool IsValidMemoryId(string? id)
+    {
+        var normalized = NormalizeMemoryId(id);
+        if (!normalized.StartsWith("MEMORY-", StringComparison.Ordinal))
+            return false;
+
+        var parts = normalized.Split('-', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length >= 3 &&
+               parts[^1].Length >= 3 &&
+               parts[^1].All(char.IsDigit) &&
+               parts.Skip(1).Take(parts.Length - 2).All(part => part.All(char.IsLetterOrDigit));
     }
 
     private static string SerializeReplayHeaders(HttpRequest request)
