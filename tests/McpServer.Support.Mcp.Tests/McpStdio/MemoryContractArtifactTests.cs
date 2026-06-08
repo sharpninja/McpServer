@@ -57,7 +57,25 @@ public sealed class MemoryContractArtifactTests
         Assert.Contains("Global memories first sorted by ID", text, StringComparison.Ordinal);
         Assert.Contains("memory_add", text, StringComparison.Ordinal);
         Assert.Contains("workflow.memory.list", text, StringComparison.Ordinal);
-        Assert.Contains("do not summarize, paraphrase, reorder within a scope, or add secrets", text, StringComparison.Ordinal);
+        Assert.Contains("do not summarize, paraphrase, reorder within a scope, silently generate new memories, or add secrets", text, StringComparison.Ordinal);
+        Assert.Contains("MCP memories are not a secret store", text, StringComparison.Ordinal);
+        Assert.Contains("agent-local memory stores are caches or migration sources only", text, StringComparison.Ordinal);
+        Assert.Contains("updatedBy", text, StringComparison.Ordinal);
+        Assert.Contains("workflow.sessionlog.appendActions", text, StringComparison.Ordinal);
+    }
+
+    /// <summary>Memory context documentation includes import safeguards and audit attribution rules.</summary>
+    [Fact]
+    public void MemoryContextDocumentation_IncludesImportAndAttributionRules()
+    {
+        var docPath = Path.Combine(FindRepoRoot(), "docs", "context", "memory.md");
+        var text = File.ReadAllText(docPath);
+
+        Assert.Contains("Agent-local memory files may be used as private caches or migration sources", text, StringComparison.Ordinal);
+        Assert.Contains("Exclude secrets, credentials, private unrelated workspace notes", text, StringComparison.Ordinal);
+        Assert.Contains("updatedBy", text, StringComparison.Ordinal);
+        Assert.Contains("workflow.sessionlog.appendActions", text, StringComparison.Ordinal);
+        Assert.Contains("Do not add private file paths", text, StringComparison.Ordinal);
     }
 
     private static void AssertMemoryToolExists(JsonElement[] tools, string name)

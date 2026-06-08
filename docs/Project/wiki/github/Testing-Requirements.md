@@ -844,8 +844,11 @@ REPL contract tests SHALL prove workflow.memory.add, workflow.memory.list, workf
 
 ### TEST-MCP-MEMORY-006
 
-Marker-template contract tests SHALL prove default-marker-prompt contains the MCP Memories section, exact REQUIRED MEMORIES header, memory tool names, ID format, scope guidance, and no-secrets guidance.
+Marker-template contract tests SHALL prove default-marker-prompt contains the MCP Memories section, exact REQUIRED MEMORIES header, memory tool names, ID format, scope guidance, no-secrets guidance, agent-local import safeguards, updatedBy attribution, and session-log action guidance.
 
+**Acceptance Criteria:**
+- [x] Contract tests fail if the marker prompt omits the MCP Memories section, REQUIRED MEMORIES header, memory tool names, ID format, scope guidance, or no-secrets guidance. (evidence: MemoryContractArtifactTests.GeneratedMarkerPrompt_IncludesMemoryInstructions.)
+- [x] Contract tests fail if memory context documentation omits agent-local import safeguards, updatedBy attribution, or session-log action guidance. (evidence: MemoryContractArtifactTests.MemoryContextDocumentation_IncludesImportAndAttributionRules.)
 
 ### TEST-MCP-MEMORY-007
 

@@ -738,6 +738,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 - [x] Plugins expose memory tools through supported tool surfaces.
 - [x] Plugins with host request-boundary injection hooks render the exact `REQUIRED MEMORIES` block on supported user prompts.
 - [x] Plugins without usable request-boundary injection hooks document the limitation without claiming automatic injection.
+- [x] Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement.
 - [x] Plugins without automatic injection expose explicit memory-list fallback behavior.
 
 ## TR-MCP-MT-001

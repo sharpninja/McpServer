@@ -323,7 +323,11 @@ templates:
       REQUIRED MEMORIES
       - None.
 
-      Preserve raw memory text exactly; do not summarize, paraphrase, reorder within a scope, or add secrets. Effective memory order is Global memories first sorted by ID, then current Workspace memories sorted by ID.
+      Preserve raw memory text exactly; do not summarize, paraphrase, reorder within a scope, silently generate new memories, or add secrets. MCP memories are not a secret store. Effective memory order is Global memories first sorted by ID, then current Workspace memories sorted by ID.
+
+      Existing agent-local memory stores are caches or migration sources only; the MCP memory store is the authoritative shared record. Import agent-local memories only when the operator approves the scope, the content belongs to this workspace or is intentionally Global, and the import does not leak secrets, private notes, or unrelated workspace guidance.
+
+      Attribute memory mutations with the real agent or user identity via `updatedBy` when supported, and record successful memory add/update/remove operations in the active session log through `workflow.sessionlog.appendActions`. Keep import provenance in the session log or dialog instead of adding private source paths to memory text.
 
       Manage memories through the required plugin or MCP tool surface: `memory_add`, `memory_list`, `memory_update`, `memory_remove`; REPL `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`; or REST `/mcpserver/memory` when explicitly allowed for non-plugin diagnostics.
 

@@ -835,11 +835,12 @@ Supported agents SHALL receive active memories at each host-supported request bo
 
 Generated `AGENTS-README-FIRST.yaml` instructions SHALL explain MCP memories, the memory tools, the ID format, scope behavior, and the exact `REQUIRED MEMORIES` rendering contract.
 **Acceptance Criteria:**
-- [x] `templates/prompt-templates.yaml` contains an MCP Memories section in the default marker prompt.
-- [x] The section names `memory_add`, `memory_list`, `memory_update`, and `memory_remove`.
-- [x] The section documents Global versus Workspace scope and the `MEMORY-{CATEGORY}-{NNN}` ID format.
-- [x] The section states that memory text is raw text, not a secret store, and must not be silently generated.
-- [x] A marker-template contract test fails if the required section, tools, or render format are missing.
+- [x] templates/prompt-templates.yaml contains an MCP Memories section in the default marker prompt. (evidence: templates/prompt-templates.yaml MCP Memories section.)
+- [x] The section names memory_add, memory_list, memory_update, and memory_remove. (evidence: templates/prompt-templates.yaml MCP Memories tool list.)
+- [x] The section documents Global versus Workspace scope and the MEMORY-{CATEGORY}-{NNN} ID format. (evidence: templates/prompt-templates.yaml scope and ID guidance.)
+- [x] The section states that memory text is raw text, not a secret store, and must not be silently generated. (evidence: templates/prompt-templates.yaml memory rules.)
+- [x] The section documents agent-local memory import safeguards, updatedBy attribution, and session-log action recording for memory mutations. (evidence: docs/context/memory.md and templates/prompt-templates.yaml import and attribution rules.)
+- [x] A marker-template contract test fails if the required section, tools, render format, import safeguards, or attribution rules are missing. (evidence: MemoryContractArtifactTests.MemoryContextDocumentation_IncludesImportAndAttributionRules.)
 
 ## FR-MCP-MEMORY-005 REPL memory namespace
 
@@ -864,10 +865,11 @@ The MCP Server SHALL allow memories to be marked Global or Workspace and SHALL r
 
 Official McpServer agent plugins SHALL expose memory tools and SHALL inject the `REQUIRED MEMORIES` block at host-supported request boundaries, or SHALL document a host limitation and expose an explicit memory-list fallback.
 **Acceptance Criteria:**
-- [x] Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline v1, Cline v2, and OpenCode plugin lanes validate memory tool availability.
-- [x] Plugins with request-boundary injection hooks render `REQUIRED MEMORIES` on every supported user prompt boundary.
-- [x] Plugins without a usable request-boundary injection hook document the host limitation without claiming automatic injection.
-- [x] Plugin validation identifies the host hook or fallback, workspace marker path, and example `REQUIRED MEMORIES` output.
+- [x] Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline v1, Cline v2, and OpenCode plugin lanes validate memory tool availability. (evidence: Shell plugin Bats memory tests and TypeScript memory tests.)
+- [x] Plugins with request-boundary injection hooks render REQUIRED MEMORIES on every supported user prompt boundary. (evidence: Plugin validation and marker memory injection coverage.)
+- [x] Plugins without a usable request-boundary injection hook document the host limitation without claiming automatic injection. (evidence: Plugin docs and validation expectations.)
+- [x] Plugin validation identifies the host hook or fallback, workspace marker path, and example REQUIRED MEMORIES output. (evidence: Plugin validation coverage.)
+- [x] Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement. (evidence: Shell Bats and TypeScript memory tests for mutation action append and failsafe cleanup.)
 
 ## FR-MCP-MEMORY-008 Federated Memory State
 

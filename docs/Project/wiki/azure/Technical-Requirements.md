@@ -726,11 +726,12 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 **Agent plugin memory integration** — Official McpServer plugins consume the shared memory contract and expose memory tools through their supported tool surfaces. Plugins with host request-boundary injection hooks render the exact `REQUIRED MEMORIES` block on supported user prompts. Plugins without such hooks document the limitation and expose explicit memory-list fallback behavior.
 **Acceptance Criteria:**
-- [x] Official plugin lanes consume the shared memory API/REPL/stdio contract.
-- [x] Plugins expose memory tools through supported tool surfaces.
-- [x] Plugins with host request-boundary injection hooks render the exact `REQUIRED MEMORIES` block on supported user prompts.
-- [x] Plugins without usable request-boundary injection hooks document the limitation without claiming automatic injection.
-- [x] Plugins without automatic injection expose explicit memory-list fallback behavior.
+- [x] Official plugin lanes consume the shared memory API, REPL, and stdio contract. (evidence: Plugin memory tools route through workflow.memory.*.)
+- [x] Plugins expose memory tools through supported tool surfaces. (evidence: Shell and TypeScript memory tool tests.)
+- [x] Plugins with host request-boundary injection hooks render the exact REQUIRED MEMORIES block on supported user prompts. (evidence: Plugin validation coverage.)
+- [x] Plugins without usable request-boundary injection hooks document the limitation without claiming automatic injection. (evidence: Plugin host limitation docs.)
+- [x] Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement. (evidence: Updated shell wrappers, TypeScript handlers, Bats tests, and Jest tests.)
+- [x] Plugins without automatic injection expose explicit memory-list fallback behavior. (evidence: memory_list plugin tests and fallback behavior.)
 
 ## TR-MCP-MT-001
 
