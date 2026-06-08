@@ -67,6 +67,13 @@ export const WorkflowMethods = {
     streamImplement: 'workflow.todo.streamImplement',
     analyzeRequirements: 'workflow.todo.analyzeRequirements',
   },
+  memory: {
+    list: 'workflow.memory.list',
+    get: 'workflow.memory.get',
+    add: 'workflow.memory.add',
+    update: 'workflow.memory.update',
+    remove: 'workflow.memory.remove',
+  },
   requirements: {
     listFr: 'workflow.requirements.listFr',
     getFr: 'workflow.requirements.getFr',

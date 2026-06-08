@@ -111,6 +111,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>Authoritative workspace-scoped FR-to-TR/TEST traceability links.</summary>
     public DbSet<RequirementTraceabilityLinkEntity> RequirementTraceabilityLinks => Set<RequirementTraceabilityLinkEntity>();
 
+    /// <summary>TR-MCP-MEMORY-001: Authoritative raw-text MCP memories.</summary>
+    public DbSet<MemoryEntity> Memories => Set<MemoryEntity>();
+
     /// <summary>FR-MCP-103: Enrolled local federation proxies known by the hub.</summary>
     public DbSet<FederationProxyEntity> FederationProxies => Set<FederationProxyEntity>();
 
@@ -407,6 +410,19 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<MemoryEntity>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.HasIndex(x => x.Category);
+            e.HasIndex(x => new { x.Scope, x.WorkspaceId, x.Category });
+            e.HasIndex(x => x.UpdatedAtUtc);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
         modelBuilder.Entity<FederationProxyEntity>(e =>
         {
             e.HasIndex(x => x.Status);
@@ -496,6 +512,11 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<MemoryEntity>().HasQueryFilter("Workspace", e =>
+            e.Scope == MemoryEntity.GlobalScope
+            || (!string.IsNullOrEmpty(_workspaceId)
+                && e.Scope == MemoryEntity.WorkspaceScope
+                && e.WorkspaceId == _workspaceId));
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
@@ -522,6 +543,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<MemoryEntity>().HasIndex(e => e.WorkspaceId);
 
         ApplyDbFkConventions(modelBuilder);
     }
@@ -553,6 +575,9 @@ public sealed class McpDbContext : DbContext
         foreach (var entityType in modelBuilder.Model.GetEntityTypes().ToArray())
         {
             if (entityType.ClrType == workspaceClrType)
+                continue;
+
+            if (entityType.ClrType == typeof(MemoryEntity))
                 continue;
 
             if (entityType.FindProperty(nameof(WorkspaceEntity.WorkspaceId)) is null)

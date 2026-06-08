@@ -484,6 +484,187 @@ public class YamlPipeExecutionTests
     }
 
     /// <summary>
+    /// A workflow.memory.list request is routed through the typed memory workflow and applies
+    /// schema-validated scope/category/keyword filters.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryListRequest_DelegatesToMemoryWorkflow()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var memory = Substitute.For<IMemoryWorkflow>();
+        memory.ListAsync(MemoryScope.Global, "agent", "PowerShell", Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new MemoryQueryResult { Items = [], TotalCount = 0 }));
+
+        var sut = new ReplCommandDispatcher(passthrough, memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-list",
+                Method = MemoryCommandShapes.ListMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["scope"] = "Global",
+                    ["category"] = "agent",
+                    ["keyword"] = "PowerShell",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await memory.Received(1).ListAsync(MemoryScope.Global, "agent", "PowerShell", Arg.Any<CancellationToken>());
+        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+    }
+
+    /// <summary>
+    /// workflow.memory.list accepts Effective as an explicit alias for the default
+    /// effective Global + Workspace list.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryListRequest_EffectiveScopeForwardsNullScope()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        memory.ListAsync(null, null, null, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new MemoryQueryResult { TotalCount = 0 }));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-list-effective",
+                Method = MemoryCommandShapes.ListMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["scope"] = "Effective",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await memory.Received(1).ListAsync(null, null, null, Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// A workflow.memory.add request is normalized into the typed memory add request and keeps
+    /// agent identity metadata intact.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryAddRequest_AcceptsFlatYamlShape()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        memory.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new MemoryMutationResult { Success = true }));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-add",
+                Method = MemoryCommandShapes.AddMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "MEMORY-AGENT-001",
+                    ["category"] = "agent",
+                    ["scope"] = "Workspace",
+                    ["text"] = "Use the Codex plugin wrapper for MCP state.",
+                    ["updatedBy"] = "Codex",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await memory.Received(1).AddAsync(
+            Arg.Is<MemoryAddRequest>(request => request != null
+                && request.Id == "MEMORY-AGENT-001"
+                && request.Category == "agent"
+                && request.Scope == MemoryScope.Workspace
+                && request.Text == "Use the Codex plugin wrapper for MCP state."
+                && request.UpdatedBy == "Codex"),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// workflow.memory.add requires memory text, so malformed YAML is rejected before transport.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryAddRequest_MissingText_ReturnsSchemaError()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-add-invalid",
+                Method = MemoryCommandShapes.AddMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["category"] = "agent",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("schema_validation_failed", err.Code);
+        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, default);
+    }
+
+    /// <summary>
+    /// workflow.memory.add rejects explicit ids that do not match the canonical
+    /// MEMORY-{CATEGORY}-{NNN} format before invoking the workflow.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryAddRequest_InvalidId_ReturnsSchemaError()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-add-invalid-id",
+                Method = MemoryCommandShapes.AddMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "not-a-memory-id",
+                    ["category"] = "agent",
+                    ["text"] = "This id must be rejected.",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("schema_validation_failed", err.Code);
+        var errors = Assert.IsAssignableFrom<IReadOnlyList<string>>(err.Details!["errors"]);
+        Assert.Contains(errors, error => error.Contains("MEMORY-{CATEGORY}-{NNN}", StringComparison.Ordinal));
+        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, default);
+    }
+
+    /// <summary>
     /// A flat workflow.todo.create request is normalized into the typed create-request
     /// interface before dispatch. YAML callers do not have to know the client method's
     /// internal <c>request</c> parameter name.

@@ -40,6 +40,13 @@ public static class ServiceCollectionExtensions
             return new McpServer.Repl.Core.GraphRagWorkflow(clientFactory.Context);
         });
 
+        // Register memory workflow for the workflow.memory namespace.
+        services.AddSingleton<IMemoryWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new McpServer.Repl.Core.MemoryWorkflow(clientFactory.Memory);
+        });
+
         // Register requirements workflow so agent plugins can invoke the
         // workflow.requirements namespace without falling back to raw REST.
         services.AddSingleton<IRequirementsWorkflow>(sp =>
@@ -66,7 +73,8 @@ public static class ServiceCollectionExtensions
                 sp.GetRequiredService<IGenericClientPassthrough>(),
                 sp.GetRequiredService<ISessionLogWorkflow>(),
                 sp.GetRequiredService<IRequirementsWorkflow>(),
-                sp.GetRequiredService<ITodoWorkflow>()));
+                sp.GetRequiredService<ITodoWorkflow>(),
+                sp.GetRequiredService<IMemoryWorkflow>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

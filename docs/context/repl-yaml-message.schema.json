@@ -16,7 +16,7 @@
         "requestId": { "type": "string", "minLength": 1 },
         "method": {
           "type": "string",
-          "pattern": "^(client\\.[A-Za-z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*|workflow\\.(sessionlog|todo|requirements|graphrag)\\..+)$"
+          "pattern": "^(client\\.[A-Za-z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*|workflow\\.(sessionlog|todo|memory|requirements|graphrag)\\..+)$"
         },
         "params": { "type": "object", "additionalProperties": true }
       }
@@ -25,6 +25,7 @@
   "allOf": [
     { "$ref": "#/$defs/sessionlogRules" },
     { "$ref": "#/$defs/todoRules" },
+    { "$ref": "#/$defs/memoryRules" },
     { "$ref": "#/$defs/requirementsRules" },
     { "$ref": "#/$defs/graphRagRules" }
   ],
@@ -80,6 +81,29 @@
         "dependsOn": { "$ref": "#/$defs/stringArray" },
         "functionalRequirements": { "$ref": "#/$defs/stringArray" },
         "technicalRequirements": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": true
+    },
+    "memoryId": {
+      "type": "string",
+      "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$"
+    },
+    "memoryScope": {
+      "type": "string",
+      "enum": ["Global", "Workspace"]
+    },
+    "memoryListScope": {
+      "type": "string",
+      "enum": ["Effective", "Global", "Workspace"]
+    },
+    "memoryPatch": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/$defs/memoryId" },
+        "category": { "type": "string", "minLength": 1 },
+        "scope": { "$ref": "#/$defs/memoryScope" },
+        "text": { "type": "string", "minLength": 1 },
+        "updatedBy": { "type": "string" }
       },
       "additionalProperties": true
     },
@@ -402,6 +426,86 @@
         {
           "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.todo.updateSelected" } } } } },
           "then": { "properties": { "payload": { "properties": { "params": { "$ref": "#/$defs/todoPatch" } } } } }
+        }
+      ]
+    },
+    "memoryRules": {
+      "allOf": [
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.memory.list" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "scope": { "$ref": "#/$defs/memoryListScope" },
+                      "category": { "type": "string" },
+                      "keyword": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.memory.get", "workflow.memory.remove"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": {
+                      "id": { "$ref": "#/$defs/memoryId" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.memory.add" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/memoryPatch" },
+                      { "required": ["category", "text"] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.memory.update" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/memoryPatch" },
+                      { "required": ["id"] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     },

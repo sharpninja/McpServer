@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
-import type { ReplBridge } from '../transport/repl-bridge.js';
+import type { ReplBridge } from '../transport/ReplBridge';
 
 const MAX_RETRIES = 3;
 

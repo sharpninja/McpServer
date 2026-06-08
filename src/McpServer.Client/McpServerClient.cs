@@ -85,6 +85,7 @@ public sealed class McpServerClient
         Todo = new TodoClient(http, options, holder);
         Context = new ContextClient(http, options, holder);
         SessionLog = new SessionLogClient(http, options, holder);
+        Memory = new MemoryClient(http, options, holder);
         GitHub = new GitHubClient(http, options, holder);
         Requirements = new RequirementsClient(http, options, holder);
         Voice = new VoiceClient(http, options, holder);
@@ -105,7 +106,7 @@ public sealed class McpServerClient
 
         _allClients = new McpClientBase[]
         {
-            Todo, Context, SessionLog, GitHub, Requirements, Voice, Events,
+            Todo, Context, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health, Federation
         };
         _apiKey = options.ApiKey ?? string.Empty;
@@ -283,6 +284,12 @@ public sealed class McpServerClient
     /// <para>See <see cref="SessionLogClient"/> for the full method list.</para>
     /// </summary>
     public SessionLogClient SessionLog { get; }
+
+    /// <summary>
+    /// Memory endpoints - add, list, update, and remove agent memories.
+    /// <para>See <see cref="MemoryClient"/> for the full method list.</para>
+    /// </summary>
+    public MemoryClient Memory { get; }
 
     /// <summary>
     /// GitHub integration endpoints — issues, pull requests, comments, and sync.

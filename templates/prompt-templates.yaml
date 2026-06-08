@@ -305,8 +305,27 @@ templates:
       - Another agent''s plugin may be inspected only for read-only diagnosis of plugin installation or contract drift.
       - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract.
       - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks/MCP server declarations must satisfy `agent_plugins.agents.Grok`.
-      - For Grok, the Streamable HTTP MCP server exposes tool names such as `sessionlog_*`, `todo_*`, and `requirements_*`; hosted-agent `mcp_*` names are not expected from that transport. `workflow.sessionlog.*`, `workflow.todo.*`, and `workflow.requirements.*` are plugin shim/REPL method names used by the Grok skills and `repl-invoke` helpers; they are not expected to appear as literal `search_tool` results.
+      - For Grok, the Streamable HTTP MCP server exposes tool names such as `sessionlog_*`, `todo_*`, `requirements_*`, and memory tools when available; hosted-agent `mcp_*` names are not expected from that transport. `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.memory.*`, and `workflow.requirements.*` are plugin shim/REPL method names used by the Grok skills and `repl-invoke` helpers; they are not expected to appear as literal `search_tool` results.
       - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source.
+
+
+      ## MCP Memories
+
+      MCP memories are durable operator guidance managed by the MCP Server. Global memories apply to every workspace; Workspace memories apply only to the active workspace. Memory IDs use `MEMORY-{CATEGORY}-{NNN}`.
+
+      Agents that support request-boundary injection must render required memories exactly as:
+
+      REQUIRED MEMORIES
+      - MEMORY-REQ-001: Raw memory text.
+
+      If no required memories are visible, render:
+
+      REQUIRED MEMORIES
+      - None.
+
+      Preserve raw memory text exactly; do not summarize, paraphrase, reorder within a scope, or add secrets. Effective memory order is Global memories first sorted by ID, then current Workspace memories sorted by ID.
+
+      Manage memories through the required plugin or MCP tool surface: `memory_add`, `memory_list`, `memory_update`, `memory_remove`; REPL `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`; or REST `/mcpserver/memory` when explicitly allowed for non-plugin diagnostics.
 
 
       ## Codex MCP Quickstart

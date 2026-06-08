@@ -85,6 +85,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             workspaceAccessor,
             Substitute.For<ITodoPromptService>(),
             Substitute.For<ISessionLogService>(),
+            Substitute.For<IMemoryService>(),
             gitHubCliService,
             Substitute.For<IRequirementsDocumentService>(),
             desktopLaunchService,

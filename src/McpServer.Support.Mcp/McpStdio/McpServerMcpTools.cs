@@ -38,6 +38,7 @@ public sealed class FwhMcpTools
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly ITodoPromptService _todoPromptService;
     private readonly ISessionLogService _sessionLogService;
+    private readonly IMemoryService _memoryService;
     private readonly IGitHubCliService _gitHubCliService;
     private readonly IRequirementsDocumentService _requirementsDocumentService;
     private readonly DesktopLaunchService _desktopLaunchService;
@@ -63,6 +64,7 @@ public sealed class FwhMcpTools
         WorkspaceServiceAccessor workspaceAccessor,
         ITodoPromptService todoPromptService,
         ISessionLogService sessionLogService,
+        IMemoryService memoryService,
         IGitHubCliService gitHubCliService,
         IRequirementsDocumentService requirementsDocumentService,
         DesktopLaunchService desktopLaunchService,
@@ -87,6 +89,7 @@ public sealed class FwhMcpTools
         _workspaceAccessor = workspaceAccessor;
         _todoPromptService = todoPromptService;
         _sessionLogService = sessionLogService;
+        _memoryService = memoryService;
         _gitHubCliService = gitHubCliService;
         _requirementsDocumentService = requirementsDocumentService;
         _desktopLaunchService = desktopLaunchService;
@@ -124,6 +127,61 @@ public sealed class FwhMcpTools
     }
 
     private static string SerializeJson(object value) => JsonSerializer.Serialize(value, s_camelCaseOptions);
+
+    private static bool TryParseMemoryScope(string? value, out MemoryScope? scope, out string? error)
+    {
+        scope = null;
+        error = null;
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return true;
+        }
+
+        var trimmed = value.Trim();
+        if (int.TryParse(trimmed, out _)
+            || !Enum.TryParse(trimmed, ignoreCase: true, out MemoryScope parsed)
+            || !Enum.IsDefined(parsed))
+        {
+            error = "scope must be Global or Workspace.";
+            return false;
+        }
+
+        scope = parsed;
+        return true;
+    }
+
+    private static bool TryParseMemoryListScope(string? value, out MemoryScope? scope, out string? error)
+    {
+        scope = null;
+        error = null;
+
+        if (string.IsNullOrWhiteSpace(value)
+            || string.Equals(value.Trim(), "Effective", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (!TryParseMemoryScope(value, out scope, out error))
+        {
+            error = "scope must be Effective, Global, or Workspace.";
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool TryParseMemoryScope(string? value, MemoryScope defaultScope, out MemoryScope scope, out string? error)
+    {
+        scope = defaultScope;
+        if (!TryParseMemoryScope(value, out var parsed, out error))
+        {
+            return false;
+        }
+
+        scope = parsed ?? defaultScope;
+        return true;
+    }
 
     /// <summary>Applies a natural-language workspace policy directive.</summary>
     [McpServerTool(Name = "workspace_policy_apply"), Description("Apply a natural-language workspace policy directive (ban/unban/clear for licenses, countries, organizations, or individuals).")]
@@ -686,6 +744,153 @@ public sealed class FwhMcpTools
             documentsIngested = last.DocumentsIngested,
             chunksWritten = last.ChunksWritten
         });
+    }
+
+    // ── Memory tools ────────────────────────────────────────────────────
+
+    /// <summary>TR-MCP-MEMORY-006: List effective memory items visible to the workspace.</summary>
+    [McpServerTool(Name = "memory_list"), Description("List effective memory items. Optional filters: scope, category, keyword.")]
+    public async Task<string> MemoryList(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional scope filter: Effective, Global, or Workspace")] string? scope = null,
+        [Description("Optional category filter")] string? category = null,
+        [Description("Optional keyword filter")] string? keyword = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            if (!TryParseMemoryListScope(scope, out var parsedScope, out var error))
+            {
+                return SerializeJson(new { error });
+            }
+
+            var result = await _memoryService.ListAsync(new MemoryListRequest
+            {
+                Scope = parsedScope,
+                Category = category,
+                Keyword = keyword,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>TR-MCP-MEMORY-006: Get a single visible memory item by id.</summary>
+    [McpServerTool(Name = "memory_get"), Description("Get a single visible memory item by id.")]
+    public async Task<string> MemoryGet(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Memory id")] string id,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var item = await _memoryService.GetAsync(id, cancellationToken).ConfigureAwait(false);
+            return item is null
+                ? SerializeJson(new { error = $"Memory '{id}' not found" })
+                : SerializeJson(item);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>TR-MCP-MEMORY-006: Add a memory item in Global or Workspace scope.</summary>
+    [McpServerTool(Name = "memory_add"), Description("Add a memory item. Defaults to Workspace scope.")]
+    public async Task<string> MemoryAdd(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Memory category")] string category,
+        [Description("Memory text")] string text,
+        [Description("Memory scope: Global or Workspace (default Workspace)")] string? scope = null,
+        [Description("Optional explicit memory id")] string? id = null,
+        [Description("Optional updater identity")] string? updatedBy = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            if (!TryParseMemoryScope(scope, MemoryScope.Workspace, out var parsedScope, out var error))
+            {
+                return SerializeJson(new MemoryMutationResult(false, error, FailureKind: MemoryMutationFailureKind.Validation));
+            }
+
+            var result = await _memoryService.AddAsync(new MemoryAddRequest
+            {
+                Id = id,
+                Category = category,
+                Scope = parsedScope,
+                Text = text,
+                UpdatedBy = updatedBy,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new MemoryMutationResult(false, ex.Message));
+        }
+    }
+
+    /// <summary>TR-MCP-MEMORY-006: Update a visible memory item by id.</summary>
+    [McpServerTool(Name = "memory_update"), Description("Update a memory item by id. Only provided fields are changed.")]
+    public async Task<string> MemoryUpdate(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Memory id")] string id,
+        [Description("Optional category replacement")] string? category = null,
+        [Description("Optional text replacement")] string? text = null,
+        [Description("Optional scope replacement: Global or Workspace")] string? scope = null,
+        [Description("Optional updater identity")] string? updatedBy = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            if (!TryParseMemoryScope(scope, out var parsedScope, out var error))
+            {
+                return SerializeJson(new MemoryMutationResult(false, error, FailureKind: MemoryMutationFailureKind.Validation));
+            }
+
+            var result = await _memoryService.UpdateAsync(id, new MemoryUpdateRequest
+            {
+                Category = category,
+                Scope = parsedScope,
+                Text = text,
+                UpdatedBy = updatedBy,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new MemoryMutationResult(false, ex.Message));
+        }
+    }
+
+    /// <summary>TR-MCP-MEMORY-006: Remove a visible memory item by id.</summary>
+    [McpServerTool(Name = "memory_remove"), Description("Remove a visible memory item by id.")]
+    public async Task<string> MemoryRemove(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Memory id")] string id,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _memoryService.RemoveAsync(id, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new MemoryMutationResult(false, ex.Message));
+        }
     }
 
     // ── GROUP A: TODO tools ──────────────────────────────────────────────

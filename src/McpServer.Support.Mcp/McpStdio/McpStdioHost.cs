@@ -172,6 +172,7 @@ public static class McpStdioHost
         builder.Services.AddScoped<IRepoFileService, RepoFileService>();
         builder.Services.AddScoped<DesktopLaunchService>();
         builder.Services.AddScoped<ISessionLogService, SessionLogService>();
+        builder.Services.AddScoped<IMemoryService, MemoryService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
         builder.Services.AddMcpGraphRag();

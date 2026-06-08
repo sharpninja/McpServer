@@ -31,6 +31,7 @@ namespace McpServer.Repl.Core;
 /// <item><c>client.context.*</c> — Context search and pack operations</item>
 /// <item><c>client.github.*</c> — GitHub integration (issues, PRs, comments)</item>
 /// <item><c>client.todo.*</c> — TODO management</item>
+/// <item><c>client.memory.*</c> — Agent memory management</item>
 /// <item><c>client.sessionlog.*</c> — Session log operations</item>
 /// <item><c>client.requirements.*</c> — Requirements management</item>
 /// <item><c>client.voice.*</c> — Voice conversation endpoints</item>
@@ -209,13 +210,14 @@ namespace McpServer.Repl.Core;
 /// payload:
 ///   requestId: req-20260304T120000Z-invalid-001
 ///   code: unknown_client
-///   message: Client 'invalidclient' not found. Valid clients: context, github, todo, sessionlog, requirements, voice, events, repo, desktop, tunnel, workspace, configuration, tools, authconfig, diagnostic, template, agentpool, agent, health, federation.
+///   message: Client 'invalidclient' not found. Valid clients: context, github, todo, memory, sessionlog, requirements, voice, events, repo, desktop, tunnel, workspace, configuration, tools, authconfig, diagnostic, template, agentpool, agent, health, federation.
 ///   details:
 ///     requestedClient: invalidclient
 ///     validClients:
 ///       - context
 ///       - github
 ///       - todo
+///       - memory
 ///       - sessionlog
 ///       - requirements
 ///       - voice

@@ -22,6 +22,7 @@ public sealed class McpServerClientTests
         Assert.NotNull(client.Todo);
         Assert.NotNull(client.Context);
         Assert.NotNull(client.SessionLog);
+        Assert.NotNull(client.Memory);
         Assert.NotNull(client.GitHub);
         Assert.NotNull(client.Requirements);
         Assert.NotNull(client.Voice);
@@ -97,6 +98,7 @@ public sealed class McpServerClientTests
         Assert.Equal(9999, client.Voice.Port);
         Assert.Equal(9999, client.Events.Port);
         Assert.Equal(9999, client.SessionLog.Port);
+        Assert.Equal(9999, client.Memory.Port);
         Assert.Equal(9999, client.Configuration.Port);
         Assert.Equal(9999, client.Tools.Port);
         Assert.Equal(9999, client.AgentPool.Port);
@@ -118,6 +120,7 @@ public sealed class McpServerClientTests
         Assert.Equal("default-anon-key", client.ApiKey);
         Assert.Equal("default-anon-key", client.Todo.ApiKey);
         Assert.Equal("default-anon-key", client.Context.ApiKey);
+        Assert.Equal("default-anon-key", client.Memory.ApiKey);
         Assert.Equal("default-anon-key", client.Repo.ApiKey);
         Assert.Equal("default-anon-key", client.Requirements.ApiKey);
         Assert.Equal("default-anon-key", client.Voice.ApiKey);

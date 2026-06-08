@@ -83,6 +83,62 @@
       "httpEquivalent": "GET /mcpserver/sync/status"
     },
     {
+      "name": "memory_list",
+      "description": "List effective memory items. Optional filters: scope, category, keyword.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "scope": { "type": "string", "required": false, "enum": ["Effective", "Global", "Workspace"], "default": "Effective", "description": "Optional scope filter: Effective, Global, or Workspace" },
+        "category": { "type": "string", "required": false, "description": "Optional category filter" },
+        "keyword": { "type": "string", "required": false, "description": "Optional keyword filter" }
+      },
+      "ordering": "Effective lists return Global memories first sorted by ID, then current Workspace memories sorted by ID.",
+      "httpEquivalent": "GET /mcpserver/memory"
+    },
+    {
+      "name": "memory_get",
+      "description": "Get a single visible memory item by id.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "id": { "type": "string", "required": true, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Memory id" }
+      },
+      "httpEquivalent": "GET /mcpserver/memory/{id}"
+    },
+    {
+      "name": "memory_add",
+      "description": "Add a memory item. Defaults to Workspace scope.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "category": { "type": "string", "required": true, "description": "Memory category" },
+        "text": { "type": "string", "required": true, "description": "Memory text" },
+        "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "default": "Workspace", "description": "Memory scope: Global or Workspace" },
+        "id": { "type": "string", "required": false, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Optional explicit memory id" },
+        "updatedBy": { "type": "string", "required": false, "description": "Optional updater identity" }
+      },
+      "httpEquivalent": "POST /mcpserver/memory"
+    },
+    {
+      "name": "memory_update",
+      "description": "Update a memory item by id. Only provided fields are changed.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "id": { "type": "string", "required": true, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Memory id" },
+        "category": { "type": "string", "required": false, "description": "Optional category replacement" },
+        "text": { "type": "string", "required": false, "description": "Optional text replacement" },
+        "scope": { "type": "string", "required": false, "enum": ["Global", "Workspace"], "description": "Optional scope replacement: Global or Workspace" },
+        "updatedBy": { "type": "string", "required": false, "description": "Optional updater identity" }
+      },
+      "httpEquivalent": "PUT /mcpserver/memory/{id}"
+    },
+    {
+      "name": "memory_remove",
+      "description": "Remove a visible memory item by id.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "id": { "type": "string", "required": true, "pattern": "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$", "description": "Memory id" }
+      },
+      "httpEquivalent": "DELETE /mcpserver/memory/{id}"
+    },
+    {
       "name": "todo_list",
       "description": "Query TODO items. Optional filters: section, priority, done.",
       "parameters": {

@@ -628,35 +628,35 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-001
 
-**TR-MCP-MEMORY-001** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-001.
+**EF memory storage model** - Add `MemoryEntity` and `DbSet<MemoryEntity>` to the shared EF model. `Id` is unique across the memory store. `Scope` is required and constrained to `Global` or `Workspace`. `WorkspaceId` is null for Global memories and required for Workspace memories. Soft-delete metadata hides removed memories by default. Indexes exist for `Scope`, `WorkspaceId`, `Category`, and `UpdatedAtUtc`.
 
 ## TR-MCP-MEMORY-002
 
-**TR-MCP-MEMORY-002** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-002.
+**Provider memory migrations** - Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.
 
 ## TR-MCP-MEMORY-003
 
-**TR-MCP-MEMORY-003** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-003.
+**Memory service layer** - Add XML-documented `IMemoryService` and `MemoryService` contracts for add, list, update, and remove. The service validates IDs, categories, scopes, text, duplicate active IDs, and scope transitions; generates globally unique `MEMORY-{CATEGORY}-{NNN}` IDs per category; preserves raw text; increments `Version` on update; and soft-deletes on remove.
 
 ## TR-MCP-MEMORY-004
 
-**TR-MCP-MEMORY-004** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-004.
+**Memory REST and typed client contract** - Add `MemoryController`, `MemoryClient`, and client models under `/mcpserver/memory`. Create, list, update, and remove models include scope where applicable. `McpServerClient.Memory` exists and participates in `_allClients` propagation for workspace path, API key, bearer token, and port.
 
 ## TR-MCP-MEMORY-005
 
-**TR-MCP-MEMORY-005** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-005.
+**MCP stdio and REPL memory tools** - Add `memory_add`, `memory_list`, `memory_update`, and `memory_remove` to MCP stdio tools, and route `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, and `workflow.memory.remove` through typed REPL workflow code. Stdio tools require `workspacePath`, call `ApplyWorkspaceOverride`, and return compact JSON including scope for add, list, and update.
 
 ## TR-MCP-MEMORY-006
 
-**TR-MCP-MEMORY-006** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-006.
+**Memory schema and contract coverage** - Update canonical REPL YAML schema, plugin schema copies, and `docs/stdio-tool-contract.json` for all memory surfaces. Schemas validate required fields, `MEMORY-{CATEGORY}-{NNN}` IDs, `Global`/`Workspace`/`Effective` scope values where applicable, and invalid method/payload cases.
 
 ## TR-MCP-MEMORY-007
 
-**TR-MCP-MEMORY-007** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-007.
+**Scope-aware effective memory querying** - Add query/service helpers that resolve active memories for a workspace. Effective queries include active Global memories plus active memories for the current workspace, exclude deleted and other-workspace rows, and apply Global-first then Workspace ordering by ID. Controller, client, MCP stdio, REPL, YAML examples, marker injection, and plugin injection all use this ordering contract.
 
 ## TR-MCP-MEMORY-008
 
-**TR-MCP-MEMORY-008** — Placeholder requirement backfilled for TODO link TR-MCP-MEMORY-008.
+**Agent plugin memory integration** - Official McpServer plugins consume the shared memory contract and expose memory tools through their supported tool surfaces. Plugins with host request-boundary injection hooks render the exact `REQUIRED MEMORIES` block on supported user prompts. Plugins without such hooks document the limitation and expose explicit memory-list fallback behavior.
 
 ## TR-MCP-MT-001
 

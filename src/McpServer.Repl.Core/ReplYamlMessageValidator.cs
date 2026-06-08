@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Text.Json;
 
 namespace McpServer.Repl.Core;
@@ -14,6 +15,8 @@ internal sealed record ReplYamlMessageValidationResult(bool IsValid, IReadOnlyLi
 
 internal static class ReplYamlMessageValidator
 {
+    private const string MemoryIdPattern = "^MEMORY-[A-Z0-9]+(?:-[A-Z0-9]+)*-[0-9]{3,}$";
+
     private static readonly IReadOnlyDictionary<string, Action<IReadOnlyDictionary<string, object?>, List<string>>> MethodValidators = CreateValidators();
 
     public static ReplYamlMessageValidationResult ValidateRequest(IRequestPayload request)
@@ -51,7 +54,8 @@ internal static class ReplYamlMessageValidator
         }
         else if (method.StartsWith(SessionLogCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
                  method.StartsWith(TodoCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
-                 method.StartsWith(RequirementsCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+                 method.StartsWith(RequirementsCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
+                 method.StartsWith(MemoryCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
             errors.Add($"No YAML schema is registered for method '{method}'.");
         }
@@ -202,6 +206,33 @@ internal static class ReplYamlMessageValidator
                 ValidateTodoOptionalFields(UnwrapRequest(args), errors);
             },
             [TodoCommandShapes.UpdateSelectedMethod] = static (args, errors) => ValidateTodoOptionalFields(UnwrapRequest(args), errors),
+
+            [MemoryCommandShapes.ListMethod] = static (args, errors) =>
+            {
+                OptionalMemoryListScope(args, "scope", errors);
+                OptionalText(args, "category", errors);
+                OptionalText(args, "keyword", errors);
+            },
+            [MemoryCommandShapes.GetMethod] = static (args, errors) => RequireMemoryId(args, "id", errors),
+            [MemoryCommandShapes.RemoveMethod] = static (args, errors) => RequireMemoryId(args, "id", errors),
+            [MemoryCommandShapes.AddMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                OptionalMemoryId(source, "id", errors);
+                RequireText(source, "category", errors);
+                OptionalMemoryScope(source, "scope", errors);
+                RequireText(source, "text", errors);
+                OptionalText(source, "updatedBy", errors);
+            },
+            [MemoryCommandShapes.UpdateMethod] = static (args, errors) =>
+            {
+                RequireMemoryId(args, "id", errors);
+                var source = UnwrapRequest(args);
+                OptionalText(source, "category", errors);
+                OptionalMemoryScope(source, "scope", errors);
+                OptionalText(source, "text", errors);
+                OptionalText(source, "updatedBy", errors);
+            },
 
             [RequirementsCommandShapes.ListFrMethod] = static (args, errors) =>
             {
@@ -624,6 +655,45 @@ internal static class ReplYamlMessageValidator
             errors.Add($"{path} must be one of: {string.Join(", ", values)}.");
         }
     }
+
+    private static void OptionalMemoryScope(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string? path = null)
+        => OptionalEnum(args, key, errors, path ?? $"payload.params.{key}", "Global", "Workspace");
+
+    private static void OptionalMemoryListScope(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string? path = null)
+        => OptionalEnum(args, key, errors, path ?? $"payload.params.{key}", "Effective", "Global", "Workspace");
+
+    private static void RequireMemoryId(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string? path = null)
+    {
+        path ??= $"payload.params.{key}";
+        var value = RequireText(args, key, errors, path);
+        if (value is not null && !IsValidMemoryId(value))
+        {
+            errors.Add($"{path} must match MEMORY-{{CATEGORY}}-{{NNN}}.");
+        }
+    }
+
+    private static void OptionalMemoryId(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string? path = null)
+    {
+        path ??= $"payload.params.{key}";
+        if (!args.TryGetValue(key, out var value) || value is null)
+        {
+            return;
+        }
+
+        if (!TryGetText(value, out var text) || string.IsNullOrWhiteSpace(text))
+        {
+            errors.Add($"{path} must match MEMORY-{{CATEGORY}}-{{NNN}}.");
+            return;
+        }
+
+        if (!IsValidMemoryId(text))
+        {
+            errors.Add($"{path} must match MEMORY-{{CATEGORY}}-{{NNN}}.");
+        }
+    }
+
+    private static bool IsValidMemoryId(string value)
+        => Regex.IsMatch(value, MemoryIdPattern, RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(100));
 
     private static void OptionalInteger(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string? path = null)
     {

@@ -70,6 +70,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly ISessionLogWorkflow? _sessionLogWorkflow;
     private readonly IRequirementsWorkflow? _requirementsWorkflow;
     private readonly ITodoWorkflow? _todoWorkflow;
+    private readonly IMemoryWorkflow? _memoryWorkflow;
 
     /// <summary>
     /// Initializes a new <see cref="ReplCommandDispatcher"/>.
@@ -78,16 +79,19 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="sessionLogWorkflow">The optional session-log workflow used to invoke <c>workflow.sessionlog.*</c> methods.</param>
     /// <param name="requirementsWorkflow">The optional requirements workflow used to invoke <c>workflow.requirements.*</c> methods.</param>
     /// <param name="todoWorkflow">The optional TODO workflow used to invoke <c>workflow.todo.*</c> methods.</param>
+    /// <param name="memoryWorkflow">The optional memory workflow used to invoke <c>workflow.memory.*</c> methods.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
         IRequirementsWorkflow? requirementsWorkflow = null,
-        ITodoWorkflow? todoWorkflow = null)
+        ITodoWorkflow? todoWorkflow = null,
+        IMemoryWorkflow? memoryWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
         _requirementsWorkflow = requirementsWorkflow;
         _todoWorkflow = todoWorkflow;
+        _memoryWorkflow = memoryWorkflow;
     }
 
     /// <inheritdoc />
@@ -169,11 +173,16 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             return await DispatchTodoRequestAsync(request, emitEnvelopeAsync, cancellationToken).ConfigureAwait(false);
         }
 
+        if (method.StartsWith(MemoryCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return await DispatchMemoryRequestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
         return BuildError(
             requestId: request.RequestId,
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
-                     $"Supported namespaces: client.<clientName>.<methodName>, {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*.");
+                     $"Supported namespaces: client.<clientName>.<methodName>, {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*.");
     }
 
     private async Task<IYamlEnvelope> DispatchSessionLogRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
@@ -455,6 +464,81 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         requestId: request.RequestId,
                         code: "method_not_found",
                         message: $"Method '{request.Method}' is not routed by the TODO workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private async Task<IYamlEnvelope> DispatchMemoryRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_memoryWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Memory workflow is not registered.");
+        }
+
+        var workflow = _memoryWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            object? result = request.Method switch
+            {
+                MemoryCommandShapes.ListMethod =>
+                    await workflow.ListAsync(
+                        GetMemoryListScope(args, "scope"),
+                        GetString(args, "category"),
+                        GetString(args, "keyword"),
+                        cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.GetMethod =>
+                    await workflow.GetAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.AddMethod =>
+                    await workflow.AddAsync(BuildMemoryAddRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.UpdateMethod =>
+                    await workflow.UpdateAsync(
+                        RequireString(args, "id"),
+                        BuildMemoryUpdateRequest(GetRequestArgs(args)),
+                        cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.RemoveMethod =>
+                    await workflow.RemoveAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false),
+                _ => null,
+            };
+
+            if (result is null)
+            {
+                return BuildError(
+                    requestId: request.RequestId,
+                    code: "method_not_found",
+                    message: $"Method '{request.Method}' is not routed by the memory workflow.");
             }
 
             return new YamlEnvelope
@@ -852,6 +936,29 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         };
     }
 
+    private static MemoryAddRequest BuildMemoryAddRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new MemoryAddRequest
+        {
+            Id = GetString(args, "id"),
+            Category = RequireString(args, "category"),
+            Scope = GetMemoryScope(args, "scope") ?? MemoryScope.Workspace,
+            Text = RequireString(args, "text"),
+            UpdatedBy = GetString(args, "updatedBy"),
+        };
+    }
+
+    private static MemoryUpdateRequest BuildMemoryUpdateRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new MemoryUpdateRequest
+        {
+            Category = GetString(args, "category"),
+            Scope = GetMemoryScope(args, "scope"),
+            Text = GetString(args, "text"),
+            UpdatedBy = GetString(args, "updatedBy"),
+        };
+    }
+
     private static Dictionary<string, object?> GetRequestArgs(Dictionary<string, object?> args)
     {
         if (!args.TryGetValue("request", out var requestValue) || requestValue is null)
@@ -906,6 +1013,82 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         return null;
+    }
+
+    private static MemoryScope? GetMemoryScope(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is MemoryScope typed)
+        {
+            return typed;
+        }
+
+        if (value is JsonElement element)
+        {
+            value = element.ValueKind switch
+            {
+                JsonValueKind.String => element.GetString(),
+                JsonValueKind.Number when element.TryGetInt32(out var numeric) => numeric,
+                _ => element.ToString(),
+            };
+        }
+
+        if (value is string text)
+        {
+            if (int.TryParse(text, out _)
+                || !Enum.TryParse(text, ignoreCase: true, out MemoryScope parsed)
+                || !Enum.IsDefined(parsed))
+            {
+                throw new ArgumentException("Memory scope must be Global or Workspace.");
+            }
+
+            return parsed;
+        }
+
+        if (value is IConvertible convertible)
+        {
+            var convertibleText = Convert.ToString(convertible, System.Globalization.CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(convertibleText)
+                && !int.TryParse(convertibleText, out _)
+                && Enum.TryParse(convertibleText, ignoreCase: true, out MemoryScope parsed)
+                && Enum.IsDefined(parsed))
+            {
+                return parsed;
+            }
+        }
+
+        throw new ArgumentException("Memory scope must be Global or Workspace.");
+    }
+
+    private static MemoryScope? GetMemoryListScope(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is JsonElement { ValueKind: JsonValueKind.String } element)
+        {
+            value = element.GetString();
+        }
+
+        if (value is string text && string.Equals(text.Trim(), "Effective", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        try
+        {
+            return GetMemoryScope(args, name);
+        }
+        catch (ArgumentException ex)
+        {
+            throw new ArgumentException("Memory list scope must be Effective, Global, or Workspace.", ex);
+        }
     }
 
     private static object? NormalizeJsonElement(object? value)

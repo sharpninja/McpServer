@@ -353,6 +353,7 @@ builder.Services.AddSingleton<ICopilotClient>(sp =>
         sp.GetRequiredService<IOptions<IngestionOptions>>(),
         sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
+builder.Services.AddScoped<IMemoryService, MemoryService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
