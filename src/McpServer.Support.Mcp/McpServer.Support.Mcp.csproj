@@ -51,6 +51,7 @@
     <PackageReference Include="Handlebars.Net" />
     <PackageReference Include="QRCoder" />
     <ProjectReference Include="..\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
     <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />
     <ProjectReference Include="..\McpServer.Storage\McpServer.Storage.csproj" />
     <ProjectReference Include="..\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj" />

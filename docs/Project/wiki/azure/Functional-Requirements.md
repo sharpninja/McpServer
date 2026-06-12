@@ -781,6 +781,50 @@ The system SHALL allow GitHub-backed TODO and issue operations to run under serv
 
 The Codex MCP plugin wrapper SHALL return successful workflow responses promptly or fail within a caller-controlled bounded timeout with actionable diagnostics instead of forcing raw REST fallback.
 
+## FR-MCP-118 FR-MCP-118
+
+Placeholder requirement backfilled for TODO link FR-MCP-118.
+
+## FR-MCP-119 FR-MCP-119
+
+Placeholder requirement backfilled for TODO link FR-MCP-119.
+
+## FR-MCP-120 FR-MCP-120
+
+Placeholder requirement backfilled for TODO link FR-MCP-120.
+
+## FR-MCP-121 FR-MCP-121
+
+Placeholder requirement backfilled for TODO link FR-MCP-121.
+
+## FR-MCP-122 FR-MCP-122
+
+Placeholder requirement backfilled for TODO link FR-MCP-122.
+
+## FR-MCP-123 FR-MCP-123
+
+Placeholder requirement backfilled for TODO link FR-MCP-123.
+
+## FR-MCP-124 FR-MCP-124
+
+Placeholder requirement backfilled for TODO link FR-MCP-124.
+
+## FR-MCP-125 FR-MCP-125
+
+Placeholder requirement backfilled for TODO link FR-MCP-125.
+
+## FR-MCP-126 FR-MCP-126
+
+Placeholder requirement backfilled for TODO link FR-MCP-126.
+
+## FR-MCP-127 FR-MCP-127
+
+Placeholder requirement backfilled for TODO link FR-MCP-127.
+
+## FR-MCP-128 FR-MCP-128
+
+Placeholder requirement backfilled for TODO link FR-MCP-128.
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.

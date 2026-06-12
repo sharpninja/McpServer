@@ -55,13 +55,17 @@ public sealed class TurnTransactionPlanArtifactTests
         Assert.Contains("`SD-DIFFGRAM-001-MSG-VERIFY-HASH`: subscriber verifies encrypted and plaintext hashes.", text, StringComparison.Ordinal);
         Assert.Contains("`SD-DIFFGRAM-001-BR-INVALID`: invalid hash/signature/decrypt path aborts and audits.", text, StringComparison.Ordinal);
         Assert.Contains("`SD-DIFFGRAM-001-BR-VALID`: valid manifest and payload commits durably.", text, StringComparison.Ordinal);
-        Assert.Contains("`mcpserver`: existing MCP Server host plus `Mcp:TurnTransactions`, in-process keyserver/subscriber controllers, and transaction coordinator under `src/McpServer.Support.Mcp`.", text, StringComparison.Ordinal);
+        Assert.Contains("`mcpserver`: existing MCP Server host plus `Mcp:TurnTransactions`, compatibility keyserver/subscriber controllers under `src/McpServer.Support.Mcp`, and the shared transaction coordinator from `src/McpServer.TransactionSecurity`.", text, StringComparison.Ordinal);
+        Assert.Contains("Separate keyserver host: `src/McpServer.KeyServer`.", text, StringComparison.Ordinal);
+        Assert.Contains("Separate subscriber host: `src/McpServer.Subscriber`.", text, StringComparison.Ordinal);
+        Assert.Contains("Shared transaction-security core: `src/McpServer.TransactionSecurity`.", text, StringComparison.Ordinal);
         Assert.Contains("Shared client contracts: existing `src/McpServer.Client`.", text, StringComparison.Ordinal);
-        Assert.Contains("Focused first-slice tests: existing MCP support/client test projects.", text, StringComparison.Ordinal);
-        Assert.Contains("Deferred projects: `src/McpServer.KeyServer`, `src/McpServer.Subscriber`, `tests/McpServer.KeyServer.Tests`, `tests/McpServer.Subscriber.Tests`, and `tests/McpServer.PlanReview.Tests`.", text, StringComparison.Ordinal);
+        Assert.Contains("Focused first-slice tests: MCP support/client test projects plus `tests/McpServer.TransactionSecurity.IntegrationTests`.", text, StringComparison.Ordinal);
 
-        AssertRepositoryFileExists(repoRoot, "src", "McpServer.Support.Mcp", "Services", "TurnTransactionCoordinator.cs");
-        AssertRepositoryFileExists(repoRoot, "src", "McpServer.Support.Mcp", "Services", "TransactionSecurityServices.cs");
+        AssertRepositoryFileExists(repoRoot, "src", "McpServer.TransactionSecurity", "Services", "TurnTransactionCoordinator.cs");
+        AssertRepositoryFileExists(repoRoot, "src", "McpServer.TransactionSecurity", "Services", "TransactionSecurityServices.cs");
+        AssertRepositoryFileExists(repoRoot, "src", "McpServer.KeyServer", "Program.cs");
+        AssertRepositoryFileExists(repoRoot, "src", "McpServer.Subscriber", "Program.cs");
         AssertRepositoryFileExists(repoRoot, "src", "McpServer.Support.Mcp", "Controllers", "KeyServerController.cs");
         AssertRepositoryFileExists(repoRoot, "src", "McpServer.Support.Mcp", "Controllers", "SubscriberController.cs");
         AssertRepositoryFileExists(repoRoot, "src", "McpServer.Client", "KeyServerClient.cs");
@@ -69,6 +73,7 @@ public sealed class TurnTransactionPlanArtifactTests
         AssertRepositoryFileExists(repoRoot, "tests", "McpServer.Support.Mcp.Tests", "Services", "TurnTransactionCoordinatorTests.cs");
         AssertRepositoryFileExists(repoRoot, "tests", "McpServer.Support.Mcp.Tests", "Controllers", "TransactionSecurityControllerTests.cs");
         AssertRepositoryFileExists(repoRoot, "tests", "McpServer.Client.Tests", "TransactionSecurityClientTests.cs");
+        AssertRepositoryFileExists(repoRoot, "tests", "McpServer.TransactionSecurity.IntegrationTests", "SeparateTransactionServiceIntegrationTests.cs");
     }
 
     private static string ReadTransactionPlan()

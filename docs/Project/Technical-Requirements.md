@@ -407,6 +407,10 @@ Package publication SHALL be branch-conditional: `main` publishes to `nuget.org`
 
 **Covered by:** `IPipelineBehavior`, `Dispatcher`
 
+## TR-MCP-CRYPTO-001
+
+**TR-MCP-CRYPTO-001** — Placeholder requirement backfilled for TODO link TR-MCP-CRYPTO-001.
+
 ## TR-MCP-CTX-001
 
 **New Project Context Indexing** — Ingestion configuration must include `src/McpServer.Cqrs/**/*.cs`, `src/McpServer.Cqrs.Mvvm/**/*.cs`, `src/McpServer.UI.Core/**/*.cs`, and `src/McpServer.Director/**/*.cs` in file patterns. Marker prompt Available Capabilities section lists all four projects with descriptions.
@@ -533,32 +537,28 @@ SQLite FTS5 full-text search support and hybrid ranking.
 
 ## TR-MCP-FED-001
 
-**Hub Proxy Federation Contract** — Federation configuration SHALL include `Role`, `HubBaseUrl`, `ProxyId`, `EnrollmentToken`, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
-**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationHeaders`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, `McpDbContext`, `Federation*Entity`, provider migrations, `FederationMiddleware`, `FederationProxyService`
-
+**Hub Proxy Federation Contract** — Federation configuration SHALL include Role, HubBaseUrl, ProxyId, EnrollmentToken, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
 **Acceptance Criteria:**
-- [ ] `FederationStateAdapterRegistry.RequiredDomains` lists every required mutable state domain, including `memory`.
+- [ ] FederationStateAdapterRegistry.RequiredDomains lists every required mutable state domain, including memory.
 - [ ] Adapter diagnostics report covered, local-only, and apply-supported status for each required domain.
-- [ ] `FederationStateOperation` carries the operation's `GlobalWorkspaceId` into adapter apply calls.
+- [ ] FederationStateOperation carries the operation GlobalWorkspaceId into adapter apply calls.
 - [ ] LocalProxy queue eligibility rejects local-only, unknown, and non-replayable routes.
 - [ ] Queued replay preserves domain, resource id, body, headers, base version, operation id, source operation id, and global workspace id.
 - [ ] Hub stale-version detection records conflicts and suppresses fanout for stale operations.
 
 ## TR-MCP-FED-MEMORY-001
 
-**Memory Federation Adapter Contract** — Memory federation SHALL register a `memory` state adapter that snapshots active memory rows by globally unique memory ID and applies signed REST-originated memory operations. The adapter SHALL preserve memory ID, scope, workspace ownership, category, raw text, timestamps, soft-delete semantics, and version tokens based on `MemoryEntity.Version`. Workspace-scoped memory rows SHALL only apply when the operation `GlobalWorkspaceId` matches the row owner. LocalProxy queueing SHALL accept `POST /mcpserver/memory` only when the JSON body supplies an explicit valid `MEMORY-*` ID, and SHALL accept `PUT`, `PATCH`, and `DELETE /mcpserver/memory/{id}` as replayable memory operations.
-
+**Memory Federation Adapter Contract** — Memory federation SHALL register a memory state adapter that snapshots active memory rows by globally unique memory ID and applies signed REST-originated memory operations. The adapter SHALL preserve memory ID, scope, workspace ownership, category, raw text, timestamps, soft-delete semantics, and version tokens based on MemoryEntity.Version. Workspace-scoped memory rows SHALL only apply when the operation GlobalWorkspaceId matches the row owner. LocalProxy queueing SHALL accept POST /mcpserver/memory only when the JSON body supplies an explicit valid MEMORY-* ID, and SHALL accept PUT, PATCH, and DELETE /mcpserver/memory/{id} as replayable memory operations.
 **Acceptance Criteria:**
-- [ ] `AddFederationStateAdapters` registers `MemoryFederationStateAdapter`.
-- [ ] `FederationProxyService` infers domain `memory` for `/mcpserver/memory`.
-- [ ] Memory POST replay eligibility requires a valid explicit `id` in the JSON body.
-- [ ] Memory PUT/PATCH/DELETE replay eligibility reads `{id}` from `/mcpserver/memory/{id}`.
-- [ ] Memory adapter version tokens use `MemoryEntity.Version.ToString(CultureInfo.InvariantCulture)`.
+- [ ] AddFederationStateAdapters registers MemoryFederationStateAdapter.
+- [ ] FederationProxyService infers domain memory for /mcpserver/memory.
+- [ ] Memory POST replay eligibility requires a valid explicit id in the JSON body.
+- [ ] Memory PUT/PATCH/DELETE replay eligibility reads id from /mcpserver/memory/{id}.
+- [ ] Memory adapter version tokens use MemoryEntity.Version.ToString(CultureInfo.InvariantCulture).
 - [ ] Memory create applies only with an explicit valid ID and conflicts on invalid JSON, invalid IDs, deleted duplicates, or duplicate non-identical rows.
 - [ ] Memory update applies only to an existing visible/non-deleted row and increments version.
 - [ ] Memory delete is an idempotent soft delete; missing or already deleted rows return applied success.
-- [ ] Workspace-scoped memory apply conflicts when `GlobalWorkspaceId` differs from the memory row owner.
-- [ ] Stale `If-Match` or base-version memory operations create federation conflicts without overwriting hub state.
+- [ ] Workspace-scoped memory rows cannot be applied to a different workspace.
 
 ## TR-MCP-GH-001
 
@@ -609,6 +609,10 @@ SQLite FTS5 full-text search support and hybrid ranking.
 
 **Covered by:** `IssueTodoSyncService`
 
+## TR-MCP-GH-008
+
+**Ownership-safe GitHub CLI repository selection** — GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through gh --repo without local repository discovery, or pass a command-scoped safe.directory Git configuration for the active workspace when a workspace working directory is required.
+
 ## TR-MCP-HTTP-001
 
 **MCP Streamable HTTP Endpoint** — `app.MapMcp("/mcp-transport")` maps the native MCP protocol handler at a path separate from the REST routes (`/mcpserver/*`). The endpoint requires an `Accept: application/json, text/event-stream` header and returns HTTP 406 without it. Uses `ModelContextProtocol.AspNetCore` 0.9.0-preview.1.
@@ -632,6 +636,10 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 **Direct Website URL Ingestion** — Add `WebsiteIngestor` with a dedicated `HttpClient` and bounded crawl behavior. Only `http`/`https` URLs are allowed. SSRF protections block localhost, loopback, RFC1918, and link-local targets (including DNS-resolved IPs). Redirects are bounded and re-validated at each hop. Per-request controls include max pages, max depth, max bytes per page, force refresh, and optional GraphRAG index trigger. Ingested pages upsert as `SourceType=external-web` with canonical URL source keys and deterministic document IDs.
 
+## TR-MCP-KEYSERVER-001
+
+**TR-MCP-KEYSERVER-001** — Placeholder requirement backfilled for TODO link TR-MCP-KEYSERVER-001.
+
 ## TR-MCP-LOG-001
 
 **Exception Logging in Catch Blocks** *(DIRECTIVE)* - Every `catch` block that handles an exception must log the exception. Unexpected exceptions must use `LogError` with `ex.ToString()` as the message body. Expected/anticipated exceptions (e.g., `OperationCanceledException` on shutdown, `InvalidOperationException` for process-already-exited races, validation exceptions returned as HTTP 4xx) must use `LogWarning` with `ex.ToString()`. Catch blocks must not silently swallow exceptions with empty bodies or comments-only. The only permitted exception is re-throwing (`throw;`) without logging, where the exception will be logged by an outer handler.
@@ -652,8 +660,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-001
 
-**EF memory storage model** - Add `MemoryEntity` and `DbSet<MemoryEntity>` to the shared EF model. `Id` is unique across the memory store. `Scope` is required and constrained to `Global` or `Workspace`. `WorkspaceId` is null for Global memories and required for Workspace memories. Soft-delete metadata hides removed memories by default. Indexes exist for `Scope`, `WorkspaceId`, `Category`, and `UpdatedAtUtc`.
-
+**EF memory storage model** — Add `MemoryEntity` and `DbSet<MemoryEntity>` to the shared EF model. `Id` is unique across the memory store. `Scope` is required and constrained to `Global` or `Workspace`. `WorkspaceId` is null for Global memories and required for Workspace memories. Soft-delete metadata hides removed memories by default. Indexes exist for `Scope`, `WorkspaceId`, `Category`, and `UpdatedAtUtc`.
 **Acceptance Criteria:**
 - [x] The shared EF model exposes `MemoryEntity` and `DbSet<MemoryEntity>`.
 - [x] Memory IDs are unique across the memory store.
@@ -664,8 +671,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-002
 
-**Provider memory migrations** - Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.
-
+**Provider memory migrations** — Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.
 **Acceptance Criteria:**
 - [x] SQLite, SQL Server, and PostgreSQL migration projects include memory migrations.
 - [x] Provider snapshots include `MemoryEntity`.
@@ -675,8 +681,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-003
 
-**Memory service layer** - Add XML-documented `IMemoryService` and `MemoryService` contracts for add, list, update, and remove. The service validates IDs, categories, scopes, text, duplicate active IDs, and scope transitions; generates globally unique `MEMORY-{CATEGORY}-{NNN}` IDs per category; preserves raw text; increments `Version` on update; and soft-deletes on remove.
-
+**Memory service layer** — Add XML-documented `IMemoryService` and `MemoryService` contracts for add, list, update, and remove. The service validates IDs, categories, scopes, text, duplicate active IDs, and scope transitions; generates globally unique `MEMORY-{CATEGORY}-{NNN}` IDs per category; preserves raw text; increments `Version` on update; and soft-deletes on remove.
 **Acceptance Criteria:**
 - [x] `IMemoryService` and `MemoryService` expose add, list, update, and remove operations with XMLDocs.
 - [x] The service validates IDs, categories, scopes, text, duplicate active IDs, and scope transitions.
@@ -687,8 +692,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-004
 
-**Memory REST and typed client contract** - Add `MemoryController`, `MemoryClient`, and client models under `/mcpserver/memory`. Create, list, update, and remove models include scope where applicable. `McpServerClient.Memory` exists and participates in `_allClients` propagation for workspace path, API key, bearer token, and port.
-
+**Memory REST and typed client contract** — Add `MemoryController`, `MemoryClient`, and client models under `/mcpserver/memory`. Create, list, update, and remove models include scope where applicable. `McpServerClient.Memory` exists and participates in `_allClients` propagation for workspace path, API key, bearer token, and port.
 **Acceptance Criteria:**
 - [x] REST endpoints are available under `/mcpserver/memory`.
 - [x] `MemoryController`, `MemoryClient`, and client models include scope where applicable.
@@ -698,8 +702,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-005
 
-**MCP stdio and REPL memory tools** - Add `memory_add`, `memory_list`, `memory_update`, and `memory_remove` to MCP stdio tools, and route `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, and `workflow.memory.remove` through typed REPL workflow code. Stdio tools require `workspacePath`, call `ApplyWorkspaceOverride`, and return compact JSON including scope for add, list, and update.
-
+**MCP stdio and REPL memory tools** — Add `memory_add`, `memory_list`, `memory_update`, and `memory_remove` to MCP stdio tools, and route `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, and `workflow.memory.remove` through typed REPL workflow code. Stdio tools require `workspacePath`, call `ApplyWorkspaceOverride`, and return compact JSON including scope for add, list, and update.
 **Acceptance Criteria:**
 - [x] MCP stdio exposes `memory_add`, `memory_list`, `memory_update`, and `memory_remove`.
 - [x] Stdio tools require `workspacePath` and call `ApplyWorkspaceOverride`.
@@ -710,8 +713,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-006
 
-**Memory schema and contract coverage** - Update canonical REPL YAML schema, plugin schema copies, and `docs/stdio-tool-contract.json` for all memory surfaces. Schemas validate required fields, `MEMORY-{CATEGORY}-{NNN}` IDs, `Global`/`Workspace`/`Effective` scope values where applicable, and invalid method/payload cases.
-
+**Memory schema and contract coverage** — Update canonical REPL YAML schema, plugin schema copies, and `docs/stdio-tool-contract.json` for all memory surfaces. Schemas validate required fields, `MEMORY-{CATEGORY}-{NNN}` IDs, `Global`/`Workspace`/`Effective` scope values where applicable, and invalid method/payload cases.
 **Acceptance Criteria:**
 - [x] `docs/context/repl-yaml-message.schema.json` includes `workflow.memory.*` methods.
 - [x] Plugin schema copies include the memory surfaces.
@@ -721,8 +723,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-007
 
-**Scope-aware effective memory querying** - Add query/service helpers that resolve active memories for a workspace. Effective queries include active Global memories plus active memories for the current workspace, exclude deleted and other-workspace rows, and apply Global-first then Workspace ordering by ID. Controller, client, MCP stdio, REPL, YAML examples, marker injection, and plugin injection all use this ordering contract.
-
+**Scope-aware effective memory querying** — Add query/service helpers that resolve active memories for a workspace. Effective queries include active Global memories plus active memories for the current workspace, exclude deleted and other-workspace rows, and apply Global-first then Workspace ordering by ID. Controller, client, MCP stdio, REPL, YAML examples, marker injection, and plugin injection all use this ordering contract.
 **Acceptance Criteria:**
 - [x] Effective queries include active Global memories plus active current-workspace memories.
 - [x] Effective queries exclude deleted rows and rows from other workspaces.
@@ -731,15 +732,14 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-MEMORY-008
 
-**Agent plugin memory integration** - Official McpServer plugins consume the shared memory contract and expose memory tools through their supported tool surfaces. Plugins with host request-boundary injection hooks render the exact `REQUIRED MEMORIES` block on supported user prompts. Plugins without such hooks document the limitation and expose explicit memory-list fallback behavior.
-
+**Agent plugin memory integration** — Official McpServer plugins consume the shared memory contract and expose memory tools through their supported tool surfaces. Plugins with host request-boundary injection hooks render the exact `REQUIRED MEMORIES` block on supported user prompts. Plugins without such hooks document the limitation and expose explicit memory-list fallback behavior.
 **Acceptance Criteria:**
-- [x] Official plugin lanes consume the shared memory API/REPL/stdio contract.
-- [x] Plugins expose memory tools through supported tool surfaces.
-- [x] Plugins with host request-boundary injection hooks render the exact `REQUIRED MEMORIES` block on supported user prompts.
-- [x] Plugins without usable request-boundary injection hooks document the limitation without claiming automatic injection.
-- [x] Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement.
-- [x] Plugins without automatic injection expose explicit memory-list fallback behavior.
+- [x] Official plugin lanes consume the shared memory API, REPL, and stdio contract. (evidence: Plugin memory tools route through workflow.memory.*.)
+- [x] Plugins expose memory tools through supported tool surfaces. (evidence: Shell and TypeScript memory tool tests.)
+- [x] Plugins with host request-boundary injection hooks render the exact REQUIRED MEMORIES block on supported user prompts. (evidence: Plugin validation coverage.)
+- [x] Plugins without usable request-boundary injection hooks document the limitation without claiming automatic injection. (evidence: Plugin host limitation docs.)
+- [x] Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement. (evidence: Updated shell wrappers, TypeScript handlers, Bats tests, and Jest tests.)
+- [x] Plugins without automatic injection expose explicit memory-list fallback behavior. (evidence: memory_list plugin tests and fallback behavior.)
 
 ## TR-MCP-MT-001
 
@@ -781,6 +781,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Session and compaction hook output contract** — Bash-family MCP plugins SHALL implement SessionStart, SessionEnd, PreCompact, and PostCompact scripts so that status-only execution paths return {}. Hook-specific output may be emitted only for event schemas that support it, and every hookSpecificOutput payload SHALL include the matching hookEventName. PostCompact history reload side effects SHALL NOT attempt context injection via additionalContext.
 **Acceptance Criteria:**
 - [x] Affected session and compact hook scripts no longer contain hookSpecificOutput or additionalContext emissions for status-only paths. (evidence: Targeted rg search over the affected session and compact scripts found no hookSpecificOutput or additionalContext after the fix.)
+
+## TR-MCP-PLUGIN-010
+
+**PowerShell wrapper process timeout control** — Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
@@ -1026,11 +1030,11 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-REQACPLUGIN-002
 
-**Plugin-side AcceptanceCriteria capture verification** — Bash and TypeScript plugin requirement mutation dispatchers SHALL reject successful-looking create/update responses that explicitly show an empty `acceptanceCriteria` list when the caller supplied a non-null criteria array, while preserving backward compatibility for responses that omit the field.
+**Plugin-side AcceptanceCriteria capture verification** — Bash and TypeScript plugin requirement mutation dispatchers SHALL reject successful-looking create/update responses that explicitly show an empty acceptanceCriteria list when the caller supplied a non-null criteria array, while preserving backward compatibility for responses that omit the field.
 **Acceptance Criteria:**
-- [x] Bash plugins enforce the check after workflow and typed successful create/update responses through a shared `_repl_requirements_acceptance_criteria_result_ok` helper. (evidence: Codex, Claude Code, Claude Cowork, Copilot, and Grok direct sourced shell assertions passed.)
+- [x] Bash plugins enforce the check after workflow and typed successful create/update responses through a shared helper. (evidence: Codex, Claude Code, Claude Cowork, Copilot, and Grok direct sourced shell assertions passed.)
 - [x] TypeScript plugins enforce the same check after workflow and typed successful create/update responses through shared response inspection. (evidence: Cline, Cline v2, and OpenCode focused Jest tests passed.)
-- [x] The guard is scoped to FR/TR/TEST create/update mutations with caller-supplied acceptanceCriteria, so list/get/delete/batch/generate/ingest and no-criteria mutations keep existing behavior. (evidence: focused shell no-AC assertions, focused Jest files, and npm builds passed.)
+- [x] The guard is scoped to FR/TR/TEST create/update mutations with caller-supplied acceptanceCriteria and keeps no-criteria mutations compatible. (evidence: Focused shell no-AC assertions, focused Jest files, and npm builds passed.)
 
 ## TR-MCP-REQEXPORT-001
 
@@ -1080,6 +1084,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-STDIO-109
 
 **Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
+
+## TR-MCP-SUBSCRIBER-001
+
+**TR-MCP-SUBSCRIBER-001** — Placeholder requirement backfilled for TODO link TR-MCP-SUBSCRIBER-001.
 
 ## TR-MCP-SVC-001
 
@@ -1225,6 +1233,38 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 **Ngrok Auth Token Security** — The ngrok auth token is passed via the `NGROK_AUTHTOKEN` environment variable on the child process, rather than as a CLI argument, to prevent exposure in process listings and shell history.
 
+## TR-MCP-TXN-001
+
+**TR-MCP-TXN-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXN-001.
+
+## TR-MCP-TXNAIUNIT-001
+
+**TR-MCP-TXNAIUNIT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNAIUNIT-001.
+
+## TR-MCP-TXNARCH-001
+
+**TR-MCP-TXNARCH-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNARCH-001.
+
+## TR-MCP-TXNAUDIT-001
+
+**TR-MCP-TXNAUDIT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNAUDIT-001.
+
+## TR-MCP-TXNBYRD-001
+
+**TR-MCP-TXNBYRD-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNBYRD-001.
+
+## TR-MCP-TXNCOMPAT-001
+
+**TR-MCP-TXNCOMPAT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNCOMPAT-001.
+
+## TR-MCP-TXNDESIGN-001
+
+**TR-MCP-TXNDESIGN-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNDESIGN-001.
+
+## TR-MCP-TXNDIAGRAMS-001
+
+**TR-MCP-TXNDIAGRAMS-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNDIAGRAMS-001.
+
 ## TR-MCP-VOICE-001
 
 **Voice Conversation Service** — `VoiceConversationService` manages the full voice session lifecycle: session creation with `CopilotInteractiveSession` spawned via `DesktopProcessLauncher` (or standard `Process.Start`), turn processing with tool-call loop (max `MaxToolSteps` iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via `VoiceConversationOptions` bound from `Mcp:Voice` configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
@@ -1310,107 +1350,3 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-TEST-001
 
 **TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
-
-## TR-MCP-GH-008
-
-**Ownership-safe GitHub CLI Repository Selection** — GitHub CLI invocations SHALL either use an explicit configured or inferred repository selector through `gh --repo` without local repository discovery, or pass a command-scoped `safe.directory` Git configuration for the active workspace when a workspace working directory is required.
-
-**Status:** ✅ Complete
-
-**Covered by:** `GitHubCliService.ResolveRepositoryArgument`, `GitHubCliService.BuildGitSafeDirectoryEnvironment`, `ProcessRunRequest.EnvironmentVariables`, `ProcessRunner.RunAsync`
-
-## TR-MCP-PLUGIN-010
-
-**PowerShell Wrapper Process Timeout Control** — `Invoke-CodexMcpPlugin.ps1` SHALL expose a `TimeoutSeconds` parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and drain stdout/stderr without read ordering that can deadlock the wrapper.
-
-**Status:** ✅ Complete
-
-**Covered by:** `Invoke-CodexMcpPlugin.ps1`, `tests/plugin-helpers.bats`
-
-## TR-MCP-KEYSERVER-001
-
-**Transaction Keyserver Service** — Provide keyserver trust behavior for the first slice as in-process services/controllers under `src/McpServer.Support.Mcp`, with public client contracts under `src/McpServer.Client`. A later slice may extract this into `src/McpServer.KeyServer` with service-local EF Core storage, full replay/sequence/expiry checks, durable audit rows, XMLDocs, and health endpoint.
-
-**Status:** 🟡 Partial
-
-**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Support.Mcp/Controllers/KeyServerController.cs`, `src/McpServer.Client` transaction contracts, `tests/McpServer.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs`
-
-## TR-MCP-CRYPTO-001
-
-**Transactional Diffgram Cryptography** — Use canonical manifest signing/hash contracts in the first slice, with the contract labels reserved for ECDSA P-256/SHA-256 signatures and ECDH P-256/HKDF-SHA256/AES-256-GCM payload encryption. Real encryption/decryption, durable key material management, and complete nonce/sequence enforcement are deferred.
-
-**Status:** 🟡 Partial
-
-**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Client` transaction contracts
-
-## TR-MCP-SUBSCRIBER-001
-
-**Transaction Subscriber Service** — Provide subscriber commit/abort/conflict behavior for the first slice as in-process services/controllers under `src/McpServer.Support.Mcp`, with public client contracts under `src/McpServer.Client`. A later slice may extract this into `src/McpServer.Subscriber` with durable commit storage, real decrypt/hash pipeline, XMLDocs, and complete failure-reason coverage.
-
-**Status:** 🟡 Partial
-
-**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Support.Mcp/Controllers/SubscriberController.cs`, `src/McpServer.Client` transaction contracts, `tests/McpServer.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs`
-
-## TR-MCP-TXN-001
-
-**Turn Transaction Coordinator** — Add MCP Server `Mcp:TurnTransactions`, `ITurnTransactionCoordinator`, diffgram models, keyserver/subscriber clients, commit gating, and degraded behavior. Initial global mutation adapters are deferred until a later slice.
-
-**Status:** 🟡 Partial
-
-**Covered by:** `src/McpServer.Support.Mcp/Services/TurnTransactionCoordinator.cs`, `src/McpServer.Support.Mcp/Controllers/TurnTransactionsController.cs`, `tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs`
-
-## TR-MCP-TXNAUDIT-001
-
-**Transaction Audit Actions** — Add structured audit/session-log actions named `transaction_manifest_signed`, `transaction_manifest_verified`, `diffgram_committed`, `diffgram_rejected`, `transaction_aborted`, `transaction_degraded`, `transaction_rollback`, and `aiunit_plan_review`.
-
-**Status:** 🟡 Partial
-
-**Covered by:** first-slice transaction responses and focused controller/coordinator tests; durable audit/session-log adapters remain deferred.
-
-## TR-MCP-TXNCOMPAT-001
-
-**Federation Compatibility** — Existing `Mcp:Federation` HMAC envelopes remain backward compatible. Transaction crypto is additive and separate from federation envelope signing and verification.
-
-**Status:** ✅ Complete
-
-**Covered by:** transaction compatibility checks confirming disabled turn transactions do not alter existing federation HMAC behavior.
-
-## TR-MCP-TXNBYRD-001
-
-**Byrd v4 Transaction Gates** — Split work into Byrd v4 red/green/refactor gates with zero failure and zero skip exit criteria for each executed validation scope.
-
-**Status:** 🟡 Partial
-
-**Covered by:** focused validation gates *(planned)*
-
-## TR-MCP-TXNAIUNIT-001
-
-**aiUnit Plan Review Gate** — Add a test-only aiUnit plan review gate and capture run-log evidence before implementation and before closeout.
-
-**Status:** ✅ Complete
-
-**Covered by:** `tests/McpServer.PlanReview.Tests`, `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`
-
-## TR-MCP-TXNDIAGRAMS-001
-
-**Imported Diagram Traceability** — Add imported diagram artifacts, branch IDs, and validation that tests map to in-scope imported diagram branches.
-
-**Status:** 🟡 Partial
-
-**Covered by:** `docs/Project/Quad-Model-Transactional-Diffgram-Plan.md`, diagram traceability tests *(planned)*
-
-## TR-MCP-TXNARCH-001
-
-**Transaction Architecture Rounds** — Add two-round architecture/design artifacts and require both rounds before implementation code begins.
-
-**Status:** 🟡 Partial
-
-**Covered by:** `docs/Project/TurnTransactions-Architecture-Round1.md`, `docs/Project/TurnTransactions-Design-Round2.md`
-
-## TR-MCP-TXNDESIGN-001
-
-**Implementable Transaction Design Contracts** — Ensure design outputs define contracts, storage, APIs, options, reason codes, audit payloads, XMLDocs, canonicalization, and test mappings before code implementation.
-
-**Status:** 🟡 Partial
-
-**Covered by:** `docs/Project/TurnTransactions-Design-Round2.md`

@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj" />
   </ItemGroup>
   <ItemGroup>

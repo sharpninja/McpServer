@@ -1,7 +1,9 @@
+using System.Security.Cryptography;
+using System.Text;
 using McpServer.Support.Mcp.Controllers;
-using McpServer.Support.Mcp.Models;
-using McpServer.Support.Mcp.Options;
-using McpServer.Support.Mcp.Services;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -97,6 +99,63 @@ public sealed class TurnTransactionCoordinatorTests
         Assert.Equal("diffgram-txn-commit", result.DiffgramId);
         await subscriber.Received(1).CommitDiffgramAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
+    }
+
+    /// <summary>Enabled coordinator sends a protected envelope when subscriber encryption is required.</summary>
+    [Fact]
+    public async Task ExecuteAsync_WhenProtectDiffgramsEnabled_SendsProtectedEnvelopeToSubscriber()
+    {
+        using var encryptionKey = EncryptionKeyPair.Create();
+        var canonicalizer = new TransactionManifestCanonicalizer();
+        using var keyServer = new InMemoryKeyServerService(Monitor(new KeyServerOptions()), canonicalizer);
+        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = "mcpserver", Role = "publisher" })
+            .ConfigureAwait(true);
+        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest
+        {
+            PartyId = "subscriber-1",
+            Role = "subscriber",
+            ActiveEncryptionKeyId = "subscriber-1:encryption:1",
+            EncryptionPublicKeyPem = encryptionKey.PublicKeyPem,
+        }).ConfigureAwait(true);
+        var protector = new TransactionDiffgramProtector();
+        var innerSubscriber = new InMemorySubscriberCommitService(
+            keyServer,
+            canonicalizer,
+            Monitor(new SubscriberOptions
+            {
+                PartyId = "subscriber-1",
+                EncryptionKeyId = "subscriber-1:encryption:1",
+                EncryptionPrivateKeyPem = encryptionKey.PrivateKeyPem,
+                RequireEncryptedDiffgrams = true,
+            }),
+            protector);
+        var subscriber = new CapturingSubscriberCommitService(innerSubscriber);
+        var coordinator = CreateCoordinator(
+            new TurnTransactionOptions
+            {
+                Enabled = true,
+                ProtectDiffgrams = true,
+                SubscriberEncryptionKeyId = "subscriber-1:encryption:1",
+            },
+            keyServer,
+            keyServer,
+            subscriber,
+            diffgramBuilder: new JsonDiffgramBuilder(protector),
+            subscriberOptions: new SubscriberOptions { RequireEncryptedDiffgrams = true });
+
+        var result = await coordinator.ExecuteAsync(
+            CreateRequest("txn-protected-coordinator"),
+            _ => Task.FromResult(new TurnMutationResult { Success = true, ResultJson = "{\"updated\":true}" }),
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal("committed", result.Status);
+        Assert.NotNull(subscriber.LastCommit);
+        var commit = subscriber.LastCommit!;
+        Assert.Equal("subscriber-1:encryption:1", commit.Manifest.SubscriberEncryptionKeyId);
+        Assert.Equal(commit.EncryptedBodySha256, commit.Manifest.EncryptedBodySha256);
+        var envelopeJson = Encoding.UTF8.GetString(Convert.FromBase64String(commit.EncryptedDiffgramBase64));
+        Assert.Contains("mcp-transaction-diffgram-v1", envelopeJson, StringComparison.Ordinal);
+        Assert.DoesNotContain("PLAN-TURNTRANSACTIONS-001", envelopeJson, StringComparison.Ordinal);
     }
 
     /// <summary>Keyserver signing failure prevents mutation execution.</summary>
@@ -271,7 +330,9 @@ public sealed class TurnTransactionCoordinatorTests
         IKeyServerPartyRegistry? registry = null,
         IKeyServerManifestService? keyServer = null,
         ISubscriberCommitService? subscriber = null,
-        ITransactionAuditWriter? auditWriter = null)
+        ITransactionAuditWriter? auditWriter = null,
+        IDiffgramBuilder? diffgramBuilder = null,
+        SubscriberOptions? subscriberOptions = null)
     {
         var canonicalizer = new TransactionManifestCanonicalizer();
         var realKeyServer = new InMemoryKeyServerService(
@@ -288,9 +349,10 @@ public sealed class TurnTransactionCoordinatorTests
             registry,
             keyServer,
             subscriber,
-            new JsonDiffgramBuilder(),
+            diffgramBuilder ?? new JsonDiffgramBuilder(),
             new TransactionDegradedModePolicy(Monitor(options)),
-            auditWriter ?? new InMemoryTransactionAuditWriter());
+            auditWriter ?? new InMemoryTransactionAuditWriter(),
+            subscriberOptions is null ? null : Monitor(subscriberOptions));
     }
 
     private static TurnTransactionRequest CreateRequest(string transactionId)
@@ -335,5 +397,58 @@ public sealed class TurnTransactionCoordinatorTests
         var monitor = Substitute.For<IOptionsMonitor<TOptions>>();
         monitor.CurrentValue.Returns(options);
         return monitor;
+    }
+
+    private sealed class CapturingSubscriberCommitService : ISubscriberCommitService
+    {
+        private readonly ISubscriberCommitService _inner;
+
+        public CapturingSubscriberCommitService(ISubscriberCommitService inner)
+        {
+            _inner = inner;
+        }
+
+        public DiffgramCommitRequest? LastCommit { get; private set; }
+
+        public Task<DiffgramCommitResponse> CommitDiffgramAsync(
+            DiffgramCommitRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            LastCommit = request;
+            return _inner.CommitDiffgramAsync(request, cancellationToken);
+        }
+
+        public Task<TransactionStatusResponse?> GetTransactionStatusAsync(
+            string transactionId,
+            CancellationToken cancellationToken = default)
+            => _inner.GetTransactionStatusAsync(transactionId, cancellationToken);
+
+        public Task<TransactionAbortResponse> AbortTransactionAsync(
+            string transactionId,
+            TransactionAbortRequest request,
+            CancellationToken cancellationToken = default)
+            => _inner.AbortTransactionAsync(transactionId, request, cancellationToken);
+    }
+
+    private sealed class EncryptionKeyPair : IDisposable
+    {
+        private readonly ECDiffieHellman _key;
+
+        private EncryptionKeyPair(ECDiffieHellman key)
+        {
+            _key = key;
+            PublicKeyPem = key.ExportSubjectPublicKeyInfoPem();
+            PrivateKeyPem = key.ExportPkcs8PrivateKeyPem();
+        }
+
+        public string PublicKeyPem { get; }
+
+        public string PrivateKeyPem { get; }
+
+        public static EncryptionKeyPair Create()
+            => new(ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256));
+
+        public void Dispose()
+            => _key.Dispose();
     }
 }

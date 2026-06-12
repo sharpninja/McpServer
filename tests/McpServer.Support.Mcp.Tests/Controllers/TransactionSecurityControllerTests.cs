@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
 using McpServer.Support.Mcp.Controllers;
-using McpServer.Support.Mcp.Models;
-using McpServer.Support.Mcp.Options;
-using McpServer.Support.Mcp.Services;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -72,6 +72,44 @@ public sealed class TransactionSecurityControllerTests
         Assert.False(string.IsNullOrWhiteSpace(verified.ManifestHashSha256));
     }
 
+    /// <summary>Keyserver signing rejects a nonce that was already signed for the publisher/subscriber pair.</summary>
+    [Fact]
+    public async Task SignManifest_WithReplayNonce_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        await SignAsync(services.KeyServer, "txn-replay-first", sequence: 40, nonce: "nonce-replay").ConfigureAwait(true);
+
+        var replay = await controller.SignManifestAsync(
+            CreateSignRequest("txn-replay-second", sequence: 41, nonce: "nonce-replay"),
+            CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(replay.Result);
+        var response = Assert.IsType<TransactionManifestSignResponse>(badRequest.Value);
+        Assert.False(response.Success);
+        Assert.Equal(TransactionFailureReason.ReplayNonce, response.Reason);
+    }
+
+    /// <summary>Keyserver signing rejects stale sequence numbers for a publisher/subscriber pair.</summary>
+    [Fact]
+    public async Task SignManifest_WithStaleSequence_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        await SignAsync(services.KeyServer, "txn-stale-first", sequence: 50, nonce: "nonce-stale-first").ConfigureAwait(true);
+
+        var stale = await controller.SignManifestAsync(
+            CreateSignRequest("txn-stale-second", sequence: 49, nonce: "nonce-stale-second"),
+            CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(stale.Result);
+        var response = Assert.IsType<TransactionManifestSignResponse>(badRequest.Value);
+        Assert.False(response.Success);
+        Assert.Equal(TransactionFailureReason.StaleSequence, response.Reason);
+    }
+
     /// <summary>Manifest verification rejects tampered signed content.</summary>
     [Fact]
     public async Task VerifyManifest_WithTamperedHash_ReturnsBadRequest()
@@ -90,6 +128,65 @@ public sealed class TransactionSecurityControllerTests
         var response = Assert.IsType<TransactionManifestVerifyResponse>(badRequest.Value);
         Assert.False(response.IsValid);
         Assert.Equal(TransactionFailureReason.ManifestSignatureMismatch, response.Reason);
+    }
+
+    /// <summary>Keyserver verification rejects an already verified manifest nonce as replay.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithReplayNonce_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        var manifest = await SignAsync(
+            services.KeyServer,
+            "txn-verify-replay",
+            sequence: 60,
+            nonce: "nonce-verify-replay").ConfigureAwait(true);
+        var first = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = manifest, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var replay = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = manifest, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.IsType<OkObjectResult>(first.Result);
+        var badRequest = Assert.IsType<BadRequestObjectResult>(replay.Result);
+        var response = Assert.IsType<TransactionManifestVerifyResponse>(badRequest.Value);
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.ReplayNonce, response.Reason);
+    }
+
+    /// <summary>Keyserver verification rejects an older signed manifest after a newer sequence verifies.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithStaleSequence_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        var older = await SignAsync(
+            services.KeyServer,
+            "txn-verify-stale-older",
+            sequence: 70,
+            nonce: "nonce-verify-stale-older").ConfigureAwait(true);
+        var newer = await SignAsync(
+            services.KeyServer,
+            "txn-verify-stale-newer",
+            sequence: 71,
+            nonce: "nonce-verify-stale-newer").ConfigureAwait(true);
+        var first = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = newer, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var stale = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = older, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.IsType<OkObjectResult>(first.Result);
+        var badRequest = Assert.IsType<BadRequestObjectResult>(stale.Result);
+        var response = Assert.IsType<TransactionManifestVerifyResponse>(badRequest.Value);
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.StaleSequence, response.Reason);
     }
 
     /// <summary>Keyserver signing rejects disabled publisher parties with a deterministic reason.</summary>
@@ -135,6 +232,27 @@ public sealed class TransactionSecurityControllerTests
         Assert.Equal(TransactionFailureReason.DisabledParty, response.Reason);
     }
 
+    /// <summary>Keyserver verification rejects manifests that reference unknown subscriber encryption keys.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithUnknownSubscriberEncryptionKey_ReturnsUnknownKey()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(
+            services.KeyServer,
+            "txn-unknown-subscriber-key",
+            sequence: 9,
+            nonce: "nonce-unknown-subscriber-key").ConfigureAwait(true);
+        manifest.SubscriberEncryptionKeyId = "subscriber-1:encryption:missing";
+
+        var response = await services.KeyServer.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = manifest, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.UnknownKey, response.Reason);
+    }
+
     /// <summary>Subscriber commit accepts a signed manifest and exposes committed status.</summary>
     [Fact]
     public async Task CommitDiffgram_WithValidManifest_CommitsAndStatusReturnsCommitted()
@@ -161,7 +279,7 @@ public sealed class TransactionSecurityControllerTests
 
     /// <summary>Subscriber commit is idempotent for the same transaction and manifest payload.</summary>
     [Fact]
-    public async Task CommitDiffgram_WithDuplicatePayload_ReturnsDuplicate()
+    public async Task CommitDiffgram_WithDuplicatePayload_ReturnsCommitted()
     {
         using var services = CreateServices();
         await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
@@ -173,7 +291,7 @@ public sealed class TransactionSecurityControllerTests
 
         var ok = Assert.IsType<OkObjectResult>(duplicate.Result);
         var response = Assert.IsType<DiffgramCommitResponse>(ok.Value);
-        Assert.Equal("duplicate", response.Status);
+        Assert.Equal("committed", response.Status);
         Assert.Equal(TransactionFailureReason.None, response.Reason);
     }
 
@@ -213,6 +331,29 @@ public sealed class TransactionSecurityControllerTests
         var response = Assert.IsType<DiffgramCommitResponse>(badRequest.Value);
         Assert.Equal("rejected", response.Status);
         Assert.Equal(TransactionFailureReason.EncryptedBodyHashMismatch, response.Reason);
+    }
+
+    /// <summary>Subscriber rejects legacy placeholder bodies when real encrypted envelopes are required.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WithPlaceholderBodyWhenEncryptionRequired_ReturnsBadRequest()
+    {
+        using var services = CreateServices(new SubscriberOptions
+        {
+            PartyId = "subscriber-1",
+            RequireEncryptedDiffgrams = true,
+        });
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-encryption-required", sequence: 9, nonce: "nonce-encryption-required")
+            .ConfigureAwait(true);
+        var controller = new SubscriberController(services.Subscriber);
+
+        var commit = await controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(badRequest.Value);
+        Assert.Equal("rejected", response.Status);
+        Assert.Equal(TransactionFailureReason.DecryptFailed, response.Reason);
     }
 
     /// <summary>Subscriber abort stores aborted status for an uncommitted transaction.</summary>
@@ -258,7 +399,7 @@ public sealed class TransactionSecurityControllerTests
         Assert.Equal(TransactionFailureReason.Aborted, response.Reason);
     }
 
-    private static TransactionSecurityTestServices CreateServices()
+    private static TransactionSecurityTestServices CreateServices(SubscriberOptions? subscriberOptions = null)
     {
         var canonicalizer = new TransactionManifestCanonicalizer();
         var keyServer = new InMemoryKeyServerService(
@@ -267,7 +408,7 @@ public sealed class TransactionSecurityControllerTests
         var subscriber = new InMemorySubscriberCommitService(
             keyServer,
             canonicalizer,
-            Monitor(new SubscriberOptions { PartyId = "subscriber-1" }));
+            Monitor(subscriberOptions ?? new SubscriberOptions { PartyId = "subscriber-1" }));
         return new TransactionSecurityTestServices(keyServer, subscriber);
     }
 

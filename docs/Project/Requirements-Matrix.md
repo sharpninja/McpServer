@@ -588,7 +588,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REQACPLUGIN-TS | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQACPLUGIN-002 | Tracked | Testing-Requirements.md |
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
-| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | FR-MCP-116 | Tracked | Functional-Requirements.md |
 | FR-MCP-117 | Tracked | Functional-Requirements.md |
 | FR-MCP-118 | 🟡 Partial | Functional-Requirements.md |
@@ -619,7 +618,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-157 | Tracked | Testing-Requirements.md |
 | TEST-MCP-158 | 🟡 Partial | Testing-Requirements.md |
 | TEST-MCP-159 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-160 | 🔴 Planned | Testing-Requirements.md |
+| TEST-MCP-160 | ✅ Complete | Testing-Requirements.md |
 | TEST-MCP-161 | 🟡 Partial | Testing-Requirements.md |
 | TEST-MCP-162 | 🟡 Partial | Testing-Requirements.md |
 | TEST-MCP-163 | 🟡 Partial | Testing-Requirements.md |
@@ -633,3 +632,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-171 | 🟡 Partial | Testing-Requirements.md |
 | TEST-MCP-172 | 🟡 Partial | Testing-Requirements.md |
 | TEST-MCP-173 | 🟡 Partial | Testing-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TEST-MCP-REQACPLUGIN-CAPTURE | Tracked | Testing-Requirements.md |

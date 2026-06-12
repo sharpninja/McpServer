@@ -407,6 +407,10 @@ Package publication SHALL be branch-conditional: `main` publishes to `nuget.org`
 
 **Covered by:** `IPipelineBehavior`, `Dispatcher`
 
+## TR-MCP-CRYPTO-001
+
+**TR-MCP-CRYPTO-001** — Placeholder requirement backfilled for TODO link TR-MCP-CRYPTO-001.
+
 ## TR-MCP-CTX-001
 
 **New Project Context Indexing** — Ingestion configuration must include `src/McpServer.Cqrs/**/*.cs`, `src/McpServer.Cqrs.Mvvm/**/*.cs`, `src/McpServer.UI.Core/**/*.cs`, and `src/McpServer.Director/**/*.cs` in file patterns. Marker prompt Available Capabilities section lists all four projects with descriptions.
@@ -631,6 +635,10 @@ Pluggable ingestors for repo/session/external/github/issues.
 ## TR-MCP-INGEST-003
 
 **Direct Website URL Ingestion** — Add `WebsiteIngestor` with a dedicated `HttpClient` and bounded crawl behavior. Only `http`/`https` URLs are allowed. SSRF protections block localhost, loopback, RFC1918, and link-local targets (including DNS-resolved IPs). Redirects are bounded and re-validated at each hop. Per-request controls include max pages, max depth, max bytes per page, force refresh, and optional GraphRAG index trigger. Ingested pages upsert as `SourceType=external-web` with canonical URL source keys and deterministic document IDs.
+
+## TR-MCP-KEYSERVER-001
+
+**TR-MCP-KEYSERVER-001** — Placeholder requirement backfilled for TODO link TR-MCP-KEYSERVER-001.
 
 ## TR-MCP-LOG-001
 
@@ -1077,6 +1085,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
 
+## TR-MCP-SUBSCRIBER-001
+
+**TR-MCP-SUBSCRIBER-001** — Placeholder requirement backfilled for TODO link TR-MCP-SUBSCRIBER-001.
+
 ## TR-MCP-SVC-001
 
 **Windows Service Configuration** — `UseWindowsService(options => { options.ServiceName = "McpServer"; })` in `Program.cs` enables Windows Service hosting. The service is published as a self-contained single-file executable to `C:\ProgramData\McpServer`. The `Manage-McpService.ps1` script handles Install, Uninstall, Start, Stop, Restart, Status, and Publish operations with gsudo elevation. Recovery policy restarts the service on failure with a 60 s delay.
@@ -1220,6 +1232,38 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 ## TR-MCP-TUN-003
 
 **Ngrok Auth Token Security** — The ngrok auth token is passed via the `NGROK_AUTHTOKEN` environment variable on the child process, rather than as a CLI argument, to prevent exposure in process listings and shell history.
+
+## TR-MCP-TXN-001
+
+**TR-MCP-TXN-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXN-001.
+
+## TR-MCP-TXNAIUNIT-001
+
+**TR-MCP-TXNAIUNIT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNAIUNIT-001.
+
+## TR-MCP-TXNARCH-001
+
+**TR-MCP-TXNARCH-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNARCH-001.
+
+## TR-MCP-TXNAUDIT-001
+
+**TR-MCP-TXNAUDIT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNAUDIT-001.
+
+## TR-MCP-TXNBYRD-001
+
+**TR-MCP-TXNBYRD-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNBYRD-001.
+
+## TR-MCP-TXNCOMPAT-001
+
+**TR-MCP-TXNCOMPAT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNCOMPAT-001.
+
+## TR-MCP-TXNDESIGN-001
+
+**TR-MCP-TXNDESIGN-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNDESIGN-001.
+
+## TR-MCP-TXNDIAGRAMS-001
+
+**TR-MCP-TXNDIAGRAMS-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNDIAGRAMS-001.
 
 ## TR-MCP-VOICE-001
 

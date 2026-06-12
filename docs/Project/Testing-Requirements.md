@@ -132,22 +132,12 @@
 - TEST-MCP-133: Voter-history endpoint: posting N votes from M distinct actors produces N audit rows; `GET /questions/{id}/voters` returns exactly those rows projected to `{ actor, action, createdAt }`; same for answers; workspace isolation enforced.
 - TEST-MCP-134: One-vote-per-user enforcement: same actor posts vote_up twice -> second call is no-op (no counter change, no second audit row); actor posts vote_up then vote_down -> counter delta is -2, audit row recorded with action `vote_change`; actor revokes vote -> counter delta is -1, audit row `vote_revoke`; unique index prevents duplicate `QaVoteEntity` rows under concurrent calls (test with parallel writes against in-memory SQLite using `Task.WhenAll`).
 - TEST-MCP-135: Current vote state endpoint: `GET /questions/{id}/votes` returns one row per active voter from `QaVoteEntity` after a sequence of apply / change / revoke calls; revoked voters do not appear; workspace isolation enforced.
-- TEST-MCP-136: Hub-and-spoke federation tests: config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy `/mcp-transport` routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation. **Covered by:** `FederationMiddlewareTests`, `FederationTopologyServiceTests`, `FederationProxyServiceTests`, `FederationStateAdapterRegistryTests`, `FederationEntityModelTests`
+- TEST-MCP-136: Hub-and-spoke federation tests cover config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy /mcp-transport routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation.
   **Acceptance Criteria:**
   - [ ] Adapter diagnostics tests fail if any required domain is uncovered or reports incorrect local-only/apply-supported status.
   - [ ] Proxy tests prove live-forwarded domains keep working and only replayable mutating requests are queued during hub outage.
   - [ ] Topology tests prove stale base-version operations create conflicts and suppress fanout.
   - [ ] Replay and fanout tests prove signed envelopes are verified before local apply.
-- TEST-MCP-MEMORY-FED-001: Memory federation tests SHALL prove memory adapter diagnostics, `/mcpserver/memory` domain inference, explicit-ID queued create eligibility, no-ID create rejection, queued memory update/delete replay metadata, signed envelope apply, stale base-version conflict behavior, fanout row creation, recipient apply, workspace ownership enforcement, invalid payload conflicts, version behavior, timestamp preservation, and idempotent soft-delete semantics.
-  **Acceptance Criteria:**
-  - [ ] Registry coverage includes `memory` as covered, non-local-only, and apply-supported.
-  - [ ] Proxy tests prove explicit-ID memory creates queue and no-ID memory creates do not queue.
-  - [ ] Proxy tests prove memory update/delete operations queue with domain `memory` and the path resource ID.
-  - [ ] Adapter tests prove create preserves ID, scope, workspace ownership, category, raw text, timestamps, and version.
-  - [ ] Adapter tests prove update increments version and preserves workspace ownership.
-  - [ ] Adapter tests prove delete soft-deletes and replayed delete is idempotent.
-  - [ ] Adapter tests prove cross-workspace operations, invalid JSON, and invalid IDs conflict without mutation.
-  - [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
 - TEST-MCP-137: Given templates/prompt-templates.yaml, when the marker-template contract tests run, then default-marker-prompt contains the frontier-to-implementation planning guidance, explicit requirements capture guidance, and TDD unit-test planning guidance.
 - TEST-MCP-138: Unit tests must fail red until WorkspaceService is database-authoritative and DbForeignKeyContractTests prove every WorkspaceId entity has a Workspaces FK with non-cascade delete behavior.
 - TEST-MCP-139: Unit tests must fail red until persistent delete paths preserve rows through soft-delete metadata and every mutable entity writes DataAuditLog rows for create, update, and soft-delete operations.
@@ -193,7 +183,31 @@
   **Acceptance Criteria:**
   - [x] Hook regression tests assert exact {} output for session-start, session-end, pre-compact, and post-compact. (evidence: tests/hooks.bats passed in the affected plugin repositories with exact-output assertions.)
   - [x] Copilot has hook regression coverage equivalent to the affected script surface. (evidence: Added F:\GitHub\mcpserver-copilot-plugin\tests\hooks.bats and passed 6/6.)
+- TEST-MCP-156: Verify GitHubCliService passes command-scoped safe.directory environment variables for workspace-scoped calls and uses gh --repo without workspace cwd when a repository is configured.
+- TEST-MCP-157: Verify the PowerShell wrapper returns a non-zero result with a timeout diagnostic when a plugin helper command hangs beyond TimeoutSeconds, while normal helper wrapper tests still pass.
 - TEST-MCP-BATCH-001: Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
+- TEST-MCP-MEMORY-001: Storage isolation tests SHALL prove Global memories and Workspace memories in two workspaces list as Global plus current workspace only, and that update/remove by ID cannot mutate another workspace-local memory.
+- TEST-MCP-MEMORY-002: CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.
+- TEST-MCP-MEMORY-003: ID generation tests SHALL prove MEMORY-{CATEGORY}-{NNN} IDs are globally unique across Global and Workspace scopes, category counters are independent, and manually supplied duplicate active IDs are rejected.
+- TEST-MCP-MEMORY-004: REST/client contract tests SHALL prove MemoryController and MemoryClient route, serialize, and deserialize memory scope, text, ID, and version correctly, and that McpServerClient.Memory propagates workspace and auth settings.
+- TEST-MCP-MEMORY-005: REPL contract tests SHALL prove workflow.memory.add, workflow.memory.list, workflow.memory.update, and workflow.memory.remove dispatch through typed REPL workflow code, support scope values where applicable, and return standard result/error envelopes.
+- TEST-MCP-MEMORY-006: Marker-template contract tests SHALL prove default-marker-prompt contains the MCP Memories section, exact REQUIRED MEMORIES header, memory tool names, ID format, scope guidance, no-secrets guidance, agent-local import safeguards, updatedBy attribution, and session-log action guidance.
+  **Acceptance Criteria:**
+  - [x] Contract tests fail if the marker prompt omits the MCP Memories section, REQUIRED MEMORIES header, memory tool names, ID format, scope guidance, or no-secrets guidance. (evidence: MemoryContractArtifactTests.GeneratedMarkerPrompt_IncludesMemoryInstructions.)
+  - [x] Contract tests fail if memory context documentation omits agent-local import safeguards, updatedBy attribution, or session-log action guidance. (evidence: MemoryContractArtifactTests.MemoryContextDocumentation_IncludesImportAndAttributionRules.)
+- TEST-MCP-MEMORY-007: YAML schema and stdio contract tests SHALL prove valid workflow.memory.* envelopes pass; add without text fails; add/update with invalid scope fails; update/remove without ID fails; invalid MEMORY ID fails; unknown memory methods fail; and docs/stdio-tool-contract.json includes all memory tools.
+- TEST-MCP-MEMORY-008: Scope ordering tests SHALL prove list surfaces and required-memory injection return Global memories first sorted by ID and Workspace memories second sorted by ID, excluding workspace rows from other workspaces.
+- TEST-MCP-MEMORY-009: Agent plugin validation SHALL prove each supported plugin exposes memory tools and either injects REQUIRED MEMORIES with Global-first ordering at supported request boundaries or documents the host limitation with an explicit memory-list fallback.
+- TEST-MCP-MEMORY-FED-001: Memory federation tests SHALL prove memory adapter diagnostics, /mcpserver/memory domain inference, explicit-ID queued create eligibility, no-ID create rejection, queued memory update/delete replay metadata, signed envelope apply, stale base-version conflict behavior, fanout row creation, recipient apply, workspace ownership enforcement, invalid payload conflicts, version behavior, timestamp preservation, and idempotent soft-delete semantics.
+  **Acceptance Criteria:**
+  - [ ] Registry coverage includes memory as covered, non-local-only, and apply-supported.
+  - [ ] Proxy tests prove explicit-ID memory creates queue and no-ID memory creates do not queue.
+  - [ ] Proxy tests prove memory update/delete operations queue with domain memory and the path resource ID.
+  - [ ] Adapter tests prove create preserves ID, scope, workspace ownership, category, raw text, timestamps, and version.
+  - [ ] Adapter tests prove update increments version and preserves workspace ownership.
+  - [ ] Adapter tests prove delete soft-deletes and replayed delete is idempotent.
+  - [ ] Adapter tests prove cross-workspace operations, invalid JSON, and invalid IDs conflict without mutation.
+  - [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
 - TEST-MCP-REPL-001: ✅ **Complete** - Given a REPL host process, when a well-formed YAML command envelope is sent to stdin, then a YAML response envelope is emitted to stdout with `type: result` and the expected result payload. **Covered by:** `Iteration1_IntegrationTests`, `YamlFramingTests`, `YamlEnvelopeShapeTests`
 - TEST-MCP-REPL-002: ✅ **Complete** - Given a REPL host process, when malformed YAML is sent to stdin, then a structured error response is emitted with `type: error` and descriptive error details, without crashing the host process. **Covered by:** `FakeYamlSerializerTests`, `YamlFramingTests`
 - TEST-MCP-REPL-003: ✅ **Complete** - Given a REPL host with no bootstrap invocation, when an operational command is sent, then the response contains `type: error` and appropriate error code. **Covered by:** `ProtocolHandshakeTests`, `TrustBootstrapFlowTests`
@@ -223,20 +237,21 @@
 - TEST-MCP-REQAC-003: The requirements document renderer emits a deterministic Acceptance Criteria block and the parser tolerates it without throwing.
 - TEST-MCP-REQAC-004: copy-from-todo copies a TODO's acceptance criteria onto a requirement verbatim.
 - TEST-MCP-REQACPLUGIN-001: Validate the Bash plugin family emits and hydrates acceptanceCriteria on FR/TR/TEST requirement create/update commands and exposes copyAcceptanceCriteriaFromTodo.
+- TEST-MCP-REQACPLUGIN-002: Plugin regression tests prove caller-supplied acceptanceCriteria is not silently lost when requirement create/update responses explicitly report an empty criteria list.
+  **Acceptance Criteria:**
+  - [x] Direct sourced shell assertions pass for all five Bash plugin repos: criteria-only update emits caller criteria, no-criteria create omits criteria, and explicit empty response returns requirements_acceptance_criteria_not_captured. (evidence: Focused shell assertions passed for Codex, Claude Code, Claude Cowork, Copilot, and Grok.)
+  - [x] Focused Jest tests pass for Cline, Cline v2, and OpenCode covering criteria-only update forwarding and explicit empty-response failure. (evidence: Cline and Cline v2 requirements.test.ts passed; OpenCode complex-tools.test.ts passed with coverage disabled for focused scope after full file tests passed.)
+  - [x] TypeScript plugin builds pass after the guard is added. (evidence: npm run build passed for Cline, Cline v2, and OpenCode.)
 - TEST-MCP-REQAC-PLUGIN-BASH: Bash plugin repl-invoke shim tests cover acceptanceCriteria create/update blocks and copyAcceptanceCriteriaFromTodo dispatch, with focused Bats gates passing for all five Bash plugins.
   **Acceptance Criteria:**
   - [x] Codex, Claude Code, Claude Cowork, Copilot, and Grok Bash plugin focused Bats gates pass for acceptanceCriteria and copyAcceptanceCriteriaFromTodo. (evidence: Focused WSL Bats filters returned AC_EXIT=0 and COPY_EXIT=0 for all five Bash plugin repos.)
 - TEST-MCP-REQACPLUGIN-BASH: In each bash plugin, tests/repl-invoke-shim.bats (or tests/plugin-helpers.bats) proves typed-params emits acceptanceCriteria on create and hydrates it from existing on partial update with zero failures and zero skips.
+- TEST-MCP-REQACPLUGIN-CAPTURE: Plugin regression tests prove caller-supplied acceptanceCriteria is not silently lost when requirement create/update responses explicitly report an empty criteria list.
 - TEST-MCP-REQACPLUGIN-LIVE: Per plugin family, a live invocation of workflow.requirements.createFr with acceptanceCriteria populated round-trips through the deployed server (commit 6d376ea+) and the resulting REST GET returns the structured criteria.
 - TEST-MCP-REQAC-PLUGIN-TS: TypeScript plugin tests cover requirements acceptanceCriteria schemas, typed parameter shaping, and live-equivalent request handling for Cline, Cline v2, and Opencode.
   **Acceptance Criteria:**
   - [x] Cline, Cline v2, and Opencode build/test gates pass with acceptanceCriteria coverage. (evidence: Cline and Cline v2 npm build/test passed; Opencode npm build and full Jest passed with coverage thresholds.)
 - TEST-MCP-REQACPLUGIN-TS: In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) proves req_create_fr/req_update_fr/req_create_test forward acceptanceCriteria into the request payload with zero failures and zero skips.
-- TEST-MCP-REQACPLUGIN-002: Plugin regression tests prove caller-supplied acceptanceCriteria is not silently lost when requirement create/update responses explicitly report an empty criteria list.
-  **Acceptance Criteria:**
-  - [x] Direct sourced shell assertions pass for Codex, Claude Code, Claude Cowork, Copilot, and Grok: criteria-only update emits caller criteria, no-criteria create omits criteria, and explicit empty response returns `requirements_acceptance_criteria_not_captured`. (evidence: focused shell assertions passed for all five Bash plugin repos.)
-  - [x] Focused Jest tests pass for Cline, Cline v2, and OpenCode covering criteria-only update forwarding and explicit empty-response failure. (evidence: `npm test -- --runTestsByPath tests/requirements.test.ts --runInBand` passed for Cline and Cline v2; `npm test -- --runTestsByPath tests/complex-tools.test.ts --runInBand --coverage=false` passed for OpenCode.)
-  - [x] TypeScript plugin builds pass after the guard is added. (evidence: `npm run build` passed for Cline, Cline v2, and OpenCode.)
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   **Acceptance Criteria:**
   - [ ] Criterion A
@@ -248,30 +263,3 @@
 - TEST-SUPPORT-010C-1: Given a successful POST to `/mcpserver/sessionlog`, when `GET /mcpserver/sessionlog/{agent}/{sessionId}` is called under the same workspace context, then the response is 200 OK with the round-tripped session. **Covered by:** `SessionLogControllerTests.WhenPostingThenGetBySessionIdReturnsRecord`
 - TEST-SUPPORT-010C-2: Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` carries a `UnifiedRequestEntryDto`, then 201 is returned and the subsequent GET shows the appended turn. **Covered by:** `SessionLogControllerTests.WhenPostingTurnViaRestThenTurnIsRetrievable`, `SessionLogServiceTests.UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings`
 - TEST-SUPPORT-010C-3: Given the turn-append route, when PUT is used instead of POST, then 405 is returned with `Allow: POST`. **Covered by:** `SessionLogControllerTests.WhenPuttingTurnRouteThenReturns405WithAllowHeader`
-- TEST-MCP-156: ✅ **Complete** - Verify `GitHubCliService` passes command-scoped `safe.directory` environment variables for workspace-scoped calls and uses `gh --repo` without workspace cwd when a repository is configured. **Covered by:** `GitHubCliServiceTests.ListIssuesAsync_WithWorkspaceAccessor_AddsCommandScopedSafeDirectory`, `GitHubCliServiceTests.CreateIssueAsync_WithConfiguredRepository_AddsRepoOptionAndAvoidsWorkspaceCwd`
-- TEST-MCP-157: ✅ **Complete** - Verify the PowerShell wrapper returns a non-zero result with a timeout diagnostic when a plugin helper command hangs beyond `TimeoutSeconds`, while normal helper wrapper tests still pass. **Covered by:** `tests/plugin-helpers.bats` (`PowerShell wrapper times out hung plugin command`)
-- TEST-MCP-158: 🟡 **Partial** - Keyserver trust and manifest signing/verification tests validate the in-process first slice for FR-MCP-118 and TR-MCP-KEYSERVER-001. Replay, sequence, expiry, disabled/unknown key, rotation, and durable audit coverage remain deferred.
-- TEST-MCP-159: 🟡 **Partial** - Subscriber commit, conflict, rejection, and abort tests validate the in-process first slice for FR-MCP-119 and TR-MCP-SUBSCRIBER-001. Real decrypt/hash, durable commit storage, idempotent duplicate commit, and complete status coverage remain deferred.
-- TEST-MCP-160: 🔴 **Planned** - Real separate keyserver/subscriber integration tests shall validate SD-DIFFGRAM-001 without mocks, including forged, stale, and mismatched manifest rejection, after separate services exist.
-- TEST-MCP-161: 🟡 **Partial** - MCP transaction coordinator tests validate focused commit gating, degraded status, read bypass, and no-response-before-commit behavior for FR-MCP-120 and FR-MCP-121. Global mutation adapters, timeout, rollback/audit, and recovery smoke coverage remain deferred.
-- TEST-MCP-162: 🟡 **Partial** - Typed client and public contract tests validate keyserver/subscriber DTO surfaces under `src/McpServer.Client`. Full MCP/REPL serialization parity remains deferred.
-- TEST-MCP-163: 🟡 **Partial** - Byrd v4 validation evidence exists only for the focused first-slice scope; broader zero-failure zero-skip evidence remains required before later slice closeout.
-- TEST-MCP-164: ✅ **Complete** - aiUnit plan review runs through `tests/McpServer.PlanReview.Tests`, fails on critical/high findings, and persisted `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json` with zero critical and zero high findings.
-- TEST-MCP-165: ✅ **Complete** - Imported diagram preservation tests validate all six imported Mermaid diagrams and stable IDs.
-- TEST-MCP-166: 🟡 **Partial** - Keyserver and manifest tests derive focused first-slice coverage from SD-DIFFGRAM-001; complete replay/expiry/rotation/audit coverage remains deferred.
-- TEST-MCP-167: 🟡 **Partial** - Subscriber commit/abort tests derive focused first-slice coverage from SD-DIFFGRAM-001; durable commit and real decrypt/hash coverage remains deferred.
-- TEST-MCP-168: 🟡 **Partial** - End-to-end turn transaction tests derive focused coordinator coverage from AD-TXN-001; global mutation adapter and durable audit coverage remains deferred.
-- TEST-MCP-169: 🟡 **Partial** - Degraded and abort tests validate focused AD-TXN-001 behavior. Rollback and AD-AOT-001 reconciliation branch coverage remains deferred.
-- TEST-MCP-170: 🔴 **Planned** - Deferred-scope enforcement tests shall prove Curiosity, weight updates, and quad execution remain disabled until later requirements authorize them.
-- TEST-MCP-171: 🟡 **Partial** - Architecture/config conformance tests validate the current in-process component mapping; separate service project mapping remains deferred.
-- TEST-MCP-172: 🟡 **Partial** - Architecture Round 1 conformance and gap-resolution checks validate TR-MCP-TXNARCH-001 at the documentation level; automated gate coverage remains deferred.
-- TEST-MCP-173: 🟡 **Partial** - Design Round 2 contract, XMLDoc, reason-code, and AC-to-test mapping checks validate TR-MCP-TXNDESIGN-001 for the first slice; complete automated gate coverage remains deferred.
-- TEST-MCP-MEMORY-001: Storage isolation tests SHALL prove Global memories and Workspace memories in two workspaces list as Global plus current workspace only, and that update/remove by ID cannot mutate another workspace-local memory.
-- TEST-MCP-MEMORY-002: CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.
-- TEST-MCP-MEMORY-003: ID generation tests SHALL prove `MEMORY-{CATEGORY}-{NNN}` IDs are globally unique across Global and Workspace scopes, category counters are independent, and manually supplied duplicate active IDs are rejected.
-- TEST-MCP-MEMORY-004: REST/client contract tests SHALL prove `MemoryController` and `MemoryClient` route, serialize, and deserialize memory scope, text, ID, and version correctly, and that `McpServerClient.Memory` propagates workspace and auth settings.
-- TEST-MCP-MEMORY-005: REPL contract tests SHALL prove `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, and `workflow.memory.remove` dispatch through typed REPL workflow code, support scope values where applicable, and return standard result/error envelopes.
-- TEST-MCP-MEMORY-006: Marker-template contract tests SHALL prove `default-marker-prompt` contains the MCP Memories section, exact `REQUIRED MEMORIES` header, memory tool names, ID format, scope guidance, no-secrets guidance, agent-local import safeguards, `updatedBy` attribution, and session-log action guidance.
-- TEST-MCP-MEMORY-007: YAML schema and stdio contract tests SHALL prove valid `workflow.memory.*` envelopes pass; add without text fails; add/update with invalid scope fails; update/remove without ID fails; invalid MEMORY ID fails; unknown memory methods fail; and `docs/stdio-tool-contract.json` includes all memory tools.
-- TEST-MCP-MEMORY-008: Scope ordering tests SHALL prove list surfaces and required-memory injection return Global memories first sorted by ID and Workspace memories second sorted by ID, excluding workspace rows from other workspaces.
-- TEST-MCP-MEMORY-009: Agent plugin validation SHALL prove each supported plugin exposes memory tools and either injects `REQUIRED MEMORIES` with Global-first ordering at supported request boundaries or documents the host limitation with an explicit memory-list fallback.

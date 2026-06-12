@@ -1,13 +1,12 @@
-using System.Collections.Concurrent;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using McpServer.Support.Mcp.Models;
-using McpServer.Support.Mcp.Options;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
 using Microsoft.Extensions.Options;
 
-namespace McpServer.Support.Mcp.Services;
+namespace McpServer.TransactionSecurity.Services;
 
 /// <summary>FR-MCP-118: Registry for keyserver parties and public key descriptors.</summary>
 public interface IKeyServerPartyRegistry
@@ -158,11 +157,14 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     private const string SignatureAlgorithm = "ECDSA-P256-SHA256";
     private const string EncryptionAlgorithm = "ECDH-P256-HKDF-SHA256-AES-256-GCM";
     private const string Canonicalization = "transaction-manifest-v1";
+    private const string ManifestSigningReplayScope = "sign";
+    private const string ManifestVerificationReplayScope = "verify";
 
     private readonly object _gate = new();
     private readonly IOptionsMonitor<KeyServerOptions> _options;
     private readonly ITransactionManifestCanonicalizer _canonicalizer;
-    private readonly Dictionary<string, RegisteredParty> _parties = new(StringComparer.OrdinalIgnoreCase);
+    private readonly IKeyServerStateStore _stateStore;
+    private readonly Dictionary<string, Dictionary<string, ECDsa>> _signingKeys = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Initializes a new instance of the <see cref="InMemoryKeyServerService"/> class.</summary>
     /// <param name="options">Keyserver options.</param>
@@ -173,10 +175,11 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     {
         _options = options;
         _canonicalizer = canonicalizer;
+        _stateStore = CreateKeyServerStateStore(options.CurrentValue);
     }
 
     /// <inheritdoc />
-    public Task<PartyRegistrationResponse> RegisterPartyAsync(
+    public async Task<PartyRegistrationResponse> RegisterPartyAsync(
         PartyRegistrationRequest request,
         CancellationToken cancellationToken = default)
     {
@@ -195,25 +198,21 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
             ? CreateEncryptionPublicKeyPem()
             : request.EncryptionPublicKeyPem.Trim();
 
-        lock (_gate)
+        var existing = await _stateStore.GetPartyAsync(partyId, cancellationToken).ConfigureAwait(false);
+        var createdAt = existing?.Party.CreatedAtUtc ?? now;
+        var state = new PartyRegistrationResponse
         {
-            var createdAt = _parties.TryGetValue(partyId, out var existing)
-                ? existing.State.CreatedAtUtc
-                : now;
-            existing?.Dispose();
-
-            var state = new PartyRegistrationResponse
-            {
-                PartyId = partyId,
-                Role = request.Role.Trim(),
-                ActiveSigningKeyId = signingKeyId,
-                ActiveEncryptionKeyId = encryptionKeyId,
-                Status = status,
-                CreatedAtUtc = createdAt,
-                UpdatedAtUtc = createdAt == now ? null : now,
-            };
-            var party = new RegisteredParty(state);
-            party.Keys[signingKeyId] = new PartyKeyDescriptor
+            PartyId = partyId,
+            Role = request.Role.Trim(),
+            ActiveSigningKeyId = signingKeyId,
+            ActiveEncryptionKeyId = encryptionKeyId,
+            Status = status,
+            CreatedAtUtc = createdAt,
+            UpdatedAtUtc = existing is null ? null : now,
+        };
+        var keys = new[]
+        {
+            new PartyKeyDescriptor
             {
                 PartyId = partyId,
                 KeyId = signingKeyId,
@@ -222,10 +221,8 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
                 PublicKeyPem = signingKey.PublicKeyPem,
                 Status = status,
                 CreatedAtUtc = now,
-            };
-            if (signingKey.PrivateKey is not null)
-                party.SigningKeys[signingKeyId] = signingKey.PrivateKey;
-            party.Keys[encryptionKeyId] = new PartyKeyDescriptor
+            },
+            new PartyKeyDescriptor
             {
                 PartyId = partyId,
                 KeyId = encryptionKeyId,
@@ -234,10 +231,30 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
                 PublicKeyPem = encryptionPublicKeyPem,
                 Status = status,
                 CreatedAtUtc = now,
-            };
-            _parties[partyId] = party;
-            return Task.FromResult(Clone(state));
+            },
+        };
+
+        Dictionary<string, ECDsa>? staleSigningKeys = null;
+        lock (_gate)
+        {
+            if (_signingKeys.TryGetValue(partyId, out var existingSigningKeys))
+                staleSigningKeys = existingSigningKeys;
+
+            var activeSigningKeys = new Dictionary<string, ECDsa>(StringComparer.OrdinalIgnoreCase);
+            if (signingKey.PrivateKey is not null)
+                activeSigningKeys[signingKeyId] = signingKey.PrivateKey;
+            _signingKeys[partyId] = activeSigningKeys;
         }
+
+        DisposeKeys(staleSigningKeys);
+        await _stateStore.SavePartyAsync(state, keys, cancellationToken).ConfigureAwait(false);
+        await RecordKeyServerAuditAsync(
+            "keyserver.party.registered",
+            null,
+            TransactionFailureReason.None,
+            partyId,
+            cancellationToken).ConfigureAwait(false);
+        return Clone(state);
     }
 
     /// <inheritdoc />
@@ -245,161 +262,232 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
         string partyId,
         string keyId,
         CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        lock (_gate)
-        {
-            return Task.FromResult(
-                _parties.TryGetValue(partyId, out var party) && party.Keys.TryGetValue(keyId, out var key)
-                    ? Clone(key)
-                    : null);
-        }
-    }
+        => _stateStore.GetPartyKeyAsync(partyId.Trim(), keyId.Trim(), cancellationToken);
 
     /// <inheritdoc />
-    public Task<TransactionManifestSignResponse> SignManifestAsync(
+    public async Task<TransactionManifestSignResponse> SignManifestAsync(
         TransactionManifestSignRequest request,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         cancellationToken.ThrowIfCancellationRequested();
 
+        var (publisher, publisherFailure) = await GetActivePartyAsync(request.PublisherPartyId, cancellationToken)
+            .ConfigureAwait(false);
+        if (publisher is null)
+            return await FailedSignAsync(publisherFailure, request.TransactionId, cancellationToken).ConfigureAwait(false);
+        var (subscriber, subscriberFailure) = await GetActivePartyAsync(request.SubscriberPartyId, cancellationToken)
+            .ConfigureAwait(false);
+        if (subscriber is null)
+            return await FailedSignAsync(subscriberFailure, request.TransactionId, cancellationToken).ConfigureAwait(false);
+
+        var signingKeyId = string.IsNullOrWhiteSpace(request.PublisherSigningKeyId)
+            ? publisher.Party.ActiveSigningKeyId
+            : request.PublisherSigningKeyId.Trim();
+        var encryptionKeyId = string.IsNullOrWhiteSpace(request.SubscriberEncryptionKeyId)
+            ? subscriber.Party.ActiveEncryptionKeyId
+            : request.SubscriberEncryptionKeyId.Trim();
+
+        var signingDescriptor = string.IsNullOrWhiteSpace(signingKeyId)
+            ? null
+            : publisher.Keys.FirstOrDefault(
+                key => string.Equals(key.KeyId, signingKeyId, StringComparison.OrdinalIgnoreCase));
+        ECDsa? privateKey = null;
+        if (!string.IsNullOrWhiteSpace(signingKeyId))
+        {
+            lock (_gate)
+            {
+                if (_signingKeys.TryGetValue(publisher.Party.PartyId, out var keySet))
+                    keySet.TryGetValue(signingKeyId, out privateKey);
+            }
+        }
+
+        if (signingDescriptor is null || privateKey is null)
+            return await FailedSignAsync(TransactionFailureReason.UnknownKey, request.TransactionId, cancellationToken).ConfigureAwait(false);
+        if (!IsActive(signingDescriptor.Status))
+            return await FailedSignAsync(TransactionFailureReason.DisabledKey, request.TransactionId, cancellationToken).ConfigureAwait(false);
+
+        var encryptionDescriptor = string.IsNullOrWhiteSpace(encryptionKeyId)
+            ? null
+            : subscriber.Keys.FirstOrDefault(
+                key => string.Equals(key.KeyId, encryptionKeyId, StringComparison.OrdinalIgnoreCase));
+        if (encryptionDescriptor is null)
+            return await FailedSignAsync(TransactionFailureReason.UnknownKey, request.TransactionId, cancellationToken).ConfigureAwait(false);
+        if (!IsActive(encryptionDescriptor.Status))
+            return await FailedSignAsync(TransactionFailureReason.DisabledKey, request.TransactionId, cancellationToken).ConfigureAwait(false);
+
+        var now = DateTimeOffset.UtcNow;
+        var issuedAt = request.IssuedAtUtc ?? now;
+        var ttl = Math.Max(1, _options.CurrentValue.ManifestTtlSeconds);
+        var expiresAt = request.ExpiresAtUtc ?? issuedAt.AddSeconds(ttl);
+        var algorithms = NormalizeAlgorithms(request.Algorithms);
+        var manifest = new TransactionManifestDto
+        {
+            TransactionId = request.TransactionId.Trim(),
+            TurnId = NormalizeOptional(request.TurnId),
+            PublisherPartyId = publisher.Party.PartyId,
+            SubscriberPartyId = subscriber.Party.PartyId,
+            PublisherSigningKeyId = signingKeyId,
+            SubscriberEncryptionKeyId = encryptionKeyId,
+            Sequence = request.Sequence,
+            Nonce = request.Nonce.Trim(),
+            IssuedAtUtc = issuedAt,
+            ExpiresAtUtc = expiresAt,
+            DiffgramSha256 = request.DiffgramSha256.Trim(),
+            EncryptedBodySha256 = request.EncryptedBodySha256.Trim(),
+            Algorithms = algorithms,
+        };
+
+        var payload = Encoding.UTF8.GetBytes(_canonicalizer.CanonicalizeUnsigned(manifest));
+        byte[] signature;
         lock (_gate)
         {
-            if (!TryGetActiveParty(request.PublisherPartyId, out var publisher, out var publisherFailure))
-                return Task.FromResult(FailedSign(publisherFailure));
-            if (!TryGetActiveParty(request.SubscriberPartyId, out var subscriber, out var subscriberFailure))
-                return Task.FromResult(FailedSign(subscriberFailure));
-
-            var signingKeyId = string.IsNullOrWhiteSpace(request.PublisherSigningKeyId)
-                ? publisher.State.ActiveSigningKeyId
-                : request.PublisherSigningKeyId.Trim();
-            var encryptionKeyId = string.IsNullOrWhiteSpace(request.SubscriberEncryptionKeyId)
-                ? subscriber.State.ActiveEncryptionKeyId
-                : request.SubscriberEncryptionKeyId.Trim();
-
-            if (string.IsNullOrWhiteSpace(signingKeyId) ||
-                !publisher.Keys.TryGetValue(signingKeyId, out var signingDescriptor) ||
-                !publisher.SigningKeys.TryGetValue(signingKeyId, out var privateKey))
-            {
-                return Task.FromResult(FailedSign(TransactionFailureReason.UnknownKey));
-            }
-
-            if (!IsActive(signingDescriptor.Status))
-                return Task.FromResult(FailedSign(TransactionFailureReason.DisabledKey));
-            if (string.IsNullOrWhiteSpace(encryptionKeyId) ||
-                !subscriber.Keys.TryGetValue(encryptionKeyId, out var encryptionDescriptor))
-            {
-                return Task.FromResult(FailedSign(TransactionFailureReason.UnknownKey));
-            }
-
-            if (!IsActive(encryptionDescriptor.Status))
-                return Task.FromResult(FailedSign(TransactionFailureReason.DisabledKey));
-
-            var now = DateTimeOffset.UtcNow;
-            var issuedAt = request.IssuedAtUtc ?? now;
-            var ttl = Math.Max(1, _options.CurrentValue.ManifestTtlSeconds);
-            var expiresAt = request.ExpiresAtUtc ?? issuedAt.AddSeconds(ttl);
-            var algorithms = NormalizeAlgorithms(request.Algorithms);
-            var manifest = new TransactionManifestDto
-            {
-                TransactionId = request.TransactionId.Trim(),
-                TurnId = NormalizeOptional(request.TurnId),
-                PublisherPartyId = publisher.State.PartyId,
-                SubscriberPartyId = subscriber.State.PartyId,
-                PublisherSigningKeyId = signingKeyId,
-                SubscriberEncryptionKeyId = encryptionKeyId,
-                Sequence = request.Sequence,
-                Nonce = request.Nonce.Trim(),
-                IssuedAtUtc = issuedAt,
-                ExpiresAtUtc = expiresAt,
-                DiffgramSha256 = request.DiffgramSha256.Trim(),
-                EncryptedBodySha256 = request.EncryptedBodySha256.Trim(),
-                Algorithms = algorithms,
-            };
-
-            var payload = Encoding.UTF8.GetBytes(_canonicalizer.CanonicalizeUnsigned(manifest));
-            manifest.Signature = new TransactionManifestSignatureDto
-            {
-                Algorithm = algorithms.Signature,
-                KeyId = signingKeyId,
-                Value = Convert.ToBase64String(privateKey.SignData(payload, HashAlgorithmName.SHA256)),
-                SignedAtUtc = now,
-            };
-
-            return Task.FromResult(new TransactionManifestSignResponse
-            {
-                Success = true,
-                Reason = TransactionFailureReason.None,
-                Manifest = manifest,
-            });
+            signature = privateKey.SignData(payload, HashAlgorithmName.SHA256);
         }
+
+        manifest.Signature = new TransactionManifestSignatureDto
+        {
+            Algorithm = algorithms.Signature,
+            KeyId = signingKeyId!,
+            Value = Convert.ToBase64String(signature),
+            SignedAtUtc = now,
+        };
+
+        var pairKey = BuildPairKey(manifest.PublisherPartyId, manifest.SubscriberPartyId);
+        var nonceKey = BuildNonceKey(pairKey, manifest.Nonce);
+        var replayReservation = await _stateStore.TryReserveManifestReplayAsync(
+            ManifestSigningReplayScope,
+            pairKey,
+            manifest.Sequence,
+            nonceKey,
+            manifest.TransactionId,
+            cancellationToken).ConfigureAwait(false);
+        if (replayReservation != TransactionFailureReason.None)
+            return await FailedSignAsync(replayReservation, manifest.TransactionId, cancellationToken).ConfigureAwait(false);
+
+        await RecordKeyServerAuditAsync(
+            "keyserver.manifest.signed",
+            manifest.TransactionId,
+            TransactionFailureReason.None,
+            manifest.PublisherPartyId,
+            cancellationToken).ConfigureAwait(false);
+        return new TransactionManifestSignResponse
+        {
+            Success = true,
+            Reason = TransactionFailureReason.None,
+            Manifest = manifest,
+        };
     }
 
     /// <inheritdoc />
-    public Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
+    public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
         TransactionManifestVerifyRequest request,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         cancellationToken.ThrowIfCancellationRequested();
         var manifest = request.Manifest ?? new TransactionManifestDto();
+        var manifestHash = _canonicalizer.ComputeManifestHash(manifest);
+        var now = DateTimeOffset.UtcNow;
+        var skew = TimeSpan.FromSeconds(Math.Max(0, _options.CurrentValue.MaxClockSkewSeconds));
 
-        lock (_gate)
+        if (!string.IsNullOrWhiteSpace(request.ExpectedSubscriberPartyId) &&
+            !string.Equals(manifest.SubscriberPartyId, request.ExpectedSubscriberPartyId.Trim(), StringComparison.OrdinalIgnoreCase))
         {
-            var manifestHash = _canonicalizer.ComputeManifestHash(manifest);
-            var now = DateTimeOffset.UtcNow;
-            var skew = TimeSpan.FromSeconds(Math.Max(0, _options.CurrentValue.MaxClockSkewSeconds));
-
-            if (!string.IsNullOrWhiteSpace(request.ExpectedSubscriberPartyId) &&
-                !string.Equals(manifest.SubscriberPartyId, request.ExpectedSubscriberPartyId.Trim(), StringComparison.OrdinalIgnoreCase))
-            {
-                return Task.FromResult(Invalid(TransactionFailureReason.WrongSubscriber, manifestHash));
-            }
-
-            if (manifest.ExpiresAtUtc < now)
-                return Task.FromResult(Invalid(TransactionFailureReason.ExpiredManifest, manifestHash));
-            if (manifest.IssuedAtUtc > now.Add(skew))
-                return Task.FromResult(Invalid(TransactionFailureReason.FutureManifest, manifestHash));
-            if (!TryGetActiveParty(manifest.PublisherPartyId, out var publisher, out var publisherFailure))
-                return Task.FromResult(Invalid(publisherFailure, manifestHash));
-            if (manifest.Signature is null ||
-                string.IsNullOrWhiteSpace(manifest.Signature.Value) ||
-                string.IsNullOrWhiteSpace(manifest.Signature.KeyId))
-            {
-                return Task.FromResult(Invalid(TransactionFailureReason.MalformedSignature, manifestHash));
-            }
-
-            if (!publisher.Keys.TryGetValue(manifest.Signature.KeyId, out var key) || !string.Equals(key.Purpose, "signing", StringComparison.OrdinalIgnoreCase))
-                return Task.FromResult(Invalid(TransactionFailureReason.UnknownKey, manifestHash));
-            if (!IsActive(key.Status))
-                return Task.FromResult(Invalid(TransactionFailureReason.DisabledKey, manifestHash));
-            if (!string.Equals(manifest.Signature.Algorithm, SignatureAlgorithm, StringComparison.Ordinal))
-                return Task.FromResult(Invalid(TransactionFailureReason.MalformedSignature, manifestHash));
-
-            byte[] signature;
-            try
-            {
-                signature = Convert.FromBase64String(manifest.Signature.Value);
-            }
-            catch (FormatException)
-            {
-                return Task.FromResult(Invalid(TransactionFailureReason.MalformedSignature, manifestHash));
-            }
-
-            var payload = Encoding.UTF8.GetBytes(_canonicalizer.CanonicalizeUnsigned(manifest));
-            using var publicKey = ECDsa.Create();
-            publicKey.ImportFromPem(key.PublicKeyPem);
-            var verified = publicKey.VerifyData(payload, signature, HashAlgorithmName.SHA256);
-            return Task.FromResult(verified
-                ? new TransactionManifestVerifyResponse
-                {
-                    IsValid = true,
-                    Reason = TransactionFailureReason.None,
-                    ManifestHashSha256 = manifestHash,
-                }
-                : Invalid(TransactionFailureReason.ManifestSignatureMismatch, manifestHash));
+            return await InvalidAsync(TransactionFailureReason.WrongSubscriber, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
         }
+
+        if (manifest.ExpiresAtUtc < now)
+            return await InvalidAsync(TransactionFailureReason.ExpiredManifest, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        if (manifest.IssuedAtUtc > now.Add(skew))
+            return await InvalidAsync(TransactionFailureReason.FutureManifest, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        var (publisher, publisherFailure) = await GetActivePartyAsync(manifest.PublisherPartyId, cancellationToken)
+            .ConfigureAwait(false);
+        if (publisher is null)
+            return await InvalidAsync(publisherFailure, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        var (subscriber, subscriberFailure) = await GetActivePartyAsync(manifest.SubscriberPartyId, cancellationToken)
+            .ConfigureAwait(false);
+        if (subscriber is null)
+            return await InvalidAsync(subscriberFailure, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        var encryptionKey = string.IsNullOrWhiteSpace(manifest.SubscriberEncryptionKeyId)
+            ? null
+            : subscriber.Keys.FirstOrDefault(
+                candidate => string.Equals(candidate.KeyId, manifest.SubscriberEncryptionKeyId, StringComparison.OrdinalIgnoreCase));
+        if (encryptionKey is null || !string.Equals(encryptionKey.Purpose, "encryption", StringComparison.OrdinalIgnoreCase))
+            return await InvalidAsync(TransactionFailureReason.UnknownKey, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        if (!IsActive(encryptionKey.Status))
+            return await InvalidAsync(TransactionFailureReason.DisabledKey, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        if (manifest.Signature is null ||
+            string.IsNullOrWhiteSpace(manifest.Signature.Value) ||
+            string.IsNullOrWhiteSpace(manifest.Signature.KeyId))
+        {
+            return await InvalidAsync(TransactionFailureReason.MalformedSignature, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        var key = publisher.Keys.FirstOrDefault(
+            candidate => string.Equals(candidate.KeyId, manifest.Signature.KeyId, StringComparison.OrdinalIgnoreCase));
+        if (key is null || !string.Equals(key.Purpose, "signing", StringComparison.OrdinalIgnoreCase))
+            return await InvalidAsync(TransactionFailureReason.UnknownKey, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        if (!IsActive(key.Status))
+            return await InvalidAsync(TransactionFailureReason.DisabledKey, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        if (!string.Equals(manifest.Signature.Algorithm, SignatureAlgorithm, StringComparison.Ordinal))
+            return await InvalidAsync(TransactionFailureReason.MalformedSignature, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+
+        byte[] signature;
+        try
+        {
+            signature = Convert.FromBase64String(manifest.Signature.Value);
+        }
+        catch (FormatException)
+        {
+            return await InvalidAsync(TransactionFailureReason.MalformedSignature, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        var payload = Encoding.UTF8.GetBytes(_canonicalizer.CanonicalizeUnsigned(manifest));
+        using var publicKey = ECDsa.Create();
+        publicKey.ImportFromPem(key.PublicKeyPem);
+        var verified = publicKey.VerifyData(payload, signature, HashAlgorithmName.SHA256);
+        if (!verified)
+            return await InvalidAsync(TransactionFailureReason.ManifestSignatureMismatch, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+
+        var pairKey = BuildPairKey(manifest.PublisherPartyId, manifest.SubscriberPartyId);
+        var nonceKey = BuildNonceKey(pairKey, manifest.Nonce);
+        var replayReservation = await _stateStore.TryReserveManifestReplayAsync(
+            ManifestVerificationReplayScope,
+            pairKey,
+            manifest.Sequence,
+            nonceKey,
+            manifest.TransactionId,
+            cancellationToken).ConfigureAwait(false);
+        if (replayReservation != TransactionFailureReason.None)
+            return await InvalidAsync(replayReservation, manifest.TransactionId, manifestHash, cancellationToken)
+                .ConfigureAwait(false);
+
+        await RecordKeyServerAuditAsync(
+            "keyserver.manifest.verified",
+            manifest.TransactionId,
+            TransactionFailureReason.None,
+            manifest.PublisherPartyId,
+            cancellationToken).ConfigureAwait(false);
+        return new TransactionManifestVerifyResponse
+        {
+            IsValid = true,
+            Reason = TransactionFailureReason.None,
+            ManifestHashSha256 = manifestHash,
+        };
     }
 
     /// <inheritdoc />
@@ -407,10 +495,12 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     {
         lock (_gate)
         {
-            foreach (var party in _parties.Values)
-                party.Dispose();
-            _parties.Clear();
+            foreach (var party in _signingKeys.Values)
+                DisposeKeys(party);
+            _signingKeys.Clear();
         }
+
+        _stateStore.Dispose();
     }
 
     private static TransactionManifestSignResponse FailedSign(TransactionFailureReason reason)
@@ -419,25 +509,61 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     private static TransactionManifestVerifyResponse Invalid(TransactionFailureReason reason, string manifestHash)
         => new() { IsValid = false, Reason = reason, ManifestHashSha256 = manifestHash };
 
-    private bool TryGetActiveParty(
-        string partyId,
-        out RegisteredParty party,
-        out TransactionFailureReason failureReason)
+    private async Task<TransactionManifestSignResponse> FailedSignAsync(
+        TransactionFailureReason reason,
+        string? transactionId,
+        CancellationToken cancellationToken)
     {
-        if (!_parties.TryGetValue(partyId.Trim(), out party!))
-        {
-            failureReason = TransactionFailureReason.UnknownParty;
-            return false;
-        }
+        await RecordKeyServerAuditAsync(
+            "keyserver.manifest.sign_rejected",
+            transactionId,
+            reason,
+            null,
+            cancellationToken).ConfigureAwait(false);
+        return FailedSign(reason);
+    }
 
-        if (!IsActive(party.State.Status))
-        {
-            failureReason = TransactionFailureReason.DisabledParty;
-            return false;
-        }
+    private async Task<TransactionManifestVerifyResponse> InvalidAsync(
+        TransactionFailureReason reason,
+        string? transactionId,
+        string manifestHash,
+        CancellationToken cancellationToken)
+    {
+        await RecordKeyServerAuditAsync(
+            "keyserver.manifest.verify_rejected",
+            transactionId,
+            reason,
+            null,
+            cancellationToken).ConfigureAwait(false);
+        return Invalid(reason, manifestHash);
+    }
 
-        failureReason = TransactionFailureReason.None;
-        return true;
+    private Task RecordKeyServerAuditAsync(
+        string eventName,
+        string? transactionId,
+        TransactionFailureReason reason,
+        string? details,
+        CancellationToken cancellationToken)
+        => _options.CurrentValue.AuditEnabled
+            ? _stateStore.RecordAuditAsync(eventName, transactionId, reason, details, cancellationToken)
+            : Task.CompletedTask;
+
+    private static IKeyServerStateStore CreateKeyServerStateStore(KeyServerOptions options)
+        => string.IsNullOrWhiteSpace(options.DatabasePath)
+            ? new InMemoryKeyServerStateStore()
+            : new SqliteTransactionSecurityStateStore(options.DatabasePath);
+
+    private async Task<(KeyServerPartyState? Party, TransactionFailureReason FailureReason)> GetActivePartyAsync(
+        string partyId,
+        CancellationToken cancellationToken)
+    {
+        var party = await _stateStore.GetPartyAsync(partyId.Trim(), cancellationToken).ConfigureAwait(false);
+        if (party is null)
+            return (null, TransactionFailureReason.UnknownParty);
+
+        return IsActive(party.Party.Status)
+            ? (party, TransactionFailureReason.None)
+            : (null, TransactionFailureReason.DisabledParty);
     }
 
     private static bool IsActive(string? status)
@@ -450,6 +576,12 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
 
     private static string NormalizeStatus(string? status)
         => string.IsNullOrWhiteSpace(status) ? "active" : status.Trim();
+
+    private static string BuildPairKey(string publisherPartyId, string subscriberPartyId)
+        => $"{publisherPartyId.Trim()}\n{subscriberPartyId.Trim()}";
+
+    private static string BuildNonceKey(string pairKey, string nonce)
+        => $"{pairKey}\n{nonce.Trim()}";
 
     private static string? NormalizeOptional(string? value)
         => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
@@ -504,48 +636,42 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
 
     private sealed record GeneratedSigningKey(string PublicKeyPem, ECDsa? PrivateKey);
 
-    private sealed class RegisteredParty : IDisposable
+    private static void DisposeKeys(Dictionary<string, ECDsa>? keys)
     {
-        public RegisteredParty(PartyRegistrationResponse state)
-        {
-            State = state;
-        }
+        if (keys is null)
+            return;
 
-        public PartyRegistrationResponse State { get; }
-        public Dictionary<string, PartyKeyDescriptor> Keys { get; } = new(StringComparer.OrdinalIgnoreCase);
-        public Dictionary<string, ECDsa> SigningKeys { get; } = new(StringComparer.OrdinalIgnoreCase);
-
-        public void Dispose()
-        {
-            foreach (var key in SigningKeys.Values)
-                key.Dispose();
-            SigningKeys.Clear();
-        }
+        foreach (var key in keys.Values)
+            key.Dispose();
+        keys.Clear();
     }
 }
 
-/// <summary>FR-MCP-123 and FR-MCP-124: In-memory subscriber commit implementation.</summary>
-public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
+/// <summary>FR-MCP-123 and FR-MCP-124: Subscriber commit implementation.</summary>
+public sealed class InMemorySubscriberCommitService : ISubscriberCommitService, IDisposable
 {
     private readonly IKeyServerManifestService _keyServer;
     private readonly ITransactionManifestCanonicalizer _canonicalizer;
     private readonly IOptionsMonitor<SubscriberOptions> _options;
-    private readonly ConcurrentDictionary<string, CommitRecord> _transactions = new(StringComparer.OrdinalIgnoreCase);
-    private readonly ConcurrentDictionary<string, long> _lastSequences = new(StringComparer.OrdinalIgnoreCase);
-    private readonly ConcurrentDictionary<string, string> _nonces = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ITransactionDiffgramProtector _diffgramProtector;
+    private readonly ISubscriberStateStore _stateStore;
 
     /// <summary>Initializes a new instance of the <see cref="InMemorySubscriberCommitService"/> class.</summary>
     /// <param name="keyServer">Keyserver manifest verifier.</param>
     /// <param name="canonicalizer">Manifest canonicalizer.</param>
     /// <param name="options">Subscriber options.</param>
+    /// <param name="diffgramProtector">Diffgram protector.</param>
     public InMemorySubscriberCommitService(
         IKeyServerManifestService keyServer,
         ITransactionManifestCanonicalizer canonicalizer,
-        IOptionsMonitor<SubscriberOptions> options)
+        IOptionsMonitor<SubscriberOptions> options,
+        ITransactionDiffgramProtector? diffgramProtector = null)
     {
         _keyServer = keyServer;
         _canonicalizer = canonicalizer;
         _options = options;
+        _diffgramProtector = diffgramProtector ?? new TransactionDiffgramProtector();
+        _stateStore = CreateSubscriberStateStore(options.CurrentValue);
     }
 
     /// <inheritdoc />
@@ -559,10 +685,25 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
         var transactionId = manifest.TransactionId?.Trim() ?? string.Empty;
         var manifestHash = _canonicalizer.ComputeManifestHash(manifest);
         if (!TryComputeEncryptedBodySha256(request.EncryptedDiffgramBase64, out var actualEncryptedBodySha256))
-            return Rejected(transactionId, TransactionFailureReason.DecryptFailed);
+        {
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.DecryptFailed,
+                manifestHash,
+                string.Empty,
+                cancellationToken).ConfigureAwait(false);
+        }
 
-        if (_transactions.TryGetValue(transactionId, out var existing))
-            return ExistingCommitResponse(existing, manifestHash, request.EncryptedBodySha256, actualEncryptedBodySha256);
+        var existing = await _stateStore.GetTransactionAsync(transactionId, cancellationToken).ConfigureAwait(false);
+        if (existing is not null)
+        {
+            return await ExistingCommitResponseAsync(
+                existing,
+                manifestHash,
+                request.EncryptedBodySha256,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
 
         var expectedSubscriber = string.IsNullOrWhiteSpace(_options.CurrentValue.PartyId)
             ? manifest.SubscriberPartyId
@@ -575,25 +716,98 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
             },
             cancellationToken).ConfigureAwait(false);
         if (!verify.IsValid)
-            return Rejected(transactionId, verify.Reason);
+        {
+            return await RejectedAsync(
+                transactionId,
+                verify.Reason,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
 
         if (!string.Equals(request.EncryptedBodySha256, manifest.EncryptedBodySha256, StringComparison.OrdinalIgnoreCase))
-            return Rejected(transactionId, TransactionFailureReason.EncryptedBodyHashMismatch);
+        {
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.EncryptedBodyHashMismatch,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
         if (!string.Equals(actualEncryptedBodySha256, manifest.EncryptedBodySha256, StringComparison.OrdinalIgnoreCase))
-            return Rejected(transactionId, TransactionFailureReason.EncryptedBodyHashMismatch);
-        if (!string.Equals(request.DiffgramSha256, manifest.DiffgramSha256, StringComparison.OrdinalIgnoreCase))
-            return Rejected(transactionId, TransactionFailureReason.PlaintextDiffgramHashMismatch);
+        {
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.EncryptedBodyHashMismatch,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        var unprotect = _diffgramProtector.Unprotect(
+            request.EncryptedDiffgramBase64,
+            _options.CurrentValue,
+            expectedSubscriber,
+            manifest.SubscriberEncryptionKeyId);
+        if (unprotect.IsProtectedEnvelope && !unprotect.Success)
+        {
+            return await RejectedAsync(
+                transactionId,
+                unprotect.Reason,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        if (!unprotect.IsProtectedEnvelope && _options.CurrentValue.RequireEncryptedDiffgrams)
+        {
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.DecryptFailed,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        var actualPlaintextSha256 = unprotect.IsProtectedEnvelope
+            ? unprotect.PlaintextSha256
+            : request.DiffgramSha256;
+        if (!string.Equals(request.DiffgramSha256, manifest.DiffgramSha256, StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(actualPlaintextSha256, manifest.DiffgramSha256, StringComparison.OrdinalIgnoreCase))
+        {
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.PlaintextDiffgramHashMismatch,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
 
         var pairKey = $"{manifest.PublisherPartyId}\n{manifest.SubscriberPartyId}";
-        if (_lastSequences.TryGetValue(pairKey, out var lastSequence) && manifest.Sequence <= lastSequence)
-            return Rejected(transactionId, TransactionFailureReason.StaleSequence);
+        var lastSequence = await _stateStore.GetLastSequenceAsync(pairKey, cancellationToken).ConfigureAwait(false);
+        if (lastSequence is not null && manifest.Sequence <= lastSequence)
+        {
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.StaleSequence,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
 
         var nonceKey = $"{pairKey}\n{manifest.Nonce}";
-        if (!_nonces.TryAdd(nonceKey, transactionId))
-            return Rejected(transactionId, TransactionFailureReason.ReplayNonce);
+        if (!await _stateStore.TryAddNonceAsync(nonceKey, transactionId, cancellationToken).ConfigureAwait(false))
+        {
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.ReplayNonce,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
 
         var now = DateTimeOffset.UtcNow;
-        var record = new CommitRecord(
+        var record = new SubscriberTransactionState(
             transactionId,
             "committed",
             TransactionFailureReason.None,
@@ -602,10 +816,34 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
             $"diffgram-{transactionId}",
             now,
             null);
-        if (!_transactions.TryAdd(transactionId, record))
-            return ExistingCommitResponse(_transactions[transactionId], manifestHash, request.EncryptedBodySha256, actualEncryptedBodySha256);
+        if (!await _stateStore.TryAddTransactionAsync(record, cancellationToken).ConfigureAwait(false))
+        {
+            existing = await _stateStore.GetTransactionAsync(transactionId, cancellationToken).ConfigureAwait(false);
+            if (existing is not null)
+            {
+                return await ExistingCommitResponseAsync(
+                    existing,
+                    manifestHash,
+                    request.EncryptedBodySha256,
+                    actualEncryptedBodySha256,
+                    cancellationToken).ConfigureAwait(false);
+            }
 
-        _lastSequences.AddOrUpdate(pairKey, manifest.Sequence, (_, current) => Math.Max(current, manifest.Sequence));
+            return await RejectedAsync(
+                transactionId,
+                TransactionFailureReason.DuplicateConflict,
+                manifestHash,
+                actualEncryptedBodySha256,
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        await _stateStore.SetLastSequenceAsync(pairKey, manifest.Sequence, cancellationToken).ConfigureAwait(false);
+        await RecordSubscriberAuditAsync(
+            "subscriber.transaction.committed",
+            transactionId,
+            TransactionFailureReason.None,
+            record.DiffgramId,
+            cancellationToken).ConfigureAwait(false);
         return new DiffgramCommitResponse
         {
             TransactionId = transactionId,
@@ -617,19 +855,17 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
     }
 
     /// <inheritdoc />
-    public Task<TransactionStatusResponse?> GetTransactionStatusAsync(
+    public async Task<TransactionStatusResponse?> GetTransactionStatusAsync(
         string transactionId,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromResult(
-            _transactions.TryGetValue(transactionId, out var record)
-                ? ToStatus(record)
-                : null);
+        var record = await _stateStore.GetTransactionAsync(transactionId.Trim(), cancellationToken).ConfigureAwait(false);
+        return record is null ? null : ToStatus(record);
     }
 
     /// <inheritdoc />
-    public Task<TransactionAbortResponse> AbortTransactionAsync(
+    public async Task<TransactionAbortResponse> AbortTransactionAsync(
         string transactionId,
         TransactionAbortRequest request,
         CancellationToken cancellationToken = default)
@@ -641,7 +877,7 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
             ? TransactionFailureReason.Aborted
             : request.Reason;
         var now = DateTimeOffset.UtcNow;
-        var record = new CommitRecord(
+        var record = new SubscriberTransactionState(
             transactionId.Trim(),
             "aborted",
             reason,
@@ -650,43 +886,99 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
             null,
             null,
             now);
-        _transactions.AddOrUpdate(transactionId.Trim(), record, (_, existing) =>
-            string.Equals(existing.Status, "committed", StringComparison.OrdinalIgnoreCase) ? existing : record);
-        var current = _transactions[transactionId.Trim()];
-        return Task.FromResult(new TransactionAbortResponse
+        var current = await _stateStore.AddOrKeepAbortAsync(record, cancellationToken).ConfigureAwait(false);
+        var responseReason = current.Status == "committed" ? TransactionFailureReason.DuplicateConflict : reason;
+        await RecordSubscriberAuditAsync(
+            current.Status == "committed" ? "subscriber.transaction.abort_rejected" : "subscriber.transaction.aborted",
+            current.TransactionId,
+            responseReason,
+            request.Actor,
+            cancellationToken).ConfigureAwait(false);
+        return new TransactionAbortResponse
         {
             TransactionId = current.TransactionId,
             Status = current.Status,
-            Reason = current.Status == "committed" ? TransactionFailureReason.DuplicateConflict : reason,
+            Reason = responseReason,
             AbortedAtUtc = current.AbortedAtUtc ?? now,
-        });
+        };
     }
 
-    private static DiffgramCommitResponse ExistingCommitResponse(
-        CommitRecord existing,
+    private async Task<DiffgramCommitResponse> ExistingCommitResponseAsync(
+        SubscriberTransactionState existing,
         string manifestHash,
         string requestedEncryptedBodyHash,
-        string actualEncryptedBodyHash)
+        string actualEncryptedBodyHash,
+        CancellationToken cancellationToken)
     {
         if (string.Equals(existing.Status, "aborted", StringComparison.OrdinalIgnoreCase))
+        {
+            await RecordSubscriberAuditAsync(
+                "subscriber.transaction.commit_rejected",
+                existing.TransactionId,
+                TransactionFailureReason.Aborted,
+                existing.Status,
+                cancellationToken).ConfigureAwait(false);
             return Rejected(existing.TransactionId, TransactionFailureReason.Aborted);
+        }
 
         if (string.Equals(existing.ManifestHashSha256, manifestHash, StringComparison.OrdinalIgnoreCase) &&
             string.Equals(existing.EncryptedBodySha256, requestedEncryptedBodyHash, StringComparison.OrdinalIgnoreCase) &&
             string.Equals(existing.EncryptedBodySha256, actualEncryptedBodyHash, StringComparison.OrdinalIgnoreCase) &&
             string.Equals(existing.Status, "committed", StringComparison.OrdinalIgnoreCase))
         {
+            await RecordSubscriberAuditAsync(
+                "subscriber.transaction.duplicate",
+                existing.TransactionId,
+                TransactionFailureReason.None,
+                existing.DiffgramId,
+                cancellationToken).ConfigureAwait(false);
             return new DiffgramCommitResponse
             {
                 TransactionId = existing.TransactionId,
-                Status = "duplicate",
+                Status = "committed",
                 Reason = TransactionFailureReason.None,
                 DiffgramId = existing.DiffgramId,
                 CommittedAtUtc = existing.CommittedAtUtc,
             };
         }
 
+        await RecordSubscriberAuditAsync(
+            "subscriber.transaction.commit_rejected",
+            existing.TransactionId,
+            TransactionFailureReason.DuplicateConflict,
+            existing.Status,
+            cancellationToken).ConfigureAwait(false);
         return Rejected(existing.TransactionId, TransactionFailureReason.DuplicateConflict);
+    }
+
+    private async Task<DiffgramCommitResponse> RejectedAsync(
+        string transactionId,
+        TransactionFailureReason reason,
+        string manifestHash,
+        string encryptedBodySha256,
+        CancellationToken cancellationToken)
+    {
+        if (!string.IsNullOrWhiteSpace(transactionId))
+        {
+            var rejected = new SubscriberTransactionState(
+                transactionId,
+                "rejected",
+                reason,
+                manifestHash,
+                encryptedBodySha256,
+                null,
+                null,
+                null);
+            await _stateStore.TryAddTransactionAsync(rejected, cancellationToken).ConfigureAwait(false);
+        }
+
+        await RecordSubscriberAuditAsync(
+            "subscriber.transaction.rejected",
+            transactionId,
+            reason,
+            null,
+            cancellationToken).ConfigureAwait(false);
+        return Rejected(transactionId, reason);
     }
 
     private static DiffgramCommitResponse Rejected(string transactionId, TransactionFailureReason reason)
@@ -697,7 +989,7 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
             Reason = reason,
         };
 
-    private static TransactionStatusResponse ToStatus(CommitRecord record)
+    private static TransactionStatusResponse ToStatus(SubscriberTransactionState record)
         => new()
         {
             TransactionId = record.TransactionId,
@@ -724,13 +1016,22 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService
         }
     }
 
-    private sealed record CommitRecord(
-        string TransactionId,
-        string Status,
-        TransactionFailureReason Reason,
-        string ManifestHashSha256,
-        string EncryptedBodySha256,
-        string? DiffgramId,
-        DateTimeOffset? CommittedAtUtc,
-        DateTimeOffset? AbortedAtUtc);
+    private Task RecordSubscriberAuditAsync(
+        string eventName,
+        string? transactionId,
+        TransactionFailureReason reason,
+        string? details,
+        CancellationToken cancellationToken)
+        => _options.CurrentValue.AuditEnabled
+            ? _stateStore.RecordAuditAsync(eventName, transactionId, reason, details, cancellationToken)
+            : Task.CompletedTask;
+
+    private static ISubscriberStateStore CreateSubscriberStateStore(SubscriberOptions options)
+        => string.IsNullOrWhiteSpace(options.DatabasePath)
+            ? new InMemorySubscriberStateStore()
+            : new SqliteTransactionSecurityStateStore(options.DatabasePath);
+
+    /// <inheritdoc />
+    public void Dispose()
+        => _stateStore.Dispose();
 }

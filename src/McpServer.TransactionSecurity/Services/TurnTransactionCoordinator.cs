@@ -1,11 +1,11 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using McpServer.Support.Mcp.Models;
-using McpServer.Support.Mcp.Options;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
 using Microsoft.Extensions.Options;
 
-namespace McpServer.Support.Mcp.Services;
+namespace McpServer.TransactionSecurity.Services;
 
 /// <summary>FR-MCP-120: Coordinates manifest signing, mutation execution, and subscriber commit.</summary>
 public interface ITurnTransactionCoordinator
@@ -54,8 +54,9 @@ public interface IDiffgramBuilder
 {
     /// <summary>Builds plaintext and encrypted diffgram evidence for a turn transaction.</summary>
     /// <param name="request">Turn transaction request.</param>
+    /// <param name="subscriberEncryptionKey">Optional subscriber public encryption key descriptor.</param>
     /// <returns>Diffgram payload.</returns>
-    DiffgramPayload Build(TurnTransactionRequest request);
+    DiffgramPayload Build(TurnTransactionRequest request, PartyKeyDescriptor? subscriberEncryptionKey = null);
 }
 
 /// <summary>Transaction audit event captured by the in-memory audit writer. TR-MCP-TXNAUDIT-001.</summary>
@@ -86,11 +87,17 @@ public sealed class DiffgramPayload
     /// <summary>Plaintext SHA-256 digest.</summary>
     public string PlaintextSha256 { get; set; } = string.Empty;
 
-    /// <summary>Base64-encoded encrypted body placeholder.</summary>
+    /// <summary>Base64-encoded encrypted body or legacy placeholder body.</summary>
     public string EncryptedBodyBase64 { get; set; } = string.Empty;
 
     /// <summary>Encrypted body SHA-256 digest.</summary>
     public string EncryptedBodySha256 { get; set; } = string.Empty;
+
+    /// <summary>Whether the encrypted body is a protected envelope.</summary>
+    public bool IsProtectedEnvelope { get; set; }
+
+    /// <summary>Subscriber encryption key identifier used to protect the envelope.</summary>
+    public string? SubscriberEncryptionKeyId { get; set; }
 }
 
 /// <summary>FR-MCP-121: Options-backed degraded-mode policy.</summary>
@@ -159,8 +166,17 @@ public sealed class InMemoryTransactionAuditWriter : ITransactionAuditWriter
 /// <summary>TR-MCP-TXN-001: JSON diffgram builder for coordinator evidence.</summary>
 public sealed class JsonDiffgramBuilder : IDiffgramBuilder
 {
+    private readonly ITransactionDiffgramProtector _protector;
+
+    /// <summary>Initializes a new instance of the <see cref="JsonDiffgramBuilder"/> class.</summary>
+    /// <param name="protector">Diffgram protector used when a subscriber encryption key is supplied.</param>
+    public JsonDiffgramBuilder(ITransactionDiffgramProtector? protector = null)
+    {
+        _protector = protector ?? new TransactionDiffgramProtector();
+    }
+
     /// <inheritdoc />
-    public DiffgramPayload Build(TurnTransactionRequest request)
+    public DiffgramPayload Build(TurnTransactionRequest request, PartyKeyDescriptor? subscriberEncryptionKey = null)
     {
         ArgumentNullException.ThrowIfNull(request);
         var body = JsonSerializer.Serialize(new
@@ -173,6 +189,20 @@ public sealed class JsonDiffgramBuilder : IDiffgramBuilder
             request.Sequence,
             capturedAtUtc = DateTimeOffset.UtcNow,
         });
+        if (subscriberEncryptionKey is not null)
+        {
+            var protectedDiffgram = _protector.Protect(body, subscriberEncryptionKey);
+            return new DiffgramPayload
+            {
+                PlaintextJson = body,
+                PlaintextSha256 = protectedDiffgram.PlaintextSha256,
+                EncryptedBodyBase64 = protectedDiffgram.EncryptedDiffgramBase64,
+                EncryptedBodySha256 = protectedDiffgram.EncryptedBodySha256,
+                IsProtectedEnvelope = true,
+                SubscriberEncryptionKeyId = subscriberEncryptionKey.KeyId,
+            };
+        }
+
         var encrypted = Convert.ToBase64String(Encoding.UTF8.GetBytes(body));
         return new DiffgramPayload
         {
@@ -180,6 +210,7 @@ public sealed class JsonDiffgramBuilder : IDiffgramBuilder
             PlaintextSha256 = HashHex(Encoding.UTF8.GetBytes(body)),
             EncryptedBodyBase64 = encrypted,
             EncryptedBodySha256 = HashHex(Convert.FromBase64String(encrypted)),
+            IsProtectedEnvelope = false,
         };
     }
 
@@ -198,6 +229,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
     private readonly IDiffgramBuilder _diffgramBuilder;
     private readonly ITransactionDegradedModePolicy _degradedModePolicy;
     private readonly ITransactionAuditWriter _auditWriter;
+    private readonly IOptionsMonitor<SubscriberOptions>? _subscriberOptions;
     private bool _degraded;
     private TransactionFailureReason _lastReason;
     private string? _lastTransactionId;
@@ -210,6 +242,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
     /// <param name="diffgramBuilder">Diffgram builder.</param>
     /// <param name="degradedModePolicy">Degraded-mode policy.</param>
     /// <param name="auditWriter">Transaction audit writer.</param>
+    /// <param name="subscriberOptions">Optional subscriber options used to mirror strict encryption configuration.</param>
     public TurnTransactionCoordinator(
         IOptionsMonitor<TurnTransactionOptions> options,
         IKeyServerPartyRegistry partyRegistry,
@@ -217,7 +250,8 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
         ISubscriberCommitService subscriber,
         IDiffgramBuilder diffgramBuilder,
         ITransactionDegradedModePolicy degradedModePolicy,
-        ITransactionAuditWriter auditWriter)
+        ITransactionAuditWriter auditWriter,
+        IOptionsMonitor<SubscriberOptions>? subscriberOptions = null)
     {
         _options = options;
         _partyRegistry = partyRegistry;
@@ -226,6 +260,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
         _diffgramBuilder = diffgramBuilder;
         _degradedModePolicy = degradedModePolicy;
         _auditWriter = auditWriter;
+        _subscriberOptions = subscriberOptions;
     }
 
     /// <inheritdoc />
@@ -262,8 +297,19 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
             return result;
         }
 
-        await EnsureDefaultPartiesAsync(request.PublisherPartyId!, request.SubscriberPartyId!, cancellationToken).ConfigureAwait(false);
-        var diffgram = _diffgramBuilder.Build(request);
+        var subscriberEncryptionKeyId = NormalizeSubscriberEncryptionKeyId(request.SubscriberPartyId!, options);
+        await EnsureDefaultPartiesAsync(request.PublisherPartyId!, request.SubscriberPartyId!, subscriberEncryptionKeyId, cancellationToken)
+            .ConfigureAwait(false);
+        var subscriberEncryptionKey = await ResolveSubscriberEncryptionKeyAsync(
+            request.SubscriberPartyId!,
+            subscriberEncryptionKeyId,
+            options,
+            transactionId,
+            cancellationToken).ConfigureAwait(false);
+        if (ShouldProtectDiffgrams(options) && subscriberEncryptionKey is null)
+            return Failure(transactionId, TransactionFailureReason.UnknownKey, "rejected", mutationApplied: false, message: "Subscriber encryption key was not available.");
+
+        var diffgram = _diffgramBuilder.Build(request, subscriberEncryptionKey);
         var sign = await SignManifestAsync(request, diffgram, transactionId, cancellationToken).ConfigureAwait(false);
         if (!sign.Success || sign.Manifest is null)
             return Failure(transactionId, sign.Reason, "rejected", mutationApplied: false, message: "Keyserver manifest signing failed.");
@@ -393,6 +439,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
                     TurnId = request.TurnId,
                     PublisherPartyId = request.PublisherPartyId!,
                     SubscriberPartyId = request.SubscriberPartyId!,
+                    SubscriberEncryptionKeyId = diffgram.SubscriberEncryptionKeyId,
                     Sequence = request.Sequence,
                     Nonce = $"{transactionId}:{request.Sequence}",
                     DiffgramSha256 = diffgram.PlaintextSha256,
@@ -467,6 +514,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
     private async Task EnsureDefaultPartiesAsync(
         string publisherPartyId,
         string subscriberPartyId,
+        string subscriberEncryptionKeyId,
         CancellationToken cancellationToken)
     {
         if (await _partyRegistry.GetPartyKeyAsync(publisherPartyId, $"{publisherPartyId}:signing:1", cancellationToken).ConfigureAwait(false) is null)
@@ -476,11 +524,49 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
                 cancellationToken).ConfigureAwait(false);
         }
 
-        if (await _partyRegistry.GetPartyKeyAsync(subscriberPartyId, $"{subscriberPartyId}:encryption:1", cancellationToken).ConfigureAwait(false) is null)
+        if (await _partyRegistry.GetPartyKeyAsync(subscriberPartyId, subscriberEncryptionKeyId, cancellationToken).ConfigureAwait(false) is null)
         {
             await _partyRegistry.RegisterPartyAsync(
-                new PartyRegistrationRequest { PartyId = subscriberPartyId, Role = "subscriber" },
+                new PartyRegistrationRequest
+                {
+                    PartyId = subscriberPartyId,
+                    Role = "subscriber",
+                    ActiveEncryptionKeyId = subscriberEncryptionKeyId,
+                },
                 cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private async Task<PartyKeyDescriptor?> ResolveSubscriberEncryptionKeyAsync(
+        string subscriberPartyId,
+        string subscriberEncryptionKeyId,
+        TurnTransactionOptions options,
+        string transactionId,
+        CancellationToken cancellationToken)
+    {
+        if (!ShouldProtectDiffgrams(options))
+            return null;
+
+        try
+        {
+            var key = await _partyRegistry.GetPartyKeyAsync(subscriberPartyId, subscriberEncryptionKeyId, cancellationToken)
+                .ConfigureAwait(false);
+            if (key is null)
+                return null;
+            if (!IsActive(key.Status) ||
+                !string.Equals(key.Purpose, "encryption", StringComparison.OrdinalIgnoreCase) ||
+                string.IsNullOrWhiteSpace(key.PublicKeyPem))
+            {
+                _auditWriter.Record("diffgram_rejected", transactionId, TransactionFailureReason.DisabledKey, subscriberEncryptionKeyId);
+                return null;
+            }
+
+            return key;
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            _auditWriter.Record("diffgram_rejected", transactionId, TransactionFailureReason.KeyServerUnavailable, ex.Message);
+            return null;
         }
     }
 
@@ -491,4 +577,15 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
 
     private static string NormalizeParty(string? requested, string fallback)
         => string.IsNullOrWhiteSpace(requested) ? fallback.Trim() : requested.Trim();
+
+    private bool ShouldProtectDiffgrams(TurnTransactionOptions options)
+        => options.ProtectDiffgrams || (_subscriberOptions?.CurrentValue.RequireEncryptedDiffgrams ?? false);
+
+    private static string NormalizeSubscriberEncryptionKeyId(string subscriberPartyId, TurnTransactionOptions options)
+        => string.IsNullOrWhiteSpace(options.SubscriberEncryptionKeyId)
+            ? $"{subscriberPartyId}:encryption:1"
+            : options.SubscriberEncryptionKeyId.Trim();
+
+    private static bool IsActive(string? status)
+        => string.IsNullOrWhiteSpace(status) || string.Equals(status, "active", StringComparison.OrdinalIgnoreCase);
 }

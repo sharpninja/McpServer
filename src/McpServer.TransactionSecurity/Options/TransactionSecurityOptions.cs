@@ -1,4 +1,4 @@
-namespace McpServer.Support.Mcp.Options;
+namespace McpServer.TransactionSecurity.Options;
 
 /// <summary>
 /// FR-MCP-118: Keyserver runtime options bound from <c>Mcp:KeyServer</c>.
@@ -18,6 +18,12 @@ public sealed class KeyServerOptions
 
     /// <summary>Whether keyserver audit event capture is enabled.</summary>
     public bool AuditEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Optional SQLite database path for durable keyserver party, key descriptor, and audit state.
+    /// Empty uses process-local in-memory state.
+    /// </summary>
+    public string? DatabasePath { get; set; }
 }
 
 /// <summary>
@@ -34,8 +40,26 @@ public sealed class SubscriberOptions
     /// <summary>Commit timeout in seconds.</summary>
     public int CommitTimeoutSeconds { get; set; } = 30;
 
+    /// <summary>Base URL for the separate keyserver host used by HTTP-backed subscriber verification.</summary>
+    public string KeyServerBaseUrl { get; set; } = "http://localhost:7167";
+
     /// <summary>Whether subscriber audit event capture is enabled.</summary>
     public bool AuditEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Optional SQLite database path for durable transaction, nonce, sequence, and audit state.
+    /// Empty uses process-local in-memory state.
+    /// </summary>
+    public string? DatabasePath { get; set; }
+
+    /// <summary>Optional subscriber encryption key identifier that corresponds to <see cref="EncryptionPrivateKeyPem"/>.</summary>
+    public string? EncryptionKeyId { get; set; }
+
+    /// <summary>Optional PEM-encoded ECDH private key used to decrypt protected diffgram envelopes.</summary>
+    public string? EncryptionPrivateKeyPem { get; set; }
+
+    /// <summary>Whether commits must carry protected diffgram envelopes instead of legacy placeholder bodies.</summary>
+    public bool RequireEncryptedDiffgrams { get; set; }
 }
 
 /// <summary>
@@ -65,6 +89,12 @@ public sealed class TurnTransactionOptions
 
     /// <summary>Default subscriber party identifier used by the coordinator.</summary>
     public string SubscriberPartyId { get; set; } = "subscriber-1";
+
+    /// <summary>Optional subscriber encryption key identifier used when protecting coordinator diffgrams.</summary>
+    public string? SubscriberEncryptionKeyId { get; set; }
+
+    /// <summary>Whether the coordinator should encrypt diffgram bodies before subscriber commit.</summary>
+    public bool ProtectDiffgrams { get; set; }
 
     /// <summary>Future external keyserver base URL. Current implementation uses the in-process service.</summary>
     public string KeyServerBaseUrl { get; set; } = "http://localhost:7167";

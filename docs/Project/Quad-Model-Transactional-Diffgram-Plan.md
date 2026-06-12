@@ -229,10 +229,10 @@ flowchart TB
 
 Repo annotations:
 
-- `ARCH-QUAD-001-COMP-MCP`: existing `src/McpServer.Support.Mcp`, including the first-slice in-process keyserver, subscriber, and turn transaction coordinator.
+- `ARCH-QUAD-001-COMP-MCP`: existing `src/McpServer.Support.Mcp`, including compatibility keyserver/subscriber controllers and turn transaction coordinator wiring over the shared transaction-security core.
 - `ARCH-QUAD-001-COMP-CLIENT`: existing `src/McpServer.Client`, including public transaction DTO/client contracts.
-- `ARCH-QUAD-001-COMP-KEYSERVER`: represented in this slice by in-process support services/controllers; a separate `src/McpServer.KeyServer` project is deferred.
-- `ARCH-QUAD-001-COMP-SUBSCRIBER`: represented in this slice by in-process support services/controllers; a separate `src/McpServer.Subscriber` project is deferred.
+- `ARCH-QUAD-001-COMP-KEYSERVER`: separate `src/McpServer.KeyServer` host exposes keyserver trust endpoints over the shared transaction-security core.
+- `ARCH-QUAD-001-COMP-SUBSCRIBER`: separate `src/McpServer.Subscriber` host exposes subscriber commit/status/abort endpoints and verifies manifests through an HTTP-backed keyserver client.
 - `ARCH-QUAD-001-COMP-PUBSUB`: represented in this slice by subscriber commit/coordinator contracts; durable DB commit storage and full external pub-sub remain deferred.
 - `ARCH-QUAD-001-COMP-QUAD`: documented scaffolding only; execution disabled.
 
@@ -240,18 +240,20 @@ Repo annotations:
 
 The implementation follows the imported hardened option:
 
-- Hybrid authenticated encryption: ECDH plus AEAD. Real encryption/decryption is deferred after the first in-process slice.
-- Nonces, sequence numbers, timestamps, and expiry on diffgrams/manifests. Complete replay/sequence/expiry enforcement is deferred.
+- Hybrid authenticated encryption: ECDH plus AEAD. Protected subscriber diffgram envelopes are implemented with ECDH P-256, HKDF-SHA256, and AES-256-GCM, and the coordinator can hand off protected envelopes for configured subscriber keys; external key material management, key rotation, and global mutation-adapter encrypted handoff remain deferred.
+- Nonces, sequence numbers, timestamps, and expiry on diffgrams/manifests. Keyserver signing/verification and subscriber commit now enforce replay nonce and monotonic sequence scopes; broader recovery, adapter, and operational stress coverage remains deferred.
 - 3PKS signed transaction manifest at start.
-- Strict SHA verification and signature checks on every diffgram. First-slice coverage is focused on manifest/hash contracts, not a production cryptographic pipeline.
+- Strict SHA verification and signature checks on every diffgram. Current coverage validates manifest signatures, encrypted-body SHA-256 before decrypt, and plaintext SHA-256 after decrypt for protected subscriber envelopes.
 - Immediate abort on chain-of-custody failure.
 - Graceful degradation instead of hard rejection when subscriber dependency is unavailable.
 - Dual-control, versioning, rollback, safety gates, provenance, and LoRA preference for future weight updates.
 
 ## Repo Implementation Map
 
-- `mcpserver`: existing MCP Server host plus `Mcp:TurnTransactions`, in-process keyserver/subscriber controllers, and transaction coordinator under `src/McpServer.Support.Mcp`.
+- `mcpserver`: existing MCP Server host plus `Mcp:TurnTransactions`, compatibility keyserver/subscriber controllers under `src/McpServer.Support.Mcp`, and the shared transaction coordinator from `src/McpServer.TransactionSecurity`.
+- Separate keyserver host: `src/McpServer.KeyServer`.
+- Separate subscriber host: `src/McpServer.Subscriber`.
+- Shared transaction-security core: `src/McpServer.TransactionSecurity`.
 - Shared client contracts: existing `src/McpServer.Client`.
-- Focused first-slice tests: existing MCP support/client test projects.
-- Deferred projects: `src/McpServer.KeyServer`, `src/McpServer.Subscriber`, `tests/McpServer.KeyServer.Tests`, `tests/McpServer.Subscriber.Tests`, and `tests/McpServer.PlanReview.Tests`.
-- Deferred adapters: durable DB-backed transaction storage/audit, real encryption/decryption/key management, full external pub-sub, and global mutation adapters for all write surfaces.
+- Focused first-slice tests: MCP support/client test projects plus `tests/McpServer.TransactionSecurity.IntegrationTests`.
+- Deferred adapters: external key material management, key rotation, full external pub-sub, global mutation-adapter encrypted handoff, and global mutation adapters for all write surfaces.

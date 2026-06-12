@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace McpServer.Support.Mcp.Models;
+namespace McpServer.TransactionSecurity.Models;
 
 /// <summary>Registration payload for a transaction-security party known to the keyserver. FR-MCP-118.</summary>
 public sealed class PartyRegistrationRequest
