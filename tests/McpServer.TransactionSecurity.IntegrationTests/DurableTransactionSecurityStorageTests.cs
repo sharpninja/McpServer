@@ -18,6 +18,7 @@ public sealed class DurableTransactionSecurityStorageTests
     private const string PublisherPartyId = "publisher-1";
     private const string SubscriberPartyId = "subscriber-1";
     private const string ExternalPublisherSigningKeyId = "publisher-1:signing:external";
+    private const string RotatedPublisherSigningKeyId = "publisher-1:signing:rotated";
 
     /// <summary>Keyserver public descriptors and audit rows survive service recreation.</summary>
     [Fact]
@@ -53,6 +54,47 @@ public sealed class DurableTransactionSecurityStorageTests
         Assert.Contains(audit, entry => entry.EventName == "keyserver.party.registered");
         Assert.Contains(audit, entry => entry.EventName == "keyserver.manifest.signed");
         Assert.Contains(audit, entry => entry.EventName == "keyserver.manifest.verified");
+    }
+
+    /// <summary>Signed manifest trace records survive keyserver service recreation without private key material.</summary>
+    [Fact]
+    public async Task KeyServerSqliteStore_PersistsSignedManifestTraceAcrossServiceRecreation()
+    {
+        using var workspace = TempWorkspace.Create();
+        var databasePath = workspace.GetPath("keyserver-manifest-trace.db");
+        TransactionManifestDto manifest;
+
+        using (var keyServer = CreateKeyServer(databasePath))
+        {
+            await RegisterStandardPartiesAsync(keyServer).ConfigureAwait(true);
+            manifest = await SignManifestAsync(keyServer, "txn-keyserver-manifest-trace", 800, "nonce-keyserver-manifest-trace")
+                .ConfigureAwait(true);
+        }
+
+        using var recreatedKeyServer = CreateKeyServer(databasePath);
+        var trace = await recreatedKeyServer.GetManifestAsync("txn-keyserver-manifest-trace").ConfigureAwait(true);
+        var traceJson = JsonSerializer.Serialize(trace);
+
+        Assert.NotNull(trace);
+        Assert.Equal(manifest.TransactionId, trace.TransactionId);
+        Assert.Equal(manifest.TurnId, trace.TurnId);
+        Assert.Equal(manifest.PublisherPartyId, trace.PublisherPartyId);
+        Assert.Equal(manifest.SubscriberPartyId, trace.SubscriberPartyId);
+        Assert.Equal(manifest.PublisherSigningKeyId, trace.PublisherSigningKeyId);
+        Assert.Equal(manifest.SubscriberEncryptionKeyId, trace.SubscriberEncryptionKeyId);
+        Assert.Equal(manifest.Sequence, trace.Sequence);
+        Assert.Equal(manifest.Nonce, trace.Nonce);
+        Assert.Equal(manifest.IssuedAtUtc, trace.IssuedAtUtc);
+        Assert.Equal(manifest.ExpiresAtUtc, trace.ExpiresAtUtc);
+        Assert.Equal(manifest.DiffgramSha256, trace.DiffgramSha256);
+        Assert.Equal(manifest.EncryptedBodySha256, trace.EncryptedBodySha256);
+        Assert.Equal(manifest.Signature!.Algorithm, trace.SignatureAlgorithm);
+        Assert.Equal(manifest.Signature.KeyId, trace.SignatureKeyId);
+        Assert.Equal(manifest.Signature.Value, trace.SignatureValue);
+        Assert.Equal(manifest.Signature.SignedAtUtc, trace.SignedAtUtc);
+        Assert.Equal("signed", trace.Status);
+        Assert.False(string.IsNullOrWhiteSpace(trace.ManifestHashSha256));
+        Assert.DoesNotContain("PRIVATE KEY", traceJson, StringComparison.Ordinal);
     }
 
     /// <summary>Externally supplied signing private material can be re-provisioned after service recreation.</summary>
@@ -145,6 +187,25 @@ public sealed class DurableTransactionSecurityStorageTests
                 })).ConfigureAwait(true);
 
         Assert.Contains("does not match", exception.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>In-memory keyserver rotation preserves old public descriptors for historic manifest verification.</summary>
+    [Fact]
+    public async Task KeyServerMemoryStore_PreservesRotatedSigningPublicKeysForVerification()
+    {
+        using var keyServer = CreateKeyServer();
+
+        await AssertSigningKeyRotationPreservesVerificationAsync(keyServer).ConfigureAwait(true);
+    }
+
+    /// <summary>SQLite keyserver rotation preserves old public descriptors for historic manifest verification.</summary>
+    [Fact]
+    public async Task KeyServerSqliteStore_PreservesRotatedSigningPublicKeysForVerification()
+    {
+        using var workspace = TempWorkspace.Create();
+        using var keyServer = CreateKeyServer(workspace.GetPath("keyserver-rotation.db"));
+
+        await AssertSigningKeyRotationPreservesVerificationAsync(keyServer).ConfigureAwait(true);
     }
 
     /// <summary>Keyserver replay nonce and sequence cursors survive SQLite store recreation.</summary>
@@ -318,17 +379,90 @@ public sealed class DurableTransactionSecurityStorageTests
     private static Task<PartyRegistrationResponse> RegisterExternalSigningPublisherAsync(
         IKeyServerPartyRegistry registry,
         SigningKeyPair signingKey)
+        => RegisterExternalSigningPublisherAsync(registry, signingKey, ExternalPublisherSigningKeyId);
+
+    private static Task<PartyRegistrationResponse> RegisterExternalSigningPublisherAsync(
+        IKeyServerPartyRegistry registry,
+        SigningKeyPair signingKey,
+        string signingKeyId)
         => registry.RegisterPartyAsync(
             new PartyRegistrationRequest
             {
                 PartyId = PublisherPartyId,
                 Role = "publisher",
-                ActiveSigningKeyId = ExternalPublisherSigningKeyId,
+                ActiveSigningKeyId = signingKeyId,
                 SigningPrivateKeyPem = signingKey.PrivateKeyPem,
             });
 
     private static Task<PartyRegistrationResponse> RegisterSubscriberAsync(IKeyServerPartyRegistry registry)
         => registry.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = SubscriberPartyId, Role = "subscriber" });
+
+    private static async Task AssertSigningKeyRotationPreservesVerificationAsync(InMemoryKeyServerService keyServer)
+    {
+        using var firstSigningKey = SigningKeyPair.Create();
+        using var rotatedSigningKey = SigningKeyPair.Create();
+        await RegisterExternalSigningPublisherAsync(keyServer, firstSigningKey, ExternalPublisherSigningKeyId)
+            .ConfigureAwait(false);
+        await RegisterSubscriberAsync(keyServer).ConfigureAwait(false);
+        var firstManifest = await SignManifestAsync(
+            keyServer,
+            "txn-key-rotation-first",
+            700,
+            "nonce-key-rotation-first",
+            ExternalPublisherSigningKeyId).ConfigureAwait(false);
+
+        var rotation = await RegisterExternalSigningPublisherAsync(
+            keyServer,
+            rotatedSigningKey,
+            RotatedPublisherSigningKeyId).ConfigureAwait(false);
+        var oldDescriptor = await keyServer.GetPartyKeyAsync(PublisherPartyId, ExternalPublisherSigningKeyId)
+            .ConfigureAwait(false);
+        var rotatedDescriptor = await keyServer.GetPartyKeyAsync(PublisherPartyId, RotatedPublisherSigningKeyId)
+            .ConfigureAwait(false);
+        var oldSigningAttempt = await keyServer.SignManifestAsync(
+            new TransactionManifestSignRequest
+            {
+                TransactionId = "txn-key-rotation-old-signing-attempt",
+                TurnId = "turn-key-rotation",
+                PublisherPartyId = PublisherPartyId,
+                PublisherSigningKeyId = ExternalPublisherSigningKeyId,
+                SubscriberPartyId = SubscriberPartyId,
+                Sequence = 701,
+                Nonce = "nonce-key-rotation-old-signing-attempt",
+                DiffgramSha256 = Sha256Hex("plain-diffgram"),
+                EncryptedBodySha256 = Sha256Hex("encrypted-diffgram"),
+            }).ConfigureAwait(false);
+        var rotatedManifest = await SignManifestAsync(
+            keyServer,
+            "txn-key-rotation-rotated",
+            702,
+            "nonce-key-rotation-rotated",
+            RotatedPublisherSigningKeyId).ConfigureAwait(false);
+        var verifyFirst = await keyServer.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest
+            {
+                Manifest = firstManifest,
+                ExpectedSubscriberPartyId = SubscriberPartyId,
+            }).ConfigureAwait(false);
+        var verifyRotated = await keyServer.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest
+            {
+                Manifest = rotatedManifest,
+                ExpectedSubscriberPartyId = SubscriberPartyId,
+            }).ConfigureAwait(false);
+
+        Assert.Equal(RotatedPublisherSigningKeyId, rotation.ActiveSigningKeyId);
+        Assert.NotNull(oldDescriptor);
+        Assert.Equal(firstSigningKey.PublicKeyPem, oldDescriptor.PublicKeyPem);
+        Assert.NotNull(rotatedDescriptor);
+        Assert.Equal(rotatedSigningKey.PublicKeyPem, rotatedDescriptor.PublicKeyPem);
+        Assert.False(oldSigningAttempt.Success);
+        Assert.Equal(TransactionFailureReason.UnknownKey, oldSigningAttempt.Reason);
+        Assert.True(verifyFirst.IsValid);
+        Assert.Equal(TransactionFailureReason.None, verifyFirst.Reason);
+        Assert.True(verifyRotated.IsValid);
+        Assert.Equal(TransactionFailureReason.None, verifyRotated.Reason);
+    }
 
     private static async Task<TransactionManifestDto> SignManifestAsync(
         IKeyServerManifestService keyServer,

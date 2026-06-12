@@ -15,6 +15,10 @@ internal interface IKeyServerStateStore : IDisposable
 
     Task<PartyKeyDescriptor?> GetPartyKeyAsync(string partyId, string keyId, CancellationToken cancellationToken);
 
+    Task SaveManifestAsync(TransactionManifestTraceRecord manifest, CancellationToken cancellationToken);
+
+    Task<TransactionManifestTraceRecord?> GetManifestAsync(string transactionId, CancellationToken cancellationToken);
+
     Task<TransactionFailureReason> TryReserveManifestReplayAsync(
         string scope,
         string pairKey,
@@ -72,6 +76,7 @@ internal sealed record SubscriberTransactionState(
 internal sealed class InMemoryKeyServerStateStore : IKeyServerStateStore
 {
     private readonly ConcurrentDictionary<string, KeyServerPartyState> _parties = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, TransactionManifestTraceRecord> _manifests = new(StringComparer.OrdinalIgnoreCase);
     private readonly ConcurrentDictionary<string, long> _lastSequences = new(StringComparer.OrdinalIgnoreCase);
     private readonly ConcurrentDictionary<string, string> _nonces = new(StringComparer.OrdinalIgnoreCase);
     private readonly ConcurrentQueue<TransactionAuditState> _audit = new();
@@ -83,7 +88,10 @@ internal sealed class InMemoryKeyServerStateStore : IKeyServerStateStore
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        _parties[party.PartyId] = new KeyServerPartyState(Clone(party), keys.Select(Clone).ToArray());
+        _parties.AddOrUpdate(
+            party.PartyId,
+            _ => new KeyServerPartyState(Clone(party), keys.Select(Clone).ToArray()),
+            (_, existing) => new KeyServerPartyState(Clone(party), MergeKeys(existing.Keys, keys)));
         return Task.CompletedTask;
     }
 
@@ -107,6 +115,26 @@ internal sealed class InMemoryKeyServerStateStore : IKeyServerStateStore
                 ? party.Keys.FirstOrDefault(key => string.Equals(key.KeyId, keyId, StringComparison.OrdinalIgnoreCase)) is { } key
                     ? Clone(key)
                     : null
+                : null);
+    }
+
+    public Task SaveManifestAsync(
+        TransactionManifestTraceRecord manifest,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        _manifests[manifest.TransactionId] = Clone(manifest);
+        return Task.CompletedTask;
+    }
+
+    public Task<TransactionManifestTraceRecord?> GetManifestAsync(
+        string transactionId,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult(
+            _manifests.TryGetValue(transactionId, out var manifest)
+                ? Clone(manifest)
                 : null);
     }
 
@@ -174,6 +202,50 @@ internal sealed class InMemoryKeyServerStateStore : IKeyServerStateStore
             CreatedAtUtc = descriptor.CreatedAtUtc,
             ExpiresAtUtc = descriptor.ExpiresAtUtc,
         };
+
+    private static TransactionManifestTraceRecord Clone(TransactionManifestTraceRecord manifest)
+        => new()
+        {
+            TransactionId = manifest.TransactionId,
+            TurnId = manifest.TurnId,
+            PublisherPartyId = manifest.PublisherPartyId,
+            PublisherSigningKeyId = manifest.PublisherSigningKeyId,
+            SubscriberPartyId = manifest.SubscriberPartyId,
+            SubscriberEncryptionKeyId = manifest.SubscriberEncryptionKeyId,
+            Sequence = manifest.Sequence,
+            Nonce = manifest.Nonce,
+            IssuedAtUtc = manifest.IssuedAtUtc,
+            ExpiresAtUtc = manifest.ExpiresAtUtc,
+            DiffgramSha256 = manifest.DiffgramSha256,
+            EncryptedBodySha256 = manifest.EncryptedBodySha256,
+            SignatureAlgorithm = manifest.SignatureAlgorithm,
+            EncryptionAlgorithm = manifest.EncryptionAlgorithm,
+            CanonicalizationProfile = manifest.CanonicalizationProfile,
+            SignatureKeyId = manifest.SignatureKeyId,
+            SignatureValue = manifest.SignatureValue,
+            SignedAtUtc = manifest.SignedAtUtc,
+            ManifestHashSha256 = manifest.ManifestHashSha256,
+            Status = manifest.Status,
+            CreatedAtUtc = manifest.CreatedAtUtc,
+        };
+
+    private static IReadOnlyList<PartyKeyDescriptor> MergeKeys(
+        IReadOnlyList<PartyKeyDescriptor> existingKeys,
+        IReadOnlyCollection<PartyKeyDescriptor> incomingKeys)
+    {
+        var merged = existingKeys.Select(Clone).ToList();
+        foreach (var incomingKey in incomingKeys)
+        {
+            var existingIndex = merged.FindIndex(
+                key => string.Equals(key.KeyId, incomingKey.KeyId, StringComparison.OrdinalIgnoreCase));
+            if (existingIndex >= 0)
+                merged[existingIndex] = Clone(incomingKey);
+            else
+                merged.Add(Clone(incomingKey));
+        }
+
+        return merged;
+    }
 
     private static string BuildScopedReplayKey(string scope, string value)
         => $"{scope.Trim()}\n{value}";
@@ -297,14 +369,16 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         existing.Status = party.Status;
         existing.CreatedAtUtc = party.CreatedAtUtc;
         existing.UpdatedAtUtc = party.UpdatedAtUtc;
-        if (existing.Keys.Count > 0)
-        {
-            db.KeyServerPartyKeys.RemoveRange(existing.Keys);
-            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        }
 
         foreach (var key in keys)
-            db.KeyServerPartyKeys.Add(ToEntity(key));
+        {
+            var existingKey = existing.Keys.SingleOrDefault(
+                current => string.Equals(current.KeyId, key.KeyId, StringComparison.OrdinalIgnoreCase));
+            if (existingKey is null)
+                db.KeyServerPartyKeys.Add(ToEntity(key));
+            else
+                UpdateEntity(existingKey, key);
+        }
 
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -335,6 +409,34 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
             .SingleOrDefaultAsync(
                 key => key.PartyId == partyId && key.KeyId == keyId,
                 cancellationToken)
+            .ConfigureAwait(false);
+        return entity is null ? null : ToModel(entity);
+    }
+
+    public async Task SaveManifestAsync(
+        TransactionManifestTraceRecord manifest,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var existing = await db.KeyServerManifests
+            .SingleOrDefaultAsync(entity => entity.TransactionId == manifest.TransactionId, cancellationToken)
+            .ConfigureAwait(false);
+        if (existing is null)
+            db.KeyServerManifests.Add(ToEntity(manifest));
+        else
+            UpdateEntity(existing, manifest);
+
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<TransactionManifestTraceRecord?> GetManifestAsync(
+        string transactionId,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var entity = await db.KeyServerManifests
+            .AsNoTracking()
+            .SingleOrDefaultAsync(manifest => manifest.TransactionId == transactionId, cancellationToken)
             .ConfigureAwait(false);
         return entity is null ? null : ToModel(entity);
     }
@@ -572,6 +674,92 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
             ExpiresAtUtc = key.ExpiresAtUtc,
         };
 
+    private static void UpdateEntity(KeyServerPartyKeyEntity entity, PartyKeyDescriptor key)
+    {
+        entity.Purpose = key.Purpose;
+        entity.Algorithm = key.Algorithm;
+        entity.PublicKeyPem = key.PublicKeyPem;
+        entity.Status = key.Status;
+        entity.CreatedAtUtc = key.CreatedAtUtc;
+        entity.ExpiresAtUtc = key.ExpiresAtUtc;
+    }
+
+    private static TransactionManifestTraceRecord ToModel(KeyServerManifestEntity entity)
+        => new()
+        {
+            TransactionId = entity.TransactionId,
+            TurnId = entity.TurnId,
+            PublisherPartyId = entity.PublisherPartyId,
+            PublisherSigningKeyId = entity.PublisherSigningKeyId,
+            SubscriberPartyId = entity.SubscriberPartyId,
+            SubscriberEncryptionKeyId = entity.SubscriberEncryptionKeyId,
+            Sequence = entity.Sequence,
+            Nonce = entity.Nonce,
+            IssuedAtUtc = entity.IssuedAtUtc,
+            ExpiresAtUtc = entity.ExpiresAtUtc,
+            DiffgramSha256 = entity.DiffgramSha256,
+            EncryptedBodySha256 = entity.EncryptedBodySha256,
+            SignatureAlgorithm = entity.SignatureAlgorithm,
+            EncryptionAlgorithm = entity.EncryptionAlgorithm,
+            CanonicalizationProfile = entity.CanonicalizationProfile,
+            SignatureKeyId = entity.SignatureKeyId,
+            SignatureValue = entity.SignatureValue,
+            SignedAtUtc = entity.SignedAtUtc,
+            ManifestHashSha256 = entity.ManifestHashSha256,
+            Status = entity.Status,
+            CreatedAtUtc = entity.CreatedAtUtc,
+        };
+
+    private static KeyServerManifestEntity ToEntity(TransactionManifestTraceRecord manifest)
+        => new()
+        {
+            TransactionId = manifest.TransactionId,
+            TurnId = manifest.TurnId,
+            PublisherPartyId = manifest.PublisherPartyId,
+            PublisherSigningKeyId = manifest.PublisherSigningKeyId,
+            SubscriberPartyId = manifest.SubscriberPartyId,
+            SubscriberEncryptionKeyId = manifest.SubscriberEncryptionKeyId,
+            Sequence = manifest.Sequence,
+            Nonce = manifest.Nonce,
+            IssuedAtUtc = manifest.IssuedAtUtc,
+            ExpiresAtUtc = manifest.ExpiresAtUtc,
+            DiffgramSha256 = manifest.DiffgramSha256,
+            EncryptedBodySha256 = manifest.EncryptedBodySha256,
+            SignatureAlgorithm = manifest.SignatureAlgorithm,
+            EncryptionAlgorithm = manifest.EncryptionAlgorithm,
+            CanonicalizationProfile = manifest.CanonicalizationProfile,
+            SignatureKeyId = manifest.SignatureKeyId,
+            SignatureValue = manifest.SignatureValue,
+            SignedAtUtc = manifest.SignedAtUtc,
+            ManifestHashSha256 = manifest.ManifestHashSha256,
+            Status = manifest.Status,
+            CreatedAtUtc = manifest.CreatedAtUtc,
+        };
+
+    private static void UpdateEntity(KeyServerManifestEntity entity, TransactionManifestTraceRecord manifest)
+    {
+        entity.TurnId = manifest.TurnId;
+        entity.PublisherPartyId = manifest.PublisherPartyId;
+        entity.PublisherSigningKeyId = manifest.PublisherSigningKeyId;
+        entity.SubscriberPartyId = manifest.SubscriberPartyId;
+        entity.SubscriberEncryptionKeyId = manifest.SubscriberEncryptionKeyId;
+        entity.Sequence = manifest.Sequence;
+        entity.Nonce = manifest.Nonce;
+        entity.IssuedAtUtc = manifest.IssuedAtUtc;
+        entity.ExpiresAtUtc = manifest.ExpiresAtUtc;
+        entity.DiffgramSha256 = manifest.DiffgramSha256;
+        entity.EncryptedBodySha256 = manifest.EncryptedBodySha256;
+        entity.SignatureAlgorithm = manifest.SignatureAlgorithm;
+        entity.EncryptionAlgorithm = manifest.EncryptionAlgorithm;
+        entity.CanonicalizationProfile = manifest.CanonicalizationProfile;
+        entity.SignatureKeyId = manifest.SignatureKeyId;
+        entity.SignatureValue = manifest.SignatureValue;
+        entity.SignedAtUtc = manifest.SignedAtUtc;
+        entity.ManifestHashSha256 = manifest.ManifestHashSha256;
+        entity.Status = manifest.Status;
+        entity.CreatedAtUtc = manifest.CreatedAtUtc;
+    }
+
     private static SubscriberTransactionState ToState(SubscriberTransactionEntity entity)
         => new(
             entity.TransactionId,
@@ -635,6 +823,8 @@ internal sealed class TransactionSecurityDbContext : DbContext
 
     public DbSet<KeyServerNonceEntity> KeyServerNonces => Set<KeyServerNonceEntity>();
 
+    public DbSet<KeyServerManifestEntity> KeyServerManifests => Set<KeyServerManifestEntity>();
+
     public DbSet<SubscriberTransactionEntity> SubscriberTransactions => Set<SubscriberTransactionEntity>();
 
     public DbSet<SubscriberSequenceEntity> SubscriberSequences => Set<SubscriberSequenceEntity>();
@@ -682,6 +872,26 @@ internal sealed class TransactionSecurityDbContext : DbContext
             entity.ToTable("TransactionKeyServerNonces");
             entity.HasKey(nonce => nonce.NonceKey);
             entity.Property(nonce => nonce.TransactionId).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<KeyServerManifestEntity>(entity =>
+        {
+            entity.ToTable("TransactionKeyServerManifests");
+            entity.HasKey(manifest => manifest.TransactionId);
+            entity.Property(manifest => manifest.TransactionId).HasMaxLength(200);
+            entity.Property(manifest => manifest.TurnId).HasMaxLength(200);
+            entity.Property(manifest => manifest.PublisherPartyId).HasMaxLength(200);
+            entity.Property(manifest => manifest.PublisherSigningKeyId).HasMaxLength(200);
+            entity.Property(manifest => manifest.SubscriberPartyId).HasMaxLength(200);
+            entity.Property(manifest => manifest.SubscriberEncryptionKeyId).HasMaxLength(200);
+            entity.Property(manifest => manifest.DiffgramSha256).HasMaxLength(64);
+            entity.Property(manifest => manifest.EncryptedBodySha256).HasMaxLength(64);
+            entity.Property(manifest => manifest.SignatureAlgorithm).HasMaxLength(100);
+            entity.Property(manifest => manifest.EncryptionAlgorithm).HasMaxLength(120);
+            entity.Property(manifest => manifest.CanonicalizationProfile).HasMaxLength(120);
+            entity.Property(manifest => manifest.SignatureKeyId).HasMaxLength(200);
+            entity.Property(manifest => manifest.ManifestHashSha256).HasMaxLength(64);
+            entity.Property(manifest => manifest.Status).HasMaxLength(50);
         });
 
         modelBuilder.Entity<SubscriberTransactionEntity>(entity =>
@@ -770,6 +980,51 @@ internal sealed class KeyServerNonceEntity
     public string NonceKey { get; set; } = string.Empty;
 
     public string TransactionId { get; set; } = string.Empty;
+
+    public DateTimeOffset CreatedAtUtc { get; set; }
+}
+
+internal sealed class KeyServerManifestEntity
+{
+    public string TransactionId { get; set; } = string.Empty;
+
+    public string? TurnId { get; set; }
+
+    public string PublisherPartyId { get; set; } = string.Empty;
+
+    public string? PublisherSigningKeyId { get; set; }
+
+    public string SubscriberPartyId { get; set; } = string.Empty;
+
+    public string? SubscriberEncryptionKeyId { get; set; }
+
+    public long Sequence { get; set; }
+
+    public string Nonce { get; set; } = string.Empty;
+
+    public DateTimeOffset IssuedAtUtc { get; set; }
+
+    public DateTimeOffset ExpiresAtUtc { get; set; }
+
+    public string DiffgramSha256 { get; set; } = string.Empty;
+
+    public string EncryptedBodySha256 { get; set; } = string.Empty;
+
+    public string SignatureAlgorithm { get; set; } = string.Empty;
+
+    public string EncryptionAlgorithm { get; set; } = string.Empty;
+
+    public string CanonicalizationProfile { get; set; } = string.Empty;
+
+    public string SignatureKeyId { get; set; } = string.Empty;
+
+    public string SignatureValue { get; set; } = string.Empty;
+
+    public DateTimeOffset SignedAtUtc { get; set; }
+
+    public string ManifestHashSha256 { get; set; } = string.Empty;
+
+    public string Status { get; set; } = "signed";
 
     public DateTimeOffset CreatedAtUtc { get; set; }
 }

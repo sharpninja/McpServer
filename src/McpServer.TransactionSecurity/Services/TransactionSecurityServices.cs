@@ -48,6 +48,14 @@ public interface IKeyServerManifestService
     Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
         TransactionManifestVerifyRequest request,
         CancellationToken cancellationToken = default);
+
+    /// <summary>Gets persisted public trace metadata for a signed manifest.</summary>
+    /// <param name="transactionId">Transaction identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Manifest trace record, or <see langword="null"/> when unknown.</returns>
+    Task<TransactionManifestTraceRecord?> GetManifestAsync(
+        string transactionId,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>TR-MCP-CRYPTO-001: Canonicalizes manifests for signing and hashing.</summary>
@@ -365,6 +373,10 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
         if (replayReservation != TransactionFailureReason.None)
             return await FailedSignAsync(replayReservation, manifest.TransactionId, cancellationToken).ConfigureAwait(false);
 
+        await _stateStore.SaveManifestAsync(
+            BuildManifestTraceRecord(manifest, _canonicalizer.ComputeManifestHash(manifest), now),
+            cancellationToken).ConfigureAwait(false);
+
         await RecordKeyServerAuditAsync(
             "keyserver.manifest.signed",
             manifest.TransactionId,
@@ -378,6 +390,14 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
             Manifest = manifest,
         };
     }
+
+    /// <inheritdoc />
+    public Task<TransactionManifestTraceRecord?> GetManifestAsync(
+        string transactionId,
+        CancellationToken cancellationToken = default)
+        => string.IsNullOrWhiteSpace(transactionId)
+            ? Task.FromResult<TransactionManifestTraceRecord?>(null)
+            : _stateStore.GetManifestAsync(transactionId.Trim(), cancellationToken);
 
     /// <inheritdoc />
     public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
@@ -576,6 +596,35 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
 
     private static string NormalizeStatus(string? status)
         => string.IsNullOrWhiteSpace(status) ? "active" : status.Trim();
+
+    private static TransactionManifestTraceRecord BuildManifestTraceRecord(
+        TransactionManifestDto manifest,
+        string manifestHash,
+        DateTimeOffset createdAtUtc)
+        => new()
+        {
+            TransactionId = manifest.TransactionId,
+            TurnId = manifest.TurnId,
+            PublisherPartyId = manifest.PublisherPartyId,
+            PublisherSigningKeyId = manifest.PublisherSigningKeyId,
+            SubscriberPartyId = manifest.SubscriberPartyId,
+            SubscriberEncryptionKeyId = manifest.SubscriberEncryptionKeyId,
+            Sequence = manifest.Sequence,
+            Nonce = manifest.Nonce,
+            IssuedAtUtc = manifest.IssuedAtUtc,
+            ExpiresAtUtc = manifest.ExpiresAtUtc,
+            DiffgramSha256 = manifest.DiffgramSha256,
+            EncryptedBodySha256 = manifest.EncryptedBodySha256,
+            SignatureAlgorithm = manifest.Signature?.Algorithm ?? string.Empty,
+            EncryptionAlgorithm = manifest.Algorithms.Encryption,
+            CanonicalizationProfile = manifest.Algorithms.Canonicalization,
+            SignatureKeyId = manifest.Signature?.KeyId ?? string.Empty,
+            SignatureValue = manifest.Signature?.Value ?? string.Empty,
+            SignedAtUtc = manifest.Signature?.SignedAtUtc ?? createdAtUtc,
+            ManifestHashSha256 = manifestHash,
+            Status = "signed",
+            CreatedAtUtc = createdAtUtc,
+        };
 
     private static string BuildPairKey(string publisherPartyId, string subscriberPartyId)
         => $"{publisherPartyId.Trim()}\n{subscriberPartyId.Trim()}";

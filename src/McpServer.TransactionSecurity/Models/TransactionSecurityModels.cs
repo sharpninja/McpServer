@@ -222,6 +222,94 @@ public sealed class TransactionManifestVerifyResponse
     public string? ManifestHashSha256 { get; set; }
 }
 
+/// <summary>Persisted public trace metadata for a signed transaction manifest. FR-MCP-120.</summary>
+public sealed class TransactionManifestTraceRecord
+{
+    /// <summary>Stable transaction identifier.</summary>
+    [JsonPropertyName("transactionId")]
+    public string TransactionId { get; set; } = string.Empty;
+
+    /// <summary>Optional session-log turn identifier.</summary>
+    [JsonPropertyName("turnId")]
+    public string? TurnId { get; set; }
+
+    /// <summary>Publisher party identifier.</summary>
+    [JsonPropertyName("publisherPartyId")]
+    public string PublisherPartyId { get; set; } = string.Empty;
+
+    /// <summary>Publisher signing key identifier.</summary>
+    [JsonPropertyName("publisherSigningKeyId")]
+    public string? PublisherSigningKeyId { get; set; }
+
+    /// <summary>Subscriber party identifier.</summary>
+    [JsonPropertyName("subscriberPartyId")]
+    public string SubscriberPartyId { get; set; } = string.Empty;
+
+    /// <summary>Subscriber encryption key identifier.</summary>
+    [JsonPropertyName("subscriberEncryptionKeyId")]
+    public string? SubscriberEncryptionKeyId { get; set; }
+
+    /// <summary>Monotonic publisher sequence.</summary>
+    [JsonPropertyName("sequence")]
+    public long Sequence { get; set; }
+
+    /// <summary>Replay-protection nonce.</summary>
+    [JsonPropertyName("nonce")]
+    public string Nonce { get; set; } = string.Empty;
+
+    /// <summary>UTC issue timestamp.</summary>
+    [JsonPropertyName("issuedAtUtc")]
+    public DateTimeOffset IssuedAtUtc { get; set; }
+
+    /// <summary>UTC expiry timestamp.</summary>
+    [JsonPropertyName("expiresAtUtc")]
+    public DateTimeOffset ExpiresAtUtc { get; set; }
+
+    /// <summary>Plaintext diffgram SHA-256 digest.</summary>
+    [JsonPropertyName("diffgramSha256")]
+    public string DiffgramSha256 { get; set; } = string.Empty;
+
+    /// <summary>Encrypted body SHA-256 digest.</summary>
+    [JsonPropertyName("encryptedBodySha256")]
+    public string EncryptedBodySha256 { get; set; } = string.Empty;
+
+    /// <summary>Signature algorithm identifier.</summary>
+    [JsonPropertyName("signatureAlgorithm")]
+    public string SignatureAlgorithm { get; set; } = string.Empty;
+
+    /// <summary>Encryption algorithm identifier.</summary>
+    [JsonPropertyName("encryptionAlgorithm")]
+    public string EncryptionAlgorithm { get; set; } = string.Empty;
+
+    /// <summary>Canonicalization profile identifier.</summary>
+    [JsonPropertyName("canonicalizationProfile")]
+    public string CanonicalizationProfile { get; set; } = string.Empty;
+
+    /// <summary>Signing key identifier recorded in the manifest signature.</summary>
+    [JsonPropertyName("signatureKeyId")]
+    public string SignatureKeyId { get; set; } = string.Empty;
+
+    /// <summary>Base64-encoded signature value.</summary>
+    [JsonPropertyName("signatureValue")]
+    public string SignatureValue { get; set; } = string.Empty;
+
+    /// <summary>UTC signature timestamp.</summary>
+    [JsonPropertyName("signedAtUtc")]
+    public DateTimeOffset SignedAtUtc { get; set; }
+
+    /// <summary>SHA-256 digest of the canonical unsigned manifest.</summary>
+    [JsonPropertyName("manifestHashSha256")]
+    public string ManifestHashSha256 { get; set; } = string.Empty;
+
+    /// <summary>Trace status, such as signed.</summary>
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "signed";
+
+    /// <summary>UTC timestamp when the trace record was created.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset CreatedAtUtc { get; set; }
+}
+
 /// <summary>Canonical signed manifest that accompanies an encrypted transaction diffgram. FR-MCP-120.</summary>
 public sealed class TransactionManifestDto
 {

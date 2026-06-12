@@ -70,6 +70,22 @@ public sealed class KeyServerController : ControllerBase
         return response.Success ? Ok(response) : BadRequest(response);
     }
 
+    /// <summary>Gets persisted public trace metadata for a signed manifest.</summary>
+    /// <param name="transactionId">Transaction identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Manifest trace record.</returns>
+    [HttpGet("manifests/{transactionId}")]
+    public async Task<ActionResult<TransactionManifestTraceRecord>> GetManifestAsync(
+        string transactionId,
+        CancellationToken cancellationToken)
+    {
+        var manifest = await _manifestService.GetManifestAsync(transactionId, cancellationToken).ConfigureAwait(false);
+        if (manifest is null)
+            return NotFound(new { error = $"Manifest '{transactionId}' was not found." });
+
+        return Ok(manifest);
+    }
+
     /// <summary>Verifies a signed transaction manifest.</summary>
     /// <param name="request">Manifest verification payload.</param>
     /// <param name="cancellationToken">Cancellation token.</param>

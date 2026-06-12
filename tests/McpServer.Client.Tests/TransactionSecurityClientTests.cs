@@ -122,6 +122,28 @@ public sealed class TransactionSecurityClientTests
         Assert.Equal("key/1", result.KeyId);
     }
 
+    /// <summary>Manifest trace lookups URL-encode transaction identifiers and deserialize audit metadata.</summary>
+    [Fact]
+    public async Task KeyServerClient_GetManifestAsync_EncodesTransactionAndDeserializes()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {"transactionId":"txn/1","turnId":"turn-1","publisherPartyId":"publisher-1","publisherSigningKeyId":"sign-1","subscriberPartyId":"subscriber-1","subscriberEncryptionKeyId":"enc-1","sequence":42,"nonce":"nonce-1","issuedAtUtc":"2026-06-11T12:00:00Z","expiresAtUtc":"2026-06-11T12:05:00Z","diffgramSha256":"plain-hash","encryptedBodySha256":"encrypted-hash","signatureAlgorithm":"ECDSA-P256-SHA256","signatureKeyId":"sign-1","signatureValue":"sig","signedAtUtc":"2026-06-11T12:00:01Z","manifestHashSha256":"manifest-hash","status":"signed","createdAtUtc":"2026-06-11T12:00:01Z"}
+            """);
+        using var http = new HttpClient(handler);
+        var client = new KeyServerClient(http, DefaultOptions);
+
+        var result = await client.GetManifestAsync("txn/1");
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/keyserver/manifests/txn%2F1", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("txn/1", result.TransactionId);
+        Assert.Equal("sign-1", result.SignatureKeyId);
+        Assert.Equal("manifest-hash", result.ManifestHashSha256);
+        Assert.Equal("signed", result.Status);
+    }
+
     /// <summary>Committing a diffgram posts the signed manifest and encrypted payload.</summary>
     [Fact]
     public async Task SubscriberClient_CommitDiffgramAsync_PostsExpectedRouteAndBody()

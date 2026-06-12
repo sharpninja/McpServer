@@ -47,6 +47,17 @@ public sealed class KeyServerClient : McpClientBase
         CancellationToken cancellationToken = default)
         => await PostAsync<TransactionManifestVerifyResponse>("mcpserver/keyserver/manifests/verify", request, cancellationToken);
 
+    /// <summary>Gets persisted public trace metadata for a signed manifest.</summary>
+    /// <param name="transactionId">Transaction identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Manifest trace record.</returns>
+    public async Task<TransactionManifestTraceRecord> GetManifestAsync(
+        string transactionId,
+        CancellationToken cancellationToken = default)
+        => await GetAsync<TransactionManifestTraceRecord>(
+            $"mcpserver/keyserver/manifests/{Encode(transactionId)}",
+            cancellationToken);
+
     /// <summary>Gets one public key descriptor for a registered party.</summary>
     /// <param name="partyId">Party identifier.</param>
     /// <param name="keyId">Key identifier.</param>

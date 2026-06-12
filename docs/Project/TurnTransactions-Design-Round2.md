@@ -1,10 +1,10 @@
 # Turn Transactions Design Round 2
 
-Status: Phase 0 implementable design artifact, updated after the durable-storage, protected-envelope crypto, and external signing-key material slices
+Status: Phase 0 implementable design artifact, updated after the durable-storage, protected-envelope crypto, external signing-key material, keyserver signing-key rotation, signed manifest trace ledger, and subscriber key-ring rotation slices
 
 Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNDESIGN-001
 
-Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/McpServer.TransactionSecurity`, Support.Mcp compatibility controllers under `src/McpServer.Support.Mcp`, public DTO/client contracts under `src/McpServer.Client`, separate hosts under `src/McpServer.KeyServer` and `src/McpServer.Subscriber`, real separate-host integration coverage under `tests/McpServer.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, external key material support for subscriber private ECDH decrypt keys and keyserver publisher signing private PEM re-provisioning, and a test-only aiUnit plan-review gate under `tests/McpServer.PlanReview.Tests`. Manifest persistence, key rotation, external pub-sub, global mutation adapters, and recovery/degraded rollback smoke coverage are deferred.
+Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/McpServer.TransactionSecurity`, Support.Mcp compatibility controllers under `src/McpServer.Support.Mcp`, public DTO/client contracts under `src/McpServer.Client`, separate hosts under `src/McpServer.KeyServer` and `src/McpServer.Subscriber`, real separate-host integration coverage under `tests/McpServer.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, external key material support for subscriber private ECDH decrypt keys and keyserver publisher signing private PEM re-provisioning, keyserver signing-key rotation that preserves prior public descriptors for historic manifest verification while old private signing material remains verify-only, signed manifest trace persistence with keyserver/controller/client lookup coverage, subscriber encryption private key rings that decrypt old and rotated protected envelopes, and a test-only aiUnit plan-review gate under `tests/McpServer.PlanReview.Tests`. External pub-sub, global mutation adapters, production key-lifecycle automation, and recovery/degraded rollback smoke coverage are deferred.
 
 ## Public DTOs
 
@@ -17,6 +17,7 @@ Add transaction security models under `McpServer.Client.Models`:
 - `TransactionManifestSignResponse`
 - `TransactionManifestVerifyRequest`
 - `TransactionManifestVerifyResponse`
+- `TransactionManifestTraceRecord`
 - `TransactionManifestDto`
 - `TransactionManifestSignatureDto`
 - `DiffgramCommitRequest`
@@ -60,7 +61,7 @@ Keyserver durable records implemented in the service-local SQLite state store:
 
 - `KeyServerPartyEntity`: party ID, role, status, active signing key ID, active encryption key ID, created/updated UTC.
 - `KeyServerPartyKeyEntity`: key ID, party ID, key purpose, algorithm, public key material, status, created UTC, expires UTC.
-- `TransactionManifestEntity`: transaction ID, turn ID, publisher ID, subscriber ID, sequence, nonce, hashes, issued/expiry UTC, signature, status. Manifest persistence remains deferred.
+- `KeyServerManifestEntity`: transaction ID, turn ID, publisher ID, subscriber ID, sequence, nonce, hashes, issued/expiry UTC, signature metadata, manifest hash, status, created UTC.
 - `KeyServerReplayNonceEntity`: scoped nonce, party pair, transaction ID, first seen UTC.
 - `KeyServerSequenceEntity`: scoped party pair, last accepted sequence, updated UTC.
 - `KeyServerAuditEventEntity`: action, reason code, transaction ID, party IDs, timestamp, details JSON.
@@ -117,6 +118,7 @@ Keyserver endpoints:
 - `POST /mcpserver/keyserver/parties`
 - `POST /mcpserver/keyserver/manifests/sign`
 - `POST /mcpserver/keyserver/manifests/verify`
+- `GET /mcpserver/keyserver/manifests/{transactionId}`
 - `GET /mcpserver/keyserver/parties/{partyId}/keys/{keyId}`
 - `GET /health`
 
@@ -143,7 +145,10 @@ Subscriber options:
 - Section: `Mcp:Subscriber`
 - `DatabasePath`
 - `PartyId`
-- `PrivateKeyPath`
+- `EncryptionKeyId`
+- `EncryptionPrivateKeyPem`
+- `EncryptionKeys[]` with `KeyId` and `PrivateKeyPem` for key-ring rotation.
+- `RequireEncryptedDiffgrams`
 - `KeyServerBaseUrl`
 - `CommitTimeoutSeconds`
 - `AuditEnabled`

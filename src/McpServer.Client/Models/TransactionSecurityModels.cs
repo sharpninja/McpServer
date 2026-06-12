@@ -248,6 +248,97 @@ public sealed class TransactionManifestVerifyResponse
 }
 
 /// <summary>
+/// Persisted public trace metadata for a signed transaction manifest.
+/// FR-MCP-120, FR-MCP-121.
+/// </summary>
+public sealed class TransactionManifestTraceRecord
+{
+    /// <summary>Stable transaction identifier.</summary>
+    [JsonPropertyName("transactionId")]
+    public string TransactionId { get; set; } = string.Empty;
+
+    /// <summary>Optional session-log turn identifier associated with this transaction.</summary>
+    [JsonPropertyName("turnId")]
+    public string? TurnId { get; set; }
+
+    /// <summary>Party identifier for the publisher that signed the manifest.</summary>
+    [JsonPropertyName("publisherPartyId")]
+    public string PublisherPartyId { get; set; } = string.Empty;
+
+    /// <summary>Publisher signing key identifier used to verify the manifest.</summary>
+    [JsonPropertyName("publisherSigningKeyId")]
+    public string? PublisherSigningKeyId { get; set; }
+
+    /// <summary>Party identifier for the subscriber that can decrypt the diffgram.</summary>
+    [JsonPropertyName("subscriberPartyId")]
+    public string SubscriberPartyId { get; set; } = string.Empty;
+
+    /// <summary>Subscriber encryption key identifier used to decrypt the diffgram.</summary>
+    [JsonPropertyName("subscriberEncryptionKeyId")]
+    public string? SubscriberEncryptionKeyId { get; set; }
+
+    /// <summary>Monotonic publisher sequence number used for replay protection.</summary>
+    [JsonPropertyName("sequence")]
+    public long Sequence { get; set; }
+
+    /// <summary>Nonce used for replay detection and audit correlation.</summary>
+    [JsonPropertyName("nonce")]
+    public string Nonce { get; set; } = string.Empty;
+
+    /// <summary>UTC issue timestamp.</summary>
+    [JsonPropertyName("issuedAtUtc")]
+    public DateTimeOffset IssuedAtUtc { get; set; }
+
+    /// <summary>UTC expiry timestamp.</summary>
+    [JsonPropertyName("expiresAtUtc")]
+    public DateTimeOffset ExpiresAtUtc { get; set; }
+
+    /// <summary>SHA-256 digest of the plaintext diffgram payload.</summary>
+    [JsonPropertyName("diffgramSha256")]
+    public string DiffgramSha256 { get; set; } = string.Empty;
+
+    /// <summary>SHA-256 digest of the encrypted diffgram payload.</summary>
+    [JsonPropertyName("encryptedBodySha256")]
+    public string EncryptedBodySha256 { get; set; } = string.Empty;
+
+    /// <summary>Signature algorithm identifier.</summary>
+    [JsonPropertyName("signatureAlgorithm")]
+    public string SignatureAlgorithm { get; set; } = string.Empty;
+
+    /// <summary>Encryption algorithm identifier.</summary>
+    [JsonPropertyName("encryptionAlgorithm")]
+    public string EncryptionAlgorithm { get; set; } = string.Empty;
+
+    /// <summary>Canonicalization profile identifier.</summary>
+    [JsonPropertyName("canonicalizationProfile")]
+    public string CanonicalizationProfile { get; set; } = string.Empty;
+
+    /// <summary>Signing key identifier recorded in the manifest signature.</summary>
+    [JsonPropertyName("signatureKeyId")]
+    public string SignatureKeyId { get; set; } = string.Empty;
+
+    /// <summary>Base64-encoded signature value.</summary>
+    [JsonPropertyName("signatureValue")]
+    public string SignatureValue { get; set; } = string.Empty;
+
+    /// <summary>UTC timestamp when the signature was generated.</summary>
+    [JsonPropertyName("signedAtUtc")]
+    public DateTimeOffset SignedAtUtc { get; set; }
+
+    /// <summary>SHA-256 digest of the canonical unsigned manifest.</summary>
+    [JsonPropertyName("manifestHashSha256")]
+    public string ManifestHashSha256 { get; set; } = string.Empty;
+
+    /// <summary>Trace status, such as <c>signed</c>.</summary>
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "signed";
+
+    /// <summary>UTC timestamp when the trace record was created.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset CreatedAtUtc { get; set; }
+}
+
+/// <summary>
 /// Canonical signed manifest that accompanies an encrypted transaction diffgram.
 /// FR-MCP-120, FR-MCP-123.
 /// </summary>

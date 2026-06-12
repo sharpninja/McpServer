@@ -58,8 +58,24 @@ public sealed class SubscriberOptions
     /// <summary>Optional PEM-encoded ECDH private key used to decrypt protected diffgram envelopes.</summary>
     public string? EncryptionPrivateKeyPem { get; set; }
 
+    /// <summary>
+    /// Optional key ring of PEM-encoded ECDH private keys used to decrypt protected diffgram envelopes
+    /// across subscriber encryption key rotations.
+    /// </summary>
+    public List<SubscriberEncryptionKeyMaterial> EncryptionKeys { get; set; } = [];
+
     /// <summary>Whether commits must carry protected diffgram envelopes instead of legacy placeholder bodies.</summary>
     public bool RequireEncryptedDiffgrams { get; set; }
+}
+
+/// <summary>Subscriber private encryption key material for one key-ring entry. FR-MCP-119.</summary>
+public sealed class SubscriberEncryptionKeyMaterial
+{
+    /// <summary>Subscriber encryption key identifier that matches manifest and envelope metadata.</summary>
+    public string KeyId { get; set; } = string.Empty;
+
+    /// <summary>PEM-encoded ECDH private key used to decrypt envelopes for <see cref="KeyId"/>.</summary>
+    public string PrivateKeyPem { get; set; } = string.Empty;
 }
 
 /// <summary>

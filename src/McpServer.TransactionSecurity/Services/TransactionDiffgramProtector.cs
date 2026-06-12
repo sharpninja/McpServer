@@ -159,17 +159,29 @@ public sealed class TransactionDiffgramProtector : ITransactionDiffgramProtector
         if (!string.Equals(envelope.SubscriberPartyId, expectedSubscriberPartyId, StringComparison.OrdinalIgnoreCase))
             return Failed(TransactionFailureReason.WrongSubscriber);
 
-        var expectedKeyId = string.IsNullOrWhiteSpace(options.EncryptionKeyId)
-            ? expectedEncryptionKeyId
-            : options.EncryptionKeyId.Trim();
-        if (!string.IsNullOrWhiteSpace(expectedKeyId) &&
-            !string.Equals(envelope.SubscriberEncryptionKeyId, expectedKeyId, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrWhiteSpace(expectedEncryptionKeyId) &&
+            !string.Equals(envelope.SubscriberEncryptionKeyId, expectedEncryptionKeyId.Trim(), StringComparison.OrdinalIgnoreCase))
         {
             return Failed(TransactionFailureReason.UnknownKey);
         }
 
-        if (string.IsNullOrWhiteSpace(options.EncryptionPrivateKeyPem))
-            return Failed(TransactionFailureReason.DecryptFailed);
+        var privateKeyPem = ResolvePrivateKeyPem(options, envelope.SubscriberEncryptionKeyId);
+        if (string.IsNullOrWhiteSpace(privateKeyPem))
+        {
+            return options.EncryptionKeys.Count > 0
+                ? Failed(TransactionFailureReason.UnknownKey)
+                : Failed(TransactionFailureReason.DecryptFailed);
+        }
+
+        var configuredSingleKeyId = string.IsNullOrWhiteSpace(options.EncryptionKeyId)
+            ? null
+            : options.EncryptionKeyId.Trim();
+        if (options.EncryptionKeys.Count == 0 &&
+            !string.IsNullOrWhiteSpace(configuredSingleKeyId) &&
+            !string.Equals(envelope.SubscriberEncryptionKeyId, configuredSingleKeyId, StringComparison.OrdinalIgnoreCase))
+        {
+            return Failed(TransactionFailureReason.UnknownKey);
+        }
 
         byte[] key = [];
         byte[] rawSecret = [];
@@ -182,7 +194,7 @@ public sealed class TransactionDiffgramProtector : ITransactionDiffgramProtector
             var plaintext = new byte[ciphertext.Length];
 
             using var privateKey = ECDiffieHellman.Create();
-            privateKey.ImportFromPem(options.EncryptionPrivateKeyPem);
+            privateKey.ImportFromPem(privateKeyPem);
             using var ephemeral = ECDiffieHellman.Create();
             ephemeral.ImportFromPem(envelope.EphemeralPublicKeyPem);
             rawSecret = privateKey.DeriveRawSecretAgreement(ephemeral.PublicKey);
@@ -226,6 +238,20 @@ public sealed class TransactionDiffgramProtector : ITransactionDiffgramProtector
                 Success = false,
                 Reason = reason,
             };
+    }
+
+    private static string? ResolvePrivateKeyPem(SubscriberOptions options, string envelopeKeyId)
+    {
+        if (options.EncryptionKeys.Count == 0)
+            return options.EncryptionPrivateKeyPem;
+
+        foreach (var key in options.EncryptionKeys)
+        {
+            if (string.Equals(key.KeyId?.Trim(), envelopeKeyId, StringComparison.OrdinalIgnoreCase))
+                return key.PrivateKeyPem;
+        }
+
+        return null;
     }
 
     private static bool TryDecodeEnvelope(

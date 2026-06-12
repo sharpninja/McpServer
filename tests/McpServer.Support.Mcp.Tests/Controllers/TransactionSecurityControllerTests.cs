@@ -72,6 +72,31 @@ public sealed class TransactionSecurityControllerTests
         Assert.False(string.IsNullOrWhiteSpace(verified.ManifestHashSha256));
     }
 
+    /// <summary>Signed manifests can be read back as trace records for transaction diagnostics.</summary>
+    [Fact]
+    public async Task GetManifest_AfterSign_ReturnsPersistedTraceRecord()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+
+        var signed = await SignAsync(services.KeyServer, "txn-controller-trace", sequence: 25, nonce: "nonce-controller-trace")
+            .ConfigureAwait(true);
+        var result = await controller.GetManifestAsync("txn-controller-trace", CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var trace = Assert.IsType<TransactionManifestTraceRecord>(ok.Value);
+        Assert.Equal(signed.TransactionId, trace.TransactionId);
+        Assert.Equal(signed.TurnId, trace.TurnId);
+        Assert.Equal(signed.PublisherPartyId, trace.PublisherPartyId);
+        Assert.Equal(signed.SubscriberPartyId, trace.SubscriberPartyId);
+        Assert.Equal(signed.Signature!.KeyId, trace.SignatureKeyId);
+        Assert.Equal(signed.Signature.Value, trace.SignatureValue);
+        Assert.Equal("signed", trace.Status);
+        Assert.False(string.IsNullOrWhiteSpace(trace.ManifestHashSha256));
+    }
+
     /// <summary>Keyserver signing rejects a nonce that was already signed for the publisher/subscriber pair.</summary>
     [Fact]
     public async Task SignManifest_WithReplayNonce_ReturnsBadRequest()

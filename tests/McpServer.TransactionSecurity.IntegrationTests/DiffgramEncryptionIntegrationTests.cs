@@ -15,6 +15,7 @@ public sealed class DiffgramEncryptionIntegrationTests
     private const string PublisherPartyId = "publisher-1";
     private const string SubscriberPartyId = "subscriber-1";
     private const string SubscriberEncryptionKeyId = "subscriber-1:encryption:1";
+    private const string RotatedSubscriberEncryptionKeyId = "subscriber-1:encryption:2";
 
     /// <summary>Subscriber decrypts a protected diffgram addressed to its party/key and commits it.</summary>
     [Fact]
@@ -114,6 +115,69 @@ public sealed class DiffgramEncryptionIntegrationTests
         Assert.Equal(TransactionFailureReason.WrongSubscriber, commit.Reason);
     }
 
+    /// <summary>Subscriber key-ring rotation keeps old and current protected envelopes decryptable.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WithSubscriberEncryptionKeyRing_DecryptsOldAndRotatedKeys()
+    {
+        using var firstKeyPair = EncryptionKeyPair.Create();
+        using var rotatedKeyPair = EncryptionKeyPair.Create();
+        using var keyServer = CreateKeyServer();
+        var protector = new TransactionDiffgramProtector();
+        await RegisterStandardPartiesAsync(keyServer, firstKeyPair).ConfigureAwait(true);
+        var firstEncryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId)
+            .ConfigureAwait(true);
+        Assert.NotNull(firstEncryptionKey);
+        var firstProtectedDiffgram = protector.Protect(CreatePlaintextDiffgram("txn-key-ring-first"), firstEncryptionKey);
+        var firstManifest = await SignAsync(
+            keyServer,
+            "txn-key-ring-first",
+            sequence: 503,
+            nonce: "nonce-key-ring-first",
+            firstProtectedDiffgram.PlaintextSha256,
+            firstProtectedDiffgram.EncryptedBodySha256,
+            SubscriberEncryptionKeyId).ConfigureAwait(true);
+
+        await RegisterSubscriberAsync(keyServer, rotatedKeyPair, RotatedSubscriberEncryptionKeyId).ConfigureAwait(true);
+        var rotatedEncryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, RotatedSubscriberEncryptionKeyId)
+            .ConfigureAwait(true);
+        Assert.NotNull(rotatedEncryptionKey);
+        var rotatedProtectedDiffgram = protector.Protect(CreatePlaintextDiffgram("txn-key-ring-rotated"), rotatedEncryptionKey);
+        var rotatedManifest = await SignAsync(
+            keyServer,
+            "txn-key-ring-rotated",
+            sequence: 504,
+            nonce: "nonce-key-ring-rotated",
+            rotatedProtectedDiffgram.PlaintextSha256,
+            rotatedProtectedDiffgram.EncryptedBodySha256,
+            RotatedSubscriberEncryptionKeyId).ConfigureAwait(true);
+        using var subscriber = CreateSubscriber(
+            keyServer,
+            new[]
+            {
+                new SubscriberEncryptionKeyMaterial
+                {
+                    KeyId = SubscriberEncryptionKeyId,
+                    PrivateKeyPem = firstKeyPair.PrivateKeyPem,
+                },
+                new SubscriberEncryptionKeyMaterial
+                {
+                    KeyId = RotatedSubscriberEncryptionKeyId,
+                    PrivateKeyPem = rotatedKeyPair.PrivateKeyPem,
+                },
+            },
+            protector);
+
+        var firstCommit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(firstManifest, firstProtectedDiffgram))
+            .ConfigureAwait(true);
+        var rotatedCommit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(rotatedManifest, rotatedProtectedDiffgram))
+            .ConfigureAwait(true);
+
+        Assert.Equal("committed", firstCommit.Status);
+        Assert.Equal(TransactionFailureReason.None, firstCommit.Reason);
+        Assert.Equal("committed", rotatedCommit.Status);
+        Assert.Equal(TransactionFailureReason.None, rotatedCommit.Reason);
+    }
+
     private static InMemoryKeyServerService CreateKeyServer()
         => new(
             new FixedOptionsMonitor<KeyServerOptions>(new KeyServerOptions()),
@@ -135,6 +199,21 @@ public sealed class DiffgramEncryptionIntegrationTests
             }),
             protector);
 
+    private static InMemorySubscriberCommitService CreateSubscriber(
+        IKeyServerManifestService keyServer,
+        IReadOnlyCollection<SubscriberEncryptionKeyMaterial> encryptionKeys,
+        ITransactionDiffgramProtector protector)
+        => new(
+            keyServer,
+            new TransactionManifestCanonicalizer(),
+            new FixedOptionsMonitor<SubscriberOptions>(new SubscriberOptions
+            {
+                PartyId = SubscriberPartyId,
+                EncryptionKeys = encryptionKeys.ToList(),
+                RequireEncryptedDiffgrams = true,
+            }),
+            protector);
+
     private static async Task RegisterStandardPartiesAsync(
         IKeyServerPartyRegistry registry,
         EncryptionKeyPair subscriberKey)
@@ -150,13 +229,42 @@ public sealed class DiffgramEncryptionIntegrationTests
         }).ConfigureAwait(false);
     }
 
-    private static async Task<TransactionManifestDto> SignAsync(
+    private static Task<PartyRegistrationResponse> RegisterSubscriberAsync(
+        IKeyServerPartyRegistry registry,
+        EncryptionKeyPair subscriberKey,
+        string encryptionKeyId)
+        => registry.RegisterPartyAsync(new PartyRegistrationRequest
+        {
+            PartyId = SubscriberPartyId,
+            Role = "subscriber",
+            ActiveEncryptionKeyId = encryptionKeyId,
+            EncryptionPublicKeyPem = subscriberKey.PublicKeyPem,
+        });
+
+    private static Task<TransactionManifestDto> SignAsync(
         IKeyServerManifestService keyServer,
         string transactionId,
         long sequence,
         string nonce,
         string plaintextSha256,
         string encryptedBodySha256)
+        => SignAsync(
+            keyServer,
+            transactionId,
+            sequence,
+            nonce,
+            plaintextSha256,
+            encryptedBodySha256,
+            SubscriberEncryptionKeyId);
+
+    private static async Task<TransactionManifestDto> SignAsync(
+        IKeyServerManifestService keyServer,
+        string transactionId,
+        long sequence,
+        string nonce,
+        string plaintextSha256,
+        string encryptedBodySha256,
+        string subscriberEncryptionKeyId)
     {
         var response = await keyServer.SignManifestAsync(new TransactionManifestSignRequest
         {
@@ -164,7 +272,7 @@ public sealed class DiffgramEncryptionIntegrationTests
             TurnId = "turn-encrypted-diffgram",
             PublisherPartyId = PublisherPartyId,
             SubscriberPartyId = SubscriberPartyId,
-            SubscriberEncryptionKeyId = SubscriberEncryptionKeyId,
+            SubscriberEncryptionKeyId = subscriberEncryptionKeyId,
             Sequence = sequence,
             Nonce = nonce,
             DiffgramSha256 = plaintextSha256,

@@ -28,7 +28,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
             TokenStorePath = Path.Combine(_tempRoot, "github-token-store.json"),
         });
 
-        var dataProtection = DataProtectionProvider.Create(_tempRoot);
+        var dataProtection = DataProtectionProvider.Create(new DirectoryInfo(_tempRoot));
         _sut = new FileGitHubWorkspaceTokenStore(options, dataProtection, NullLogger<FileGitHubWorkspaceTokenStore>.Instance);
     }
 

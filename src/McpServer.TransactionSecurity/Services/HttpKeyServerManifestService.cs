@@ -45,6 +45,28 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
             },
             cancellationToken).ConfigureAwait(false);
 
+    /// <inheritdoc />
+    public async Task<TransactionManifestTraceRecord?> GetManifestAsync(
+        string transactionId,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(transactionId))
+            return null;
+
+        try
+        {
+            return await _http
+                .GetFromJsonAsync<TransactionManifestTraceRecord>(
+                    $"mcpserver/keyserver/manifests/{Uri.EscapeDataString(transactionId.Trim())}",
+                    cancellationToken)
+                .ConfigureAwait(false);
+        }
+        catch (Exception ex) when ((ex is HttpRequestException || ex is TaskCanceledException) && !cancellationToken.IsCancellationRequested)
+        {
+            return null;
+        }
+    }
+
     private async Task<TResponse> PostAsync<TRequest, TResponse>(
         string path,
         TRequest request,
