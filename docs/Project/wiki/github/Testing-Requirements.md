@@ -422,7 +422,7 @@ Given audited copilot decoration, when invoke and streaming operations execute, 
 
 ### TEST-MCP-087
 
-Given ingestion options without the required new-project allowlist patterns, when host configuration post-processing runs, then `src/McpServer.Cqrs`, `src/McpServer.Cqrs.Mvvm`, `src/McpServer.UI.Core`, and `src/McpServer.Director` glob patterns are enforced; marker prompt output includes the Available Capabilities section for these projects.
+Given ingestion options and marker prompt generation for this repository, when host configuration post-processing runs, then repo-local src/McpServer.Cqrs and src/McpServer.Cqrs.Mvvm glob patterns are enforced, and marker output includes the Available Capabilities section without McpServer.UI.Core or McpServer.Director entries.
 
 
 ### TEST-MCP-088

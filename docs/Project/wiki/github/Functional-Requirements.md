@@ -262,9 +262,7 @@ Agents must follow a session continuity protocol: at session start, read the mar
 
 ## FR-MCP-039 MCP Context Indexing for New Projects
 
-All source files from `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.UI.Core`, and `McpServer.Director` shall be indexed into the MCP context store for semantic search. The marker prompt lists these projects in the Available Capabilities section.
-
-**Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` allowlist merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `templates/prompt-templates.yaml` (default-marker-prompt)
+Repo-local source files from McpServer.Cqrs and McpServer.Cqrs.Mvvm shall be indexed into the MCP context store for semantic search. McpServer.UI.Core and McpServer.Director have moved to the separate McpServerManager repository and must not be advertised as indexed capabilities in this repository marker.
 
 ## FR-MCP-040 Requirements Document CRUD Management
 

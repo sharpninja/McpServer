@@ -632,5 +632,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-171 | 🟡 Partial | Testing-Requirements.md |
 | TEST-MCP-172 | 🟡 Partial | Testing-Requirements.md |
 | TEST-MCP-173 | 🟡 Partial | Testing-Requirements.md |
-| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TEST-MCP-REQACPLUGIN-CAPTURE | Tracked | Testing-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

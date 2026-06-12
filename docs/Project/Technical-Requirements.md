@@ -413,7 +413,7 @@ Package publication SHALL be branch-conditional: `main` publishes to `nuget.org`
 
 ## TR-MCP-CTX-001
 
-**New Project Context Indexing** — Ingestion configuration must include `src/McpServer.Cqrs/**/*.cs`, `src/McpServer.Cqrs.Mvvm/**/*.cs`, `src/McpServer.UI.Core/**/*.cs`, and `src/McpServer.Director/**/*.cs` in file patterns. Marker prompt Available Capabilities section lists all four projects with descriptions.
+**New Project Context Indexing** — Ingestion configuration must include the repo-local `src/McpServer.Cqrs/**/*.cs` and `src/McpServer.Cqrs.Mvvm/**/*.cs` file patterns. Marker prompt Available Capabilities section lists only these repo-local core libraries; `McpServer.UI.Core` and `McpServer.Director` moved to `McpServerManager`.
 **Status:** ✅ Complete
 
 **Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` required-pattern merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `MarkerFileService.DefaultPromptTemplate`

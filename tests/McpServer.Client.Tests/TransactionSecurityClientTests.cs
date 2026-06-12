@@ -42,6 +42,7 @@ public sealed class TransactionSecurityClientTests
             ActiveSigningKeyId = "sign-1",
             ActiveEncryptionKeyId = "enc-1",
             SigningPublicKeyPem = "-----BEGIN PUBLIC KEY-----",
+            SigningPrivateKeyPem = "-----BEGIN PRIVATE KEY-----",
             EncryptionPublicKeyPem = "-----BEGIN PUBLIC KEY-----"
         });
 
@@ -49,6 +50,7 @@ public sealed class TransactionSecurityClientTests
         Assert.Contains("/mcpserver/keyserver/parties", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("\"partyId\":\"publisher-1\"", handler.LastRequestBody);
         Assert.Contains("\"activeSigningKeyId\":\"sign-1\"", handler.LastRequestBody);
+        Assert.Contains("\"signingPrivateKeyPem\":\"-----BEGIN PRIVATE KEY-----\"", handler.LastRequestBody);
         Assert.Equal("publisher-1", result.PartyId);
         Assert.Equal("active", result.Status);
     }

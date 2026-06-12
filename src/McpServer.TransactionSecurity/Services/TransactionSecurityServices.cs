@@ -193,7 +193,7 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
         var signingKeyId = NormalizeKeyId(request.ActiveSigningKeyId, partyId, "signing");
         var encryptionKeyId = NormalizeKeyId(request.ActiveEncryptionKeyId, partyId, "encryption");
         var status = NormalizeStatus(request.Status);
-        var signingKey = CreateSigningKey(request.SigningPublicKeyPem);
+        var signingKey = CreateSigningKey(request.SigningPublicKeyPem, request.SigningPrivateKeyPem);
         var encryptionPublicKeyPem = string.IsNullOrWhiteSpace(request.EncryptionPublicKeyPem)
             ? CreateEncryptionPublicKeyPem()
             : request.EncryptionPublicKeyPem.Trim();
@@ -619,13 +619,43 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
             ExpiresAtUtc = descriptor.ExpiresAtUtc,
         };
 
-    private static GeneratedSigningKey CreateSigningKey(string? suppliedPublicKeyPem)
+    private static GeneratedSigningKey CreateSigningKey(string? suppliedPublicKeyPem, string? suppliedPrivateKeyPem)
     {
+        if (!string.IsNullOrWhiteSpace(suppliedPrivateKeyPem))
+        {
+            var importedPrivateKey = ECDsa.Create();
+            try
+            {
+                importedPrivateKey.ImportFromPem(suppliedPrivateKeyPem.Trim());
+                var publicKeyPem = importedPrivateKey.ExportSubjectPublicKeyInfoPem();
+                if (!string.IsNullOrWhiteSpace(suppliedPublicKeyPem) &&
+                    !PublicKeysMatch(suppliedPublicKeyPem, publicKeyPem))
+                    throw new ArgumentException("Signing public key does not match the supplied signing private key.", nameof(suppliedPublicKeyPem));
+
+                return new GeneratedSigningKey(publicKeyPem, importedPrivateKey);
+            }
+            catch
+            {
+                importedPrivateKey.Dispose();
+                throw;
+            }
+        }
+
         if (!string.IsNullOrWhiteSpace(suppliedPublicKeyPem))
             return new GeneratedSigningKey(suppliedPublicKeyPem.Trim(), null);
 
-        var key = ECDsa.Create(ECCurve.NamedCurves.nistP256);
-        return new GeneratedSigningKey(key.ExportSubjectPublicKeyInfoPem(), key);
+        var generatedPrivateKey = ECDsa.Create(ECCurve.NamedCurves.nistP256);
+        return new GeneratedSigningKey(generatedPrivateKey.ExportSubjectPublicKeyInfoPem(), generatedPrivateKey);
+    }
+
+    private static bool PublicKeysMatch(string suppliedPublicKeyPem, string derivedPublicKeyPem)
+    {
+        using var suppliedPublicKey = ECDsa.Create();
+        suppliedPublicKey.ImportFromPem(suppliedPublicKeyPem.Trim());
+        using var derivedPublicKey = ECDsa.Create();
+        derivedPublicKey.ImportFromPem(derivedPublicKeyPem);
+        return suppliedPublicKey.ExportSubjectPublicKeyInfo().AsSpan()
+            .SequenceEqual(derivedPublicKey.ExportSubjectPublicKeyInfo());
     }
 
     private static string CreateEncryptionPublicKeyPem()

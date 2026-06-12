@@ -1,10 +1,10 @@
 # Turn Transactions Design Round 2
 
-Status: Phase 0 implementable design artifact, updated after the durable-storage and protected-envelope crypto slices
+Status: Phase 0 implementable design artifact, updated after the durable-storage, protected-envelope crypto, and external signing-key material slices
 
 Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNDESIGN-001
 
-Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/McpServer.TransactionSecurity`, Support.Mcp compatibility controllers under `src/McpServer.Support.Mcp`, public DTO/client contracts under `src/McpServer.Client`, separate hosts under `src/McpServer.KeyServer` and `src/McpServer.Subscriber`, real separate-host integration coverage under `tests/McpServer.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, and a test-only aiUnit plan-review gate under `tests/McpServer.PlanReview.Tests`. External key material management, manifest persistence, key rotation, external pub-sub, global mutation adapters, and recovery/degraded rollback smoke coverage are deferred.
+Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/McpServer.TransactionSecurity`, Support.Mcp compatibility controllers under `src/McpServer.Support.Mcp`, public DTO/client contracts under `src/McpServer.Client`, separate hosts under `src/McpServer.KeyServer` and `src/McpServer.Subscriber`, real separate-host integration coverage under `tests/McpServer.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, external key material support for subscriber private ECDH decrypt keys and keyserver publisher signing private PEM re-provisioning, and a test-only aiUnit plan-review gate under `tests/McpServer.PlanReview.Tests`. Manifest persistence, key rotation, external pub-sub, global mutation adapters, and recovery/degraded rollback smoke coverage are deferred.
 
 ## Public DTOs
 

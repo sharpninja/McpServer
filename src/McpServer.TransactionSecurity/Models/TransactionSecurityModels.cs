@@ -25,6 +25,10 @@ public sealed class PartyRegistrationRequest
     [JsonPropertyName("signingPublicKeyPem")]
     public string? SigningPublicKeyPem { get; set; }
 
+    /// <summary>Optional PEM-encoded ECDSA private key used by the keyserver to sign manifests for this party.</summary>
+    [JsonPropertyName("signingPrivateKeyPem")]
+    public string? SigningPrivateKeyPem { get; set; }
+
     /// <summary>Optional PEM-encoded encryption public key.</summary>
     [JsonPropertyName("encryptionPublicKeyPem")]
     public string? EncryptionPublicKeyPem { get; set; }

@@ -31,12 +31,12 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
-    /// Verifies that the marker prompt template includes the Available Capabilities section and expected project entries.
+    /// Verifies that the marker prompt template includes the Available Capabilities section and repo-local project entries.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-087, FR-MCP-039, TR-MCP-CTX-001.
-    /// Test data: <c>templates\prompt-templates.yaml</c> and known capability bullet strings for indexed projects.
-    /// This data is used to confirm marker prompt output advertises indexed libraries required for context retrieval.
+    /// Test data: <c>templates\prompt-templates.yaml</c> and known capability bullet strings for indexed repo-local projects.
+    /// This data is used to confirm marker prompt output advertises indexed libraries that still live in this repository.
     /// </remarks>
     [Fact]
     public void MarkerPromptTemplate_ContainsAvailableCapabilitiesSection()
@@ -47,8 +47,8 @@ public sealed class IngestionAllowlistContractTests
         Assert.Contains("## Available Capabilities", content);
         Assert.Contains("- McpServer.Cqrs (CQRS framework)", content);
         Assert.Contains("- McpServer.Cqrs.Mvvm (MVVM support)", content);
-        Assert.Contains("- McpServer.UI.Core (Core UI logic)", content);
-        Assert.Contains("- McpServer.Director (Director CLI)", content);
+        Assert.DoesNotContain("- McpServer.UI.Core (Core UI logic)", content);
+        Assert.DoesNotContain("- McpServer.Director (Director CLI)", content);
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
@@ -16,6 +17,7 @@ public sealed class DurableTransactionSecurityStorageTests
 {
     private const string PublisherPartyId = "publisher-1";
     private const string SubscriberPartyId = "subscriber-1";
+    private const string ExternalPublisherSigningKeyId = "publisher-1:signing:external";
 
     /// <summary>Keyserver public descriptors and audit rows survive service recreation.</summary>
     [Fact]
@@ -51,6 +53,98 @@ public sealed class DurableTransactionSecurityStorageTests
         Assert.Contains(audit, entry => entry.EventName == "keyserver.party.registered");
         Assert.Contains(audit, entry => entry.EventName == "keyserver.manifest.signed");
         Assert.Contains(audit, entry => entry.EventName == "keyserver.manifest.verified");
+    }
+
+    /// <summary>Externally supplied signing private material can be re-provisioned after service recreation.</summary>
+    [Fact]
+    public async Task KeyServerSqliteStore_ReprovisionsExternalSigningPrivateKeyAfterServiceRecreation()
+    {
+        using var workspace = TempWorkspace.Create();
+        using var signingKey = SigningKeyPair.Create();
+        var databasePath = workspace.GetPath("keyserver-external-signing.db");
+        TransactionManifestDto firstManifest;
+
+        using (var keyServer = CreateKeyServer(databasePath))
+        {
+            await RegisterExternalSigningPublisherAsync(keyServer, signingKey).ConfigureAwait(true);
+            await RegisterSubscriberAsync(keyServer).ConfigureAwait(true);
+            firstManifest = await SignManifestAsync(
+                keyServer,
+                "txn-external-signing-first",
+                500,
+                "nonce-external-signing-first",
+                ExternalPublisherSigningKeyId).ConfigureAwait(true);
+        }
+
+        using (var recreatedWithoutMaterial = CreateKeyServer(databasePath))
+        {
+            var descriptor = await recreatedWithoutMaterial.GetPartyKeyAsync(PublisherPartyId, ExternalPublisherSigningKeyId)
+                .ConfigureAwait(true);
+            var missingPrivateMaterial = await recreatedWithoutMaterial.SignManifestAsync(
+                new TransactionManifestSignRequest
+                {
+                    TransactionId = "txn-external-signing-missing-private",
+                    TurnId = "turn-external-key-material",
+                    PublisherPartyId = PublisherPartyId,
+                    PublisherSigningKeyId = ExternalPublisherSigningKeyId,
+                    SubscriberPartyId = SubscriberPartyId,
+                    Sequence = 501,
+                    Nonce = "nonce-external-signing-missing-private",
+                    DiffgramSha256 = Sha256Hex("plain-diffgram"),
+                    EncryptedBodySha256 = Sha256Hex("encrypted-diffgram"),
+                }).ConfigureAwait(true);
+            var verifyExisting = await recreatedWithoutMaterial.VerifyManifestAsync(
+                new TransactionManifestVerifyRequest
+                {
+                    Manifest = firstManifest,
+                    ExpectedSubscriberPartyId = SubscriberPartyId,
+                }).ConfigureAwait(true);
+
+            Assert.NotNull(descriptor);
+            Assert.Equal(signingKey.PublicKeyPem, descriptor.PublicKeyPem);
+            Assert.False(missingPrivateMaterial.Success);
+            Assert.Equal(TransactionFailureReason.UnknownKey, missingPrivateMaterial.Reason);
+            Assert.True(verifyExisting.IsValid);
+        }
+
+        using var recreatedWithMaterial = CreateKeyServer(databasePath);
+        var registration = await RegisterExternalSigningPublisherAsync(recreatedWithMaterial, signingKey).ConfigureAwait(true);
+        var secondManifest = await SignManifestAsync(
+            recreatedWithMaterial,
+            "txn-external-signing-second",
+            501,
+            "nonce-external-signing-second",
+            ExternalPublisherSigningKeyId).ConfigureAwait(true);
+        var publicDescriptor = await recreatedWithMaterial.GetPartyKeyAsync(PublisherPartyId, ExternalPublisherSigningKeyId)
+            .ConfigureAwait(true);
+        var registrationJson = JsonSerializer.Serialize(registration);
+
+        Assert.Equal(ExternalPublisherSigningKeyId, secondManifest.PublisherSigningKeyId);
+        Assert.NotNull(publicDescriptor);
+        Assert.Equal(signingKey.PublicKeyPem, publicDescriptor.PublicKeyPem);
+        Assert.DoesNotContain("PRIVATE KEY", registrationJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>Registration rejects mismatched public/private signing material instead of publishing a false descriptor.</summary>
+    [Fact]
+    public async Task RegisterParty_WithConflictingExternalSigningPublicKey_Throws()
+    {
+        using var privateMaterial = SigningKeyPair.Create();
+        using var conflictingPublicMaterial = SigningKeyPair.Create();
+        using var keyServer = CreateKeyServer();
+
+        var exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => keyServer.RegisterPartyAsync(
+                new PartyRegistrationRequest
+                {
+                    PartyId = PublisherPartyId,
+                    Role = "publisher",
+                    ActiveSigningKeyId = ExternalPublisherSigningKeyId,
+                    SigningPrivateKeyPem = privateMaterial.PrivateKeyPem,
+                    SigningPublicKeyPem = conflictingPublicMaterial.PublicKeyPem,
+                })).ConfigureAwait(true);
+
+        Assert.Contains("does not match", exception.Message, StringComparison.Ordinal);
     }
 
     /// <summary>Keyserver replay nonce and sequence cursors survive SQLite store recreation.</summary>
@@ -218,8 +312,47 @@ public sealed class DurableTransactionSecurityStorageTests
     {
         await registry.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = PublisherPartyId, Role = "publisher" })
             .ConfigureAwait(false);
-        await registry.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = SubscriberPartyId, Role = "subscriber" })
-            .ConfigureAwait(false);
+        await RegisterSubscriberAsync(registry).ConfigureAwait(false);
+    }
+
+    private static Task<PartyRegistrationResponse> RegisterExternalSigningPublisherAsync(
+        IKeyServerPartyRegistry registry,
+        SigningKeyPair signingKey)
+        => registry.RegisterPartyAsync(
+            new PartyRegistrationRequest
+            {
+                PartyId = PublisherPartyId,
+                Role = "publisher",
+                ActiveSigningKeyId = ExternalPublisherSigningKeyId,
+                SigningPrivateKeyPem = signingKey.PrivateKeyPem,
+            });
+
+    private static Task<PartyRegistrationResponse> RegisterSubscriberAsync(IKeyServerPartyRegistry registry)
+        => registry.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = SubscriberPartyId, Role = "subscriber" });
+
+    private static async Task<TransactionManifestDto> SignManifestAsync(
+        IKeyServerManifestService keyServer,
+        string transactionId,
+        long sequence,
+        string nonce,
+        string publisherSigningKeyId)
+    {
+        var response = await keyServer.SignManifestAsync(new TransactionManifestSignRequest
+        {
+            TransactionId = transactionId,
+            TurnId = "turn-durable-storage",
+            PublisherPartyId = PublisherPartyId,
+            PublisherSigningKeyId = publisherSigningKeyId,
+            SubscriberPartyId = SubscriberPartyId,
+            Sequence = sequence,
+            Nonce = nonce,
+            DiffgramSha256 = Sha256Hex("plain-diffgram"),
+            EncryptedBodySha256 = Sha256Hex("encrypted-diffgram"),
+        }).ConfigureAwait(false);
+
+        Assert.True(response.Success);
+        Assert.NotNull(response.Manifest);
+        return response.Manifest;
     }
 
     private static async Task<TransactionManifestDto> SignManifestAsync(
@@ -293,6 +426,28 @@ public sealed class DurableTransactionSecurityStorageTests
         public void Dispose()
         {
         }
+    }
+
+    private sealed class SigningKeyPair : IDisposable
+    {
+        private readonly ECDsa _key;
+
+        private SigningKeyPair(ECDsa key)
+        {
+            _key = key;
+            PublicKeyPem = key.ExportSubjectPublicKeyInfoPem();
+            PrivateKeyPem = key.ExportPkcs8PrivateKeyPem();
+        }
+
+        public string PublicKeyPem { get; }
+
+        public string PrivateKeyPem { get; }
+
+        public static SigningKeyPair Create()
+            => new(ECDsa.Create(ECCurve.NamedCurves.nistP256));
+
+        public void Dispose()
+            => _key.Dispose();
     }
 
     private sealed class TempWorkspace : IDisposable

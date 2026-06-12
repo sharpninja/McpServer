@@ -240,7 +240,7 @@ Repo annotations:
 
 The implementation follows the imported hardened option:
 
-- Hybrid authenticated encryption: ECDH plus AEAD. Protected subscriber diffgram envelopes are implemented with ECDH P-256, HKDF-SHA256, and AES-256-GCM, and the coordinator can hand off protected envelopes for configured subscriber keys; external key material management, key rotation, and global mutation-adapter encrypted handoff remain deferred.
+- Hybrid authenticated encryption: ECDH plus AEAD. Protected subscriber diffgram envelopes are implemented with ECDH P-256, HKDF-SHA256, and AES-256-GCM; subscriber private ECDH decrypt keys are supplied from external configuration; the keyserver can import externally supplied publisher ECDSA signing private keys and re-provision them after service recreation without storing private material in SQLite; and the coordinator can hand off protected envelopes for configured subscriber keys. Key rotation and global mutation-adapter encrypted handoff remain deferred.
 - Nonces, sequence numbers, timestamps, and expiry on diffgrams/manifests. Keyserver signing/verification and subscriber commit now enforce replay nonce and monotonic sequence scopes; broader recovery, adapter, and operational stress coverage remains deferred.
 - 3PKS signed transaction manifest at start.
 - Strict SHA verification and signature checks on every diffgram. Current coverage validates manifest signatures, encrypted-body SHA-256 before decrypt, and plaintext SHA-256 after decrypt for protected subscriber envelopes.
@@ -256,4 +256,4 @@ The implementation follows the imported hardened option:
 - Shared transaction-security core: `src/McpServer.TransactionSecurity`.
 - Shared client contracts: existing `src/McpServer.Client`.
 - Focused first-slice tests: MCP support/client test projects plus `tests/McpServer.TransactionSecurity.IntegrationTests`.
-- Deferred adapters: external key material management, key rotation, full external pub-sub, global mutation-adapter encrypted handoff, and global mutation adapters for all write surfaces.
+- Deferred adapters: key rotation, full external pub-sub, global mutation-adapter encrypted handoff, global mutation adapters for all write surfaces, and production operational automation for external key provisioning.

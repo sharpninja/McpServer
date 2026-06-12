@@ -182,8 +182,6 @@ var requiredRepoAllowlistPatterns = new[]
 {
     "src/McpServer.Cqrs/**/*.cs",
     "src/McpServer.Cqrs.Mvvm/**/*.cs",
-    "src/McpServer.UI.Core/**/*.cs",
-    "src/McpServer.Director/**/*.cs",
     "docs/README.md",
     "docs/MCP-SERVER.md",
     "docs/USER-GUIDE.md",

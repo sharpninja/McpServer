@@ -653,10 +653,6 @@ templates:
 
       - McpServer.Cqrs.Mvvm (MVVM support)
 
-      - McpServer.UI.Core (Core UI logic)
-
-      - McpServer.Director (Director CLI)
-
 
       ---
 
