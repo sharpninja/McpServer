@@ -350,3 +350,19 @@ public sealed class DialogAppendResult
     [JsonPropertyName("totalDialogCount")]
     public int TotalDialogCount { get; set; }
 }
+
+/// <summary>FR-SUPPORT-010E: Result of the stateless open-session lifecycle call.</summary>
+public sealed class SessionLifecycleOpenResult
+{
+    /// <summary>Agent source type.</summary>
+    [JsonPropertyName("agent")]
+    public string? Agent { get; set; }
+
+    /// <summary>Session identifier.</summary>
+    [JsonPropertyName("sessionId")]
+    public string? SessionId { get; set; }
+
+    /// <summary>True when the call created the session; false when it already existed.</summary>
+    [JsonPropertyName("created")]
+    public bool Created { get; set; }
+}

@@ -362,6 +362,34 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <inheritdoc />
+    public async Task<bool> OpenSessionAsync(string sourceType, string sessionId, string? title = null, string? model = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        SyncDbWorkspaceFromContext();
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+
+        var exists = await _db.SessionLogs
+            .AnyAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken)
+            .ConfigureAwait(false);
+        if (exists)
+            return false;
+
+        await SubmitAsync(new UnifiedSessionLogDto
+        {
+            SourceType = sourceType,
+            SessionId = sessionId,
+            Title = title,
+            Model = model,
+            Status = "in_progress",
+        }, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
+        return true;
+    }
+
+    /// <inheritdoc />
     public async Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
     {
         SyncDbWorkspaceFromContext();
@@ -572,15 +600,19 @@ public sealed class SessionLogService : ISessionLogService
 
     private static void MapDtoToEntity(UnifiedSessionLogDto dto, SessionLogEntity entity)
     {
-        entity.Title = dto.Title;
-        entity.Model = dto.Model;
-        entity.AgentDefinitionId = dto.AgentDefinitionId;
-        entity.Started = ParseDateTimeOffset(dto.Started);
-        entity.LastUpdated = ParseDateTimeOffset(dto.LastUpdated);
-        entity.Status = dto.Status;
-        entity.TurnCount = dto.TurnCount;
-        entity.TotalTokens = dto.TotalTokens;
-        entity.CursorSessionLabel = dto.CursorSessionLabel;
+        // FR-SUPPORT-010F: ADDITIVE merge. Agents routinely send partial session
+        // payloads (e.g. a bare status-only close); omitted (null) fields must
+        // never clobber existing values. TurnCount/Started/LastUpdated are
+        // recomputed from turns by RefreshSessionSummaryFromTurns after mapping.
+        if (dto.Title is not null) entity.Title = dto.Title;
+        if (dto.Model is not null) entity.Model = dto.Model;
+        if (dto.AgentDefinitionId is not null) entity.AgentDefinitionId = dto.AgentDefinitionId;
+        if (ParseDateTimeOffset(dto.Started) is { } started) entity.Started = started;
+        if (ParseDateTimeOffset(dto.LastUpdated) is { } lastUpdated) entity.LastUpdated = lastUpdated;
+        if (dto.Status is not null) entity.Status = dto.Status;
+        if (dto.TurnCount > 0) entity.TurnCount = dto.TurnCount;
+        if (dto.TotalTokens is not null) entity.TotalTokens = dto.TotalTokens;
+        if (dto.CursorSessionLabel is not null) entity.CursorSessionLabel = dto.CursorSessionLabel;
 
         if (dto.CopilotStatistics is { } stats)
         {
@@ -650,7 +682,9 @@ public sealed class SessionLogService : ISessionLogService
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {
-                UpdateEntryFromDto(existingEntry, dto);
+                // FR-SUPPORT-010F: whole-session submit merges turns additively -
+                // omitted turn fields never clobber previously persisted values.
+                UpdateEntryFromDto(existingEntry, dto, mergeOmittedFields: true);
             }
             else
             {

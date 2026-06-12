@@ -82,6 +82,10 @@ public sealed class FederatedSessionLogService : ISessionLogService
         => _inner.UpsertTurnAsync(sourceType, sessionId, turn, cancellationToken);
 
     /// <inheritdoc />
+    public Task<bool> OpenSessionAsync(string sourceType, string sessionId, string? title = null, string? model = null, CancellationToken cancellationToken = default)
+        => _inner.OpenSessionAsync(sourceType, sessionId, title, model, cancellationToken);
+
+    /// <inheritdoc />
     public Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
         => _inner.RepairWorkspaceStampsAsync(dryRun, cancellationToken);
 

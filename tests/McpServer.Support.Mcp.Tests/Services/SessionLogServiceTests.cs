@@ -1458,6 +1458,97 @@ public sealed class SessionLogServiceTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// FR-SUPPORT-010F: whole-session submit is ADDITIVE. Omitted session scalars
+    /// (title, model) survive a partial submit; supplied scalars update.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_PartialSessionPayload_PreservesOmittedSessionScalars()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "additive-session");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            var full = CreateTestDto("ClaudeCode", sessionId, title: "Original title");
+            full.Model = "claude-fable-5";
+            await sut1.SubmitAsync(full).ConfigureAwait(true);
+        }
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            await sut2.SubmitAsync(new UnifiedSessionLogDto
+            {
+                SourceType = "ClaudeCode",
+                SessionId = sessionId,
+                Status = "completed"
+            }).ConfigureAwait(true);
+
+            var stored = await db2.SessionLogs.IgnoreQueryFilters()
+                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+            Assert.Equal("completed", stored.Status);
+            Assert.Equal("Original title", stored.Title);
+            Assert.Equal("claude-fable-5", stored.Model);
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010F: re-submitting an existing turn through whole-session submit
+    /// merges instead of clobbering - omitted turn scalars (response, queryText)
+    /// survive; previously appended collections survive.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_SparseTurnInSessionPayload_PreservesOmittedTurnFields()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "additive-turn");
+        const string requestId = "req-20260211T100100Z-entry-001";
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            var full = CreateTestDto("ClaudeCode", sessionId);
+            full.Turns![0].Response = "Original response";
+            full.Turns[0].Interpretation = "Original interpretation";
+            full.Turns[0].DesignDecisions = ["Decision: keep data."];
+            await sut1.SubmitAsync(full).ConfigureAwait(true);
+        }
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            await sut2.SubmitAsync(new UnifiedSessionLogDto
+            {
+                SourceType = "ClaudeCode",
+                SessionId = sessionId,
+                Turns =
+                [
+                    new UnifiedRequestEntryDto
+                    {
+                        RequestId = requestId,
+                        Status = "completed",
+                        Tags = ["wrap-up"]
+                    }
+                ]
+            }).ConfigureAwait(true);
+
+            var turn = await db2.SessionLogTurns.IgnoreQueryFilters()
+                .Include(t => t.Tags)
+                .Include(t => t.StringListItems)
+                .FirstAsync(t => t.RequestId == requestId).ConfigureAwait(true);
+            Assert.Equal("completed", turn.Status);
+            Assert.Equal("Original response", turn.Response);
+            Assert.Equal("Original interpretation", turn.Interpretation);
+            Assert.Equal("How do I configure EF Core?", turn.QueryText);
+            Assert.Contains(turn.StringListItems, s => s.ListType == "DesignDecision" && s.Value == "Decision: keep data.");
+            Assert.Contains(turn.Tags, t => t.Tag == "wrap-up");
+        }
+    }
+
     private static void DriftTurnRows(SqliteConnection connection, string sessionId, bool driftGrandchildren = false)
     {
         EnsureWorkspaceRow(connection, DriftedWorkspacePath);

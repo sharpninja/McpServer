@@ -459,6 +459,163 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     private sealed record RepairWorkspaceStampsResult(int Repaired);
 
+    #region Phase 1a - stateless session lifecycle (FR-SUPPORT-010E)
+
+    /// <summary>
+    /// FR-SUPPORT-010E: open is an idempotent ensure-session keyed by
+    /// (agent, sessionId); calling it twice yields one session and 200 both times.
+    /// </summary>
+    [Fact]
+    public async Task OpenSession_Twice_IsIdempotent()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"open-{Guid.NewGuid():N}");
+        var body = new { title = "Lifecycle open", model = "claude-fable-5" };
+
+        var first = await _client.PostAsJsonAsync(LifecycleUri($"ClaudeCode/{sessionId}/open"), body).ConfigureAwait(true);
+        var second = await _client.PostAsJsonAsync(LifecycleUri($"ClaudeCode/{sessionId}/open"), body).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, first.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+
+        var query = await _client.GetFromJsonAsync<SessionLogQueryResult>(
+            new Uri($"/mcpserver/sessionlog?agent=ClaudeCode", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Single(query!.Items, s => s.SessionId == sessionId);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010E: begin creates an in_progress turn keyed by
+    /// (agent, sessionId, requestId) with no in-process server state.
+    /// </summary>
+    [Fact]
+    public async Task BeginTurn_CreatesInProgressTurn()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"begin-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId).ConfigureAwait(true);
+        var requestId = NewRequestId("begin");
+
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
+            new { queryTitle = "Begin turn", queryText = "lifecycle begin" }).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var fetched = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
+            new Uri($"/mcpserver/sessionlog/ClaudeCode/{sessionId}", UriKind.Relative)).ConfigureAwait(true);
+        var turn = Assert.Single(fetched!.Turns!);
+        Assert.Equal(requestId, turn.RequestId);
+        Assert.Equal("in_progress", turn.Status);
+    }
+
+    /// <summary>FR-SUPPORT-010E: begin on a missing session maps to 404.</summary>
+    [Fact]
+    public async Task BeginTurn_SessionMissing_Returns404()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"missing-{Guid.NewGuid():N}");
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{NewRequestId("orphan")}/begin"),
+            new { queryTitle = "x" }).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010E: complete merges the payload onto the existing turn and
+    /// finalizes it; audit evidence (decision/action/commit) satisfies the
+    /// terminal-turn compliance gate, and omitted fields (queryText) survive.
+    /// </summary>
+    [Fact]
+    public async Task CompleteTurn_WithEvidence_FinalizesTurn()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"complete-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId).ConfigureAwait(true);
+        var requestId = NewRequestId("complete");
+        await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
+            new { queryTitle = "Work", queryText = "do work" }).ConfigureAwait(true);
+
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/complete"),
+            new UnifiedRequestEntryDto
+            {
+                Response = "done",
+                DesignDecisions = ["Decision: lifecycle endpoints are stateless."]
+            }).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var fetched = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
+            new Uri($"/mcpserver/sessionlog/ClaudeCode/{sessionId}", UriKind.Relative)).ConfigureAwait(true);
+        var turn = Assert.Single(fetched!.Turns!);
+        Assert.Equal("completed", turn.Status);
+        Assert.Equal("done", turn.Response);
+        Assert.Equal("do work", turn.QueryText);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010E: complete without any decision/action/commit evidence is
+    /// rejected by the terminal-turn compliance gate with 400.
+    /// </summary>
+    [Fact]
+    public async Task CompleteTurn_WithoutEvidence_Returns400()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"complete400-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId).ConfigureAwait(true);
+        var requestId = NewRequestId("noevidence");
+        await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
+            new { queryTitle = "Work" }).ConfigureAwait(true);
+
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/complete"),
+            new UnifiedRequestEntryDto { Response = "done" }).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010E: fail finalizes the turn as failed, records the failure
+    /// note, and still honors the compliance gate via supplied evidence.
+    /// </summary>
+    [Fact]
+    public async Task FailTurn_SetsFailedStatusWithNote()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"fail-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId).ConfigureAwait(true);
+        var requestId = NewRequestId("fail");
+        await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
+            new { queryTitle = "Doomed work" }).ConfigureAwait(true);
+
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/fail"),
+            new UnifiedRequestEntryDto
+            {
+                FailureNote = "dependency missing",
+                DesignDecisions = ["Decision: abort; dependency missing."]
+            }).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var fetched = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
+            new Uri($"/mcpserver/sessionlog/ClaudeCode/{sessionId}", UriKind.Relative)).ConfigureAwait(true);
+        var turn = Assert.Single(fetched!.Turns!);
+        Assert.Equal("failed", turn.Status);
+        Assert.Equal("dependency missing", turn.FailureNote);
+    }
+
+    private async Task OpenSessionAsync(string sessionId)
+    {
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/open"),
+            new { title = "Lifecycle test session", model = "claude-fable-5" }).ConfigureAwait(true);
+        response.EnsureSuccessStatusCode();
+    }
+
+    private static Uri LifecycleUri(string suffix) =>
+        new($"/mcpserver/sessionlog/{suffix}", UriKind.Relative);
+
+    private static string NewRequestId(string slug) =>
+        $"req-{DateTime.UtcNow:yyyyMMddTHHmmss}Z-{slug}-{Guid.NewGuid().ToString("N")[..12]}";
+
+    #endregion
+
     private static UnifiedSessionLogDto CreateTestDto(string sourceType, string sessionId)
     {
         return new UnifiedSessionLogDto
