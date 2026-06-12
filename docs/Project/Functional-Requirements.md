@@ -1034,3 +1034,188 @@ The Codex MCP plugin wrapper SHALL return successful workflow responses promptly
 **Status:** ✅ Complete
 
 **Covered by:** `Invoke-CodexMcpPlugin.ps1`, `tests/plugin-helpers.bats`
+
+## FR-MCP-118 Keyserver trust service
+
+McpServer shall provide a keyserver service that registers trusted parties, manages public key metadata, signs transaction manifests, verifies signed manifests, rejects invalid or replayed manifests, and persists audit records without exposing private key material.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR118-001: Register publisher, subscriber, arbiter, and future model parties with party ID, role, active signing key ID, active encryption key ID, status, created UTC, and audit metadata.
+- [x] AC-FR118-002: Keyserver signing never returns, serializes, or logs private key material.
+- [x] AC-FR118-003: Manifest signing binds transaction ID, turn ID, publisher party, subscriber party, key IDs, sequence, nonce, issued UTC, expiry UTC, algorithms, diffgram SHA-256, and encrypted body SHA-256.
+- [x] AC-FR118-004: Manifest verification succeeds for an unchanged canonical payload and valid keyserver signature.
+- [ ] AC-FR118-005: Verification rejects unknown parties, disabled parties, unknown keys, disabled keys, expired manifests, replayed nonces, stale sequences, malformed signatures, and hash mismatches.
+- [ ] AC-FR118-006: Rejections return deterministic machine-readable reason codes and are audit logged.
+- [ ] AC-FR118-007: Key rotation supports a new active key while retaining old public keys for verification until expiry.
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Support.Mcp/Controllers/KeyServerController.cs`, `tests/McpServer.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs`
+
+**Slice 1 scope:** Implemented in-process under `src/McpServer.Support.Mcp` with client contracts under `src/McpServer.Client`. A separate `src/McpServer.KeyServer` service, durable database-backed registry/audit storage, real encryption keys, and key rotation remain deferred.
+
+## FR-MCP-119 Subscriber diffgram commit service
+
+McpServer shall provide a subscriber service that verifies keyserver-signed manifests, decrypts intended diffgrams, validates hashes, durably commits accepted diffgrams, supports abort/status flows, and rejects invalid or conflicting commits.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR119-001: Subscriber accepts a commit only when manifest verification succeeds against keyserver trust.
+- [ ] AC-FR119-002: Subscriber decrypts only payloads addressed to its party/key ID.
+- [ ] AC-FR119-003: Subscriber validates encrypted body SHA-256 before decrypt and plaintext diffgram SHA-256 after decrypt.
+- [ ] AC-FR119-004: First valid commit persists transaction ID, diffgram ID, manifest hash, sequence, status, committed UTC, and audit metadata durably.
+- [ ] AC-FR119-005: Duplicate commit with identical transaction/diffgram/hash is idempotent and returns committed.
+- [x] AC-FR119-006: Duplicate commit with mismatched payload, manifest, hash, or sequence is rejected as conflict.
+- [x] AC-FR119-007: Abort endpoint records aborted status and refuses later commit unless explicitly configured for recovery tests.
+- [ ] AC-FR119-008: Status endpoint exposes committed, rejected, aborted, pending, and reason details without exposing secrets.
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Support.Mcp/Controllers/SubscriberController.cs`, `tests/McpServer.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs`
+
+**Slice 1 scope:** Implemented in-process under `src/McpServer.Support.Mcp` with client contracts under `src/McpServer.Client`. A separate `src/McpServer.Subscriber` service, durable DB commit storage, real decrypt/hash pipeline, and external pub-sub remain deferred.
+
+## FR-MCP-120 MCP Server transaction gating
+
+McpServer shall gate mutating user turns behind transaction manifest signing and subscriber commit confirmation before returning a committed-success response.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR120-001: Every enabled mutating turn creates a transaction before state change.
+- [x] AC-FR120-002: MCP Server obtains a keyserver manifest before publishing a diffgram.
+- [x] AC-FR120-003: MCP Server publishes no final success response until subscriber commit is confirmed.
+- [x] AC-FR120-004: Keyserver signing failure prevents mutation and returns rejected or degraded status.
+- [ ] AC-FR120-005: Subscriber timeout aborts or degrades according to config.
+- [x] AC-FR120-006: Read-only turns bypass transactions unless explicitly configured.
+- [ ] AC-FR120-007: Transaction IDs appear in response metadata, session log actions, and audit rows.
+- [x] AC-FR120-008: Existing federation HMAC behavior remains unchanged when turn transactions are disabled.
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TurnTransactionCoordinator.cs`, `src/McpServer.Support.Mcp/Controllers/TurnTransactionsController.cs`, `tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs`
+
+**Slice 1 scope:** The coordinator covers focused commit gating/degraded outcomes in-process. Global mutation adapters for all write surfaces, durable audit rows, and full response/session-log transaction propagation remain deferred.
+
+## FR-MCP-121 Degraded mode and rollback
+
+McpServer shall enter an explicit degraded mode when keyserver/subscriber transaction dependencies are unavailable or a commit cannot be completed, allowing only safe reads and preserving audit records through rollback.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR121-001: Missing subscriber or commit failure enters explicit degraded mode.
+- [x] AC-FR121-002: Degraded mode is visible in health/status output.
+- [ ] AC-FR121-003: Degraded mode allows only health, status, and context reads.
+- [ ] AC-FR121-004: Degraded mode blocks repo writes, TODO writes, requirements writes, session-log mutation writes, and state-changing MCP tools except audit records for the degradation itself.
+- [ ] AC-FR121-005: Rollback preserves abort/degraded audit records even when transactional state is reverted.
+- [x] AC-FR121-006: User-facing responses distinguish committed, aborted, rejected, degraded, and unknown states.
+- [ ] AC-FR121-007: Recovery requires keyserver health, subscriber health, and a commit smoke test.
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TurnTransactionCoordinator.cs`, `src/McpServer.Support.Mcp/Controllers/TurnTransactionsController.cs`, `tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs`
+
+**Slice 1 scope:** Focused degraded-mode signaling exists in the transaction coordinator. Global read-only enforcement and durable rollback/audit preservation remain deferred.
+
+## FR-MCP-122 Byrd v4 execution control
+
+The transactional diffgram implementation shall follow Byrd Development Process v4 with requirements-first, failing-test-first, mocks-first, refactor, and zero-failure zero-skip validation gates.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [ ] AC-FR122-001: Every implementation slice starts with requirements and at least one failing test.
+- [ ] AC-FR122-002: Mocks-first tests are green before real integration tests are added.
+- [ ] AC-FR122-003: Refactor occurs only after green tests and does not reduce coverage.
+- [ ] AC-FR122-004: A slice cannot close with failed or skipped tests in its executed scope.
+- [ ] AC-FR122-005: Validation command output is attached as evidence before marking AC satisfied.
+
+**Covered by:** `docs/Development-Process-draft-v4.md`, validation gates *(planned)*
+
+## FR-MCP-123 Quad-model future scaffolding
+
+The transaction foundation shall preserve the imported quad-model architecture while keeping Curiosity, AoT reconciliation execution, and weight-update execution disabled by default until later implementation slices authorize them.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR123-001: Keyserver/subscriber contracts have no compile-time dependency on quad orchestration.
+- [ ] AC-FR123-002: Curiosity, AoT reconciliation, and weight-update execution are disabled by default.
+- [x] AC-FR123-003: Future quad roles can consume committed transaction APIs without changing crypto contracts.
+- [ ] AC-FR123-004: Weight update workflows require separate requirements, human/admin approval, safety gates, provenance, and rollback design.
+
+**Covered by:** `src/McpServer.Client` contracts, `src/McpServer.Support.Mcp` in-process transaction services, imported diagram deferred-scope tests *(planned)*
+
+## FR-MCP-124 aiUnit plan review
+
+The transaction plan shall include a test-only aiUnit plan review gate that fails on critical or high findings and records run-log evidence before implementation proceeds.
+
+**Status:** ✅ Complete
+
+**Acceptance Criteria:**
+- [x] AC-FR124-001: `tests/McpServer.PlanReview.Tests` contains an `[AiPlanReview]` gate for `PLAN-TURNTRANSACTIONS-001`.
+- [x] AC-FR124-002: The review fails on critical or high findings.
+- [x] AC-FR124-003: Critical/high findings are resolved through requirements, TODO updates, plan fixes, or explicit blocker state before Phase 1.
+- [x] AC-FR124-004: The aiUnit run log path `aiunit-review-plan-*.json` is captured as evidence.
+- [x] AC-FR124-005: `SharpNinja.aiUnit` remains a test-only dependency and is not referenced by production projects.
+
+**Covered by:** `tests/McpServer.PlanReview.Tests`, `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`
+
+**Slice 1 scope:** The aiUnit gate is implemented as a test-only xUnit v2 project using `SharpNinja.aiUnit` and the Claude CLI strategy. Final evidence shows `status=pass`, zero critical findings, and zero high findings; medium/low follow-up items remain tracked for later slices.
+
+## FR-MCP-125 Imported diagram preservation
+
+The imported plan's Mermaid diagrams shall be preserved as project-contract artifacts with stable IDs, source references, branch IDs, scope annotations, and test mappings.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR125-001: All six imported Mermaid diagrams are present in project docs.
+- [x] AC-FR125-002: Imported Mermaid source is preserved before repo-specific annotations are added.
+- [x] AC-FR125-003: Every imported diagram has a stable ID, source section, branch IDs, and scope annotations.
+- [x] AC-FR125-004: Diagram annotations identify in-scope, deferred, and disabled-by-default behavior.
+- [x] AC-FR125-005: aiUnit plan review covers the imported diagrams.
+- [ ] AC-FR125-006: Diagram updates require updating traceability and affected tests.
+
+**Covered by:** `docs/Project/Quad-Model-Transactional-Diffgram-Plan.md`
+
+## FR-MCP-126 Diagram-derived implementation tests
+
+In-scope branches from imported activity and sequence diagrams shall have implementation-test coverage or an explicit deferred requirement before related code is written.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [ ] AC-FR126-001: Every in-scope success terminal state has implementation-test coverage.
+- [ ] AC-FR126-002: Every in-scope rejection, abort, rollback, degraded, timeout, conflict, and approval-denied branch has coverage.
+- [ ] AC-FR126-003: Tests reference diagram IDs and branch IDs in test names or XMLDoc comments.
+- [ ] AC-FR126-004: Deferred branches have explicit deferred requirements.
+- [ ] AC-FR126-005: Traceability validation fails when an in-scope branch lacks tests.
+
+**Covered by:** diagram-derived implementation tests *(planned)*
+
+## FR-MCP-127 Two-round code architecture review
+
+The implementation shall include a first architecture round that defines boundaries, ownership, trust, storage, threat model, and gap analysis before implementation code is written.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR127-001: Architecture Round 1 produces boundary, trust, storage, crypto ownership, dependency, and threat-model decisions before implementation starts.
+- [x] AC-FR127-002: Round 1 gap analysis is completed and every critical/high design gap is resolved, deferred, or blocked explicitly.
+- [ ] AC-FR127-003: Round 1 decisions are captured as design-decision audit/session-log actions during implementation.
+- [x] AC-FR127-004: aiUnit plan review includes the Round 1 architecture output.
+
+**Covered by:** `docs/Project/TurnTransactions-Architecture-Round1.md`
+
+## FR-MCP-128 Two-round implementable design review
+
+The implementation shall include a second design round that defines implementable DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and test mappings before implementation code is written.
+
+**Status:** 🟡 Partial
+
+**Acceptance Criteria:**
+- [x] AC-FR128-001: Design Round 2 defines DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, and canonical serialization before implementation.
+- [x] AC-FR128-002: Round 2 gap analysis proves every AC has planned test/evidence/deferred handling.
+- [x] AC-FR128-003: Round 2 design maps public APIs to XMLDoc obligations and test classes.
+- [x] AC-FR128-004: Implementation cannot start until Round 2 has no unresolved critical/high gaps.
+
+**Covered by:** `docs/Project/TurnTransactions-Design-Round2.md`
+
+**Slice 1 scope:** The design artifact now reflects the implemented in-process first slice. Separate service projects, durable DB adapters, real encryption, and global mutation adapters remain future work.

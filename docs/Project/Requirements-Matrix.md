@@ -591,7 +591,45 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | FR-MCP-116 | Tracked | Functional-Requirements.md |
 | FR-MCP-117 | Tracked | Functional-Requirements.md |
+| FR-MCP-118 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-119 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-120 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-121 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-122 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-123 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-124 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-125 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-126 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-127 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-128 | 🟡 Partial | Functional-Requirements.md |
 | TR-MCP-GH-008 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-010 | Tracked | Technical-Requirements.md |
+| TR-MCP-KEYSERVER-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-CRYPTO-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-SUBSCRIBER-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXN-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXNAUDIT-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXNCOMPAT-001 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-TXNBYRD-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXNAIUNIT-001 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-TXNDIAGRAMS-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXNARCH-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXNDESIGN-001 | 🟡 Partial | Technical-Requirements.md |
 | TEST-MCP-156 | Tracked | Testing-Requirements.md |
 | TEST-MCP-157 | Tracked | Testing-Requirements.md |
+| TEST-MCP-158 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-159 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-160 | 🔴 Planned | Testing-Requirements.md |
+| TEST-MCP-161 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-162 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-163 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-164 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-165 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-166 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-167 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-168 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-169 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-170 | 🔴 Planned | Testing-Requirements.md |
+| TEST-MCP-171 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-172 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-173 | 🟡 Partial | Testing-Requirements.md |

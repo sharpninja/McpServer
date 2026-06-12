@@ -77,6 +77,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "build\_build.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build.Tests", "tests\Build.Tests\Build.Tests.csproj", "{D6271A8D-E8DD-4026-BC6F-C9AE6D1BCE1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.PlanReview.Tests", "tests\McpServer.PlanReview.Tests\McpServer.PlanReview.Tests.csproj", "{B9749F1B-2CED-4332-817D-4E9FC5494ADC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -495,6 +497,18 @@ Global
 		{D6271A8D-E8DD-4026-BC6F-C9AE6D1BCE1C}.Release|x64.Build.0 = Release|Any CPU
 		{D6271A8D-E8DD-4026-BC6F-C9AE6D1BCE1C}.Release|x86.ActiveCfg = Release|Any CPU
 		{D6271A8D-E8DD-4026-BC6F-C9AE6D1BCE1C}.Release|x86.Build.0 = Release|Any CPU
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Debug|x64.ActiveCfg = Debug|x64
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Debug|x64.Build.0 = Debug|x64
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Debug|x86.ActiveCfg = Debug|x86
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Debug|x86.Build.0 = Debug|x86
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Release|x64.ActiveCfg = Release|x64
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Release|x64.Build.0 = Release|x64
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Release|x86.ActiveCfg = Release|x86
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -534,5 +548,6 @@ Global
 		{3894BD83-CF9C-4FD3-8DFB-EEB545188C19} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
 		{718B42DA-F5B8-4C3C-96A8-3D5216FBE3E2} = {DEE5DD87-39C1-BF34-B639-A387DCCF972B}
 		{D6271A8D-E8DD-4026-BC6F-C9AE6D1BCE1C} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
+		{B9749F1B-2CED-4332-817D-4E9FC5494ADC} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
 	EndGlobalSection
 EndGlobal

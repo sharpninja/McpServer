@@ -1326,3 +1326,91 @@ Presence signaling SHALL be excluded from one-shot sessions.
 **Status:** ✅ Complete
 
 **Covered by:** `Invoke-CodexMcpPlugin.ps1`, `tests/plugin-helpers.bats`
+
+## TR-MCP-KEYSERVER-001
+
+**Transaction Keyserver Service** — Provide keyserver trust behavior for the first slice as in-process services/controllers under `src/McpServer.Support.Mcp`, with public client contracts under `src/McpServer.Client`. A later slice may extract this into `src/McpServer.KeyServer` with service-local EF Core storage, full replay/sequence/expiry checks, durable audit rows, XMLDocs, and health endpoint.
+
+**Status:** 🟡 Partial
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Support.Mcp/Controllers/KeyServerController.cs`, `src/McpServer.Client` transaction contracts, `tests/McpServer.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs`
+
+## TR-MCP-CRYPTO-001
+
+**Transactional Diffgram Cryptography** — Use canonical manifest signing/hash contracts in the first slice, with the contract labels reserved for ECDSA P-256/SHA-256 signatures and ECDH P-256/HKDF-SHA256/AES-256-GCM payload encryption. Real encryption/decryption, durable key material management, and complete nonce/sequence enforcement are deferred.
+
+**Status:** 🟡 Partial
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Client` transaction contracts
+
+## TR-MCP-SUBSCRIBER-001
+
+**Transaction Subscriber Service** — Provide subscriber commit/abort/conflict behavior for the first slice as in-process services/controllers under `src/McpServer.Support.Mcp`, with public client contracts under `src/McpServer.Client`. A later slice may extract this into `src/McpServer.Subscriber` with durable commit storage, real decrypt/hash pipeline, XMLDocs, and complete failure-reason coverage.
+
+**Status:** 🟡 Partial
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TransactionSecurityServices.cs`, `src/McpServer.Support.Mcp/Controllers/SubscriberController.cs`, `src/McpServer.Client` transaction contracts, `tests/McpServer.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs`
+
+## TR-MCP-TXN-001
+
+**Turn Transaction Coordinator** — Add MCP Server `Mcp:TurnTransactions`, `ITurnTransactionCoordinator`, diffgram models, keyserver/subscriber clients, commit gating, and degraded behavior. Initial global mutation adapters are deferred until a later slice.
+
+**Status:** 🟡 Partial
+
+**Covered by:** `src/McpServer.Support.Mcp/Services/TurnTransactionCoordinator.cs`, `src/McpServer.Support.Mcp/Controllers/TurnTransactionsController.cs`, `tests/McpServer.Support.Mcp.Tests/Services/TurnTransactionCoordinatorTests.cs`
+
+## TR-MCP-TXNAUDIT-001
+
+**Transaction Audit Actions** — Add structured audit/session-log actions named `transaction_manifest_signed`, `transaction_manifest_verified`, `diffgram_committed`, `diffgram_rejected`, `transaction_aborted`, `transaction_degraded`, `transaction_rollback`, and `aiunit_plan_review`.
+
+**Status:** 🟡 Partial
+
+**Covered by:** first-slice transaction responses and focused controller/coordinator tests; durable audit/session-log adapters remain deferred.
+
+## TR-MCP-TXNCOMPAT-001
+
+**Federation Compatibility** — Existing `Mcp:Federation` HMAC envelopes remain backward compatible. Transaction crypto is additive and separate from federation envelope signing and verification.
+
+**Status:** ✅ Complete
+
+**Covered by:** transaction compatibility checks confirming disabled turn transactions do not alter existing federation HMAC behavior.
+
+## TR-MCP-TXNBYRD-001
+
+**Byrd v4 Transaction Gates** — Split work into Byrd v4 red/green/refactor gates with zero failure and zero skip exit criteria for each executed validation scope.
+
+**Status:** 🟡 Partial
+
+**Covered by:** focused validation gates *(planned)*
+
+## TR-MCP-TXNAIUNIT-001
+
+**aiUnit Plan Review Gate** — Add a test-only aiUnit plan review gate and capture run-log evidence before implementation and before closeout.
+
+**Status:** ✅ Complete
+
+**Covered by:** `tests/McpServer.PlanReview.Tests`, `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`
+
+## TR-MCP-TXNDIAGRAMS-001
+
+**Imported Diagram Traceability** — Add imported diagram artifacts, branch IDs, and validation that tests map to in-scope imported diagram branches.
+
+**Status:** 🟡 Partial
+
+**Covered by:** `docs/Project/Quad-Model-Transactional-Diffgram-Plan.md`, diagram traceability tests *(planned)*
+
+## TR-MCP-TXNARCH-001
+
+**Transaction Architecture Rounds** — Add two-round architecture/design artifacts and require both rounds before implementation code begins.
+
+**Status:** 🟡 Partial
+
+**Covered by:** `docs/Project/TurnTransactions-Architecture-Round1.md`, `docs/Project/TurnTransactions-Design-Round2.md`
+
+## TR-MCP-TXNDESIGN-001
+
+**Implementable Transaction Design Contracts** — Ensure design outputs define contracts, storage, APIs, options, reason codes, audit payloads, XMLDocs, canonicalization, and test mappings before code implementation.
+
+**Status:** 🟡 Partial
+
+**Covered by:** `docs/Project/TurnTransactions-Design-Round2.md`

@@ -1,0 +1,325 @@
+records:
+  - kind: fr
+    id: FR-MCP-118
+    title: Keyserver trust service
+    description: McpServer shall provide a keyserver service that registers trusted parties, manages public key metadata, signs transaction manifests, verifies signed manifests, rejects invalid or replayed manifests, and persists audit records without exposing private key material.
+    priority: high
+    area: MCP
+    status: pending
+    acceptanceCriteria:
+      - id: AC-FR118-001
+        text: Register publisher, subscriber, arbiter, and future model parties with party ID, role, active signing key ID, active encryption key ID, status, created UTC, and audit metadata.
+        isSatisfied: false
+      - id: AC-FR118-002
+        text: Keyserver signing never returns, serializes, or logs private key material.
+        isSatisfied: false
+      - id: AC-FR118-003
+        text: Manifest signing binds transaction ID, turn ID, publisher party, subscriber party, key IDs, sequence, nonce, issued UTC, expiry UTC, algorithms, diffgram SHA-256, and encrypted body SHA-256.
+        isSatisfied: false
+      - id: AC-FR118-004
+        text: Manifest verification succeeds for an unchanged canonical payload and valid keyserver signature.
+        isSatisfied: false
+      - id: AC-FR118-005
+        text: Verification rejects unknown parties, disabled parties, unknown keys, disabled keys, expired manifests, replayed nonces, stale sequences, malformed signatures, and hash mismatches.
+        isSatisfied: false
+      - id: AC-FR118-006
+        text: Rejections return deterministic machine-readable reason codes and are audit logged.
+        isSatisfied: false
+      - id: AC-FR118-007
+        text: Key rotation supports a new active key while retaining old public keys for verification until expiry.
+        isSatisfied: false
+  - kind: fr
+    id: FR-MCP-119
+    title: Subscriber diffgram commit service
+    description: McpServer shall provide a subscriber service that verifies keyserver-signed manifests, decrypts intended diffgrams, validates hashes, durably commits accepted diffgrams, supports abort/status flows, and rejects invalid or conflicting commits.
+    priority: high
+    area: MCP
+    status: pending
+    acceptanceCriteria:
+      - id: AC-FR119-001
+        text: Subscriber accepts a commit only when manifest verification succeeds against keyserver trust.
+        isSatisfied: false
+      - id: AC-FR119-002
+        text: Subscriber decrypts only payloads addressed to its party/key ID.
+        isSatisfied: false
+      - id: AC-FR119-003
+        text: Subscriber validates encrypted body SHA-256 before decrypt and plaintext diffgram SHA-256 after decrypt.
+        isSatisfied: false
+      - id: AC-FR119-004
+        text: First valid commit persists transaction ID, diffgram ID, manifest hash, sequence, status, committed UTC, and audit metadata durably.
+        isSatisfied: false
+      - id: AC-FR119-005
+        text: Duplicate commit with identical transaction/diffgram/hash is idempotent and returns committed.
+        isSatisfied: false
+      - id: AC-FR119-006
+        text: Duplicate commit with mismatched payload, manifest, hash, or sequence is rejected as conflict.
+        isSatisfied: false
+      - id: AC-FR119-007
+        text: Abort endpoint records aborted status and refuses later commit unless explicitly configured for recovery tests.
+        isSatisfied: false
+      - id: AC-FR119-008
+        text: Status endpoint exposes committed, rejected, aborted, pending, and reason details without exposing secrets.
+        isSatisfied: false
+  - kind: fr
+    id: FR-MCP-120
+    title: MCP Server transaction gating
+    description: McpServer shall gate mutating user turns behind transaction manifest signing and subscriber commit confirmation before returning a committed-success response.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-121
+    title: Degraded mode and rollback
+    description: McpServer shall enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads, and preserve audit records through rollback.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-122
+    title: Byrd v4 execution control
+    description: The transactional diffgram implementation shall follow Byrd Development Process v4 with requirements-first, failing-test-first, mocks-first, refactor, and zero-failure zero-skip validation gates.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-123
+    title: Quad-model future scaffolding
+    description: The transaction foundation shall preserve the imported quad-model architecture while keeping Curiosity, AoT reconciliation execution, and weight-update execution disabled by default until later slices authorize them.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-124
+    title: aiUnit plan review
+    description: The transaction plan shall include a test-only aiUnit plan review gate that fails on critical or high findings and records run-log evidence before implementation proceeds.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-125
+    title: Imported diagram preservation
+    description: The imported plan's Mermaid diagrams shall be preserved as project-contract artifacts with stable IDs, source references, branch IDs, scope annotations, and test mappings.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-126
+    title: Diagram-derived implementation tests
+    description: In-scope branches from imported activity and sequence diagrams shall have implementation-test coverage or an explicit deferred requirement before related code is written.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-127
+    title: Two-round code architecture review
+    description: The implementation shall include a first architecture round that defines boundaries, ownership, trust, storage, threat model, and gap analysis before implementation code is written.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: fr
+    id: FR-MCP-128
+    title: Two-round implementable design review
+    description: The implementation shall include a second design round that defines implementable DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and test mappings before implementation code is written.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: tr
+    id: TR-MCP-KEYSERVER-001
+    title: Transaction keyserver service
+    description: Add src/McpServer.KeyServer as a net10.0 ASP.NET Core service with service-local EF Core SQLite storage, party registry, public-key registry, manifest sign/verify endpoints, replay/sequence/expiry checks, audit rows, XMLDocs, and health endpoint.
+    priority: high
+    area: MCP
+    subarea: KEYSERVER
+    status: pending
+  - kind: tr
+    id: TR-MCP-CRYPTO-001
+    title: Transactional diffgram cryptography
+    description: Use ECDSA P-256 and SHA-256 for keyserver manifest signatures; use ECDH P-256, HKDF-SHA256, AES-256-GCM, nonce, sequence, timestamp, expiry, encrypted body hash, and plaintext diffgram hash for diffgram payloads.
+    priority: high
+    area: MCP
+    subarea: CRYPTO
+    status: pending
+  - kind: tr
+    id: TR-MCP-SUBSCRIBER-001
+    title: Transaction subscriber service
+    description: Add src/McpServer.Subscriber with durable commit storage, manifest verification, decrypt/hash pipeline, idempotency checks, abort/status endpoints, XMLDocs, and precise failure reasons.
+    priority: high
+    area: MCP
+    subarea: SUBSCRIBER
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXN-001
+    title: Turn transaction coordinator
+    description: Add MCP Server Mcp:TurnTransactions, ITurnTransactionCoordinator, diffgram models, keyserver/subscriber clients, commit gating, degraded behavior, and initial mutation adapters.
+    priority: high
+    area: MCP
+    subarea: TXN
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXNAUDIT-001
+    title: Transaction audit actions
+    description: Add structured audit/session-log actions for manifest sign/verify, commit/reject, abort, degraded, rollback, and aiUnit plan review events.
+    priority: high
+    area: MCP
+    subarea: TXNAUDIT
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXNCOMPAT-001
+    title: Federation compatibility
+    description: Existing Mcp:Federation HMAC envelopes remain backward compatible. Transaction crypto is additive and separate from federation envelope signing and verification.
+    priority: high
+    area: MCP
+    subarea: TXNCOMPAT
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXNBYRD-001
+    title: Byrd v4 transaction gates
+    description: Split work into Byrd v4 red/green/refactor gates with zero failure and zero skip exit criteria for each executed validation scope.
+    priority: high
+    area: MCP
+    subarea: TXNBYRD
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXNAIUNIT-001
+    title: aiUnit plan review gate
+    description: Add a test-only aiUnit plan review gate and capture run-log evidence before implementation and before closeout.
+    priority: high
+    area: MCP
+    subarea: TXNAIUNIT
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXNDIAGRAMS-001
+    title: Imported diagram traceability
+    description: Add imported diagram artifacts, branch IDs, and validation that tests map to in-scope imported diagram branches.
+    priority: high
+    area: MCP
+    subarea: TXNDIAGRAMS
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXNARCH-001
+    title: Transaction architecture rounds
+    description: Add two-round architecture/design artifacts and require both rounds before implementation code begins.
+    priority: high
+    area: MCP
+    subarea: TXNARCH
+    status: pending
+  - kind: tr
+    id: TR-MCP-TXNDESIGN-001
+    title: Implementable transaction design contracts
+    description: Ensure design outputs define contracts, storage, APIs, options, reason codes, audit payloads, XMLDocs, canonicalization, and test mappings before code implementation.
+    priority: high
+    area: MCP
+    subarea: TXNDESIGN
+    status: pending
+  - kind: test
+    id: TEST-MCP-158
+    title: Keyserver trust and audit tests
+    description: Keyserver trust, signing, replay, sequence, expiry, disabled/unknown key, rotation, and audit tests shall validate FR-MCP-118 and TR-MCP-KEYSERVER-001.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-159
+    title: Subscriber commit and abort tests
+    description: Subscriber commit, decrypt, hash validation, idempotency, conflict, rejection, abort, and status tests shall validate FR-MCP-119 and TR-MCP-SUBSCRIBER-001.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-160
+    title: Real keyserver subscriber integration tests
+    description: Real keyserver/subscriber integration tests shall validate SD-DIFFGRAM-001 without mocks, including forged, stale, and mismatched manifest rejection.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-161
+    title: MCP transaction gating tests
+    description: MCP transaction gating tests shall validate timeout, degraded mode, rollback/audit, and no-response-before-commit behavior for FR-MCP-120 and FR-MCP-121.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-162
+    title: Transaction client and serialization parity tests
+    description: Typed client, MCP/REPL serialization, and public contract parity tests shall validate keyserver/subscriber DTO and client surfaces.
+    priority: medium
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-163
+    title: Byrd v4 validation evidence
+    description: Byrd v4 validation evidence shall prove each executed slice exits with zero failures and zero skips.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-164
+    title: aiUnit plan review tests
+    description: aiUnit plan review shall run with no critical/high findings and persist aiunit-review-plan run-log evidence.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-165
+    title: Imported diagram preservation tests
+    description: Imported diagram preservation tests shall validate all six imported Mermaid diagrams and stable IDs.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-166
+    title: Keyserver manifest diagram tests
+    description: Keyserver and manifest tests shall derive coverage from SD-DIFFGRAM-001.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-167
+    title: Subscriber diagram tests
+    description: Subscriber commit and abort tests shall derive coverage from SD-DIFFGRAM-001.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-168
+    title: End-to-end turn transaction diagram tests
+    description: End-to-end turn transaction tests shall derive coverage from AD-TXN-001.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-169
+    title: Degraded rollback reconciliation tests
+    description: Degraded, abort, rollback, and reconciliation-branch tests shall validate AD-TXN-001 and AD-AOT-001 in-scope behavior.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-170
+    title: Deferred quad scope enforcement tests
+    description: Deferred-scope enforcement tests shall prove Curiosity, weight updates, and quad execution remain disabled until later requirements authorize them.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-171
+    title: Quad architecture conformance tests
+    description: Architecture/config conformance tests shall validate ARCH-QUAD-001 component mapping.
+    priority: medium
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-172
+    title: Architecture Round 1 conformance tests
+    description: Architecture Round 1 conformance and gap-resolution tests shall validate TR-MCP-TXNARCH-001.
+    priority: high
+    area: MCP
+    status: pending
+  - kind: test
+    id: TEST-MCP-173
+    title: Design Round 2 conformance tests
+    description: Design Round 2 contract, XMLDoc, reason-code, and AC-to-test mapping validation shall validate TR-MCP-TXNDESIGN-001.
+    priority: high
+    area: MCP
+    status: pending

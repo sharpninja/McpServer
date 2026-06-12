@@ -103,11 +103,14 @@ public sealed class McpServerClient
         Agent = new AgentClient(http, options, holder);
         Health = new HealthClient(http, options, holder);
         Federation = new FederationClient(http, options, holder);
+        KeyServer = new KeyServerClient(http, options, holder);
+        Subscriber = new SubscriberClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, SessionLog, Memory, GitHub, Requirements, Voice, Events,
-            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health, Federation
+            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
+            Federation, KeyServer, Subscriber
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -394,4 +397,16 @@ public sealed class McpServerClient
     /// <para>See <see cref="FederationClient"/> for the full method list.</para>
     /// </summary>
     public FederationClient Federation { get; }
+
+    /// <summary>
+    /// Transaction keyserver endpoints — party registration, key lookup, manifest signing, and verification.
+    /// <para>See <see cref="KeyServerClient"/> for the full method list.</para>
+    /// </summary>
+    public KeyServerClient KeyServer { get; }
+
+    /// <summary>
+    /// Transaction subscriber endpoints — encrypted diffgram commit, status, and abort operations.
+    /// <para>See <see cref="SubscriberClient"/> for the full method list.</para>
+    /// </summary>
+    public SubscriberClient Subscriber { get; }
 }
