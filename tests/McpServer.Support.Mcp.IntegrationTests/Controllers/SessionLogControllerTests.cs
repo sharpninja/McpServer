@@ -434,6 +434,31 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         }
     }
 
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-005: the workspace-stamp repair endpoint is reachable,
+    /// idempotent, and reports the number of re-stamped rows.
+    /// </summary>
+    [Fact]
+    public async Task WhenPostingRepairWorkspaceStampsThenReturns200WithCount()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", $"repair-{Guid.NewGuid():N}"));
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+
+        var response = await _client.PostAsync(new Uri("/mcpserver/sessionlog/repair-workspace-stamps", UriKind.Relative), null).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<RepairWorkspaceStampsResult>().ConfigureAwait(true);
+        Assert.NotNull(body);
+        Assert.True(body!.Repaired >= 0);
+
+        var second = await _client.PostAsync(new Uri("/mcpserver/sessionlog/repair-workspace-stamps", UriKind.Relative), null).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+        var secondBody = await second.Content.ReadFromJsonAsync<RepairWorkspaceStampsResult>().ConfigureAwait(true);
+        Assert.Equal(0, secondBody!.Repaired);
+    }
+
+    private sealed record RepairWorkspaceStampsResult(int Repaired);
+
     private static UnifiedSessionLogDto CreateTestDto(string sourceType, string sessionId)
     {
         return new UnifiedSessionLogDto

@@ -81,6 +81,10 @@ public sealed class FederatedSessionLogService : ISessionLogService
     public Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
         => _inner.UpsertTurnAsync(sourceType, sessionId, turn, cancellationToken);
 
+    /// <inheritdoc />
+    public Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
+        => _inner.RepairWorkspaceStampsAsync(dryRun, cancellationToken);
+
     private static SessionLogQueryResult MergeResults(SessionLogQueryResult local, SessionLogQueryResult remote)
     {
         var localKeys = new HashSet<string>(

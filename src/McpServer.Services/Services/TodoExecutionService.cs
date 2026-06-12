@@ -1118,9 +1118,13 @@ public sealed class TodoExecutionService : ITodoExecutionService
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
+        // BUG-SESSIONLOG-WS-001..004: child sets carry no workspace query filter,
+        // so isolation comes from the explicit parent-session predicate here.
         var turns = await _db.SessionLogTurns
             .AsNoTracking()
-            .Where(turn => turn.RequestId != null && requestIdSet.Contains(turn.RequestId))
+            .Where(turn => turn.RequestId != null
+                && requestIdSet.Contains(turn.RequestId)
+                && turn.SessionLog!.WorkspaceId == workspacePath)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
@@ -1142,12 +1146,15 @@ public sealed class TodoExecutionService : ITodoExecutionService
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
+        // BUG-SESSIONLOG-WS-001..004: child sets carry no workspace query filter,
+        // so isolation comes from the explicit parent-session predicate here.
         var items = await _db.SessionLogTurnStringLists
             .AsNoTracking()
             .Where(item => item.ListType == "filesModified"
                 && item.SessionLogTurn != null
                 && item.SessionLogTurn.RequestId != null
-                && requestIdSet.Contains(item.SessionLogTurn.RequestId))
+                && requestIdSet.Contains(item.SessionLogTurn.RequestId)
+                && item.SessionLogTurn.SessionLog!.WorkspaceId == workspacePath)
             .Select(item => new { item.SessionLogTurn!.Timestamp, item.Value })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);

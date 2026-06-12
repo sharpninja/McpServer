@@ -57,16 +57,34 @@ public sealed class SessionLogService : ISessionLogService
 
     private void StampWorkspaceId(SessionLogEntity session)
     {
-        var workspaceId = ResolveWorkspaceId();
-        if (string.IsNullOrEmpty(workspaceId))
+        // BUG-SESSIONLOG-WS-002: the session row is stamped from the ambient
+        // workspace ONLY when it has no stamp yet (new sessions). An existing
+        // session is never re-stamped on update; that "moved" sessions between
+        // workspaces and let child rows drift away from their parent.
+        if (string.IsNullOrEmpty(session.WorkspaceId))
         {
-            // No explicit workspace context: defer to McpDbContext.SaveChangesAsync
-            // which auto-stamps Added entities from the DbContext's _workspaceId.
-            // This preserves ingestion / batch-import paths that run without an HTTP scope.
-            return;
+            var workspaceId = ResolveWorkspaceId();
+            if (string.IsNullOrEmpty(workspaceId))
+            {
+                // No explicit workspace context: defer to McpDbContext.SaveChangesAsync
+                // which auto-stamps Added entities (children inherit the parent graph).
+                return;
+            }
+
+            session.WorkspaceId = workspaceId;
         }
 
-        session.WorkspaceId = workspaceId;
+        // Children ALWAYS inherit the parent session's effective stamp so one
+        // session never holds mixed WorkspaceIds.
+        StampChildrenFromParent(session);
+    }
+
+    private static void StampChildrenFromParent(SessionLogEntity session)
+    {
+        var workspaceId = session.WorkspaceId;
+        if (string.IsNullOrEmpty(workspaceId))
+            return;
+
         foreach (var turn in session.Turns)
         {
             turn.WorkspaceId = workspaceId;
@@ -224,11 +242,15 @@ public sealed class SessionLogService : ISessionLogService
         if (requestIdError is not null)
             throw new ArgumentException(requestIdError, nameof(requestId));
 
+        // BUG-SESSIONLOG-WS-001..004: child sets carry no workspace query filter,
+        // so isolation comes from the explicit parent-session predicate here.
+        var currentWorkspaceId = _db.CurrentWorkspaceId;
         var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
             .FirstOrDefaultAsync(e =>
                 e.SessionLog!.SourceType == sourceType
                 && e.SessionLog.SessionId == sessionId
+                && e.SessionLog.WorkspaceId == currentWorkspaceId
                 && e.RequestId == requestId, cancellationToken)
             .ConfigureAwait(false)
             ?? throw new InvalidOperationException(
@@ -340,6 +362,67 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <inheritdoc />
+    public async Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
+    {
+        SyncDbWorkspaceFromContext();
+        var sessions = await _db.SessionLogs
+            .IgnoreQueryFilters()
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.Actions)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.Tags)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.ContextItems)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.ProcessingDialog)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.Commits)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.StringListItems)
+            .AsSplitQuery()
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        var changed = 0;
+        foreach (var session in sessions)
+        {
+            var workspaceId = session.WorkspaceId;
+            foreach (var turn in session.Turns)
+            {
+                changed += Restamp(turn.WorkspaceId, workspaceId, value => turn.WorkspaceId = value);
+                foreach (var action in turn.Actions)
+                    changed += Restamp(action.WorkspaceId, workspaceId, value => action.WorkspaceId = value);
+                foreach (var tag in turn.Tags)
+                    changed += Restamp(tag.WorkspaceId, workspaceId, value => tag.WorkspaceId = value);
+                foreach (var context in turn.ContextItems)
+                    changed += Restamp(context.WorkspaceId, workspaceId, value => context.WorkspaceId = value);
+                foreach (var dialog in turn.ProcessingDialog)
+                    changed += Restamp(dialog.WorkspaceId, workspaceId, value => dialog.WorkspaceId = value);
+                foreach (var commit in turn.Commits)
+                    changed += Restamp(commit.WorkspaceId, workspaceId, value => commit.WorkspaceId = value);
+                foreach (var stringItem in turn.StringListItems)
+                    changed += Restamp(stringItem.WorkspaceId, workspaceId, value => stringItem.WorkspaceId = value);
+            }
+        }
+
+        if (changed > 0 && !dryRun)
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        else if (dryRun)
+            _db.ChangeTracker.Clear();
+
+        return changed;
+
+        static int Restamp(string current, string workspaceId, Action<string> setWorkspaceId)
+        {
+            if (string.Equals(current, workspaceId, StringComparison.Ordinal))
+                return 0;
+
+            setWorkspaceId(workspaceId);
+            return 1;
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<UnifiedSessionLogDto?> GetAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(sourceType);
@@ -402,10 +485,11 @@ public sealed class SessionLogService : ISessionLogService
 
         ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn));
 
-        var workspaceId = ResolveWorkspaceId();
+        // BUG-SESSIONLOG-WS-002: the turn and its children inherit the PARENT
+        // session's stamp; the ambient workspace never re-stamps the session here.
+        var workspaceId = session.WorkspaceId;
         if (!string.IsNullOrEmpty(workspaceId))
         {
-            session.WorkspaceId = workspaceId;
             persistedTurn.WorkspaceId = workspaceId;
             foreach (var action in persistedTurn.Actions) action.WorkspaceId = workspaceId;
             foreach (var tag in persistedTurn.Tags) tag.WorkspaceId = workspaceId;

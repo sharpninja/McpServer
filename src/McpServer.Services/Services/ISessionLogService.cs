@@ -75,6 +75,17 @@ public interface ISessionLogService
     /// <returns>The persisted turn entity identifier.</returns>
     /// <exception cref="InvalidOperationException">When the parent session does not exist.</exception>
     Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-005: Re-stamps session-log child rows (turns and their
+    /// children) whose WorkspaceId drifted away from their parent session's
+    /// WorkspaceId. Idempotent data repair for stamping inconsistencies introduced
+    /// before the parent-inheritance invariant was enforced.
+    /// </summary>
+    /// <param name="dryRun">When true, counts drifted rows without persisting changes.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Number of rows re-stamped (or that would be re-stamped when <paramref name="dryRun"/> is true).</returns>
+    Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default);
 }
 
 /// <summary>TR-PLANNED-013: Query parameters for session log search.</summary>

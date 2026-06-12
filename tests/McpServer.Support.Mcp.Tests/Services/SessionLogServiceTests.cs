@@ -1168,6 +1168,371 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Null(fetched);
     }
 
+    #region Phase 0 - workspace stamping and child-filter bugs (BUG-SESSIONLOG-WS-001..004, repro 2026-06-12)
+
+    private const string DriftedWorkspacePath = @"E:\tests\sessionlog-service-DRIFTED";
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-001 (Bug A): a turn row whose WorkspaceId drifted away from
+    /// its parent session must still be matched by request id on upsert. Today the
+    /// workspace query filter hides the row, the service INSERTs a duplicate, and the
+    /// unique index (SessionLogId, RequestId) throws (HTTP 500 in production).
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_DriftedTurnStamp_UpdatesExistingTurnInsteadOfDuplicateInsert()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-drift-upsert");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+        }
+
+        DriftTurnRows(connection, sessionId);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var update = new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260211T100100Z-entry-001",
+                Timestamp = "2026-02-11T10:05:00Z",
+                QueryText = "How do I configure EF Core?",
+                Response = "Updated response after drift",
+                Status = "in_progress"
+            };
+
+            var turnId = await sut2.UpsertTurnAsync("ClaudeCode", sessionId, update).ConfigureAwait(true);
+
+            Assert.True(turnId > 0);
+            Assert.Equal(1, CountTurnRows(connection, "req-20260211T100100Z-entry-001"));
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-002 (Bug A invariant): every child row written by submit or
+    /// turn upsert carries the parent session's WorkspaceId, for both the explicit
+    /// workspace-context path and the ambient auto-stamp path.
+    /// </summary>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task SubmitAndUpsert_ChildRowsAlwaysMatchParentSessionWorkspace(bool useServiceWorkspaceContext)
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-stamp-invariant");
+
+        var (sut, db) = BuildSqliteSut(connection, useServiceWorkspaceContext);
+        using (db)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns![0].Actions = [new UnifiedActionDto { Order = 1, Description = "edit", Type = "edit", Status = "completed", FilePath = "src/a.cs" }];
+            dto.Turns[0].Tags = ["phase0"];
+            dto.Turns[0].Commits = [new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "m" }];
+            dto.Turns[0].DesignDecisions = ["Decision: stamp children from parent."];
+            await sut.SubmitAsync(dto).ConfigureAwait(true);
+
+            var richTurn = new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260211T110000Z-entry-002",
+                Timestamp = "2026-02-11T11:00:00Z",
+                QueryText = "second turn",
+                Status = "completed",
+                DesignDecisions = ["Decision: second turn keeps invariant."],
+                Commits = [new SessionLogCommitDto { Sha = "def456", Branch = "main", Message = "m2" }]
+            };
+            await sut.UpsertTurnAsync("ClaudeCode", sessionId, richTurn).ConfigureAwait(true);
+
+            var session = await db.SessionLogs.IgnoreQueryFilters()
+                .Include(s => s.Turns).ThenInclude(t => t.Actions)
+                .Include(s => s.Turns).ThenInclude(t => t.Tags)
+                .Include(s => s.Turns).ThenInclude(t => t.Commits)
+                .Include(s => s.Turns).ThenInclude(t => t.StringListItems)
+                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+
+            Assert.False(string.IsNullOrEmpty(session.WorkspaceId));
+            foreach (var turn in session.Turns)
+            {
+                Assert.Equal(session.WorkspaceId, turn.WorkspaceId);
+                foreach (var a in turn.Actions) Assert.Equal(session.WorkspaceId, a.WorkspaceId);
+                foreach (var t in turn.Tags) Assert.Equal(session.WorkspaceId, t.WorkspaceId);
+                foreach (var c in turn.Commits) Assert.Equal(session.WorkspaceId, c.WorkspaceId);
+                foreach (var s in turn.StringListItems) Assert.Equal(session.WorkspaceId, s.WorkspaceId);
+            }
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-003 (Bug B): a bare status-only submit (no turns) on a session
+    /// whose turn carries commits must not sever the required Turn-Commit association
+    /// and must not corrupt the persisted turn count - including when the child rows'
+    /// stamps drifted (the 2026-06-12 production close failure).
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task SubmitAsync_BareStatusUpdate_PreservesTurnsAndCommits(bool driftChildStamps)
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-bare-close");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Before close")).ConfigureAwait(true);
+            var turnWithCommit = new UnifiedRequestEntryDto
+            {
+                RequestId = "req-20260211T120000Z-entry-002",
+                Timestamp = "2026-02-11T12:00:00Z",
+                QueryText = "work",
+                Status = "completed",
+                DesignDecisions = ["Decision: ship it."],
+                Commits = [new SessionLogCommitDto { Sha = "554ab3d", Branch = "main", Message = "fix(plugin): drop .mcp.json" }]
+            };
+            await sut1.UpsertTurnAsync("ClaudeCode", sessionId, turnWithCommit).ConfigureAwait(true);
+        }
+
+        if (driftChildStamps)
+            DriftTurnRows(connection, sessionId);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var bareClose = new UnifiedSessionLogDto
+            {
+                SourceType = "ClaudeCode",
+                SessionId = sessionId,
+                Title = "Before close",
+                Status = "completed"
+            };
+
+            await sut2.SubmitAsync(bareClose).ConfigureAwait(true);
+        }
+
+        var (_, verifyDb) = BuildSqliteSut(connection);
+        using (verifyDb)
+        {
+            var session = await verifyDb.SessionLogs.IgnoreQueryFilters()
+                .Include(s => s.Turns).ThenInclude(t => t.Commits)
+                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+
+            Assert.Equal("completed", session.Status);
+            Assert.Equal(2, session.Turns.Count);
+            Assert.Equal(2, session.TurnCount);
+            Assert.Single(session.Turns.SelectMany(t => t.Commits));
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-004 (Bug C): query-history and per-id get report the real turn
+    /// count even when child stamps drifted. Today the filtered Turns collection yields
+    /// turnCount 0 while the rows still exist.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_DriftedTurnStamps_ReportsRealTurnCount()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-drift-count");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+        }
+
+        DriftTurnRows(connection, sessionId);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var page = await sut2.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode", Limit = 50 }).ConfigureAwait(true);
+            var listed = Assert.Single(page.Items, s => s.SessionId == sessionId);
+            Assert.Equal(1, listed.TurnCount);
+
+            var fetched = await sut2.GetAsync("ClaudeCode", sessionId).ConfigureAwait(true);
+            Assert.NotNull(fetched);
+            Assert.Single(fetched!.Turns!);
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010D isolation guard: with child query filters removed, dialog append
+    /// keyed by (sourceType, sessionId, requestId) must still resolve the turn through
+    /// the workspace-filtered parent session and never touch another workspace's turn
+    /// that shares the same identifiers.
+    /// </summary>
+    [Fact]
+    public async Task AppendProcessingDialogAsync_SameIdsInTwoWorkspaces_OnlyTouchesCurrentWorkspace()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-isolation-dialog");
+
+        var (sutW1, dbW1) = BuildSqliteSut(connection, workspacePath: WorkspacePath);
+        using (dbW1)
+        {
+            await sutW1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+        }
+
+        var (sutW2, dbW2) = BuildSqliteSut(connection, workspacePath: DriftedWorkspacePath);
+        using (dbW2)
+        {
+            await sutW2.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+        }
+
+        var (sutW1b, dbW1b) = BuildSqliteSut(connection, workspacePath: WorkspacePath);
+        using (dbW1b)
+        {
+            var added = await sutW1b.AppendProcessingDialogAsync(
+                "ClaudeCode",
+                sessionId,
+                "req-20260211T100100Z-entry-001",
+                [new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:02:00Z", Role = "model", Content = "w1 only", Category = "reasoning" }])
+                .ConfigureAwait(true);
+            Assert.Equal(1, added);
+        }
+
+        var (_, verifyDb) = BuildSqliteSut(connection);
+        using (verifyDb)
+        {
+            var dialogOwners = await verifyDb.SessionLogProcessingDialogs.IgnoreQueryFilters()
+                .Where(d => d.Content == "w1 only")
+                .Select(d => d.SessionLogTurn!.SessionLog!.WorkspaceId)
+                .ToListAsync().ConfigureAwait(true);
+            var owner = Assert.Single(dialogOwners);
+            Assert.Equal(WorkspacePath, owner);
+        }
+    }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-005: the data-repair routine re-stamps drifted child rows to
+    /// their parent session's WorkspaceId and is idempotent.
+    /// </summary>
+    [Fact]
+    public async Task RepairWorkspaceStampsAsync_RestampsDriftedChildrenToParent_Idempotent()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var sessionId = BuildSessionId("ClaudeCode", "ws-repair");
+
+        var (sut1, db1) = BuildSqliteSut(connection);
+        using (db1)
+        {
+            var dto = CreateTestDto("ClaudeCode", sessionId);
+            dto.Turns![0].Commits = [new SessionLogCommitDto { Sha = "abc", Branch = "main", Message = "m" }];
+            dto.Turns[0].DesignDecisions = ["Decision: repair."];
+            await sut1.SubmitAsync(dto).ConfigureAwait(true);
+        }
+
+        DriftTurnRows(connection, sessionId, driftGrandchildren: true);
+
+        var (sut2, db2) = BuildSqliteSut(connection);
+        using (db2)
+        {
+            var dryRunCount = await sut2.RepairWorkspaceStampsAsync(dryRun: true).ConfigureAwait(true);
+            Assert.True(dryRunCount > 0);
+            var dryRunRepeat = await sut2.RepairWorkspaceStampsAsync(dryRun: true).ConfigureAwait(true);
+            Assert.Equal(dryRunCount, dryRunRepeat);
+
+            var firstPass = await sut2.RepairWorkspaceStampsAsync().ConfigureAwait(true);
+            Assert.Equal(dryRunCount, firstPass);
+            var secondPass = await sut2.RepairWorkspaceStampsAsync().ConfigureAwait(true);
+            Assert.Equal(0, secondPass);
+
+            var session = await db2.SessionLogs.IgnoreQueryFilters()
+                .Include(s => s.Turns).ThenInclude(t => t.Commits)
+                .Include(s => s.Turns).ThenInclude(t => t.StringListItems)
+                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+            foreach (var turn in session.Turns)
+            {
+                Assert.Equal(session.WorkspaceId, turn.WorkspaceId);
+                foreach (var c in turn.Commits) Assert.Equal(session.WorkspaceId, c.WorkspaceId);
+                foreach (var s in turn.StringListItems) Assert.Equal(session.WorkspaceId, s.WorkspaceId);
+            }
+        }
+    }
+
+    private static void DriftTurnRows(SqliteConnection connection, string sessionId, bool driftGrandchildren = false)
+    {
+        EnsureWorkspaceRow(connection, DriftedWorkspacePath);
+        ExecuteSql(connection,
+            $"UPDATE SessionLogTurns SET WorkspaceId = @ws WHERE SessionLogId IN (SELECT Id FROM SessionLogs WHERE SessionId = @sid)",
+            ("@ws", DriftedWorkspacePath), ("@sid", sessionId));
+        if (driftGrandchildren)
+        {
+            foreach (var table in new[] { "SessionLogCommits", "SessionLogTurnStringLists", "SessionLogActions", "SessionLogTurnTags" })
+            {
+                ExecuteSql(connection,
+                    $"UPDATE {table} SET WorkspaceId = @ws WHERE SessionLogTurnId IN (SELECT t.Id FROM SessionLogTurns t JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = @sid)",
+                    ("@ws", DriftedWorkspacePath), ("@sid", sessionId));
+            }
+        }
+    }
+
+    private static void EnsureWorkspaceRow(SqliteConnection connection, string workspaceId)
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
+        using var db = new McpDbContext(options);
+        if (db.Workspaces.Any(w => w.WorkspaceId == workspaceId))
+            return;
+        db.Workspaces.Add(new McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+        {
+            WorkspaceId = workspaceId,
+            WorkspacePath = workspaceId,
+            Name = "drift-workspace"
+        });
+        db.SaveChanges();
+    }
+
+    private static int CountTurnRows(SqliteConnection connection, string requestId)
+    {
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = "SELECT COUNT(*) FROM SessionLogTurns WHERE RequestId = @rid";
+        cmd.Parameters.AddWithValue("@rid", requestId);
+        return Convert.ToInt32(cmd.ExecuteScalar(), System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    private static void ExecuteSql(SqliteConnection connection, string sql, params (string Name, object Value)[] args)
+    {
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
+        foreach (var (name, value) in args)
+            cmd.Parameters.AddWithValue(name, value);
+        cmd.ExecuteNonQuery();
+    }
+
+    private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(
+        SqliteConnection connection,
+        bool useServiceWorkspaceContext)
+        => BuildSqliteSut(connection, WorkspacePath, useServiceWorkspaceContext);
+
+    private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(
+        SqliteConnection connection,
+        string workspacePath,
+        bool useServiceWorkspaceContext = true)
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(connection)
+            .Options;
+        var workspaceContext = new WorkspaceContext { WorkspacePath = workspacePath };
+        var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(
+            db,
+            NullLogger<SessionLogService>.Instance,
+            Substitute.For<IChangeEventBus>(),
+            useServiceWorkspaceContext ? workspaceContext : null);
+        return (sut, db);
+    }
+
+    #endregion
+
     private SessionLogService BuildSutWithWorkspaceContext(string workspacePath)
     {
         _db.OverrideWorkspaceId(workspacePath);

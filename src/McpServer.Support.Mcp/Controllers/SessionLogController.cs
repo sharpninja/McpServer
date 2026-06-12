@@ -224,4 +224,21 @@ public sealed class SessionLogController : ControllerBase
             return NotFound(new { error = ex.Message });
         }
     }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-005: Re-stamps session-log child rows whose WorkspaceId
+    /// drifted away from their parent session. Idempotent data repair for rows
+    /// written before the parent-inheritance stamping invariant was enforced.
+    /// </summary>
+    /// <param name="dryRun">When true, reports the drifted-row count without persisting changes.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the number of rows re-stamped (or counted when dryRun).</returns>
+    [HttpPost("repair-workspace-stamps")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> RepairWorkspaceStampsAsync([FromQuery] bool dryRun, CancellationToken cancellationToken)
+    {
+        var repaired = await _service.RepairWorkspaceStampsAsync(dryRun, cancellationToken).ConfigureAwait(false);
+        _logger.LogInformation("Session log workspace stamp repair {Mode}: {Count} rows", dryRun ? "dry-run" : "applied", repaired);
+        return Ok(new { repaired, dryRun });
+    }
 }

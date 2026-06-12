@@ -489,13 +489,13 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        // BUG-SESSIONLOG-WS-001..004: session-log CHILD entities carry no workspace
+        // query filter. Children are only reachable through their (filtered) parent
+        // session; filtering them independently let stamping drift hide rows from
+        // the EF graph, producing duplicate-key inserts on upsert, severed required
+        // associations on bare submits, and corrupted turn counts. Direct child-set
+        // queries must add an explicit parent-workspace predicate (see
+        // AppendProcessingDialogAsync and TodoExecutionService turn lookups).
         modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
         modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
         modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
@@ -927,9 +927,29 @@ public sealed class McpDbContext : DbContext
         {
             ToolDefinitionEntity toolDefinition => toolDefinition.WorkspacePath ?? string.Empty,
             ToolDefinitionTagEntity toolDefinitionTag => ResolveToolDefinitionTagWorkspaceId(toolDefinitionTag),
+            // BUG-SESSIONLOG-WS-002: session-log children always inherit the parent
+            // graph's stamp so a single session never holds mixed WorkspaceIds.
+            SessionLogTurnEntity turn => FirstNonEmpty(turn.SessionLog?.WorkspaceId),
+            SessionLogActionEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTurnTagEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTurnContextEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogProcessingDialogEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogCommitEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTurnStringListEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             _ when _workspaceId.Length > 0 => _workspaceId,
             _ => null,
         };
+
+        string? FirstNonEmpty(params string?[] candidates)
+        {
+            foreach (var candidate in candidates)
+            {
+                if (!string.IsNullOrEmpty(candidate))
+                    return candidate;
+            }
+
+            return _workspaceId.Length > 0 ? _workspaceId : null;
+        }
     }
 
     private string ResolveToolDefinitionTagWorkspaceId(ToolDefinitionTagEntity toolDefinitionTag)
