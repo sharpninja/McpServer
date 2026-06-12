@@ -311,6 +311,26 @@ public sealed class SessionLogSubmitResult
     public string? SessionId { get; set; }
 }
 
+/// <summary>Result of upserting a single session log turn.</summary>
+public sealed class SessionLogTurnSubmitResult
+{
+    /// <summary>Database row ID for the upserted turn.</summary>
+    [JsonPropertyName("turnId")]
+    public long TurnId { get; set; }
+
+    /// <summary>Agent source type.</summary>
+    [JsonPropertyName("agent")]
+    public string? Agent { get; set; }
+
+    /// <summary>Session identifier.</summary>
+    [JsonPropertyName("sessionId")]
+    public string? SessionId { get; set; }
+
+    /// <summary>Request identifier for the upserted turn.</summary>
+    [JsonPropertyName("requestId")]
+    public string? RequestId { get; set; }
+}
+
 /// <summary>Result of appending dialog items.</summary>
 public sealed class DialogAppendResult
 {

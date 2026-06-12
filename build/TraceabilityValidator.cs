@@ -6,19 +6,19 @@ using System.Text.RegularExpressions;
 /// </summary>
 static partial class TraceabilityValidator
 {
-    [GeneratedRegex(@"^##\s+(FR-[A-Z0-9-]+-\d{3})\b")]
+    [GeneratedRegex(@"^##\s+(FR-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\b")]
     private static partial Regex FrHeadingRegex();
 
-    [GeneratedRegex(@"^##\s+(TR-[A-Z0-9-]+-\d{3})\b")]
+    [GeneratedRegex(@"^##\s+(TR-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\b")]
     private static partial Regex TrHeadingRegex();
 
-    [GeneratedRegex(@"\b(TEST-[A-Z]+-\d{3})\b")]
+    [GeneratedRegex(@"\b(TEST-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\b")]
     private static partial Regex TestIdRegex();
 
-    [GeneratedRegex(@"^\|\s*(FR-[A-Z0-9-]+-\d{3})")]
+    [GeneratedRegex(@"^\|\s*(FR-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\b")]
     private static partial Regex MappingFrRegex();
 
-    [GeneratedRegex(@"^\|\s*((?:FR|TR|TEST)-[A-Z0-9-]+-\d{3}(?:[–-]\d{3})?)")]
+    [GeneratedRegex(@"^\|\s*((?:FR|TR|TEST)-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\s*\|")]
     private static partial Regex MatrixIdRegex();
 
     [GeneratedRegex(@"^([A-Z]+(?:-[A-Z0-9]+)+-)(\d{3})[–-](\d{3})$")]
@@ -71,7 +71,10 @@ static partial class TraceabilityValidator
             var match = MatrixIdRegex().Match(line);
             if (!match.Success) continue;
 
-            foreach (var expanded in ExpandRangeToken(match.Groups[1].Value))
+            var token = match.Groups[1].Value;
+            ids.Add(token);
+
+            foreach (var expanded in ExpandRangeToken(token))
                 ids.Add(expanded);
         }
         return ids;

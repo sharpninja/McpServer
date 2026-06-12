@@ -28,12 +28,38 @@ public sealed class TraceabilityValidatorTests
     }
 
     [Fact]
+    public void GetTestIds_ExtractsSuffixedAndNamedTestIds()
+    {
+        string[] lines =
+        [
+            "- TEST-SUPPORT-010A-1: workspace stamping coverage",
+            "- TEST-MCP-REQACPLUGIN-BASH: plugin acceptance criteria coverage",
+        ];
+
+        var ids = TraceabilityValidator.GetTestIds(lines);
+
+        Assert.Contains("TEST-SUPPORT-010A-1", ids);
+        Assert.Contains("TEST-MCP-REQACPLUGIN-BASH", ids);
+    }
+
+    [Fact]
     public void GetMappingFrIds_ExtractsFrIdsFromTable()
     {
         string[] lines = ["| FR-MCP-001 | TR-MCP-ARCH-001 |", "| FR-MCP-002 | TR-MCP-API-001 |", "| header |"];
         var ids = TraceabilityValidator.GetMappingFrIds(lines);
         Assert.Equal(2, ids.Count);
         Assert.Equal("FR-MCP-001", ids[0]);
+    }
+
+    [Fact]
+    public void GetMappingFrIds_ExtractsLetterSuffixedFrIdsFromTable()
+    {
+        string[] lines = ["| FR-SUPPORT-010A | TR-MCP-MT-003A | TEST-SUPPORT-010A-1 |"];
+
+        var ids = TraceabilityValidator.GetMappingFrIds(lines);
+
+        Assert.Single(ids);
+        Assert.Equal("FR-SUPPORT-010A", ids[0]);
     }
 
     [Fact]
@@ -66,6 +92,30 @@ public sealed class TraceabilityValidatorTests
     }
 
     [Fact]
+    public void GetMatrixIds_ExpandsEnDashRanges()
+    {
+        string[] lines = ["| TR-MCP-DATA-001–003 | Complete | Storage and indexing |"];
+
+        var ids = TraceabilityValidator.GetMatrixIds(lines);
+
+        Assert.Contains("TR-MCP-DATA-001", ids);
+        Assert.Contains("TR-MCP-DATA-002", ids);
+        Assert.Contains("TR-MCP-DATA-003", ids);
+    }
+
+    [Fact]
+    public void GetMatrixIds_PreservesLiteralRangeLikeIds()
+    {
+        string[] lines = ["| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |"];
+
+        var ids = TraceabilityValidator.GetMatrixIds(lines);
+
+        Assert.Contains("TR-MCP-AGENT-PARITY-020-027", ids);
+        Assert.Contains("TR-MCP-AGENT-PARITY-020", ids);
+        Assert.Contains("TR-MCP-AGENT-PARITY-027", ids);
+    }
+
+    [Fact]
     public void Validate_AllPresent_ReturnsNoMissing()
     {
         string[] fr = ["## FR-MCP-001 Feature"];
@@ -79,6 +129,45 @@ public sealed class TraceabilityValidatorTests
         Assert.Empty(result.MissingFrInMatrix);
         Assert.Empty(result.MissingTrInMatrix);
         Assert.Empty(result.MissingTestInMatrix);
+    }
+
+    [Fact]
+    public void Validate_LetterSuffixedRequirements_AreCovered()
+    {
+        string[] fr = ["## FR-SUPPORT-010A SessionLog Workspace Stamping"];
+        string[] tr = ["## TR-MCP-MT-003A"];
+        string[] test = ["- TEST-SUPPORT-010A-1: workspace stamping coverage"];
+        string[] mapping = ["| FR-SUPPORT-010A | TR-MCP-MT-003A | TEST-SUPPORT-010A-1 |"];
+        string[] matrix =
+        [
+            "| FR-SUPPORT-010A | Tracked | Functional-Requirements.md |",
+            "| TR-MCP-MT-003A | Tracked | Technical-Requirements.md |",
+            "| TEST-SUPPORT-010A-1 | Tracked | Testing-Requirements.md |",
+        ];
+
+        var result = TraceabilityValidator.Validate(fr, tr, test, mapping, matrix);
+
+        Assert.Empty(result.MissingFrInMapping);
+        Assert.Empty(result.MissingFrInMatrix);
+        Assert.Empty(result.MissingTrInMatrix);
+        Assert.Empty(result.MissingTestInMatrix);
+    }
+
+    [Fact]
+    public void Validate_LetterSuffixedRequirementsMissingTraceability_AreReported()
+    {
+        string[] fr = ["## FR-SUPPORT-010A SessionLog Workspace Stamping"];
+        string[] tr = ["## TR-MCP-MT-003A"];
+        string[] test = ["- TEST-SUPPORT-010A-1: workspace stamping coverage"];
+        string[] mapping = [];
+        string[] matrix = [];
+
+        var result = TraceabilityValidator.Validate(fr, tr, test, mapping, matrix);
+
+        Assert.Contains("FR-SUPPORT-010A", result.MissingFrInMapping);
+        Assert.Contains("FR-SUPPORT-010A", result.MissingFrInMatrix);
+        Assert.Contains("TR-MCP-MT-003A", result.MissingTrInMatrix);
+        Assert.Contains("TEST-SUPPORT-010A-1", result.MissingTestInMatrix);
     }
 
     [Fact]

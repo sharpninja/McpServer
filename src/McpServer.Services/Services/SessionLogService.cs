@@ -114,6 +114,7 @@ public sealed class SessionLogService : ISessionLogService
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
             UpsertTurns(existing, dto.Turns);
+            RefreshSessionSummaryFromTurns(existing);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id})", dto.SourceType, dto.SessionId, existing.Id);
         }
         else
@@ -127,6 +128,7 @@ public sealed class SessionLogService : ISessionLogService
             };
             MapDtoToEntity(dto, existing);
             existing.Turns = MapNewTurns(dto.Turns);
+            RefreshSessionSummaryFromTurns(existing);
             _db.SessionLogs.Add(existing);
             _logger.LogInformation("Created session log {SourceType}/{SessionId}", dto.SourceType, dto.SessionId);
         }
@@ -150,6 +152,7 @@ public sealed class SessionLogService : ISessionLogService
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
             UpsertTurns(existing, dto.Turns);
+            RefreshSessionSummaryFromTurns(existing);
             await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
             StampWorkspaceId(existing);
 
@@ -383,8 +386,6 @@ public sealed class SessionLogService : ISessionLogService
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
             ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
 
-        ValidateTerminalTurnCompliance(turn);
-
         var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);
         SessionLogTurnEntity persistedTurn;
 
@@ -395,9 +396,11 @@ public sealed class SessionLogService : ISessionLogService
         }
         else
         {
-            UpdateEntryFromDto(existingTurn, turn);
+            UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: true);
             persistedTurn = existingTurn;
         }
+
+        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn));
 
         var workspaceId = ResolveWorkspaceId();
         if (!string.IsNullOrEmpty(workspaceId))
@@ -411,6 +414,8 @@ public sealed class SessionLogService : ISessionLogService
             foreach (var commit in persistedTurn.Commits) commit.WorkspaceId = workspaceId;
             foreach (var stringItem in persistedTurn.StringListItems) stringItem.WorkspaceId = workspaceId;
         }
+
+        RefreshSessionSummaryFromTurns(session);
 
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -511,6 +516,35 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 
+    private static void RefreshSessionSummaryFromTurns(SessionLogEntity session)
+    {
+        var turns = session.Turns.ToList();
+        session.TurnCount = turns.Count;
+
+        var timestamps = turns
+            .Select(static turn => turn.Timestamp)
+            .Where(static timestamp => timestamp.HasValue)
+            .Select(static timestamp => timestamp!.Value)
+            .ToList();
+
+        if (timestamps.Count == 0)
+        {
+            return;
+        }
+
+        var earliest = timestamps.Min();
+        var latest = timestamps.Max();
+        if (session.Started is null || earliest < session.Started.Value)
+        {
+            session.Started = earliest;
+        }
+
+        if (session.LastUpdated is null || latest > session.LastUpdated.Value)
+        {
+            session.LastUpdated = latest;
+        }
+    }
+
     private void UpsertTurns(SessionLogEntity session, List<UnifiedRequestEntryDto>? dtoTurns)
     {
         var incoming = dtoTurns ?? [];
@@ -528,14 +562,11 @@ public sealed class SessionLogService : ISessionLogService
             .Where(e => e.RequestId != null)
             .ToDictionary(e => e.RequestId!, StringComparer.Ordinal);
 
-        var matchedIds = new HashSet<string>(StringComparer.Ordinal);
-
         foreach (var dto in deduped)
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {
                 UpdateEntryFromDto(existingEntry, dto);
-                matchedIds.Add(dto.RequestId);
             }
             else
             {
@@ -543,47 +574,100 @@ public sealed class SessionLogService : ISessionLogService
                 session.Turns.Add(newEntry);
             }
         }
+    }
 
-        var stale = session.Turns
-            .Where(e => e.RequestId != null && !matchedIds.Contains(e.RequestId)
-                        && existingByRequestId.ContainsKey(e.RequestId))
-            .ToList();
-        if (stale.Count > 0)
+    private void UpdateEntryFromDto(
+        SessionLogTurnEntity entity,
+        UnifiedRequestEntryDto dto,
+        bool mergeOmittedFields = false)
+    {
+        entity.Timestamp = ApplyValue(entity.Timestamp, ParseDateTimeOffset(dto.Timestamp), dto.Timestamp is not null, mergeOmittedFields);
+        entity.Model = ApplyValue(entity.Model, dto.Model, dto.Model is not null, mergeOmittedFields);
+        entity.ModelProvider = ApplyValue(entity.ModelProvider, dto.ModelProvider, dto.ModelProvider is not null, mergeOmittedFields);
+        entity.QueryText = ApplyValue(entity.QueryText, dto.QueryText, dto.QueryText is not null, mergeOmittedFields);
+        entity.QueryTitle = ApplyValue(entity.QueryTitle, dto.QueryTitle, dto.QueryTitle is not null, mergeOmittedFields);
+        entity.Response = ApplyValue(entity.Response, dto.Response, dto.Response is not null, mergeOmittedFields);
+        entity.Interpretation = ApplyValue(entity.Interpretation, dto.Interpretation, dto.Interpretation is not null, mergeOmittedFields);
+        entity.Status = ApplyValue(entity.Status, dto.Status, dto.Status is not null, mergeOmittedFields);
+        entity.TokenCount = ApplyValue(entity.TokenCount, dto.TokenCount, dto.TokenCount.HasValue, mergeOmittedFields);
+        entity.FailureNote = ApplyValue(entity.FailureNote, dto.FailureNote, dto.FailureNote is not null, mergeOmittedFields);
+        entity.Score = ApplyValue(entity.Score, dto.Score, dto.Score.HasValue, mergeOmittedFields);
+        entity.IsPremium = ApplyValue(entity.IsPremium, dto.IsPremium, dto.IsPremium.HasValue, mergeOmittedFields);
+        entity.RawContextJson = ApplyValue(entity.RawContextJson, SerializeJson(dto.RawContext), dto.RawContext is not null, mergeOmittedFields);
+        entity.OriginalEntryJson = ApplyValue(entity.OriginalEntryJson, SerializeJson(dto.OriginalEntry), dto.OriginalEntry is not null, mergeOmittedFields);
+
+        MergeCollection(entity.Actions, dto.Actions, MapActions, SameAction, mergeOmittedFields);
+        MergeCollection(entity.Tags, dto.Tags, MapTags, SameTag, mergeOmittedFields);
+        MergeCollection(entity.ContextItems, dto.ContextList, MapContextItems, SameContextItem, mergeOmittedFields);
+        MergeCollection(entity.ProcessingDialog, dto.ProcessingDialog, MapProcessingDialog, SameProcessingDialog, mergeOmittedFields);
+        MergeCollection(entity.Commits, dto.Commits, MapCommits, SameCommit, mergeOmittedFields);
+
+        ReplaceStringListItems(entity, "DesignDecision", dto.DesignDecisions, mergeOmittedFields);
+        ReplaceStringListItems(entity, "Requirement", dto.RequirementsDiscovered, mergeOmittedFields);
+        ReplaceStringListItems(entity, "FileModified", dto.FilesModified, mergeOmittedFields);
+        ReplaceStringListItems(entity, "Blocker", dto.Blockers, mergeOmittedFields);
+    }
+
+    private static T ApplyValue<T>(
+        T current,
+        T incoming,
+        bool supplied,
+        bool mergeOmittedFields)
+    {
+        return !mergeOmittedFields || supplied ? incoming : current;
+    }
+
+    private static void MergeCollection<TIncoming, TEntity>(
+        ICollection<TEntity> target,
+        TIncoming? incoming,
+        Func<TIncoming?, List<TEntity>> map,
+        Func<TEntity, TEntity, bool> same,
+        bool mergeOmittedFields)
+        where TEntity : class
+    {
+        if (incoming is null)
         {
-            _db.SessionLogTurns.RemoveRange(stale);
+            return;
+        }
+
+        foreach (var item in map(incoming))
+        {
+            if (!target.Any(existing => same(existing, item)))
+            {
+                target.Add(item);
+            }
         }
     }
 
-    private void UpdateEntryFromDto(SessionLogTurnEntity entity, UnifiedRequestEntryDto dto)
+    private void ReplaceStringListItems(
+        SessionLogTurnEntity entity,
+        string listType,
+        List<string>? incoming,
+        bool mergeOmittedFields)
     {
-        entity.Timestamp = ParseDateTimeOffset(dto.Timestamp);
-        entity.Model = dto.Model;
-        entity.ModelProvider = dto.ModelProvider;
-        entity.QueryText = dto.QueryText;
-        entity.QueryTitle = dto.QueryTitle;
-        entity.Response = dto.Response;
-        entity.Interpretation = dto.Interpretation;
-        entity.Status = dto.Status;
-        entity.TokenCount = dto.TokenCount;
-        entity.FailureNote = dto.FailureNote;
-        entity.Score = dto.Score;
-        entity.IsPremium = dto.IsPremium;
-        entity.RawContextJson = SerializeJson(dto.RawContext);
-        entity.OriginalEntryJson = SerializeJson(dto.OriginalEntry);
+        if (incoming is null)
+        {
+            return;
+        }
 
-        _db.SessionLogActions.RemoveRange(entity.Actions);
-        _db.SessionLogTurnTags.RemoveRange(entity.Tags);
-        _db.SessionLogTurnContexts.RemoveRange(entity.ContextItems);
-        _db.SessionLogProcessingDialogs.RemoveRange(entity.ProcessingDialog);
-        _db.SessionLogCommits.RemoveRange(entity.Commits);
-        _db.SessionLogTurnStringLists.RemoveRange(entity.StringListItems);
-
-        entity.Actions = MapActions(dto.Actions);
-        entity.Tags = MapTags(dto.Tags);
-        entity.ContextItems = MapContextItems(dto.ContextList);
-        entity.ProcessingDialog = MapProcessingDialog(dto.ProcessingDialog);
-        entity.Commits = MapCommits(dto.Commits);
-        entity.StringListItems = MapStringListItems(dto);
+        var existingValues = entity.StringListItems
+            .Where(item => item.ListType == listType)
+            .Select(item => item.Value)
+            .ToHashSet(StringComparer.Ordinal);
+        var ordinal = entity.StringListItems
+            .Where(item => item.ListType == listType)
+            .Select(item => item.Ordinal)
+            .DefaultIfEmpty(-1)
+            .Max() + 1;
+        foreach (var value in incoming.Where(value => existingValues.Add(value)))
+        {
+            entity.StringListItems.Add(new SessionLogTurnStringListEntity
+            {
+                ListType = listType,
+                Ordinal = ordinal++,
+                Value = value
+            });
+        }
     }
 
     private static List<SessionLogTurnEntity> MapNewTurns(List<UnifiedRequestEntryDto>? turns)
@@ -676,6 +760,37 @@ public sealed class SessionLogService : ISessionLogService
         }).ToList() ?? [];
     }
 
+    private static bool SameAction(SessionLogActionEntity left, SessionLogActionEntity right) =>
+        left.Order == right.Order
+        && string.Equals(left.Description, right.Description, StringComparison.Ordinal)
+        && string.Equals(left.Type, right.Type, StringComparison.Ordinal)
+        && string.Equals(left.Status, right.Status, StringComparison.Ordinal)
+        && string.Equals(left.FilePath, right.FilePath, StringComparison.Ordinal);
+
+    private static bool SameTag(SessionLogTurnTagEntity left, SessionLogTurnTagEntity right) =>
+        string.Equals(left.Tag, right.Tag, StringComparison.Ordinal);
+
+    private static bool SameContextItem(SessionLogTurnContextEntity left, SessionLogTurnContextEntity right) =>
+        string.Equals(left.ContextItem, right.ContextItem, StringComparison.Ordinal);
+
+    private static bool SameProcessingDialog(SessionLogProcessingDialogEntity left, SessionLogProcessingDialogEntity right) =>
+        left.Timestamp == right.Timestamp
+        && string.Equals(left.Role, right.Role, StringComparison.Ordinal)
+        && string.Equals(left.Content, right.Content, StringComparison.Ordinal)
+        && string.Equals(left.Category, right.Category, StringComparison.Ordinal);
+
+    private static bool SameCommit(SessionLogCommitEntity left, SessionLogCommitEntity right)
+    {
+        if (!string.IsNullOrWhiteSpace(left.Sha) || !string.IsNullOrWhiteSpace(right.Sha))
+            return string.Equals(left.Sha, right.Sha, StringComparison.Ordinal);
+
+        return string.Equals(left.Branch, right.Branch, StringComparison.Ordinal)
+               && string.Equals(left.Message, right.Message, StringComparison.Ordinal)
+               && string.Equals(left.Author, right.Author, StringComparison.Ordinal)
+               && left.CommitTimestamp == right.CommitTimestamp
+               && string.Equals(left.FilesChangedJson, right.FilesChangedJson, StringComparison.Ordinal);
+    }
+
     private static List<SessionLogTurnStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
     {
         var items = new List<SessionLogTurnStringListEntity>();
@@ -686,7 +801,7 @@ public sealed class SessionLogService : ISessionLogService
         return items;
     }
 
-    private static void AddStringListItems(List<SessionLogTurnStringListEntity> items, string listType, List<string>? values)
+    private static void AddStringListItems(ICollection<SessionLogTurnStringListEntity> items, string listType, List<string>? values)
     {
         if (values is not { Count: > 0 })
             return;
@@ -703,6 +818,15 @@ public sealed class SessionLogService : ISessionLogService
 
     private static UnifiedSessionLogDto MapEntityToDto(SessionLogEntity entity)
     {
+        var turns = entity.Turns.OrderBy(e => e.Id).ToList();
+        var timestamps = turns
+            .Select(static turn => turn.Timestamp)
+            .Where(static timestamp => timestamp.HasValue)
+            .Select(static timestamp => timestamp!.Value)
+            .ToList();
+        var started = entity.Started ?? (timestamps.Count > 0 ? timestamps.Min() : null);
+        var lastUpdated = entity.LastUpdated ?? (timestamps.Count > 0 ? timestamps.Max() : null);
+
         return new UnifiedSessionLogDto
         {
             SourceType = entity.SourceType,
@@ -710,10 +834,10 @@ public sealed class SessionLogService : ISessionLogService
             AgentDefinitionId = entity.AgentDefinitionId,
             Title = entity.Title,
             Model = entity.Model,
-            Started = entity.Started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-            LastUpdated = entity.LastUpdated?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+            Started = started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+            LastUpdated = lastUpdated?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
             Status = entity.Status,
-            TurnCount = entity.TurnCount,
+            TurnCount = turns.Count,
             TotalTokens = entity.TotalTokens,
             CursorSessionLabel = entity.CursorSessionLabel,
             CopilotStatistics = entity.CopilotAvgSuccessScore.HasValue || entity.CopilotTotalNetTokens.HasValue
@@ -736,64 +860,66 @@ public sealed class SessionLogService : ISessionLogService
                     Branch = entity.Branch
                 }
                 : null,
-            Turns = entity.Turns.Select(e => new UnifiedRequestEntryDto
-            {
-                RequestId = e.RequestId,
-                Timestamp = e.Timestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-                Model = e.Model,
-                ModelProvider = e.ModelProvider,
-                QueryText = e.QueryText,
-                QueryTitle = e.QueryTitle,
-                Response = e.Response,
-                Interpretation = e.Interpretation,
-                Status = e.Status,
-                TokenCount = e.TokenCount,
-                FailureNote = e.FailureNote,
-                Score = e.Score,
-                IsPremium = e.IsPremium,
-                RawContext = DeserializeJson(e.RawContextJson),
-                OriginalEntry = DeserializeJson(e.OriginalEntryJson),
-                Tags = e.Tags.Count > 0 ? e.Tags.Select(t => t.Tag).ToList() : null,
-                ContextList = e.ContextItems.Count > 0
-                    ? e.ContextItems.OrderBy(c => c.Ordinal).Select(c => c.ContextItem).ToList()
-                    : null,
-                Actions = e.Actions.Count > 0
-                    ? e.Actions.OrderBy(a => a.Order).Select(a => new UnifiedActionDto
-                    {
-                        Order = a.Order,
-                        Description = a.Description,
-                        Type = a.Type,
-                        Status = a.Status,
-                        FilePath = a.FilePath
-                    }).ToList()
-                    : null,
-                ProcessingDialog = e.ProcessingDialog.Count > 0
-                    ? e.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => new ProcessingDialogItemDto
-                    {
-                        Timestamp = p.Timestamp.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-                        Role = p.Role,
-                        Content = p.Content,
-                        Category = p.Category
-                    }).ToList()
-                    : null,
-                Commits = e.Commits.Count > 0
-                    ? e.Commits.OrderBy(c => c.Ordinal).Select(c => new SessionLogCommitDto
-                    {
-                        Sha = c.Sha,
-                        Branch = c.Branch,
-                        Message = c.Message,
-                        Author = c.Author,
-                        Timestamp = c.CommitTimestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-                        FilesChanged = DeserializeStringList(c.FilesChangedJson)
-                    }).ToList()
-                    : null,
-                DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
-                RequirementsDiscovered = MapStringListToDto(e.StringListItems, "Requirement"),
-                FilesModified = MapStringListToDto(e.StringListItems, "FileModified"),
-                Blockers = MapStringListToDto(e.StringListItems, "Blocker")
-            }).ToList()
+            Turns = turns.Select(MapTurnEntityToDto).ToList()
         };
     }
+
+    private static UnifiedRequestEntryDto MapTurnEntityToDto(SessionLogTurnEntity e) => new()
+    {
+        RequestId = e.RequestId,
+        Timestamp = e.Timestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+        Model = e.Model,
+        ModelProvider = e.ModelProvider,
+        QueryText = e.QueryText,
+        QueryTitle = e.QueryTitle,
+        Response = e.Response,
+        Interpretation = e.Interpretation,
+        Status = e.Status,
+        TokenCount = e.TokenCount,
+        FailureNote = e.FailureNote,
+        Score = e.Score,
+        IsPremium = e.IsPremium,
+        RawContext = DeserializeJson(e.RawContextJson),
+        OriginalEntry = DeserializeJson(e.OriginalEntryJson),
+        Tags = e.Tags.Count > 0 ? e.Tags.Select(t => t.Tag).ToList() : null,
+        ContextList = e.ContextItems.Count > 0
+            ? e.ContextItems.OrderBy(c => c.Ordinal).Select(c => c.ContextItem).ToList()
+            : null,
+        Actions = e.Actions.Count > 0
+            ? e.Actions.OrderBy(a => a.Order).Select(a => new UnifiedActionDto
+            {
+                Order = a.Order,
+                Description = a.Description,
+                Type = a.Type,
+                Status = a.Status,
+                FilePath = a.FilePath
+            }).ToList()
+            : null,
+        ProcessingDialog = e.ProcessingDialog.Count > 0
+            ? e.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => new ProcessingDialogItemDto
+            {
+                Timestamp = p.Timestamp.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+                Role = p.Role,
+                Content = p.Content,
+                Category = p.Category
+            }).ToList()
+            : null,
+        Commits = e.Commits.Count > 0
+            ? e.Commits.OrderBy(c => c.Ordinal).Select(c => new SessionLogCommitDto
+            {
+                Sha = c.Sha,
+                Branch = c.Branch,
+                Message = c.Message,
+                Author = c.Author,
+                Timestamp = c.CommitTimestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+                FilesChanged = DeserializeStringList(c.FilesChangedJson)
+            }).ToList()
+            : null,
+        DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
+        RequirementsDiscovered = MapStringListToDto(e.StringListItems, "Requirement"),
+        FilesModified = MapStringListToDto(e.StringListItems, "FileModified"),
+        Blockers = MapStringListToDto(e.StringListItems, "Blocker")
+    };
 
     private static DateTimeOffset? ParseDateTimeOffset(string? value)
     {

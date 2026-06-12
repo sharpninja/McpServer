@@ -189,14 +189,25 @@ public static class MarkerFileService
         {
             if (File.Exists(markerPath))
             {
-                File.Delete(markerPath);
-                logger?.LogInformation("Removed MCP marker file: {Path}", markerPath);
+                var archivePath = BuildArchivedMarkerPath(markerPath);
+                File.Move(markerPath, archivePath);
+                logger?.LogInformation("Archived MCP marker file from {Path} to {ArchivePath}", markerPath, archivePath);
             }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             logger?.LogWarning(ex, "Failed to remove MCP marker file: {Path}", markerPath);
         }
+    }
+
+    private static string BuildArchivedMarkerPath(string markerPath)
+    {
+        var timestamp = DateTimeOffset.UtcNow.ToString("yyyyMMddTHHmmssfffffffZ", CultureInfo.InvariantCulture);
+        var candidate = $"{markerPath}.deleted-{timestamp}";
+        for (var attempt = 1; File.Exists(candidate); attempt++)
+            candidate = $"{markerPath}.deleted-{timestamp}-{attempt}";
+
+        return candidate;
     }
 
     internal static string ResolvePrompt(

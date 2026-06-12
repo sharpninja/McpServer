@@ -12,6 +12,12 @@ namespace McpServer.Support.Mcp.Requirements;
 public sealed class RequirementsDocumentService : IRequirementsDocumentService
 {
     private static readonly UTF8Encoding s_utf8NoBom = new(false);
+    private static readonly TimeSpan[] s_atomicWriteRetryDelays =
+    [
+        TimeSpan.FromMilliseconds(20),
+        TimeSpan.FromMilliseconds(50),
+        TimeSpan.FromMilliseconds(100)
+    ];
 
     private readonly RequirementsOptions _options;
     private readonly IChangeEventBus? _eventBus;
@@ -497,22 +503,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         {
             await File.WriteAllTextAsync(tempPath, content, s_utf8NoBom, ct).ConfigureAwait(false);
 
-            if (File.Exists(fullPath))
-            {
-                try
-                {
-                    File.Replace(tempPath, fullPath, null, ignoreMetadataErrors: true);
-                }
-                catch (Exception ex) when (ex is PlatformNotSupportedException or UnauthorizedAccessException)
-                {
-                    _logger.LogError("{ExceptionDetail}", ex.ToString());
-                    File.Move(tempPath, fullPath, overwrite: true);
-                }
-            }
-            else
-            {
-                File.Move(tempPath, fullPath);
-            }
+            await ReplaceOrMoveWithRetryAsync(tempPath, fullPath, ct).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -530,6 +521,47 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             {
                 _logger.LogDebug(cleanupEx, "Failed to delete temp file {TempPath}", tempPath);
             }
+        }
+    }
+
+    private async Task ReplaceOrMoveWithRetryAsync(string tempPath, string fullPath, CancellationToken ct)
+    {
+        for (var attempt = 0; ; attempt++)
+        {
+            try
+            {
+                ReplaceOrMove(tempPath, fullPath);
+                return;
+            }
+            catch (Exception ex) when (ex is PlatformNotSupportedException or UnauthorizedAccessException)
+            {
+                _logger.LogDebug(ex, "Atomic replace is unavailable for {Path}; falling back to overwrite move.", fullPath);
+                File.Move(tempPath, fullPath, overwrite: true);
+                return;
+            }
+            catch (IOException ex) when (attempt < s_atomicWriteRetryDelays.Length)
+            {
+                _logger.LogDebug(ex, "Retrying atomic write for {Path} after transient file-system error.", fullPath);
+                await Task.Delay(s_atomicWriteRetryDelays[attempt], ct).ConfigureAwait(false);
+            }
+            catch (IOException ex)
+            {
+                _logger.LogDebug(ex, "Atomic write retries exhausted for {Path}; falling back to overwrite move.", fullPath);
+                File.Move(tempPath, fullPath, overwrite: true);
+                return;
+            }
+        }
+    }
+
+    private static void ReplaceOrMove(string tempPath, string fullPath)
+    {
+        if (File.Exists(fullPath))
+        {
+            File.Replace(tempPath, fullPath, null, ignoreMetadataErrors: true);
+        }
+        else
+        {
+            File.Move(tempPath, fullPath);
         }
     }
 

@@ -548,7 +548,7 @@ templates:
       ## Protocols
 
 
-      - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Swagger UI: {{baseUrl}}/swagger
+      - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Use this for typed client/API integration and read-only diagnosis after the required plugin/tool route fails. Do not bypass the required plugin for session log, TODO, requirements, import/export, or traceability operations. Swagger UI: {{baseUrl}}/swagger
 
       - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
 

@@ -266,11 +266,15 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             RequestId = "req-20260516T120000Z-via-rest",
             Timestamp = "2026-05-16T12:00:00Z",
             QueryText = "appended turn",
+            Interpretation = "per-turn route preserves structured fields",
             Status = "completed",
+            Tags = ["rest"],
+            ContextList = ["tests/McpServer.Support.Mcp.IntegrationTests/Controllers/SessionLogControllerTests.cs"],
             Actions =
             [
                 new UnifiedActionDto
                 {
+                    Order = 1,
                     Description = "Recorded REST turn append",
                     Type = "session_turn",
                     Status = "completed",
@@ -289,7 +293,15 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}", UriKind.Relative)).ConfigureAwait(true);
         Assert.NotNull(fetched);
         Assert.NotNull(fetched!.Turns);
-        Assert.Contains(fetched.Turns!, t => t.RequestId == "req-20260516T120000Z-via-rest");
+        var appended = Assert.Single(fetched.Turns!, t => t.RequestId == "req-20260516T120000Z-via-rest");
+        Assert.Equal("per-turn route preserves structured fields", appended.Interpretation);
+        Assert.Equal("rest", Assert.Single(appended.Tags!));
+        Assert.Equal(
+            "tests/McpServer.Support.Mcp.IntegrationTests/Controllers/SessionLogControllerTests.cs",
+            Assert.Single(appended.ContextList!));
+        var action = Assert.Single(appended.Actions!);
+        Assert.Equal(1, action.Order);
+        Assert.Equal("Recorded REST turn append", action.Description);
     }
 
     /// <summary>

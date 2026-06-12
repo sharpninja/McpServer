@@ -3,6 +3,7 @@ using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
@@ -83,6 +84,101 @@ public sealed class SessionLogServiceTests : IDisposable
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// BUG-SESSIONLOG-RESTORE-001: Whole-session submit on a relational provider
+    /// upserts turns by request id instead of attempting duplicate inserts.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_ExistingRelationalSession_UpsertsTurnsByRequestIdWithoutDuplicateInsert()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var sessionId = BuildSessionId("ClaudeCode", "relational-upsert-turns");
+            var initial = CreateTestDto("ClaudeCode", sessionId, title: "Original");
+            initial.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "initial bootstrap", "bootstrap"),
+                CreateRelationalTurn("req-20260610T151236Z-plan-bbcrawler-workspace", "initial plan", "plan")
+            ];
+            await sut.SubmitAsync(initial).ConfigureAwait(true);
+
+            var restored = CreateTestDto("ClaudeCode", sessionId, title: "Restored");
+            restored.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "restored bootstrap", "restore"),
+                CreateRelationalTurn("req-20260610T151236Z-plan-bbcrawler-workspace", "restored plan", "restore")
+            ];
+
+            await sut.SubmitAsync(restored).ConfigureAwait(true);
+
+            var stored = await db.SessionLogs
+                .IgnoreQueryFilters()
+                .Include(s => s.Turns)
+                    .ThenInclude(t => t.Tags)
+                .Include(s => s.Turns)
+                    .ThenInclude(t => t.Actions)
+                .SingleAsync(s => s.SessionId == sessionId)
+                .ConfigureAwait(true);
+            Assert.Equal("Restored", stored.Title);
+            Assert.Equal(2, stored.Turns.Count);
+            Assert.Equal(
+                2,
+                await db.SessionLogTurns
+                    .IgnoreQueryFilters()
+                    .CountAsync(t => t.SessionLogId == stored.Id)
+                    .ConfigureAwait(true));
+            Assert.All(stored.Turns, turn => Assert.Contains(turn.Tags, tag => tag.Tag == "restore"));
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003: Whole-session submit preserves durable turns that are absent
+    /// from the incoming document instead of hard-deleting them or their child rows.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_ExistingRelationalSession_PreservesAbsentDurableTurnsAndChildren()
+    {
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        var (sut, db) = BuildSqliteSut(connection);
+        using (db)
+        {
+            var sessionId = BuildSessionId("ClaudeCode", "relational-remove-stale-tagged-turn");
+            var initial = CreateTestDto("ClaudeCode", sessionId, title: "Original");
+            initial.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "kept turn", "keep"),
+                CreateRelationalTurn("req-20260610T151236Z-stale-bbcrawler-workspace", "stale turn", "stale")
+            ];
+            await sut.SubmitAsync(initial).ConfigureAwait(true);
+
+            var restored = CreateTestDto("ClaudeCode", sessionId, title: "Restored");
+            restored.Turns =
+            [
+                CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "restored kept turn", "restore")
+            ];
+
+            await sut.SubmitAsync(restored).ConfigureAwait(true);
+
+            var stored = await db.SessionLogs
+                .IgnoreQueryFilters()
+                .Include(s => s.Turns)
+                    .ThenInclude(t => t.Tags)
+                .SingleAsync(s => s.SessionId == sessionId)
+                .ConfigureAwait(true);
+            Assert.Equal(2, stored.Turns.Count);
+            var kept = Assert.Single(stored.Turns, turn => turn.RequestId == "req-20260610T151235Z-bootstrap-bbcrawler-workspace");
+            Assert.Equal("restored kept turn", kept.Response);
+            var preserved = Assert.Single(stored.Turns, turn => turn.RequestId == "req-20260610T151236Z-stale-bbcrawler-workspace");
+            Assert.Equal("stale turn", preserved.Response);
+            Assert.Contains(preserved.Tags, tag => tag.Tag == "stale");
+            Assert.Contains(preserved.Actions, action => action.Description == "stale turn action");
+        }
+    }
+
     [Fact]
     public async Task WhenSubmittingWithCopilotStatisticsThenStatisticsArePersisted()
     {
@@ -156,6 +252,25 @@ public sealed class SessionLogServiceTests : IDisposable
 
         Assert.Equal(2, result.TotalCount);
         Assert.Equal(2, result.Items.Count);
+    }
+
+    [Fact]
+    public async Task QueryAsync_WhenSummaryFieldsAreMissing_DerivesStartedAndTurnCountFromTurns()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "summary-derived");
+        var dto = CreateTestDto("ClaudeCode", sessionId);
+        dto.Started = null;
+        dto.TurnCount = 0;
+        dto.Turns![0].Timestamp = "2026-06-10T15:40:39Z";
+
+        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode" }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(1, item.TurnCount);
+        Assert.StartsWith("2026-06-10T15:40:39", item.Started, StringComparison.Ordinal);
+        Assert.Single(item.Turns!);
     }
 
     [Fact]
@@ -445,7 +560,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task WhenUpsertingWithRemovedEntryThenStaleEntryIsDeleted()
+    public async Task WhenUpsertingWithRemovedEntryThenAbsentDurableEntryIsPreserved()
     {
         var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
         dto1.Turns!.Add(new UnifiedRequestEntryDto
@@ -458,14 +573,16 @@ public sealed class SessionLogServiceTests : IDisposable
         var id = await _sut.SubmitAsync(dto1).ConfigureAwait(true);
         Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
 
-        // Submit with only the first entry — second should be removed
+        // TR-MCP-DB-003: Submit with only the first entry must not hard-delete
+        // the absent durable turn.
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
         dto2.TurnCount = 1;
         await _sut.SubmitAsync(dto2).ConfigureAwait(true);
 
-        Assert.Equal(1, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
-        var remaining = await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true);
-        Assert.Equal("req-20260211T100100Z-entry-001", remaining.RequestId);
+        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
+        Assert.Contains(
+            await _db.SessionLogTurns.Where(e => e.SessionLogId == id).ToListAsync().ConfigureAwait(true),
+            turn => turn.RequestId == "req-20260211T100200Z-entry-002");
     }
 
     [Fact]
@@ -828,6 +945,58 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
+    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> persists structured turn fields so
+    /// agents do not have to fold audit data into the response text.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurn_PersistsStructuredFields()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("ClaudeCode", "structured-turn-append");
+        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+
+        var newTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260610T154039Z-structured-turn",
+            Timestamp = "2026-06-10T15:40:39Z",
+            QueryTitle = "Repro turn",
+            QueryText = "Structured fields repro",
+            Response = "testing structured fields",
+            Interpretation = "structured DTO sub-field repro",
+            Status = "in_progress",
+            TokenCount = 123,
+            Tags = ["repro"],
+            ContextList = ["src/McpServer.Repl.Core/GenericClientPassthrough.cs"],
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Order = 1,
+                    Description = "repro action",
+                    Type = "edit",
+                    Status = "completed",
+                    FilePath = "src/test.cs"
+                }
+            ]
+        };
+
+        await sut.UpsertTurnAsync("ClaudeCode", sessionId, newTurn).ConfigureAwait(true);
+
+        var fetched = await sut.GetAsync("ClaudeCode", sessionId).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        var appended = Assert.Single(fetched!.Turns!, turn => turn.RequestId == "req-20260610T154039Z-structured-turn");
+        Assert.Equal("structured DTO sub-field repro", appended.Interpretation);
+        Assert.Equal(123, appended.TokenCount);
+        Assert.Equal("repro", Assert.Single(appended.Tags!));
+        Assert.Equal("src/McpServer.Repl.Core/GenericClientPassthrough.cs", Assert.Single(appended.ContextList!));
+        var action = Assert.Single(appended.Actions!);
+        Assert.Equal(1, action.Order);
+        Assert.Equal("repro action", action.Description);
+        Assert.Equal("src/test.cs", action.FilePath);
+    }
+
+    /// <summary>
     /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> on an existing requestId updates the
     /// row in place rather than inserting a duplicate.
     /// </summary>
@@ -860,6 +1029,64 @@ public sealed class SessionLogServiceTests : IDisposable
             .ConfigureAwait(true);
         Assert.Equal("updated query", turn.QueryText);
         Assert.Equal("updated response", turn.Response);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: Incremental per-turn updates preserve existing structured
+    /// child rows when the later DTO omits those collections.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_ExistingTurn_PreservesStructuredCollectionsWhenOmitted()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("ClaudeCode", "turn-merge-structured");
+        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+
+        await sut.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100100Z-entry-001",
+            Timestamp = "2026-02-11T10:01:00Z",
+            QueryText = "initial structured query",
+            Response = "initial response",
+            Status = "in_progress",
+            Tags = ["repro"],
+            ContextList = ["src/McpServer.Services/Services/SessionLogService.cs"],
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Order = 1,
+                    Description = "preserve action",
+                    Type = "edit",
+                    Status = "completed",
+                    FilePath = "src/file.cs"
+                }
+            ],
+            FilesModified = ["src/file.cs"],
+            Blockers = ["initial blocker"]
+        }).ConfigureAwait(true);
+
+        await sut.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100100Z-entry-001",
+            Response = "final response",
+            Status = "completed",
+            DesignDecisions = ["Per-turn updates are merged so omitted structured collections are preserved."]
+        }).ConfigureAwait(true);
+
+        var fetched = await sut.GetAsync("ClaudeCode", sessionId).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        var turn = Assert.Single(fetched!.Turns!, item => item.RequestId == "req-20260211T100100Z-entry-001");
+        Assert.Equal("final response", turn.Response);
+        Assert.Equal("repro", Assert.Single(turn.Tags!));
+        Assert.Equal("src/McpServer.Services/Services/SessionLogService.cs", Assert.Single(turn.ContextList!));
+        Assert.Equal("preserve action", Assert.Single(turn.Actions!).Description);
+        Assert.Equal("src/file.cs", Assert.Single(turn.FilesModified!));
+        Assert.Equal("initial blocker", Assert.Single(turn.Blockers!));
+        Assert.Equal(
+            "Per-turn updates are merged so omitted structured collections are preserved.",
+            Assert.Single(turn.DesignDecisions!));
     }
 
     /// <summary>
@@ -948,6 +1175,22 @@ public sealed class SessionLogServiceTests : IDisposable
         return new SessionLogService(_db, NullLogger<SessionLogService>.Instance, _eventBus, ctx);
     }
 
+    private static (SessionLogService Sut, McpDbContext Db) BuildSqliteSut(SqliteConnection connection)
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseSqlite(connection)
+            .Options;
+        var workspaceContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
+        var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(
+            db,
+            NullLogger<SessionLogService>.Instance,
+            Substitute.For<IChangeEventBus>(),
+            workspaceContext);
+        return (sut, db);
+    }
+
     private static UnifiedSessionLogDto CreateTestDto(string sourceType, string sessionId, string title = "Test Session")
     {
         return new UnifiedSessionLogDto
@@ -972,6 +1215,34 @@ public sealed class SessionLogServiceTests : IDisposable
                     Status = "completed"
                 }
             ]
+        };
+    }
+
+    private static UnifiedRequestEntryDto CreateRelationalTurn(string requestId, string response, string tag)
+    {
+        return new UnifiedRequestEntryDto
+        {
+            RequestId = requestId,
+            Timestamp = "2026-06-10T15:12:35Z",
+            QueryTitle = response,
+            QueryText = response,
+            Response = response,
+            Status = "completed",
+            Tags = [tag],
+            ContextList = [$"docs/{tag}.md"],
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = $"{response} action",
+                    Type = "test",
+                    Status = "completed",
+                    FilePath = $"src/{tag}.cs"
+                }
+            ],
+            DesignDecisions = [$"{response} decision"],
+            FilesModified = [$"src/{tag}.cs"],
+            Blockers = [$"{response} blocker"]
         };
     }
 

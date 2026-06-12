@@ -16,6 +16,13 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, IDisposable
 {
     private const int StoreLockRetryDelayMilliseconds = 50;
+    private static readonly TimeSpan[] s_atomicWriteRetryDelays =
+    [
+        TimeSpan.FromMilliseconds(20),
+        TimeSpan.FromMilliseconds(50),
+        TimeSpan.FromMilliseconds(100)
+    ];
+
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -171,16 +178,51 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         {
             await File.WriteAllTextAsync(tmp, json, ct).ConfigureAwait(false);
             EnsureRestrictedFilePermissions(tmp);
-            if (File.Exists(path))
-                File.Replace(tmp, path, null, ignoreMetadataErrors: true);
-            else
-                File.Move(tmp, path);
+            await ReplaceOrMoveWithRetryAsync(tmp, path, ct).ConfigureAwait(false);
             EnsureRestrictedFilePermissions(path);
         }
         finally
         {
             if (File.Exists(tmp))
                 File.Delete(tmp);
+        }
+    }
+
+    private static async Task ReplaceOrMoveWithRetryAsync(string tmp, string path, CancellationToken ct)
+    {
+        for (var attempt = 0; ; attempt++)
+        {
+            try
+            {
+                ReplaceOrMove(tmp, path);
+                return;
+            }
+            catch (Exception ex) when (ex is PlatformNotSupportedException or UnauthorizedAccessException)
+            {
+                File.Move(tmp, path, overwrite: true);
+                return;
+            }
+            catch (IOException) when (attempt < s_atomicWriteRetryDelays.Length)
+            {
+                await Task.Delay(s_atomicWriteRetryDelays[attempt], ct).ConfigureAwait(false);
+            }
+            catch (IOException)
+            {
+                File.Move(tmp, path, overwrite: true);
+                return;
+            }
+        }
+    }
+
+    private static void ReplaceOrMove(string tmp, string path)
+    {
+        if (File.Exists(path))
+        {
+            File.Replace(tmp, path, null, ignoreMetadataErrors: true);
+        }
+        else
+        {
+            File.Move(tmp, path);
         }
     }
 

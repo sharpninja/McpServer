@@ -28,6 +28,17 @@ public sealed class SessionLogClient : McpClientBase
         return await PostAsync<SessionLogSubmitResult>("mcpserver/sessionlog", sessionLog, cancellationToken);
     }
 
+    /// <summary>Upsert a single turn on an existing session log.</summary>
+    public async Task<SessionLogTurnSubmitResult> UpsertTurnAsync(
+        string agent,
+        string sessionId,
+        UnifiedRequestEntryDto turn,
+        CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/turn";
+        return await PostAsync<SessionLogTurnSubmitResult>(path, turn, cancellationToken);
+    }
+
     /// <summary>Query session logs with optional filters.</summary>
     public async Task<SessionLogQueryResult> QueryAsync(
         string? agent = null, string? model = null, string? text = null,

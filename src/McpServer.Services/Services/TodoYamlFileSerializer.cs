@@ -12,6 +12,12 @@ namespace McpServer.Support.Mcp.Services;
 internal static class TodoYamlFileSerializer
 {
     private static readonly UTF8Encoding s_utf8NoBom = new(false);
+    private static readonly TimeSpan[] s_atomicWriteRetryDelays =
+    [
+        TimeSpan.FromMilliseconds(20),
+        TimeSpan.FromMilliseconds(50),
+        TimeSpan.FromMilliseconds(100)
+    ];
     private static readonly IDeserializer s_deserializer = new DeserializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
         .WithTypeConverter(new TodoStringListYamlConverter())
@@ -62,23 +68,50 @@ internal static class TodoYamlFileSerializer
 
         try
         {
-            if (File.Exists(fullPath))
-            {
-                File.Replace(tempPath, fullPath, null, ignoreMetadataErrors: true);
-            }
-            else
-            {
-                File.Move(tempPath, fullPath);
-            }
-        }
-        catch (Exception ex) when (ex is PlatformNotSupportedException or UnauthorizedAccessException)
-        {
-            File.Move(tempPath, fullPath, overwrite: true);
+            await ReplaceOrMoveWithRetryAsync(tempPath, fullPath, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
             if (File.Exists(tempPath))
                 File.Delete(tempPath);
+        }
+    }
+
+    private static async Task ReplaceOrMoveWithRetryAsync(string tempPath, string fullPath, CancellationToken cancellationToken)
+    {
+        for (var attempt = 0; ; attempt++)
+        {
+            try
+            {
+                ReplaceOrMove(tempPath, fullPath);
+                return;
+            }
+            catch (Exception ex) when (ex is PlatformNotSupportedException or UnauthorizedAccessException)
+            {
+                File.Move(tempPath, fullPath, overwrite: true);
+                return;
+            }
+            catch (IOException) when (attempt < s_atomicWriteRetryDelays.Length)
+            {
+                await Task.Delay(s_atomicWriteRetryDelays[attempt], cancellationToken).ConfigureAwait(false);
+            }
+            catch (IOException)
+            {
+                File.Move(tempPath, fullPath, overwrite: true);
+                return;
+            }
+        }
+    }
+
+    private static void ReplaceOrMove(string tempPath, string fullPath)
+    {
+        if (File.Exists(fullPath))
+        {
+            File.Replace(tempPath, fullPath, null, ignoreMetadataErrors: true);
+        }
+        else
+        {
+            File.Move(tempPath, fullPath);
         }
     }
 }

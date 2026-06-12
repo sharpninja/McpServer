@@ -40,6 +40,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
         Converters = { new FlexibleBooleanJsonConverter() }
     };
 
