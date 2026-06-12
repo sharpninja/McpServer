@@ -158,35 +158,204 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             return await DispatchClientRequestAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
+        // FR-MCP-REPL-006: every workflow.* namespace is DEPRECATED in favor of the
+        // client.<Client>.<Method> passthrough surface (and the stateless session
+        // lifecycle verbs). Responses carry deprecated: true so callers migrate.
         if (method.StartsWith(RequirementsCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchRequirementsRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return MarkWorkflowDeprecated(await DispatchRequirementsRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
         if (method.StartsWith(SessionLogCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchSessionLogRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return MarkWorkflowDeprecated(await DispatchSessionLogRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
         if (method.StartsWith(TodoCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchTodoRequestAsync(request, emitEnvelopeAsync, cancellationToken).ConfigureAwait(false);
+            return MarkWorkflowDeprecated(await DispatchTodoRequestAsync(request, emitEnvelopeAsync, cancellationToken).ConfigureAwait(false));
         }
 
         if (method.StartsWith(MemoryCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchMemoryRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return MarkWorkflowDeprecated(await DispatchMemoryRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
         return BuildError(
             requestId: request.RequestId,
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
-                     $"Supported namespaces: client.<clientName>.<methodName>, {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*.");
+                     $"Primary namespace: client.<clientName>.<methodName>. " +
+                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*.");
+    }
+
+    private static IYamlEnvelope MarkWorkflowDeprecated(IYamlEnvelope response)
+    {
+        if (response.Type == "result" && response.Payload is ResultPayload result)
+        {
+            result.Deprecated = true;
+        }
+
+        return response;
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-006: routes workflow.sessionlog lifecycle verbs that carry
+    /// explicit (agent, sessionId) identifiers straight to the stateless
+    /// SessionLog client lifecycle methods. Returns null when the verb is not a
+    /// lifecycle verb or the identifiers are absent (legacy stateful path).
+    /// </summary>
+    private async Task<IYamlEnvelope?> TryDispatchStatelessLifecycleAsync(
+        IRequestPayload request,
+        Dictionary<string, object?> args,
+        CancellationToken cancellationToken)
+    {
+        var agent = GetString(args, "agent") ?? GetString(args, "sourceType");
+        var sessionId = GetString(args, "sessionId");
+        if (string.IsNullOrWhiteSpace(agent) || string.IsNullOrWhiteSpace(sessionId))
+        {
+            return null;
+        }
+
+        string clientMethod;
+        Dictionary<string, object?> clientArgs;
+        Dictionary<string, object?> resultShape;
+
+        switch (request.Method)
+        {
+            case SessionLogCommandShapes.OpenSessionMethod:
+                clientMethod = "OpenSessionAsync";
+                clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["agent"] = agent,
+                    ["sessionId"] = sessionId,
+                    ["title"] = GetString(args, "title"),
+                    ["model"] = GetString(args, "model"),
+                };
+                resultShape = new Dictionary<string, object?> { ["sessionId"] = sessionId, ["opened"] = true };
+                break;
+
+            case SessionLogCommandShapes.BeginTurnMethod:
+                clientMethod = "BeginTurnAsync";
+                clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["agent"] = agent,
+                    ["sessionId"] = sessionId,
+                    ["requestId"] = GetString(args, "requestId"),
+                    ["queryTitle"] = GetString(args, "queryTitle"),
+                    ["queryText"] = GetString(args, "queryText"),
+                    ["model"] = GetString(args, "model"),
+                };
+                resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "in_progress" };
+                break;
+
+            case SessionLogCommandShapes.CompleteTurnMethod:
+                clientMethod = "CompleteTurnAsync";
+                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);
+                resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "completed" };
+                break;
+
+            case SessionLogCommandShapes.FailTurnMethod:
+                clientMethod = "FailTurnAsync";
+                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: GetString(args, "errorMessage") ?? GetString(args, "failureNote"));
+                resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "failed" };
+                break;
+
+            default:
+                return null;
+        }
+
+        try
+        {
+            await _passthrough.InvokeAsync("SessionLog", clientMethod, clientArgs, cancellationToken).ConfigureAwait(false);
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = resultShape,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private static Dictionary<string, object?> BuildFinalizeArgs(
+        string agent,
+        string sessionId,
+        Dictionary<string, object?> args,
+        string? failureNote)
+    {
+        // Forward the turn payload either verbatim (params.payload) or assembled
+        // from the flat legacy parameter names so existing callers keep working.
+        var payload = args.TryGetValue("payload", out var explicitPayload) && explicitPayload is not null
+            ? explicitPayload
+            : BuildPayloadFromFlatArgs(args, failureNote);
+
+        return new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["agent"] = agent,
+            ["sessionId"] = sessionId,
+            ["requestId"] = GetString(args, "requestId"),
+            ["payload"] = payload,
+        };
+    }
+
+    private static Dictionary<string, object?> BuildPayloadFromFlatArgs(Dictionary<string, object?> args, string? failureNote)
+    {
+        var payload = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+        foreach (var key in new[]
+                 {
+                     "response", "interpretation", "tokenCount", "model", "tags", "contextList",
+                     "designDecisions", "commits", "actions", "filesModified", "blockers", "processingDialog",
+                 })
+        {
+            if (args.TryGetValue(key, out var value) && value is not null)
+            {
+                payload[key] = value;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(failureNote))
+        {
+            payload["failureNote"] = failureNote;
+        }
+
+        return payload;
     }
 
     private async Task<IYamlEnvelope> DispatchSessionLogRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
     {
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        // FR-MCP-REPL-006: lifecycle verbs carrying explicit (agent, sessionId)
+        // identifiers route STATELESSLY through the SessionLog client - no
+        // in-process active-session state is consulted or required. The legacy
+        // stateful path below remains only for callers that omit the identifiers.
+        var statelessResponse = await TryDispatchStatelessLifecycleAsync(request, args, cancellationToken).ConfigureAwait(false);
+        if (statelessResponse is not null)
+        {
+            return statelessResponse;
+        }
+
         if (_sessionLogWorkflow is null)
         {
             return BuildError(
@@ -196,9 +365,6 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         var workflow = _sessionLogWorkflow;
-        var args = request.Params is null
-            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
-            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
 
         try
         {

@@ -316,11 +316,7 @@ public sealed class YamlSerializer : IYamlSerializer
                 ["method"] = r.Method,
                 ["params"] = r.Params,
             },
-            IResultPayload res => new Dictionary<string, object?>
-            {
-                ["requestId"] = res.RequestId,
-                ["result"] = res.Result,
-            },
+            IResultPayload res => NormalizeResultPayload(res),
             IErrorPayload e => new Dictionary<string, object?>
             {
                 ["requestId"] = e.RequestId,
@@ -336,5 +332,23 @@ public sealed class YamlSerializer : IYamlSerializer
             },
             _ => payload,
         };
+    }
+
+    private static Dictionary<string, object?> NormalizeResultPayload(IResultPayload res)
+    {
+        var wire = new Dictionary<string, object?>
+        {
+            ["requestId"] = res.RequestId,
+            ["result"] = res.Result,
+        };
+
+        // FR-MCP-REPL-006: deprecation marker for workflow.* responses; the key is
+        // only present on the wire when explicitly set.
+        if (res is ResultPayload { Deprecated: not null } payload)
+        {
+            wire["deprecated"] = payload.Deprecated;
+        }
+
+        return wire;
     }
 }

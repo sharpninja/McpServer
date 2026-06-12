@@ -56,6 +56,14 @@ public sealed class ResultPayload : IResultPayload
 
     /// <inheritdoc />
     public object? Result { get; init; }
+
+    /// <summary>
+    /// FR-MCP-REPL-006: True when the invoked method belongs to a deprecated
+    /// namespace (<c>workflow.*</c>). Callers should migrate to the
+    /// <c>client.&lt;Client&gt;.&lt;Method&gt;</c> passthrough surface. Omitted
+    /// from the wire when null.
+    /// </summary>
+    public bool? Deprecated { get; set; }
 }
 
 /// <summary>
