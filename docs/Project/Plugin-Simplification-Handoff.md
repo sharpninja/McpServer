@@ -24,7 +24,31 @@ Full McpServer solution suite on this branch: green except 5 pre-existing failur
 - `plugins/core/README.md` - contract rules (plugins never edit synced files; host diffs live in `plugin-env`).
 - Reconciliation source: codex `repl-invoke.sh` is the canonical base (strict superset); the shared UpsertTurnAsync patch was committed across all 5 shell repos this session (`97aab2d` claude-code, `f1bfae0`/`a934ba2`/`820bff8`/`ca9be45` cowork/codex/copilot/grok).
 
-## REMAINING (not done - do not assume complete)
+## Phase 2 fan-out — DONE (2026-06-13, on feature branches, pushed to origin)
+
+All 8 plugin repos migrated onto the canonical core via Model C (delete superseded shared-lib suites; validate via checksum guard + core fixtures + host smoke), each on branch `feature/plugin-core-migration`, pushed to its origin, NOT merged:
+
+| Repo | Commit | Validation |
+|---|---|---|
+| claude-code | `df85a3c` | checksum 28 files; 96 host bats (skills+smoke) |
+| cowork | `ba73187` | checksum 20; 96 host bats |
+| codex | `2654bc6` | checksum 20; 9 host bats (manifest+smoke) |
+| copilot | `d47d7a7` | checksum 20; 16 host bats (plan-output+skills+smoke) |
+| grok | `75e9a14` | checksum 28; 95 host bats |
+| opencode | `cf85e93` | tsc clean; 33 host jest |
+| cline-v2 | `47b5520` | tsc clean; 10 host jest |
+| cline | `03c74cf` | tsc clean; 13 host jest |
+
+Node repos consume `@sharpninja/mcpserver-plugin-core` as a committed vendored tgz (`vendor/*.tgz`, `file:` dependency) so each branch is self-contained/reviewable without a registry. The core `lib-node` package gained a 106-test jest suite (McpServer `7c6d677`); a latent `contextLogger` undefined-return bug (crashed best-effort paths) was fixed there with a regression test. Note: the 3 node repos vendored the pre-fix tgz on their branches; re-vendor at merge time to pick up the `contextLogger` fix (backward-compatible, their tests pass against the vendored copy).
+
+## Phase 3 — status
+
+- DONE: persistent REPL daemon + `repl_invoke_persistent` wrapper (opt-in, 8 bats); CI guards (`core-guard.yml` + checksum guard) installed in all 5 shell repos; plugin-local divergent `repl-invoke.sh` copies consolidated 5→1 canonical lib fleet-wide.
+- CORRECTLY DEFERRED by plan condition: removing the deprecated `workflow.todo/requirements/memory` dispatcher namespaces is grep-gated on "zero plugin references." The canonical `repl-invoke.sh` (41 refs) and the node `todo/requirements/memory` tools (43 refs) still route through them (typed-first with workflow fallback), so removal would break the migrated fleet. It waits until those routes move fully to `client.*` (a future core change). Persistent-REPL default-on left opt-in to avoid a hot-path behavior change.
+
+## REMAINING (approval-gated, deliberately not done)
+
+> NOTE (2026-06-13): The Phase 2 fan-out (item 1 below) is now COMPLETE - see the "Phase 2 fan-out — DONE" table above; all 8 repos are migrated on `feature/plugin-core-migration` branches pushed to origin. Item 1's writeup is retained as the historical diagnosis/recipe. The only true remaining work is item 3 (merge + production deploy, approval-gated) and item 2's deferred future-core-change.
 
 1. **Phase 2 fan-out** to the 8 plugin repos. The migration MECHANICS are tooled and proven, but a fan-out attempt (2026-06-13) surfaced a blocking seam that must be fixed in the core FIRST:
 
