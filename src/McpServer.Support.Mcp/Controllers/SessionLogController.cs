@@ -395,6 +395,204 @@ public sealed class SessionLogController : ControllerBase
         _logger.LogInformation("Session log workspace stamp repair {Mode}: {Count} rows", dryRun ? "dry-run" : "applied", repaired);
         return Ok(new { repaired, dryRun });
     }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: PATCH a turn - additive merge. Omitted scalar fields and
+    /// omitted collections are preserved; collection items are appended. This is
+    /// the explicit verb for the long-standing additive submit behavior.
+    /// </summary>
+    [HttpPatch("{agent}/{sessionId}/{requestId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public Task<IActionResult> PatchTurnAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        [FromBody] UnifiedRequestEntryDto? body,
+        CancellationToken cancellationToken)
+    {
+        var turn = body ?? new UnifiedRequestEntryDto();
+        turn.RequestId = requestId;
+        return UpsertLifecycleTurnAsync(agent, sessionId, turn, StatusCodes.Status200OK, cancellationToken);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: PUT a turn - REPLACE. Omitted scalar fields are reset and
+    /// every section becomes exactly what the body carries (omitted/empty sections
+    /// are cleared). Use this to remove data by re-stating the turn.
+    /// </summary>
+    [HttpPut("{agent}/{sessionId}/{requestId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ReplaceTurnAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        [FromBody] UnifiedRequestEntryDto? body,
+        CancellationToken cancellationToken)
+    {
+        var turn = body ?? new UnifiedRequestEntryDto();
+        turn.RequestId = requestId;
+        try
+        {
+            var turnId = await _service.ReplaceTurnAsync(agent, sessionId, turn, cancellationToken).ConfigureAwait(false);
+            return Ok(new { turnId, agent, sessionId, requestId, replaced = true });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid turn payload.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: PUT a single turn section - REPLACE just that section.
+    /// Sections: actions, tags, context, dialog, commits, designDecisions,
+    /// requirementsDiscovered, filesModified, blockers. An empty/omitted section
+    /// property clears it. Other sections are left untouched.
+    /// </summary>
+    [HttpPut("{agent}/{sessionId}/{requestId}/sections/{section}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ReplaceTurnSectionAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        string section,
+        [FromBody] UnifiedRequestEntryDto? body,
+        CancellationToken cancellationToken)
+    {
+        var payload = body ?? new UnifiedRequestEntryDto();
+        payload.RequestId = requestId;
+        try
+        {
+            var found = await _service.ReplaceTurnSectionAsync(agent, sessionId, requestId, section, payload, cancellationToken).ConfigureAwait(false);
+            return found
+                ? Ok(new { agent, sessionId, requestId, section, replaced = true })
+                : NotFound(new { error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid section or identifier.");
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: DELETE all items in a turn section (clear the section).
+    /// </summary>
+    [HttpDelete("{agent}/{sessionId}/{requestId}/sections/{section}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ClearTurnSectionAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        string section,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var found = await _service.ClearTurnSectionAsync(agent, sessionId, requestId, section, cancellationToken).ConfigureAwait(false);
+            return found
+                ? Ok(new { agent, sessionId, requestId, section, cleared = true })
+                : NotFound(new { error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid section or identifier.");
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: DELETE a single item from a turn section. The item key is
+    /// the value for string sections (tags/context/string-lists), the SHA for
+    /// commits, the Order for actions, and the ordinal for dialog.
+    /// </summary>
+    [HttpDelete("{agent}/{sessionId}/{requestId}/sections/{section}/items/{itemKey}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteTurnItemAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        string section,
+        string itemKey,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var found = await _service.DeleteTurnItemAsync(agent, sessionId, requestId, section, itemKey, cancellationToken).ConfigureAwait(false);
+            return found
+                ? Ok(new { agent, sessionId, requestId, section, itemKey, deleted = true })
+                : NotFound(new { error = $"Item not found in section '{section}' of turn {agent}/{sessionId}/{requestId}." });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid section or identifier.");
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: DELETE a single turn (and all of its child rows). The
+    /// parent session is preserved.
+    /// </summary>
+    [HttpDelete("{agent}/{sessionId}/{requestId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteTurnAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var found = await _service.DeleteTurnAsync(agent, sessionId, requestId, cancellationToken).ConfigureAwait(false);
+            return found
+                ? Ok(new { agent, sessionId, requestId, deleted = true })
+                : NotFound(new { error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid identifier.");
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: DELETE an entire session and every turn and child row
+    /// beneath it.
+    /// </summary>
+    [HttpDelete("{agent}/{sessionId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteSessionAsync(
+        string agent,
+        string sessionId,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var found = await _service.DeleteSessionAsync(agent, sessionId, cancellationToken).ConfigureAwait(false);
+            return found
+                ? Ok(new { agent, sessionId, deleted = true })
+                : NotFound(new { error = $"Session not found: {agent}/{sessionId}" });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid identifier.");
+        }
+    }
 }
 
 /// <summary>FR-SUPPORT-010E: Optional body for the stateless open-session endpoint.</summary>

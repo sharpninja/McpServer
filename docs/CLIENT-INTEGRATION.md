@@ -64,7 +64,8 @@ Key tool categories:
 - **Desktop**: `desktop_launch`
 - **Sync**: `sync_run`, `sync_status`
 - **TODO**: `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`
-- **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`
+- **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
+- **Session Logs (replace/remove)**: `sessionlog_replace_turn`, `sessionlog_replace_section`, `sessionlog_clear_section`, `sessionlog_delete_item`, `sessionlog_delete_turn`, `sessionlog_delete_session` (PUT=replace, DELETE=remove; see [session-log-workflow-api.md](context/session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete))
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
 
 ## Workspace Targeting

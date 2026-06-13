@@ -85,6 +85,86 @@ Runtime state tracking for the active session and turn:
    - Terminal state
    - Captures error message and optional error code
 
+## Replacing and Removing Data (PATCH / PUT / DELETE)
+
+The normal turn lifecycle is **append-only and additive**: `POST`/`PATCH` and the
+`begin`/`complete`/`fail` verbs merge their payload onto the existing turn, so an
+omitted field never clobbers a previously recorded value and collection items are
+appended. That is the right default for an audit trail, but it means a plain
+submit can never *remove* a section of data. The verb split below makes removal
+explicit. Intent is carried by the **HTTP verb**, not by sending nulls, so there
+is no ambiguity between "field absent" and "clear this field".
+
+| Verb | Scope | Semantics |
+|------|-------|-----------|
+| `POST` / `PATCH` | turn | **Additive merge.** Omitted scalars preserved; collection items appended. (PATCH is the explicit alias for the long-standing additive submit.) |
+| `PUT` | turn | **Replace.** Omitted scalars reset; every section becomes exactly the payload; omitted/empty sections cleared. |
+| `PUT` | section | **Replace one section.** Only the named section is rewritten from the payload; an empty/omitted property clears it. Other sections untouched. |
+| `DELETE` | section | Clear all items in one section. |
+| `DELETE` | section item | Remove a single item from a section. |
+| `DELETE` | turn | Remove a turn and all its child rows (the session is preserved). |
+| `DELETE` | session | Remove a session and every turn beneath it. |
+
+`PUT` and `DELETE` are **correction operations**: unlike the append-only
+lifecycle, they intentionally rewrite or remove recorded data, including on
+turns already marked `completed`/`failed`. Use them to fix a mis-logged turn or
+purge data, not as part of normal turn flow. The terminal-turn compliance gate
+(at least one decision/action/commit) still applies to a `PUT` that sets a
+terminal status, but not to section/item/whole-turn `DELETE`.
+
+### Sections
+
+`actions`, `tags`, `context`, `dialog`, `commits`, `designDecisions`,
+`requirementsDiscovered`, `filesModified`, `blockers`.
+
+### Item keys (for single-item DELETE)
+
+- String sections (`tags`, `context`, `designDecisions`, `requirementsDiscovered`, `filesModified`, `blockers`): the item **value**.
+- `commits`: the commit **SHA**.
+- `actions`: the action **Order**.
+- `dialog`: the item **ordinal**.
+
+### REST endpoints
+
+```
+PATCH  /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}                       # additive merge
+PUT    /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}                       # replace whole turn
+PUT    /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}    # replace one section
+DELETE /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}/items/{itemKey}
+DELETE /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/sections/{section}    # clear section
+DELETE /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}                       # delete turn
+DELETE /mcpserver/sessionlog/{agent}/{sessionId}                                   # delete session
+```
+
+The replace/section bodies are a `UnifiedRequestEntryDto`; for a section PUT only
+the matching property is read. `DELETE` returns `404` when the target does not
+exist and is idempotent on retry (re-deleting an already-removed item/turn/section
+is safe).
+
+### MCP tools
+
+- `sessionlog_replace_turn` (turn replace)
+- `sessionlog_replace_section` (section replace)
+- `sessionlog_clear_section` (clear a section)
+- `sessionlog_delete_item` (remove one item)
+- `sessionlog_delete_turn` (delete a turn)
+- `sessionlog_delete_session` (delete a session)
+
+### REPL passthrough
+
+The typed client methods are exposed verbatim over `client.SessionLog.*`:
+`ReplaceTurn`, `ReplaceTurnSection`, `ClearTurnSection`, `DeleteTurnItem`,
+`DeleteTurn`, `DeleteSession`.
+
+### Removal recipes
+
+- **Drop one tag**: `DELETE .../sections/tags/items/<tag-value>`
+- **Clear all blockers** (e.g. after they are resolved): `DELETE .../sections/blockers`
+- **Replace the file list** with a corrected set: `PUT .../sections/filesModified` with `{ "filesModified": ["src/a.cs"] }`
+- **Strip a mis-recorded commit**: `DELETE .../sections/commits/items/<sha>`
+- **Rewrite a whole turn** (omit a section to clear it): `PUT .../{requestId}` with the corrected `UnifiedRequestEntryDto`
+- **Remove an accidental turn**: `DELETE .../{requestId}`
+
 ## YAML Command Shapes
 
 All commands use the `workflow.sessionlog.*` namespace.

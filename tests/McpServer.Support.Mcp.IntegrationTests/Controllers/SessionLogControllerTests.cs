@@ -335,29 +335,32 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: Unsupported verb on the turn-append route returns 405 with
-    /// <c>Allow</c> naming the supported verbs.
+    /// FR-SUPPORT-010G: PUT on a turn route is now a supported verb (REPLACE). A
+    /// valid requestId replaces the turn and returns 200; the bare <c>/turn</c>
+    /// append route remains POST-only (PUT there resolves to a turn whose id is the
+    /// literal "turn", which fails requestId validation with 400, not 405).
     /// </summary>
     [Fact]
-    public async Task WhenPuttingTurnRouteThenReturns405WithAllowHeader()
+    public async Task WhenPuttingTurnWithValidRequestIdThenReplacesAndReturns200()
     {
         var sessionId = BuildSessionId("Cursor", $"turn-verb-{Guid.NewGuid():N}");
         var dto = CreateTestDto("Cursor", sessionId);
+        var requestId = dto.Turns![0].RequestId!;
         await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
 
         var content = JsonContent.Create(new UnifiedRequestEntryDto
         {
-            RequestId = "req-20260516T120000Z-put",
-            Status = "completed"
+            RequestId = requestId,
+            Status = "completed",
+            Actions = [new UnifiedActionDto { Order = 0, Description = "replace", Status = "completed" }],
         });
         using var request = new HttpRequestMessage(HttpMethod.Put,
-            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/turn", UriKind.Relative))
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/{requestId}", UriKind.Relative))
         { Content = content };
 
         var response = await _client.SendAsync(request).ConfigureAwait(true);
 
-        Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
-        Assert.Contains("POST", response.Content.Headers.Allow ?? response.Headers.GetValues("Allow"));
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     /// <summary>

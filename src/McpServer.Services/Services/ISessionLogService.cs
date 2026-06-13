@@ -77,6 +77,86 @@ public interface ISessionLogService
     Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// FR-SUPPORT-010G: REPLACE a single turn (PUT semantics). Unlike the additive
+    /// <see cref="UpsertTurnAsync"/>, omitted scalar fields are reset and every
+    /// section collection becomes exactly what the payload carries (omitted or
+    /// empty sections are cleared). Use this to remove data by re-stating the turn.
+    /// </summary>
+    /// <param name="sourceType">Agent source type of the parent session.</param>
+    /// <param name="sessionId">Session identifier of the parent session.</param>
+    /// <param name="turn">Complete turn representation to replace the existing one with.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The persisted turn entity identifier.</returns>
+    /// <exception cref="InvalidOperationException">When the parent session does not exist.</exception>
+    Task<long> ReplaceTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-SUPPORT-010G: REPLACE a single named section of a turn (PUT semantics).
+    /// Sections: actions, tags, context, dialog, commits, designDecisions,
+    /// requirementsDiscovered, filesModified, blockers. The matching property on
+    /// <paramref name="payload"/> becomes the section's complete new contents; a
+    /// null/empty property clears the section. Other sections are untouched.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="section">Section name (case-insensitive).</param>
+    /// <param name="payload">Carrier whose matching section property holds the new contents.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True when the turn was found and replaced; false when the turn does not exist.</returns>
+    /// <exception cref="ArgumentException">When <paramref name="section"/> is not a known section.</exception>
+    Task<bool> ReplaceTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, UnifiedRequestEntryDto payload, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-SUPPORT-010G: Remove every item in a named section of a turn (DELETE
+    /// semantics). Equivalent to replacing the section with an empty collection.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="section">Section name (case-insensitive).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True when the turn was found and the section cleared; false when the turn does not exist.</returns>
+    /// <exception cref="ArgumentException">When <paramref name="section"/> is not a known section.</exception>
+    Task<bool> ClearTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-SUPPORT-010G: Remove a single item from a section of a turn (DELETE
+    /// semantics). The <paramref name="itemKey"/> is matched against the item's
+    /// natural identity: the value for string sections (tags/context/string-lists),
+    /// the SHA for commits, the Order for actions, and the ordinal for dialog.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="section">Section name (case-insensitive).</param>
+    /// <param name="itemKey">Natural key of the item to remove.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True when a matching item was found and removed; false otherwise.</returns>
+    /// <exception cref="ArgumentException">When <paramref name="section"/> is not a known section.</exception>
+    Task<bool> DeleteTurnItemAsync(string sourceType, string sessionId, string requestId, string section, string itemKey, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-SUPPORT-010G: Delete a single turn and all of its child rows from a
+    /// session. The parent session is left in place.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True when the turn existed and was deleted; false when not found.</returns>
+    Task<bool> DeleteTurnAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-SUPPORT-010G: Delete a session and every turn and child row beneath it.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True when the session existed and was deleted; false when not found.</returns>
+    Task<bool> DeleteSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// FR-SUPPORT-010E: Idempotent ensure-session keyed by (sourceType, sessionId)
     /// within the current workspace. Creates the session with status in_progress
     /// when missing; otherwise leaves the existing session untouched.

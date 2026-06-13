@@ -162,6 +162,157 @@ public sealed partial class FwhMcpTools
         CancellationToken cancellationToken = default)
         => FinalizeLifecycleTurnToolAsync(agent, sessionId, requestId, workspacePath, "failed", turnJson, cancellationToken);
 
+    /// <summary>FR-SUPPORT-010G: REPLACE a whole turn (PUT semantics). Omitted fields reset, sections cleared.</summary>
+    [McpServerTool(Name = "sessionlog_replace_turn"), Description("REPLACE a session turn (PUT). Omitted scalar fields are reset and every section becomes exactly what turnJson carries (omitted/empty sections are cleared). Use to remove data by re-stating the turn. turnJson is a UnifiedRequestEntryDto.")]
+    public async Task<string> SessionLogReplaceTurn(
+        [Description("Agent source type")] string agent,
+        [Description("Session id")] string sessionId,
+        [Description("Request id")] string requestId,
+        [Description("JSON turn payload (UnifiedRequestEntryDto) - the complete new turn state")] string turnJson,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var turn = JsonSerializer.Deserialize<UnifiedRequestEntryDto>(turnJson, s_caseInsensitiveOptions) ?? new UnifiedRequestEntryDto();
+            turn.RequestId = requestId;
+            var turnId = await _sessionLogService.ReplaceTurnAsync(agent, sessionId, turn, cancellationToken).ConfigureAwait(false);
+            return JsonSerializer.Serialize(new { success = true, turnId, agent, sessionId, requestId, replaced = true });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-SUPPORT-010G: REPLACE one section of a turn (PUT semantics).</summary>
+    [McpServerTool(Name = "sessionlog_replace_section"), Description("REPLACE one section of a turn (PUT). section in: actions, tags, context, dialog, commits, designDecisions, requirementsDiscovered, filesModified, blockers. sectionJson is a UnifiedRequestEntryDto whose matching property holds the new contents; an empty/omitted property clears the section. Other sections untouched.")]
+    public async Task<string> SessionLogReplaceSection(
+        [Description("Agent source type")] string agent,
+        [Description("Session id")] string sessionId,
+        [Description("Request id")] string requestId,
+        [Description("Section name (e.g. tags, actions, commits, designDecisions)")] string section,
+        [Description("JSON UnifiedRequestEntryDto carrying the section's new contents")] string sectionJson,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var payload = JsonSerializer.Deserialize<UnifiedRequestEntryDto>(sectionJson, s_caseInsensitiveOptions) ?? new UnifiedRequestEntryDto();
+            payload.RequestId = requestId;
+            var found = await _sessionLogService.ReplaceTurnSectionAsync(agent, sessionId, requestId, section, payload, cancellationToken).ConfigureAwait(false);
+            if (found)
+                return JsonSerializer.Serialize(new { success = true, agent, sessionId, requestId, section, replaced = true });
+            return JsonSerializer.Serialize(new { success = false, error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-SUPPORT-010G: Clear all items in a turn section (DELETE semantics).</summary>
+    [McpServerTool(Name = "sessionlog_clear_section"), Description("Remove ALL items in a turn section. section in: actions, tags, context, dialog, commits, designDecisions, requirementsDiscovered, filesModified, blockers.")]
+    public async Task<string> SessionLogClearSection(
+        [Description("Agent source type")] string agent,
+        [Description("Session id")] string sessionId,
+        [Description("Request id")] string requestId,
+        [Description("Section name")] string section,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var found = await _sessionLogService.ClearTurnSectionAsync(agent, sessionId, requestId, section, cancellationToken).ConfigureAwait(false);
+            if (found)
+                return JsonSerializer.Serialize(new { success = true, agent, sessionId, requestId, section, cleared = true });
+            return JsonSerializer.Serialize(new { success = false, error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-SUPPORT-010G: Remove a single item from a turn section (DELETE semantics).</summary>
+    [McpServerTool(Name = "sessionlog_delete_item"), Description("Remove a single item from a turn section. itemKey is the value for string sections (tags/context/string-lists), the SHA for commits, the Order for actions, and the ordinal for dialog.")]
+    public async Task<string> SessionLogDeleteItem(
+        [Description("Agent source type")] string agent,
+        [Description("Session id")] string sessionId,
+        [Description("Request id")] string requestId,
+        [Description("Section name")] string section,
+        [Description("Natural key of the item to remove")] string itemKey,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var found = await _sessionLogService.DeleteTurnItemAsync(agent, sessionId, requestId, section, itemKey, cancellationToken).ConfigureAwait(false);
+            if (found)
+                return JsonSerializer.Serialize(new { success = true, agent, sessionId, requestId, section, itemKey, deleted = true });
+            return JsonSerializer.Serialize(new { success = false, error = $"Item '{itemKey}' not found in section '{section}'." });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-SUPPORT-010G: Delete a single turn and all its children.</summary>
+    [McpServerTool(Name = "sessionlog_delete_turn"), Description("Delete a single turn (and all of its child rows). The parent session is preserved.")]
+    public async Task<string> SessionLogDeleteTurn(
+        [Description("Agent source type")] string agent,
+        [Description("Session id")] string sessionId,
+        [Description("Request id")] string requestId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var found = await _sessionLogService.DeleteTurnAsync(agent, sessionId, requestId, cancellationToken).ConfigureAwait(false);
+            if (found)
+                return JsonSerializer.Serialize(new { success = true, agent, sessionId, requestId, deleted = true });
+            return JsonSerializer.Serialize(new { success = false, error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-SUPPORT-010G: Delete an entire session and everything beneath it.</summary>
+    [McpServerTool(Name = "sessionlog_delete_session"), Description("Delete an entire session and every turn and child row beneath it. Irreversible.")]
+    public async Task<string> SessionLogDeleteSession(
+        [Description("Agent source type")] string agent,
+        [Description("Session id")] string sessionId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var found = await _sessionLogService.DeleteSessionAsync(agent, sessionId, cancellationToken).ConfigureAwait(false);
+            if (found)
+                return JsonSerializer.Serialize(new { success = true, agent, sessionId, deleted = true });
+            return JsonSerializer.Serialize(new { success = false, error = $"Session not found: {agent}/{sessionId}" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
     private Task<string> FinalizeLifecycleTurnToolAsync(
         string agent, string sessionId, string requestId, string workspacePath,
         string status, string? turnJson, CancellationToken cancellationToken)

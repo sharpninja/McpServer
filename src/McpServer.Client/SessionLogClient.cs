@@ -117,5 +117,82 @@ public sealed class SessionLogClient : McpClientBase
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/fail";
         return await PostAsync<SessionLogTurnSubmitResult>(path, payload ?? new UnifiedRequestEntryDto(), cancellationToken);
     }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: PATCH a turn - additive merge. Omitted fields preserved,
+    /// collection items appended. Explicit verb for the additive submit behavior.
+    /// </summary>
+    public async Task<SessionLogTurnSubmitResult> PatchTurnAsync(
+        string agent, string sessionId, string requestId,
+        UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}";
+        return await PatchAsync<SessionLogTurnSubmitResult>(path, turn, cancellationToken);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: PUT a turn - REPLACE. Omitted scalar fields are reset and
+    /// every section becomes exactly what the payload carries (omitted/empty
+    /// sections cleared). Use to remove data by re-stating the turn.
+    /// </summary>
+    public async Task<SessionLogMutationResult> ReplaceTurnAsync(
+        string agent, string sessionId, string requestId,
+        UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}";
+        return await PutAsync<SessionLogMutationResult>(path, turn, cancellationToken);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: PUT a single turn section - REPLACE just that section.
+    /// Sections: actions, tags, context, dialog, commits, designDecisions,
+    /// requirementsDiscovered, filesModified, blockers. The matching property on
+    /// <paramref name="payload"/> becomes the section's new contents; null/empty clears it.
+    /// </summary>
+    public async Task<SessionLogMutationResult> ReplaceTurnSectionAsync(
+        string agent, string sessionId, string requestId, string section,
+        UnifiedRequestEntryDto payload, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}";
+        return await PutAsync<SessionLogMutationResult>(path, payload, cancellationToken);
+    }
+
+    /// <summary>FR-SUPPORT-010G: DELETE all items in a turn section (clear the section).</summary>
+    public async Task<SessionLogMutationResult> ClearTurnSectionAsync(
+        string agent, string sessionId, string requestId, string section,
+        CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}";
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G: DELETE a single item from a turn section. The item key is
+    /// the value for string sections (tags/context/string-lists), the SHA for
+    /// commits, the Order for actions, and the ordinal for dialog.
+    /// </summary>
+    public async Task<SessionLogMutationResult> DeleteTurnItemAsync(
+        string agent, string sessionId, string requestId, string section, string itemKey,
+        CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/sections/{Uri.EscapeDataString(section)}/items/{Uri.EscapeDataString(itemKey)}";
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+    }
+
+    /// <summary>FR-SUPPORT-010G: DELETE a single turn and all of its child rows.</summary>
+    public async Task<SessionLogMutationResult> DeleteTurnAsync(
+        string agent, string sessionId, string requestId, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}";
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+    }
+
+    /// <summary>FR-SUPPORT-010G: DELETE an entire session and every turn beneath it.</summary>
+    public async Task<SessionLogMutationResult> DeleteSessionAsync(
+        string agent, string sessionId, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}";
+        return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
+    }
 }
 
