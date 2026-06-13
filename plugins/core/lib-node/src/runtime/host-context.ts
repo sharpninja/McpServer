@@ -142,10 +142,13 @@ export function contextLogger(value: unknown): {
   warn?: (message: string) => void;
   error?: (message: string) => void;
 } {
-  return asRecord(value).logger as {
+  // Return an empty object (never undefined) so callers can safely do
+  // contextLogger(context).warn?.(...) on the best-effort swallow paths even
+  // when the host supplies no logger.
+  return (asRecord(value).logger as {
     warn?: (message: string) => void;
     error?: (message: string) => void;
-  };
+  }) ?? {};
 }
 
 export function setMarkerEnvironment(marker: MarkerContext, agentName: string): void {
