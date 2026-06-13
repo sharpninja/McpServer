@@ -1,0 +1,53 @@
+# FR-MCP-PLUGINCORE-002: drop-in CI job for every mcpserver-*-plugin repo.
+# Fails the build when a synced core file was edited locally (fix belongs in
+# McpServer/plugins/core, then re-sync) and runs the shared + repo bats suites.
+name: core-guard
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  core-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify synced core files are untouched
+        run: |
+          test -f CORE-MANIFEST.yaml || { echo 'CORE-MANIFEST.yaml missing - run sync-plugin-core' >&2; exit 1; }
+          failures=0; checked=0
+          while IFS= read -r line; do
+            case "$line" in
+              "  lib/"*)
+                rel="${line%%:*}"; rel="${rel#  }"
+                expected="${line##*: }"
+                checked=$((checked+1))
+                if [ ! -f "$rel" ]; then echo "MISSING: $rel" >&2; failures=$((failures+1)); continue; fi
+                actual="$(sha256sum "$rel" | cut -d' ' -f1)"
+                [ "$actual" = "$expected" ] || { echo "MODIFIED: $rel (edit McpServer/plugins/core and re-sync)" >&2; failures=$((failures+1)); }
+                ;;
+            esac
+          done < CORE-MANIFEST.yaml
+          [ "$checked" -gt 0 ] || { echo 'manifest lists no files' >&2; exit 1; }
+          [ "$failures" -eq 0 ] || { echo "core integrity FAILED: $failures/$checked diverged" >&2; exit 1; }
+          echo "core integrity OK: $checked files"
+
+      - name: No new duplicated lib files outside the synced set
+        run: |
+          # Every file under lib/ must be listed in CORE-MANIFEST.yaml or in
+          # the repo's declared residual list (lib/PLUGIN-RESIDUAL.txt).
+          fail=0
+          while IFS= read -r f; do
+            rel="${f#./}"
+            grep -q "  $rel:" CORE-MANIFEST.yaml && continue
+            [ -f lib/PLUGIN-RESIDUAL.txt ] && grep -qx "$rel" lib/PLUGIN-RESIDUAL.txt && continue
+            echo "UNDECLARED lib file: $rel (add to plugins/core and sync, or declare in lib/PLUGIN-RESIDUAL.txt)" >&2
+            fail=1
+          done < <(find ./lib -type f \( -name '*.sh' -o -name '*.ps1' -o -name '*.js' \) | sort)
+          exit $fail
+
+      - name: Run bats suites
+        run: |
+          sudo npm install -g bats >/dev/null 2>&1 || sudo apt-get install -y bats
+          bats tests/

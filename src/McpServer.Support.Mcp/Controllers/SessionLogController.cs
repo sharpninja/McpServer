@@ -226,6 +226,160 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
+    /// FR-SUPPORT-010E: Idempotent ensure-session keyed by (agent, sessionId).
+    /// Creates the session when missing; otherwise leaves it untouched. Stateless:
+    /// callable from any process with no prior in-process session state.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="body">Optional title/model for a newly created session.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the session key and whether it was created.</returns>
+    [HttpPost("{agent}/{sessionId}/open")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> OpenSessionAsync(
+        string agent,
+        string sessionId,
+        [FromBody] SessionLifecycleOpenRequest? body,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var created = await _service.OpenSessionAsync(agent, sessionId, body?.Title, body?.Model, cancellationToken).ConfigureAwait(false);
+            return Ok(new { agent, sessionId, created });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid session identifier.");
+        }
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010E: Begins (or re-opens) a turn keyed by
+    /// (agent, sessionId, requestId) with status in_progress. Stateless: no
+    /// in-process "active session" is required or kept.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="body">Optional query title/text and model.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>201 Created with the turn id, 400 on validation failure, or 404 if the session does not exist.</returns>
+    [HttpPost("{agent}/{sessionId}/{requestId}/begin")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public Task<IActionResult> BeginTurnAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        [FromBody] SessionLifecycleBeginRequest? body,
+        CancellationToken cancellationToken)
+    {
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = requestId,
+            Timestamp = body?.Timestamp ?? DateTimeOffset.UtcNow.ToString("o"),
+            QueryTitle = body?.QueryTitle,
+            QueryText = body?.QueryText,
+            Model = body?.Model,
+            Status = "in_progress",
+        };
+        return UpsertLifecycleTurnAsync(agent, sessionId, turn, StatusCodes.Status201Created, cancellationToken);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010E: Completes a turn keyed by (agent, sessionId, requestId),
+    /// merging the supplied payload onto the existing turn (omitted fields are
+    /// preserved). The terminal-turn compliance gate requires at least one design
+    /// decision, action, or commit.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="body">Optional turn payload merged onto the existing turn.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the turn id, 400 on compliance/validation failure, or 404 if the session does not exist.</returns>
+    [HttpPost("{agent}/{sessionId}/{requestId}/complete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public Task<IActionResult> CompleteTurnAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        [FromBody] UnifiedRequestEntryDto? body,
+        CancellationToken cancellationToken)
+        => FinalizeTurnAsync(agent, sessionId, requestId, body, "completed", cancellationToken);
+
+    /// <summary>
+    /// FR-SUPPORT-010E: Fails a turn keyed by (agent, sessionId, requestId),
+    /// recording the failure note. Subject to the same terminal-turn compliance
+    /// gate as complete.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="body">Optional turn payload (failureNote, evidence) merged onto the existing turn.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the turn id, 400 on compliance/validation failure, or 404 if the session does not exist.</returns>
+    [HttpPost("{agent}/{sessionId}/{requestId}/fail")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public Task<IActionResult> FailTurnAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        [FromBody] UnifiedRequestEntryDto? body,
+        CancellationToken cancellationToken)
+        => FinalizeTurnAsync(agent, sessionId, requestId, body, "failed", cancellationToken);
+
+    private Task<IActionResult> FinalizeTurnAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        UnifiedRequestEntryDto? body,
+        string status,
+        CancellationToken cancellationToken)
+    {
+        var turn = body ?? new UnifiedRequestEntryDto();
+        turn.RequestId = requestId;
+        turn.Status = status;
+        turn.Timestamp ??= DateTimeOffset.UtcNow.ToString("o");
+        return UpsertLifecycleTurnAsync(agent, sessionId, turn, StatusCodes.Status200OK, cancellationToken);
+    }
+
+    private async Task<IActionResult> UpsertLifecycleTurnAsync(
+        string agent,
+        string sessionId,
+        UnifiedRequestEntryDto turn,
+        int successStatusCode,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var turnId = await _service.UpsertTurnAsync(agent, sessionId, turn, cancellationToken).ConfigureAwait(false);
+            var payload = new { turnId, agent, sessionId, requestId = turn.RequestId, status = turn.Status };
+            return successStatusCode == StatusCodes.Status201Created
+                ? Created(
+                    new Uri($"/mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}", UriKind.Relative),
+                    payload)
+                : Ok(payload);
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid turn payload.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// BUG-SESSIONLOG-WS-005: Re-stamps session-log child rows whose WorkspaceId
     /// drifted away from their parent session. Idempotent data repair for rows
     /// written before the parent-inheritance stamping invariant was enforced.
@@ -242,3 +396,15 @@ public sealed class SessionLogController : ControllerBase
         return Ok(new { repaired, dryRun });
     }
 }
+
+/// <summary>FR-SUPPORT-010E: Optional body for the stateless open-session endpoint.</summary>
+/// <param name="Title">Human-readable session title.</param>
+/// <param name="Model">AI model identifier.</param>
+public sealed record SessionLifecycleOpenRequest(string? Title, string? Model);
+
+/// <summary>FR-SUPPORT-010E: Optional body for the stateless begin-turn endpoint.</summary>
+/// <param name="QueryTitle">Short turn title.</param>
+/// <param name="QueryText">Full user query text.</param>
+/// <param name="Timestamp">ISO 8601 turn timestamp; defaults to now.</param>
+/// <param name="Model">AI model identifier.</param>
+public sealed record SessionLifecycleBeginRequest(string? QueryTitle, string? QueryText, string? Timestamp, string? Model);

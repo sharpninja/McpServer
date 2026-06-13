@@ -818,9 +818,14 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
 
         var eventLines = _replProcess.StdoutLines.ToList();
-        
+
         foreach (var line in eventLines)
         {
+            // FR-MCP-REPL-005: '---' document separators are part of the framing
+            // contract between envelopes, not envelope content.
+            if (string.IsNullOrWhiteSpace(line) || line.TrimEnd() == "---")
+                continue;
+
             var envelope = _yamlDeserializer.Deserialize<Dictionary<string, object>>(line);
             Assert.NotNull(envelope);
             Assert.True(envelope.ContainsKey("type") || envelope.ContainsKey("Type"));

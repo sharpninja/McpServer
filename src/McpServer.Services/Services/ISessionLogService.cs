@@ -77,6 +77,19 @@ public interface ISessionLogService
     Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// FR-SUPPORT-010E: Idempotent ensure-session keyed by (sourceType, sessionId)
+    /// within the current workspace. Creates the session with status in_progress
+    /// when missing; otherwise leaves the existing session untouched.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="title">Optional title for a newly created session.</param>
+    /// <param name="model">Optional model for a newly created session.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True when the session was created; false when it already existed.</returns>
+    Task<bool> OpenSessionAsync(string sourceType, string sessionId, string? title = null, string? model = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// BUG-SESSIONLOG-WS-005: Re-stamps session-log child rows (turns and their
     /// children) whose WorkspaceId drifted away from their parent session's
     /// WorkspaceId. Idempotent data repair for stamping inconsistencies introduced

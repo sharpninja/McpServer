@@ -74,6 +74,17 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
                 continue;
             }
 
+            // FR-MCP-REPL-005: NDJSON fast path - a complete single-line JSON
+            // envelope is a full document; dispatch it immediately instead of
+            // waiting for a blank-line/--- boundary. This makes persistent
+            // bridge clients that write one JSON line per request first-class.
+            if (buffer.Length == 0 && IsCompleteSingleLineJson(line))
+            {
+                buffer.AppendLine(line);
+                await FlushAsync(buffer, writer, cancellationToken).ConfigureAwait(false);
+                continue;
+            }
+
             buffer.AppendLine(line);
         }
 
@@ -90,6 +101,25 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
 
         var trimmed = line.TrimEnd();
         return trimmed == "---";
+    }
+
+    private static bool IsCompleteSingleLineJson(string line)
+    {
+        var trimmed = line.Trim();
+        if (trimmed.Length < 2 || trimmed[0] != '{' || trimmed[^1] != '}')
+        {
+            return false;
+        }
+
+        try
+        {
+            using var _ = System.Text.Json.JsonDocument.Parse(trimmed);
+            return true;
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return false;
+        }
     }
 
     private async Task FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken)
@@ -194,13 +224,16 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
     private async Task WriteEnvelopeAsync(IYamlEnvelope envelope, TextWriter writer, CancellationToken cancellationToken)
     {
         var yaml = _serializer.Serialize(envelope);
-        // Envelopes are framed by a blank line, matching the inbound convention.
+        // FR-MCP-REPL-005: envelopes are framed by a blank line (legacy shell
+        // contract) AND a '---' document separator (the framing persistent bridge
+        // clients parse) so one process can serve many requests for both styles.
         await writer.WriteAsync(yaml.AsMemory(), cancellationToken).ConfigureAwait(false);
         if (!yaml.EndsWith('\n'))
         {
             await writer.WriteLineAsync().ConfigureAwait(false);
         }
         await writer.WriteLineAsync().ConfigureAwait(false);
+        await writer.WriteLineAsync("---".AsMemory(), cancellationToken).ConfigureAwait(false);
         await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
     }
 
