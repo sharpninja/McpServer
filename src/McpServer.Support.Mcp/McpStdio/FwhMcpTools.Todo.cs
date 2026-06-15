@@ -124,7 +124,9 @@ public sealed partial class FwhMcpTools
         ApplyWorkspaceOverride(workspacePath);
         try
         {
-            var result = await _workspaceAccessor.GetTodoService().RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
+            var result = _todoMutations is null
+                ? await _workspaceAccessor.GetTodoService().RepairProjectionAsync(cancellationToken).ConfigureAwait(false)
+                : await _todoMutations.RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(result);
         }
         catch (NotSupportedException ex)
@@ -162,7 +164,9 @@ public sealed partial class FwhMcpTools
                 Estimate = estimate,
                 Description = description != null ? new[] { description } : null
             };
-            var result = await _todoCreationService.CreateAsync(req, cancellationToken).ConfigureAwait(false);
+            var result = _todoMutations is null
+                ? await _todoCreationService.CreateAsync(req, cancellationToken).ConfigureAwait(false)
+                : await _todoMutations.CreateAsync(req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
@@ -188,7 +192,9 @@ public sealed partial class FwhMcpTools
         try
         {
             var req = new TodoUpdateRequest { Title = title, Priority = priority, Done = done, Note = note };
-            var result = await _todoUpdateService.UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
+            var result = _todoMutations is null
+                ? await _todoUpdateService.UpdateAsync(id, req, cancellationToken).ConfigureAwait(false)
+                : await _todoMutations.UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
@@ -209,7 +215,9 @@ public sealed partial class FwhMcpTools
         ApplyWorkspaceOverride(workspacePath);
         try
         {
-            var result = await _workspaceAccessor.GetTodoService().DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            var result = _todoMutations is null
+                ? await _workspaceAccessor.GetTodoService().DeleteAsync(id, cancellationToken).ConfigureAwait(false)
+                : await _todoMutations.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true });
         }
@@ -231,6 +239,16 @@ public sealed partial class FwhMcpTools
         ApplyWorkspaceOverride(workspacePath);
         try
         {
+            if (_todoMutations is not null)
+            {
+                var gated = await _todoMutations.MoveAsync(
+                    id,
+                    new TodoMoveRequest { TargetWorkspacePath = targetWorkspacePath },
+                    cancellationToken).ConfigureAwait(false);
+                if (!gated.Success) return JsonSerializer.Serialize(new { error = gated.Error });
+                return JsonSerializer.Serialize(new { success = true, item = gated.Item });
+            }
+
             var sourceService = _workspaceAccessor.GetTodoService();
             var item = await sourceService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
             if (item is null) return JsonSerializer.Serialize(new { error = $"Item '{id}' not found in source workspace." });

@@ -8,9 +8,13 @@ using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using ModelContextProtocol.Server;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +27,9 @@ namespace McpServer.Support.Mcp.McpStdio;
 [McpServerToolType]
 public sealed partial class FwhMcpTools
 {
+    private const string DeferredContextMutationMessage =
+        "Context ingestion and rebuild mutations are not transaction compensated while required turn transactions are active.";
+
     private static readonly JsonSerializerOptions s_caseInsensitiveOptions = new() { PropertyNameCaseInsensitive = true };
     private static readonly JsonSerializerOptions s_camelCaseOptions = new()
     {
@@ -39,6 +46,7 @@ public sealed partial class FwhMcpTools
     private readonly ITodoPromptService _todoPromptService;
     private readonly ISessionLogService _sessionLogService;
     private readonly IMemoryService _memoryService;
+    private readonly ITransactionGatedMemoryService? _memoryMutations;
     private readonly IGitHubCliService _gitHubCliService;
     private readonly IRequirementsDocumentService _requirementsDocumentService;
     private readonly DesktopLaunchService _desktopLaunchService;
@@ -49,8 +57,11 @@ public sealed partial class FwhMcpTools
     private readonly TodoServiceResolver _todoServiceResolver;
     private readonly TodoCreationService _todoCreationService;
     private readonly TodoUpdateService _todoUpdateService;
+    private readonly ITransactionGatedTodoMutationService? _todoMutations;
     private readonly ITodoExecutionService _todoExecutionService;
     private readonly IPromptTemplateService _promptTemplateService;
+    private readonly ITurnTransactionCoordinator? _transactionCoordinator;
+    private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ILogger<FwhMcpTools> _logger;
 
 
@@ -77,7 +88,11 @@ public sealed partial class FwhMcpTools
         TodoUpdateService todoUpdateService,
         ITodoExecutionService todoExecutionService,
         IPromptTemplateService promptTemplateService,
-        ILogger<FwhMcpTools> logger)
+        ILogger<FwhMcpTools> logger,
+        ITransactionGatedMemoryService? memoryMutations = null,
+        ITransactionGatedTodoMutationService? todoMutations = null,
+        ITurnTransactionCoordinator? transactionCoordinator = null,
+        IOptions<TurnTransactionOptions>? transactionOptions = null)
     {
         _logger = logger;
         _db = db;
@@ -90,6 +105,7 @@ public sealed partial class FwhMcpTools
         _todoPromptService = todoPromptService;
         _sessionLogService = sessionLogService;
         _memoryService = memoryService;
+        _memoryMutations = memoryMutations;
         _gitHubCliService = gitHubCliService;
         _requirementsDocumentService = requirementsDocumentService;
         _desktopLaunchService = desktopLaunchService;
@@ -100,8 +116,11 @@ public sealed partial class FwhMcpTools
         _todoServiceResolver = todoServiceResolver;
         _todoCreationService = todoCreationService;
         _todoUpdateService = todoUpdateService;
+        _todoMutations = todoMutations;
         _todoExecutionService = todoExecutionService;
         _promptTemplateService = promptTemplateService;
+        _transactionCoordinator = transactionCoordinator;
+        _transactionOptions = transactionOptions;
     }
 
     /// <summary>
@@ -125,6 +144,31 @@ public sealed partial class FwhMcpTools
 
         _db.OverrideWorkspaceId(workspacePath);
     }
+
+    private bool ShouldDeferContextMutation(out string error)
+    {
+        error = string.Empty;
+        if (_transactionCoordinator is null)
+            return false;
+
+        var status = _transactionCoordinator.GetStatus();
+        if (status.Degraded)
+        {
+            error = string.IsNullOrWhiteSpace(status.Message)
+                ? "Turn transaction coordinator is degraded."
+                : status.Message;
+            return true;
+        }
+
+        if (!RequiresMutationTransactions(status))
+            return false;
+
+        error = DeferredContextMutationMessage;
+        return true;
+    }
+
+    private bool RequiresMutationTransactions(TurnTransactionStatusResponse status)
+        => status.Enabled && (_transactionOptions?.Value.RequiredForMutations ?? true);
 
     private static string SerializeJson(object value) => JsonSerializer.Serialize(value, s_camelCaseOptions);
 
@@ -263,6 +307,9 @@ public sealed partial class FwhMcpTools
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
+        if (ShouldDeferContextMutation(out var transactionError))
+            return JsonSerializer.Serialize(new { error = transactionError, code = "turn_transaction_gate" });
+
         var result = await _coordinator.RunAsync(cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(new
         {
@@ -372,14 +419,17 @@ public sealed partial class FwhMcpTools
                 return SerializeJson(new MemoryMutationResult(false, error, FailureKind: MemoryMutationFailureKind.Validation));
             }
 
-            var result = await _memoryService.AddAsync(new MemoryAddRequest
+            var request = new MemoryAddRequest
             {
                 Id = id,
                 Category = category,
                 Scope = parsedScope,
                 Text = text,
                 UpdatedBy = updatedBy,
-            }, cancellationToken).ConfigureAwait(false);
+            };
+            var result = _memoryMutations is null
+                ? await _memoryService.AddAsync(request, cancellationToken).ConfigureAwait(false)
+                : await _memoryMutations.AddAsync(request, cancellationToken).ConfigureAwait(false);
             return SerializeJson(result);
         }
         catch (Exception ex)
@@ -408,13 +458,16 @@ public sealed partial class FwhMcpTools
                 return SerializeJson(new MemoryMutationResult(false, error, FailureKind: MemoryMutationFailureKind.Validation));
             }
 
-            var result = await _memoryService.UpdateAsync(id, new MemoryUpdateRequest
+            var request = new MemoryUpdateRequest
             {
                 Category = category,
                 Scope = parsedScope,
                 Text = text,
                 UpdatedBy = updatedBy,
-            }, cancellationToken).ConfigureAwait(false);
+            };
+            var result = _memoryMutations is null
+                ? await _memoryService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false)
+                : await _memoryMutations.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
             return SerializeJson(result);
         }
         catch (Exception ex)
@@ -434,7 +487,9 @@ public sealed partial class FwhMcpTools
         ApplyWorkspaceOverride(workspacePath);
         try
         {
-            var result = await _memoryService.RemoveAsync(id, cancellationToken).ConfigureAwait(false);
+            var result = _memoryMutations is null
+                ? await _memoryService.RemoveAsync(id, cancellationToken).ConfigureAwait(false)
+                : await _memoryMutations.RemoveAsync(id, cancellationToken).ConfigureAwait(false);
             return SerializeJson(result);
         }
         catch (Exception ex)

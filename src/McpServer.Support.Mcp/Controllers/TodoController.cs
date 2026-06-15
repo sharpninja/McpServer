@@ -20,6 +20,7 @@ public sealed class TodoController : ControllerBase
     private readonly ITodoPromptService _todoPromptService;
     private readonly TodoCreationService _todoCreationService;
     private readonly TodoUpdateService _todoUpdateService;
+    private readonly ITransactionGatedTodoMutationService? _todoMutations;
     private readonly IAgentPoolService? _agentPoolService;
 
     /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Resolves workspace-specific TODO service.</summary>
@@ -31,6 +32,7 @@ public sealed class TodoController : ControllerBase
         ITodoPromptService todoPromptService,
         TodoCreationService todoCreationService,
         TodoUpdateService todoUpdateService,
+        ITransactionGatedTodoMutationService? todoMutations = null,
         IAgentPoolService? agentPoolService = null)
     {
         _todoServiceResolver = todoServiceResolver;
@@ -40,6 +42,7 @@ public sealed class TodoController : ControllerBase
         _todoPromptService = todoPromptService;
         _todoCreationService = todoCreationService ?? throw new ArgumentNullException(nameof(todoCreationService));
         _todoUpdateService = todoUpdateService ?? throw new ArgumentNullException(nameof(todoUpdateService));
+        _todoMutations = todoMutations;
         _agentPoolService = agentPoolService;
     }
 
@@ -118,9 +121,14 @@ public sealed class TodoController : ControllerBase
     {
         try
         {
-            var result = await _todoService.RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
-            return result.Success
-                ? Ok(result)
+            var result = _todoMutations is null
+                ? await _todoService.RepairProjectionAsync(cancellationToken).ConfigureAwait(false)
+                : await _todoMutations.RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
+            if (result.Success)
+                return Ok(result);
+
+            return string.Equals(result.Status.AuthoritativeStore, "turn-transaction-gate", StringComparison.Ordinal)
+                ? Conflict(result)
                 : StatusCode(StatusCodes.Status500InternalServerError, result);
         }
         catch (NotSupportedException ex)
@@ -138,7 +146,9 @@ public sealed class TodoController : ControllerBase
         if (request is null)
             return BadRequest(new TodoMutationResult(false, "Request body is required."));
 
-        var result = await _todoCreationService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
+        var result = _todoMutations is null
+            ? await _todoCreationService.CreateAsync(request, cancellationToken).ConfigureAwait(false)
+            : await _todoMutations.CreateAsync(request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return ToMutationFailureResult(result);
 
@@ -156,7 +166,9 @@ public sealed class TodoController : ControllerBase
         if (request is null)
             return BadRequest(new TodoMutationResult(false, "Request body is required."));
 
-        var result = await _todoUpdateService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
+        var result = _todoMutations is null
+            ? await _todoUpdateService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false)
+            : await _todoMutations.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return ToMutationFailureResult(result);
 
@@ -167,7 +179,9 @@ public sealed class TodoController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<TodoMutationResult>> DeleteAsync(string id, CancellationToken cancellationToken)
     {
-        var result = await _todoService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+        var result = _todoMutations is null
+            ? await _todoService.DeleteAsync(id, cancellationToken).ConfigureAwait(false)
+            : await _todoMutations.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return ToMutationFailureResult(result);
 
@@ -183,6 +197,15 @@ public sealed class TodoController : ControllerBase
     {
         if (request is null || string.IsNullOrWhiteSpace(request.TargetWorkspacePath))
             return BadRequest(new TodoMutationResult(false, "Request body with targetWorkspacePath is required."));
+
+        if (_todoMutations is not null)
+        {
+            var gatedResult = await _todoMutations.MoveAsync(id, request, cancellationToken).ConfigureAwait(false);
+            if (!gatedResult.Success)
+                return ToMutationFailureResult(gatedResult);
+
+            return Ok(gatedResult);
+        }
 
         var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
         if (item is null)

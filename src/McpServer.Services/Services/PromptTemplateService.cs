@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using HandlebarsDotNet;
@@ -21,7 +23,7 @@ namespace McpServer.Support.Mcp.Services;
 /// YAML file-backed implementation of <see cref="IPromptTemplateService"/>.
 /// Registered as a global singleton. Write operations are serialized via <see cref="SemaphoreSlim"/>.
 /// </summary>
-public sealed class PromptTemplateService : IPromptTemplateService, IDisposable
+public sealed class PromptTemplateService : IPromptTemplateService, IPromptTemplateCompensation, IDisposable
 {
     private static readonly IDeserializer s_deserializer = new DeserializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
@@ -138,6 +140,64 @@ public sealed class PromptTemplateService : IPromptTemplateService, IDisposable
 
             _logger.LogInformation("Created template '{Id}'", request.Id);
             return new PromptTemplateMutationResult(true, Item: template);
+        }
+        finally
+        {
+            _fileLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<PromptTemplateFileSnapshot> CaptureFileAsync(CancellationToken cancellationToken = default)
+    {
+        await _fileLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (!File.Exists(_filePath))
+                return new PromptTemplateFileSnapshot(Exists: false, Content: null, ContentSha256: string.Empty);
+
+            var content = await File.ReadAllTextAsync(_filePath, cancellationToken).ConfigureAwait(false);
+            return new PromptTemplateFileSnapshot(Exists: true, content, ComputeSha256(content));
+        }
+        finally
+        {
+            _fileLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task RestoreFileAsync(
+        PromptTemplateFileSnapshot snapshot,
+        string expectedCurrentContentSha256,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        ArgumentNullException.ThrowIfNull(expectedCurrentContentSha256);
+
+        await _fileLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var currentHash = string.Empty;
+            if (File.Exists(_filePath))
+            {
+                var currentContent = await File.ReadAllTextAsync(_filePath, cancellationToken).ConfigureAwait(false);
+                currentHash = ComputeSha256(currentContent);
+            }
+
+            if (!string.Equals(currentHash, expectedCurrentContentSha256, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("Prompt-template file changed after transactional write; rollback refused.");
+
+            if (!snapshot.Exists)
+            {
+                if (File.Exists(_filePath))
+                    File.Delete(_filePath);
+                return;
+            }
+
+            var dir = Path.GetDirectoryName(_filePath);
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            await File.WriteAllTextAsync(_filePath, snapshot.Content ?? string.Empty, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -369,6 +429,9 @@ public sealed class PromptTemplateService : IPromptTemplateService, IDisposable
         await File.WriteAllTextAsync(_filePath, yaml, cancellationToken).ConfigureAwait(false);
         _logger.LogDebug("Wrote {Count} templates to {Path}", templates.Count, _filePath);
     }
+
+    private static string ComputeSha256(string value)
+        => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
 
     /// <summary>Root YAML structure: templates map.</summary>
     internal sealed class TemplateFileRoot

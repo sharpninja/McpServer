@@ -7,6 +7,7 @@ builder.Services.AddTransactionKeyServer(builder.Configuration);
 
 var app = builder.Build();
 app.MapDefaultEndpoints();
+await app.Services.ProvisionConfiguredTransactionKeysAsync(app.Lifetime.ApplicationStopping).ConfigureAwait(false);
 
 app.MapPost(
     "/mcpserver/keyserver/parties",
@@ -37,6 +38,42 @@ app.MapPost(
     {
         var response = await manifests.VerifyManifestAsync(request, cancellationToken).ConfigureAwait(false);
         return response.IsValid ? Results.Ok(response) : Results.BadRequest(response);
+    });
+
+app.MapGet(
+    "/mcpserver/keyserver/manifests/report",
+    async (
+        string? publisherPartyId,
+        string? subscriberPartyId,
+        string? status,
+        DateTimeOffset? fromUtc,
+        DateTimeOffset? toUtc,
+        int? limit,
+        IKeyServerManifestService manifests,
+        CancellationToken cancellationToken) =>
+    {
+        var report = await manifests.GetManifestReportAsync(
+            new TransactionManifestTraceReportRequest
+            {
+                PublisherPartyId = publisherPartyId,
+                SubscriberPartyId = subscriberPartyId,
+                Status = status,
+                FromUtc = fromUtc,
+                ToUtc = toUtc,
+                Limit = limit,
+            },
+            cancellationToken).ConfigureAwait(false);
+        return Results.Ok(report);
+    });
+
+app.MapGet(
+    "/mcpserver/keyserver/manifests/{transactionId}",
+    async (string transactionId, IKeyServerManifestService manifests, CancellationToken cancellationToken) =>
+    {
+        var manifest = await manifests.GetManifestAsync(transactionId, cancellationToken).ConfigureAwait(false);
+        return manifest is null
+            ? Results.NotFound(new { error = $"Manifest '{transactionId}' was not found." })
+            : Results.Ok(manifest);
     });
 
 app.Run();

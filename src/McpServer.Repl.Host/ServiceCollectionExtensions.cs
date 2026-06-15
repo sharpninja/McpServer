@@ -8,7 +8,10 @@
 // TEST-MCP-REPL-016: All dependencies resolved from DI container
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using McpServer.Repl.Core;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 
 namespace McpServer.Repl.Host;
 
@@ -26,10 +29,19 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddReplCoreServices(this IServiceCollection services)
     {
         // Register TODO workflow (implementation lives in McpServer.Repl.Core)
-        services.AddSingleton<ITodoWorkflow>(sp =>
+        services.AddSingleton<TodoWorkflow>(sp =>
         {
             var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
             return new McpServer.Repl.Core.TodoWorkflow(clientFactory.Todo);
+        });
+        services.AddSingleton<ITodoWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new TransactionalTodoWorkflow(
+                sp.GetRequiredService<TodoWorkflow>(),
+                clientFactory.Todo,
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>());
         });
 
         // Register GraphRAG workflow (implementation lives in McpServer.Repl.Core)
@@ -66,15 +78,30 @@ public static class ServiceCollectionExtensions
         // FR-MCP-REPL-001, TR-MCP-REPL-001/003/004: YAML envelope serialization,
         // generic client passthrough, command dispatcher, and stream-level protocol loop.
         services.AddSingleton<IYamlSerializer, YamlSerializer>();
+        services.AddSingleton<IClientMutationPolicy>(sp =>
+            new KnownUnsafeClientMutationPolicy(() =>
+            {
+                var coordinator = sp.GetService<ITurnTransactionCoordinator>();
+                if (coordinator is null)
+                    return new ClientMutationPolicyState(RequiredForMutations: false);
+
+                var status = coordinator.GetStatus();
+                var options = sp.GetService<IOptions<TurnTransactionOptions>>()?.Value;
+                var required = status.Enabled && (options?.RequiredForMutations ?? true);
+                return new ClientMutationPolicyState(required, status.Degraded, status.Message);
+            }));
         services.AddSingleton<IGenericClientPassthrough>(sp =>
-            new GenericClientPassthrough(sp.GetRequiredService<McpServer.Client.McpServerClient>()));
+            new GenericClientPassthrough(
+                sp.GetRequiredService<McpServer.Client.McpServerClient>(),
+                sp.GetRequiredService<IClientMutationPolicy>()));
         services.AddSingleton<IReplCommandDispatcher>(sp =>
             new ReplCommandDispatcher(
                 sp.GetRequiredService<IGenericClientPassthrough>(),
                 sp.GetRequiredService<ISessionLogWorkflow>(),
                 sp.GetRequiredService<IRequirementsWorkflow>(),
                 sp.GetRequiredService<ITodoWorkflow>(),
-                sp.GetRequiredService<IMemoryWorkflow>()));
+                sp.GetRequiredService<IMemoryWorkflow>(),
+                sp.GetRequiredService<IClientMutationPolicy>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

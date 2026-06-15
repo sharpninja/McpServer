@@ -139,6 +139,87 @@ public sealed class EfTodoServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-161: Transaction rollback compensation restores EF TODO state
+    /// exactly enough to clear values that public update DTOs cannot clear.
+    /// </summary>
+    [Fact]
+    public async Task RestoreAsync_AfterUpdate_RestoresCapturedEntityState()
+    {
+        var create = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-TXN-001",
+            Title = "Before",
+            Section = "Backlog",
+            Priority = "high",
+            FunctionalRequirements = ["FR-BEFORE"],
+        }).ConfigureAwait(true);
+        Assert.True(create.Success, create.Error);
+
+        var snapshot = await _sut.CaptureForRestoreAsync("EF-TXN-001").ConfigureAwait(true);
+        Assert.NotNull(snapshot);
+
+        var update = await _sut.UpdateAsync("EF-TXN-001", new TodoUpdateRequest
+        {
+            Title = "After",
+            Note = "note after",
+            Remaining = "remaining after",
+            FunctionalRequirements = ["FR-AFTER"],
+        }).ConfigureAwait(true);
+        Assert.True(update.Success, update.Error);
+
+        var restore = await _sut.RestoreAsync(snapshot!).ConfigureAwait(true);
+        Assert.True(restore.Success, restore.Error);
+
+        var restored = await _sut.GetByIdAsync("EF-TXN-001").ConfigureAwait(true);
+        Assert.NotNull(restored);
+        Assert.Equal("Before", restored!.Title);
+        Assert.Null(restored.Note);
+        Assert.Null(restored.Remaining);
+        Assert.Equal(["FR-BEFORE"], restored.FunctionalRequirements);
+
+        using var scope = _serviceProvider.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var links = await db.TodoRequirementLinks
+            .OrderBy(row => row.RequirementId)
+            .Select(row => row.RequirementId)
+            .ToListAsync()
+            .ConfigureAwait(true);
+        Assert.Equal(["FR-BEFORE"], links);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Store-level compensation restores a soft-deleted EF TODO row.
+    /// </summary>
+    [Fact]
+    public async Task RestoreAsync_AfterDelete_RestoresSoftDeletedTodo()
+    {
+        var create = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-TXN-002",
+            Title = "Delete rollback",
+            Section = "Backlog",
+            Priority = "medium",
+            FunctionalRequirements = ["FR-DELETE-BEFORE"],
+        }).ConfigureAwait(true);
+        Assert.True(create.Success, create.Error);
+
+        var snapshot = await _sut.CaptureForRestoreAsync("EF-TXN-002").ConfigureAwait(true);
+        Assert.NotNull(snapshot);
+
+        var delete = await _sut.DeleteAsync("EF-TXN-002").ConfigureAwait(true);
+        Assert.True(delete.Success, delete.Error);
+        Assert.Null(await _sut.GetByIdAsync("EF-TXN-002").ConfigureAwait(true));
+
+        var restore = await _sut.RestoreAsync(snapshot!).ConfigureAwait(true);
+        Assert.True(restore.Success, restore.Error);
+
+        var restored = await _sut.GetByIdAsync("EF-TXN-002").ConfigureAwait(true);
+        Assert.NotNull(restored);
+        Assert.Equal("Delete rollback", restored!.Title);
+        Assert.Equal(["FR-DELETE-BEFORE"], restored.FunctionalRequirements);
+    }
+
+    /// <summary>
     /// Phase-3 acceptance: <see cref="EfTodoService.QueryAsync"/> honors priority
     /// and keyword filters applied through the relational layer.
     /// </summary>

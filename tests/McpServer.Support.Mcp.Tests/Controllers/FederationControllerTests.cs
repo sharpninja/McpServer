@@ -1,6 +1,9 @@
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -47,11 +50,18 @@ public sealed class FederationControllerTests
 
     private static FederationController CreateController(
         FederationRegistry? registry = null,
-        TunnelRegistry? tunnels = null)
+        TunnelRegistry? tunnels = null,
+        ITurnTransactionCoordinator? transactionCoordinator = null,
+        TurnTransactionOptions? transactionOptions = null)
     {
         registry ??= CreateRegistry();
         tunnels ??= CreateEmptyTunnelRegistry();
-        return new FederationController(registry, tunnels);
+        return new FederationController(
+            registry,
+            tunnels,
+            transactionCoordinator: transactionCoordinator,
+            transactionOptions: Microsoft.Extensions.Options.Options.Create(
+                transactionOptions ?? new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
     }
 
     // --- GetStatus ---
@@ -193,6 +203,115 @@ public sealed class FederationControllerTests
             .ConfigureAwait(true);
     }
 
+    /// <summary>Signed envelope intake waits for transactional apply completion before acknowledging applied.</summary>
+    [Fact]
+    public async Task RecordEnvelope_WaitsForTransactionalApplyBeforeAcknowledgingApplied()
+    {
+        var topology = Substitute.For<IFederationTopologyService>();
+        var apply = new BlockingOperationApplyService(new FederationApplyResult { Applied = true, Version = "v2" });
+        var signer = CreateSigner();
+        var operation = new FederationOperationRequest
+        {
+            OperationId = "op-wait-apply",
+            ProxyId = "PAYTON-LEGION2",
+            Domain = "todo",
+            ResourceId = "PLAN-FEDERATION-001",
+            HttpMethod = "PUT",
+            Path = "/mcpserver/todo/PLAN-FEDERATION-001",
+            BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
+        };
+        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-wait-apply", Status = "accepted", Created = true });
+        topology.AcknowledgeOperationAsync("op-wait-apply", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-wait-apply", Status = "applied", Created = false });
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            topologyService: topology,
+            envelopeSigner: signer,
+            operationApplyService: apply);
+
+        var resultTask = controller.RecordEnvelope(envelope, CancellationToken.None);
+        await apply.WaitForApplyAsync().ConfigureAwait(true);
+
+        Assert.False(resultTask.IsCompleted);
+        await topology.DidNotReceive()
+            .AcknowledgeOperationAsync(
+                "op-wait-apply",
+                Arg.Any<FederationOperationAckRequest>(),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+
+        apply.Release();
+        var result = await resultTask.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var response = Assert.IsType<FederationOperationResponse>(ok.Value);
+        Assert.Equal("applied", response.Status);
+        await topology.Received(1)
+            .AcknowledgeOperationAsync(
+                "op-wait-apply",
+                Arg.Is<FederationOperationAckRequest>(request =>
+                    request != null &&
+                    request.Status == "applied" &&
+                    request.HubVersion == "v2"),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>Signed envelope intake records a conflict acknowledgement when transactional apply reports degraded.</summary>
+    [Fact]
+    public async Task RecordEnvelope_WhenTransactionalApplyReportsDegraded_AcknowledgesConflict()
+    {
+        var topology = Substitute.For<IFederationTopologyService>();
+        var apply = Substitute.For<IFederationOperationApplyService>();
+        var signer = CreateSigner();
+        var operation = new FederationOperationRequest
+        {
+            OperationId = "op-degraded-apply",
+            ProxyId = "PAYTON-LEGION2",
+            Domain = "todo",
+            ResourceId = "PLAN-FEDERATION-001",
+            BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
+        };
+        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-degraded-apply", Status = "accepted", Created = true });
+        topology.AcknowledgeOperationAsync("op-degraded-apply", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-degraded-apply", Status = "conflict", Created = false });
+        apply.ApplyAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationApplyResult
+            {
+                Applied = false,
+                Conflict = true,
+                Version = "v-degraded",
+                Message = "turn transaction coordinator is degraded",
+            });
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            topologyService: topology,
+            envelopeSigner: signer,
+            operationApplyService: apply);
+
+        var result = await controller.RecordEnvelope(envelope, CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var response = Assert.IsType<FederationOperationResponse>(ok.Value);
+        Assert.Equal("conflict", response.Status);
+        await topology.Received(1)
+            .AcknowledgeOperationAsync(
+                "op-degraded-apply",
+                Arg.Is<FederationOperationAckRequest>(request =>
+                    request != null &&
+                    request.Status == "conflict" &&
+                    request.HubVersion == "v-degraded" &&
+                    request.Error == "turn transaction coordinator is degraded"),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
     /// <summary>Hub sync signs local-execution outbox rows with local-execution apply mode.</summary>
     [Fact]
     public async Task Sync_LocalExecutionItemSignsEnvelopeWithLocalExecutionApplyMode()
@@ -239,6 +358,19 @@ public sealed class FederationControllerTests
         Assert.True(status.Enabled);
     }
 
+    /// <summary>TEST-MCP-161: Enable fails closed before mutating registry state when required turn transactions are active.</summary>
+    [Fact]
+    public void Enable_WhenTransactionsRequired_ReturnsConflictWithoutChangingRegistry()
+    {
+        var registry = CreateRegistry();
+        var controller = CreateController(registry, transactionCoordinator: new CapturingCoordinator(enabled: true));
+
+        var result = controller.Enable();
+
+        Assert.IsType<ConflictObjectResult>(result.Result);
+        Assert.False(registry.IsEnabled);
+    }
+
     /// <summary>Disable sets federation to disabled.</summary>
     [Fact]
     public void Disable_SetsEnabledFalse()
@@ -251,6 +383,22 @@ public sealed class FederationControllerTests
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var status = Assert.IsType<FederationStatusResponse>(ok.Value);
         Assert.False(status.Enabled);
+    }
+
+    /// <summary>TEST-MCP-161: Degraded transaction state blocks federation control-plane mutations before registry writes.</summary>
+    [Fact]
+    public void Disable_WhenCoordinatorDegraded_ReturnsConflictWithoutChangingRegistry()
+    {
+        var registry = CreateRegistry(o => o.Enabled = true);
+        var controller = CreateController(
+            registry,
+            transactionCoordinator: new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
+
+        var result = controller.Disable();
+
+        var conflict = Assert.IsType<ConflictObjectResult>(result.Result);
+        Assert.Contains("txn degraded", conflict.Value?.ToString() ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+        Assert.True(registry.IsEnabled);
     }
 
     // --- ListTargets ---
@@ -280,6 +428,19 @@ public sealed class FederationControllerTests
         var created = Assert.IsType<CreatedAtActionResult>(result.Result);
         var info = Assert.IsType<FederationTargetInfo>(created.Value);
         Assert.Equal("remote", info.Name);
+    }
+
+    /// <summary>TEST-MCP-161: Target registration fails closed before adding a federation target.</summary>
+    [Fact]
+    public void AddTarget_WhenTransactionsRequired_ReturnsConflictWithoutAddingTarget()
+    {
+        var registry = CreateRegistry();
+        var controller = CreateController(registry, transactionCoordinator: new CapturingCoordinator(enabled: true));
+
+        var result = controller.AddTarget(new FederationTargetOptions { Name = "remote", BaseUrl = "https://x.ngrok.io" });
+
+        Assert.IsType<ConflictObjectResult>(result.Result);
+        Assert.Empty(registry.List());
     }
 
     /// <summary>Adding a duplicate target name returns 409 Conflict.</summary>
@@ -387,6 +548,24 @@ public sealed class FederationControllerTests
         Assert.Single(routes);
     }
 
+    /// <summary>TEST-MCP-161: Workspace route writes fail closed before mutating route state.</summary>
+    [Fact]
+    public void AddRoute_WhenTransactionsRequired_ReturnsConflictWithoutAddingRoute()
+    {
+        var registry = CreateRegistry(o =>
+            o.Targets.Add(new FederationTargetOptions { Name = "t1", BaseUrl = "http://localhost:7148" }));
+        var controller = CreateController(registry, transactionCoordinator: new CapturingCoordinator(enabled: true));
+
+        var result = controller.AddRoute(new WorkspaceRouteOptions
+        {
+            WorkspacePath = @"C:\ws\alpha",
+            TargetName = "t1",
+        });
+
+        Assert.IsType<ConflictObjectResult>(result.Result);
+        Assert.Empty(registry.ListRoutes());
+    }
+
     /// <summary>Adding a route with an unknown target returns 404.</summary>
     [Fact]
     public void AddRoute_UnknownTarget_Returns404()
@@ -438,6 +617,72 @@ public sealed class FederationControllerTests
         Assert.Equal(0, discovery.Discovered);
     }
 
+    /// <summary>TEST-MCP-161: Direct topology operation recording fails closed before topology mutation.</summary>
+    [Fact]
+    public async Task RecordOperation_WhenTransactionsRequired_ReturnsConflictWithoutCallingTopology()
+    {
+        var topology = Substitute.For<IFederationTopologyService>();
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            topologyService: topology,
+            transactionCoordinator: new CapturingCoordinator(enabled: true),
+            transactionOptions: Microsoft.Extensions.Options.Options.Create(
+                new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
+
+        var result = await controller.RecordOperation(
+                new FederationOperationRequest { OperationId = "op-block", ProxyId = "proxy-1", Domain = "todo" },
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        Assert.IsType<ConflictObjectResult>(result.Result);
+        await topology.DidNotReceive()
+            .RecordOperationAsync(Arg.Any<FederationOperationRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>TEST-MCP-161: Signed federation envelope intake remains protocol-internal and reaches transactional apply.</summary>
+    [Fact]
+    public async Task RecordEnvelope_WhenTransactionsRequired_StillReachesTransactionalApply()
+    {
+        var topology = Substitute.For<IFederationTopologyService>();
+        var apply = Substitute.For<IFederationOperationApplyService>();
+        var signer = CreateSigner();
+        var operation = new FederationOperationRequest
+        {
+            OperationId = "op-signed-txn",
+            ProxyId = "PAYTON-LEGION2",
+            Domain = "todo",
+            ResourceId = "PLAN-FEDERATION-001",
+            BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
+        };
+        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-signed-txn", Status = "accepted", Created = true });
+        topology.AcknowledgeOperationAsync("op-signed-txn", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-signed-txn", Status = "applied", Created = false });
+        apply.ApplyAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationApplyResult { Applied = true, Version = "v2" });
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            topologyService: topology,
+            envelopeSigner: signer,
+            operationApplyService: apply,
+            transactionCoordinator: new CapturingCoordinator(enabled: true),
+            transactionOptions: Microsoft.Extensions.Options.Options.Create(
+                new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
+
+        var result = await controller.RecordEnvelope(envelope, CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var response = Assert.IsType<FederationOperationResponse>(ok.Value);
+        Assert.Equal("applied", response.Status);
+        await apply.Received(1)
+            .ApplyAsync(operation, Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
     private sealed class TestStateAdapter : IFederationStateAdapter
     {
         private readonly bool _applySupported;
@@ -480,5 +725,55 @@ public sealed class FederationControllerTests
         public bool IsEcho(FederationStateOperation operation)
             => !string.IsNullOrWhiteSpace(operation.SourceOperationId) &&
                string.Equals(operation.SourceOperationId, operation.OperationId, StringComparison.Ordinal);
+    }
+
+    private sealed class BlockingOperationApplyService : IFederationOperationApplyService
+    {
+        private readonly FederationApplyResult _result;
+        private readonly TaskCompletionSource _applyStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        private readonly TaskCompletionSource _releaseApply = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public BlockingOperationApplyService(FederationApplyResult result)
+        {
+            _result = result;
+        }
+
+        public async ValueTask<FederationApplyResult> ApplyAsync(
+            FederationOperationRequest operation,
+            CancellationToken cancellationToken)
+        {
+            _applyStarted.TrySetResult();
+            await _releaseApply.Task.WaitAsync(cancellationToken).ConfigureAwait(false);
+            return _result;
+        }
+
+        public Task WaitForApplyAsync()
+            => _applyStarted.Task.WaitAsync(TimeSpan.FromSeconds(10));
+
+        public void Release()
+            => _releaseApply.TrySetResult();
+    }
+
+    private sealed class CapturingCoordinator : ITurnTransactionCoordinator
+    {
+        private readonly TurnTransactionStatusResponse _status;
+
+        public CapturingCoordinator(bool enabled, bool degraded = false, string message = "")
+        {
+            _status = new TurnTransactionStatusResponse
+            {
+                Enabled = enabled,
+                Degraded = degraded,
+                Message = message,
+            };
+        }
+
+        public Task<TurnTransactionResult> ExecuteAsync(
+            TurnTransactionRequest request,
+            Func<CancellationToken, Task<TurnMutationResult>> mutation,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public TurnTransactionStatusResponse GetStatus() => _status;
     }
 }

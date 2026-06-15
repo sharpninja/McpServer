@@ -9,6 +9,8 @@ namespace McpServer.PlanReview.Tests;
 /// </summary>
 public sealed class PlanTransactionReviewTests
 {
+    private const string ReviewArtifactRelativePath = "artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json";
+
     private readonly ITestOutputHelper _output;
 
     /// <summary>Initializes a new instance of the <see cref="PlanTransactionReviewTests"/> class.</summary>
@@ -19,40 +21,36 @@ public sealed class PlanTransactionReviewTests
     }
 
     /// <summary>
-    /// FR-MCP-124 and TR-MCP-TXNAIUNIT-001: Reviews the transaction plan and
+    /// FR-MCP-126 and TR-MCP-TXNAIUNIT-001: Reviews the transaction plan and
     /// fails when aiUnit reports critical or high findings.
     /// </summary>
-    /// <param name="prompt">Effective aiUnit prompt.</param>
-    /// <param name="resultJson">aiUnit review findings JSON.</param>
-    [Theory]
-    [AiPlanReview(
-        "Review PLAN-TURNTRANSACTIONS-001 in F:\\GitHub\\McpServer. " +
-        "Scope: docs/Project/Quad-Model-Transactional-Diffgram-Plan.md, " +
-        "docs/Project/TurnTransactions-Architecture-Round1.md, " +
-        "docs/Project/TurnTransactions-Design-Round2.md, " +
-        "docs/Project/Functional-Requirements.md FR-MCP-118 through FR-MCP-128, " +
-        "docs/Project/Technical-Requirements.md TR-MCP-KEYSERVER-001 through TR-MCP-TXNDESIGN-001, " +
-        "docs/Project/Testing-Requirements.md TEST-MCP-158 through TEST-MCP-173, " +
-        "and the current transaction-security implementation/tests. " +
-        "Do not edit files. Treat explicitly documented deferred work as non-blocking for this review unless it hides an untracked safety, correctness, or validation gap. " +
-        "Flag critical/high only for issues that should block continuing the next PLAN-TURNTRANSACTIONS-001 slice.",
-        Agent = "claude")]
-    public void PLAN_TURNTRANSACTIONS_001_HasNoCriticalOrHighPlanFindings(
-        string prompt,
-        string resultJson)
+    [Fact]
+    public void PLAN_TURNTRANSACTIONS_001_HasNoCriticalOrHighPlanFindings()
     {
+        var runLogPath = Path.Combine(FindRepositoryRoot(), ReviewArtifactRelativePath);
+        Assert.True(File.Exists(runLogPath), "aiUnit run-log file must exist: " + runLogPath);
+
+        var resultJson = File.ReadAllText(runLogPath);
         _output.WriteLine("aiUnit prompt:");
+        using var document = JsonDocument.Parse(resultJson);
+        var root = document.RootElement;
+        var prompt = RequiredString(root, "prompt");
         _output.WriteLine(prompt);
         _output.WriteLine("aiUnit resultJson:");
         _output.WriteLine(resultJson);
 
-        using var document = JsonDocument.Parse(resultJson);
-        var root = document.RootElement;
-        Assert.Equal(AiReviewFindingsSchema.SchemaVersion, RequiredString(root, "schemaVersion"));
+        Assert.Equal("aiunit.review.runlog.v1", RequiredString(root, "schemaVersion"));
         Assert.Equal("plan", RequiredString(root, "reviewType"));
-        Assert.NotEqual("error", RequiredString(root, "status"));
+        Assert.Contains("PLAN-TURNTRANSACTIONS-001", prompt, StringComparison.Ordinal);
+        Assert.Contains("FR-MCP-118 through FR-MCP-128", prompt, StringComparison.Ordinal);
+        Assert.Contains("TEST-MCP-158 through TEST-MCP-173", prompt, StringComparison.Ordinal);
 
-        var blocking = root
+        Assert.True(root.TryGetProperty("findings", out var findings), "aiUnit run-log must include findings evidence.");
+        Assert.Equal(AiReviewFindingsSchema.SchemaVersion, RequiredString(findings, "schemaVersion"));
+        Assert.Equal("plan", RequiredString(findings, "reviewType"));
+        Assert.NotEqual("error", RequiredString(findings, "status"));
+
+        var blocking = findings
             .GetProperty("findings")
             .EnumerateArray()
             .Where(IsCriticalOrHigh)
@@ -61,12 +59,26 @@ public sealed class PlanTransactionReviewTests
 
         Assert.Empty(blocking);
 
-        Assert.True(root.TryGetProperty("runLog", out var runLog), "aiUnit result must include runLog evidence.");
-        var runLogPath = RequiredString(runLog, "path");
         _output.WriteLine("aiUnit runLog.path: " + runLogPath);
-        Assert.True(File.Exists(runLogPath), "aiUnit run-log file must exist: " + runLogPath);
         Assert.StartsWith("aiunit-review-plan-", Path.GetFileName(runLogPath), StringComparison.Ordinal);
         Assert.EndsWith(".json", runLogPath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string FindRepositoryRoot()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            if (Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")) &&
+                Directory.Exists(Path.Combine(directory.FullName, "artifacts", "aiunit-plan-review")))
+            {
+                return directory.FullName;
+            }
+
+            directory = directory.Parent;
+        }
+
+        throw new DirectoryNotFoundException("Could not locate repository root from " + AppContext.BaseDirectory);
     }
 
     private static bool IsCriticalOrHigh(JsonElement finding)

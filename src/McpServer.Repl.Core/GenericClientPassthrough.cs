@@ -36,6 +36,7 @@ namespace McpServer.Repl.Core;
 public sealed class GenericClientPassthrough : IGenericClientPassthrough
 {
     private readonly McpServerClient _client;
+    private readonly IClientMutationPolicy? _clientMutationPolicy;
     private static readonly JsonSerializerOptions _jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
@@ -48,10 +49,12 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     /// Initializes a new instance of <see cref="GenericClientPassthrough"/> with the specified client.
     /// </summary>
     /// <param name="client">The MCP server client containing all sub-clients.</param>
+    /// <param name="clientMutationPolicy">Optional mutation policy used before reflection invocation.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="client"/> is null.</exception>
-    public GenericClientPassthrough(McpServerClient client)
+    public GenericClientPassthrough(McpServerClient client, IClientMutationPolicy? clientMutationPolicy = null)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
+        _clientMutationPolicy = clientMutationPolicy;
     }
 
     /// <inheritdoc />
@@ -64,6 +67,10 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         ArgumentNullException.ThrowIfNull(clientName);
         ArgumentNullException.ThrowIfNull(methodName);
         ArgumentNullException.ThrowIfNull(arguments);
+
+        var decision = _clientMutationPolicy?.Evaluate(clientName, methodName, arguments) ?? ClientMutationPolicyDecision.Allow();
+        if (!decision.Allowed)
+            throw new ClientMutationPolicyException(clientName, methodName, decision);
 
         // Step 1: Resolve client by name (case-insensitive)
         var clientProperty = ResolveClientProperty(clientName);

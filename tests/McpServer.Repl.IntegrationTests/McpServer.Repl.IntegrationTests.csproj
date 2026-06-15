@@ -18,12 +18,15 @@
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="YamlDotNet" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Repl.Host\McpServer.Repl.Host.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Client\McpServer.Client.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

@@ -4,6 +4,9 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,11 +20,16 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/requirements")]
 public sealed class RequirementsController : ControllerBase
 {
+    private const string DeferredRequirementsIngestMessage =
+        "Requirements whole-document ingest is not transaction compensated while required turn transactions are active.";
+
     private readonly IRequirementsDocumentService _requirements;
     private readonly RequirementsOptions _requirementsOptions;
     private readonly WorkspaceContext _workspaceContext;
     private readonly ITodoExecutionService _todoExecution;
     private readonly ILogger<RequirementsController> _logger;
+    private readonly ITurnTransactionCoordinator? _transactionCoordinator;
+    private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
 
 
     /// <summary>Initializes a new instance of the <see cref="RequirementsController"/> class.</summary>
@@ -29,13 +37,17 @@ public sealed class RequirementsController : ControllerBase
         IOptions<RequirementsOptions> requirementsOptions,
         WorkspaceContext workspaceContext,
         ITodoExecutionService todoExecution,
-        ILogger<RequirementsController> logger)
+        ILogger<RequirementsController> logger,
+        ITurnTransactionCoordinator? transactionCoordinator = null,
+        IOptions<TurnTransactionOptions>? transactionOptions = null)
     {
         _logger = logger;
         _requirements = requirements;
         _requirementsOptions = requirementsOptions?.Value ?? throw new ArgumentNullException(nameof(requirementsOptions));
         _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
         _todoExecution = todoExecution ?? throw new ArgumentNullException(nameof(todoExecution));
+        _transactionCoordinator = transactionCoordinator;
+        _transactionOptions = transactionOptions;
     }
 
     /// <summary>Gets all Functional Requirement entries.</summary>
@@ -625,6 +637,9 @@ public sealed class RequirementsController : ControllerBase
     {
         try
         {
+            if (ShouldDeferIngest(out var transactionError))
+                return Conflict(new { error = transactionError });
+
             var sourceFormat = NormalizeSourceFormat(request?.SourceFormat, request?.Documents);
             var wikiSelection = sourceFormat == "wiki"
                 ? RequirementsWikiDocumentSelector.Select(request?.Documents ?? new Dictionary<string, RequirementsIngestDocument>(), request?.PreferredWikiFormat)
@@ -726,6 +741,31 @@ public sealed class RequirementsController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
     }
+
+    private bool ShouldDeferIngest(out string error)
+    {
+        error = string.Empty;
+        if (_transactionCoordinator is null)
+            return false;
+
+        var status = _transactionCoordinator.GetStatus();
+        if (status.Degraded)
+        {
+            error = string.IsNullOrWhiteSpace(status.Message)
+                ? "Turn transaction coordinator is degraded."
+                : status.Message;
+            return true;
+        }
+
+        if (!RequiresMutationTransactions(status))
+            return false;
+
+        error = DeferredRequirementsIngestMessage;
+        return true;
+    }
+
+    private bool RequiresMutationTransactions(TurnTransactionStatusResponse status)
+        => status.Enabled && (_transactionOptions?.Value.RequiredForMutations ?? true);
 
     /// <summary>Generates a requirements document or exports all requirements documents to the workspace.</summary>
     /// <param name="doc">Document selector: functional, technical, testing, mapping, matrix, or all.</param>

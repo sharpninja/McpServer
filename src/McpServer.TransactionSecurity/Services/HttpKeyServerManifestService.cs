@@ -67,6 +67,28 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
         }
     }
 
+    /// <inheritdoc />
+    public async Task<TransactionManifestTraceReport> GetManifestReportAsync(
+        TransactionManifestTraceReportRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var limit = Math.Clamp(request.Limit ?? 100, 1, 500);
+        try
+        {
+            return await _http
+                .GetFromJsonAsync<TransactionManifestTraceReport>(
+                    $"mcpserver/keyserver/manifests/report{BuildReportQuery(request, limit)}",
+                    cancellationToken)
+                .ConfigureAwait(false)
+                ?? EmptyReport(request, limit);
+        }
+        catch (Exception ex) when ((ex is HttpRequestException || ex is TaskCanceledException) && !cancellationToken.IsCancellationRequested)
+        {
+            return EmptyReport(request, limit);
+        }
+    }
+
     private async Task<TResponse> PostAsync<TRequest, TResponse>(
         string path,
         TRequest request,
@@ -84,4 +106,37 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
             return unavailableResponse();
         }
     }
+
+    private static string BuildReportQuery(TransactionManifestTraceReportRequest request, int limit)
+    {
+        var query = new List<string>();
+        Add(query, "publisherPartyId", request.PublisherPartyId);
+        Add(query, "subscriberPartyId", request.SubscriberPartyId);
+        Add(query, "status", request.Status);
+        Add(query, "fromUtc", request.FromUtc?.ToString("O"));
+        Add(query, "toUtc", request.ToUtc?.ToString("O"));
+        query.Add($"limit={limit}");
+        return query.Count == 0 ? string.Empty : "?" + string.Join("&", query);
+    }
+
+    private static void Add(List<string> query, string name, string? value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+            query.Add($"{name}={Uri.EscapeDataString(value.Trim())}");
+    }
+
+    private static TransactionManifestTraceReport EmptyReport(
+        TransactionManifestTraceReportRequest request,
+        int limit)
+        => new()
+        {
+            GeneratedAtUtc = DateTimeOffset.UtcNow,
+            PublisherPartyId = string.IsNullOrWhiteSpace(request.PublisherPartyId) ? null : request.PublisherPartyId.Trim(),
+            SubscriberPartyId = string.IsNullOrWhiteSpace(request.SubscriberPartyId) ? null : request.SubscriberPartyId.Trim(),
+            Status = string.IsNullOrWhiteSpace(request.Status) ? null : request.Status.Trim(),
+            FromUtc = request.FromUtc,
+            ToUtc = request.ToUtc,
+            Limit = limit,
+            Records = [],
+        };
 }

@@ -233,15 +233,15 @@ Repo annotations:
 - `ARCH-QUAD-001-COMP-CLIENT`: existing `src/McpServer.Client`, including public transaction DTO/client contracts.
 - `ARCH-QUAD-001-COMP-KEYSERVER`: separate `src/McpServer.KeyServer` host exposes keyserver trust endpoints over the shared transaction-security core.
 - `ARCH-QUAD-001-COMP-SUBSCRIBER`: separate `src/McpServer.Subscriber` host exposes subscriber commit/status/abort endpoints and verifies manifests through an HTTP-backed keyserver client.
-- `ARCH-QUAD-001-COMP-PUBSUB`: represented in this slice by subscriber commit/coordinator contracts; durable DB commit storage and full external pub-sub remain deferred.
+- `ARCH-QUAD-001-COMP-PUBSUB`: represented in this slice by subscriber commit/coordinator contracts, direct and HTTP external subscriber pub-sub adapters, external process/topic broker envelopes, required-subscriber fan-out, durable local broker-backed commit/abort outbox replay, replay worker/endpoints, and retention purge.
 - `ARCH-QUAD-001-COMP-QUAD`: documented scaffolding only; execution disabled.
 
 ## Imported Security Remediation
 
 The implementation follows the imported hardened option:
 
-- Hybrid authenticated encryption: ECDH plus AEAD. Protected subscriber diffgram envelopes are implemented with ECDH P-256, HKDF-SHA256, and AES-256-GCM; subscriber private ECDH decrypt keys are supplied from external configuration or a key ring for old and rotated subscriber encryption key IDs; the keyserver can import externally supplied publisher ECDSA signing private keys, re-provision them after service recreation without storing private material in SQLite, rotate active signing key IDs while preserving prior public descriptors for historic manifest verification, and persist signed manifest trace records for transaction lookup; and the coordinator can hand off protected envelopes for configured subscriber keys. Global mutation-adapter encrypted handoff remains deferred.
-- Nonces, sequence numbers, timestamps, and expiry on diffgrams/manifests. Keyserver signing/verification and subscriber commit now enforce replay nonce and monotonic sequence scopes; broader recovery, adapter, and operational stress coverage remains deferred.
+- Hybrid authenticated encryption: ECDH plus AEAD. Protected subscriber diffgram envelopes are implemented with ECDH P-256, HKDF-SHA256, and AES-256-GCM; subscriber private ECDH decrypt keys are supplied from external configuration, file-backed configuration, or a key ring for old and rotated subscriber encryption key IDs; the separate keyserver can provision configured publisher/subscriber parties from PEM file paths at startup, can import externally supplied publisher ECDSA signing private keys, re-provision them after service recreation without storing private material in SQLite, rotate active signing key IDs while preserving prior public descriptors for historic manifest verification, and persist signed manifest trace records for transaction lookup; and the coordinator can hand off protected envelopes for configured subscriber keys. Full key rotation lifecycle automation beyond file-backed startup provisioning and global mutation-adapter encrypted handoff remain deferred.
+- Nonces, sequence numbers, timestamps, and expiry on diffgrams/manifests. Keyserver signing/verification and subscriber commit now enforce replay nonce and monotonic sequence scopes; coordinator rollback compensation now cancels durable pending commit replay after successful local rollback or commit timeout, durable pub-sub replay reclaims stale in-progress claims after the configured lease, durable state records topic/subscriber identity, replay endpoints/workers exercise operational recovery, terminal retention purges completed messages without deleting replayable work, and deterministic high-volume/high-contention stress coverage exercises durable pub-sub and coordinator timeout paths.
 - 3PKS signed transaction manifest at start.
 - Strict SHA verification and signature checks on every diffgram. Current coverage validates manifest signatures, encrypted-body SHA-256 before decrypt, and plaintext SHA-256 after decrypt for protected subscriber envelopes.
 - Immediate abort on chain-of-custody failure.
@@ -251,9 +251,10 @@ The implementation follows the imported hardened option:
 ## Repo Implementation Map
 
 - `mcpserver`: existing MCP Server host plus `Mcp:TurnTransactions`, compatibility keyserver/subscriber controllers under `src/McpServer.Support.Mcp`, and the shared transaction coordinator from `src/McpServer.TransactionSecurity`.
+- Current `mcpserver` mutation-gating extensions include server-side TODO update gating through `TransactionGatedTodoMutationService`, stdio transaction registration through `McpStdioHost`, database-backed TODO compensation through `ITodoCompensationService` on `EfTodoService`, service-boundary GraphRAG/GitHub/voice/agent-pool fail-closed gates, federation control-plane fail-closed gates, generic REPL context/TODO/federation/keyserver/subscriber protected namespace policy, context rebuild/website-ingest fail-closed gates, and session-log applied repair fail-closed gates.
 - Separate keyserver host: `src/McpServer.KeyServer`.
 - Separate subscriber host: `src/McpServer.Subscriber`.
 - Shared transaction-security core: `src/McpServer.TransactionSecurity`.
 - Shared client contracts: existing `src/McpServer.Client`.
 - Focused first-slice tests: MCP support/client test projects plus `tests/McpServer.TransactionSecurity.IntegrationTests`.
-- Deferred adapters: production key-lifecycle automation, full external pub-sub, global mutation-adapter encrypted handoff, and global mutation adapters for all write surfaces.
+- Deferred adapters: remaining direct agent execution, desktop launch, tunnel, workspace configuration, auth configuration, server configuration, full remote/runtime-side compensation, complete concurrent-update isolation during delayed rollback, and full key rotation lifecycle automation beyond file-backed startup provisioning.

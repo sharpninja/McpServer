@@ -590,47 +590,63 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
 | FR-MCP-116 | Tracked | Functional-Requirements.md |
 | FR-MCP-117 | Tracked | Functional-Requirements.md |
-| FR-MCP-118 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-119 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-120 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-121 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-122 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-123 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-118 | ✅ Complete | KeyServerController, McpServer.KeyServer Program, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| FR-MCP-119 | ✅ Complete | InMemorySubscriberCommitService, SubscriberController, SubscriberClient, McpServer.Subscriber Program, TransactionSecurityControllerTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
+| FR-MCP-120 | ✅ Complete | TransactionSecurityModels, TurnTransactionCoordinator, TransactionPubSubServices, TurnTransactionFederationOperationApplyService, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, McpServerMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests, DurableTransactionSecurityStorageTests |
+| FR-MCP-121 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionsController, TransactionPubSubReplayWorker, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TurnTransactionsControllerTests, TransactionPubSubReplayWorkerTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests, Functional-Requirements.md |
+| FR-MCP-122 | ✅ Complete | Functional-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests |
+| FR-MCP-123 | ✅ Complete | Functional-Requirements.md, TurnTransactions-Architecture-Round1.md, TurnTransactions-Design-Round2.md, PlanTransactionReviewTests, TurnTransactionPlanArtifactTests |
 | FR-MCP-124 | ✅ Complete | Functional-Requirements.md |
-| FR-MCP-125 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-126 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-127 | 🟡 Partial | Functional-Requirements.md |
-| FR-MCP-128 | 🟡 Partial | Functional-Requirements.md |
+| FR-MCP-125 | ✅ Complete | Functional-Requirements.md, TurnTransactions-Design-Round2.md, Testing-Requirements.md, TurnTransactionPlanArtifactTests |
+| FR-MCP-126 | ✅ Complete | Functional-Requirements.md, PlanTransactionReviewTests |
+| FR-MCP-127 | ✅ Complete | Functional-Requirements.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, TurnTransactionCoordinatorTests |
+| FR-MCP-128 | ✅ Complete | Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests |
 | TR-MCP-GH-008 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-010 | Tracked | Technical-Requirements.md |
-| TR-MCP-KEYSERVER-001 | 🟡 Partial | Technical-Requirements.md |
-| TR-MCP-CRYPTO-001 | 🟡 Partial | Technical-Requirements.md |
-| TR-MCP-SUBSCRIBER-001 | 🟡 Partial | Technical-Requirements.md |
-| TR-MCP-TXN-001 | 🟡 Partial | Technical-Requirements.md |
-| TR-MCP-TXNAUDIT-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-KEYSERVER-001 | ✅ Complete | McpServer.KeyServer Program, KeyServerController, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-CRYPTO-001 | ✅ Complete | Technical-Requirements.md, TransactionSecurityModels, TransactionSecurityServices, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-SUBSCRIBER-001 | ✅ Complete | TransactionSecurityServices, TransactionSecurityStateStores, SubscriberController, SubscriberClient, McpServer.Subscriber Program, TransactionSecurityControllerTests, DiffgramEncryptionIntegrationTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-TXN-001 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionFederationOperationApplyService, TransactionPubSubReplayWorker, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, TurnTransactionsController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, McpServerMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, TurnTransactionsControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, DurableTransactionSecurityStorageTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-TXNAUDIT-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests, TransactionPubSubReplayWorkerTests, DurableTransactionSecurityStorageTests |
 | TR-MCP-TXNCOMPAT-001 | ✅ Complete | Technical-Requirements.md |
-| TR-MCP-TXNBYRD-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXNBYRD-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Design-Round2.md, Testing-Requirements.md, TurnTransactionPlanArtifactTests |
 | TR-MCP-TXNAIUNIT-001 | ✅ Complete | Technical-Requirements.md |
-| TR-MCP-TXNDIAGRAMS-001 | 🟡 Partial | Technical-Requirements.md |
-| TR-MCP-TXNARCH-001 | 🟡 Partial | Technical-Requirements.md |
-| TR-MCP-TXNDESIGN-001 | 🟡 Partial | Technical-Requirements.md |
+| TR-MCP-TXNDIAGRAMS-001 | ✅ Complete | Technical-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, DiffgramEncryptionIntegrationTests |
+| TR-MCP-TXNARCH-001 | ✅ Complete | Technical-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactions-Architecture-Round1.md, TurnTransactionPlanArtifactTests |
+| TR-MCP-TXNDESIGN-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Design-Round2.md, PlanTransactionReviewTests, TurnTransactionPlanArtifactTests |
 | TEST-MCP-156 | Tracked | Testing-Requirements.md |
 | TEST-MCP-157 | Tracked | Testing-Requirements.md |
-| TEST-MCP-158 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-159 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-160 | ✅ Complete | Testing-Requirements.md |
-| TEST-MCP-161 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-162 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-163 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-158 | ✅ Complete | Testing-Requirements.md, DurableTransactionSecurityStorageTests, TransactionSecurityControllerTests |
+| TEST-MCP-159 | ✅ Complete | Testing-Requirements.md, TransactionSecurityControllerTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
+| TEST-MCP-160 | ✅ Complete | SeparateTransactionServiceIntegrationTests, DurableTransactionSecurityStorageTests, TransactionSecurityControllerTests, TransactionSecurityClientTests |
+| TEST-MCP-161 | ✅ Complete | TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests, TurnTransactionsControllerTests, TransactionalTodoWorkflowTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedTodoMutationServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, RequirementsDatabaseDocumentServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, ToolRegistryScopeTests, ToolBucketServiceTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, GraphRagToolAdapterTests, ContextClientTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, DurableTransactionSecurityStorageTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests, TurnTransactions-Mutation-Endpoint-Audit.md |
+| TEST-MCP-162 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Functional-Requirements.md, Technical-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-163 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactions-Mutation-Endpoint-Audit.md |
 | TEST-MCP-164 | ✅ Complete | Testing-Requirements.md |
 | TEST-MCP-165 | ✅ Complete | Testing-Requirements.md |
-| TEST-MCP-166 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-167 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-168 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-169 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-170 | 🔴 Planned | Testing-Requirements.md |
-| TEST-MCP-171 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-172 | 🟡 Partial | Testing-Requirements.md |
-| TEST-MCP-173 | 🟡 Partial | Testing-Requirements.md |
+| TEST-MCP-166 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md |
+| TEST-MCP-167 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, DiffgramEncryptionIntegrationTests |
+| TEST-MCP-168 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests |
+| TEST-MCP-169 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md |
+| TEST-MCP-170 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md |
+| TEST-MCP-171 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Architecture-Round1.md |
+| TEST-MCP-172 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Design-Round2.md |
+| TEST-MCP-173 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Mutation-Endpoint-Audit.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
 | TEST-MCP-REQACPLUGIN-CAPTURE | Tracked | Testing-Requirements.md |
+| FR-MCP-PLUGINCORE-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-PLUGINCORE-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-PLUGINCORE-003 | Tracked | Functional-Requirements.md |
+| FR-MCP-REPL-006 | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-010E | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-010F | Tracked | Functional-Requirements.md |
+| TR-MCP-PLUGINCORE-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGINCORE-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGINCORE-003 | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-010E | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-010F | Tracked | Technical-Requirements.md |
+| TEST-MCP-PLUGINCORE-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGINCORE-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGINCORE-003 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010E | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010F | Tracked | Testing-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

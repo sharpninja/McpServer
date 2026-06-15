@@ -39,11 +39,11 @@ public sealed class TurnTransactionCoordinatorTests
     public async Task ExecuteAsync_WhenRequiredForMutationsFalse_BypassesAndRunsMutation()
     {
         var keyServer = Substitute.For<IKeyServerManifestService>();
-        var subscriber = Substitute.For<ISubscriberCommitService>();
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
         var coordinator = CreateCoordinator(
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false },
             keyServer: keyServer,
-            subscriber: subscriber);
+            transactionPubSub: transactionPubSub);
 
         var result = await coordinator.ExecuteAsync(
             CreateRequest("txn-required-false"),
@@ -55,7 +55,7 @@ public sealed class TurnTransactionCoordinatorTests
         Assert.Contains("not required", result.Message, StringComparison.OrdinalIgnoreCase);
         await keyServer.DidNotReceive().SignManifestAsync(Arg.Any<TransactionManifestSignRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
-        await subscriber.DidNotReceive().CommitDiffgramAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+        await transactionPubSub.DidNotReceive().PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -74,8 +74,8 @@ public sealed class TurnTransactionCoordinatorTests
                 Reason = TransactionFailureReason.None,
                 Manifest = CreateManifest("txn-commit"),
             });
-        var subscriber = Substitute.For<ISubscriberCommitService>();
-        subscriber.CommitDiffgramAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .Returns(new DiffgramCommitResponse
             {
                 TransactionId = "txn-commit",
@@ -87,7 +87,7 @@ public sealed class TurnTransactionCoordinatorTests
             new TurnTransactionOptions { Enabled = true },
             registry,
             keyServer,
-            subscriber);
+            transactionPubSub: transactionPubSub);
 
         var result = await coordinator.ExecuteAsync(
             CreateRequest("txn-commit"),
@@ -97,7 +97,15 @@ public sealed class TurnTransactionCoordinatorTests
         Assert.Equal("committed", result.Status);
         Assert.True(result.MutationApplied);
         Assert.Equal("diffgram-txn-commit", result.DiffgramId);
-        await subscriber.Received(1).CommitDiffgramAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+        await transactionPubSub.Received(1).PublishCommitAsync(
+                Arg.Is<DiffgramCommitRequest>(request =>
+                    request != null &&
+                    request.Manifest.TransactionId == "txn-commit" &&
+                    request.Manifest.PublisherPartyId == "mcpserver" &&
+                    request.Manifest.SubscriberPartyId == "subscriber-1" &&
+                    !string.IsNullOrWhiteSpace(request.DiffgramSha256) &&
+                    !string.IsNullOrWhiteSpace(request.EncryptedBodySha256)),
+                Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -130,6 +138,7 @@ public sealed class TurnTransactionCoordinatorTests
             }),
             protector);
         var subscriber = new CapturingSubscriberCommitService(innerSubscriber);
+        var transactionPubSub = new DirectSubscriberTransactionPubSub(subscriber);
         var coordinator = CreateCoordinator(
             new TurnTransactionOptions
             {
@@ -139,7 +148,7 @@ public sealed class TurnTransactionCoordinatorTests
             },
             keyServer,
             keyServer,
-            subscriber,
+            transactionPubSub: transactionPubSub,
             diffgramBuilder: new JsonDiffgramBuilder(protector),
             subscriberOptions: new SubscriberOptions { RequireEncryptedDiffgrams = true });
 
@@ -221,8 +230,20 @@ public sealed class TurnTransactionCoordinatorTests
     public async Task ExecuteAsync_WhenMutationFails_RecordsAbortStatusAndAudit()
     {
         var audit = new InMemoryTransactionAuditWriter();
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishAbortAsync(
+                "txn-mutation-fail",
+                Arg.Any<TransactionAbortRequest>(),
+                Arg.Any<CancellationToken>())
+            .Returns(new TransactionAbortResponse
+            {
+                TransactionId = "txn-mutation-fail",
+                Status = "aborted",
+                Reason = TransactionFailureReason.Aborted,
+            });
         var coordinator = CreateCoordinator(
             new TurnTransactionOptions { Enabled = true },
+            transactionPubSub: transactionPubSub,
             auditWriter: audit);
 
         var result = await coordinator.ExecuteAsync(
@@ -237,14 +258,75 @@ public sealed class TurnTransactionCoordinatorTests
         Assert.Equal("txn-mutation-fail", status.LastTransactionId);
         Assert.Equal(TransactionFailureReason.Aborted, status.LastReason);
         Assert.Contains(audit.Snapshot(), item => item.EventName == "transaction_aborted");
+        await transactionPubSub.Received(1).PublishAbortAsync(
+                "txn-mutation-fail",
+                Arg.Is<TransactionAbortRequest>(request =>
+                    request != null &&
+                    request.Reason == TransactionFailureReason.Aborted &&
+                    request.Actor == "TurnTransactionCoordinator"),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await transactionPubSub.DidNotReceive().PublishCommitAsync(
+                Arg.Any<DiffgramCommitRequest>(),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>Subscriber duplicate acknowledgement is treated as committed by the coordinator.</summary>
+    [Fact]
+    public async Task ExecuteAsync_WhenPubSubReturnsDuplicate_TreatsAsCommitted()
+    {
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new DiffgramCommitResponse
+            {
+                TransactionId = "txn-duplicate",
+                Status = "duplicate",
+                Reason = TransactionFailureReason.None,
+                DiffgramId = "diffgram-txn-duplicate",
+            });
+        var coordinator = CreateCoordinator(
+            new TurnTransactionOptions { Enabled = true },
+            transactionPubSub: transactionPubSub);
+
+        var result = await coordinator.ExecuteAsync(
+            CreateRequest("txn-duplicate"),
+            _ => Task.FromResult(new TurnMutationResult { Success = true }),
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal("committed", result.Status);
+        Assert.Equal(TransactionFailureReason.None, result.Reason);
+        Assert.Equal("diffgram-txn-duplicate", result.DiffgramId);
+    }
+
+    /// <summary>Pub-sub transport exceptions map to subscriber-unavailable degraded mode.</summary>
+    [Fact]
+    public async Task ExecuteAsync_WhenPubSubThrows_EntersDegradedModeWithSubscriberUnavailable()
+    {
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+            .Returns<Task<DiffgramCommitResponse>>(_ => throw new InvalidOperationException("pubsub offline"));
+        var coordinator = CreateCoordinator(
+            new TurnTransactionOptions { Enabled = true, DegradedModeEnabled = true },
+            transactionPubSub: transactionPubSub);
+
+        var result = await coordinator.ExecuteAsync(
+            CreateRequest("txn-pubsub-throw"),
+            _ => Task.FromResult(new TurnMutationResult { Success = true }),
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal("degraded", result.Status);
+        Assert.True(result.MutationApplied);
+        Assert.True(result.Degraded);
+        Assert.Equal(TransactionFailureReason.SubscriberUnavailable, result.Reason);
     }
 
     /// <summary>Subscriber dependency failure enters degraded mode when configured.</summary>
     [Fact]
     public async Task ExecuteAsync_WhenSubscriberUnavailable_EntersDegradedMode()
     {
-        var subscriber = Substitute.For<ISubscriberCommitService>();
-        subscriber.CommitDiffgramAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .Returns(new DiffgramCommitResponse
             {
                 TransactionId = "txn-degraded",
@@ -254,7 +336,7 @@ public sealed class TurnTransactionCoordinatorTests
         var audit = new InMemoryTransactionAuditWriter();
         var coordinator = CreateCoordinator(
             new TurnTransactionOptions { Enabled = true, DegradedModeEnabled = true },
-            subscriber: subscriber,
+            transactionPubSub: transactionPubSub,
             auditWriter: audit);
 
         var result = await coordinator.ExecuteAsync(
@@ -269,12 +351,102 @@ public sealed class TurnTransactionCoordinatorTests
         Assert.Contains(audit.Snapshot(), item => item.EventName == "transaction_degraded");
     }
 
+    /// <summary>Degraded subscriber failure invokes mutation rollback compensation while preserving audit rows.</summary>
+    [Fact]
+    public async Task ExecuteAsync_WhenSubscriberUnavailableAndRollbackProvided_RunsRollbackCompensation()
+    {
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new DiffgramCommitResponse
+            {
+                TransactionId = "txn-degraded-rollback",
+                Status = "rejected",
+                Reason = TransactionFailureReason.SubscriberUnavailable,
+            });
+        var audit = new InMemoryTransactionAuditWriter();
+        var coordinator = CreateCoordinator(
+            new TurnTransactionOptions { Enabled = true, DegradedModeEnabled = true },
+            transactionPubSub: transactionPubSub,
+            auditWriter: audit);
+        var mutationApplied = false;
+        var rollbackApplied = false;
+
+        var result = await coordinator.ExecuteAsync(
+            CreateRequest("txn-degraded-rollback"),
+            _ =>
+            {
+                mutationApplied = true;
+                return Task.FromResult(new TurnMutationResult
+                {
+                    Success = true,
+                    RollbackAsync = ct =>
+                    {
+                        rollbackApplied = true;
+                        return Task.CompletedTask;
+                    },
+                });
+            },
+            CancellationToken.None).ConfigureAwait(true);
+        var auditEvents = audit.Snapshot();
+
+        Assert.Equal("degraded", result.Status);
+        Assert.True(result.Degraded);
+        Assert.True(result.MutationApplied);
+        Assert.True(mutationApplied);
+        Assert.True(rollbackApplied);
+        Assert.True(result.RollbackAttempted);
+        Assert.True(result.RollbackSucceeded);
+        Assert.Null(result.RollbackError);
+        Assert.Equal(TransactionFailureReason.SubscriberUnavailable, result.Reason);
+        Assert.Contains(auditEvents, item => item.EventName == "transaction_rollback_completed");
+        Assert.Contains(auditEvents, item => item.EventName == "transaction_degraded");
+    }
+
+    /// <summary>Rollback failure is reported without hiding the original subscriber commit reason.</summary>
+    [Fact]
+    public async Task ExecuteAsync_WhenRollbackCompensationFails_PreservesOriginalTransactionReason()
+    {
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new DiffgramCommitResponse
+            {
+                TransactionId = "txn-rollback-failure",
+                Status = "rejected",
+                Reason = TransactionFailureReason.DuplicateConflict,
+            });
+        var audit = new InMemoryTransactionAuditWriter();
+        var coordinator = CreateCoordinator(
+            new TurnTransactionOptions { Enabled = true, DegradedModeEnabled = true },
+            transactionPubSub: transactionPubSub,
+            auditWriter: audit);
+
+        var result = await coordinator.ExecuteAsync(
+            CreateRequest("txn-rollback-failure"),
+            _ => Task.FromResult(new TurnMutationResult
+            {
+                Success = true,
+                RollbackAsync = ct => throw new InvalidOperationException("compensation failed"),
+            }),
+            CancellationToken.None).ConfigureAwait(true);
+        var auditEvents = audit.Snapshot();
+
+        Assert.Equal("rejected", result.Status);
+        Assert.False(result.Degraded);
+        Assert.True(result.MutationApplied);
+        Assert.True(result.RollbackAttempted);
+        Assert.False(result.RollbackSucceeded);
+        Assert.Contains("compensation failed", result.RollbackError, StringComparison.Ordinal);
+        Assert.Equal(TransactionFailureReason.DuplicateConflict, result.Reason);
+        Assert.Contains(auditEvents, item => item.EventName == "transaction_rollback_failed");
+        Assert.Contains(auditEvents, item => item.EventName == "diffgram_rejected");
+    }
+
     /// <summary>Subscriber timeout is mapped to degraded mode when configured.</summary>
     [Fact]
     public async Task ExecuteAsync_WhenSubscriberCommitTimesOut_EntersDegradedMode()
     {
-        var subscriber = Substitute.For<ISubscriberCommitService>();
-        subscriber.CommitDiffgramAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .Returns(async callInfo =>
             {
                 await Task.Delay(TimeSpan.FromSeconds(30), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);
@@ -282,7 +454,7 @@ public sealed class TurnTransactionCoordinatorTests
             });
         var coordinator = CreateCoordinator(
             new TurnTransactionOptions { Enabled = true, DegradedModeEnabled = true, CommitTimeoutSeconds = 1 },
-            subscriber: subscriber);
+            transactionPubSub: transactionPubSub);
 
         var result = await coordinator.ExecuteAsync(
             CreateRequest("txn-timeout"),
@@ -294,12 +466,80 @@ public sealed class TurnTransactionCoordinatorTests
         Assert.True(result.Degraded);
     }
 
+    /// <summary>Concurrent subscriber timeouts all return structured degraded results without skipped work.</summary>
+    [Fact]
+    public async Task ExecuteAsync_WhenConcurrentSubscriberCommitsTimeOut_AllReturnCommitTimeout()
+    {
+        const int WorkerCount = 12;
+        var registry = Substitute.For<IKeyServerPartyRegistry>();
+        registry.GetPartyKeyAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new PartyKeyDescriptor { PartyId = "mcpserver", KeyId = "mcpserver:signing:1", Status = "active" });
+        var keyServer = Substitute.For<IKeyServerManifestService>();
+        keyServer.SignManifestAsync(Arg.Any<TransactionManifestSignRequest>(), Arg.Any<CancellationToken>())
+            .Returns(callInfo =>
+            {
+                var signRequest = callInfo.Arg<TransactionManifestSignRequest>();
+                Assert.NotNull(signRequest);
+                return new TransactionManifestSignResponse
+                {
+                    Success = true,
+                    Reason = TransactionFailureReason.None,
+                    Manifest = CreateManifest(signRequest.TransactionId),
+                };
+            });
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+            .Returns(async callInfo =>
+            {
+                await Task.Delay(TimeSpan.FromSeconds(30), callInfo.Arg<CancellationToken>()).ConfigureAwait(false);
+                return new DiffgramCommitResponse();
+            });
+        var audit = new InMemoryTransactionAuditWriter();
+        var coordinator = CreateCoordinator(
+            new TurnTransactionOptions { Enabled = true, DegradedModeEnabled = true, CommitTimeoutSeconds = 1 },
+            registry,
+            keyServer,
+            transactionPubSub: transactionPubSub,
+            auditWriter: audit);
+        var mutationCount = 0;
+
+        var results = await Task.WhenAll(
+                Enumerable.Range(0, WorkerCount).Select(index =>
+                    coordinator.ExecuteAsync(
+                        CreateRequest($"txn-timeout-load-{index:D2}"),
+                        _ =>
+                        {
+                            Interlocked.Increment(ref mutationCount);
+                            return Task.FromResult(new TurnMutationResult { Success = true });
+                        },
+                        CancellationToken.None)))
+            .ConfigureAwait(true);
+        var status = coordinator.GetStatus();
+        var auditEvents = audit.Snapshot();
+
+        Assert.All(results, result =>
+        {
+            Assert.Equal("degraded", result.Status);
+            Assert.Equal(TransactionFailureReason.CommitTimeout, result.Reason);
+            Assert.True(result.Degraded);
+            Assert.True(result.MutationApplied);
+        });
+        Assert.Equal(WorkerCount, mutationCount);
+        Assert.True(status.Degraded);
+        Assert.Equal(TransactionFailureReason.CommitTimeout, status.LastReason);
+        Assert.Equal(WorkerCount, auditEvents.Count(item => item.EventName == "transaction_degraded"));
+        await transactionPubSub.Received(WorkerCount).PublishCommitAsync(
+                Arg.Any<DiffgramCommitRequest>(),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
     /// <summary>Status controller exposes degraded mode state after a coordinator failure.</summary>
     [Fact]
     public async Task GetStatus_AfterDegradedFailure_ReturnsCurrentState()
     {
-        var subscriber = Substitute.For<ISubscriberCommitService>();
-        subscriber.CommitDiffgramAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
+        var transactionPubSub = Substitute.For<ITransactionPubSub>();
+        transactionPubSub.PublishCommitAsync(Arg.Any<DiffgramCommitRequest>(), Arg.Any<CancellationToken>())
             .Returns(new DiffgramCommitResponse
             {
                 TransactionId = "txn-status",
@@ -308,7 +548,7 @@ public sealed class TurnTransactionCoordinatorTests
             });
         var coordinator = CreateCoordinator(
             new TurnTransactionOptions { Enabled = true, DegradedModeEnabled = true },
-            subscriber: subscriber);
+            transactionPubSub: transactionPubSub);
         await coordinator.ExecuteAsync(
             CreateRequest("txn-status"),
             _ => Task.FromResult(new TurnMutationResult { Success = true }),
@@ -330,6 +570,7 @@ public sealed class TurnTransactionCoordinatorTests
         IKeyServerPartyRegistry? registry = null,
         IKeyServerManifestService? keyServer = null,
         ISubscriberCommitService? subscriber = null,
+        ITransactionPubSub? transactionPubSub = null,
         ITransactionAuditWriter? auditWriter = null,
         IDiffgramBuilder? diffgramBuilder = null,
         SubscriberOptions? subscriberOptions = null)
@@ -344,11 +585,12 @@ public sealed class TurnTransactionCoordinatorTests
             keyServer,
             canonicalizer,
             Monitor(new SubscriberOptions { PartyId = "subscriber-1" }));
+        transactionPubSub ??= new DirectSubscriberTransactionPubSub(subscriber);
         return new TurnTransactionCoordinator(
             Monitor(options),
             registry,
             keyServer,
-            subscriber,
+            transactionPubSub,
             diffgramBuilder ?? new JsonDiffgramBuilder(),
             new TransactionDegradedModePolicy(Monitor(options)),
             auditWriter ?? new InMemoryTransactionAuditWriter(),

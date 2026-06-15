@@ -806,6 +806,118 @@ Verify GitHubCliService passes command-scoped safe.directory environment variabl
 Verify the PowerShell wrapper returns a non-zero result with a timeout diagnostic when a plugin helper command hangs beyond TimeoutSeconds, while normal helper wrapper tests still pass.
 
 
+### TEST-MCP-158
+
+Keyserver trust and audit tests SHALL verify party registration, manifest signing, manifest verification, replay nonce rejection, stale sequence rejection, expiry rejection, disabled/unknown party or key rejection, key rotation descriptor preservation, signed manifest trace lookup/reporting, and audit persistence.
+
+**Acceptance Criteria:**
+- [x] `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, and `SeparateTransactionServiceIntegrationTests` cover keyserver trust and audit behavior with zero skipped tests in the executed scope.
+
+### TEST-MCP-159
+
+Subscriber commit and abort tests SHALL verify manifest trust, protected diffgram decrypt/hash validation, idempotent duplicate commit, conflict rejection, abort semantics, transaction status reporting, key-ring rotation, durable status, and concurrent commit/replay behavior.
+
+**Acceptance Criteria:**
+- [x] `TransactionSecurityControllerTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`, and subscriber-focused transaction tests cover accepted, rejected, pending, committed, and aborted status paths.
+
+### TEST-MCP-160
+
+Real keyserver/subscriber integration tests SHALL validate the separate keyserver and subscriber hosts without mocks, including valid commit, tampered manifest, stale sequence, encrypted-body mismatch, subscriber key-ring configuration, and file-backed key provisioning.
+
+**Acceptance Criteria:**
+- [x] `SeparateTransactionServiceIntegrationTests` and durable transaction-security integration coverage pass with zero failures and zero skips.
+
+### TEST-MCP-161
+
+MCP transaction gating tests SHALL verify coordinator commit/degraded paths, durable timeout rollback cancellation, pub-sub handoff/replay/retention, federation apply/control-plane gating, memory add/update/delete rollback, TODO CRUD rollback, repo/template/requirements/session/tool registry compensation, GraphRAG/GitHub/context/voice/agent-pool fail-closed gates, stdio routing, and generic client protected namespace policy.
+
+**Acceptance Criteria:**
+- [x] Focused and full Support.Mcp/Repl.Core test suites cover transaction gating and fail-closed behavior with zero skipped tests in the executed scope.
+
+### TEST-MCP-162
+
+Transaction traceability/import tests SHALL prove FR-MCP-118 through FR-MCP-128, transaction TR records, TEST-MCP-158 through TEST-MCP-173, and live TODO references resolve without placeholder transaction-plan entries.
+
+**Acceptance Criteria:**
+- [x] `TurnTransactionPlanArtifactTests.TransactionPlanRequirements_AreConcreteAndMapped` fails if transaction FR/TR/TEST records regress to placeholder backfills or lose matrix/mapping rows.
+
+### TEST-MCP-163
+
+Deferred-scope documentation tests SHALL prove future Quad-Model orchestration, Curiosity execution, AoT reconciliation, weight redistribution, direct agent execution, desktop launch, tunnels, workspace/auth/server configuration, full remote/runtime compensation, complete delayed-rollback isolation, bucket/GitHub compensation, and full key-rotation lifecycle automation remain explicit future work rather than silently reported as complete.
+
+**Acceptance Criteria:**
+- [x] `TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds` validates deferred scope and design artifacts.
+
+### TEST-MCP-164
+
+aiUnit plan review tests SHALL validate committed aiUnit run-log evidence for PLAN-TURNTRANSACTIONS-001 and fail on critical/high findings.
+
+**Acceptance Criteria:**
+- [x] `PlanTransactionReviewTests` validates `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`, reviewed scope, pass status, and absence of critical/high findings.
+
+### TEST-MCP-165
+
+Imported diagram preservation tests SHALL validate all six imported Mermaid diagrams, stable IDs, imported source references, and repo annotations.
+
+**Acceptance Criteria:**
+- [x] `TurnTransactionPlanArtifactTests.ImportedPlan_PreservesAllSixMermaidDiagramIds` covers AD-TXN-001, AD-CURIOSITY-001, SD-DIFFGRAM-001, AD-AOT-001, AD-WEIGHT-001, and ARCH-QUAD-001.
+
+### TEST-MCP-166
+
+Keyserver manifest diagram tests SHALL derive coverage from SD-DIFFGRAM-001 signing, verification, invalid, and valid branches.
+
+**Acceptance Criteria:**
+- [x] Keyserver tests cover manifest sign/verify, hash validation, replay/sequence rejection, and signed manifest trace behavior.
+
+### TEST-MCP-167
+
+Subscriber diagram tests SHALL derive coverage from SD-DIFFGRAM-001 subscriber decrypt, hash, commit, reject, duplicate, abort, and status branches.
+
+**Acceptance Criteria:**
+- [x] Subscriber tests cover protected-envelope commit, old-key decrypt, rotated-key decrypt, abort, and status lifecycle behavior.
+
+### TEST-MCP-168
+
+End-to-end turn transaction diagram tests SHALL derive coverage from AD-TXN-001 commit, subscriber unavailable, degraded, and no-success-before-ack branches.
+
+**Acceptance Criteria:**
+- [x] Coordinator and transaction pub-sub tests cover signed manifest handoff, subscriber commit acknowledgement, timeout, degraded status, and durable replay.
+
+### TEST-MCP-169
+
+Degraded rollback reconciliation tests SHALL validate AD-TXN-001 and AD-AOT-001 in-scope rollback/audit behavior without enabling future AoT execution.
+
+**Acceptance Criteria:**
+- [x] Transaction-gated services and pub-sub tests verify rollback compensation, rollback failure reporting, durable pending-commit cancellation, and additive audit evidence.
+
+### TEST-MCP-170
+
+Deferred quad scope enforcement tests SHALL prove Curiosity execution, weight updates, AoT execution, and quad orchestration remain disabled until later requirements authorize them.
+
+**Acceptance Criteria:**
+- [x] Plan artifact tests validate deferred-scope text, and no production project references a quad execution service for the deferred branches.
+
+### TEST-MCP-171
+
+Quad architecture conformance tests SHALL validate ARCH-QUAD-001 component mapping, trust boundaries, and disabled future branches.
+
+**Acceptance Criteria:**
+- [x] Plan artifact tests validate architecture/design artifacts and repo component references.
+
+### TEST-MCP-172
+
+Architecture Round 1 conformance tests SHALL validate trust model, component boundaries, storage boundaries, threat model, rollback/audit decisions, and gap analysis.
+
+**Acceptance Criteria:**
+- [x] `TurnTransactions-Architecture-Round1.md` is covered by `TurnTransactionPlanArtifactTests`.
+
+### TEST-MCP-173
+
+Design Round 2 conformance tests SHALL validate DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and AC-to-test mapping.
+
+**Acceptance Criteria:**
+- [x] `TurnTransactions-Design-Round2.md`, `TurnTransactions-Mutation-Endpoint-Audit.md`, requirements docs, matrix, and mappings are covered by `TurnTransactionPlanArtifactTests`.
+
 
 ## TEST-MCP-BATCH
 
@@ -881,6 +993,24 @@ Memory federation tests SHALL prove memory adapter diagnostics, /mcpserver/memor
 - [ ] Adapter tests prove delete soft-deletes and replayed delete is idempotent.
 - [ ] Adapter tests prove cross-workspace operations, invalid JSON, and invalid IDs conflict without mutation.
 - [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
+
+
+## TEST-MCP-PLUGINCORE
+
+### TEST-MCP-PLUGINCORE-001
+
+bats: sync writes manifest+sha256; guard OK after sync; fails on edit; fails on deletion; manifest required; re-sync repairs.
+
+
+### TEST-MCP-PLUGINCORE-002
+
+core-guard job fails on a seeded undeclared lib file and passes when declared in PLUGIN-RESIDUAL.txt.
+
+
+### TEST-MCP-PLUGINCORE-003
+
+bats: daemon roundtrip with --- terminator; one child serves N sends; auto-restart after kill; concurrent sends; persistent wrapper threads JSON params and honors fallback.
+
 
 
 ## TEST-MCP-REPL
@@ -1144,3 +1274,13 @@ Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/tur
 ### TEST-SUPPORT-010C-3
 
 Given the turn-append route, when PUT is used instead of POST, then 405 is returned with `Allow: POST`. **Covered by:** `SessionLogControllerTests.WhenPuttingTurnRouteThenReturns405WithAllowHeader`
+
+
+### TEST-SUPPORT-010E
+
+Integration tests: open idempotent, begin creates in_progress, complete merges+finalizes with evidence gate, fail records note, missing session 404.
+
+
+### TEST-SUPPORT-010F
+
+SQLite tests: partial session submit preserves omitted title/model; sparse turn submit preserves omitted response/queryText and prior collections.

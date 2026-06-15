@@ -33,6 +33,58 @@ public interface ITodoService
     Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default);
 }
 
+/// <summary>
+/// TR-MCP-TXN-001: Internal store capability for restoring TODO state during transaction rollback compensation.
+/// </summary>
+public interface ITodoCompensationService
+{
+    /// <summary>Captures the provider-specific current state needed to restore a TODO item later.</summary>
+    Task<TodoCompensationSnapshot?> CaptureForRestoreAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Updates a TODO item while atomically capturing its restore point under the provider write lock.</summary>
+    Task<TodoCompensatedMutationResult> UpdateWithRestorePointAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Deletes a TODO item while atomically capturing its restore point under the provider write lock.</summary>
+    Task<TodoCompensatedMutationResult> DeleteWithRestorePointAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Deletes a TODO item created by an uncommitted transaction during rollback compensation.</summary>
+    Task<TodoMutationResult> DeleteCreatedAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Restores a previously captured provider-specific TODO state.</summary>
+    Task<TodoMutationResult> RestoreAsync(TodoCompensationSnapshot snapshot, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// TR-MCP-TXN-001: Advertises whether a TODO service can actually perform rollback compensation.
+/// </summary>
+public interface ITodoCompensationCapability
+{
+    /// <summary>
+    /// Gets a value indicating whether rollback compensation can be performed without deferring failure to mutation time.
+    /// </summary>
+    bool SupportsRollbackCompensation { get; }
+}
+
+/// <summary>TR-MCP-TXN-001: Opaque provider-specific TODO compensation snapshot.</summary>
+public sealed record TodoCompensationSnapshot
+{
+    /// <summary>Provider identifier that owns the snapshot payload.</summary>
+    public required string Provider { get; init; }
+
+    /// <summary>Provider-specific state. Only the provider that created the snapshot should interpret it.</summary>
+    public required object State { get; init; }
+}
+
+/// <summary>TR-MCP-TXN-001: TODO mutation result paired with the pre-mutation restore point captured by the provider.</summary>
+public sealed record TodoCompensatedMutationResult
+{
+    /// <summary>The TODO mutation result returned by the provider.</summary>
+    public required TodoMutationResult Result { get; init; }
+
+    /// <summary>The pre-mutation restore point, or <see langword="null"/> when no item existed to restore.</summary>
+    public TodoCompensationSnapshot? Snapshot { get; init; }
+}
+
 /// <summary>TR-PLANNED-013: Query parameters for searching TODO items.</summary>
 public sealed record TodoQueryRequest
 {

@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using McpServer.TransactionSecurity.Models;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace McpServer.TransactionSecurity.Services;
@@ -18,6 +19,11 @@ internal interface IKeyServerStateStore : IDisposable
     Task SaveManifestAsync(TransactionManifestTraceRecord manifest, CancellationToken cancellationToken);
 
     Task<TransactionManifestTraceRecord?> GetManifestAsync(string transactionId, CancellationToken cancellationToken);
+
+    Task<KeyServerManifestTraceQueryResult> QueryManifestsAsync(
+        TransactionManifestTraceReportRequest request,
+        int limit,
+        CancellationToken cancellationToken);
 
     Task<TransactionFailureReason> TryReserveManifestReplayAsync(
         string scope,
@@ -41,6 +47,10 @@ internal interface ISubscriberStateStore : IDisposable
 
     Task<bool> TryAddTransactionAsync(SubscriberTransactionState transaction, CancellationToken cancellationToken);
 
+    Task<SubscriberTransactionState> AddOrCompleteTransactionAsync(
+        SubscriberTransactionState transaction,
+        CancellationToken cancellationToken);
+
     Task<SubscriberTransactionState> AddOrKeepAbortAsync(
         SubscriberTransactionState transaction,
         CancellationToken cancellationToken);
@@ -62,6 +72,10 @@ internal interface ISubscriberStateStore : IDisposable
 internal sealed record KeyServerPartyState(
     PartyRegistrationResponse Party,
     IReadOnlyList<PartyKeyDescriptor> Keys);
+
+internal sealed record KeyServerManifestTraceQueryResult(
+    int TotalCount,
+    IReadOnlyList<TransactionManifestTraceRecord> Records);
 
 internal sealed record SubscriberTransactionState(
     string TransactionId,
@@ -136,6 +150,24 @@ internal sealed class InMemoryKeyServerStateStore : IKeyServerStateStore
             _manifests.TryGetValue(transactionId, out var manifest)
                 ? Clone(manifest)
                 : null);
+    }
+
+    public Task<KeyServerManifestTraceQueryResult> QueryManifestsAsync(
+        TransactionManifestTraceReportRequest request,
+        int limit,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        var matches = _manifests.Values
+            .Select(Clone)
+            .Where(manifest => Matches(manifest, request))
+            .OrderBy(manifest => manifest.CreatedAtUtc)
+            .ThenBy(manifest => manifest.Sequence)
+            .ThenBy(manifest => manifest.TransactionId, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        return Task.FromResult(new KeyServerManifestTraceQueryResult(
+            matches.Count,
+            matches.Take(limit).ToList()));
     }
 
     public Task<TransactionFailureReason> TryReserveManifestReplayAsync(
@@ -229,6 +261,31 @@ internal sealed class InMemoryKeyServerStateStore : IKeyServerStateStore
             CreatedAtUtc = manifest.CreatedAtUtc,
         };
 
+    private static bool Matches(
+        TransactionManifestTraceRecord manifest,
+        TransactionManifestTraceReportRequest request)
+    {
+        if (!string.IsNullOrWhiteSpace(request.PublisherPartyId) &&
+            !string.Equals(manifest.PublisherPartyId, request.PublisherPartyId, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (!string.IsNullOrWhiteSpace(request.SubscriberPartyId) &&
+            !string.Equals(manifest.SubscriberPartyId, request.SubscriberPartyId, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (!string.IsNullOrWhiteSpace(request.Status) &&
+            !string.Equals(manifest.Status, request.Status, StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (request.FromUtc is { } fromUtc && manifest.CreatedAtUtc < fromUtc)
+            return false;
+
+        if (request.ToUtc is { } toUtc && manifest.CreatedAtUtc > toUtc)
+            return false;
+
+        return true;
+    }
+
     private static IReadOnlyList<PartyKeyDescriptor> MergeKeys(
         IReadOnlyList<PartyKeyDescriptor> existingKeys,
         IReadOnlyCollection<PartyKeyDescriptor> incomingKeys)
@@ -249,6 +306,7 @@ internal sealed class InMemoryKeyServerStateStore : IKeyServerStateStore
 
     private static string BuildScopedReplayKey(string scope, string value)
         => $"{scope.Trim()}\n{value}";
+
 }
 
 internal sealed class InMemorySubscriberStateStore : ISubscriberStateStore
@@ -272,6 +330,20 @@ internal sealed class InMemorySubscriberStateStore : ISubscriberStateStore
     {
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult(_transactions.TryAdd(transaction.TransactionId, transaction));
+    }
+
+    public Task<SubscriberTransactionState> AddOrCompleteTransactionAsync(
+        SubscriberTransactionState transaction,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        var current = _transactions.AddOrUpdate(
+            transaction.TransactionId,
+            transaction,
+            (_, existing) => string.Equals(existing.Status, "pending", StringComparison.OrdinalIgnoreCase)
+                ? transaction
+                : existing);
+        return Task.FromResult(current);
     }
 
     public Task<SubscriberTransactionState> AddOrKeepAbortAsync(
@@ -327,7 +399,201 @@ internal sealed class InMemorySubscriberStateStore : ISubscriberStateStore
     }
 }
 
-internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore, ISubscriberStateStore
+internal sealed class InMemoryTransactionPubSubBrokerStore : ITransactionPubSubBrokerStore
+{
+    private readonly ConcurrentDictionary<string, TransactionPubSubMessageState> _messages = new(StringComparer.OrdinalIgnoreCase);
+    private readonly object _gate = new();
+
+    public Task<TransactionPubSubMessageState> SavePendingAsync(
+        TransactionPubSubMessageState message,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (_gate)
+        {
+            if (_messages.TryGetValue(message.OperationId, out var existing))
+            {
+                if (string.Equals(existing.Status, "acknowledged", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(existing.Status, "canceled", StringComparison.OrdinalIgnoreCase) ||
+                    !string.Equals(existing.RequestJson, message.RequestJson, StringComparison.Ordinal))
+                    return Task.FromResult(existing);
+
+                var refreshed = existing with
+                {
+                    TransactionId = message.TransactionId,
+                    Kind = message.Kind,
+                    TopicName = message.TopicName,
+                    SubscriberId = message.SubscriberId,
+                    RequestJson = message.RequestJson,
+                    UpdatedAtUtc = DateTimeOffset.UtcNow,
+                };
+                _messages[message.OperationId] = refreshed;
+                return Task.FromResult(refreshed);
+            }
+
+            _messages[message.OperationId] = message;
+            return Task.FromResult(message);
+        }
+    }
+
+    public Task MarkAttemptAsync(
+        string operationId,
+        TransactionFailureReason reason,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (_gate)
+        {
+            if (_messages.TryGetValue(operationId, out var message))
+            {
+                _messages[operationId] = message with
+                {
+                    Status = "pending",
+                    Reason = reason,
+                    AttemptCount = message.AttemptCount + 1,
+                    UpdatedAtUtc = DateTimeOffset.UtcNow,
+                };
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task MarkCanceledAsync(
+        string operationId,
+        string responseJson,
+        TransactionFailureReason reason,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (_gate)
+        {
+            if (_messages.TryGetValue(operationId, out var message))
+            {
+                _messages[operationId] = message with
+                {
+                    Status = "canceled",
+                    ResponseJson = responseJson,
+                    Reason = reason,
+                    UpdatedAtUtc = DateTimeOffset.UtcNow,
+                };
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task MarkAcknowledgedAsync(
+        string operationId,
+        string responseJson,
+        TransactionFailureReason reason,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (_gate)
+        {
+            if (_messages.TryGetValue(operationId, out var message))
+            {
+                _messages[operationId] = message with
+                {
+                    Status = "acknowledged",
+                    ResponseJson = responseJson,
+                    Reason = reason,
+                    AttemptCount = message.AttemptCount + 1,
+                    UpdatedAtUtc = DateTimeOffset.UtcNow,
+                };
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task<TransactionPubSubMessageState?> TryClaimPendingAsync(
+        string operationId,
+        DateTimeOffset staleInProgressBeforeUtc,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (_gate)
+        {
+            if (!_messages.TryGetValue(operationId, out var message) || !CanClaim(message, staleInProgressBeforeUtc))
+                return Task.FromResult<TransactionPubSubMessageState?>(null);
+
+            var claimed = message with
+            {
+                Status = "in_progress",
+                UpdatedAtUtc = DateTimeOffset.UtcNow,
+            };
+            _messages[operationId] = claimed;
+            return Task.FromResult<TransactionPubSubMessageState?>(claimed);
+        }
+    }
+
+    public Task<IReadOnlyList<TransactionPubSubMessageState>> GetPendingAsync(
+        int maxMessages,
+        DateTimeOffset staleInProgressBeforeUtc,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        IReadOnlyList<TransactionPubSubMessageState> pending;
+        lock (_gate)
+        {
+            pending = _messages.Values
+                .Where(message => IsPendingOrStaleInProgress(message, staleInProgressBeforeUtc))
+                .OrderBy(message => message.CreatedAtUtc)
+                .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)
+                .Take(maxMessages)
+                .ToArray();
+        }
+
+        return Task.FromResult(pending);
+    }
+
+    public Task<int> PurgeCompletedAsync(
+        DateTimeOffset completedBeforeUtc,
+        int maxMessages,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (_gate)
+        {
+            var operationIds = _messages.Values
+                .Where(message => IsCompletedBefore(message, completedBeforeUtc))
+                .OrderBy(message => message.UpdatedAtUtc)
+                .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)
+                .Take(Math.Max(1, maxMessages))
+                .Select(message => message.OperationId)
+                .ToArray();
+            foreach (var operationId in operationIds)
+                _messages.TryRemove(operationId, out _);
+
+            return Task.FromResult(operationIds.Length);
+        }
+    }
+
+    private static bool CanClaim(TransactionPubSubMessageState message, DateTimeOffset staleInProgressBeforeUtc)
+        => string.Equals(message.Status, "pending", StringComparison.OrdinalIgnoreCase) ||
+           (string.Equals(message.Status, "in_progress", StringComparison.OrdinalIgnoreCase) &&
+            message.UpdatedAtUtc <= staleInProgressBeforeUtc);
+
+    private static bool IsCompletedBefore(TransactionPubSubMessageState message, DateTimeOffset completedBeforeUtc)
+        => (string.Equals(message.Status, "acknowledged", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(message.Status, "canceled", StringComparison.OrdinalIgnoreCase)) &&
+           message.UpdatedAtUtc <= completedBeforeUtc;
+
+    private static bool IsPendingOrStaleInProgress(
+        TransactionPubSubMessageState message,
+        DateTimeOffset staleInProgressBeforeUtc)
+        => string.Equals(message.Status, "pending", StringComparison.OrdinalIgnoreCase) ||
+           (string.Equals(message.Status, "in_progress", StringComparison.OrdinalIgnoreCase) &&
+            message.UpdatedAtUtc <= staleInProgressBeforeUtc);
+
+    public void Dispose()
+    {
+    }
+}
+
+internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore, ISubscriberStateStore, ITransactionPubSubBrokerStore
 {
     private readonly DbContextOptions<TransactionSecurityDbContext> _options;
 
@@ -345,6 +611,25 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
 
         using var db = CreateContext();
         db.Database.EnsureCreated();
+        db.Database.ExecuteSqlRaw(
+            """
+            CREATE TABLE IF NOT EXISTS "TransactionPubSubMessages" (
+                "OperationId" TEXT NOT NULL CONSTRAINT "PK_TransactionPubSubMessages" PRIMARY KEY,
+                "TransactionId" TEXT NOT NULL,
+                "Kind" TEXT NOT NULL,
+                "TopicName" TEXT NOT NULL DEFAULT 'mcp.turntransactions',
+                "SubscriberId" TEXT NOT NULL DEFAULT 'all-required',
+                "Status" TEXT NOT NULL,
+                "RequestJson" TEXT NOT NULL,
+                "ResponseJson" TEXT NULL,
+                "AttemptCount" INTEGER NOT NULL,
+                "Reason" INTEGER NOT NULL,
+                "CreatedAtUtc" TEXT NOT NULL,
+                "UpdatedAtUtc" TEXT NOT NULL
+            );
+            """);
+        EnsureTransactionPubSubTopicColumn(db);
+        EnsureTransactionPubSubSubscriberColumn(db);
     }
 
     public async Task SavePartyAsync(
@@ -441,6 +726,38 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         return entity is null ? null : ToModel(entity);
     }
 
+    public async Task<KeyServerManifestTraceQueryResult> QueryManifestsAsync(
+        TransactionManifestTraceReportRequest request,
+        int limit,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var query = db.KeyServerManifests.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(request.PublisherPartyId))
+            query = query.Where(manifest => manifest.PublisherPartyId == request.PublisherPartyId);
+        if (!string.IsNullOrWhiteSpace(request.SubscriberPartyId))
+            query = query.Where(manifest => manifest.SubscriberPartyId == request.SubscriberPartyId);
+        if (!string.IsNullOrWhiteSpace(request.Status))
+            query = query.Where(manifest => manifest.Status == request.Status);
+        if (request.FromUtc is { } fromUtc)
+            query = query.Where(manifest => manifest.CreatedAtUtc >= fromUtc);
+        if (request.ToUtc is { } toUtc)
+            query = query.Where(manifest => manifest.CreatedAtUtc <= toUtc);
+
+        var totalCount = await query.CountAsync(cancellationToken).ConfigureAwait(false);
+        var entities = await query
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var records = entities
+            .Select(ToModel)
+            .OrderBy(manifest => manifest.CreatedAtUtc)
+            .ThenBy(manifest => manifest.Sequence)
+            .ThenBy(manifest => manifest.TransactionId, StringComparer.OrdinalIgnoreCase)
+            .Take(limit)
+            .ToList();
+        return new KeyServerManifestTraceQueryResult(totalCount, records);
+    }
+
     public async Task<TransactionFailureReason> TryReserveManifestReplayAsync(
         string scope,
         string pairKey,
@@ -535,6 +852,29 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         }
     }
 
+    public async Task<SubscriberTransactionState> AddOrCompleteTransactionAsync(
+        SubscriberTransactionState transaction,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var existing = await db.SubscriberTransactions
+            .SingleOrDefaultAsync(entity => entity.TransactionId == transaction.TransactionId, cancellationToken)
+            .ConfigureAwait(false);
+        if (existing is null)
+        {
+            db.SubscriberTransactions.Add(ToEntity(transaction));
+            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return transaction;
+        }
+
+        if (!string.Equals(existing.Status, "pending", StringComparison.OrdinalIgnoreCase))
+            return ToState(existing);
+
+        UpdateEntity(existing, transaction);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return transaction;
+    }
+
     public async Task<SubscriberTransactionState> AddOrKeepAbortAsync(
         SubscriberTransactionState transaction,
         CancellationToken cancellationToken)
@@ -627,6 +967,185 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
             CreatedAtUtc = DateTimeOffset.UtcNow,
         });
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<TransactionPubSubMessageState> SavePendingAsync(
+        TransactionPubSubMessageState message,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var existing = await db.TransactionPubSubMessages
+            .SingleOrDefaultAsync(entity => entity.OperationId == message.OperationId, cancellationToken)
+            .ConfigureAwait(false);
+        if (existing is null)
+        {
+            db.TransactionPubSubMessages.Add(ToEntity(message));
+            try
+            {
+                await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                return message;
+            }
+            catch (DbUpdateException)
+            {
+                existing = await db.TransactionPubSubMessages
+                    .AsNoTracking()
+                    .SingleAsync(entity => entity.OperationId == message.OperationId, cancellationToken)
+                    .ConfigureAwait(false);
+                return ToState(existing);
+            }
+        }
+
+        if (string.Equals(existing.Status, "acknowledged", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(existing.Status, "canceled", StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(existing.RequestJson, message.RequestJson, StringComparison.Ordinal))
+            return ToState(existing);
+
+        existing.TransactionId = message.TransactionId;
+        existing.Kind = message.Kind;
+        existing.Status = message.Status;
+        existing.RequestJson = message.RequestJson;
+        existing.UpdatedAtUtc = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return ToState(existing);
+    }
+
+    public async Task MarkAttemptAsync(
+        string operationId,
+        TransactionFailureReason reason,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var entity = await db.TransactionPubSubMessages
+            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null)
+            return;
+
+        entity.Status = "pending";
+        entity.Reason = reason;
+        entity.AttemptCount++;
+        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task MarkCanceledAsync(
+        string operationId,
+        string responseJson,
+        TransactionFailureReason reason,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var entity = await db.TransactionPubSubMessages
+            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null)
+            return;
+
+        entity.Status = "canceled";
+        entity.ResponseJson = responseJson;
+        entity.Reason = reason;
+        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task MarkAcknowledgedAsync(
+        string operationId,
+        string responseJson,
+        TransactionFailureReason reason,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var entity = await db.TransactionPubSubMessages
+            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null)
+            return;
+
+        entity.Status = "acknowledged";
+        entity.ResponseJson = responseJson;
+        entity.Reason = reason;
+        entity.AttemptCount++;
+        entity.UpdatedAtUtc = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<TransactionPubSubMessageState?> TryClaimPendingAsync(
+        string operationId,
+        DateTimeOffset staleInProgressBeforeUtc,
+        CancellationToken cancellationToken)
+    {
+        var now = DateTimeOffset.UtcNow;
+        await using var db = CreateContext();
+        var updated = await db.Database.ExecuteSqlInterpolatedAsync(
+                $"""
+                UPDATE "TransactionPubSubMessages"
+                SET "Status" = {"in_progress"},
+                    "UpdatedAtUtc" = {now}
+                WHERE "OperationId" = {operationId}
+                  AND (
+                      "Status" = {"pending"}
+                      OR ("Status" = {"in_progress"} AND "UpdatedAtUtc" <= {staleInProgressBeforeUtc})
+                  )
+                """,
+                cancellationToken)
+            .ConfigureAwait(false);
+        if (updated == 0)
+            return null;
+
+        var entity = await db.TransactionPubSubMessages
+            .AsNoTracking()
+            .SingleOrDefaultAsync(message => message.OperationId == operationId, cancellationToken)
+            .ConfigureAwait(false);
+        return entity is null ? null : ToState(entity);
+    }
+
+    public async Task<IReadOnlyList<TransactionPubSubMessageState>> GetPendingAsync(
+        int maxMessages,
+        DateTimeOffset staleInProgressBeforeUtc,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var entities = await db.TransactionPubSubMessages
+            .AsNoTracking()
+            .Where(message => message.Status == "pending" || message.Status == "in_progress")
+            .ToArrayAsync(cancellationToken)
+            .ConfigureAwait(false);
+        return entities
+            .Select(ToState)
+            .Where(message =>
+                string.Equals(message.Status, "pending", StringComparison.OrdinalIgnoreCase) ||
+                (string.Equals(message.Status, "in_progress", StringComparison.OrdinalIgnoreCase) &&
+                 message.UpdatedAtUtc <= staleInProgressBeforeUtc))
+            .OrderBy(message => message.CreatedAtUtc)
+            .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)
+            .Take(maxMessages)
+            .ToArray();
+    }
+
+    public async Task<int> PurgeCompletedAsync(
+        DateTimeOffset completedBeforeUtc,
+        int maxMessages,
+        CancellationToken cancellationToken)
+    {
+        await using var db = CreateContext();
+        var entities = await db.TransactionPubSubMessages
+            .ToArrayAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var completed = entities
+            .Where(message =>
+                (string.Equals(message.Status, "acknowledged", StringComparison.OrdinalIgnoreCase) ||
+                 string.Equals(message.Status, "canceled", StringComparison.OrdinalIgnoreCase)) &&
+                message.UpdatedAtUtc <= completedBeforeUtc)
+            .OrderBy(message => message.UpdatedAtUtc)
+            .ThenBy(message => message.OperationId, StringComparer.OrdinalIgnoreCase)
+            .Take(Math.Max(1, maxMessages))
+            .ToArray();
+        if (completed.Length == 0)
+            return 0;
+
+        db.TransactionPubSubMessages.RemoveRange(completed);
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return completed.Length;
     }
 
     public void Dispose()
@@ -797,8 +1316,74 @@ internal sealed class SqliteTransactionSecurityStateStore : IKeyServerStateStore
         entity.AbortedAtUtc = transaction.AbortedAtUtc;
     }
 
+    private static TransactionPubSubMessageState ToState(TransactionPubSubMessageEntity entity)
+        => new(
+            entity.OperationId,
+            entity.TransactionId,
+            entity.Kind,
+            entity.TopicName,
+            entity.SubscriberId,
+            entity.Status,
+            entity.RequestJson,
+            entity.ResponseJson,
+            entity.AttemptCount,
+            entity.Reason,
+            entity.CreatedAtUtc,
+            entity.UpdatedAtUtc);
+
+    private static TransactionPubSubMessageEntity ToEntity(TransactionPubSubMessageState message)
+        => new()
+        {
+            OperationId = message.OperationId,
+            TransactionId = message.TransactionId,
+            Kind = message.Kind,
+            TopicName = message.TopicName,
+            SubscriberId = message.SubscriberId,
+            Status = message.Status,
+            RequestJson = message.RequestJson,
+            ResponseJson = message.ResponseJson,
+            AttemptCount = message.AttemptCount,
+            Reason = message.Reason,
+            CreatedAtUtc = message.CreatedAtUtc,
+            UpdatedAtUtc = message.UpdatedAtUtc,
+        };
+
     private static string BuildScopedReplayKey(string scope, string value)
         => $"{scope.Trim()}\n{value}";
+
+    private static void EnsureTransactionPubSubTopicColumn(TransactionSecurityDbContext db)
+    {
+        try
+        {
+            db.Database.ExecuteSqlRaw(
+                """
+                ALTER TABLE "TransactionPubSubMessages"
+                ADD COLUMN "TopicName" TEXT NOT NULL DEFAULT 'mcp.turntransactions';
+                """);
+        }
+        catch (SqliteException ex) when (
+            ex.SqliteErrorCode == 1 &&
+            ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase))
+        {
+        }
+    }
+
+    private static void EnsureTransactionPubSubSubscriberColumn(TransactionSecurityDbContext db)
+    {
+        try
+        {
+            db.Database.ExecuteSqlRaw(
+                """
+                ALTER TABLE "TransactionPubSubMessages"
+                ADD COLUMN "SubscriberId" TEXT NOT NULL DEFAULT 'all-required';
+                """);
+        }
+        catch (SqliteException ex) when (
+            ex.SqliteErrorCode == 1 &&
+            ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase))
+        {
+        }
+    }
 }
 
 internal sealed record TransactionAuditState(
@@ -832,6 +1417,8 @@ internal sealed class TransactionSecurityDbContext : DbContext
     public DbSet<SubscriberNonceEntity> SubscriberNonces => Set<SubscriberNonceEntity>();
 
     public DbSet<TransactionAuditEntity> TransactionAuditEvents => Set<TransactionAuditEntity>();
+
+    public DbSet<TransactionPubSubMessageEntity> TransactionPubSubMessages => Set<TransactionPubSubMessageEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -924,6 +1511,18 @@ internal sealed class TransactionSecurityDbContext : DbContext
             entity.HasKey(audit => audit.Id);
             entity.Property(audit => audit.EventName).HasMaxLength(120);
             entity.Property(audit => audit.TransactionId).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<TransactionPubSubMessageEntity>(entity =>
+        {
+            entity.ToTable("TransactionPubSubMessages");
+            entity.HasKey(message => message.OperationId);
+            entity.Property(message => message.OperationId).HasMaxLength(240);
+            entity.Property(message => message.TransactionId).HasMaxLength(200);
+            entity.Property(message => message.Kind).HasMaxLength(40);
+            entity.Property(message => message.TopicName).HasMaxLength(200).HasDefaultValue("mcp.turntransactions");
+            entity.Property(message => message.SubscriberId).HasMaxLength(200).HasDefaultValue("all-required");
+            entity.Property(message => message.Status).HasMaxLength(40);
         });
     }
 }
@@ -1077,4 +1676,31 @@ internal sealed class TransactionAuditEntity
     public string? Details { get; set; }
 
     public DateTimeOffset CreatedAtUtc { get; set; }
+}
+
+internal sealed class TransactionPubSubMessageEntity
+{
+    public string OperationId { get; set; } = string.Empty;
+
+    public string TransactionId { get; set; } = string.Empty;
+
+    public string Kind { get; set; } = string.Empty;
+
+    public string TopicName { get; set; } = "mcp.turntransactions";
+
+    public string SubscriberId { get; set; } = "all-required";
+
+    public string Status { get; set; } = string.Empty;
+
+    public string RequestJson { get; set; } = string.Empty;
+
+    public string? ResponseJson { get; set; }
+
+    public int AttemptCount { get; set; }
+
+    public TransactionFailureReason Reason { get; set; }
+
+    public DateTimeOffset CreatedAtUtc { get; set; }
+
+    public DateTimeOffset UpdatedAtUtc { get; set; }
 }

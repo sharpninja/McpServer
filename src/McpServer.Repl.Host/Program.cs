@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using McpServer.Repl.Host;
 using McpServer.Client;
+using McpServer.TransactionSecurity.Services;
 
 var rootCommand = new RootCommand("MCP Server REPL Host");
 
@@ -80,6 +81,7 @@ static IHost CreateHost(string? workspacePathOverride, string? markerFileOverrid
         })
         .ConfigureServices((context, services) =>
         {
+            services.AddInProcessTransactionSecurity(context.Configuration);
             services.AddReplCoreServices();
 
             services.AddSingleton(sp =>

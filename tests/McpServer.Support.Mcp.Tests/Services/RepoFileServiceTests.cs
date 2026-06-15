@@ -120,6 +120,61 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task CaptureForWriteAsync_ExistingPath_ReturnsSnapshot()
+    {
+        var result = await _sut.CaptureForWriteAsync("readme.md").ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.True(result.Exists);
+        Assert.Equal("readme.md", result.RelativePath);
+        Assert.Equal("# Hello", result.Content);
+        Assert.False(string.IsNullOrWhiteSpace(result.ContentSha256));
+    }
+
+    [Fact]
+    public async Task RestoreWriteAsync_ExistingSnapshot_RestoresPriorContent()
+    {
+        var snapshot = await _sut.CaptureForWriteAsync("readme.md").ConfigureAwait(true);
+        Assert.NotNull(snapshot);
+        var write = await _sut.WriteAsync("readme.md", "changed").ConfigureAwait(true);
+        Assert.True(write.Written);
+
+        await _sut.RestoreWriteAsync(snapshot!, "changed").ConfigureAwait(true);
+
+        Assert.Equal("# Hello", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
+    }
+
+    [Fact]
+    public async Task RestoreWriteAsync_NewFileSnapshot_DeletesCreatedFile()
+    {
+        var snapshot = await _sut.CaptureForWriteAsync("created.md").ConfigureAwait(true);
+        Assert.NotNull(snapshot);
+        var write = await _sut.WriteAsync("created.md", "created").ConfigureAwait(true);
+        Assert.True(write.Written);
+
+        await _sut.RestoreWriteAsync(snapshot!, "created").ConfigureAwait(true);
+
+        Assert.False(File.Exists(Path.Combine(_tempDir, "created.md")));
+    }
+
+    [Fact]
+    public async Task RestoreWriteAsync_WhenFileChangedAfterWrite_RefusesOverwrite()
+    {
+        var snapshot = await _sut.CaptureForWriteAsync("readme.md").ConfigureAwait(true);
+        Assert.NotNull(snapshot);
+        var write = await _sut.WriteAsync("readme.md", "transaction").ConfigureAwait(true);
+        Assert.True(write.Written);
+        File.WriteAllText(Path.Combine(_tempDir, "readme.md"), "human edit");
+
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _sut.RestoreWriteAsync(snapshot!, "transaction"))
+            .ConfigureAwait(true);
+
+        Assert.Contains("changed after transactional write", ex.Message, StringComparison.Ordinal);
+        Assert.Equal("human edit", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
+    }
+
+    [Fact]
     public async Task ReadAsync_GlobAllowlist_RequiresActualPatternMatch()
     {
         var allowedRoot = Path.Combine(_tempDir, "src", "McpServer.Cqrs");

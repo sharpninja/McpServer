@@ -144,6 +144,37 @@ public sealed class TransactionSecurityClientTests
         Assert.Equal("signed", result.Status);
     }
 
+    /// <summary>Manifest trace reports include filter query values and deserialize ledger summaries.</summary>
+    [Fact]
+    public async Task KeyServerClient_GetManifestReportAsync_AppendsFiltersAndDeserializes()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {"generatedAtUtc":"2026-06-11T12:01:00Z","publisherPartyId":"publisher A","subscriberPartyId":"subscriber/1","status":"signed","limit":25,"totalCount":1,"returnedCount":1,"records":[{"transactionId":"txn/1","turnId":"turn-1","publisherPartyId":"publisher A","publisherSigningKeyId":"sign-1","subscriberPartyId":"subscriber/1","subscriberEncryptionKeyId":"enc-1","sequence":42,"nonce":"nonce-1","issuedAtUtc":"2026-06-11T12:00:00Z","expiresAtUtc":"2026-06-11T12:05:00Z","diffgramSha256":"plain-hash","encryptedBodySha256":"encrypted-hash","signatureAlgorithm":"ECDSA-P256-SHA256","signatureKeyId":"sign-1","signatureValue":"sig","signedAtUtc":"2026-06-11T12:00:01Z","manifestHashSha256":"manifest-hash","status":"signed","createdAtUtc":"2026-06-11T12:00:01Z"}]}
+            """);
+        using var http = new HttpClient(handler);
+        var client = new KeyServerClient(http, DefaultOptions);
+
+        var result = await client.GetManifestReportAsync(new TransactionManifestTraceReportRequest
+        {
+            PublisherPartyId = "publisher A",
+            SubscriberPartyId = "subscriber/1",
+            Status = "signed",
+            Limit = 25,
+        });
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/keyserver/manifests/report", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("publisherPartyId=publisher%20A", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("subscriberPartyId=subscriber%2F1", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("status=signed", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("limit=25", handler.LastRequest.RequestUri.Query);
+        Assert.Equal(1, result.TotalCount);
+        Assert.Equal(1, result.ReturnedCount);
+        Assert.Equal("txn/1", Assert.Single(result.Records).TransactionId);
+    }
+
     /// <summary>Committing a diffgram posts the signed manifest and encrypted payload.</summary>
     [Fact]
     public async Task SubscriberClient_CommitDiffgramAsync_PostsExpectedRouteAndBody()

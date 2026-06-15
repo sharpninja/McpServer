@@ -1,10 +1,10 @@
 # Turn Transactions Design Round 2
 
-Status: Phase 0 implementable design artifact, updated after the durable-storage, protected-envelope crypto, external signing-key material, keyserver signing-key rotation, signed manifest trace ledger, and subscriber key-ring rotation slices
+Status: Phase 0 implementable design artifact, updated after the durable-storage, protected-envelope crypto, external signing-key material, keyserver signing-key rotation, signed manifest trace ledger/reporting, subscriber key-ring rotation, separate-host subscriber key-ring configuration, pending subscriber status, global federation adapter transaction-gating, production key-file provisioning, durable pub-sub outbox/replay, and external broker/fan-out/replay-retention slices
 
 Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNDESIGN-001
 
-Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/McpServer.TransactionSecurity`, Support.Mcp compatibility controllers under `src/McpServer.Support.Mcp`, public DTO/client contracts under `src/McpServer.Client`, separate hosts under `src/McpServer.KeyServer` and `src/McpServer.Subscriber`, real separate-host integration coverage under `tests/McpServer.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, external key material support for subscriber private ECDH decrypt keys and keyserver publisher signing private PEM re-provisioning, keyserver signing-key rotation that preserves prior public descriptors for historic manifest verification while old private signing material remains verify-only, signed manifest trace persistence with keyserver/controller/client lookup coverage, subscriber encryption private key rings that decrypt old and rotated protected envelopes, and a test-only aiUnit plan-review gate under `tests/McpServer.PlanReview.Tests`. External pub-sub, global mutation adapters, production key-lifecycle automation, and recovery/degraded rollback smoke coverage are deferred.
+Current implemented scope: transaction keyserver, subscriber, and coordinator behavior is implemented through shared core services under `src/McpServer.TransactionSecurity`, Support.Mcp compatibility controllers under `src/McpServer.Support.Mcp`, public DTO/client contracts under `src/McpServer.Client`, separate hosts under `src/McpServer.KeyServer` and `src/McpServer.Subscriber`, real separate-host integration coverage under `tests/McpServer.TransactionSecurity.IntegrationTests`, durable service-local SQLite keyserver/subscriber storage, keyserver signing/verification replay nonce and sequence hardening, protected subscriber diffgram envelopes, coordinator protected-envelope handoff for configured subscriber keys, external key material support for subscriber private ECDH decrypt keys and keyserver publisher signing private PEM re-provisioning, keyserver signing-key rotation that preserves prior public descriptors for historic manifest verification while old private signing material remains verify-only, signed manifest trace persistence with keyserver/controller/client lookup and filtered report coverage, subscriber encryption private key rings that decrypt old and rotated protected envelopes, separate-host subscriber key-ring configuration binding coverage, separate-host startup provisioning for file-backed publisher signing and subscriber encryption key material, subscriber transaction status lifecycle reporting for pending/committed/rejected/aborted states, a broker-neutral transaction pub-sub seam with direct, HTTP external subscriber, and external process/topic broker adapters for commit/abort handoff, configured multi-subscriber fan-out, durable local broker-backed pub-sub outbox/replay for commit and abort handoffs through in-memory or SQLite state, durable topic/subscriber status identity, stale in-progress durable pub-sub replay lease recovery, Support.Mcp pub-sub status/replay/retention endpoints, a background replay/retention worker, deterministic high-volume/high-contention durable pub-sub stress coverage, concurrent durable replay backlog coverage, concurrent coordinator timeout stress coverage, durable timeout rollback cancellation coverage, optional mutation rollback compensation for post-mutation subscriber/degraded failures with additive audit evidence, cancellation of durable pending commit handoffs after successful rollback compensation, global federation mutation-adapter apply gating through the turn transaction coordinator, first native Support.Mcp memory add/update/delete mutation gating for REST, typed REPL-over-HTTP, and in-process MCP stdio paths, typed REPL TODO create/update/updateSelected/delete/deleteSelected transaction gating through `TransactionalTodoWorkflow`, server-side TODO create/update/delete/move transaction gating for compensation-capable providers, generic REPL protected namespace blocking for unsafe federation/keyserver/subscriber calls, federation control-plane fail-closed gating, and a test-only aiUnit plan-review gate under `tests/McpServer.PlanReview.Tests`. Surfaces without a compensation contract either fail closed while required mutation transactions are active or remain explicitly deferred as future scope.
 
 ## Public DTOs
 
@@ -18,6 +18,8 @@ Add transaction security models under `McpServer.Client.Models`:
 - `TransactionManifestVerifyRequest`
 - `TransactionManifestVerifyResponse`
 - `TransactionManifestTraceRecord`
+- `TransactionManifestTraceReportRequest`
+- `TransactionManifestTraceReport`
 - `TransactionManifestDto`
 - `TransactionManifestSignatureDto`
 - `DiffgramCommitRequest`
@@ -54,6 +56,8 @@ MCP Server:
 - `IDiffgramBuilder`
 - `ITransactionDegradedModePolicy`
 - `ITransactionAuditWriter`
+- `ITransactionPubSub`
+- `ITransactionPubSubReplayService`
 
 ## Entity Model
 
@@ -68,11 +72,14 @@ Keyserver durable records implemented in the service-local SQLite state store:
 
 Subscriber durable records implemented in the service-local SQLite state store:
 
-- `SubscriberCommitEntity`: transaction ID, diffgram ID, manifest hash, sequence, status, committed UTC, aborted UTC.
-- `SubscriberRejectionEntity`: transaction ID, diffgram ID, reason code, reason text, timestamp.
-- `SubscriberAbortEntity`: transaction ID, reason code, requested UTC, actor.
-- `SubscriberReplayNonceEntity`: nonce, transaction ID, first seen UTC.
+- `SubscriberTransactionEntity`: transaction ID, status (`pending`, `committed`, `rejected`, or `aborted`), reason code, manifest hash, encrypted body hash, diffgram ID, committed UTC, aborted UTC.
+- `SubscriberSequenceEntity`: scoped party pair, last accepted sequence, updated UTC.
+- `SubscriberReplayNonceEntity`: scoped nonce, transaction ID, first seen UTC.
 - `SubscriberAuditEventEntity`: action, reason code, transaction ID, timestamp, details JSON.
+
+Pub-sub durable records implemented in the service-local SQLite state store:
+
+- `TransactionPubSubMessageEntity`: deterministic operation ID (`commit:{transactionId}` or `abort:{transactionId}`), transaction ID, kind, status (`pending` or `acknowledged`), serialized request JSON, optional acknowledgement JSON, attempt count, last reason code, created UTC, updated UTC.
 
 ## Canonicalization
 
@@ -81,7 +88,7 @@ Subscriber durable records implemented in the service-local SQLite state store:
 - Property order: fixed by canonicalizer, not reflection or serializer default order.
 - Hash format: lowercase hexadecimal SHA-256.
 - Signature algorithm label: `ECDSA-P256-SHA256`.
-- Diffgram encryption label: `ECDH-P256-HKDF-SHA256-AES-256-GCM` for protected subscriber envelopes and coordinator protected-envelope handoff; global adapter encryption handoff remains deferred.
+- Diffgram encryption label: `ECDH-P256-HKDF-SHA256-AES-256-GCM` for protected subscriber envelopes and coordinator protected-envelope handoff; global federation adapter applies use the same coordinator handoff when routed through transactions.
 - Verification compares signatures and hashes in constant-time APIs where applicable.
 
 ## Reason Codes
@@ -119,6 +126,7 @@ Keyserver endpoints:
 - `POST /mcpserver/keyserver/manifests/sign`
 - `POST /mcpserver/keyserver/manifests/verify`
 - `GET /mcpserver/keyserver/manifests/{transactionId}`
+- `GET /mcpserver/keyserver/manifests/report`
 - `GET /mcpserver/keyserver/parties/{partyId}/keys/{keyId}`
 - `GET /health`
 
@@ -129,6 +137,8 @@ Subscriber endpoints:
 - `POST /mcpserver/subscriber/transactions/{transactionId}/abort`
 - `GET /health`
 
+`TransactionStatusResponse.Status` reports `pending` while the subscriber has accepted a transaction ID for validation but has not reached a terminal result; normal completion transitions the durable row to `committed`, `rejected`, or `aborted`.
+
 ## Options
 
 Keyserver options:
@@ -137,8 +147,8 @@ Keyserver options:
 - `DatabasePath`
 - `ManifestTtlSeconds`
 - `MaxClockSkewSeconds`
-- `SigningKeyPath`
 - `AuditEnabled`
+- `ProvisionedParties[]` with party ID, role, active key IDs, public PEM values or public PEM file paths, and signing private PEM values or signing private PEM file paths for startup provisioning.
 
 Subscriber options:
 
@@ -147,7 +157,8 @@ Subscriber options:
 - `PartyId`
 - `EncryptionKeyId`
 - `EncryptionPrivateKeyPem`
-- `EncryptionKeys[]` with `KeyId` and `PrivateKeyPem` for key-ring rotation.
+- `EncryptionPrivateKeyPemFile`
+- `EncryptionKeys[]` with `KeyId`, `PrivateKeyPem`, and `PrivateKeyPemFile` for key-ring rotation.
 - `RequireEncryptedDiffgrams`
 - `KeyServerBaseUrl`
 - `CommitTimeoutSeconds`
@@ -162,20 +173,26 @@ MCP Server:
 - `CommitTimeoutSeconds=30`
 - `KeyServerBaseUrl=http://localhost:7167`
 - `SubscriberBaseUrl=http://localhost:7168`
+- `PubSubTransport=Direct`
+- `DurablePubSubEnabled=false`
+- `PubSubDatabasePath`
+- `PubSubInProgressClaimLeaseSeconds=300`
 
 The Support.Mcp compatibility host keeps in-process wiring for existing endpoints. The separate subscriber host uses `Mcp:Subscriber:KeyServerBaseUrl` through an HTTP-backed keyserver verifier; integration tests inject a TestServer-backed keyserver `HttpClient` to prove cross-host behavior without relying on Kestrel ports.
 
 ## Test Mapping
 
-- `TEST-MCP-158`: partial keyserver unit/contract coverage for the shared-core and separate-host first slice.
-- `TEST-MCP-159`: partial subscriber unit/contract coverage for the shared-core and separate-host first slice.
-- `TEST-MCP-160`: complete real keyserver/subscriber integration coverage for valid commit plus tampered, stale, and encrypted-body-mismatch rejection.
-- `TEST-MCP-161`: partial MCP transaction coordinator coverage for focused commit/degraded paths and protected-envelope handoff.
-- `TEST-MCP-164`: complete aiUnit plan review for FR-MCP-124 with run-log evidence under `artifacts/aiunit-plan-review`.
+- `TEST-MCP-158`: complete keyserver unit/contract coverage for the shared-core and separate-host first slice.
+- `TEST-MCP-159`: complete subscriber unit/contract coverage for commit, abort, replay, protected envelopes, key-ring rotation, durable status, in-flight pending status, high-contention duplicate commits, abort/commit race handling, high-volume durable pub-sub commit settlement, high-contention duplicate durable pending attempt accounting, and concurrent durable replay backlog draining.
+- `TEST-MCP-160`: complete real keyserver/subscriber integration coverage for valid commit, tampered, stale, encrypted-body-mismatch rejection, configuration-bound subscriber key-ring rotation, and file-backed production key provisioning.
+- `TEST-MCP-161`: complete MCP transaction coordinator coverage for focused commit/degraded paths, concurrent commit timeout handling, durable timeout rollback cancellation, protected-envelope handoff, direct, HTTP, and external broker transaction pub-sub handoff, required-subscriber fan-out, durable pub-sub outbox/replay, stale in-progress replay lease recovery, durable topic/subscriber persistence, replay management endpoints, replay/retention worker behavior, retention purge behavior, durable pub-sub high-volume/high-contention stress behavior, concurrent durable replay backlog draining, global federation adapter apply gating, federation control-plane fail-closed gating, Support.Mcp memory add/update/delete gating, typed REPL TODO create/update/updateSelected/delete/deleteSelected gating, server-side TODO create/update/delete/move gating, EF TODO compensation snapshot restore, atomic EF capture/update, rollback-failure reporting for commit rejection and local partial-failure aborts, ISSUE-backed update rejection, HTTP PUT routing, stdio `todo_update` routing, and stdio coordinator registration.
+- `TEST-MCP-162`: complete traceability/import coverage proving FR-MCP-118 through FR-MCP-128, transaction TR records, TEST-MCP-158 through TEST-MCP-173, and live TODO references resolve without placeholder transaction-plan entries.
+- `TEST-MCP-163`: complete deferred-scope documentation coverage proving future Quad-Model, runtime/control-plane, delayed-rollback isolation, remote/runtime compensation, and key-rotation automation work remains explicit instead of being silently claimed complete.
+- `TEST-MCP-164`: complete aiUnit plan review for FR-MCP-126 with run-log evidence under `artifacts/aiunit-plan-review`.
 - `TEST-MCP-165`: complete imported diagram preservation coverage.
-- `TEST-MCP-166` through `TEST-MCP-169`: partial diagram-derived coverage for focused first-slice paths.
-- `TEST-MCP-170`: planned deferred-scope enforcement coverage.
-- `TEST-MCP-171` through `TEST-MCP-173`: partial architecture/design conformance coverage; complete automated gate coverage remains deferred.
+- `TEST-MCP-166` through `TEST-MCP-169`: complete diagram-derived coverage for focused first-slice paths.
+- `TEST-MCP-170`: complete deferred-scope enforcement coverage for disabled future Quad-Model branches.
+- `TEST-MCP-171` through `TEST-MCP-173`: complete architecture/design conformance and traceability closeout coverage for PLAN-TURNTRANSACTIONS-001.
 
 ## Round 2 Gap Analysis
 

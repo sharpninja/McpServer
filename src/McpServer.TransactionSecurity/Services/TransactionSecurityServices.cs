@@ -56,6 +56,14 @@ public interface IKeyServerManifestService
     Task<TransactionManifestTraceRecord?> GetManifestAsync(
         string transactionId,
         CancellationToken cancellationToken = default);
+
+    /// <summary>Builds a filtered manifest traceability report from the persisted ledger.</summary>
+    /// <param name="request">Report filters and limit.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Filtered traceability report.</returns>
+    Task<TransactionManifestTraceReport> GetManifestReportAsync(
+        TransactionManifestTraceReportRequest request,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>TR-MCP-CRYPTO-001: Canonicalizes manifests for signing and hashing.</summary>
@@ -400,6 +408,31 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
             : _stateStore.GetManifestAsync(transactionId.Trim(), cancellationToken);
 
     /// <inheritdoc />
+    public async Task<TransactionManifestTraceReport> GetManifestReportAsync(
+        TransactionManifestTraceReportRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        cancellationToken.ThrowIfCancellationRequested();
+        var normalized = NormalizeTraceReportRequest(request);
+        var limit = Math.Clamp(normalized.Limit ?? 100, 1, 500);
+        var query = await _stateStore.QueryManifestsAsync(normalized, limit, cancellationToken).ConfigureAwait(false);
+        return new TransactionManifestTraceReport
+        {
+            GeneratedAtUtc = DateTimeOffset.UtcNow,
+            PublisherPartyId = normalized.PublisherPartyId,
+            SubscriberPartyId = normalized.SubscriberPartyId,
+            Status = normalized.Status,
+            FromUtc = normalized.FromUtc,
+            ToUtc = normalized.ToUtc,
+            Limit = limit,
+            TotalCount = query.TotalCount,
+            ReturnedCount = query.Records.Count,
+            Records = query.Records.ToList(),
+        };
+    }
+
+    /// <inheritdoc />
     public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
         TransactionManifestVerifyRequest request,
         CancellationToken cancellationToken = default)
@@ -594,6 +627,18 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
             ? $"{partyId}:{purpose}:1"
             : keyId.Trim();
 
+    private static TransactionManifestTraceReportRequest NormalizeTraceReportRequest(
+        TransactionManifestTraceReportRequest request)
+        => new()
+        {
+            PublisherPartyId = NormalizeOptional(request.PublisherPartyId),
+            SubscriberPartyId = NormalizeOptional(request.SubscriberPartyId),
+            Status = NormalizeOptional(request.Status),
+            FromUtc = request.FromUtc,
+            ToUtc = request.ToUtc,
+            Limit = request.Limit,
+        };
+
     private static string NormalizeStatus(string? status)
         => string.IsNullOrWhiteSpace(status) ? "active" : status.Trim();
 
@@ -784,6 +829,39 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService, 
                 cancellationToken).ConfigureAwait(false);
         }
 
+        if (!string.IsNullOrWhiteSpace(transactionId))
+        {
+            var pending = new SubscriberTransactionState(
+                transactionId,
+                "pending",
+                TransactionFailureReason.None,
+                manifestHash,
+                actualEncryptedBodySha256,
+                null,
+                null,
+                null);
+            if (!await _stateStore.TryAddTransactionAsync(pending, cancellationToken).ConfigureAwait(false))
+            {
+                existing = await _stateStore.GetTransactionAsync(transactionId, cancellationToken).ConfigureAwait(false);
+                if (existing is not null)
+                {
+                    return await ExistingCommitResponseAsync(
+                        existing,
+                        manifestHash,
+                        request.EncryptedBodySha256,
+                        actualEncryptedBodySha256,
+                        cancellationToken).ConfigureAwait(false);
+                }
+
+                return await RejectedAsync(
+                    transactionId,
+                    TransactionFailureReason.DuplicateConflict,
+                    manifestHash,
+                    actualEncryptedBodySha256,
+                    cancellationToken).ConfigureAwait(false);
+            }
+        }
+
         var expectedSubscriber = string.IsNullOrWhiteSpace(_options.CurrentValue.PartyId)
             ? manifest.SubscriberPartyId
             : _options.CurrentValue.PartyId!.Trim();
@@ -895,23 +973,15 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService, 
             $"diffgram-{transactionId}",
             now,
             null);
-        if (!await _stateStore.TryAddTransactionAsync(record, cancellationToken).ConfigureAwait(false))
+        var current = await _stateStore.AddOrCompleteTransactionAsync(record, cancellationToken).ConfigureAwait(false);
+        if (!string.Equals(current.Status, "committed", StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(current.ManifestHashSha256, manifestHash, StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(current.EncryptedBodySha256, actualEncryptedBodySha256, StringComparison.OrdinalIgnoreCase))
         {
-            existing = await _stateStore.GetTransactionAsync(transactionId, cancellationToken).ConfigureAwait(false);
-            if (existing is not null)
-            {
-                return await ExistingCommitResponseAsync(
-                    existing,
-                    manifestHash,
-                    request.EncryptedBodySha256,
-                    actualEncryptedBodySha256,
-                    cancellationToken).ConfigureAwait(false);
-            }
-
-            return await RejectedAsync(
-                transactionId,
-                TransactionFailureReason.DuplicateConflict,
+            return await ExistingCommitResponseAsync(
+                current,
                 manifestHash,
+                request.EncryptedBodySha256,
                 actualEncryptedBodySha256,
                 cancellationToken).ConfigureAwait(false);
         }
@@ -1000,6 +1070,25 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService, 
             return Rejected(existing.TransactionId, TransactionFailureReason.Aborted);
         }
 
+        if (string.Equals(existing.Status, "pending", StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(existing.ManifestHashSha256, manifestHash, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(existing.EncryptedBodySha256, requestedEncryptedBodyHash, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(existing.EncryptedBodySha256, actualEncryptedBodyHash, StringComparison.OrdinalIgnoreCase))
+        {
+            await RecordSubscriberAuditAsync(
+                "subscriber.transaction.pending",
+                existing.TransactionId,
+                TransactionFailureReason.None,
+                existing.Status,
+                cancellationToken).ConfigureAwait(false);
+            return new DiffgramCommitResponse
+            {
+                TransactionId = existing.TransactionId,
+                Status = "pending",
+                Reason = TransactionFailureReason.None,
+            };
+        }
+
         if (string.Equals(existing.ManifestHashSha256, manifestHash, StringComparison.OrdinalIgnoreCase) &&
             string.Equals(existing.EncryptedBodySha256, requestedEncryptedBodyHash, StringComparison.OrdinalIgnoreCase) &&
             string.Equals(existing.EncryptedBodySha256, actualEncryptedBodyHash, StringComparison.OrdinalIgnoreCase) &&
@@ -1048,7 +1137,7 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService, 
                 null,
                 null,
                 null);
-            await _stateStore.TryAddTransactionAsync(rejected, cancellationToken).ConfigureAwait(false);
+            await _stateStore.AddOrCompleteTransactionAsync(rejected, cancellationToken).ConfigureAwait(false);
         }
 
         await RecordSubscriberAuditAsync(

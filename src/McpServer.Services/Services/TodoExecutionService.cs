@@ -14,7 +14,7 @@ namespace McpServer.Support.Mcp.Services;
 /// <summary>
 /// File-backed Byrd execution workflow service layered on top of the existing TODO providers.
 /// </summary>
-public sealed class TodoExecutionService : ITodoExecutionService
+public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecutionPlanCompensation
 {
     private const string GeneratedTodoIdPrefix = "EXEC-TODO-";
     private static readonly ConcurrentDictionary<string, SemaphoreSlim> s_stateLocks = new(StringComparer.OrdinalIgnoreCase);
@@ -47,6 +47,170 @@ public sealed class TodoExecutionService : ITodoExecutionService
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    /// <inheritdoc />
+    public async Task<TodoExecutionStateSnapshot> CaptureStateAsync(
+        string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedWorkspacePath = NormalizeWorkspacePath(workspacePath);
+        var statePath = GetStatePath(normalizedWorkspacePath);
+        var gate = GetStateLock(statePath);
+        await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (!File.Exists(statePath))
+                return new TodoExecutionStateSnapshot(normalizedWorkspacePath, Exists: false, ContentJson: null);
+
+            var content = await File.ReadAllTextAsync(statePath, cancellationToken).ConfigureAwait(false);
+            return new TodoExecutionStateSnapshot(normalizedWorkspacePath, Exists: true, ContentJson: content);
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task RestoreStateAsync(
+        TodoExecutionStateSnapshot snapshot,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+
+        var normalizedWorkspacePath = NormalizeWorkspacePath(snapshot.WorkspacePath);
+        var statePath = GetStatePath(normalizedWorkspacePath);
+        var gate = GetStateLock(statePath);
+        await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await RestoreStateFileCoreAsync(statePath, snapshot, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task VerifyPlanTodoCompensationAsync(
+        string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedWorkspacePath = NormalizeWorkspacePath(workspacePath);
+        var todoService = await ResolveTodoServiceAsync(normalizedWorkspacePath, cancellationToken).ConfigureAwait(false);
+        _ = GetSupportedTodoCompensation(todoService);
+    }
+
+    /// <inheritdoc />
+    public async Task RollbackCreatedPlanTodosAsync(
+        string workspacePath,
+        IReadOnlyList<string> createdTodoIds,
+        TodoExecutionStateSnapshot stateSnapshot,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(createdTodoIds);
+        ArgumentNullException.ThrowIfNull(stateSnapshot);
+
+        var normalizedWorkspacePath = NormalizeWorkspacePath(workspacePath);
+        var errors = new List<string>();
+        ITodoCompensationService? compensation = null;
+        try
+        {
+            var todoService = await ResolveTodoServiceAsync(normalizedWorkspacePath, cancellationToken).ConfigureAwait(false);
+            compensation = GetSupportedTodoCompensation(todoService);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            errors.Add(ex.Message);
+        }
+
+        if (compensation is not null)
+            await DeleteCreatedPlanTodosAsync(compensation, createdTodoIds, errors, cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            await RestoreStateAsync(stateSnapshot, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            errors.Add($"Failed to restore TODO execution state: {ex.Message}");
+        }
+
+        if (errors.Count > 0)
+            throw new InvalidOperationException("TODO execution plan rollback compensation failed: " + string.Join(" ", errors));
+    }
+
+    private async Task RollbackCreatedPlanTodosUnderStateLockAsync(
+        ITodoService todoService,
+        IReadOnlyList<string> createdTodoIds,
+        string statePath,
+        TodoExecutionStateSnapshot stateSnapshot,
+        CancellationToken cancellationToken)
+    {
+        var errors = new List<string>();
+        try
+        {
+            var compensation = GetSupportedTodoCompensation(todoService);
+            await DeleteCreatedPlanTodosAsync(compensation, createdTodoIds, errors, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            errors.Add(ex.Message);
+        }
+
+        try
+        {
+            await RestoreStateFileCoreAsync(statePath, stateSnapshot, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            errors.Add($"Failed to restore TODO execution state: {ex.Message}");
+        }
+
+        if (errors.Count > 0)
+            throw new InvalidOperationException("TODO execution plan rollback compensation failed: " + string.Join(" ", errors));
+    }
+
+    private static async Task DeleteCreatedPlanTodosAsync(
+        ITodoCompensationService compensation,
+        IReadOnlyList<string> createdTodoIds,
+        List<string> errors,
+        CancellationToken cancellationToken)
+    {
+        foreach (var todoId in createdTodoIds
+                     .Where(static id => !string.IsNullOrWhiteSpace(id))
+                     .Distinct(StringComparer.OrdinalIgnoreCase)
+                     .Reverse())
+        {
+            try
+            {
+                var delete = await compensation.DeleteCreatedAsync(todoId, cancellationToken).ConfigureAwait(false);
+                if (!delete.Success)
+                    errors.Add(delete.Error ?? $"Failed to delete created TODO '{todoId}'.");
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+            {
+                errors.Add($"Failed to delete created TODO '{todoId}': {ex.Message}");
+            }
+        }
+    }
+
+    private static async Task RestoreStateFileCoreAsync(
+        string statePath,
+        TodoExecutionStateSnapshot snapshot,
+        CancellationToken cancellationToken)
+    {
+        if (!snapshot.Exists)
+        {
+            if (File.Exists(statePath))
+                File.Delete(statePath);
+            return;
+        }
+
+        Directory.CreateDirectory(Path.GetDirectoryName(statePath)!);
+        await File.WriteAllTextAsync(statePath, snapshot.ContentJson ?? string.Empty, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -101,9 +265,12 @@ public sealed class TodoExecutionService : ITodoExecutionService
         if (request.Todos is not { Count: > 0 })
             throw new ArgumentException("At least one plan TODO is required.", nameof(request));
 
+        var stateSnapshot = await CaptureStateAsync(normalizedWorkspacePath, cancellationToken).ConfigureAwait(false);
         var todoService = await ResolveTodoServiceAsync(normalizedWorkspacePath, cancellationToken).ConfigureAwait(false);
+        var createdTodoIds = new List<string>();
         var statePath = GetStatePath(normalizedWorkspacePath);
         var gate = GetStateLock(statePath);
+        var gateReleased = false;
         await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
@@ -111,7 +278,6 @@ public sealed class TodoExecutionService : ITodoExecutionService
             var phase = FindPhase(state, normalizedWorkspacePath, request.PhaseId)
                 ?? throw new KeyNotFoundException($"Iteration phase '{request.PhaseId}' was not found.");
 
-            var createdTodoIds = new List<string>();
             var updatedPhaseTodoIds = phase.TodoIds.ToList();
             var updatedTodos = state.Todos.ToList();
             var now = UtcNow();
@@ -137,6 +303,9 @@ public sealed class TodoExecutionService : ITodoExecutionService
                     FunctionalRequirements = requirementIds.Where(static id => id.StartsWith("FR-", StringComparison.OrdinalIgnoreCase)).ToList(),
                     TechnicalRequirements = requirementIds.Where(static id => id.StartsWith("TR-", StringComparison.OrdinalIgnoreCase)).ToList(),
                 }, cancellationToken).ConfigureAwait(false);
+
+                if (MayHaveCreatedLegacyTodo(createResult))
+                    createdTodoIds.Add(todoId);
 
                 if (!createResult.Success)
                     throw new InvalidOperationException(createResult.Error ?? $"Failed to create legacy TODO '{todoId}'.");
@@ -199,7 +368,6 @@ public sealed class TodoExecutionService : ITodoExecutionService
                 });
 
                 updatedPhaseTodoIds.Add(todoId);
-                createdTodoIds.Add(todoId);
             }
 
             state.Todos = updatedTodos;
@@ -217,9 +385,30 @@ public sealed class TodoExecutionService : ITodoExecutionService
                 TodoIds = createdTodoIds,
             };
         }
+        catch (Exception ex) when (createdTodoIds.Count > 0 && (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested))
+        {
+            try
+            {
+                await RollbackCreatedPlanTodosUnderStateLockAsync(
+                    todoService,
+                    createdTodoIds,
+                    statePath,
+                    stateSnapshot,
+                    cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception rollbackEx) when (rollbackEx is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+            {
+                throw new InvalidOperationException(
+                    $"CreateTodosFromPlanAsync failed after creating legacy TODO rows, and rollback compensation failed: {rollbackEx.Message}",
+                    ex);
+            }
+
+            throw;
+        }
         finally
         {
-            gate.Release();
+            if (!gateReleased)
+                gate.Release();
         }
     }
 
@@ -1046,6 +1235,21 @@ public sealed class TodoExecutionService : ITodoExecutionService
 
         return _todoServiceResolver.Resolve(context);
     }
+
+    private static ITodoCompensationService GetSupportedTodoCompensation(ITodoService todoService)
+    {
+        if (todoService is ITodoCompensationService compensation
+            && (todoService is not ITodoCompensationCapability capability || capability.SupportsRollbackCompensation))
+        {
+            return compensation;
+        }
+
+        throw new InvalidOperationException("The active TODO provider does not support cross-store transaction rollback compensation.");
+    }
+
+    private static bool MayHaveCreatedLegacyTodo(TodoMutationResult result)
+        => result.Success ||
+           result is { Item: not null, FailureKind: TodoMutationFailureKind.ExternalSyncFailed or TodoMutationFailureKind.ProjectionFailed };
 
     private async Task<string> GenerateNextTodoIdAsync(TodoExecutionStateDocument state, ITodoService todoService, CancellationToken cancellationToken)
     {

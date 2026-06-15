@@ -112,6 +112,42 @@ public sealed class MemoryControllerTests
         Assert.True(mutation.Success);
     }
 
+    /// <summary>POST /mcpserver/memory uses the transaction-gated mutation service when it is registered.</summary>
+    [Fact]
+    public async Task AddAsync_WhenTransactionGateRegistered_UsesGatedAddService()
+    {
+        var service = Substitute.For<IMemoryService>();
+        var gated = Substitute.For<ITransactionGatedMemoryService>();
+        gated.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new MemoryMutationResult(
+                true,
+                Memory: new MemoryItem
+                {
+                    Id = "MEMORY-OPERATOR-001",
+                    Category = "OPERATOR",
+                    Scope = MemoryScope.Global,
+                    Text = "created",
+                    Version = 1,
+                    CreatedAtUtc = DateTimeOffset.UtcNow,
+                    UpdatedAtUtc = DateTimeOffset.UtcNow,
+                }));
+
+        var controller = new MemoryController(service, gated);
+        var action = await controller.AddAsync(new MemoryAddRequest
+        {
+            Category = "operator",
+            Scope = MemoryScope.Global,
+            Text = "created",
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        var created = Assert.IsType<CreatedResult>(action.Result);
+        Assert.Equal("/mcpserver/memory/MEMORY-OPERATOR-001", created.Location);
+        await gated.Received(1)
+            .AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await service.DidNotReceiveWithAnyArgs().AddAsync(default!, default).ConfigureAwait(true);
+    }
+
     /// <summary>PUT /mcpserver/memory/{id} maps validation failures to BadRequest.</summary>
     [Fact]
     public async Task UpdateAsync_WhenValidationFails_ReturnsBadRequest()

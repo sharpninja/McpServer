@@ -113,6 +113,9 @@ public sealed partial class FwhMcpTools
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
+        if (ShouldDeferContextMutation(out var transactionError))
+            return JsonSerializer.Serialize(new { error = transactionError, code = "turn_transaction_gate" });
+
         var result = await _coordinator.IngestWebsiteAsync(new WebsiteIngestRequest
         {
             Url = url,

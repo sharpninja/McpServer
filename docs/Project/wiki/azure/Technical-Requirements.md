@@ -409,7 +409,10 @@ Package publication SHALL be branch-conditional: `main` publishes to `nuget.org`
 
 ## TR-MCP-CRYPTO-001
 
-**TR-MCP-CRYPTO-001** — Placeholder requirement backfilled for TODO link TR-MCP-CRYPTO-001.
+**Transactional Diffgram Cryptography** — Transaction manifests SHALL use canonical JSON, lowercase SHA-256 hashes, ECDSA P-256 signatures, nonces, monotonic sequence scopes, issued/expiry timestamps, diffgram body hashes, and encrypted body hashes. Protected subscriber diffgram envelopes SHALL use ECDH P-256, HKDF-SHA256, and AES-256-GCM with subscriber key-ring support for old and rotated keys.
+**Status:** ✅ Complete for PLAN-TURNTRANSACTIONS-001 first-slice scope; future crypto lifecycle automation remains deferred.
+
+**Covered by:** `TransactionSecurityModels`, `TransactionSecurityServices`, `TurnTransactionCoordinator`, `TransactionSecurityStateStores`, `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`
 
 ## TR-MCP-CTX-001
 
@@ -635,7 +638,10 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-KEYSERVER-001
 
-**TR-MCP-KEYSERVER-001** — Placeholder requirement backfilled for TODO link TR-MCP-KEYSERVER-001.
+**Transaction Keyserver Service** — Provide shared keyserver services and a separate `McpServer.KeyServer` host with service-local SQLite storage, party/key registry, public-key descriptors, manifest sign/verify endpoints, replay nonce and sequence checks, expiry checks, signed manifest trace persistence/reporting, audit records, XMLDocs, typed client contracts, and health endpoint. Private signing material may be provisioned from file-backed startup configuration but must not be returned or logged.
+**Status:** ✅ Complete for PLAN-TURNTRANSACTIONS-001 first-slice scope.
+
+**Covered by:** `McpServer.KeyServer`, `KeyServerController`, `KeyServerClient`, `HttpKeyServerManifestService`, `TransactionSecurityServices`, `TransactionSecurityOptions`, `TransactionSecurityServiceCollectionExtensions`, `TransactionSecurityStateStores`, `TransactionSecurityModels`, `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`
 
 ## TR-MCP-LOG-001
 
@@ -782,6 +788,18 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-PLUGIN-010
 
 **PowerShell wrapper process timeout control** — Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
+
+## TR-MCP-PLUGINCORE-001
+
+**sync-plugin-core + check-core-integrity (sh+ps1)** — Copy lib trees, emit CORE-MANIFEST.yaml with sha256; guard recomputes and fails on drift/missing.
+
+## TR-MCP-PLUGINCORE-002
+
+**core-guard.yml no-duplication job** — CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.
+
+## TR-MCP-PLUGINCORE-003
+
+**repl-daemon.js TCP broker + repl-persistent.sh wrapper** — Detached node broker keeps one repl child, NDJSON in/--- out, state-file readiness, idle shutdown, restart; shell wrapper builds envelopes and falls back to spawn-per-call.
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
@@ -1084,7 +1102,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-SUBSCRIBER-001
 
-**TR-MCP-SUBSCRIBER-001** — Placeholder requirement backfilled for TODO link TR-MCP-SUBSCRIBER-001.
+**Transaction Subscriber Service** — Provide shared subscriber commit services and a separate `McpServer.Subscriber` host with durable commit/status storage, keyserver-backed manifest verification, protected-envelope decrypt/hash validation, idempotent duplicate commit handling, conflict rejection, abort/status endpoints, subscriber encryption key-ring binding, XMLDocs, typed client contracts, and deterministic failure reasons.
+**Status:** ✅ Complete for PLAN-TURNTRANSACTIONS-001 first-slice scope.
+
+**Covered by:** `McpServer.Subscriber`, `SubscriberController`, `SubscriberClient`, `TransactionSecurityServices`, `TransactionSecurityOptions`, `TransactionSecurityStateStores`, `TransactionSecurityModels`, `TransactionSecurityControllerTests`, `TransactionSecurityClientTests`, `DurableTransactionSecurityStorageTests`, `SeparateTransactionServiceIntegrationTests`
 
 ## TR-MCP-SVC-001
 
@@ -1232,35 +1253,59 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 ## TR-MCP-TXN-001
 
-**TR-MCP-TXN-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXN-001.
+**Turn Transaction Coordinator** — Add `Mcp:TurnTransactions`, `ITurnTransactionCoordinator`, transaction request/result models, keyserver/subscriber client handoff, direct/HTTP/external broker pub-sub adapters, durable local pub-sub outbox/replay, degraded status, pending-commit cancellation, and first-party mutation gates. Mutation paths SHALL either use compensation-capable coordinator execution or fail closed before uncompensated side effects while required turn transactions are active.
+**Status:** ✅ Complete for PLAN-TURNTRANSACTIONS-001 first-slice scope.
+
+**Covered by:** `TurnTransactionCoordinator`, `TransactionPubSubServices`, `TransactionPubSubReplayWorker`, `TurnTransactionFederationOperationApplyService`, `TransactionGatedMemoryService`, `TransactionGatedTodoMutationService`, `TransactionGatedRepoFileService`, `TransactionGatedPromptTemplateService`, `TransactionGatedRequirementsDocumentService`, `TransactionGatedSessionLogService`, `TransactionGatedToolRegistryService`, `TransactionGatedToolBucketService`, `TransactionGatedGraphRagService`, `TransactionGatedGitHubCliService`, `TransactionGatedIssueTodoSyncService`, `TransactionGatedVoiceConversationService`, `TransactionGatedAgentPoolService`, `ClientMutationPolicy`, `FederationController`, `MemoryController`, `TodoController`, `McpServerMcpTools`, `TransactionalTodoWorkflow`, `TurnTransactionCoordinatorTests`, `TransactionPubSubTests`, `TransactionGatedMemoryServiceTests`, `TransactionGatedTodoMutationServiceTests`, `TransactionGatedSessionLogServiceTests`, `ClientMutationPolicyTests`, `TransactionalTodoWorkflowTests`
 
 ## TR-MCP-TXNAIUNIT-001
 
-**TR-MCP-TXNAIUNIT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNAIUNIT-001.
+**aiUnit Plan Review Gate** — Add a test-only aiUnit plan-review evidence gate for PLAN-TURNTRANSACTIONS-001. The gate SHALL validate committed aiUnit run-log evidence, require the reviewed scope to include FR-MCP-118 through FR-MCP-128 and TEST-MCP-158 through TEST-MCP-173, and fail when critical/high findings are present.
+**Status:** ✅ Complete.
+
+**Covered by:** `PlanTransactionReviewTests`, `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`
 
 ## TR-MCP-TXNARCH-001
 
-**TR-MCP-TXNARCH-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNARCH-001.
+**Transaction Architecture Rounds** — Preserve a first architecture round that defines component ownership, trust boundaries, storage boundaries, threat model, rollback/audit rules, and gap analysis before implementation closeout.
+**Status:** ✅ Complete.
+
+**Covered by:** `TurnTransactions-Architecture-Round1.md`, `TurnTransactionPlanArtifactTests`
 
 ## TR-MCP-TXNAUDIT-001
 
-**TR-MCP-TXNAUDIT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNAUDIT-001.
+**Transaction Audit Actions** — Transaction code SHALL record structured audit/session-log evidence for manifest sign/verify, commit/reject, abort, degraded, rollback, replay, retention, and aiUnit review events without deleting durable audit rows during rollback.
+**Status:** ✅ Complete for PLAN-TURNTRANSACTIONS-001 first-slice scope.
+
+**Covered by:** `TransactionSecurityStateStores`, `TransactionPubSubServices`, `TurnTransactionCoordinator`, `TransactionGatedSessionLogService`, `TurnTransactionsControllerTests`, `TransactionPubSubTests`, `DurableTransactionSecurityStorageTests`, `PlanTransactionReviewTests`
 
 ## TR-MCP-TXNBYRD-001
 
-**TR-MCP-TXNBYRD-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNBYRD-001.
+**Byrd v4 Transaction Gates** — Transaction implementation work SHALL be split into requirements-first, test-first, mock-first, implementation, refactor, and validation gates. Executed validation scopes SHALL exit with zero failures and zero skips; deferred work belongs in TODO/requirements state rather than skipped test placeholders.
+**Status:** ✅ Complete for PLAN-TURNTRANSACTIONS-001 first-slice scope.
+
+**Covered by:** `Functional-Requirements.md`, `Testing-Requirements.md`, `Requirements-Matrix.md`, `TurnTransactionPlanArtifactTests`, `ValidateTraceability`
 
 ## TR-MCP-TXNCOMPAT-001
 
-**TR-MCP-TXNCOMPAT-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNCOMPAT-001.
+**Federation Compatibility** — Existing `Mcp:Federation` HMAC envelopes SHALL remain backward compatible. Transaction crypto is additive and separate from federation envelope signing. Federation apply paths route through the coordinator, and federation control-plane mutations fail closed while required transaction gating is active until full compensation is designed.
+**Status:** ✅ Complete for PLAN-TURNTRANSACTIONS-001 first-slice scope.
+
+**Covered by:** `TurnTransactionFederationOperationApplyService`, `FederationController`, `FederationOperationApplyServiceTests`, `FederationControllerTests`, `FederationControllerPushTests`, `ClientMutationPolicyTests`, `TurnTransactions-Mutation-Endpoint-Audit.md`
 
 ## TR-MCP-TXNDESIGN-001
 
-**TR-MCP-TXNDESIGN-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNDESIGN-001.
+**Implementable Transaction Design Contracts** — Preserve a second design round that defines public DTOs, durable entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, canonicalization, test mappings, and explicit deferred scope before closeout.
+**Status:** ✅ Complete.
+
+**Covered by:** `TurnTransactions-Design-Round2.md`, `TransactionSecurityModels`, `TransactionSecurityOptions`, `TransactionSecurityServices`, `TurnTransactions-Mutation-Endpoint-Audit.md`, `TurnTransactionPlanArtifactTests`
 
 ## TR-MCP-TXNDIAGRAMS-001
 
-**TR-MCP-TXNDIAGRAMS-001** — Placeholder requirement backfilled for TODO link TR-MCP-TXNDIAGRAMS-001.
+**Imported Diagram Traceability** — Imported Mermaid diagrams SHALL be preserved with stable IDs, source-section references, branch IDs, scope annotations, and test mappings. In-scope branches SHALL have tests; future quad-model, Curiosity, AoT, and weight-update branches SHALL remain explicitly deferred.
+**Status:** ✅ Complete.
+
+**Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
 
 ## TR-MCP-VOICE-001
 
@@ -1343,6 +1388,14 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-PLANNED-013A
 
 `AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
+
+## TR-SUPPORT-010E
+
+**Stateless lifecycle controller + client + tool adapters** — SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
+
+## TR-SUPPORT-010F
+
+**Merge-on-null mapping for partial submits** — MapDtoToEntity merges non-null scalars; UpsertTurns passes mergeOmittedFields:true; collections append-only.
 
 ## TR-TEST-001
 

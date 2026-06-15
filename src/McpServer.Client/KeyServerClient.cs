@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,6 +59,20 @@ public sealed class KeyServerClient : McpClientBase
             $"mcpserver/keyserver/manifests/{Encode(transactionId)}",
             cancellationToken);
 
+    /// <summary>Gets a filtered public traceability report for signed manifests.</summary>
+    /// <param name="request">Report filters and limit.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Manifest traceability report.</returns>
+    public async Task<TransactionManifestTraceReport> GetManifestReportAsync(
+        TransactionManifestTraceReportRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return await GetAsync<TransactionManifestTraceReport>(
+            $"mcpserver/keyserver/manifests/report{BuildReportQuery(request)}",
+            cancellationToken);
+    }
+
     /// <summary>Gets one public key descriptor for a registered party.</summary>
     /// <param name="partyId">Party identifier.</param>
     /// <param name="keyId">Key identifier.</param>
@@ -72,4 +87,23 @@ public sealed class KeyServerClient : McpClientBase
             cancellationToken);
 
     private static string Encode(string value) => Uri.EscapeDataString(value);
+
+    private static string BuildReportQuery(TransactionManifestTraceReportRequest request)
+    {
+        var query = new List<string>();
+        Add(query, "publisherPartyId", request.PublisherPartyId);
+        Add(query, "subscriberPartyId", request.SubscriberPartyId);
+        Add(query, "status", request.Status);
+        Add(query, "fromUtc", request.FromUtc?.ToString("O"));
+        Add(query, "toUtc", request.ToUtc?.ToString("O"));
+        if (request.Limit is { } limit)
+            query.Add($"limit={limit}");
+        return query.Count == 0 ? string.Empty : "?" + string.Join("&", query);
+    }
+
+    private static void Add(List<string> query, string name, string? value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+            query.Add($"{name}={Encode(value.Trim())}");
+    }
 }

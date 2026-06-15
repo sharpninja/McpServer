@@ -26,6 +26,38 @@ public interface IRepoFileService
     Task<RepoWriteResult> WriteAsync(string relativePath, string content, CancellationToken cancellationToken = default);
 }
 
+/// <summary>
+/// TR-MCP-TXN-001: Captures and restores repository file state for transactional write compensation.
+/// </summary>
+public interface IRepoFileCompensation
+{
+    /// <summary>
+    /// Captures the file state before a write mutation.
+    /// </summary>
+    /// <param name="relativePath">Relative path from repo root.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>The captured file state, or <see langword="null"/> when the path is invalid or disallowed.</returns>
+    Task<RepoFileSnapshot?> CaptureForWriteAsync(string relativePath, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Restores the captured file state after a failed transaction commit.
+    /// </summary>
+    /// <param name="snapshot">Pre-write file snapshot.</param>
+    /// <param name="writtenContent">Content written by the rejected transaction.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    Task RestoreWriteAsync(
+        RepoFileSnapshot snapshot,
+        string writtenContent,
+        CancellationToken cancellationToken = default);
+}
+
+/// <summary>TR-MCP-TXN-001: Pre-write repository file state used for rollback compensation.</summary>
+/// <param name="RelativePath">Normalized relative path from repo root.</param>
+/// <param name="Exists">Whether the file existed before the write.</param>
+/// <param name="Content">Previous file content, or empty when the file did not exist.</param>
+/// <param name="ContentSha256">SHA-256 hash of previous file content, or empty when the file did not exist.</param>
+public sealed record RepoFileSnapshot(string RelativePath, bool Exists, string Content, string ContentSha256);
+
 /// <summary>TR-PLANNED-013: Result of repo file read.</summary>
 /// <param name="RelativePath">Normalized relative path.</param>
 /// <param name="Content">File content (empty string if not found).</param>

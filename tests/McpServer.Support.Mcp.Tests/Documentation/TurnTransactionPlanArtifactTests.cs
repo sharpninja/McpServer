@@ -1,9 +1,10 @@
 namespace McpServer.Support.Mcp.Tests.Documentation;
 
 /// <summary>
-/// TEST-MCP-165, TEST-MCP-167, TEST-MCP-168, and TEST-MCP-169:
+/// TEST-MCP-162 through TEST-MCP-173:
 /// Verifies the restored turn transaction plan artifact preserves imported
-/// diagram identifiers and points to the implemented transaction surfaces.
+/// diagram identifiers, traceability, deferred scope, and implemented
+/// transaction surfaces.
 /// </summary>
 public sealed class TurnTransactionPlanArtifactTests
 {
@@ -76,8 +77,103 @@ public sealed class TurnTransactionPlanArtifactTests
         AssertRepositoryFileExists(repoRoot, "tests", "McpServer.TransactionSecurity.IntegrationTests", "SeparateTransactionServiceIntegrationTests.cs");
     }
 
+    /// <summary>
+    /// TEST-MCP-162 and TEST-MCP-173: Validates transaction-plan requirements
+    /// are concrete traceability artifacts rather than placeholder backfills.
+    /// </summary>
+    [Fact]
+    public void TransactionPlanRequirements_AreConcreteAndMapped()
+    {
+        var functional = ReadProjectFile("Functional-Requirements.md");
+        var technical = ReadProjectFile("Technical-Requirements.md");
+        var testing = ReadProjectFile("Testing-Requirements.md");
+        var matrix = ReadProjectFile("Requirements-Matrix.md");
+        var mapping = ReadProjectFile("TR-per-FR-Mapping.md");
+
+        foreach (var requirementId in Enumerable.Range(118, 11).Select(id => $"FR-MCP-{id}"))
+        {
+            var section = ExtractRequirementSection(functional, "## " + requirementId + " ");
+            Assert.DoesNotContain("Placeholder requirement backfilled", section, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("**Acceptance Criteria:**", section, StringComparison.Ordinal);
+            Assert.Contains("| " + requirementId + " |", matrix, StringComparison.Ordinal);
+            Assert.Contains("| " + requirementId + " |", mapping, StringComparison.Ordinal);
+        }
+
+        foreach (var requirementId in new[]
+        {
+            "TR-MCP-KEYSERVER-001",
+            "TR-MCP-CRYPTO-001",
+            "TR-MCP-SUBSCRIBER-001",
+            "TR-MCP-TXN-001",
+            "TR-MCP-TXNAUDIT-001",
+            "TR-MCP-TXNCOMPAT-001",
+            "TR-MCP-TXNBYRD-001",
+            "TR-MCP-TXNAIUNIT-001",
+            "TR-MCP-TXNDIAGRAMS-001",
+            "TR-MCP-TXNARCH-001",
+            "TR-MCP-TXNDESIGN-001",
+        })
+        {
+            var section = ExtractRequirementSection(technical, "## " + requirementId);
+            Assert.DoesNotContain("Placeholder requirement backfilled", section, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("**Status:**", section, StringComparison.Ordinal);
+            Assert.Contains("**Covered by:**", section, StringComparison.Ordinal);
+            Assert.Contains("| " + requirementId + " |", matrix, StringComparison.Ordinal);
+        }
+
+        foreach (var testId in Enumerable.Range(158, 16).Select(id => $"TEST-MCP-{id}"))
+        {
+            Assert.Contains("- " + testId + ":", testing, StringComparison.Ordinal);
+            Assert.Contains("| " + testId + " |", matrix, StringComparison.Ordinal);
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-163, TEST-MCP-170, TEST-MCP-171, and TEST-MCP-172: Validates
+    /// future-disabled scope and the two architecture/design rounds remain
+    /// explicit local artifacts.
+    /// </summary>
+    [Fact]
+    public void PlanArtifacts_PreserveDeferredScopeAndDesignRounds()
+    {
+        var plan = ReadTransactionPlan();
+        var round1 = ReadProjectFile("TurnTransactions-Architecture-Round1.md");
+        var round2 = ReadProjectFile("TurnTransactions-Design-Round2.md");
+        var audit = ReadProjectFile("TurnTransactions-Mutation-Endpoint-Audit.md");
+
+        Assert.Contains("Keep quad-model orchestration, Curiosity execution, AoT reconciliation execution, and weight update execution disabled", plan, StringComparison.Ordinal);
+        Assert.Contains("AD-CURIOSITY-001-BR-FRUSTRATION", plan, StringComparison.Ordinal);
+        Assert.Contains("AD-AOT-001-BR-DISAGREE", plan, StringComparison.Ordinal);
+        Assert.Contains("AD-WEIGHT-001-BR-GATES", plan, StringComparison.Ordinal);
+        Assert.Contains("Deferred adapters:", plan, StringComparison.Ordinal);
+
+        Assert.Contains("keyserver", round1, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("subscriber", round1, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("transaction coordination state", round1, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Rollback never deletes audit rows", round1, StringComparison.Ordinal);
+
+        Assert.Contains("## Test Mapping", round2, StringComparison.Ordinal);
+        Assert.Contains("## Round 2 Gap Analysis", round2, StringComparison.Ordinal);
+        Assert.Contains("TEST-MCP-161", round2, StringComparison.Ordinal);
+
+        Assert.Contains("Federation control-plane mutations fail closed", audit, StringComparison.Ordinal);
+        Assert.Contains("Explicitly Deferred", audit, StringComparison.Ordinal);
+    }
+
     private static string ReadTransactionPlan()
         => File.ReadAllText(Path.Combine(FindRepoRoot(), "docs", "Project", "Quad-Model-Transactional-Diffgram-Plan.md"));
+
+    private static string ReadProjectFile(string fileName)
+        => File.ReadAllText(Path.Combine(FindRepoRoot(), "docs", "Project", fileName));
+
+    private static string ExtractRequirementSection(string text, string heading)
+    {
+        var start = text.IndexOf(heading, StringComparison.Ordinal);
+        Assert.True(start >= 0, "Missing requirement heading " + heading + ".");
+
+        var next = text.IndexOf("\n## ", start + heading.Length, StringComparison.Ordinal);
+        return next < 0 ? text[start..] : text[start..next];
+    }
 
     private static string ExtractDiagramSection(string text, string diagramId)
     {

@@ -27,6 +27,7 @@ using McpServer.Support.Mcp.Services.FederationAdapters;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Web;
+using McpServer.TransactionSecurity.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.Json;
@@ -290,7 +291,12 @@ builder.Services.AddSingleton<IAgentBranchStrategy, FeatureAgentBranchStrategy>(
 builder.Services.AddSingleton<IAgentBranchStrategy, WorktreeAgentBranchStrategy>();
 builder.Services.AddSingleton<AgentBranchStrategyResolver>();
 builder.Services.AddHostedService<AgentHealthMonitorService>();
-builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
+builder.Services.AddSingleton<FileGitHubWorkspaceTokenStore>();
+builder.Services.AddSingleton<IGitHubWorkspaceTokenStore>(sp =>
+    new TransactionGatedGitHubWorkspaceTokenStore(
+        sp.GetRequiredService<FileGitHubWorkspaceTokenStore>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddSingleton<IVectorIndexService, VectorIndexService>();
 builder.Services.AddScoped<RepoIngestor>();
@@ -300,29 +306,90 @@ builder.Services.AddScoped<GitHubIngestor>();
 builder.Services.AddScoped<IssueIngestor>();
 builder.Services.AddScoped<IWebsiteIngestor, WebsiteIngestor>();
 builder.Services.AddScoped<IngestionCoordinator>();
-builder.Services.AddScoped<IRepoFileService, RepoFileService>();
+builder.Services.AddScoped<RepoFileService>();
+builder.Services.AddScoped<IRepoFileService>(sp =>
+{
+    var service = sp.GetRequiredService<RepoFileService>();
+    return new TransactionGatedRepoFileService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
 builder.Services.AddScoped<DesktopLaunchService>();
-builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
+builder.Services.AddSingleton<GitHubCliService>();
+builder.Services.AddSingleton<IGitHubCliService>(sp =>
+    new TransactionGatedGitHubCliService(
+        sp.GetRequiredService<GitHubCliService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
 builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());
 builder.Services.AddSingleton<TodoServiceResolver>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<WorkspaceServiceAccessor>();
 builder.Services.AddSingleton<TodoCreationService>();
-builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
+builder.Services.AddSingleton<IssueTodoSyncService>();
+builder.Services.AddSingleton<IIssueTodoSyncService>(sp =>
+    new TransactionGatedIssueTodoSyncService(
+        sp.GetRequiredService<IssueTodoSyncService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<TodoUpdateService>();
-builder.Services.AddScoped<ITodoExecutionService, TodoExecutionService>();
-builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+builder.Services.AddScoped<ITransactionGatedTodoMutationService, TransactionGatedTodoMutationService>();
+builder.Services.AddScoped<TodoExecutionService>();
+builder.Services.AddScoped<ITodoExecutionService>(sp =>
+{
+    var service = sp.GetRequiredService<TodoExecutionService>();
+    return new TransactionGatedTodoExecutionService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
+builder.Services.AddSingleton<RequirementsService>();
+builder.Services.AddSingleton<IRequirementsService>(sp =>
+    new TransactionGatedRequirementsAnalysisService(
+        sp.GetRequiredService<RequirementsService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<RequirementsDatabaseDocumentService>();
-builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
-builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
+builder.Services.AddSingleton<IRequirementsDocumentService>(sp =>
+{
+    var service = sp.GetRequiredService<RequirementsDatabaseDocumentService>();
+    return new TransactionGatedRequirementsDocumentService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
+builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
-builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
-builder.Services.AddSingleton<IAgentPoolService, AgentPoolService>();
+builder.Services.AddSingleton<VoiceConversationService>();
+builder.Services.AddSingleton<IVoiceConversationService>(sp =>
+    new TransactionGatedVoiceConversationService(
+        sp.GetRequiredService<VoiceConversationService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
+builder.Services.AddSingleton<AgentPoolService>();
+builder.Services.AddSingleton<IAgentPoolService>(sp =>
+    new TransactionGatedAgentPoolService(
+        sp.GetRequiredService<AgentPoolService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<PromptTemplateRenderer>();
 builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
-builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
+builder.Services.AddSingleton<PromptTemplateService>();
+builder.Services.AddSingleton<IPromptTemplateService>(sp =>
+{
+    var service = sp.GetRequiredService<PromptTemplateService>();
+    return new TransactionGatedPromptTemplateService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
 builder.Services.AddSingleton<IMarkerPromptProvider, FileMarkerPromptProvider>();
 builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
 builder.Services.AddSingleton<PairingHtmlRenderer>();
@@ -354,6 +421,7 @@ builder.Services.AddSingleton<ICopilotClient>(sp =>
         sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<IMemoryService, MemoryService>();
+builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
@@ -361,8 +429,25 @@ builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
 builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();
-builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
-builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
+builder.Services.AddScoped<ToolRegistryService>();
+builder.Services.AddScoped<IToolRegistryService>(sp =>
+{
+    var service = sp.GetRequiredService<ToolRegistryService>();
+    return new TransactionGatedToolRegistryService(
+        service,
+        sp.GetRequiredService<McpDbContext>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
+builder.Services.AddScoped<ToolBucketService>();
+builder.Services.AddScoped<IToolBucketService>(sp =>
+{
+    var service = sp.GetRequiredService<ToolBucketService>();
+    return new TransactionGatedToolBucketService(
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
 builder.Services.AddSingleton<ApiKeyIssuanceGuard>();
@@ -425,7 +510,8 @@ builder.Services.AddFederationStateAdapters();
 builder.Services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
 builder.Services.AddSingleton<FederationStateAdapterRegistry>();
 builder.Services.AddSingleton<IFederationEnvelopeSigner, FederationEnvelopeSigner>();
-builder.Services.AddSingleton<IFederationOperationApplyService, FederationOperationApplyService>();
+builder.Services.AddSingleton<FederationOperationApplyService>();
+builder.Services.AddSingleton<IFederationOperationApplyService, TurnTransactionFederationOperationApplyService>();
 builder.Services.AddSingleton<IFederationLocalExecutionService, FederationLocalExecutionService>();
 builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
     .ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.HttpClientHandler
@@ -465,7 +551,13 @@ builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederation
     builder.Services.Remove(innerSession);
     builder.Services.AddScoped<ISessionLogService>(sp =>
     {
-        var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+        var local = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+        var inner = new TransactionGatedSessionLogService(
+            local,
+            sp.GetRequiredService<McpDbContext>(),
+            sp.GetService<ITurnTransactionCoordinator>(),
+            sp.GetService<WorkspaceContext>(),
+            sp.GetService<IOptions<TurnTransactionOptions>>());
         return new FederatedSessionLogService(
             inner,
             sp.GetRequiredService<FederationRegistry>(),
@@ -483,11 +575,15 @@ builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederation
     builder.Services.AddScoped<IGraphRagService>(sp =>
     {
         var inner = (IGraphRagService)ActivatorUtilities.CreateInstance(sp, innerType);
-        return new McpServer.Support.Mcp.GraphRag.FederatedGraphRagService(
+        var federated = new McpServer.Support.Mcp.GraphRag.FederatedGraphRagService(
             inner,
             sp.GetRequiredService<FederationRegistry>(),
             sp.GetRequiredService<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(),
             sp.GetRequiredService<ILogger<McpServer.Support.Mcp.GraphRag.FederatedGraphRagService>>());
+        return new TransactionGatedGraphRagService(
+            federated,
+            sp.GetService<ITurnTransactionCoordinator>(),
+            sp.GetService<IOptions<TurnTransactionOptions>>());
     });
 }
 
@@ -514,6 +610,7 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService<FederationLocalProxyEnrollmentService>();
     builder.Services.AddHostedService<FederationQueuedOperationReplayService>();
     builder.Services.AddHostedService<FederationFanoutSyncService>();
+    builder.Services.AddHostedService<TransactionPubSubReplayWorker>();
     // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
     builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }
@@ -613,7 +710,7 @@ if (!app.Environment.IsEnvironment("Test"))
 
     using (var scope = app.Services.CreateScope())
     {
-        var bucketService = scope.ServiceProvider.GetRequiredService<IToolBucketService>();
+        var bucketService = scope.ServiceProvider.GetRequiredService<ToolBucketService>();
         var toolRegistryOpts = scope.ServiceProvider.GetRequiredService<IOptions<ToolRegistryOptions>>().Value;
         foreach (var entry in toolRegistryOpts.DefaultBuckets)
         {

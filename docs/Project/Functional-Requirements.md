@@ -262,9 +262,7 @@ Agents must follow a session continuity protocol: at session start, read the mar
 
 ## FR-MCP-039 MCP Context Indexing for New Projects
 
-Repo-local source files from `McpServer.Cqrs` and `McpServer.Cqrs.Mvvm` shall be indexed into the MCP context store for semantic search. `McpServer.UI.Core` and `McpServer.Director` moved to the separate `McpServerManager` repository and must not be advertised as indexed capabilities in this repository marker.
-
-**Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` allowlist merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `templates/prompt-templates.yaml` (default-marker-prompt)
+Repo-local source files from McpServer.Cqrs and McpServer.Cqrs.Mvvm shall be indexed into the MCP context store for semantic search. McpServer.UI.Core and McpServer.Director have moved to the separate McpServerManager repository and must not be advertised as indexed capabilities in this repository marker.
 
 ## FR-MCP-040 Requirements Document CRUD Management
 
@@ -781,49 +779,108 @@ The system SHALL allow GitHub-backed TODO and issue operations to run under serv
 
 The Codex MCP plugin wrapper SHALL return successful workflow responses promptly or fail within a caller-controlled bounded timeout with actionable diagnostics instead of forcing raw REST fallback.
 
-## FR-MCP-118 FR-MCP-118
+## FR-MCP-118 Keyserver trust service
 
-Placeholder requirement backfilled for TODO link FR-MCP-118.
+McpServer SHALL provide keyserver trust services that register trusted parties, manage public key metadata, sign transaction manifests, verify signed manifests, reject invalid or replayed manifests, preserve historical signing descriptors for verification, and persist audit evidence without exposing private key material.
+**Acceptance Criteria:**
+- [x] Publisher, subscriber, arbiter, and future model parties can be provisioned with party ID, role, active signing key ID, active encryption key ID, status, created/updated UTC, and audit metadata.
+- [x] Manifest signing binds transaction ID, turn ID, publisher party, subscriber party, key IDs, sequence, nonce, issued UTC, expiry UTC, algorithms, diffgram SHA-256, and encrypted body SHA-256.
+- [x] Manifest verification succeeds for an unchanged canonical payload and valid keyserver signature and rejects unknown parties, disabled parties, unknown keys, disabled keys, expired manifests, replayed nonces, stale sequences, malformed signatures, and hash mismatches with deterministic reason codes.
+- [x] Keyserver signing never returns, serializes, or logs private key material; external signing private PEM can be provisioned from file-backed startup configuration.
+- [x] Key rotation supports a new active signing key while retaining old public descriptors for historic verification; full lifecycle automation beyond file-backed startup provisioning is deferred and explicit future scope.
 
-## FR-MCP-119 FR-MCP-119
+## FR-MCP-119 Subscriber diffgram commit service
 
-Placeholder requirement backfilled for TODO link FR-MCP-119.
+McpServer SHALL provide subscriber services that verify keyserver-signed manifests, decrypt intended diffgrams, validate encrypted and plaintext hashes, durably commit accepted diffgrams, expose abort/status flows, and reject invalid or conflicting commits.
+**Acceptance Criteria:**
+- [x] Subscriber accepts a commit only when manifest verification succeeds against keyserver trust and the protected payload is addressed to the subscriber party/key ID.
+- [x] Subscriber validates encrypted body SHA-256 before decrypt and plaintext diffgram SHA-256 after decrypt.
+- [x] First valid commit persists transaction ID, diffgram ID, manifest hash, sequence, status, committed UTC, reason details, and audit metadata durably.
+- [x] Duplicate commit with identical transaction/diffgram/hash is idempotent and returns committed; duplicate commit with mismatched payload, manifest, hash, or sequence is rejected as conflict.
+- [x] Abort records aborted status, refuses later commit, and status exposes pending, committed, rejected, aborted, and reason details without exposing secrets.
+- [x] Subscriber encryption private key rings decrypt old and rotated protected envelopes and bind separate-host configuration to the configured subscriber key material.
 
-## FR-MCP-120 FR-MCP-120
+## FR-MCP-120 MCP Server transaction gating
 
-Placeholder requirement backfilled for TODO link FR-MCP-120.
+McpServer SHALL gate first-party mutating user-turn paths behind transaction manifest signing and subscriber commit confirmation before returning committed success, or fail closed before uncompensated side effects when a safe compensation boundary is not yet available.
+**Acceptance Criteria:**
+- [x] Federation adapter apply, memory add/update/delete, TODO create/update/delete/move, repository write, prompt-template mutations, TODO execution state/plan mutations, requirements repository/export writes, session-log writes, tool registry mutations, voice/external interactive mutations, agent-pool lifecycle mutations, GraphRAG mutations, GitHub external side-effect mutations, context rebuild/website/sync mutations, and federation control-plane mutations either route through compensation-capable coordinator gates or fail closed while required transactions are active.
+- [x] Memory add rollback restores or preserves the created memory record, clears soft-delete metadata when exact EF restoration is available, and same-ID retry conflicts after rollback.
+- [x] Server-side TODO compensation captures update/delete/move restore points under the provider write lock, deletes uncommitted local create rows, restores source snapshots on move rollback, and rejects ISSUE-backed TODO mutation while GitHub side-effect compensation remains future scope.
+- [x] Session-log rollback restores or preserves add-style created session records and restores captured full session graphs for replace/delete inside an explicit database transaction.
+- [x] Generic REPL client passthrough blocks unsafe protected namespaces and unclassified client namespaces while required transaction gating is active, while explicitly service-gated namespaces remain routed to server-side gates.
+- [x] Complete provider-level isolation across delayed subscriber rejection and bucket/GitHub whole-orchestration compensation remain documented future enhancements, not committed-success claims for this slice.
 
-## FR-MCP-121 FR-MCP-121
+## FR-MCP-121 Degraded mode and rollback
 
-Placeholder requirement backfilled for TODO link FR-MCP-121.
+McpServer SHALL enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads or explicitly fail-closed operations, and preserve audit records through rollback.
+**Acceptance Criteria:**
+- [x] Coordinator status exposes enabled/degraded state, last reason, message, and transaction dependency health.
+- [x] Required transaction gates reject mutation before side effects when the coordinator is degraded or required transaction dependencies cannot sign or commit.
+- [x] Commit failure invokes available rollback compensation and reports rollback success or rollback failure without deleting audit evidence.
+- [x] Durable pending commit handoffs are canceled after successful rollback compensation or commit timeout settlement.
+- [x] Runtime/control-plane endpoints without complete remote compensation fail closed or remain explicitly deferred until future compensation slices.
 
-## FR-MCP-122 FR-MCP-122
+## FR-MCP-122 Byrd v4 execution control
 
-Placeholder requirement backfilled for TODO link FR-MCP-122.
+The transactional diffgram implementation SHALL follow Byrd Development Process v4 with requirements-first, failing-test-first, mocks-first, refactor, explicit validation, and zero-failure zero-skip validation gates for each executed scope.
+**Acceptance Criteria:**
+- [x] The plan records FR/TR/TEST identifiers and mappings before implementation closeout.
+- [x] Each implementation slice names focused tests and validates zero failures and zero skips for the executed scope.
+- [x] Deferred work is tracked as TODO/requirements state instead of skipped test placeholders.
+- [x] Final closeout validation includes focused transaction tests, full affected unit suites, traceability validation, and solution build evidence.
 
-## FR-MCP-123 FR-MCP-123
+## FR-MCP-123 Quad-model future scaffolding
 
-Placeholder requirement backfilled for TODO link FR-MCP-123.
+The transaction foundation SHALL preserve the imported quad-model architecture while keeping Curiosity execution, AoT reconciliation execution, quad-model orchestration, and weight-update execution disabled by default until later requirements authorize them.
+**Acceptance Criteria:**
+- [x] Imported diagrams retain stable IDs and future branch annotations for Curiosity, AoT reconciliation, weight redistribution, and quad orchestration.
+- [x] Current production code implements transaction security and mutation gating only; direct model execution and weight-update execution remain disabled/deferred.
+- [x] Deferred future scope is explicitly documented in the plan, mutation audit, design rounds, TEST-MCP-163, and TEST-MCP-170.
 
-## FR-MCP-124 FR-MCP-124
+## FR-MCP-124 Imported document and diagram preservation
 
-Placeholder requirement backfilled for TODO link FR-MCP-124.
+The imported Quad-Model transactional diffgram document SHALL be preserved as local project-contract artifacts, including its diagrams, branch IDs, source references, and implementation-scope annotations.
+**Acceptance Criteria:**
+- [x] All six imported Mermaid diagram IDs are present in `docs/Project/Quad-Model-Transactional-Diffgram-Plan.md`.
+- [x] Each imported diagram section includes a Mermaid block, imported source-section reference, and repository annotations.
+- [x] Diagram-derived implemented and deferred branches map to TEST-MCP-165 through TEST-MCP-173.
 
-## FR-MCP-125 FR-MCP-125
+## FR-MCP-125 Federation and compatibility preservation
 
-Placeholder requirement backfilled for TODO link FR-MCP-125.
+The transactional diffgram implementation SHALL remain additive to existing federation behavior and SHALL preserve existing HMAC federation envelope compatibility while adding transaction-specific trust boundaries.
+**Acceptance Criteria:**
+- [x] Federation HMAC envelopes remain separate from transaction manifest signing and protected diffgram encryption.
+- [x] Global federation mutation-adapter apply paths are transaction-gated through the coordinator.
+- [x] Federation control-plane mutations fail closed while required transaction gating is active until full compensation is designed.
+- [x] Existing proxy/federation compatibility expectations remain documented separately from transaction crypto.
 
-## FR-MCP-126 FR-MCP-126
+## FR-MCP-126 aiUnit plan review
 
-Placeholder requirement backfilled for TODO link FR-MCP-126.
+The transaction plan SHALL include a test-only aiUnit plan review gate that fails on critical or high findings and records run-log evidence before closeout.
+**Acceptance Criteria:**
+- [x] `tests/McpServer.PlanReview.Tests` validates aiUnit plan-review run-log evidence for PLAN-TURNTRANSACTIONS-001.
+- [x] The gate fails when run-log findings contain critical or high severity findings.
+- [x] The run-log artifact records prompt scope, provider/model metadata, findings status, and reviewed scope.
+- [x] Explicit future-disabled work is treated as non-blocking only when it does not hide a safety, correctness, or validation gap.
 
-## FR-MCP-127 FR-MCP-127
+## FR-MCP-127 Diagram-derived implementation tests
 
-Placeholder requirement backfilled for TODO link FR-MCP-127.
+In-scope branches from imported activity and sequence diagrams SHALL have implementation-test coverage or an explicit deferred requirement before related code is written.
+**Acceptance Criteria:**
+- [x] SD-DIFFGRAM-001 valid, invalid, signing, verification, encryption, and hash branches are covered by keyserver/subscriber/client/integration tests.
+- [x] AD-TXN-001 commit, subscriber unavailable, degraded, rollback, timeout, and audit branches are covered by coordinator, pub-sub, federation, and mutation-gating tests.
+- [x] Deferred diagram branches for Curiosity, AoT, weight redistribution, and full quad execution are explicitly documented as disabled future scope.
+- [x] TEST-MCP-165 through TEST-MCP-173 preserve diagram IDs, branch IDs, design mappings, and traceability closeout evidence.
 
-## FR-MCP-128 FR-MCP-128
+## FR-MCP-128 Two-round architecture and design review
 
-Placeholder requirement backfilled for TODO link FR-MCP-128.
+The implementation SHALL include two architecture/design rounds before closeout: a first architecture round defining boundaries, ownership, trust, storage, threat model, and gap analysis, and a second implementable design round defining DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and test mappings.
+**Acceptance Criteria:**
+- [x] `TurnTransactions-Architecture-Round1.md` captures component boundaries, trust model, storage boundaries, rollback/audit rules, threat model, and gap analysis.
+- [x] `TurnTransactions-Design-Round2.md` captures implementable DTOs, entities, options, interfaces, endpoint contracts, reason codes, canonicalization, audit payloads, XMLDoc obligations, and TEST-MCP-158 through TEST-MCP-173 mappings.
+- [x] `TurnTransactions-Mutation-Endpoint-Audit.md` captures current gated, fail-closed, and explicitly deferred mutation surfaces.
+- [x] Requirements matrix and FR/TR mapping rows link FR-MCP-118 through FR-MCP-128 to transaction TR and TEST records.
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
@@ -931,6 +988,18 @@ The MCP Server SHALL federate Memory as a first-class mutable federation domain.
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
 
+## FR-MCP-PLUGINCORE-001 Canonical plugin core with sync and checksum guard
+
+A single canonical plugin core SHALL be distributed into plugin repos by a sync tool that writes a per-file sha256 manifest, and a checksum guard SHALL fail CI when a synced file is edited locally.
+
+## FR-MCP-PLUGINCORE-002 No-duplication CI guard for plugin lib files
+
+Plugin CI SHALL fail when a lib file is neither covered by the core manifest nor declared as plugin residual.
+
+## FR-MCP-PLUGINCORE-003 Persistent REPL daemon
+
+A persistent REPL daemon SHALL serve many requests from one long-lived repl child over NDJSON framing, with auto-start, crash-restart, and spawn-per-call fallback.
+
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
 
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
@@ -996,6 +1065,10 @@ All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are c
 
 ---
 
+## FR-MCP-REPL-006 Deprecate workflow.* REPL namespaces in favor of client.* passthrough
+
+The REPL SHALL mark every workflow.* response deprecated and route workflow.sessionlog lifecycle verbs with explicit identifiers statelessly through the SessionLog client.
+
 ## FR-MCP-REPL-007 REPL Credential Discovery Diagnostics
 
 `mcpserver-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `McpServerClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
@@ -1055,6 +1128,14 @@ Session log POST shall return RFC 7807 ProblemDetails on body-binding or validat
 Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
+
+## FR-SUPPORT-010E Stateless session lifecycle endpoints
+
+The session-log API SHALL expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
+
+## FR-SUPPORT-010F Additive partial session-log submits
+
+Whole-session submit SHALL merge additively: omitted session and turn fields never overwrite previously persisted values.
 
 ## FR-TEST-002 FR-TEST-002
 

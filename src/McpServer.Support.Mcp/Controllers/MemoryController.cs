@@ -13,11 +13,15 @@ namespace McpServer.Support.Mcp.Controllers;
 public sealed class MemoryController : ControllerBase
 {
     private readonly IMemoryService _memoryService;
+    private readonly ITransactionGatedMemoryService? _memoryMutations;
 
     /// <summary>Initializes a new instance of the <see cref="MemoryController"/> class.</summary>
-    public MemoryController(IMemoryService memoryService)
+    public MemoryController(
+        IMemoryService memoryService,
+        ITransactionGatedMemoryService? memoryMutations = null)
     {
         _memoryService = memoryService ?? throw new ArgumentNullException(nameof(memoryService));
+        _memoryMutations = memoryMutations;
     }
 
     /// <summary>Lists effective memories visible to the active workspace.</summary>
@@ -60,7 +64,9 @@ public sealed class MemoryController : ControllerBase
         if (request is null)
             return BadRequest(new MemoryMutationResult(false, "Request body is required.", FailureKind: MemoryMutationFailureKind.Validation));
 
-        var result = await _memoryService.AddAsync(request, cancellationToken).ConfigureAwait(false);
+        var result = _memoryMutations is null
+            ? await _memoryService.AddAsync(request, cancellationToken).ConfigureAwait(false)
+            : await _memoryMutations.AddAsync(request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return ToMutationFailureResult(result);
 
@@ -78,7 +84,9 @@ public sealed class MemoryController : ControllerBase
         if (request is null)
             return BadRequest(new MemoryMutationResult(false, "Request body is required.", FailureKind: MemoryMutationFailureKind.Validation));
 
-        var result = await _memoryService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
+        var result = _memoryMutations is null
+            ? await _memoryService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false)
+            : await _memoryMutations.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return ToMutationFailureResult(result);
 
@@ -89,7 +97,9 @@ public sealed class MemoryController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<MemoryMutationResult>> RemoveAsync(string id, CancellationToken cancellationToken)
     {
-        var result = await _memoryService.RemoveAsync(id, cancellationToken).ConfigureAwait(false);
+        var result = _memoryMutations is null
+            ? await _memoryService.RemoveAsync(id, cancellationToken).ConfigureAwait(false)
+            : await _memoryMutations.RemoveAsync(id, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return ToMutationFailureResult(result);
 

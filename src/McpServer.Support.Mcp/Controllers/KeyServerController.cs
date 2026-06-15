@@ -70,6 +70,19 @@ public sealed class KeyServerController : ControllerBase
         return response.Success ? Ok(response) : BadRequest(response);
     }
 
+    /// <summary>Gets a filtered public traceability report for signed manifests.</summary>
+    /// <param name="request">Report filters and limit.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Filtered manifest traceability report.</returns>
+    [HttpGet("manifests/report")]
+    public async Task<ActionResult<TransactionManifestTraceReport>> GetManifestReportAsync(
+        [FromQuery] TransactionManifestTraceReportRequest request,
+        CancellationToken cancellationToken)
+    {
+        var report = await _manifestService.GetManifestReportAsync(request, cancellationToken).ConfigureAwait(false);
+        return Ok(report);
+    }
+
     /// <summary>Gets persisted public trace metadata for a signed manifest.</summary>
     /// <param name="transactionId">Transaction identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>

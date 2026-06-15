@@ -225,7 +225,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
     private readonly IOptionsMonitor<TurnTransactionOptions> _options;
     private readonly IKeyServerPartyRegistry _partyRegistry;
     private readonly IKeyServerManifestService _keyServer;
-    private readonly ISubscriberCommitService _subscriber;
+    private readonly ITransactionPubSub _transactionPubSub;
     private readonly IDiffgramBuilder _diffgramBuilder;
     private readonly ITransactionDegradedModePolicy _degradedModePolicy;
     private readonly ITransactionAuditWriter _auditWriter;
@@ -238,7 +238,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
     /// <param name="options">Turn transaction options.</param>
     /// <param name="partyRegistry">Keyserver party registry.</param>
     /// <param name="keyServer">Keyserver manifest service.</param>
-    /// <param name="subscriber">Subscriber commit service.</param>
+    /// <param name="transactionPubSub">Transaction pub-sub delivery seam.</param>
     /// <param name="diffgramBuilder">Diffgram builder.</param>
     /// <param name="degradedModePolicy">Degraded-mode policy.</param>
     /// <param name="auditWriter">Transaction audit writer.</param>
@@ -247,7 +247,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
         IOptionsMonitor<TurnTransactionOptions> options,
         IKeyServerPartyRegistry partyRegistry,
         IKeyServerManifestService keyServer,
-        ISubscriberCommitService subscriber,
+        ITransactionPubSub transactionPubSub,
         IDiffgramBuilder diffgramBuilder,
         ITransactionDegradedModePolicy degradedModePolicy,
         ITransactionAuditWriter auditWriter,
@@ -256,7 +256,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
         _options = options;
         _partyRegistry = partyRegistry;
         _keyServer = keyServer;
-        _subscriber = subscriber;
+        _transactionPubSub = transactionPubSub;
         _diffgramBuilder = diffgramBuilder;
         _degradedModePolicy = degradedModePolicy;
         _auditWriter = auditWriter;
@@ -331,10 +331,18 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
 
         if (!mutationResult.Success)
         {
-            await _subscriber.AbortTransactionAsync(
+            await _transactionPubSub.PublishAbortAsync(
                 transactionId,
                 new TransactionAbortRequest { Reason = TransactionFailureReason.Aborted, Actor = "TurnTransactionCoordinator" },
                 cancellationToken).ConfigureAwait(false);
+            var rollback = await RollbackMutationAsync(
+                    transactionId,
+                    mutationResult,
+                    TransactionFailureReason.Aborted,
+                    cancellationToken)
+                .ConfigureAwait(false);
+            await CancelPendingCommitAfterRollbackAsync(transactionId, rollback, cancellationToken)
+                .ConfigureAwait(false);
             var result = new TurnTransactionResult
             {
                 TransactionId = transactionId,
@@ -344,6 +352,9 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
                 MutationResult = mutationResult,
                 Degraded = GetStatus().Degraded,
                 Message = mutationResult.Error,
+                RollbackAttempted = rollback.Attempted,
+                RollbackSucceeded = rollback.Succeeded,
+                RollbackError = rollback.Error,
             };
             RecordStatus(result);
             _auditWriter.Record("transaction_aborted", transactionId, TransactionFailureReason.Aborted, mutationResult.Error);
@@ -381,7 +392,22 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
             return result;
         }
 
-        return Failure(transactionId, commit.Reason, "rejected", mutationApplied: true, mutationResult, "Subscriber commit failed.");
+        var commitRollback = await RollbackMutationAsync(
+                transactionId,
+                mutationResult,
+                commit.Reason,
+                cancellationToken)
+            .ConfigureAwait(false);
+        await CancelPendingCommitAfterRollbackAsync(transactionId, commitRollback, cancellationToken)
+            .ConfigureAwait(false);
+        return Failure(
+            transactionId,
+            commit.Reason,
+            "rejected",
+            mutationApplied: true,
+            mutationResult,
+            "Subscriber commit failed.",
+            commitRollback);
     }
 
     /// <inheritdoc />
@@ -406,7 +432,8 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
         string defaultStatus,
         bool mutationApplied,
         TurnMutationResult? mutationResult = null,
-        string? message = null)
+        string? message = null,
+        TransactionRollbackResult rollback = default)
     {
         var degraded = _degradedModePolicy.ShouldEnterDegradedMode(reason);
         var result = new TurnTransactionResult
@@ -418,10 +445,67 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
             MutationResult = mutationResult,
             Degraded = degraded,
             Message = message,
+            RollbackAttempted = rollback.Attempted,
+            RollbackSucceeded = rollback.Succeeded,
+            RollbackError = rollback.Error,
         };
         RecordStatus(result);
         _auditWriter.Record(degraded ? "transaction_degraded" : "diffgram_rejected", transactionId, reason, message);
         return result;
+    }
+
+    private async Task<TransactionRollbackResult> RollbackMutationAsync(
+        string transactionId,
+        TurnMutationResult mutationResult,
+        TransactionFailureReason reason,
+        CancellationToken cancellationToken)
+    {
+        if (mutationResult.RollbackAsync is null)
+            return default;
+
+        try
+        {
+            await mutationResult.RollbackAsync(cancellationToken).ConfigureAwait(false);
+            _auditWriter.Record("transaction_rollback_completed", transactionId, reason, "Mutation compensation completed.");
+            return new TransactionRollbackResult(true, true, null);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            _auditWriter.Record("transaction_rollback_failed", transactionId, reason, ex.Message);
+            return new TransactionRollbackResult(true, false, ex.Message);
+        }
+    }
+
+    private async Task CancelPendingCommitAfterRollbackAsync(
+        string transactionId,
+        TransactionRollbackResult rollback,
+        CancellationToken cancellationToken)
+    {
+        if (!rollback.Succeeded ||
+            _transactionPubSub is not ITransactionPubSubCompensation compensation)
+            return;
+
+        try
+        {
+            await compensation.CancelPendingCommitAsync(
+                    transactionId,
+                    TransactionFailureReason.Aborted,
+                    cancellationToken)
+                .ConfigureAwait(false);
+            _auditWriter.Record(
+                "transaction_pending_commit_canceled",
+                transactionId,
+                TransactionFailureReason.Aborted,
+                "Pending commit handoff canceled after rollback compensation.");
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            _auditWriter.Record(
+                "transaction_pending_commit_cancel_failed",
+                transactionId,
+                TransactionFailureReason.Aborted,
+                ex.Message);
+        }
     }
 
     private async Task<TransactionManifestSignResponse> SignManifestAsync(
@@ -469,7 +553,7 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
 
         try
         {
-            return await _subscriber.CommitDiffgramAsync(request, timeout.Token).ConfigureAwait(false);
+            return await _transactionPubSub.PublishCommitAsync(request, timeout.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
@@ -588,4 +672,6 @@ public sealed class TurnTransactionCoordinator : ITurnTransactionCoordinator
 
     private static bool IsActive(string? status)
         => string.IsNullOrWhiteSpace(status) || string.Equals(status, "active", StringComparison.OrdinalIgnoreCase);
+
+    private readonly record struct TransactionRollbackResult(bool Attempted, bool Succeeded, string? Error);
 }

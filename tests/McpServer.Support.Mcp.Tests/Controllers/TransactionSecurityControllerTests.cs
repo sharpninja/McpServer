@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
@@ -95,6 +96,41 @@ public sealed class TransactionSecurityControllerTests
         Assert.Equal(signed.Signature.Value, trace.SignatureValue);
         Assert.Equal("signed", trace.Status);
         Assert.False(string.IsNullOrWhiteSpace(trace.ManifestHashSha256));
+    }
+
+    /// <summary>Manifest trace reports expose filtered ledger records without private key material.</summary>
+    [Fact]
+    public async Task GetManifestReport_AfterSign_ReturnsFilteredTraceReport()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        await SignAsync(services.KeyServer, "txn-controller-report-1", sequence: 26, nonce: "nonce-controller-report-1")
+            .ConfigureAwait(true);
+        await SignAsync(services.KeyServer, "txn-controller-report-2", sequence: 27, nonce: "nonce-controller-report-2")
+            .ConfigureAwait(true);
+
+        var result = await controller.GetManifestReportAsync(
+            new TransactionManifestTraceReportRequest
+            {
+                PublisherPartyId = "publisher-1",
+                SubscriberPartyId = "subscriber-1",
+                Limit = 1,
+            },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var report = Assert.IsType<TransactionManifestTraceReport>(ok.Value);
+        var trace = Assert.Single(report.Records);
+        var reportJson = JsonSerializer.Serialize(report);
+        Assert.Equal("publisher-1", report.PublisherPartyId);
+        Assert.Equal("subscriber-1", report.SubscriberPartyId);
+        Assert.Equal(1, report.Limit);
+        Assert.Equal(2, report.TotalCount);
+        Assert.Equal(1, report.ReturnedCount);
+        Assert.Equal("txn-controller-report-1", trace.TransactionId);
+        Assert.Equal("signed", trace.Status);
+        Assert.DoesNotContain("PRIVATE KEY", reportJson, StringComparison.Ordinal);
     }
 
     /// <summary>Keyserver signing rejects a nonce that was already signed for the publisher/subscriber pair.</summary>
@@ -302,6 +338,55 @@ public sealed class TransactionSecurityControllerTests
         Assert.Equal("committed", statusResponse.Status);
     }
 
+    /// <summary>Subscriber status reports pending while manifest verification is in flight.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WhileVerificationInFlight_StatusReturnsPendingThenCommitted()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-pending", sequence: 33, nonce: "nonce-pending")
+            .ConfigureAwait(true);
+        var verifier = new BlockingManifestService(services.KeyServer);
+        using var subscriber = new InMemorySubscriberCommitService(
+            verifier,
+            new TransactionManifestCanonicalizer(),
+            Monitor(new SubscriberOptions { PartyId = "subscriber-1" }));
+        var controller = new SubscriberController(subscriber);
+
+        var commitTask = controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None);
+        await verifier.WaitForVerifyAsync().ConfigureAwait(true);
+
+        var pending = await controller.GetTransactionStatusAsync("txn-pending", CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var pendingOk = Assert.IsType<OkObjectResult>(pending.Result);
+        var pendingResponse = Assert.IsType<TransactionStatusResponse>(pendingOk.Value);
+        Assert.Equal("pending", pendingResponse.Status);
+        Assert.Equal(TransactionFailureReason.None, pendingResponse.Reason);
+        Assert.Null(pendingResponse.CommittedAtUtc);
+
+        var duplicate = await controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None)
+            .ConfigureAwait(true);
+        var duplicateOk = Assert.IsType<OkObjectResult>(duplicate.Result);
+        var duplicateResponse = Assert.IsType<DiffgramCommitResponse>(duplicateOk.Value);
+        Assert.Equal("pending", duplicateResponse.Status);
+        Assert.Equal(TransactionFailureReason.None, duplicateResponse.Reason);
+
+        verifier.ReleaseVerification();
+        var commit = await commitTask.ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(ok.Value);
+        Assert.Equal("committed", response.Status);
+
+        var committed = await controller.GetTransactionStatusAsync("txn-pending", CancellationToken.None)
+            .ConfigureAwait(true);
+        var committedOk = Assert.IsType<OkObjectResult>(committed.Result);
+        var committedResponse = Assert.IsType<TransactionStatusResponse>(committedOk.Value);
+        Assert.Equal("committed", committedResponse.Status);
+        Assert.NotNull(committedResponse.CommittedAtUtc);
+    }
+
     /// <summary>Subscriber commit is idempotent for the same transaction and manifest payload.</summary>
     [Fact]
     public async Task CommitDiffgram_WithDuplicatePayload_ReturnsCommitted()
@@ -501,5 +586,49 @@ public sealed class TransactionSecurityControllerTests
         {
             KeyServer.Dispose();
         }
+    }
+
+    private sealed class BlockingManifestService : IKeyServerManifestService
+    {
+        private readonly IKeyServerManifestService _inner;
+        private readonly TaskCompletionSource _verifyStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        private readonly TaskCompletionSource _allowVerify = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public BlockingManifestService(IKeyServerManifestService inner)
+        {
+            _inner = inner;
+        }
+
+        public Task<TransactionManifestSignResponse> SignManifestAsync(
+            TransactionManifestSignRequest request,
+            CancellationToken cancellationToken = default)
+            => _inner.SignManifestAsync(request, cancellationToken);
+
+        public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
+            TransactionManifestVerifyRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            _verifyStarted.TrySetResult();
+            await _allowVerify.Task.WaitAsync(cancellationToken).ConfigureAwait(false);
+            return await _inner.VerifyManifestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public Task<TransactionManifestTraceRecord?> GetManifestAsync(
+            string transactionId,
+            CancellationToken cancellationToken = default)
+            => _inner.GetManifestAsync(transactionId, cancellationToken);
+
+        public Task<TransactionManifestTraceReport> GetManifestReportAsync(
+            TransactionManifestTraceReportRequest request,
+            CancellationToken cancellationToken = default)
+            => _inner.GetManifestReportAsync(request, cancellationToken);
+
+        public async Task WaitForVerifyAsync()
+        {
+            await _verifyStarted.Task.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+        }
+
+        public void ReleaseVerification()
+            => _allowVerify.TrySetResult();
     }
 }

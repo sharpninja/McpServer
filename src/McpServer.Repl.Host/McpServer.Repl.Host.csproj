@@ -25,6 +25,7 @@
     <PackageReference Include="Spectre.Console" />
     <PackageReference Include="IdentityModel" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
@@ -33,5 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\McpServer.Repl.Core\McpServer.Repl.Core.csproj" />
     <ProjectReference Include="..\McpServer.Client\McpServer.Client.csproj" />
+    <ProjectReference Include="..\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
   </ItemGroup>
 </Project>

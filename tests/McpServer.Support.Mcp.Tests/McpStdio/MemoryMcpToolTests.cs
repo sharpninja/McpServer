@@ -133,6 +133,39 @@ public sealed class MemoryMcpToolTests : IDisposable
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>TEST-MCP-161: memory_add uses the transaction-gated mutation service when registered.</summary>
+    [Fact]
+    public async Task MemoryAdd_WhenTransactionGateRegistered_DelegatesToTransactionGate()
+    {
+        var memoryMutations = Substitute.For<ITransactionGatedMemoryService>();
+        memoryMutations.AddAsync(
+                Arg.Any<MemoryAddRequest>(),
+                Arg.Any<CancellationToken>())
+            .Returns(new MemoryMutationResult(true, Memory: CreateMemory("MEMORY-AGENT-001", MemoryScope.Global)));
+        var tools = CreateTools(_db, _memoryService, memoryMutations);
+
+        var json = await tools.MemoryAdd(
+            @"F:\GitHub\McpServer",
+            "agent",
+            "Preserve exact PowerShell quoting.",
+            "Global",
+            "MEMORY-AGENT-001",
+            "Codex").ConfigureAwait(true);
+        var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
+
+        Assert.NotNull(result);
+        Assert.True(result!.Success);
+        await memoryMutations.Received(1).AddAsync(
+            Arg.Is<MemoryAddRequest>(request => request != null
+                && request.Id == "MEMORY-AGENT-001"
+                && request.Category == "agent"
+                && request.Scope == MemoryScope.Global
+                && request.Text == "Preserve exact PowerShell quoting."
+                && request.UpdatedBy == "Codex"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await _memoryService.DidNotReceiveWithAnyArgs().AddAsync(default!, default).ConfigureAwait(true);
+    }
+
     /// <summary>TEST-MCP-MEMORY-003: memory_update forwards only supplied replacement fields.</summary>
     [Fact]
     public async Task MemoryUpdate_DelegatesToMemoryService()
@@ -164,6 +197,34 @@ public sealed class MemoryMcpToolTests : IDisposable
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>TEST-MCP-TXN-004: memory_update uses the transaction-gated mutation service when registered.</summary>
+    [Fact]
+    public async Task MemoryUpdate_WhenTransactionGateRegistered_DelegatesToTransactionGate()
+    {
+        var memoryMutations = Substitute.For<ITransactionGatedMemoryService>();
+        memoryMutations.UpdateAsync(
+                "MEMORY-AGENT-001",
+                Arg.Any<MemoryUpdateRequest>(),
+                Arg.Any<CancellationToken>())
+            .Returns(new MemoryMutationResult(true, Memory: CreateMemory("MEMORY-AGENT-001", MemoryScope.Workspace)));
+        var tools = CreateTools(_db, _memoryService, memoryMutations);
+
+        var json = await tools.MemoryUpdate(
+            @"F:\GitHub\McpServer",
+            "MEMORY-AGENT-001",
+            text: "Use supported wrappers for MCP state.").ConfigureAwait(true);
+        var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
+
+        Assert.NotNull(result);
+        Assert.True(result!.Success);
+        await memoryMutations.Received(1).UpdateAsync(
+            "MEMORY-AGENT-001",
+            Arg.Is<MemoryUpdateRequest>(request => request != null
+                && request.Text == "Use supported wrappers for MCP state."),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await _memoryService.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, default).ConfigureAwait(true);
+    }
+
     /// <summary>TEST-MCP-MEMORY-003: memory_remove forwards the delete request and returns mutation state.</summary>
     [Fact]
     public async Task MemoryRemove_DelegatesToMemoryService()
@@ -177,6 +238,24 @@ public sealed class MemoryMcpToolTests : IDisposable
         Assert.NotNull(result);
         Assert.True(result!.Success);
         await _memoryService.Received(1).RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>TEST-MCP-TXN-004: memory_remove uses the transaction-gated mutation service when registered.</summary>
+    [Fact]
+    public async Task MemoryRemove_WhenTransactionGateRegistered_DelegatesToTransactionGate()
+    {
+        var memoryMutations = Substitute.For<ITransactionGatedMemoryService>();
+        memoryMutations.RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
+            .Returns(new MemoryMutationResult(true));
+        var tools = CreateTools(_db, _memoryService, memoryMutations);
+
+        var json = await tools.MemoryRemove(@"F:\GitHub\McpServer", "MEMORY-AGENT-001").ConfigureAwait(true);
+        var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
+
+        Assert.NotNull(result);
+        Assert.True(result!.Success);
+        await memoryMutations.Received(1).RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await _memoryService.DidNotReceiveWithAnyArgs().RemoveAsync(default!, default).ConfigureAwait(true);
     }
 
     /// <summary>Creates a memory item fixture with deterministic timestamps.</summary>
@@ -195,7 +274,10 @@ public sealed class MemoryMcpToolTests : IDisposable
         };
 
     /// <summary>Builds the shared <see cref="FwhMcpTools"/> fixture for memory tool tests.</summary>
-    private static FwhMcpTools CreateTools(McpDbContext db, IMemoryService memoryService)
+    private static FwhMcpTools CreateTools(
+        McpDbContext db,
+        IMemoryService memoryService,
+        ITransactionGatedMemoryService? memoryMutations = null)
     {
         var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = "." });
         var workspaceContext = new WorkspaceContext { WorkspacePath = "." };
@@ -255,6 +337,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             todoUpdateService,
             Substitute.For<ITodoExecutionService>(),
             Substitute.For<IPromptTemplateService>(),
-            NullLogger<FwhMcpTools>.Instance);
+            NullLogger<FwhMcpTools>.Instance,
+            memoryMutations);
     }
 }

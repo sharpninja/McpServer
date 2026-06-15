@@ -71,7 +71,9 @@ public static class ServiceCollectionExtensions
             new RequirementsWorkflow(sp.GetRequiredService<McpServerClient>().Requirements));
 
         services.TryAddTransient<IGenericClientPassthrough>(static sp =>
-            new GenericClientPassthrough(sp.GetRequiredService<McpServerClient>()));
+            new GenericClientPassthrough(
+                sp.GetRequiredService<McpServerClient>(),
+                sp.GetService<IClientMutationPolicy>()));
 
         services.TryAddTransient<ISessionLogClientAdapter>(static sp =>
             new SessionLogClientAdapter(sp.GetRequiredService<McpServerClient>().SessionLog));

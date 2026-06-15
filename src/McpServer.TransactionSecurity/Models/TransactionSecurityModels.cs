@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace McpServer.TransactionSecurity.Models;
@@ -310,6 +311,78 @@ public sealed class TransactionManifestTraceRecord
     public DateTimeOffset CreatedAtUtc { get; set; }
 }
 
+/// <summary>Filter request for a transaction manifest traceability report. FR-MCP-120.</summary>
+public sealed class TransactionManifestTraceReportRequest
+{
+    /// <summary>Optional publisher party filter.</summary>
+    [JsonPropertyName("publisherPartyId")]
+    public string? PublisherPartyId { get; set; }
+
+    /// <summary>Optional subscriber party filter.</summary>
+    [JsonPropertyName("subscriberPartyId")]
+    public string? SubscriberPartyId { get; set; }
+
+    /// <summary>Optional trace status filter, such as signed.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional inclusive lower created-at timestamp filter.</summary>
+    [JsonPropertyName("fromUtc")]
+    public DateTimeOffset? FromUtc { get; set; }
+
+    /// <summary>Optional inclusive upper created-at timestamp filter.</summary>
+    [JsonPropertyName("toUtc")]
+    public DateTimeOffset? ToUtc { get; set; }
+
+    /// <summary>Maximum number of trace records to return.</summary>
+    [JsonPropertyName("limit")]
+    public int? Limit { get; set; }
+}
+
+/// <summary>Traceability report over signed transaction manifest ledger records. FR-MCP-120.</summary>
+public sealed class TransactionManifestTraceReport
+{
+    /// <summary>UTC timestamp when the report was generated.</summary>
+    [JsonPropertyName("generatedAtUtc")]
+    public DateTimeOffset GeneratedAtUtc { get; set; }
+
+    /// <summary>Publisher party filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("publisherPartyId")]
+    public string? PublisherPartyId { get; set; }
+
+    /// <summary>Subscriber party filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("subscriberPartyId")]
+    public string? SubscriberPartyId { get; set; }
+
+    /// <summary>Status filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Inclusive lower created-at timestamp filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("fromUtc")]
+    public DateTimeOffset? FromUtc { get; set; }
+
+    /// <summary>Inclusive upper created-at timestamp filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("toUtc")]
+    public DateTimeOffset? ToUtc { get; set; }
+
+    /// <summary>Maximum number of records requested after filtering.</summary>
+    [JsonPropertyName("limit")]
+    public int Limit { get; set; }
+
+    /// <summary>Total number of records matching the filters before the limit is applied.</summary>
+    [JsonPropertyName("totalCount")]
+    public int TotalCount { get; set; }
+
+    /// <summary>Number of records returned in this report.</summary>
+    [JsonPropertyName("returnedCount")]
+    public int ReturnedCount { get; set; }
+
+    /// <summary>Trace records included in the report.</summary>
+    [JsonPropertyName("records")]
+    public List<TransactionManifestTraceRecord> Records { get; set; } = [];
+}
+
 /// <summary>Canonical signed manifest that accompanies an encrypted transaction diffgram. FR-MCP-120.</summary>
 public sealed class TransactionManifestDto
 {
@@ -490,6 +563,70 @@ public sealed class TransactionAbortResponse
     public DateTimeOffset AbortedAtUtc { get; set; }
 }
 
+/// <summary>Broker envelope for an external transaction pub-sub topic. FR-MCP-121.</summary>
+public sealed class TransactionPubSubEnvelope
+{
+    /// <summary>Deterministic operation identifier for the broker envelope.</summary>
+    [JsonPropertyName("operationId")]
+    public string OperationId { get; set; } = string.Empty;
+
+    /// <summary>Stable transaction identifier.</summary>
+    [JsonPropertyName("transactionId")]
+    public string TransactionId { get; set; } = string.Empty;
+
+    /// <summary>Envelope kind, such as commit or abort.</summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; set; } = string.Empty;
+
+    /// <summary>Logical broker topic.</summary>
+    [JsonPropertyName("topic")]
+    public string Topic { get; set; } = string.Empty;
+
+    /// <summary>Target subscriber identifier.</summary>
+    [JsonPropertyName("subscriberId")]
+    public string SubscriberId { get; set; } = string.Empty;
+
+    /// <summary>Serialized request body for the subscriber operation.</summary>
+    [JsonPropertyName("requestJson")]
+    public string RequestJson { get; set; } = string.Empty;
+
+    /// <summary>UTC timestamp when the broker envelope was created.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset CreatedAtUtc { get; set; }
+}
+
+/// <summary>Broker acknowledgement for an external transaction pub-sub topic. FR-MCP-121.</summary>
+public sealed class TransactionPubSubAcknowledgement
+{
+    /// <summary>Deterministic operation identifier for the broker envelope.</summary>
+    [JsonPropertyName("operationId")]
+    public string OperationId { get; set; } = string.Empty;
+
+    /// <summary>Target subscriber identifier.</summary>
+    [JsonPropertyName("subscriberId")]
+    public string SubscriberId { get; set; } = string.Empty;
+
+    /// <summary>Envelope kind, such as commit or abort.</summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; set; } = string.Empty;
+
+    /// <summary>Broker acknowledgement status.</summary>
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    /// <summary>Structured acknowledgement reason.</summary>
+    [JsonPropertyName("reason")]
+    public TransactionFailureReason Reason { get; set; }
+
+    /// <summary>Serialized subscriber response body when available.</summary>
+    [JsonPropertyName("responseJson")]
+    public string? ResponseJson { get; set; }
+
+    /// <summary>UTC timestamp when the broker acknowledged the envelope.</summary>
+    [JsonPropertyName("acknowledgedAtUtc")]
+    public DateTimeOffset? AcknowledgedAtUtc { get; set; }
+}
+
 /// <summary>Request metadata for a turn transaction coordinator execution. FR-MCP-120.</summary>
 public sealed class TurnTransactionRequest
 {
@@ -540,6 +677,13 @@ public sealed class TurnMutationResult
     /// <summary>Optional failure message.</summary>
     [JsonPropertyName("error")]
     public string? Error { get; set; }
+
+    /// <summary>
+    /// Optional compensation callback that rolls back mutation-side effects when the
+    /// transaction cannot be committed after the mutation has run. FR-MCP-120, FR-MCP-121.
+    /// </summary>
+    [JsonIgnore]
+    public Func<CancellationToken, Task>? RollbackAsync { get; set; }
 }
 
 /// <summary>Coordinator result for a turn transaction attempt. FR-MCP-120, FR-MCP-121.</summary>
@@ -580,6 +724,18 @@ public sealed class TurnTransactionResult
     /// <summary>Optional mutation callback result.</summary>
     [JsonPropertyName("mutationResult")]
     public TurnMutationResult? MutationResult { get; set; }
+
+    /// <summary>Whether rollback compensation was invoked after mutation execution. FR-MCP-120.</summary>
+    [JsonPropertyName("rollbackAttempted")]
+    public bool RollbackAttempted { get; set; }
+
+    /// <summary>Whether rollback compensation completed successfully. FR-MCP-120.</summary>
+    [JsonPropertyName("rollbackSucceeded")]
+    public bool RollbackSucceeded { get; set; }
+
+    /// <summary>Optional rollback compensation failure message. FR-MCP-120.</summary>
+    [JsonPropertyName("rollbackError")]
+    public string? RollbackError { get; set; }
 }
 
 /// <summary>Current turn transaction coordinator status. FR-MCP-121.</summary>

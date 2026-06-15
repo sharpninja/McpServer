@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace McpServer.Client.Models;
@@ -336,6 +337,84 @@ public sealed class TransactionManifestTraceRecord
     /// <summary>UTC timestamp when the trace record was created.</summary>
     [JsonPropertyName("createdAtUtc")]
     public DateTimeOffset CreatedAtUtc { get; set; }
+}
+
+/// <summary>
+/// Filter request for a transaction manifest traceability report.
+/// FR-MCP-120, FR-MCP-121.
+/// </summary>
+public sealed class TransactionManifestTraceReportRequest
+{
+    /// <summary>Optional publisher party filter.</summary>
+    [JsonPropertyName("publisherPartyId")]
+    public string? PublisherPartyId { get; set; }
+
+    /// <summary>Optional subscriber party filter.</summary>
+    [JsonPropertyName("subscriberPartyId")]
+    public string? SubscriberPartyId { get; set; }
+
+    /// <summary>Optional trace status filter, such as <c>signed</c>.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional inclusive lower created-at timestamp filter.</summary>
+    [JsonPropertyName("fromUtc")]
+    public DateTimeOffset? FromUtc { get; set; }
+
+    /// <summary>Optional inclusive upper created-at timestamp filter.</summary>
+    [JsonPropertyName("toUtc")]
+    public DateTimeOffset? ToUtc { get; set; }
+
+    /// <summary>Maximum number of trace records to return.</summary>
+    [JsonPropertyName("limit")]
+    public int? Limit { get; set; }
+}
+
+/// <summary>
+/// Traceability report over signed transaction manifest ledger records.
+/// FR-MCP-120, FR-MCP-121.
+/// </summary>
+public sealed class TransactionManifestTraceReport
+{
+    /// <summary>UTC timestamp when the report was generated.</summary>
+    [JsonPropertyName("generatedAtUtc")]
+    public DateTimeOffset GeneratedAtUtc { get; set; }
+
+    /// <summary>Publisher party filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("publisherPartyId")]
+    public string? PublisherPartyId { get; set; }
+
+    /// <summary>Subscriber party filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("subscriberPartyId")]
+    public string? SubscriberPartyId { get; set; }
+
+    /// <summary>Status filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Inclusive lower created-at timestamp filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("fromUtc")]
+    public DateTimeOffset? FromUtc { get; set; }
+
+    /// <summary>Inclusive upper created-at timestamp filter applied to the report, when supplied.</summary>
+    [JsonPropertyName("toUtc")]
+    public DateTimeOffset? ToUtc { get; set; }
+
+    /// <summary>Maximum number of records requested after filtering.</summary>
+    [JsonPropertyName("limit")]
+    public int Limit { get; set; }
+
+    /// <summary>Total number of records matching the filters before the limit is applied.</summary>
+    [JsonPropertyName("totalCount")]
+    public int TotalCount { get; set; }
+
+    /// <summary>Number of records returned in this report.</summary>
+    [JsonPropertyName("returnedCount")]
+    public int ReturnedCount { get; set; }
+
+    /// <summary>Trace records included in the report.</summary>
+    [JsonPropertyName("records")]
+    public List<TransactionManifestTraceRecord> Records { get; set; } = [];
 }
 
 /// <summary>

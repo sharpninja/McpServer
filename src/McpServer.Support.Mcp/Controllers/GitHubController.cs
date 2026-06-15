@@ -228,7 +228,15 @@ public sealed class GitHubController : ControllerBase
         if (workspacePath is null)
             return BadRequest(new { error = "Workspace context is required for GitHub auth updates." });
 
-        await _tokenStore.UpsertAsync(workspacePath, request.AccessToken, request.ExpiresAtUtc, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await _tokenStore.UpsertAsync(workspacePath, request.AccessToken, request.ExpiresAtUtc, cancellationToken).ConfigureAwait(false);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { error = ex.Message });
+        }
+
         await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, "auth-token", cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true });
     }
@@ -243,7 +251,16 @@ public sealed class GitHubController : ControllerBase
         if (workspacePath is null)
             return BadRequest(new { error = "Workspace context is required for GitHub auth updates." });
 
-        var removed = await _tokenStore.DeleteAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+        bool removed;
+        try
+        {
+            removed = await _tokenStore.DeleteAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { error = ex.Message });
+        }
+
         if (removed)
             await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, "auth-token", cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true, removed });

@@ -1,7 +1,11 @@
 using System.Globalization;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -14,6 +18,9 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/federation")]
 public sealed class FederationController : ControllerBase
 {
+    private const string DeferredFederationMutationMessage =
+        "Federation control-plane mutations are not transaction compensated while required turn transactions are active.";
+
     private readonly FederationRegistry _registry;
     private readonly TunnelRegistry _tunnelRegistry;
     private readonly IFederationPushService? _pushService;
@@ -21,6 +28,8 @@ public sealed class FederationController : ControllerBase
     private readonly FederationStateAdapterRegistry? _adapterRegistry;
     private readonly IFederationEnvelopeSigner? _envelopeSigner;
     private readonly IFederationOperationApplyService? _operationApplyService;
+    private readonly ITurnTransactionCoordinator? _transactionCoordinator;
+    private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
 
     /// <summary>Initializes a new instance of the <see cref="FederationController"/> class.</summary>
     /// <param name="registry">Federation target registry.</param>
@@ -30,6 +39,8 @@ public sealed class FederationController : ControllerBase
     /// <param name="adapterRegistry">Optional state adapter registry.</param>
     /// <param name="envelopeSigner">Optional signed envelope verifier.</param>
     /// <param name="operationApplyService">Optional operation apply service used by signed hub intake.</param>
+    /// <param name="transactionCoordinator">Optional turn transaction coordinator used to fail closed uncompensated federation control-plane mutations.</param>
+    /// <param name="transactionOptions">Optional turn transaction options.</param>
     public FederationController(
         FederationRegistry registry,
         TunnelRegistry tunnelRegistry,
@@ -37,7 +48,9 @@ public sealed class FederationController : ControllerBase
         IFederationTopologyService? topologyService = null,
         FederationStateAdapterRegistry? adapterRegistry = null,
         IFederationEnvelopeSigner? envelopeSigner = null,
-        IFederationOperationApplyService? operationApplyService = null)
+        IFederationOperationApplyService? operationApplyService = null,
+        ITurnTransactionCoordinator? transactionCoordinator = null,
+        IOptions<TurnTransactionOptions>? transactionOptions = null)
     {
         _registry = registry;
         _tunnelRegistry = tunnelRegistry;
@@ -46,6 +59,8 @@ public sealed class FederationController : ControllerBase
         _adapterRegistry = adapterRegistry;
         _envelopeSigner = envelopeSigner;
         _operationApplyService = operationApplyService;
+        _transactionCoordinator = transactionCoordinator;
+        _transactionOptions = transactionOptions;
     }
 
     /// <summary>Get the current federation status including all targets and workspace routes.</summary>
@@ -63,6 +78,9 @@ public sealed class FederationController : ControllerBase
         [FromBody] FederationEnrollmentRequest request,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
@@ -81,6 +99,9 @@ public sealed class FederationController : ControllerBase
         [FromBody] FederationHeartbeatRequest request,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
@@ -111,6 +132,9 @@ public sealed class FederationController : ControllerBase
         [FromBody] FederationWorkspaceRegistrationRequest request,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
@@ -142,6 +166,9 @@ public sealed class FederationController : ControllerBase
         [FromBody] FederationOperationRequest request,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
@@ -215,6 +242,9 @@ public sealed class FederationController : ControllerBase
         [FromBody] FederationOperationAckRequest request,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
@@ -265,6 +295,9 @@ public sealed class FederationController : ControllerBase
         [FromBody] FederationConflictResolutionRequest request,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
@@ -307,6 +340,9 @@ public sealed class FederationController : ControllerBase
         [FromBody] FederationSyncAckRequest request,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
@@ -333,6 +369,9 @@ public sealed class FederationController : ControllerBase
     [HttpPost("enable")]
     public ActionResult<FederationStatusResponse> Enable()
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         _registry.SetEnabled(true);
         return Ok(BuildStatus());
     }
@@ -342,6 +381,9 @@ public sealed class FederationController : ControllerBase
     [HttpPost("disable")]
     public ActionResult<FederationStatusResponse> Disable()
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         _registry.SetEnabled(false);
         return Ok(BuildStatus());
     }
@@ -358,6 +400,9 @@ public sealed class FederationController : ControllerBase
     [HttpPost("targets")]
     public ActionResult<FederationTargetInfo> AddTarget([FromBody] FederationTargetOptions options)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (!_registry.TryAddTarget(options, out var error))
             return Conflict(new { error });
 
@@ -371,6 +416,9 @@ public sealed class FederationController : ControllerBase
     [HttpDelete("targets/{name}")]
     public IActionResult RemoveTarget(string name)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (!_registry.TryRemoveTarget(name))
             return NotFound(new { error = $"Federation target '{name}' not found." });
 
@@ -383,6 +431,9 @@ public sealed class FederationController : ControllerBase
     [HttpPost("targets/{name}/set-default")]
     public ActionResult<FederationStatusResponse> SetDefault(string name)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (!_registry.SetDefaultTarget(name))
             return NotFound(new { error = $"Federation target '{name}' not found." });
 
@@ -394,6 +445,9 @@ public sealed class FederationController : ControllerBase
     [HttpDelete("targets/default")]
     public ActionResult<FederationStatusResponse> ClearDefault()
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         _registry.SetDefaultTarget(null);
         return Ok(BuildStatus());
     }
@@ -404,6 +458,9 @@ public sealed class FederationController : ControllerBase
     [HttpPost("routes")]
     public ActionResult<IReadOnlyList<WorkspaceRouteInfo>> AddRoute([FromBody] WorkspaceRouteOptions route)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (!_registry.SetWorkspaceRoute(route.WorkspacePath, route.TargetName))
             return NotFound(new { error = $"Federation target '{route.TargetName}' not found." });
 
@@ -416,6 +473,9 @@ public sealed class FederationController : ControllerBase
     [HttpDelete("routes")]
     public IActionResult RemoveRoute([FromBody] WorkspaceRouteOptions route)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (!_registry.RemoveWorkspaceRoute(route.WorkspacePath))
             return NotFound(new { error = $"No federation route for workspace path '{route.WorkspacePath}'." });
 
@@ -444,6 +504,9 @@ public sealed class FederationController : ControllerBase
         [FromServices] ServerRuntimeInfo serverRuntimeInfo,
         CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (string.IsNullOrWhiteSpace(workspaceName))
             return BadRequest(new { error = "workspaceName query parameter is required." });
 
@@ -474,6 +537,9 @@ public sealed class FederationController : ControllerBase
     [HttpPost("targets/discover-from-tunnels")]
     public async Task<ActionResult<TunnelDiscoveryResult>> DiscoverFromTunnels(CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         var tunnels = await _tunnelRegistry.ListAsync(ct).ConfigureAwait(false);
         var discovered = new List<FederationTargetInfo>();
 
@@ -502,6 +568,9 @@ public sealed class FederationController : ControllerBase
     [HttpPost("push")]
     public async Task<ActionResult<FederationPushResult>> Push([FromBody] FederationPushRequest request, CancellationToken ct)
     {
+        if (ShouldDeferFederationControlMutation(out var transactionError))
+            return Conflict(new { error = transactionError });
+
         if (!_registry.IsEnabled)
             return Conflict(new { error = "Federation is disabled." });
 
@@ -542,6 +611,31 @@ public sealed class FederationController : ControllerBase
 
         return Ok(new FederationPushResult(succeeded, failed, errors));
     }
+
+    private bool ShouldDeferFederationControlMutation(out string error)
+    {
+        error = string.Empty;
+        if (_transactionCoordinator is null)
+            return false;
+
+        var status = _transactionCoordinator.GetStatus();
+        if (status.Degraded)
+        {
+            error = string.IsNullOrWhiteSpace(status.Message)
+                ? "Turn transaction coordinator is degraded."
+                : status.Message;
+            return true;
+        }
+
+        if (!RequiresMutationTransactions(status))
+            return false;
+
+        error = DeferredFederationMutationMessage;
+        return true;
+    }
+
+    private bool RequiresMutationTransactions(TurnTransactionStatusResponse status)
+        => status.Enabled && (_transactionOptions?.Value.RequiredForMutations ?? true);
 
     private FederationStatusResponse BuildStatus()
     {

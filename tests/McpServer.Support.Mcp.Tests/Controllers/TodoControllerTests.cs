@@ -168,6 +168,208 @@ public sealed class TodoControllerTests
     }
 
     /// <summary>
+    /// TEST-MCP-161: Verifies that HTTP TODO requirements analysis returns a
+    /// fail-closed response when the analyzer gate rejects uncompensated side effects.
+    /// </summary>
+    [Fact]
+    public async Task AnalyzeRequirementsAsync_WhenTransactionGateRejects_ReturnsUnprocessableEntity()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var requirementsService = Substitute.For<IRequirementsService>();
+        requirementsService.AnalyzeAsync("TODO-TXN-ANALYZE-001", Arg.Any<CancellationToken>())
+            .Returns(new RequirementsAnalysisResult(
+                false,
+                Error: "TODO requirements analysis is not transaction compensated while required turn transactions are active."));
+
+        var controller = CreateController(todoService, requirementsService: requirementsService);
+        var actionResult = await controller.AnalyzeRequirementsAsync(
+                "TODO-TXN-ANALYZE-001",
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var unprocessable = Assert.IsType<UnprocessableEntityObjectResult>(actionResult.Result);
+        var result = Assert.IsType<RequirementsAnalysisResult>(unprocessable.Value);
+        Assert.False(result.Success);
+        Assert.Contains("not transaction compensated", result.Error, StringComparison.Ordinal);
+        await requirementsService.Received(1)
+            .AnalyzeAsync("TODO-TXN-ANALYZE-001", Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that HTTP TODO update uses the transaction-gated update service when registered.
+    /// </summary>
+    [Fact]
+    public async Task UpdateAsync_WhenTransactionGateRegistered_UsesGatedUpdateService()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        gated.UpdateAsync("TODO-TXN-HTTP-001", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                true,
+                null,
+                new TodoFlatItem
+                {
+                    Id = "TODO-TXN-HTTP-001",
+                    Title = "After",
+                    Section = "Backlog",
+                    Priority = "high",
+                    Done = false,
+                }));
+
+        var controller = CreateController(todoService, todoMutations: gated);
+        var actionResult = await controller.UpdateAsync(
+                "TODO-TXN-HTTP-001",
+                new TodoUpdateRequest { Title = "After" },
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(ok.Value);
+        Assert.True(mutation.Success);
+        await gated.Received(1)
+            .UpdateAsync("TODO-TXN-HTTP-001", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await todoService.DidNotReceive()
+            .UpdateAsync(Arg.Any<string>(), Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that HTTP TODO create uses the transaction-gated mutation service when registered.
+    /// </summary>
+    [Fact]
+    public async Task CreateAsync_WhenTransactionGateRegistered_UsesGatedCreateService()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        gated.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                true,
+                null,
+                new TodoFlatItem
+                {
+                    Id = "TODO-TXN-HTTP-CREATE-001",
+                    Title = "Created",
+                    Section = "Backlog",
+                    Priority = "high",
+                    Done = false,
+                }));
+
+        var controller = CreateController(todoService, todoMutations: gated);
+        var actionResult = await controller.CreateAsync(
+                new TodoCreateRequest
+                {
+                    Id = "TODO-TXN-HTTP-CREATE-001",
+                    Title = "Created",
+                    Section = "Backlog",
+                    Priority = "high",
+                },
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var created = Assert.IsType<CreatedResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(created.Value);
+        Assert.True(mutation.Success);
+        await gated.Received(1)
+            .CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await todoService.DidNotReceive()
+            .CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that HTTP TODO delete uses the transaction-gated mutation service when registered.
+    /// </summary>
+    [Fact]
+    public async Task DeleteAsync_WhenTransactionGateRegistered_UsesGatedDeleteService()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        gated.DeleteAsync("TODO-TXN-HTTP-DELETE-001", Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(true));
+
+        var controller = CreateController(todoService, todoMutations: gated);
+        var actionResult = await controller.DeleteAsync("TODO-TXN-HTTP-DELETE-001", CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(ok.Value);
+        Assert.True(mutation.Success);
+        await gated.Received(1)
+            .DeleteAsync("TODO-TXN-HTTP-DELETE-001", Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await todoService.DidNotReceive()
+            .DeleteAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that HTTP TODO move uses the transaction-gated mutation service when registered.
+    /// </summary>
+    [Fact]
+    public async Task MoveAsync_WhenTransactionGateRegistered_UsesGatedMoveService()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        gated.MoveAsync("TODO-TXN-HTTP-MOVE-001", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                true,
+                null,
+                new TodoFlatItem
+                {
+                    Id = "TODO-TXN-HTTP-MOVE-001",
+                    Title = "Moved",
+                    Section = "Backlog",
+                    Priority = "high",
+                    Done = false,
+                }));
+
+        var controller = CreateController(todoService, todoMutations: gated);
+        var actionResult = await controller.MoveAsync(
+                "TODO-TXN-HTTP-MOVE-001",
+                new TodoMoveRequest { TargetWorkspacePath = @"F:\GitHub\McpServer.Target" },
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(ok.Value);
+        Assert.True(mutation.Success);
+        await gated.Received(1)
+            .MoveAsync("TODO-TXN-HTTP-MOVE-001", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await todoService.DidNotReceive()
+            .GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that HTTP TODO move maps gated failures through the standard mutation failure mapper.
+    /// </summary>
+    [Fact]
+    public async Task MoveAsync_WhenGatedMoveFails_ReturnsMappedFailureResult()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        gated.MoveAsync("TODO-TXN-HTTP-MOVE-002", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                false,
+                "move rejected",
+                FailureKind: TodoMutationFailureKind.Conflict));
+
+        var controller = CreateController(todoService, todoMutations: gated);
+        var actionResult = await controller.MoveAsync(
+                "TODO-TXN-HTTP-MOVE-002",
+                new TodoMoveRequest { TargetWorkspacePath = @"F:\GitHub\McpServer.Target" },
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var conflict = Assert.IsType<ConflictObjectResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(conflict.Value);
+        Assert.Equal(TodoMutationFailureKind.Conflict, mutation.FailureKind);
+    }
+
+    /// <summary>
     /// TR-MCP-TODO-006: Verifies that GET /mcpserver/todo/projection/status returns the service-provided
     /// projection status payload when the active TODO provider supports SQLite projection diagnostics.
     /// The fixture supplies a fully-populated status result so the controller's success shaping can be asserted.
@@ -251,10 +453,46 @@ public sealed class TodoControllerTests
         Assert.Equal("repair failed", repair.Error);
     }
 
+    /// <summary>
+    /// TEST-MCP-161: Verifies that HTTP TODO projection repair routes through the transaction gate
+    /// and returns a conflict when repair is fail-closed by mutation gating.
+    /// </summary>
+    [Fact]
+    public async Task RepairProjectionAsync_WhenTransactionGateRejects_ReturnsConflict()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        gated.RepairProjectionAsync(Arg.Any<CancellationToken>())
+            .Returns(new TodoProjectionRepairResult(
+                false,
+                "TODO projection repair is not transaction compensated while required turn transactions are active.",
+                new TodoProjectionStatusResult(
+                    "turn-transaction-gate",
+                    "turn-transaction-gate",
+                    "TODO.yaml",
+                    false,
+                    false,
+                    true,
+                    "2026-06-14T00:00:00.0000000Z",
+                    Message: "TODO projection repair is not transaction compensated while required turn transactions are active.")));
+
+        var controller = CreateController(todoService, todoMutations: gated);
+        var actionResult = await controller.RepairProjectionAsync(CancellationToken.None).ConfigureAwait(true);
+
+        var conflict = Assert.IsType<ConflictObjectResult>(actionResult.Result);
+        var repair = Assert.IsType<TodoProjectionRepairResult>(conflict.Value);
+        Assert.False(repair.Success);
+        Assert.Contains("not transaction compensated", repair.Error, StringComparison.Ordinal);
+        await gated.Received(1).RepairProjectionAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await todoService.DidNotReceive().RepairProjectionAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
     private static TodoController CreateController(
         ITodoService todoService,
         IGitHubCliService? gitHubCliService = null,
-        IIssueTodoSyncService? issueTodoSyncService = null)
+        IIssueTodoSyncService? issueTodoSyncService = null,
+        ITransactionGatedTodoMutationService? todoMutations = null,
+        IRequirementsService? requirementsService = null)
     {
         gitHubCliService ??= Substitute.For<IGitHubCliService>();
         issueTodoSyncService ??= Substitute.For<IIssueTodoSyncService>();
@@ -276,10 +514,11 @@ public sealed class TodoControllerTests
             resolver,
             new WorkspaceContext(),
             Substitute.For<IWorkspaceService>(),
-            Substitute.For<IRequirementsService>(),
+            requirementsService ?? Substitute.For<IRequirementsService>(),
             Substitute.For<ITodoPromptService>(),
             creationService,
-            updateService)
+            updateService,
+            todoMutations)
         {
             ControllerContext = new ControllerContext
             {

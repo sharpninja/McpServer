@@ -71,6 +71,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly IRequirementsWorkflow? _requirementsWorkflow;
     private readonly ITodoWorkflow? _todoWorkflow;
     private readonly IMemoryWorkflow? _memoryWorkflow;
+    private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
     /// Initializes a new <see cref="ReplCommandDispatcher"/>.
@@ -80,18 +81,21 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="requirementsWorkflow">The optional requirements workflow used to invoke <c>workflow.requirements.*</c> methods.</param>
     /// <param name="todoWorkflow">The optional TODO workflow used to invoke <c>workflow.todo.*</c> methods.</param>
     /// <param name="memoryWorkflow">The optional memory workflow used to invoke <c>workflow.memory.*</c> methods.</param>
+    /// <param name="clientMutationPolicy">The optional policy used to block unsafe generic <c>client.*</c> mutations.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
         IRequirementsWorkflow? requirementsWorkflow = null,
         ITodoWorkflow? todoWorkflow = null,
-        IMemoryWorkflow? memoryWorkflow = null)
+        IMemoryWorkflow? memoryWorkflow = null,
+        IClientMutationPolicy? clientMutationPolicy = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
         _requirementsWorkflow = requirementsWorkflow;
         _todoWorkflow = todoWorkflow;
         _memoryWorkflow = memoryWorkflow;
+        _clientMutationPolicy = clientMutationPolicy;
     }
 
     /// <inheritdoc />
@@ -569,6 +573,14 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case TodoCommandShapes.AnalyzeRequirementsMethod:
+                    var policyError = BuildClientMutationPolicyErrorIfRejected(
+                        request.RequestId,
+                        "todo",
+                        "AnalyzeRequirementsAsync",
+                        args);
+                    if (policyError is not null)
+                        return policyError;
+
                     result = await workflow.AnalyzeRequirementsAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false);
                     break;
 
@@ -939,6 +951,10 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         var args = request.Params is null
             ? new Dictionary<string, object?>()
             : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        var policyError = BuildClientMutationPolicyErrorIfRejected(request.RequestId, clientName, methodName, args);
+        if (policyError is not null)
+            return policyError;
 
         try
         {
@@ -1882,6 +1898,30 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
 
         value = raw.ToString();
         return !string.IsNullOrWhiteSpace(value);
+    }
+
+    private IYamlEnvelope? BuildClientMutationPolicyErrorIfRejected(
+        string requestId,
+        string clientName,
+        string methodName,
+        IReadOnlyDictionary<string, object?> args)
+    {
+        var decision = _clientMutationPolicy?.Evaluate(clientName, methodName, args) ?? ClientMutationPolicyDecision.Allow();
+        if (decision.Allowed)
+            return null;
+
+        return BuildError(
+            requestId: requestId,
+            code: string.IsNullOrWhiteSpace(decision.ErrorCode) ? "mutation_not_transactional" : decision.ErrorCode,
+            message: string.IsNullOrWhiteSpace(decision.Message)
+                ? $"Client method client.{clientName}.{methodName} is blocked by mutation policy."
+                : decision.Message,
+            details: new Dictionary<string, object?>
+            {
+                ["clientName"] = clientName,
+                ["methodName"] = methodName,
+                ["policy"] = nameof(IClientMutationPolicy),
+            });
     }
 
     private static IYamlEnvelope BuildError(

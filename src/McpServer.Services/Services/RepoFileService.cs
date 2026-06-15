@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Options;
@@ -9,7 +11,7 @@ namespace McpServer.Support.Mcp.Services;
 /// TR-PLANNED-013: Repository file read/list/write with path allowlist and audit.
 /// FR-SUPPORT-010: Path allowlist enforced; write operations audited.
 /// </summary>
-public sealed class RepoFileService : IRepoFileService
+public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
 {
     private static readonly char[] s_trimSlashChars = { '/', '\\' };
     private readonly IngestionOptions _options;
@@ -112,6 +114,68 @@ public sealed class RepoFileService : IRepoFileService
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             return new RepoWriteResult(false, ex.Message);
         }
+    }
+
+    /// <inheritdoc />
+    public async Task<RepoFileSnapshot?> CaptureForWriteAsync(
+        string relativePath,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath))
+            return null;
+
+        var normalized = NormalizeRelative(relativePath);
+        if (!TryResolveFullPath(normalized, out var fullPath))
+            return null;
+        if (!IsAllowed(normalized))
+            return null;
+        if (!File.Exists(fullPath))
+            return new RepoFileSnapshot(normalized, Exists: false, Content: string.Empty, ContentSha256: string.Empty);
+
+        var content = await File.ReadAllTextAsync(fullPath, cancellationToken).ConfigureAwait(false);
+        return new RepoFileSnapshot(normalized, Exists: true, content, ComputeSha256(content));
+    }
+
+    /// <inheritdoc />
+    public async Task RestoreWriteAsync(
+        RepoFileSnapshot snapshot,
+        string writtenContent,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        ArgumentNullException.ThrowIfNull(writtenContent);
+
+        if (!TryResolveFullPath(snapshot.RelativePath, out var fullPath))
+            throw new InvalidOperationException($"Rollback path '{snapshot.RelativePath}' is not allowed or invalid.");
+        if (!IsAllowed(snapshot.RelativePath))
+            throw new InvalidOperationException($"Rollback path '{snapshot.RelativePath}' is not in the repo allowlist.");
+
+        var expectedWrittenHash = ComputeSha256(writtenContent);
+        if (File.Exists(fullPath))
+        {
+            var currentContent = await File.ReadAllTextAsync(fullPath, cancellationToken).ConfigureAwait(false);
+            var currentHash = ComputeSha256(currentContent);
+            if (!string.Equals(currentHash, expectedWrittenHash, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException(
+                    $"File '{snapshot.RelativePath}' changed after transactional write; rollback refused.");
+        }
+        else if (snapshot.Exists)
+        {
+            throw new InvalidOperationException(
+                $"File '{snapshot.RelativePath}' changed after transactional write; rollback refused.");
+        }
+
+        if (snapshot.Exists)
+        {
+            var dir = Path.GetDirectoryName(fullPath);
+            if (!string.IsNullOrEmpty(dir))
+                Directory.CreateDirectory(dir);
+            await File.WriteAllTextAsync(fullPath, snapshot.Content, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        if (File.Exists(fullPath))
+            File.Delete(fullPath);
     }
 
     private static string NormalizeRelative(string? relative)
@@ -255,6 +319,9 @@ public sealed class RepoFileService : IRepoFileService
 
         return path.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
+
+    private static string ComputeSha256(string value)
+        => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
     {

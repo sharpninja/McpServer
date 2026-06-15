@@ -198,6 +198,33 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Null(await service.GetFrAsync("FR-MCP-905").ConfigureAwait(true));
     }
 
+    /// <summary>Transaction compensation restores the prior requirements snapshot and allows retrying a rolled-back ID.</summary>
+    [Fact]
+    public async Task RestoreRequirementsSnapshotAsync_SoftDeletesCreatedRowsAndAllowsRetry()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("compensation-retry"));
+        var service = fixture.CreateService();
+        await service.AddFrAsync(new FrEntry("FR-MCP-907", "Original", "Original body")).ConfigureAwait(true);
+
+        var snapshot = await service.CaptureRequirementsSnapshotAsync(CancellationToken.None).ConfigureAwait(true);
+        await service.UpdateFrAsync(new FrEntry("FR-MCP-907", "Changed", "Changed body")).ConfigureAwait(true);
+        await service.AddTrAsync(new TrEntry("TR-MCP-REQ-907", "Created TR", "Created body")).ConfigureAwait(true);
+
+        await service.RestoreRequirementsSnapshotAsync(snapshot, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal("Original body", (await service.GetFrAsync("FR-MCP-907").ConfigureAwait(true))?.Body);
+        Assert.Null(await service.GetTrAsync("TR-MCP-REQ-907").ConfigureAwait(true));
+
+        await service.AddTrAsync(new TrEntry("TR-MCP-REQ-907", "Retry TR", "Retry body")).ConfigureAwait(true);
+
+        var retried = await service.GetTrAsync("TR-MCP-REQ-907").ConfigureAwait(true);
+        Assert.NotNull(retried);
+        Assert.Equal("Retry body", retried!.Body);
+        var rows = await fixture.GetRequirementRowsAsync().ConfigureAwait(true);
+        Assert.Single(rows, row => row.Kind == "tr" && row.Id == "TR-MCP-REQ-907");
+    }
+
     /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>
     [Fact]
     public async Task Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors()

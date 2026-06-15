@@ -19,7 +19,7 @@ namespace McpServer.Support.Mcp.Requirements;
 /// are stored in <see cref="McpDbContext"/> and scoped by the active workspace.
 /// Markdown files are used only for bootstrap import and export rendering.
 /// </summary>
-public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentService, IDisposable
+public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentService, IRequirementsCompensation, IDisposable
 {
     private const string FrKind = "fr";
     private const string TrKind = "tr";
@@ -76,6 +76,75 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     /// <inheritdoc />
     public void Dispose() => _writeLock.Dispose();
+
+    /// <inheritdoc />
+    public async Task<RequirementsCompensationSnapshot> CaptureRequirementsSnapshotAsync(CancellationToken cancellationToken = default)
+    {
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, cancellationToken).ConfigureAwait(false);
+            var workspaceId = RequireWorkspaceId(ctx);
+            var requirements = await ctx.Requirements
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .Where(row => row.WorkspaceId == workspaceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            var links = await ctx.RequirementTraceabilityLinks
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .Where(row => row.WorkspaceId == workspaceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+
+            var state = new RequirementsDatabaseCompensationState(
+                workspaceId,
+                requirements
+                    .Select(row => new RequirementEntityCompensationState(CloneRequirement(row), ReadSoftDeleteState(ctx.Entry(row))))
+                    .ToArray(),
+                links
+                    .Select(row => new RequirementTraceabilityLinkCompensationState(CloneTraceabilityLink(row), ReadSoftDeleteState(ctx.Entry(row))))
+                    .ToArray());
+
+            return new RequirementsCompensationSnapshot(
+                requirements.Where(row => !IsSoftDeleted(ctx, row) && row.Kind == FrKind).Select(MapFr).ToArray(),
+                requirements.Where(row => !IsSoftDeleted(ctx, row) && row.Kind == TrKind).Select(MapTr).ToArray(),
+                requirements.Where(row => !IsSoftDeleted(ctx, row) && row.Kind == TestKind).Select(MapTest).ToArray(),
+                BuildVisibleMappings(ctx, links),
+                Provider: nameof(RequirementsDatabaseDocumentService),
+                State: state);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task RestoreRequirementsSnapshotAsync(
+        RequirementsCompensationSnapshot snapshot,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        if (snapshot.State is not RequirementsDatabaseCompensationState state)
+            throw new InvalidOperationException($"Requirements compensation snapshot provider '{snapshot.Provider}' is not supported by {nameof(RequirementsDatabaseDocumentService)}.");
+
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, cancellationToken).ConfigureAwait(false);
+            await RestoreRequirementsCoreAsync(ctx, state, cancellationToken).ConfigureAwait(false);
+            await RestoreTraceabilityLinksCoreAsync(ctx, state, cancellationToken).ConfigureAwait(false);
+            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<FrEntry>> GetAllFrAsync(CancellationToken ct = default)
@@ -533,24 +602,44 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await using var scope = CreateScope();
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
-            if (await ctx.Requirements.AnyAsync(x => x.Kind == kind && x.Id == id, ct).ConfigureAwait(false))
+            var existing = await ctx.Requirements
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .FirstOrDefaultAsync(x => x.Kind == kind && x.Id == id, ct)
+                .ConfigureAwait(false);
+            if (existing is not null && !IsSoftDeleted(ctx, existing))
                 throw new RequirementsConflictException($"{kind.ToUpperInvariant()} '{id}' already exists.");
 
             var now = Now();
-            ctx.Requirements.Add(new RequirementEntity
+            if (existing is null)
             {
-                WorkspaceId = RequireWorkspaceId(ctx),
-                Kind = kind,
-                Id = id,
-                Title = title,
-                Body = body,
-                Priority = NormalizePriority(priority),
-                Status = NormalizeStatus(status),
-                Notes = notes,
-                AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria),
-                CreatedAtUtc = now,
-                UpdatedAtUtc = now
-            });
+                ctx.Requirements.Add(new RequirementEntity
+                {
+                    WorkspaceId = RequireWorkspaceId(ctx),
+                    Kind = kind,
+                    Id = id,
+                    Title = title,
+                    Body = body,
+                    Priority = NormalizePriority(priority),
+                    Status = NormalizeStatus(status),
+                    Notes = notes,
+                    AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria),
+                    CreatedAtUtc = now,
+                    UpdatedAtUtc = now
+                });
+            }
+            else
+            {
+                existing.Title = title;
+                existing.Body = body;
+                existing.Priority = NormalizePriority(priority);
+                existing.Status = NormalizeStatus(status);
+                existing.Notes = notes;
+                existing.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
+                existing.CreatedAtUtc = now;
+                existing.UpdatedAtUtc = now;
+                ClearSoftDelete(ctx, existing);
+            }
+
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Created, id, ct).ConfigureAwait(false);
         }
@@ -946,6 +1035,161 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     private static string Now() => DateTime.UtcNow.ToString("O");
 
+    private static IReadOnlyList<FrTrMapping> BuildVisibleMappings(
+        McpDbContext ctx,
+        IReadOnlyList<RequirementTraceabilityLinkEntity> links)
+    {
+        return links
+            .Where(link => !IsSoftDeleted(ctx, link))
+            .GroupBy(link => link.FrId, StringComparer.OrdinalIgnoreCase)
+            .Select(group => new FrTrMapping(
+                group.Key,
+                group.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+                group.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+                group.First().WorkspaceId))
+            .ToArray();
+    }
+
+    private static async Task RestoreRequirementsCoreAsync(
+        McpDbContext ctx,
+        RequirementsDatabaseCompensationState state,
+        CancellationToken cancellationToken)
+    {
+        var currentRows = await ctx.Requirements
+            .IgnoreQueryFilters(SoftDeleteQueryFilter)
+            .Where(row => row.WorkspaceId == state.WorkspaceId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var snapshotRows = state.Requirements.ToDictionary(
+            row => RequirementKey(row.Entity.WorkspaceId, row.Entity.Kind, row.Entity.Id),
+            StringComparer.OrdinalIgnoreCase);
+
+        foreach (var current in currentRows)
+        {
+            if (!snapshotRows.ContainsKey(RequirementKey(current.WorkspaceId, current.Kind, current.Id)))
+                MarkSoftDeleted(ctx, current, DateTimeOffset.UtcNow, "requirements_transaction_rollback");
+        }
+
+        foreach (var snapshot in state.Requirements)
+        {
+            var source = snapshot.Entity;
+            var current = currentRows.FirstOrDefault(row =>
+                string.Equals(row.WorkspaceId, source.WorkspaceId, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.Kind, source.Kind, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.Id, source.Id, StringComparison.OrdinalIgnoreCase));
+            if (current is null)
+            {
+                current = CloneRequirement(source);
+                ctx.Requirements.Add(current);
+            }
+            else
+            {
+                CopyRequirement(source, current);
+            }
+
+            ApplySoftDeleteState(ctx.Entry(current), snapshot.SoftDelete);
+        }
+    }
+
+    private static async Task RestoreTraceabilityLinksCoreAsync(
+        McpDbContext ctx,
+        RequirementsDatabaseCompensationState state,
+        CancellationToken cancellationToken)
+    {
+        var currentLinks = await ctx.RequirementTraceabilityLinks
+            .IgnoreQueryFilters(SoftDeleteQueryFilter)
+            .Where(row => row.WorkspaceId == state.WorkspaceId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var snapshotLinks = state.TraceabilityLinks.ToDictionary(
+            row => TraceabilityKey(row.Entity.WorkspaceId, row.Entity.FrId, row.Entity.TargetKind, row.Entity.TargetId),
+            StringComparer.OrdinalIgnoreCase);
+
+        foreach (var current in currentLinks)
+        {
+            if (!snapshotLinks.ContainsKey(TraceabilityKey(current.WorkspaceId, current.FrId, current.TargetKind, current.TargetId)))
+                MarkSoftDeleted(ctx, current, DateTimeOffset.UtcNow, "requirements_transaction_rollback");
+        }
+
+        foreach (var snapshot in state.TraceabilityLinks)
+        {
+            var source = snapshot.Entity;
+            var current = currentLinks.FirstOrDefault(row =>
+                string.Equals(row.WorkspaceId, source.WorkspaceId, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.FrId, source.FrId, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.TargetKind, source.TargetKind, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.TargetId, source.TargetId, StringComparison.OrdinalIgnoreCase));
+            if (current is null)
+            {
+                current = CloneTraceabilityLink(source);
+                ctx.RequirementTraceabilityLinks.Add(current);
+            }
+            else
+            {
+                CopyTraceabilityLink(source, current);
+            }
+
+            ApplySoftDeleteState(ctx.Entry(current), snapshot.SoftDelete);
+        }
+    }
+
+    private static string RequirementKey(string workspaceId, string kind, string id)
+        => $"{workspaceId}\0{kind}\0{id}";
+
+    private static string TraceabilityKey(string workspaceId, string frId, string targetKind, string targetId)
+        => $"{workspaceId}\0{frId}\0{targetKind}\0{targetId}";
+
+    private static RequirementEntity CloneRequirement(RequirementEntity source)
+    {
+        return new RequirementEntity
+        {
+            WorkspaceId = source.WorkspaceId,
+            Kind = source.Kind,
+            Id = source.Id,
+            Title = source.Title,
+            Body = source.Body,
+            Priority = source.Priority,
+            Status = source.Status,
+            Notes = source.Notes,
+            AcceptanceCriteriaJson = source.AcceptanceCriteriaJson,
+            CreatedAtUtc = source.CreatedAtUtc,
+            UpdatedAtUtc = source.UpdatedAtUtc,
+        };
+    }
+
+    private static void CopyRequirement(RequirementEntity source, RequirementEntity target)
+    {
+        target.Title = source.Title;
+        target.Body = source.Body;
+        target.Priority = source.Priority;
+        target.Status = source.Status;
+        target.Notes = source.Notes;
+        target.AcceptanceCriteriaJson = source.AcceptanceCriteriaJson;
+        target.CreatedAtUtc = source.CreatedAtUtc;
+        target.UpdatedAtUtc = source.UpdatedAtUtc;
+    }
+
+    private static RequirementTraceabilityLinkEntity CloneTraceabilityLink(RequirementTraceabilityLinkEntity source)
+    {
+        return new RequirementTraceabilityLinkEntity
+        {
+            WorkspaceId = source.WorkspaceId,
+            SourceKind = source.SourceKind,
+            FrId = source.FrId,
+            TargetKind = source.TargetKind,
+            TargetId = source.TargetId,
+            CreatedAtUtc = source.CreatedAtUtc,
+        };
+    }
+
+    private static void CopyTraceabilityLink(
+        RequirementTraceabilityLinkEntity source,
+        RequirementTraceabilityLinkEntity target)
+    {
+        target.SourceKind = source.SourceKind;
+        target.CreatedAtUtc = source.CreatedAtUtc;
+    }
+
     private static bool IsSoftDeleted(McpDbContext ctx, object entity)
     {
         var entry = ctx.Entry(entity);
@@ -979,6 +1223,23 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         entry.Property("DeleteReason").CurrentValue = null;
     }
 
+    private static SoftDeleteState ReadSoftDeleteState(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+        => new(
+            entry.Property("IsDeleted").CurrentValue is true,
+            entry.Property("DeletedAtUtc").CurrentValue as DateTimeOffset?,
+            entry.Property("DeletedBy").CurrentValue as string,
+            entry.Property("DeleteReason").CurrentValue as string);
+
+    private static void ApplySoftDeleteState(
+        Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry,
+        SoftDeleteState state)
+    {
+        entry.Property("IsDeleted").CurrentValue = state.IsDeleted;
+        entry.Property("DeletedAtUtc").CurrentValue = state.DeletedAtUtc;
+        entry.Property("DeletedBy").CurrentValue = state.DeletedBy;
+        entry.Property("DeleteReason").CurrentValue = state.DeleteReason;
+    }
+
     private async Task PublishRequirementsChangeSafeAsync(string action, string entityId, CancellationToken ct)
     {
         if (_eventBus is null)
@@ -1005,6 +1266,25 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private readonly record struct RequirementBatchValue(string Kind, string Id, string Title, string Body, string Priority, string Status, string? Notes, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria);
 
     private readonly record struct RequirementDocumentPaths(string Functional, string Technical, string Testing, string Mapping, string Matrix);
+
+    private sealed record RequirementsDatabaseCompensationState(
+        string WorkspaceId,
+        IReadOnlyList<RequirementEntityCompensationState> Requirements,
+        IReadOnlyList<RequirementTraceabilityLinkCompensationState> TraceabilityLinks);
+
+    private sealed record RequirementEntityCompensationState(
+        RequirementEntity Entity,
+        SoftDeleteState SoftDelete);
+
+    private sealed record RequirementTraceabilityLinkCompensationState(
+        RequirementTraceabilityLinkEntity Entity,
+        SoftDeleteState SoftDelete);
+
+    private readonly record struct SoftDeleteState(
+        bool IsDeleted,
+        DateTimeOffset? DeletedAtUtc,
+        string? DeletedBy,
+        string? DeleteReason);
 
     private readonly struct DbScope : IAsyncDisposable
     {
