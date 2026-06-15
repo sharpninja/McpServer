@@ -918,6 +918,41 @@ Design Round 2 conformance tests SHALL validate DTOs, entities, options, interfa
 **Acceptance Criteria:**
 - [x] `TurnTransactions-Design-Round2.md`, `TurnTransactions-Mutation-Endpoint-Audit.md`, requirements docs, matrix, and mappings are covered by `TurnTransactionPlanArtifactTests`.
 
+### TEST-MCP-174
+
+Documentation tests SHALL prove FR-MCP-129 through FR-MCP-131, TR-MCP-QUAD-001 through TR-MCP-QUAD-004, TEST-MCP-174 through TEST-MCP-180, diagram annotations, and the AD-CURIOSITY-001-BR-EXTERNAL in-scope split are present while AoT reconciliation, weight updates, and full quad orchestration remain deferred.
+
+
+### TEST-MCP-175
+
+Unit tests SHALL prove workspace-scoped CRUD, role validation, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete/disable semantics, credentialReference-only persistence, status projection, and workspace isolation.
+
+
+### TEST-MCP-176
+
+Controller, client, and STDIO/MCP tool tests SHALL prove list/get/upsert/delete/enable/disable/status/invoke routes serialize the public DTOs correctly, hide raw credentials, enforce AgentManager policy behavior, and preserve workspace/auth propagation.
+
+
+### TEST-MCP-177
+
+Provider tests SHALL prove env:, config:, and file: credential references resolve without persistence or response leakage; OpenAI and OpenAI-compatible client creation validates endpoint policy; disallowed hosts, loopback without explicit allowance, timeout, and cancellation fail closed without live network dependency.
+
+
+### TEST-MCP-178
+
+Invocation transaction tests SHALL prove execution is rejected unless brain-slot execution and required turn transactions are enabled, no output is returned before subscriber commit, commit failure, timeout, or degradation discards output, and diffgrams contain slot metadata and hashes.
+
+
+### TEST-MCP-179
+
+Curiosity admission tests SHALL prove only CuriosityEngine can request GraphRAG or context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache or GraphRAG, and Left, Right, and Arbiter invocations never mutate cache.
+
+
+### TEST-MCP-180
+
+Containment tests SHALL prove AoT reconciliation execution, weight update execution, and full automatic quad orchestration continue returning DeferredFeatureDisabled with no side effects while individual brain-slot invocation is enabled only by the new gates.
+
+
 
 ## TEST-MCP-BATCH
 

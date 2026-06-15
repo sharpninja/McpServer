@@ -13,7 +13,8 @@ The imported document is implemented in this repository with this fixed order:
 1. Build the keyserver first.
 2. Build the subscriber second.
 3. Integrate MCP Server turn transactions third.
-4. Keep quad-model orchestration, Curiosity execution, AoT reconciliation execution, and weight update execution disabled until later requirements authorize those slices.
+4. Add individually gated external brain-slot invocation for the four quad roles.
+5. Keep full quad-model orchestration, autonomous Curiosity execution, AoT reconciliation execution, and weight update execution disabled until later requirements authorize those slices.
 
 ## Imported Executive Summary
 
@@ -112,8 +113,8 @@ Repo annotations:
 
 - `AD-CURIOSITY-001-BR-MONITOR`: documented for future cache/log/trace monitoring.
 - `AD-CURIOSITY-001-BR-FRUSTRATION`: deferred; must remain disabled in this slice.
-- `AD-CURIOSITY-001-BR-EXTERNAL`: deferred; requires separate external-escalation requirements.
-- `AD-CURIOSITY-001-BR-INJECT`: deferred; GraphRAG injection is not enabled by this slice.
+- `AD-CURIOSITY-001-BR-EXTERNAL`: in scope only for individually configured, transaction-gated external brain-slot invocation under FR-MCP-129 and TR-MCP-QUAD-003.
+- `AD-CURIOSITY-001-BR-INJECT`: in scope only for CuriosityEngine committed-result GraphRAG/context admission under FR-MCP-130; all other roles are rejected for admission.
 - `AD-CURIOSITY-001-BR-WEIGHT`: deferred and disabled; covered by future weight-update requirements.
 
 ### SD-DIFFGRAM-001 Three-Party Diffgram Exchange

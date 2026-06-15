@@ -222,6 +222,93 @@
       "httpEquivalent": "POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
     },
     {
+      "name": "brain_slot_list",
+      "description": "List external brain-slot definitions for a workspace.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" }
+      },
+      "httpEquivalent": "GET /mcpserver/brain-slots"
+    },
+    {
+      "name": "brain_slot_get",
+      "description": "Get an external brain-slot definition by slot id.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "slotId": { "type": "string", "required": true, "description": "Brain slot id" }
+      },
+      "httpEquivalent": "GET /mcpserver/brain-slots/{slotId}"
+    },
+    {
+      "name": "brain_slot_upsert",
+      "description": "Create or update an external brain-slot definition. Stores credentialReference only; raw API keys must not be supplied.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "slotId": { "type": "string", "required": true, "description": "Brain slot id" },
+        "role": { "type": "string", "required": true, "enum": ["LeftHemisphere", "RightHemisphere", "CuriosityEngine", "ArbiterOfTruth"], "description": "Quad role served by the slot" },
+        "providerKind": { "type": "string", "required": true, "enum": ["OpenAI", "OpenAICompatible"], "description": "Provider kind" },
+        "modelId": { "type": "string", "required": true, "description": "Provider model identifier" },
+        "credentialReference": { "type": "string", "required": true, "pattern": "^(env|config|file):.+", "description": "Credential reference using env:, config:, or file:" },
+        "partyId": { "type": "string", "required": false, "description": "Trusted party id; defaults to brain-slot role mapping" },
+        "displayName": { "type": "string", "required": false, "description": "Optional display name" },
+        "endpoint": { "type": "string", "required": false, "description": "Optional provider endpoint URI" },
+        "enabled": { "type": "boolean", "default": false, "description": "Whether the slot is enabled" },
+        "replaceExisting": { "type": "boolean", "default": false, "description": "Allow replacement of an existing enabled slot for the same role" },
+        "timeoutSeconds": { "type": "integer", "default": 30, "description": "Timeout in seconds" },
+        "maxOutputTokens": { "type": "integer", "default": 1024, "description": "Maximum output tokens" },
+        "systemPrompt": { "type": "string", "required": false, "description": "Optional system prompt" }
+      },
+      "httpEquivalent": "PUT /mcpserver/brain-slots/{slotId}"
+    },
+    {
+      "name": "brain_slot_delete",
+      "description": "Soft-delete and disable an external brain-slot definition.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "slotId": { "type": "string", "required": true, "description": "Brain slot id" }
+      },
+      "httpEquivalent": "DELETE /mcpserver/brain-slots/{slotId}"
+    },
+    {
+      "name": "brain_slot_enable",
+      "description": "Enable an external brain-slot definition.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "slotId": { "type": "string", "required": true, "description": "Brain slot id" },
+        "replaceExisting": { "type": "boolean", "default": false, "description": "Allow replacement of an existing enabled slot for the same role" }
+      },
+      "httpEquivalent": "POST /mcpserver/brain-slots/{slotId}/enable"
+    },
+    {
+      "name": "brain_slot_disable",
+      "description": "Disable an external brain-slot definition.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "slotId": { "type": "string", "required": true, "description": "Brain slot id" }
+      },
+      "httpEquivalent": "POST /mcpserver/brain-slots/{slotId}/disable"
+    },
+    {
+      "name": "brain_slot_status",
+      "description": "Get external brain-slot readiness status for a workspace.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" }
+      },
+      "httpEquivalent": "GET /mcpserver/brain-slots/status"
+    },
+    {
+      "name": "brain_slot_invoke",
+      "description": "Invoke an external brain slot with transaction-gated output return.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "slotId": { "type": "string", "required": true, "description": "Brain slot id" },
+        "input": { "type": "string", "required": true, "description": "Input prompt" },
+        "turnId": { "type": "string", "required": false, "description": "Owning session-log turn id" },
+        "admitToGraphRag": { "type": "boolean", "default": false, "description": "Whether committed Curiosity output should be admitted to GraphRAG/context" },
+        "metadataJson": { "type": "string", "required": false, "description": "Optional JSON object of string metadata" }
+      },
+      "httpEquivalent": "POST /mcpserver/brain-slots/{slotId}/invoke"
+    },
+    {
       "name": "github_list_issues",
       "description": "List GitHub issues. Optional state filter and limit.",
       "parameters": {

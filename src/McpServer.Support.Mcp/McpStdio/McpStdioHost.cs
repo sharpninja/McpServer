@@ -53,6 +53,7 @@ public static class McpStdioHost
         builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
         builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
         builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
+        builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
         var requiredRepoAllowlistPatterns = new[]
         {
             "src/McpServer.Cqrs/**/*.cs",
@@ -236,6 +237,12 @@ public static class McpStdioHost
         });
         builder.Services.AddScoped<IMemoryService, MemoryService>();
         builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
+        builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
+        builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
+        builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
+        builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
+        builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
+        builder.Services.AddScoped<IBrainSlotContainmentService, BrainSlotContainmentService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
         builder.Services.AddMcpGraphRag();

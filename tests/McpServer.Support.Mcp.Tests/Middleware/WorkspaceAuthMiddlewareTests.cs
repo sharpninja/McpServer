@@ -256,4 +256,110 @@ public sealed class WorkspaceAuthMiddlewareTests
         Assert.False(nextCalled);
         Assert.Equal(503, ctx.Response.StatusCode);
     }
+
+    // --- FR-MCP-132 / TR-MCP-AUTH-010: unknown/stale/missing key on a workspace-independent
+    //     route is an authentication outcome (401), not a startup readiness 503, once the
+    //     auth-token subsystem is initialized. -----------------------------------------------
+
+    private static IConfiguration CreateConfigWithRepoRoot(string repoRoot)
+        => new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["Mcp:RepoRoot"] = repoRoot })
+            .Build();
+
+    /// <summary>
+    /// TEST-MCP-AUTH-010: An unknown API key with no resolved workspace (workspace-independent
+    /// route, no X-Workspace-Path) where the Mcp:RepoRoot fallback path has no seeded token, but
+    /// the subsystem IS initialized, returns 401 - not the legacy "token not initialized" 503.
+    /// </summary>
+    [Fact]
+    public async Task UnknownApiKey_Unresolved_Initialized_Returns401()
+    {
+        var tokenService = new WorkspaceTokenService();
+        tokenService.GenerateToken(@"C:\real\workspace"); // initialized, but for a different path
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var ctx = CreateContext("GET", "/mcpserver/todo", "stale-or-wrong-key");
+
+        await middleware.InvokeAsync(
+            ctx,
+            tokenService,
+            CreateConfigWithRepoRoot(@"C:\different\repo\root"),
+            new WorkspaceContext { WorkspacePath = null },
+            CreateFederationOptions());
+
+        Assert.False(nextCalled);
+        Assert.Equal(401, ctx.Response.StatusCode);
+    }
+
+    /// <summary>
+    /// TEST-MCP-AUTH-010: A missing API key under the same unresolved/initialized condition returns 401.
+    /// </summary>
+    [Fact]
+    public async Task NoApiKey_Unresolved_Initialized_Returns401()
+    {
+        var tokenService = new WorkspaceTokenService();
+        tokenService.GenerateToken(@"C:\real\workspace");
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var ctx = CreateContext("GET", "/mcpserver/todo", null);
+
+        await middleware.InvokeAsync(
+            ctx,
+            tokenService,
+            CreateConfigWithRepoRoot(@"C:\different\repo\root"),
+            new WorkspaceContext { WorkspacePath = null },
+            CreateFederationOptions());
+
+        Assert.False(nextCalled);
+        Assert.Equal(401, ctx.Response.StatusCode);
+    }
+
+    /// <summary>
+    /// TEST-MCP-AUTH-010: An empty fallback repo root is still a credential failure, not startup 503,
+    /// once the token subsystem is initialized.
+    /// </summary>
+    [Fact]
+    public async Task EmptyRepoRoot_Unresolved_Initialized_Returns401()
+    {
+        var tokenService = new WorkspaceTokenService();
+        tokenService.GenerateToken(@"C:\real\workspace");
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var ctx = CreateContext("GET", "/mcpserver/todo", null);
+
+        await middleware.InvokeAsync(
+            ctx,
+            tokenService,
+            CreateConfigWithRepoRoot(string.Empty),
+            new WorkspaceContext { WorkspacePath = null },
+            CreateFederationOptions());
+
+        Assert.False(nextCalled);
+        Assert.Equal(401, ctx.Response.StatusCode);
+    }
+
+    /// <summary>
+    /// TEST-MCP-AUTH-011: When the auth-token subsystem is genuinely not initialized, the 503
+    /// readiness response must carry a Retry-After header.
+    /// </summary>
+    [Fact]
+    public async Task SubsystemNotInitialized_Returns503WithRetryAfter()
+    {
+        var tokenService = new WorkspaceTokenService(); // no tokens -> not initialized
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var ctx = CreateContext("GET", "/mcpserver/todo", "anything");
+
+        await middleware.InvokeAsync(
+            ctx,
+            tokenService,
+            CreateConfigWithRepoRoot(@"C:\different\repo\root"),
+            new WorkspaceContext { WorkspacePath = null },
+            CreateFederationOptions());
+
+        Assert.False(nextCalled);
+        Assert.Equal(503, ctx.Response.StatusCode);
+        Assert.True(ctx.Response.Headers.ContainsKey("Retry-After"),
+            "A 503 readiness response must include a Retry-After header.");
+    }
 }

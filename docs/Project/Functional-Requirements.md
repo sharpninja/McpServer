@@ -882,6 +882,46 @@ The implementation SHALL include two architecture/design rounds before closeout:
 - [x] `TurnTransactions-Mutation-Endpoint-Audit.md` captures current gated, fail-closed, and explicitly deferred mutation surfaces.
 - [x] Requirements matrix and FR/TR mapping rows link FR-MCP-118 through FR-MCP-128 to transaction TR and TEST records.
 
+## FR-MCP-129 Durable external brain-slot registry and live invocation
+
+The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for `LeftHemisphere`, `RightHemisphere`, `CuriosityEngine`, and `ArbiterOfTruth`, including CRUD, readiness status projection, and individually gated live model invocation.
+
+**Acceptance Criteria:**
+- [ ] Brain-slot definitions are durable CRUD records scoped by workspace and role.
+- [ ] Exactly one enabled slot per workspace and role is allowed; enabling a replacement requires `replaceExisting=true` and writes an audit entry.
+- [ ] A workspace is quad-ready only when all four roles have enabled slots with valid provider, model, endpoint policy, credential reference, and trusted party mapping.
+- [ ] CRUD stores and returns `credentialReference` only; raw API keys are never persisted or returned.
+- [ ] REST, client, and STDIO/MCP surfaces expose list/get/upsert/delete/enable/disable/status/invoke parity.
+- [ ] Invocation is rejected unless `Mcp:BrainSlots:ExecutionEnabled=true`, the slot is enabled, endpoint policy passes, credentials resolve, and required turn transactions are enabled.
+- [ ] No implicit fallback model is used; v1 fallback behavior is fail-closed with structured reason codes.
+
+**Covered by:** `BrainSlotRegistryServiceTests`, `BrainSlotControllerTests`, `BrainSlotClientTests`, `BrainSlotProviderTests`, `BrainSlotInvocationTransactionTests`
+
+## FR-MCP-130 Transaction-gated Curiosity external result admission
+
+The `CuriosityEngine` slot MAY request GraphRAG or context admission for external model output only after the related brain-slot invocation transaction commits successfully through the subscriber path.
+
+**Acceptance Criteria:**
+- [ ] No model output is returned to the caller until the subscriber commit succeeds.
+- [ ] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
+- [ ] Only `CuriosityEngine` may request GraphRAG/context admission in this slice.
+- [ ] Left, Right, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
+- [ ] Curiosity admission records the committed transaction and admission metadata for audit.
+
+**Covered by:** `BrainSlotInvocationTransactionTests`, `BrainSlotCuriosityAdmissionTests`
+
+## FR-MCP-131 Quad containment for reconciliation, weight updates, and full orchestration
+
+The MCP runtime SHALL continue to reject AoT reconciliation execution, weight updates, and full automatic quad orchestration with `DeferredFeatureDisabled` until separate requirements authorize those branches.
+
+**Acceptance Criteria:**
+- [ ] AoT reconciliation execution returns `DeferredFeatureDisabled`.
+- [ ] Weight update execution returns `DeferredFeatureDisabled`.
+- [ ] Full automatic quad orchestration returns `DeferredFeatureDisabled`.
+- [ ] Individual brain-slot invocation authorization does not authorize AoT reconciliation, weight updates, or full quad orchestration side effects.
+
+**Covered by:** `BrainSlotContainmentTests`, `TurnTransactionPlanArtifactTests`
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.
@@ -1140,3 +1180,15 @@ Whole-session submit SHALL merge additively: omitted session and turn fields nev
 ## FR-TEST-002 FR-TEST-002
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
+
+## FR-MCP-132 Accurate HTTP semantics for /mcpserver/* credential failures
+
+All `/mcpserver/*` endpoints SHALL return `401 Unauthorized` for an unknown, stale, or missing API key, including the pure `X-Api-Key` agent flow that sends no `X-Workspace-Path` header. `503 Service Unavailable` SHALL be returned only when the per-workspace auth-token subsystem has not yet been initialized (genuine startup readiness), and every such 503 SHALL include a `Retry-After` header and a JSON body. Because per-workspace tokens rotate on every server restart, a rotated/stale API key MUST surface as `401` (re-read the marker file), never as a blanket `503` across the whole `/mcpserver/*` surface.
+
+**Covered by:** `WorkspaceAuthMiddleware`, `WorkspaceTokenService.IsInitialized`, `WorkspaceAuthMiddlewareTests`, `ReadinessAndAuthIntegrationTests`
+
+## FR-MCP-133 Readiness reflects the workspace/token subsystem
+
+The readiness endpoint `/ready` SHALL report `Unhealthy` when the subsystem that gates `/mcpserver/*` is not ready: specifically when no enabled workspace is registered, or the primary workspace has no seeded auth token, or the auth-token subsystem is uninitialized. `/ready` SHALL never report `Healthy` while `/mcpserver/*` requests would be rejected with a startup `503`. This closes the gap where `/health` read `Healthy` (it only checks liveness: `self` + federation `upstream`) while every data endpoint returned `503`.
+
+**Covered by:** `WorkspaceReadinessHealthCheck`, `WorkspaceReadinessHealthCheckTests`, `ReadinessAndAuthIntegrationTests`

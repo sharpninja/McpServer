@@ -882,6 +882,18 @@ The implementation SHALL include two architecture/design rounds before closeout:
 - [x] `TurnTransactions-Mutation-Endpoint-Audit.md` captures current gated, fail-closed, and explicitly deferred mutation surfaces.
 - [x] Requirements matrix and FR/TR mapping rows link FR-MCP-118 through FR-MCP-128 to transaction TR and TEST records.
 
+## FR-MCP-129 Durable external brain-slot registry and live invocation
+
+The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth, including CRUD, status projection, and individually gated live model invocation.
+
+## FR-MCP-130 Transaction-gated Curiosity external result admission
+
+The CuriosityEngine slot MAY request GraphRAG or context admission for external model output only after the related brain-slot invocation transaction commits successfully through the subscriber path.
+
+## FR-MCP-131 Quad containment for reconciliation, weight updates, and full orchestration
+
+The MCP runtime SHALL continue to reject AoT reconciliation execution, weight updates, and full automatic quad orchestration with DeferredFeatureDisabled until separate requirements authorize those branches.
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.

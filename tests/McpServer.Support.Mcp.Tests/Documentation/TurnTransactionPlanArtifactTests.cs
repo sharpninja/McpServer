@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Tests.Documentation;
 
 /// <summary>
-/// TEST-MCP-162 through TEST-MCP-173:
+/// TEST-MCP-162 through TEST-MCP-180:
 /// Verifies the restored turn transaction plan artifact preserves imported
 /// diagram identifiers, traceability, deferred scope, and implemented
 /// transaction surfaces.
@@ -78,7 +78,7 @@ public sealed class TurnTransactionPlanArtifactTests
     }
 
     /// <summary>
-    /// TEST-MCP-162 and TEST-MCP-173: Validates transaction-plan requirements
+    /// TEST-MCP-162, TEST-MCP-173, and TEST-MCP-174: Validates transaction-plan requirements
     /// are concrete traceability artifacts rather than placeholder backfills.
     /// </summary>
     [Fact]
@@ -90,7 +90,7 @@ public sealed class TurnTransactionPlanArtifactTests
         var matrix = ReadProjectFile("Requirements-Matrix.md");
         var mapping = ReadProjectFile("TR-per-FR-Mapping.md");
 
-        foreach (var requirementId in Enumerable.Range(118, 11).Select(id => $"FR-MCP-{id}"))
+        foreach (var requirementId in Enumerable.Range(118, 14).Select(id => $"FR-MCP-{id}"))
         {
             var section = ExtractRequirementSection(functional, "## " + requirementId + " ");
             Assert.DoesNotContain("Placeholder requirement backfilled", section, StringComparison.OrdinalIgnoreCase);
@@ -112,6 +112,10 @@ public sealed class TurnTransactionPlanArtifactTests
             "TR-MCP-TXNDIAGRAMS-001",
             "TR-MCP-TXNARCH-001",
             "TR-MCP-TXNDESIGN-001",
+            "TR-MCP-QUAD-001",
+            "TR-MCP-QUAD-002",
+            "TR-MCP-QUAD-003",
+            "TR-MCP-QUAD-004",
         })
         {
             var section = ExtractRequirementSection(technical, "## " + requirementId);
@@ -121,7 +125,7 @@ public sealed class TurnTransactionPlanArtifactTests
             Assert.Contains("| " + requirementId + " |", matrix, StringComparison.Ordinal);
         }
 
-        foreach (var testId in Enumerable.Range(158, 16).Select(id => $"TEST-MCP-{id}"))
+        foreach (var testId in Enumerable.Range(158, 23).Select(id => $"TEST-MCP-{id}"))
         {
             Assert.Contains("- " + testId + ":", testing, StringComparison.Ordinal);
             Assert.Contains("| " + testId + " |", matrix, StringComparison.Ordinal);
@@ -129,7 +133,7 @@ public sealed class TurnTransactionPlanArtifactTests
     }
 
     /// <summary>
-    /// TEST-MCP-163, TEST-MCP-170, TEST-MCP-171, and TEST-MCP-172: Validates
+    /// TEST-MCP-163, TEST-MCP-170, TEST-MCP-171, TEST-MCP-172, and TEST-MCP-174: Validates
     /// future-disabled scope and the two architecture/design rounds remain
     /// explicit local artifacts.
     /// </summary>
@@ -141,8 +145,10 @@ public sealed class TurnTransactionPlanArtifactTests
         var round2 = ReadProjectFile("TurnTransactions-Design-Round2.md");
         var audit = ReadProjectFile("TurnTransactions-Mutation-Endpoint-Audit.md");
 
-        Assert.Contains("Keep quad-model orchestration, Curiosity execution, AoT reconciliation execution, and weight update execution disabled", plan, StringComparison.Ordinal);
+        Assert.Contains("Keep full quad-model orchestration, autonomous Curiosity execution, AoT reconciliation execution, and weight update execution disabled", plan, StringComparison.Ordinal);
         Assert.Contains("AD-CURIOSITY-001-BR-FRUSTRATION", plan, StringComparison.Ordinal);
+        Assert.Contains("`AD-CURIOSITY-001-BR-EXTERNAL`: in scope only for individually configured, transaction-gated external brain-slot invocation", plan, StringComparison.Ordinal);
+        Assert.Contains("`AD-CURIOSITY-001-BR-INJECT`: in scope only for CuriosityEngine committed-result GraphRAG/context admission", plan, StringComparison.Ordinal);
         Assert.Contains("AD-AOT-001-BR-DISAGREE", plan, StringComparison.Ordinal);
         Assert.Contains("AD-WEIGHT-001-BR-GATES", plan, StringComparison.Ordinal);
         Assert.Contains("Deferred adapters:", plan, StringComparison.Ordinal);

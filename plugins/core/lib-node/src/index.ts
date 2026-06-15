@@ -46,6 +46,7 @@ export {
   getSessionShimState,
 } from './tools/session.js';
 export { memoryTools, canHandleMemoryTool, handleMemoryTool } from './tools/memory.js';
+export { brainSlotTools, canHandleBrainSlotTool, handleBrainSlotTool } from './tools/brain-slots.js';
 export {
   requirementsTools,
   canHandleRequirementsTool,

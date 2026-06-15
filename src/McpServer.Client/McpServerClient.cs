@@ -105,12 +105,13 @@ public sealed class McpServerClient
         Federation = new FederationClient(http, options, holder);
         KeyServer = new KeyServerClient(http, options, holder);
         Subscriber = new SubscriberClient(http, options, holder);
+        BrainSlots = new BrainSlotClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
-            Federation, KeyServer, Subscriber
+            Federation, KeyServer, Subscriber, BrainSlots
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -409,4 +410,10 @@ public sealed class McpServerClient
     /// <para>See <see cref="SubscriberClient"/> for the full method list.</para>
     /// </summary>
     public SubscriberClient Subscriber { get; }
+
+    /// <summary>
+    /// External brain-slot registry and invocation endpoints.
+    /// <para>See <see cref="BrainSlotClient"/> for the full method list.</para>
+    /// </summary>
+    public BrainSlotClient BrainSlots { get; }
 }

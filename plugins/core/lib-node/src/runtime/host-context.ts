@@ -12,6 +12,7 @@ import { cacheFlush } from '../cache/cache-manager.js';
 import { todoTools, canHandleTodoTool, handleTodoTool } from '../tools/todo.js';
 import { sessionTools, canHandleSessionTool, handleSessionTool } from '../tools/session.js';
 import { memoryTools, canHandleMemoryTool, handleMemoryTool } from '../tools/memory.js';
+import { brainSlotTools, canHandleBrainSlotTool, handleBrainSlotTool } from '../tools/brain-slots.js';
 import {
   requirementsTools,
   canHandleRequirementsTool,
@@ -36,6 +37,7 @@ export const allToolDescriptors: ToolDescriptor[] = [
   ...todoTools,
   ...sessionTools,
   ...memoryTools,
+  ...brainSlotTools,
   ...requirementsTools,
   ...graphragTools,
 ];
@@ -280,6 +282,7 @@ export class HostContext {
     if (canHandleTodoTool(name)) return handleTodoTool(name, args, this.bridge);
     if (canHandleSessionTool(name)) return handleSessionTool(name, args, this.bridge);
     if (canHandleMemoryTool(name)) return handleMemoryTool(name, args, this.bridge);
+    if (canHandleBrainSlotTool(name)) return handleBrainSlotTool(name, args, this.bridge);
     if (canHandleRequirementsTool(name)) return handleRequirementsTool(name, args, this.bridge);
     if (canHandleGraphragTool(name)) return handleGraphragTool(name, args, this.bridge);
     throw new Error(`Unknown tool: ${name}`);

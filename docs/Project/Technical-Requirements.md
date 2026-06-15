@@ -1307,6 +1307,34 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 **Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
 
+## TR-MCP-QUAD-001
+
+**Brain-slot storage, DTOs, CRUD, and validation** — Persist `BrainSlotDefinition` and `BrainSlotInvocation` rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per workspace and role, `replaceExisting` replacement audit, soft delete, and readiness status.
+**Status:** 🔴 In Progress.
+
+**Covered by:** `BrainSlotRegistryService`, `BrainSlotController`, `BrainSlotClient`, `McpServerMcpTools`, `BrainSlotRegistryServiceTests`, `BrainSlotControllerTests`, `BrainSlotClientTests`
+
+## TR-MCP-QUAD-002
+
+**External model provider adapter, credentials, endpoint allowlist, timeout, and redaction** — Resolve credentials from `env:`, `config:`, or `file:` references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
+**Status:** 🔴 In Progress.
+
+**Covered by:** `BrainSlotCredentialResolver`, `BrainSlotChatClientFactory`, `BrainSlotProviderTests`
+
+## TR-MCP-QUAD-003
+
+**Keyserver party mapping and transaction diffgram admission** — Require enabled trusted party/key mapping before invocation; invoke external models only when brain-slot execution and required turn transactions are enabled; commit `OperationName = "brain-slot.invoke"` with `PublisherPartyId` from the slot party and diffgram metadata covering slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before returning output.
+**Status:** 🔴 In Progress.
+
+**Covered by:** `BrainSlotInvocationService`, `TurnTransactionCoordinator`, `BrainSlotInvocationTransactionTests`, `BrainSlotCuriosityAdmissionTests`
+
+## TR-MCP-QUAD-004
+
+**Deferred branch containment** — Provide explicit runtime guards proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration return `DeferredFeatureDisabled` and do not execute side effects in this slice.
+**Status:** 🔴 In Progress.
+
+**Covered by:** `BrainSlotContainmentService`, `BrainSlotContainmentTests`, `TurnTransactionPlanArtifactTests`
+
 ## TR-MCP-VOICE-001
 
 **Voice Conversation Service** — `VoiceConversationService` manages the full voice session lifecycle: session creation with `CopilotInteractiveSession` spawned via `DesktopProcessLauncher` (or standard `Process.Start`), turn processing with tool-call loop (max `MaxToolSteps` iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via `VoiceConversationOptions` bound from `Mcp:Voice` configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
@@ -1400,4 +1428,16 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-TEST-001
 
 **TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
+
+## TR-MCP-AUTH-010
+
+**WorkspaceAuthMiddleware 503/401 gating** — The API-key branch of `WorkspaceAuthMiddleware` reserves `StatusCodes.Status503ServiceUnavailable` strictly for the case `!WorkspaceTokenService.IsInitialized` (no full token seeded yet); that response includes a `Retry-After` header and a JSON body. Once the token subsystem is initialized, an unresolved workspace or a non-validating/missing credential yields `401 Unauthorized`. The legacy `Mcp:RepoRoot` fallback no longer produces a `503` for unknown keys (it previously did when the fallback path's normalized key had no seeded token, e.g. server CWD != registered primary path). Implements FR-MCP-132.
+
+## TR-MCP-AUTH-011
+
+**WorkspaceTokenService.IsInitialized** — `WorkspaceTokenService` exposes `bool IsInitialized => !_tokens.IsEmpty` (true once at least one full-access token has been generated). Consumed by `WorkspaceAuthMiddleware` and `WorkspaceReadinessHealthCheck` to distinguish genuine startup-not-ready from a credential failure. Implements FR-MCP-132.
+
+## TR-MCP-HEALTH-002
+
+**WorkspaceReadinessHealthCheck** — A new `IHealthCheck` registered as `AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"])` and surfaced on `/ready` (which runs all checks; `/health` and `/alive` only run `live`-tagged checks). It returns `Unhealthy` when `!WorkspaceTokenService.IsInitialized`, when no enabled workspace is registered, or when the primary workspace has no seeded token; `Healthy` otherwise. It injects the singleton `WorkspaceTokenService` directly and resolves the scoped `IWorkspaceService` through an `IServiceScopeFactory`. Implements FR-MCP-133.
 

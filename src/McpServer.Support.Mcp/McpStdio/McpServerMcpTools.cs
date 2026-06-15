@@ -60,6 +60,8 @@ public sealed partial class FwhMcpTools
     private readonly ITransactionGatedTodoMutationService? _todoMutations;
     private readonly ITodoExecutionService _todoExecutionService;
     private readonly IPromptTemplateService _promptTemplateService;
+    private readonly IBrainSlotRegistryService? _brainSlotRegistry;
+    private readonly IBrainSlotInvocationService? _brainSlotInvocation;
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ILogger<FwhMcpTools> _logger;
@@ -92,7 +94,9 @@ public sealed partial class FwhMcpTools
         ITransactionGatedMemoryService? memoryMutations = null,
         ITransactionGatedTodoMutationService? todoMutations = null,
         ITurnTransactionCoordinator? transactionCoordinator = null,
-        IOptions<TurnTransactionOptions>? transactionOptions = null)
+        IOptions<TurnTransactionOptions>? transactionOptions = null,
+        IBrainSlotRegistryService? brainSlotRegistry = null,
+        IBrainSlotInvocationService? brainSlotInvocation = null)
     {
         _logger = logger;
         _db = db;
@@ -119,6 +123,8 @@ public sealed partial class FwhMcpTools
         _todoMutations = todoMutations;
         _todoExecutionService = todoExecutionService;
         _promptTemplateService = promptTemplateService;
+        _brainSlotRegistry = brainSlotRegistry;
+        _brainSlotInvocation = brainSlotInvocation;
         _transactionCoordinator = transactionCoordinator;
         _transactionOptions = transactionOptions;
     }

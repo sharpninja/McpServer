@@ -233,6 +233,27 @@
 - TEST-MCP-173: Design Round 2 conformance tests SHALL validate DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and AC-to-test mapping.
   **Acceptance Criteria:**
   - [x] `TurnTransactions-Design-Round2.md`, `TurnTransactions-Mutation-Endpoint-Audit.md`, requirements docs, matrix, and mappings are covered by `TurnTransactionPlanArtifactTests`.
+- TEST-MCP-174: Brain slot documentation and plan artifact coverage SHALL prove FR-MCP-129 through FR-MCP-131, TR-MCP-QUAD-001 through TR-MCP-QUAD-004, TEST-MCP-174 through TEST-MCP-180, diagram annotations, and the `AD-CURIOSITY-001-BR-EXTERNAL` in-scope split are present while AoT reconciliation, weight updates, and full quad orchestration remain deferred.
+  **Acceptance Criteria:**
+  - [ ] `TurnTransactionPlanArtifactTests` fails if brain-slot requirement IDs, diagram annotations, mapping rows, or matrix rows are missing.
+- TEST-MCP-175: Brain slot durable registry coverage SHALL prove workspace-scoped CRUD, role validation, one enabled slot per workspace and role, `replaceExisting` replacement audit, soft delete/disable semantics, credentialReference-only persistence, status projection, and workspace isolation.
+  **Acceptance Criteria:**
+  - [ ] `BrainSlotRegistryServiceTests` covers create, update, enable, disable, delete, replacement, audit, readiness, and workspace isolation.
+- TEST-MCP-176: Brain slot REST, client, and STDIO contract coverage SHALL prove list/get/upsert/delete/enable/disable/status/invoke routes serialize the public DTOs correctly, hide raw credentials, enforce `AgentManager` policy behavior, and preserve workspace/auth propagation.
+  **Acceptance Criteria:**
+  - [ ] `BrainSlotControllerTests`, `BrainSlotClientTests`, and MCP tool tests cover every public brain-slot operation.
+- TEST-MCP-177: Brain slot provider and credential coverage SHALL prove `env:`, `config:`, and `file:` credential references resolve without persistence or response leakage; OpenAI and OpenAI-compatible client creation validates endpoint policy; disallowed hosts, loopback without explicit allowance, timeout, and cancellation fail closed without live network dependency.
+  **Acceptance Criteria:**
+  - [ ] `BrainSlotProviderTests` use fake clients and never require live network credentials.
+- TEST-MCP-178: Brain slot transaction admission coverage SHALL prove execution is rejected unless brain-slot execution and required turn transactions are enabled, no output is returned before subscriber commit, commit failure/timeout/degradation discards output, and diffgrams contain slot metadata and hashes.
+  **Acceptance Criteria:**
+  - [ ] `BrainSlotInvocationTransactionTests` covers disabled gates, failed commits, delayed commits, and committed output return.
+- TEST-MCP-179: Curiosity admission coverage SHALL prove only `CuriosityEngine` can request GraphRAG/context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache/GraphRAG, and Left/Right/Arbiter invocations never mutate cache.
+  **Acceptance Criteria:**
+  - [ ] `BrainSlotCuriosityAdmissionTests` covers committed Curiosity admission and rejected non-Curiosity admission.
+- TEST-MCP-180: Quad containment coverage SHALL prove AoT reconciliation execution, weight update execution, and full automatic quad orchestration continue returning `DeferredFeatureDisabled` with no side effects while individual brain-slot invocation is enabled only by the new gates.
+  **Acceptance Criteria:**
+  - [ ] `BrainSlotContainmentTests` covers all disabled quad branches.
 - TEST-MCP-BATCH-001: Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
 - TEST-MCP-MEMORY-001: Storage isolation tests SHALL prove Global memories and Workspace memories in two workspaces list as Global plus current workspace only, and that update/remove by ID cannot mutate another workspace-local memory.
 - TEST-MCP-MEMORY-002: CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.
@@ -316,3 +337,8 @@
 - TEST-SUPPORT-010C-3: Given the turn-append route, when PUT is used instead of POST, then 405 is returned with `Allow: POST`. **Covered by:** `SessionLogControllerTests.WhenPuttingTurnRouteThenReturns405WithAllowHeader`
 - TEST-SUPPORT-010E: Integration tests: open idempotent, begin creates in_progress, complete merges+finalizes with evidence gate, fail records note, missing session 404.
 - TEST-SUPPORT-010F: SQLite tests: partial session submit preserves omitted title/model; sparse turn submit preserves omitted response/queryText and prior collections.
+- TEST-MCP-AUTH-010: Given the auth-token subsystem is initialized and a request hits a workspace-independent `/mcpserver/*` route with an unknown or missing API key and no `X-Workspace-Path` (so the workspace is unresolved and the `Mcp:RepoRoot` fallback path has no seeded token or is empty), `WorkspaceAuthMiddleware` returns `401` (regression: previously `503` "token not initialized"). **Covered by:** `WorkspaceAuthMiddlewareTests.UnknownApiKey_Unresolved_Initialized_Returns401`, `WorkspaceAuthMiddlewareTests.NoApiKey_Unresolved_Initialized_Returns401`, `WorkspaceAuthMiddlewareTests.EmptyRepoRoot_Unresolved_Initialized_Returns401`
+- TEST-MCP-AUTH-011: When `!WorkspaceTokenService.IsInitialized`, `WorkspaceAuthMiddleware` returns `503` with a `Retry-After` header and a JSON body. **Covered by:** `WorkspaceAuthMiddlewareTests.SubsystemNotInitialized_Returns503WithRetryAfter`
+- TEST-MCP-AUTH-012: `WorkspaceTokenService.IsInitialized` is `false` before any token is generated and `true` after `GenerateToken`. **Covered by:** `WorkspaceTokenServiceTests.IsInitialized_NoTokens_ReturnsFalse`, `WorkspaceTokenServiceTests.IsInitialized_AfterGenerateToken_ReturnsTrue`
+- TEST-MCP-HEALTH-002: `WorkspaceReadinessHealthCheck` returns `Healthy` when an enabled primary workspace is registered and has a seeded token; `Unhealthy` when the token subsystem is uninitialized, no enabled workspace is registered, or the primary workspace has no seeded token. **Covered by:** `WorkspaceReadinessHealthCheckTests`
+- TEST-MCP-HEALTH-003: Integration: with the data layer up, `/mcpserver/todo` returns `200` with a valid token and no `X-Workspace-Path`; unknown or missing keys return `401`; `/ready` returns `200` Healthy and its body lists the `workspace-ready` check. **Covered by:** `ReadinessAndAuthIntegrationTests`

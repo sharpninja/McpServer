@@ -459,6 +459,13 @@ builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(Pair
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
 builder.Services.Configure<IdentityServerOptions>(builder.Configuration.GetSection(IdentityServerOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
+builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
+builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
+builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
+builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
+builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
+builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
+builder.Services.AddScoped<IBrainSlotContainmentService, BrainSlotContainmentService>();
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
 
@@ -520,7 +527,8 @@ builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
         AutomaticDecompression = System.Net.DecompressionMethods.None,
     });
 builder.Services.AddHealthChecks()
-    .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"]);
+    .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"])
+    .AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"]);
 
 // FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
 // Register the HTTP client and data client used by federation decorators.

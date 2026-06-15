@@ -114,6 +114,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-MEMORY-001: Authoritative raw-text MCP memories.</summary>
     public DbSet<MemoryEntity> Memories => Set<MemoryEntity>();
 
+    /// <summary>TR-MCP-QUAD-001: Durable external brain-slot definitions.</summary>
+    public DbSet<BrainSlotDefinitionEntity> BrainSlotDefinitions => Set<BrainSlotDefinitionEntity>();
+
+    /// <summary>TR-MCP-QUAD-001: Durable external brain-slot invocation audit rows.</summary>
+    public DbSet<BrainSlotInvocationEntity> BrainSlotInvocations => Set<BrainSlotInvocationEntity>();
+
     /// <summary>FR-MCP-103: Enrolled local federation proxies known by the hub.</summary>
     public DbSet<FederationProxyEntity> FederationProxies => Set<FederationProxyEntity>();
 
@@ -423,6 +429,26 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<BrainSlotDefinitionEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.SlotId });
+            e.HasIndex(x => new { x.WorkspaceId, x.Role, x.Enabled });
+            e.HasIndex(x => new { x.WorkspaceId, x.Role })
+                .IsUnique()
+                .HasFilter(BrainSlotEnabledUniqueIndexFilter());
+            e.HasIndex(x => new { x.WorkspaceId, x.PartyId });
+        });
+
+        modelBuilder.Entity<BrainSlotInvocationEntity>(e =>
+        {
+            e.HasIndex(x => new { x.WorkspaceId, x.SlotId, x.StartedAtUtc });
+            e.HasIndex(x => new { x.WorkspaceId, x.TransactionId });
+            e.HasOne<BrainSlotDefinitionEntity>()
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.SlotId })
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
         modelBuilder.Entity<FederationProxyEntity>(e =>
         {
             e.HasIndex(x => x.Status);
@@ -517,6 +543,8 @@ public sealed class McpDbContext : DbContext
             || (!string.IsNullOrEmpty(_workspaceId)
                 && e.Scope == MemoryEntity.WorkspaceScope
                 && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<BrainSlotDefinitionEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<BrainSlotInvocationEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
@@ -544,6 +572,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<MemoryEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<BrainSlotInvocationEntity>().HasIndex(e => e.WorkspaceId);
 
         ApplyDbFkConventions(modelBuilder);
     }
@@ -567,6 +596,16 @@ public sealed class McpDbContext : DbContext
         ApplyWorkspaceForeignKeys(modelBuilder);
         ApplySoftDeleteMetadata(modelBuilder);
         ApplySoftDeleteQueryFilters(modelBuilder);
+    }
+
+    private string BrainSlotEnabledUniqueIndexFilter()
+    {
+        var providerName = Database.ProviderName ?? string.Empty;
+        if (providerName.Contains("Npgsql", StringComparison.OrdinalIgnoreCase))
+            return "\"Enabled\" = TRUE AND \"IsDeleted\" = FALSE";
+        if (providerName.Contains("SqlServer", StringComparison.OrdinalIgnoreCase))
+            return "[Enabled] = 1 AND [IsDeleted] = 0";
+        return "\"Enabled\" = 1 AND \"IsDeleted\" = 0";
     }
 
     private static void ApplyWorkspaceForeignKeys(ModelBuilder modelBuilder)

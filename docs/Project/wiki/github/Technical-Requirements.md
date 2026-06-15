@@ -948,6 +948,22 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **QA Vote Audit Actions** — Vote audit-action enum extends to: `vote_up`, `vote_down`, `vote_change`, `vote_revoke`. Migration adds the new values to the audit action enum check constraint (where one exists - SQLite stores as string, SqlServer / Postgres via check constraint).
 
+## TR-MCP-QUAD-001
+
+**Brain-slot storage, DTOs, CRUD, and validation** — Persist BrainSlotDefinition and BrainSlotInvocation rows per workspace; expose client DTOs, REST endpoints, and validation enforcing known roles, credentialReference-only secrets, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete, and readiness status.
+
+## TR-MCP-QUAD-002
+
+**External model provider adapter, credentials, endpoint allowlist, timeout, and redaction** — Resolve credentials from env:, config:, or file: references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
+
+## TR-MCP-QUAD-003
+
+**Keyserver party mapping and transaction diffgram admission** — Require enabled trusted party/key mapping before invocation; invoke external models only when brain-slot execution and required turn transactions are enabled; commit OperationName brain-slot.invoke with PublisherPartyId from the slot party and diffgram metadata covering slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before returning output.
+
+## TR-MCP-QUAD-004
+
+**Deferred branch containment** — Provide explicit runtime guards proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration return DeferredFeatureDisabled and do not execute side effects in this slice.
+
 ## TR-MCP-REPL-001
 
 **YAML Envelope Protocol** — The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing `type`, `payload` with method-specific parameters, and optional `correlationId`/`requestId`. Response envelopes SHALL contain `type` (`result`/`error`/`event`), `payload` with result data or error details, and echoed identifiers. Malformed YAML SHALL emit structured error responses rather than crashing the process.

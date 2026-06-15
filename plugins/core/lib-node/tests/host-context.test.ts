@@ -71,6 +71,7 @@ describe('createMcpServerPluginCore', () => {
       'todo_internal_status',
       'session_query_history',
       'memory_list',
+      'brain_slot_status',
       'req_generate_document',
       'graphrag_query',
     ]));
