@@ -20,7 +20,10 @@ public sealed class BrainSlotsControllerTests
                 QuadReady = false,
                 MissingRoles = [BrainSlotRoles.CuriosityEngine],
             });
-        var controller = new BrainSlotsController(registry, Substitute.For<IBrainSlotInvocationService>());
+        var controller = new BrainSlotsController(
+            registry,
+            Substitute.For<IBrainSlotInvocationService>(),
+            Substitute.For<IQuadBrainOrchestrationService>());
 
         var action = await controller.GetStatusAsync(CancellationToken.None).ConfigureAwait(true);
 
@@ -38,7 +41,10 @@ public sealed class BrainSlotsControllerTests
         registry.UpsertAsync(Arg.Any<string>(), Arg.Any<UpsertBrainSlotRequest>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromException<BrainSlotDto>(
                 new BrainSlotValidationException("bad endpoint", BrainSlotReasonCodes.EndpointNotAllowed)));
-        var controller = new BrainSlotsController(registry, Substitute.For<IBrainSlotInvocationService>());
+        var controller = new BrainSlotsController(
+            registry,
+            Substitute.For<IBrainSlotInvocationService>(),
+            Substitute.For<IQuadBrainOrchestrationService>());
 
         var action = await controller.UpsertAsync(
             "slot-1",
@@ -56,7 +62,10 @@ public sealed class BrainSlotsControllerTests
         registry.UpsertAsync(Arg.Any<string>(), Arg.Any<UpsertBrainSlotRequest>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromException<BrainSlotDto>(
                 new BrainSlotConflictException("replaceExisting required")));
-        var controller = new BrainSlotsController(registry, Substitute.For<IBrainSlotInvocationService>());
+        var controller = new BrainSlotsController(
+            registry,
+            Substitute.For<IBrainSlotInvocationService>(),
+            Substitute.For<IQuadBrainOrchestrationService>());
 
         var action = await controller.UpsertAsync(
             "slot-1",
@@ -80,7 +89,10 @@ public sealed class BrainSlotsControllerTests
                 Role = BrainSlotRoles.CuriosityEngine,
                 Output = "committed output",
             });
-        var controller = new BrainSlotsController(Substitute.For<IBrainSlotRegistryService>(), invocation);
+        var controller = new BrainSlotsController(
+            Substitute.For<IBrainSlotRegistryService>(),
+            invocation,
+            Substitute.For<IQuadBrainOrchestrationService>());
 
         var action = await controller.InvokeAsync(
             "curiosity-main",
@@ -93,6 +105,67 @@ public sealed class BrainSlotsControllerTests
         await invocation.Received(1).InvokeAsync(
             "curiosity-main",
             Arg.Is<BrainSlotInvokeRequest>(request => request != null && request.AdmitToGraphRag),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>POST orchestrate forwards the full Quad-Brain request to the orchestration service. TEST-MCP-184.</summary>
+    [Fact]
+    public async Task OrchestrateAsync_ForwardsRequest()
+    {
+        var quad = Substitute.For<IQuadBrainOrchestrationService>();
+        quad.ExecuteFullOrchestrationAsync(Arg.Any<QuadBrainOrchestrationRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new QuadBrainOrchestrationResponse
+            {
+                Status = "committed",
+                Reason = BrainSlotReasonCodes.None,
+                Output = "final",
+            });
+        var controller = new BrainSlotsController(
+            Substitute.For<IBrainSlotRegistryService>(),
+            Substitute.For<IBrainSlotInvocationService>(),
+            quad);
+
+        var action = await controller.OrchestrateAsync(
+            new QuadBrainOrchestrationRequest { Input = "decide", AdmitCuriosityToGraphRag = true },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        var response = Assert.IsType<QuadBrainOrchestrationResponse>(ok.Value);
+        Assert.Equal("final", response.Output);
+        await quad.Received(1).ExecuteFullOrchestrationAsync(
+            Arg.Is<QuadBrainOrchestrationRequest>(request => request != null && request.Input == "decide" && request.AdmitCuriosityToGraphRag),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>POST weights/update forwards approved weight updates to the orchestration service. TEST-MCP-184.</summary>
+    [Fact]
+    public async Task UpdateWeightsAsync_ForwardsRequest()
+    {
+        var quad = Substitute.For<IQuadBrainOrchestrationService>();
+        quad.ExecuteWeightUpdateAsync(Arg.Any<QuadBrainWeightUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new QuadBrainWeightUpdateResponse
+            {
+                Status = "committed",
+                Reason = BrainSlotReasonCodes.None,
+            });
+        var controller = new BrainSlotsController(
+            Substitute.For<IBrainSlotRegistryService>(),
+            Substitute.For<IBrainSlotInvocationService>(),
+            quad);
+
+        var action = await controller.UpdateWeightsAsync(new QuadBrainWeightUpdateRequest
+        {
+            RoleWeights = new Dictionary<string, double> { [BrainSlotRoles.LeftHemisphere] = 1.25 },
+            ReasonText = "approved adjustment",
+            AotApproved = true,
+            AdminApproved = true,
+            SafetyGatesPassed = true,
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.IsType<QuadBrainWeightUpdateResponse>(ok.Value);
+        await quad.Received(1).ExecuteWeightUpdateAsync(
+            Arg.Is<QuadBrainWeightUpdateRequest>(request => request != null && request.RoleWeights.ContainsKey(BrainSlotRoles.LeftHemisphere)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 }

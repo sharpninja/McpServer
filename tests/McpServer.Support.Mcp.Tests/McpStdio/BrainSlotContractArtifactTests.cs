@@ -21,6 +21,9 @@ public sealed class BrainSlotContractArtifactTests
         AssertBrainSlotToolExists(tools, "brain_slot_disable");
         AssertBrainSlotToolExists(tools, "brain_slot_status");
         var invoke = Assert.Single(tools, tool => GetString(tool, "name") == "brain_slot_invoke");
+        var orchestrate = Assert.Single(tools, tool => GetString(tool, "name") == "brain_slot_orchestrate");
+        var reconcile = Assert.Single(tools, tool => GetString(tool, "name") == "brain_slot_aot_reconcile");
+        var weightUpdate = Assert.Single(tools, tool => GetString(tool, "name") == "brain_slot_weight_update");
 
         var roleValues = upsert
             .GetProperty("parameters")
@@ -42,6 +45,12 @@ public sealed class BrainSlotContractArtifactTests
         Assert.Equal("^(env|config|file):.+", GetString(upsert.GetProperty("parameters").GetProperty("credentialReference"), "pattern"));
         Assert.Equal("POST /mcpserver/brain-slots/{slotId}/invoke", GetString(invoke, "httpEquivalent"));
         Assert.False(invoke.GetProperty("parameters").GetProperty("admitToGraphRag").GetProperty("default").GetBoolean());
+        Assert.Equal("POST /mcpserver/brain-slots/orchestrate", GetString(orchestrate, "httpEquivalent"));
+        Assert.Equal("POST /mcpserver/brain-slots/aot/reconcile", GetString(reconcile, "httpEquivalent"));
+        Assert.Equal("POST /mcpserver/brain-slots/weights/update", GetString(weightUpdate, "httpEquivalent"));
+        Assert.True(weightUpdate.GetProperty("parameters").GetProperty("aotApproved").GetProperty("required").GetBoolean());
+        Assert.True(weightUpdate.GetProperty("parameters").GetProperty("adminApproved").GetProperty("required").GetBoolean());
+        Assert.True(weightUpdate.GetProperty("parameters").GetProperty("safetyGatesPassed").GetProperty("required").GetBoolean());
     }
 
     private static void AssertBrainSlotToolExists(JsonElement[] tools, string name)

@@ -83,8 +83,8 @@ records:
     status: pending
   - kind: fr
     id: FR-MCP-123
-    title: Quad-model future scaffolding
-    description: The transaction foundation shall preserve the imported quad-model architecture while keeping Curiosity, AoT reconciliation execution, and weight-update execution disabled by default until later slices authorize them.
+    title: Quad-model scaffold-to-implementation progression
+    description: The transaction foundation shall preserve the imported quad-model architecture while keeping unauthorized branches fail-closed; FR-MCP-134 and FR-MCP-135 now authorize full Quad-Brain orchestration, AoT reconciliation execution, and safety-gated weight updates.
     priority: high
     area: MCP
     status: pending
@@ -297,8 +297,8 @@ records:
     status: pending
   - kind: test
     id: TEST-MCP-170
-    title: Deferred quad scope enforcement tests
-    description: Deferred-scope enforcement tests shall prove Curiosity, weight updates, and quad execution remain disabled until later requirements authorize them.
+    title: Quad scope authorization enforcement tests
+    description: Authorization-scope tests shall prove Curiosity admission, weight updates, AoT execution, and quad execution operate only through explicit FR-MCP-129 through FR-MCP-135 gates, while unrelated autonomous branches remain fail-closed.
     priority: high
     area: MCP
     status: pending

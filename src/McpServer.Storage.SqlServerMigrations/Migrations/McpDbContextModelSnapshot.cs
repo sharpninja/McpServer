@@ -315,6 +315,9 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<double>("OrchestrationWeight")
+                        .HasColumnType("float");
+
                     b.Property<string>("PartyId")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -338,6 +341,12 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("WeightUpdatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("WeightVersion")
+                        .HasColumnType("int");
 
                     b.HasKey("WorkspaceId", "SlotId");
 

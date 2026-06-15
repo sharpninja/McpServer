@@ -884,15 +884,52 @@ The implementation SHALL include two architecture/design rounds before closeout:
 
 ## FR-MCP-129 Durable external brain-slot registry and live invocation
 
-The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth, including CRUD, status projection, and individually gated live model invocation.
+The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth, including CRUD, readiness status projection, and individually gated live model invocation.
+**Acceptance Criteria:**
+- [x] Brain-slot definitions are durable CRUD records scoped by workspace and role.
+- [x] Exactly one enabled slot per workspace and role is allowed; enabling a replacement requires replaceExisting=true and writes an audit entry.
+- [x] A workspace is quad-ready only when all four roles have enabled slots with valid provider, model, endpoint policy, credential reference, and trusted party mapping.
+- [x] CRUD stores and returns credentialReference only; raw API keys are never persisted or returned.
+- [x] REST, client, and STDIO/MCP surfaces expose list/get/upsert/delete/enable/disable/status/invoke parity.
+- [x] Invocation is rejected unless brain-slot execution is enabled, the slot is enabled, endpoint policy passes, credentials resolve, and required turn transactions are enabled.
+- [x] No implicit fallback model is used; fallback behavior remains fail-closed with structured reason codes unless a configured slot is invoked and committed.
 
 ## FR-MCP-130 Transaction-gated Curiosity external result admission
 
 The CuriosityEngine slot MAY request GraphRAG or context admission for external model output only after the related brain-slot invocation transaction commits successfully through the subscriber path.
+**Acceptance Criteria:**
+- [x] No model output is returned to the caller until the subscriber commit succeeds.
+- [x] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
+- [x] Only CuriosityEngine may request GraphRAG/context admission.
+- [x] Left, Right, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
+- [x] Curiosity admission records the committed transaction and admission metadata for audit.
 
-## FR-MCP-131 Quad containment for reconciliation, weight updates, and full orchestration
+## FR-MCP-131 Quad containment and authorization boundary
 
-The MCP runtime SHALL continue to reject AoT reconciliation execution, weight updates, and full automatic quad orchestration with DeferredFeatureDisabled until separate requirements authorize those branches.
+The MCP runtime SHALL keep Quad-Brain branches fail-closed unless explicit branch requirements authorize them. FR-MCP-134 and FR-MCP-135 now authorize AoT reconciliation execution, durable weight updates, and full Quad-Brain orchestration; unauthorized cache mutation and implicit fallback remain contained.
+**Acceptance Criteria:**
+- [x] AoT reconciliation execution is authorized only through the transaction-gated ArbiterOfTruth slot path.
+- [x] Weight update execution is authorized only through the safety-gated, transaction-coordinated weight update path.
+- [x] Full automatic quad orchestration is authorized only when the workspace is quad-ready and all role outputs commit successfully.
+- [x] Individual brain-slot invocation authorization still does not authorize non-Curiosity GraphRAG/cache mutation or implicit fallback model behavior.
+
+## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
+
+The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+**Acceptance Criteria:**
+- [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
+- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
+- [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
+- [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
+
+## FR-MCP-135 Quad-Brain weight update controls
+
+The MCP runtime SHALL support durable, audited Quad-Brain role weight updates with AoT approval, admin approval, explicit safety-gate acknowledgement, version checks, before/after snapshots, and rollback metadata, while rejecting unsafe or stale updates without mutating slot state.
+**Acceptance Criteria:**
+- [x] Weight updates require AoT approval, admin approval, safety gates passed, and a non-empty reason before slot weights change.
+- [x] Each accepted update increments slot weight versions and records previous and new values in DataAuditLogs.
+- [x] Stale expected versions, missing roles, disabled slots, invalid weights, or missing approvals return structured fail-closed reason codes.
+- [x] Full orchestration can apply an explicit approved weight update but never performs an implicit self-improvement update.
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 

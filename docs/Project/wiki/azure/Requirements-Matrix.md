@@ -601,11 +601,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-126 | ✅ Complete | Functional-Requirements.md, PlanTransactionReviewTests |
 | FR-MCP-127 | ✅ Complete | Functional-Requirements.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, TurnTransactionCoordinatorTests |
 | FR-MCP-128 | ✅ Complete | Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests |
-| FR-MCP-129 | 🔴 In Progress | Functional-Requirements.md, BrainSlotRegistryServiceTests, BrainSlotControllerTests, BrainSlotClientTests, BrainSlotProviderTests, BrainSlotInvocationTransactionTests |
-| FR-MCP-130 | 🔴 In Progress | Functional-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotCuriosityAdmissionTests |
-| FR-MCP-131 | 🔴 In Progress | Functional-Requirements.md, BrainSlotContainmentTests, TurnTransactionPlanArtifactTests |
+| FR-MCP-129 | ✅ Complete | Functional-Requirements.md, BrainSlotRegistryServiceTests, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotCredentialResolverTests, BrainSlotInvocationTransactionTests, BrainSlotContractArtifactTests |
+| FR-MCP-130 | ✅ Complete | Functional-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotContainmentTests |
+| FR-MCP-131 | ✅ Complete | Functional-Requirements.md, QuadBrainOrchestrationServiceTests, BrainSlotContainmentTests, TurnTransactionPlanArtifactTests |
 | FR-MCP-132 | ✅ Complete | Functional-Requirements.md, WorkspaceAuthMiddleware, WorkspaceTokenService, WorkspaceAuthMiddlewareTests, WorkspaceTokenServiceTests |
 | FR-MCP-133 | ✅ Complete | Functional-Requirements.md, WorkspaceReadinessHealthCheck, WorkspaceReadinessHealthCheckTests, ReadinessAndAuthIntegrationTests |
+| FR-MCP-134 | ✅ Complete | Functional-Requirements.md, QuadBrainOrchestrationService, QuadBrainOrchestrationServiceTests, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests |
+| FR-MCP-135 | ✅ Complete | Functional-Requirements.md, BrainSlotDefinitionEntity, QuadBrainOrchestrationService, AddBrainSlotWeights migrations, QuadBrainOrchestrationServiceTests |
 | TR-MCP-GH-008 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-010 | Tracked | Technical-Requirements.md |
 | TR-MCP-KEYSERVER-001 | ✅ Complete | McpServer.KeyServer Program, KeyServerController, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
@@ -619,10 +621,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-TXNDIAGRAMS-001 | ✅ Complete | Technical-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, DiffgramEncryptionIntegrationTests |
 | TR-MCP-TXNARCH-001 | ✅ Complete | Technical-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactions-Architecture-Round1.md, TurnTransactionPlanArtifactTests |
 | TR-MCP-TXNDESIGN-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Design-Round2.md, PlanTransactionReviewTests, TurnTransactionPlanArtifactTests |
-| TR-MCP-QUAD-001 | 🔴 In Progress | Technical-Requirements.md, BrainSlotRegistryServiceTests, BrainSlotControllerTests, BrainSlotClientTests |
-| TR-MCP-QUAD-002 | 🔴 In Progress | Technical-Requirements.md, BrainSlotProviderTests |
-| TR-MCP-QUAD-003 | 🔴 In Progress | Technical-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotCuriosityAdmissionTests |
-| TR-MCP-QUAD-004 | 🔴 In Progress | Technical-Requirements.md, BrainSlotContainmentTests, TurnTransactionPlanArtifactTests |
+| TR-MCP-QUAD-001 | ✅ Complete | Technical-Requirements.md, BrainSlotRegistryServiceTests, BrainSlotsControllerTests, BrainSlotClientTests |
+| TR-MCP-QUAD-002 | ✅ Complete | Technical-Requirements.md, BrainSlotCredentialResolverTests, BrainSlotInvocationTransactionTests |
+| TR-MCP-QUAD-003 | ✅ Complete | Technical-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotContainmentTests |
+| TR-MCP-QUAD-004 | ✅ Complete | Technical-Requirements.md, QuadBrainOrchestrationServiceTests, BrainSlotContainmentTests, TurnTransactionPlanArtifactTests |
+| TR-MCP-QUAD-005 | ✅ Complete | Technical-Requirements.md, QuadBrainOrchestrationService, BrainSlotsController, BrainSlotClient, FwhMcpTools, brain-slots.ts, QuadBrainOrchestrationServiceTests, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, brain-slots.test.ts |
+| TR-MCP-QUAD-006 | ✅ Complete | Technical-Requirements.md, QuadBrainOrchestrationService, BrainSlotInvocationService, QuadBrainOrchestrationServiceTests |
+| TR-MCP-QUAD-007 | ✅ Complete | Technical-Requirements.md, BrainSlotDefinitionEntity, QuadBrainOrchestrationService, AddBrainSlotWeights migrations, QuadBrainOrchestrationServiceTests |
 | TR-MCP-AUTH-010 | ✅ Complete | Technical-Requirements.md, WorkspaceAuthMiddleware, WorkspaceAuthMiddlewareTests |
 | TR-MCP-AUTH-011 | ✅ Complete | Technical-Requirements.md, WorkspaceTokenService, WorkspaceAuthMiddleware, WorkspaceTokenServiceTests, WorkspaceAuthMiddlewareTests |
 | TR-MCP-HEALTH-002 | ✅ Complete | Technical-Requirements.md, WorkspaceReadinessHealthCheck, Program health checks, WorkspaceReadinessHealthCheckTests, ReadinessAndAuthIntegrationTests |
@@ -644,13 +649,18 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-171 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Architecture-Round1.md |
 | TEST-MCP-172 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Design-Round2.md |
 | TEST-MCP-173 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Mutation-Endpoint-Audit.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
-| TEST-MCP-174 | 🔴 In Progress | Testing-Requirements.md, TurnTransactionPlanArtifactTests |
-| TEST-MCP-175 | 🔴 In Progress | Testing-Requirements.md, BrainSlotRegistryServiceTests |
-| TEST-MCP-176 | 🔴 In Progress | Testing-Requirements.md, BrainSlotControllerTests, BrainSlotClientTests, McpStdioHost |
-| TEST-MCP-177 | 🔴 In Progress | Testing-Requirements.md, BrainSlotProviderTests |
-| TEST-MCP-178 | 🔴 In Progress | Testing-Requirements.md, BrainSlotInvocationTransactionTests |
-| TEST-MCP-179 | 🔴 In Progress | Testing-Requirements.md, BrainSlotCuriosityAdmissionTests |
-| TEST-MCP-180 | 🔴 In Progress | Testing-Requirements.md, BrainSlotContainmentTests |
+| TEST-MCP-174 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests |
+| TEST-MCP-175 | ✅ Complete | Testing-Requirements.md, BrainSlotRegistryServiceTests |
+| TEST-MCP-176 | ✅ Complete | Testing-Requirements.md, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, brain-slots.test.ts |
+| TEST-MCP-177 | ✅ Complete | Testing-Requirements.md, BrainSlotCredentialResolverTests, BrainSlotInvocationTransactionTests |
+| TEST-MCP-178 | ✅ Complete | Testing-Requirements.md, BrainSlotInvocationTransactionTests |
+| TEST-MCP-179 | ✅ Complete | Testing-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotContainmentTests |
+| TEST-MCP-180 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests, BrainSlotContainmentTests |
+| TEST-MCP-181 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests |
+| TEST-MCP-182 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests |
+| TEST-MCP-183 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests |
+| TEST-MCP-184 | ✅ Complete | Testing-Requirements.md, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, brain-slots.test.ts |
+| TEST-MCP-185 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Requirements-Matrix.md |
 | TEST-MCP-AUTH-010 | ✅ Complete | Testing-Requirements.md, WorkspaceAuthMiddlewareTests |
 | TEST-MCP-AUTH-011 | ✅ Complete | Testing-Requirements.md, WorkspaceAuthMiddlewareTests |
 | TEST-MCP-AUTH-012 | ✅ Complete | Testing-Requirements.md, WorkspaceTokenServiceTests |

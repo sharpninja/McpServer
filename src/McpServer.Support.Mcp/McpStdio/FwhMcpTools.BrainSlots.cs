@@ -189,6 +189,91 @@ public sealed partial class FwhMcpTools
         }, cancellationToken).ConfigureAwait(false));
     }
 
+    /// <summary>Runs the full Quad-Brain decision loop.</summary>
+    [McpServerTool(Name = "brain_slot_orchestrate"), Description("Run the full four-role Quad-Brain decision loop.")]
+    public async Task<string> BrainSlotOrchestrate(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Input prompt")] string input,
+        [Description("Owning session-log turn id")] string? turnId = null,
+        [Description("Whether committed Curiosity output should be admitted to GraphRAG/context")] bool admitCuriosityToGraphRag = false,
+        [Description("Optional JSON object of string metadata")] string? metadataJson = null,
+        [Description("Optional JSON QuadBrainWeightUpdateRequest to apply after final commit")] string? weightUpdateJson = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        if (_quadBrainOrchestration is null)
+            return SerializeJson(new { error = "quad brain orchestration service is unavailable" });
+
+        return SerializeJson(await _quadBrainOrchestration.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = input,
+            TurnId = turnId,
+            AdmitCuriosityToGraphRag = admitCuriosityToGraphRag,
+            Metadata = ParseMetadata(metadataJson),
+            WeightUpdate = ParseWeightUpdate(weightUpdateJson),
+        }, cancellationToken).ConfigureAwait(false));
+    }
+
+    /// <summary>Runs Arbiter-of-Truth reconciliation over committed role evidence.</summary>
+    [McpServerTool(Name = "brain_slot_aot_reconcile"), Description("Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.")]
+    public async Task<string> BrainSlotAotReconcile(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Original input prompt")] string input,
+        [Description("Committed LeftHemisphere output")] string leftOutput,
+        [Description("Committed RightHemisphere output")] string rightOutput,
+        [Description("Committed CuriosityEngine output")] string curiosityOutput,
+        [Description("Owning session-log turn id")] string? turnId = null,
+        [Description("Optional JSON object of string metadata")] string? metadataJson = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        if (_quadBrainOrchestration is null)
+            return SerializeJson(new { error = "quad brain orchestration service is unavailable" });
+
+        return SerializeJson(await _quadBrainOrchestration.ExecuteAotReconciliationAsync(new AotReconciliationRequest
+        {
+            Input = input,
+            LeftOutput = leftOutput,
+            RightOutput = rightOutput,
+            CuriosityOutput = curiosityOutput,
+            TurnId = turnId,
+            Metadata = ParseMetadata(metadataJson),
+        }, cancellationToken).ConfigureAwait(false));
+    }
+
+    /// <summary>Applies an explicitly approved Quad-Brain role-weight update.</summary>
+    [McpServerTool(Name = "brain_slot_weight_update"), Description("Apply an approved durable Quad-Brain role-weight update.")]
+    public async Task<string> BrainSlotWeightUpdate(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("JSON object mapping Quad role names to weights")] string roleWeightsJson,
+        [Description("Required reason for the update")] string reasonText,
+        [Description("Whether Arbiter-of-Truth approval has been recorded")] bool aotApproved,
+        [Description("Whether admin approval has been recorded")] bool adminApproved,
+        [Description("Whether safety gates have passed")] bool safetyGatesPassed,
+        [Description("Optional JSON object mapping Quad role names to expected versions")] string? expectedVersionsJson = null,
+        [Description("Owning session-log turn id")] string? turnId = null,
+        [Description("Who proposed the update")] string? proposedBy = null,
+        [Description("Optional JSON object of string metadata")] string? metadataJson = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        if (_quadBrainOrchestration is null)
+            return SerializeJson(new { error = "quad brain orchestration service is unavailable" });
+
+        return SerializeJson(await _quadBrainOrchestration.ExecuteWeightUpdateAsync(new QuadBrainWeightUpdateRequest
+        {
+            RoleWeights = ParseDoubleMap(roleWeightsJson),
+            ExpectedVersions = ParseIntMap(expectedVersionsJson),
+            TurnId = turnId,
+            ProposedBy = proposedBy,
+            ReasonText = reasonText,
+            AotApproved = aotApproved,
+            AdminApproved = adminApproved,
+            SafetyGatesPassed = safetyGatesPassed,
+            Metadata = ParseMetadata(metadataJson),
+        }, cancellationToken).ConfigureAwait(false));
+    }
+
     private static IReadOnlyDictionary<string, string> ParseMetadata(string? metadataJson)
     {
         if (string.IsNullOrWhiteSpace(metadataJson))
@@ -201,6 +286,54 @@ public sealed partial class FwhMcpTools
         catch (JsonException)
         {
             return new Dictionary<string, string> { ["metadataParseError"] = "invalid json" };
+        }
+    }
+
+    private static QuadBrainWeightUpdateRequest? ParseWeightUpdate(string? weightUpdateJson)
+    {
+        if (string.IsNullOrWhiteSpace(weightUpdateJson))
+            return null;
+
+        try
+        {
+            return JsonSerializer.Deserialize<QuadBrainWeightUpdateRequest>(weightUpdateJson, s_caseInsensitiveOptions);
+        }
+        catch (JsonException)
+        {
+            return new QuadBrainWeightUpdateRequest
+            {
+                Metadata = new Dictionary<string, string> { ["weightUpdateParseError"] = "invalid json" },
+            };
+        }
+    }
+
+    private static IReadOnlyDictionary<string, double> ParseDoubleMap(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return new Dictionary<string, double>();
+
+        try
+        {
+            return JsonSerializer.Deserialize<Dictionary<string, double>>(json, s_caseInsensitiveOptions) ?? new Dictionary<string, double>();
+        }
+        catch (JsonException)
+        {
+            return new Dictionary<string, double>();
+        }
+    }
+
+    private static IReadOnlyDictionary<string, int> ParseIntMap(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return new Dictionary<string, int>();
+
+        try
+        {
+            return JsonSerializer.Deserialize<Dictionary<string, int>>(json, s_caseInsensitiveOptions) ?? new Dictionary<string, int>();
+        }
+        catch (JsonException)
+        {
+            return new Dictionary<string, int>();
         }
     }
 }

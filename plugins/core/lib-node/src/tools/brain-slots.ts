@@ -49,6 +49,7 @@ export const brainSlotTools: Tool[] = [
         timeoutSeconds: { type: 'number', description: 'Timeout in seconds' },
         maxOutputTokens: { type: 'number', description: 'Maximum output tokens' },
         systemPrompt: { type: 'string', description: 'Optional system prompt' },
+        orchestrationWeight: { type: 'number', description: 'Initial orchestration weight' },
       },
       required: ['workspacePath', 'slotId', 'role', 'providerKind', 'modelId', 'credentialReference'],
     },
@@ -117,6 +118,59 @@ export const brainSlotTools: Tool[] = [
       required: ['workspacePath', 'slotId', 'input'],
     },
   },
+  {
+    name: 'brain_slot_orchestrate',
+    description: 'Run the full four-role Quad-Brain decision loop.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        workspacePath: { type: 'string', description: 'Workspace path' },
+        input: { type: 'string', description: 'Input prompt' },
+        turnId: { type: 'string', description: 'Owning session-log turn id' },
+        admitCuriosityToGraphRag: { type: 'boolean', description: 'Admit committed Curiosity output to GraphRAG/context' },
+        metadataJson: { type: 'string', description: 'JSON object of string metadata' },
+        weightUpdateJson: { type: 'string', description: 'Optional JSON QuadBrainWeightUpdateRequest to apply after final commit' },
+      },
+      required: ['workspacePath', 'input'],
+    },
+  },
+  {
+    name: 'brain_slot_aot_reconcile',
+    description: 'Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        workspacePath: { type: 'string', description: 'Workspace path' },
+        input: { type: 'string', description: 'Original input prompt' },
+        leftOutput: { type: 'string', description: 'Committed LeftHemisphere output' },
+        rightOutput: { type: 'string', description: 'Committed RightHemisphere output' },
+        curiosityOutput: { type: 'string', description: 'Committed CuriosityEngine output' },
+        turnId: { type: 'string', description: 'Owning session-log turn id' },
+        metadataJson: { type: 'string', description: 'JSON object of string metadata' },
+      },
+      required: ['workspacePath', 'input', 'leftOutput', 'rightOutput', 'curiosityOutput'],
+    },
+  },
+  {
+    name: 'brain_slot_weight_update',
+    description: 'Apply an approved durable Quad-Brain role-weight update.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        workspacePath: { type: 'string', description: 'Workspace path' },
+        roleWeightsJson: { type: 'string', description: 'JSON object mapping Quad role names to weights' },
+        expectedVersionsJson: { type: 'string', description: 'Optional JSON object mapping Quad role names to expected versions' },
+        reasonText: { type: 'string', description: 'Required reason for the update' },
+        proposedBy: { type: 'string', description: 'Who proposed the update' },
+        aotApproved: { type: 'boolean', description: 'Whether Arbiter-of-Truth approval has been recorded' },
+        adminApproved: { type: 'boolean', description: 'Whether admin approval has been recorded' },
+        safetyGatesPassed: { type: 'boolean', description: 'Whether safety gates have passed' },
+        turnId: { type: 'string', description: 'Owning session-log turn id' },
+        metadataJson: { type: 'string', description: 'JSON object of string metadata' },
+      },
+      required: ['workspacePath', 'roleWeightsJson', 'reasonText', 'aotApproved', 'adminApproved', 'safetyGatesPassed'],
+    },
+  },
 ];
 
 const mutatingBrainSlotTools = new Set([
@@ -125,6 +179,9 @@ const mutatingBrainSlotTools = new Set([
   'brain_slot_enable',
   'brain_slot_disable',
   'brain_slot_invoke',
+  'brain_slot_orchestrate',
+  'brain_slot_aot_reconcile',
+  'brain_slot_weight_update',
 ]);
 
 export function canHandleBrainSlotTool(name: string): boolean {

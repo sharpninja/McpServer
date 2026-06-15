@@ -830,13 +830,13 @@ The transactional diffgram implementation SHALL follow Byrd Development Process 
 - [x] Deferred work is tracked as TODO/requirements state instead of skipped test placeholders.
 - [x] Final closeout validation includes focused transaction tests, full affected unit suites, traceability validation, and solution build evidence.
 
-## FR-MCP-123 Quad-model future scaffolding
+## FR-MCP-123 Quad-model scaffold-to-implementation progression
 
-The transaction foundation SHALL preserve the imported quad-model architecture while keeping Curiosity execution, AoT reconciliation execution, quad-model orchestration, and weight-update execution disabled by default until later requirements authorize them.
+The transaction foundation SHALL preserve the imported quad-model architecture while keeping branches disabled until explicit requirements authorize them. FR-MCP-134 and FR-MCP-135 now authorize transaction-gated Curiosity participation, AoT reconciliation, full Quad-Brain orchestration, and safety-gated weight updates while unrelated autonomous branches remain deferred.
 **Acceptance Criteria:**
-- [x] Imported diagrams retain stable IDs and future branch annotations for Curiosity, AoT reconciliation, weight redistribution, and quad orchestration.
-- [x] Current production code implements transaction security and mutation gating only; direct model execution and weight-update execution remain disabled/deferred.
-- [x] Deferred future scope is explicitly documented in the plan, mutation audit, design rounds, TEST-MCP-163, and TEST-MCP-170.
+- [x] Imported diagrams retain stable IDs and branch annotations for Curiosity, AoT reconciliation, weight redistribution, and quad orchestration.
+- [x] Current production code implements transaction security, mutation gating, external brain-slot invocation, full Quad-Brain orchestration, AoT reconciliation, and safety-gated durable weight updates.
+- [x] Remaining deferred future scope is explicitly documented in the plan, mutation audit, design rounds, TEST-MCP-163, TEST-MCP-170, and TEST-MCP-185.
 
 ## FR-MCP-124 Imported document and diagram preservation
 
@@ -870,8 +870,8 @@ In-scope branches from imported activity and sequence diagrams SHALL have implem
 **Acceptance Criteria:**
 - [x] SD-DIFFGRAM-001 valid, invalid, signing, verification, encryption, and hash branches are covered by keyserver/subscriber/client/integration tests.
 - [x] AD-TXN-001 commit, subscriber unavailable, degraded, rollback, timeout, and audit branches are covered by coordinator, pub-sub, federation, and mutation-gating tests.
-- [x] Deferred diagram branches for Curiosity, AoT, weight redistribution, and full quad execution are explicitly documented as disabled future scope.
-- [x] TEST-MCP-165 through TEST-MCP-173 preserve diagram IDs, branch IDs, design mappings, and traceability closeout evidence.
+- [x] Diagram branches for Curiosity, AoT, weight redistribution, and full quad execution are either implemented under FR-MCP-129 through FR-MCP-135 or explicitly documented as remaining deferred scope.
+- [x] TEST-MCP-165 through TEST-MCP-185 preserve diagram IDs, branch IDs, design mappings, and traceability closeout evidence.
 
 ## FR-MCP-128 Two-round architecture and design review
 
@@ -887,40 +887,64 @@ The implementation SHALL include two architecture/design rounds before closeout:
 The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for `LeftHemisphere`, `RightHemisphere`, `CuriosityEngine`, and `ArbiterOfTruth`, including CRUD, readiness status projection, and individually gated live model invocation.
 
 **Acceptance Criteria:**
-- [ ] Brain-slot definitions are durable CRUD records scoped by workspace and role.
-- [ ] Exactly one enabled slot per workspace and role is allowed; enabling a replacement requires `replaceExisting=true` and writes an audit entry.
-- [ ] A workspace is quad-ready only when all four roles have enabled slots with valid provider, model, endpoint policy, credential reference, and trusted party mapping.
-- [ ] CRUD stores and returns `credentialReference` only; raw API keys are never persisted or returned.
-- [ ] REST, client, and STDIO/MCP surfaces expose list/get/upsert/delete/enable/disable/status/invoke parity.
-- [ ] Invocation is rejected unless `Mcp:BrainSlots:ExecutionEnabled=true`, the slot is enabled, endpoint policy passes, credentials resolve, and required turn transactions are enabled.
-- [ ] No implicit fallback model is used; v1 fallback behavior is fail-closed with structured reason codes.
+- [x] Brain-slot definitions are durable CRUD records scoped by workspace and role.
+- [x] Exactly one enabled slot per workspace and role is allowed; enabling a replacement requires `replaceExisting=true` and writes an audit entry.
+- [x] A workspace is quad-ready only when all four roles have enabled slots with valid provider, model, endpoint policy, credential reference, and trusted party mapping.
+- [x] CRUD stores and returns `credentialReference` only; raw API keys are never persisted or returned.
+- [x] REST, client, and STDIO/MCP surfaces expose list/get/upsert/delete/enable/disable/status/invoke parity.
+- [x] Invocation is rejected unless `Mcp:BrainSlots:ExecutionEnabled=true`, the slot is enabled, endpoint policy passes, credentials resolve, and required turn transactions are enabled.
+- [x] No implicit fallback model is used; fallback behavior remains fail-closed with structured reason codes unless a configured slot is invoked and committed.
 
-**Covered by:** `BrainSlotRegistryServiceTests`, `BrainSlotControllerTests`, `BrainSlotClientTests`, `BrainSlotProviderTests`, `BrainSlotInvocationTransactionTests`
+**Covered by:** `BrainSlotRegistryServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotCredentialResolverTests`, `BrainSlotInvocationTransactionTests`, `BrainSlotContractArtifactTests`
 
 ## FR-MCP-130 Transaction-gated Curiosity external result admission
 
 The `CuriosityEngine` slot MAY request GraphRAG or context admission for external model output only after the related brain-slot invocation transaction commits successfully through the subscriber path.
 
 **Acceptance Criteria:**
-- [ ] No model output is returned to the caller until the subscriber commit succeeds.
-- [ ] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
-- [ ] Only `CuriosityEngine` may request GraphRAG/context admission in this slice.
-- [ ] Left, Right, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
-- [ ] Curiosity admission records the committed transaction and admission metadata for audit.
+- [x] No model output is returned to the caller until the subscriber commit succeeds.
+- [x] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
+- [x] Only `CuriosityEngine` may request GraphRAG/context admission.
+- [x] Left, Right, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
+- [x] Curiosity admission records the committed transaction and admission metadata for audit.
 
-**Covered by:** `BrainSlotInvocationTransactionTests`, `BrainSlotCuriosityAdmissionTests`
+**Covered by:** `BrainSlotInvocationTransactionTests`, `BrainSlotContainmentTests`
 
-## FR-MCP-131 Quad containment for reconciliation, weight updates, and full orchestration
+## FR-MCP-131 Quad containment and authorization boundary
 
-The MCP runtime SHALL continue to reject AoT reconciliation execution, weight updates, and full automatic quad orchestration with `DeferredFeatureDisabled` until separate requirements authorize those branches.
+The MCP runtime SHALL keep Quad-Brain branches fail-closed unless explicit branch requirements authorize them. FR-MCP-134 and FR-MCP-135 now authorize AoT reconciliation execution, durable weight updates, and full Quad-Brain orchestration; unauthorized cache mutation and implicit fallback remain contained.
 
 **Acceptance Criteria:**
-- [ ] AoT reconciliation execution returns `DeferredFeatureDisabled`.
-- [ ] Weight update execution returns `DeferredFeatureDisabled`.
-- [ ] Full automatic quad orchestration returns `DeferredFeatureDisabled`.
-- [ ] Individual brain-slot invocation authorization does not authorize AoT reconciliation, weight updates, or full quad orchestration side effects.
+- [x] AoT reconciliation execution is authorized only through the transaction-gated ArbiterOfTruth slot path.
+- [x] Weight update execution is authorized only through the safety-gated, transaction-coordinated weight update path.
+- [x] Full automatic quad orchestration is authorized only when the workspace is quad-ready and all role outputs commit successfully.
+- [x] Individual brain-slot invocation authorization still does not authorize non-Curiosity GraphRAG/cache mutation or implicit fallback model behavior.
 
-**Covered by:** `BrainSlotContainmentTests`, `TurnTransactionPlanArtifactTests`
+**Covered by:** `QuadBrainOrchestrationServiceTests`, `BrainSlotContainmentTests`, `TurnTransactionPlanArtifactTests`
+
+## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
+
+The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including `LeftHemisphere`, `RightHemisphere`, `CuriosityEngine`, and `ArbiterOfTruth` invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+
+**Acceptance Criteria:**
+- [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
+- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
+- [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
+- [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
+
+**Covered by:** `QuadBrainOrchestrationServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`
+
+## FR-MCP-135 Quad-Brain weight update controls
+
+The MCP runtime SHALL support durable, audited Quad-Brain role weight updates with AoT approval, admin approval, explicit safety-gate acknowledgement, version checks, before/after snapshots, and rollback metadata, while rejecting unsafe or stale updates without mutating slot state.
+
+**Acceptance Criteria:**
+- [x] Weight updates require AoT approval, admin approval, safety gates passed, and a non-empty reason before slot weights change.
+- [x] Each accepted update increments slot weight versions and records previous and new values in `DataAuditLogs`.
+- [x] Stale expected versions, missing roles, disabled slots, invalid weights, or missing approvals return structured fail-closed reason codes.
+- [x] Full orchestration can apply an explicit approved weight update but never performs an implicit self-improvement update.
+
+**Covered by:** `QuadBrainOrchestrationServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 

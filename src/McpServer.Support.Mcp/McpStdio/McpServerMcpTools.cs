@@ -62,6 +62,7 @@ public sealed partial class FwhMcpTools
     private readonly IPromptTemplateService _promptTemplateService;
     private readonly IBrainSlotRegistryService? _brainSlotRegistry;
     private readonly IBrainSlotInvocationService? _brainSlotInvocation;
+    private readonly IQuadBrainOrchestrationService? _quadBrainOrchestration;
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ILogger<FwhMcpTools> _logger;
@@ -96,7 +97,8 @@ public sealed partial class FwhMcpTools
         ITurnTransactionCoordinator? transactionCoordinator = null,
         IOptions<TurnTransactionOptions>? transactionOptions = null,
         IBrainSlotRegistryService? brainSlotRegistry = null,
-        IBrainSlotInvocationService? brainSlotInvocation = null)
+        IBrainSlotInvocationService? brainSlotInvocation = null,
+        IQuadBrainOrchestrationService? quadBrainOrchestration = null)
     {
         _logger = logger;
         _db = db;
@@ -125,6 +127,7 @@ public sealed partial class FwhMcpTools
         _promptTemplateService = promptTemplateService;
         _brainSlotRegistry = brainSlotRegistry;
         _brainSlotInvocation = brainSlotInvocation;
+        _quadBrainOrchestration = quadBrainOrchestration;
         _transactionCoordinator = transactionCoordinator;
         _transactionOptions = transactionOptions;
     }

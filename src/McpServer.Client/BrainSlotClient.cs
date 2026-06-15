@@ -51,4 +51,22 @@ public sealed class BrainSlotClient : McpClientBase
     /// <summary>Invokes a configured brain slot.</summary>
     public Task<BrainSlotInvokeResponse> InvokeAsync(string slotId, BrainSlotInvokeRequest request, CancellationToken cancellationToken = default)
         => PostAsync<BrainSlotInvokeResponse>($"mcpserver/brain-slots/{Uri.EscapeDataString(slotId)}/invoke", request, cancellationToken);
+
+    /// <summary>Runs the full Quad-Brain decision loop.</summary>
+    public Task<QuadBrainOrchestrationResponse> OrchestrateAsync(
+        QuadBrainOrchestrationRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<QuadBrainOrchestrationResponse>("mcpserver/brain-slots/orchestrate", request, cancellationToken);
+
+    /// <summary>Runs Arbiter-of-Truth reconciliation over committed role evidence.</summary>
+    public Task<AotReconciliationResponse> ReconcileAotAsync(
+        AotReconciliationRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<AotReconciliationResponse>("mcpserver/brain-slots/aot/reconcile", request, cancellationToken);
+
+    /// <summary>Applies an explicitly approved Quad-Brain role-weight update.</summary>
+    public Task<QuadBrainWeightUpdateResponse> UpdateWeightsAsync(
+        QuadBrainWeightUpdateRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<QuadBrainWeightUpdateResponse>("mcpserver/brain-slots/weights/update", request, cancellationToken);
 }

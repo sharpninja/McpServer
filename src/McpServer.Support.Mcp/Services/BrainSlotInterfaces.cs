@@ -30,6 +30,9 @@ public interface IBrainSlotRegistryService
 
     /// <summary>Gets the backing entity for internal invocation.</summary>
     Task<BrainSlotDefinitionEntity?> GetEntityAsync(string slotId, CancellationToken cancellationToken = default);
+
+    /// <summary>Gets the enabled backing entity for a role.</summary>
+    Task<BrainSlotDefinitionEntity?> GetEnabledEntityForRoleAsync(string role, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -81,18 +84,24 @@ public interface IBrainSlotContextAdmissionService
 }
 
 /// <summary>
-/// TR-MCP-QUAD-004: Explicit guard for deferred quad branches.
+/// FR-MCP-134, FR-MCP-135, and TR-MCP-QUAD-005: Executes full Quad-Brain branches.
 /// </summary>
-public interface IBrainSlotContainmentService
+public interface IQuadBrainOrchestrationService
 {
-    /// <summary>Rejects AoT reconciliation execution for this slice.</summary>
-    BrainSlotInvokeResponse ExecuteAotReconciliation(BrainSlotDeferredRequest request);
+    /// <summary>Executes the full four-role Quad-Brain decision loop.</summary>
+    Task<QuadBrainOrchestrationResponse> ExecuteFullOrchestrationAsync(
+        QuadBrainOrchestrationRequest request,
+        CancellationToken cancellationToken = default);
 
-    /// <summary>Rejects weight update execution for this slice.</summary>
-    BrainSlotInvokeResponse ExecuteWeightUpdate(BrainSlotDeferredRequest request);
+    /// <summary>Executes Arbiter-of-Truth reconciliation over committed role evidence.</summary>
+    Task<AotReconciliationResponse> ExecuteAotReconciliationAsync(
+        AotReconciliationRequest request,
+        CancellationToken cancellationToken = default);
 
-    /// <summary>Rejects full automatic quad orchestration for this slice.</summary>
-    BrainSlotInvokeResponse ExecuteFullOrchestration(BrainSlotDeferredRequest request);
+    /// <summary>Executes a durable, audited role-weight update after safety gates pass.</summary>
+    Task<QuadBrainWeightUpdateResponse> ExecuteWeightUpdateAsync(
+        QuadBrainWeightUpdateRequest request,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>

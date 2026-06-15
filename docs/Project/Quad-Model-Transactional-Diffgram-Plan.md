@@ -14,7 +14,7 @@ The imported document is implemented in this repository with this fixed order:
 2. Build the subscriber second.
 3. Integrate MCP Server turn transactions third.
 4. Add individually gated external brain-slot invocation for the four quad roles.
-5. Keep full quad-model orchestration, autonomous Curiosity execution, AoT reconciliation execution, and weight update execution disabled until later requirements authorize those slices.
+5. Execute the authorized full Quad-Brain orchestration, AoT reconciliation, and safety-gated weight update slices through FR-MCP-134 and FR-MCP-135 while keeping unrelated autonomous Curiosity branches and implicit fallback behavior disabled.
 
 ## Imported Executive Summary
 
@@ -82,8 +82,8 @@ Repo annotations:
 - `AD-TXN-001-BR-NO-SUBSCRIBER`: `B -> C`; in scope for degraded-mode tests.
 - `AD-TXN-001-BR-START`: `B -> D -> E`; in scope for keyserver-first tests.
 - `AD-TXN-001-BR-AOT-APPROVED`: `H -> M -> N -> O -> P`; in scope for MCP transaction gating tests after keyserver and subscriber are green.
-- `AD-TXN-001-BR-AOT-REJECTED`: `H -> I -> J`; documented now, executable quad reconciliation deferred.
-- `AD-TXN-001-BR-ROLLBACK`: `J -> L`; rollback audit behavior in scope, model disagreement execution deferred.
+- `AD-TXN-001-BR-AOT-REJECTED`: `H -> I -> J`; implemented through explicit ArbiterOfTruth reconciliation over committed role evidence.
+- `AD-TXN-001-BR-ROLLBACK`: `J -> L`; rollback audit behavior remains in scope for transaction compensation; model-disagreement policy automation remains deferred.
 
 ### AD-CURIOSITY-001 Curiosity Engine Flow
 
@@ -113,9 +113,9 @@ Repo annotations:
 
 - `AD-CURIOSITY-001-BR-MONITOR`: documented for future cache/log/trace monitoring.
 - `AD-CURIOSITY-001-BR-FRUSTRATION`: deferred; must remain disabled in this slice.
-- `AD-CURIOSITY-001-BR-EXTERNAL`: in scope only for individually configured, transaction-gated external brain-slot invocation under FR-MCP-129 and TR-MCP-QUAD-003.
-- `AD-CURIOSITY-001-BR-INJECT`: in scope only for CuriosityEngine committed-result GraphRAG/context admission under FR-MCP-130; all other roles are rejected for admission.
-- `AD-CURIOSITY-001-BR-WEIGHT`: deferred and disabled; covered by future weight-update requirements.
+- `AD-CURIOSITY-001-BR-EXTERNAL`: implemented for individually configured, transaction-gated external brain-slot invocation under FR-MCP-129 and TR-MCP-QUAD-003.
+- `AD-CURIOSITY-001-BR-INJECT`: implemented only for CuriosityEngine committed-result GraphRAG/context admission under FR-MCP-130; all other roles are rejected for admission.
+- `AD-CURIOSITY-001-BR-WEIGHT`: implemented only through explicit FR-MCP-135 safety-gated weight update requests; implicit self-improvement remains disabled.
 
 ### SD-DIFFGRAM-001 Three-Party Diffgram Exchange
 
@@ -168,10 +168,10 @@ flowchart TD
 
 Repo annotations:
 
-- `AD-AOT-001-BR-REJECT`: documented and disabled until quad execution exists.
-- `AD-AOT-001-BR-AGREE`: future reconciliation branch.
-- `AD-AOT-001-BR-DISAGREE`: future rejection branch.
-- `AD-AOT-001-BR-ACCEPT`: future revised-result branch.
+- `AD-AOT-001-BR-REJECT`: implemented as a fail-closed rejected orchestration response when role evidence or Arbiter commit is unavailable.
+- `AD-AOT-001-BR-AGREE`: implemented through the full Quad-Brain orchestration prompt that combines Left, Right, and Curiosity evidence for ArbiterOfTruth.
+- `AD-AOT-001-BR-DISAGREE`: documented as a future policy branch for multi-round disagreement escalation; the current runtime fails closed instead of auto-escalating.
+- `AD-AOT-001-BR-ACCEPT`: implemented through ArbiterOfTruth reconciliation returning a committed final decision.
 
 ### AD-WEIGHT-001 Weight Redistribution Safety
 
@@ -193,12 +193,12 @@ flowchart TD
 
 Repo annotations:
 
-- `AD-WEIGHT-001-BR-PROPOSE`: deferred and disabled.
-- `AD-WEIGHT-001-BR-AOT`: deferred and disabled.
-- `AD-WEIGHT-001-BR-HUMAN`: deferred and disabled.
-- `AD-WEIGHT-001-BR-SNAPSHOT`: future implementation must define snapshot/rollback contracts.
-- `AD-WEIGHT-001-BR-GATES`: future implementation must define safety gates before any weight update code.
-- `AD-WEIGHT-001-BR-QUARANTINE`: future implementation must define quarantine semantics.
+- `AD-WEIGHT-001-BR-PROPOSE`: implemented only as an explicit caller-supplied `QuadBrainWeightUpdateRequest`; autonomous proposal remains disabled.
+- `AD-WEIGHT-001-BR-AOT`: implemented with required `aotApproved=true`.
+- `AD-WEIGHT-001-BR-HUMAN`: implemented with required `adminApproved=true`.
+- `AD-WEIGHT-001-BR-SNAPSHOT`: implemented through per-role before/after snapshots, weight versions, audit rows, and transaction rollback metadata.
+- `AD-WEIGHT-001-BR-GATES`: implemented through explicit safety-gated weight updates requiring AoT approval, admin approval, safety gates passed, version checks, and reason text.
+- `AD-WEIGHT-001-BR-QUARANTINE`: deferred branches: quarantine workflows and automated model fine-tuning remain future work.
 
 ### ARCH-QUAD-001 High-Level System Architecture
 
@@ -235,7 +235,7 @@ Repo annotations:
 - `ARCH-QUAD-001-COMP-KEYSERVER`: separate `src/McpServer.KeyServer` host exposes keyserver trust endpoints over the shared transaction-security core.
 - `ARCH-QUAD-001-COMP-SUBSCRIBER`: separate `src/McpServer.Subscriber` host exposes subscriber commit/status/abort endpoints and verifies manifests through an HTTP-backed keyserver client.
 - `ARCH-QUAD-001-COMP-PUBSUB`: represented in this slice by subscriber commit/coordinator contracts, direct and HTTP external subscriber pub-sub adapters, external process/topic broker envelopes, required-subscriber fan-out, durable local broker-backed commit/abort outbox replay, replay worker/endpoints, and retention purge.
-- `ARCH-QUAD-001-COMP-QUAD`: documented scaffolding only; execution disabled.
+- `ARCH-QUAD-001-COMP-QUAD`: implemented in `QuadBrainOrchestrationService`, brain-slot REST/client/STDIO surfaces, Node plugin tool descriptors, and `AddBrainSlotWeights` provider migrations.
 
 ## Imported Security Remediation
 
@@ -258,4 +258,4 @@ The implementation follows the imported hardened option:
 - Shared transaction-security core: `src/McpServer.TransactionSecurity`.
 - Shared client contracts: existing `src/McpServer.Client`.
 - Focused first-slice tests: MCP support/client test projects plus `tests/McpServer.TransactionSecurity.IntegrationTests`.
-- Deferred adapters: remaining direct agent execution, desktop launch, tunnel, workspace configuration, auth configuration, server configuration, full remote/runtime-side compensation, complete concurrent-update isolation during delayed rollback, and full key rotation lifecycle automation beyond file-backed startup provisioning.
+- Deferred branches: remaining direct agent execution, desktop launch, tunnel, workspace configuration, auth configuration, server configuration, full remote/runtime-side compensation, complete concurrent-update isolation during delayed rollback, quarantine workflows, automated model fine-tuning, and full key rotation lifecycle automation beyond file-backed startup provisioning.

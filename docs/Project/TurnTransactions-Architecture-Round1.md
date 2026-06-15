@@ -10,7 +10,7 @@ Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNARCH-001
 - `McpServer.KeyServer` is a new service. It owns keyserver signing keys, party public-key registry, manifest signing, manifest verification, replay detection, sequence validation, expiry validation, and keyserver audit rows.
 - `McpServer.Subscriber` is a new service. It owns subscriber private decrypt/signing material, durable commit state, idempotency/conflict checks, abort state, rejection reasons, and subscriber audit rows.
 - `McpServer.Client` owns public DTOs and typed clients for keyserver, subscriber, and transaction status surfaces.
-- Quad-model execution, Curiosity research, AoT reconciliation execution, and weight updates are documented but disabled by default in this slice.
+- Quad-model execution now has explicit authorization boundaries: individual external brain-slot invocation, Curiosity committed-result admission, full Quad-Brain orchestration, AoT reconciliation, and safety-gated weight updates execute only through FR-MCP-129 through FR-MCP-135 gates. Autonomous Curiosity research, implicit fallback behavior, quarantine workflows, and automated model fine-tuning remain deferred.
 
 ## Key And Crypto Ownership
 
@@ -65,5 +65,5 @@ Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNARCH-001
 - Decision: build keyserver and subscriber as solution projects in this repo, not separate repositories.
 - Decision: use service-local SQLite stores for keyserver and subscriber in v1.
 - Decision: keep transaction crypto additive and separate from federation HMAC envelopes.
-- Decision: keep quad execution disabled until future requirements authorize it.
+- Decision: keep unauthorized quad branches fail-closed; FR-MCP-134 and FR-MCP-135 authorize full orchestration, AoT reconciliation, and safety-gated weight updates through explicit transaction and approval gates.
 - Decision: require diagram-derived tests before implementation of each in-scope branch.

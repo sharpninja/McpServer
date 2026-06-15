@@ -843,10 +843,10 @@ Transaction traceability/import tests SHALL prove FR-MCP-118 through FR-MCP-128,
 
 ### TEST-MCP-163
 
-Deferred-scope documentation tests SHALL prove future Quad-Model orchestration, Curiosity execution, AoT reconciliation, weight redistribution, direct agent execution, desktop launch, tunnels, workspace/auth/server configuration, full remote/runtime compensation, complete delayed-rollback isolation, bucket/GitHub compensation, and full key-rotation lifecycle automation remain explicit future work rather than silently reported as complete.
+Deferred-scope documentation tests SHALL prove remaining future autonomous Quad-Model branches, direct agent execution, desktop launch, tunnels, workspace/auth/server configuration, full remote/runtime compensation, complete delayed-rollback isolation, bucket/GitHub compensation, quarantine/fine-tuning automation, implicit fallback behavior, and full key-rotation lifecycle automation remain explicit future work rather than silently reported as complete.
 
 **Acceptance Criteria:**
-- [x] `TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds` validates deferred scope and design artifacts.
+- [x] TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds validates deferred scope and design artifacts while distinguishing authorized Quad-Brain branches from remaining future scope. (evidence: tests/McpServer.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs)
 
 ### TEST-MCP-164
 
@@ -885,24 +885,24 @@ End-to-end turn transaction diagram tests SHALL derive coverage from AD-TXN-001 
 
 ### TEST-MCP-169
 
-Degraded rollback reconciliation tests SHALL validate AD-TXN-001 and AD-AOT-001 in-scope rollback/audit behavior without enabling future AoT execution.
+Degraded rollback reconciliation tests SHALL validate AD-TXN-001 and AD-AOT-001 in-scope rollback/audit behavior while requiring AoT execution to use the authorized ArbiterOfTruth transaction path.
 
 **Acceptance Criteria:**
-- [x] Transaction-gated services and pub-sub tests verify rollback compensation, rollback failure reporting, durable pending-commit cancellation, and additive audit evidence.
+- [x] Transaction-gated services and pub-sub tests verify rollback compensation, rollback failure reporting, durable pending-commit cancellation, additive audit evidence, and authorized AoT transaction routing. (evidence: BrainSlotInvocationTransactionTests and TurnTransactionPlanArtifactTests)
 
 ### TEST-MCP-170
 
-Deferred quad scope enforcement tests SHALL prove Curiosity execution, weight updates, AoT execution, and quad orchestration remain disabled until later requirements authorize them.
+Quad scope enforcement tests SHALL prove Curiosity admission, weight updates, AoT execution, and quad orchestration execute only through FR-MCP-129 through FR-MCP-135 authorization gates, while unrelated autonomous branches remain fail-closed.
 
 **Acceptance Criteria:**
-- [x] Plan artifact tests validate deferred-scope text, and no production project references a quad execution service for the deferred branches.
+- [x] Plan artifact tests validate the implemented/deferred split and reject stale claims that authorized AoT, weight update, or full orchestration branches remain disabled. (evidence: TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds)
 
 ### TEST-MCP-171
 
-Quad architecture conformance tests SHALL validate ARCH-QUAD-001 component mapping, trust boundaries, and disabled future branches.
+Quad architecture conformance tests SHALL validate ARCH-QUAD-001 component mapping, trust boundaries, authorized quad branches, and remaining future branches.
 
 **Acceptance Criteria:**
-- [x] Plan artifact tests validate architecture/design artifacts and repo component references.
+- [x] Plan artifact tests validate architecture/design artifacts, repo component references, authorized branch routing, and remaining future branch documentation. (evidence: TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds)
 
 ### TEST-MCP-172
 
@@ -920,38 +920,87 @@ Design Round 2 conformance tests SHALL validate DTOs, entities, options, interfa
 
 ### TEST-MCP-174
 
-Documentation tests SHALL prove FR-MCP-129 through FR-MCP-131, TR-MCP-QUAD-001 through TR-MCP-QUAD-004, TEST-MCP-174 through TEST-MCP-180, diagram annotations, and the AD-CURIOSITY-001-BR-EXTERNAL in-scope split are present while AoT reconciliation, weight updates, and full quad orchestration remain deferred.
+Brain slot documentation and plan artifact coverage SHALL prove FR-MCP-129 through FR-MCP-135, TR-MCP-QUAD-001 through TR-MCP-QUAD-007, TEST-MCP-174 through TEST-MCP-185, diagram annotations, and the AD-CURIOSITY-001-BR-EXTERNAL, AD-AOT-001, AD-WEIGHT-001, and full quad orchestration implementation split are present.
 
+**Acceptance Criteria:**
+- [x] TurnTransactionPlanArtifactTests fails if brain-slot requirement IDs, diagram annotations, mapping rows, or matrix rows are missing. (evidence: TurnTransactionPlanArtifactTests)
 
 ### TEST-MCP-175
 
-Unit tests SHALL prove workspace-scoped CRUD, role validation, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete/disable semantics, credentialReference-only persistence, status projection, and workspace isolation.
+Brain slot durable registry coverage SHALL prove workspace-scoped CRUD, role validation, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete/disable semantics, credentialReference-only persistence, status projection, and workspace isolation.
 
+**Acceptance Criteria:**
+- [x] BrainSlotRegistryServiceTests covers create, update, enable, disable, delete, replacement, audit, readiness, and workspace isolation. (evidence: BrainSlotRegistryServiceTests)
 
 ### TEST-MCP-176
 
-Controller, client, and STDIO/MCP tool tests SHALL prove list/get/upsert/delete/enable/disable/status/invoke routes serialize the public DTOs correctly, hide raw credentials, enforce AgentManager policy behavior, and preserve workspace/auth propagation.
+Brain slot REST, client, and STDIO contract coverage SHALL prove list/get/upsert/delete/enable/disable/status/invoke/orchestrate/aot-reconcile/weight-update routes serialize the public DTOs correctly, hide raw credentials, enforce AgentManager policy behavior, and preserve workspace/auth propagation.
 
+**Acceptance Criteria:**
+- [x] BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, and plugin tests cover every public brain-slot operation. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
 
 ### TEST-MCP-177
 
-Provider tests SHALL prove env:, config:, and file: credential references resolve without persistence or response leakage; OpenAI and OpenAI-compatible client creation validates endpoint policy; disallowed hosts, loopback without explicit allowance, timeout, and cancellation fail closed without live network dependency.
+Brain slot provider and credential coverage SHALL prove env:, config:, and file: credential references resolve without persistence or response leakage; OpenAI and OpenAI-compatible client creation validates endpoint policy; disallowed hosts, loopback without explicit allowance, timeout, and cancellation fail closed without live network dependency.
 
+**Acceptance Criteria:**
+- [x] BrainSlotCredentialResolverTests and fake invocation/provider tests never require live network credentials. (evidence: BrainSlotCredentialResolverTests and fake provider coverage)
 
 ### TEST-MCP-178
 
-Invocation transaction tests SHALL prove execution is rejected unless brain-slot execution and required turn transactions are enabled, no output is returned before subscriber commit, commit failure, timeout, or degradation discards output, and diffgrams contain slot metadata and hashes.
+Brain slot transaction admission coverage SHALL prove execution is rejected unless brain-slot execution and required turn transactions are enabled, no output is returned before subscriber commit, commit failure/timeout/degradation discards output, and diffgrams contain slot metadata and hashes.
 
+**Acceptance Criteria:**
+- [x] BrainSlotInvocationTransactionTests covers disabled gates, failed commits, delayed commits, and committed output return. (evidence: BrainSlotInvocationTransactionTests)
 
 ### TEST-MCP-179
 
-Curiosity admission tests SHALL prove only CuriosityEngine can request GraphRAG or context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache or GraphRAG, and Left, Right, and Arbiter invocations never mutate cache.
+Curiosity admission coverage SHALL prove only CuriosityEngine can request GraphRAG/context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache/GraphRAG, and Left/Right/Arbiter invocations never mutate cache.
 
+**Acceptance Criteria:**
+- [x] BrainSlotInvocationTransactionTests and BrainSlotContainmentTests cover committed Curiosity admission and rejected non-Curiosity admission. (evidence: BrainSlotInvocationTransactionTests; BrainSlotContainmentTests)
 
 ### TEST-MCP-180
 
-Containment tests SHALL prove AoT reconciliation execution, weight update execution, and full automatic quad orchestration continue returning DeferredFeatureDisabled with no side effects while individual brain-slot invocation is enabled only by the new gates.
+Quad containment coverage SHALL prove AoT reconciliation execution, weight update execution, and full automatic quad orchestration are available only through explicit FR-MCP-134/FR-MCP-135 gates, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
 
+**Acceptance Criteria:**
+- [x] QuadBrainOrchestrationServiceTests covers the authorized quad branches and BrainSlotContainmentTests covers the remaining cache-mutation boundary. (evidence: QuadBrainOrchestrationServiceTests; BrainSlotContainmentTests)
+
+### TEST-MCP-181
+
+Quad orchestration service coverage SHALL prove full Quad-Brain orchestration rejects non-ready workspaces, invokes roles through transaction-gated slots in the required order, and returns final committed AoT output with role transaction metadata.
+
+**Acceptance Criteria:**
+- [x] QuadBrainOrchestrationServiceTests covers ready and non-ready orchestration paths. (evidence: QuadBrainOrchestrationServiceTests)
+
+### TEST-MCP-182
+
+AoT reconciliation execution coverage SHALL prove AoT reconciliation executes through the ArbiterOfTruth slot, includes Left/Right/Curiosity evidence, returns committed output only after subscriber acknowledgement, and fails closed without fallback.
+
+**Acceptance Criteria:**
+- [x] QuadBrainOrchestrationServiceTests covers Arbiter invocation and committed final output. (evidence: QuadBrainOrchestrationServiceTests)
+
+### TEST-MCP-183
+
+Quad weight update coverage SHALL prove approved weight updates persist weights and versions with audits, while missing approvals, stale versions, invalid roles, disabled slots, and invalid weights are rejected without mutation.
+
+**Acceptance Criteria:**
+- [x] QuadBrainOrchestrationServiceTests covers approved persistence/audit and missing-approval rejection. (evidence: QuadBrainOrchestrationServiceTests)
+
+### TEST-MCP-184
+
+Quad public contract parity coverage SHALL prove REST, client, STDIO, and Node plugin surfaces expose orchestration, AoT reconciliation, and weight update contracts consistently.
+
+**Acceptance Criteria:**
+- [x] BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, and brain-slots.test.ts cover public parity. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
+
+### TEST-MCP-185
+
+Quad traceability closure coverage SHALL prove FR-MCP-134 through FR-MCP-135, TR-MCP-QUAD-005 through TR-MCP-QUAD-007, TEST-MCP-181 through TEST-MCP-185, and the imported diagrams no longer describe AoT, weight updates, or full quad orchestration as deferred once implemented.
+
+**Acceptance Criteria:**
+- [x] TurnTransactionPlanArtifactTests covers the implemented/deferred split and matrix rows. (evidence: TurnTransactionPlanArtifactTests)
 
 
 ## TEST-MCP-BATCH

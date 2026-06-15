@@ -306,6 +306,9 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("OrchestrationWeight")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("PartyId")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -329,6 +332,12 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("WeightUpdatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("WeightVersion")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("WorkspaceId", "SlotId");
 

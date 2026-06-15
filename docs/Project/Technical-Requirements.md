@@ -1302,7 +1302,7 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 ## TR-MCP-TXNDIAGRAMS-001
 
-**Imported Diagram Traceability** — Imported Mermaid diagrams SHALL be preserved with stable IDs, source-section references, branch IDs, scope annotations, and test mappings. In-scope branches SHALL have tests; future quad-model, Curiosity, AoT, and weight-update branches SHALL remain explicitly deferred.
+**Imported Diagram Traceability** — Imported Mermaid diagrams SHALL be preserved with stable IDs, source-section references, branch IDs, scope annotations, and test mappings. In-scope branches SHALL have tests; authorized quad-model, Curiosity, AoT, and weight-update branches SHALL map to implementation coverage, while unrelated future branches remain explicitly deferred.
 **Status:** ✅ Complete.
 
 **Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
@@ -1310,30 +1310,79 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 ## TR-MCP-QUAD-001
 
 **Brain-slot storage, DTOs, CRUD, and validation** — Persist `BrainSlotDefinition` and `BrainSlotInvocation` rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per workspace and role, `replaceExisting` replacement audit, soft delete, and readiness status.
-**Status:** 🔴 In Progress.
+**Status:** ✅ Complete.
 
-**Covered by:** `BrainSlotRegistryService`, `BrainSlotController`, `BrainSlotClient`, `McpServerMcpTools`, `BrainSlotRegistryServiceTests`, `BrainSlotControllerTests`, `BrainSlotClientTests`
+**Covered by:** `BrainSlotRegistryService`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `BrainSlotRegistryServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`
+
+**Acceptance Criteria:**
+- [x] Brain-slot definitions and invocations persist per workspace with role validation, one-enabled-slot enforcement, soft delete, credentialReference-only storage, and readiness projection.
+- [x] REST, client, STDIO, and plugin DTOs round-trip slot CRUD without returning raw credential material.
 
 ## TR-MCP-QUAD-002
 
 **External model provider adapter, credentials, endpoint allowlist, timeout, and redaction** — Resolve credentials from `env:`, `config:`, or `file:` references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
-**Status:** 🔴 In Progress.
+**Status:** ✅ Complete.
 
-**Covered by:** `BrainSlotCredentialResolver`, `BrainSlotChatClientFactory`, `BrainSlotProviderTests`
+**Covered by:** `BrainSlotCredentialResolver`, `BrainSlotChatClientFactory`, `BrainSlotCredentialResolverTests`, `BrainSlotInvocationTransactionTests`
+
+**Acceptance Criteria:**
+- [x] Credential references resolve from `env:`, `config:`, and `file:` sources without persisting or logging raw secrets.
+- [x] OpenAI-compatible endpoints enforce host allowlists, explicit loopback allowance, timeout, cancellation, and redaction gates.
 
 ## TR-MCP-QUAD-003
 
 **Keyserver party mapping and transaction diffgram admission** — Require enabled trusted party/key mapping before invocation; invoke external models only when brain-slot execution and required turn transactions are enabled; commit `OperationName = "brain-slot.invoke"` with `PublisherPartyId` from the slot party and diffgram metadata covering slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before returning output.
-**Status:** 🔴 In Progress.
+**Status:** ✅ Complete.
 
-**Covered by:** `BrainSlotInvocationService`, `TurnTransactionCoordinator`, `BrainSlotInvocationTransactionTests`, `BrainSlotCuriosityAdmissionTests`
+**Covered by:** `BrainSlotInvocationService`, `TurnTransactionCoordinator`, `BrainSlotInvocationTransactionTests`, `BrainSlotContainmentTests`
+
+**Acceptance Criteria:**
+- [x] Invocation rejects until execution, slot, endpoint, credential, party/key, and required transaction gates pass.
+- [x] `brain-slot.invoke` diffgrams include slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before output is returned.
 
 ## TR-MCP-QUAD-004
 
-**Deferred branch containment** — Provide explicit runtime guards proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration return `DeferredFeatureDisabled` and do not execute side effects in this slice.
-**Status:** 🔴 In Progress.
+**Quad branch containment and authorization** — Provide explicit runtime gates proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration execute only through FR-MCP-134/FR-MCP-135 paths, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
+**Status:** ✅ Complete.
 
-**Covered by:** `BrainSlotContainmentService`, `BrainSlotContainmentTests`, `TurnTransactionPlanArtifactTests`
+**Covered by:** `QuadBrainOrchestrationService`, `BrainSlotContainmentTests`, `QuadBrainOrchestrationServiceTests`, `TurnTransactionPlanArtifactTests`
+
+**Acceptance Criteria:**
+- [x] Authorized AoT reconciliation, full orchestration, and weight updates route through FR-MCP-134/FR-MCP-135 services only.
+- [x] Non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
+
+## TR-MCP-QUAD-005
+
+**Quad orchestration service and contracts** — Add service, DTO, REST, client, STDIO, and plugin contracts for full Quad-Brain orchestration and AoT reconciliation while reusing the existing transaction-gated brain-slot invocation path.
+**Status:** ✅ Complete.
+
+**Covered by:** `QuadBrainOrchestrationService`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `plugins/core/lib-node/src/tools/brain-slots.ts`, `QuadBrainOrchestrationServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `brain-slots.test.ts`
+
+**Acceptance Criteria:**
+- [x] Quad orchestration DTOs, services, REST endpoints, typed client methods, STDIO tools, and Node plugin tools are present for orchestrate, AoT reconcile, and weight update operations.
+- [x] Public contract tests prove route/tool parity and mutation failsafe classification.
+
+## TR-MCP-QUAD-006
+
+**AoT reconciliation decision loop** — Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram IDs preserved for every role.
+**Status:** ✅ Complete.
+
+**Covered by:** `QuadBrainOrchestrationService`, `BrainSlotInvocationService`, `QuadBrainOrchestrationServiceTests`
+
+**Acceptance Criteria:**
+- [x] Full orchestration invokes `LeftHemisphere`, `RightHemisphere`, `CuriosityEngine`, and `ArbiterOfTruth` through transaction-gated slots and returns final committed Arbiter output.
+- [x] Orchestration rejects non-ready workspaces before any role invocation.
+
+## TR-MCP-QUAD-007
+
+**Durable weight versioning and safety gates** — Persist role weights and versions on brain-slot definitions, enforce dual-control and safety-gate validation, audit before/after snapshots, and expose explicit weight update APIs.
+**Status:** ✅ Complete.
+
+**Covered by:** `BrainSlotDefinitionEntity`, `QuadBrainOrchestrationService`, `AddBrainSlotWeights` migrations, `QuadBrainOrchestrationServiceTests`
+
+**Acceptance Criteria:**
+- [x] Weight updates require AoT approval, admin approval, safety gates, reason text, valid enabled roles, valid weights, and expected versions before mutation.
+- [x] Approved updates persist weight/version/timestamp changes, audit before/after snapshots, and provide rollback metadata through the transaction coordinator.
 
 ## TR-MCP-VOICE-001
 

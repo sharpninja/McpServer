@@ -67,6 +67,15 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
     }
 
     /// <inheritdoc />
+    public async Task<BrainSlotDefinitionEntity?> GetEnabledEntityForRoleAsync(string role, CancellationToken cancellationToken = default)
+    {
+        var normalizedRole = BrainSlotValidation.NormalizeRole(role);
+        return await _db.BrainSlotDefinitions
+            .FirstOrDefaultAsync(slot => slot.Role == normalizedRole && slot.Enabled, cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
     public async Task<BrainSlotDto> UpsertAsync(string slotId, UpsertBrainSlotRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -116,6 +125,8 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
         entity.TimeoutSeconds = timeout;
         entity.MaxOutputTokens = request.MaxOutputTokens <= 0 ? 1024 : request.MaxOutputTokens;
         entity.SystemPrompt = NormalizeOptional(request.SystemPrompt);
+        if (entity.WeightVersion == 0 && entity.WeightUpdatedAtUtc is null)
+            entity.OrchestrationWeight = NormalizeWeight(request.OrchestrationWeight);
         entity.UpdatedAtUtc = now;
 
         await RegisterPartyAsync(entity, cancellationToken).ConfigureAwait(false);
@@ -290,6 +301,9 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
         return value;
     }
 
+    private static double NormalizeWeight(double weight)
+        => double.IsNaN(weight) || double.IsInfinity(weight) || weight <= 0 ? 1.0 : weight;
+
     private void ValidateCredentialReference(string reference)
     {
         if (!_credentialResolver.IsSupportedReference(reference))
@@ -352,6 +366,9 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
             TimeoutSeconds = entity.TimeoutSeconds,
             MaxOutputTokens = entity.MaxOutputTokens,
             SystemPrompt = entity.SystemPrompt,
+            OrchestrationWeight = entity.OrchestrationWeight <= 0 ? 1.0 : entity.OrchestrationWeight,
+            WeightVersion = entity.WeightVersion,
+            WeightUpdatedAtUtc = entity.WeightUpdatedAtUtc,
             CreatedAtUtc = entity.CreatedAtUtc,
             UpdatedAtUtc = entity.UpdatedAtUtc,
         };

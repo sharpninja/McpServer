@@ -242,7 +242,7 @@ public static class McpStdioHost
         builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
         builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
         builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
-        builder.Services.AddScoped<IBrainSlotContainmentService, BrainSlotContainmentService>();
+        builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestrationService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
         builder.Services.AddMcpGraphRag();

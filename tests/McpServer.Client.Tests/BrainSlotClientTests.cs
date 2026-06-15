@@ -106,4 +106,81 @@ public sealed class BrainSlotClientTests
         Assert.Equal("http://localhost:7147/mcpserver/brain-slots/curiosity-main/invoke", handler.LastRequest.RequestUri!.ToString());
         Assert.Contains("\"admitToGraphRag\":true", handler.LastRequestBody, StringComparison.Ordinal);
     }
+
+    /// <summary>OrchestrateAsync posts the full Quad-Brain request to the orchestration route.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task OrchestrateAsync_PostsExpectedRoute()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {"status":"committed","reason":"None","output":"final","transactionId":"txn-aot","diffgramId":"diff-aot","roleResults":[],"startedAtUtc":"2026-06-15T00:00:00Z","completedAtUtc":"2026-06-15T00:00:01Z"}
+            """);
+        using var http = new HttpClient(handler);
+        var client = new BrainSlotClient(http, DefaultOptions);
+
+        var result = await client.OrchestrateAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = "decide",
+            TurnId = "turn-quad",
+            AdmitCuriosityToGraphRag = true,
+        }).ConfigureAwait(true);
+
+        Assert.Equal("final", result.Output);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Equal("http://localhost:7147/mcpserver/brain-slots/orchestrate", handler.LastRequest.RequestUri!.ToString());
+        Assert.Contains("\"admitCuriosityToGraphRag\":true", handler.LastRequestBody, StringComparison.Ordinal);
+    }
+
+    /// <summary>ReconcileAotAsync posts committed role evidence to the AoT reconciliation route.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task ReconcileAotAsync_PostsExpectedRoute()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {"status":"committed","reason":"None","slotId":"arbiter-main","transactionId":"txn-aot","diffgramId":"diff-aot","output":"approved","startedAtUtc":"2026-06-15T00:00:00Z","completedAtUtc":"2026-06-15T00:00:01Z"}
+            """);
+        using var http = new HttpClient(handler);
+        var client = new BrainSlotClient(http, DefaultOptions);
+
+        var result = await client.ReconcileAotAsync(new AotReconciliationRequest
+        {
+            Input = "decide",
+            LeftOutput = "left",
+            RightOutput = "right",
+            CuriosityOutput = "curiosity",
+        }).ConfigureAwait(true);
+
+        Assert.Equal("approved", result.Output);
+        Assert.Equal("http://localhost:7147/mcpserver/brain-slots/aot/reconcile", handler.LastRequest!.RequestUri!.ToString());
+        Assert.Contains("\"leftOutput\":\"left\"", handler.LastRequestBody, StringComparison.Ordinal);
+    }
+
+    /// <summary>UpdateWeightsAsync posts safety-gated weight updates to the weight route.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateWeightsAsync_PostsExpectedRoute()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {"status":"committed","reason":"None","transactionId":"txn-weight","diffgramId":"diff-weight","snapshots":[],"startedAtUtc":"2026-06-15T00:00:00Z","completedAtUtc":"2026-06-15T00:00:01Z"}
+            """);
+        using var http = new HttpClient(handler);
+        var client = new BrainSlotClient(http, DefaultOptions);
+
+        var result = await client.UpdateWeightsAsync(new QuadBrainWeightUpdateRequest
+        {
+            RoleWeights = new Dictionary<string, double> { ["LeftHemisphere"] = 1.2 },
+            ExpectedVersions = new Dictionary<string, int> { ["LeftHemisphere"] = 0 },
+            ReasonText = "approved",
+            AotApproved = true,
+            AdminApproved = true,
+            SafetyGatesPassed = true,
+        }).ConfigureAwait(true);
+
+        Assert.Equal("committed", result.Status);
+        Assert.Equal("http://localhost:7147/mcpserver/brain-slots/weights/update", handler.LastRequest!.RequestUri!.ToString());
+        Assert.Contains("\"roleWeights\":{\"LeftHemisphere\":1.2}", handler.LastRequestBody, StringComparison.Ordinal);
+    }
 }

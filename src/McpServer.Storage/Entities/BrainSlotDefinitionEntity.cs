@@ -60,6 +60,15 @@ public sealed class BrainSlotDefinitionEntity
     /// <summary>Optional system prompt.</summary>
     public string? SystemPrompt { get; set; }
 
+    /// <summary>Relative orchestration weight used by the quad decision loop.</summary>
+    public double OrchestrationWeight { get; set; } = 1.0;
+
+    /// <summary>Optimistic concurrency version for orchestration weight updates.</summary>
+    public int WeightVersion { get; set; }
+
+    /// <summary>UTC timestamp for the most recent orchestration weight update.</summary>
+    public DateTimeOffset? WeightUpdatedAtUtc { get; set; }
+
     /// <summary>UTC creation timestamp.</summary>
     public DateTimeOffset CreatedAtUtc { get; set; }
 

@@ -309,6 +309,50 @@
       "httpEquivalent": "POST /mcpserver/brain-slots/{slotId}/invoke"
     },
     {
+      "name": "brain_slot_orchestrate",
+      "description": "Run the full four-role Quad-Brain decision loop.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "input": { "type": "string", "required": true, "description": "Input prompt" },
+        "turnId": { "type": "string", "required": false, "description": "Owning session-log turn id" },
+        "admitCuriosityToGraphRag": { "type": "boolean", "default": false, "description": "Whether committed Curiosity output should be admitted to GraphRAG/context" },
+        "metadataJson": { "type": "string", "required": false, "description": "Optional JSON object of string metadata" },
+        "weightUpdateJson": { "type": "string", "required": false, "description": "Optional JSON QuadBrainWeightUpdateRequest to apply after final commit" }
+      },
+      "httpEquivalent": "POST /mcpserver/brain-slots/orchestrate"
+    },
+    {
+      "name": "brain_slot_aot_reconcile",
+      "description": "Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "input": { "type": "string", "required": true, "description": "Original input prompt" },
+        "leftOutput": { "type": "string", "required": true, "description": "Committed LeftHemisphere output" },
+        "rightOutput": { "type": "string", "required": true, "description": "Committed RightHemisphere output" },
+        "curiosityOutput": { "type": "string", "required": true, "description": "Committed CuriosityEngine output" },
+        "turnId": { "type": "string", "required": false, "description": "Owning session-log turn id" },
+        "metadataJson": { "type": "string", "required": false, "description": "Optional JSON object of string metadata" }
+      },
+      "httpEquivalent": "POST /mcpserver/brain-slots/aot/reconcile"
+    },
+    {
+      "name": "brain_slot_weight_update",
+      "description": "Apply an approved durable Quad-Brain role-weight update.",
+      "parameters": {
+        "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
+        "roleWeightsJson": { "type": "string", "required": true, "description": "JSON object mapping Quad role names to weights" },
+        "reasonText": { "type": "string", "required": true, "description": "Required reason for the update" },
+        "aotApproved": { "type": "boolean", "required": true, "description": "Whether Arbiter-of-Truth approval has been recorded" },
+        "adminApproved": { "type": "boolean", "required": true, "description": "Whether admin approval has been recorded" },
+        "safetyGatesPassed": { "type": "boolean", "required": true, "description": "Whether safety gates have passed" },
+        "expectedVersionsJson": { "type": "string", "required": false, "description": "Optional JSON object mapping Quad role names to expected versions" },
+        "turnId": { "type": "string", "required": false, "description": "Owning session-log turn id" },
+        "proposedBy": { "type": "string", "required": false, "description": "Who proposed the update" },
+        "metadataJson": { "type": "string", "required": false, "description": "Optional JSON object of string metadata" }
+      },
+      "httpEquivalent": "POST /mcpserver/brain-slots/weights/update"
+    },
+    {
       "name": "github_list_issues",
       "description": "List GitHub issues. Optional state filter and limit.",
       "parameters": {
