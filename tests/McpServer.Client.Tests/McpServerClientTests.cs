@@ -91,6 +91,7 @@ public sealed class McpServerClientTests
 
         Assert.Equal(9999, client.Todo.Port);
         Assert.Equal(9999, client.Context.Port);
+        Assert.Equal(9999, client.GraphRag.Port);
         Assert.Equal(9999, client.Workspace.Port);
         Assert.Equal(9999, client.Repo.Port);
         Assert.Equal(9999, client.GitHub.Port);
@@ -120,6 +121,7 @@ public sealed class McpServerClientTests
         Assert.Equal("default-anon-key", client.ApiKey);
         Assert.Equal("default-anon-key", client.Todo.ApiKey);
         Assert.Equal("default-anon-key", client.Context.ApiKey);
+        Assert.Equal("default-anon-key", client.GraphRag.ApiKey);
         Assert.Equal("default-anon-key", client.Memory.ApiKey);
         Assert.Equal("default-anon-key", client.Repo.ApiKey);
         Assert.Equal("default-anon-key", client.Requirements.ApiKey);

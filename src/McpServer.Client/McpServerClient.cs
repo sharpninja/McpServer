@@ -84,6 +84,7 @@ public sealed class McpServerClient
 
         Todo = new TodoClient(http, options, holder);
         Context = new ContextClient(http, options, holder);
+        GraphRag = new GraphRagClient(http, options, holder);
         SessionLog = new SessionLogClient(http, options, holder);
         Memory = new MemoryClient(http, options, holder);
         GitHub = new GitHubClient(http, options, holder);
@@ -109,7 +110,7 @@ public sealed class McpServerClient
 
         _allClients = new McpClientBase[]
         {
-            Todo, Context, SessionLog, Memory, GitHub, Requirements, Voice, Events,
+            Todo, Context, GraphRag, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
             Federation, KeyServer, Subscriber, BrainSlots
         };
@@ -282,6 +283,12 @@ public sealed class McpServerClient
     /// <para>See <see cref="ContextClient"/> for the full method list.</para>
     /// </summary>
     public ContextClient Context { get; }
+
+    /// <summary>
+    /// GraphRAG endpoints — lifecycle, query, ingest, document, entity, and relationship operations.
+    /// <para>See <see cref="GraphRagClient"/> for the full method list.</para>
+    /// </summary>
+    public GraphRagClient GraphRag { get; }
 
     /// <summary>
     /// Session log endpoints — submit, query, and append dialog items to session logs.

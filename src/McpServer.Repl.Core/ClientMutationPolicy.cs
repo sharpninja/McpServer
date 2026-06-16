@@ -114,6 +114,17 @@ public sealed class KnownUnsafeClientMutationPolicy : IClientMutationPolicy
                 "GraphRagListRelationshipsAsync",
                 "GraphRagGetRelationshipAsync",
             },
+            ["graphRag"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "StatusAsync",
+                "QueryAsync",
+                "ListDocumentsAsync",
+                "GetDocumentChunksAsync",
+                "ListEntitiesAsync",
+                "GetEntityAsync",
+                "ListRelationshipsAsync",
+                "GetRelationshipAsync",
+            },
             ["todo"] = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 "QueryAsync",
