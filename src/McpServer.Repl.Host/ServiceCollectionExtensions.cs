@@ -101,7 +101,8 @@ public static class ServiceCollectionExtensions
                 sp.GetRequiredService<IRequirementsWorkflow>(),
                 sp.GetRequiredService<ITodoWorkflow>(),
                 sp.GetRequiredService<IMemoryWorkflow>(),
-                sp.GetRequiredService<IClientMutationPolicy>()));
+                sp.GetRequiredService<IClientMutationPolicy>(),
+                sp.GetRequiredService<IGraphRagWorkflow>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

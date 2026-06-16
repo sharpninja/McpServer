@@ -144,6 +144,9 @@ case "$method" in
         [ -z "$id" ] && id="MEMORY-REQ-001"
         printf 'type: result\npayload:\n  result:\n    success: true\n    id: %s\n' "$id"
         ;;
+    workflow.graphrag.*)
+        printf 'type: result\npayload:\n  result:\n    ok: true\n    method: %s\n' "$method"
+        ;;
     workflow.sessionlog.*|workflow.requirements.*)
         printf 'type: error\npayload:\n  code: method_not_found\n  message: not routed\n'
         ;;
@@ -471,6 +474,99 @@ read_audit() {
     [ "$status" -eq 0 ]
     grep -q 'enabled: true' <<<"$output"
     grep -q 'source: environment' <<<"$output"
+}
+
+@test "GraphRAG workflow shim routes all 17 commands through workspace REPL" {
+    source "$LIB"
+    write_requirements_state
+
+    methods=(
+        "workflow.graphrag.status"
+        "workflow.graphrag.index"
+        "workflow.graphrag.query"
+        "workflow.graphrag.ingest"
+        "workflow.graphrag.documents.list"
+        "workflow.graphrag.documents.chunks"
+        "workflow.graphrag.documents.delete"
+        "workflow.graphrag.entities.create"
+        "workflow.graphrag.entities.list"
+        "workflow.graphrag.entities.get"
+        "workflow.graphrag.entities.update"
+        "workflow.graphrag.entities.delete"
+        "workflow.graphrag.relationships.create"
+        "workflow.graphrag.relationships.list"
+        "workflow.graphrag.relationships.get"
+        "workflow.graphrag.relationships.update"
+        "workflow.graphrag.relationships.delete"
+    )
+
+    for method in "${methods[@]}"; do
+        params=""
+        case "$method" in
+            workflow.graphrag.index)
+                params="force: true"
+                ;;
+            workflow.graphrag.query)
+                params="query: Dispatcher parity?"
+                ;;
+            workflow.graphrag.ingest)
+                params="content: GraphRAG shell parity."
+                ;;
+            workflow.graphrag.documents.list)
+                params="skip: 0
+take: 5
+sourceType: repo"
+                ;;
+            workflow.graphrag.documents.chunks|workflow.graphrag.documents.delete)
+                params="documentId: doc-001"
+                ;;
+            workflow.graphrag.entities.create)
+                params="name: Dispatcher
+entityType: component"
+                ;;
+            workflow.graphrag.entities.list)
+                params="skip: 0
+take: 5
+entityType: component"
+                ;;
+            workflow.graphrag.entities.get|workflow.graphrag.entities.delete)
+                params="entityId: entity-001"
+                ;;
+            workflow.graphrag.entities.update)
+                params="entityId: entity-001
+name: Dispatcher Updated
+entityType: component"
+                ;;
+            workflow.graphrag.relationships.create)
+                params="sourceEntityId: entity-001
+targetEntityId: entity-002
+relationshipType: routes-to"
+                ;;
+            workflow.graphrag.relationships.list)
+                params="skip: 0
+take: 5
+entityId: entity-001
+type: routes-to"
+                ;;
+            workflow.graphrag.relationships.get|workflow.graphrag.relationships.delete)
+                params="relationshipId: rel-001"
+                ;;
+            workflow.graphrag.relationships.update)
+                params="relationshipId: rel-001
+sourceEntityId: entity-001
+targetEntityId: entity-003
+relationshipType: routes-to"
+                ;;
+        esac
+
+        run repl_invoke "$method" "$params"
+        if [ "$status" -ne 0 ]; then
+            printf 'failed method=%s status=%s\n%s\n' "$method" "$status" "$output"
+        fi
+        [ "$status" -eq 0 ]
+        grep -q "method: $method" <<<"$output"
+        grep -q "method=$method" "$STUB_LOG"
+    done
 }
 
 write_requirements_state() {

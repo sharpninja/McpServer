@@ -400,6 +400,8 @@ _repl_schema_validate_method() {
         workflow.requirements.ingestDocument|client.Requirements.IngestAsync)
             _repl_schema_require_any_text "$method" "$params_yaml" "content" "documents" "functionalMarkdown" "technicalMarkdown" "testingMarkdown" "mappingMarkdown" || return 1
             ;;
+        workflow.graphrag.status|workflow.graphrag.index|workflow.graphrag.documents.list|workflow.graphrag.entities.list|workflow.graphrag.relationships.list)
+            ;;
         workflow.graphrag.query)
             _repl_schema_require_text "$method" "$params_yaml" "query" || return 1
             ;;
@@ -4245,6 +4247,10 @@ repl_invoke() {
             ;;
         workflow.requirements.*)
             _repl_workflow_requirements "$method" "$params_yaml"
+            return $?
+            ;;
+        workflow.graphrag.*)
+            _repl_invoke_raw_in_workspace "$method" "$params_yaml"
             return $?
             ;;
     esac

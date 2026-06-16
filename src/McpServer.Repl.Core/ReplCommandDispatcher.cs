@@ -71,6 +71,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly IRequirementsWorkflow? _requirementsWorkflow;
     private readonly ITodoWorkflow? _todoWorkflow;
     private readonly IMemoryWorkflow? _memoryWorkflow;
+    private readonly IGraphRagWorkflow? _graphRagWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
@@ -82,19 +83,22 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="todoWorkflow">The optional TODO workflow used to invoke <c>workflow.todo.*</c> methods.</param>
     /// <param name="memoryWorkflow">The optional memory workflow used to invoke <c>workflow.memory.*</c> methods.</param>
     /// <param name="clientMutationPolicy">The optional policy used to block unsafe generic <c>client.*</c> mutations.</param>
+    /// <param name="graphRagWorkflow">The optional GraphRAG workflow used to invoke <c>workflow.graphrag.*</c> methods.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
         IRequirementsWorkflow? requirementsWorkflow = null,
         ITodoWorkflow? todoWorkflow = null,
         IMemoryWorkflow? memoryWorkflow = null,
-        IClientMutationPolicy? clientMutationPolicy = null)
+        IClientMutationPolicy? clientMutationPolicy = null,
+        IGraphRagWorkflow? graphRagWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
         _requirementsWorkflow = requirementsWorkflow;
         _todoWorkflow = todoWorkflow;
         _memoryWorkflow = memoryWorkflow;
+        _graphRagWorkflow = graphRagWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
     }
 
@@ -185,12 +189,17 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             return MarkWorkflowDeprecated(await DispatchMemoryRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
+        if (method.StartsWith(GraphRagCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return MarkWorkflowDeprecated(await DispatchGraphRagRequestAsync(request, cancellationToken).ConfigureAwait(false));
+        }
+
         return BuildError(
             requestId: request.RequestId,
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
                      $"Primary namespace: client.<clientName>.<methodName>. " +
-                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*.");
+                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
     }
 
     private static IYamlEnvelope MarkWorkflowDeprecated(IYamlEnvelope response)
@@ -717,6 +726,181 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     requestId: request.RequestId,
                     code: "method_not_found",
                     message: $"Method '{request.Method}' is not routed by the memory workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private async Task<IYamlEnvelope> DispatchGraphRagRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_graphRagWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "GraphRAG workflow is not registered.");
+        }
+
+        var workflow = _graphRagWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+        var requestArgs = GetRequestArgs(args);
+
+        try
+        {
+            object? result;
+            switch (request.Method)
+            {
+                case GraphRagCommandShapes.StatusMethod:
+                    result = await workflow.GetStatusAsync(cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.IndexMethod:
+                    result = await workflow.IndexAsync(
+                        GetBool(requestArgs, "force") ?? false,
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.QueryMethod:
+                    var queryRequest = BuildGraphRagQueryRequest(requestArgs);
+                    result = await workflow.QueryAsync(
+                        queryRequest.Query,
+                        queryRequest.Mode,
+                        queryRequest.MaxChunks,
+                        queryRequest.IncludeContextChunks,
+                        queryRequest.MaxEntities,
+                        queryRequest.MaxRelationships,
+                        queryRequest.CommunityDepth,
+                        queryRequest.ResponseTokenBudget,
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.IngestMethod:
+                    result = await workflow.IngestTextAsync(
+                        BuildGraphRagIngestTextRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.DocumentsListMethod:
+                    result = await workflow.ListDocumentsAsync(
+                        GetInt(requestArgs, "skip") ?? 0,
+                        GetInt(requestArgs, "take") ?? 50,
+                        GetString(requestArgs, "sourceType"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.DocumentsChunksMethod:
+                    result = await workflow.GetDocumentChunksAsync(
+                        RequireString(args, requestArgs, "documentId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.DocumentsDeleteMethod:
+                    result = await workflow.DeleteDocumentAsync(
+                        RequireString(args, requestArgs, "documentId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesCreateMethod:
+                    result = await workflow.CreateEntityAsync(
+                        BuildGraphEntityRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesListMethod:
+                    result = await workflow.ListEntitiesAsync(
+                        GetInt(requestArgs, "skip") ?? 0,
+                        GetInt(requestArgs, "take") ?? 50,
+                        GetString(requestArgs, "entityType"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesGetMethod:
+                    result = await workflow.GetEntityAsync(
+                        RequireString(args, requestArgs, "entityId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesUpdateMethod:
+                    result = await workflow.UpdateEntityAsync(
+                        RequireString(args, requestArgs, "entityId"),
+                        BuildGraphEntityRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesDeleteMethod:
+                    await workflow.DeleteEntityAsync(
+                        RequireString(args, requestArgs, "entityId"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["deleted"] = true };
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsCreateMethod:
+                    result = await workflow.CreateRelationshipAsync(
+                        BuildGraphRelationshipRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsListMethod:
+                    result = await workflow.ListRelationshipsAsync(
+                        GetInt(requestArgs, "skip") ?? 0,
+                        GetInt(requestArgs, "take") ?? 50,
+                        GetString(requestArgs, "entityId"),
+                        GetString(requestArgs, "type"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsGetMethod:
+                    result = await workflow.GetRelationshipAsync(
+                        RequireString(args, requestArgs, "relationshipId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsUpdateMethod:
+                    result = await workflow.UpdateRelationshipAsync(
+                        RequireString(args, requestArgs, "relationshipId"),
+                        BuildGraphRelationshipRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsDeleteMethod:
+                    await workflow.DeleteRelationshipAsync(
+                        RequireString(args, requestArgs, "relationshipId"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["deleted"] = true };
+                    break;
+
+                default:
+                    return BuildError(
+                        requestId: request.RequestId,
+                        code: "method_not_found",
+                        message: $"Method '{request.Method}' is not routed by the GraphRAG workflow.");
             }
 
             return new YamlEnvelope
@@ -1414,6 +1598,105 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         return value;
+    }
+
+    private static string RequireString(
+        IReadOnlyDictionary<string, object?> args,
+        IReadOnlyDictionary<string, object?> fallbackArgs,
+        string name)
+    {
+        var value = GetString(args, name) ?? GetString(fallbackArgs, name);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new ArgumentException($"Missing required parameter: {name}");
+        }
+
+        return value;
+    }
+
+    private static double? GetDouble(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is double typed)
+        {
+            return typed;
+        }
+
+        if (value is JsonElement element)
+        {
+            return element.ValueKind switch
+            {
+                JsonValueKind.Number when element.TryGetDouble(out var parsed) => parsed,
+                JsonValueKind.String when double.TryParse(element.GetString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var parsed) => parsed,
+                _ => null,
+            };
+        }
+
+        if (value is IConvertible convertible)
+        {
+            var text = Convert.ToString(convertible, System.Globalization.CultureInfo.InvariantCulture);
+            if (double.TryParse(text, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var parsed))
+            {
+                return parsed;
+            }
+        }
+
+        return null;
+    }
+
+    private static GraphRagQueryRequest BuildGraphRagQueryRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphRagQueryRequest
+        {
+            Query = RequireString(args, "query"),
+            Mode = GetString(args, "mode"),
+            MaxChunks = GetInt(args, "maxChunks"),
+            IncludeContextChunks = GetBool(args, "includeContextChunks") ?? true,
+            MaxEntities = GetInt(args, "maxEntities"),
+            MaxRelationships = GetInt(args, "maxRelationships"),
+            CommunityDepth = GetInt(args, "communityDepth"),
+            ResponseTokenBudget = GetInt(args, "responseTokenBudget"),
+        };
+    }
+
+    private static GraphRagIngestTextRequest BuildGraphRagIngestTextRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphRagIngestTextRequest
+        {
+            Content = RequireString(args, "content"),
+            Title = GetString(args, "title"),
+            SourceType = GetString(args, "sourceType"),
+            SourceKey = GetString(args, "sourceKey"),
+            TriggerReindex = GetBool(args, "triggerReindex") ?? false,
+        };
+    }
+
+    private static GraphEntityRequest BuildGraphEntityRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphEntityRequest
+        {
+            Name = RequireString(args, "name"),
+            EntityType = RequireString(args, "entityType"),
+            Description = GetString(args, "description"),
+            Metadata = GetString(args, "metadata"),
+        };
+    }
+
+    private static GraphRelationshipRequest BuildGraphRelationshipRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphRelationshipRequest
+        {
+            SourceEntityId = RequireString(args, "sourceEntityId"),
+            TargetEntityId = RequireString(args, "targetEntityId"),
+            RelationshipType = RequireString(args, "relationshipType"),
+            Description = GetString(args, "description"),
+            Weight = GetDouble(args, "weight") ?? 1.0,
+            Metadata = GetString(args, "metadata"),
+        };
     }
 
     private static IReadOnlyDictionary<string, RequirementsIngestDocument>? GetRequirementsDocumentMap(IReadOnlyDictionary<string, object?> args)

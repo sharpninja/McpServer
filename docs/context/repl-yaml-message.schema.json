@@ -763,6 +763,100 @@
     "graphRagRules": {
       "allOf": [
         {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.status" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.index" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "force": { "type": "boolean" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.documents.list" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "skip": { "type": "integer" },
+                      "take": { "type": "integer" },
+                      "sourceType": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.entities.list" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "skip": { "type": "integer" },
+                      "take": { "type": "integer" },
+                      "entityType": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.relationships.list" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "skip": { "type": "integer" },
+                      "take": { "type": "integer" },
+                      "entityId": { "type": "string" },
+                      "type": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
           "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.query" } } } } },
           "then": {
             "properties": {
