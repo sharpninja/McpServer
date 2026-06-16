@@ -151,7 +151,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `McpSessionIdentifierFactory` |
 | TEST-MCP-089 | ✅ Complete | `HostedAgentWorkflowIntegrationTests`, `McpHostedAgentAdapterTests`, `DesktopClientTests`, `DesktopControllerTests`, `SessionLogWorkflowTests`, `TodoWorkflowTests`, `ServiceCollectionExtensionsTests`, `PowerShellSessions_ExecuteInteractiveCommand_PreservesHostLocalSessionState` |
 | FR-MCP-067 | 🔲 Planned | — |
-| TR-MCP-HTTP-002 | 🔲 Planned | — |
+| TR-MCP-HTTP-002 | ✅ Complete | Program.cs centralized ProblemDetails handling, SessionLogController error paths |
 | TEST-MCP-090 | 🔲 Planned | — |
 | FR-MCP-068 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
 | TR-MCP-CFG-006 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
@@ -436,8 +436,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-106 | Tracked | Functional-Requirements.md |
 | FR-MCP-107 | Tracked | Functional-Requirements.md |
 | FR-MCP-108 | Tracked | Functional-Requirements.md |
-| FR-MCP-109 | Tracked | Functional-Requirements.md |
-| FR-MCP-110 | Tracked | Functional-Requirements.md |
 | FR-WFL-001 | Tracked | Functional-Requirements.md |
 | TR-01 | Tracked | Technical-Requirements.md |
 | TR-02 | Tracked | Technical-Requirements.md |
@@ -461,13 +459,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-DB-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLAN-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
-| TR-MCP-NUKE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-TODO-009 | Tracked | Technical-Requirements.md |
 | TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-001 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-002 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-003 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-001 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
+| TR-MCP-WEB-002 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
+| TR-MCP-WEB-003 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
+| TR-MCP-WEB-004 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
 | TR-TEST-INTEG-001 | Tracked | Technical-Requirements.md |
 | TR-WFL-FULL-001 | Tracked | Technical-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
@@ -485,10 +482,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-142 | Tracked | Testing-Requirements.md |
 | TEST-MCP-143 | Tracked | Testing-Requirements.md |
 | TEST-MCP-144 | Tracked | Testing-Requirements.md |
-| TEST-MCP-145 | Tracked | Testing-Requirements.md |
-| TEST-MCP-146 | Tracked | Testing-Requirements.md |
-| TEST-MCP-147 | Tracked | Testing-Requirements.md |
-| TEST-MCP-148 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
@@ -537,7 +530,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-AGENT-PARITY-013 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020..027 | Tracked | Technical-Requirements.md |
-| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-030 | Tracked | Technical-Requirements.md |
 | TR-MCP-BATCH-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-BATCHTS-001 | Tracked | Technical-Requirements.md |

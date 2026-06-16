@@ -1050,8 +1050,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Acceptance criteria persistence** — Persist requirement acceptance criteria as a nullable AcceptanceCriteriaJson column on RequirementEntity (JSON-column pattern like TodoItemEntity); add migrations for SQLite, SqlServer, PostgreSql; reuse the existing AcceptanceCriterion type.
 **Acceptance Criteria:**
-- [ ] Source criterion 1
-- [ ] Source criterion 2
+- [x] `RequirementEntity` stores requirement acceptance criteria in a nullable JSON column that reuses the shared `AcceptanceCriterion` contract.
+- [x] SQLite, SQL Server, and PostgreSQL provider migrations include the acceptance-criteria column without requiring callers to rewrite existing requirements.
+- [x] Requirement create/update/read paths round-trip ordered criteria, checked state, evidence text, and empty/null criteria distinctly.
+- [x] Requirements document generation renders persisted criteria as Markdown checklist bullets while keeping the database as the authoritative store.
 
 ## TR-MCP-REQAC-002
 
@@ -1436,19 +1438,47 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-MCP-WEB-001
 
-**TR-MCP-WEB-001** — Placeholder requirement backfilled by DB-FK-001.
+**Web UI Ownership Boundary** — Web UI implementation work for the former `McpServer.UI.Core` and `McpServer.Director` surfaces SHALL be owned by the `McpServerManager` repository. This repository SHALL keep only server-side contracts, API behavior, and compatibility documentation required by those external UI clients.
+
+**Status:** 🔲 Planned / Deferred to `McpServerManager`
+
+**Acceptance Criteria:**
+- [ ] New Web UI implementation code is not added under this repository's moved `McpServer.UI.Core` or `McpServer.Director` surfaces.
+- [ ] Server-side API changes needed by `McpServerManager` are tracked as MCP FR/TR/TEST items in this repository.
+- [ ] Cross-repo handoffs identify the owning repository and do not silently reopen moved UI projects here.
 
 ## TR-MCP-WEB-002
 
-**TR-MCP-WEB-002** — Placeholder requirement backfilled by DB-FK-001.
+**Web UI API Compatibility Contract** — Server APIs consumed by external web-management clients SHALL remain documented and version-compatible across `McpServer` and `McpServerManager`. Breaking API changes require explicit requirements updates, migration notes, and tests in the server repository before deployment.
+
+**Status:** 🔲 Planned / Deferred until the next `McpServerManager` integration slice
+
+**Acceptance Criteria:**
+- [ ] API changes intended for web-management clients name the consuming route, DTO, and owning client surface.
+- [ ] Breaking changes include a migration note and compatibility test coverage.
+- [ ] Generated requirements/wiki output reflects the current cross-repo API contract.
 
 ## TR-MCP-WEB-003
 
-**TR-MCP-WEB-003** — Placeholder requirement backfilled by DB-FK-001.
+**Web UI Authentication And Workspace Boundary** — External web-management clients SHALL authenticate through the existing MCP workspace auth/token model and SHALL preserve workspace isolation. This repository SHALL provide the server-side policy and tests; client UX and screen implementation remain in `McpServerManager`.
+
+**Status:** 🔲 Planned / Deferred until the next `McpServerManager` integration slice
+
+**Acceptance Criteria:**
+- [ ] Web-client API calls use existing workspace-token/OIDC policy behavior rather than a new parallel auth path.
+- [ ] Workspace-scoped requests remain isolated by the resolved workspace path.
+- [ ] Any new server endpoint used by web clients includes auth and workspace-isolation tests.
 
 ## TR-MCP-WEB-004
 
-**TR-MCP-WEB-004** — Placeholder requirement backfilled by DB-FK-001.
+**Web UI Deployment And Handoff Documentation** — Deployment guidance for web-management surfaces SHALL distinguish server deployment in this repository from UI/client deployment in `McpServerManager`. This repository SHALL document only the server prerequisites, endpoint contracts, and compatibility expectations needed for the external UI.
+
+**Status:** 🔲 Planned / Deferred until the next `McpServerManager` integration slice
+
+**Acceptance Criteria:**
+- [ ] Server deployment docs do not instruct agents to deploy moved UI projects from this repository.
+- [ ] Handoff docs name `McpServerManager` as the owner for UI implementation and client deployment.
+- [ ] Server readiness/config validation covers the endpoints and auth policy that external UI clients depend on.
 
 ## TR-MCP-WS-002
 
