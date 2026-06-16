@@ -58,7 +58,10 @@ internal sealed class Fts5SearchService : IContextSearchService
                     FROM chunks_fts f
                     JOIN Chunks c ON f.ChunkId = c.Id
                     JOIN Documents d ON c.DocumentId = d.Id
-                    WHERE chunks_fts MATCH @query AND d.SourceType = @sourceType
+                    WHERE chunks_fts MATCH @query
+                      AND c.IsDeleted = 0
+                      AND d.IsDeleted = 0
+                      AND d.SourceType = @sourceType
                     ORDER BY score
                     LIMIT @limit
                     """;
@@ -75,7 +78,10 @@ internal sealed class Fts5SearchService : IContextSearchService
                            snippet(chunks_fts, 1, '<b>', '</b>', '...', 64) AS snippet
                     FROM chunks_fts f
                     JOIN Chunks c ON f.ChunkId = c.Id
+                    JOIN Documents d ON c.DocumentId = d.Id
                     WHERE chunks_fts MATCH @query
+                      AND c.IsDeleted = 0
+                      AND d.IsDeleted = 0
                     ORDER BY score
                     LIMIT @limit
                     """;
@@ -149,13 +155,20 @@ internal sealed class Fts5SearchService : IContextSearchService
             var conn = _db.Database.GetDbConnection();
             await conn.OpenAsync(ct).ConfigureAwait(false);
 
-            // Repopulate FTS5 index from Chunks table
+            // Repopulate FTS5 index from visible chunks only. FTS SQL bypasses EF query
+            // filters, so soft-delete predicates must be explicit here.
             using var deleteCmd = conn.CreateCommand();
             deleteCmd.CommandText = "DELETE FROM chunks_fts";
             await deleteCmd.ExecuteNonQueryAsync(ct).ConfigureAwait(false);
 
             using var insertCmd = conn.CreateCommand();
-            insertCmd.CommandText = "INSERT INTO chunks_fts(ChunkId, Content) SELECT Id, Content FROM Chunks";
+            insertCmd.CommandText = """
+                INSERT INTO chunks_fts(ChunkId, Content)
+                SELECT c.Id, c.Content
+                FROM Chunks c
+                JOIN Documents d ON c.DocumentId = d.Id
+                WHERE c.IsDeleted = 0 AND d.IsDeleted = 0
+                """;
             await insertCmd.ExecuteNonQueryAsync(ct).ConfigureAwait(false);
 
             using var rebuildCmd = conn.CreateCommand();
