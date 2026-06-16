@@ -11,6 +11,7 @@
 - built-in repository read/list/write, local desktop-launch, and in-process PowerShell session operations
 - a hosted-agent registration surface that attaches MCP-backed tools to `ChatClientAgent` run options
 - a host-facing `IMcpHostedAgent.PowerShellSessions` manager for direct local PowerShell execution
+- an ACID tightly coupled Agent Framework profile that exposes a fail-closed, audited, serialized tool surface
 
 ## Basic registration
 
@@ -29,6 +30,25 @@ var hostedAgent = hostedAgentFactory.CreateHostedAgent();
 var registration = hostedAgent.Registration;
 var powerShellSessions = hostedAgent.PowerShellSessions;
 ```
+
+## ACID tightly coupled profile
+
+Use the ACID profile when a host needs a named Microsoft Agent Framework definition with authenticated workspace binding, durable audit expectations, serialized function invocation, and a restricted model-visible MCP tool surface.
+
+```csharp
+services.AddMcpServerMcpAgent(options =>
+{
+    options.UseAcidTightlyCoupledProfile();
+    options.BaseUrl = new Uri("http://localhost:7147");
+    options.ApiKey = "token-from-marker";
+    options.WorkspacePath = @"E:\github\MyProject";
+});
+
+var hostedAgent = serviceProvider.GetRequiredService<IMcpHostedAgent>();
+var runtime = hostedAgent.CreateAcidTightlyCoupledRuntime(chatClient);
+```
+
+The ACID profile extends Microsoft Agent Framework through `Microsoft.Agents.AI.ChatClientAgent`. It does not certify every MCP endpoint as transactional. By default it exposes only the built-in session/audit, read-only TODO, repository read/list, requirements read, and GraphRAG read/list/get tools. Generic passthrough, desktop launch, local PowerShell, repository writes, TODO mutations, and GraphRAG mutations remain hidden until a separate transaction and audit contract authorizes them.
 
 ## Built-in workflows
 
@@ -66,3 +86,6 @@ See `src\McpServer.McpAgent.SampleHost` for an interactive preview executable th
 - TR-MCP-AGENT-006
 - TR-MCP-AGENT-007
 - TEST-MCP-089
+- FR-MCP-136
+- TR-MCP-AGENT-015
+- TEST-MCP-186

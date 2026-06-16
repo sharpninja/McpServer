@@ -946,6 +946,20 @@ The MCP runtime SHALL support durable, audited Quad-Brain role weight updates wi
 
 **Covered by:** `QuadBrainOrchestrationServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`
 
+## FR-MCP-136 ACID-coupled Microsoft Agent Framework agent definition
+
+The system SHALL expose an explicit ACID-compliant, tightly coupled hosted-agent definition for Microsoft Agent Framework hosts, extending the existing `ChatClientAgent` integration while requiring authenticated workspace binding, serialized tool invocation, durable audit/session-log boundaries, and fail-closed tool exposure.
+
+**Acceptance Criteria:**
+- [x] The ACID profile has stable public metadata including id, name, source type, consistency model, coupling mode, and Microsoft Agent Framework extension type.
+- [x] The ACID profile requires authentication, workspace scoping, session-turn boundaries, durable audit, transaction-required mutation policy, and serialized model tool invocation.
+- [x] Generic passthrough, shell, desktop, repository-write, TODO-mutation, and GraphRAG-mutation tools are not exposed by default in the ACID profile.
+- [x] Default hosted-agent registration remains backward compatible when the ACID profile is not selected.
+
+**Technical Implementation:** [TR-MCP-AGENT-015](./Technical-Requirements.md#tr-mcp-agent-015) | [TR-MCP-TXN-001](./Technical-Requirements.md#tr-mcp-txn-001) | [TR-MCP-TXNAUDIT-001](./Technical-Requirements.md#tr-mcp-txnaudit-001) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `McpHostedAgentAdapterTests`, `ServiceCollectionExtensionsTests`, `HostedAgentWorkflowIntegrationTests`
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.

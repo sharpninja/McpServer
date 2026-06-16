@@ -30,6 +30,11 @@ public interface IMcpHostedAgent
     string SourceType { get; }
 
     /// <summary>
+    /// Gets the execution profile used when creating Microsoft Agent Framework run options.
+    /// </summary>
+    McpAgentExecutionProfile ExecutionProfile { get; }
+
+    /// <summary>
     /// Gets the canonical identifier helper bound to the hosted agent's configured source type.
     /// </summary>
     IMcpSessionIdentifierFactory Identifiers { get; }
@@ -73,6 +78,17 @@ public interface IMcpHostedAgent
     /// <param name="chatClient">The chat client that should power the hosted agent.</param>
     /// <returns>A <see cref="ChatClientAgent"/> configured with this hosted agent's metadata.</returns>
     ChatClientAgent CreateChatClientAgent(IChatClient chatClient);
+
+    /// <summary>
+    /// Creates an ACID tightly coupled Agent Framework runtime bundle.
+    /// The hosted agent must be configured with <see cref="McpAgentOptions.UseAcidTightlyCoupledProfile"/>.
+    /// </summary>
+    /// <param name="chatClient">The chat client that should power the hosted agent.</param>
+    /// <param name="baseOptions">Optional caller-supplied run options to clone before ACID capabilities are attached.</param>
+    /// <returns>The ACID runtime bundle containing the agent, sealed run options, definition, and exposed tools.</returns>
+    McpAcidHostedAgentRuntime CreateAcidTightlyCoupledRuntime(
+        IChatClient chatClient,
+        ChatClientAgentRunOptions? baseOptions = null);
 
     /// <summary>
      /// Creates <see cref="ChatClientAgentRunOptions"/> that attach the built-in MCP workflow tools

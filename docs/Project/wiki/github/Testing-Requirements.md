@@ -1002,6 +1002,16 @@ Quad traceability closure coverage SHALL prove FR-MCP-134 through FR-MCP-135, TR
 **Acceptance Criteria:**
 - [x] TurnTransactionPlanArtifactTests covers the implemented/deferred split and matrix rows. (evidence: TurnTransactionPlanArtifactTests)
 
+### TEST-MCP-186
+
+Tests SHALL verify the ACID tightly coupled Microsoft Agent Framework profile metadata, strict option defaults, filtered model-visible tools, serialized function invocation settings, DI compatibility, and backward compatibility for default hosted-agent registration.
+
+**Acceptance Criteria:**
+- [x] A red test fails until the ACID profile metadata and option defaults are implemented.
+- [x] A red test fails until ACID run options filter unsafe tools and preserve serialized function invocation.
+- [x] A regression test proves default non-ACID hosted-agent registration still exposes the existing tool surface.
+- [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
+
 
 ## TEST-MCP-BATCH
 

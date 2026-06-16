@@ -65,9 +65,63 @@ public sealed class McpAgentOptions
     public string SourceType { get; set; } = McpHostedAgentDefaults.DefaultSourceType;
 
     /// <summary>
+    /// Selects the execution profile used when creating Microsoft Agent Framework run options.
+    /// </summary>
+    public McpAgentExecutionProfile ExecutionProfile { get; set; } = McpAgentExecutionProfile.Default;
+
+    /// <summary>
+    /// Gets or sets whether the hosted agent requires a session-log turn boundary before ACID work.
+    /// </summary>
+    public bool RequireSessionTurnBoundary { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the hosted agent requires durable audit/session-log coverage.
+    /// </summary>
+    public bool RequireDurableAudit { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether mutating operations must be protected by transaction-capable server policy.
+    /// </summary>
+    public bool RequireTransactionalMutations { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether model tool invocation must be serialized in the hosted function-invocation pipeline.
+    /// </summary>
+    public bool RequireSerializedToolInvocation { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether caller-supplied host tools may be merged into ACID run options.
+    /// Defaults to <see langword="false"/> so the ACID profile exposes only approved MCP tools.
+    /// </summary>
+    public bool AllowHostToolsInAcidProfile { get; set; }
+
+    /// <summary>
     /// HTTP timeout applied to the transport client created for the hosted agent scaffold.
     /// </summary>
     public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(300);
+
+    /// <summary>
+    /// Applies the stable ACID tightly coupled Agent Framework profile to this options instance.
+    /// </summary>
+    /// <returns>The current options instance for fluent host configuration.</returns>
+    public McpAgentOptions UseAcidTightlyCoupledProfile()
+    {
+        var definition = McpAcidAgentDefinition.Instance;
+
+        ExecutionProfile = McpAgentExecutionProfile.AcidTightlyCoupled;
+        AgentId = definition.AgentId;
+        AgentName = definition.AgentName;
+        Description = definition.Description;
+        SourceType = definition.SourceType;
+        RequireAuthentication = true;
+        RequireSessionTurnBoundary = true;
+        RequireDurableAudit = true;
+        RequireTransactionalMutations = true;
+        RequireSerializedToolInvocation = true;
+        AllowHostToolsInAcidProfile = false;
+
+        return this;
+    }
 
     internal McpServerClientOptions ToClientOptions(ILoggerFactory? loggerFactory = null)
         => new()
@@ -89,4 +143,3 @@ public sealed class McpAgentOptions
             Name = AgentName,
         };
 }
-

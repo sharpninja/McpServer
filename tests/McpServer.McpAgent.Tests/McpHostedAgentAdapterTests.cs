@@ -111,7 +111,8 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Equal(expectedToolNames, registration.Functions.Select(static function => function.Name));
         Assert.NotNull(hostedAgent.PowerShellSessions);
         Assert.True(baseFactoryCalled);
-        Assert.IsType<FunctionInvokingChatClient>(wrappedClient);
+        var invokingClient = Assert.IsType<FunctionInvokingChatClient>(wrappedClient);
+        Assert.False(invokingClient.AllowConcurrentInvocation);
         Assert.NotNull(runOptions.ChatOptions);
         Assert.NotNull(runOptions.ChatOptions.ToolMode);
         Assert.False(runOptions.ChatOptions.AllowMultipleToolCalls);
@@ -123,6 +124,51 @@ public sealed class McpHostedAgentAdapterTests
             attachedTools.Select(static tool => tool.Name).ToArray());
         Assert.Equal(hostedAgent.Name, chatClientAgent.Name);
         Assert.Equal(hostedAgent.AgentOptions.Description, chatClientAgent.Description);
+    }
+
+    /// <summary>
+    /// TEST-MCP-186: Verifies that the ACID profile filters the model-visible MCP tool surface,
+    /// rejects unreviewed host tools by default, and preserves serialized function invocation.
+    /// </summary>
+    [Fact]
+    public void Registration_CreateRunOptions_AcidProfileFiltersToolsAndRejectsHostTools()
+    {
+        var (hostedAgent, _) = CreateHostedAgent(configureOptions: static options =>
+            options.UseAcidTightlyCoupledProfile());
+        var existingTool = AIFunctionFactory.Create(
+            (Func<string>)(() => "existing"),
+            new AIFunctionFactoryOptions
+            {
+                Description = "Existing host tool.",
+                Name = "existing_host_tool",
+            });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            hostedAgent.CreateRunOptions(
+                new ChatClientAgentRunOptions
+                {
+                    ChatOptions = new ChatOptions
+                    {
+                        Tools = [existingTool],
+                    },
+                }));
+        var runOptions = hostedAgent.CreateRunOptions();
+        var wrappedClient = runOptions.ChatClientFactory!(new StubChatClient());
+        var invokingClient = Assert.IsType<FunctionInvokingChatClient>(wrappedClient);
+        Assert.NotNull(runOptions.ChatOptions?.Tools);
+        var toolNames = runOptions.ChatOptions.Tools
+            .Select(static tool => tool.Name)
+            .ToArray();
+
+        Assert.Equal(McpAgentExecutionProfile.AcidTightlyCoupled, hostedAgent.ExecutionProfile);
+        Assert.Contains("reject caller-supplied host tools", exception.Message, StringComparison.Ordinal);
+        Assert.False(invokingClient.AllowConcurrentInvocation);
+        Assert.False(runOptions.ChatOptions!.AllowMultipleToolCalls);
+        Assert.Equal(McpAcidAgentDefinition.Instance.AllowedToolNames, toolNames);
+        Assert.DoesNotContain("mcp_client_invoke", toolNames);
+        Assert.DoesNotContain("mcp_powershell_session_command", toolNames);
+        Assert.DoesNotContain("mcp_repo_write", toolNames);
+        Assert.DoesNotContain("mcp_graphrag_ingest_text", toolNames);
     }
 
     /// <summary>
@@ -444,7 +490,9 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Empty(handler.Requests);
     }
 
-    private static (McpHostedAgent HostedAgent, RecordingMcpHttpMessageHandler Handler) CreateHostedAgent(string? desktopLaunchToken = null)
+    private static (McpHostedAgent HostedAgent, RecordingMcpHttpMessageHandler Handler) CreateHostedAgent(
+        string? desktopLaunchToken = null,
+        Action<McpAgentOptions>? configureOptions = null)
     {
         var handler = new RecordingMcpHttpMessageHandler();
         var httpClient = new HttpClient(handler);
@@ -458,15 +506,16 @@ public sealed class McpHostedAgentAdapterTests
                 WorkspacePath = TestWorkspacePath,
             });
         var timeProvider = new FixedTimeProvider(new DateTimeOffset(2026, 03, 09, 15, 01, 05, TimeSpan.Zero));
-        var options = Options.Create(
-            new McpAgentOptions
-            {
-                ApiKey = "test-key",
-                BaseUrl = new Uri("http://localhost:7147"),
-                DesktopLaunchToken = desktopLaunchToken,
-                SourceType = "Codex",
-                WorkspacePath = TestWorkspacePath,
-            });
+        var configuredOptions = new McpAgentOptions
+        {
+            ApiKey = "test-key",
+            BaseUrl = new Uri("http://localhost:7147"),
+            DesktopLaunchToken = desktopLaunchToken,
+            SourceType = "Codex",
+            WorkspacePath = TestWorkspacePath,
+        };
+        configureOptions?.Invoke(configuredOptions);
+        var options = Options.Create(configuredOptions);
         var identifiers = new McpSessionIdentifierFactory(options, timeProvider);
         var sessionLog = new McpServer.McpAgent.SessionLog.SessionLogWorkflow(client, identifiers, timeProvider);
         var todo = new McpServer.McpAgent.Todo.TodoWorkflow(client);
@@ -482,9 +531,9 @@ public sealed class McpHostedAgentAdapterTests
                 identifiers,
                 new ChatClientAgentOptions
                 {
-                    Description = "Hosted MCP agent adapter.",
-                    Id = "mcpserver-hosted-agent",
-                    Name = "McpServerMcpAgent",
+                    Description = configuredOptions.Description,
+                    Id = configuredOptions.AgentId,
+                    Name = configuredOptions.AgentName,
                 },
                 options,
                 sessionLog,
@@ -751,4 +800,3 @@ public sealed class McpHostedAgentAdapterTests
         public object? GetService(Type serviceType, object? serviceKey = null) => null;
     }
 }
-

@@ -269,6 +269,12 @@
 - TEST-MCP-185: Quad traceability closure coverage SHALL prove FR-MCP-134 through FR-MCP-135, TR-MCP-QUAD-005 through TR-MCP-QUAD-007, TEST-MCP-181 through TEST-MCP-185, and the imported diagrams no longer describe AoT, weight updates, or full quad orchestration as deferred once implemented.
   **Acceptance Criteria:**
   - [x] `TurnTransactionPlanArtifactTests` covers the implemented/deferred split and matrix rows.
+- TEST-MCP-186: ACID hosted-agent profile tests SHALL verify the ACID tightly coupled Microsoft Agent Framework profile metadata, strict option defaults, filtered model-visible tools, serialized function invocation settings, DI compatibility, and backward compatibility for default hosted-agent registration.
+  **Acceptance Criteria:**
+  - [x] A red test fails until the ACID profile metadata and option defaults are implemented.
+  - [x] A red test fails until ACID run options filter unsafe tools and preserve serialized function invocation.
+  - [x] A regression test proves default non-ACID hosted-agent registration still exposes the existing tool surface.
+  - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
 - TEST-MCP-BATCH-001: Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
 - TEST-MCP-MEMORY-001: Storage isolation tests SHALL prove Global memories and Workspace memories in two workspaces list as Global plus current workspace only, and that update/remove by ID cannot mutate another workspace-local memory.
 - TEST-MCP-MEMORY-002: CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.

@@ -26,6 +26,26 @@ public static class McpHostedAgentDefaults
     public const string DefaultAgentDescription = "Hosted MCP Agent registration scaffold.";
 
     /// <summary>
+    /// Stable identifier assigned to the ACID tightly coupled hosted agent metadata.
+    /// </summary>
+    public const string AcidAgentId = "mcpserver-acid-tightly-coupled-agent";
+
+    /// <summary>
+    /// Stable host-facing name assigned to the ACID tightly coupled hosted agent.
+    /// </summary>
+    public const string AcidAgentName = "McpServerAcidTightlyCoupledAgent";
+
+    /// <summary>
+    /// Stable source type reserved for ACID hosted-agent session-log workflows.
+    /// </summary>
+    public const string AcidSourceType = "McpAcidAgent";
+
+    /// <summary>
+    /// Stable description surfaced through <c>Microsoft.Agents.AI</c> metadata for the ACID profile.
+    /// </summary>
+    public const string AcidAgentDescription = "ACID-compliant tightly coupled MCP Agent profile for Microsoft Agent Framework hosts.";
+
+    /// <summary>
     /// Canonical UTC timestamp format shared by hosted-agent session and request identifiers.
     /// </summary>
     public const string IdentifierTimestampFormat = "yyyyMMddTHHmmssZ";
@@ -50,4 +70,3 @@ public static class McpHostedAgentDefaults
     /// </summary>
     public const string HttpClientName = "McpServer.McpAgent";
 }
-

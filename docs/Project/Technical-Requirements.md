@@ -157,6 +157,19 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 **Covered by:** `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
 
+## TR-MCP-AGENT-015
+
+**ACID hosted-agent profile and sealed run contract** — The `McpServer.McpAgent` package SHALL define an ACID tightly coupled profile that applies strict `McpAgentOptions` defaults, filters the model-visible tool surface to approved read/audit tools, seals `ChatClientAgent` run options with serialized function invocation, and documents the profile as fail-closed for unproven mutation paths.
+**Status:** ✅ Complete
+
+**Acceptance Criteria:**
+- [x] `McpAgentOptions` exposes a `UseAcidTightlyCoupledProfile` helper that sets strict profile defaults without changing default registration behavior.
+- [x] ACID run options preserve `AllowMultipleToolCalls=false` and `FunctionInvokingChatClient.AllowConcurrentInvocation=false`.
+- [x] ACID tool exposure is generated from an allowlist and excludes unsafe generic, shell, desktop, and mutation tools by default.
+- [x] All new public APIs have XMLDocs and are covered by focused tests.
+
+**Covered by:** `McpAcidAgentDefinition`, `McpAgentOptions`, `McpHostedAgent`, `McpAcidHostedAgentRuntime`, `McpHostedAgentAdapterTests`, `ServiceCollectionExtensionsTests`
+
 ## TR-MCP-AGENT-PARITY-010
 
 **TR-MCP-AGENT-PARITY-010** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-010.

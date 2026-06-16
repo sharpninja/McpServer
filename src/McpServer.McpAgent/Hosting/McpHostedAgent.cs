@@ -87,6 +87,9 @@ public sealed class McpHostedAgent : IMcpHostedAgent
     public string SourceType => _options.SourceType;
 
     /// <inheritdoc />
+    public McpAgentExecutionProfile ExecutionProfile => _options.ExecutionProfile;
+
+    /// <inheritdoc />
     public IMcpSessionIdentifierFactory Identifiers { get; }
 
     /// <inheritdoc />
@@ -109,6 +112,32 @@ public sealed class McpHostedAgent : IMcpHostedAgent
         Registration.CreateChatClientAgent(chatClient);
 
     /// <inheritdoc />
+    public McpAcidHostedAgentRuntime CreateAcidTightlyCoupledRuntime(
+        IChatClient chatClient,
+        ChatClientAgentRunOptions? baseOptions = null)
+    {
+        if (_options.ExecutionProfile != McpAgentExecutionProfile.AcidTightlyCoupled)
+        {
+            throw new InvalidOperationException(
+                "CreateAcidTightlyCoupledRuntime requires McpAgentOptions.UseAcidTightlyCoupledProfile().");
+        }
+
+        var agent = CreateChatClientAgent(chatClient);
+        var runOptions = CreateRunOptions(baseOptions);
+        var toolNames = runOptions.ChatOptions?.Tools?
+            .Select(static tool => tool.Name)
+            .Where(static name => !string.IsNullOrWhiteSpace(name))
+            .Select(static name => name!)
+            .ToArray() ?? [];
+
+        return new McpAcidHostedAgentRuntime(
+            agent,
+            runOptions,
+            McpAcidAgentDefinition.Instance,
+            toolNames);
+    }
+
+    /// <inheritdoc />
     public ChatClientAgentRunOptions CreateRunOptions(ChatClientAgentRunOptions? baseOptions = null) =>
         Registration.CreateRunOptions(baseOptions);
 
@@ -117,9 +146,13 @@ public sealed class McpHostedAgent : IMcpHostedAgent
         var runOptions = CloneRunOptions(baseOptions);
         var existingFactory = runOptions.ChatClientFactory;
         var chatOptions = runOptions.ChatOptions?.Clone() ?? new ChatOptions();
-        chatOptions.Tools = MergeTools(chatOptions.Tools, Registration.Tools);
+        chatOptions.Tools = _options.ExecutionProfile == McpAgentExecutionProfile.AcidTightlyCoupled
+            ? MergeAcidTools(chatOptions.Tools, Registration.Tools)
+            : MergeTools(chatOptions.Tools, Registration.Tools);
         chatOptions.ToolMode ??= ChatToolMode.Auto;
-        chatOptions.AllowMultipleToolCalls ??= false;
+        chatOptions.AllowMultipleToolCalls = _options.RequireSerializedToolInvocation
+            ? false
+            : chatOptions.AllowMultipleToolCalls ?? false;
         runOptions.ChatOptions = chatOptions;
         runOptions.ChatClientFactory = chatClient =>
         {
@@ -164,5 +197,23 @@ public sealed class McpHostedAgent : IMcpHostedAgent
         }
 
         return mergedTools;
+    }
+
+    private IList<AITool> MergeAcidTools(IList<AITool>? existingTools, IReadOnlyList<AITool> adapterTools)
+    {
+        if (existingTools is { Count: > 0 } && !_options.AllowHostToolsInAcidProfile)
+        {
+            throw new InvalidOperationException(
+                "ACID tightly coupled run options reject caller-supplied host tools by default. " +
+                "Set AllowHostToolsInAcidProfile only after those tools have their own transaction and audit contract.");
+        }
+
+        var definition = McpAcidAgentDefinition.Instance;
+        var approvedAdapterTools = adapterTools
+            .Where(tool => definition.IsToolAllowed(tool.Name))
+            .ToArray();
+        var hostTools = _options.AllowHostToolsInAcidProfile ? existingTools : null;
+
+        return MergeTools(hostTools, approvedAdapterTools);
     }
 }
