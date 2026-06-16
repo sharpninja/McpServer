@@ -680,11 +680,15 @@ public sealed class SessionLogService : ISessionLogService
         var sessionRowId = session.Id;
         var turnId = turnEntity.Id;
 
-        // Child FKs are DeleteBehavior.Restrict (no cascade); delete bottom-up with
-        // bulk ExecuteDelete so the change tracker's cascade evaluation cannot
-        // strand the graph. Drop tracked entities first so they cannot conflict.
+        // Child FKs are DeleteBehavior.Restrict (no cascade); soft-delete bottom-up with
+        // bulk ExecuteUpdate so durable session-log rows retain deletion metadata.
+        // Drop tracked entities first so they cannot conflict with bulk updates.
         _db.ChangeTracker.Clear();
-        await DeleteTurnRowsAsync(turnId, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteTurnRowsAsync(
+            turnId,
+            DateTimeOffset.UtcNow,
+            "session_log_turn_delete",
+            cancellationToken).ConfigureAwait(false);
 
         var remaining = await _db.SessionLogTurns
             .CountAsync(t => t.SessionLogId == sessionRowId, cancellationToken).ConfigureAwait(false);
@@ -719,13 +723,20 @@ public sealed class SessionLogService : ISessionLogService
 
         var sessionRowId = session.Id;
         var turnIds = session.Turns.Select(t => t.Id).ToList();
+        var deletedAtUtc = DateTimeOffset.UtcNow;
 
         _db.ChangeTracker.Clear();
         foreach (var turnId in turnIds)
-            await DeleteTurnRowsAsync(turnId, cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogs
-            .Where(s => s.Id == sessionRowId)
-            .ExecuteDeleteAsync(cancellationToken)
+            await SoftDeleteTurnRowsAsync(
+                turnId,
+                deletedAtUtc,
+                "session_log_session_delete",
+                cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(
+                _db.SessionLogs.Where(s => s.Id == sessionRowId),
+                deletedAtUtc,
+                "session_log_session_delete",
+                cancellationToken)
             .ConfigureAwait(false);
 
         await PublishChangeSafeAsync(
@@ -738,19 +749,39 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <summary>
-    /// FR-SUPPORT-010G: bulk-delete every child row of a turn and the turn row
-    /// itself (bottom-up), bypassing the change tracker. Child sets carry no
-    /// workspace query filter, so the turn id alone scopes the delete.
+    /// FR-SUPPORT-010G / TR-MCP-DB-003: bulk soft-delete every child row of a turn
+    /// and the turn row itself (bottom-up). Child sets carry no workspace query
+    /// filter, so the turn id alone scopes the update.
     /// </summary>
-    private async Task DeleteTurnRowsAsync(long turnId, CancellationToken cancellationToken)
+    private async Task SoftDeleteTurnRowsAsync(
+        long turnId,
+        DateTimeOffset deletedAtUtc,
+        string reason,
+        CancellationToken cancellationToken)
     {
-        await _db.SessionLogActions.Where(x => x.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurnTags.Where(x => x.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurnContexts.Where(x => x.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogProcessingDialogs.Where(x => x.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogCommits.Where(x => x.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurnStringLists.Where(x => x.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurns.Where(x => x.Id == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogActions.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurnTags.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurnContexts.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogProcessingDialogs.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogCommits.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurnStringLists.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurns.Where(x => x.Id == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static Task<int> SoftDeleteRowsAsync<TEntity>(
+        IQueryable<TEntity> query,
+        DateTimeOffset deletedAtUtc,
+        string reason,
+        CancellationToken cancellationToken)
+        where TEntity : class
+    {
+        return query.ExecuteUpdateAsync(
+            setters => setters
+                .SetProperty(entity => EF.Property<bool>(entity, "IsDeleted"), true)
+                .SetProperty(entity => EF.Property<DateTimeOffset?>(entity, "DeletedAtUtc"), deletedAtUtc)
+                .SetProperty(entity => EF.Property<string?>(entity, "DeletedBy"), nameof(SessionLogService))
+                .SetProperty(entity => EF.Property<string?>(entity, "DeleteReason"), reason),
+            cancellationToken);
     }
 
     private void ValidateTurnIdentifiers(string sourceType, string sessionId, string requestId)

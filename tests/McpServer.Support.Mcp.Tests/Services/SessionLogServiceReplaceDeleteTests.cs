@@ -188,7 +188,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
     }
 
     [Fact]
-    public async Task DeleteTurnAsync_RemovesTurnAndChildren()
+    public async Task DeleteTurnAsync_SoftDeletesTurnAndChildren()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -205,12 +205,14 @@ public sealed class SessionLogServiceReplaceDeleteTests
             Assert.Equal(0, session!.TurnCount);     // turn gone
             Assert.True(session.Turns is null or { Count: 0 });
         }
-        Assert.Equal(0, CountTurnRows(connection, sessionId));     // turn row gone
-        Assert.Equal(0, CountAllChildRows(connection, sessionId)); // no orphaned children
+        Assert.Equal(1, CountTurnRows(connection, sessionId));     // durable row retained
+        Assert.True(CountAllChildRows(connection, sessionId) > 0); // child rows retained
+        Assert.Equal(1, CountSoftDeletedTurnRows(connection, sessionId));
+        Assert.Equal(CountAllChildRows(connection, sessionId), CountSoftDeletedChildRows(connection, sessionId));
     }
 
     [Fact]
-    public async Task DeleteSessionAsync_RemovesSessionAndEverything()
+    public async Task DeleteSessionAsync_SoftDeletesSessionAndEverything()
     {
         using var connection = OpenConnection();
         var sessionId = SeedFullSession(connection);
@@ -223,8 +225,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
         using (db2)
             Assert.Null(await sut2.GetAsync(Agent, sessionId).ConfigureAwait(true));
 
-        Assert.Equal(0, CountAllChildRows(connection, sessionId));
-        Assert.Equal(0, CountTurnRows(connection, sessionId));
+        Assert.Equal(1, CountSessionRows(connection, sessionId));
+        Assert.Equal(1, CountTurnRows(connection, sessionId));
+        Assert.True(CountAllChildRows(connection, sessionId) > 0);
+        Assert.Equal(1, CountSoftDeletedSessionRows(connection, sessionId));
+        Assert.Equal(1, CountSoftDeletedTurnRows(connection, sessionId));
+        Assert.Equal(CountAllChildRows(connection, sessionId), CountSoftDeletedChildRows(connection, sessionId));
     }
 
     [Fact]
@@ -363,6 +369,14 @@ public sealed class SessionLogServiceReplaceDeleteTests
             "SELECT COUNT(*) FROM SessionLogTurns t JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = $sid",
             ("$sid", sessionId));
 
+    private static int CountSoftDeletedSessionRows(SqliteConnection connection, string sessionId)
+        => ScalarCount(connection, "SELECT COUNT(*) FROM SessionLogs WHERE SessionId = $sid AND IsDeleted = 1", ("$sid", sessionId));
+
+    private static int CountSoftDeletedTurnRows(SqliteConnection connection, string sessionId)
+        => ScalarCount(connection,
+            "SELECT COUNT(*) FROM SessionLogTurns t JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = $sid AND t.IsDeleted = 1",
+            ("$sid", sessionId));
+
     private static int CountAllChildRows(SqliteConnection connection, string sessionId)
     {
         var tables = new[]
@@ -376,6 +390,24 @@ public sealed class SessionLogServiceReplaceDeleteTests
             total += ScalarCount(connection,
                 $"SELECT COUNT(*) FROM {table} c JOIN SessionLogTurns t ON t.Id = c.SessionLogTurnId " +
                 "JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = $sid",
+                ("$sid", sessionId));
+        }
+        return total;
+    }
+
+    private static int CountSoftDeletedChildRows(SqliteConnection connection, string sessionId)
+    {
+        var tables = new[]
+        {
+            "SessionLogActions", "SessionLogTurnTags", "SessionLogTurnContexts",
+            "SessionLogProcessingDialogs", "SessionLogCommits", "SessionLogTurnStringLists",
+        };
+        var total = 0;
+        foreach (var table in tables)
+        {
+            total += ScalarCount(connection,
+                $"SELECT COUNT(*) FROM {table} c JOIN SessionLogTurns t ON t.Id = c.SessionLogTurnId " +
+                "JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = $sid AND c.IsDeleted = 1",
                 ("$sid", sessionId));
         }
         return total;
