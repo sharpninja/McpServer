@@ -369,3 +369,23 @@
 - TEST-MCP-AUTH-012: `WorkspaceTokenService.IsInitialized` is `false` before any token is generated and `true` after `GenerateToken`. **Covered by:** `WorkspaceTokenServiceTests.IsInitialized_NoTokens_ReturnsFalse`, `WorkspaceTokenServiceTests.IsInitialized_AfterGenerateToken_ReturnsTrue`
 - TEST-MCP-HEALTH-002: `WorkspaceReadinessHealthCheck` returns `Healthy` when an enabled primary workspace is registered and has a seeded token; `Unhealthy` when the token subsystem is uninitialized, no enabled workspace is registered, or the primary workspace has no seeded token. **Covered by:** `WorkspaceReadinessHealthCheckTests`
 - TEST-MCP-HEALTH-003: Integration: with the data layer up, `/mcpserver/todo` returns `200` with a valid token and no `X-Workspace-Path`; unknown or missing keys return `401`; `/ready` returns `200` Healthy and its body lists the `workspace-ready` check. **Covered by:** `ReadinessAndAuthIntegrationTests`
+- TEST-MCP-TRACE-LEGACY-001: Traceability audit coverage for completed legacy MCP baseline rows FR-MCP-001 through FR-MCP-025. The mapping file must no longer report these complete rows as `*(Planned)*`; when precise historical TEST rows are unavailable, this TEST ID records the explicit traceability audit classification and points maintainers to the matrix source-file evidence for those shipped baseline server features.
+  **Acceptance Criteria:**
+  - [x] Completed FR-MCP-001..025 mapping rows use this TEST ID instead of `*(Planned)*` where no more precise TEST ID is documented.
+  - [x] Requirements-Matrix.md remains the source-file evidence record for the shipped baseline server features in this band.
+- TEST-MCP-TRACE-LEGACY-002: Traceability audit coverage for completed auth, agent, CQRS, workspace, prompt, voice, desktop, and template rows FR-MCP-026 through FR-MCP-050. The mapping file must use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+  **Acceptance Criteria:**
+  - [x] Completed FR-MCP-026..050 mapping rows use this TEST ID instead of `*(Planned)*` where no more precise TEST ID is documented.
+  - [x] Rows that are still planned or in progress remain unchanged and are not reclassified as complete.
+- TEST-MCP-TRACE-LEGACY-003: Traceability audit coverage for completed agent-pool, change-event, GitHub, GraphRAG, and Byrd process rows FR-MCP-052 through FR-MCP-083. The mapping file must use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+  **Acceptance Criteria:**
+  - [x] Completed FR-MCP-052..083 mapping rows use this TEST ID instead of `*(Planned)*` where no more precise TEST ID is documented.
+  - [x] Planned and in-progress FRs in the same numeric range remain visibly planned rather than being swept into completed audit coverage.
+- TEST-MCP-TRACE-REPL-001: Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
+  **Acceptance Criteria:**
+  - [x] Completed FR-MCP-REPL-001..005 mapping rows use this TEST ID instead of `*(Planned)*`.
+  - [x] The REPL test family remains documented in Testing-Requirements.md with concrete focused test classes.
+- TEST-SUPPORT-010: Traceability audit coverage for the original FR-SUPPORT-010 support surface row. This row is broad and predates the later FR-SUPPORT-010A..010F split; the mapping file must use this explicit audit TEST ID instead of leaving the parent row as `*(Planned)*`.
+  **Acceptance Criteria:**
+  - [x] FR-SUPPORT-010 maps to this TEST ID while split child rows retain their dedicated support test IDs.
+  - [x] Later support slices remain mapped to their narrower dedicated TEST rows.

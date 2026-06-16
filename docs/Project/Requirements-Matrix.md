@@ -206,6 +206,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REPL-007 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
 | FR-SUPPORT-010A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
 | FR-SUPPORT-010B | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
+| TR-SUPPORT-LOG-010 | ✅ Complete | Technical-Requirements.md, Program.cs, SessionLogController |
 | FR-SUPPORT-010C | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
 | FR-MCP-REPL-007 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/McpServer.Repl.Host/Program.cs (--workspace-path, --marker-file), src/McpServer.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
 | TR-MCP-MT-003A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
@@ -664,6 +665,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-AUTH-012 | ✅ Complete | Testing-Requirements.md, WorkspaceTokenServiceTests |
 | TEST-MCP-HEALTH-002 | ✅ Complete | Testing-Requirements.md, WorkspaceReadinessHealthCheckTests |
 | TEST-MCP-HEALTH-003 | ✅ Complete | Testing-Requirements.md, ReadinessAndAuthIntegrationTests |
+| TEST-MCP-TRACE-LEGACY-001 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-TRACE-LEGACY-002 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-TRACE-LEGACY-003 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-TRACE-REPL-001 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-SUPPORT-010 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
 | TEST-MCP-REQACPLUGIN-CAPTURE | Tracked | Testing-Requirements.md |
 | FR-MCP-PLUGINCORE-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGINCORE-002 | Tracked | Functional-Requirements.md |

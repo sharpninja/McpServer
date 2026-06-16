@@ -2,59 +2,59 @@
 
 ## TR-01
 
-**TR-01** — Placeholder requirement backfilled by DB-FK-001.
+**TR-01** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-02
 
-**TR-02** — Placeholder requirement backfilled by DB-FK-001.
+**TR-02** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-03
 
-**TR-03** — Placeholder requirement backfilled by DB-FK-001.
+**TR-03** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-04
 
-**TR-04** — Placeholder requirement backfilled by DB-FK-001.
+**TR-04** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-05
 
-**TR-05** — Placeholder requirement backfilled by DB-FK-001.
+**TR-05** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-06
 
-**TR-06** — Placeholder requirement backfilled by DB-FK-001.
+**TR-06** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-07
 
-**TR-07** — Placeholder requirement backfilled by DB-FK-001.
+**TR-07** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-08
 
-**TR-08** — Placeholder requirement backfilled by DB-FK-001.
+**TR-08** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-09
 
-**TR-09** — Placeholder requirement backfilled by DB-FK-001.
+**TR-09** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-10
 
-**TR-10** — Placeholder requirement backfilled by DB-FK-001.
+**TR-10** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-11
 
-**TR-11** — Placeholder requirement backfilled by DB-FK-001.
+**TR-11** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-12
 
-**TR-12** — Placeholder requirement backfilled by DB-FK-001.
+**TR-12** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-13
 
-**TR-13** — Placeholder requirement backfilled by DB-FK-001.
+**TR-13** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-14
 
-**TR-14** — Placeholder requirement backfilled by DB-FK-001.
+**TR-14** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-GRAPHRAG-ADHOC-001
 
@@ -183,35 +183,35 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 ## TR-MCP-AGENT-PARITY-010
 
-**TR-MCP-AGENT-PARITY-010** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-010.
+**TR-MCP-AGENT-PARITY-010** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-AGENT-PARITY-011
 
-**TR-MCP-AGENT-PARITY-011** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-011.
+**TR-MCP-AGENT-PARITY-011** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-AGENT-PARITY-012
 
-**TR-MCP-AGENT-PARITY-012** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-012.
+**TR-MCP-AGENT-PARITY-012** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-AGENT-PARITY-013
 
-**TR-MCP-AGENT-PARITY-013** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-013.
+**TR-MCP-AGENT-PARITY-013** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-AGENT-PARITY-020
 
-**TR-MCP-AGENT-PARITY-020** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020.
+**TR-MCP-AGENT-PARITY-020** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-AGENT-PARITY-020..027
 
-**TR-MCP-AGENT-PARITY-020..027** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020..027.
+**TR-MCP-AGENT-PARITY-020..027** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-AGENT-PARITY-020-027
 
-**TR-MCP-AGENT-PARITY-020-027** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020-027.
+**TR-MCP-AGENT-PARITY-020-027** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-AGENT-PARITY-030
 
-**TR-MCP-AGENT-PARITY-030** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-030.
+**TR-MCP-AGENT-PARITY-030** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
 ## TR-MCP-API-001
 
@@ -1520,6 +1520,10 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 `AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
 
+## TR-SUPPORT-LOG-010
+
+**Session-log ProblemDetails contract** — Session-log REST endpoints SHALL return `application/problem+json` for malformed JSON binding and domain validation failures. Error keys SHALL identify the JSON root or offending domain field rather than leaking action parameter names such as `dto`.
+
 ## TR-SUPPORT-010E
 
 **Stateless lifecycle controller + client + tool adapters** — SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
@@ -1530,7 +1534,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-TEST-001
 
-**TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
+**TR-TEST-001** — Legacy test-planning import stub retained for historical traceability. Status: reserved; active test requirements are tracked under concrete TEST-* IDs in Testing-Requirements.md.
 
 ## TR-MCP-AUTH-010
 

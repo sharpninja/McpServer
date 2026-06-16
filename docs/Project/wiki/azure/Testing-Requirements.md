@@ -1322,6 +1322,32 @@ In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) p
 
 
 
+## TEST-MCP-TRACE-LEGACY
+
+### TEST-MCP-TRACE-LEGACY-001
+
+Traceability audit coverage for completed legacy MCP baseline rows FR-MCP-001 through FR-MCP-025. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented; the requirements matrix remains the evidence source.
+
+
+### TEST-MCP-TRACE-LEGACY-002
+
+Traceability audit coverage for completed auth, agent, CQRS, workspace, prompt, voice, desktop, and template rows FR-MCP-026 through FR-MCP-050. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+
+
+### TEST-MCP-TRACE-LEGACY-003
+
+Traceability audit coverage for completed agent-pool, change-event, GitHub, GraphRAG, and Byrd process rows FR-MCP-052 through FR-MCP-083. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+
+
+
+## TEST-MCP-TRACE-REPL
+
+### TEST-MCP-TRACE-REPL-001
+
+Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
+
+
+
 ## TEST-REQAC-LIVE
 
 ### TEST-REQAC-LIVE-001
@@ -1378,3 +1404,11 @@ Integration tests: open idempotent, begin creates in_progress, complete merges+f
 ### TEST-SUPPORT-010F
 
 SQLite tests: partial session submit preserves omitted title/model; sparse turn submit preserves omitted response/queryText and prior collections.
+
+
+
+## TEST-SUPPORT-TRACE
+
+### TEST-SUPPORT-010
+
+Traceability audit coverage for the original broad FR-SUPPORT-010 support surface row. This broad parent row predates the later FR-SUPPORT-010A through FR-SUPPORT-010F split and maps to this explicit audit TEST ID while split child rows retain their dedicated support test IDs.
