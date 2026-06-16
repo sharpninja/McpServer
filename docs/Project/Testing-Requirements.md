@@ -274,6 +274,12 @@
   - [x] A red test fails until the ACID profile metadata and option defaults are implemented.
   - [x] A red test fails until ACID run options filter unsafe tools and preserve serialized function invocation.
   - [x] A regression test proves default non-ACID hosted-agent registration still exposes the existing tool surface.
+
+- TEST-MCP-187: Quad Brain coding-agent prompt integration tests SHALL verify that the hosted MCP coding agent executes coding prompts through the Quad Brain orchestration client surface without live external model calls.
+  **Acceptance Criteria:**
+  - [x] A prompt-array integration test invokes `mcp_quadbrain_coding_execute` for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape.
+  - [x] An ACID profile test proves the Quad Brain coding tool is exposed while unsafe tools remain blocked.
+  - [x] Tests use an in-memory MCP HTTP handler and do not require live external model credentials or network calls.
   - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
 - TEST-MCP-BATCH-001: Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
 - TEST-MCP-MEMORY-001: Storage isolation tests SHALL prove Global memories and Workspace memories in two workspaces list as Global plus current workspace only, and that update/remove by ID cannot mutate another workspace-local memory.

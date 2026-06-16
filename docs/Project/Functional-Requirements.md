@@ -960,6 +960,20 @@ The system SHALL expose an explicit ACID-compliant, tightly coupled hosted-agent
 
 **Covered by:** `McpHostedAgentAdapterTests`, `ServiceCollectionExtensionsTests`, `HostedAgentWorkflowIntegrationTests`
 
+## FR-MCP-137 Quad Brain coding agent execution
+
+The hosted MCP coding agent SHALL expose a typed Microsoft Agent Framework surface that executes coding tasks through the MCP Server Quad Brain orchestration endpoint instead of raw client passthrough, direct external model calls, or implicit fallback behavior.
+
+**Acceptance Criteria:**
+- [x] The hosted agent exposes a model-visible `mcp_quadbrain_coding_execute` tool that accepts a coding prompt, task kind, turn id, GraphRAG admission preference, and caller metadata.
+- [x] The tool calls `McpServerClient.BrainSlots.OrchestrateAsync` with coding-agent metadata and never bypasses the Quad Brain transaction/admission contract.
+- [x] The ACID tightly coupled profile includes the Quad Brain coding tool while still excluding generic passthrough, shell execution, repository write, desktop launch, TODO mutation, and GraphRAG mutation tools.
+- [x] Host code can execute the same coding-agent path through a typed runtime method without manually invoking raw MCP endpoints.
+
+**Technical Implementation:** [TR-MCP-AGENT-016](./Technical-Requirements.md#tr-mcp-agent-016) | [TR-MCP-QUAD-005](./Technical-Requirements.md#tr-mcp-quad-005) | [TR-MCP-TXN-001](./Technical-Requirements.md#tr-mcp-txn-001) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `McpHostedAgentAdapterTests`, `HostedAgentWorkflowIntegrationTests`
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-AGENT-PARITY-001.

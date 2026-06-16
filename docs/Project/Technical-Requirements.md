@@ -166,6 +166,17 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 - [x] `McpAgentOptions` exposes a `UseAcidTightlyCoupledProfile` helper that sets strict profile defaults without changing default registration behavior.
 - [x] ACID run options preserve `AllowMultipleToolCalls=false` and `FunctionInvokingChatClient.AllowConcurrentInvocation=false`.
 - [x] ACID tool exposure is generated from an allowlist and excludes unsafe generic, shell, desktop, and mutation tools by default.
+
+## TR-MCP-AGENT-016
+
+**Hosted-agent Quad Brain coding adapter** — The `McpServer.McpAgent` package SHALL provide public DTOs, hosted-agent adapter functions, ACID allowlist membership, and typed runtime helpers that route coding requests to `McpServerClient.BrainSlots.OrchestrateAsync` with deterministic metadata and cancellation support.
+**Status:** ✅ Complete
+
+**Acceptance Criteria:**
+- [x] Coding-agent DTOs are public, XML-documented, and use `System.Text.Json` property names compatible with Microsoft Agent Framework function invocation.
+- [x] The adapter preserves caller metadata and appends coding-agent fields including `taskKind`, `executionProfile`, and `sourceType`.
+- [x] The adapter fails through the typed `QuadBrainOrchestrationResponse` status/reason contract returned by MCP Server and does not synthesize implicit fallback model output.
+- [x] Existing non-ACID hosted-agent registration remains backward compatible aside from the additional Quad Brain coding tool.
 - [x] All new public APIs have XMLDocs and are covered by focused tests.
 
 **Covered by:** `McpAcidAgentDefinition`, `McpAgentOptions`, `McpHostedAgent`, `McpAcidHostedAgentRuntime`, `McpHostedAgentAdapterTests`, `ServiceCollectionExtensionsTests`

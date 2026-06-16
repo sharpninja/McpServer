@@ -67,13 +67,14 @@ public sealed class GraphRagToolAdapterTests
     }
 
     /// <summary>
-    /// TEST-MCP-090: Verifies that the total tool count is 42 (28 pre-existing + 14 new GraphRAG tools).
+    /// TEST-MCP-090/TEST-MCP-187: Verifies that the total tool count is 43
+    /// (28 pre-existing + 14 GraphRAG tools + 1 Quad Brain coding-agent tool).
     /// </summary>
     [Fact]
-    public void Registration_TotalToolCount_Is_42()
+    public void Registration_TotalToolCount_Is_43()
     {
         var (hostedAgent, _) = CreateHostedAgent();
-        Assert.Equal(42, hostedAgent.Registration.Functions.Count);
+        Assert.Equal(43, hostedAgent.Registration.Functions.Count);
     }
 
     /// <summary>

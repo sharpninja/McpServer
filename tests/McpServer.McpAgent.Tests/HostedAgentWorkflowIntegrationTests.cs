@@ -24,6 +24,34 @@ public sealed class HostedAgentWorkflowIntegrationTests
 {
     private static readonly string TestWorkspacePath =
         Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
+
+    /// <summary>
+    /// TEST-MCP-187: Coding-task prompts that should execute through the Quad Brain coding-agent tool.
+    /// </summary>
+    public static TheoryData<string, string, string> QuadBrainCodingPrompts => new()
+    {
+        {
+            "implementation",
+            "Implement an idempotent C# service method that restores a soft-deleted record before retrying insert.",
+            "repository"
+        },
+        {
+            "debugging",
+            "Find the cancellation bug in an async transaction coordinator and propose the minimal fix.",
+            "transactions"
+        },
+        {
+            "review",
+            "Review a controller endpoint that returns model output before subscriber commit and identify the regression.",
+            "controller"
+        },
+        {
+            "test-design",
+            "Design unit tests for a GraphRAG admission branch that must reject non-Curiosity roles.",
+            "tests"
+        },
+    };
+
     /// <summary>
     /// TEST-MCP-089: Verifies that a DI-registered hosted agent can expose its ChatClientAgent
     /// metadata, attach the built-in MCP tools to run options, and execute a representative
@@ -336,6 +364,63 @@ public sealed class HostedAgentWorkflowIntegrationTests
         Assert.Equal("Codex-20260309T150105Z-second-agent", secondBody.RootElement.GetProperty("sessionId").GetString());
     }
 
+    /// <summary>
+    /// TEST-MCP-187: Verifies that coding prompts execute through the hosted-agent Quad Brain tool
+    /// and reach the typed BrainSlots orchestration client contract without live model calls.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(QuadBrainCodingPrompts))]
+    public async Task AddMcpServerMcpAgent_QuadBrainCodingTool_ExecutesCodingPromptsThroughOrchestration(
+        string taskKind,
+        string prompt,
+        string focusArea)
+    {
+        using var serviceProvider = CreateServiceProvider(out var handler);
+        var hostedAgentFactory = serviceProvider.GetRequiredService<IMcpHostedAgentFactory>();
+        var hostedAgent = hostedAgentFactory.CreateHostedAgent();
+        var tools = GetAttachedTools(hostedAgent);
+        var codingTool = tools["mcp_quadbrain_coding_execute"];
+
+        var result = await codingTool.InvokeAsync(
+            new AIFunctionArguments
+            {
+                ["request"] = new McpQuadBrainCodingAgentRequest
+                {
+                    Prompt = prompt,
+                    TaskKind = taskKind,
+                    TurnId = $"turn-{taskKind}",
+                    AdmitCuriosityToGraphRag = true,
+                    Metadata = new Dictionary<string, string>
+                    {
+                        ["focusArea"] = focusArea,
+                        ["suite"] = "quad-coding-prompts",
+                    },
+                },
+            },
+            CancellationToken.None);
+
+        var response = DeserializeJsonResult<QuadBrainOrchestrationResponse>(result);
+        var request = Assert.Single(handler.Requests);
+        using var body = JsonDocument.Parse(request.Body!);
+        var metadata = body.RootElement.GetProperty("metadata");
+
+        Assert.Equal("Committed", response.Status);
+        Assert.Equal($"Quad Brain coding result for {taskKind}", response.Output);
+        Assert.Equal("txn-quad-coding", response.TransactionId);
+        Assert.Equal(HttpMethod.Post, request.Method);
+        Assert.Equal("/mcpserver/brain-slots/orchestrate", request.RequestUri.AbsolutePath);
+        Assert.Equal(prompt, body.RootElement.GetProperty("input").GetString());
+        Assert.Equal($"turn-{taskKind}", body.RootElement.GetProperty("turnId").GetString());
+        Assert.True(body.RootElement.GetProperty("admitCuriosityToGraphRag").GetBoolean());
+        Assert.Equal(focusArea, metadata.GetProperty("focusArea").GetString());
+        Assert.Equal("quad-coding-prompts", metadata.GetProperty("suite").GetString());
+        Assert.Equal("Microsoft.AgentFramework", metadata.GetProperty("codingAgent.surface").GetString());
+        Assert.Equal(taskKind, metadata.GetProperty("codingAgent.taskKind").GetString());
+        Assert.Equal(nameof(McpAgentExecutionProfile.Default), metadata.GetProperty("codingAgent.executionProfile").GetString());
+        Assert.Equal("Codex", metadata.GetProperty("codingAgent.sourceType").GetString());
+        Assert.Equal(McpHostedAgentDefaults.DefaultAgentId, metadata.GetProperty("codingAgent.agentId").GetString());
+    }
+
     private static ServiceProvider CreateServiceProvider(out RecordingHostedWorkflowHttpMessageHandler handler)
     {
         handler = new RecordingHostedWorkflowHttpMessageHandler();
@@ -447,6 +532,9 @@ public sealed class HostedAgentWorkflowIntegrationTests
             if (segments is ["mcpserver", "desktop", "launch"] && request.Method == HttpMethod.Post)
                 return CreateDesktopLaunchResponse();
 
+            if (segments is ["mcpserver", "brain-slots", "orchestrate"] && request.Method == HttpMethod.Post)
+                return CreateQuadBrainOrchestrationResponse(body!);
+
             throw new InvalidOperationException(
                 $"Unexpected MCP request '{request.Method} {request.RequestUri.AbsolutePath}'.");
         }
@@ -534,6 +622,45 @@ public sealed class HostedAgentWorkflowIntegrationTests
                     ProcessId = 4242,
                     ExitCode = 0
                 }));
+
+        private static HttpResponseMessage CreateQuadBrainOrchestrationResponse(string body)
+        {
+            using var document = JsonDocument.Parse(body);
+            var taskKind = document.RootElement
+                .GetProperty("metadata")
+                .GetProperty("codingAgent.taskKind")
+                .GetString();
+
+            return CreateJsonResponse(
+                HttpStatusCode.OK,
+                JsonSerializer.Serialize(
+                    new QuadBrainOrchestrationResponse
+                    {
+                        Status = "Committed",
+                        Reason = "Committed",
+                        Output = $"Quad Brain coding result for {taskKind}",
+                        TransactionId = "txn-quad-coding",
+                        DiffgramId = "diff-quad-coding",
+                        StartedAtUtc = new DateTimeOffset(2026, 03, 09, 15, 01, 05, TimeSpan.Zero),
+                        CompletedAtUtc = new DateTimeOffset(2026, 03, 09, 15, 01, 06, TimeSpan.Zero),
+                        RoleResults =
+                        [
+                            new QuadBrainRoleResult
+                            {
+                                Role = "ArbiterOfTruth",
+                                SlotId = "brain-slot:aot",
+                                Status = "Committed",
+                                Reason = "Committed",
+                                ModelId = "grok-build",
+                                TransactionId = "txn-aot",
+                                DiffgramId = "diff-aot",
+                                Output = $"Quad Brain coding result for {taskKind}",
+                                OrchestrationWeight = 1,
+                                WeightVersion = 1,
+                            },
+                        ],
+                    }));
+        }
 
         private static string? GetQueryParameter(Uri requestUri, string name)
         {

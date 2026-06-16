@@ -2,6 +2,7 @@ using McpServer.McpAgent.SessionLog;
 using McpServer.McpAgent.Todo;
 using McpServer.McpAgent.PowerShellSessions;
 using McpServer.Client;
+using McpServer.Client.Models;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 
@@ -89,6 +90,17 @@ public interface IMcpHostedAgent
     McpAcidHostedAgentRuntime CreateAcidTightlyCoupledRuntime(
         IChatClient chatClient,
         ChatClientAgentRunOptions? baseOptions = null);
+
+    /// <summary>
+    /// Executes a coding task through MCP Server Quad Brain orchestration using the same route exposed
+    /// by the model-visible <c>mcp_quadbrain_coding_execute</c> tool.
+    /// </summary>
+    /// <param name="request">The coding-agent request containing prompt, turn id, and metadata.</param>
+    /// <param name="cancellationToken">Cancellation token for the MCP Server request.</param>
+    /// <returns>The committed Quad Brain orchestration response returned by MCP Server.</returns>
+    Task<QuadBrainOrchestrationResponse> ExecuteQuadBrainCodingTaskAsync(
+        McpQuadBrainCodingAgentRequest request,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
      /// Creates <see cref="ChatClientAgentRunOptions"/> that attach the built-in MCP workflow tools

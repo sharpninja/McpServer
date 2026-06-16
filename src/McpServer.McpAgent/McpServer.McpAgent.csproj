@@ -15,7 +15,7 @@
     <RepositoryBranch>main</RepositoryBranch>
     <PackageTags>mcp;agent-framework;ai-agent;workflow</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReleaseNotes>MCP-AGENT-001: adds hosted-agent registration, session-log and TODO workflows, repository and desktop tools, local PowerShell sessions, ChatClientAgent-ready tool adapters, an ACID tightly coupled Agent Framework profile, and an interactive sample host.</PackageReleaseNotes>
+    <PackageReleaseNotes>MCP-AGENT-001: adds hosted-agent registration, session-log and TODO workflows, repository and desktop tools, local PowerShell sessions, ChatClientAgent-ready tool adapters, an ACID tightly coupled Agent Framework profile, Quad Brain coding-agent execution, and an interactive sample host.</PackageReleaseNotes>
     <ReadmeFile>README.md</ReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>

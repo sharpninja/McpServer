@@ -24,6 +24,7 @@ public sealed class McpAcidAgentDefinition
         "mcp_requirements_get_fr",
         "mcp_requirements_get_tr",
         "mcp_requirements_get_test",
+        "mcp_quadbrain_coding_execute",
         "mcp_graphrag_list_documents",
         "mcp_graphrag_get_document_chunks",
         "mcp_graphrag_list_entities",

@@ -1,6 +1,6 @@
 # McpServer.McpAgent
 
-`SharpNinja.McpServer.McpAgent` is a .NET 9 library for hosting MCP-aware agents as MCP Agent integrations built on Microsoft Agent Framework.
+`SharpNinja.McpServer.McpAgent` is a .NET 10 library for hosting MCP-aware agents as MCP Agent integrations built on Microsoft Agent Framework.
 
 ## What it provides
 
@@ -11,6 +11,7 @@
 - built-in repository read/list/write, local desktop-launch, and in-process PowerShell session operations
 - a hosted-agent registration surface that attaches MCP-backed tools to `ChatClientAgent` run options
 - a host-facing `IMcpHostedAgent.PowerShellSessions` manager for direct local PowerShell execution
+- a Quad Brain coding-agent tool that routes coding prompts through MCP Server brain-slot orchestration
 - an ACID tightly coupled Agent Framework profile that exposes a fail-closed, audited, serialized tool surface
 
 ## Basic registration
@@ -48,7 +49,7 @@ var hostedAgent = serviceProvider.GetRequiredService<IMcpHostedAgent>();
 var runtime = hostedAgent.CreateAcidTightlyCoupledRuntime(chatClient);
 ```
 
-The ACID profile extends Microsoft Agent Framework through `Microsoft.Agents.AI.ChatClientAgent`. It does not certify every MCP endpoint as transactional. By default it exposes only the built-in session/audit, read-only TODO, repository read/list, requirements read, and GraphRAG read/list/get tools. Generic passthrough, desktop launch, local PowerShell, repository writes, TODO mutations, and GraphRAG mutations remain hidden until a separate transaction and audit contract authorizes them.
+The ACID profile extends Microsoft Agent Framework through `Microsoft.Agents.AI.ChatClientAgent`. It does not certify every MCP endpoint as transactional. By default it exposes only the built-in session/audit, read-only TODO, repository read/list, requirements read, the transaction-gated `mcp_quadbrain_coding_execute` coding tool, and GraphRAG read/list/get tools. Generic passthrough, desktop launch, local PowerShell, repository writes, TODO mutations, and GraphRAG mutations remain hidden until a separate transaction and audit contract authorizes them.
 
 ## Built-in workflows
 
@@ -61,6 +62,7 @@ The ACID profile extends Microsoft Agent Framework through `Microsoft.Agents.AI.
   - update TODO items
   - run plan/status/implementation flows with streaming or buffered helpers
 - hosted-agent MCP tools
+  - `mcp_quadbrain_coding_execute`
   - `mcp_repo_read`, `mcp_repo_list`, `mcp_repo_write`
   - `mcp_desktop_launch`
   - `mcp_powershell_session_create`, `mcp_powershell_session_command`, `mcp_powershell_session_close`
@@ -89,3 +91,6 @@ See `src\McpServer.McpAgent.SampleHost` for an interactive preview executable th
 - FR-MCP-136
 - TR-MCP-AGENT-015
 - TEST-MCP-186
+- FR-MCP-137
+- TR-MCP-AGENT-016
+- TEST-MCP-187
