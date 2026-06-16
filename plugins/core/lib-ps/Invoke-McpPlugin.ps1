@@ -206,14 +206,32 @@ function Resolve-StatusScript {
         return $env:MCP_STATUS_SCRIPT
     }
 
-    $libDir = Join-Path $Root 'lib'
-    $candidate = Get-ChildItem -LiteralPath $libDir -Filter 'mcp.*.status.sh' -ErrorAction SilentlyContinue |
-        Select-Object -First 1
-    if ($candidate) {
-        return $candidate.FullName
+    foreach ($libName in @('lib-sh', 'lib')) {
+        $libDir = Join-Path $Root $libName
+        $candidate = Get-ChildItem -LiteralPath $libDir -Filter 'mcp.*.status.sh' -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+        if ($candidate) {
+            return $candidate.FullName
+        }
     }
 
-    return (Join-Path $libDir 'mcp-status.sh')
+    return (Resolve-PluginShellScript -Root $Root -Name 'mcp-status.sh')
+}
+
+function Resolve-PluginShellScript {
+    param(
+        [Parameter(Mandatory)][string]$Root,
+        [Parameter(Mandatory)][string]$Name
+    )
+
+    foreach ($libName in @('lib-sh', 'lib')) {
+        $candidate = Join-Path (Join-Path $Root $libName) $Name
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+    }
+
+    throw "Unable to find plugin shell script '$Name' under '$Root\\lib-sh' or '$Root\\lib'."
 }
 
 switch ($Command) {
@@ -226,7 +244,7 @@ switch ($Command) {
         }
 
         $paramsText = Read-OptionalText -Inline $Params -HasInline:$($PSBoundParameters.ContainsKey('Params')) -Path $ParamsPath -AllowRedirectedInput
-        Invoke-BashPluginScript -ScriptPath (Join-Path $pluginRootFull 'lib\repl-invoke.sh') -Arguments @($Method) -StandardInput ($paramsText ?? '')
+        Invoke-BashPluginScript -ScriptPath (Resolve-PluginShellScript -Root $pluginRootFull -Name 'repl-invoke.sh') -Arguments @($Method) -StandardInput ($paramsText ?? '')
     }
     'CompleteTurn' {
         $responseText = Read-OptionalText -Inline $Response -HasInline:$($PSBoundParameters.ContainsKey('Response')) -Path $ResponsePath -AllowRedirectedInput
@@ -234,6 +252,6 @@ switch ($Command) {
             $responseText = 'Turn completed.'
         }
 
-        Invoke-BashPluginScript -ScriptPath (Join-Path $pluginRootFull 'lib\final-response.sh') -StandardInput $responseText
+        Invoke-BashPluginScript -ScriptPath (Resolve-PluginShellScript -Root $pluginRootFull -Name 'final-response.sh') -StandardInput $responseText
     }
 }
