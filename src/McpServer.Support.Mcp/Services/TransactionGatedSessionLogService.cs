@@ -6,6 +6,7 @@ using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using McpServer.TransactionSecurity.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
@@ -328,7 +329,7 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         if (string.IsNullOrWhiteSpace(sourceType) || string.IsNullOrWhiteSpace(sessionId))
             return new SessionGraphSnapshot(sourceType, sessionId, workspaceId, null);
 
-        var session = await SessionQuery()
+        var session = await SessionQuery(includeSoftDeleted: false)
             .AsNoTracking()
             .FirstOrDefaultAsync(
                 entity => entity.SourceType == sourceType
@@ -347,33 +348,28 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         try
         {
             _db.ChangeTracker.Clear();
-            var current = await SessionQuery()
+            var current = await SessionQuery(includeSoftDeleted: true)
                 .FirstOrDefaultAsync(
                     entity => entity.SourceType == snapshot.SourceType
                               && entity.SessionId == snapshot.SessionId
                               && entity.WorkspaceId == snapshot.WorkspaceId,
                     cancellationToken)
                 .ConfigureAwait(false);
-            if (current is not null)
+            if (current is null)
             {
-                var sessionRowId = current.Id;
-                var turnIds = current.Turns.Select(turn => turn.Id).ToArray();
-                _db.ChangeTracker.Clear();
-                foreach (var turnId in turnIds)
-                    await DeleteTurnRowsAsync(turnId, cancellationToken).ConfigureAwait(false);
-                await _db.SessionLogs
-                    .IgnoreQueryFilters()
-                    .Where(entity => entity.Id == sessionRowId)
-                    .ExecuteDeleteAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                if (snapshot.Session is not null)
+                    _db.SessionLogs.Add(CloneSession(snapshot.Session));
+            }
+            else if (snapshot.Session is null)
+            {
+                SoftDeleteSessionGraph(current, "transaction_rollback_removed_session");
+            }
+            else
+            {
+                RestoreSessionGraph(current, snapshot.Session);
             }
 
-            if (snapshot.Session is not null)
-            {
-                _db.SessionLogs.Add(CloneSession(snapshot.Session));
-                await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            }
-
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             await transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
         }
         catch
@@ -388,25 +384,31 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         CancellationToken cancellationToken)
     {
         _db.ChangeTracker.Clear();
-        var currentExists = await _db.SessionLogs
-            .IgnoreQueryFilters()
-            .AsNoTracking()
-            .AnyAsync(
+        var current = await SessionQuery(includeSoftDeleted: true)
+            .FirstOrDefaultAsync(
                 entity => entity.SourceType == snapshot.SourceType
                           && entity.SessionId == snapshot.SessionId
                           && entity.WorkspaceId == snapshot.WorkspaceId,
                 cancellationToken)
             .ConfigureAwait(false);
-        if (currentExists || snapshot.Session is null)
+        if (current is not null)
+        {
+            ClearSessionGraphSoftDelete(current);
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        if (snapshot.Session is null)
             return;
 
         _db.SessionLogs.Add(CloneSession(snapshot.Session));
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    private IQueryable<SessionLogEntity> SessionQuery()
-        => _db.SessionLogs
-            .IgnoreQueryFilters()
+    private IQueryable<SessionLogEntity> SessionQuery(bool includeSoftDeleted)
+    {
+        var query = includeSoftDeleted ? _db.SessionLogs.IgnoreQueryFilters() : _db.SessionLogs;
+        return query
             .Include(session => session.Turns.OrderBy(turn => turn.Id))
                 .ThenInclude(turn => turn.Actions.OrderBy(action => action.Order))
             .Include(session => session.Turns)
@@ -420,16 +422,6 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
             .Include(session => session.Turns)
                 .ThenInclude(turn => turn.StringListItems.OrderBy(item => item.Ordinal))
             .AsSplitQuery();
-
-    private async Task DeleteTurnRowsAsync(long turnId, CancellationToken cancellationToken)
-    {
-        await _db.SessionLogActions.IgnoreQueryFilters().Where(row => row.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurnTags.IgnoreQueryFilters().Where(row => row.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurnContexts.IgnoreQueryFilters().Where(row => row.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogProcessingDialogs.IgnoreQueryFilters().Where(row => row.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogCommits.IgnoreQueryFilters().Where(row => row.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurnStringLists.IgnoreQueryFilters().Where(row => row.SessionLogTurnId == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
-        await _db.SessionLogTurns.IgnoreQueryFilters().Where(row => row.Id == turnId).ExecuteDeleteAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private void SyncDbWorkspaceFromContext()
@@ -440,6 +432,197 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
 
         if (!string.Equals(_db.CurrentWorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase))
             _db.OverrideWorkspaceId(workspaceId);
+    }
+
+    private void RestoreSessionGraph(SessionLogEntity target, SessionLogEntity source)
+    {
+        CopySessionScalars(target, source);
+        ClearSoftDelete(target);
+
+        var restoredTurns = new List<SessionLogTurnEntity>();
+        foreach (var sourceTurn in source.Turns.OrderBy(turn => turn.Id))
+        {
+            var targetTurn = FindMatchingTurn(target, sourceTurn, restoredTurns);
+            if (targetTurn is null)
+            {
+                targetTurn = new SessionLogTurnEntity();
+                target.Turns.Add(targetTurn);
+            }
+
+            RestoreTurnGraph(targetTurn, sourceTurn);
+            restoredTurns.Add(targetTurn);
+        }
+
+        foreach (var extraTurn in target.Turns.Where(turn => !restoredTurns.Contains(turn)).ToArray())
+            SoftDeleteTurnGraph(extraTurn, "transaction_rollback_removed_turn");
+    }
+
+    private static SessionLogTurnEntity? FindMatchingTurn(
+        SessionLogEntity target,
+        SessionLogTurnEntity source,
+        IReadOnlyCollection<SessionLogTurnEntity> restoredTurns)
+    {
+        if (source.Id != 0)
+        {
+            var byId = target.Turns.FirstOrDefault(turn => turn.Id == source.Id && !restoredTurns.Contains(turn));
+            if (byId is not null)
+                return byId;
+        }
+
+        if (string.IsNullOrWhiteSpace(source.RequestId))
+            return null;
+
+        return target.Turns.FirstOrDefault(
+            turn => string.Equals(turn.RequestId, source.RequestId, StringComparison.Ordinal)
+                    && !restoredTurns.Contains(turn));
+    }
+
+    private void RestoreTurnGraph(SessionLogTurnEntity target, SessionLogTurnEntity source)
+    {
+        CopyTurnScalars(target, source);
+        ClearSoftDelete(target);
+        ReplaceChildCollection(target.Actions, source.Actions.OrderBy(action => action.Order).Select(CloneAction));
+        ReplaceChildCollection(target.Tags, source.Tags.Select(CloneTag));
+        ReplaceChildCollection(target.ContextItems, source.ContextItems.OrderBy(context => context.Ordinal).Select(CloneContext));
+        ReplaceChildCollection(target.ProcessingDialog, source.ProcessingDialog.OrderBy(dialog => dialog.Ordinal).Select(CloneDialog));
+        ReplaceChildCollection(target.Commits, source.Commits.OrderBy(commit => commit.Ordinal).Select(CloneCommit));
+        ReplaceChildCollection(target.StringListItems, source.StringListItems.OrderBy(item => item.Ordinal).Select(CloneStringListItem));
+    }
+
+    private void ReplaceChildCollection<TEntity>(
+        ICollection<TEntity> targetCollection,
+        IEnumerable<TEntity> restoredChildren)
+        where TEntity : class
+    {
+        foreach (var existingChild in targetCollection.ToArray())
+            MarkSoftDeleted(existingChild, "transaction_rollback_replaced_child");
+
+        foreach (var restoredChild in restoredChildren)
+            targetCollection.Add(restoredChild);
+    }
+
+    private void SoftDeleteSessionGraph(SessionLogEntity session, string reason)
+    {
+        foreach (var turn in session.Turns)
+            SoftDeleteTurnGraph(turn, reason);
+
+        MarkSoftDeleted(session, reason);
+    }
+
+    private void SoftDeleteTurnGraph(SessionLogTurnEntity turn, string reason)
+    {
+        foreach (var action in turn.Actions)
+            MarkSoftDeleted(action, reason);
+        foreach (var tag in turn.Tags)
+            MarkSoftDeleted(tag, reason);
+        foreach (var context in turn.ContextItems)
+            MarkSoftDeleted(context, reason);
+        foreach (var dialog in turn.ProcessingDialog)
+            MarkSoftDeleted(dialog, reason);
+        foreach (var commit in turn.Commits)
+            MarkSoftDeleted(commit, reason);
+        foreach (var item in turn.StringListItems)
+            MarkSoftDeleted(item, reason);
+
+        MarkSoftDeleted(turn, reason);
+    }
+
+    private void ClearSessionGraphSoftDelete(SessionLogEntity session)
+    {
+        ClearSoftDelete(session);
+        foreach (var turn in session.Turns)
+        {
+            ClearSoftDelete(turn);
+            foreach (var action in turn.Actions)
+                ClearSoftDelete(action);
+            foreach (var tag in turn.Tags)
+                ClearSoftDelete(tag);
+            foreach (var context in turn.ContextItems)
+                ClearSoftDelete(context);
+            foreach (var dialog in turn.ProcessingDialog)
+                ClearSoftDelete(dialog);
+            foreach (var commit in turn.Commits)
+                ClearSoftDelete(commit);
+            foreach (var item in turn.StringListItems)
+                ClearSoftDelete(item);
+        }
+    }
+
+    private void MarkSoftDeleted(object entity, string reason)
+    {
+        var entry = _db.Entry(entity);
+        var deletedAtUtc = DateTimeOffset.UtcNow;
+        SetShadowValue(entry, "IsDeleted", true);
+        SetShadowValue(entry, "DeletedAtUtc", deletedAtUtc);
+        SetShadowValue(entry, "DeletedBy", nameof(TransactionGatedSessionLogService));
+        SetShadowValue(entry, "DeleteReason", reason);
+    }
+
+    private void ClearSoftDelete(object entity)
+    {
+        var entry = _db.Entry(entity);
+        SetShadowValue(entry, "IsDeleted", false);
+        SetShadowValue(entry, "DeletedAtUtc", null);
+        SetShadowValue(entry, "DeletedBy", null);
+        SetShadowValue(entry, "DeleteReason", null);
+    }
+
+    private static void SetShadowValue(EntityEntry entry, string propertyName, object? value)
+    {
+        if (entry.Metadata.FindProperty(propertyName) is null)
+            return;
+
+        var property = entry.Property(propertyName);
+        property.CurrentValue = value;
+        if (entry.State != EntityState.Added)
+            property.IsModified = true;
+    }
+
+    private static void CopySessionScalars(SessionLogEntity target, SessionLogEntity source)
+    {
+        target.WorkspaceId = source.WorkspaceId;
+        target.SourceType = source.SourceType;
+        target.SessionId = source.SessionId;
+        target.AgentDefinitionId = source.AgentDefinitionId;
+        target.Title = source.Title;
+        target.Model = source.Model;
+        target.Started = source.Started;
+        target.LastUpdated = source.LastUpdated;
+        target.Status = source.Status;
+        target.TurnCount = source.TurnCount;
+        target.TotalTokens = source.TotalTokens;
+        target.CursorSessionLabel = source.CursorSessionLabel;
+        target.CopilotAvgSuccessScore = source.CopilotAvgSuccessScore;
+        target.CopilotTotalNetTokens = source.CopilotTotalNetTokens;
+        target.CopilotTotalNetPremiumRequests = source.CopilotTotalNetPremiumRequests;
+        target.CopilotCompletedCount = source.CopilotCompletedCount;
+        target.CopilotInProgressCount = source.CopilotInProgressCount;
+        target.Project = source.Project;
+        target.TargetFramework = source.TargetFramework;
+        target.Repository = source.Repository;
+        target.Branch = source.Branch;
+        target.SourceFilePath = source.SourceFilePath;
+        target.ContentHash = source.ContentHash;
+    }
+
+    private static void CopyTurnScalars(SessionLogTurnEntity target, SessionLogTurnEntity source)
+    {
+        target.WorkspaceId = source.WorkspaceId;
+        target.RequestId = source.RequestId;
+        target.Timestamp = source.Timestamp;
+        target.Model = source.Model;
+        target.ModelProvider = source.ModelProvider;
+        target.QueryText = source.QueryText;
+        target.QueryTitle = source.QueryTitle;
+        target.Response = source.Response;
+        target.Interpretation = source.Interpretation;
+        target.Status = source.Status;
+        target.TokenCount = source.TokenCount;
+        target.FailureNote = source.FailureNote;
+        target.Score = source.Score;
+        target.IsPremium = source.IsPremium;
+        target.RawContextJson = source.RawContextJson;
+        target.OriginalEntryJson = source.OriginalEntryJson;
     }
 
     private static SessionLogEntity CloneSession(SessionLogEntity source)

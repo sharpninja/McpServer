@@ -159,7 +159,8 @@ public sealed class TransactionGatedSessionLogServiceTests
         Assert.Equal(2, restored.ProcessingDialog!.Count);
         Assert.Equal(2, restored.Commits!.Count);
         Assert.Equal(2, restored.DesignDecisions!.Count);
-        Assert.Equal(16, CountAllChildRows(connection, sessionId));
+        Assert.Equal(16, CountVisibleChildRows(connection, sessionId));
+        Assert.True(CountSoftDeletedChildRows(connection, sessionId) > 0);
     }
 
     /// <summary>
@@ -190,7 +191,8 @@ public sealed class TransactionGatedSessionLogServiceTests
 
         Assert.Equal(1, CountSessionRows(connection, sessionId));
         Assert.Equal(1, CountTurnRows(connection, sessionId));
-        Assert.Equal(16, CountAllChildRows(connection, sessionId));
+        Assert.Equal(16, CountVisibleChildRows(connection, sessionId));
+        Assert.True(CountSoftDeletedChildRows(connection, sessionId) > 0);
 
         var restored = await GetSessionAsync(connection, sessionId).ConfigureAwait(true);
         Assert.NotNull(restored);
@@ -198,6 +200,25 @@ public sealed class TransactionGatedSessionLogServiceTests
         var turn = Assert.Single(restored.Turns!);
         Assert.Equal("seed response", turn.Response);
         Assert.Equal(new[] { "seed-tag-a", "seed-tag-b" }, turn.Tags!.OrderBy(tag => tag).ToArray());
+    }
+
+    /// <summary>
+    /// TR-MCP-DB-003: rollback code must not bypass tracked soft-delete protection with
+    /// bulk physical delete operations.
+    /// </summary>
+    [Fact]
+    public void TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes()
+    {
+        var sourcePath = Path.Combine(
+            FindRepositoryRoot(),
+            "src",
+            "McpServer.Support.Mcp",
+            "Services",
+            "TransactionGatedSessionLogService.cs");
+        var source = File.ReadAllText(sourcePath);
+
+        Assert.DoesNotContain("ExecuteDelete", source, StringComparison.Ordinal);
+        Assert.DoesNotContain("DELETE FROM", source, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -380,6 +401,15 @@ public sealed class TransactionGatedSessionLogServiceTests
             ("$sid", sessionId));
 
     private static int CountAllChildRows(SqliteConnection connection, string sessionId)
+        => CountChildRows(connection, sessionId, null);
+
+    private static int CountVisibleChildRows(SqliteConnection connection, string sessionId)
+        => CountChildRows(connection, sessionId, isDeleted: false);
+
+    private static int CountSoftDeletedChildRows(SqliteConnection connection, string sessionId)
+        => CountChildRows(connection, sessionId, isDeleted: true);
+
+    private static int CountChildRows(SqliteConnection connection, string sessionId, bool? isDeleted)
     {
         var tables = new[]
         {
@@ -387,17 +417,21 @@ public sealed class TransactionGatedSessionLogServiceTests
             "SessionLogProcessingDialogs", "SessionLogCommits", "SessionLogTurnStringLists",
         };
         var total = 0;
+        var deletedPredicate = isDeleted.HasValue ? " AND c.IsDeleted = $isDeleted" : string.Empty;
         foreach (var table in tables)
         {
             total += ScalarCount(
                 connection,
                 $"SELECT COUNT(*) FROM {table} c JOIN SessionLogTurns t ON t.Id = c.SessionLogTurnId " +
-                "JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = $sid",
-                ("$sid", sessionId));
+                $"JOIN SessionLogs s ON s.Id = t.SessionLogId WHERE s.SessionId = $sid{deletedPredicate}",
+                isDeleted.HasValue ? [("$sid", sessionId), ("$isDeleted", isDeleted.Value ? 1 : 0)] : [("$sid", sessionId)]);
         }
 
         return total;
     }
+
+    private static string FindRepositoryRoot()
+        => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
 
     private static int ScalarCount(SqliteConnection connection, string sql, params (string Name, object Value)[] args)
     {

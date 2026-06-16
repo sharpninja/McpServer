@@ -911,14 +911,17 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
                 return Conflict("Session log delete operation does not identify a session id.");
 
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            var query = db.SessionLogs.Where(s => s.SessionId == key.SessionId);
+            var query = SessionLogGraphQuery(db).Where(s => s.SessionId == key.SessionId);
             if (!string.IsNullOrWhiteSpace(key.SourceType))
                 query = query.Where(s => s.SourceType == key.SourceType);
             var session = await query.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
             if (session is null)
                 return new FederationApplyResult { Applied = true, Version = null };
 
-            db.SessionLogs.Remove(session);
+            if (IsSoftDeleted(db, session))
+                return new FederationApplyResult { Applied = true, Version = null };
+
+            SoftDeleteSessionGraph(db, session, "federation_delete_replay");
             await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             return new FederationApplyResult { Applied = true, Version = null };
         }
@@ -1039,6 +1042,74 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
             Conflict = true,
             Message = message,
         };
+
+    private static IQueryable<SessionLogEntity> SessionLogGraphQuery(McpDbContext db)
+        => db.SessionLogs
+            .IgnoreQueryFilters()
+            .Include(session => session.Turns.OrderBy(turn => turn.Id))
+                .ThenInclude(turn => turn.Actions)
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.Tags)
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.ContextItems)
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.ProcessingDialog)
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.Commits)
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.StringListItems)
+            .AsSplitQuery();
+
+    private static void SoftDeleteSessionGraph(McpDbContext db, SessionLogEntity session, string reason)
+    {
+        var deletedAtUtc = DateTimeOffset.UtcNow;
+        foreach (var turn in session.Turns)
+        {
+            foreach (var action in turn.Actions)
+                MarkSoftDeleted(db, action, deletedAtUtc, reason);
+            foreach (var tag in turn.Tags)
+                MarkSoftDeleted(db, tag, deletedAtUtc, reason);
+            foreach (var context in turn.ContextItems)
+                MarkSoftDeleted(db, context, deletedAtUtc, reason);
+            foreach (var dialog in turn.ProcessingDialog)
+                MarkSoftDeleted(db, dialog, deletedAtUtc, reason);
+            foreach (var commit in turn.Commits)
+                MarkSoftDeleted(db, commit, deletedAtUtc, reason);
+            foreach (var item in turn.StringListItems)
+                MarkSoftDeleted(db, item, deletedAtUtc, reason);
+
+            MarkSoftDeleted(db, turn, deletedAtUtc, reason);
+        }
+
+        MarkSoftDeleted(db, session, deletedAtUtc, reason);
+    }
+
+    private static void MarkSoftDeleted(McpDbContext db, object entity, DateTimeOffset deletedAtUtc, string reason)
+    {
+        var entry = db.Entry(entity);
+        SetShadowValue(entry, "IsDeleted", true);
+        SetShadowValue(entry, "DeletedAtUtc", deletedAtUtc);
+        SetShadowValue(entry, "DeletedBy", nameof(SessionLogFederationStateAdapter));
+        SetShadowValue(entry, "DeleteReason", reason);
+    }
+
+    private static bool IsSoftDeleted(McpDbContext db, object entity)
+    {
+        var entry = db.Entry(entity);
+        return entry.Metadata.FindProperty("IsDeleted") is not null
+               && entry.Property("IsDeleted").CurrentValue is true;
+    }
+
+    private static void SetShadowValue(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, string propertyName, object? value)
+    {
+        if (entry.Metadata.FindProperty(propertyName) is null)
+            return;
+
+        var property = entry.Property(propertyName);
+        property.CurrentValue = value;
+        if (entry.State != EntityState.Added)
+            property.IsModified = true;
+    }
 }
 
 /// <summary>Federation adapter for requirements and traceability links.</summary>

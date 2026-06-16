@@ -546,6 +546,81 @@ public sealed class FederationStateAdapterRegistryTests
             .ConfigureAwait(true);
     }
 
+    /// <summary>Session log DELETE replay soft-deletes the retained session graph instead of physically removing rows.</summary>
+    [Fact]
+    public async Task SessionLogAdapter_DeleteReplaySoftDeletesRetainedSessionGraph()
+    {
+        const string sessionId = "Codex-20260522T000000Z-delete-replay";
+        using var provider = CreateProvider();
+        await SeedAsync(provider, db =>
+        {
+            db.SessionLogs.Add(new SessionLogEntity
+            {
+                WorkspaceId = WorkspacePath,
+                SourceType = "Codex",
+                SessionId = sessionId,
+                Status = "completed",
+                Started = DateTimeOffset.Parse("2026-05-22T00:00:00Z"),
+                LastUpdated = DateTimeOffset.Parse("2026-05-22T00:01:00Z"),
+                Turns =
+                [
+                    new SessionLogTurnEntity
+                    {
+                        WorkspaceId = WorkspacePath,
+                        RequestId = "req-delete-replay",
+                        Status = "completed",
+                        Actions =
+                        [
+                            new SessionLogActionEntity
+                            {
+                                WorkspaceId = WorkspacePath,
+                                Order = 0,
+                                Description = "delete replay action",
+                                Type = "test",
+                                Status = "completed",
+                            },
+                        ],
+                        Tags =
+                        [
+                            new SessionLogTurnTagEntity
+                            {
+                                WorkspaceId = WorkspacePath,
+                                Tag = "delete-replay",
+                            },
+                        ],
+                    },
+                ],
+            });
+        }).ConfigureAwait(true);
+        var adapter = ResolveAdapter(provider, "session_log");
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-session-delete",
+            Domain = "session_log",
+            ResourceId = $"Codex/{sessionId}",
+            HttpMethod = "DELETE",
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await using var scope = provider.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        Assert.Empty(await db.SessionLogs.Where(session => session.SessionId == sessionId).ToListAsync().ConfigureAwait(true));
+
+        var retained = await db.SessionLogs
+            .IgnoreQueryFilters()
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.Actions)
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.Tags)
+            .SingleAsync(session => session.SessionId == sessionId)
+            .ConfigureAwait(true);
+        AssertSoftDeleted(db, retained);
+        Assert.All(retained.Turns, turn => AssertSoftDeleted(db, turn));
+        Assert.All(retained.Turns.SelectMany(turn => turn.Actions), action => AssertSoftDeleted(db, action));
+        Assert.All(retained.Turns.SelectMany(turn => turn.Tags), tag => AssertSoftDeleted(db, tag));
+    }
+
     /// <summary>Local-only adapters reject apply attempts and explain the exemption.</summary>
     [Fact]
     public async Task LocalOnlyAdapter_RejectsApply()
@@ -575,6 +650,9 @@ public sealed class FederationStateAdapterRegistryTests
         seed(db);
         await db.SaveChangesAsync().ConfigureAwait(false);
     }
+
+    private static void AssertSoftDeleted(McpDbContext db, object entity)
+        => Assert.True(db.Entry(entity).Property("IsDeleted").CurrentValue is true);
 
     private static ServiceProvider CreateProvider(Action<IServiceCollection>? configureServices = null)
     {
