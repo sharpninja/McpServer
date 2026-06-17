@@ -28,22 +28,22 @@ public static class McpHostedAgentDefaults
     /// <summary>
     /// Stable identifier assigned to the ACID tightly coupled hosted agent metadata.
     /// </summary>
-    public const string AcidAgentId = "mcpserver-acid-tightly-coupled-agent";
+    public const string QBAgentId = "mcpserver-qbagent";
 
     /// <summary>
     /// Stable host-facing name assigned to the ACID tightly coupled hosted agent.
     /// </summary>
-    public const string AcidAgentName = "McpServerAcidTightlyCoupledAgent";
+    public const string QBAgentName = "QBAgent";
 
     /// <summary>
     /// Stable source type reserved for ACID hosted-agent session-log workflows.
     /// </summary>
-    public const string AcidSourceType = "McpAcidAgent";
+    public const string QBAgentSourceType = "QBAgent";
 
     /// <summary>
     /// Stable description surfaced through <c>Microsoft.Agents.AI</c> metadata for the ACID profile.
     /// </summary>
-    public const string AcidAgentDescription = "ACID-compliant tightly coupled MCP Agent profile for Microsoft Agent Framework hosts.";
+    public const string QBAgentDescription = "ACID-compliant tightly coupled MCP Agent profile for Microsoft Agent Framework hosts.";
 
     /// <summary>
     /// Canonical UTC timestamp format shared by hosted-agent session and request identifiers.

@@ -82,7 +82,7 @@ public sealed class ServiceCollectionExtensionsTests
         using var serviceProvider = services.BuildServiceProvider();
         var hostedAgent = serviceProvider.GetRequiredService<IMcpHostedAgent>();
         var agentOptions = serviceProvider.GetRequiredService<ChatClientAgentOptions>();
-        var definition = McpAcidAgentDefinition.Instance;
+        var definition = QBAgentDefinition.Instance;
 
         Assert.Equal(McpAgentExecutionProfile.AcidTightlyCoupled, hostedAgent.ExecutionProfile);
         Assert.Equal(definition.AgentId, hostedAgent.AgentOptions.Id);

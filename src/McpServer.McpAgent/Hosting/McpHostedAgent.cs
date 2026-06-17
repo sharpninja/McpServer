@@ -114,7 +114,7 @@ public sealed class McpHostedAgent : IMcpHostedAgent
         Registration.CreateChatClientAgent(chatClient);
 
     /// <inheritdoc />
-    public McpAcidHostedAgentRuntime CreateAcidTightlyCoupledRuntime(
+    public QBAgentRuntime CreateAcidTightlyCoupledRuntime(
         IChatClient chatClient,
         ChatClientAgentRunOptions? baseOptions = null)
     {
@@ -132,10 +132,10 @@ public sealed class McpHostedAgent : IMcpHostedAgent
             .Select(static name => name!)
             .ToArray() ?? [];
 
-        return new McpAcidHostedAgentRuntime(
+        return new QBAgentRuntime(
             agent,
             runOptions,
-            McpAcidAgentDefinition.Instance,
+            QBAgentDefinition.Instance,
             toolNames,
             ExecuteQuadBrainCodingTaskAsync);
     }
@@ -221,7 +221,7 @@ public sealed class McpHostedAgent : IMcpHostedAgent
                 "Set AllowHostToolsInAcidProfile only after those tools have their own transaction and audit contract.");
         }
 
-        var definition = McpAcidAgentDefinition.Instance;
+        var definition = QBAgentDefinition.Instance;
         var approvedAdapterTools = adapterTools
             .Where(tool => definition.IsToolAllowed(tool.Name))
             .ToArray();

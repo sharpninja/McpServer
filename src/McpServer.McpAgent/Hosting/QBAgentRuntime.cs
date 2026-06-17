@@ -7,12 +7,12 @@ namespace McpServer.McpAgent.Hosting;
 /// FR-MCP-136/TR-MCP-AGENT-015: Bundles an ACID tightly coupled Agent Framework agent with
 /// the sealed run options that expose only the approved MCP tool surface.
 /// </summary>
-public sealed class McpAcidHostedAgentRuntime
+public sealed class QBAgentRuntime
 {
-    internal McpAcidHostedAgentRuntime(
+    internal QBAgentRuntime(
         ChatClientAgent agent,
         ChatClientAgentRunOptions runOptions,
-        McpAcidAgentDefinition definition,
+        QBAgentDefinition definition,
         IReadOnlyList<string> toolNames,
         Func<McpQuadBrainCodingAgentRequest, CancellationToken, Task<QuadBrainOrchestrationResponse>> codingTaskExecutor)
     {
@@ -38,7 +38,7 @@ public sealed class McpAcidHostedAgentRuntime
     /// <summary>
     /// Gets the public ACID hosted-agent definition represented by this runtime bundle.
     /// </summary>
-    public McpAcidAgentDefinition Definition { get; }
+    public QBAgentDefinition Definition { get; }
 
     /// <summary>
     /// Gets the model-visible tool names attached to <see cref="RunOptions"/>.

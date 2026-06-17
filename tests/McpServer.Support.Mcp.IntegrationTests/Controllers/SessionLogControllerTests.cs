@@ -306,15 +306,15 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     /// <summary>
     /// FR-SUPPORT-010C: Closing a turn through the REST turn endpoint for a Quad-Brain
-    /// ACID agent session (SourceType <c>McpAcidAgent</c>) requires at least one decision,
+    /// ACID agent session (SourceType <c>QBAgent</c>) requires at least one decision,
     /// action, or commit item so audit-empty completions are rejected.
     /// </summary>
     [Fact]
     public async Task WhenAcidAgentClosingTurnWithoutComplianceItemsThenReturns400()
     {
-        const string acidSourceType = "McpAcidAgent";
-        var sessionId = BuildSessionId(acidSourceType, $"turn-close-validation-{Guid.NewGuid():N}");
-        var dto = CreateTestDto(acidSourceType, sessionId);
+        const string qbAgentSourceType = "QBAgent";
+        var sessionId = BuildSessionId(qbAgentSourceType, $"turn-close-validation-{Guid.NewGuid():N}");
+        var dto = CreateTestDto(qbAgentSourceType, sessionId);
         await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
 
         var emptyClose = new UnifiedRequestEntryDto
@@ -326,7 +326,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         };
 
         var response = await _client.PostAsJsonAsync(
-            new Uri($"/mcpserver/sessionlog/{acidSourceType}/{sessionId}/turn", UriKind.Relative), emptyClose)
+            new Uri($"/mcpserver/sessionlog/{qbAgentSourceType}/{sessionId}/turn", UriKind.Relative), emptyClose)
             .ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -604,23 +604,23 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: a Quad-Brain ACID agent (SourceType <c>McpAcidAgent</c>) completing
+    /// FR-SUPPORT-010E: a Quad-Brain ACID agent (SourceType <c>QBAgent</c>) completing
     /// a turn without any decision/action/commit evidence is rejected by the terminal-turn
     /// compliance gate with 400.
     /// </summary>
     [Fact]
     public async Task CompleteTurn_AcidAgentWithoutEvidence_Returns400()
     {
-        const string acidSourceType = "McpAcidAgent";
-        var sessionId = BuildSessionId(acidSourceType, $"complete400-{Guid.NewGuid():N}");
-        await OpenSessionAsync(sessionId, acidSourceType).ConfigureAwait(true);
+        const string qbAgentSourceType = "QBAgent";
+        var sessionId = BuildSessionId(qbAgentSourceType, $"complete400-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId, qbAgentSourceType).ConfigureAwait(true);
         var requestId = NewRequestId("noevidence");
         await _client.PostAsJsonAsync(
-            LifecycleUri($"{acidSourceType}/{sessionId}/{requestId}/begin"),
+            LifecycleUri($"{qbAgentSourceType}/{sessionId}/{requestId}/begin"),
             new { queryTitle = "Work" }).ConfigureAwait(true);
 
         var response = await _client.PostAsJsonAsync(
-            LifecycleUri($"{acidSourceType}/{sessionId}/{requestId}/complete"),
+            LifecycleUri($"{qbAgentSourceType}/{sessionId}/{requestId}/complete"),
             new UnifiedRequestEntryDto { Response = "done" }).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

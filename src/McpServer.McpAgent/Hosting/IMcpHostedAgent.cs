@@ -87,7 +87,7 @@ public interface IMcpHostedAgent
     /// <param name="chatClient">The chat client that should power the hosted agent.</param>
     /// <param name="baseOptions">Optional caller-supplied run options to clone before ACID capabilities are attached.</param>
     /// <returns>The ACID runtime bundle containing the agent, sealed run options, definition, and exposed tools.</returns>
-    McpAcidHostedAgentRuntime CreateAcidTightlyCoupledRuntime(
+    QBAgentRuntime CreateAcidTightlyCoupledRuntime(
         IChatClient chatClient,
         ChatClientAgentRunOptions? baseOptions = null);
 

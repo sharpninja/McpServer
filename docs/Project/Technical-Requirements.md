@@ -179,7 +179,7 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 - [x] Existing non-ACID hosted-agent registration remains backward compatible aside from the additional Quad Brain coding tool.
 - [x] All new public APIs have XMLDocs and are covered by focused tests.
 
-**Covered by:** `McpAcidAgentDefinition`, `McpAgentOptions`, `McpHostedAgent`, `McpAcidHostedAgentRuntime`, `McpHostedAgentAdapterTests`, `ServiceCollectionExtensionsTests`
+**Covered by:** `QBAgentDefinition`, `McpAgentOptions`, `McpHostedAgent`, `McpAcidHostedAgentRuntime`, `McpHostedAgentAdapterTests`, `ServiceCollectionExtensionsTests`
 
 ## TR-MCP-AGENT-PARITY-010
 

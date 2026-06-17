@@ -4,7 +4,7 @@ namespace McpServer.McpAgent;
 /// FR-MCP-136/TR-MCP-AGENT-015: Stable public definition for the ACID tightly coupled
 /// Microsoft Agent Framework hosted agent.
 /// </summary>
-public sealed class McpAcidAgentDefinition
+public sealed class QBAgentDefinition
 {
     private static readonly string[] AllowedTools =
     [
@@ -72,7 +72,7 @@ public sealed class McpAcidAgentDefinition
 
     private readonly HashSet<string> _allowedToolLookup;
 
-    private McpAcidAgentDefinition()
+    private QBAgentDefinition()
     {
         _allowedToolLookup = new HashSet<string>(AllowedTools, StringComparer.Ordinal);
     }
@@ -80,27 +80,27 @@ public sealed class McpAcidAgentDefinition
     /// <summary>
     /// Gets the singleton ACID hosted-agent definition.
     /// </summary>
-    public static McpAcidAgentDefinition Instance { get; } = new();
+    public static QBAgentDefinition Instance { get; } = new();
 
     /// <summary>
     /// Gets the stable Agent Framework metadata identifier.
     /// </summary>
-    public string AgentId => McpHostedAgentDefaults.AcidAgentId;
+    public string AgentId => McpHostedAgentDefaults.QBAgentId;
 
     /// <summary>
     /// Gets the stable host-facing agent name.
     /// </summary>
-    public string AgentName => McpHostedAgentDefaults.AcidAgentName;
+    public string AgentName => McpHostedAgentDefaults.QBAgentName;
 
     /// <summary>
     /// Gets the stable source type used for session-log and audit records.
     /// </summary>
-    public string SourceType => McpHostedAgentDefaults.AcidSourceType;
+    public string SourceType => McpHostedAgentDefaults.QBAgentSourceType;
 
     /// <summary>
     /// Gets the public description projected into Microsoft Agent Framework metadata.
     /// </summary>
-    public string Description => McpHostedAgentDefaults.AcidAgentDescription;
+    public string Description => McpHostedAgentDefaults.QBAgentDescription;
 
     /// <summary>
     /// Gets the declared consistency model for this hosted-agent profile.

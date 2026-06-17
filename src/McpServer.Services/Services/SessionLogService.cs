@@ -910,7 +910,7 @@ public sealed class SessionLogService : ISessionLogService
         // requirement (FR-MCP-136 durable audit/session-log boundaries). It applies only
         // to the ACID hosted-agent source type and must not gate standard session-log
         // endpoints used by ordinary agents (ClaudeCode, Cursor, Copilot, ...).
-        if (!string.Equals(sessionSourceType, McpHostedAgentDefaults.AcidSourceType, StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(sessionSourceType, McpHostedAgentDefaults.QBAgentSourceType, StringComparison.OrdinalIgnoreCase))
             return;
 
         var decisionCount = (turn.DesignDecisions?.Count(static value => !string.IsNullOrWhiteSpace(value)) ?? 0)

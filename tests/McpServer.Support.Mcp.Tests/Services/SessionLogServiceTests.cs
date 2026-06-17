@@ -1092,15 +1092,15 @@ public sealed class SessionLogServiceTests : IDisposable
     /// <summary>
     /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> rejects terminal turn states without
     /// decision, action, or commit evidence ONLY for Quad-Brain ACID agent sessions
-    /// (SourceType <c>McpAcidAgent</c> = <c>McpHostedAgentDefaults.AcidSourceType</c>).
+    /// (SourceType <c>QBAgent</c> = <c>McpHostedAgentDefaults.QBAgentSourceType</c>).
     /// </summary>
     [Fact]
     public async Task UpsertTurnAsync_AcidAgentClosingTurnWithoutEvidence_ThrowsArgumentException()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
-        const string acidSourceType = "McpAcidAgent";
-        var sessionId = BuildSessionId(acidSourceType, "turn-close-validation");
-        await sut.SubmitAsync(CreateTestDto(acidSourceType, sessionId)).ConfigureAwait(true);
+        const string qbAgentSourceType = "QBAgent";
+        var sessionId = BuildSessionId(qbAgentSourceType, "turn-close-validation");
+        await sut.SubmitAsync(CreateTestDto(qbAgentSourceType, sessionId)).ConfigureAwait(true);
 
         var turn = new UnifiedRequestEntryDto
         {
@@ -1111,7 +1111,7 @@ public sealed class SessionLogServiceTests : IDisposable
         };
 
         var ex = await Assert.ThrowsAsync<ArgumentException>(
-            () => sut.UpsertTurnAsync(acidSourceType, sessionId, turn))
+            () => sut.UpsertTurnAsync(qbAgentSourceType, sessionId, turn))
             .ConfigureAwait(true);
 
         Assert.Contains("no decision, action, or commit items", ex.Message, StringComparison.Ordinal);

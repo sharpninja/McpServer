@@ -106,7 +106,7 @@ public sealed class McpAgentOptions
     /// <returns>The current options instance for fluent host configuration.</returns>
     public McpAgentOptions UseAcidTightlyCoupledProfile()
     {
-        var definition = McpAcidAgentDefinition.Instance;
+        var definition = QBAgentDefinition.Instance;
 
         ExecutionProfile = McpAgentExecutionProfile.AcidTightlyCoupled;
         AgentId = definition.AgentId;

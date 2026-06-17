@@ -165,7 +165,7 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Contains("reject caller-supplied host tools", exception.Message, StringComparison.Ordinal);
         Assert.False(invokingClient.AllowConcurrentInvocation);
         Assert.False(runOptions.ChatOptions!.AllowMultipleToolCalls);
-        Assert.Equal(McpAcidAgentDefinition.Instance.AllowedToolNames, toolNames);
+        Assert.Equal(QBAgentDefinition.Instance.AllowedToolNames, toolNames);
         Assert.Contains("mcp_quadbrain_coding_execute", toolNames);
         Assert.DoesNotContain("mcp_client_invoke", toolNames);
         Assert.DoesNotContain("mcp_powershell_session_command", toolNames);
@@ -216,7 +216,7 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Equal("Microsoft.AgentFramework", metadata.GetProperty("codingAgent.surface").GetString());
         Assert.Equal("implementation", metadata.GetProperty("codingAgent.taskKind").GetString());
         Assert.Equal(nameof(McpAgentExecutionProfile.AcidTightlyCoupled), metadata.GetProperty("codingAgent.executionProfile").GetString());
-        Assert.Equal(McpHostedAgentDefaults.AcidSourceType, metadata.GetProperty("codingAgent.sourceType").GetString());
+        Assert.Equal(McpHostedAgentDefaults.QBAgentSourceType, metadata.GetProperty("codingAgent.sourceType").GetString());
     }
 
     /// <summary>

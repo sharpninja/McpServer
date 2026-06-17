@@ -92,7 +92,7 @@ public sealed partial class McpAgentOptionsValidator : IValidateOptions<McpAgent
 
         if (options.ExecutionProfile == McpAgentExecutionProfile.AcidTightlyCoupled)
         {
-            var definition = McpAcidAgentDefinition.Instance;
+            var definition = QBAgentDefinition.Instance;
 
             if (string.IsNullOrWhiteSpace(options.WorkspacePath))
                 failures.Add("WorkspacePath is required for the ACID tightly coupled hosted-agent profile.");
