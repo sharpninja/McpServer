@@ -120,6 +120,37 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <summary>
+    /// TEST-NUKE-002: BackupPreservedState tolerates a first-time install where the
+    /// install root does not yet exist - it creates the root, performs no backup, and
+    /// returns an empty result so the deploy can proceed. Regression for the
+    /// trusted-third-party first-install DirectoryNotFoundException.
+    /// </summary>
+    [Fact]
+    public void BackupPreservedState_InstallRootMissing_CreatesRootAndReturnsEmpty()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcpserver-backup-test-{Guid.NewGuid():N}");
+        var installRoot = Path.Combine(root, "install"); // intentionally not created
+        var backupDir = Path.Combine(root, "backup");
+        var archivePath = Path.Combine(root, "archive.zip");
+
+        try
+        {
+            var result = WindowsServiceHelper.BackupPreservedState(installRoot, backupDir, archivePath);
+
+            Assert.Empty(result.BackedUpConfig);
+            Assert.Empty(result.BackedUpData);
+            Assert.Null(result.ArchivePath);
+            Assert.True(Directory.Exists(installRoot), "install root should be created for first install");
+            Assert.True(Directory.Exists(backupDir), "backup dir should exist so restore is a no-op");
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
+    }
+
     private static string FindRepositoryRoot()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);

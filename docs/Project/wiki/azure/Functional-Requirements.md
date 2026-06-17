@@ -1,44 +1,48 @@
 # Functional Requirements (MCP Server)
 
+## [] []
+
+Placeholder requirement backfilled for TODO link [].
+
 ## FR-01 FR-01
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-02 FR-02
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-03 FR-03
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-04 FR-04
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-05 FR-05
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-06 FR-06
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-07 FR-07
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-08 FR-08
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-09 FR-09
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-10 FR-10
 
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
+Placeholder requirement backfilled by DB-FK-001.
 
 ## FR-LOC-001 Localization Support
 
@@ -1197,5 +1201,5 @@ Whole-session submit SHALL merge additively: omitted session and turn fields nev
 
 ## FR-TEST-002 FR-TEST-002
 
-Legacy test-planning functional import stub retained for historical traceability. Status: reserved; active test requirements are tracked under concrete TEST-* IDs in Testing-Requirements.md.
+Placeholder requirement backfilled for TODO link FR-TEST-002.
 

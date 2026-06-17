@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Subscriber", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.TransactionSecurity.IntegrationTests", "tests\McpServer.TransactionSecurity.IntegrationTests\McpServer.TransactionSecurity.IntegrationTests.csproj", "{DA92BFA6-105C-41A8-A8DD-4D2FE8E97636}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Acid.IntegrationTests", "tests\McpServer.Acid.IntegrationTests\McpServer.Acid.IntegrationTests.csproj", "{F8D2490B-BA3E-41E5-A644-6767D7545E16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -565,6 +567,18 @@ Global
 		{DA92BFA6-105C-41A8-A8DD-4D2FE8E97636}.Release|x64.Build.0 = Release|x64
 		{DA92BFA6-105C-41A8-A8DD-4D2FE8E97636}.Release|x86.ActiveCfg = Release|x86
 		{DA92BFA6-105C-41A8-A8DD-4D2FE8E97636}.Release|x86.Build.0 = Release|x86
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Debug|x64.ActiveCfg = Debug|x64
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Debug|x64.Build.0 = Debug|x64
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Debug|x86.ActiveCfg = Debug|x86
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Debug|x86.Build.0 = Debug|x86
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Release|x64.ActiveCfg = Release|x64
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Release|x64.Build.0 = Release|x64
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Release|x86.ActiveCfg = Release|x86
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -609,5 +623,6 @@ Global
 		{E19E229B-F10D-471F-9D88-A7C905DEAE5D} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
 		{00A8B4A2-E43A-46FA-A204-D26B56D36E9A} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
 		{DA92BFA6-105C-41A8-A8DD-4D2FE8E97636} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
+		{F8D2490B-BA3E-41E5-A644-6767D7545E16} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
 	EndGlobalSection
 EndGlobal

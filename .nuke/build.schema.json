@@ -214,7 +214,7 @@
         },
         "TrustedThirdPartyPort": {
           "type": "integer",
-          "description": "Trusted third-party HTTP port (default: 7146)",
+          "description": "Trusted third-party HTTP port (default: 7167)",
           "format": "int32"
         },
         "TrustedThirdPartyPublishSource": {

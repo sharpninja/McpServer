@@ -141,6 +141,16 @@ static partial class WindowsServiceHelper
             Directory.Delete(backupDir, true);
         Directory.CreateDirectory(backupDir);
 
+        // First-time install: the install root does not exist yet, so there is nothing
+        // to preserve. Create the root for the subsequent publish/copy and return an
+        // empty backup (backupDir still exists so the restore step is a safe no-op).
+        if (!Directory.Exists(installRoot))
+        {
+            Directory.CreateDirectory(installRoot);
+            Log.Information("  Install root did not exist (first install); nothing to back up.");
+            return new BackupResult(GetConfiguredDataFolder(installRoot), [], [], null);
+        }
+
         var dataFolder = GetConfiguredDataFolder(installRoot);
         var dataBackupDir = Path.Combine(backupDir, "data");
         Directory.CreateDirectory(dataBackupDir);

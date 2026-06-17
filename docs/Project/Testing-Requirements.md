@@ -1,5 +1,19 @@
 # Testing Requirements (MCP Server)
 
+- TEST-MCP-ACID-001: Baseline full ACID turn-transaction lifecycle with all three participants (MCP Server coordinator, third-party key server, subscriber) mocked in-process. Covers happy-path commit, mutation-failure abort + rollback, subscriber-unavailable degraded mode + rollback, and every published-message failure case (manifest signature mismatch, encrypted-body hash mismatch, plaintext hash mismatch, stale sequence, sign replay nonce), plus status and abort. Implemented in `tests/McpServer.Acid.IntegrationTests/AcidFullLifecycleTests.cs` via the pluggable `AcidTransactionHarness`.
+  **Acceptance Criteria:**
+  - [x] The coordinator is the real system under test; the harness mocks the MCP Server caller by driving `ExecuteAsync` directly.
+  - [x] Each collaborator (key server, subscriber) is selectable as Mock (in-process) or Running (real spun-up host) through `AcidParticipants`.
+  - [x] The all-mocked baseline drives the full transaction lifecycle and is green for all cases.
+- TEST-MCP-ACID-002: The same lifecycle commits when the key server and subscriber are real instances - an already-running host on its port when present, otherwise a `WebApplicationFactory` host spun up for the test and disposed afterwards. Implemented in `tests/McpServer.Acid.IntegrationTests/AcidRunningInstanceTests.cs`.
+  **Acceptance Criteria:**
+  - [x] Coordinator drives manifest signing and subscriber commit over the HTTP transports against the running hosts.
+  - [x] Spun-up hosts are torn down on harness disposal.
+- TEST-MCP-ACID-003: Key server `SignManifest` request-outcome matrix - success, unknown party, unknown key, replay nonce, stale sequence. (`KeyServerSignMatrixTests`)
+- TEST-MCP-ACID-004: Key server `VerifyManifest` request-outcome matrix - valid, signature mismatch, wrong subscriber. (`KeyServerVerifyMatrixTests`)
+- TEST-MCP-ACID-005: Subscriber `CommitDiffgram` request-outcome matrix - committed, idempotent re-commit, signature mismatch, encrypted-body mismatch, plaintext mismatch, stale sequence, wrong subscriber, decrypt-required failure. Exercises the subscriber validating the key server's verification result. (`SubscriberCommitMatrixTests`)
+- TEST-MCP-ACID-006: Coordinator transaction-outcome matrix - committed, bypassed (disabled / non-mutating), aborted, rejected when validating a key-server sign failure (fail-closed before mutation), rejected when validating a subscriber commit rejection (rollback), and degraded when the subscriber is unavailable. Exercises the coordinator validating the key server's and subscriber's results. (`CoordinatorOutcomeMatrixTests`)
+
 - TEST-GRAPHRAG-ADHOC-001: GraphEntityEntity/GraphRelationshipEntity persist with all fields, workspace isolation, cascade delete, FK validation, and RemoveVector correctness.
 - TEST-GRAPHRAG-ADHOC-002: IngestTextAsync creates document + chunks, generates embeddings, registers vectors, handles empty content, defaults SourceType/SourceKey, and optionally triggers reindex.
 - TEST-GRAPHRAG-ADHOC-003: ListDocumentsAsync pagination and filtering, GetDocumentChunksAsync ordering, DeleteDocumentAsync cascade and vector cleanup.

@@ -11,7 +11,7 @@ partial class Build
 {
     const string TrustedThirdPartyServiceDefaultName = "McpServerKeyServer";
     const string TrustedThirdPartyDefaultInstallPath = @"C:\ProgramData\McpServer-KeyServer";
-    const int TrustedThirdPartyDefaultPort = 7146;
+    const int TrustedThirdPartyDefaultPort = 7167;
     const string TrustedThirdPartyExeName = "McpServer.KeyServer.exe";
     const string AgentExeName = "McpServer.McpAgent.SampleHost.exe";
 
@@ -21,7 +21,7 @@ partial class Build
     [Parameter("Trusted third-party installation directory (default: C:\\ProgramData\\McpServer-KeyServer)")]
     readonly string TrustedThirdPartyInstallPath = TrustedThirdPartyDefaultInstallPath;
 
-    [Parameter("Trusted third-party HTTP port (default: 7146)")]
+    [Parameter("Trusted third-party HTTP port (default: 7167)")]
     readonly int TrustedThirdPartyPort = TrustedThirdPartyDefaultPort;
 
     [Parameter("Path to pre-built trusted third-party publish output (used with --skip-build)")]

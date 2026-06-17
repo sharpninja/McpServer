@@ -1,60 +1,64 @@
 # Technical Requirements (MCP Server)
 
+## []
+
+**[]** — Placeholder requirement backfilled for TODO link [].
+
 ## TR-01
 
 **TR-01** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
 
 ## TR-02
 
-**TR-02** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-02** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-03
 
-**TR-03** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-03** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-04
 
-**TR-04** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-04** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-05
 
-**TR-05** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-05** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-06
 
-**TR-06** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-06** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-07
 
-**TR-07** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-07** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-08
 
-**TR-08** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-08** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-09
 
-**TR-09** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-09** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-10
 
-**TR-10** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-10** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-11
 
-**TR-11** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-11** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-12
 
-**TR-12** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-12** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-13
 
-**TR-13** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-13** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-14
 
-**TR-14** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
+**TR-14** — Placeholder requirement backfilled by DB-FK-001.
 
 ## TR-GRAPHRAG-ADHOC-001
 
@@ -1479,5 +1483,5 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-TEST-001
 
-**TR-TEST-001** — Legacy test-planning import stub retained for historical traceability. Status: reserved; active test requirements are tracked under concrete TEST-* IDs in Testing-Requirements.md.
+**TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
 

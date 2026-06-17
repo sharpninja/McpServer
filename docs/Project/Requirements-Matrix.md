@@ -687,4 +687,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-PLUGINCORE-003 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010E | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010F | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-004 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-005 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-006 | Tracked | Testing-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
