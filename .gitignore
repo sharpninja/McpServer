@@ -6,6 +6,9 @@
 # dotenv files
 .env
 
+# Archived MCP marker files (created on server restart/unregister; never commit)
+AGENTS-README-FIRST.yaml.deleted-*
+
 # User-specific files
 *.rsuser
 *.suo
