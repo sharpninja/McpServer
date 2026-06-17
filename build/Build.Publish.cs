@@ -15,5 +15,7 @@ partial class Build
                 .SetProject(project)
                 .SetConfiguration(Configuration)
                 .SetOutput(ArtifactsDirectory / "mcp-server"));
+
+            CopyBrainSlotRuntimeConfig(RootDirectory, ArtifactsDirectory / "mcp-server");
         });
 }

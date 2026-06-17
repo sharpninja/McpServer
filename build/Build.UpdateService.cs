@@ -131,6 +131,7 @@ partial class Build
             Log.Information("  Cleaning stale files before copy ...");
             WindowsServiceHelper.RemoveStaleInstallContent(InstallPath, stageDir);
             WindowsServiceHelper.CopyDirectory(stageDir, InstallPath);
+            CopyBrainSlotRuntimeConfig(RootDirectory, InstallPath);
 
             // Verify launcher sidecar
             var launcherPath = Path.Combine(InstallPath, LauncherExeName);

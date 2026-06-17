@@ -305,14 +305,16 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: Closing a turn through the REST turn endpoint requires at
-    /// least one decision, action, or commit item so audit-empty completions are rejected.
+    /// FR-SUPPORT-010C: Closing a turn through the REST turn endpoint for a Quad-Brain
+    /// ACID agent session (SourceType <c>McpAcidAgent</c>) requires at least one decision,
+    /// action, or commit item so audit-empty completions are rejected.
     /// </summary>
     [Fact]
-    public async Task WhenClosingTurnWithoutComplianceItemsThenReturns400()
+    public async Task WhenAcidAgentClosingTurnWithoutComplianceItemsThenReturns400()
     {
-        var sessionId = BuildSessionId("Cursor", $"turn-close-validation-{Guid.NewGuid():N}");
-        var dto = CreateTestDto("Cursor", sessionId);
+        const string acidSourceType = "McpAcidAgent";
+        var sessionId = BuildSessionId(acidSourceType, $"turn-close-validation-{Guid.NewGuid():N}");
+        var dto = CreateTestDto(acidSourceType, sessionId);
         await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
 
         var emptyClose = new UnifiedRequestEntryDto
@@ -324,7 +326,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         };
 
         var response = await _client.PostAsJsonAsync(
-            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/turn", UriKind.Relative), emptyClose)
+            new Uri($"/mcpserver/sessionlog/{acidSourceType}/{sessionId}/turn", UriKind.Relative), emptyClose)
             .ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -332,6 +334,33 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.Contains("no decision, action, or commit items", body, StringComparison.Ordinal);
         Assert.Contains("Compliance with Session Logging Requirements is not optional.", body, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: A standard (non-Quad-Brain) agent session closes a turn through
+    /// the REST turn endpoint without any decision/action/commit evidence and succeeds;
+    /// the ACID compliance gate must not leak into the standard session-log endpoints.
+    /// </summary>
+    [Fact]
+    public async Task WhenStandardAgentClosingTurnWithoutComplianceItemsThenSucceeds()
+    {
+        var sessionId = BuildSessionId("Cursor", $"turn-close-standard-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", sessionId);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+
+        var emptyClose = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120200Z-empty-close-ok",
+            Timestamp = "2026-05-16T12:02:00Z",
+            QueryText = "standard close without compliance items",
+            Status = "completed"
+        };
+
+        var response = await _client.PostAsJsonAsync(
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/turn", UriKind.Relative), emptyClose)
+            .ConfigureAwait(true);
+
+        Assert.True(response.IsSuccessStatusCode, $"Expected success but got {(int)response.StatusCode}.");
     }
 
     /// <summary>
@@ -553,13 +582,14 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: complete without any decision/action/commit evidence is
-    /// rejected by the terminal-turn compliance gate with 400.
+    /// FR-SUPPORT-010E: a standard (non-Quad-Brain) agent completes a turn without any
+    /// decision/action/commit evidence and the turn finalizes successfully. The ACID
+    /// compliance gate must not leak into the standard lifecycle endpoints.
     /// </summary>
     [Fact]
-    public async Task CompleteTurn_WithoutEvidence_Returns400()
+    public async Task CompleteTurn_StandardAgentWithoutEvidence_Succeeds()
     {
-        var sessionId = BuildSessionId("ClaudeCode", $"complete400-{Guid.NewGuid():N}");
+        var sessionId = BuildSessionId("ClaudeCode", $"completeok-{Guid.NewGuid():N}");
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
         var requestId = NewRequestId("noevidence");
         await _client.PostAsJsonAsync(
@@ -568,6 +598,29 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
         var response = await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/complete"),
+            new UnifiedRequestEntryDto { Response = "done" }).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010E: a Quad-Brain ACID agent (SourceType <c>McpAcidAgent</c>) completing
+    /// a turn without any decision/action/commit evidence is rejected by the terminal-turn
+    /// compliance gate with 400.
+    /// </summary>
+    [Fact]
+    public async Task CompleteTurn_AcidAgentWithoutEvidence_Returns400()
+    {
+        const string acidSourceType = "McpAcidAgent";
+        var sessionId = BuildSessionId(acidSourceType, $"complete400-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId, acidSourceType).ConfigureAwait(true);
+        var requestId = NewRequestId("noevidence");
+        await _client.PostAsJsonAsync(
+            LifecycleUri($"{acidSourceType}/{sessionId}/{requestId}/begin"),
+            new { queryTitle = "Work" }).ConfigureAwait(true);
+
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"{acidSourceType}/{sessionId}/{requestId}/complete"),
             new UnifiedRequestEntryDto { Response = "done" }).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -603,10 +656,10 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         Assert.Equal("dependency missing", turn.FailureNote);
     }
 
-    private async Task OpenSessionAsync(string sessionId)
+    private async Task OpenSessionAsync(string sessionId, string sourceType = "ClaudeCode")
     {
         var response = await _client.PostAsJsonAsync(
-            LifecycleUri($"ClaudeCode/{sessionId}/open"),
+            LifecycleUri($"{sourceType}/{sessionId}/open"),
             new { title = "Lifecycle test session", model = "claude-fable-5" }).ConfigureAwait(true);
         response.EnsureSuccessStatusCode();
     }

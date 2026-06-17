@@ -22,13 +22,13 @@ static partial class WindowsServiceHelper
     private static readonly string[] LegacyDataGlobs = ["*.db", "*.db-shm", "*.db-wal"];
 
     /// <summary>Asserts that the current process is running elevated (Administrator).</summary>
-    public static void AssertElevated()
+    public static void AssertElevated(string targetName = "UpdateService")
     {
         using var identity = WindowsIdentity.GetCurrent();
         var principal = new WindowsPrincipal(identity);
         if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
             throw new InvalidOperationException(
-                "This target must be run elevated. Use: gsudo ./build.ps1 UpdateService");
+                $"This target must be run elevated. Use: gsudo ./build.ps1 {targetName}");
     }
 
     /// <summary>Checks whether a Windows service with the given name exists.</summary>
@@ -103,15 +103,19 @@ static partial class WindowsServiceHelper
     }
 
     /// <summary>Creates or updates the Windows service registration.</summary>
-    public static void EnsureServiceRegistration(string serviceName, string installRoot, string exeName, int port)
+    public static void EnsureServiceRegistration(
+        string serviceName,
+        string installRoot,
+        string exeName,
+        int port,
+        string displayName = "MCP Server",
+        string description = "MCP Model Context Protocol Server")
     {
         var exePath = Path.Combine(installRoot, exeName);
         if (!File.Exists(exePath))
             throw new FileNotFoundException($"Deployment is missing {exeName} under {installRoot}.");
 
         var binPath = GetServiceImagePath(installRoot, exeName, port);
-        const string displayName = "MCP Server";
-        const string description = "MCP Model Context Protocol Server";
 
         // sc.exe requires binPath= value where the value is a single argument.
         // When the value itself contains quotes/spaces, wrap the entire value in an outer set of quotes.

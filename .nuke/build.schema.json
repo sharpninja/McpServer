@@ -24,6 +24,8 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
+        "BuildAgent",
+        "BuildTrustedThirdParty",
         "BumpVersion",
         "Clean",
         "Compile",
@@ -32,12 +34,15 @@
         "PackNuGet",
         "PackReplTool",
         "Publish",
+        "PublishAgent",
+        "PublishTrustedThirdParty",
         "Restore",
         "StartServer",
         "Test",
         "TestGraphRagSmoke",
         "TestMultiInstance",
         "UpdateService",
+        "UpdateTrustedThirdPartyService",
         "ValidateConfig",
         "ValidateTraceability"
       ]
@@ -202,6 +207,23 @@
           "type": "integer",
           "description": "Health check timeout in seconds",
           "format": "int32"
+        },
+        "TrustedThirdPartyInstallPath": {
+          "type": "string",
+          "description": "Trusted third-party installation directory (default: C:\\ProgramData\\McpServer-KeyServer)"
+        },
+        "TrustedThirdPartyPort": {
+          "type": "integer",
+          "description": "Trusted third-party HTTP port (default: 7146)",
+          "format": "int32"
+        },
+        "TrustedThirdPartyPublishSource": {
+          "type": "string",
+          "description": "Path to pre-built trusted third-party publish output (used with --skip-build)"
+        },
+        "TrustedThirdPartyServiceName": {
+          "type": "string",
+          "description": "Trusted third-party Windows service name (default: McpServerKeyServer)"
         },
         "UninstallTool": {
           "type": "boolean",

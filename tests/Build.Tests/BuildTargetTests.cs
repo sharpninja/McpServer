@@ -1,3 +1,5 @@
+using Nuke.Common.IO;
+
 namespace NukeBuild.Tests;
 
 /// <summary>
@@ -67,5 +69,73 @@ public sealed class BuildTargetTests
     {
         var prop = BuildType.GetProperty("Test");
         Assert.NotNull(prop);
+    }
+
+    [Theory]
+    [InlineData("BuildTrustedThirdParty")]
+    [InlineData("PublishTrustedThirdParty")]
+    [InlineData("UpdateTrustedThirdPartyService")]
+    [InlineData("BuildAgent")]
+    [InlineData("PublishAgent")]
+    public void Build_HasTrustedThirdPartyAndAgentTargets(string targetName)
+    {
+        var prop = BuildType.GetProperty(targetName);
+        Assert.NotNull(prop);
+    }
+
+    [Theory]
+    [InlineData("TrustedThirdPartyServiceName")]
+    [InlineData("TrustedThirdPartyInstallPath")]
+    [InlineData("TrustedThirdPartyPort")]
+    [InlineData("TrustedThirdPartyPublishSource")]
+    public void Build_HasTrustedThirdPartyDeploymentParameters(string parameterName)
+    {
+        var field = BuildType.GetField(
+            parameterName,
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        Assert.NotNull(field);
+    }
+
+    [Fact]
+    public void CopyBrainSlotRuntimeConfig_CopiesAssignmentFileToDeploymentConfigPath()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var destination = Path.Combine(Path.GetTempPath(), $"mcpserver-build-test-{Guid.NewGuid():N}");
+
+        try
+        {
+            var copied = Build.CopyBrainSlotRuntimeConfig((AbsolutePath)repoRoot, destination);
+
+            Assert.True(File.Exists(copied));
+            Assert.EndsWith(
+                Path.Combine("config", Build.BrainSlotConfigDirectoryName, Build.BrainSlotConfigFileName),
+                copied,
+                StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("slotId: brain-slot-arbiter-of-truth-grok-build", File.ReadAllText(copied), StringComparison.Ordinal);
+        }
+        finally
+        {
+            if (Directory.Exists(destination))
+                Directory.Delete(destination, true);
+        }
+    }
+
+    private static string FindRepositoryRoot()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            var candidate = Path.Combine(
+                directory.FullName,
+                "config",
+                Build.BrainSlotConfigDirectoryName,
+                Build.BrainSlotConfigFileName);
+            if (File.Exists(candidate))
+                return directory.FullName;
+
+            directory = directory.Parent;
+        }
+
+        throw new DirectoryNotFoundException("Could not find repository root containing brain-slot configuration.");
     }
 }

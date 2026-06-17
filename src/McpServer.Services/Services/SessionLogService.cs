@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using McpServer.Cqrs.Search;
+using McpServer.McpAgent;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Storage;
@@ -511,7 +512,7 @@ public sealed class SessionLogService : ISessionLogService
             persistedTurn = existingTurn;
         }
 
-        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn));
+        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn), session.SourceType);
 
         // BUG-SESSIONLOG-WS-002: the turn and its children inherit the PARENT
         // session's stamp; the ambient workspace never re-stamps the session here.
@@ -584,7 +585,7 @@ public sealed class SessionLogService : ISessionLogService
             persistedTurn = existingTurn;
         }
 
-        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn));
+        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn), session.SourceType);
         StampTurnChildren(persistedTurn, session.WorkspaceId);
         RefreshSessionSummaryFromTurns(session);
 
@@ -900,9 +901,16 @@ public sealed class SessionLogService : ISessionLogService
             target.Add(item);
     }
 
-    private static void ValidateTerminalTurnCompliance(UnifiedRequestEntryDto turn)
+    private static void ValidateTerminalTurnCompliance(UnifiedRequestEntryDto turn, string? sessionSourceType)
     {
         if (!IsTerminalTurnStatus(turn.Status))
+            return;
+
+        // FR-SUPPORT-010C: the terminal-turn audit-evidence gate is a Quad-Brain ACID
+        // requirement (FR-MCP-136 durable audit/session-log boundaries). It applies only
+        // to the ACID hosted-agent source type and must not gate standard session-log
+        // endpoints used by ordinary agents (ClaudeCode, Cursor, Copilot, ...).
+        if (!string.Equals(sessionSourceType, McpHostedAgentDefaults.AcidSourceType, StringComparison.OrdinalIgnoreCase))
             return;
 
         var decisionCount = (turn.DesignDecisions?.Count(static value => !string.IsNullOrWhiteSpace(value)) ?? 0)

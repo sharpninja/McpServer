@@ -1090,15 +1090,17 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> rejects terminal turn states when the
-    /// submitted turn has no decision, action, or commit evidence.
+    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> rejects terminal turn states without
+    /// decision, action, or commit evidence ONLY for Quad-Brain ACID agent sessions
+    /// (SourceType <c>McpAcidAgent</c> = <c>McpHostedAgentDefaults.AcidSourceType</c>).
     /// </summary>
     [Fact]
-    public async Task UpsertTurnAsync_ClosingTurnWithoutDecisionActionOrCommit_ThrowsArgumentException()
+    public async Task UpsertTurnAsync_AcidAgentClosingTurnWithoutEvidence_ThrowsArgumentException()
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
-        var sessionId = BuildSessionId("Cursor", "turn-close-validation");
-        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+        const string acidSourceType = "McpAcidAgent";
+        var sessionId = BuildSessionId(acidSourceType, "turn-close-validation");
+        await sut.SubmitAsync(CreateTestDto(acidSourceType, sessionId)).ConfigureAwait(true);
 
         var turn = new UnifiedRequestEntryDto
         {
@@ -1109,11 +1111,36 @@ public sealed class SessionLogServiceTests : IDisposable
         };
 
         var ex = await Assert.ThrowsAsync<ArgumentException>(
-            () => sut.UpsertTurnAsync("Cursor", sessionId, turn))
+            () => sut.UpsertTurnAsync(acidSourceType, sessionId, turn))
             .ConfigureAwait(true);
 
         Assert.Contains("no decision, action, or commit items", ex.Message, StringComparison.Ordinal);
         Assert.Contains("Compliance with Session Logging Requirements is not optional.", ex.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> allows a standard (non-Quad-Brain) agent
+    /// session to close a terminal turn without decision, action, or commit evidence.
+    /// The ACID compliance gate must not leak into the standard session-log endpoints.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_StandardAgentClosingTurnWithoutEvidence_Succeeds()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "turn-close-standard");
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120200Z-no-evidence-ok",
+            Timestamp = "2026-05-16T12:02:00Z",
+            QueryText = "standard terminal turn without audit evidence",
+            Status = "completed"
+        };
+
+        var id = await sut.UpsertTurnAsync("Cursor", sessionId, turn).ConfigureAwait(true);
+
+        Assert.True(id > 0);
     }
 
     /// <summary>

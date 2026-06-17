@@ -1,9 +1,23 @@
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Services;
+using Microsoft.Extensions.Hosting.WindowsServices;
+
+if (OperatingSystem.IsWindows() && WindowsServiceHelpers.IsWindowsService())
+{
+    Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+}
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddTransactionKeyServer(builder.Configuration);
+
+if (OperatingSystem.IsWindows())
+{
+    builder.Host.UseWindowsService(options =>
+    {
+        options.ServiceName = "McpServerKeyServer";
+    });
+}
 
 var app = builder.Build();
 app.MapDefaultEndpoints();
