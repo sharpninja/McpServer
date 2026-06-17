@@ -1164,6 +1164,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
 
+## TR-MCP-SUBLOG-001
+
+**Subscriber message-log sink** — Parseable sink test
+
 ## TR-MCP-SUBSCRIBER-001
 
 **Transaction Subscriber Service** — Provide shared subscriber commit services and a separate `McpServer.Subscriber` host with durable commit/status storage, keyserver-backed manifest verification, protected-envelope decrypt/hash validation, idempotent duplicate commit handling, conflict rejection, abort/status endpoints, subscriber encryption key-ring binding, XMLDocs, typed client contracts, and deterministic failure reasons.

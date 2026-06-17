@@ -1246,3 +1246,15 @@ All `/mcpserver/*` endpoints SHALL return `401 Unauthorized` for an unknown, sta
 The readiness endpoint `/ready` SHALL report `Unhealthy` when the subsystem that gates `/mcpserver/*` is not ready: specifically when no enabled workspace is registered, or the primary workspace has no seeded auth token, or the auth-token subsystem is uninitialized. `/ready` SHALL never report `Healthy` while `/mcpserver/*` requests would be rejected with a startup `503`. This closes the gap where `/health` read `Healthy` (it only checks liveness: `self` + federation `upstream`) while every data endpoint returned `503`.
 
 **Covered by:** `WorkspaceReadinessHealthCheck`, `WorkspaceReadinessHealthCheckTests`, `ReadinessAndAuthIntegrationTests`
+
+## FR-MCP-SUBLOG-001 Subscriber high-performance message logging
+
+The transaction subscriber SHALL log every received transaction message (commit and abort outcomes) to a high-performance log store (Parseable) when configured via `Mcp:Subscriber:Parseable`, capturing the event name, transaction id, structured reason, detail, and UTC timestamp. Logging SHALL be best-effort: a sink error MUST NOT block or fail the subscriber commit path. When the sink is disabled the subscriber SHALL use a no-op log.
+
+**Acceptance Criteria:**
+- [x] A pluggable `ISubscriberMessageLog` seam exists with a no-op default and a Parseable HTTP sink.
+- [x] The Parseable sink POSTs a flat JSON batch to `{Url}/api/v1/ingest` with the `X-P-Stream` header and basic auth.
+- [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
+- [x] Sink transport errors are swallowed and never break the transaction.
+
+**Covered by:** `ISubscriberMessageLog`, `ParseableSubscriberMessageLog`, `InMemorySubscriberCommitService.RecordSubscriberAuditAsync`, `SubscriberMessageLogTests`

@@ -112,6 +112,34 @@ public sealed class SubscriberOptions
 
     /// <summary>Whether commits must carry protected diffgram envelopes instead of legacy placeholder bodies.</summary>
     public bool RequireEncryptedDiffgrams { get; set; }
+
+    /// <summary>
+    /// FR-MCP-SUBLOG-001: High-performance message-log sink for received transaction messages (Parseable).
+    /// Bound from <c>Mcp:Subscriber:Parseable</c>. Disabled by default.
+    /// </summary>
+    public SubscriberParseableOptions Parseable { get; set; } = new();
+}
+
+/// <summary>
+/// FR-MCP-SUBLOG-001: Parseable sink options for high-performance subscriber message logging,
+/// bound from <c>Mcp:Subscriber:Parseable</c>.
+/// </summary>
+public sealed class SubscriberParseableOptions
+{
+    /// <summary>Whether received-message logging to Parseable is enabled.</summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>Parseable base URL (for example <c>http://localhost:8000</c>). Required when enabled.</summary>
+    public string? Url { get; set; }
+
+    /// <summary>Parseable stream name (<c>X-P-Stream</c> header).</summary>
+    public string StreamName { get; set; } = "mcp-subscriber";
+
+    /// <summary>Basic-auth username.</summary>
+    public string Username { get; set; } = "admin";
+
+    /// <summary>Basic-auth password.</summary>
+    public string Password { get; set; } = "admin";
 }
 
 /// <summary>Subscriber private encryption key material for one key-ring entry. FR-MCP-119.</summary>

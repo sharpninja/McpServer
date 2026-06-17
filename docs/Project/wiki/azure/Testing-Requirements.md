@@ -1355,6 +1355,14 @@ In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) p
 
 
 
+## TEST-MCP-SUBLOG
+
+### TEST-MCP-SUBLOG-001
+
+Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream and basic auth; the subscriber invokes the message log once per received message with correct status/reason; sink errors do not fail the commit; no-op default logs nothing.
+
+
+
 ## TEST-MCP-TRACE-LEGACY
 
 ### TEST-MCP-TRACE-LEGACY-001

@@ -1,3 +1,4 @@
+using System.Net.Http;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,7 @@ public static class TransactionSecurityServiceCollectionExtensions
         services.PostConfigure<SubscriberOptions>(HydrateSubscriberKeyMaterial);
         services.TryAddSingleton<ITransactionManifestCanonicalizer, TransactionManifestCanonicalizer>();
         services.TryAddSingleton<ITransactionDiffgramProtector, TransactionDiffgramProtector>();
+        services.AddSubscriberMessageLog();
         services.AddSingleton<ISubscriberCommitService, InMemorySubscriberCommitService>();
         services.AddTransactionPubSub();
         return services;
@@ -72,6 +74,7 @@ public static class TransactionSecurityServiceCollectionExtensions
             client.BaseAddress = new Uri(options.KeyServerBaseUrl);
             client.Timeout = TimeSpan.FromSeconds(Math.Max(1, options.CommitTimeoutSeconds));
         });
+        services.AddSubscriberMessageLog();
         services.AddSingleton<ISubscriberCommitService, InMemorySubscriberCommitService>();
         services.AddTransactionPubSub();
         return services;
@@ -95,6 +98,22 @@ public static class TransactionSecurityServiceCollectionExtensions
         services.AddSingleton<ITransactionAuditWriter, InMemoryTransactionAuditWriter>();
         services.AddSingleton<IDiffgramBuilder, JsonDiffgramBuilder>();
         services.AddSingleton<ITurnTransactionCoordinator, TurnTransactionCoordinator>();
+        return services;
+    }
+
+    private static IServiceCollection AddSubscriberMessageLog(this IServiceCollection services)
+    {
+        // FR-MCP-SUBLOG-001: high-performance received-message sink. No-op unless Mcp:Subscriber:Parseable is enabled.
+        services.AddHttpClient("subscriber-parseable");
+        services.TryAddSingleton<ISubscriberMessageLog>(sp =>
+        {
+            var parseable = sp.GetRequiredService<IOptions<SubscriberOptions>>().Value.Parseable;
+            if (!parseable.Enabled || string.IsNullOrWhiteSpace(parseable.Url))
+                return new NoopSubscriberMessageLog();
+
+            var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("subscriber-parseable");
+            return new ParseableSubscriberMessageLog(httpClient, parseable);
+        });
         return services;
     }
 

@@ -779,23 +779,27 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService, 
     private readonly IOptionsMonitor<SubscriberOptions> _options;
     private readonly ITransactionDiffgramProtector _diffgramProtector;
     private readonly ISubscriberStateStore _stateStore;
+    private readonly ISubscriberMessageLog _messageLog;
 
     /// <summary>Initializes a new instance of the <see cref="InMemorySubscriberCommitService"/> class.</summary>
     /// <param name="keyServer">Keyserver manifest verifier.</param>
     /// <param name="canonicalizer">Manifest canonicalizer.</param>
     /// <param name="options">Subscriber options.</param>
     /// <param name="diffgramProtector">Diffgram protector.</param>
+    /// <param name="messageLog">FR-MCP-SUBLOG-001: high-performance received-message log sink (defaults to no-op).</param>
     public InMemorySubscriberCommitService(
         IKeyServerManifestService keyServer,
         ITransactionManifestCanonicalizer canonicalizer,
         IOptionsMonitor<SubscriberOptions> options,
-        ITransactionDiffgramProtector? diffgramProtector = null)
+        ITransactionDiffgramProtector? diffgramProtector = null,
+        ISubscriberMessageLog? messageLog = null)
     {
         _keyServer = keyServer;
         _canonicalizer = canonicalizer;
         _options = options;
         _diffgramProtector = diffgramProtector ?? new TransactionDiffgramProtector();
         _stateStore = CreateSubscriberStateStore(options.CurrentValue);
+        _messageLog = messageLog ?? new NoopSubscriberMessageLog();
     }
 
     /// <inheritdoc />
@@ -1184,15 +1188,28 @@ public sealed class InMemorySubscriberCommitService : ISubscriberCommitService, 
         }
     }
 
-    private Task RecordSubscriberAuditAsync(
+    private async Task RecordSubscriberAuditAsync(
         string eventName,
         string? transactionId,
         TransactionFailureReason reason,
         string? details,
         CancellationToken cancellationToken)
-        => _options.CurrentValue.AuditEnabled
-            ? _stateStore.RecordAuditAsync(eventName, transactionId, reason, details, cancellationToken)
-            : Task.CompletedTask;
+    {
+        // FR-MCP-SUBLOG-001: every received-message outcome funnels through here, so this is the
+        // single chokepoint that feeds the high-performance message-log sink (best-effort, independent
+        // of the durable audit gate).
+        await _messageLog.LogAsync(
+            new SubscriberMessageLogEntry(
+                eventName,
+                transactionId,
+                reason.ToString(),
+                details,
+                DateTimeOffset.UtcNow),
+            cancellationToken).ConfigureAwait(false);
+
+        if (_options.CurrentValue.AuditEnabled)
+            await _stateStore.RecordAuditAsync(eventName, transactionId, reason, details, cancellationToken).ConfigureAwait(false);
+    }
 
     private static ISubscriberStateStore CreateSubscriberStateStore(SubscriberOptions options)
         => string.IsNullOrWhiteSpace(options.DatabasePath)
