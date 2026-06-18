@@ -22,6 +22,7 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptionsMonitor<TurnTransactionOptions> _transactionOptions;
     private readonly ILogger<QuadBrainOrchestrationService> _logger;
+    private readonly IBrainInteractionSessionLogger? _brainLogger;
 
     /// <summary>Initializes a new instance of the <see cref="QuadBrainOrchestrationService"/> class.</summary>
     public QuadBrainOrchestrationService(
@@ -30,7 +31,8 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         IBrainSlotInvocationService invocation,
         IOptionsMonitor<TurnTransactionOptions> transactionOptions,
         ILogger<QuadBrainOrchestrationService> logger,
-        ITurnTransactionCoordinator? transactionCoordinator = null)
+        ITurnTransactionCoordinator? transactionCoordinator = null,
+        IBrainInteractionSessionLogger? brainLogger = null)
     {
         _db = db;
         _registry = registry;
@@ -38,6 +40,7 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         _transactionOptions = transactionOptions;
         _logger = logger;
         _transactionCoordinator = transactionCoordinator;
+        _brainLogger = brainLogger;
     }
 
     /// <inheritdoc />
@@ -169,6 +172,10 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
             Metadata = AddMetadata(request.Metadata, "quadOperation", "aot-reconciliation"),
         }, cancellationToken).ConfigureAwait(false);
 
+        // FR-MCP-QBEXEC-003: log the Arbiter-of-Truth reconciliation prompt + output in full (best-effort).
+        await LogBrainInteractionAsync(request.Metadata, request.TurnId, BrainSlotRoles.ArbiterOfTruth, prompt, response.Output, cancellationToken)
+            .ConfigureAwait(false);
+
         return new AotReconciliationResponse
         {
             Status = response.Status,
@@ -290,13 +297,42 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         QuadBrainOrchestrationRequest request,
         bool admitToGraphRag,
         CancellationToken cancellationToken)
-        => await _invocation.InvokeAsync(slot.SlotId, new BrainSlotInvokeRequest
+    {
+        var response = await _invocation.InvokeAsync(slot.SlotId, new BrainSlotInvokeRequest
         {
             Input = prompt,
             TurnId = request.TurnId,
             AdmitToGraphRag = admitToGraphRag,
             Metadata = AddMetadata(request.Metadata, "quadRole", slot.Role),
         }, cancellationToken).ConfigureAwait(false);
+
+        // FR-MCP-QBEXEC-003: log the full prompt + output of this brain interaction (best-effort, secret-redacted).
+        await LogBrainInteractionAsync(request.Metadata, request.TurnId, slot.Role, prompt, response.Output, cancellationToken)
+            .ConfigureAwait(false);
+        return response;
+    }
+
+    /// <summary>FR-MCP-QBEXEC-003: best-effort full-text logging of a brain interaction to the session log.</summary>
+    private Task LogBrainInteractionAsync(
+        IReadOnlyDictionary<string, string>? metadata,
+        string? turnId,
+        string role,
+        string prompt,
+        string? output,
+        CancellationToken cancellationToken)
+    {
+        if (_brainLogger is null)
+            return Task.CompletedTask;
+
+        var sessionId = MetadataValue(metadata, "sessionId");
+        var sourceType = MetadataValue(metadata, "sourceType") ?? "QBAgent";
+        return _brainLogger.LogInteractionAsync(sourceType, sessionId, turnId, role, prompt, output, cancellationToken);
+    }
+
+    private static string? MetadataValue(IReadOnlyDictionary<string, string>? metadata, string key)
+        => metadata is not null && metadata.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)
+            ? value
+            : null;
 
     private static string BuildRolePrompt(string role, string input, BrainSlotDefinitionEntity slot)
         => $"""

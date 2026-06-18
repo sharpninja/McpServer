@@ -465,7 +465,13 @@ builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFacto
 builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
 builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
 builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
+// FR-MCP-QBEXEC-003: full-fidelity inter-brain session logging (full prompt+output text, secret-redacted).
+builder.Services.AddScoped<IBrainInteractionSessionLogger, BrainInteractionSessionLogger>();
 builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestrationService>();
+// FR-MCP-QBEXEC-002: concrete internal-tool executor routes QuadBrain's MCP-internal mutations through the
+// transaction-gated services; it is injected into the chat service's optional executor parameter, replacing the
+// NoopInternalToolExecutor fallback.
+builder.Services.AddScoped<IQuadBrainInternalToolExecutor, QuadBrainInternalToolExecutor>();
 builder.Services.AddScoped<IQuadBrainOpenAiChatService, QuadBrainOpenAiChatService>();
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
