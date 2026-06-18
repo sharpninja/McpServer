@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\McpServer.McpAgent\McpServer.McpAgent.csproj" />
+    <ProjectReference Include="..\McpServer.QBAgent.Tools\McpServer.QBAgent.Tools.csproj" />
   </ItemGroup>
 </Project>

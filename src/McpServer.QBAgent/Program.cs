@@ -1,6 +1,10 @@
 using McpServer.McpAgent;
 using McpServer.McpAgent.Hosting;
 using McpServer.QBAgent;
+using McpServer.QBAgent.Skills;
+using McpServer.QBAgent.Tools;
+using McpServer.Support.Mcp.Services;
+using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,6 +34,9 @@ var bound = result.Options!;
 
 try
 {
+    var workspacePath = string.IsNullOrWhiteSpace(bound.WorkspacePath) ? startDirectory : bound.WorkspacePath!;
+    var skillsRoot = Path.Combine(workspacePath, "skills");
+
     var services = new ServiceCollection();
     services.AddMcpServerMcpAgent(options =>
     {
@@ -42,21 +49,52 @@ try
         options.Description = bound.Description;
         options.RequireAuthentication = bound.RequireAuthentication;
     });
+    services.AddQBAgentTools();
+    services.AddQBAgentSkills(skillsRoot);
 
     await using var provider = services.BuildServiceProvider();
     var agent = provider.GetRequiredService<IMcpHostedAgent>();
+    var processRunner = provider.GetRequiredService<IProcessRunner>();
+    var skillRegistry = provider.GetRequiredService<ISkillRegistry>();
+
+    // FR-MCP-QBTOOLS-007: register the agent-side external tools (file/powershell/bash/git) plus the skill tools
+    // (list_skills/load_skill) so the Agent Framework loop can execute them; inject the skill discovery list.
+    using var toolSet = QBAgentExternalToolSurface.Create(
+        agent.Client, agent.PowerShellSessions, processRunner, workspacePath, bound.AllowGitPush);
+    var tools = new List<AITool>(toolSet.Tools);
+    tools.AddRange(new SkillTool(skillRegistry).CreateTools());
+
+    var discovery = string.Join(
+        Environment.NewLine,
+        skillRegistry.Discover().Select(static s => $"- {s.Name}: {s.Description}"));
+    var skillPreamble = discovery.Length == 0
+        ? null
+        : $"Available skills (call load_skill with the name to load full instructions before acting):{Environment.NewLine}{discovery}";
 
     // QuadBrain as the OpenAI model behind the Agent Framework loop; QBAgent executes the emitted tool calls.
     using var chatClient = QBAgentChatClientFactory.Create(bound);
     var chatAgent = agent.CreateChatClientAgent(chatClient);
-    var runOptions = agent.CreateRunOptions();
+    var runOptions = agent.CreateRunOptions(new ChatClientAgentRunOptions
+    {
+        ChatOptions = new ChatOptions { Tools = tools },
+    });
     var session = await chatAgent.CreateSessionAsync().ConfigureAwait(false);
 
+    var firstTurn = true;
     await QBAgentRunLoop.RunAsync(
         async (prompt, cancellationToken) =>
         {
+            var messages = new List<ChatMessage>();
+            if (firstTurn && skillPreamble is not null)
+            {
+                messages.Add(new ChatMessage(ChatRole.System, skillPreamble));
+                firstTurn = false;
+            }
+
+            messages.Add(new ChatMessage(ChatRole.User, prompt));
+
             var response = await chatAgent.RunAsync(
-                [new ChatMessage(ChatRole.User, prompt)],
+                messages,
                 session,
                 runOptions,
                 cancellationToken).ConfigureAwait(false);
