@@ -1,4 +1,5 @@
 using System.ClientModel;
+using System.ClientModel.Primitives;
 using McpServer.McpAgent;
 using Microsoft.Extensions.AI;
 using OpenAIChatClient = OpenAI.Chat.ChatClient;
@@ -19,12 +20,31 @@ public static class QBAgentChatClientFactory
     /// <summary>Creates an <see cref="IChatClient"/> bound to the QuadBrain OpenAI-compatible endpoint.</summary>
     /// <param name="options">Agent options carrying the marker-bound <see cref="McpAgentOptions.BaseUrl"/> and API key.</param>
     /// <returns>An OpenAI-compatible chat client targeting <c>{BaseUrl}/v1</c>.</returns>
-    public static IChatClient Create(McpAgentOptions options)
+    public static IChatClient Create(McpAgentOptions options) => Create(options, transport: null);
+
+    /// <summary>
+    /// Creates an <see cref="IChatClient"/> bound to the QuadBrain endpoint over a caller-supplied
+    /// <see cref="HttpClient"/>. The wire format is unchanged; only the underlying transport is replaced, which lets
+    /// hosts route through a configured client (proxy, custom certificate handling) or an in-memory test server.
+    /// </summary>
+    /// <param name="options">Agent options carrying the marker-bound <see cref="McpAgentOptions.BaseUrl"/> and API key.</param>
+    /// <param name="httpClient">The HTTP client whose handler pipeline carries the request.</param>
+    /// <returns>An OpenAI-compatible chat client targeting <c>{BaseUrl}/v1</c> over <paramref name="httpClient"/>.</returns>
+    public static IChatClient Create(McpAgentOptions options, HttpClient httpClient)
+    {
+        ArgumentNullException.ThrowIfNull(httpClient);
+        return Create(options, new HttpClientPipelineTransport(httpClient));
+    }
+
+    private static IChatClient Create(McpAgentOptions options, PipelineTransport? transport)
     {
         ArgumentNullException.ThrowIfNull(options);
         ArgumentNullException.ThrowIfNull(options.BaseUrl);
 
         var clientOptions = new OpenAIClientOptions { Endpoint = BuildEndpoint(options.BaseUrl) };
+        if (transport is not null)
+            clientOptions.Transport = transport;
+
         var chatClient = new OpenAIChatClient(
             ModelId,
             new ApiKeyCredential(options.ApiKey ?? string.Empty),
