@@ -24,6 +24,28 @@ public interface IRepoFileService
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>Write result indicating success or failure with an error message.</returns>
     Task<RepoWriteResult> WriteAsync(string relativePath, string content, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-MCP-QBTOOLS-006 / TR-MCP-QBTOOLS-006: Applies a targeted replacement of <paramref name="oldString"/>
+    /// with <paramref name="newString"/> in an existing file, under the same path allowlist, audit, and change
+    /// event behavior as <see cref="WriteAsync"/>. A missing or empty <paramref name="oldString"/> fails; an
+    /// ambiguous match (more than one occurrence) fails unless <paramref name="replaceAll"/> is set; when
+    /// <paramref name="expectedOccurrences"/> is supplied the actual match count must equal it.
+    /// </summary>
+    /// <param name="relativePath">Relative path from repo root.</param>
+    /// <param name="oldString">Exact text to find.</param>
+    /// <param name="newString">Replacement text; must differ from <paramref name="oldString"/>.</param>
+    /// <param name="replaceAll">When true, replaces every occurrence instead of requiring a unique match.</param>
+    /// <param name="expectedOccurrences">Optional expected match-count guard.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>Edit result indicating whether the edit applied and how many replacements were made.</returns>
+    Task<RepoEditResult> EditAsync(
+        string relativePath,
+        string oldString,
+        string newString,
+        bool replaceAll = false,
+        int? expectedOccurrences = null,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -78,3 +100,9 @@ public sealed record RepoListEntry(string Name, bool IsDirectory);
 /// <param name="Written">Whether the write succeeded.</param>
 /// <param name="Error">Error message when write failed; otherwise <see langword="null"/>.</param>
 public sealed record RepoWriteResult(bool Written, string? Error);
+
+/// <summary>FR-MCP-QBTOOLS-006: Result of a targeted repo edit.</summary>
+/// <param name="Written">Whether the edit was applied.</param>
+/// <param name="Replacements">Number of replacements performed.</param>
+/// <param name="Error">Error message when the edit failed; otherwise <see langword="null"/>.</param>
+public sealed record RepoEditResult(bool Written, int Replacements, string? Error);

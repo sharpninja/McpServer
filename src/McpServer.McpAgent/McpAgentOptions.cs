@@ -96,6 +96,13 @@ public sealed class McpAgentOptions
     public bool AllowHostToolsInAcidProfile { get; set; }
 
     /// <summary>
+    /// TR-MCP-QBTOOLS-004: Gets or sets whether the QBAgent <c>git</c> tool may run the <c>push</c> subcommand.
+    /// Defaults to <see langword="false"/> so an autonomous agent cannot move remote state until a host opts in;
+    /// when enabled, push is still constrained to the existing <c>origin</c> remote.
+    /// </summary>
+    public bool AllowGitPush { get; set; }
+
+    /// <summary>
     /// HTTP timeout applied to the transport client created for the hosted agent scaffold.
     /// </summary>
     public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(300);

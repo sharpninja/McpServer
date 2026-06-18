@@ -186,6 +186,60 @@ public sealed class TransactionGatedRepoFileServiceTests
         Assert.Null(coordinator.Request);
     }
 
+    /// <summary>FR-MCP-QBTOOLS-006: repo.edit signs and commits, applying the edit and building the transaction.</summary>
+    [Fact]
+    public async Task EditAsync_WhenCoordinatorCommits_AppliesEditAndBuildsTransaction()
+    {
+        var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
+        var coordinator = new CapturingCoordinator();
+        var sut = CreateSut(inner, coordinator);
+
+        var result = await sut.EditAsync("docs/notes.md", "before", "after", false, null, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Written);
+        Assert.Equal("after", inner.Content);
+        Assert.Equal(1, inner.EditCalls);
+        Assert.Equal(0, inner.RestoreCalls);
+        Assert.NotNull(coordinator.Request);
+        Assert.Equal("repo.edit", coordinator.Request.OperationName);
+    }
+
+    /// <summary>FR-MCP-QBTOOLS-006: a rejected repo.edit transaction rolls back to the prior content.</summary>
+    [Fact]
+    public async Task EditAsync_WhenCommitFails_RestoresPriorContent()
+    {
+        var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
+        var coordinator = new CapturingCoordinator
+        {
+            Status = "rejected",
+            Reason = TransactionFailureReason.SubscriberUnavailable,
+            Message = "subscriber unavailable",
+            InvokeRollback = true,
+        };
+        var sut = CreateSut(inner, coordinator);
+
+        var result = await sut.EditAsync("docs/notes.md", "before", "after", false, null, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.False(result.Written);
+        Assert.Equal("before", inner.Content);
+        Assert.Equal(1, inner.RestoreCalls);
+        Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
+    }
+
+    /// <summary>repo.edit uses the inner service directly when no coordinator is registered.</summary>
+    [Fact]
+    public async Task EditAsync_WhenCoordinatorAbsent_EditsDirectly()
+    {
+        var inner = new RecordingRepoFileService { Exists = true, Content = "before" };
+        var sut = new TransactionGatedRepoFileService(inner, inner);
+
+        var result = await sut.EditAsync("docs/notes.md", "before", "after", false, null, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Written);
+        Assert.Equal("after", inner.Content);
+        Assert.Equal(1, inner.EditCalls);
+    }
+
     private static TransactionGatedRepoFileService CreateSut(
         RecordingRepoFileService inner,
         ITurnTransactionCoordinator coordinator,
@@ -272,6 +326,19 @@ public sealed class TransactionGatedRepoFileServiceTests
             Content = content;
             return Task.FromResult(new RepoWriteResult(true, null));
         }
+
+        public int EditCalls { get; private set; }
+
+        public Task<RepoEditResult> EditAsync(
+            string relativePath, string oldString, string newString,
+            bool replaceAll = false, int? expectedOccurrences = null, CancellationToken cancellationToken = default)
+        {
+            EditCalls++;
+            var current = Content ?? string.Empty;
+            Content = current.Replace(oldString, newString, StringComparison.Ordinal);
+            Exists = true;
+            return Task.FromResult(new RepoEditResult(true, 1, null));
+        }
     }
 
     private sealed class NonCompensatingRepoFileService : IRepoFileService
@@ -289,6 +356,11 @@ public sealed class TransactionGatedRepoFileServiceTests
             WriteCalls++;
             return Task.FromResult(new RepoWriteResult(true, null));
         }
+
+        public Task<RepoEditResult> EditAsync(
+            string relativePath, string oldString, string newString,
+            bool replaceAll = false, int? expectedOccurrences = null, CancellationToken cancellationToken = default)
+            => Task.FromResult(new RepoEditResult(true, 1, null));
     }
 
     private sealed class CapturingCoordinator : ITurnTransactionCoordinator

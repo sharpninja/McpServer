@@ -103,6 +103,76 @@ public sealed class TransactionGatedRepoFileService : IRepoFileService
         return ToTransactionFailure("repo.write", result);
     }
 
+    /// <inheritdoc />
+    public async Task<RepoEditResult> EditAsync(
+        string relativePath,
+        string oldString,
+        string newString,
+        bool replaceAll = false,
+        int? expectedOccurrences = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(oldString);
+        ArgumentNullException.ThrowIfNull(newString);
+
+        if (_coordinator is null)
+            return await _inner.EditAsync(relativePath, oldString, newString, replaceAll, expectedOccurrences, cancellationToken).ConfigureAwait(false);
+
+        var status = _coordinator.GetStatus();
+        if (status.Degraded)
+        {
+            return new RepoEditResult(
+                false,
+                0,
+                string.IsNullOrWhiteSpace(status.Message) ? "Turn transaction coordinator is degraded." : status.Message);
+        }
+
+        var requiresMutationTransactions = RequiresMutationTransactions(status);
+        if (requiresMutationTransactions && _compensation is null)
+            return new RepoEditResult(false, 0, "Repository file provider does not support transaction rollback compensation.");
+
+        RepoEditResult? editResult = null;
+        var hasEditResult = false;
+        var transaction = BuildEditTransactionRequest(relativePath, oldString, newString, replaceAll);
+        var result = await _coordinator.ExecuteAsync(
+                transaction,
+                async ct =>
+                {
+                    RepoFileSnapshot? snapshot = null;
+                    if (_compensation is not null)
+                        snapshot = await _compensation.CaptureForWriteAsync(relativePath, ct).ConfigureAwait(false);
+
+                    var edit = await _inner.EditAsync(relativePath, oldString, newString, replaceAll, expectedOccurrences, ct).ConfigureAwait(false);
+                    editResult = edit;
+                    hasEditResult = true;
+
+                    Func<CancellationToken, Task>? rollback = null;
+                    if (edit.Written && snapshot is not null)
+                    {
+                        // The inner service computed the edited content; re-capture it so rollback's hash guard
+                        // matches the content the transaction actually wrote before restoring the pre-edit snapshot.
+                        var postEdit = await _compensation!.CaptureForWriteAsync(relativePath, ct).ConfigureAwait(false);
+                        var writtenContent = postEdit?.Content ?? string.Empty;
+                        rollback = rollbackCt => RestoreWriteOrThrowAsync(snapshot, writtenContent, rollbackCt);
+                    }
+
+                    return new TurnMutationResult
+                    {
+                        Success = edit.Written,
+                        ResultJson = JsonSerializer.Serialize(edit, JsonOptions),
+                        Error = edit.Error,
+                        RollbackAsync = rollback,
+                    };
+                },
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        if (hasEditResult && (!editResult!.Written || IsTransactionSuccess(result)))
+            return editResult;
+
+        return ToEditTransactionFailure("repo.edit", result);
+    }
+
     private async Task RestoreWriteOrThrowAsync(
         RepoFileSnapshot snapshot,
         string writtenContent,
@@ -170,5 +240,36 @@ public sealed class TransactionGatedRepoFileService : IRepoFileService
     private static string ComputeSha256(string value)
         => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
 
+    private TurnTransactionRequest BuildEditTransactionRequest(string relativePath, string oldString, string newString, bool replaceAll)
+    {
+        var sequence = NextSequence();
+        return new TurnTransactionRequest
+        {
+            TurnId = $"repo.edit-{sequence}",
+            OperationName = "repo.edit",
+            OperationBodyJson = JsonSerializer.Serialize(
+                new RepoEditTransactionPayload(relativePath, ComputeSha256(oldString), ComputeSha256(newString), replaceAll),
+                JsonOptions),
+            Sequence = sequence,
+            Mutating = true,
+        };
+    }
+
+    private static RepoEditResult ToEditTransactionFailure(string operationName, TurnTransactionResult result)
+    {
+        var transactionId = string.IsNullOrWhiteSpace(result.TransactionId) ? "unassigned" : result.TransactionId;
+        var message = string.IsNullOrWhiteSpace(result.Message) ? result.Reason.ToString() : result.Message;
+        if (result.RollbackAttempted)
+        {
+            message = result.RollbackSucceeded
+                ? $"{message} Rollback completed."
+                : $"{message} Rollback failed: {result.RollbackError ?? "unknown error"}.";
+        }
+
+        return new RepoEditResult(false, 0, $"Turn transaction coordinator did not commit {operationName} '{transactionId}': {message}");
+    }
+
     private sealed record RepoWriteTransactionPayload(string RelativePath, string ContentSha256, int ContentLength);
+
+    private sealed record RepoEditTransactionPayload(string RelativePath, string OldSha256, string NewSha256, bool ReplaceAll);
 }

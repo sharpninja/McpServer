@@ -117,6 +117,85 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
     }
 
     /// <inheritdoc />
+    public async Task<RepoEditResult> EditAsync(
+        string relativePath,
+        string oldString,
+        string newString,
+        bool replaceAll = false,
+        int? expectedOccurrences = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(oldString);
+        ArgumentNullException.ThrowIfNull(newString);
+        if (string.IsNullOrWhiteSpace(relativePath))
+            return new RepoEditResult(false, 0, "path is required");
+        if (oldString.Length == 0)
+            return new RepoEditResult(false, 0, "oldString must not be empty");
+        if (string.Equals(oldString, newString, StringComparison.Ordinal))
+            return new RepoEditResult(false, 0, "oldString and newString must differ");
+
+        var normalized = NormalizeRelative(relativePath);
+        if (!TryResolveFullPath(normalized, out var fullPath))
+            return new RepoEditResult(false, 0, "path not allowed or invalid");
+        if (!IsAllowed(normalized))
+            return new RepoEditResult(false, 0, "path not in allowlist");
+        if (!File.Exists(fullPath))
+            return new RepoEditResult(false, 0, "file not found");
+
+        try
+        {
+            var content = await File.ReadAllTextAsync(fullPath, cancellationToken).ConfigureAwait(false);
+            var occurrences = CountOccurrences(content, oldString);
+            if (occurrences == 0)
+                return new RepoEditResult(false, 0, "oldString not found in file");
+            if (expectedOccurrences.HasValue && occurrences != expectedOccurrences.Value)
+                return new RepoEditResult(false, 0, $"expected {expectedOccurrences.Value} occurrence(s) but found {occurrences}");
+            if (!replaceAll && occurrences > 1)
+                return new RepoEditResult(false, 0, $"oldString is ambiguous ({occurrences} matches); set replaceAll or widen oldString to a unique span");
+
+            var (updated, replacements) = replaceAll
+                ? (content.Replace(oldString, newString, StringComparison.Ordinal), occurrences)
+                : (ReplaceFirst(content, oldString, newString), 1);
+
+            await File.WriteAllTextAsync(fullPath, updated, cancellationToken).ConfigureAwait(false);
+            _auditLog.RecordWrite(normalized, DateTime.UtcNow);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, cancellationToken).ConfigureAwait(false);
+            return new RepoEditResult(true, replacements, null);
+        }
+        catch (IOException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return new RepoEditResult(false, 0, ex.Message);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return new RepoEditResult(false, 0, ex.Message);
+        }
+    }
+
+    private static int CountOccurrences(string content, string token)
+    {
+        var count = 0;
+        var index = content.IndexOf(token, StringComparison.Ordinal);
+        while (index >= 0)
+        {
+            count++;
+            index = content.IndexOf(token, index + token.Length, StringComparison.Ordinal);
+        }
+
+        return count;
+    }
+
+    private static string ReplaceFirst(string content, string oldString, string newString)
+    {
+        var index = content.IndexOf(oldString, StringComparison.Ordinal);
+        return index < 0
+            ? content
+            : string.Concat(content.AsSpan(0, index), newString, content.AsSpan(index + oldString.Length));
+    }
+
+    /// <inheritdoc />
     public async Task<RepoFileSnapshot?> CaptureForWriteAsync(
         string relativePath,
         CancellationToken cancellationToken = default)
