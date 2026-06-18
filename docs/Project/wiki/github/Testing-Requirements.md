@@ -1140,6 +1140,56 @@ bats: daemon roundtrip with --- terminator; one child serves N sends; auto-resta
 
 
 
+## TEST-MCP-QBAGENT
+
+### TEST-MCP-QBAGENT-001
+
+Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
+
+
+
+## TEST-MCP-QBAGENTINT
+
+### TEST-MCP-QBAGENTINT-001
+
+Integration tests for QBAgent sending a request to QuadBrain, receiving a response with or without tool actions, and executing the returned external tool calls via the Microsoft Agent Framework loop.
+
+**Acceptance Criteria:**
+- [ ] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned.
+- [ ] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn.
+- [ ] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent.
+
+
+## TEST-MCP-QBEXEC
+
+### TEST-MCP-QBEXEC-001
+
+Classifier marks mcp_ tools internal; interceptor executes handled internal tools and strips them while keeping external and failed/unhandled internal; the OpenAI surface strips internal tool calls and emits only external ones (and emits none when all elected tools ran server-side).
+
+
+
+## TEST-MCP-QBINT
+
+### TEST-MCP-QBINT-001
+
+Integration tests over POST /v1/chat/completions through the real ASP.NET pipeline with orchestration and the internal-tool executor replaced by deterministic doubles.
+
+**Acceptance Criteria:**
+- [x] A request without a workspace token returns 401.
+- [x] An authorized request returns the Arbiter decision as the assistant message.
+- [x] An external tool elected by QuadBrain is returned to the agent as a tool call.
+- [x] An MCP-internal tool executed server-side is stripped from the response.
+- [x] An internal tool failure is surfaced as a note rather than a tool call.
+
+
+## TEST-MCP-QBOPENAI
+
+### TEST-MCP-QBOPENAI-001
+
+An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.
+
+
+
 ## TEST-MCP-REPL
 
 ### TEST-MCP-REPL-001

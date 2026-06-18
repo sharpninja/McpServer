@@ -961,6 +961,18 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **QA Vote Audit Actions** — Vote audit-action enum extends to: `vote_up`, `vote_down`, `vote_change`, `vote_revoke`. Migration adds the new values to the audit action enum check constraint (where one exists - SQLite stores as string, SqlServer / Postgres via check constraint).
 
+## TR-MCP-QBAGENT-001
+
+**QBAgent marker bootstrap and graceful no-marker exit** — QBAgent startup resolves baseUrl and apiKey from the AGENTS-README-FIRST.yaml marker in the working directory (not from defaulted McpAgentOptions); binds the QuadBrain coding route to that endpoint with X-Api-Key auth; rejects/omits all non-QuadBrain surfaces; and when no marker file is found performs a clean graceful shutdown (defined exit, informational log, no endpoint contact).
+
+## TR-MCP-QBEXEC-001
+
+**QuadBrain internal-tool interception** — server-side execution and stripping seam.
+
+## TR-MCP-QBOPENAI-001
+
+**OpenAI chat-completions surface over QuadBrain orchestration** — Add OpenAI-compatible chat-completion request/response DTOs and a server endpoint that maps an inbound OpenAI ChatCompletion request onto QuadBrain orchestration (last user turn + system context as the prompt) and returns an OpenAI ChatCompletion response carrying the Arbiter output. Subsequent slices add tool/function-calling (tools in the request, assistant tool_calls in the response) and optional streaming. QBAgent points a standard OpenAI IChatClient at this endpoint (baseUrl/apiKey from marker), runs the Agent Framework tool loop, and executes action tools.
+
 ## TR-MCP-QUAD-001
 
 **Brain-slot storage, DTOs, CRUD, and validation** — Persist BrainSlotDefinition and BrainSlotInvocation rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete, and readiness status.

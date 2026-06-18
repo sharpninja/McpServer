@@ -1066,6 +1066,34 @@ A persistent REPL daemon SHALL serve many requests from one long-lived repl chil
 
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
 
+## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
+
+QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On startup it SHALL read the marker file (AGENTS-README-FIRST.yaml) in its start directory and use that marker's apiKey and baseUrl to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
+**Acceptance Criteria:**
+- [x] A valid marker binds baseUrl and apiKey from the marker and applies the QBAgent profile.
+- [x] A marker missing apiKey or with a non-absolute baseUrl is rejected as invalid.
+- [x] With no marker present QBAgent exits gracefully with exit code 0 and contacts no endpoint.
+- [x] An interactive run loop routes each prompt through the bound runtime, handles blank lines and exit commands, stops at end of input, and reports runner failures without aborting.
+
+## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
+
+QuadBrain SHALL execute MCP-internal tools (those exposed by McpServer itself - session, TODO, requirements, repo, graphrag, etc.) directly server-side during orchestration rather than emitting them to the agent, which improves performance and removes dependence on model behavior. Tools OUTSIDE McpServer SHALL be emitted as OpenAI tool_calls for QBAgent to execute. QuadBrain orchestration SHALL perform session logging. When role models elect MCP-internal mutating tools (TODO and Requirements add/update), the Arbiter-of-Truth SHALL intercept the call and gate it through the turn transaction coordinator; on commit it executes the tool in McpServer and strips that tool_call from the chat-completion response before returning to QBAgent.
+**Acceptance Criteria:**
+- [x] Tools are classified MCP-internal (mcp_ prefix) versus external.
+- [x] The interceptor executes internal tools server-side and strips them; only external calls are emitted to the agent as tool commands.
+- [x] Internal tool failures and unhandled internal tools are surfaced to the agent as a note and earmarked as Session Log failures, never as tool commands.
+- [ ] A concrete executor routes TODO and Requirements mutations through the transaction-gated services so the AoT commit applies them server-side.
+- [ ] QuadBrain orchestration performs the Session Log write for the turn including internal-tool failure entries.
+
+## FR-MCP-QBOPENAI-001 QuadBrain OpenAI-compatible chat-completions endpoint
+
+QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (chat/completions shape) backed by QuadBrain orchestration, accepting standard OpenAI chat messages and tool/function definitions and returning OpenAI-shaped completions - including assistant tool_calls when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent (FR-MCP-QBAGENT-001) consumes this endpoint as its IChatClient and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.
+**Acceptance Criteria:**
+- [x] An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message.
+- [x] Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.
+- [x] Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.
+- [x] QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.
+
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
 The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.
@@ -1170,6 +1198,11 @@ Every MCP server plugin that accepts caller-supplied requirement acceptanceCrite
 ## FR-MCP-SUBLOG-001 Subscriber high-performance message logging
 
 The transaction subscriber SHALL log every received transaction message (commit and abort outcomes) to a high-performance log store (Parseable) when configured, capturing transaction id, event, reason, status, manifest and encrypted-body hashes, diffgram id, and party ids; logging is best-effort and SHALL never block or fail the commit path on sink errors.
+**Acceptance Criteria:**
+- [x] A pluggable ISubscriberMessageLog seam exists with a no-op default and a Parseable HTTP sink.
+- [x] The Parseable sink POSTs a flat JSON batch to the ingest endpoint with the X-P-Stream header and basic auth.
+- [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
+- [x] Sink transport errors are swallowed and never break the transaction.
 
 ## FR-SUPPORT-010 MCP Context Unification
 

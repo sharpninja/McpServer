@@ -466,6 +466,7 @@ builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>(
 builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
 builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
 builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestrationService>();
+builder.Services.AddScoped<IQuadBrainOpenAiChatService, QuadBrainOpenAiChatService>();
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
 

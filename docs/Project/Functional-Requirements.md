@@ -1258,3 +1258,40 @@ The transaction subscriber SHALL log every received transaction message (commit 
 - [x] Sink transport errors are swallowed and never break the transaction.
 
 **Covered by:** `ISubscriberMessageLog`, `ParseableSubscriberMessageLog`, `InMemorySubscriberCommitService.RecordSubscriberAuditAsync`, `SubscriberMessageLogTests`
+
+## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
+
+QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On startup it SHALL read the marker file (`AGENTS-README-FIRST.yaml`) in its start directory and use that marker's `apiKey` and `baseUrl` to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
+
+**Acceptance Criteria:**
+- [x] A valid marker binds `baseUrl` and `apiKey` from the marker (not from defaulted options) and applies the QBAgent (ACID tightly coupled, QuadBrain-only) profile.
+- [x] A marker missing `apiKey` or with a non-absolute `baseUrl` is rejected as invalid.
+- [x] With no marker file present, QBAgent reports a graceful no-marker exit (exit code 0) and contacts no endpoint.
+- [x] An interactive QuadBrain coding-task run loop routes each prompt through the bound runtime (`ExecuteQuadBrainCodingTaskAsync`), handles blank lines and exit commands, stops at end of input, and reports executor failures without aborting the loop.
+
+**Covered by:** `McpServer.QBAgent` (`QBAgentBootstrapper`, `QBAgentRunLoop`, `Program`), `QBAgentBootstrapperTests`, `QBAgentRunLoopTests`
+
+## FR-MCP-QBOPENAI-001 QuadBrain OpenAI-compatible chat-completions endpoint
+
+QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (`POST /v1/chat/completions`) backed by QuadBrain orchestration, accepting standard OpenAI chat messages (and, in a later slice, tool/function definitions) and returning OpenAI-shaped completions - including assistant `tool_calls` when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent consumes this endpoint as its `IChatClient` and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.
+
+**Acceptance Criteria:**
+- [x] An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message (slice 1).
+- [x] Tool/function definitions in the request flow through and the response emits assistant `tool_calls` when QuadBrain elects to call a tool (slice 2; QuadBrain signals a call via a `{"tool_calls":[{"name":...,"arguments":...}]}` Arbiter output).
+- [x] Bearer-auth mapping for `/v1/*` - OpenAI clients send `Authorization: Bearer <workspace token>` (with `X-Api-Key` fallback), validated via `WorkspaceTokenService.ResolveWorkspaceByToken`; invalid/missing yields 401 (slice 3).
+- [x] QBAgent wires a standard OpenAI `IChatClient` to `{baseUrl}/v1`, runs the Agent Framework tool loop with action tools (non-ACID standard profile, QBAgent identity), and executes the emitted tool calls (slice 4).
+
+**Covered by:** `OpenAiChatModels`, `QuadBrainOpenAiChatService`, `OpenAiBearerAuth`, `QuadBrainOpenAiController`, `McpServer.QBAgent` (`QBAgentChatClientFactory`, `QBAgentRunLoop`, `Program`), `QuadBrainOpenAiChatServiceTests`, `QuadBrainOpenAiAuthTests`, `QBAgentChatClientFactoryTests`, `QBAgentRunLoopTests`
+
+## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
+
+QuadBrain SHALL execute MCP-internal tools (those exposed by McpServer itself - session, TODO, requirements, repo, graphrag, etc., named with the `mcp_` prefix) directly server-side during orchestration rather than emitting them to the agent; tools OUTSIDE McpServer SHALL be emitted as OpenAI `tool_calls` for QBAgent to execute. QuadBrain orchestration SHALL own session logging. When role models elect MCP-internal mutating tools (TODO and Requirements add/update), the Arbiter-of-Truth SHALL intercept the call, gate it through the turn transaction coordinator, and on commit execute the tool in McpServer and strip that call from the chat-completion response before returning to QBAgent.
+
+**Acceptance Criteria:**
+- [x] Tools are classified MCP-internal (`mcp_` prefix) vs external (`QuadBrainToolClassifier`).
+- [x] The interceptor executes internal tools server-side and strips successfully executed calls; ONLY external calls are emitted to the agent as tool commands (`QuadBrainToolInterceptor`), wired into the OpenAI surface.
+- [x] Internal tool failures (and unhandled internal tools) are NEVER emitted to the agent as tool commands; they are surfaced to QBAgent as a note (assistant content) and earmarked as Session Log failures.
+- [ ] (Sub-slice) A concrete executor routes TODO/Requirements mutations through the transaction-gated services so the AoT commit applies them server-side.
+- [ ] (Sub-slice) QuadBrain orchestration performs the Session Log write for the turn (including the internal-tool failure entries).
+
+**Covered by:** `QuadBrainToolClassifier`, `QuadBrainToolInterceptor`, `IQuadBrainInternalToolExecutor`, `QuadBrainOpenAiChatService`, `QuadBrainToolInterceptionTests`, `QuadBrainOpenAiChatServiceTests`

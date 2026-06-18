@@ -696,4 +696,15 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-SUBLOG-001 | Tracked | Functional-Requirements.md |
 | TR-MCP-SUBLOG-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-SUBLOG-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBAGENT-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBAGENT-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBAGENT-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBOPENAI-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBOPENAI-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBOPENAI-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBEXEC-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBEXEC-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBEXEC-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBINT-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBAGENTINT-001 | Planned | Testing-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
