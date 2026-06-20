@@ -189,7 +189,8 @@ public sealed class QuadBrainOrchestrationServiceTests
     private static BrainSlotDefinitionEntity Slot(string role)
         => new()
         {
-            WorkspaceId = Workspace,
+            // TR-MCP-QUAD-001: brain-slot definitions are global (stored under the global workspace "").
+            WorkspaceId = string.Empty,
             SlotId = role.ToLowerInvariant() + "-main",
             Role = role,
             ProviderKind = "OpenAI",

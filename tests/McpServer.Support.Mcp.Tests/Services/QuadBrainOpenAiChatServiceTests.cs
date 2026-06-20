@@ -165,6 +165,109 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("mcp_todo_update", choice.Message.Content!, StringComparison.Ordinal);
     }
 
+    /// <summary>FR-MCP-QBEXEC-001 (AC-5): a failed internal tool is recorded to the session log, not only noted.</summary>
+    [Fact]
+    public async Task CompleteAsync_InternalToolFailure_RecordsFailureToSessionLog()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "{\"tool_calls\":[{\"name\":\"mcp_todo_update\",\"arguments\":{}}]}",
+        });
+        var logger = new RecordingInteractionLogger();
+        var service = new QuadBrainOpenAiChatService(
+            orchestration, classifier: null, internalToolExecutor: new FailingExecutor("mcp_todo_update"), interactionLogger: logger);
+
+        await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            .ConfigureAwait(true);
+
+        var (tool, error) = Assert.Single(logger.FailedTools);
+        Assert.Equal("mcp_todo_update", tool);
+        Assert.Equal("transaction rejected", error);
+    }
+
+    /// <summary>A successfully executed internal tool is NOT recorded as a failure.</summary>
+    [Fact]
+    public async Task CompleteAsync_InternalToolSuccess_RecordsNoFailure()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "{\"tool_calls\":[{\"name\":\"mcp_todo_update\",\"arguments\":{}}]}",
+        });
+        var logger = new RecordingInteractionLogger();
+        var service = new QuadBrainOpenAiChatService(
+            orchestration, classifier: null, internalToolExecutor: new HandlingExecutor("mcp_todo_update"), interactionLogger: logger);
+
+        await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            .ConfigureAwait(true);
+
+        Assert.Empty(logger.FailedTools);
+    }
+
+    /// <summary>FR-MCP-QBOPENAI-001 (G-019): the response carries a best-effort non-zero usage estimate.</summary>
+    [Fact]
+    public async Task CompleteAsync_PopulatesBestEffortUsageEstimate()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "a reasonably long arbiter answer that spans several tokens",
+        });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(new OpenAiChatCompletionRequest
+        {
+            Messages = [new OpenAiChatMessage { Role = "user", Content = "please plan the work in detail" }],
+        }).ConfigureAwait(true);
+
+        Assert.True(response.Usage.PromptTokens > 0);
+        Assert.True(response.Usage.CompletionTokens > 0);
+        Assert.Equal(response.Usage.PromptTokens + response.Usage.CompletionTokens, response.Usage.TotalTokens);
+    }
+
+    /// <summary>FR-MCP-QUAD-SESSION-001: the session id (and turn id) attach the run to its session via metadata.</summary>
+    [Fact]
+    public async Task CompleteAsync_WithSessionId_AttachesSessionAndTurnToOrchestration()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "ok",
+        });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] },
+            sessionId: "sess-1",
+            turnId: "turn-1").ConfigureAwait(true);
+
+        Assert.Equal("sess-1", orchestration.LastRequest!.Metadata["sessionId"]);
+        Assert.Equal("turn-1", orchestration.LastRequest.Metadata["turnId"]);
+        Assert.Equal("turn-1", orchestration.LastRequest.TurnId);
+    }
+
+    /// <summary>Without a session header no session/turn metadata is attached (anonymous run).</summary>
+    [Fact]
+    public async Task CompleteAsync_WithoutSessionId_AttachesNoSessionMetadata()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "ok",
+        });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            .ConfigureAwait(true);
+
+        Assert.False(orchestration.LastRequest!.Metadata.ContainsKey("sessionId"));
+        Assert.Null(orchestration.LastRequest.TurnId);
+    }
+
     /// <summary>An empty message list is rejected.</summary>
     [Fact]
     public async Task CompleteAsync_NoMessages_Throws()
@@ -196,6 +299,24 @@ public sealed class QuadBrainOpenAiChatServiceTests
             => Task.FromResult(toolCall.Function.Name == failedToolName
                 ? InternalToolExecutionOutcome.Fail("transaction rejected")
                 : InternalToolExecutionOutcome.Unhandled);
+    }
+
+    private sealed class RecordingInteractionLogger : IBrainInteractionSessionLogger
+    {
+        public List<(string Tool, string? Error)> FailedTools { get; } = [];
+
+        public Task LogInteractionAsync(
+            string sourceType, string? sessionId, string? turnId, string role, string prompt, string? output,
+            CancellationToken cancellationToken = default)
+            => Task.CompletedTask;
+
+        public Task LogInternalToolFailureAsync(
+            string sourceType, string? sessionId, string? turnId, string toolName, string? error,
+            CancellationToken cancellationToken = default)
+        {
+            FailedTools.Add((toolName, error));
+            return Task.CompletedTask;
+        }
     }
 
     private sealed class CapturingOrchestrationService(QuadBrainOrchestrationResponse response)

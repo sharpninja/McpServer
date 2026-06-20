@@ -111,6 +111,82 @@ public sealed class BrainSlotOptions
 
     /// <summary>Maximum accepted timeout in seconds.</summary>
     public int MaxTimeoutSeconds { get; set; } = 300;
+
+    /// <summary>
+    /// FR-MCP-QBSEED-001: Brain-slot definitions provisioned into the durable registry at startup
+    /// when <see cref="ExecutionEnabled"/> is true. Empty disables startup provisioning.
+    /// </summary>
+    public List<BrainSlotSeedDefinition> Slots { get; set; } = [];
+}
+
+/// <summary>
+/// FR-MCP-QBSEED-001 and TR-MCP-QBSEED-002: A configuration-declared brain-slot definition applied at
+/// startup. Carries a stable slot id plus the same fields as <see cref="UpsertBrainSlotRequest"/>.
+/// Credentials are referenced only by safe reference (env:, config:, or file:), never inline.
+/// </summary>
+public sealed class BrainSlotSeedDefinition
+{
+    /// <summary>Stable slot identifier used as the upsert key.</summary>
+    public string SlotId { get; set; } = string.Empty;
+
+    /// <summary>Quad role served by the slot.</summary>
+    public string Role { get; set; } = string.Empty;
+
+    /// <summary>Human-readable display name.</summary>
+    public string? DisplayName { get; set; }
+
+    /// <summary>Provider kind (OpenAI or OpenAICompatible).</summary>
+    public string ProviderKind { get; set; } = string.Empty;
+
+    /// <summary>Provider model identifier.</summary>
+    public string ModelId { get; set; } = string.Empty;
+
+    /// <summary>Optional provider endpoint.</summary>
+    public string? Endpoint { get; set; }
+
+    /// <summary>Credential reference (env:, config:, or file:).</summary>
+    public string CredentialReference { get; set; } = string.Empty;
+
+    /// <summary>Trusted transaction-security party identifier.</summary>
+    public string PartyId { get; set; } = string.Empty;
+
+    /// <summary>Whether this slot should be enabled.</summary>
+    public bool Enabled { get; set; } = true;
+
+    /// <summary>Per-call timeout in seconds.</summary>
+    public int TimeoutSeconds { get; set; }
+
+    /// <summary>Maximum output tokens.</summary>
+    public int MaxOutputTokens { get; set; }
+
+    /// <summary>Optional system prompt.</summary>
+    public string? SystemPrompt { get; set; }
+
+    /// <summary>Initial orchestration weight. Defaults to 1.0 when omitted or invalid.</summary>
+    public double OrchestrationWeight { get; set; } = 1.0;
+
+    /// <summary>Whether enabling may replace another enabled slot for the same role.</summary>
+    public bool ReplaceExisting { get; set; } = true;
+
+    /// <summary>Projects this seed definition onto a registry upsert request.</summary>
+    /// <returns>The equivalent <see cref="UpsertBrainSlotRequest"/>.</returns>
+    public UpsertBrainSlotRequest ToUpsertRequest()
+        => new()
+        {
+            Role = Role,
+            DisplayName = DisplayName,
+            ProviderKind = ProviderKind,
+            ModelId = ModelId,
+            Endpoint = Endpoint,
+            CredentialReference = CredentialReference,
+            PartyId = PartyId,
+            Enabled = Enabled,
+            TimeoutSeconds = TimeoutSeconds,
+            MaxOutputTokens = MaxOutputTokens,
+            SystemPrompt = SystemPrompt,
+            OrchestrationWeight = OrchestrationWeight,
+            ReplaceExisting = ReplaceExisting,
+        };
 }
 
 /// <summary>

@@ -101,6 +101,36 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
         Assert.Contains("mcp_todo_update", choice.Message.Content!, StringComparison.Ordinal);
     }
 
+    /// <summary>FR-MCP-QBOPENAI-001 (G-016): an orchestration failure maps to an OpenAI-compatible 500 error envelope.</summary>
+    [Fact]
+    public async Task ChatCompletions_OrchestrationThrows_ReturnsOpenAiErrorEnvelope()
+    {
+        using var factory = BuildFactory(new ThrowingOrchestration(), new FakeExecutor());
+        using var client = Authorized(factory);
+
+        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), SimpleRequest()).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("server_error", json, StringComparison.Ordinal);
+        Assert.Contains("boom", json, StringComparison.Ordinal);
+    }
+
+    /// <summary>FR-MCP-QUAD-SESSION-001: the X-Session-Id header attaches the run to its session (reaches orchestration).</summary>
+    [Fact]
+    public async Task ChatCompletions_WithSessionHeader_AttachesSessionToOrchestration()
+    {
+        var orchestration = new CapturingOrchestration { Output = "ok" };
+        using var factory = BuildFactory(orchestration, new FakeExecutor());
+        using var client = Authorized(factory);
+        client.DefaultRequestHeaders.Add("X-Session-Id", "sess-42");
+
+        await PostAsync(client, SimpleRequest()).ConfigureAwait(true);
+
+        Assert.NotNull(orchestration.LastRequest);
+        Assert.Equal("sess-42", orchestration.LastRequest!.Metadata["sessionId"]);
+    }
+
     private static CustomWebApplicationFactory BuildFactory(
         IQuadBrainOrchestrationService orchestration,
         IQuadBrainInternalToolExecutor executor)
@@ -140,6 +170,43 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
         public Task<QuadBrainOrchestrationResponse> ExecuteFullOrchestrationAsync(
             QuadBrainOrchestrationRequest request, CancellationToken cancellationToken = default)
             => Task.FromResult(new QuadBrainOrchestrationResponse { Status = "committed", Output = Output });
+
+        public Task<AotReconciliationResponse> ExecuteAotReconciliationAsync(
+            AotReconciliationRequest request, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<QuadBrainWeightUpdateResponse> ExecuteWeightUpdateAsync(
+            QuadBrainWeightUpdateRequest request, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+    }
+
+    private sealed class CapturingOrchestration : IQuadBrainOrchestrationService
+    {
+        public string Output { get; set; } = string.Empty;
+
+        public QuadBrainOrchestrationRequest? LastRequest { get; private set; }
+
+        public Task<QuadBrainOrchestrationResponse> ExecuteFullOrchestrationAsync(
+            QuadBrainOrchestrationRequest request, CancellationToken cancellationToken = default)
+        {
+            LastRequest = request;
+            return Task.FromResult(new QuadBrainOrchestrationResponse { Status = "committed", Output = Output });
+        }
+
+        public Task<AotReconciliationResponse> ExecuteAotReconciliationAsync(
+            AotReconciliationRequest request, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<QuadBrainWeightUpdateResponse> ExecuteWeightUpdateAsync(
+            QuadBrainWeightUpdateRequest request, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+    }
+
+    private sealed class ThrowingOrchestration : IQuadBrainOrchestrationService
+    {
+        public Task<QuadBrainOrchestrationResponse> ExecuteFullOrchestrationAsync(
+            QuadBrainOrchestrationRequest request, CancellationToken cancellationToken = default)
+            => throw new InvalidOperationException("boom");
 
         public Task<AotReconciliationResponse> ExecuteAotReconciliationAsync(
             AotReconciliationRequest request, CancellationToken cancellationToken = default)

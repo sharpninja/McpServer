@@ -543,8 +543,13 @@ public sealed class McpDbContext : DbContext
             || (!string.IsNullOrEmpty(_workspaceId)
                 && e.Scope == MemoryEntity.WorkspaceScope
                 && e.WorkspaceId == _workspaceId));
-        modelBuilder.Entity<BrainSlotDefinitionEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<BrainSlotInvocationEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        // TR-MCP-QUAD-001: the QuadBrain subsystem is GLOBAL (one quad shared by every workspace and session).
+        // Brain-slot definitions and their invocation audit rows are stored under the global workspace
+        // (WorkspaceId == "") and visible in every workspace context; the per-session dimension is carried by the
+        // invocation's TurnId/metadata, not the workspace. Invocations FK to definitions on (WorkspaceId, SlotId),
+        // so both must share the same (global) workspace id.
+        modelBuilder.Entity<BrainSlotDefinitionEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty);
+        modelBuilder.Entity<BrainSlotInvocationEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty);
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
@@ -966,6 +971,9 @@ public sealed class McpDbContext : DbContext
         {
             ToolDefinitionEntity toolDefinition => toolDefinition.WorkspacePath ?? string.Empty,
             ToolDefinitionTagEntity toolDefinitionTag => ResolveToolDefinitionTagWorkspaceId(toolDefinitionTag),
+            // TR-MCP-QUAD-001: QuadBrain brain-slot definitions and invocation rows are global; always stamp "".
+            BrainSlotDefinitionEntity => string.Empty,
+            BrainSlotInvocationEntity => string.Empty,
             // BUG-SESSIONLOG-WS-002: session-log children always inherit the parent
             // graph's stamp so a single session never holds mixed WorkspaceIds.
             SessionLogTurnEntity turn => FirstNonEmpty(turn.SessionLog?.WorkspaceId),

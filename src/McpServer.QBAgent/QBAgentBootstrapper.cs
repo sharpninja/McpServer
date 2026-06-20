@@ -25,8 +25,9 @@ public sealed record QBAgentBootstrapResult(QBAgentBootstrapStatus Status, McpAg
 /// FR-MCP-QBAGENT-001 / TR-MCP-QBAGENT-001: Bootstraps QBAgent from the <c>AGENTS-README-FIRST.yaml</c> marker
 /// in the directory the agent was started in. QBAgent communicates exclusively with the MCP Server QuadBrain
 /// service: it binds the QuadBrain endpoint (<c>baseUrl</c>) and the <c>apiKey</c> from the marker and applies
-/// the QBAgent (ACID tightly coupled) profile. When no marker is present QBAgent exits gracefully and contacts
-/// no endpoint.
+/// the QBAgent (QuadBrain-only) identity under the standard (non-ACID) execution profile so the agent can execute
+/// action tools (ACID tight-coupling is intentionally not applied to QBAgent). When no marker is present QBAgent
+/// exits gracefully and contacts no endpoint.
 /// </summary>
 public static class QBAgentBootstrapper
 {

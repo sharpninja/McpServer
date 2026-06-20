@@ -10,6 +10,8 @@
 - [Troubleshooting / FAQ](USER-GUIDE.md#7-troubleshooting-and-faq)
 - [Documentation index and wiring](USER-GUIDE.md#8-wire-docs-into-readme-index-and-docs-folder)
 - [MCP Server Guide](MCP-SERVER.md)
+- [QuadBrain User Guide](QUADBRAIN.md)
+- [QBAgent User Guide](QBAGENT.md)
 - [FAQ](FAQ.md)
 - [Client Integration](CLIENT-INTEGRATION.md)
 - [Agent Plugin Availability](AGENT-PLUGIN-AVAILABILITY.md)

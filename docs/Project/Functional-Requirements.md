@@ -1264,7 +1264,7 @@ The transaction subscriber SHALL log every received transaction message (commit 
 QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On startup it SHALL read the marker file (`AGENTS-README-FIRST.yaml`) in its start directory and use that marker's `apiKey` and `baseUrl` to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
 
 **Acceptance Criteria:**
-- [x] A valid marker binds `baseUrl` and `apiKey` from the marker (not from defaulted options) and applies the QBAgent (ACID tightly coupled, QuadBrain-only) profile.
+- [x] A valid marker binds `baseUrl` and `apiKey` from the marker (not from defaulted options) and applies the QBAgent (QuadBrain-only) identity under the standard (non-ACID) execution profile, so the agent can execute action tools while reaching QuadBrain as an OpenAI-compatible model. (ACID tight-coupling is intentionally NOT applied to QBAgent; see TR-MCP-QBOPENAI-001 slice 4.)
 - [x] A marker missing `apiKey` or with a non-absolute `baseUrl` is rejected as invalid.
 - [x] With no marker file present, QBAgent reports a graceful no-marker exit (exit code 0) and contacts no endpoint.
 - [x] An interactive QuadBrain coding-task run loop routes each prompt through the bound runtime (`ExecuteQuadBrainCodingTaskAsync`), handles blank lines and exit commands, stops at end of input, and reports executor failures without aborting the loop.
@@ -1291,7 +1291,193 @@ QuadBrain SHALL execute MCP-internal tools (those exposed by McpServer itself - 
 - [x] Tools are classified MCP-internal (`mcp_` prefix) vs external (`QuadBrainToolClassifier`).
 - [x] The interceptor executes internal tools server-side and strips successfully executed calls; ONLY external calls are emitted to the agent as tool commands (`QuadBrainToolInterceptor`), wired into the OpenAI surface.
 - [x] Internal tool failures (and unhandled internal tools) are NEVER emitted to the agent as tool commands; they are surfaced to QBAgent as a note (assistant content) and earmarked as Session Log failures.
-- [ ] (Sub-slice) A concrete executor routes TODO/Requirements mutations through the transaction-gated services so the AoT commit applies them server-side.
-- [ ] (Sub-slice) QuadBrain orchestration performs the Session Log write for the turn (including the internal-tool failure entries).
+- [x] (Sub-slice) A concrete executor (`QuadBrainInternalToolExecutor`, FR-MCP-QBEXEC-002) routes TODO, repo, and Requirements (FR/TR/TEST create/update) mutations through the transaction-gated services so the AoT commit applies them server-side.
+- [x] (Sub-slice) Internal-tool failures are recorded to the session log via `IBrainInteractionSessionLogger.LogInternalToolFailureAsync` (best-effort; a no-op when no session/turn context is carried), in addition to being surfaced to the agent as a note.
 
-**Covered by:** `QuadBrainToolClassifier`, `QuadBrainToolInterceptor`, `IQuadBrainInternalToolExecutor`, `QuadBrainOpenAiChatService`, `QuadBrainToolInterceptionTests`, `QuadBrainOpenAiChatServiceTests`
+**Covered by:** `QuadBrainToolClassifier`, `QuadBrainToolInterceptor`, `IQuadBrainInternalToolExecutor`, `QuadBrainInternalToolExecutor`, `QuadBrainOpenAiChatService`, `BrainInteractionSessionLogger`, `QuadBrainToolInterceptionTests`, `QuadBrainOpenAiChatServiceTests`, `QuadBrainInternalToolExecutorTests`
+
+## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
+
+The server SHALL provision the four GLOBAL Quad-Brain roles (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, so a deployed server can run the live four-brain loop directly. Provisioning is a single global set (brain definitions are global, not workspace-scoped). The QuadBrain OpenAI-compatible endpoint (`/v1`) still resolves the caller's workspace from its Bearer/API-key token, but that workspace context is used to scope the server-side internal TOOL mutations (`mcp_todo_*`, `mcp_repo_*`, `mcp_requirements_*`), not brain-slot visibility (the brains are global).
+
+**Acceptance Criteria:**
+- [x] When `Mcp:BrainSlots:ExecutionEnabled` is true and `Mcp:BrainSlots:Slots` is populated, the startup seeder upserts and enables each configured slot as a single global set and the quad becomes ready in every workspace context.
+- [x] Provisioning is idempotent across restarts and does not abort host startup when a single slot definition is invalid.
+- [x] When execution is disabled or no slots are configured, the seeder provisions nothing.
+- [x] A `/v1/chat/completions` request authenticated with a workspace token runs the real four-role orchestration over the global brains and returns the Arbiter decision (or its elected tool calls); the token's workspace scopes only the internal-tool mutations.
+
+**Covered by:** `BrainSlotStartupSeeder`, `BrainSlotOptions`, `BrainSlotSeedDefinition`, `BrainSlotRegistryService`, `WorkspaceResolutionMiddleware`, `QuadBrainOrchestrationService`, `BrainSlotStartupSeederTests`, `QuadBrainLiveOrchestrationTests`, `QuadBrainLiveEndpointIntegrationTests`
+
+## FR-MCP-QUAD-SESSION-001 Per-session QuadBrain instances over global brains
+
+QuadBrain brain DEFINITIONS are global, but a running QuadBrain orchestration is an INSTANCE attached to a single session: multiple instances may run concurrently, each bound to its own session. A `/v1/chat/completions` request SHALL declare its session via the `X-Session-Id` header (with an optional `X-Turn-Id` header to correlate the turn); the server SHALL thread that session (and turn) into the orchestration so inter-brain logging, internal-tool-failure logging, and turn transactions are correlated to the session and concurrent instances stay isolated. A request without `X-Session-Id` runs as an anonymous instance.
+
+**Acceptance Criteria:**
+- [x] A `/v1` request's `X-Session-Id` (and optional `X-Turn-Id`) header is threaded into the orchestration request metadata (`sessionId`/`turnId`) and `TurnId`.
+- [x] Inter-brain logging and internal-tool-failure logging use the attached session/turn (and are a no-op when absent).
+- [x] A request with no `X-Session-Id` attaches no session metadata and runs as an anonymous instance.
+- [x] Multiple concurrent `/v1` requests with different `X-Session-Id` values are independent instances over the shared global brains.
+
+**Covered by:** `QuadBrainOpenAiController`, `QuadBrainOpenAiChatService`, `QuadBrainOrchestrationService`, `BrainInteractionSessionLogger`, `QuadBrainOpenAiChatServiceTests`, `QuadBrainOpenAiEndpointIntegrationTests`
+
+## FR-MCP-QBTOOLS-001 Agent-side file tools (read/write/list/edit)
+
+The QBAgent external tool surface shall provide four file tool primitives (read_file, write_file, list_files, edit_file) as transport adapters that delegate all operations to the MCP Server RepoFileService via McpServerClient, ensuring the server-side service remains the single enforcement gate for path-traversal safety, allowlist enforcement, and transactional rollback.
+
+**Acceptance Criteria:**
+- [x] read_file, write_file, list_files, and edit_file tools are exposed by name
+- [x] File tools route through McpServerClient.Repo interface to server RepoFileService
+- [x] File tool classes carry no filesystem logic of their own
+- [x] Path safety and allowlist enforcement are server-owned
+- [x] Transactional rollback logic is server-owned
+
+**Covered by:** `src/McpServer.QBAgent.Tools/FileTools.cs`, `src/McpServer.Support.Mcp/Controllers/RepoController.cs`, `src/McpServer.Services/Services/IRepoFileService.cs`, `tests/McpServer.Support.Mcp.IntegrationTests/Controllers/QBAgentToolsIntegrationTests.cs`
+
+## FR-MCP-QBTOOLS-002 Agent-side PowerShell execution tool
+
+The QBAgent external tool surface shall provide a run_powershell tool that reuses a single in-process hosted PowerShell session per QBAgent run, with serialized invocations and persistent working directory and variable state across multiple calls within a single agent session.
+
+**Acceptance Criteria:**
+- [x] run_powershell tool is exposed by name and not mcp_-prefixed
+- [x] Tool uses IHostedPowerShellSessionManager for lazy session creation and reuse
+- [x] Sessions are created on first run and reused across subsequent calls
+- [x] Invocations are serialized with a SemaphoreSlim gate to prevent concurrent execution
+- [x] Working directory and variables persist across calls within a single tool instance
+- [x] Session is properly disposed when the tool set is disposed
+
+**Covered by:** `src/McpServer.QBAgent.Tools/PowerShellTool.cs`, `tests/McpServer.QBAgent.Tests/Tools/PowerShellToolTests.cs`, `tests/McpServer.QBAgent.Tests/Tools/QBAgentExternalToolSurfaceTests.cs`
+
+## FR-MCP-QBTOOLS-003 Optional agent-side Bash execution tool
+
+The QBAgent external tool surface shall provide an optional run_bash tool that executes commands through Git Bash when available, reports unavailability gracefully (without failing the agent turn) when bash.exe is not on PATH, and returns captured stdout/stderr plus exit code for successful invocations.
+
+**Acceptance Criteria:**
+- [x] run_bash tool is exposed by name and not mcp_-prefixed
+- [x] Tool runs commands via IProcessRunner with bash.exe in working directory
+- [x] When bash.exe is missing from PATH, result.Available is false and error message explains unavailability
+- [x] When bash is available but command fails, result.Available is true and result.Success is false with exit code captured
+- [x] stdout and stderr are captured and returned in the result
+- [x] Agent turn does not fail when bash is unavailable - fallback to run_powershell continues normally
+
+**Covered by:** `src/McpServer.QBAgent.Tools/BashCommandTool.cs`, `tests/McpServer.QBAgent.Tests/Tools/BashCommandToolTests.cs`, `tests/McpServer.QBAgent.Tests/Tools/ToolFakes.cs`
+
+## FR-MCP-QBTOOLS-004 Agent-side git command tool with allowlisted subcommands and push gating
+
+The QBAgent external tool surface shall provide a git tool that runs allowlisted git subcommands (status, diff, log, branch, add, commit, checkout, push, reset, show, fetch, rev-parse, remote) through IProcessRunner with no shell, enforces push-to-origin-only with explicit opt-in gating, and rejects unknown subcommands and URL/SCP-style remotes before launching git.
+
+**Acceptance Criteria:**
+- [x] git tool accepts subcommand and optional arguments parameters
+- [x] Tool validates subcommand against allowlist and rejects unknown subcommands without launching git
+- [x] git push is disabled by default (AllowGitPush opt-in gate)
+- [x] When push is enabled, tool enforces origin-only: rejects non-origin remote names
+- [x] Tool rejects URL remotes (https://...) and SCP-style remotes (git@host:repo) before launch
+- [x] When push arguments omit remote, tool injects "origin" so push never relies on ambient defaults
+- [x] Tool uses IProcessRunner with no shell so arguments are passed as argv (no shell injection possible)
+- [x] git push with flags-only arguments has "origin" appended
+- [x] Mutating subcommands (commit, push) run in the workspace directory
+
+**Covered by:** `src/McpServer.QBAgent.Tools/GitCommandTool.cs`, `src/McpServer.McpAgent/McpAgentOptions.cs`, `tests/McpServer.QBAgent.Tests/Tools/GitCommandToolTests.cs`
+
+## FR-MCP-QBTOOLS-006 Targeted file edit (find-and-replace) operation
+
+The QBAgent external tool surface shall provide an edit_file tool that applies a targeted string replacement to an existing repository file by routing through the server RepoFileService.EditAsync, ensuring path-safety, audit logging, and transactional rollback are server-owned. Ambiguous matches (multiple occurrences without replaceAll) are rejected; optional expectedOccurrences guards the match count.
+
+**Acceptance Criteria:**
+- [x] edit_file tool accepts path, oldString, newString, replaceAll (default false), and expectedOccurrences parameters
+- [x] Tool routes all edits through McpServerClient.Repo.EditFileAsync to server RepoFileService
+- [x] Missing or empty oldString is rejected by server
+- [x] Ambiguous match (multiple occurrences) fails unless replaceAll is true
+- [x] When expectedOccurrences is supplied, actual match count must equal it or edit fails
+- [x] Server enforces path allowlist on edit operations
+- [x] Server logs edit operations for audit
+- [x] Replacement success and match count are returned in FileEditResult
+- [x] Error messages are returned when edit cannot be applied
+
+**Covered by:** `src/McpServer.QBAgent.Tools/FileTools.cs`, `src/McpServer.Support.Mcp/Controllers/RepoController.cs`, `src/McpServer.Services/Services/IRepoFileService.cs`, `src/McpServer.Client/Models/RepoModels.cs`
+
+## FR-MCP-QBTOOLS-007 QBAgent external tool surface packaging and disposal
+
+The QBAgent external tool surface shall be exposed as a QBAgentToolSet that contains all seven external primitives (read_file, write_file, list_files, edit_file, run_powershell, run_bash, git) as a ready-to-use IReadOnlyList<AITool> for integration with the Microsoft Agent Framework, and shall own the lifetime of the disposable PowerShell tool so a single Dispose() call releases all reused sessions and gates.
+
+**Acceptance Criteria:**
+- [x] QBAgentExternalToolSurface.Create factory method assembles all seven tools
+- [x] No tool is mcp_-prefixed so QuadBrain interceptor treats them as external
+- [x] QBAgentToolSet exposes Tools property as IReadOnlyList<AITool> for ChatOptions.Tools
+- [x] QBAgentToolSet owns the PowerShellTool instance and disposes it
+- [x] Dispose() on QBAgentToolSet properly disposes the reused PowerShell session and gate
+- [x] Dispose() is idempotent
+- [x] All seven external primitives are exposed by name
+
+**Covered by:** `src/McpServer.QBAgent.Tools/QBAgentExternalToolSurface.cs`, `src/McpServer.QBAgent/Program.cs`, `tests/McpServer.QBAgent.Tests/Tools/QBAgentExternalToolSurfaceTests.cs`
+
+## FR-MCP-QBSKILLS-001 SKILL.md Frontmatter Parser and Manifest
+
+The system shall parse agentskills.io SKILL.md files: a YAML frontmatter block (delimited by `---` lines, requiring `name` and `description` fields, with optional `license` and `allowed-tools` fields) followed by a markdown instruction body. The manifest record shall capture all fields plus the body and file path.
+
+**Acceptance Criteria:**
+- [x] A valid SKILL.md with name, description, license, and allowed-tools parses into a SkillManifest with all fields extracted. (evidence: SkillManifestParserTests.Parse_Valid_ExtractsAllFields passes with all fields populated.)
+- [x] Missing required name field is rejected with a descriptive error message. (evidence: SkillManifestParserTests.Parse_MissingName_Fails rejects and identifies 'name' in error.)
+- [x] Missing required description field is rejected with a descriptive error message. (evidence: SkillManifestParserTests.Parse_MissingDescription_Fails rejects and identifies 'description' in error.)
+- [x] A document without YAML frontmatter is rejected with error describing the missing frontmatter. (evidence: SkillManifestParserTests.Parse_NoFrontmatter_Fails rejects documents starting with markdown.)
+- [x] CRLF and LF line endings are both supported. (evidence: SkillManifestParserTests.Parse_CrlfLineEndings_Succeeds handles \r\n correctly.)
+- [x] The frontmatter and body are cleanly separated; the body is not included in parsed metadata. (evidence: SkillManifestParserTests.Parse_Valid_ExtractsAllFields asserts 'name:' is not in body.)
+
+**Covered by:** SkillManifest, SkillManifestParser, ISkillManifestParser
+
+## FR-MCP-QBSKILLS-002 Skill Discovery and Loading External Tools
+
+The system shall expose list_skills and load_skill as non-mcp_ external tools to the QBAgent loop. The list_skills tool returns discovery summaries (name + description only) for all skills; the load_skill tool accepts a skill name and returns the full instruction body on demand, implementing progressive disclosure to reduce initial system prompt size.
+
+**Acceptance Criteria:**
+- [x] The list_skills tool is exposed as a non-mcp_ prefixed tool with name 'list_skills' and relevant description. (evidence: SkillToolTests.CreateTools_ExposesListAndLoad_NonMcpPrefixed asserts 'list_skills' is in tool names and no mcp_ prefix is present.)
+- [x] The load_skill tool is exposed as a non-mcp_ prefixed tool with name 'load_skill'. (evidence: SkillToolTests.CreateTools_ExposesListAndLoad_NonMcpPrefixed asserts 'load_skill' is in tool names.)
+- [x] list_skills returns only name and description for each skill, suitable for discovery. (evidence: SkillToolTests.ListSkills_ReturnsDiscovery returns SkillSummary objects with exactly name and description.)
+- [x] load_skill returns the full instruction body for a known skill by name. (evidence: SkillToolTests.LoadSkill_Known_ReturnsBody returns body text from the manifest.)
+- [x] load_skill returns a helpful not-found message when the skill does not exist. (evidence: SkillToolTests.LoadSkill_Unknown_ReturnsNotFound returns message containing 'not found'.)
+
+**Covered by:** SkillTool, ISkillRegistry
+
+## FR-MCP-QBSKILLS-003 Skill Registry with Progressive Disclosure and Recursive Discovery
+
+The system shall implement a SkillRegistry that discovers skills from one or more root directories by recursively locating SKILL.md files, supporting both flat (skills/x/SKILL.md) and nested (vendor/plugins/p/skills/x/SKILL.md) layouts. The registry implements progressive disclosure: Discover() returns a summary list (name + description only) with lazy loading; Load(name) returns the full manifest (including body) on demand. Earlier roots win on name conflict. Parsing errors and missing directories are handled gracefully without throwing.
+
+**Acceptance Criteria:**
+- [x] The registry discovers valid SKILL.md files in flat layout (skills/x/SKILL.md) and nested layouts (vendor/plugins/p/skills/x/SKILL.md) recursively. (evidence: SkillRegistryTests.Discover_FindsValidSkillsAcrossLayouts validates both flat and nested layouts in one test run.)
+- [x] Discover() returns name and description only (SkillSummary) for each valid skill, ordered by name. (evidence: SkillRegistryTests.Discover_FindsValidSkillsAcrossLayouts returns SkillSummary objects in alphabetical order.)
+- [x] Load(name) returns the full manifest body for a known skill and null for an unknown one. (evidence: SkillRegistryTests.Load_ReturnsBody_OrNull retrieves full body and returns null when missing.)
+- [x] Invalid skills (missing name or description) are silently skipped without throwing during discovery. (evidence: SkillRegistryTests.Discover_FindsValidSkillsAcrossLayouts creates a broken skill and verifies it is not included in discovery results.)
+- [x] A nonexistent root directory is skipped gracefully without throwing. (evidence: SkillRegistryTests.Discover_NonexistentRoot_NoThrow passes a missing path and asserts no exception occurs.)
+- [x] All seven authored workspace skills (byrd-tdd-process, mcp-session-logging, mcp-todo, mcp-requirements-traceability, git-usage, bash-usage, edit-file-usage) parse and are discoverable. (evidence: AuthoredSkillsTests.AuthoredSkills_AllParseAndDiscover asserts all seven skills are in the discovery list.)
+- [x] Each authored workspace skill has a non-empty instruction body when loaded. (evidence: AuthoredSkillsTests.AuthoredSkills_HaveBodies verifies each skill loads a non-empty body.)
+
+**Covered by:** SkillRegistry, ISkillRegistry, QBAgentSkillsServiceCollectionExtensions
+
+
+
+## FR-MCP-QBEXEC-002 Concrete QuadBrain internal-tool executor
+
+The MCP server SHALL route QuadBrain-elected internal mutating tools (`mcp_todo_create`, `mcp_todo_update`, `mcp_todo_delete`, `mcp_repo_write`, `mcp_repo_edit`) through transaction-gated services so every mutation commits atomically through the turn transaction coordinator. Read-only and unknown internal tools SHALL return `Unhandled` (never throwing), surfacing them as agent notes rather than executing server-side.
+
+**Acceptance Criteria:**
+- [x] `mcp_todo_create`, `mcp_todo_update`, and `mcp_todo_delete` are routed through `ITransactionGatedTodoMutationService`.
+- [x] `mcp_repo_write` and `mcp_repo_edit` are routed through `IRepoFileService`.
+- [x] All mutations commit through the turn transaction coordinator, enforcing ACID semantics.
+- [x] Requirements FR/TR/TEST create/update mutations (`mcp_requirements_create_fr/tr/test`, `mcp_requirements_update_fr/tr/test`) are routed through the transaction-gated `IRequirementsDocumentService`; read-only requirements tools (`mcp_requirements_list_*`, `mcp_requirements_get_*`) return `Unhandled`.
+- [x] Unknown and read-only tools return `InternalToolExecutionOutcome.Unhandled` without throwing.
+- [x] Invalid arguments (malformed JSON, missing required fields) return `Fail` outcomes.
+
+**Covered by:** `QuadBrainInternalToolExecutor`, `QuadBrainInternalToolExecutorTests`
+
+## FR-MCP-QBEXEC-003 Inter-brain session logging
+
+The MCP server SHALL append full-text brain interaction records (complete prompt + complete model output) to the session log for every brain invocation, correlated by turn id, with secret redaction before logging. Logging is best-effort: when no session or turn context is available, or append fails, orchestration continues uninterrupted without propagating the logging error.
+
+**Acceptance Criteria:**
+- [x] Each brain role invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) logs the full prompt and full output text as two dialog items.
+- [x] Logs are appended to the session-log turn, correlated by the request id and session id from orchestration metadata.
+- [x] Bearer tokens and API keys matching common patterns are redacted before logging (Bearer prefix, api_key/x-api-key patterns).
+- [x] When session/turn context is null or empty, logging is a no-op without attempting to append.
+- [x] When append fails (exception, turn not found, service unavailable), the exception is logged at Warning level and orchestration continues without interruption.
+- [x] Logging failure never causes brain-slot invocation, AoT reconciliation, or weight updates to reject or rollback.
+
+**Covered by:** `BrainInteractionSessionLogger`, `BrainInteractionSessionLoggerTests`, `QuadBrainOrchestrationService`

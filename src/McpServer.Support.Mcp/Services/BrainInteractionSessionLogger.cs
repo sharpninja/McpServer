@@ -29,6 +29,25 @@ public interface IBrainInteractionSessionLogger
         string prompt,
         string? output,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-MCP-QBEXEC-001 (AC-5): Records an MCP-internal tool execution failure to the session-log turn so the
+    /// failure is durably captured (not only surfaced to the agent as a note). Best-effort: a no-op when no
+    /// session/turn context is available.
+    /// </summary>
+    /// <param name="sourceType">Session-log source type (for example <c>QBAgent</c>).</param>
+    /// <param name="sessionId">Session identifier; when null/empty the call is a no-op.</param>
+    /// <param name="turnId">Turn request id; when null/empty the call is a no-op.</param>
+    /// <param name="toolName">The MCP-internal tool that failed.</param>
+    /// <param name="error">The failure reason, if any.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task LogInternalToolFailureAsync(
+        string sourceType,
+        string? sessionId,
+        string? turnId,
+        string toolName,
+        string? error,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>FR-MCP-QBEXEC-003: Default <see cref="IBrainInteractionSessionLogger"/> over <see cref="ISessionLogService"/>.</summary>
@@ -76,6 +95,42 @@ public sealed partial class BrainInteractionSessionLogger : IBrainInteractionSes
             // durable index even if full-text dialog capture fails (e.g. the turn was not yet created).
             _logger.LogWarning(ex, "Inter-brain full-text session logging failed for {SourceType}/{SessionId}/{TurnId} role {Role}.",
                 sourceType, sessionId, turnId, role);
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task LogInternalToolFailureAsync(
+        string sourceType,
+        string? sessionId,
+        string? turnId,
+        string toolName,
+        string? error,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(sourceType) || string.IsNullOrWhiteSpace(sessionId) || string.IsNullOrWhiteSpace(turnId))
+            return; // No session/turn context to correlate the failure with.
+
+        var timestamp = DateTimeOffset.UtcNow.ToString("O");
+        var items = new ProcessingDialogItemDto[]
+        {
+            new()
+            {
+                Timestamp = timestamp,
+                Role = "model",
+                Category = "error",
+                Content = $"MCP-internal tool '{toolName}' failed server-side and was not emitted to the agent"
+                          + (string.IsNullOrWhiteSpace(error) ? "." : $": {Redact(error)}"),
+            },
+        };
+
+        try
+        {
+            await _sessionLog.AppendProcessingDialogAsync(sourceType, sessionId, turnId, items, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Internal-tool failure session logging failed for {SourceType}/{SessionId}/{TurnId} tool {Tool}.",
+                sourceType, sessionId, turnId, toolName);
         }
     }
 

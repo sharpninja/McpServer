@@ -409,3 +409,92 @@
   **Acceptance Criteria:**
   - [x] FR-SUPPORT-010 maps to this TEST ID while split child rows retain their dedicated support test IDs.
   - [x] Later support slices remain mapped to their narrower dedicated TEST rows.
+- TEST-MCP-QBSEED-001: Unit coverage for `BrainSlotStartupSeeder` over a real in-memory `McpDbContext`, real `BrainSlotRegistryService`, and the in-memory key server (only the credential resolver stubbed).
+  **Acceptance Criteria:**
+  - [x] With execution enabled and four roles configured, `StartAsync` makes the quad ready (all roles enabled).
+  - [x] Running the seeder twice is idempotent (exactly four enabled slots, no exception).
+  - [x] With execution disabled, or with no slots configured, nothing is provisioned.
+  - [x] One invalid slot is skipped without throwing and the remaining valid slots are still provisioned.
+- TEST-MCP-QBLIVE-001: Service-composition coverage of the real four-role Quad-Brain loop (`QuadBrainOrchestrationService` + `BrainSlotInvocationService` + `BrainSlotRegistryService` + in-memory key server), faking only `IBrainSlotChatClientFactory` and the committing transaction coordinator.
+  **Acceptance Criteria:**
+  - [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
+  - [x] A `tool_calls` Arbiter output is returned verbatim as the orchestration output.
+  - [x] With only three roles seeded the loop rejects `QuadNotReady` without calling any brain.
+  - [x] With execution disabled no brain is called and the loop rejects `ExecutionDisabled`.
+- TEST-MCP-QBLIVEINT-001: Integration coverage that drives the real orchestration through `POST /v1/chat/completions` over four seeded slots, faking only the per-brain LLM call and the transaction coordinator.
+  **Acceptance Criteria:**
+  - [x] A plain Arbiter decision is returned as the assistant message (finish_reason `stop`) and all four roles were invoked.
+  - [x] A `tool_calls` Arbiter output surfaces as an OpenAI assistant tool call (finish_reason `tool_calls`).
+  - [x] With no slots seeded the endpoint returns an empty decision (the real loop rejected `QuadNotReady`).
+
+- TEST-MCP-QBTOOLS-001: Verifies the QBAgent external tool surface exposes the file/powershell/bash/git primitives by name and that they are NOT mcp_-prefixed, so the QuadBrain interceptor treats them as external tools the agent executes (FR-MCP-QBTOOLS-001/007, TR-MCP-QBTOOLS-000).
+  **Acceptance Criteria:**
+  - [x] All seven external primitives (read_file, write_file, list_files, edit_file, run_powershell, run_bash, git) are present by name
+  - [x] No external tool carries the mcp_ prefix
+  - [x] Disposing the tool set is idempotent
+
+- TEST-MCP-QBTOOLS-002: Verifies the QBAgent git tool builds expected git invocations, constrains push to the origin remote, gates push behind the opt-in, and rejects unknown subcommands (FR-MCP-QBTOOLS-004).
+  **Acceptance Criteria:**
+  - [x] status builds `git status` in the workspace and reports success
+  - [x] argument strings are appended after the subcommand
+  - [x] unknown subcommands are rejected and git is never launched
+  - [x] push is refused when the opt-in is off and git is never launched
+  - [x] push to a non-origin remote is rejected even when push is enabled
+  - [x] push with no remote injects origin so it never relies on ambient defaults
+  - [x] push to origin with a branch is allowed and passed through
+  - [x] GuardPush appends origin when only flags are present
+  - [x] push -u origin main is allowed (upstream flag precedes origin remote)
+  - [x] push to a URL remote is rejected before git is launched
+  - [x] push to an scp-style remote (git@host:repo) is rejected
+  - [x] mutating subcommands (commit) run in the workspace directory
+
+- TEST-MCP-QBTOOLS-003: Verifies the optional run_bash tool reports unavailability cleanly when Git Bash is not installed and returns output when it is (FR-MCP-QBTOOLS-003).
+  **Acceptance Criteria:**
+  - [x] When bash.exe is missing, the runner returns -1/"not found" and the tool reports available=false
+  - [x] When bash runs, the tool reports available=true and surfaces stdout and exit code
+  - [x] A non-zero bash exit is available but not successful
+
+- TEST-MCP-QBTOOLS-007: Verifies the run_powershell tool creates a hosted session lazily and executes the command against it (FR-MCP-QBTOOLS-002).
+  **Acceptance Criteria:**
+  - [x] The tool creates one session and runs the command, returning the captured output
+  - [x] A second call reuses the same session (no new session created)
+  - [x] An empty command is rejected before any session work
+  - [x] When session creation fails, the tool surfaces the error and does not execute a command
+  - [x] Disposing the tool closes the reused session
+
+- TEST-MCP-QBTOOLSINT-001: End-to-end test of the QBAgent tool + skill surface. The real Microsoft Agent Framework loop runs with QuadBrain (scripted) as the model over the in-memory server; the agent loads a skill then writes and edits a workspace file, with the file tools routed through the MCP client to the server's RepoFileService (FR-MCP-QBTOOLS-001/006/007, FR-MCP-QBSKILLS-002).
+  **Acceptance Criteria:**
+  - [x] The agent loads a skill, then write_file + edit_file land on the server workspace file
+  - [x] edit_file replaces the specified string in the target file
+  - [x] File content persists correctly across write and edit operations
+
+- TEST-MCP-QBSKILLS-001: **SKILL.md Frontmatter Parser Validation** - Verifies the manifest parser extracts name, description, license, allowed-tools fields; rejects missing required fields with descriptive errors; handles CRLF and LF line endings; separates body from frontmatter. (evidence: SkillManifestParserTests validates parsing of valid manifests and rejection cases including missing fields, missing frontmatter, and line ending normalization.)
+
+- TEST-MCP-QBSKILLS-002: **Skill Registry Discovery and Loading** - Verifies the registry discovers skills recursively from flat and nested layouts; returns summary list (name+description) via Discover(); loads full manifest body via Load(name); silently skips invalid skills and nonexistent roots; all seven authored workspace skills parse with non-empty bodies. (evidence: SkillRegistryTests validates discovery across flat/nested layouts, load behavior, graceful error handling, and AuthoredSkillsTests confirms all authored skills are discoverable with bodies.)
+
+- TEST-MCP-QBSKILLS-003: **Skill Tools External Tool Exposure** - Verifies list_skills and load_skill are exposed as non-mcp_ prefixed external tools; list_skills returns discovery summaries; load_skill returns skill body for known skills and not-found message for unknown skills. (evidence: SkillToolTests validates tool names, descriptions, and return values for both discovery and load operations.)
+
+
+
+- TEST-MCP-QBEXEC-002: Concrete internal-tool executor (FR-MCP-QBEXEC-002, TR-MCP-QBEXEC-002). Verifies `QuadBrainInternalToolExecutor.TryExecuteAsync` routes `mcp_todo_create`, `mcp_todo_update`, `mcp_todo_delete` through gated TODO service with parsed id/request validation; routes `mcp_repo_write` and `mcp_repo_edit` through repo service with path/content parsing; returns `Unhandled` for unknown tools; returns `Fail` for missing required fields and JSON parse errors; never throws. Implemented in `tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs`.
+  **Acceptance Criteria:**
+  - [x] `mcp_todo_create` with valid JSON routes through gated create and returns Ok outcome.
+  - [x] `mcp_todo_update` with missing id returns Fail without service call.
+  - [x] `mcp_repo_write` routes through repo write service with path and content arguments.
+  - [x] `mcp_repo_edit` routes through repo edit service with path, oldString, newString, replaceAll, and expectedOccurrences.
+  - [x] Unknown tool names return Unhandled outcome.
+  - [x] Invalid JSON arguments return Fail outcome without calling service.
+
+- TEST-MCP-QBEXEC-003: Inter-brain session logging (FR-MCP-QBEXEC-003, TR-MCP-QBEXEC-003). Verifies `BrainInteractionSessionLogger.LogInteractionAsync` appends full prompt and output as two dialog items with role tag, timestamps, and source type; validates non-empty session/turn context (no-op when null/empty/whitespace); redacts Bearer tokens and API key patterns before logging; swallows append exceptions and logs at Warning level; never propagates logging failure. Implemented in `tests/McpServer.Support.Mcp.Tests/Services/BrainInteractionSessionLoggerTests.cs`.
+  **Acceptance Criteria:**
+  - [x] Full prompt appends as user observation item with role tag and timestamp.
+  - [x] Full output appends as model reasoning item with role tag and timestamp.
+  - [x] Null/empty/whitespace sessionId or turnId results in no-op without append attempt.
+  - [x] Bearer tokens (Bearer prefix followed by non-whitespace) are redacted to `Bearer [REDACTED]`.
+  - [x] API key patterns (api_key, x-api-key, apikey with colon or equals separator) are redacted to `[key_name] [REDACTED]`.
+  - [x] Append exceptions are caught and logged at Warning, not re-thrown.
+- TEST-MCP-QUAD-SESSION-001: Per-session QuadBrain instance attachment over global brains (FR-MCP-QUAD-SESSION-001).
+  **Acceptance Criteria:**
+  - [x] CompleteAsync with a sessionId/turnId attaches them to the orchestration request metadata and TurnId.
+  - [x] Without a session id, no session metadata is attached (anonymous instance).
+  - [x] A /v1 request's X-Session-Id header reaches the orchestration (integration).

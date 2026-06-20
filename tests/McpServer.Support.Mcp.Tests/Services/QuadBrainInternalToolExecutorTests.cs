@@ -1,4 +1,6 @@
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Requirements;
+using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using NSubstitute;
 using Xunit;
@@ -7,14 +9,16 @@ namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
 /// TEST-MCP-QBEXEC-002: Verifies the concrete QuadBrain internal-tool executor routes MCP-internal mutations
-/// through the transaction-gated services and returns Unhandled for unknown/read-only tools (FR-MCP-QBEXEC-002).
+/// (TODO, repo, and FR/TR/TEST requirements) through the transaction-gated services and returns Unhandled for
+/// unknown/read-only tools (FR-MCP-QBEXEC-001 AC-4, FR-MCP-QBEXEC-002).
 /// </summary>
 public sealed class QuadBrainInternalToolExecutorTests
 {
     private readonly ITransactionGatedTodoMutationService _todo = Substitute.For<ITransactionGatedTodoMutationService>();
     private readonly IRepoFileService _repo = Substitute.For<IRepoFileService>();
+    private readonly IRequirementsDocumentService _requirements = Substitute.For<IRequirementsDocumentService>();
 
-    private QuadBrainInternalToolExecutor CreateSut() => new(_todo, _repo);
+    private QuadBrainInternalToolExecutor CreateSut() => new(_todo, _repo, _requirements);
 
     private static OpenAiToolCall Call(string name, string arguments)
         => new() { Function = new OpenAiFunctionCall { Name = name, Arguments = arguments } };
@@ -111,6 +115,97 @@ public sealed class QuadBrainInternalToolExecutorTests
         Assert.True(outcome.Handled);
         Assert.False(outcome.Success);
         Assert.Contains("transaction rejected", outcome.Error!, StringComparison.Ordinal);
+    }
+
+    /// <summary>mcp_requirements_create_fr routes through the transaction-gated FR add (FR-MCP-QBEXEC-001 AC-4).</summary>
+    [Fact]
+    public async Task Execute_McpRequirementsCreateFr_RoutesThroughGatedAdd()
+    {
+        var sut = CreateSut();
+
+        var outcome = await sut.TryExecuteAsync(
+            Call("mcp_requirements_create_fr", "{\"id\":\"FR-MCP-X-001\",\"title\":\"t\",\"body\":\"b\"}"),
+            turnId: null).ConfigureAwait(true);
+
+        Assert.True(outcome.Success);
+        await _requirements.Received(1).AddFrAsync(
+            Arg.Is<FrEntry>(e => e != null && e.Id == "FR-MCP-X-001" && e.Title == "t" && e.Body == "b"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>mcp_requirements_update_tr routes through the transaction-gated TR update.</summary>
+    [Fact]
+    public async Task Execute_McpRequirementsUpdateTr_RoutesThroughGatedUpdate()
+    {
+        var sut = CreateSut();
+
+        var outcome = await sut.TryExecuteAsync(
+            Call("mcp_requirements_update_tr", "{\"id\":\"TR-MCP-X-001\",\"title\":\"t\",\"body\":\"b\"}"),
+            turnId: null).ConfigureAwait(true);
+
+        Assert.True(outcome.Success);
+        await _requirements.Received(1).UpdateTrAsync(
+            Arg.Is<TrEntry>(e => e != null && e.Id == "TR-MCP-X-001"), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>mcp_requirements_create_test routes the condition through the transaction-gated TEST add.</summary>
+    [Fact]
+    public async Task Execute_McpRequirementsCreateTest_RoutesThroughGatedAdd()
+    {
+        var sut = CreateSut();
+
+        var outcome = await sut.TryExecuteAsync(
+            Call("mcp_requirements_create_test", "{\"id\":\"TEST-MCP-X-001\",\"condition\":\"does X\"}"),
+            turnId: null).ConfigureAwait(true);
+
+        Assert.True(outcome.Success);
+        await _requirements.Received(1).AddTestAsync(
+            Arg.Is<TestEntry>(e => e != null && e.Id == "TEST-MCP-X-001" && e.Condition == "does X"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>A requirements mutation without an id fails without calling the service.</summary>
+    [Fact]
+    public async Task Execute_McpRequirementsCreateFr_MissingId_Fails()
+    {
+        var sut = CreateSut();
+
+        var outcome = await sut.TryExecuteAsync(
+            Call("mcp_requirements_create_fr", "{\"title\":\"t\",\"body\":\"b\"}"), turnId: null).ConfigureAwait(true);
+
+        Assert.True(outcome.Handled);
+        Assert.False(outcome.Success);
+        Assert.Contains("id", outcome.Error!, StringComparison.Ordinal);
+        await _requirements.DidNotReceive().AddFrAsync(Arg.Any<FrEntry>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>A requirements service failure maps to a Fail outcome rather than throwing.</summary>
+    [Fact]
+    public async Task Execute_McpRequirementsCreateFr_WhenServiceThrows_ReturnsFail()
+    {
+        _requirements.AddFrAsync(Arg.Any<FrEntry>(), Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromException(new InvalidOperationException("duplicate id")));
+        var sut = CreateSut();
+
+        var outcome = await sut.TryExecuteAsync(
+            Call("mcp_requirements_create_fr", "{\"id\":\"FR-MCP-X-001\",\"title\":\"t\",\"body\":\"b\"}"),
+            turnId: null).ConfigureAwait(true);
+
+        Assert.True(outcome.Handled);
+        Assert.False(outcome.Success);
+        Assert.Contains("duplicate id", outcome.Error!, StringComparison.Ordinal);
+    }
+
+    /// <summary>Read-only requirements tools (list/get) return Unhandled (left for the agent).</summary>
+    [Fact]
+    public async Task Execute_McpRequirementsListFr_ReturnsUnhandled()
+    {
+        var sut = CreateSut();
+
+        var outcome = await sut.TryExecuteAsync(Call("mcp_requirements_list_fr", "{}"), turnId: null).ConfigureAwait(true);
+
+        Assert.False(outcome.Handled);
+        Assert.Same(InternalToolExecutionOutcome.Unhandled, outcome);
     }
 
     /// <summary>An unknown or read-only internal tool returns Unhandled (left for the agent as a note).</summary>

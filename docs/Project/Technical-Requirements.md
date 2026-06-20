@@ -1335,13 +1335,13 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 ## TR-MCP-QUAD-001
 
-**Brain-slot storage, DTOs, CRUD, and validation** — Persist `BrainSlotDefinition` and `BrainSlotInvocation` rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per workspace and role, `replaceExisting` replacement audit, soft delete, and readiness status.
+**Brain-slot storage, DTOs, CRUD, and validation** — The QuadBrain subsystem is GLOBAL: persist `BrainSlotDefinition` and `BrainSlotInvocation` rows under the global workspace (`WorkspaceId == ""`) so one quad is shared by every workspace and session; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per role (globally), `replaceExisting` replacement audit, soft delete, and readiness status. (Earlier drafts scoped slots per workspace; that was incorrect - QuadBrain definitions are global. The `McpDbContext` query filter and `ResolveWorkspaceIdForAddedEntity` stamp both brain-slot entities global, and the invocation→definition FK on `(WorkspaceId, SlotId)` therefore matches.)
 **Status:** ✅ Complete.
 
-**Covered by:** `BrainSlotRegistryService`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `BrainSlotRegistryServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`
+**Covered by:** `BrainSlotRegistryService`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `McpDbContext`, `BrainSlotRegistryServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotStartupSeederTests`
 
 **Acceptance Criteria:**
-- [x] Brain-slot definitions and invocations persist per workspace with role validation, one-enabled-slot enforcement, soft delete, credentialReference-only storage, and readiness projection.
+- [x] Brain-slot definitions and invocations persist GLOBALLY (under `WorkspaceId == ""`, visible in every workspace context) with role validation, one-enabled-slot-per-role enforcement, soft delete, credentialReference-only storage, and readiness projection.
 - [x] REST, client, STDIO, and plugin DTOs round-trip slot CRUD without returning raw credential material.
 
 ## TR-MCP-QUAD-002
@@ -1564,3 +1564,91 @@ A dedicated `McpServer.QBAgent` host (project `src/McpServer.QBAgent`) starts in
 
 `QuadBrainToolClassifier` marks `mcp_`-prefixed tools as MCP-internal. `QuadBrainToolInterceptor` partitions the AoT-elected `tool_calls`, runs internal ones through `IQuadBrainInternalToolExecutor`, and strips the successfully executed calls. Only external calls remain as tool commands; internal failures and unhandled-internal calls are partitioned into `ToolInterceptionResult.Failed` and are NEVER emitted as tool commands - `QuadBrainOpenAiChatService` renders them as an assistant-content note (and earmarks them as Session Log failures) while emitting only external `tool_calls` (and none when all elected tools ran server-side). The default executor is `NoopInternalToolExecutor` (no-op) until the concrete executor lands. Remaining sub-slices: a concrete `IQuadBrainInternalToolExecutor` routing TODO/Requirements mutations through `ITransactionGatedTodoMutationService` / `IRequirementsDocumentService` (AoT transaction commit), and orchestration-owned session logging via `ISessionLogService`. Implements FR-MCP-QBEXEC-001.
 
+## TR-MCP-QBSEED-002 Gated idempotent Quad-Brain startup provisioning and /v1 workspace scoping
+
+`BrainSlotOptions` gains `Slots` (`List<BrainSlotSeedDefinition>`), each carrying a `SlotId` plus the `UpsertBrainSlotRequest` fields and a `ToUpsertRequest()` projection; credentials are referenced only by safe reference (`env:`, `config:`, `file:`), never inline. `BrainSlotStartupSeeder` (an `IHostedService` registered in every environment) provisions the GLOBAL quad on `StartAsync`: it returns immediately when `Mcp:BrainSlots:ExecutionEnabled` is false or `Slots` is empty; otherwise it resolves a scoped `IBrainSlotRegistryService` and upserts each configured slot once as a single global set (brain definitions are global, so no per-workspace iteration is needed). Provisioning is idempotent (each slot is keyed by `SlotId` through `UpsertAsync`), and a single invalid slot is logged and skipped without aborting host startup. `WorkspaceResolutionMiddleware` additionally resolves `/v1` requests: it scopes the request `WorkspaceContext` (and overrides the `McpDbContext` workspace id) from an explicit `X-Workspace-Path` header or, failing that, from the OpenAI Bearer/`X-Api-Key` token via `WorkspaceTokenService.ResolveWorkspaceByToken`. That workspace context scopes the server-side internal-TOOL mutations the orchestration executes (`mcp_todo_*`, `mcp_repo_*`, `mcp_requirements_*`); the brains themselves are global. Unresolved `/v1` requests still proceed and the controller enforces token validity. Implements FR-MCP-QBSEED-001.
+
+## TR-MCP-QUAD-SESSION-001 Per-session QuadBrain instance attachment over global brains
+
+`QuadBrainOpenAiController` reads the `X-Session-Id` (and optional `X-Turn-Id`) request headers and passes them to `IQuadBrainOpenAiChatService.CompleteAsync(request, sessionId, turnId, ct)`. `QuadBrainOpenAiChatService` writes `sessionId`/`turnId` into the `QuadBrainOrchestrationRequest.Metadata` (and sets `TurnId`) so the orchestration run is attached to its session: `QuadBrainOrchestrationService.LogBrainInteractionAsync` and `QuadBrainOpenAiChatService.LogInternalToolFailuresAsync` correlate full-text dialog and internal-tool-failure entries to that session/turn via `IBrainInteractionSessionLogger` (best-effort, a no-op when absent). Because brain definitions are global and the orchestration holds no shared mutable per-instance state, concurrent `/v1` requests with distinct `X-Session-Id` values run as independent instances over the same global quad. Implements FR-MCP-QUAD-SESSION-001.
+
+
+## TR-MCP-QBTOOLS-000 Both-planes architecture with one-core-per-capability
+
+The QBAgent external tool surface implements the one-core-per-capability pattern within a both-planes architecture: the agent-side external tools are transport adapters and JSON-shape only (file tools call the MCP client so the server RepoFileService is the single safety gate); the server-side internal plane calls the same core services (RepoFileService, IProcessRunner, IHostedPowerShellSessionManager). This prevents a second, divergent safety/rollback implementation. The threat model notes that run_bash and run_powershell are general-purpose shells with full shell semantics - hosts requiring complete remote-mutation prevention must withhold these tools, not rely solely on the git push gate.
+
+Implements FR-MCP-QBTOOLS-001.
+
+## TR-MCP-QBTOOLS-002 Agent-side PowerShell tool with in-process session reuse
+
+The PowerShellTool class shall create a single hosted PowerShell session lazily on first invocation and reuse it for all subsequent calls within a QBAgent run, maintaining working directory and variable state across multiple commands. Invocations are serialized via SemaphoreSlim to prevent concurrent execution against the same session. Session creation failure is surfaced as a structured result without executing a command. Disposing the tool closes the reused session and releases the gate semaphore.
+
+Implements FR-MCP-QBTOOLS-002.
+
+## TR-MCP-QBTOOLS-003 Optional Bash tool with graceful unavailability reporting
+
+The BashCommandTool shall attempt to launch bash.exe from PATH via IProcessRunner, detect when bash is missing (exit code -1 with "not found" in stderr), and return BashToolResult with Available=false instead of failing the agent turn. When bash is found, the tool returns captured stdout, stderr, and exit code. Commands are executed with `bash -lc` in the workspace directory. Arguments are wrapped in double quotes with backslash and quote escaping to ensure bash.exe receives a single token.
+
+Implements FR-MCP-QBTOOLS-003.
+
+## TR-MCP-QBTOOLS-004 Agent-side git tool with allowlist, push gating, and origin-only enforcement
+
+The GitCommandTool shall validate subcommand against a static allowlist (status, diff, log, branch, add, commit, checkout, push, reset, show, fetch, rev-parse, remote) and reject unknown subcommands without launching git. For the push subcommand: when AllowPush is false, reject with a structured error; when true, apply GuardPush to enforce origin-only by scanning arguments for URL remotes (containing "://") and SCP-style remotes (matching user@host:path format with colon before slash), rejecting both; when the remote is omitted or only flags are present, append "origin" so push never relies on ambient defaults. Non-push subcommands and guarded push invocations are run through IProcessRunner with no shell, passing subcommand and arguments as separate tokens so they cannot be shell-injected.
+
+Implements FR-MCP-QBTOOLS-004.
+
+## TR-MCP-QBTOOLS-006 Targeted file edit with server-owned path safety and audit
+
+The FileTools.EditFileAsync method routes all edits through McpServerClient.Repo.EditFileAsync to the server RepoFileService.EditAsync, which enforces path allowlist, validates oldString and newString parameters (oldString must not be empty or null, newString must differ from oldString), counts occurrences (failing if ambiguous and replaceAll is false), optionally guards against expectedOccurrences mismatch, applies the replacement, and logs the write operation for audit. FileEditResult is returned with Written flag, Replacements count, and Error message when applicable.
+
+Implements FR-MCP-QBTOOLS-006.
+
+## TR-MCP-QBTOOLS-008 Dependency injection registration for QBAgent tool dependencies
+
+The QBAgentToolsServiceCollectionExtensions.AddQBAgentTools method registers IProcessRunner and IProcessEnvironmentService as singletons, plus options for ProcessRunnerOptions and logging, so a host building a bare IServiceCollection for QBAgent can resolve the git and bash tool dependencies without additional configuration.
+
+Implements FR-MCP-QBTOOLS-001.
+
+## TR-MCP-QBSKILLS-001 SKILL.md Parsing Implementation
+
+A minimal YAML frontmatter parser shall extract required fields (name, description) and optional fields (license, allowed-tools) from SKILL.md files. The parser shall normalize line endings, handle quoted and unquoted values, parse comma-separated lists in allowed-tools, and report descriptive validation errors. All parsing errors shall return false with an error message rather than throwing.
+
+**Acceptance Criteria:**
+- [x] The parser extracts name and description as required fields with validation. (evidence: SkillManifestParser.TryParse validates presence of both fields before returning true.)
+- [x] The parser reads optional license and allowed-tools fields when present. (evidence: SkillManifestParserTests.Parse_Valid_ExtractsAllFields asserts License and AllowedTools are correctly populated.)
+- [x] The parser handles line normalization for CRLF and LF endings. (evidence: SkillManifestParser.TryParse normalizes \r\n to \n before parsing.)
+- [x] The parser accepts quoted and unquoted values in YAML. (evidence: SkillManifestParser.Unquote strips leading/trailing quotes if present.)
+- [x] allowed-tools values are split on commas and each item is trimmed and unquoted. (evidence: SkillManifestParser.SplitList splits and unquotes individual tool names.)
+- [x] Parsing errors return false with an appropriate error message describing the problem. (evidence: SkillManifestParser.TryParse returns false and populates error parameter on validation failure.)
+
+Implements FR-MCP-QBSKILLS-001.
+
+## TR-MCP-QBSKILLS-002 Skill Subsystem DI Registration and Agent Integration
+
+The AddQBAgentSkills extension method shall register the manifest parser and skill registry into the dependency injection container, binding the registry to skill root directories. The SkillTool class shall be initialized with the registry and expose list_skills and load_skill as AITool objects for integration into the QBAgent chat loop via CreateTools().
+
+**Acceptance Criteria:**
+- [x] AddQBAgentSkills registers ISkillManifestParser as a singleton with SkillManifestParser implementation. (evidence: QBAgentSkillsServiceCollectionExtensions.AddQBAgentSkills calls TryAddSingleton for ISkillManifestParser.)
+- [x] AddQBAgentSkills registers ISkillRegistry as a singleton bound to the supplied root directories. (evidence: QBAgentSkillsServiceCollectionExtensions.AddQBAgentSkills creates SkillRegistry with the provided roots.)
+- [x] The SkillTool integrates the registry and exposes CreateTools() returning list_skills and load_skill tools. (evidence: SkillTool.CreateTools() returns AITool objects with names 'list_skills' and 'load_skill'.)
+- [x] End-to-end agent integration: the agent loads a skill via load_skill and operates on workspace files with full tool integration. (evidence: QBAgentToolsIntegrationTests.Agent_LoadsSkill_ThenWritesAndEditsFile_ThroughServer verifies the full flow with real file operations.)
+
+Implements FR-MCP-QBSKILLS-002 and FR-MCP-QBSKILLS-003.
+
+
+
+## TR-MCP-QBEXEC-002 Internal tool execution routing
+
+Implements the concrete `IQuadBrainInternalToolExecutor` with switch-based handler dispatch for `mcp_todo_create`, `mcp_todo_update`, `mcp_todo_delete`, `mcp_repo_write`, and `mcp_repo_edit`. Each handler deserializes JSON arguments, validates required fields (id, path, content, oldString/newString), delegates to the injected transaction-gated service, and returns either `Ok` (JSON serialized result) or `Fail` (error message). Unknown tools return `Unhandled`. Invalid JSON returns `Fail` with a descriptive error without attempting service delegation. The executor is injected into the OpenAI chat service as an optional internal-tool-execution parameter, replacing the no-op fallback when present.
+
+**Covered by:** `QuadBrainInternalToolExecutor`, `QuadBrainInternalToolExecutorTests`, `Program.cs` (DI registration line 474)
+
+Implements FR-MCP-QBEXEC-002.
+
+## TR-MCP-QBEXEC-003 Inter-brain full-text session logging service
+
+Implements `IBrainInteractionSessionLogger` as a best-effort logger that appends two `ProcessingDialogItemDto` items (user observation with prompt, model reasoning with output) to the session-log turn for each brain interaction. The implementation validates non-null/non-empty sourceType, sessionId, and turnId before attempting append (no-op when any is missing). Text is redacted via `Redact` static method using generated regex patterns for Bearer tokens and common API key formats (case-insensitive, anchored to field separators). Append exceptions are caught, logged at Warning level with source type/session/turn/role context, and not re-thrown. Timestamp is ISO8601 UTC for each dialog item.
+
+**Covered by:** `BrainInteractionSessionLogger`, `BrainInteractionSessionLoggerTests`, `QuadBrainOrchestrationService.LogBrainInteractionAsync`, `Program.cs` (DI registration line 469)
+
+Implements FR-MCP-QBEXEC-003.

@@ -13,10 +13,14 @@ public interface IQuadBrainOpenAiChatService
 {
     /// <summary>Completes an OpenAI-compatible chat request by running QuadBrain orchestration.</summary>
     /// <param name="request">The OpenAI-compatible request.</param>
+    /// <param name="sessionId">FR-MCP-QUAD-SESSION-001: the session this QuadBrain instance is attached to (from the <c>X-Session-Id</c> header). Multiple instances run concurrently, each bound to its own session.</param>
+    /// <param name="turnId">Optional turn id (from the <c>X-Turn-Id</c> header) used to correlate session-log writes and turn transactions.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>An OpenAI-compatible chat-completion response.</returns>
     Task<OpenAiChatCompletionResponse> CompleteAsync(
         OpenAiChatCompletionRequest request,
+        string? sessionId = null,
+        string? turnId = null,
         CancellationToken cancellationToken = default);
 }
 
@@ -25,25 +29,31 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
 {
     private readonly IQuadBrainOrchestrationService _orchestration;
     private readonly QuadBrainToolInterceptor _interceptor;
+    private readonly IBrainInteractionSessionLogger? _interactionLogger;
 
     /// <summary>Initializes a new instance of the <see cref="QuadBrainOpenAiChatService"/> class.</summary>
     /// <param name="orchestration">The QuadBrain orchestration service.</param>
     /// <param name="classifier">Internal/external tool classifier (defaults to the <c>mcp_</c>-prefix classifier).</param>
     /// <param name="internalToolExecutor">Server-side internal tool executor (defaults to a no-op).</param>
+    /// <param name="interactionLogger">FR-MCP-QBEXEC-001 (AC-5): optional session-log writer used to record internal-tool failures.</param>
     public QuadBrainOpenAiChatService(
         IQuadBrainOrchestrationService orchestration,
         IQuadBrainToolClassifier? classifier = null,
-        IQuadBrainInternalToolExecutor? internalToolExecutor = null)
+        IQuadBrainInternalToolExecutor? internalToolExecutor = null,
+        IBrainInteractionSessionLogger? interactionLogger = null)
     {
         _orchestration = orchestration ?? throw new ArgumentNullException(nameof(orchestration));
         _interceptor = new QuadBrainToolInterceptor(
             classifier ?? new QuadBrainToolClassifier(),
             internalToolExecutor ?? NoopInternalToolExecutor.Instance);
+        _interactionLogger = interactionLogger;
     }
 
     /// <inheritdoc />
     public async Task<OpenAiChatCompletionResponse> CompleteAsync(
         OpenAiChatCompletionRequest request,
+        string? sessionId = null,
+        string? turnId = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -58,10 +68,19 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
         if (request.Tools is { Count: > 0 })
             metadata["openai.tools"] = string.Join(",", request.Tools.Select(static t => t.Function.Name));
 
+        // FR-MCP-QUAD-SESSION-001: attach this QuadBrain run to its session (and optional turn) so orchestration,
+        // inter-brain logging, internal-tool-failure logging, and turn transactions are correlated to the session.
+        if (!string.IsNullOrWhiteSpace(sessionId))
+            metadata["sessionId"] = sessionId.Trim();
+        if (!string.IsNullOrWhiteSpace(turnId))
+            metadata["turnId"] = turnId.Trim();
+
+        var orchestrationInput = BuildPrompt(request.Messages, request.Tools);
         var orchestration = await _orchestration.ExecuteFullOrchestrationAsync(
             new QuadBrainOrchestrationRequest
             {
-                Input = BuildPrompt(request.Messages, request.Tools),
+                Input = orchestrationInput,
+                TurnId = string.IsNullOrWhiteSpace(turnId) ? null : turnId.Trim(),
                 Metadata = metadata,
             },
             cancellationToken).ConfigureAwait(false);
@@ -74,8 +93,9 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
             // unhandled internal) calls are emitted to the agent.
             var interception = await _interceptor.InterceptAsync(toolCalls, turnId: null, cancellationToken).ConfigureAwait(false);
 
-            // FR-MCP-QBEXEC-001: internal tool failures are NOT emitted to the agent as tool commands; they are
-            // surfaced as a note (and logged as Session Log failures by the orchestration).
+            // FR-MCP-QBEXEC-001 (AC-5): internal tool failures are NOT emitted to the agent as tool commands; they
+            // are surfaced as a note AND recorded to the session log (best-effort) so the failure is durably captured.
+            await LogInternalToolFailuresAsync(interception.Failed, metadata, cancellationToken).ConfigureAwait(false);
             var failureNote = BuildFailureNote(interception.Failed);
             if (interception.RemainingToolCalls.Count > 0)
             {
@@ -97,6 +117,12 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
             finishReason = "stop";
         }
 
+        // FR-MCP-QBOPENAI-001 (G-019): QuadBrain orchestration does not surface real provider token counts, so
+        // usage is a documented best-effort estimate (~4 characters per token) over the folded prompt and the
+        // assistant content/tool-call output so OpenAI clients receive a non-zero usage block.
+        var promptTokens = EstimateTokens(orchestrationInput);
+        var completionTokens = EstimateTokens(message.Content) + EstimateTokens(SerializeToolCalls(message.ToolCalls));
+
         return new OpenAiChatCompletionResponse
         {
             Id = $"chatcmpl-{(string.IsNullOrWhiteSpace(orchestration.TransactionId) ? Guid.NewGuid().ToString("N") : orchestration.TransactionId)}",
@@ -111,8 +137,23 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
                     FinishReason = finishReason,
                 },
             ],
+            Usage = new OpenAiUsage
+            {
+                PromptTokens = promptTokens,
+                CompletionTokens = completionTokens,
+                TotalTokens = promptTokens + completionTokens,
+            },
         };
     }
+
+    /// <summary>Best-effort token estimate (~4 characters per token); 0 for empty text.</summary>
+    private static int EstimateTokens(string? text)
+        => string.IsNullOrEmpty(text) ? 0 : (text.Length + 3) / 4;
+
+    private static string? SerializeToolCalls(List<OpenAiToolCall>? toolCalls)
+        => toolCalls is { Count: > 0 }
+            ? string.Concat(toolCalls.Select(call => call.Function.Name + call.Function.Arguments))
+            : null;
 
     /// <summary>
     /// Detects QuadBrain's tool-call convention: an Arbiter output that is a JSON object with a
@@ -176,6 +217,32 @@ public sealed class QuadBrainOpenAiChatService : IQuadBrainOpenAiChatService
     /// Folds the chat transcript into a single prompt for orchestration. The full role-tagged transcript is
     /// preserved so QuadBrain sees system context and prior turns, not just the last user message.
     /// </summary>
+    /// <summary>
+    /// FR-MCP-QBEXEC-001 (AC-5): Records each failed MCP-internal tool to the session log. Best-effort - a no-op
+    /// when no logger is configured or no session/turn context is carried in the orchestration metadata.
+    /// </summary>
+    private async Task LogInternalToolFailuresAsync(
+        IReadOnlyList<ExecutedInternalTool> failed,
+        IReadOnlyDictionary<string, string> metadata,
+        CancellationToken cancellationToken)
+    {
+        if (_interactionLogger is null || failed.Count == 0)
+            return;
+
+        var sourceType = MetadataValue(metadata, "sourceType") ?? "QBAgent";
+        var sessionId = MetadataValue(metadata, "sessionId");
+        var turnId = MetadataValue(metadata, "turnId");
+        foreach (var failure in failed)
+        {
+            await _interactionLogger.LogInternalToolFailureAsync(
+                    sourceType, sessionId, turnId, failure.ToolCall.Function.Name, failure.Outcome.Error, cancellationToken)
+                .ConfigureAwait(false);
+        }
+    }
+
+    private static string? MetadataValue(IReadOnlyDictionary<string, string> metadata, string key)
+        => metadata.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value) ? value : null;
+
     /// <summary>Builds a human-readable note for internal tool calls that could not be completed server-side.</summary>
     private static string BuildFailureNote(IReadOnlyList<ExecutedInternalTool> failed)
     {

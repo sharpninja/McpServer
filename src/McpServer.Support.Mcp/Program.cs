@@ -635,6 +635,11 @@ if (!builder.Environment.IsEnvironment("Test"))
 // file get materialized into the DB before the first request.
 builder.Services.AddHostedService<TodoBootstrapImporter>();
 
+// FR-MCP-QBSEED-001: provision the Quad-Brain from Mcp:BrainSlots:Slots at startup (gated, idempotent).
+// Registered after TodoBootstrapImporter so the database and workspace registrations are ready; the seeder
+// is a no-op unless execution is enabled and slots are configured, and never aborts startup on failure.
+builder.Services.AddHostedService<BrainSlotStartupSeeder>();
+
 var mvcBuilder = builder.Services.AddControllers();
 #if !DEBUG
 if (!builder.Environment.IsStaging())
