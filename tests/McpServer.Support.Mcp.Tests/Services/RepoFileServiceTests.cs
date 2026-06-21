@@ -7,7 +7,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-013: Unit tests for RepoFileService path security and audit.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for RepoFileService path security and audit.</summary>
 public sealed class RepoFileServiceTests : IDisposable
 {
     private readonly string _tempDir;

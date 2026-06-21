@@ -84,7 +84,7 @@ EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, Postgr
 
 ### Requirement Traceability
 
-All source files reference FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`. Requirements traceability is validated in CI via `./build.ps1 ValidateTraceability`.
+All source files reference FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-CORE-013: Constructor.</summary>`). When adding new functionality, reference the relevant ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`. Requirements traceability is validated in CI via `./build.ps1 ValidateTraceability`.
 
 ### Central Package Management
 

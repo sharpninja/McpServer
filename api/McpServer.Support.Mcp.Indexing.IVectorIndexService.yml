@@ -26,7 +26,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
   summary: >-
-    TR-PLANNED-013: Abstraction for HNSW vector index operations.
+    TR-PLANNED-CORE-013: Abstraction for HNSW vector index operations.
 
     FR-SUPPORT-010: Supports nearest-neighbor search for embedding-based retrieval.
   example: []
@@ -51,7 +51,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Add a vector to the index.'
+  summary: 'TR-PLANNED-CORE-013: Add a vector to the index.'
   example: []
   syntax:
     content: void AddVector(string chunkId, float[] embedding)
@@ -85,7 +85,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Search for nearest neighbors.'
+  summary: 'TR-PLANNED-CORE-013: Search for nearest neighbors.'
   example: []
   syntax:
     content: IReadOnlyList<(string ChunkId, float Distance)> Search(float[] queryEmbedding, int k = 20)
@@ -122,7 +122,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Persist the index to disk.'
+  summary: 'TR-PLANNED-CORE-013: Persist the index to disk.'
   example: []
   syntax:
     content: Task SaveAsync(string path, CancellationToken ct = default)
@@ -156,7 +156,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Load the index from disk.'
+  summary: 'TR-PLANNED-CORE-013: Load the index from disk.'
   example: []
   syntax:
     content: Task LoadAsync(string path, CancellationToken ct = default)
@@ -190,7 +190,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Rebuild the index from scratch.'
+  summary: 'TR-PLANNED-CORE-013: Rebuild the index from scratch.'
   example: []
   syntax:
     content: Task RebuildAsync(CancellationToken ct = default)
@@ -219,7 +219,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Number of vectors in the index.'
+  summary: 'TR-PLANNED-CORE-013: Number of vectors in the index.'
   example: []
   syntax:
     content: int Count { get; }

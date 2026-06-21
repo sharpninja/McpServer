@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013: Ingests GitHub issues and PRs via IGitHubCliService into ContextDocument/Chunk pairs.
+/// TR-PLANNED-CORE-013: Ingests GitHub issues and PRs via IGitHubCliService into ContextDocument/Chunk pairs.
 /// FR-SUPPORT-010: Indexes GitHub context for hybrid search.
 /// </summary>
 public sealed class GitHubIngestor
@@ -17,7 +17,7 @@ public sealed class GitHubIngestor
     private readonly IGitHubCliService _github;
     private readonly ILogger<GitHubIngestor> _logger;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public GitHubIngestor(Chunker chunker, IGitHubCliService github, ILogger<GitHubIngestor> logger)
     {
         _chunker = chunker;
@@ -25,7 +25,7 @@ public sealed class GitHubIngestor
         _logger = logger;
     }
 
-    /// <summary>TR-PLANNED-013: Ingest all issues and PRs into document/chunk pairs.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Ingest all issues and PRs into document/chunk pairs.</summary>
     public async Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>> IngestAsync(CancellationToken ct = default)
     {
         var results = new List<(ContextDocument, IReadOnlyList<ContextChunk>)>();

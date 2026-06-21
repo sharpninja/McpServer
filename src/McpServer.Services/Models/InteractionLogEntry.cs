@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Models;
 
 /// <summary>
-/// TR-PLANNED-013: Structured log entry for a single MCP interaction (request/response).
+/// TR-PLANNED-CORE-013: Structured log entry for a single MCP interaction (request/response).
 /// Used for local structured logging and optional async submission to a logging service.
 /// </summary>
 public sealed class InteractionLogEntry

@@ -21,7 +21,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Logging
   summary: >-
-    TR-PLANNED-013: Formats one log event as a single JSON object for Parseable per
+    TR-PLANNED-CORE-013: Formats one log event as a single JSON object for Parseable per
 
     https://www.parseable.com/docs/ingest-data/programming-languages/dotnet.
 

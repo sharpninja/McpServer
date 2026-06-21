@@ -27,7 +27,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
   summary: >-
-    TR-PLANNED-013: TODO item CRUD and query endpoints for MCP.
+    TR-PLANNED-CORE-013: TODO item CRUD and query endpoints for MCP.
 
     Agents can search, create, update, and delete TODO items via REST.
   example: []
@@ -256,7 +256,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public TodoController(ITodoService todoService, IRequirementsService requirementsService)
@@ -288,7 +288,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Query TODO items by keyword, priority, section, id, or done status.'
+  summary: 'TR-PLANNED-CORE-013: Query TODO items by keyword, priority, section, id, or done status.'
   example: []
   syntax:
     content: >-
@@ -366,7 +366,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Get a single TODO item by id.'
+  summary: 'TR-PLANNED-CORE-013: Get a single TODO item by id.'
   example: []
   syntax:
     content: >-
@@ -414,7 +414,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Create a new TODO item.'
+  summary: 'TR-PLANNED-CORE-013: Create a new TODO item.'
   example: []
   syntax:
     content: >-
@@ -464,7 +464,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Update an existing TODO item by id.'
+  summary: 'TR-PLANNED-CORE-013: Update an existing TODO item by id.'
   example: []
   syntax:
     content: >-
@@ -519,7 +519,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Delete a TODO item by id.'
+  summary: 'TR-PLANNED-CORE-013: Delete a TODO item by id.'
   example: []
   syntax:
     content: >-

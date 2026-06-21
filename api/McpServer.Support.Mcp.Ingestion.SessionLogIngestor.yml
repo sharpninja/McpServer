@@ -23,7 +23,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013: Ingests session logs from docs/sessions/, normalizes to UnifiedModel.
+    TR-PLANNED-CORE-013: Ingests session logs from docs/sessions/, normalizes to UnifiedModel.
 
     FR-SUPPORT-010: Supports .md and .json session log files.
   example: []
@@ -57,7 +57,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public SessionLogIngestor(Chunker chunker, IOptions<IngestionOptions> options, ISessionLogService sessionLogService, ILogger<SessionLogIngestor> logger)
@@ -129,7 +129,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013: Imports all JSON session log files from SessionsPath into the 4NF session log tables.
+    TR-PLANNED-CORE-013: Imports all JSON session log files from SessionsPath into the 4NF session log tables.
 
     Skips .md files (no structured data). Uses upsert via <xref href="McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto%2cSystem.String%2cSystem.String%2cSystem.Threading.CancellationToken)" data-throw-if-not-resolved="false"></xref>.
   example: []

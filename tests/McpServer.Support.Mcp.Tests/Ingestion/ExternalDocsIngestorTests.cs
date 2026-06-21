@@ -6,7 +6,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-013: Unit tests for ExternalDocsIngestor file discovery and limits.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for ExternalDocsIngestor file discovery and limits.</summary>
 public sealed class ExternalDocsIngestorTests : IDisposable
 {
     private readonly string _tempDir;

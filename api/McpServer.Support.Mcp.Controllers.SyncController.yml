@@ -23,7 +23,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
   summary: >-
-    TR-PLANNED-013: Sync (ingestion) trigger and status.
+    TR-PLANNED-CORE-013: Sync (ingestion) trigger and status.
 
     FR-SUPPORT-010: sync.run, sync.status.
   example: []
@@ -252,7 +252,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public SyncController(IngestionCoordinator coordinator, ISyncStatusStore syncStatusStore)
@@ -286,7 +286,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Trigger ingestion (sync.run).'
+  summary: 'TR-PLANNED-CORE-013: Trigger ingestion (sync.run).'
   example: []
   syntax:
     content: >-
@@ -329,7 +329,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Last sync status (sync.status).'
+  summary: 'TR-PLANNED-CORE-013: Last sync status (sync.status).'
   example: []
   syntax:
     content: >-

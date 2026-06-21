@@ -1,4 +1,4 @@
-// TR-PLANNED-013: Batch formatter that produces Parseable-compatible JSON (array of flat objects).
+// TR-PLANNED-CORE-013: Batch formatter that produces Parseable-compatible JSON (array of flat objects).
 
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using Serilog.Sinks.Http;
 namespace McpServer.Support.Mcp.Logging;
 
 /// <summary>
-/// TR-PLANNED-013: Formats Serilog batches for Parseable ingest API per
+/// TR-PLANNED-CORE-013: Formats Serilog batches for Parseable ingest API per
 /// https://www.parseable.com/docs/ingest-data/programming-languages/dotnet.
 /// Uses <see cref="ParseableEventFormatter"/> shape; sink may call either LogEvent or string overload.
 /// </summary>

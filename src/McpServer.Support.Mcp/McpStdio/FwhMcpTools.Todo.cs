@@ -20,7 +20,7 @@ public sealed partial class FwhMcpTools
 {
     // ── GROUP A: TODO tools ──────────────────────────────────────────────
 
-    /// <summary>TR-PLANNED-013: List/search TODO items.</summary>
+    /// <summary>TR-PLANNED-CORE-013: List/search TODO items.</summary>
     [McpServerTool(Name = "todo_list"), Description("Query TODO items. Optional filters: section, priority, done.")]
     public async Task<string> TodoList(
         [Description("Workspace path (required)")] string workspacePath,
@@ -42,7 +42,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Get a single TODO by id.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Get a single TODO by id.</summary>
     [McpServerTool(Name = "todo_get"), Description("Get a single TODO item by its id (e.g. MVP-APP-001).")]
     public async Task<string> TodoGet(
         [Description("TODO item id")] string id,
@@ -140,7 +140,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Create a new TODO item.</summary>
     [McpServerTool(Name = "todo_create"), Description("Create a new TODO item. Requires id, title, section, priority.")]
     public async Task<string> TodoCreate(
         [Description("Item id (e.g. MVP-APP-006 or ISSUE-NEW)")] string id,
@@ -177,7 +177,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Update an existing TODO item.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Update an existing TODO item.</summary>
     [McpServerTool(Name = "todo_update"), Description("Update a TODO item by id. Only provided fields are changed.")]
     public async Task<string> TodoUpdate(
         [Description("TODO item id")] string id,
@@ -205,7 +205,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Delete a TODO item by id.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Delete a TODO item by id.</summary>
     [McpServerTool(Name = "todo_delete"), Description("Delete a TODO item by id.")]
     public async Task<string> TodoDelete(
         [Description("TODO item id")] string id,

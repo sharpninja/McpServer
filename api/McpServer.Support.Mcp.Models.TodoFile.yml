@@ -27,7 +27,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Root model for TODO.yaml file.'
+  summary: 'TR-PLANNED-CORE-013: Root model for TODO.yaml file.'
   example: []
   syntax:
     content: public sealed class TodoFile

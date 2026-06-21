@@ -1,45 +1,5 @@
 # Functional Requirements (MCP Server)
 
-## FR-01 FR-01
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-02 FR-02
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-03 FR-03
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-04 FR-04
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-05 FR-05
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-06 FR-06
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-07 FR-07
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-08 FR-08
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-09 FR-09
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
-## FR-10 FR-10
-
-Legacy imported functional identifier retained for historical traceability. Status: reserved/superseded by MCP-specific functional requirements; no active implementation work is tracked under this stub.
-
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -986,14 +946,6 @@ Legacy agent-parity functional TODO link retained for historical traceability. S
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
 
-## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
-
-Temporary live verification for plugin acceptanceCriteria rollout.
-
-## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
-
-Temporary live verification for plugin acceptanceCriteria rollout.
-
 ## FR-MCP-MEMORY-001 Global and workspace memory storage
 
 The MCP Server SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.
@@ -1203,19 +1155,19 @@ Local MCP server providing context retrieval, TODO management, repository access
 
 **Covered by:** `ContextController`, `TodoController`, `RepoController`, `SessionLogController`, `McpServerMcpTools`, `McpDbContext`, `HybridSearchService`, `EmbeddingService`, `VectorIndexService`, `Fts5SearchService`, `RepoFileService`, `IngestionCoordinator`
 
-## FR-SUPPORT-010A SessionLog Workspace Stamping
+## FR-SUPPORT-011 SessionLog Workspace Stamping
 
 Session log POST shall stamp the resolved workspace ID on every persisted row (parent SessionLog plus all child entities: turns, actions, tags, context items, processing dialog, commits, string-list items) so a POST followed by a GET under the same workspace context returns the same record. When no workspace context is resolved (ingestion / batch import paths), WorkspaceId defaults to empty string and the DbContext-level auto-stamp populates it from `_workspaceId` if available.
 
 **Covered by:** `SessionLogService.StampWorkspaceId`, `McpDbContext.StampWorkspaceId`, `SessionLogControllerTests.WhenPostingThenGetBySessionIdReturnsRecord`
 
-## FR-SUPPORT-010B SessionLog ProblemDetails Errors
+## FR-SUPPORT-012 SessionLog ProblemDetails Errors
 
 Session log POST shall return RFC 7807 ProblemDetails on body-binding or validation failure. Error responses cite the offending JSON path under `errors`, never the action-parameter name. Content-Type is `application/problem+json`. The accepted top-level shape is documented in the response `detail`.
 
 **Covered by:** `Program.cs` (`InvalidModelStateResponseFactory`), `SessionLogController.SubmitAsync` (`ValidationProblem` calls), `SessionLogControllerTests.WhenPostingMalformedWorkspaceFieldThenReturnsProblemDetailsWithoutDtoKey`
 
-## FR-SUPPORT-010C SessionLog REST Surface Completion
+## FR-SUPPORT-013 SessionLog REST Surface Completion
 
 Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
@@ -1223,11 +1175,11 @@ The terminal-turn audit-evidence gate (a turn moving to a terminal status: compl
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`, `SessionLogService.ValidateTerminalTurnCompliance` (ACID-scoped), `SessionLogServiceTests.UpsertTurnAsync_AcidAgentClosingTurnWithoutEvidence_ThrowsArgumentException`, `SessionLogServiceTests.UpsertTurnAsync_StandardAgentClosingTurnWithoutEvidence_Succeeds`, `SessionLogControllerTests.WhenAcidAgentClosingTurnWithoutComplianceItemsThenReturns400`, `SessionLogControllerTests.WhenStandardAgentClosingTurnWithoutComplianceItemsThenSucceeds`, `SessionLogControllerTests.CompleteTurn_StandardAgentWithoutEvidence_Succeeds`, `SessionLogControllerTests.CompleteTurn_AcidAgentWithoutEvidence_Returns400`
 
-## FR-SUPPORT-010E Stateless session lifecycle endpoints
+## FR-SUPPORT-014 Stateless session lifecycle endpoints
 
 The session-log API SHALL expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
 
-## FR-SUPPORT-010F Additive partial session-log submits
+## FR-SUPPORT-015 Additive partial session-log submits
 
 Whole-session submit SHALL merge additively: omitted session and turn fields never overwrite previously persisted values.
 

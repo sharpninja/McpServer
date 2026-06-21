@@ -7,7 +7,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-013: Unit tests for GitHubIngestor.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for GitHubIngestor.</summary>
 public sealed class GitHubIngestorTests
 {
     private readonly IGitHubCliService _github = Substitute.For<IGitHubCliService>();

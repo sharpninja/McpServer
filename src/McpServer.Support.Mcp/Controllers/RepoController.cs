@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// TR-PLANNED-013: Repository file read/write and list (repo.read, repo.write, repo.list).
+/// TR-PLANNED-CORE-013: Repository file read/write and list (repo.read, repo.write, repo.list).
 /// FR-SUPPORT-010: Path allowlist enforced; audit log for writes.
 /// </summary>
 [ApiController]
@@ -13,13 +13,13 @@ public sealed class RepoController : ControllerBase
 {
     private readonly IRepoFileService _repoFileService;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public RepoController(IRepoFileService repoFileService)
     {
         _repoFileService = repoFileService;
     }
 
-    /// <summary>TR-PLANNED-013: Read file contents (repo.read).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Read file contents (repo.read).</summary>
     /// <param name="path">Relative path from repo root.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("file")]
@@ -33,7 +33,7 @@ public sealed class RepoController : ControllerBase
         return Ok(new { path = result.RelativePath, content = result.Content, exists = result.Exists });
     }
 
-    /// <summary>TR-PLANNED-013: Write file contents (repo.write).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Write file contents (repo.write).</summary>
     /// <param name="request">Path and content.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost("file")]
@@ -71,7 +71,7 @@ public sealed class RepoController : ControllerBase
         return Ok(new { path = request.Path, written = result.Written, replacements = result.Replacements, error = result.Error });
     }
 
-    /// <summary>TR-PLANNED-013: List files/directories (repo.list).</summary>
+    /// <summary>TR-PLANNED-CORE-013: List files/directories (repo.list).</summary>
     /// <param name="path">Relative path from repo root (optional).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("list")]
@@ -86,7 +86,7 @@ public sealed class RepoController : ControllerBase
     }
 }
 
-/// <summary>Request for repo file write. TR-PLANNED-013.</summary>
+/// <summary>Request for repo file write. TR-PLANNED-CORE-013.</summary>
 public sealed class RepoWriteRequest
 {
     /// <summary>Relative path from repo root.</summary>

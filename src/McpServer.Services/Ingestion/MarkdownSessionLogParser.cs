@@ -6,7 +6,7 @@ using McpServer.Support.Mcp.Models;
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013: Parses Markdown session log files into UnifiedSessionLogDto.
+/// TR-PLANNED-CORE-013: Parses Markdown session log files into UnifiedSessionLogDto.
 /// FR-SUPPORT-010: Enables ingestion of legacy Markdown session logs alongside JSON.
 /// </summary>
 internal sealed partial class MarkdownSessionLogParser
@@ -19,7 +19,7 @@ internal sealed partial class MarkdownSessionLogParser
         "Deployment", "Verification", "Commit Strategy", "Success Criteria"
     ];
 
-    /// <summary>TR-PLANNED-013: Attempt to parse a Markdown file as a session log.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Attempt to parse a Markdown file as a session log.</summary>
     /// <param name="markdownContent">Full Markdown content.</param>
     /// <param name="filePath">Path to the source file (for deriving source type and session id).</param>
     /// <returns>Parsed DTO, or null if the content is not a valid session log.</returns>
@@ -108,7 +108,7 @@ internal sealed partial class MarkdownSessionLogParser
     }
 
     /// <summary>
-    /// TR-PLANNED-013: Produces a normalized, structured text representation of a Markdown session log
+    /// TR-PLANNED-CORE-013: Produces a normalized, structured text representation of a Markdown session log
     /// suitable for chunking, FTS, and vector embedding. Matches the format of NormalizeJsonSessionLog.
     /// </summary>
     internal static string NormalizeToStructuredText(string markdownContent)

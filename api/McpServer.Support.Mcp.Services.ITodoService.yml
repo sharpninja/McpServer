@@ -25,7 +25,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Service for querying and managing TODO items from the YAML file.
+    TR-PLANNED-CORE-013: Service for querying and managing TODO items from the YAML file.
 
     Provides CRUD operations and search by keyword, priority, or id.
   example: []

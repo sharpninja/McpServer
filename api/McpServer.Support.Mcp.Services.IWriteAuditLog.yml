@@ -22,7 +22,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Audit log for repo write operations.
+    TR-PLANNED-CORE-013: Audit log for repo write operations.
 
     FR-SUPPORT-010: Enforce audit trail for repo.write.
   example: []

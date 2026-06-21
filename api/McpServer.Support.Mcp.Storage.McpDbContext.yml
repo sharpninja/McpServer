@@ -34,7 +34,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
   summary: >-
-    TR-PLANNED-013: EF Core DbContext for MCP metadata and chunks.
+    TR-PLANNED-CORE-013: EF Core DbContext for MCP metadata and chunks.
 
     FR-SUPPORT-010: SQLite storage for local MCP server.
   example: []
@@ -121,7 +121,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Constructor for DI.'
+  summary: 'TR-PLANNED-CORE-013: Constructor for DI.'
   example: []
   syntax:
     content: public McpDbContext(DbContextOptions<McpDbContext> options)
@@ -151,7 +151,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Indexed documents.'
+  summary: 'TR-PLANNED-CORE-013: Indexed documents.'
   example: []
   syntax:
     content: public DbSet<ContextDocumentEntity> Documents { get; }
@@ -178,7 +178,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Indexed chunks.'
+  summary: 'TR-PLANNED-CORE-013: Indexed chunks.'
   example: []
   syntax:
     content: public DbSet<ContextChunkEntity> Chunks { get; }
@@ -205,7 +205,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Session logs (MVP-SUPPORT-011).'
+  summary: 'TR-PLANNED-CORE-013: Session logs (MVP-SUPPORT-011).'
   example: []
   syntax:
     content: public DbSet<SessionLogEntity> SessionLogs { get; }
@@ -232,7 +232,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Session log entries (MVP-SUPPORT-011).'
+  summary: 'TR-PLANNED-CORE-013: Session log entries (MVP-SUPPORT-011).'
   example: []
   syntax:
     content: public DbSet<SessionLogEntryEntity> SessionLogEntries { get; }
@@ -259,7 +259,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Session log entry actions (MVP-SUPPORT-011).'
+  summary: 'TR-PLANNED-CORE-013: Session log entry actions (MVP-SUPPORT-011).'
   example: []
   syntax:
     content: public DbSet<SessionLogActionEntity> SessionLogActions { get; }
@@ -286,7 +286,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Session log entry tags (MVP-SUPPORT-011).'
+  summary: 'TR-PLANNED-CORE-013: Session log entry tags (MVP-SUPPORT-011).'
   example: []
   syntax:
     content: public DbSet<SessionLogEntryTagEntity> SessionLogEntryTags { get; }
@@ -313,7 +313,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Session log entry context items (MVP-SUPPORT-011).'
+  summary: 'TR-PLANNED-CORE-013: Session log entry context items (MVP-SUPPORT-011).'
   example: []
   syntax:
     content: public DbSet<SessionLogEntryContextEntity> SessionLogEntryContexts { get; }
@@ -340,7 +340,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage
-  summary: 'TR-PLANNED-013: Session log entry processing dialog items (MVP-SUPPORT-011).'
+  summary: 'TR-PLANNED-CORE-013: Session log entry processing dialog items (MVP-SUPPORT-011).'
   example: []
   syntax:
     content: public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs { get; }

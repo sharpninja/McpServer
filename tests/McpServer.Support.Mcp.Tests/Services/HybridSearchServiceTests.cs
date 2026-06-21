@@ -10,7 +10,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-013: Unit tests for HybridSearchService RRF blending and degradation.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for HybridSearchService RRF blending and degradation.</summary>
 public sealed class HybridSearchServiceTests : IAsyncLifetime
 {
     private const string WorkspacePath = @"E:\tests\hybrid-search";

@@ -20,7 +20,7 @@ public sealed partial class FwhMcpTools
 {
     // ── GROUP B: Session Log tools ───────────────────────────────────────
 
-    /// <summary>TR-PLANNED-013: Submit a session log payload.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Submit a session log payload.</summary>
     [McpServerTool(Name = "sessionlog_submit"), Description("Submit (upsert) a session log. Body is JSON string conforming to UnifiedSessionLogDto.")]
     public async Task<string> SessionLogSubmit(
         [Description("JSON string of the session log payload")] string json,
@@ -42,7 +42,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Query session logs.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Query session logs.</summary>
     [McpServerTool(Name = "sessionlog_query"), Description("Query session logs with optional filters: agent, model, text, from, to, limit.")]
     public async Task<string> SessionLogQuery(
         [Description("Workspace path (required)")] string workspacePath,
@@ -76,7 +76,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Append processing dialog items to an existing session log entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Append processing dialog items to an existing session log entry.</summary>
     [McpServerTool(Name = "sessionlog_dialog"), Description("Append processing dialog items to a session log entry.")]
     public async Task<string> SessionLogDialog(
         [Description("Agent source type")] string agent,
@@ -101,7 +101,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>FR-SUPPORT-010E: Stateless idempotent ensure-session.</summary>
+    /// <summary>FR-SUPPORT-014: Stateless idempotent ensure-session.</summary>
     [McpServerTool(Name = "sessionlog_open"), Description("Idempotently open (ensure) a session keyed by agent + sessionId. Stateless; safe to call from any process.")]
     public async Task<string> SessionLogOpen(
         [Description("Agent source type (e.g. ClaudeCode)")] string agent,
@@ -124,7 +124,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>FR-SUPPORT-010E: Stateless begin-turn keyed by (agent, sessionId, requestId).</summary>
+    /// <summary>FR-SUPPORT-014: Stateless begin-turn keyed by (agent, sessionId, requestId).</summary>
     [McpServerTool(Name = "sessionlog_begin_turn"), Description("Begin (or re-open) a session turn with status in_progress. Stateless; keyed by agent + sessionId + requestId.")]
     public Task<string> SessionLogBeginTurn(
         [Description("Agent source type")] string agent,
@@ -140,7 +140,7 @@ public sealed partial class FwhMcpTools
             turn.QueryText = queryText;
         }, cancellationToken);
 
-    /// <summary>FR-SUPPORT-010E: Stateless complete-turn with additive merge.</summary>
+    /// <summary>FR-SUPPORT-014: Stateless complete-turn with additive merge.</summary>
     [McpServerTool(Name = "sessionlog_complete_turn"), Description("Complete a session turn. Merges turnJson (UnifiedRequestEntryDto) additively onto the existing turn; requires at least one design decision, action, or commit.")]
     public Task<string> SessionLogCompleteTurn(
         [Description("Agent source type")] string agent,
@@ -151,7 +151,7 @@ public sealed partial class FwhMcpTools
         CancellationToken cancellationToken = default)
         => FinalizeLifecycleTurnToolAsync(agent, sessionId, requestId, workspacePath, "completed", turnJson, cancellationToken);
 
-    /// <summary>FR-SUPPORT-010E: Stateless fail-turn with additive merge.</summary>
+    /// <summary>FR-SUPPORT-014: Stateless fail-turn with additive merge.</summary>
     [McpServerTool(Name = "sessionlog_fail_turn"), Description("Fail a session turn, recording the failure note. Merges turnJson additively; subject to the same compliance gate as complete.")]
     public Task<string> SessionLogFailTurn(
         [Description("Agent source type")] string agent,

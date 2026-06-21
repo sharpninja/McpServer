@@ -22,7 +22,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Abstraction for context chunk search (FTS5, vector, or hybrid).
+    TR-PLANNED-CORE-013: Abstraction for context chunk search (FTS5, vector, or hybrid).
 
     FR-SUPPORT-010: Enables ranked search with BM25 scoring and snippet extraction.
   example: []
@@ -47,7 +47,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Search indexed context chunks by query text.'
+  summary: 'TR-PLANNED-CORE-013: Search indexed context chunks by query text.'
   example: []
   syntax:
     content: Task<ContextSearchResult> SearchAsync(string query, int limit = 20, string? sourceType = null, CancellationToken ct = default)
@@ -90,7 +90,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Rebuild the search index.'
+  summary: 'TR-PLANNED-CORE-013: Rebuild the search index.'
   example: []
   syntax:
     content: Task RebuildAsync(CancellationToken ct = default)

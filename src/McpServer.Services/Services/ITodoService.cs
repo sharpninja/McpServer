@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Service for querying and managing TODO items.
+/// TR-PLANNED-CORE-013: Service for querying and managing TODO items.
 /// Provides CRUD operations, search, and audit-history access.
 /// </summary>
 public interface ITodoService
@@ -85,7 +85,7 @@ public sealed record TodoCompensatedMutationResult
     public TodoCompensationSnapshot? Snapshot { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Query parameters for searching TODO items.</summary>
+/// <summary>TR-PLANNED-CORE-013: Query parameters for searching TODO items.</summary>
 public sealed record TodoQueryRequest
 {
     /// <summary>Free-text keyword to match against id, title, description, and technical details.</summary>
@@ -104,10 +104,10 @@ public sealed record TodoQueryRequest
     public bool? Done { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Result of a TODO query.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of a TODO query.</summary>
 public sealed record TodoQueryResult(IReadOnlyList<TodoFlatItem> Items, int TotalCount);
 
-/// <summary>TR-PLANNED-013: A flattened TODO item with section and priority context.</summary>
+/// <summary>TR-PLANNED-CORE-013: A flattened TODO item with section and priority context.</summary>
 public sealed record TodoFlatItem
 {
     /// <summary>Item id (e.g. MVP-APP-001).</summary>
@@ -168,10 +168,10 @@ public sealed record TodoFlatItem
     public IReadOnlyList<string>? TechnicalRequirements { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Flattened implementation task.</summary>
+/// <summary>TR-PLANNED-CORE-013: Flattened implementation task.</summary>
 public sealed record TodoFlatTask(string Task, bool Done);
 
-/// <summary>TR-PLANNED-013: Request to create a new TODO item.</summary>
+/// <summary>TR-PLANNED-CORE-013: Request to create a new TODO item.</summary>
 public sealed record TodoCreateRequest
 {
     /// <summary>Item id (e.g. MVP-APP-006). Required.</summary>
@@ -217,7 +217,7 @@ public sealed record TodoCreateRequest
     public IReadOnlyList<string>? TechnicalRequirements { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Request to update an existing TODO item.</summary>
+/// <summary>TR-PLANNED-CORE-013: Request to update an existing TODO item.</summary>
 public sealed record TodoUpdateRequest
 {
     /// <summary>Updated title (null = no change).</summary>
@@ -295,7 +295,7 @@ public enum TodoMutationFailureKind
     ExternalSyncFailed = 5,
 }
 
-/// <summary>TR-PLANNED-013: Result of a TODO mutation (create/update/delete).</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of a TODO mutation (create/update/delete).</summary>
 public sealed record TodoMutationResult(
     bool Success,
     string? Error = null,

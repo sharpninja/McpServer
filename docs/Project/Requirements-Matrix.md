@@ -48,7 +48,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REQ-003 | ✅ Complete | RequirementsController, FwhMcpTools, Program.cs (requirements DI/config) |
 | TR-MCP-DRY-001 | ✅ Active directive | All code and scripts |
 | TR-MCP-DOC-002 | ✅ Active directive | .github/copilot-instructions.md, AGENTS.md |
-| TR-LOC-001 | 🔲 Planned | — |
 | FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServerManager moved Director auth surfaces |
 | FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
 | FR-MCP-028 | 🔲 Planned | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
@@ -204,13 +203,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (TodoCommandShapes, SessionLogCommandShapes, RequirementsCommandShapes, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
 | TR-MCP-REPL-006 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
 | TR-MCP-REPL-007 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
-| FR-SUPPORT-010A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
-| FR-SUPPORT-010B | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
+| FR-SUPPORT-011 | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
+| FR-SUPPORT-012 | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
 | TR-SUPPORT-LOG-010 | ✅ Complete | Technical-Requirements.md, Program.cs, SessionLogController |
-| FR-SUPPORT-010C | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
+| FR-SUPPORT-013 | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
 | FR-MCP-REPL-007 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/McpServer.Repl.Host/Program.cs (--workspace-path, --marker-file), src/McpServer.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
-| TR-MCP-MT-003A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
-| TR-PLANNED-013A | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
+| TR-MCP-MT-004 | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
+| TR-PLANNED-CORE-014 | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
 | TR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs |
 | TEST-MCP-REPL-001 | ✅ Complete | tests/McpServer.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
 | TEST-MCP-REPL-002 | ✅ Complete | tests/McpServer.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
@@ -422,36 +421,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-110 | ✅ Complete | Deterministic Nuke PowerShell execution |
 | TR-MCP-NUKE-001 | ✅ Complete | Non-interactive PowerShell hosts for Nuke automation |
 | TEST-MCP-148 | ✅ Complete | Nuke PowerShell non-interactive guard tests |
-| FR-01 | Tracked | Functional-Requirements.md |
-| FR-02 | Tracked | Functional-Requirements.md |
-| FR-03 | Tracked | Functional-Requirements.md |
-| FR-04 | Tracked | Functional-Requirements.md |
-| FR-05 | Tracked | Functional-Requirements.md |
-| FR-06 | Tracked | Functional-Requirements.md |
-| FR-07 | Tracked | Functional-Requirements.md |
-| FR-08 | Tracked | Functional-Requirements.md |
-| FR-09 | Tracked | Functional-Requirements.md |
-| FR-10 | Tracked | Functional-Requirements.md |
 | FR-MCP-104 | Tracked | Functional-Requirements.md |
 | FR-MCP-105 | Tracked | Functional-Requirements.md |
 | FR-MCP-106 | Tracked | Functional-Requirements.md |
 | FR-MCP-107 | Tracked | Functional-Requirements.md |
 | FR-MCP-108 | Tracked | Functional-Requirements.md |
 | FR-WFL-001 | Tracked | Functional-Requirements.md |
-| TR-01 | Tracked | Technical-Requirements.md |
-| TR-02 | Tracked | Technical-Requirements.md |
-| TR-03 | Tracked | Technical-Requirements.md |
-| TR-04 | Tracked | Technical-Requirements.md |
-| TR-05 | Tracked | Technical-Requirements.md |
-| TR-06 | Tracked | Technical-Requirements.md |
-| TR-07 | Tracked | Technical-Requirements.md |
-| TR-08 | Tracked | Technical-Requirements.md |
-| TR-09 | Tracked | Technical-Requirements.md |
-| TR-10 | Tracked | Technical-Requirements.md |
-| TR-11 | Tracked | Technical-Requirements.md |
-| TR-12 | Tracked | Technical-Requirements.md |
-| TR-13 | Tracked | Technical-Requirements.md |
-| TR-14 | Tracked | Technical-Requirements.md |
 | TR-MCP-BYRD-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-002 | Tracked | Technical-Requirements.md |
@@ -483,23 +458,22 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-142 | Tracked | Testing-Requirements.md |
 | TEST-MCP-143 | Tracked | Testing-Requirements.md |
 | TEST-MCP-144 | Tracked | Testing-Requirements.md |
-| TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
-| TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
-| TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
-| TEST-MCP-REPL-007-4 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010A-1 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010A-2 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010B-1 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010B-2 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010C-1 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010C-2 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010C-3 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010C-4 | ✅ Complete | SessionLogControllerTests, SessionLogServiceTests |
+| TEST-MCP-REPL-021 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-022 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-023 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-024 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-016 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-017 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-018 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-019 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-020 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-021 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-022 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-023 | ✅ Complete | SessionLogControllerTests, SessionLogServiceTests |
 | TEST-WFL-001 | Tracked | Testing-Requirements.md |
 | FR-GEN-001 | Tracked | Functional-Requirements.md |
 | FR-TEST-002 | Tracked | Functional-Requirements.md |
 | TR-GEN-YAML-001 | Tracked | Technical-Requirements.md |
-| TR-TEST-001 | Tracked | Technical-Requirements.md |
 | FR-TEST-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-111 | Tracked | Functional-Requirements.md |
 | FR-MCP-112 | Tracked | Functional-Requirements.md |
@@ -509,8 +483,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-AGENT-PARITY-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-AGENT-PARITY-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-BATCH-001 | Tracked | Functional-Requirements.md |
-| FR-MCP-LIVE-CODEX-20260603T2014Z | Tracked | Functional-Requirements.md |
-| FR-MCP-LIVE-CODEX-20260603T2015Z | Tracked | Functional-Requirements.md |
 | FR-MCP-MEMORY-001 | ✅ Complete | Functional-Requirements.md |
 | FR-MCP-MEMORY-002 | ✅ Complete | Functional-Requirements.md |
 | FR-MCP-MEMORY-003 | ✅ Complete | Functional-Requirements.md |
@@ -576,11 +548,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REQAC-003 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-004 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQACPLUGIN-001 | Tracked | Testing-Requirements.md |
-| TEST-MCP-REQAC-PLUGIN-BASH | Tracked | Testing-Requirements.md |
-| TEST-MCP-REQACPLUGIN-BASH | Tracked | Testing-Requirements.md |
-| TEST-MCP-REQACPLUGIN-LIVE | Tracked | Testing-Requirements.md |
-| TEST-MCP-REQAC-PLUGIN-TS | Tracked | Testing-Requirements.md |
-| TEST-MCP-REQACPLUGIN-TS | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQACPLUGIN-002 | Tracked | Testing-Requirements.md |
 | TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
 | FR-MCP-116 | Tracked | Functional-Requirements.md |
@@ -670,23 +637,22 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-TRACE-LEGACY-003 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
 | TEST-MCP-TRACE-REPL-001 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
 | TEST-SUPPORT-010 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
-| TEST-MCP-REQACPLUGIN-CAPTURE | Tracked | Testing-Requirements.md |
 | FR-MCP-PLUGINCORE-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGINCORE-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-PLUGINCORE-003 | Tracked | Functional-Requirements.md |
 | FR-MCP-REPL-006 | Tracked | Functional-Requirements.md |
-| FR-SUPPORT-010E | Tracked | Functional-Requirements.md |
-| FR-SUPPORT-010F | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-014 | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-015 | Tracked | Functional-Requirements.md |
 | TR-MCP-PLUGINCORE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGINCORE-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGINCORE-003 | Tracked | Technical-Requirements.md |
-| TR-SUPPORT-010E | Tracked | Technical-Requirements.md |
-| TR-SUPPORT-010F | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-CORE-014 | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-CORE-015 | Tracked | Technical-Requirements.md |
 | TEST-MCP-PLUGINCORE-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-PLUGINCORE-002 | Tracked | Testing-Requirements.md |
 | TEST-MCP-PLUGINCORE-003 | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010E | Tracked | Testing-Requirements.md |
-| TEST-SUPPORT-010F | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-014 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-015 | Tracked | Testing-Requirements.md |
 | TEST-MCP-ACID-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-ACID-002 | Tracked | Testing-Requirements.md |
 | TEST-MCP-ACID-003 | Tracked | Testing-Requirements.md |

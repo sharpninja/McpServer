@@ -30,7 +30,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013, TR-GH-013-001: Wrapper for GitHub CLI (gh) for issues and PRs.
+    TR-PLANNED-CORE-013, TR-GH-013-001: Wrapper for GitHub CLI (gh) for issues and PRs.
 
     FR-SUPPORT-010, FR-SUPPORT-013: Uses existing local gh auth.
   example: []

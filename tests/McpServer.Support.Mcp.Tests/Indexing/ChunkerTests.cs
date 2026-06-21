@@ -3,7 +3,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Indexing;
 
-/// <summary>TR-PLANNED-013: Unit tests for Chunker.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for Chunker.</summary>
 public sealed class ChunkerTests
 {
     private readonly Chunker _sut = new();

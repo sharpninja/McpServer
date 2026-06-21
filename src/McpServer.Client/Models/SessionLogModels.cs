@@ -351,7 +351,7 @@ public sealed class DialogAppendResult
     public int TotalDialogCount { get; set; }
 }
 
-/// <summary>FR-SUPPORT-010E: Result of the stateless open-session lifecycle call.</summary>
+/// <summary>FR-SUPPORT-014: Result of the stateless open-session lifecycle call.</summary>
 public sealed class SessionLifecycleOpenResult
 {
     /// <summary>Agent source type.</summary>

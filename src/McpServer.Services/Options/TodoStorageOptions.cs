@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Options;
 
 /// <summary>
-/// TR-PLANNED-013 / TR-MCP-TODO-005 (provider-agnostic): Configuration for TODO persistence backend.
+/// TR-PLANNED-CORE-013 / TR-MCP-TODO-005 (provider-agnostic): Configuration for TODO persistence backend.
 /// </summary>
 /// <remarks>
 /// When <see cref="Provider"/> is <c>database</c> the TODO subsystem persists through

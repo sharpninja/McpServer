@@ -24,7 +24,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
   summary: >-
-    TR-PLANNED-013: Session log submit and query endpoints (MVP-SUPPORT-011).
+    TR-PLANNED-CORE-013: Session log submit and query endpoints (MVP-SUPPORT-011).
 
     FR-SUPPORT-010: Agents POST session log payloads; clients GET with optional filters.
   example: []
@@ -253,7 +253,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public SessionLogController(ISessionLogService service)
@@ -283,7 +283,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Submit a session log (upsert by SourceType + SessionId).'
+  summary: 'TR-PLANNED-CORE-013: Submit a session log (upsert by SourceType + SessionId).'
   example: []
   syntax:
     content: >-
@@ -349,7 +349,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Query session logs with optional filters and pagination.'
+  summary: 'TR-PLANNED-CORE-013: Query session logs with optional filters and pagination.'
   example: []
   syntax:
     content: >-
@@ -454,7 +454,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
   summary: >-
-    TR-PLANNED-013: Append processing dialog items to an existing entry.
+    TR-PLANNED-CORE-013: Append processing dialog items to an existing entry.
 
     The AI model calls this endpoint on the fly to record reasoning, tool calls, and execution trace.
   example: []

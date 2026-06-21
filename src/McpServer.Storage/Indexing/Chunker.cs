@@ -5,7 +5,7 @@ using McpServer.Support.Mcp.Models;
 namespace McpServer.Support.Mcp.Indexing;
 
 /// <summary>
-/// TR-PLANNED-013: Splits content into fixed-size chunks for full-text and vector indexing.
+/// TR-PLANNED-CORE-013: Splits content into fixed-size chunks for full-text and vector indexing.
 /// </summary>
 public sealed class Chunker
 {
@@ -14,14 +14,14 @@ public sealed class Chunker
 
     private readonly int _maxTokensPerChunk;
 
-    /// <summary>TR-PLANNED-013: Creates a chunker with optional max tokens per chunk.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Creates a chunker with optional max tokens per chunk.</summary>
     /// <param name="maxTokensPerChunk">Maximum estimated tokens per chunk (default 512).</param>
     public Chunker(int maxTokensPerChunk = DefaultMaxTokensPerChunk)
     {
         _maxTokensPerChunk = maxTokensPerChunk > 0 ? maxTokensPerChunk : DefaultMaxTokensPerChunk;
     }
 
-    /// <summary>TR-PLANNED-013: Chunks text and returns chunk records with stable IDs.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Chunks text and returns chunk records with stable IDs.</summary>
     /// <param name="documentId">Parent document ID.</param>
     /// <param name="content">Full text to chunk.</param>
     /// <returns>Ordered list of context chunks.</returns>
@@ -67,7 +67,7 @@ public sealed class Chunker
         return list;
     }
 
-    /// <summary>TR-PLANNED-013: Estimates token count (approx 4 chars per token).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Estimates token count (approx 4 chars per token).</summary>
     /// <param name="text">The text to estimate tokens for.</param>
     /// <returns>Estimated token count.</returns>
     public static int EstimateTokenCount(string text)

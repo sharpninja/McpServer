@@ -29,7 +29,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013: Result of a single sync (ingestion) run.
+    TR-PLANNED-CORE-013: Result of a single sync (ingestion) run.
 
     FR-SUPPORT-010: Status for sync.status endpoint.
   example: []
@@ -252,7 +252,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Session logs imported into 4NF tables (MVP-SUPPORT-011).'
+  summary: 'TR-PLANNED-CORE-013: Session logs imported into 4NF tables (MVP-SUPPORT-011).'
   example: []
   syntax:
     content: public int SessionLogsImported { get; init; }

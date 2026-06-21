@@ -1,4 +1,4 @@
-// TR-PLANNED-013: Runs the MCP server over STDIO (stdin/stdout JSON-RPC) when --transport stdio.
+// TR-PLANNED-CORE-013: Runs the MCP server over STDIO (stdin/stdout JSON-RPC) when --transport stdio.
 
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
@@ -25,7 +25,7 @@ using ModelContextProtocol.Server;
 namespace McpServer.Support.Mcp.McpStdio;
 
 /// <summary>
-/// TR-PLANNED-013: Host for MCP STDIO transport; registers shared services and runs MCP server.
+/// TR-PLANNED-CORE-013: Host for MCP STDIO transport; registers shared services and runs MCP server.
 /// </summary>
 public static class McpStdioHost
 {

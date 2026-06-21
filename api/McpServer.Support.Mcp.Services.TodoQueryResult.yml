@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of a TODO query.'
+  summary: 'TR-PLANNED-CORE-013: Result of a TODO query.'
   example: []
   syntax:
     content: 'public sealed record TodoQueryResult : IEquatable<TodoQueryResult>'
@@ -56,7 +56,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of a TODO query.'
+  summary: 'TR-PLANNED-CORE-013: Result of a TODO query.'
   example: []
   syntax:
     content: public TodoQueryResult(IReadOnlyList<TodoFlatItem> Items, int TotalCount)

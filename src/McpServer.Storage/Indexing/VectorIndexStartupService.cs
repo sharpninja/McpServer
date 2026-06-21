@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Indexing;
 
 /// <summary>
-/// TR-PLANNED-013: Hosted service that loads persisted HNSW index on startup and saves on shutdown.
+/// TR-PLANNED-CORE-013: Hosted service that loads persisted HNSW index on startup and saves on shutdown.
 /// FR-SUPPORT-010: Ensures vector index is populated from DB when no persisted index exists.
 /// </summary>
 public sealed class VectorIndexStartupService(
@@ -15,7 +15,7 @@ public sealed class VectorIndexStartupService(
     IOptions<VectorIndexOptions> options,
     ILogger<VectorIndexStartupService> logger) : IHostedService
 {
-    /// <summary>TR-PLANNED-013: Load or build the vector index at startup.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Load or build the vector index at startup.</summary>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
@@ -58,7 +58,7 @@ public sealed class VectorIndexStartupService(
         }
     }
 
-    /// <summary>TR-PLANNED-013: Save the vector index on shutdown.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Save the vector index on shutdown.</summary>
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         if (vectorIndex.Count > 0)

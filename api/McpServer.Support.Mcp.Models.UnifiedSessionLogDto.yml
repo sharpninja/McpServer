@@ -454,7 +454,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Total token count across all entries.'
+  summary: 'TR-PLANNED-CORE-013: Total token count across all entries.'
   example: []
   syntax:
     content: >-
@@ -493,7 +493,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Cursor-specific session label.'
+  summary: 'TR-PLANNED-CORE-013: Cursor-specific session label.'
   example: []
   syntax:
     content: >-
@@ -532,7 +532,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Copilot-specific aggregate statistics.'
+  summary: 'TR-PLANNED-CORE-013: Copilot-specific aggregate statistics.'
   example: []
   syntax:
     content: >-

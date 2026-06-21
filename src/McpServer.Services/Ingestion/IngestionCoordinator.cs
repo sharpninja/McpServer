@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013, TR-GH-013-004: Runs repo, session-log, and issue ingestion, persists to McpDbContext.
+/// TR-PLANNED-CORE-013, TR-GH-013-004: Runs repo, session-log, and issue ingestion, persists to McpDbContext.
 /// FR-SUPPORT-010: Records sync status for sync.run / sync.status. Generates embeddings for vector search.
 /// </summary>
 public sealed class IngestionCoordinator
@@ -29,7 +29,7 @@ public sealed class IngestionCoordinator
     private readonly WorkspaceContext _workspaceContext;
     private readonly ILogger<IngestionCoordinator> _logger;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public IngestionCoordinator(
         McpDbContext db,
         RepoIngestor repoIngestor,
@@ -406,7 +406,7 @@ public sealed class IngestionCoordinator
             chunkEntities.Add(entity);
         }
 
-        // TR-PLANNED-013: Generate embeddings and add to vector index if embedding service is available
+        // TR-PLANNED-CORE-013: Generate embeddings and add to vector index if embedding service is available
         if (_embeddingService.IsAvailable)
         {
             const int batchSize = 32;

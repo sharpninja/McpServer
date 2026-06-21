@@ -1,61 +1,5 @@
 # Technical Requirements (MCP Server)
 
-## TR-01
-
-**TR-01** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-02
-
-**TR-02** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-03
-
-**TR-03** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-04
-
-**TR-04** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-05
-
-**TR-05** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-06
-
-**TR-06** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-07
-
-**TR-07** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-08
-
-**TR-08** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-09
-
-**TR-09** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-10
-
-**TR-10** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-11
-
-**TR-11** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-12
-
-**TR-12** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-13
-
-**TR-13** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
-## TR-14
-
-**TR-14** — Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.
-
 ## TR-GRAPHRAG-ADHOC-001
 
 **Ad-hoc text ingestion pipeline** — GraphRagService.IngestTextAsync shall accept raw text, chunk via Chunker (512 tokens), generate embeddings via IEmbeddingService (all-MiniLM-L6-v2, 384-dim), persist ContextDocumentEntity and ContextChunkEntity rows with workspace scoping, register vectors in IVectorIndexService, and optionally trigger IndexAsync. Document ID format: "adhoc-{Guid:N}". Content hash: SHA256.
@@ -67,10 +11,6 @@
 ## TR-GRAPHRAG-ADHOC-003
 
 **Document lifecycle with cascade delete and vector cleanup** — DeleteDocumentAsync shall query chunk IDs for the document, call IVectorIndexService.RemoveVector for each chunk, then delete the ContextDocumentEntity (EF cascade removes chunks). RemoveVector removes the chunk from internal HNSW dictionaries making the node unreachable; full rebuild reclaims space. ListDocumentsAsync shall return paginated results with ChunkCount and TotalTokens computed via subquery.
-
-## TR-LOC-001
-
-**Localization Infrastructure** — Multi-language support for the MCP server. *(Planned - implementation scope TBD.)*
 
 ## TR-MCP-AGENT-001
 
@@ -783,7 +723,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 **EF Core Global Query Filter for WorkspaceId** — `McpDbContext` accepts optional `WorkspaceContext` to capture `_workspaceId` per-instance. `OnModelCreating` applies `.HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId)` on all 14 entity types. Empty `_workspaceId` disables filtering (backward compatible). `IgnoreQueryFilters()` escapes for cross-workspace admin queries. `WorkspaceId TEXT NOT NULL DEFAULT ''` column with indexes on all entity tables.
 **Covered by:** `McpDbContext`, all entity types (`WorkspaceId` property)
 
-## TR-MCP-MT-003A
+## TR-MCP-MT-004
 
 `SessionLogService` injects an optional `WorkspaceContext` and stamps `WorkspaceId` on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on `McpDbContext.SaveChangesAsync` to auto-fill `WorkspaceId` for Added entities from the DbContext's resolved `_workspaceId`. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
 
@@ -886,7 +826,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-QA-013
 
-**QA XML Documentation** — XML docs on every new public type and member (CS1591 enforced). Test classes cite TR-PLANNED-013 plus the FR/TR/TEST IDs they validate.
+**QA XML Documentation** — XML docs on every new public type and member (CS1591 enforced). Test classes cite TR-PLANNED-CORE-013 plus the FR/TR/TEST IDs they validate.
 
 ## TR-MCP-QA-014
 
@@ -1516,7 +1456,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **McpServer Management Web UI** — Reserved/planned: web-based management UI for workspace and server administration. Tracks FR-MCP-031.
 
-## TR-PLANNED-013A
+## TR-PLANNED-CORE-014
 
 `AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
 
@@ -1524,17 +1464,13 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Session-log ProblemDetails contract** — Session-log REST endpoints SHALL return `application/problem+json` for malformed JSON binding and domain validation failures. Error keys SHALL identify the JSON root or offending domain field rather than leaking action parameter names such as `dto`.
 
-## TR-SUPPORT-010E
+## TR-SUPPORT-CORE-014
 
 **Stateless lifecycle controller + client + tool adapters** — SessionLogController exposes open/begin/complete/fail keyed by ids; SessionLogClient and MCP tools delegate; UpsertTurnAsync underpins all.
 
-## TR-SUPPORT-010F
+## TR-SUPPORT-CORE-015
 
 **Merge-on-null mapping for partial submits** — MapDtoToEntity merges non-null scalars; UpsertTurns passes mergeOmittedFields:true; collections append-only.
-
-## TR-TEST-001
-
-**TR-TEST-001** — Legacy test-planning import stub retained for historical traceability. Status: reserved; active test requirements are tracked under concrete TEST-* IDs in Testing-Requirements.md.
 
 ## TR-MCP-AUTH-010
 

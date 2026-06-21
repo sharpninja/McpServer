@@ -25,7 +25,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
   summary: >-
-    TR-PLANNED-013: Represents a source document indexed by the MCP.
+    TR-PLANNED-CORE-013: Represents a source document indexed by the MCP.
 
     FR-SUPPORT-010: Normalized entry for context retrieval.
   example: []
@@ -61,7 +61,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Unique document identifier.'
+  summary: 'TR-PLANNED-CORE-013: Unique document identifier.'
   example: []
   syntax:
     content: public required string Id { get; init; }
@@ -115,7 +115,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Source path or URL.'
+  summary: 'TR-PLANNED-CORE-013: Source path or URL.'
   example: []
   syntax:
     content: public required string SourceKey { get; init; }
@@ -169,7 +169,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Hash for change detection.'
+  summary: 'TR-PLANNED-CORE-013: Hash for change detection.'
   example: []
   syntax:
     content: public required string ContentHash { get; init; }

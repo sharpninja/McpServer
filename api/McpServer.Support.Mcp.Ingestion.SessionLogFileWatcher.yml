@@ -24,7 +24,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013: Hosted service that monitors docs/sessions/ for new and updated JSON and Markdown files.
+    TR-PLANNED-CORE-013: Hosted service that monitors docs/sessions/ for new and updated JSON and Markdown files.
 
     When a file change is detected, the session log is re-imported into the 4NF tables.
 
@@ -63,7 +63,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public SessionLogFileWatcher(IServiceScopeFactory scopeFactory, IOptions<IngestionOptions> options, ILogger<SessionLogFileWatcher> logger)

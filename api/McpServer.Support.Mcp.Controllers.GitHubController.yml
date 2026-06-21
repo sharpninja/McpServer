@@ -34,7 +34,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
   summary: >-
-    TR-PLANNED-013, TR-GH-013-006: GitHub metadata via gh CLI (issues and PRs).
+    TR-PLANNED-CORE-013, TR-GH-013-006: GitHub metadata via gh CLI (issues and PRs).
 
     FR-SUPPORT-010, FR-SUPPORT-013: List, create, comment, update, close, reopen, sync endpoints.
   example: []
@@ -263,7 +263,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public GitHubController(IGitHubCliService gh, IIssueTodoSyncService? syncService = null)
@@ -295,7 +295,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: List issues (gh.issues.list).'
+  summary: 'TR-PLANNED-CORE-013: List issues (gh.issues.list).'
   example: []
   syntax:
     content: >-
@@ -446,7 +446,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Create issue (gh.issues.create).'
+  summary: 'TR-PLANNED-CORE-013: Create issue (gh.issues.create).'
   example: []
   syntax:
     content: >-
@@ -757,7 +757,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Comment on issue (gh.issues.comment).'
+  summary: 'TR-PLANNED-CORE-013: Comment on issue (gh.issues.comment).'
   example: []
   syntax:
     content: >-
@@ -889,7 +889,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: List PRs (gh.prs.list).'
+  summary: 'TR-PLANNED-CORE-013: List PRs (gh.prs.list).'
   example: []
   syntax:
     content: >-
@@ -959,7 +959,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Comment on PR (gh.prs.comment).'
+  summary: 'TR-PLANNED-CORE-013: Comment on PR (gh.prs.comment).'
   example: []
   syntax:
     content: >-

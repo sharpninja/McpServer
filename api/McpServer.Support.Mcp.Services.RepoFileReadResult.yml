@@ -23,7 +23,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of repo file read.'
+  summary: 'TR-PLANNED-CORE-013: Result of repo file read.'
   example: []
   syntax:
     content: 'public sealed record RepoFileReadResult : IEquatable<RepoFileReadResult>'
@@ -57,7 +57,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of repo file read.'
+  summary: 'TR-PLANNED-CORE-013: Result of repo file read.'
   example: []
   syntax:
     content: public RepoFileReadResult(string RelativePath, string Content, bool Exists)

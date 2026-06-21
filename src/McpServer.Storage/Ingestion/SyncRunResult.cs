@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013: Result of a single sync (ingestion) run.
+/// TR-PLANNED-CORE-013: Result of a single sync (ingestion) run.
 /// FR-SUPPORT-010: Status for sync.status endpoint.
 /// </summary>
 public sealed class SyncRunResult
@@ -27,7 +27,7 @@ public sealed class SyncRunResult
     /// <summary>Chunks written in this run.</summary>
     public int ChunksWritten { get; init; }
 
-    /// <summary>TR-PLANNED-013: Session logs imported into 4NF tables (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session logs imported into 4NF tables (MVP-SUPPORT-011).</summary>
     public int SessionLogsImported { get; init; }
 
     /// <summary>TR-GH-013-004: Issues synced during ingestion.</summary>

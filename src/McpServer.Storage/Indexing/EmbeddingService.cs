@@ -9,7 +9,7 @@ using Microsoft.ML.OnnxRuntime.Tensors;
 namespace McpServer.Support.Mcp.Indexing;
 
 /// <summary>
-/// TR-PLANNED-013: ONNX embedding service using all-MiniLM-L6-v2 for vector search.
+/// TR-PLANNED-CORE-013: ONNX embedding service using all-MiniLM-L6-v2 for vector search.
 /// FR-SUPPORT-010: Generates 384-dimensional embeddings with mean pooling and L2 normalization.
 /// Gracefully degrades to stub mode when model is unavailable (CI/CD, first run before download).
 /// </summary>
@@ -25,7 +25,7 @@ public sealed class EmbeddingService : IEmbeddingService, IDisposable
     private WordPieceTokenizer? _tokenizer;
     private bool _disposed;
 
-    /// <summary>TR-PLANNED-013: Constructor with configuration and optional model loading.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor with configuration and optional model loading.</summary>
     public EmbeddingService(IOptions<EmbeddingOptions> options, ILogger<EmbeddingService> logger)
     {
         _options = options?.Value ?? new EmbeddingOptions();
@@ -33,7 +33,7 @@ public sealed class EmbeddingService : IEmbeddingService, IDisposable
         TryLoadModel();
     }
 
-    /// <summary>TR-PLANNED-013: Constructor for testing without DI options.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor for testing without DI options.</summary>
     internal EmbeddingService(EmbeddingOptions options, ILogger<EmbeddingService> logger)
     {
         _options = options ?? new EmbeddingOptions();
@@ -88,7 +88,7 @@ public sealed class EmbeddingService : IEmbeddingService, IDisposable
         _session = null;
     }
 
-    /// <summary>TR-PLANNED-013: Attempt to download the model if AutoDownload is enabled.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Attempt to download the model if AutoDownload is enabled.</summary>
     internal async Task TryDownloadModelAsync(CancellationToken ct = default)
     {
         if (IsAvailable) return;
@@ -240,7 +240,7 @@ public sealed class EmbeddingService : IEmbeddingService, IDisposable
 }
 
 /// <summary>
-/// TR-PLANNED-013: Simple WordPiece tokenizer for BERT-compatible models.
+/// TR-PLANNED-CORE-013: Simple WordPiece tokenizer for BERT-compatible models.
 /// Loads vocab.txt and tokenizes input into input_ids, attention_mask, token_type_ids.
 /// </summary>
 internal sealed class WordPieceTokenizer

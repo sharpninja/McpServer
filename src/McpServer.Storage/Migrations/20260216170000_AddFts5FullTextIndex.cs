@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace McpServer.Support.Mcp.Storage.Migrations;
 
 /// <summary>
-/// TR-PLANNED-013: FTS5 full-text index over ContextChunkEntity.Content for BM25-ranked search.
+/// TR-PLANNED-CORE-013: FTS5 full-text index over ContextChunkEntity.Content for BM25-ranked search.
 /// </summary>
 public partial class AddFts5FullTextIndex : Migration
 {

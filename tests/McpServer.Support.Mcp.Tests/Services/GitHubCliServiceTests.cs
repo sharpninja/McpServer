@@ -11,7 +11,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-013, TR-GH-013-001: Unit tests for GitHubCliService with mocked IProcessRunner.</summary>
+/// <summary>TR-PLANNED-CORE-013, TR-GH-013-001: Unit tests for GitHubCliService with mocked IProcessRunner.</summary>
 public sealed class GitHubCliServiceTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();

@@ -78,4 +78,4 @@ dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedN
 
 ### Requirement Traceability Comments
 
-All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.
+All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-CORE-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.

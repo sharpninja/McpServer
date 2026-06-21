@@ -21,7 +21,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: Request to create GitHub issue. TR-PLANNED-013.
+  summary: Request to create GitHub issue. TR-PLANNED-CORE-013.
   example: []
   syntax:
     content: public sealed class GitHubIssueRequest

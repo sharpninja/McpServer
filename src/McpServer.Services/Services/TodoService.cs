@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Reads/writes TODO items from docs/Project/TODO.yaml.
+/// TR-PLANNED-CORE-013: Reads/writes TODO items from docs/Project/TODO.yaml.
 /// Provides flat search by keyword, priority, id and full CRUD.
 /// </summary>
 internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
@@ -21,7 +21,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     private readonly ILogger<TodoService> _logger;
     private readonly SemaphoreSlim _fileLock = new(1, 1);
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public TodoService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog, ILogger<TodoService> logger, IChangeEventBus? eventBus = null)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -34,7 +34,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         _todoAuditPath = todoPath;
     }
 
-    /// <summary>TR-PLANNED-013: Constructor accepting explicit file path (for testing).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor accepting explicit file path (for testing).</summary>
     internal TodoService(string todoFilePath, IWriteAuditLog auditLog, ILogger<TodoService> logger, IChangeEventBus? eventBus = null)
     {
         _todoFilePath = todoFilePath ?? throw new ArgumentNullException(nameof(todoFilePath));

@@ -30,7 +30,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Request to create a new TODO item.'
+  summary: 'TR-PLANNED-CORE-013: Request to create a new TODO item.'
   example: []
   syntax:
     content: 'public sealed record TodoCreateRequest : IEquatable<TodoCreateRequest>'

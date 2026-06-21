@@ -11,7 +11,7 @@ replacing an exact `oldString` with a `newString`. Edits are not raw filesystem 
 they route through the MCP Server `RepoFileService` (interface `IRepoFileService`,
 `src/McpServer.Services/Services/RepoFileService.cs`) and are wrapped by
 `TransactionGatedRepoFileService` (`src/McpServer.Support.Mcp/Services/TransactionGatedRepoFileService.cs`),
-which enforces the path allowlist (FR-SUPPORT-010, TR-PLANNED-013) and transactional
+which enforces the path allowlist (FR-SUPPORT-010, TR-PLANNED-CORE-013) and transactional
 rollback compensation via `IRepoFileCompensation` (TR-MCP-TXN-001).
 
 ## When to Use

@@ -24,7 +24,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Service for submitting and querying session logs (MVP-SUPPORT-011).
+    TR-PLANNED-CORE-013: Service for submitting and querying session logs (MVP-SUPPORT-011).
 
     FR-SUPPORT-010: Agents POST session log payloads; clients GET with optional filters.
   example: []
@@ -49,7 +49,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Submit (upsert) a session log. Inserts or replaces by (SourceType, SessionId).'
+  summary: 'TR-PLANNED-CORE-013: Submit (upsert) a session log. Inserts or replaces by (SourceType, SessionId).'
   example: []
   syntax:
     content: Task<long> SubmitAsync(UnifiedSessionLogDto dto, string? sourceFilePath = null, string? contentHash = null, CancellationToken cancellationToken = default)
@@ -92,7 +92,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Checks whether a session with the given key already exists with the specified content hash.'
+  summary: 'TR-PLANNED-CORE-013: Checks whether a session with the given key already exists with the specified content hash.'
   example: []
   syntax:
     content: Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default)
@@ -136,7 +136,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Append one or more processing dialog items to an existing entry.
+    TR-PLANNED-CORE-013: Append one or more processing dialog items to an existing entry.
 
     The AI model calls this on the fly to record reasoning, tool calls, and execution trace.
   example: []
@@ -184,7 +184,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Query session logs with optional filters and pagination.'
+  summary: 'TR-PLANNED-CORE-013: Query session logs with optional filters and pagination.'
   example: []
   syntax:
     content: Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default)

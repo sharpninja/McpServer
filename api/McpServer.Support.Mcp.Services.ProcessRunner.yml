@@ -20,7 +20,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Default process runner using System.Diagnostics.Process.'
+  summary: 'TR-PLANNED-CORE-013: Default process runner using System.Diagnostics.Process.'
   example: []
   syntax:
     content: 'public sealed class ProcessRunner : IProcessRunner'
@@ -54,7 +54,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Run an external process and return its result.'
+  summary: 'TR-PLANNED-CORE-013: Run an external process and return its result.'
   example: []
   syntax:
     content: public Task<ProcessRunResult> RunAsync(string fileName, string arguments, CancellationToken ct = default)

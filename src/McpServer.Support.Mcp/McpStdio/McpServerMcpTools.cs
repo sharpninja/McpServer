@@ -1,4 +1,4 @@
-// TR-PLANNED-013 / FR-SUPPORT-010: MCP tools for STDIO transport (mirrors HTTP API capabilities).
+// TR-PLANNED-CORE-013 / FR-SUPPORT-010: MCP tools for STDIO transport (mirrors HTTP API capabilities).
 
 using System.ComponentModel;
 using System.Text.Json;
@@ -21,7 +21,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.McpStdio;
 
 /// <summary>
-/// TR-PLANNED-013: MCP tools exposed over STDIO; same capabilities as HTTP /mcpserver/context, /mcpserver/repo.
+/// TR-PLANNED-CORE-013: MCP tools exposed over STDIO; same capabilities as HTTP /mcpserver/context, /mcpserver/repo.
 /// Includes TODO, Session Log, and GitHub tools for full STDIO parity.
 /// </summary>
 [McpServerToolType]
@@ -68,7 +68,7 @@ public sealed partial class FwhMcpTools
     private readonly ILogger<FwhMcpTools> _logger;
 
 
-    /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor for DI. Uses WorkspaceServiceAccessor for workspace-aware TODO resolution.</summary>
+    /// <summary>TR-PLANNED-CORE-013, TR-MCP-MT-001: Constructor for DI. Uses WorkspaceServiceAccessor for workspace-aware TODO resolution.</summary>
     public FwhMcpTools(McpDbContext db,
         IRepoFileService repoFileService,
         IngestionCoordinator coordinator,

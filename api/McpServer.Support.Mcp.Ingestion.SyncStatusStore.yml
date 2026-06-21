@@ -21,7 +21,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: In-memory store for last sync run result.'
+  summary: 'TR-PLANNED-CORE-013: In-memory store for last sync run result.'
   example: []
   syntax:
     content: 'public sealed class SyncStatusStore : ISyncStatusStore'

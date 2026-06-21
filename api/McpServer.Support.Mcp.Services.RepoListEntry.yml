@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Single list entry (name, isDirectory).'
+  summary: 'TR-PLANNED-CORE-013: Single list entry (name, isDirectory).'
   example: []
   syntax:
     content: 'public sealed record RepoListEntry : IEquatable<RepoListEntry>'
@@ -56,7 +56,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Single list entry (name, isDirectory).'
+  summary: 'TR-PLANNED-CORE-013: Single list entry (name, isDirectory).'
   example: []
   syntax:
     content: public RepoListEntry(string Name, bool IsDirectory)

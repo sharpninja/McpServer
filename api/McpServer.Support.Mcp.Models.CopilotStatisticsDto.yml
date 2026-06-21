@@ -24,7 +24,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Copilot aggregate statistics for a session.'
+  summary: 'TR-PLANNED-CORE-013: Copilot aggregate statistics for a session.'
   example: []
   syntax:
     content: public sealed class CopilotStatisticsDto

@@ -67,7 +67,7 @@ public sealed class SessionLogClient : McpClientBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: Idempotent ensure-session keyed by (agent, sessionId).
+    /// FR-SUPPORT-014: Idempotent ensure-session keyed by (agent, sessionId).
     /// Stateless: callable from any process with no prior session state.
     /// </summary>
     public async Task<SessionLifecycleOpenResult> OpenSessionAsync(
@@ -79,7 +79,7 @@ public sealed class SessionLogClient : McpClientBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: Begins (or re-opens) a turn keyed by
+    /// FR-SUPPORT-014: Begins (or re-opens) a turn keyed by
     /// (agent, sessionId, requestId) with status in_progress.
     /// </summary>
     public async Task<SessionLogTurnSubmitResult> BeginTurnAsync(
@@ -92,7 +92,7 @@ public sealed class SessionLogClient : McpClientBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: Completes the turn, merging <paramref name="payload"/>
+    /// FR-SUPPORT-014: Completes the turn, merging <paramref name="payload"/>
     /// onto the existing turn (omitted fields preserved). Requires at least one
     /// design decision, action, or commit (terminal-turn compliance gate).
     /// </summary>
@@ -106,7 +106,7 @@ public sealed class SessionLogClient : McpClientBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: Fails the turn, recording the failure note. Subject to the
+    /// FR-SUPPORT-014: Fails the turn, recording the failure note. Subject to the
     /// same terminal-turn compliance gate as complete.
     /// </summary>
     public async Task<SessionLogTurnSubmitResult> FailTurnAsync(

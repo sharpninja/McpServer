@@ -22,7 +22,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013: Ingests repository files under allowlist; computes hashes and chunks.
+    TR-PLANNED-CORE-013: Ingests repository files under allowlist; computes hashes and chunks.
 
     FR-SUPPORT-010: Path allowlist and repo root only.
   example: []
@@ -56,7 +56,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public RepoIngestor(Chunker chunker, IOptions<IngestionOptions> options)
@@ -90,7 +90,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Ingests allowlisted files under RepoRoot; returns documents and chunks.'
+  summary: 'TR-PLANNED-CORE-013: Ingests allowlisted files under RepoRoot; returns documents and chunks.'
   example: []
   syntax:
     content: public Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>> IngestAsync(CancellationToken cancellationToken = default)

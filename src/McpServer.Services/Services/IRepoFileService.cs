@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Repository file read/list/write with path allowlist.
+/// TR-PLANNED-CORE-013: Repository file read/list/write with path allowlist.
 /// FR-SUPPORT-010: Path allowlist enforced; write audit log.
 /// </summary>
 public interface IRepoFileService
@@ -80,23 +80,23 @@ public interface IRepoFileCompensation
 /// <param name="ContentSha256">SHA-256 hash of previous file content, or empty when the file did not exist.</param>
 public sealed record RepoFileSnapshot(string RelativePath, bool Exists, string Content, string ContentSha256);
 
-/// <summary>TR-PLANNED-013: Result of repo file read.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of repo file read.</summary>
 /// <param name="RelativePath">Normalized relative path.</param>
 /// <param name="Content">File content (empty string if not found).</param>
 /// <param name="Exists">Whether the file exists on disk.</param>
 public sealed record RepoFileReadResult(string RelativePath, string Content, bool Exists);
 
-/// <summary>TR-PLANNED-013: Result of repo list.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of repo list.</summary>
 /// <param name="Path">Normalized directory path.</param>
 /// <param name="Entries">Ordered list of directory entries.</param>
 public sealed record RepoListResult(string Path, IReadOnlyList<RepoListEntry> Entries);
 
-/// <summary>TR-PLANNED-013: Single list entry (name, isDirectory).</summary>
+/// <summary>TR-PLANNED-CORE-013: Single list entry (name, isDirectory).</summary>
 /// <param name="Name">File or directory name.</param>
 /// <param name="IsDirectory">Whether the entry is a directory.</param>
 public sealed record RepoListEntry(string Name, bool IsDirectory);
 
-/// <summary>TR-PLANNED-013: Result of repo write.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of repo write.</summary>
 /// <param name="Written">Whether the write succeeded.</param>
 /// <param name="Error">Error message when write failed; otherwise <see langword="null"/>.</param>
 public sealed record RepoWriteResult(bool Written, string? Error);

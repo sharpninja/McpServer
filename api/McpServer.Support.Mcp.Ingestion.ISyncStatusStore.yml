@@ -21,7 +21,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Stores last sync run result for sync.status endpoint.'
+  summary: 'TR-PLANNED-CORE-013: Stores last sync run result for sync.status endpoint.'
   example: []
   syntax:
     content: public interface ISyncStatusStore

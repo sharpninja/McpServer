@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Repository file read/list/write with path allowlist and audit.
+/// TR-PLANNED-CORE-013: Repository file read/list/write with path allowlist and audit.
 /// FR-SUPPORT-010: Path allowlist enforced; write operations audited.
 /// </summary>
 public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
@@ -21,7 +21,7 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
     private readonly ILogger<RepoFileService> _logger;
 
 
-    /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Uses WorkspaceContext for workspace-aware path resolution.</summary>
+    /// <summary>TR-PLANNED-CORE-013, TR-MCP-MT-001: Constructor. Uses WorkspaceContext for workspace-aware path resolution.</summary>
     /// <param name="options">Ingestion options providing default repo root and allowlist.</param>
     /// <param name="workspaceContext">Per-request workspace context for multi-workspace resolution.</param>
     /// <param name="auditLog">Audit log for recording write operations.</param>

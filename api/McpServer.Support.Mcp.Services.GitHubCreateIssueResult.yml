@@ -24,7 +24,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of creating an issue.'
+  summary: 'TR-PLANNED-CORE-013: Result of creating an issue.'
   example: []
   syntax:
     content: 'public sealed record GitHubCreateIssueResult : IEquatable<GitHubCreateIssueResult>'
@@ -58,7 +58,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of creating an issue.'
+  summary: 'TR-PLANNED-CORE-013: Result of creating an issue.'
   example: []
   syntax:
     content: public GitHubCreateIssueResult(bool Success, int? Number, string? Url, string? Error)

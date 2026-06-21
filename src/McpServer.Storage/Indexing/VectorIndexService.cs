@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Indexing;
 
 /// <summary>
-/// TR-PLANNED-013: HNSW-based vector index using HnswIndex 1.6.0 NuGet.
+/// TR-PLANNED-CORE-013: HNSW-based vector index using HnswIndex 1.6.0 NuGet.
 /// FR-SUPPORT-010: Provides approximate nearest-neighbor search with cosine distance.
 /// Falls back to in-memory brute-force if HNSW fails to initialize.
 /// </summary>
@@ -21,7 +21,7 @@ public sealed class VectorIndexService : IVectorIndexService, IDisposable
     private readonly Dictionary<int, string> _internalIdToChunkId = [];
     private readonly Dictionary<int, float[]> _internalIdToVector = [];
 
-    /// <summary>TR-PLANNED-013: Constructor with configuration.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor with configuration.</summary>
     public VectorIndexService(IOptions<VectorIndexOptions> options, ILogger<VectorIndexService> logger)
     {
         _options = options?.Value ?? new VectorIndexOptions();
@@ -29,7 +29,7 @@ public sealed class VectorIndexService : IVectorIndexService, IDisposable
         InitializeIndex();
     }
 
-    /// <summary>TR-PLANNED-013: Constructor for testing.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor for testing.</summary>
     internal VectorIndexService(VectorIndexOptions options, ILogger<VectorIndexService> logger)
     {
         _options = options ?? new VectorIndexOptions();

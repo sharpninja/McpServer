@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace McpServer.Support.Mcp.Storage;
 
 /// <summary>
-/// TR-PLANNED-013: EF Core DbContext for MCP metadata and chunks.
+/// TR-PLANNED-CORE-013: EF Core DbContext for MCP metadata and chunks.
 /// FR-SUPPORT-010: SQLite storage for local MCP server.
 /// TR-MCP-MT-003: Global query filter on WorkspaceId for multi-tenant data isolation.
 /// </summary>
@@ -17,7 +17,7 @@ public sealed class McpDbContext : DbContext
 {
     private string _workspaceId;
 
-    /// <summary>TR-PLANNED-013: Constructor for DI with workspace context.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor for DI with workspace context.</summary>
     public McpDbContext(DbContextOptions<McpDbContext> options, WorkspaceContext? workspaceContext = null)
         : base(options)
     {
@@ -36,34 +36,34 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-DB-004: Generic append-only mutable-entity audit ledger.</summary>
     public DbSet<DataAuditLogEntity> DataAuditLogs => Set<DataAuditLogEntity>();
 
-    /// <summary>TR-PLANNED-013: Indexed documents.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Indexed documents.</summary>
     public DbSet<ContextDocumentEntity> Documents => Set<ContextDocumentEntity>();
 
-    /// <summary>TR-PLANNED-013: Indexed chunks.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Indexed chunks.</summary>
     public DbSet<ContextChunkEntity> Chunks => Set<ContextChunkEntity>();
 
-    /// <summary>TR-PLANNED-013: Session logs (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session logs (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogEntity> SessionLogs => Set<SessionLogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turns (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turns (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnEntity> SessionLogTurns => Set<SessionLogTurnEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn actions (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn actions (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogActionEntity> SessionLogActions => Set<SessionLogActionEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn tags (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn tags (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnTagEntity> SessionLogTurnTags => Set<SessionLogTurnTagEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn context items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn context items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnContextEntity> SessionLogTurnContexts => Set<SessionLogTurnContextEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn processing dialog items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn commits.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn commits.</summary>
     public DbSet<SessionLogCommitEntity> SessionLogCommits => Set<SessionLogCommitEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn string-list items (design decisions, requirements, files modified, blockers).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn string-list items (design decisions, requirements, files modified, blockers).</summary>
     public DbSet<SessionLogTurnStringListEntity> SessionLogTurnStringLists => Set<SessionLogTurnStringListEntity>();
 
     /// <summary>Tool definitions discoverable by keyword search.</summary>

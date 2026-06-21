@@ -21,7 +21,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: A group of completed items by date.'
+  summary: 'TR-PLANNED-CORE-013: A group of completed items by date.'
   example: []
   syntax:
     content: public sealed class CompletedGroup

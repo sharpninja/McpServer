@@ -14,7 +14,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
-/// <summary>TR-PLANNED-013: Context controller API tests.</summary>
+/// <summary>TR-PLANNED-CORE-013: Context controller API tests.</summary>
 public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;

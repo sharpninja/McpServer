@@ -1012,6 +1012,16 @@ Tests SHALL verify the ACID tightly coupled Microsoft Agent Framework profile me
 - [x] A regression test proves default non-ACID hosted-agent registration still exposes the existing tool surface.
 - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
 
+### TEST-MCP-187
+
+Verifies that the hosted MCP coding agent executes coding prompts through the Quad Brain orchestration client surface without live external model calls. Integration test invokes mcp_quadbrain_coding_execute for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape. Tests use in-memory MCP HTTP handler without live external model credentials or network calls.
+
+**Acceptance Criteria:**
+- [x] A prompt-array integration test invokes `mcp_quadbrain_coding_execute` for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape.
+- [x] An ACID profile test proves the Quad Brain coding tool is exposed while unsafe tools remain blocked.
+- [x] Tests use an in-memory MCP HTTP handler and do not require live external model credentials or network calls.
+- [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
+
 
 ## TEST-MCP-ACID
 
@@ -1046,12 +1056,61 @@ Committed, bypassed (disabled/non-mutating), aborted, rejected on key-server sig
 
 
 
+## TEST-MCP-AUTH
+
+### TEST-MCP-AUTH-010
+
+Given the auth-token subsystem is initialized, when a request hits a workspace-independent /mcpserver/* route with an unknown or missing API key and no X-Workspace-Path, then WorkspaceAuthMiddleware returns 401. This is a regression test (previously returned 503).
+
+**Acceptance Criteria:**
+- [x] Unknown API key with unresolved workspace returns 401.
+- [x] Missing API key with unresolved workspace returns 401.
+- [x] Empty RepoRoot fallback path with unresolved workspace returns 401.
+
+### TEST-MCP-AUTH-011
+
+When WorkspaceTokenService.IsInitialized is false, WorkspaceAuthMiddleware returns 503 with a Retry-After header and a JSON body.
+
+**Acceptance Criteria:**
+- [x] Uninitialized subsystem returns 503 with Retry-After header and JSON body.
+
+### TEST-MCP-AUTH-012
+
+WorkspaceTokenService.IsInitialized is false before any token is generated and true after GenerateToken.
+
+**Acceptance Criteria:**
+- [x] IsInitialized returns false before any token is generated.
+- [x] IsInitialized returns true after GenerateToken.
+
+
 ## TEST-MCP-BATCH
 
 ### TEST-MCP-BATCH-001
 
 Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
 
+
+
+## TEST-MCP-HEALTH
+
+### TEST-MCP-HEALTH-002
+
+WorkspaceReadinessHealthCheck returns Healthy when an enabled primary workspace is registered and has a seeded token; returns Unhealthy when the token subsystem is uninitialized, no enabled workspace is registered, or the primary workspace has no seeded token.
+
+**Acceptance Criteria:**
+- [x] Returns Healthy when enabled primary workspace is registered with seeded token.
+- [x] Returns Unhealthy when token subsystem is uninitialized.
+- [x] Returns Unhealthy when no enabled workspace is registered.
+- [x] Returns Unhealthy when primary workspace has no seeded token.
+
+### TEST-MCP-HEALTH-003
+
+Integration test with the data layer up: /mcpserver/todo returns 200 with a valid token and no X-Workspace-Path; unknown or missing keys return 401; /ready returns 200 Healthy with workspace-ready check listed.
+
+**Acceptance Criteria:**
+- [x] /mcpserver/todo returns 200 with valid token and no X-Workspace-Path.
+- [x] Unknown or missing API keys return 401.
+- [x] /ready returns 200 Healthy with workspace-ready check.
 
 
 ## TEST-MCP-MEMORY
@@ -1146,6 +1205,10 @@ bats: daemon roundtrip with --- terminator; one child serves N sends; auto-resta
 
 Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
 
+**Acceptance Criteria:**
+- [x] With a valid marker, QBAgent binds baseUrl/apiKey and applies the QBAgent profile. (evidence: QBAgentBootstrapperTests valid-marker cases.)
+- [x] With no marker, QBAgent exits gracefully (exit 0) contacting no endpoint. (evidence: QBAgentBootstrapperTests no-marker case + QBAgentRunLoopTests.)
+- [x] The chat client targets the QuadBrain /v1 endpoint derived from the marker base URL. (evidence: QBAgentChatClientFactoryTests BuildEndpoint/Create.)
 
 
 ## TEST-MCP-QBAGENTINT
@@ -1155,9 +1218,9 @@ Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBr
 Integration tests for QBAgent sending a request to QuadBrain, receiving a response with or without tool actions, and executing the returned external tool calls via the Microsoft Agent Framework loop.
 
 **Acceptance Criteria:**
-- [ ] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned.
-- [ ] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn.
-- [ ] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent.
+- [x] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned. (evidence: QBAgentSendingIntegrationTests.QBAgent_NoToolAction_ReturnsPlainResponse - real Agent Framework loop over OpenAI wire, 1 orchestration round, plain text returned.)
+- [x] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolCall_AgentExecutesAndContinues - external apply_patch executed by FunctionInvokingChatClient, 2 rounds, final answer returned.)
+- [x] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent. (evidence: QBAgentSendingIntegrationTests.QBAgent_InternalTool_ExecutedServerSide_NeverReachesAgent - mcp_todo_update ran in the internal executor and was stripped; agent invoked no tool, single round.)
 
 
 ## TEST-MCP-QBEXEC
@@ -1166,6 +1229,24 @@ Integration tests for QBAgent sending a request to QuadBrain, receiving a respon
 
 Classifier marks mcp_ tools internal; interceptor executes handled internal tools and strips them while keeping external and failed/unhandled internal; the OpenAI surface strips internal tool calls and emits only external ones (and emits none when all elected tools ran server-side).
 
+**Acceptance Criteria:**
+- [x] Tools are classified internal (mcp_ prefix) vs external. (evidence: QuadBrainToolInterceptionTests classifier cases.)
+- [x] Internal tools execute server-side and are stripped; only external calls are emitted. (evidence: QuadBrainToolInterceptionTests + endpoint test ChatCompletions_InternalToolExecuted_IsStripped.)
+- [x] Internal-tool failures surface as a note, never as a tool command. (evidence: endpoint test ChatCompletions_InternalToolFailure_BecomesNote.)
+
+### TEST-MCP-QBEXEC-002
+
+Unit tests asserting mcp_todo_update routes through ITransactionGatedTodoMutationService, mcp_repo_edit through TransactionGatedRepoFileService, mcp_git push via ProcessRunner targets origin, and an unknown mcp_ tool returns Unhandled.
+
+**Acceptance Criteria:**
+- [ ] todo/requirements/repo routes go through the transaction-gated services; unknown mcp_ returns Unhandled.
+
+### TEST-MCP-QBEXEC-003
+
+Unit tests asserting each brain invocation's full prompt+output is written to the session log under TurnId, AoT reconciliation is logged, and internal-tool executed/failed outcomes are recorded with secrets redacted.
+
+**Acceptance Criteria:**
+- [ ] Each brain invocation full prompt+output logged under TurnId; AoT logged; executed/failed outcomes recorded; secrets redacted.
 
 
 ## TEST-MCP-QBINT
@@ -1182,12 +1263,155 @@ Integration tests over POST /v1/chat/completions through the real ASP.NET pipeli
 - [x] An internal tool failure is surfaced as a note rather than a tool call.
 
 
+## TEST-MCP-QBLIVE
+
+### TEST-MCP-QBLIVE-001
+
+Service-composition coverage of the real four-role Quad-Brain loop (QuadBrainOrchestrationService + BrainSlotInvocationService + BrainSlotRegistryService + in-memory key server), faking only IBrainSlotChatClientFactory and the committing transaction coordinator.
+
+**Acceptance Criteria:**
+- [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
+- [x] A tool_calls Arbiter output is returned verbatim as the orchestration output.
+- [x] With only three roles seeded the loop rejects QuadNotReady without calling any brain.
+- [x] With execution disabled no brain is called and the loop rejects ExecutionDisabled.
+
+
+## TEST-MCP-QBLIVEINT
+
+### TEST-MCP-QBLIVEINT-001
+
+Integration coverage that drives the real orchestration through POST /v1/chat/completions over four seeded slots, faking only the per-brain LLM call and the transaction coordinator.
+
+**Acceptance Criteria:**
+- [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) with all four roles invoked.
+- [x] A tool_calls Arbiter output surfaces as an OpenAI assistant tool call (finish_reason tool_calls).
+- [x] With no slots seeded the endpoint returns an empty decision (loop rejects QuadNotReady).
+
+
 ## TEST-MCP-QBOPENAI
 
 ### TEST-MCP-QBOPENAI-001
 
 An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.
 
+**Acceptance Criteria:**
+- [x] An OpenAI ChatCompletion request maps to QuadBrain orchestration and returns the Arbiter output as the assistant message. (evidence: QuadBrainOpenAiChatServiceTests + QuadBrainOpenAiEndpointIntegrationTests.ChatCompletions_Authorized_ReturnsArbiterContent.)
+- [x] Tool definitions flow through and assistant tool_calls are emitted for external tools. (evidence: QuadBrainOpenAiChatServiceTests tool-call parsing + endpoint test ChatCompletions_ExternalTool_ReturnedAsToolCall.)
+- [x] Bearer / X-Api-Key auth is enforced (401 on missing/invalid token). (evidence: QuadBrainOpenAiAuthTests + endpoint test ChatCompletions_NoToken_Returns401.)
+
+
+## TEST-MCP-QBSEED
+
+### TEST-MCP-QBSEED-001
+
+Unit coverage for BrainSlotStartupSeeder over a real in-memory McpDbContext, real BrainSlotRegistryService, and the in-memory key server (only the credential resolver stubbed).
+
+**Acceptance Criteria:**
+- [x] With execution enabled and four roles configured, StartAsync makes the quad ready (all roles enabled).
+- [x] Running the seeder twice is idempotent (exactly four enabled slots, no exception).
+- [x] With execution disabled, or with no slots configured, nothing is provisioned.
+- [x] One invalid slot is skipped without throwing and the remaining valid slots are still provisioned.
+
+
+## TEST-MCP-QBSKILLS
+
+### TEST-MCP-QBSKILLS-001
+
+Unit tests asserting the parser requires name+description, rejects missing name, and reads optional allowed-tools.
+
+**Acceptance Criteria:**
+- [ ] Requires name+description; rejects missing name; reads optional allowed-tools.
+
+### TEST-MCP-QBSKILLS-002
+
+Unit tests asserting discovery returns name+description only, load returns the full body, and discovery includes vendored + workspace skills.
+
+**Acceptance Criteria:**
+- [ ] Discovery returns name+description only; load returns full body; both roots included.
+
+### TEST-MCP-QBSKILLS-003
+
+Unit tests asserting list_skills and load_skill are exposed as external tools and return the discovery list and named body respectively.
+
+**Acceptance Criteria:**
+- [ ] list_skills returns discovery; load_skill returns the named skill body.
+
+
+## TEST-MCP-QBTOOLS
+
+### TEST-MCP-QBTOOLS-001
+
+Unit tests asserting read_file/write_file/edit_file/list_files are registered as non-mcp_ external tools and delegate to the MCP client Repo surface (no direct filesystem access).
+
+**Acceptance Criteria:**
+- [ ] The four file tools are present, non-mcp_-prefixed, and delegate to the MCP client.
+- [ ] A path-traversal request is rejected server-side.
+
+### TEST-MCP-QBTOOLS-002
+
+Unit tests (mock IProcessRunner) asserting git status builds expected args and parses output, push targets origin only, and an unknown subcommand is rejected.
+
+**Acceptance Criteria:**
+- [ ] status/diff/log build expected args and parse results.
+- [ ] push args never include a non-origin remote; unknown subcommand rejected.
+
+### TEST-MCP-QBTOOLS-003
+
+Unit test (mock ResolveExecutable) asserting run_bash returns available=false when bash.exe is missing and runs the command when present.
+
+**Acceptance Criteria:**
+- [ ] bash absent yields available=false without throwing; bash present returns stdout/stderr/exit.
+
+### TEST-MCP-QBTOOLS-004
+
+Unit tests for EditAsync: replace-unique, ambiguous-fails, replace-all, missing-old-fails, traversal-rejected, nonexistent-fails, audit+updated-event.
+
+**Acceptance Criteria:**
+- [ ] Unique replace succeeds; missing/ambiguous fail per rules; traversal and nonexistent rejected; audit + change event emitted.
+
+### TEST-MCP-QBTOOLS-005
+
+Unit tests asserting gated EditAsync commits+audits, rolls back to original on transaction reject, and fails under a degraded coordinator.
+
+**Acceptance Criteria:**
+- [ ] Commit applies + audits; reject restores original; degraded coordinator fails.
+
+### TEST-MCP-QBTOOLS-006
+
+Unit tests asserting McpHostedAgentToolAdapter exposes mcp_repo_edit, mcp_bash, and mcp_git, and that mutating variants route through the transaction-gated core.
+
+**Acceptance Criteria:**
+- [ ] mcp_repo_edit/mcp_bash/mcp_git present; mutating ones transaction-gated.
+
+### TEST-MCP-QBTOOLS-007
+
+Unit tests asserting run_powershell executes a command in a hosted runspace and returns captured output/error streams.
+
+**Acceptance Criteria:**
+- [ ] run_powershell runs a command and returns output and error streams from the hosted runspace.
+
+
+## TEST-MCP-QBTOOLSINT
+
+### TEST-MCP-QBTOOLSINT-001
+
+Integration tests (CustomWebApplicationFactory + in-memory transport) where the agent loads a skill then calls edit_file (applied through server RepoFileService) and git status; plus internal mcp_repo_edit executed server-side never reaching the agent.
+
+**Acceptance Criteria:**
+- [ ] Agent loads a skill body then calls edit_file and the edit lands through the server.
+- [ ] git status runs externally and returns; mcp_repo_edit executes server-side and is stripped.
+
+
+## TEST-MCP-QUAD-SESSION
+
+### TEST-MCP-QUAD-SESSION-001
+
+Per-session QuadBrain instance attachment over global brains with session metadata propagation.
+
+**Acceptance Criteria:**
+- [x] CompleteAsync with a sessionId/turnId attaches them to the orchestration request metadata and TurnId.
+- [x] Without a session id, no session metadata is attached (anonymous instance).
+- [x] A /v1 request's X-Session-Id header reaches the orchestration (integration).
 
 
 ## TEST-MCP-REPL
@@ -1312,6 +1536,38 @@ Given a marker whose HMAC payload is signed with LF-only (`\n`) line endings (ma
 ✅ **Complete** - Given concurrent REPL operations, when workflows maintain stateful context, then session state and TODO selection are properly isolated per workflow instance. **Covered by:** `SessionLogWorkflowTests` (state management), `TodoWorkflowTests` (selection state)
 
 
+### TEST-MCP-REPL-021
+
+When TryResolveWithDiagnostics is called on a workspace path containing no marker file, the error message enumerates every directory walked from the start path to its root. This verifies diagnostic usability when marker files cannot be found during workspace resolution.
+
+**Acceptance Criteria:**
+- [x] Error message enumerates all directories walked from start path to root
+- [x] Test passes with implementation in MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths
+
+### TEST-MCP-REPL-022
+
+When an explicit workspacePathOverride pointing to a workspace with a valid marker is provided to TryResolveWithDiagnostics, resolution succeeds and the returned options carry the marker's API key.
+
+**Acceptance Criteria:**
+- [x] Resolution succeeds when explicit workspace path points to valid marker
+- [x] Returned options contain the marker's API key
+
+### TEST-MCP-REPL-023
+
+When a marker file's canonicalization is tampered and TryResolveWithDiagnostics is called, the error names the marker path and identifies 'signature' failure. This verifies secure marker validation and error reporting.
+
+**Acceptance Criteria:**
+- [x] Error message names the marker path
+- [x] Error identifies 'signature' as the failure reason
+
+### TEST-MCP-REPL-024
+
+Given a marker whose HMAC payload is signed with LF-only (\n) line endings (matching production MarkerFileService.AppendPayloadLine), when TryResolveWithDiagnostics is called on Windows or any platform where Environment.NewLine differs from \n, signature verification succeeds. This ensures cross-platform marker compatibility.
+
+**Acceptance Criteria:**
+- [x] Signature verification succeeds for LF-only signed payload on all platforms
+- [x] Test validates cross-platform Environment.NewLine compatibility
+
 
 ## TEST-MCP-REQAC
 
@@ -1411,6 +1667,9 @@ In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) p
 
 Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream and basic auth; the subscriber invokes the message log once per received message with correct status/reason; sink errors do not fail the commit; no-op default logs nothing.
 
+**Acceptance Criteria:**
+- [x] A no-op subscriber message-log default exists and a Parseable HTTP sink POSTs a flat JSON batch with X-P-Stream + basic auth. (evidence: SubscriberMessageLogTests Parseable sink cases.)
+- [x] One message-log entry is emitted per received message at the audit chokepoint, independent of the durable audit gate. (evidence: SubscriberMessageLogTests chokepoint case.)
 
 
 ## TEST-MCP-TRACE-LEGACY
@@ -1500,3 +1759,80 @@ Integration tests: open idempotent, begin creates in_progress, complete merges+f
 ### TEST-SUPPORT-010F
 
 SQLite tests: partial session submit preserves omitted title/model; sparse turn submit preserves omitted response/queryText and prior collections.
+
+
+### TEST-SUPPORT-014
+
+Integration tests verify session log operations: open idempotent, begin creates in_progress, complete merges and finalizes with evidence gate, fail records note, missing session returns 404.
+
+**Acceptance Criteria:**
+- [x] Open operation is idempotent
+- [x] Begin creates session in in_progress state
+- [x] Complete merges and finalizes with evidence gate
+- [x] Fail records note in session
+
+### TEST-SUPPORT-015
+
+SQLite tests verify that partial session submit preserves omitted title/model and sparse turn submit preserves omitted response/queryText and prior collections.
+
+**Acceptance Criteria:**
+- [x] Partial session submit preserves omitted title and model fields
+- [x] Sparse turn submit preserves omitted response and queryText fields
+- [x] Prior collections are preserved during partial updates
+
+### TEST-SUPPORT-016
+
+When SessionLogService with a non-null WorkspaceContext calls SubmitAsync, SessionLogEntity.WorkspaceId and every child entity's WorkspaceId equal the context's WorkspacePath. This ensures proper workspace isolation for session logs.
+
+**Acceptance Criteria:**
+- [x] SessionLogEntity.WorkspaceId matches context WorkspacePath
+- [x] Every child entity's WorkspaceId matches context WorkspacePath
+
+### TEST-SUPPORT-017
+
+When SessionLogService is constructed with workspaceContext: null and a DbContext without _workspaceId, SubmitAsync persists a session with SessionLogEntity.WorkspaceId remaining empty string.
+
+**Acceptance Criteria:**
+- [x] WorkspaceId remains empty string when workspace context is null
+- [x] Session persists successfully without workspace context
+
+### TEST-SUPPORT-018
+
+When a malformed POST body fails JSON deserialization against UnifiedSessionLogDto, the controller returns 400 with application/problem+json content-type and errors object contains the field path (e.g., $.workspace), never the dto parameter name.
+
+**Acceptance Criteria:**
+- [x] Response content-type is application/problem+json
+- [x] Errors object contains field path ($.workspace) not parameter name
+
+### TEST-SUPPORT-019
+
+When a POST body is missing sourceType, domain validation rejects it with application/problem+json response citing sourceType (not legacy {"error":"..."} plain shape).
+
+**Acceptance Criteria:**
+- [x] Response is application/problem+json format
+- [x] sourceType field is cited in error response
+
+### TEST-SUPPORT-020
+
+When a successful POST to /mcpserver/sessionlog completes, GET /mcpserver/sessionlog/{agent}/{sessionId} under the same workspace context returns 200 OK with the round-tripped session.
+
+**Acceptance Criteria:**
+- [x] POST to /mcpserver/sessionlog succeeds
+- [x] GET /mcpserver/sessionlog/{agent}/{sessionId} returns 200 OK
+- [x] Response contains the round-tripped session data
+
+### TEST-SUPPORT-021
+
+When the turn-append route receives a POST to /mcpserver/sessionlog/{agent}/{sessionId}/turn with a UnifiedRequestEntryDto, 201 is returned and the subsequent GET shows the appended turn.
+
+**Acceptance Criteria:**
+- [x] POST to turn route returns 201 Created
+- [x] Subsequent GET shows the appended turn
+
+### TEST-SUPPORT-022
+
+When PUT is used on the turn-append route instead of POST, the endpoint returns 405 Method Not Allowed with 'Allow: POST' header.
+
+**Acceptance Criteria:**
+- [x] PUT request returns 405 Method Not Allowed
+- [x] Response includes Allow: POST header

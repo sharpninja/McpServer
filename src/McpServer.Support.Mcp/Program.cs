@@ -1,4 +1,4 @@
-// TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
+// TR-PLANNED-CORE-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
 using System.Net;
@@ -647,7 +647,7 @@ if (!builder.Environment.IsStaging())
         mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
 #endif
 
-// FR-SUPPORT-010B / TR-PLANNED-013A: Replace ASP.NET's default invalid-model-state
+// FR-SUPPORT-012 / TR-PLANNED-CORE-014: Replace ASP.NET's default invalid-model-state
 // response shape ({"errors":{"dto":["..."]}}) with RFC 7807 ProblemDetails that
 // cites the actual offending JSON path. The "dto" key is the action parameter
 // name; surfacing it confuses callers into thinking a wrapper field is required.

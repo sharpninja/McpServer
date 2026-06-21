@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// TR-PLANNED-013: TODO item CRUD and query endpoints for MCP.
+/// TR-PLANNED-CORE-013: TODO item CRUD and query endpoints for MCP.
 /// Agents can search, create, update, and delete TODO items via REST.
 /// </summary>
 [ApiController]
@@ -23,7 +23,7 @@ public sealed class TodoController : ControllerBase
     private readonly ITransactionGatedTodoMutationService? _todoMutations;
     private readonly IAgentPoolService? _agentPoolService;
 
-    /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Resolves workspace-specific TODO service.</summary>
+    /// <summary>TR-PLANNED-CORE-013, TR-MCP-MT-001: Constructor. Resolves workspace-specific TODO service.</summary>
     public TodoController(
         TodoServiceResolver todoServiceResolver,
         WorkspaceContext workspaceContext,
@@ -46,7 +46,7 @@ public sealed class TodoController : ControllerBase
         _agentPoolService = agentPoolService;
     }
 
-    /// <summary>TR-PLANNED-013: Query TODO items by keyword, priority, section, id, or done status.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Query TODO items by keyword, priority, section, id, or done status.</summary>
     [HttpGet]
     public async Task<ActionResult<TodoQueryResult>> QueryAsync(
         [FromQuery] string? keyword,
@@ -68,7 +68,7 @@ public sealed class TodoController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>TR-PLANNED-013: Get a single TODO item by id.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Get a single TODO item by id.</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<TodoFlatItem>> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
@@ -137,7 +137,7 @@ public sealed class TodoController : ControllerBase
         }
     }
 
-    /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Create a new TODO item.</summary>
     [HttpPost]
     public async Task<ActionResult<TodoMutationResult>> CreateAsync(
         [FromBody] TodoCreateRequest? request,
@@ -156,7 +156,7 @@ public sealed class TodoController : ControllerBase
         return Created(new Uri($"/mcpserver/todo/{Uri.EscapeDataString(createdId)}", UriKind.Relative), result);
     }
 
-    /// <summary>TR-PLANNED-013: Update an existing TODO item by id.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Update an existing TODO item by id.</summary>
     [HttpPut("{id}")]
     public async Task<ActionResult<TodoMutationResult>> UpdateAsync(
         string id,
@@ -175,7 +175,7 @@ public sealed class TodoController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>TR-PLANNED-013: Delete a TODO item by id.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Delete a TODO item by id.</summary>
     [HttpDelete("{id}")]
     public async Task<ActionResult<TodoMutationResult>> DeleteAsync(string id, CancellationToken cancellationToken)
     {

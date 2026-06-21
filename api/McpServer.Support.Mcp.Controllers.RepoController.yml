@@ -24,7 +24,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
   summary: >-
-    TR-PLANNED-013: Repository file read/write and list (repo.read, repo.write, repo.list).
+    TR-PLANNED-CORE-013: Repository file read/write and list (repo.read, repo.write, repo.list).
 
     FR-SUPPORT-010: Path allowlist enforced; audit log for writes.
   example: []
@@ -253,7 +253,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public RepoController(IRepoFileService repoFileService)
@@ -283,7 +283,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Read file contents (repo.read).'
+  summary: 'TR-PLANNED-CORE-013: Read file contents (repo.read).'
   example: []
   syntax:
     content: >-
@@ -335,7 +335,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Write file contents (repo.write).'
+  summary: 'TR-PLANNED-CORE-013: Write file contents (repo.write).'
   example: []
   syntax:
     content: >-
@@ -387,7 +387,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: List files/directories (repo.list).'
+  summary: 'TR-PLANNED-CORE-013: List files/directories (repo.list).'
   example: []
   syntax:
     content: >-

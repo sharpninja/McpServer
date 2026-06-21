@@ -21,7 +21,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Migrations
-  summary: 'TR-PLANNED-013: FTS5 full-text index over ContextChunkEntity.Content for BM25-ranked search.'
+  summary: 'TR-PLANNED-CORE-013: FTS5 full-text index over ContextChunkEntity.Content for BM25-ranked search.'
   example: []
   syntax:
     content: 'public class AddFts5FullTextIndex : Migration'
