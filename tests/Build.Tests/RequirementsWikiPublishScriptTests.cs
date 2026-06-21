@@ -119,6 +119,7 @@ public sealed class RequirementsWikiPublishScriptTests
 
         psi.ArgumentList.Add("-NoLogo");
         psi.ArgumentList.Add("-NoProfile");
+        psi.ArgumentList.Add("-NonInteractive");
         psi.ArgumentList.Add("-File");
         psi.ArgumentList.Add(scriptPath);
         foreach (var argument in arguments)

@@ -25,6 +25,12 @@ public sealed class WorkspaceTokenService
     private readonly ConcurrentDictionary<string, string> _defaultTokenToWorkspace = new(StringComparer.Ordinal);
 
     /// <summary>
+    /// Gets a value indicating whether at least one full-access workspace token has been generated.
+    /// Default anonymous tokens do not initialize the privileged workspace-auth subsystem.
+    /// </summary>
+    public bool IsInitialized => !_tokens.IsEmpty;
+
+    /// <summary>
     /// Generates a new cryptographic random full-access token for the given workspace and stores it.
     /// If a token already exists for the workspace it is replaced.
     /// </summary>

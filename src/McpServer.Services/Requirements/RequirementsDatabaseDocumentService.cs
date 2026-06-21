@@ -1,3 +1,5 @@
+using System.Text.Json;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements.Models;
@@ -17,11 +19,38 @@ namespace McpServer.Support.Mcp.Requirements;
 /// are stored in <see cref="McpDbContext"/> and scoped by the active workspace.
 /// Markdown files are used only for bootstrap import and export rendering.
 /// </summary>
-public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentService, IDisposable
+public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentService, IRequirementsCompensation, IDisposable
 {
     private const string FrKind = "fr";
     private const string TrKind = "tr";
     private const string TestKind = "test";
+    private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
+
+    // TR-MCP-REQAC-001: AcceptanceCriterion carries [JsonPropertyName] attributes, so default
+    // options already emit/read the canonical {id,text,isSatisfied,evidence} shape used by TODOs.
+    private static readonly JsonSerializerOptions s_criteriaJson = new(JsonSerializerDefaults.Web);
+
+    /// <summary>Serializes acceptance criteria to the JSON column value (null when empty).</summary>
+    private static string? SerializeCriteria(IReadOnlyList<AcceptanceCriterion>? criteria) =>
+        criteria is null || criteria.Count == 0 ? null : JsonSerializer.Serialize(criteria, s_criteriaJson);
+
+    /// <summary>Deserializes the JSON column value to acceptance criteria (empty list when null/blank).</summary>
+    private static IReadOnlyList<AcceptanceCriterion> DeserializeCriteria(string? json) =>
+        string.IsNullOrWhiteSpace(json)
+            ? []
+            : JsonSerializer.Deserialize<List<AcceptanceCriterion>>(json, s_criteriaJson) ?? [];
+
+    /// <summary>Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria.</summary>
+    private static FrEntry MapFr(RequirementEntity x) =>
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
+
+    /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
+    private static TrEntry MapTr(RequirementEntity x) =>
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
+
+    /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria.</summary>
+    private static TestEntry MapTest(RequirementEntity x) =>
+        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
 
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly RequirementsOptions _options;
@@ -49,17 +78,86 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public void Dispose() => _writeLock.Dispose();
 
     /// <inheritdoc />
+    public async Task<RequirementsCompensationSnapshot> CaptureRequirementsSnapshotAsync(CancellationToken cancellationToken = default)
+    {
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, cancellationToken).ConfigureAwait(false);
+            var workspaceId = RequireWorkspaceId(ctx);
+            var requirements = await ctx.Requirements
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .Where(row => row.WorkspaceId == workspaceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            var links = await ctx.RequirementTraceabilityLinks
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .Where(row => row.WorkspaceId == workspaceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+
+            var state = new RequirementsDatabaseCompensationState(
+                workspaceId,
+                requirements
+                    .Select(row => new RequirementEntityCompensationState(CloneRequirement(row), ReadSoftDeleteState(ctx.Entry(row))))
+                    .ToArray(),
+                links
+                    .Select(row => new RequirementTraceabilityLinkCompensationState(CloneTraceabilityLink(row), ReadSoftDeleteState(ctx.Entry(row))))
+                    .ToArray());
+
+            return new RequirementsCompensationSnapshot(
+                requirements.Where(row => !IsSoftDeleted(ctx, row) && row.Kind == FrKind).Select(MapFr).ToArray(),
+                requirements.Where(row => !IsSoftDeleted(ctx, row) && row.Kind == TrKind).Select(MapTr).ToArray(),
+                requirements.Where(row => !IsSoftDeleted(ctx, row) && row.Kind == TestKind).Select(MapTest).ToArray(),
+                BuildVisibleMappings(ctx, links),
+                Provider: nameof(RequirementsDatabaseDocumentService),
+                State: state);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task RestoreRequirementsSnapshotAsync(
+        RequirementsCompensationSnapshot snapshot,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        if (snapshot.State is not RequirementsDatabaseCompensationState state)
+            throw new InvalidOperationException($"Requirements compensation snapshot provider '{snapshot.Provider}' is not supported by {nameof(RequirementsDatabaseDocumentService)}.");
+
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, cancellationToken).ConfigureAwait(false);
+            await RestoreRequirementsCoreAsync(ctx, state, cancellationToken).ConfigureAwait(false);
+            await RestoreTraceabilityLinksCoreAsync(ctx, state, cancellationToken).ConfigureAwait(false);
+            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<IReadOnlyList<FrEntry>> GetAllFrAsync(CancellationToken ct = default)
     {
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
-        return await scope.Context.Requirements
+        var rows = await scope.Context.Requirements
             .AsNoTracking()
             .Where(x => x.Kind == FrKind)
             .OrderBy(x => x.Id)
-            .Select(x => new FrEntry(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        return rows.Select(MapFr).ToArray();
     }
 
     /// <inheritdoc />
@@ -69,21 +167,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, FrKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new FrEntry(row.Id, row.Title, row.Body, row.WorkspaceId, row.Priority, row.Status, row.Notes);
+        return row is null ? null : MapFr(row);
     }
 
     /// <inheritdoc />
     public async Task AddFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -114,13 +212,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     {
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
-        return await scope.Context.Requirements
+        var rows = await scope.Context.Requirements
             .AsNoTracking()
             .Where(x => x.Kind == TrKind)
             .OrderBy(x => x.Id)
-            .Select(x => new TrEntry(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        return rows.Select(MapTr).ToArray();
     }
 
     /// <inheritdoc />
@@ -130,21 +228,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TrKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new TrEntry(row.Id, row.Title, row.Body, row.WorkspaceId, row.Priority, row.Status, row.Notes);
+        return row is null ? null : MapTr(row);
     }
 
     /// <inheritdoc />
     public async Task AddTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -159,13 +257,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     {
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
-        return await scope.Context.Requirements
+        var rows = await scope.Context.Requirements
             .AsNoTracking()
             .Where(x => x.Kind == TestKind)
             .OrderBy(x => x.Id)
-            .Select(x => new TestEntry(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        return rows.Select(MapTest).ToArray();
     }
 
     /// <inheritdoc />
@@ -175,21 +273,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TestKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new TestEntry(row.Id, row.Body, row.WorkspaceId, row.Title, row.Priority, row.Status, row.Notes);
+        return row is null ? null : MapTest(row);
     }
 
     /// <inheritdoc />
     public async Task AddTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await AddRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await UpdateRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -197,6 +295,108 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     {
         ValidateId(id, nameof(id));
         await DeleteRequirementAndTargetLinksAsync(TestKind, id, ct).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchEntries> AddBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(entries);
+        ValidateBatchEntries(entries);
+        ValidateBatchUniqueIds(entries);
+
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+
+            foreach (var value in EnumerateBatch(entries))
+            {
+                if (await ctx.Requirements.AnyAsync(x => x.Kind == value.Kind && x.Id == value.Id, ct).ConfigureAwait(false))
+                    throw new RequirementsConflictException($"{value.Kind.ToUpperInvariant()} '{value.Id}' already exists.");
+            }
+
+            var workspaceId = RequireWorkspaceId(ctx);
+            var now = Now();
+            foreach (var value in EnumerateBatch(entries))
+            {
+                ctx.Requirements.Add(new RequirementEntity
+                {
+                    WorkspaceId = workspaceId,
+                    Kind = value.Kind,
+                    Id = value.Id,
+                    Title = value.Title,
+                    Body = value.Body,
+                    Priority = NormalizePriority(value.Priority),
+                    Status = NormalizeStatus(value.Status),
+                    Notes = value.Notes,
+                    AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria),
+                    CreatedAtUtc = now,
+                    UpdatedAtUtc = now
+                });
+            }
+
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+            await transaction.CommitAsync(ct).ConfigureAwait(false);
+
+            var result = NormalizeBatchResult(entries, workspaceId);
+            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Created, result, ct).ConfigureAwait(false);
+            return result;
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchEntries> UpdateBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(entries);
+        ValidateBatchEntries(entries);
+        ValidateBatchUniqueIds(entries);
+
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+
+            var updates = new List<(RequirementEntity Row, RequirementBatchValue Value)>();
+            foreach (var value in EnumerateBatch(entries))
+            {
+                var row = await FindRequirementAsync(ctx, value.Kind, value.Id, asTracking: true, ct).ConfigureAwait(false)
+                    ?? throw new RequirementsNotFoundException($"{value.Kind.ToUpperInvariant()} '{value.Id}' was not found.");
+                updates.Add((row, value));
+            }
+
+            var now = Now();
+            foreach (var (row, value) in updates)
+            {
+                row.Title = value.Title;
+                row.Body = value.Body;
+                row.Priority = NormalizePriority(value.Priority);
+                row.Status = NormalizeStatus(value.Status);
+                row.Notes = value.Notes;
+                row.AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria);
+                row.UpdatedAtUtc = now;
+            }
+
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+            await transaction.CommitAsync(ct).ConfigureAwait(false);
+
+            var result = NormalizeBatchResult(entries, RequireWorkspaceId(ctx));
+            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Updated, result, ct).ConfigureAwait(false);
+            return result;
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
     }
 
     /// <inheritdoc />
@@ -245,17 +445,27 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             await ValidateMappingTargetsAsync(ctx, mapping.FrId, normalizedTrIds, normalizedTestIds, ct).ConfigureAwait(false);
 
+            var workspaceId = RequireWorkspaceId(ctx);
             var existingLinks = await ctx.RequirementTraceabilityLinks
-                .Where(x => x.FrId == mapping.FrId)
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .Where(x => x.WorkspaceId == workspaceId && x.FrId == mapping.FrId)
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
-            ctx.RequirementTraceabilityLinks.RemoveRange(existingLinks);
-            var now = Now();
-            var workspaceId = RequireWorkspaceId(ctx);
+
+            var timestamp = DateTimeOffset.UtcNow;
+            var now = timestamp.ToString("O");
+            var desiredKeys = normalizedTrIds
+                .Select(trId => BuildTraceabilityLinkKey(TrKind, trId))
+                .Concat(normalizedTestIds.Select(testId => BuildTraceabilityLinkKey(TestKind, testId)))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var existingLink in existingLinks.Where(link => !desiredKeys.Contains(BuildTraceabilityLinkKey(link.TargetKind, link.TargetId))))
+                MarkSoftDeleted(ctx, existingLink, timestamp, "requirements_mapping_replaced");
+
             foreach (var trId in normalizedTrIds)
-                ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity { WorkspaceId = workspaceId, FrId = mapping.FrId, TargetKind = TrKind, TargetId = trId, CreatedAtUtc = now });
+                UpsertTraceabilityLink(ctx, existingLinks, workspaceId, mapping.FrId, TrKind, trId, now);
             foreach (var testId in normalizedTestIds)
-                ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity { WorkspaceId = workspaceId, FrId = mapping.FrId, TargetKind = TestKind, TargetId = testId, CreatedAtUtc = now });
+                UpsertTraceabilityLink(ctx, existingLinks, workspaceId, mapping.FrId, TestKind, testId, now);
 
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, mapping.FrId, ct).ConfigureAwait(false);
@@ -265,6 +475,43 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             _writeLock.Release();
         }
     }
+
+    private static void UpsertTraceabilityLink(
+        McpDbContext ctx,
+        IReadOnlyList<RequirementTraceabilityLinkEntity> existingLinks,
+        string workspaceId,
+        string frId,
+        string targetKind,
+        string targetId,
+        string createdAtUtc)
+    {
+        var existing = existingLinks.FirstOrDefault(link =>
+            string.Equals(link.TargetKind, targetKind, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(link.TargetId, targetId, StringComparison.OrdinalIgnoreCase));
+
+        if (existing is null)
+        {
+            ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity
+            {
+                WorkspaceId = workspaceId,
+                FrId = frId,
+                TargetKind = targetKind,
+                TargetId = targetId,
+                CreatedAtUtc = createdAtUtc
+            });
+            return;
+        }
+
+        existing.SourceKind = FrKind;
+        if (IsSoftDeleted(ctx, existing))
+        {
+            existing.CreatedAtUtc = createdAtUtc;
+            ClearSoftDelete(ctx, existing);
+        }
+    }
+
+    private static string BuildTraceabilityLinkKey(string targetKind, string targetId)
+        => $"{targetKind}\0{targetId}";
 
     /// <inheritdoc />
     public async Task DeleteMappingAsync(string frId, CancellationToken ct = default)
@@ -347,7 +594,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             ct).ConfigureAwait(false);
     }
 
-    private async Task AddRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, CancellationToken ct)
+    private async Task AddRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria, CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -355,23 +602,44 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await using var scope = CreateScope();
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
-            if (await ctx.Requirements.AnyAsync(x => x.Kind == kind && x.Id == id, ct).ConfigureAwait(false))
+            var existing = await ctx.Requirements
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .FirstOrDefaultAsync(x => x.Kind == kind && x.Id == id, ct)
+                .ConfigureAwait(false);
+            if (existing is not null && !IsSoftDeleted(ctx, existing))
                 throw new RequirementsConflictException($"{kind.ToUpperInvariant()} '{id}' already exists.");
 
             var now = Now();
-            ctx.Requirements.Add(new RequirementEntity
+            if (existing is null)
             {
-                WorkspaceId = RequireWorkspaceId(ctx),
-                Kind = kind,
-                Id = id,
-                Title = title,
-                Body = body,
-                Priority = NormalizePriority(priority),
-                Status = NormalizeStatus(status),
-                Notes = notes,
-                CreatedAtUtc = now,
-                UpdatedAtUtc = now
-            });
+                ctx.Requirements.Add(new RequirementEntity
+                {
+                    WorkspaceId = RequireWorkspaceId(ctx),
+                    Kind = kind,
+                    Id = id,
+                    Title = title,
+                    Body = body,
+                    Priority = NormalizePriority(priority),
+                    Status = NormalizeStatus(status),
+                    Notes = notes,
+                    AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria),
+                    CreatedAtUtc = now,
+                    UpdatedAtUtc = now
+                });
+            }
+            else
+            {
+                existing.Title = title;
+                existing.Body = body;
+                existing.Priority = NormalizePriority(priority);
+                existing.Status = NormalizeStatus(status);
+                existing.Notes = notes;
+                existing.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
+                existing.CreatedAtUtc = now;
+                existing.UpdatedAtUtc = now;
+                ClearSoftDelete(ctx, existing);
+            }
+
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Created, id, ct).ConfigureAwait(false);
         }
@@ -381,7 +649,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private async Task UpdateRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, CancellationToken ct)
+    private async Task UpdateRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria, CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -396,6 +664,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             row.Priority = NormalizePriority(priority);
             row.Status = NormalizeStatus(status);
             row.Notes = notes;
+            row.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
             row.UpdatedAtUtc = Now();
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, id, ct).ConfigureAwait(false);
@@ -404,6 +673,85 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         {
             _writeLock.Release();
         }
+    }
+
+    private static IEnumerable<RequirementBatchValue> EnumerateBatch(RequirementsBatchEntries entries)
+    {
+        foreach (var entry in entries.Functional)
+            yield return new RequirementBatchValue(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
+        foreach (var entry in entries.Technical)
+            yield return new RequirementBatchValue(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
+        foreach (var entry in entries.Testing)
+            yield return new RequirementBatchValue(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
+    }
+
+    private static RequirementsBatchEntries NormalizeBatchResult(RequirementsBatchEntries entries, string workspaceId) =>
+        new(
+            entries.Functional
+                .Select(entry => entry with
+                {
+                    WorkspaceId = workspaceId,
+                    Priority = NormalizePriority(entry.Priority),
+                    Status = NormalizeStatus(entry.Status)
+                })
+                .ToArray(),
+            entries.Technical
+                .Select(entry => entry with
+                {
+                    WorkspaceId = workspaceId,
+                    Priority = NormalizePriority(entry.Priority),
+                    Status = NormalizeStatus(entry.Status)
+                })
+                .ToArray(),
+            entries.Testing
+                .Select(entry => entry with
+                {
+                    WorkspaceId = workspaceId,
+                    Priority = NormalizePriority(entry.Priority),
+                    Status = NormalizeStatus(entry.Status)
+                })
+                .ToArray());
+
+    private static void ValidateBatchEntries(RequirementsBatchEntries entries)
+    {
+        ArgumentNullException.ThrowIfNull(entries.Functional);
+        ArgumentNullException.ThrowIfNull(entries.Technical);
+        ArgumentNullException.ThrowIfNull(entries.Testing);
+
+        foreach (var entry in entries.Functional)
+            ValidateFr(entry);
+        foreach (var entry in entries.Technical)
+            ValidateTr(entry);
+        foreach (var entry in entries.Testing)
+            ValidateTest(entry);
+    }
+
+    private static void ValidateBatchUniqueIds(RequirementsBatchEntries entries)
+    {
+        ValidateUniqueIds(entries.Functional, static item => item.Id, "FR");
+        ValidateUniqueIds(entries.Technical, static item => item.Id, "TR");
+        ValidateUniqueIds(entries.Testing, static item => item.Id, "TEST");
+    }
+
+    private static void ValidateUniqueIds<T>(IReadOnlyList<T> items, Func<T, string> getId, string label)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var item in items)
+        {
+            var id = getId(item);
+            if (!seen.Add(id.Trim()))
+                throw new ArgumentException($"Duplicate {label} ID '{id}' in batch.", nameof(items));
+        }
+    }
+
+    private async Task PublishBatchRequirementsChangeSafeAsync(string action, RequirementsBatchEntries entries, CancellationToken ct)
+    {
+        foreach (var entry in entries.Functional)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
+        foreach (var entry in entries.Technical)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
+        foreach (var entry in entries.Testing)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
     }
 
     private async Task DeleteRequirementAndTargetLinksAsync(string kind, string id, CancellationToken ct)
@@ -687,6 +1035,211 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     private static string Now() => DateTime.UtcNow.ToString("O");
 
+    private static IReadOnlyList<FrTrMapping> BuildVisibleMappings(
+        McpDbContext ctx,
+        IReadOnlyList<RequirementTraceabilityLinkEntity> links)
+    {
+        return links
+            .Where(link => !IsSoftDeleted(ctx, link))
+            .GroupBy(link => link.FrId, StringComparer.OrdinalIgnoreCase)
+            .Select(group => new FrTrMapping(
+                group.Key,
+                group.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+                group.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+                group.First().WorkspaceId))
+            .ToArray();
+    }
+
+    private static async Task RestoreRequirementsCoreAsync(
+        McpDbContext ctx,
+        RequirementsDatabaseCompensationState state,
+        CancellationToken cancellationToken)
+    {
+        var currentRows = await ctx.Requirements
+            .IgnoreQueryFilters(SoftDeleteQueryFilter)
+            .Where(row => row.WorkspaceId == state.WorkspaceId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var snapshotRows = state.Requirements.ToDictionary(
+            row => RequirementKey(row.Entity.WorkspaceId, row.Entity.Kind, row.Entity.Id),
+            StringComparer.OrdinalIgnoreCase);
+
+        foreach (var current in currentRows)
+        {
+            if (!snapshotRows.ContainsKey(RequirementKey(current.WorkspaceId, current.Kind, current.Id)))
+                MarkSoftDeleted(ctx, current, DateTimeOffset.UtcNow, "requirements_transaction_rollback");
+        }
+
+        foreach (var snapshot in state.Requirements)
+        {
+            var source = snapshot.Entity;
+            var current = currentRows.FirstOrDefault(row =>
+                string.Equals(row.WorkspaceId, source.WorkspaceId, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.Kind, source.Kind, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.Id, source.Id, StringComparison.OrdinalIgnoreCase));
+            if (current is null)
+            {
+                current = CloneRequirement(source);
+                ctx.Requirements.Add(current);
+            }
+            else
+            {
+                CopyRequirement(source, current);
+            }
+
+            ApplySoftDeleteState(ctx.Entry(current), snapshot.SoftDelete);
+        }
+    }
+
+    private static async Task RestoreTraceabilityLinksCoreAsync(
+        McpDbContext ctx,
+        RequirementsDatabaseCompensationState state,
+        CancellationToken cancellationToken)
+    {
+        var currentLinks = await ctx.RequirementTraceabilityLinks
+            .IgnoreQueryFilters(SoftDeleteQueryFilter)
+            .Where(row => row.WorkspaceId == state.WorkspaceId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var snapshotLinks = state.TraceabilityLinks.ToDictionary(
+            row => TraceabilityKey(row.Entity.WorkspaceId, row.Entity.FrId, row.Entity.TargetKind, row.Entity.TargetId),
+            StringComparer.OrdinalIgnoreCase);
+
+        foreach (var current in currentLinks)
+        {
+            if (!snapshotLinks.ContainsKey(TraceabilityKey(current.WorkspaceId, current.FrId, current.TargetKind, current.TargetId)))
+                MarkSoftDeleted(ctx, current, DateTimeOffset.UtcNow, "requirements_transaction_rollback");
+        }
+
+        foreach (var snapshot in state.TraceabilityLinks)
+        {
+            var source = snapshot.Entity;
+            var current = currentLinks.FirstOrDefault(row =>
+                string.Equals(row.WorkspaceId, source.WorkspaceId, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.FrId, source.FrId, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.TargetKind, source.TargetKind, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.TargetId, source.TargetId, StringComparison.OrdinalIgnoreCase));
+            if (current is null)
+            {
+                current = CloneTraceabilityLink(source);
+                ctx.RequirementTraceabilityLinks.Add(current);
+            }
+            else
+            {
+                CopyTraceabilityLink(source, current);
+            }
+
+            ApplySoftDeleteState(ctx.Entry(current), snapshot.SoftDelete);
+        }
+    }
+
+    private static string RequirementKey(string workspaceId, string kind, string id)
+        => $"{workspaceId}\0{kind}\0{id}";
+
+    private static string TraceabilityKey(string workspaceId, string frId, string targetKind, string targetId)
+        => $"{workspaceId}\0{frId}\0{targetKind}\0{targetId}";
+
+    private static RequirementEntity CloneRequirement(RequirementEntity source)
+    {
+        return new RequirementEntity
+        {
+            WorkspaceId = source.WorkspaceId,
+            Kind = source.Kind,
+            Id = source.Id,
+            Title = source.Title,
+            Body = source.Body,
+            Priority = source.Priority,
+            Status = source.Status,
+            Notes = source.Notes,
+            AcceptanceCriteriaJson = source.AcceptanceCriteriaJson,
+            CreatedAtUtc = source.CreatedAtUtc,
+            UpdatedAtUtc = source.UpdatedAtUtc,
+        };
+    }
+
+    private static void CopyRequirement(RequirementEntity source, RequirementEntity target)
+    {
+        target.Title = source.Title;
+        target.Body = source.Body;
+        target.Priority = source.Priority;
+        target.Status = source.Status;
+        target.Notes = source.Notes;
+        target.AcceptanceCriteriaJson = source.AcceptanceCriteriaJson;
+        target.CreatedAtUtc = source.CreatedAtUtc;
+        target.UpdatedAtUtc = source.UpdatedAtUtc;
+    }
+
+    private static RequirementTraceabilityLinkEntity CloneTraceabilityLink(RequirementTraceabilityLinkEntity source)
+    {
+        return new RequirementTraceabilityLinkEntity
+        {
+            WorkspaceId = source.WorkspaceId,
+            SourceKind = source.SourceKind,
+            FrId = source.FrId,
+            TargetKind = source.TargetKind,
+            TargetId = source.TargetId,
+            CreatedAtUtc = source.CreatedAtUtc,
+        };
+    }
+
+    private static void CopyTraceabilityLink(
+        RequirementTraceabilityLinkEntity source,
+        RequirementTraceabilityLinkEntity target)
+    {
+        target.SourceKind = source.SourceKind;
+        target.CreatedAtUtc = source.CreatedAtUtc;
+    }
+
+    private static bool IsSoftDeleted(McpDbContext ctx, object entity)
+    {
+        var entry = ctx.Entry(entity);
+        return entry.Metadata.FindProperty("IsDeleted") is not null
+               && entry.Property("IsDeleted").CurrentValue is true;
+    }
+
+    private static void MarkSoftDeleted(McpDbContext ctx, object entity, DateTimeOffset deletedAtUtc, string reason)
+    {
+        var entry = ctx.Entry(entity);
+        if (entry.Metadata.FindProperty("IsDeleted") is null)
+            return;
+
+        entry.State = EntityState.Modified;
+        entry.Property("IsDeleted").CurrentValue = true;
+        entry.Property("DeletedAtUtc").CurrentValue = deletedAtUtc;
+        entry.Property("DeletedBy").CurrentValue = nameof(RequirementsDatabaseDocumentService);
+        entry.Property("DeleteReason").CurrentValue = reason;
+    }
+
+    private static void ClearSoftDelete(McpDbContext ctx, object entity)
+    {
+        var entry = ctx.Entry(entity);
+        if (entry.Metadata.FindProperty("IsDeleted") is null)
+            return;
+
+        entry.State = EntityState.Modified;
+        entry.Property("IsDeleted").CurrentValue = false;
+        entry.Property("DeletedAtUtc").CurrentValue = null;
+        entry.Property("DeletedBy").CurrentValue = null;
+        entry.Property("DeleteReason").CurrentValue = null;
+    }
+
+    private static SoftDeleteState ReadSoftDeleteState(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+        => new(
+            entry.Property("IsDeleted").CurrentValue is true,
+            entry.Property("DeletedAtUtc").CurrentValue as DateTimeOffset?,
+            entry.Property("DeletedBy").CurrentValue as string,
+            entry.Property("DeleteReason").CurrentValue as string);
+
+    private static void ApplySoftDeleteState(
+        Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry,
+        SoftDeleteState state)
+    {
+        entry.Property("IsDeleted").CurrentValue = state.IsDeleted;
+        entry.Property("DeletedAtUtc").CurrentValue = state.DeletedAtUtc;
+        entry.Property("DeletedBy").CurrentValue = state.DeletedBy;
+        entry.Property("DeleteReason").CurrentValue = state.DeleteReason;
+    }
+
     private async Task PublishRequirementsChangeSafeAsync(string action, string entityId, CancellationToken ct)
     {
         if (_eventBus is null)
@@ -710,7 +1263,28 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
+    private readonly record struct RequirementBatchValue(string Kind, string Id, string Title, string Body, string Priority, string Status, string? Notes, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria);
+
     private readonly record struct RequirementDocumentPaths(string Functional, string Technical, string Testing, string Mapping, string Matrix);
+
+    private sealed record RequirementsDatabaseCompensationState(
+        string WorkspaceId,
+        IReadOnlyList<RequirementEntityCompensationState> Requirements,
+        IReadOnlyList<RequirementTraceabilityLinkCompensationState> TraceabilityLinks);
+
+    private sealed record RequirementEntityCompensationState(
+        RequirementEntity Entity,
+        SoftDeleteState SoftDelete);
+
+    private sealed record RequirementTraceabilityLinkCompensationState(
+        RequirementTraceabilityLinkEntity Entity,
+        SoftDeleteState SoftDelete);
+
+    private readonly record struct SoftDeleteState(
+        bool IsDeleted,
+        DateTimeOffset? DeletedAtUtc,
+        string? DeletedBy,
+        string? DeleteReason);
 
     private readonly struct DbScope : IAsyncDisposable
     {

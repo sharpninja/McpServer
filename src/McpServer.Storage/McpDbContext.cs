@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace McpServer.Support.Mcp.Storage;
 
 /// <summary>
-/// TR-PLANNED-013: EF Core DbContext for MCP metadata and chunks.
+/// TR-PLANNED-CORE-013: EF Core DbContext for MCP metadata and chunks.
 /// FR-SUPPORT-010: SQLite storage for local MCP server.
 /// TR-MCP-MT-003: Global query filter on WorkspaceId for multi-tenant data isolation.
 /// </summary>
@@ -17,7 +17,7 @@ public sealed class McpDbContext : DbContext
 {
     private string _workspaceId;
 
-    /// <summary>TR-PLANNED-013: Constructor for DI with workspace context.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor for DI with workspace context.</summary>
     public McpDbContext(DbContextOptions<McpDbContext> options, WorkspaceContext? workspaceContext = null)
         : base(options)
     {
@@ -36,34 +36,34 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-DB-004: Generic append-only mutable-entity audit ledger.</summary>
     public DbSet<DataAuditLogEntity> DataAuditLogs => Set<DataAuditLogEntity>();
 
-    /// <summary>TR-PLANNED-013: Indexed documents.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Indexed documents.</summary>
     public DbSet<ContextDocumentEntity> Documents => Set<ContextDocumentEntity>();
 
-    /// <summary>TR-PLANNED-013: Indexed chunks.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Indexed chunks.</summary>
     public DbSet<ContextChunkEntity> Chunks => Set<ContextChunkEntity>();
 
-    /// <summary>TR-PLANNED-013: Session logs (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session logs (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogEntity> SessionLogs => Set<SessionLogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turns (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turns (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnEntity> SessionLogTurns => Set<SessionLogTurnEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn actions (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn actions (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogActionEntity> SessionLogActions => Set<SessionLogActionEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn tags (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn tags (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnTagEntity> SessionLogTurnTags => Set<SessionLogTurnTagEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn context items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn context items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnContextEntity> SessionLogTurnContexts => Set<SessionLogTurnContextEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn processing dialog items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn commits.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn commits.</summary>
     public DbSet<SessionLogCommitEntity> SessionLogCommits => Set<SessionLogCommitEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log turn string-list items (design decisions, requirements, files modified, blockers).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Session log turn string-list items (design decisions, requirements, files modified, blockers).</summary>
     public DbSet<SessionLogTurnStringListEntity> SessionLogTurnStringLists => Set<SessionLogTurnStringListEntity>();
 
     /// <summary>Tool definitions discoverable by keyword search.</summary>
@@ -111,6 +111,15 @@ public sealed class McpDbContext : DbContext
     /// <summary>Authoritative workspace-scoped FR-to-TR/TEST traceability links.</summary>
     public DbSet<RequirementTraceabilityLinkEntity> RequirementTraceabilityLinks => Set<RequirementTraceabilityLinkEntity>();
 
+    /// <summary>TR-MCP-MEMORY-001: Authoritative raw-text MCP memories.</summary>
+    public DbSet<MemoryEntity> Memories => Set<MemoryEntity>();
+
+    /// <summary>TR-MCP-QUAD-001: Durable external brain-slot definitions.</summary>
+    public DbSet<BrainSlotDefinitionEntity> BrainSlotDefinitions => Set<BrainSlotDefinitionEntity>();
+
+    /// <summary>TR-MCP-QUAD-001: Durable external brain-slot invocation audit rows.</summary>
+    public DbSet<BrainSlotInvocationEntity> BrainSlotInvocations => Set<BrainSlotInvocationEntity>();
+
     /// <summary>FR-MCP-103: Enrolled local federation proxies known by the hub.</summary>
     public DbSet<FederationProxyEntity> FederationProxies => Set<FederationProxyEntity>();
 
@@ -125,6 +134,22 @@ public sealed class McpDbContext : DbContext
 
     /// <summary>FR-MCP-103: Conflicts created by stale proxy writes.</summary>
     public DbSet<FederationConflictEntity> FederationConflicts => Set<FederationConflictEntity>();
+
+    /// <inheritdoc />
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(optionsBuilder);
+        base.OnConfiguring(optionsBuilder);
+
+        // EF Core 10 throws PendingModelChangesWarning by default when the runtime model
+        // differs from the resolved snapshot. The production database strategy already
+        // suppresses this warning (see SqliteMcpDatabaseProviderStrategy and friends).
+        // Mirror that here so tests and ad-hoc consumers that construct the context with
+        // a bare provider (e.g. UseSqlite without MigrationsAssembly) do not throw when
+        // the snapshot lives in one of the per-provider migrations assemblies.
+        optionsBuilder.ConfigureWarnings(warnings =>
+            warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+    }
 
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -177,7 +202,7 @@ public sealed class McpDbContext : DbContext
 
         modelBuilder.Entity<SessionLogEntity>(e =>
         {
-            e.HasIndex(x => new { x.SourceType, x.SessionId }).IsUnique();
+            e.HasIndex(x => new { x.WorkspaceId, x.SourceType, x.SessionId }).IsUnique();
             e.HasIndex(x => x.SourceType);
             e.HasIndex(x => x.Started);
             e.HasIndex(x => x.LastUpdated);
@@ -391,6 +416,39 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<MemoryEntity>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.HasIndex(x => x.Category);
+            e.HasIndex(x => new { x.Scope, x.WorkspaceId, x.Category });
+            e.HasIndex(x => x.UpdatedAtUtc);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<BrainSlotDefinitionEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.SlotId });
+            e.HasIndex(x => new { x.WorkspaceId, x.Role, x.Enabled });
+            e.HasIndex(x => new { x.WorkspaceId, x.Role })
+                .IsUnique()
+                .HasFilter(BrainSlotEnabledUniqueIndexFilter());
+            e.HasIndex(x => new { x.WorkspaceId, x.PartyId });
+        });
+
+        modelBuilder.Entity<BrainSlotInvocationEntity>(e =>
+        {
+            e.HasIndex(x => new { x.WorkspaceId, x.SlotId, x.StartedAtUtc });
+            e.HasIndex(x => new { x.WorkspaceId, x.TransactionId });
+            e.HasOne<BrainSlotDefinitionEntity>()
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.SlotId })
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
         modelBuilder.Entity<FederationProxyEntity>(e =>
         {
             e.HasIndex(x => x.Status);
@@ -457,13 +515,13 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        // BUG-SESSIONLOG-WS-001..004: session-log CHILD entities carry no workspace
+        // query filter. Children are only reachable through their (filtered) parent
+        // session; filtering them independently let stamping drift hide rows from
+        // the EF graph, producing duplicate-key inserts on upsert, severed required
+        // associations on bare submits, and corrupted turn counts. Direct child-set
+        // queries must add an explicit parent-workspace predicate (see
+        // AppendProcessingDialogAsync and TodoExecutionService turn lookups).
         modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
         modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
         modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
@@ -480,6 +538,18 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<MemoryEntity>().HasQueryFilter("Workspace", e =>
+            e.Scope == MemoryEntity.GlobalScope
+            || (!string.IsNullOrEmpty(_workspaceId)
+                && e.Scope == MemoryEntity.WorkspaceScope
+                && e.WorkspaceId == _workspaceId));
+        // TR-MCP-QUAD-001: the QuadBrain subsystem is GLOBAL (one quad shared by every workspace and session).
+        // Brain-slot definitions and their invocation audit rows are stored under the global workspace
+        // (WorkspaceId == "") and visible in every workspace context; the per-session dimension is carried by the
+        // invocation's TurnId/metadata, not the workspace. Invocations FK to definitions on (WorkspaceId, SlotId),
+        // so both must share the same (global) workspace id.
+        modelBuilder.Entity<BrainSlotDefinitionEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty);
+        modelBuilder.Entity<BrainSlotInvocationEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty);
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
@@ -506,6 +576,8 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<MemoryEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<BrainSlotInvocationEntity>().HasIndex(e => e.WorkspaceId);
 
         ApplyDbFkConventions(modelBuilder);
     }
@@ -531,12 +603,25 @@ public sealed class McpDbContext : DbContext
         ApplySoftDeleteQueryFilters(modelBuilder);
     }
 
+    private string BrainSlotEnabledUniqueIndexFilter()
+    {
+        var providerName = Database.ProviderName ?? string.Empty;
+        if (providerName.Contains("Npgsql", StringComparison.OrdinalIgnoreCase))
+            return "\"Enabled\" = TRUE AND \"IsDeleted\" = FALSE";
+        if (providerName.Contains("SqlServer", StringComparison.OrdinalIgnoreCase))
+            return "[Enabled] = 1 AND [IsDeleted] = 0";
+        return "\"Enabled\" = 1 AND \"IsDeleted\" = 0";
+    }
+
     private static void ApplyWorkspaceForeignKeys(ModelBuilder modelBuilder)
     {
         var workspaceClrType = typeof(WorkspaceEntity);
         foreach (var entityType in modelBuilder.Model.GetEntityTypes().ToArray())
         {
             if (entityType.ClrType == workspaceClrType)
+                continue;
+
+            if (entityType.ClrType == typeof(MemoryEntity))
                 continue;
 
             if (entityType.FindProperty(nameof(WorkspaceEntity.WorkspaceId)) is null)
@@ -886,9 +971,32 @@ public sealed class McpDbContext : DbContext
         {
             ToolDefinitionEntity toolDefinition => toolDefinition.WorkspacePath ?? string.Empty,
             ToolDefinitionTagEntity toolDefinitionTag => ResolveToolDefinitionTagWorkspaceId(toolDefinitionTag),
+            // TR-MCP-QUAD-001: QuadBrain brain-slot definitions and invocation rows are global; always stamp "".
+            BrainSlotDefinitionEntity => string.Empty,
+            BrainSlotInvocationEntity => string.Empty,
+            // BUG-SESSIONLOG-WS-002: session-log children always inherit the parent
+            // graph's stamp so a single session never holds mixed WorkspaceIds.
+            SessionLogTurnEntity turn => FirstNonEmpty(turn.SessionLog?.WorkspaceId),
+            SessionLogActionEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTurnTagEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTurnContextEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogProcessingDialogEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogCommitEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTurnStringListEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             _ when _workspaceId.Length > 0 => _workspaceId,
             _ => null,
         };
+
+        string? FirstNonEmpty(params string?[] candidates)
+        {
+            foreach (var candidate in candidates)
+            {
+                if (!string.IsNullOrEmpty(candidate))
+                    return candidate;
+            }
+
+            return _workspaceId.Length > 0 ? _workspaceId : null;
+        }
     }
 
     private string ResolveToolDefinitionTagWorkspaceId(ToolDefinitionTagEntity toolDefinitionTag)

@@ -6,7 +6,17 @@
     <Configurations>Debug;Release;Staging</Configurations>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <RootNamespace>McpServer.Repl.Core</RootNamespace>
+    <PackageId>SharpNinja.McpServer.Repl.Core</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>Reusable REPL workflow helpers for MCP Server session log, TODO, requirements, and generic client passthrough operations.</Description>
+    <PackageProjectUrl>https://github.com/sharpninja/McpServer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>main</RepositoryBranch>
+    <PackageTags>mcp;repl;workflow;client</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

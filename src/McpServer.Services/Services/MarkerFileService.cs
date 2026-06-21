@@ -189,14 +189,25 @@ public static class MarkerFileService
         {
             if (File.Exists(markerPath))
             {
-                File.Delete(markerPath);
-                logger?.LogInformation("Removed MCP marker file: {Path}", markerPath);
+                var archivePath = BuildArchivedMarkerPath(markerPath);
+                File.Move(markerPath, archivePath);
+                logger?.LogInformation("Archived MCP marker file from {Path} to {ArchivePath}", markerPath, archivePath);
             }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             logger?.LogWarning(ex, "Failed to remove MCP marker file: {Path}", markerPath);
         }
+    }
+
+    private static string BuildArchivedMarkerPath(string markerPath)
+    {
+        var timestamp = DateTimeOffset.UtcNow.ToString("yyyyMMddTHHmmssfffffffZ", CultureInfo.InvariantCulture);
+        var candidate = $"{markerPath}.deleted-{timestamp}";
+        for (var attempt = 1; File.Exists(candidate); attempt++)
+            candidate = $"{markerPath}.deleted-{timestamp}-{attempt}";
+
+        return candidate;
     }
 
     internal static string ResolvePrompt(
@@ -393,6 +404,19 @@ public static class MarkerFileService
                     HookExpectations = ["MCP server startup", "tool call audit"],
                     ToolExpectations = ["session_*", "req_*"],
                     RootHints = [Sibling("mcpserver-cline-plugin"), "$CLINE_PLUGIN_ROOT"],
+                },
+                ["Grok"] = new()
+                {
+                    SourceType = "GrokCode",
+                    PluginName = "mcpserver-grok-plugin",
+                    PluginVersion = "1.1.1",
+                    Activation = "Grok Build loads enabled plugin skills, hooks, and MCP servers from the Grok/Claude-compatible plugin manifests. Use sessionlog_*, todo_*, and requirements_* tool names when the Streamable HTTP MCP server is discoverable; mcp_* names are hosted-agent aliases, and workflow.* names are plugin shim/REPL method names invoked through the Grok plugin skills or repl-invoke helpers, not literal Grok search_tool results.",
+                    StartupCommand = "",
+                    UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:GrokCode",
+                    RequiredEnvVars = ["GROK_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=GrokCode"],
+                    HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop", "PlanMode"],
+                    ToolExpectations = ["sessionlog_*", "todo_*", "requirements_*"],
+                    RootHints = [Sibling("mcpserver-grok-plugin"), "$GROK_PLUGIN_ROOT"],
                 },
             },
         };

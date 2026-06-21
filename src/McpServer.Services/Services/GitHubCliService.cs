@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013, TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
+/// TR-PLANNED-CORE-013, TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
 /// </summary>
 public sealed class GitHubCliService : IGitHubCliService
 {
@@ -33,7 +33,7 @@ public sealed class GitHubCliService : IGitHubCliService
     private readonly IOptionsMonitor<GitHubIntegrationOptions>? _githubOptions;
     private readonly WorkspaceServiceAccessor? _workspaceAccessor;
 
-    /// <summary>TR-PLANNED-013: Constructor with IProcessRunner for testability.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor with IProcessRunner for testability.</summary>
     public GitHubCliService(
         IProcessRunner processRunner,
         ILogger<GitHubCliService> logger,
@@ -72,7 +72,7 @@ public sealed class GitHubCliService : IGitHubCliService
             args.Add(normalizedState);
         }
 
-        var result = await RunGhAsync(BuildArguments(args), cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubIssueListResult(false, result.Stderr ?? "gh failed", Array.Empty<GitHubIssueItem>());
@@ -103,7 +103,7 @@ public sealed class GitHubCliService : IGitHubCliService
             args.Add(normalizedState);
         }
 
-        var result = await RunGhAsync(BuildArguments(args), cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubPullListResult(false, result.Stderr ?? "gh failed", Array.Empty<GitHubPullItem>());
@@ -123,7 +123,7 @@ public sealed class GitHubCliService : IGitHubCliService
             args.Add(body);
         }
 
-        var result = await RunGhAsync(BuildArguments(args), cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubCreateIssueResult(false, null, null, result.Stderr ?? "gh failed");
@@ -139,7 +139,7 @@ public sealed class GitHubCliService : IGitHubCliService
         ArgumentNullException.ThrowIfNull(issueId);
         ArgumentNullException.ThrowIfNull(body);
         var normalizedIssueId = NormalizeTargetIdentifier(issueId, nameof(issueId));
-        var args = BuildArguments("issue", "comment", "--body", body, "--", normalizedIssueId);
+        var args = new List<string> { "issue", "comment", "--body", body, "--", normalizedIssueId };
         var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         return new GitHubCommentResult(result.ExitCode == 0, result.ExitCode != 0 ? result.Stderr : null);
     }
@@ -150,7 +150,7 @@ public sealed class GitHubCliService : IGitHubCliService
         ArgumentNullException.ThrowIfNull(prId);
         ArgumentNullException.ThrowIfNull(body);
         var normalizedPullId = NormalizeTargetIdentifier(prId, nameof(prId));
-        var args = BuildArguments("pr", "comment", "--body", body, "--", normalizedPullId);
+        var args = new List<string> { "pr", "comment", "--body", body, "--", normalizedPullId };
         var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         return new GitHubCommentResult(result.ExitCode == 0, result.ExitCode != 0 ? result.Stderr : null);
     }
@@ -158,12 +158,14 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubIssueDetailResult> GetIssueAsync(int issueNumber, CancellationToken ct = default)
     {
-        var args = BuildArguments(
+        var args = new List<string>
+        {
             "issue",
             "view",
             issueNumber.ToString(CultureInfo.InvariantCulture),
             "--json",
-            "number,title,body,state,url,labels,assignees,milestone,createdAt,updatedAt,closedAt,author,comments");
+            "number,title,body,state,url,labels,assignees,milestone,createdAt,updatedAt,closedAt,author,comments"
+        };
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubIssueDetailResult(false, null, result.Stderr ?? "gh failed");
@@ -232,7 +234,7 @@ public sealed class GitHubCliService : IGitHubCliService
             args.Add(request.Milestone);
         }
 
-        var result = await RunGhAsync(BuildArguments(args), ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
         return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
@@ -251,7 +253,7 @@ public sealed class GitHubCliService : IGitHubCliService
             args.Add(normalizedReason);
         }
 
-        var result = await RunGhAsync(BuildArguments(args), ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
         return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
@@ -260,7 +262,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubMutationResult> ReopenIssueAsync(int issueNumber, CancellationToken ct = default)
     {
-        var args = BuildArguments("issue", "reopen", issueNumber.ToString(CultureInfo.InvariantCulture));
+        var args = new List<string> { "issue", "reopen", issueNumber.ToString(CultureInfo.InvariantCulture) };
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
@@ -270,7 +272,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubLabelsResult> ListIssueLabelsAsync(CancellationToken ct = default)
     {
-        var args = BuildArguments("label", "list", "--json", "name,color,description", "--limit", "100");
+        var args = new List<string> { "label", "list", "--json", "name,color,description", "--limit", "100" };
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubLabelsResult(false, null, result.Stderr ?? "gh failed");
@@ -296,7 +298,7 @@ public sealed class GitHubCliService : IGitHubCliService
         AddOption(args, "--event", query.Event);
         AddOption(args, "--workflow", query.Workflow);
 
-        var result = await RunGhAsync(BuildArguments(args), ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubWorkflowRunListResult(false, Array.Empty<GitHubWorkflowRunItem>(), result.Stderr ?? "gh failed");
 
@@ -306,12 +308,14 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default)
     {
-        var args = BuildArguments(
+        var args = new List<string>
+        {
             "run",
             "view",
             runId.ToString(CultureInfo.InvariantCulture),
             "--json",
-            "databaseId,workflowName,displayTitle,headBranch,headSha,status,conclusion,event,url,attempt,createdAt,updatedAt,jobs");
+            "databaseId,workflowName,displayTitle,headBranch,headSha,status,conclusion,event,url,attempt,createdAt,updatedAt,jobs"
+        };
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubWorkflowRunDetailResult(false, null, result.Stderr ?? "gh failed");
@@ -325,7 +329,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default)
     {
-        var args = BuildArguments("run", "rerun", runId.ToString(CultureInfo.InvariantCulture));
+        var args = new List<string> { "run", "rerun", runId.ToString(CultureInfo.InvariantCulture) };
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
@@ -335,7 +339,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default)
     {
-        var args = BuildArguments("run", "cancel", runId.ToString(CultureInfo.InvariantCulture));
+        var args = new List<string> { "run", "cancel", runId.ToString(CultureInfo.InvariantCulture) };
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
@@ -522,11 +526,17 @@ public sealed class GitHubCliService : IGitHubCliService
         return builder.ToString();
     }
 
-    private async Task<ProcessRunResult> RunGhAsync(string args, CancellationToken ct)
+    private async Task<ProcessRunResult> RunGhAsync(IReadOnlyList<string> arguments, CancellationToken ct)
     {
         var preferStoredToken = _githubOptions?.CurrentValue.PreferStoredToken ?? true;
         var allowFallback = _githubOptions?.CurrentValue.AllowCliFallback ?? true;
         var workingDirectory = ResolveWorkingDirectory();
+        var repository = ResolveRepositoryArgument(workingDirectory);
+        var args = BuildArguments(AddRepositoryOption(arguments, repository));
+        var processWorkingDirectory = string.IsNullOrWhiteSpace(repository) ? workingDirectory : null;
+        var environmentVariables = string.IsNullOrWhiteSpace(repository)
+            ? BuildGitSafeDirectoryEnvironment(workingDirectory)
+            : null;
 
         if (preferStoredToken)
         {
@@ -534,7 +544,9 @@ public sealed class GitHubCliService : IGitHubCliService
             if (!string.IsNullOrWhiteSpace(token))
             {
                 _logger.LogDebug("GitHub CLI auth mode: stored workspace token.");
-                return await _processRunner.RunAsync(new ProcessRunRequest(GhExe, args, token, workingDirectory), ct).ConfigureAwait(false);
+                return await _processRunner.RunAsync(
+                    new ProcessRunRequest(GhExe, args, token, processWorkingDirectory, environmentVariables),
+                    ct).ConfigureAwait(false);
             }
         }
 
@@ -545,11 +557,201 @@ public sealed class GitHubCliService : IGitHubCliService
         }
 
         _logger.LogDebug("GitHub CLI auth mode: CLI fallback.");
-        if (string.IsNullOrWhiteSpace(workingDirectory))
+        if (string.IsNullOrWhiteSpace(processWorkingDirectory) && environmentVariables is null)
             return await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
 
-        return await _processRunner.RunAsync(new ProcessRunRequest(GhExe, args, WorkingDirectory: workingDirectory), ct).ConfigureAwait(false);
+        return await _processRunner.RunAsync(
+            new ProcessRunRequest(GhExe, args, WorkingDirectory: processWorkingDirectory, EnvironmentVariables: environmentVariables),
+            ct).ConfigureAwait(false);
     }
+
+    private string? ResolveRepositoryArgument(string? workingDirectory)
+    {
+        var configured = _githubOptions?.CurrentValue.Repository;
+        var configuredRepository = TryNormalizeRepositoryArgument(configured);
+        if (!string.IsNullOrWhiteSpace(configuredRepository))
+            return configuredRepository;
+
+        if (string.IsNullOrWhiteSpace(workingDirectory))
+            return null;
+
+        return TryResolveGitHubRepositoryFromGitConfig(workingDirectory);
+    }
+
+    private static IReadOnlyDictionary<string, string?>? BuildGitSafeDirectoryEnvironment(string? workingDirectory)
+    {
+        if (string.IsNullOrWhiteSpace(workingDirectory))
+            return null;
+
+        return new Dictionary<string, string?>(StringComparer.Ordinal)
+        {
+            ["GIT_CONFIG_COUNT"] = "1",
+            ["GIT_CONFIG_KEY_0"] = "safe.directory",
+            ["GIT_CONFIG_VALUE_0"] = Path.GetFullPath(workingDirectory)
+        };
+    }
+
+    private static IReadOnlyList<string> AddRepositoryOption(IReadOnlyList<string> arguments, string? repository)
+    {
+        if (string.IsNullOrWhiteSpace(repository))
+            return arguments;
+
+        var result = new List<string>(arguments.Count + 2);
+        var inserted = false;
+        foreach (var argument in arguments)
+        {
+            if (!inserted && string.Equals(argument, "--", StringComparison.Ordinal))
+            {
+                result.Add("--repo");
+                result.Add(repository);
+                inserted = true;
+            }
+
+            result.Add(argument);
+        }
+
+        if (!inserted)
+        {
+            result.Add("--repo");
+            result.Add(repository);
+        }
+
+        return result;
+    }
+
+    private static string? TryResolveGitHubRepositoryFromGitConfig(string workingDirectory)
+    {
+        var configPath = TryResolveGitConfigPath(workingDirectory);
+        if (configPath is null || !File.Exists(configPath))
+            return null;
+
+        try
+        {
+            foreach (var rawLine in File.ReadLines(configPath))
+            {
+                var line = rawLine.Trim();
+                if (!line.StartsWith("url", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var equalsIndex = line.IndexOf('=', StringComparison.Ordinal);
+                if (equalsIndex < 0)
+                    continue;
+
+                var repository = TryNormalizeRepositoryArgument(line[(equalsIndex + 1)..]);
+                if (!string.IsNullOrWhiteSpace(repository))
+                    return repository;
+            }
+        }
+        catch (IOException)
+        {
+            return null;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return null;
+        }
+
+        return null;
+    }
+
+    private static string? TryResolveGitConfigPath(string workingDirectory)
+    {
+        try
+        {
+            var dotGitPath = Path.Combine(Path.GetFullPath(workingDirectory), ".git");
+            if (Directory.Exists(dotGitPath))
+                return Path.Combine(dotGitPath, "config");
+
+            if (!File.Exists(dotGitPath))
+                return null;
+
+            var gitDirLine = File.ReadLines(dotGitPath).FirstOrDefault();
+            const string gitDirPrefix = "gitdir:";
+            if (gitDirLine is null || !gitDirLine.StartsWith(gitDirPrefix, StringComparison.OrdinalIgnoreCase))
+                return null;
+
+            var gitDir = gitDirLine[gitDirPrefix.Length..].Trim();
+            if (string.IsNullOrWhiteSpace(gitDir))
+                return null;
+
+            var resolvedGitDir = Path.IsPathRooted(gitDir)
+                ? gitDir
+                : Path.GetFullPath(Path.Combine(workingDirectory, gitDir));
+            return Path.Combine(resolvedGitDir, "config");
+        }
+        catch (IOException)
+        {
+            return null;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
+
+    private static string? TryNormalizeRepositoryArgument(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return null;
+
+        var trimmed = value.Trim().TrimEnd('/');
+        if (Uri.TryCreate(trimmed, UriKind.Absolute, out var uri))
+        {
+            if (!IsGitHubHost(uri.Host))
+                return null;
+
+            return BuildRepositoryArgument(uri.Host, uri.AbsolutePath.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        var scpSeparator = trimmed.IndexOf(':', StringComparison.Ordinal);
+        var atIndex = trimmed.IndexOf('@', StringComparison.Ordinal);
+        if (atIndex >= 0 && scpSeparator > atIndex)
+        {
+            var host = trimmed[(atIndex + 1)..scpSeparator];
+            if (!IsGitHubHost(host))
+                return null;
+
+            return BuildRepositoryArgument(host, trimmed[(scpSeparator + 1)..].Split('/', StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        var parts = trimmed.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 2)
+            return $"{parts[0]}/{TrimGitSuffix(parts[1])}";
+
+        if (parts.Length == 3)
+            return string.Equals(parts[0], "github.com", StringComparison.OrdinalIgnoreCase)
+                ? $"{parts[1]}/{TrimGitSuffix(parts[2])}"
+                : $"{parts[0]}/{parts[1]}/{TrimGitSuffix(parts[2])}";
+
+        return null;
+    }
+
+    private static bool IsGitHubHost(string host)
+        => string.Equals(host, "github.com", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(host, "www.github.com", StringComparison.OrdinalIgnoreCase)
+           || host.EndsWith(".github.com", StringComparison.OrdinalIgnoreCase)
+           || host.EndsWith(".ghe.com", StringComparison.OrdinalIgnoreCase);
+
+    private static string? BuildRepositoryArgument(string host, string[] pathParts)
+    {
+        if (pathParts.Length < 2)
+            return null;
+
+        var owner = pathParts[0];
+        var repo = TrimGitSuffix(pathParts[1]);
+        if (string.IsNullOrWhiteSpace(owner) || string.IsNullOrWhiteSpace(repo))
+            return null;
+
+        return string.Equals(host, "github.com", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(host, "www.github.com", StringComparison.OrdinalIgnoreCase)
+            ? $"{owner}/{repo}"
+            : $"{host}/{owner}/{repo}";
+    }
+
+    private static string TrimGitSuffix(string value)
+        => value.EndsWith(".git", StringComparison.OrdinalIgnoreCase)
+            ? value[..^4]
+            : value;
 
     private async Task<string?> TryResolveWorkspaceTokenAsync(CancellationToken ct)
     {

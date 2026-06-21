@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace McpServer.Support.Mcp.Storage.Entities;
 
 /// <summary>
-/// TR-PLANNED-013: Persisted chunk for full-text and vector retrieval.
+/// TR-PLANNED-CORE-013: Persisted chunk for full-text and vector retrieval.
 /// </summary>
 public sealed class ContextChunkEntity
 {
-    /// <summary>TR-PLANNED-013: Unique chunk identifier.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Unique chunk identifier.</summary>
     [Key]
     [MaxLength(256)]
     public required string Id { get; set; }
@@ -16,22 +16,22 @@ public sealed class ContextChunkEntity
     /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
     public string WorkspaceId { get; set; } = string.Empty;
 
-    /// <summary>TR-PLANNED-013: Parent document identifier.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Parent document identifier.</summary>
     [Required]
     [MaxLength(256)]
     public required string DocumentId { get; set; }
 
-    /// <summary>TR-PLANNED-013: Chunk text content.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Chunk text content.</summary>
     [Required]
     public required string Content { get; set; }
 
-    /// <summary>TR-PLANNED-013: Estimated token count.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Estimated token count.</summary>
     public int TokenCount { get; set; }
 
-    /// <summary>TR-PLANNED-013: Zero-based index within document.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Zero-based index within document.</summary>
     public int ChunkIndex { get; set; }
 
-    /// <summary>TR-PLANNED-013: Embedding vector stored as BLOB (nullable, populated during ingestion).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Embedding vector stored as BLOB (nullable, populated during ingestion).</summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Suppressed globally in Directory.Build.props")]
     public byte[]? Embedding { get; set; }
 

@@ -52,6 +52,41 @@ public sealed class VoiceControllerTests
         Assert.Contains("Voice turn processing failed.", payload, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-161: Verifies transaction-gate failures during stream setup return a pre-stream service
+    /// unavailable response instead of starting an SSE stream.
+    /// </summary>
+    [Fact]
+    public async Task SubmitTurnStreamingAsync_SendSessionMessageTransactionGate_ReturnsServiceUnavailableJson()
+    {
+        var voiceService = Substitute.For<IVoiceConversationService>();
+        voiceService
+            .SendSessionMessageAsync("voice-1", "User is here.", Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<bool>(new InvalidOperationException("Voice mutations are not transaction compensated.")));
+
+        var controller = new VoiceController(
+            voiceService,
+            new WorkspaceContext { WorkspacePath = @"E:\github\McpServer" },
+            NullLogger<VoiceController>.Instance)
+        {
+            ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() }
+        };
+        controller.Response.Body = new MemoryStream();
+
+        await controller.SubmitTurnStreamingAsync(
+            "voice-1",
+            new VoiceTurnRequest { UserTranscriptText = "Hello" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        controller.Response.Body.Position = 0;
+        using var reader = new StreamReader(controller.Response.Body, leaveOpen: true);
+        var payload = await reader.ReadToEndAsync().ConfigureAwait(true);
+
+        Assert.Equal(StatusCodes.Status503ServiceUnavailable, controller.Response.StatusCode);
+        Assert.NotEqual("text/event-stream", controller.Response.ContentType);
+        Assert.Contains("not transaction compensated", payload, StringComparison.OrdinalIgnoreCase);
+    }
+
     private static async IAsyncEnumerable<VoiceTurnStreamEvent> EmptyEvents()
     {
         await Task.CompletedTask.ConfigureAwait(true);

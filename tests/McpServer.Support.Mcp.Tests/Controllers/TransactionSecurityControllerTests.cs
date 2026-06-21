@@ -1,0 +1,634 @@
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using McpServer.Support.Mcp.Controllers;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using NSubstitute;
+
+namespace McpServer.Support.Mcp.Tests.Controllers;
+
+/// <summary>
+/// Unit tests for keyserver and subscriber transaction-security controllers.
+/// TEST-MCP-158, TEST-MCP-159, TEST-MCP-160, TEST-MCP-165.
+/// </summary>
+public sealed class TransactionSecurityControllerTests
+{
+    /// <summary>Party registration generates usable signing and encryption key descriptors.</summary>
+    [Fact]
+    public async Task RegisterParty_ThenGetKey_ReturnsGeneratedPublicKey()
+    {
+        using var services = CreateServices();
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+
+        var registration = await controller.RegisterPartyAsync(
+            new PartyRegistrationRequest { PartyId = "publisher-1", Role = "publisher" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(registration.Result);
+        var party = Assert.IsType<PartyRegistrationResponse>(ok.Value);
+        var keyResult = await controller.GetPartyKeyAsync(
+            party.PartyId,
+            party.ActiveSigningKeyId!,
+            CancellationToken.None).ConfigureAwait(true);
+
+        var keyOk = Assert.IsType<OkObjectResult>(keyResult.Result);
+        var key = Assert.IsType<PartyKeyDescriptor>(keyOk.Value);
+        Assert.Equal("signing", key.Purpose);
+        Assert.Contains("BEGIN PUBLIC KEY", key.PublicKeyPem, StringComparison.Ordinal);
+    }
+
+    /// <summary>Signed manifests verify successfully and return a canonical manifest hash.</summary>
+    [Fact]
+    public async Task SignManifest_ThenVerifyManifest_ReturnsValidManifestHash()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+
+        var sign = await controller.SignManifestAsync(
+            CreateSignRequest("txn-1", sequence: 1, nonce: "nonce-1"),
+            CancellationToken.None).ConfigureAwait(true);
+
+        var signOk = Assert.IsType<OkObjectResult>(sign.Result);
+        var signed = Assert.IsType<TransactionManifestSignResponse>(signOk.Value);
+        Assert.True(signed.Success);
+        Assert.NotNull(signed.Manifest!.Signature);
+
+        var verify = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest
+            {
+                Manifest = signed.Manifest,
+                ExpectedSubscriberPartyId = "subscriber-1",
+            },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var verifyOk = Assert.IsType<OkObjectResult>(verify.Result);
+        var verified = Assert.IsType<TransactionManifestVerifyResponse>(verifyOk.Value);
+        Assert.True(verified.IsValid);
+        Assert.Equal(TransactionFailureReason.None, verified.Reason);
+        Assert.False(string.IsNullOrWhiteSpace(verified.ManifestHashSha256));
+    }
+
+    /// <summary>Signed manifests can be read back as trace records for transaction diagnostics.</summary>
+    [Fact]
+    public async Task GetManifest_AfterSign_ReturnsPersistedTraceRecord()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+
+        var signed = await SignAsync(services.KeyServer, "txn-controller-trace", sequence: 25, nonce: "nonce-controller-trace")
+            .ConfigureAwait(true);
+        var result = await controller.GetManifestAsync("txn-controller-trace", CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var trace = Assert.IsType<TransactionManifestTraceRecord>(ok.Value);
+        Assert.Equal(signed.TransactionId, trace.TransactionId);
+        Assert.Equal(signed.TurnId, trace.TurnId);
+        Assert.Equal(signed.PublisherPartyId, trace.PublisherPartyId);
+        Assert.Equal(signed.SubscriberPartyId, trace.SubscriberPartyId);
+        Assert.Equal(signed.Signature!.KeyId, trace.SignatureKeyId);
+        Assert.Equal(signed.Signature.Value, trace.SignatureValue);
+        Assert.Equal("signed", trace.Status);
+        Assert.False(string.IsNullOrWhiteSpace(trace.ManifestHashSha256));
+    }
+
+    /// <summary>Manifest trace reports expose filtered ledger records without private key material.</summary>
+    [Fact]
+    public async Task GetManifestReport_AfterSign_ReturnsFilteredTraceReport()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        await SignAsync(services.KeyServer, "txn-controller-report-1", sequence: 26, nonce: "nonce-controller-report-1")
+            .ConfigureAwait(true);
+        await SignAsync(services.KeyServer, "txn-controller-report-2", sequence: 27, nonce: "nonce-controller-report-2")
+            .ConfigureAwait(true);
+
+        var result = await controller.GetManifestReportAsync(
+            new TransactionManifestTraceReportRequest
+            {
+                PublisherPartyId = "publisher-1",
+                SubscriberPartyId = "subscriber-1",
+                Limit = 1,
+            },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var report = Assert.IsType<TransactionManifestTraceReport>(ok.Value);
+        var trace = Assert.Single(report.Records);
+        var reportJson = JsonSerializer.Serialize(report);
+        Assert.Equal("publisher-1", report.PublisherPartyId);
+        Assert.Equal("subscriber-1", report.SubscriberPartyId);
+        Assert.Equal(1, report.Limit);
+        Assert.Equal(2, report.TotalCount);
+        Assert.Equal(1, report.ReturnedCount);
+        Assert.Equal("txn-controller-report-1", trace.TransactionId);
+        Assert.Equal("signed", trace.Status);
+        Assert.DoesNotContain("PRIVATE KEY", reportJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>Keyserver signing rejects a nonce that was already signed for the publisher/subscriber pair.</summary>
+    [Fact]
+    public async Task SignManifest_WithReplayNonce_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        await SignAsync(services.KeyServer, "txn-replay-first", sequence: 40, nonce: "nonce-replay").ConfigureAwait(true);
+
+        var replay = await controller.SignManifestAsync(
+            CreateSignRequest("txn-replay-second", sequence: 41, nonce: "nonce-replay"),
+            CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(replay.Result);
+        var response = Assert.IsType<TransactionManifestSignResponse>(badRequest.Value);
+        Assert.False(response.Success);
+        Assert.Equal(TransactionFailureReason.ReplayNonce, response.Reason);
+    }
+
+    /// <summary>Keyserver signing rejects stale sequence numbers for a publisher/subscriber pair.</summary>
+    [Fact]
+    public async Task SignManifest_WithStaleSequence_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        await SignAsync(services.KeyServer, "txn-stale-first", sequence: 50, nonce: "nonce-stale-first").ConfigureAwait(true);
+
+        var stale = await controller.SignManifestAsync(
+            CreateSignRequest("txn-stale-second", sequence: 49, nonce: "nonce-stale-second"),
+            CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(stale.Result);
+        var response = Assert.IsType<TransactionManifestSignResponse>(badRequest.Value);
+        Assert.False(response.Success);
+        Assert.Equal(TransactionFailureReason.StaleSequence, response.Reason);
+    }
+
+    /// <summary>Manifest verification rejects tampered signed content.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithTamperedHash_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        var signed = await SignAsync(services.KeyServer, "txn-2", sequence: 2, nonce: "nonce-2").ConfigureAwait(true);
+        signed.DiffgramSha256 = Sha256Hex("tampered");
+
+        var result = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = signed, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(result.Result);
+        var response = Assert.IsType<TransactionManifestVerifyResponse>(badRequest.Value);
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.ManifestSignatureMismatch, response.Reason);
+    }
+
+    /// <summary>Keyserver verification rejects an already verified manifest nonce as replay.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithReplayNonce_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        var manifest = await SignAsync(
+            services.KeyServer,
+            "txn-verify-replay",
+            sequence: 60,
+            nonce: "nonce-verify-replay").ConfigureAwait(true);
+        var first = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = manifest, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var replay = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = manifest, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.IsType<OkObjectResult>(first.Result);
+        var badRequest = Assert.IsType<BadRequestObjectResult>(replay.Result);
+        var response = Assert.IsType<TransactionManifestVerifyResponse>(badRequest.Value);
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.ReplayNonce, response.Reason);
+    }
+
+    /// <summary>Keyserver verification rejects an older signed manifest after a newer sequence verifies.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithStaleSequence_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var controller = new KeyServerController(services.KeyServer, services.KeyServer);
+        var older = await SignAsync(
+            services.KeyServer,
+            "txn-verify-stale-older",
+            sequence: 70,
+            nonce: "nonce-verify-stale-older").ConfigureAwait(true);
+        var newer = await SignAsync(
+            services.KeyServer,
+            "txn-verify-stale-newer",
+            sequence: 71,
+            nonce: "nonce-verify-stale-newer").ConfigureAwait(true);
+        var first = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = newer, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var stale = await controller.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = older, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.IsType<OkObjectResult>(first.Result);
+        var badRequest = Assert.IsType<BadRequestObjectResult>(stale.Result);
+        var response = Assert.IsType<TransactionManifestVerifyResponse>(badRequest.Value);
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.StaleSequence, response.Reason);
+    }
+
+    /// <summary>Keyserver signing rejects disabled publisher parties with a deterministic reason.</summary>
+    [Fact]
+    public async Task SignManifest_WithDisabledPublisher_ReturnsDisabledParty()
+    {
+        using var services = CreateServices();
+        await services.KeyServer.RegisterPartyAsync(
+            new PartyRegistrationRequest { PartyId = "publisher-1", Role = "publisher", Status = "disabled" },
+            CancellationToken.None).ConfigureAwait(true);
+        await services.KeyServer.RegisterPartyAsync(
+            new PartyRegistrationRequest { PartyId = "subscriber-1", Role = "subscriber" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var response = await services.KeyServer.SignManifestAsync(
+            CreateSignRequest("txn-disabled-publisher", sequence: 7, nonce: "nonce-disabled-publisher"),
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.False(response.Success);
+        Assert.Equal(TransactionFailureReason.DisabledParty, response.Reason);
+    }
+
+    /// <summary>Keyserver verification rejects disabled publisher parties with a deterministic reason.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithDisabledPublisher_ReturnsDisabledParty()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(
+            services.KeyServer,
+            "txn-disabled-publisher-verify",
+            sequence: 8,
+            nonce: "nonce-disabled-publisher-verify").ConfigureAwait(true);
+        await services.KeyServer.RegisterPartyAsync(
+            new PartyRegistrationRequest { PartyId = "publisher-1", Role = "publisher", Status = "disabled" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var response = await services.KeyServer.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = manifest, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.DisabledParty, response.Reason);
+    }
+
+    /// <summary>Keyserver verification rejects manifests that reference unknown subscriber encryption keys.</summary>
+    [Fact]
+    public async Task VerifyManifest_WithUnknownSubscriberEncryptionKey_ReturnsUnknownKey()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(
+            services.KeyServer,
+            "txn-unknown-subscriber-key",
+            sequence: 9,
+            nonce: "nonce-unknown-subscriber-key").ConfigureAwait(true);
+        manifest.SubscriberEncryptionKeyId = "subscriber-1:encryption:missing";
+
+        var response = await services.KeyServer.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = manifest, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        Assert.False(response.IsValid);
+        Assert.Equal(TransactionFailureReason.UnknownKey, response.Reason);
+    }
+
+    /// <summary>Subscriber commit accepts a signed manifest and exposes committed status.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WithValidManifest_CommitsAndStatusReturnsCommitted()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-3", sequence: 3, nonce: "nonce-3").ConfigureAwait(true);
+        var controller = new SubscriberController(services.Subscriber);
+
+        var commit = await controller.CommitDiffgramAsync(
+            CreateCommitRequest(manifest),
+            CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(ok.Value);
+        Assert.Equal("committed", response.Status);
+        Assert.Equal("diffgram-txn-3", response.DiffgramId);
+
+        var status = await controller.GetTransactionStatusAsync("txn-3", CancellationToken.None).ConfigureAwait(true);
+        var statusOk = Assert.IsType<OkObjectResult>(status.Result);
+        var statusResponse = Assert.IsType<TransactionStatusResponse>(statusOk.Value);
+        Assert.Equal("committed", statusResponse.Status);
+    }
+
+    /// <summary>Subscriber status reports pending while manifest verification is in flight.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WhileVerificationInFlight_StatusReturnsPendingThenCommitted()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-pending", sequence: 33, nonce: "nonce-pending")
+            .ConfigureAwait(true);
+        var verifier = new BlockingManifestService(services.KeyServer);
+        using var subscriber = new InMemorySubscriberCommitService(
+            verifier,
+            new TransactionManifestCanonicalizer(),
+            Monitor(new SubscriberOptions { PartyId = "subscriber-1" }));
+        var controller = new SubscriberController(subscriber);
+
+        var commitTask = controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None);
+        await verifier.WaitForVerifyAsync().ConfigureAwait(true);
+
+        var pending = await controller.GetTransactionStatusAsync("txn-pending", CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var pendingOk = Assert.IsType<OkObjectResult>(pending.Result);
+        var pendingResponse = Assert.IsType<TransactionStatusResponse>(pendingOk.Value);
+        Assert.Equal("pending", pendingResponse.Status);
+        Assert.Equal(TransactionFailureReason.None, pendingResponse.Reason);
+        Assert.Null(pendingResponse.CommittedAtUtc);
+
+        var duplicate = await controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None)
+            .ConfigureAwait(true);
+        var duplicateOk = Assert.IsType<OkObjectResult>(duplicate.Result);
+        var duplicateResponse = Assert.IsType<DiffgramCommitResponse>(duplicateOk.Value);
+        Assert.Equal("pending", duplicateResponse.Status);
+        Assert.Equal(TransactionFailureReason.None, duplicateResponse.Reason);
+
+        verifier.ReleaseVerification();
+        var commit = await commitTask.ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(ok.Value);
+        Assert.Equal("committed", response.Status);
+
+        var committed = await controller.GetTransactionStatusAsync("txn-pending", CancellationToken.None)
+            .ConfigureAwait(true);
+        var committedOk = Assert.IsType<OkObjectResult>(committed.Result);
+        var committedResponse = Assert.IsType<TransactionStatusResponse>(committedOk.Value);
+        Assert.Equal("committed", committedResponse.Status);
+        Assert.NotNull(committedResponse.CommittedAtUtc);
+    }
+
+    /// <summary>Subscriber commit is idempotent for the same transaction and manifest payload.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WithDuplicatePayload_ReturnsCommitted()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-4", sequence: 4, nonce: "nonce-4").ConfigureAwait(true);
+        var controller = new SubscriberController(services.Subscriber);
+        await controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None).ConfigureAwait(true);
+
+        var duplicate = await controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(duplicate.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(ok.Value);
+        Assert.Equal("committed", response.Status);
+        Assert.Equal(TransactionFailureReason.None, response.Reason);
+    }
+
+    /// <summary>Subscriber commit rejects encrypted body hash mismatches.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WithEncryptedHashMismatch_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-5", sequence: 5, nonce: "nonce-5").ConfigureAwait(true);
+        var controller = new SubscriberController(services.Subscriber);
+        var request = CreateCommitRequest(manifest);
+        request.EncryptedBodySha256 = Sha256Hex("other-encrypted-body");
+
+        var commit = await controller.CommitDiffgramAsync(request, CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(badRequest.Value);
+        Assert.Equal("rejected", response.Status);
+        Assert.Equal(TransactionFailureReason.EncryptedBodyHashMismatch, response.Reason);
+    }
+
+    /// <summary>Subscriber commit rejects a tampered encrypted body even when caller hash fields copy the manifest.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WithTamperedEncryptedBody_ReturnsBadRequest()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-5b", sequence: 6, nonce: "nonce-5b").ConfigureAwait(true);
+        var controller = new SubscriberController(services.Subscriber);
+        var request = CreateCommitRequest(manifest);
+        request.EncryptedDiffgramBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes("tampered-encrypted-diffgram"));
+
+        var commit = await controller.CommitDiffgramAsync(request, CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(badRequest.Value);
+        Assert.Equal("rejected", response.Status);
+        Assert.Equal(TransactionFailureReason.EncryptedBodyHashMismatch, response.Reason);
+    }
+
+    /// <summary>Subscriber rejects legacy placeholder bodies when real encrypted envelopes are required.</summary>
+    [Fact]
+    public async Task CommitDiffgram_WithPlaceholderBodyWhenEncryptionRequired_ReturnsBadRequest()
+    {
+        using var services = CreateServices(new SubscriberOptions
+        {
+            PartyId = "subscriber-1",
+            RequireEncryptedDiffgrams = true,
+        });
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-encryption-required", sequence: 9, nonce: "nonce-encryption-required")
+            .ConfigureAwait(true);
+        var controller = new SubscriberController(services.Subscriber);
+
+        var commit = await controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(badRequest.Value);
+        Assert.Equal("rejected", response.Status);
+        Assert.Equal(TransactionFailureReason.DecryptFailed, response.Reason);
+    }
+
+    /// <summary>Subscriber abort stores aborted status for an uncommitted transaction.</summary>
+    [Fact]
+    public async Task AbortTransaction_BeforeCommit_ReturnsAbortedStatus()
+    {
+        using var services = CreateServices();
+        var controller = new SubscriberController(services.Subscriber);
+
+        var abort = await controller.AbortTransactionAsync(
+            "txn-6",
+            new TransactionAbortRequest { Reason = TransactionFailureReason.Aborted, Actor = "test" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(abort.Result);
+        var response = Assert.IsType<TransactionAbortResponse>(ok.Value);
+        Assert.Equal("aborted", response.Status);
+
+        var status = await controller.GetTransactionStatusAsync("txn-6", CancellationToken.None).ConfigureAwait(true);
+        var statusOk = Assert.IsType<OkObjectResult>(status.Result);
+        var statusResponse = Assert.IsType<TransactionStatusResponse>(statusOk.Value);
+        Assert.Equal("aborted", statusResponse.Status);
+    }
+
+    /// <summary>Subscriber commit refuses a transaction after abort and reports the abort reason.</summary>
+    [Fact]
+    public async Task CommitDiffgram_AfterAbort_ReturnsAbortedReason()
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var manifest = await SignAsync(services.KeyServer, "txn-6b", sequence: 7, nonce: "nonce-6b").ConfigureAwait(true);
+        var controller = new SubscriberController(services.Subscriber);
+        await controller.AbortTransactionAsync(
+            "txn-6b",
+            new TransactionAbortRequest { Reason = TransactionFailureReason.Aborted, Actor = "test" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var commit = await controller.CommitDiffgramAsync(CreateCommitRequest(manifest), CancellationToken.None).ConfigureAwait(true);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(commit.Result);
+        var response = Assert.IsType<DiffgramCommitResponse>(badRequest.Value);
+        Assert.Equal("rejected", response.Status);
+        Assert.Equal(TransactionFailureReason.Aborted, response.Reason);
+    }
+
+    private static TransactionSecurityTestServices CreateServices(SubscriberOptions? subscriberOptions = null)
+    {
+        var canonicalizer = new TransactionManifestCanonicalizer();
+        var keyServer = new InMemoryKeyServerService(
+            Monitor(new KeyServerOptions { ManifestTtlSeconds = 300, MaxClockSkewSeconds = 300 }),
+            canonicalizer);
+        var subscriber = new InMemorySubscriberCommitService(
+            keyServer,
+            canonicalizer,
+            Monitor(subscriberOptions ?? new SubscriberOptions { PartyId = "subscriber-1" }));
+        return new TransactionSecurityTestServices(keyServer, subscriber);
+    }
+
+    private static async Task RegisterStandardPartiesAsync(IKeyServerPartyRegistry registry)
+    {
+        await registry.RegisterPartyAsync(
+            new PartyRegistrationRequest { PartyId = "publisher-1", Role = "publisher" },
+            CancellationToken.None).ConfigureAwait(true);
+        await registry.RegisterPartyAsync(
+            new PartyRegistrationRequest { PartyId = "subscriber-1", Role = "subscriber" },
+            CancellationToken.None).ConfigureAwait(true);
+    }
+
+    private static async Task<TransactionManifestDto> SignAsync(
+        IKeyServerManifestService keyServer,
+        string transactionId,
+        long sequence,
+        string nonce)
+    {
+        var response = await keyServer.SignManifestAsync(
+            CreateSignRequest(transactionId, sequence, nonce),
+            CancellationToken.None).ConfigureAwait(true);
+        Assert.True(response.Success);
+        return response.Manifest!;
+    }
+
+    private static TransactionManifestSignRequest CreateSignRequest(string transactionId, long sequence, string nonce)
+        => new()
+        {
+            TransactionId = transactionId,
+            TurnId = "turn-1",
+            PublisherPartyId = "publisher-1",
+            SubscriberPartyId = "subscriber-1",
+            Sequence = sequence,
+            Nonce = nonce,
+            DiffgramSha256 = Sha256Hex("plain-diffgram"),
+            EncryptedBodySha256 = Sha256Hex("encrypted-diffgram"),
+        };
+
+    private static DiffgramCommitRequest CreateCommitRequest(TransactionManifestDto manifest)
+        => new()
+        {
+            Manifest = manifest,
+            EncryptedDiffgramBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes("encrypted-diffgram")),
+            EncryptedBodySha256 = manifest.EncryptedBodySha256,
+            DiffgramSha256 = manifest.DiffgramSha256,
+        };
+
+    private static IOptionsMonitor<TOptions> Monitor<TOptions>(TOptions options)
+        where TOptions : class
+    {
+        var monitor = Substitute.For<IOptionsMonitor<TOptions>>();
+        monitor.CurrentValue.Returns(options);
+        return monitor;
+    }
+
+    private static string Sha256Hex(string value)
+        => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
+
+    private sealed record TransactionSecurityTestServices(
+        InMemoryKeyServerService KeyServer,
+        InMemorySubscriberCommitService Subscriber) : IDisposable
+    {
+        public void Dispose()
+        {
+            KeyServer.Dispose();
+        }
+    }
+
+    private sealed class BlockingManifestService : IKeyServerManifestService
+    {
+        private readonly IKeyServerManifestService _inner;
+        private readonly TaskCompletionSource _verifyStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        private readonly TaskCompletionSource _allowVerify = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public BlockingManifestService(IKeyServerManifestService inner)
+        {
+            _inner = inner;
+        }
+
+        public Task<TransactionManifestSignResponse> SignManifestAsync(
+            TransactionManifestSignRequest request,
+            CancellationToken cancellationToken = default)
+            => _inner.SignManifestAsync(request, cancellationToken);
+
+        public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
+            TransactionManifestVerifyRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            _verifyStarted.TrySetResult();
+            await _allowVerify.Task.WaitAsync(cancellationToken).ConfigureAwait(false);
+            return await _inner.VerifyManifestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        public Task<TransactionManifestTraceRecord?> GetManifestAsync(
+            string transactionId,
+            CancellationToken cancellationToken = default)
+            => _inner.GetManifestAsync(transactionId, cancellationToken);
+
+        public Task<TransactionManifestTraceReport> GetManifestReportAsync(
+            TransactionManifestTraceReportRequest request,
+            CancellationToken cancellationToken = default)
+            => _inner.GetManifestReportAsync(request, cancellationToken);
+
+        public async Task WaitForVerifyAsync()
+        {
+            await _verifyStarted.Task.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+        }
+
+        public void ReleaseVerification()
+            => _allowVerify.TrySetResult();
+    }
+}

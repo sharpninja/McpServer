@@ -27,7 +27,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013: Configuration for MCP ingestion (repo root, paths, allowlists).
+    TR-PLANNED-CORE-013: Configuration for MCP ingestion (repo root, paths, allowlists).
 
     FR-SUPPORT-010: Repo and session log paths.
   example: []
@@ -61,7 +61,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Repository root (e.g. workspace path).'
+  summary: 'TR-PLANNED-CORE-013: Repository root (e.g. workspace path).'
   example: []
   syntax:
     content: public string RepoRoot { get; set; }
@@ -88,7 +88,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Path to TODO data file when using YAML storage.'
+  summary: 'TR-PLANNED-CORE-013: Path to TODO data file when using YAML storage.'
   example: []
   syntax:
     content: public string TodoFilePath { get; set; }
@@ -142,7 +142,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Path to UnifiedModel schema (for reference).'
+  summary: 'TR-PLANNED-CORE-013: Path to UnifiedModel schema (for reference).'
   example: []
   syntax:
     content: public string UnifiedModelSchemaPath { get; set; }
@@ -196,7 +196,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Allowed repo path patterns (e.g. "*.md", "*.cs", "docs/**"). Null = all under RepoRoot.'
+  summary: 'TR-PLANNED-CORE-013: Allowed repo path patterns (e.g. "*.md", "*.cs", "docs/**"). Null = all under RepoRoot.'
   example: []
   syntax:
     content: public IReadOnlyList<string>? RepoAllowlist { get; set; }
@@ -223,7 +223,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Maximum file size in bytes to ingest (default 1 MB).'
+  summary: 'TR-PLANNED-CORE-013: Maximum file size in bytes to ingest (default 1 MB).'
   example: []
   syntax:
     content: public long MaxFileSizeBytes { get; set; }

@@ -1,7 +1,6 @@
 using System.Net;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -34,32 +33,12 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     [Fact]
     public async Task InvalidApiKey_Returns401()
     {
-        // Configure a workspace so auth middleware enforces token validation
-        var tempDir = Path.Combine(Path.GetTempPath(), $"mt-test-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(tempDir);
-        try
-        {
-            var factory = _factory.WithWebHostBuilder(b =>
-            {
-                b.ConfigureAppConfiguration((_, config) =>
-                {
-                    config.AddInMemoryCollection(new Dictionary<string, string?>
-                    {
-                        { "Mcp:RepoRoot", tempDir },
-                    });
-                });
-            });
-            var client = factory.CreateClient();
-            client.DefaultRequestHeaders.Add("X-Api-Key", "invalid-token-value");
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, _factory.WorkspacePath);
+        client.DefaultRequestHeaders.Add("X-Api-Key", "invalid-token-value");
 
-            var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
-            // Auth middleware checks against generated workspace token — invalid key gets 401
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-        finally
-        {
-            try { Directory.Delete(tempDir, recursive: true); } catch { /* cleanup best effort */ }
-        }
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
     [Fact]
@@ -80,43 +59,25 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
 
         var pathA = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "ws-priority-a"));
         tokenService.GenerateToken(pathA);
+        var token = tokenService.GetToken(pathA)!;
 
         var client = _factory.CreateClient();
         // X-Workspace-Path of unregistered path should return 400 even with valid token
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, @"C:\not\registered");
+        client.DefaultRequestHeaders.Add("X-Api-Key", token);
 
         var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
-    public async Task NoHeaders_NoApiKey_Returns401()
+    public async Task WorkspacePathHeaderWithoutApiKey_Returns401()
     {
-        // Configure a workspace so auth middleware enforces token validation
-        var tempDir = Path.Combine(Path.GetTempPath(), $"mt-test-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(tempDir);
-        try
-        {
-            var factory = _factory.WithWebHostBuilder(b =>
-            {
-                b.ConfigureAppConfiguration((_, config) =>
-                {
-                    config.AddInMemoryCollection(new Dictionary<string, string?>
-                    {
-                        { "Mcp:RepoRoot", tempDir },
-                    });
-                });
-            });
-            var client = factory.CreateClient();
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, _factory.WorkspacePath);
 
-            // Without any API key header, auth middleware returns 401
-            var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-        finally
-        {
-            try { Directory.Delete(tempDir, recursive: true); } catch { /* cleanup best effort */ }
-        }
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
     [Fact]

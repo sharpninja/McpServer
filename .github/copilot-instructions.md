@@ -45,7 +45,7 @@ dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedN
 
 # Validate appsettings config (via Nuke)
 ./build.ps1 ValidateConfig
-# or: pwsh.exe ./scripts/Validate-McpConfig.ps1
+# or: pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Validate-McpConfig.ps1
 
 # Validate requirements traceability
 ./build.ps1 ValidateTraceability
@@ -78,4 +78,4 @@ dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedN
 
 ### Requirement Traceability Comments
 
-All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.
+All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-CORE-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.

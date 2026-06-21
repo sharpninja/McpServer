@@ -23,7 +23,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of a TODO mutation (create/update/delete).'
+  summary: 'TR-PLANNED-CORE-013: Result of a TODO mutation (create/update/delete).'
   example: []
   syntax:
     content: 'public sealed record TodoMutationResult : IEquatable<TodoMutationResult>'
@@ -57,7 +57,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of a TODO mutation (create/update/delete).'
+  summary: 'TR-PLANNED-CORE-013: Result of a TODO mutation (create/update/delete).'
   example: []
   syntax:
     content: public TodoMutationResult(bool Success, string? Error = null, TodoFlatItem? Item = null)

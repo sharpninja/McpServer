@@ -27,7 +27,10 @@
       "Bash(pwsh -ExecutionPolicy Bypass -File F:/GitHub/McpServer/check-markers.ps1)",
       "Bash(grep -v \"^Loaded\\\\|^$\\\\|Snippet\\\\|-------\\\\|aliases\\\\|common\\\\|repos\\\\|bing\\\\|chocolatey\\\\|clean\\\\|devmode\\\\|gh_comp\\\\|github\\\\|module-loader\\\\|oh-my-posh\\\\|set-version\\\\|update-snippets\\\\|CommandType\\\\|----------\\\\|Alias\\\\|Name \\\\|----\\\\|Snippets\\\\|profileup\\\\|snipup\\\\|snipps\\\\|hub\\\\|modrl\\\\|posh\\\\|repos\\\\|ch \\\\|dn \\\\|dt \\\\|np \\\\|ng \\\\|pp \\\\|pps\\\\|psg\\\\|scp\\\\|wg \\\\|als\\\\|clean\\\\|devmode\\\\|audio\\\\|pwg\")",
       "Bash(pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass -File F:/GitHub/McpServer/check-markers.ps1)",
-      "Bash(pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass -File F:/GitHub/McpServer/create-graphrag-todos.ps1)"
+      "Bash(pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass -File F:/GitHub/McpServer/create-graphrag-todos.ps1)",
+      "Bash(date +%s%N)",
+      "Bash(git -C F:/GitHub/McpServer status --short)",
+      "Bash(git -C F:/GitHub/McpServer log --oneline -5)"
     ]
   }
 }

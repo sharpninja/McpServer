@@ -1,28 +1,34 @@
 using System.Net;
 using System.Net.Http.Json;
+using McpServer.Support.Mcp.IntegrationTests;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
-/// <summary>TR-PLANNED-013: Integration tests for TODO CRUD endpoints.</summary>
-public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.TodoWebFactory>, IDisposable
+/// <summary>TR-PLANNED-CORE-013: Integration tests for TODO CRUD endpoints.</summary>
+public sealed class TodoControllerTests : IDisposable
 {
     private readonly HttpClient _client;
     private readonly TodoWebFactory _factory;
 
-    public TodoControllerTests(TodoWebFactory factory)
+    public TodoControllerTests()
     {
-        _factory = factory;
-        _client = factory.CreateClient();
-        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", factory.GetFullWorkspaceApiKey());
+        _factory = new TodoWebFactory();
+        _client = _factory.CreateClient();
+        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", _factory.GetFullWorkspaceApiKey());
     }
 
-    public void Dispose() => _client.Dispose();
+    public void Dispose()
+    {
+        _client.Dispose();
+        _factory.Dispose();
+    }
 
     /// <summary>GET /mcpserver/todo returns 200 with items from seed YAML.</summary>
     [Fact]
@@ -503,6 +509,120 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Contains("Circular", result.Error ?? "", StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// BUG-APPVISIBILITY-001: API dashboard/count/list callers that switch workspaces must see only the
+    /// TODO and session-log rows for the requested workspace. The fixture uses two configured workspaces
+    /// in one test host and separate authenticated clients so stale request workspace state cannot pass.
+    /// </summary>
+    [Fact]
+    public async Task WhenTwoWorkspacesQueryTodoAndSessionLogsThenEachWorkspaceSeesOnlyItsOwnRows()
+    {
+        var secondaryWorkspacePath = Path.Combine(
+            Path.GetTempPath(),
+            $"mcp-todo-secondary-{Guid.NewGuid():N}",
+            "workspace");
+        var secondaryDataPath = Path.Combine(Path.GetTempPath(), $"mcp-todo-secondary-data-{Guid.NewGuid():N}");
+        SeedMinimalWorkspaceFiles(secondaryWorkspacePath);
+        Directory.CreateDirectory(secondaryDataPath);
+
+        try
+        {
+            var overrides = new Dictionary<string, string?>
+            {
+                { "Mcp:Workspaces:1:WorkspacePath", secondaryWorkspacePath },
+                { "Mcp:Workspaces:1:Name", "todo-secondary" },
+                { "Mcp:Workspaces:1:TodoPath", Path.Combine(secondaryWorkspacePath, "docs", "Project", "TODO.yaml") },
+                { "Mcp:Workspaces:1:DataDirectory", secondaryDataPath },
+                { "Mcp:Workspaces:1:IsPrimary", "false" },
+                { "Mcp:Workspaces:1:IsEnabled", "true" },
+            };
+
+            using var factory = new CustomWebApplicationFactory(null, overrides);
+            using var primaryClient = factory.CreateClient();
+            using var secondaryClient = factory.CreateClient();
+            AddWorkspaceAuth(primaryClient, factory.Services, factory.WorkspacePath);
+            AddWorkspaceAuth(secondaryClient, factory.Services, secondaryWorkspacePath);
+
+            var primaryTodoId = "BUG-PRIMARY-001";
+            var secondaryTodoId = "BUG-SECONDARY-001";
+            var primarySessionId = BuildSessionId("Codex", $"primary-{Guid.NewGuid():N}");
+            var secondarySessionId = BuildSessionId("Cursor", $"secondary-{Guid.NewGuid():N}");
+
+            var primaryTodo = await primaryClient.PostAsJsonAsync(
+                new Uri("/mcpserver/todo", UriKind.Relative),
+                new { id = primaryTodoId, title = "Primary workspace TODO", section = "bug-appvisibility", priority = "high" })
+                .ConfigureAwait(true);
+            var secondaryTodo = await secondaryClient.PostAsJsonAsync(
+                new Uri("/mcpserver/todo", UriKind.Relative),
+                new { id = secondaryTodoId, title = "Secondary workspace TODO", section = "bug-appvisibility", priority = "high" })
+                .ConfigureAwait(true);
+            var primarySession = await primaryClient.PostAsJsonAsync(
+                new Uri("/mcpserver/sessionlog", UriKind.Relative),
+                CreateSessionLog("Codex", primarySessionId))
+                .ConfigureAwait(true);
+            var secondarySession = await secondaryClient.PostAsJsonAsync(
+                new Uri("/mcpserver/sessionlog", UriKind.Relative),
+                CreateSessionLog("Cursor", secondarySessionId))
+                .ConfigureAwait(true);
+
+            Assert.Equal(HttpStatusCode.Created, primaryTodo.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, secondaryTodo.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, primarySession.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, secondarySession.StatusCode);
+
+            var primaryTodos = await primaryClient.GetFromJsonAsync<QueryResult>(
+                new Uri("/mcpserver/todo?section=bug-appvisibility", UriKind.Relative))
+                .ConfigureAwait(true);
+            var secondaryTodos = await secondaryClient.GetFromJsonAsync<QueryResult>(
+                new Uri("/mcpserver/todo?section=bug-appvisibility", UriKind.Relative))
+                .ConfigureAwait(true);
+            var primaryLogs = await primaryClient.GetFromJsonAsync<SessionLogQueryResult>(
+                new Uri("/mcpserver/sessionlog?limit=20", UriKind.Relative))
+                .ConfigureAwait(true);
+            var secondaryLogs = await secondaryClient.GetFromJsonAsync<SessionLogQueryResult>(
+                new Uri("/mcpserver/sessionlog?limit=20", UriKind.Relative))
+                .ConfigureAwait(true);
+
+            Assert.NotNull(primaryTodos);
+            Assert.Equal(1, primaryTodos!.TotalCount);
+            Assert.Equal(primaryTodoId, primaryTodos.Items.Single().Id);
+            Assert.DoesNotContain(primaryTodos.Items, item => item.Id == secondaryTodoId);
+
+            Assert.NotNull(secondaryTodos);
+            Assert.Equal(1, secondaryTodos!.TotalCount);
+            Assert.Equal(secondaryTodoId, secondaryTodos.Items.Single().Id);
+            Assert.DoesNotContain(secondaryTodos.Items, item => item.Id == primaryTodoId);
+
+            Assert.NotNull(primaryLogs);
+            Assert.Contains(primaryLogs!.Items, item => item.SessionId == primarySessionId);
+            Assert.DoesNotContain(primaryLogs.Items, item => item.SessionId == secondarySessionId);
+
+            Assert.NotNull(secondaryLogs);
+            Assert.Contains(secondaryLogs!.Items, item => item.SessionId == secondarySessionId);
+            Assert.DoesNotContain(secondaryLogs.Items, item => item.SessionId == primarySessionId);
+
+            var secondaryTodoFromPrimary = await primaryClient.GetAsync(
+                new Uri($"/mcpserver/todo/{secondaryTodoId}", UriKind.Relative)).ConfigureAwait(true);
+            var primaryTodoFromSecondary = await secondaryClient.GetAsync(
+                new Uri($"/mcpserver/todo/{primaryTodoId}", UriKind.Relative)).ConfigureAwait(true);
+            var secondarySessionFromPrimary = await primaryClient.GetAsync(
+                new Uri($"/mcpserver/sessionlog/Cursor/{secondarySessionId}", UriKind.Relative)).ConfigureAwait(true);
+            var primarySessionFromSecondary = await secondaryClient.GetAsync(
+                new Uri($"/mcpserver/sessionlog/Codex/{primarySessionId}", UriKind.Relative)).ConfigureAwait(true);
+
+            Assert.Equal(HttpStatusCode.NotFound, secondaryTodoFromPrimary.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, primaryTodoFromSecondary.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, secondarySessionFromPrimary.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, primarySessionFromSecondary.StatusCode);
+        }
+        finally
+        {
+            TryDeleteDirectory(secondaryWorkspacePath);
+            TryDeleteDirectory(secondaryDataPath);
+            TryDeleteDirectory(Path.GetDirectoryName(secondaryWorkspacePath));
+        }
+    }
+
     private sealed record MutationResult(bool Success, string? Error, string? FailureKind = null);
     private sealed record ProjectionStatusResult(
         string AuthoritativeStore,
@@ -524,6 +644,8 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     private sealed record QueryResult(FlatItem[] Items, int TotalCount);
     private sealed record AuditQueryResult(AuditEntry[] Entries, int TotalCount);
     private sealed record AuditEntry(long AuditId, string TodoId, int Version, string Action, string RecordedAtUtc, FlatItem? Snapshot, FlatItem? PreviousSnapshot, string? Source);
+    private sealed record SessionLogQueryResult(SessionLogItem[] Items, int TotalCount);
+    private sealed record SessionLogItem(string? SourceType, string? SessionId, string? Title);
 
     private sealed record FlatItem(
         string? Id,
@@ -548,7 +670,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
 
     #region Test Factory
 
-    /// <summary>TR-PLANNED-013: WebApplicationFactory that seeds a temporary TODO.yaml.</summary>
+    /// <summary>TR-PLANNED-CORE-013: WebApplicationFactory that seeds a temporary TODO.yaml.</summary>
     public sealed class TodoWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
     {
         private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "mcp-todo-tests-" + Guid.NewGuid().ToString("N")[..8]);
@@ -559,6 +681,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         {
             // Create seed TODO.yaml
             var projectDir = Path.Combine(_tempDir, "docs", "Project");
+            var databasePath = Path.Combine(_tempDir, "mcp.db");
             Directory.CreateDirectory(projectDir);
             File.WriteAllText(TodoYamlPath, SeedYaml);
 
@@ -568,13 +691,28 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:DataSource", databasePath },
+                    { "Mcp:Database:Provider", "sqlite" },
+                    { "Mcp:Database:Sqlite:DataSource", databasePath },
+                    { "Mcp:UseInMemoryDatabaseForTests", "false" },
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
                     { "Mcp:TodoStorage:Provider", "sqlite" },
-                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
+                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" },
+                    { "Mcp:Workspaces:0:WorkspacePath", _tempDir },
+                    { "Mcp:Workspaces:0:Name", Path.GetFileName(_tempDir) },
+                    { "Mcp:Workspaces:0:TodoPath", "docs/Project/TODO.yaml" },
+                    { "Mcp:Workspaces:0:IsPrimary", "true" },
+                    { "Mcp:Workspaces:0:IsEnabled", "true" }
                 });
+            });
+            builder.ConfigureServices(services =>
+            {
+                IntegrationTestDatabase.ConfigureSqlite(services, databasePath);
+                services.RemoveAll<IWorkspaceProjectionWriter>();
+                services.AddSingleton<IWorkspaceProjectionWriter, NoOpWorkspaceProjectionWriter>();
+                services.AddHostedService<IntegrationTestDatabase.Initializer>();
             });
         }
 
@@ -585,7 +723,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                    ?? throw new InvalidOperationException("Workspace full API key was not generated for test host.");
         }
 
-        private new void Dispose()
+        public new void Dispose()
         {
             base.Dispose();
             try { Directory.Delete(_tempDir, recursive: true); } catch { /* best effort */ }
@@ -629,6 +767,83 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                   done: true
                   completed: "2026-01-15"
             """;
+    }
+
+    private static void AddWorkspaceAuth(HttpClient client, IServiceProvider services, string workspacePath)
+    {
+        using var scope = services.CreateScope();
+        var tokenService = scope.ServiceProvider.GetRequiredService<WorkspaceTokenService>();
+        var token = tokenService.GetToken(workspacePath) ?? tokenService.GenerateToken(workspacePath);
+
+        client.DefaultRequestHeaders.Remove("X-Api-Key");
+        client.DefaultRequestHeaders.Add("X-Api-Key", token);
+        client.DefaultRequestHeaders.Remove("X-Workspace-Path");
+        client.DefaultRequestHeaders.Add("X-Workspace-Path", workspacePath);
+    }
+
+    private static object CreateSessionLog(string sourceType, string sessionId)
+    {
+        return new
+        {
+            sourceType,
+            sessionId,
+            title = "Workspace visibility session",
+            model = "codex",
+            started = "2026-05-27T12:00:00Z",
+            lastUpdated = "2026-05-27T12:01:00Z",
+            status = "completed",
+            turnCount = 1,
+            turns = new[]
+            {
+                new
+                {
+                    requestId = "req-20260527T120000Z-visibility",
+                    timestamp = "2026-05-27T12:00:00Z",
+                    queryText = "workspace visibility",
+                    response = "ok",
+                    status = "completed"
+                }
+            }
+        };
+    }
+
+    private static string BuildSessionId(string agent, string suffix)
+    {
+        var normalized = new string((suffix ?? string.Empty)
+            .ToLowerInvariant()
+            .Select(c => char.IsLetterOrDigit(c) ? c : '-')
+            .ToArray())
+            .Trim('-');
+        if (string.IsNullOrWhiteSpace(normalized))
+            normalized = "session";
+
+        return $"{agent}-20260527T120000Z-{normalized}";
+    }
+
+    private static void SeedMinimalWorkspaceFiles(string workspacePath)
+    {
+        var projectPath = Path.Combine(workspacePath, "docs", "Project");
+        Directory.CreateDirectory(projectPath);
+        File.WriteAllText(Path.Combine(projectPath, "TODO.yaml"), """
+            mvp-app:
+              high-priority: []
+            """);
+    }
+
+    private static void TryDeleteDirectory(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        try
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, recursive: true);
+        }
+        catch
+        {
+            // Best-effort cleanup only.
+        }
     }
 
     #endregion

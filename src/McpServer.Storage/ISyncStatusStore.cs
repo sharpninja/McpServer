@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013, TR-MCP-MT-004: Stores last sync run result per workspace for sync.status endpoint.
+/// TR-PLANNED-CORE-013, TR-MCP-MT-004: Stores last sync run result per workspace for sync.status endpoint.
 /// </summary>
 public interface ISyncStatusStore
 {

@@ -61,4 +61,39 @@ public sealed class SessionLogClientTests
         Assert.Contains("/Copilot/s1/r1/dialog", handler.LastRequest!.RequestUri!.AbsolutePath);
         Assert.Equal(2, result.TotalDialogCount);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task UpsertTurnAsync_PostsTurn()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.Created, """{"turnId":5,"agent":"Copilot","sessionId":"s1","requestId":"r1"}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        var result = await client.UpsertTurnAsync("Copilot", "s1", new UnifiedRequestEntryDto
+        {
+            RequestId = "r1",
+            QueryText = "structured turn",
+            Interpretation = "preserve interpretation",
+            Status = "in_progress",
+            Tags = ["sessionlog"],
+            ContextList = ["src/McpServer.Client/SessionLogClient.cs"],
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = "typed client per-turn append",
+                    Type = "session_turn",
+                    Status = "completed",
+                    FilePath = "src/McpServer.Client/SessionLogClient.cs"
+                }
+            ]
+        });
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/sessionlog/Copilot/s1/turn", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"interpretation\":\"preserve interpretation\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"contextList\":[\"src/McpServer.Client/SessionLogClient.cs\"]", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Equal(5, result.TurnId);
+        Assert.Equal("r1", result.RequestId);
+    }
 }

@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);CS8632;xUnit1051;CS1591</NoWarn>
+    <RootNamespace>McpServer.AgentPluginCore.Tests</RootNamespace>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="YamlDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Self-contained contract tests: no reference to real shared core (per Byrd Phase 1 mocks/stubs gate, PARITY-RESUME-004) -->
+    <!-- Stubs provide v4 semantics stand-in until real @sharpninja/mcpserver-agent-core or equivalent is implemented -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Temp inclusion of parity harness for Core Package Integration wave (PLAN-AGENTPARITY-001) + Byrd v4 validation gate.
+         Enables focused tests for IParityCoreAdapter + RealCoreAdapter (stub + real paths) to run in AgentPluginCore suite.
+         This is the documented "temp inclusion validation" path. Removed post-wave or when dedicated parity test proj added. -->
+    <Compile Include="..\AgentPluginParity\harness-stub.cs" />
+    <!-- Phase 3: ClaudeCode plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCode_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCode_V4ParityTests.cs" />
+    <!-- Phase 4: Grok plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\Grok_V4ParityTests.cs" />
+    <!-- Phase 5: Codex plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\Codex_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\Codex_V4ParityTests.cs" />
+    <!-- Phase 6: Cline plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\Cline_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\Cline_V4ParityTests.cs" />
+    <!-- Phase 7: ClineV2 plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\ClineV2_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\ClineV2_V4ParityTests.cs" />
+    <!-- Phase 8: Copilot plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\Copilot_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\Copilot_V4ParityTests.cs" />
+    <!-- Phase 9: ClaudeCowork plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCowork_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCowork_V4ParityTests.cs" />
+    <!-- Phase 10: OpenCode plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\OpenCode_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\OpenCode_V4ParityTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <Using Include="NSubstitute" />
+    <Using Include="System.Text.Json" />
+  </ItemGroup>
+</Project>

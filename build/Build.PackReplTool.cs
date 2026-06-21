@@ -11,10 +11,23 @@ partial class Build
         {
             var project = SourceDirectory / "McpServer.Repl.Host" / "McpServer.Repl.Host.csproj";
 
-            DotNetPack(_ => _
+            var settings = new DotNetPackSettings()
                 .SetProject(project)
                 .SetConfiguration(Configuration)
-                .SetOutputDirectory(LocalPackagesDirectory)
-                .EnableNoBuild());
+                .SetOutputDirectory(LocalPackagesDirectory);
+
+            if (!string.IsNullOrWhiteSpace(PackageVersion))
+            {
+                settings = settings
+                    .SetProperty("PackageVersion", PackageVersion)
+                    .SetProperty("Version", PackageVersion)
+                    .SetProperty("InformationalVersion", PackageVersion);
+            }
+            else
+            {
+                settings = settings.EnableNoBuild();
+            }
+
+            DotNetPack(_ => settings);
         });
 }

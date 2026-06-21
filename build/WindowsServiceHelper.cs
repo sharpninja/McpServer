@@ -22,13 +22,13 @@ static partial class WindowsServiceHelper
     private static readonly string[] LegacyDataGlobs = ["*.db", "*.db-shm", "*.db-wal"];
 
     /// <summary>Asserts that the current process is running elevated (Administrator).</summary>
-    public static void AssertElevated()
+    public static void AssertElevated(string targetName = "UpdateService")
     {
         using var identity = WindowsIdentity.GetCurrent();
         var principal = new WindowsPrincipal(identity);
         if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
             throw new InvalidOperationException(
-                "This target must be run elevated. Use: gsudo ./build.ps1 UpdateService");
+                $"This target must be run elevated. Use: gsudo ./build.ps1 {targetName}");
     }
 
     /// <summary>Checks whether a Windows service with the given name exists.</summary>
@@ -103,15 +103,19 @@ static partial class WindowsServiceHelper
     }
 
     /// <summary>Creates or updates the Windows service registration.</summary>
-    public static void EnsureServiceRegistration(string serviceName, string installRoot, string exeName, int port)
+    public static void EnsureServiceRegistration(
+        string serviceName,
+        string installRoot,
+        string exeName,
+        int port,
+        string displayName = "MCP Server",
+        string description = "MCP Model Context Protocol Server")
     {
         var exePath = Path.Combine(installRoot, exeName);
         if (!File.Exists(exePath))
             throw new FileNotFoundException($"Deployment is missing {exeName} under {installRoot}.");
 
         var binPath = GetServiceImagePath(installRoot, exeName, port);
-        const string displayName = "MCP Server";
-        const string description = "MCP Model Context Protocol Server";
 
         // sc.exe requires binPath= value where the value is a single argument.
         // When the value itself contains quotes/spaces, wrap the entire value in an outer set of quotes.
@@ -136,6 +140,16 @@ static partial class WindowsServiceHelper
         if (Directory.Exists(backupDir))
             Directory.Delete(backupDir, true);
         Directory.CreateDirectory(backupDir);
+
+        // First-time install: the install root does not exist yet, so there is nothing
+        // to preserve. Create the root for the subsequent publish/copy and return an
+        // empty backup (backupDir still exists so the restore step is a safe no-op).
+        if (!Directory.Exists(installRoot))
+        {
+            Directory.CreateDirectory(installRoot);
+            Log.Information("  Install root did not exist (first install); nothing to back up.");
+            return new BackupResult(GetConfiguredDataFolder(installRoot), [], [], null);
+        }
 
         var dataFolder = GetConfiguredDataFolder(installRoot);
         var dataBackupDir = Path.Combine(backupDir, "data");
@@ -327,39 +341,108 @@ static partial class WindowsServiceHelper
         return new HealthResult(false, null, null, lastError);
     }
 
-    /// <summary>Parses workspace definitions from deployed config and checks each workspace's health.</summary>
+    /// <summary>
+    /// Queries the running server (loopback) for the DB-backed workspace list and probes the shared health endpoint.
+    /// </summary>
+    /// <remarks>
+    /// Workspaces are sourced from the DB via <c>GET /mcpserver/workspace</c>, not from the deployed appsettings.
+    /// Auth is bootstrapped via the loopback-only <c>GET /api-key</c> endpoint which returns the primary
+    /// workspace's default (read-only) token and path.
+    /// </remarks>
     public static WorkspaceHealthResult CheckWorkspaceHealth(string installRoot, int port)
     {
-        var configPath = Path.Combine(installRoot, "appsettings.yaml");
-        if (!File.Exists(configPath))
+        using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+        var baseUrl = $"http://localhost:{port}";
+
+        // 1. Bootstrap auth via the loopback /api-key endpoint
+        string apiKey, primaryWorkspacePath;
+        try
         {
-            Log.Warning("No deployed appsettings.yaml found at {Path}; skipping workspace health checks.", installRoot);
+            using var keyResponse = http.GetAsync($"{baseUrl}/api-key").GetAwaiter().GetResult();
+            if (!keyResponse.IsSuccessStatusCode)
+            {
+                Log.Warning("  /api-key returned {Status}; skipping workspace health checks.", keyResponse.StatusCode);
+                return new WorkspaceHealthResult(0, 0, 0);
+            }
+            var keyJson = keyResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            using var keyDoc = JsonDocument.Parse(keyJson);
+            apiKey = keyDoc.RootElement.GetProperty("apiKey").GetString() ?? string.Empty;
+            primaryWorkspacePath = keyDoc.RootElement.TryGetProperty("workspacePath", out var wp)
+                ? wp.GetString() ?? string.Empty
+                : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(primaryWorkspacePath))
+            {
+                Log.Warning("  /api-key response missing apiKey or workspacePath; skipping workspace health checks.");
+                return new WorkspaceHealthResult(0, 0, 0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Warning("  /api-key request failed: {Error}; skipping workspace health checks.", ex.Message);
             return new WorkspaceHealthResult(0, 0, 0);
         }
 
-        var content = File.ReadAllText(configPath);
-        var workspaces = ParseWorkspaceNames(content);
+        // 2. Fetch DB-backed workspace registry
+        List<(string Name, string Path, bool IsEnabled, bool IsPrimary)> workspaces;
+        try
+        {
+            using var wsRequest = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/mcpserver/workspace");
+            wsRequest.Headers.TryAddWithoutValidation("X-Api-Key", apiKey);
+            wsRequest.Headers.TryAddWithoutValidation("X-Workspace-Path", primaryWorkspacePath);
+            using var wsResponse = http.SendAsync(wsRequest).GetAwaiter().GetResult();
+            if (!wsResponse.IsSuccessStatusCode)
+            {
+                Log.Warning("  GET /mcpserver/workspace returned {Status}; skipping workspace health checks.", wsResponse.StatusCode);
+                return new WorkspaceHealthResult(0, 0, 0);
+            }
+            var wsJson = wsResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            using var wsDoc = JsonDocument.Parse(wsJson);
+            workspaces = new List<(string, string, bool, bool)>();
+            if (wsDoc.RootElement.TryGetProperty("items", out var items) && items.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in items.EnumerateArray())
+                {
+                    var name = item.TryGetProperty("name", out var n) ? n.GetString() ?? string.Empty : string.Empty;
+                    var wpath = item.TryGetProperty("workspacePath", out var p) ? p.GetString() ?? string.Empty : string.Empty;
+                    var enabled = item.TryGetProperty("isEnabled", out var e) && e.GetBoolean();
+                    var primary = item.TryGetProperty("isPrimary", out var pr) && pr.GetBoolean();
+                    workspaces.Add((name, wpath, enabled, primary));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Warning("  GET /mcpserver/workspace failed: {Error}; skipping workspace health checks.", ex.Message);
+            return new WorkspaceHealthResult(0, 0, 0);
+        }
 
         if (workspaces.Count == 0)
         {
-            Log.Information("  No workspaces defined in deployed configuration.");
+            Log.Warning("  No workspaces registered in DB; check workspace registration.");
             return new WorkspaceHealthResult(0, 0, 0);
         }
 
+        // 3. Shared /health probe (all workspaces are in-process under the host)
+        var sharedHealth = CheckHealth(port, attempts: 1, timeoutSeconds: 5, delaySeconds: 1);
         int healthy = 0, failed = 0;
-        foreach (var name in workspaces)
+        foreach (var w in workspaces)
         {
-            var probe = CheckHealth(port, attempts: 1, timeoutSeconds: 2, delaySeconds: 1);
-            if (probe.Healthy)
+            var flags = (w.IsPrimary ? "primary" : "") + (w.IsEnabled ? "" : " disabled");
+            flags = flags.Trim();
+            if (sharedHealth.Healthy && w.IsEnabled)
             {
                 healthy++;
-                Log.Information("  OK {Name} health OK on port {Port}", name, port);
+                Log.Information("  OK {Name} [{Flags}] {Path}", w.Name, flags, w.Path);
+            }
+            else if (!w.IsEnabled)
+            {
+                Log.Information("  -- {Name} [{Flags}] {Path} (skipped: disabled)", w.Name, flags, w.Path);
             }
             else
             {
                 failed++;
-                Log.Warning("  Workspace health check failed: {Name}; port={Port}; error={Error}",
-                    name, port, probe.Error);
+                Log.Warning("  FAIL {Name} [{Flags}] {Path}; error={Error}", w.Name, flags, w.Path, sharedHealth.Error);
             }
         }
 

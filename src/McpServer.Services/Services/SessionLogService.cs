@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using McpServer.Cqrs.Search;
+using McpServer.McpAgent;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Storage;
@@ -11,21 +12,23 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
+/// TR-PLANNED-CORE-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
 /// FR-SUPPORT-010: Persists session logs in 4NF-normalized SQLite tables via <see cref="McpDbContext"/>.
 /// </summary>
 public sealed class SessionLogService : ISessionLogService
 {
     private const int MaxLimit = 1000;
+    private const string SessionTurnComplianceError =
+        "Compliance with Session Logging Requirements is not optional.";
 
     private readonly McpDbContext _db;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<SessionLogService> _logger;
     private readonly WorkspaceContext? _workspaceContext;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <remarks>
-    /// TR-MCP-MT-003A: <paramref name="workspaceContext"/> is optional so the
+    /// TR-MCP-MT-004: <paramref name="workspaceContext"/> is optional so the
     /// ingestion / batch import paths (which run without an HTTP scope) keep
     /// working; in those cases <c>WorkspaceId</c> defaults to empty string.
     /// </remarks>
@@ -43,18 +46,46 @@ public sealed class SessionLogService : ISessionLogService
 
     private string ResolveWorkspaceId() => _workspaceContext?.WorkspacePath ?? string.Empty;
 
-    private void StampWorkspaceId(SessionLogEntity session)
+    private void SyncDbWorkspaceFromContext()
     {
         var workspaceId = ResolveWorkspaceId();
-        if (string.IsNullOrEmpty(workspaceId))
-        {
-            // No explicit workspace context: defer to McpDbContext.SaveChangesAsync
-            // which auto-stamps Added entities from the DbContext's _workspaceId.
-            // This preserves ingestion / batch-import paths that run without an HTTP scope.
+        if (string.IsNullOrWhiteSpace(workspaceId))
             return;
+
+        if (!string.Equals(_db.CurrentWorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase))
+            _db.OverrideWorkspaceId(workspaceId);
+    }
+
+    private void StampWorkspaceId(SessionLogEntity session)
+    {
+        // BUG-SESSIONLOG-WS-002: the session row is stamped from the ambient
+        // workspace ONLY when it has no stamp yet (new sessions). An existing
+        // session is never re-stamped on update; that "moved" sessions between
+        // workspaces and let child rows drift away from their parent.
+        if (string.IsNullOrEmpty(session.WorkspaceId))
+        {
+            var workspaceId = ResolveWorkspaceId();
+            if (string.IsNullOrEmpty(workspaceId))
+            {
+                // No explicit workspace context: defer to McpDbContext.SaveChangesAsync
+                // which auto-stamps Added entities (children inherit the parent graph).
+                return;
+            }
+
+            session.WorkspaceId = workspaceId;
         }
 
-        session.WorkspaceId = workspaceId;
+        // Children ALWAYS inherit the parent session's effective stamp so one
+        // session never holds mixed WorkspaceIds.
+        StampChildrenFromParent(session);
+    }
+
+    private static void StampChildrenFromParent(SessionLogEntity session)
+    {
+        var workspaceId = session.WorkspaceId;
+        if (string.IsNullOrEmpty(workspaceId))
+            return;
+
         foreach (var turn in session.Turns)
         {
             turn.WorkspaceId = workspaceId;
@@ -71,6 +102,7 @@ public sealed class SessionLogService : ISessionLogService
     public async Task<long> SubmitAsync(UnifiedSessionLogDto dto, string? sourceFilePath = null, string? contentHash = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(dto);
+        SyncDbWorkspaceFromContext();
 
         if (string.IsNullOrWhiteSpace(dto.SourceType))
             throw new ArgumentException("SourceType is required.", nameof(dto));
@@ -101,6 +133,7 @@ public sealed class SessionLogService : ISessionLogService
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
             UpsertTurns(existing, dto.Turns);
+            RefreshSessionSummaryFromTurns(existing);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id})", dto.SourceType, dto.SessionId, existing.Id);
         }
         else
@@ -114,6 +147,7 @@ public sealed class SessionLogService : ISessionLogService
             };
             MapDtoToEntity(dto, existing);
             existing.Turns = MapNewTurns(dto.Turns);
+            RefreshSessionSummaryFromTurns(existing);
             _db.SessionLogs.Add(existing);
             _logger.LogInformation("Created session log {SourceType}/{SessionId}", dto.SourceType, dto.SessionId);
         }
@@ -137,6 +171,7 @@ public sealed class SessionLogService : ISessionLogService
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
             UpsertTurns(existing, dto.Turns);
+            RefreshSessionSummaryFromTurns(existing);
             await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
             StampWorkspaceId(existing);
 
@@ -158,7 +193,6 @@ public sealed class SessionLogService : ISessionLogService
 
     private Task<SessionLogEntity?> FindExistingSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken) =>
         _db.SessionLogs
-            .IgnoreQueryFilters()
             .Include(s => s.Turns)
                 .ThenInclude(e => e.Actions)
             .Include(s => s.Turns)
@@ -179,6 +213,7 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(contentHash);
+        SyncDbWorkspaceFromContext();
 
         return await _db.SessionLogs
             .AnyAsync(s => s.SourceType == sourceType
@@ -199,6 +234,8 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(requestId);
         ArgumentNullException.ThrowIfNull(items);
+        SyncDbWorkspaceFromContext();
+
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
         if (sessionIdError is not null)
             throw new ArgumentException(sessionIdError, nameof(sessionId));
@@ -206,11 +243,15 @@ public sealed class SessionLogService : ISessionLogService
         if (requestIdError is not null)
             throw new ArgumentException(requestIdError, nameof(requestId));
 
+        // BUG-SESSIONLOG-WS-001..004: child sets carry no workspace query filter,
+        // so isolation comes from the explicit parent-session predicate here.
+        var currentWorkspaceId = _db.CurrentWorkspaceId;
         var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
             .FirstOrDefaultAsync(e =>
                 e.SessionLog!.SourceType == sourceType
                 && e.SessionLog.SessionId == sessionId
+                && e.SessionLog.WorkspaceId == currentWorkspaceId
                 && e.RequestId == requestId, cancellationToken)
             .ConfigureAwait(false)
             ?? throw new InvalidOperationException(
@@ -250,6 +291,7 @@ public sealed class SessionLogService : ISessionLogService
     public async Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
+        SyncDbWorkspaceFromContext();
 
         var limit = Math.Clamp(request.Limit, 1, MaxLimit);
         var offset = Math.Max(request.Offset, 0);
@@ -321,10 +363,100 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <inheritdoc />
+    public async Task<bool> OpenSessionAsync(string sourceType, string sessionId, string? title = null, string? model = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        SyncDbWorkspaceFromContext();
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+
+        var exists = await _db.SessionLogs
+            .AnyAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken)
+            .ConfigureAwait(false);
+        if (exists)
+            return false;
+
+        await SubmitAsync(new UnifiedSessionLogDto
+        {
+            SourceType = sourceType,
+            SessionId = sessionId,
+            Title = title,
+            Model = model,
+            Status = "in_progress",
+        }, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
+        return true;
+    }
+
+    /// <inheritdoc />
+    public async Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
+    {
+        SyncDbWorkspaceFromContext();
+        var sessions = await _db.SessionLogs
+            .IgnoreQueryFilters()
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.Actions)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.Tags)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.ContextItems)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.ProcessingDialog)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.Commits)
+            .Include(s => s.Turns)
+                .ThenInclude(t => t.StringListItems)
+            .AsSplitQuery()
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        var changed = 0;
+        foreach (var session in sessions)
+        {
+            var workspaceId = session.WorkspaceId;
+            foreach (var turn in session.Turns)
+            {
+                changed += Restamp(turn.WorkspaceId, workspaceId, value => turn.WorkspaceId = value);
+                foreach (var action in turn.Actions)
+                    changed += Restamp(action.WorkspaceId, workspaceId, value => action.WorkspaceId = value);
+                foreach (var tag in turn.Tags)
+                    changed += Restamp(tag.WorkspaceId, workspaceId, value => tag.WorkspaceId = value);
+                foreach (var context in turn.ContextItems)
+                    changed += Restamp(context.WorkspaceId, workspaceId, value => context.WorkspaceId = value);
+                foreach (var dialog in turn.ProcessingDialog)
+                    changed += Restamp(dialog.WorkspaceId, workspaceId, value => dialog.WorkspaceId = value);
+                foreach (var commit in turn.Commits)
+                    changed += Restamp(commit.WorkspaceId, workspaceId, value => commit.WorkspaceId = value);
+                foreach (var stringItem in turn.StringListItems)
+                    changed += Restamp(stringItem.WorkspaceId, workspaceId, value => stringItem.WorkspaceId = value);
+            }
+        }
+
+        if (changed > 0 && !dryRun)
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        else if (dryRun)
+            _db.ChangeTracker.Clear();
+
+        return changed;
+
+        static int Restamp(string current, string workspaceId, Action<string> setWorkspaceId)
+        {
+            if (string.Equals(current, workspaceId, StringComparison.Ordinal))
+                return 0;
+
+            setWorkspaceId(workspaceId);
+            return 1;
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<UnifiedSessionLogDto?> GetAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
+        SyncDbWorkspaceFromContext();
 
         var entity = await _db.SessionLogs
             .Include(s => s.Turns.OrderBy(e => e.Id))
@@ -353,6 +485,7 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(turn);
+        SyncDbWorkspaceFromContext();
 
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
         if (sessionIdError is not null)
@@ -375,22 +508,17 @@ public sealed class SessionLogService : ISessionLogService
         }
         else
         {
-            UpdateEntryFromDto(existingTurn, turn);
+            UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: true);
             persistedTurn = existingTurn;
         }
 
-        var workspaceId = ResolveWorkspaceId();
-        if (!string.IsNullOrEmpty(workspaceId))
-        {
-            session.WorkspaceId = workspaceId;
-            persistedTurn.WorkspaceId = workspaceId;
-            foreach (var action in persistedTurn.Actions) action.WorkspaceId = workspaceId;
-            foreach (var tag in persistedTurn.Tags) tag.WorkspaceId = workspaceId;
-            foreach (var context in persistedTurn.ContextItems) context.WorkspaceId = workspaceId;
-            foreach (var dialog in persistedTurn.ProcessingDialog) dialog.WorkspaceId = workspaceId;
-            foreach (var commit in persistedTurn.Commits) commit.WorkspaceId = workspaceId;
-            foreach (var stringItem in persistedTurn.StringListItems) stringItem.WorkspaceId = workspaceId;
-        }
+        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn), session.SourceType);
+
+        // BUG-SESSIONLOG-WS-002: the turn and its children inherit the PARENT
+        // session's stamp; the ambient workspace never re-stamps the session here.
+        StampTurnChildren(persistedTurn, session.WorkspaceId);
+
+        RefreshSessionSummaryFromTurns(session);
 
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -402,6 +530,410 @@ public sealed class SessionLogService : ISessionLogService
 
         return persistedTurn.Id;
     }
+
+    /// <summary>
+    /// BUG-SESSIONLOG-WS-002: stamp a turn and all of its loaded child rows with
+    /// the parent session's WorkspaceId so a session never holds mixed stamps.
+    /// No-op when the parent has no stamp (the ambient auto-stamp path handles it).
+    /// </summary>
+    private static void StampTurnChildren(SessionLogTurnEntity turn, string? workspaceId)
+    {
+        if (string.IsNullOrEmpty(workspaceId))
+            return;
+
+        turn.WorkspaceId = workspaceId;
+        foreach (var action in turn.Actions) action.WorkspaceId = workspaceId;
+        foreach (var tag in turn.Tags) tag.WorkspaceId = workspaceId;
+        foreach (var context in turn.ContextItems) context.WorkspaceId = workspaceId;
+        foreach (var dialog in turn.ProcessingDialog) dialog.WorkspaceId = workspaceId;
+        foreach (var commit in turn.Commits) commit.WorkspaceId = workspaceId;
+        foreach (var stringItem in turn.StringListItems) stringItem.WorkspaceId = workspaceId;
+    }
+
+    /// <inheritdoc />
+    public async Task<long> ReplaceTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        ArgumentNullException.ThrowIfNull(turn);
+        SyncDbWorkspaceFromContext();
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+
+        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);
+        if (requestIdError is not null)
+            throw new ArgumentException(requestIdError, nameof(turn));
+
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
+            ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
+
+        var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);
+        SessionLogTurnEntity persistedTurn;
+
+        if (existingTurn is null)
+        {
+            persistedTurn = MapSingleEntry(turn);
+            session.Turns.Add(persistedTurn);
+        }
+        else
+        {
+            // FR-SUPPORT-010G: PUT replace - omitted scalars reset, collections
+            // become exactly the payload (omitted/empty cleared).
+            UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: false);
+            persistedTurn = existingTurn;
+        }
+
+        ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn), session.SourceType);
+        StampTurnChildren(persistedTurn, session.WorkspaceId);
+        RefreshSessionSummaryFromTurns(session);
+
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return persistedTurn.Id;
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> ReplaceTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, UnifiedRequestEntryDto payload, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        ArgumentNullException.ThrowIfNull(requestId);
+        ArgumentNullException.ThrowIfNull(payload);
+        SyncDbWorkspaceFromContext();
+
+        var parsed = ParseSection(section); // throws ArgumentException on unknown section
+        ValidateTurnIdentifiers(sourceType, sessionId, requestId);
+
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
+        var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);
+        if (session is null || turnEntity is null)
+            return false;
+
+        ApplySectionReplace(turnEntity, parsed, payload);
+        StampTurnChildren(turnEntity, session.WorkspaceId);
+
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return true;
+    }
+
+    /// <inheritdoc />
+    public Task<bool> ClearTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, CancellationToken cancellationToken = default)
+        => ReplaceTurnSectionAsync(sourceType, sessionId, requestId, section, new UnifiedRequestEntryDto { RequestId = requestId }, cancellationToken);
+
+    /// <inheritdoc />
+    public async Task<bool> DeleteTurnItemAsync(string sourceType, string sessionId, string requestId, string section, string itemKey, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        ArgumentNullException.ThrowIfNull(requestId);
+        ArgumentNullException.ThrowIfNull(itemKey);
+        SyncDbWorkspaceFromContext();
+
+        var parsed = ParseSection(section);
+        ValidateTurnIdentifiers(sourceType, sessionId, requestId);
+
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
+        var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);
+        if (session is null || turnEntity is null)
+            return false;
+
+        if (!RemoveSectionItem(turnEntity, parsed, itemKey))
+            return false;
+
+        StampTurnChildren(turnEntity, session.WorkspaceId);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return true;
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> DeleteTurnAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        ArgumentNullException.ThrowIfNull(requestId);
+        SyncDbWorkspaceFromContext();
+        ValidateTurnIdentifiers(sourceType, sessionId, requestId);
+
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
+        var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);
+        if (session is null || turnEntity is null)
+            return false;
+
+        var sessionRowId = session.Id;
+        var turnId = turnEntity.Id;
+
+        // Child FKs are DeleteBehavior.Restrict (no cascade); soft-delete bottom-up with
+        // bulk ExecuteUpdate so durable session-log rows retain deletion metadata.
+        // Drop tracked entities first so they cannot conflict with bulk updates.
+        _db.ChangeTracker.Clear();
+        await SoftDeleteTurnRowsAsync(
+            turnId,
+            DateTimeOffset.UtcNow,
+            "session_log_turn_delete",
+            cancellationToken).ConfigureAwait(false);
+
+        var remaining = await _db.SessionLogTurns
+            .CountAsync(t => t.SessionLogId == sessionRowId, cancellationToken).ConfigureAwait(false);
+        await _db.SessionLogs
+            .Where(s => s.Id == sessionRowId)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(s => s.TurnCount, remaining), cancellationToken)
+            .ConfigureAwait(false);
+
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return true;
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> DeleteSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        SyncDbWorkspaceFromContext();
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
+        if (session is null)
+            return false;
+
+        var sessionRowId = session.Id;
+        var turnIds = session.Turns.Select(t => t.Id).ToList();
+        var deletedAtUtc = DateTimeOffset.UtcNow;
+
+        _db.ChangeTracker.Clear();
+        foreach (var turnId in turnIds)
+            await SoftDeleteTurnRowsAsync(
+                turnId,
+                deletedAtUtc,
+                "session_log_session_delete",
+                cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(
+                _db.SessionLogs.Where(s => s.Id == sessionRowId),
+                deletedAtUtc,
+                "session_log_session_delete",
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Deleted,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return true;
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010G / TR-MCP-DB-003: bulk soft-delete every child row of a turn
+    /// and the turn row itself (bottom-up). Child sets carry no workspace query
+    /// filter, so the turn id alone scopes the update.
+    /// </summary>
+    private async Task SoftDeleteTurnRowsAsync(
+        long turnId,
+        DateTimeOffset deletedAtUtc,
+        string reason,
+        CancellationToken cancellationToken)
+    {
+        await SoftDeleteRowsAsync(_db.SessionLogActions.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurnTags.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurnContexts.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogProcessingDialogs.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogCommits.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurnStringLists.Where(x => x.SessionLogTurnId == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+        await SoftDeleteRowsAsync(_db.SessionLogTurns.Where(x => x.Id == turnId), deletedAtUtc, reason, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static Task<int> SoftDeleteRowsAsync<TEntity>(
+        IQueryable<TEntity> query,
+        DateTimeOffset deletedAtUtc,
+        string reason,
+        CancellationToken cancellationToken)
+        where TEntity : class
+    {
+        return query.ExecuteUpdateAsync(
+            setters => setters
+                .SetProperty(entity => EF.Property<bool>(entity, "IsDeleted"), true)
+                .SetProperty(entity => EF.Property<DateTimeOffset?>(entity, "DeletedAtUtc"), deletedAtUtc)
+                .SetProperty(entity => EF.Property<string?>(entity, "DeletedBy"), nameof(SessionLogService))
+                .SetProperty(entity => EF.Property<string?>(entity, "DeleteReason"), reason),
+            cancellationToken);
+    }
+
+    private void ValidateTurnIdentifiers(string sourceType, string sessionId, string requestId)
+    {
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);
+        if (requestIdError is not null)
+            throw new ArgumentException(requestIdError, nameof(requestId));
+    }
+
+    private void ApplySectionReplace(SessionLogTurnEntity turn, TurnSection section, UnifiedRequestEntryDto payload)
+    {
+        switch (section)
+        {
+            case TurnSection.Actions: ReplaceCollection(turn.Actions, MapActions(payload.Actions)); break;
+            case TurnSection.Tags: ReplaceCollection(turn.Tags, MapTags(payload.Tags)); break;
+            case TurnSection.Context: ReplaceCollection(turn.ContextItems, MapContextItems(payload.ContextList)); break;
+            case TurnSection.Dialog: ReplaceCollection(turn.ProcessingDialog, MapProcessingDialog(payload.ProcessingDialog)); break;
+            case TurnSection.Commits: ReplaceCollection(turn.Commits, MapCommits(payload.Commits)); break;
+            case TurnSection.DesignDecisions: ReplaceStringListItems(turn, "DesignDecision", payload.DesignDecisions, mergeOmittedFields: false); break;
+            case TurnSection.RequirementsDiscovered: ReplaceStringListItems(turn, "Requirement", payload.RequirementsDiscovered, mergeOmittedFields: false); break;
+            case TurnSection.FilesModified: ReplaceStringListItems(turn, "FileModified", payload.FilesModified, mergeOmittedFields: false); break;
+            case TurnSection.Blockers: ReplaceStringListItems(turn, "Blocker", payload.Blockers, mergeOmittedFields: false); break;
+            default: throw new ArgumentOutOfRangeException(nameof(section), section, "Unhandled section.");
+        }
+    }
+
+    private bool RemoveSectionItem(SessionLogTurnEntity turn, TurnSection section, string itemKey)
+    {
+        return section switch
+        {
+            TurnSection.Tags => RemoveMatching(turn.Tags, t => string.Equals(t.Tag, itemKey, StringComparison.Ordinal)),
+            TurnSection.Context => RemoveMatching(turn.ContextItems, c => string.Equals(c.ContextItem, itemKey, StringComparison.Ordinal)),
+            TurnSection.Commits => RemoveMatching(turn.Commits, c => string.Equals(c.Sha, itemKey, StringComparison.Ordinal)),
+            TurnSection.Actions => int.TryParse(itemKey, out var order) && RemoveMatching(turn.Actions, a => a.Order == order),
+            TurnSection.Dialog => int.TryParse(itemKey, out var ordinal) && RemoveMatching(turn.ProcessingDialog, d => d.Ordinal == ordinal),
+            TurnSection.DesignDecisions => RemoveStringListItem(turn, "DesignDecision", itemKey),
+            TurnSection.RequirementsDiscovered => RemoveStringListItem(turn, "Requirement", itemKey),
+            TurnSection.FilesModified => RemoveStringListItem(turn, "FileModified", itemKey),
+            TurnSection.Blockers => RemoveStringListItem(turn, "Blocker", itemKey),
+            _ => false,
+        };
+    }
+
+    private bool RemoveMatching<TEntity>(ICollection<TEntity> target, Func<TEntity, bool> predicate)
+        where TEntity : class
+    {
+        var matches = target.Where(predicate).ToList();
+        if (matches.Count == 0)
+            return false;
+        foreach (var match in matches)
+        {
+            _db.Remove(match);
+            target.Remove(match);
+        }
+        return true;
+    }
+
+    private bool RemoveStringListItem(SessionLogTurnEntity turn, string listType, string value)
+    {
+        var matches = turn.StringListItems
+            .Where(i => i.ListType == listType && string.Equals(i.Value, value, StringComparison.Ordinal))
+            .ToList();
+        if (matches.Count == 0)
+            return false;
+        foreach (var match in matches)
+        {
+            _db.Remove(match);
+            turn.StringListItems.Remove(match);
+        }
+        return true;
+    }
+
+    /// <summary>FR-SUPPORT-010G: logical turn sections addressable by the replace/remove API.</summary>
+    private enum TurnSection
+    {
+        Actions,
+        Tags,
+        Context,
+        Dialog,
+        Commits,
+        DesignDecisions,
+        RequirementsDiscovered,
+        FilesModified,
+        Blockers,
+    }
+
+    private static TurnSection ParseSection(string section)
+    {
+        return (section?.Trim().ToLowerInvariant()) switch
+        {
+            "actions" or "action" => TurnSection.Actions,
+            "tags" or "tag" => TurnSection.Tags,
+            "context" or "contextlist" or "contextitems" => TurnSection.Context,
+            "dialog" or "processingdialog" => TurnSection.Dialog,
+            "commits" or "commit" => TurnSection.Commits,
+            "designdecisions" or "designdecision" or "decisions" => TurnSection.DesignDecisions,
+            "requirementsdiscovered" or "requirements" => TurnSection.RequirementsDiscovered,
+            "filesmodified" or "files" => TurnSection.FilesModified,
+            "blockers" or "blocker" => TurnSection.Blockers,
+            _ => throw new ArgumentException(
+                $"Unknown session-log turn section '{section}'. Valid sections: actions, tags, context, dialog, commits, designDecisions, requirementsDiscovered, filesModified, blockers.",
+                nameof(section)),
+        };
+    }
+
+    private void ReplaceCollection<TEntity>(ICollection<TEntity> target, List<TEntity> replacement)
+        where TEntity : class
+    {
+        foreach (var existing in target.ToList())
+            _db.Remove(existing);
+        target.Clear();
+        foreach (var item in replacement)
+            target.Add(item);
+    }
+
+    private static void ValidateTerminalTurnCompliance(UnifiedRequestEntryDto turn, string? sessionSourceType)
+    {
+        if (!IsTerminalTurnStatus(turn.Status))
+            return;
+
+        // FR-SUPPORT-013: the terminal-turn audit-evidence gate is a Quad-Brain ACID
+        // requirement (FR-MCP-136 durable audit/session-log boundaries). It applies only
+        // to the ACID hosted-agent source type and must not gate standard session-log
+        // endpoints used by ordinary agents (ClaudeCode, Cursor, Copilot, ...).
+        if (!string.Equals(sessionSourceType, McpHostedAgentDefaults.QBAgentSourceType, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        var decisionCount = (turn.DesignDecisions?.Count(static value => !string.IsNullOrWhiteSpace(value)) ?? 0)
+            + (turn.ProcessingDialog?.Count(static item =>
+                string.Equals(item.Category, "decision", StringComparison.OrdinalIgnoreCase)) ?? 0);
+        var actionCount = turn.Actions?.Count ?? 0;
+        var commitCount = turn.Commits?.Count ?? 0;
+
+        if (decisionCount > 0 || actionCount > 0 || commitCount > 0)
+            return;
+
+        throw new ArgumentException(
+            $"Cannot close session turn '{turn.RequestId}' with status '{turn.Status}' because the payload contains no decision, action, or commit items. {SessionTurnComplianceError} Add at least one design decision, session action, or commit entry before retrying.",
+            nameof(turn));
+    }
+
+    private static bool IsTerminalTurnStatus(string? status) =>
+        status is not null
+        && (string.Equals(status, "completed", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "closed", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "cancelled", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "canceled", StringComparison.OrdinalIgnoreCase));
 
     private static string BuildSearchText(SessionLogTurnEntity turn)
         => string.Join(
@@ -436,15 +968,19 @@ public sealed class SessionLogService : ISessionLogService
 
     private static void MapDtoToEntity(UnifiedSessionLogDto dto, SessionLogEntity entity)
     {
-        entity.Title = dto.Title;
-        entity.Model = dto.Model;
-        entity.AgentDefinitionId = dto.AgentDefinitionId;
-        entity.Started = ParseDateTimeOffset(dto.Started);
-        entity.LastUpdated = ParseDateTimeOffset(dto.LastUpdated);
-        entity.Status = dto.Status;
-        entity.TurnCount = dto.TurnCount;
-        entity.TotalTokens = dto.TotalTokens;
-        entity.CursorSessionLabel = dto.CursorSessionLabel;
+        // FR-SUPPORT-015: ADDITIVE merge. Agents routinely send partial session
+        // payloads (e.g. a bare status-only close); omitted (null) fields must
+        // never clobber existing values. TurnCount/Started/LastUpdated are
+        // recomputed from turns by RefreshSessionSummaryFromTurns after mapping.
+        if (dto.Title is not null) entity.Title = dto.Title;
+        if (dto.Model is not null) entity.Model = dto.Model;
+        if (dto.AgentDefinitionId is not null) entity.AgentDefinitionId = dto.AgentDefinitionId;
+        if (ParseDateTimeOffset(dto.Started) is { } started) entity.Started = started;
+        if (ParseDateTimeOffset(dto.LastUpdated) is { } lastUpdated) entity.LastUpdated = lastUpdated;
+        if (dto.Status is not null) entity.Status = dto.Status;
+        if (dto.TurnCount > 0) entity.TurnCount = dto.TurnCount;
+        if (dto.TotalTokens is not null) entity.TotalTokens = dto.TotalTokens;
+        if (dto.CursorSessionLabel is not null) entity.CursorSessionLabel = dto.CursorSessionLabel;
 
         if (dto.CopilotStatistics is { } stats)
         {
@@ -461,6 +997,35 @@ public sealed class SessionLogService : ISessionLogService
             entity.TargetFramework = ws.TargetFramework;
             entity.Repository = ws.Repository;
             entity.Branch = ws.Branch;
+        }
+    }
+
+    private static void RefreshSessionSummaryFromTurns(SessionLogEntity session)
+    {
+        var turns = session.Turns.ToList();
+        session.TurnCount = turns.Count;
+
+        var timestamps = turns
+            .Select(static turn => turn.Timestamp)
+            .Where(static timestamp => timestamp.HasValue)
+            .Select(static timestamp => timestamp!.Value)
+            .ToList();
+
+        if (timestamps.Count == 0)
+        {
+            return;
+        }
+
+        var earliest = timestamps.Min();
+        var latest = timestamps.Max();
+        if (session.Started is null || earliest < session.Started.Value)
+        {
+            session.Started = earliest;
+        }
+
+        if (session.LastUpdated is null || latest > session.LastUpdated.Value)
+        {
+            session.LastUpdated = latest;
         }
     }
 
@@ -481,14 +1046,13 @@ public sealed class SessionLogService : ISessionLogService
             .Where(e => e.RequestId != null)
             .ToDictionary(e => e.RequestId!, StringComparer.Ordinal);
 
-        var matchedIds = new HashSet<string>(StringComparer.Ordinal);
-
         foreach (var dto in deduped)
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {
-                UpdateEntryFromDto(existingEntry, dto);
-                matchedIds.Add(dto.RequestId);
+                // FR-SUPPORT-015: whole-session submit merges turns additively -
+                // omitted turn fields never clobber previously persisted values.
+                UpdateEntryFromDto(existingEntry, dto, mergeOmittedFields: true);
             }
             else
             {
@@ -496,47 +1060,139 @@ public sealed class SessionLogService : ISessionLogService
                 session.Turns.Add(newEntry);
             }
         }
+    }
 
-        var stale = session.Turns
-            .Where(e => e.RequestId != null && !matchedIds.Contains(e.RequestId)
-                        && existingByRequestId.ContainsKey(e.RequestId))
-            .ToList();
-        if (stale.Count > 0)
+    private void UpdateEntryFromDto(
+        SessionLogTurnEntity entity,
+        UnifiedRequestEntryDto dto,
+        bool mergeOmittedFields = false)
+    {
+        entity.Timestamp = ApplyValue(entity.Timestamp, ParseDateTimeOffset(dto.Timestamp), dto.Timestamp is not null, mergeOmittedFields);
+        entity.Model = ApplyValue(entity.Model, dto.Model, dto.Model is not null, mergeOmittedFields);
+        entity.ModelProvider = ApplyValue(entity.ModelProvider, dto.ModelProvider, dto.ModelProvider is not null, mergeOmittedFields);
+        entity.QueryText = ApplyValue(entity.QueryText, dto.QueryText, dto.QueryText is not null, mergeOmittedFields);
+        entity.QueryTitle = ApplyValue(entity.QueryTitle, dto.QueryTitle, dto.QueryTitle is not null, mergeOmittedFields);
+        entity.Response = ApplyValue(entity.Response, dto.Response, dto.Response is not null, mergeOmittedFields);
+        entity.Interpretation = ApplyValue(entity.Interpretation, dto.Interpretation, dto.Interpretation is not null, mergeOmittedFields);
+        entity.Status = ApplyValue(entity.Status, dto.Status, dto.Status is not null, mergeOmittedFields);
+        entity.TokenCount = ApplyValue(entity.TokenCount, dto.TokenCount, dto.TokenCount.HasValue, mergeOmittedFields);
+        entity.FailureNote = ApplyValue(entity.FailureNote, dto.FailureNote, dto.FailureNote is not null, mergeOmittedFields);
+        entity.Score = ApplyValue(entity.Score, dto.Score, dto.Score.HasValue, mergeOmittedFields);
+        entity.IsPremium = ApplyValue(entity.IsPremium, dto.IsPremium, dto.IsPremium.HasValue, mergeOmittedFields);
+        entity.RawContextJson = ApplyValue(entity.RawContextJson, SerializeJson(dto.RawContext), dto.RawContext is not null, mergeOmittedFields);
+        entity.OriginalEntryJson = ApplyValue(entity.OriginalEntryJson, SerializeJson(dto.OriginalEntry), dto.OriginalEntry is not null, mergeOmittedFields);
+
+        if (mergeOmittedFields)
         {
-            _db.SessionLogTurns.RemoveRange(stale);
+            // PATCH/additive: omitted collections preserved, items appended.
+            MergeCollection(entity.Actions, dto.Actions, MapActions, SameAction, mergeOmittedFields);
+            MergeCollection(entity.Tags, dto.Tags, MapTags, SameTag, mergeOmittedFields);
+            MergeCollection(entity.ContextItems, dto.ContextList, MapContextItems, SameContextItem, mergeOmittedFields);
+            MergeCollection(entity.ProcessingDialog, dto.ProcessingDialog, MapProcessingDialog, SameProcessingDialog, mergeOmittedFields);
+            MergeCollection(entity.Commits, dto.Commits, MapCommits, SameCommit, mergeOmittedFields);
+        }
+        else
+        {
+            // FR-SUPPORT-010G PUT/replace: each collection becomes exactly the
+            // payload; omitted or empty collections are cleared.
+            ReplaceCollection(entity.Actions, MapActions(dto.Actions));
+            ReplaceCollection(entity.Tags, MapTags(dto.Tags));
+            ReplaceCollection(entity.ContextItems, MapContextItems(dto.ContextList));
+            ReplaceCollection(entity.ProcessingDialog, MapProcessingDialog(dto.ProcessingDialog));
+            ReplaceCollection(entity.Commits, MapCommits(dto.Commits));
+        }
+
+        ReplaceStringListItems(entity, "DesignDecision", dto.DesignDecisions, mergeOmittedFields);
+        ReplaceStringListItems(entity, "Requirement", dto.RequirementsDiscovered, mergeOmittedFields);
+        ReplaceStringListItems(entity, "FileModified", dto.FilesModified, mergeOmittedFields);
+        ReplaceStringListItems(entity, "Blocker", dto.Blockers, mergeOmittedFields);
+    }
+
+    private static T ApplyValue<T>(
+        T current,
+        T incoming,
+        bool supplied,
+        bool mergeOmittedFields)
+    {
+        return !mergeOmittedFields || supplied ? incoming : current;
+    }
+
+    private static void MergeCollection<TIncoming, TEntity>(
+        ICollection<TEntity> target,
+        TIncoming? incoming,
+        Func<TIncoming?, List<TEntity>> map,
+        Func<TEntity, TEntity, bool> same,
+        bool mergeOmittedFields)
+        where TEntity : class
+    {
+        if (incoming is null)
+        {
+            return;
+        }
+
+        foreach (var item in map(incoming))
+        {
+            if (!target.Any(existing => same(existing, item)))
+            {
+                target.Add(item);
+            }
         }
     }
 
-    private void UpdateEntryFromDto(SessionLogTurnEntity entity, UnifiedRequestEntryDto dto)
+    private void ReplaceStringListItems(
+        SessionLogTurnEntity entity,
+        string listType,
+        List<string>? incoming,
+        bool mergeOmittedFields)
     {
-        entity.Timestamp = ParseDateTimeOffset(dto.Timestamp);
-        entity.Model = dto.Model;
-        entity.ModelProvider = dto.ModelProvider;
-        entity.QueryText = dto.QueryText;
-        entity.QueryTitle = dto.QueryTitle;
-        entity.Response = dto.Response;
-        entity.Interpretation = dto.Interpretation;
-        entity.Status = dto.Status;
-        entity.TokenCount = dto.TokenCount;
-        entity.FailureNote = dto.FailureNote;
-        entity.Score = dto.Score;
-        entity.IsPremium = dto.IsPremium;
-        entity.RawContextJson = SerializeJson(dto.RawContext);
-        entity.OriginalEntryJson = SerializeJson(dto.OriginalEntry);
+        if (!mergeOmittedFields)
+        {
+            // FR-SUPPORT-010G PUT/replace: drop existing items of this list type
+            // and set to the payload; null/empty clears the list. Despite the
+            // method name, the additive path below never actually replaced.
+            foreach (var existing in entity.StringListItems.Where(item => item.ListType == listType).ToList())
+            {
+                _db.Remove(existing);
+                entity.StringListItems.Remove(existing);
+            }
 
-        _db.SessionLogActions.RemoveRange(entity.Actions);
-        _db.SessionLogTurnTags.RemoveRange(entity.Tags);
-        _db.SessionLogTurnContexts.RemoveRange(entity.ContextItems);
-        _db.SessionLogProcessingDialogs.RemoveRange(entity.ProcessingDialog);
-        _db.SessionLogCommits.RemoveRange(entity.Commits);
-        _db.SessionLogTurnStringLists.RemoveRange(entity.StringListItems);
+            var values = incoming ?? [];
+            for (var i = 0; i < values.Count; i++)
+            {
+                entity.StringListItems.Add(new SessionLogTurnStringListEntity
+                {
+                    ListType = listType,
+                    Ordinal = i,
+                    Value = values[i]
+                });
+            }
 
-        entity.Actions = MapActions(dto.Actions);
-        entity.Tags = MapTags(dto.Tags);
-        entity.ContextItems = MapContextItems(dto.ContextList);
-        entity.ProcessingDialog = MapProcessingDialog(dto.ProcessingDialog);
-        entity.Commits = MapCommits(dto.Commits);
-        entity.StringListItems = MapStringListItems(dto);
+            return;
+        }
+
+        if (incoming is null)
+        {
+            return;
+        }
+
+        var existingValues = entity.StringListItems
+            .Where(item => item.ListType == listType)
+            .Select(item => item.Value)
+            .ToHashSet(StringComparer.Ordinal);
+        var ordinal = entity.StringListItems
+            .Where(item => item.ListType == listType)
+            .Select(item => item.Ordinal)
+            .DefaultIfEmpty(-1)
+            .Max() + 1;
+        foreach (var value in incoming.Where(value => existingValues.Add(value)))
+        {
+            entity.StringListItems.Add(new SessionLogTurnStringListEntity
+            {
+                ListType = listType,
+                Ordinal = ordinal++,
+                Value = value
+            });
+        }
     }
 
     private static List<SessionLogTurnEntity> MapNewTurns(List<UnifiedRequestEntryDto>? turns)
@@ -629,6 +1285,37 @@ public sealed class SessionLogService : ISessionLogService
         }).ToList() ?? [];
     }
 
+    private static bool SameAction(SessionLogActionEntity left, SessionLogActionEntity right) =>
+        left.Order == right.Order
+        && string.Equals(left.Description, right.Description, StringComparison.Ordinal)
+        && string.Equals(left.Type, right.Type, StringComparison.Ordinal)
+        && string.Equals(left.Status, right.Status, StringComparison.Ordinal)
+        && string.Equals(left.FilePath, right.FilePath, StringComparison.Ordinal);
+
+    private static bool SameTag(SessionLogTurnTagEntity left, SessionLogTurnTagEntity right) =>
+        string.Equals(left.Tag, right.Tag, StringComparison.Ordinal);
+
+    private static bool SameContextItem(SessionLogTurnContextEntity left, SessionLogTurnContextEntity right) =>
+        string.Equals(left.ContextItem, right.ContextItem, StringComparison.Ordinal);
+
+    private static bool SameProcessingDialog(SessionLogProcessingDialogEntity left, SessionLogProcessingDialogEntity right) =>
+        left.Timestamp == right.Timestamp
+        && string.Equals(left.Role, right.Role, StringComparison.Ordinal)
+        && string.Equals(left.Content, right.Content, StringComparison.Ordinal)
+        && string.Equals(left.Category, right.Category, StringComparison.Ordinal);
+
+    private static bool SameCommit(SessionLogCommitEntity left, SessionLogCommitEntity right)
+    {
+        if (!string.IsNullOrWhiteSpace(left.Sha) || !string.IsNullOrWhiteSpace(right.Sha))
+            return string.Equals(left.Sha, right.Sha, StringComparison.Ordinal);
+
+        return string.Equals(left.Branch, right.Branch, StringComparison.Ordinal)
+               && string.Equals(left.Message, right.Message, StringComparison.Ordinal)
+               && string.Equals(left.Author, right.Author, StringComparison.Ordinal)
+               && left.CommitTimestamp == right.CommitTimestamp
+               && string.Equals(left.FilesChangedJson, right.FilesChangedJson, StringComparison.Ordinal);
+    }
+
     private static List<SessionLogTurnStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
     {
         var items = new List<SessionLogTurnStringListEntity>();
@@ -639,7 +1326,7 @@ public sealed class SessionLogService : ISessionLogService
         return items;
     }
 
-    private static void AddStringListItems(List<SessionLogTurnStringListEntity> items, string listType, List<string>? values)
+    private static void AddStringListItems(ICollection<SessionLogTurnStringListEntity> items, string listType, List<string>? values)
     {
         if (values is not { Count: > 0 })
             return;
@@ -656,6 +1343,15 @@ public sealed class SessionLogService : ISessionLogService
 
     private static UnifiedSessionLogDto MapEntityToDto(SessionLogEntity entity)
     {
+        var turns = entity.Turns.OrderBy(e => e.Id).ToList();
+        var timestamps = turns
+            .Select(static turn => turn.Timestamp)
+            .Where(static timestamp => timestamp.HasValue)
+            .Select(static timestamp => timestamp!.Value)
+            .ToList();
+        var started = entity.Started ?? (timestamps.Count > 0 ? timestamps.Min() : null);
+        var lastUpdated = entity.LastUpdated ?? (timestamps.Count > 0 ? timestamps.Max() : null);
+
         return new UnifiedSessionLogDto
         {
             SourceType = entity.SourceType,
@@ -663,10 +1359,10 @@ public sealed class SessionLogService : ISessionLogService
             AgentDefinitionId = entity.AgentDefinitionId,
             Title = entity.Title,
             Model = entity.Model,
-            Started = entity.Started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-            LastUpdated = entity.LastUpdated?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+            Started = started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+            LastUpdated = lastUpdated?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
             Status = entity.Status,
-            TurnCount = entity.TurnCount,
+            TurnCount = turns.Count,
             TotalTokens = entity.TotalTokens,
             CursorSessionLabel = entity.CursorSessionLabel,
             CopilotStatistics = entity.CopilotAvgSuccessScore.HasValue || entity.CopilotTotalNetTokens.HasValue
@@ -689,64 +1385,66 @@ public sealed class SessionLogService : ISessionLogService
                     Branch = entity.Branch
                 }
                 : null,
-            Turns = entity.Turns.Select(e => new UnifiedRequestEntryDto
-            {
-                RequestId = e.RequestId,
-                Timestamp = e.Timestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-                Model = e.Model,
-                ModelProvider = e.ModelProvider,
-                QueryText = e.QueryText,
-                QueryTitle = e.QueryTitle,
-                Response = e.Response,
-                Interpretation = e.Interpretation,
-                Status = e.Status,
-                TokenCount = e.TokenCount,
-                FailureNote = e.FailureNote,
-                Score = e.Score,
-                IsPremium = e.IsPremium,
-                RawContext = DeserializeJson(e.RawContextJson),
-                OriginalEntry = DeserializeJson(e.OriginalEntryJson),
-                Tags = e.Tags.Count > 0 ? e.Tags.Select(t => t.Tag).ToList() : null,
-                ContextList = e.ContextItems.Count > 0
-                    ? e.ContextItems.OrderBy(c => c.Ordinal).Select(c => c.ContextItem).ToList()
-                    : null,
-                Actions = e.Actions.Count > 0
-                    ? e.Actions.OrderBy(a => a.Order).Select(a => new UnifiedActionDto
-                    {
-                        Order = a.Order,
-                        Description = a.Description,
-                        Type = a.Type,
-                        Status = a.Status,
-                        FilePath = a.FilePath
-                    }).ToList()
-                    : null,
-                ProcessingDialog = e.ProcessingDialog.Count > 0
-                    ? e.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => new ProcessingDialogItemDto
-                    {
-                        Timestamp = p.Timestamp.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-                        Role = p.Role,
-                        Content = p.Content,
-                        Category = p.Category
-                    }).ToList()
-                    : null,
-                Commits = e.Commits.Count > 0
-                    ? e.Commits.OrderBy(c => c.Ordinal).Select(c => new SessionLogCommitDto
-                    {
-                        Sha = c.Sha,
-                        Branch = c.Branch,
-                        Message = c.Message,
-                        Author = c.Author,
-                        Timestamp = c.CommitTimestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-                        FilesChanged = DeserializeStringList(c.FilesChangedJson)
-                    }).ToList()
-                    : null,
-                DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
-                RequirementsDiscovered = MapStringListToDto(e.StringListItems, "Requirement"),
-                FilesModified = MapStringListToDto(e.StringListItems, "FileModified"),
-                Blockers = MapStringListToDto(e.StringListItems, "Blocker")
-            }).ToList()
+            Turns = turns.Select(MapTurnEntityToDto).ToList()
         };
     }
+
+    private static UnifiedRequestEntryDto MapTurnEntityToDto(SessionLogTurnEntity e) => new()
+    {
+        RequestId = e.RequestId,
+        Timestamp = e.Timestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+        Model = e.Model,
+        ModelProvider = e.ModelProvider,
+        QueryText = e.QueryText,
+        QueryTitle = e.QueryTitle,
+        Response = e.Response,
+        Interpretation = e.Interpretation,
+        Status = e.Status,
+        TokenCount = e.TokenCount,
+        FailureNote = e.FailureNote,
+        Score = e.Score,
+        IsPremium = e.IsPremium,
+        RawContext = DeserializeJson(e.RawContextJson),
+        OriginalEntry = DeserializeJson(e.OriginalEntryJson),
+        Tags = e.Tags.Count > 0 ? e.Tags.Select(t => t.Tag).ToList() : null,
+        ContextList = e.ContextItems.Count > 0
+            ? e.ContextItems.OrderBy(c => c.Ordinal).Select(c => c.ContextItem).ToList()
+            : null,
+        Actions = e.Actions.Count > 0
+            ? e.Actions.OrderBy(a => a.Order).Select(a => new UnifiedActionDto
+            {
+                Order = a.Order,
+                Description = a.Description,
+                Type = a.Type,
+                Status = a.Status,
+                FilePath = a.FilePath
+            }).ToList()
+            : null,
+        ProcessingDialog = e.ProcessingDialog.Count > 0
+            ? e.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => new ProcessingDialogItemDto
+            {
+                Timestamp = p.Timestamp.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+                Role = p.Role,
+                Content = p.Content,
+                Category = p.Category
+            }).ToList()
+            : null,
+        Commits = e.Commits.Count > 0
+            ? e.Commits.OrderBy(c => c.Ordinal).Select(c => new SessionLogCommitDto
+            {
+                Sha = c.Sha,
+                Branch = c.Branch,
+                Message = c.Message,
+                Author = c.Author,
+                Timestamp = c.CommitTimestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+                FilesChanged = DeserializeStringList(c.FilesChangedJson)
+            }).ToList()
+            : null,
+        DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
+        RequirementsDiscovered = MapStringListToDto(e.StringListItems, "Requirement"),
+        FilesModified = MapStringListToDto(e.StringListItems, "FileModified"),
+        Blockers = MapStringListToDto(e.StringListItems, "Blocker")
+    };
 
     private static DateTimeOffset? ParseDateTimeOffset(string? value)
     {

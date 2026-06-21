@@ -21,6 +21,8 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
     private const string CodeReviewSectionKey = "code-review-remediation";
     private const string YamlBootstrapSource = "yaml-bootstrap";
     private const string SqliteBackfillSource = "sqlite-backfill";
+    private const string TodoDeleteSource = "api";
+    private const string TodoDeleteReason = "todo_delete";
 
     private readonly string _dataSource;
     private readonly string _todoFilePath;
@@ -222,7 +224,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            var existing = await GetStoredByIdAsync(request.Id, cancellationToken).ConfigureAwait(false);
+            var existing = await GetStoredByIdAsync(request.Id, cancellationToken, includeDeleted: true).ConfigureAwait(false);
             if (existing is not null)
                 return new TodoMutationResult(false, $"Item with id '{request.Id}' already exists.", FailureKind: TodoMutationFailureKind.Conflict);
 
@@ -369,12 +371,23 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 
             using (var command = connection.CreateCommand())
             {
-                command.CommandText = "DELETE FROM todo_items WHERE id = $id;";
+                command.CommandText = """
+                    UPDATE todo_items
+                    SET is_deleted = 1,
+                        deleted_at_utc = $deletedAtUtc,
+                        deleted_by = $deletedBy,
+                        delete_reason = $deleteReason
+                    WHERE id = $id
+                      AND is_deleted = 0;
+                    """;
                 command.Parameters.AddWithValue("$id", id);
+                command.Parameters.AddWithValue("$deletedAtUtc", DateTime.UtcNow.ToString("O"));
+                command.Parameters.AddWithValue("$deletedBy", TodoDeleteSource);
+                command.Parameters.AddWithValue("$deleteReason", TodoDeleteReason);
                 await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            await InsertHistoryEntryAsync(connection, id, "deleted", existing.ToFlatItem(), existing.ToFlatItem(), "api", cancellationToken).ConfigureAwait(false);
+            await InsertHistoryEntryAsync(connection, id, "deleted", existing.ToFlatItem(), existing.ToFlatItem(), TodoDeleteSource, cancellationToken).ConfigureAwait(false);
             transaction.Commit();
 
             return await FinalizeMutationAsync(ChangeEventActions.Deleted, id, null, cancellationToken).ConfigureAwait(false);
@@ -458,7 +471,11 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
                 reference TEXT NULL,
                 depends_on_json TEXT NULL,
                 functional_requirements_json TEXT NULL,
-                technical_requirements_json TEXT NULL
+                technical_requirements_json TEXT NULL,
+                is_deleted INTEGER NOT NULL DEFAULT 0,
+                deleted_at_utc TEXT NULL,
+                deleted_by TEXT NULL,
+                delete_reason TEXT NULL
             );
             CREATE INDEX IF NOT EXISTS idx_todo_items_section ON todo_items(section);
             CREATE INDEX IF NOT EXISTS idx_todo_items_priority ON todo_items(priority);
@@ -498,6 +515,15 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
             await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN item_order INTEGER NOT NULL DEFAULT 0;").ConfigureAwait(false);
         if (!columns.Contains("phase_label"))
             await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN phase_label TEXT NULL;").ConfigureAwait(false);
+        if (!columns.Contains("is_deleted"))
+            await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN is_deleted INTEGER NOT NULL DEFAULT 0;").ConfigureAwait(false);
+        if (!columns.Contains("deleted_at_utc"))
+            await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN deleted_at_utc TEXT NULL;").ConfigureAwait(false);
+        if (!columns.Contains("deleted_by"))
+            await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN deleted_by TEXT NULL;").ConfigureAwait(false);
+        if (!columns.Contains("delete_reason"))
+            await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN delete_reason TEXT NULL;").ConfigureAwait(false);
+        await ExecuteNonQueryAsync(connection, "CREATE INDEX IF NOT EXISTS idx_todo_items_is_deleted ON todo_items(is_deleted);").ConfigureAwait(false);
 
         var metadataColumns = await GetTableColumnsAsync(connection, "todo_document_metadata").ConfigureAwait(false);
         if (!metadataColumns.Contains("last_projection_failure_utc"))
@@ -925,6 +951,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         command.CommandText = """
             SELECT *
             FROM todo_items
+            WHERE is_deleted = 0
             ORDER BY section_order ASC,
                      section COLLATE NOCASE ASC,
                      CASE LOWER(priority) WHEN 'high' THEN 0 WHEN 'medium' THEN 1 ELSE 2 END ASC,
@@ -938,12 +965,14 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         return items;
     }
 
-    private async Task<StoredTodoItem?> GetStoredByIdAsync(string id, CancellationToken cancellationToken)
+    private async Task<StoredTodoItem?> GetStoredByIdAsync(string id, CancellationToken cancellationToken, bool includeDeleted = false)
     {
         using var connection = CreateConnection();
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM todo_items WHERE id = $id LIMIT 1;";
+        command.CommandText = includeDeleted
+            ? "SELECT * FROM todo_items WHERE id = $id LIMIT 1;"
+            : "SELECT * FROM todo_items WHERE id = $id AND is_deleted = 0 LIMIT 1;";
         command.Parameters.AddWithValue("$id", id);
         using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
         return await reader.ReadAsync(cancellationToken).ConfigureAwait(false) ? ReadStoredTodo(reader) : null;
@@ -1152,21 +1181,21 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
     private async Task<int> ResolveSectionOrderAsync(SqliteConnection connection, string section, CancellationToken cancellationToken)
     {
         using var existingCommand = connection.CreateCommand();
-        existingCommand.CommandText = "SELECT MIN(section_order) FROM todo_items WHERE section = $section;";
+        existingCommand.CommandText = "SELECT MIN(section_order) FROM todo_items WHERE section = $section AND is_deleted = 0;";
         existingCommand.Parameters.AddWithValue("$section", section);
         var existingValue = await existingCommand.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
         if (existingValue is long longValue)
             return Convert.ToInt32(longValue);
 
         using var nextCommand = connection.CreateCommand();
-        nextCommand.CommandText = "SELECT COALESCE(MAX(section_order), -1) + 1 FROM todo_items;";
+        nextCommand.CommandText = "SELECT COALESCE(MAX(section_order), -1) + 1 FROM todo_items WHERE is_deleted = 0;";
         return Convert.ToInt32((long)(await nextCommand.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false) ?? 0L));
     }
 
     private async Task<int> GetNextItemOrderAsync(SqliteConnection connection, string section, string priority, string itemKind, CancellationToken cancellationToken)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COALESCE(MAX(item_order), -1) + 1 FROM todo_items WHERE section = $section AND priority = $priority AND item_kind = $itemKind;";
+        command.CommandText = "SELECT COALESCE(MAX(item_order), -1) + 1 FROM todo_items WHERE section = $section AND priority = $priority AND item_kind = $itemKind AND is_deleted = 0;";
         command.Parameters.AddWithValue("$section", section);
         command.Parameters.AddWithValue("$priority", priority);
         command.Parameters.AddWithValue("$itemKind", itemKind);
@@ -1176,7 +1205,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
     private async Task<int> GetCurrentItemCountAsync(SqliteConnection connection)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COUNT(*) FROM todo_items;";
+        command.CommandText = "SELECT COUNT(*) FROM todo_items WHERE is_deleted = 0;";
         return Convert.ToInt32((long)(await command.ExecuteScalarAsync().ConfigureAwait(false) ?? 0L));
     }
 

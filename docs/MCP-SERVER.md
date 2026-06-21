@@ -145,7 +145,7 @@ Build-related tasks are available as Nuke targets via `./build.ps1`. See the [Bu
 Windows service deployment and update must go through the Nuke build target:
 
 ```powershell
-pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
+pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 ```
 
 The following operational/admin scripts are lower-level helpers for local development, diagnostics, or migration tasks. Do not use them as the normal Windows service redeploy path:

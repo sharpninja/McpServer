@@ -106,7 +106,7 @@ public sealed class TodoClientTests
               "repairRequired": false,
               "verifiedAtUtc": "2026-03-21T00:00:00Z",
               "lastProjectedToYamlUtc": "2026-03-21T00:00:00Z",
-              "message": "TODO.yaml matches authoritative SQLite state."
+              "message": "TODO.yaml matches authoritative database state."
             }
             """);
         using var http = new HttpClient(handler);
@@ -138,7 +138,7 @@ public sealed class TodoClientTests
                 "projectionConsistent": true,
                 "repairRequired": false,
                 "verifiedAtUtc": "2026-03-21T00:01:00Z",
-                "message": "TODO.yaml matches authoritative SQLite state."
+                "message": "TODO.yaml matches authoritative database state."
               }
             }
             """);

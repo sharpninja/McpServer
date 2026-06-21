@@ -1,0 +1,8 @@
+<Project>
+  <Import Project="..\Directory.Build.targets" Condition="Exists('..\Directory.Build.targets')" />
+
+  <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Validation'))">
+    <Compile Include="$(MSBuildThisFileDirectory)Validation.Shared\ValidationAuth.cs"
+             Link="Validation.Shared\ValidationAuth.cs" />
+  </ItemGroup>
+</Project>

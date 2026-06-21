@@ -13,10 +13,12 @@ function Get-IdsFromHeadings {
         [string]$Prefix
     )
 
+    $idPattern = "$Prefix-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*"
+
     return Get-Content $Path |
-        Where-Object { $_ -match "^\#\#\s+($Prefix-[A-Z0-9-]+-\d{3})\b" } |
+        Where-Object { $_ -match "^\#\#\s+($idPattern)\b" } |
         ForEach-Object {
-            if ($_ -match "^\#\#\s+($Prefix-[A-Z0-9-]+-\d{3})\b") { $matches[1] }
+            if ($_ -match "^\#\#\s+($idPattern)\b") { $matches[1] }
         }
 }
 
@@ -41,6 +43,7 @@ function Get-MatrixRequirementIds {
     $lines = Get-Content $Path | Where-Object { $_ -match '^\|\s*(FR-|TR-|TEST-)' }
     foreach ($line in $lines) {
         $req = ($line -split '\|')[1].Trim()
+        [void]$ids.Add($req)
         foreach ($expanded in (Expand-RangeToken -Token $req)) {
             [void]$ids.Add($expanded)
         }
@@ -57,8 +60,8 @@ $matrixPath = Join-Path $ProjectDocsPath "Requirements-Matrix.md"
 $frIds = Get-IdsFromHeadings -Path $functionalPath -Prefix "FR"
 $trIds = Get-IdsFromHeadings -Path $technicalPath -Prefix "TR"
 $testIds = Get-Content $testingPath |
-    Where-Object { $_ -match '\b(TEST-[A-Z]+-\d{3})\b' } |
-    ForEach-Object { [regex]::Matches($_, '\b(TEST-[A-Z]+-\d{3})\b') } |
+    Where-Object { $_ -match '\b(TEST-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\b' } |
+    ForEach-Object { [regex]::Matches($_, '\b(TEST-[A-Z0-9]+(?:[-.–]+[A-Z0-9]+)*)\b') } |
     ForEach-Object { $_ } |
     ForEach-Object { $_.Groups[1].Value } |
     Select-Object -Unique

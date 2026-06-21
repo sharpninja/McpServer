@@ -9,7 +9,7 @@ namespace McpServer.Support.Mcp.Services;
 /// delegate exclusively to the inner (local) service. When federation is disabled or
 /// no target resolves, all calls pass through to the inner service with zero overhead.
 /// </summary>
-public sealed class FederatedTodoService : ITodoService
+public sealed class FederatedTodoService : ITodoService, ITodoCompensationService, ITodoCompensationCapability
 {
     private readonly ITodoService _inner;
     private readonly FederationRegistry _registry;
@@ -32,6 +32,11 @@ public sealed class FederatedTodoService : ITodoService
         _client = client;
         _logger = logger;
     }
+
+    /// <inheritdoc />
+    public bool SupportsRollbackCompensation
+        => _inner is ITodoCompensationService &&
+           (_inner is not ITodoCompensationCapability capability || capability.SupportsRollbackCompensation);
 
     /// <inheritdoc />
     public async Task<TodoQueryResult> QueryAsync(TodoQueryRequest request, CancellationToken cancellationToken = default)
@@ -105,6 +110,42 @@ public sealed class FederatedTodoService : ITodoService
     /// <inheritdoc />
     public Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
         => _inner.RepairProjectionAsync(cancellationToken);
+
+    /// <inheritdoc />
+    public Task<TodoCompensationSnapshot?> CaptureForRestoreAsync(string id, CancellationToken cancellationToken = default)
+        => _inner is ITodoCompensationService compensation
+            ? compensation.CaptureForRestoreAsync(id, cancellationToken)
+            : Task.FromResult<TodoCompensationSnapshot?>(null);
+
+    /// <inheritdoc />
+    public Task<TodoCompensatedMutationResult> UpdateWithRestorePointAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default)
+        => _inner is ITodoCompensationService compensation
+            ? compensation.UpdateWithRestorePointAsync(id, request, cancellationToken)
+            : Task.FromResult(new TodoCompensatedMutationResult
+            {
+                Result = new TodoMutationResult(false, "The active TODO provider does not support transaction rollback compensation.", FailureKind: TodoMutationFailureKind.Conflict),
+            });
+
+    /// <inheritdoc />
+    public Task<TodoCompensatedMutationResult> DeleteWithRestorePointAsync(string id, CancellationToken cancellationToken = default)
+        => _inner is ITodoCompensationService compensation
+            ? compensation.DeleteWithRestorePointAsync(id, cancellationToken)
+            : Task.FromResult(new TodoCompensatedMutationResult
+            {
+                Result = new TodoMutationResult(false, "The active TODO provider does not support transaction rollback compensation.", FailureKind: TodoMutationFailureKind.Conflict),
+            });
+
+    /// <inheritdoc />
+    public Task<TodoMutationResult> DeleteCreatedAsync(string id, CancellationToken cancellationToken = default)
+        => _inner is ITodoCompensationService compensation
+            ? compensation.DeleteCreatedAsync(id, cancellationToken)
+            : Task.FromResult(new TodoMutationResult(false, "The active TODO provider does not support transaction rollback compensation.", FailureKind: TodoMutationFailureKind.Conflict));
+
+    /// <inheritdoc />
+    public Task<TodoMutationResult> RestoreAsync(TodoCompensationSnapshot snapshot, CancellationToken cancellationToken = default)
+        => _inner is ITodoCompensationService compensation
+            ? compensation.RestoreAsync(snapshot, cancellationToken)
+            : Task.FromResult(new TodoMutationResult(false, "The active TODO provider does not support transaction rollback compensation.", FailureKind: TodoMutationFailureKind.Conflict));
 
     private static TodoQueryResult MergeResults(TodoQueryResult local, TodoQueryResult remote)
     {

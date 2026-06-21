@@ -21,7 +21,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Background service that dequeues interaction log entries and submits them asynchronously to the configured logging service URL.'
+  summary: 'TR-PLANNED-CORE-013: Background service that dequeues interaction log entries and submits them asynchronously to the configured logging service URL.'
   example: []
   syntax:
     content: 'public sealed class InteractionLogSubmissionService : BackgroundService, IHostedService, IDisposable'
@@ -61,7 +61,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public InteractionLogSubmissionService(IInteractionLogSubmissionChannel channel, IHttpClientFactory httpClientFactory, ILogger<InteractionLogSubmissionService> logger, IOptions<McpInteractionLoggingOptions> options)

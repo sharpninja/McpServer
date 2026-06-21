@@ -65,6 +65,7 @@ public sealed class McpHostedAgentAdapterTests
             "mcp_requirements_get_fr",
             "mcp_requirements_get_tr",
             "mcp_requirements_get_test",
+            "mcp_quadbrain_coding_execute",
             "mcp_client_invoke",
             "mcp_graphrag_ingest_text",
             "mcp_graphrag_list_documents",
@@ -111,7 +112,8 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Equal(expectedToolNames, registration.Functions.Select(static function => function.Name));
         Assert.NotNull(hostedAgent.PowerShellSessions);
         Assert.True(baseFactoryCalled);
-        Assert.IsType<FunctionInvokingChatClient>(wrappedClient);
+        var invokingClient = Assert.IsType<FunctionInvokingChatClient>(wrappedClient);
+        Assert.False(invokingClient.AllowConcurrentInvocation);
         Assert.NotNull(runOptions.ChatOptions);
         Assert.NotNull(runOptions.ChatOptions.ToolMode);
         Assert.False(runOptions.ChatOptions.AllowMultipleToolCalls);
@@ -123,6 +125,98 @@ public sealed class McpHostedAgentAdapterTests
             attachedTools.Select(static tool => tool.Name).ToArray());
         Assert.Equal(hostedAgent.Name, chatClientAgent.Name);
         Assert.Equal(hostedAgent.AgentOptions.Description, chatClientAgent.Description);
+    }
+
+    /// <summary>
+    /// TEST-MCP-186: Verifies that the ACID profile filters the model-visible MCP tool surface,
+    /// rejects unreviewed host tools by default, and preserves serialized function invocation.
+    /// </summary>
+    [Fact]
+    public void Registration_CreateRunOptions_AcidProfileFiltersToolsAndRejectsHostTools()
+    {
+        var (hostedAgent, _) = CreateHostedAgent(configureOptions: static options =>
+            options.UseAcidTightlyCoupledProfile());
+        var existingTool = AIFunctionFactory.Create(
+            (Func<string>)(() => "existing"),
+            new AIFunctionFactoryOptions
+            {
+                Description = "Existing host tool.",
+                Name = "existing_host_tool",
+            });
+
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            hostedAgent.CreateRunOptions(
+                new ChatClientAgentRunOptions
+                {
+                    ChatOptions = new ChatOptions
+                    {
+                        Tools = [existingTool],
+                    },
+                }));
+        var runOptions = hostedAgent.CreateRunOptions();
+        var wrappedClient = runOptions.ChatClientFactory!(new StubChatClient());
+        var invokingClient = Assert.IsType<FunctionInvokingChatClient>(wrappedClient);
+        Assert.NotNull(runOptions.ChatOptions?.Tools);
+        var toolNames = runOptions.ChatOptions.Tools
+            .Select(static tool => tool.Name)
+            .ToArray();
+
+        Assert.Equal(McpAgentExecutionProfile.AcidTightlyCoupled, hostedAgent.ExecutionProfile);
+        Assert.Contains("reject caller-supplied host tools", exception.Message, StringComparison.Ordinal);
+        Assert.False(invokingClient.AllowConcurrentInvocation);
+        Assert.False(runOptions.ChatOptions!.AllowMultipleToolCalls);
+        Assert.Equal(QBAgentDefinition.Instance.AllowedToolNames, toolNames);
+        Assert.Contains("mcp_quadbrain_coding_execute", toolNames);
+        Assert.DoesNotContain("mcp_client_invoke", toolNames);
+        Assert.DoesNotContain("mcp_powershell_session_command", toolNames);
+        Assert.DoesNotContain("mcp_repo_write", toolNames);
+        Assert.DoesNotContain("mcp_graphrag_ingest_text", toolNames);
+    }
+
+    /// <summary>
+    /// TEST-MCP-187: Verifies that the ACID runtime exposes a typed host-callable coding-agent path
+    /// that executes through the same Quad Brain orchestration endpoint as the model-visible tool.
+    /// </summary>
+    [Fact]
+    public async Task AcidRuntime_ExecuteCodingTaskAsync_RoutesThroughQuadBrainOrchestration()
+    {
+        var (hostedAgent, handler) = CreateHostedAgent(configureOptions: static options =>
+            options.UseAcidTightlyCoupledProfile());
+        using var chatClient = new StubChatClient();
+        var runtime = hostedAgent.CreateAcidTightlyCoupledRuntime(chatClient);
+
+        var response = await runtime.ExecuteCodingTaskAsync(
+            new McpQuadBrainCodingAgentRequest
+            {
+                Prompt = "Implement a transactional rollback guard for a C# repository method.",
+                TaskKind = "implementation",
+                TurnId = "turn-acid-coding",
+                AdmitCuriosityToGraphRag = true,
+                Metadata = new Dictionary<string, string>
+                {
+                    ["repo"] = "McpServer",
+                    ["language"] = "csharp",
+                },
+            },
+            CancellationToken.None);
+
+        var request = Assert.Single(handler.Requests, static request =>
+            request.RequestUri.AbsolutePath == "/mcpserver/brain-slots/orchestrate");
+        using var body = JsonDocument.Parse(request.Body!);
+        var metadata = body.RootElement.GetProperty("metadata");
+
+        Assert.Equal("Committed", response.Status);
+        Assert.Equal("Quad Brain coding result for implementation", response.Output);
+        Assert.Equal(HttpMethod.Post, request.Method);
+        Assert.Equal("Implement a transactional rollback guard for a C# repository method.", body.RootElement.GetProperty("input").GetString());
+        Assert.Equal("turn-acid-coding", body.RootElement.GetProperty("turnId").GetString());
+        Assert.True(body.RootElement.GetProperty("admitCuriosityToGraphRag").GetBoolean());
+        Assert.Equal("McpServer", metadata.GetProperty("repo").GetString());
+        Assert.Equal("csharp", metadata.GetProperty("language").GetString());
+        Assert.Equal("Microsoft.AgentFramework", metadata.GetProperty("codingAgent.surface").GetString());
+        Assert.Equal("implementation", metadata.GetProperty("codingAgent.taskKind").GetString());
+        Assert.Equal(nameof(McpAgentExecutionProfile.AcidTightlyCoupled), metadata.GetProperty("codingAgent.executionProfile").GetString());
+        Assert.Equal(McpHostedAgentDefaults.QBAgentSourceType, metadata.GetProperty("codingAgent.sourceType").GetString());
     }
 
     /// <summary>
@@ -444,7 +538,9 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Empty(handler.Requests);
     }
 
-    private static (McpHostedAgent HostedAgent, RecordingMcpHttpMessageHandler Handler) CreateHostedAgent(string? desktopLaunchToken = null)
+    private static (McpHostedAgent HostedAgent, RecordingMcpHttpMessageHandler Handler) CreateHostedAgent(
+        string? desktopLaunchToken = null,
+        Action<McpAgentOptions>? configureOptions = null)
     {
         var handler = new RecordingMcpHttpMessageHandler();
         var httpClient = new HttpClient(handler);
@@ -458,15 +554,16 @@ public sealed class McpHostedAgentAdapterTests
                 WorkspacePath = TestWorkspacePath,
             });
         var timeProvider = new FixedTimeProvider(new DateTimeOffset(2026, 03, 09, 15, 01, 05, TimeSpan.Zero));
-        var options = Options.Create(
-            new McpAgentOptions
-            {
-                ApiKey = "test-key",
-                BaseUrl = new Uri("http://localhost:7147"),
-                DesktopLaunchToken = desktopLaunchToken,
-                SourceType = "Codex",
-                WorkspacePath = TestWorkspacePath,
-            });
+        var configuredOptions = new McpAgentOptions
+        {
+            ApiKey = "test-key",
+            BaseUrl = new Uri("http://localhost:7147"),
+            DesktopLaunchToken = desktopLaunchToken,
+            SourceType = "Codex",
+            WorkspacePath = TestWorkspacePath,
+        };
+        configureOptions?.Invoke(configuredOptions);
+        var options = Options.Create(configuredOptions);
         var identifiers = new McpSessionIdentifierFactory(options, timeProvider);
         var sessionLog = new McpServer.McpAgent.SessionLog.SessionLogWorkflow(client, identifiers, timeProvider);
         var todo = new McpServer.McpAgent.Todo.TodoWorkflow(client);
@@ -482,9 +579,9 @@ public sealed class McpHostedAgentAdapterTests
                 identifiers,
                 new ChatClientAgentOptions
                 {
-                    Description = "Hosted MCP agent adapter.",
-                    Id = "mcpserver-hosted-agent",
-                    Name = "McpServerMcpAgent",
+                    Description = configuredOptions.Description,
+                    Id = configuredOptions.AgentId,
+                    Name = configuredOptions.AgentName,
                 },
                 options,
                 sessionLog,
@@ -550,6 +647,7 @@ public sealed class McpHostedAgentAdapterTests
                 "/mcpserver/repo/list" when request.Method == HttpMethod.Get => CreateRepoListResponse(request.RequestUri!),
                 "/mcpserver/repo/file" when request.Method == HttpMethod.Post => CreateRepoWriteResponse(body!),
                 "/mcpserver/desktop/launch" when request.Method == HttpMethod.Post => CreateDesktopLaunchResponse(),
+                "/mcpserver/brain-slots/orchestrate" when request.Method == HttpMethod.Post => CreateQuadBrainOrchestrationResponse(body!),
                 _ => throw new InvalidOperationException($"Unexpected MCP request path '{request.RequestUri.AbsolutePath}'."),
             };
         }
@@ -642,6 +740,45 @@ public sealed class McpHostedAgentAdapterTests
                     ProcessId = 4242,
                     ExitCode = 0
                 }));
+
+        private static HttpResponseMessage CreateQuadBrainOrchestrationResponse(string body)
+        {
+            using var document = JsonDocument.Parse(body);
+            var taskKind = document.RootElement
+                .GetProperty("metadata")
+                .GetProperty("codingAgent.taskKind")
+                .GetString();
+
+            return CreateJsonResponse(
+                HttpStatusCode.OK,
+                JsonSerializer.Serialize(
+                    new QuadBrainOrchestrationResponse
+                    {
+                        Status = "Committed",
+                        Reason = "Committed",
+                        Output = $"Quad Brain coding result for {taskKind}",
+                        TransactionId = "txn-quad-coding",
+                        DiffgramId = "diff-quad-coding",
+                        StartedAtUtc = new DateTimeOffset(2026, 03, 09, 15, 01, 05, TimeSpan.Zero),
+                        CompletedAtUtc = new DateTimeOffset(2026, 03, 09, 15, 01, 06, TimeSpan.Zero),
+                        RoleResults =
+                        [
+                            new QuadBrainRoleResult
+                            {
+                                Role = "ArbiterOfTruth",
+                                SlotId = "brain-slot:aot",
+                                Status = "Committed",
+                                Reason = "Committed",
+                                ModelId = "grok-build",
+                                TransactionId = "txn-aot",
+                                DiffgramId = "diff-aot",
+                                Output = $"Quad Brain coding result for {taskKind}",
+                                OrchestrationWeight = 1,
+                                WeightVersion = 1,
+                            },
+                        ],
+                    }));
+        }
 
         private static string? GetQueryParameter(Uri requestUri, string name)
         {
@@ -751,4 +888,3 @@ public sealed class McpHostedAgentAdapterTests
         public object? GetService(Type serviceType, object? serviceKey = null) => null;
     }
 }
-

@@ -9,8 +9,10 @@
 using System.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using McpServer.Repl.Host;
 using McpServer.Client;
+using McpServer.TransactionSecurity.Services;
 
 var rootCommand = new RootCommand("MCP Server REPL Host");
 
@@ -24,7 +26,7 @@ agentStdioCommand.SetHandler(async (context) =>
 {
     var workspacePath = context.ParseResult.GetValueForOption(workspacePathOption);
     var markerFile = context.ParseResult.GetValueForOption(markerFileOption);
-    var host = CreateHost(workspacePath, markerFile);
+    var host = CreateHost(workspacePath, markerFile, suppressConsoleLogging: true);
     var agentStdioHandler = host.Services.GetRequiredService<AgentStdioHandler>();
     await agentStdioHandler.RunAsync(context.GetCancellationToken());
 });
@@ -36,7 +38,7 @@ interactiveCommand.SetHandler(async (context) =>
 {
     var workspacePath = context.ParseResult.GetValueForOption(workspacePathOption);
     var markerFile = context.ParseResult.GetValueForOption(markerFileOption);
-    var host = CreateHost(workspacePath, markerFile);
+    var host = CreateHost(workspacePath, markerFile, suppressConsoleLogging: false);
     var interactiveHandler = host.Services.GetRequiredService<InteractiveHandler>();
     await interactiveHandler.RunAsync(context.GetCancellationToken());
 });
@@ -67,11 +69,19 @@ rootCommand.SetHandler(() =>
 
 return await rootCommand.InvokeAsync(args);
 
-static IHost CreateHost(string? workspacePathOverride, string? markerFileOverride)
+static IHost CreateHost(string? workspacePathOverride, string? markerFileOverride, bool suppressConsoleLogging)
 {
     return Host.CreateDefaultBuilder()
+        .ConfigureLogging(logging =>
+        {
+            if (suppressConsoleLogging)
+            {
+                logging.ClearProviders();
+            }
+        })
         .ConfigureServices((context, services) =>
         {
+            services.AddInProcessTransactionSecurity(context.Configuration);
             services.AddReplCoreServices();
 
             services.AddSingleton(sp =>

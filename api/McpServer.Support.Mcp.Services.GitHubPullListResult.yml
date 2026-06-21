@@ -23,7 +23,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of listing PRs.'
+  summary: 'TR-PLANNED-CORE-013: Result of listing PRs.'
   example: []
   syntax:
     content: 'public sealed record GitHubPullListResult : IEquatable<GitHubPullListResult>'
@@ -57,7 +57,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of listing PRs.'
+  summary: 'TR-PLANNED-CORE-013: Result of listing PRs.'
   example: []
   syntax:
     content: public GitHubPullListResult(bool Success, string? Error, IReadOnlyList<GitHubPullItem> Pulls)

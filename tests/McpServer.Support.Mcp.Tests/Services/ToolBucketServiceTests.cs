@@ -102,6 +102,38 @@ public sealed class ToolBucketServiceTests : IDisposable
     }
 
     /// <summary>
+    /// Verifies that bucket browsing falls back to direct GitHub HTTP reads when the server process cannot
+    /// use <c>gh api</c>, which is common for Windows services running without an interactive GitHub CLI
+    /// credential profile.
+    /// </summary>
+    [Fact]
+    public async Task BrowseAsync_WhenGitHubCliFails_UsesHttpFallback()
+    {
+        using (var seed = CreateContext(null))
+        {
+            seed.ToolBuckets.Add(CreateBucketEntity("official", string.Empty));
+            seed.SaveChanges();
+        }
+
+        var processRunner = Substitute.For<IProcessRunner>();
+        processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(1, string.Empty, "gh auth required"));
+
+        using var httpClient = new HttpClient(new BucketHttpMessageHandler());
+        using var scopedDb = CreateContext(@"E:\github\McpServer");
+        var sut = CreateSut(scopedDb, processRunner, httpClient);
+
+        var result = await sut.BrowseAsync("official").ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        Assert.NotNull(result.Tools);
+        var tool = Assert.Single(result.Tools!);
+        Assert.Equal("mcpserver-grok-plugin", tool.Name);
+        Assert.Contains("git clone", tool.CommandTemplate, StringComparison.Ordinal);
+        Assert.Contains("https://github.com/sharpninja/mcpserver-grok-plugin.git", tool.CommandTemplate, StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// Verifies that an unscoped bucket query only returns global buckets instead of every tenant bucket,
     /// which keeps global discovery working while preventing empty-workspace data visibility across tenants.
     /// Validates FR-MCP-022 and TR-MCP-MT-003.
@@ -144,13 +176,17 @@ public sealed class ToolBucketServiceTests : IDisposable
             });
     }
 
-    private static ToolBucketService CreateSut(McpDbContext db, IProcessRunner? processRunner = null)
+    private static ToolBucketService CreateSut(
+        McpDbContext db,
+        IProcessRunner? processRunner = null,
+        HttpClient? httpClient = null)
     {
         return new ToolBucketService(
             db,
             processRunner ?? Substitute.For<IProcessRunner>(),
             Substitute.For<IToolRegistryService>(),
-            NullLogger<ToolBucketService>.Instance);
+            NullLogger<ToolBucketService>.Instance,
+            httpClient: httpClient);
     }
 
     private static ToolBucketEntity CreateBucketEntity(string name, string workspaceId)
@@ -165,5 +201,33 @@ public sealed class ToolBucketServiceTests : IDisposable
             WorkspaceId = workspaceId,
             DateTimeCreated = DateTimeOffset.UtcNow,
         };
+    }
+
+    private sealed class BucketHttpMessageHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            if (request.RequestUri?.Host == "api.github.com")
+            {
+                return Task.FromResult(CreateJsonResponse(
+                    """[{"name":"mcpserver-grok-plugin.json","download_url":"https://raw.githubusercontent.com/sharpninja/McpServerTools/main/mcpserver-grok-plugin.json"}]"""));
+            }
+
+            if (request.RequestUri?.Host == "raw.githubusercontent.com")
+            {
+                return Task.FromResult(CreateJsonResponse(
+                    """{"name":"mcpserver-grok-plugin","description":"Clone or update the Grok plugin","tags":["mcp","plugin","grok"],"parameterSchema":"{}","commandTemplate":"git clone https://github.com/sharpninja/mcpserver-grok-plugin.git"}"""));
+            }
+
+            return Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.NotFound));
+        }
+
+        private static HttpResponseMessage CreateJsonResponse(string json)
+        {
+            return new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json"),
+            };
+        }
     }
 }

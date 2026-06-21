@@ -29,9 +29,9 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     private readonly RequirementsClient _client;
     private RequirementsSelectionState? _selection = null;
 
-    private static readonly Regex FrIdPattern = new(@"^FR-[A-Z]+-\d{3}$", RegexOptions.Compiled);
-    private static readonly Regex TrIdPattern = new(@"^TR-[A-Z]+-[A-Z]+-\d{3}$", RegexOptions.Compiled);
-    private static readonly Regex TestIdPattern = new(@"^TEST-[A-Z]+-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex FrIdPattern = new(@"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex TrIdPattern = new(@"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex TestIdPattern = new(@"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
 
     /// <summary>
     /// Initializes a new instance of RequirementsWorkflow with the specified client.
@@ -82,7 +82,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Title = request.Title,
             Body = request.Description,
             Priority = request.Priority,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         try
@@ -114,7 +115,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Body = request.Description,
             Priority = request.Priority,
             Status = request.Status,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         var entry = await _client.UpdateFrAsync(frId, clientRequest, cancellationToken);
@@ -173,7 +175,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Title = request.Title,
             Body = request.Description,
             Priority = request.Priority,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         try
@@ -205,7 +208,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Body = request.Description,
             Priority = request.Priority,
             Status = request.Status,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         var entry = await _client.UpdateTrAsync(trId, clientRequest, cancellationToken);
@@ -259,7 +263,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Title = request.Title,
             Condition = request.Description,
             Priority = request.Priority,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         try
@@ -291,7 +296,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Condition = request.Description,
             Priority = request.Priority,
             Status = request.Status,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         var entry = await _client.UpdateTestAsync(testId, clientRequest, cancellationToken);
@@ -303,6 +309,86 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ValidateTestId(id);
         await _client.DeleteTestAsync(id, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateFrBatchAsync(CreateFrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateFrId(record.Id ?? string.Empty);
+
+        return await _client.CreateFrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateFrBatchAsync(UpdateFrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateFrId(record.Id ?? string.Empty);
+
+        return await _client.UpdateFrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateTrBatchAsync(CreateTrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTrId(record.Id ?? string.Empty);
+
+        return await _client.CreateTrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateTrBatchAsync(UpdateTrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTrId(record.Id ?? string.Empty);
+
+        return await _client.UpdateTrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateTestBatchAsync(CreateTestBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTestId(record.Id ?? string.Empty);
+
+        return await _client.CreateTestBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateTestBatchAsync(UpdateTestBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTestId(record.Id ?? string.Empty);
+
+        return await _client.UpdateTestBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateBatchAsync(CreateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateBatchRecordId(record.Kind, record.Id);
+
+        return await _client.CreateBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateBatchAsync(UpdateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateBatchRecordId(record.Kind, record.Id);
+
+        return await _client.UpdateBatchAsync(request, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -607,6 +693,37 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         return _selection;
     }
 
+    private static IReadOnlyList<T> RequireRecords<T>(IReadOnlyList<T>? records)
+    {
+        if (records is null || records.Count == 0)
+        {
+            throw new ArgumentException("Batch records array cannot be null or empty", nameof(records));
+        }
+
+        return records;
+    }
+
+    private static void ValidateBatchRecordId(string? kind, string? id)
+    {
+        switch ((kind ?? string.Empty).Trim().ToLowerInvariant())
+        {
+            case "fr":
+            case "functional":
+                ValidateFrId(id ?? string.Empty);
+                return;
+            case "tr":
+            case "technical":
+                ValidateTrId(id ?? string.Empty);
+                return;
+            case "test":
+            case "testing":
+                ValidateTestId(id ?? string.Empty);
+                return;
+            default:
+                throw new ArgumentException($"Invalid requirement kind: {kind}. Valid values: fr, tr, test");
+        }
+    }
+
     private static void ValidateFrId(string id)
     {
         if (string.IsNullOrWhiteSpace(id))
@@ -629,7 +746,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         if (!TrIdPattern.IsMatch(id))
         {
-            throw new ArgumentException($"Invalid TR ID format: {id}. Expected format: TR-<AREA>-<SUBAREA>-###");
+            throw new ArgumentException($"Invalid TR ID format: {id}. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###");
         }
     }
 
@@ -642,7 +759,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         if (!TestIdPattern.IsMatch(id))
         {
-            throw new ArgumentException($"Invalid TEST ID format: {id}. Expected format: TEST-<AREA>-###");
+            throw new ArgumentException($"Invalid TEST ID format: {id}. Expected format: TEST-<AREA>[-<QUALIFIER>]-###");
         }
     }
 
@@ -738,6 +855,8 @@ internal sealed class FrItemAdapter : IFrItem
     public string Priority => _entry.Priority;
     public string Area => ExtractArea(_entry.Id);
     public string? Notes => _entry.Notes;
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -790,6 +909,8 @@ internal sealed class TrItemAdapter : ITrItem
     public string Area => ExtractArea(_entry.Id);
     public string Subarea => ExtractSubarea(_entry.Id);
     public string? Notes => _entry.Notes;
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -848,6 +969,8 @@ internal sealed class TestItemAdapter : ITestItem
     public string Area => ExtractArea(_entry.Id);
     public string TestType => "unit";
     public string? Notes => _entry.Notes;
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 

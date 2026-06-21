@@ -137,6 +137,12 @@ public sealed class VoiceController : ControllerBase
             await Response.WriteAsJsonAsync(new { error = ex.Message }, cancellationToken).ConfigureAwait(false);
             return;
         }
+        catch (InvalidOperationException ex)
+        {
+            Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+            await Response.WriteAsJsonAsync(new { error = ex.Message }, cancellationToken).ConfigureAwait(false);
+            return;
+        }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             _logger.LogError(ex, "Streaming voice turn failed before SSE setup for session {SessionId}", sessionId);

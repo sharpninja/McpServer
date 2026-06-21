@@ -16,6 +16,9 @@ public interface ITodoExecutionService
     /// <summary>Return the active TODO the agent should work on.</summary>
     Task<ActiveTodoResult?> GetActiveTodoAsync(string workspacePath, CancellationToken cancellationToken = default);
 
+    /// <summary>FR-MCP-REQAC-002: return the raw execution TODO record so callers can copy structured fields (e.g. acceptance criteria) verbatim.</summary>
+    Task<TodoExecutionRecord?> GetTodoAsync(string workspacePath, string todoId, CancellationToken cancellationToken = default);
+
     /// <summary>Return the next ready TODO the agent should work on.</summary>
     Task<ActiveTodoResult?> GetNextReadyTodoAsync(string workspacePath, CancellationToken cancellationToken = default);
 
@@ -52,3 +55,39 @@ public interface ITodoExecutionService
     /// <summary>Perform a safe Android ADB step.</summary>
     Task<AdbStepResult> AdbStepAsync(string workspacePath, AdbStepRequest request, CancellationToken cancellationToken = default);
 }
+
+/// <summary>
+/// TR-MCP-TXN-001: Captures and restores TODO execution state for transaction rollback compensation.
+/// </summary>
+public interface ITodoExecutionStateCompensation
+{
+    /// <summary>Captures the current persisted TODO execution state for a workspace.</summary>
+    Task<TodoExecutionStateSnapshot> CaptureStateAsync(string workspacePath, CancellationToken cancellationToken = default);
+
+    /// <summary>Restores a previously captured TODO execution state snapshot.</summary>
+    Task RestoreStateAsync(TodoExecutionStateSnapshot snapshot, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// TR-MCP-TXN-001: Compensates cross-store plan expansion rollback for TODO execution state and created legacy TODO rows.
+/// </summary>
+public interface ITodoExecutionPlanCompensation : ITodoExecutionStateCompensation
+{
+    /// <summary>Verifies that the active legacy TODO provider can delete created plan TODO rows during rollback.</summary>
+    Task VerifyPlanTodoCompensationAsync(string workspacePath, CancellationToken cancellationToken = default);
+
+    /// <summary>Deletes legacy TODO rows created by an uncommitted plan expansion and restores the execution-state snapshot.</summary>
+    Task RollbackCreatedPlanTodosAsync(
+        string workspacePath,
+        IReadOnlyList<string> createdTodoIds,
+        TodoExecutionStateSnapshot stateSnapshot,
+        CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// TR-MCP-TXN-001: Opaque TODO execution state snapshot used for rollback compensation.
+/// </summary>
+/// <param name="WorkspacePath">Workspace path that owns the snapshot.</param>
+/// <param name="Exists">Whether the state file existed when the snapshot was captured.</param>
+/// <param name="ContentJson">Exact JSON content captured from the state file, or <see langword="null"/> when it did not exist.</param>
+public sealed record TodoExecutionStateSnapshot(string WorkspacePath, bool Exists, string? ContentJson);

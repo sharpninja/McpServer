@@ -56,6 +56,20 @@ public sealed class SlowCommandHandler : ICommandHandler<SlowCommand, string>
     }
 }
 
+/// <summary>Test command that logs entries during handling.</summary>
+public sealed record LoggingCommand(string Message) : ICommand<string>;
+
+/// <summary>Test handler that logs to the call context.</summary>
+public sealed class LoggingCommandHandler : ICommandHandler<LoggingCommand, string>
+{
+    public Task<Result<string>> HandleAsync(LoggingCommand command, CallContext context)
+    {
+        context.Log(Microsoft.Extensions.Logging.LogLevel.Debug, 0, command.Message, null, (s, _) => s?.ToString() ?? "");
+        context.Log(Microsoft.Extensions.Logging.LogLevel.Information, 0, command.Message, null, (s, _) => s?.ToString() ?? "");
+        return Task.FromResult(Result<string>.Success($"Logged: {command.Message}"));
+    }
+}
+
 /// <summary>Test pipeline behavior that adds a prefix.</summary>
 public sealed class PrefixBehavior : IPipelineBehavior
 {
@@ -151,6 +165,50 @@ public class DispatcherTests
         // but with pre-cancelled token, it should fail
         // (EchoCommand doesn't check CT, so it may succeed — that's OK)
         Assert.True(result.IsSuccess || result.IsFailure);
+    }
+
+    [Fact]
+    public async Task SendAsync_RecentDispatches_HasEntryAfterDispatch()
+    {
+        using var sp = BuildProvider();
+        var dispatcher = sp.GetRequiredService<Dispatcher>();
+
+        Assert.Empty(dispatcher.RecentDispatches);
+        var result = await dispatcher.SendAsync(new EchoCommand("hello"));
+        Assert.True(result.IsSuccess);
+        Assert.Single(dispatcher.RecentDispatches);
+        var entry = dispatcher.RecentDispatches[0];
+        Assert.Equal("Success", entry.Outcome);
+        Assert.Equal("EchoCommand", entry.OperationName);
+    }
+
+    [Fact]
+    public async Task SendAsync_RecentDispatches_CaptureLogEntries()
+    {
+        using var sp = BuildProvider();
+        var dispatcher = sp.GetRequiredService<Dispatcher>();
+
+        var result = await dispatcher.SendAsync(new LoggingCommand("test-log"));
+        Assert.True(result.IsSuccess);
+        Assert.Single(dispatcher.RecentDispatches);
+        var record = dispatcher.RecentDispatches[0];
+        Assert.Equal("LoggingCommand", record.OperationName);
+        Assert.NotEmpty(record.Entries);
+    }
+
+    [Fact]
+    public async Task SendAsync_MultipleConcurrentDispatches_AllComplete()
+    {
+        using var sp = BuildProvider();
+        var dispatcher = sp.GetRequiredService<Dispatcher>();
+
+        var tasks = Enumerable.Range(0, 50)
+            .Select(i => dispatcher.SendAsync(new EchoCommand($"msg{i}")))
+            .ToArray();
+
+        await Task.WhenAll(tasks);
+        Assert.Equal(50, dispatcher.RecentDispatches.Count);
+        Assert.All(tasks, t => Assert.True(t.Result.IsSuccess));
     }
 
     [Fact]

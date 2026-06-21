@@ -37,7 +37,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: A flattened TODO item with section and priority context.'
+  summary: 'TR-PLANNED-CORE-013: A flattened TODO item with section and priority context.'
   example: []
   syntax:
     content: 'public sealed record TodoFlatItem : IEquatable<TodoFlatItem>'

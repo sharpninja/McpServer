@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using McpServer.Validation;
 using Xunit;
 
 namespace McpServer.SessionLog.Validation;
@@ -38,9 +39,8 @@ public sealed class SessionLogEndpointFixture : IDisposable
     public SessionLogEndpointFixture()
     {
         Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-        ApiKey = ResolvePreferredApiKeyAsync(Client).GetAwaiter().GetResult();
-        if (!string.IsNullOrWhiteSpace(ApiKey))
-            Client.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
+        ApiKey = ValidationAuth.ResolvePreferredApiKey(Client);
+        ValidationAuth.AddPreferredApiKey(Client);
     }
 
     private static async Task<string?> ResolvePreferredApiKeyAsync(HttpClient client)

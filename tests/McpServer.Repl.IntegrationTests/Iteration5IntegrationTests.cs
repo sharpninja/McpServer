@@ -661,15 +661,18 @@ public sealed class Iteration5IntegrationTests : IDisposable
     {
         var initialCount = _replProcess.StdoutLines.Count;
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(envelope));
-        await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(15));
+        Assert.True(foundResponse, BuildTimeoutMessage(initialCount + 1));
         await Task.Delay(100);
     }
 
+    private string BuildTimeoutMessage(int expectedCount)
+        => $"Timed out waiting for stdout document count {expectedCount}. "
+           + $"STDOUT: {string.Join(Environment.NewLine + "--- stdout document ---" + Environment.NewLine, _replProcess.StdoutLines)} "
+           + $"STDERR: {string.Join(Environment.NewLine, _replProcess.StderrLines)}";
+
     private static string GenerateRequestId(string suffix)
-    {
-        var timestamp = DateTimeOffset.UtcNow.ToString("yyyyMMddTHHmmss", CultureInfo.InvariantCulture);
-        return $"req-{timestamp}Z-{suffix}";
-    }
+        => TestRequestIds.Next(suffix);
 
     public void Dispose()
     {

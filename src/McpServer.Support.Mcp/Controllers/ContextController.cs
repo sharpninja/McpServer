@@ -3,6 +3,9 @@ using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.TransactionSecurity.Models;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
@@ -11,35 +14,44 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// TR-PLANNED-013: Context retrieval endpoints for MCP.
+/// TR-PLANNED-CORE-013: Context retrieval endpoints for MCP.
 /// FR-SUPPORT-010: Hybrid search and deterministic context packs.
 /// </summary>
 [ApiController]
 [Route("mcpserver/context")]
 public sealed class ContextController : ControllerBase
 {
+    private const string DeferredContextMutationMessage =
+        "Context ingestion and rebuild mutations are not transaction compensated while required turn transactions are active.";
+
     private readonly McpDbContext _db;
     private readonly IContextSearchService _searchService;
     private readonly IGraphRagService _graphRagService;
     private readonly GraphRagOptions _graphRagOptions;
     private readonly IngestionCoordinator _ingestionCoordinator;
+    private readonly ITurnTransactionCoordinator? _transactionCoordinator;
+    private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public ContextController(
         McpDbContext db,
         IContextSearchService searchService,
         IGraphRagService graphRagService,
         IngestionCoordinator ingestionCoordinator,
-        IOptions<GraphRagOptions> graphRagOptions)
+        IOptions<GraphRagOptions> graphRagOptions,
+        ITurnTransactionCoordinator? transactionCoordinator = null,
+        IOptions<TurnTransactionOptions>? transactionOptions = null)
     {
         _db = db;
         _searchService = searchService;
         _graphRagService = graphRagService;
         _ingestionCoordinator = ingestionCoordinator;
         _graphRagOptions = graphRagOptions.Value;
+        _transactionCoordinator = transactionCoordinator;
+        _transactionOptions = transactionOptions;
     }
 
-    /// <summary>TR-PLANNED-013: Hybrid search with filters (context.search).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Hybrid search with filters (context.search).</summary>
     /// <param name="request">Search request body.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Search results.</returns>
@@ -110,12 +122,17 @@ public sealed class ContextController : ControllerBase
         });
     }
 
-    /// <summary>TR-PLANNED-013: Rebuild the FTS5 search index.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Rebuild the FTS5 search index.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Status of the rebuild operation.</returns>
     [HttpPost("rebuild-index")]
     public async Task<ActionResult<object>> RebuildIndexAsync(CancellationToken cancellationToken)
     {
+        if (ShouldDeferContextMutation(out var transactionError))
+        {
+            return Conflict(new { error = transactionError });
+        }
+
         await _searchService.RebuildAsync(cancellationToken).ConfigureAwait(false);
         return Ok(new { status = "rebuilt" });
     }
@@ -165,7 +182,7 @@ public sealed class ContextController : ControllerBase
         });
     }
 
-    /// <summary>TR-PLANNED-013: List indexed sources (context.sources).</summary>
+    /// <summary>TR-PLANNED-CORE-013: List indexed sources (context.sources).</summary>
     [HttpGet("sources")]
     public async Task<ActionResult<object>> GetSourcesAsync(CancellationToken cancellationToken)
     {
@@ -192,6 +209,11 @@ public sealed class ContextController : ControllerBase
         if (string.IsNullOrWhiteSpace(request.Url))
         {
             return BadRequest(new { error = "url is required." });
+        }
+
+        if (ShouldDeferContextMutation(out var transactionError))
+        {
+            return Conflict(new { error = transactionError });
         }
 
         var result = await _ingestionCoordinator.IngestWebsiteAsync(request, cancellationToken).ConfigureAwait(false);
@@ -232,6 +254,13 @@ public sealed class ContextController : ControllerBase
         {
             Response.StatusCode = StatusCodes.Status400BadRequest;
             await Response.WriteAsJsonAsync(new { error = "url is required." }, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        if (ShouldDeferContextMutation(out var transactionError))
+        {
+            Response.StatusCode = StatusCodes.Status409Conflict;
+            await Response.WriteAsJsonAsync(new { error = transactionError }, cancellationToken).ConfigureAwait(false);
             return;
         }
 
@@ -300,9 +329,34 @@ public sealed class ContextController : ControllerBase
             }
         }
     }
+
+    private bool ShouldDeferContextMutation(out string error)
+    {
+        error = string.Empty;
+        if (_transactionCoordinator is null)
+            return false;
+
+        var status = _transactionCoordinator.GetStatus();
+        if (status.Degraded)
+        {
+            error = string.IsNullOrWhiteSpace(status.Message)
+                ? "Turn transaction coordinator is degraded."
+                : status.Message;
+            return true;
+        }
+
+        if (!RequiresMutationTransactions(status))
+            return false;
+
+        error = DeferredContextMutationMessage;
+        return true;
+    }
+
+    private bool RequiresMutationTransactions(TurnTransactionStatusResponse status)
+        => status.Enabled && (_transactionOptions?.Value.RequiredForMutations ?? true);
 }
 
-/// <summary>Request for context search. TR-PLANNED-013.</summary>
+/// <summary>Request for context search. TR-PLANNED-CORE-013.</summary>
 public sealed class ContextSearchRequest
 {
     /// <summary>Search query text.</summary>

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// TR-PLANNED-013, TR-GH-013-006: GitHub metadata via gh CLI (issues and PRs).
+/// TR-PLANNED-CORE-013, TR-GH-013-006: GitHub metadata via gh CLI (issues and PRs).
 /// FR-SUPPORT-010, FR-SUPPORT-013: List, create, comment, update, close, reopen, sync endpoints.
 /// </summary>
 [ApiController]
@@ -36,7 +36,7 @@ public sealed class GitHubController : ControllerBase
     private readonly IGitHubWorkspaceTokenStore _tokenStore;
     private readonly IOptionsMonitor<GitHubIntegrationOptions> _gitHubOptions;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public GitHubController(
         IGitHubCliService gh,
         IGitHubWorkspaceTokenStore tokenStore,
@@ -53,7 +53,7 @@ public sealed class GitHubController : ControllerBase
         _logger = logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger<GitHubController>.Instance;
     }
 
-    /// <summary>TR-PLANNED-013: List issues (gh.issues.list).</summary>
+    /// <summary>TR-PLANNED-CORE-013: List issues (gh.issues.list).</summary>
     /// <param name="state">Optional filter: open, closed, all.</param>
     /// <param name="limit">Max issues to return (1–100).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -86,7 +86,7 @@ public sealed class GitHubController : ControllerBase
         return Ok(result.Issue);
     }
 
-    /// <summary>TR-PLANNED-013: Create issue (gh.issues.create).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Create issue (gh.issues.create).</summary>
     /// <param name="request">Title and optional body.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost("issues")]
@@ -156,7 +156,7 @@ public sealed class GitHubController : ControllerBase
         return Ok(new { success = true, url = result.Url });
     }
 
-    /// <summary>TR-PLANNED-013: Comment on issue (gh.issues.comment).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Comment on issue (gh.issues.comment).</summary>
     /// <param name="id">Issue number.</param>
     /// <param name="body">Comment request body.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -228,7 +228,15 @@ public sealed class GitHubController : ControllerBase
         if (workspacePath is null)
             return BadRequest(new { error = "Workspace context is required for GitHub auth updates." });
 
-        await _tokenStore.UpsertAsync(workspacePath, request.AccessToken, request.ExpiresAtUtc, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await _tokenStore.UpsertAsync(workspacePath, request.AccessToken, request.ExpiresAtUtc, cancellationToken).ConfigureAwait(false);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { error = ex.Message });
+        }
+
         await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, "auth-token", cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true });
     }
@@ -243,7 +251,16 @@ public sealed class GitHubController : ControllerBase
         if (workspacePath is null)
             return BadRequest(new { error = "Workspace context is required for GitHub auth updates." });
 
-        var removed = await _tokenStore.DeleteAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+        bool removed;
+        try
+        {
+            removed = await _tokenStore.DeleteAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { error = ex.Message });
+        }
+
         if (removed)
             await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, "auth-token", cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true, removed });
@@ -286,7 +303,7 @@ public sealed class GitHubController : ControllerBase
         return Ok(new { authorizeUrl });
     }
 
-    /// <summary>TR-PLANNED-013: List PRs (gh.prs.list).</summary>
+    /// <summary>TR-PLANNED-CORE-013: List PRs (gh.prs.list).</summary>
     /// <param name="state">Optional filter: open, closed, all.</param>
     /// <param name="limit">Max PRs to return (1–100).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -374,7 +391,7 @@ public sealed class GitHubController : ControllerBase
         return Ok(new { success = true });
     }
 
-    /// <summary>TR-PLANNED-013: Comment on PR (gh.prs.comment).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Comment on PR (gh.prs.comment).</summary>
     /// <param name="id">PR number.</param>
     /// <param name="body">Comment request body.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -538,7 +555,7 @@ public sealed class GitHubController : ControllerBase
     }
 }
 
-/// <summary>Request to create GitHub issue. TR-PLANNED-013.</summary>
+/// <summary>Request to create GitHub issue. TR-PLANNED-CORE-013.</summary>
 public sealed class GitHubIssueRequest
 {
     /// <summary>Issue title.</summary>
@@ -548,7 +565,7 @@ public sealed class GitHubIssueRequest
     public string? Body { get; set; }
 }
 
-/// <summary>Request to add comment. TR-PLANNED-013.</summary>
+/// <summary>Request to add comment. TR-PLANNED-CORE-013.</summary>
 public sealed class GitHubCommentRequest
 {
     /// <summary>Comment body.</summary>

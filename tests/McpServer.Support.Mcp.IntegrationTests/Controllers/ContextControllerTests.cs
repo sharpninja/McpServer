@@ -14,7 +14,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
-/// <summary>TR-PLANNED-013: Context controller API tests.</summary>
+/// <summary>TR-PLANNED-CORE-013: Context controller API tests.</summary>
 public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
@@ -316,6 +316,8 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
     private sealed class StubWebsiteIngestor : IWebsiteIngestor
     {
+        private readonly string _documentId = "external-web:test-doc-" + Guid.NewGuid().ToString("N");
+        private readonly string _chunkIdSuffix = Guid.NewGuid().ToString("N");
         private int _count;
 
         public Task<IReadOnlyList<WebsiteIngestPage>> IngestAsync(
@@ -326,7 +328,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
             _count++;
             var doc = new ContextDocument
             {
-                Id = "external-web:test-doc",
+                Id = _documentId,
                 SourceType = "external-web",
                 SourceKey = "https://example.com/docs",
                 IngestedAt = DateTime.UtcNow,
@@ -337,8 +339,8 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
             [
                 new ContextChunk
                 {
-                    Id = _count == 1 ? "chunk-1" : "chunk-2",
-                    DocumentId = "external-web:test-doc",
+                    Id = _count == 1 ? $"chunk-1-{_chunkIdSuffix}" : $"chunk-2-{_chunkIdSuffix}",
+                    DocumentId = _documentId,
                     Content = _count == 1 ? "first" : "second",
                     TokenCount = 1,
                     ChunkIndex = 0

@@ -25,7 +25,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
   summary: >-
-    TR-PLANNED-013: Context retrieval endpoints for MCP.
+    TR-PLANNED-CORE-013: Context retrieval endpoints for MCP.
 
     FR-SUPPORT-010: Hybrid search and deterministic context packs.
   example: []
@@ -254,7 +254,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public ContextController(McpDbContext db, IContextSearchService searchService)
@@ -286,7 +286,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Hybrid search with filters (context.search).'
+  summary: 'TR-PLANNED-CORE-013: Hybrid search with filters (context.search).'
   example: []
   syntax:
     content: >-
@@ -336,7 +336,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: Rebuild the FTS5 search index.'
+  summary: 'TR-PLANNED-CORE-013: Rebuild the FTS5 search index.'
   example: []
   syntax:
     content: >-
@@ -429,7 +429,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Controllers
-  summary: 'TR-PLANNED-013: List indexed sources (context.sources).'
+  summary: 'TR-PLANNED-CORE-013: List indexed sources (context.sources).'
   example: []
   syntax:
     content: >-

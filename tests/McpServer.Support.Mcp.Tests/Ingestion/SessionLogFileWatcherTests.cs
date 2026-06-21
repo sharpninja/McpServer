@@ -12,7 +12,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-013: Tests for SessionLogFileWatcher detecting file changes (MVP-SUPPORT-011).</summary>
+/// <summary>TR-PLANNED-CORE-013: Tests for SessionLogFileWatcher detecting file changes (MVP-SUPPORT-011).</summary>
 public sealed class SessionLogFileWatcherTests : IDisposable
 {
     private readonly string _tempDir;

@@ -1,4 +1,4 @@
-// TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
+// TR-PLANNED-CORE-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
 using System.Net;
@@ -22,10 +22,12 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
+using McpServer.TransactionSecurity.Services;
 using McpServer.Support.Mcp.Services.FederationAdapters;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Web;
+using McpServer.TransactionSecurity.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.Json;
@@ -108,17 +110,6 @@ var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
 McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 
-WorkspaceConfigEntry? primaryWorkspaceEntry = null;
-{
-    var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-    primaryWorkspaceEntry = workspaces
-        .Where(w => w.IsPrimary && w.IsEnabled)
-        .FirstOrDefault();
-    primaryWorkspaceEntry ??= workspaces
-        .Where(w => w.IsEnabled)
-        .FirstOrDefault();
-
-}
 
 builder.Host.UseSerilog((context, _, config) =>
 {
@@ -184,6 +175,7 @@ builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(Ag
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
 builder.Services.Configure<AgentProcessManagerOptions>(builder.Configuration.GetSection(AgentProcessManagerOptions.SectionName));
+builder.Services.AddInProcessTransactionSecurity(builder.Configuration);
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
 builder.Services.AddSingleton<AppSettingsFileService>();
@@ -191,8 +183,6 @@ var requiredRepoAllowlistPatterns = new[]
 {
     "src/McpServer.Cqrs/**/*.cs",
     "src/McpServer.Cqrs.Mvvm/**/*.cs",
-    "src/McpServer.UI.Core/**/*.cs",
-    "src/McpServer.Director/**/*.cs",
     "docs/README.md",
     "docs/MCP-SERVER.md",
     "docs/USER-GUIDE.md",
@@ -301,14 +291,12 @@ builder.Services.AddSingleton<IAgentBranchStrategy, FeatureAgentBranchStrategy>(
 builder.Services.AddSingleton<IAgentBranchStrategy, WorktreeAgentBranchStrategy>();
 builder.Services.AddSingleton<AgentBranchStrategyResolver>();
 builder.Services.AddHostedService<AgentHealthMonitorService>();
-builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
-builder.Services.Configure<ProcessRunnerOptions>(options =>
-{
-    if (primaryWorkspaceEntry is not null)
-    {
-        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
-    }
-});
+builder.Services.AddSingleton<FileGitHubWorkspaceTokenStore>();
+builder.Services.AddSingleton<IGitHubWorkspaceTokenStore>(sp =>
+    new TransactionGatedGitHubWorkspaceTokenStore(
+        sp.GetRequiredService<FileGitHubWorkspaceTokenStore>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddSingleton<IVectorIndexService, VectorIndexService>();
 builder.Services.AddScoped<RepoIngestor>();
@@ -318,45 +306,109 @@ builder.Services.AddScoped<GitHubIngestor>();
 builder.Services.AddScoped<IssueIngestor>();
 builder.Services.AddScoped<IWebsiteIngestor, WebsiteIngestor>();
 builder.Services.AddScoped<IngestionCoordinator>();
-builder.Services.AddScoped<IRepoFileService, RepoFileService>();
+builder.Services.AddScoped<RepoFileService>();
+builder.Services.AddScoped<IRepoFileService>(sp =>
+{
+    var service = sp.GetRequiredService<RepoFileService>();
+    return new TransactionGatedRepoFileService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
 builder.Services.AddScoped<DesktopLaunchService>();
-builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
+builder.Services.AddSingleton<GitHubCliService>();
+builder.Services.AddSingleton<IGitHubCliService>(sp =>
+    new TransactionGatedGitHubCliService(
+        sp.GetRequiredService<GitHubCliService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
 builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());
 builder.Services.AddSingleton<TodoServiceResolver>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<WorkspaceServiceAccessor>();
 builder.Services.AddSingleton<TodoCreationService>();
-builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
+builder.Services.AddSingleton<IssueTodoSyncService>();
+builder.Services.AddSingleton<IIssueTodoSyncService>(sp =>
+    new TransactionGatedIssueTodoSyncService(
+        sp.GetRequiredService<IssueTodoSyncService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<TodoUpdateService>();
-builder.Services.AddScoped<ITodoExecutionService, TodoExecutionService>();
-builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+builder.Services.AddScoped<ITransactionGatedTodoMutationService, TransactionGatedTodoMutationService>();
+builder.Services.AddScoped<TodoExecutionService>();
+builder.Services.AddScoped<ITodoExecutionService>(sp =>
+{
+    var service = sp.GetRequiredService<TodoExecutionService>();
+    return new TransactionGatedTodoExecutionService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
+builder.Services.AddSingleton<RequirementsService>();
+builder.Services.AddSingleton<IRequirementsService>(sp =>
+    new TransactionGatedRequirementsAnalysisService(
+        sp.GetRequiredService<RequirementsService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<RequirementsDatabaseDocumentService>();
-builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
-builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
+builder.Services.AddSingleton<IRequirementsDocumentService>(sp =>
+{
+    var service = sp.GetRequiredService<RequirementsDatabaseDocumentService>();
+    return new TransactionGatedRequirementsDocumentService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
+builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
-builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
-builder.Services.AddSingleton<IAgentPoolService, AgentPoolService>();
+builder.Services.AddSingleton<VoiceConversationService>();
+builder.Services.AddSingleton<IVoiceConversationService>(sp =>
+    new TransactionGatedVoiceConversationService(
+        sp.GetRequiredService<VoiceConversationService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
+builder.Services.AddSingleton<AgentPoolService>();
+builder.Services.AddSingleton<IAgentPoolService>(sp =>
+    new TransactionGatedAgentPoolService(
+        sp.GetRequiredService<AgentPoolService>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<PromptTemplateRenderer>();
 builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
-builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
+builder.Services.AddSingleton<PromptTemplateService>();
+builder.Services.AddSingleton<IPromptTemplateService>(sp =>
+{
+    var service = sp.GetRequiredService<PromptTemplateService>();
+    return new TransactionGatedPromptTemplateService(
+        service,
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
 builder.Services.AddSingleton<IMarkerPromptProvider, FileMarkerPromptProvider>();
 builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
 builder.Services.AddSingleton<PairingHtmlRenderer>();
-builder.Services.Configure<TodoPromptOptions>(options =>
-{
-    if (primaryWorkspaceEntry is not null)
+builder.Services.AddOptions<TodoPromptOptions>()
+    .Configure<IWorkspaceService>((options, svc) =>
     {
-        options.StatusPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.StatusPrompt) ? null : primaryWorkspaceEntry.StatusPrompt;
-        options.ImplementPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.ImplementPrompt) ? null : primaryWorkspaceEntry.ImplementPrompt;
-        options.PlanPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.PlanPrompt) ? null : primaryWorkspaceEntry.PlanPrompt;
-        options.BaseUrl = $"http://{System.Net.Dns.GetHostName()}:{listenPort}";
-        options.RunAs = primaryWorkspaceEntry.RunAs;
-        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
-        options.AgentPath = primaryWorkspaceEntry.AgentPath;
-    }
-});
+        var items = svc.ListAsync().GetAwaiter().GetResult().Items;
+        var primary = items.FirstOrDefault(w => w.IsPrimary && w.IsEnabled)
+                   ?? items.FirstOrDefault(w => w.IsEnabled);
+        if (primary is not null)
+        {
+            options.StatusPrompt = string.IsNullOrWhiteSpace(primary.StatusPrompt) ? null : primary.StatusPrompt;
+            options.ImplementPrompt = string.IsNullOrWhiteSpace(primary.ImplementPrompt) ? null : primary.ImplementPrompt;
+            options.PlanPrompt = string.IsNullOrWhiteSpace(primary.PlanPrompt) ? null : primary.PlanPrompt;
+            options.BaseUrl = $"http://{System.Net.Dns.GetHostName()}:{listenPort}";
+            options.RunAs = primary.RunAs;
+            options.AgentPath = primary.AgentPath;
+        }
+    });
 builder.Services.AddSingleton<IProcessSpawner, DesktopProcessSpawner>();
 builder.Services.AddCopilotClient();
 builder.Services.RemoveAll<ICopilotClient>();
@@ -368,6 +420,8 @@ builder.Services.AddSingleton<ICopilotClient>(sp =>
         sp.GetRequiredService<IOptions<IngestionOptions>>(),
         sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
+builder.Services.AddScoped<IMemoryService, MemoryService>();
+builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
@@ -375,8 +429,25 @@ builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
 builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();
-builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
-builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
+builder.Services.AddScoped<ToolRegistryService>();
+builder.Services.AddScoped<IToolRegistryService>(sp =>
+{
+    var service = sp.GetRequiredService<ToolRegistryService>();
+    return new TransactionGatedToolRegistryService(
+        service,
+        sp.GetRequiredService<McpDbContext>(),
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
+builder.Services.AddScoped<ToolBucketService>();
+builder.Services.AddScoped<IToolBucketService>(sp =>
+{
+    var service = sp.GetRequiredService<ToolBucketService>();
+    return new TransactionGatedToolBucketService(
+        service,
+        sp.GetService<ITurnTransactionCoordinator>(),
+        sp.GetService<IOptions<TurnTransactionOptions>>());
+});
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
 builder.Services.AddSingleton<ApiKeyIssuanceGuard>();
@@ -388,6 +459,20 @@ builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(Pair
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
 builder.Services.Configure<IdentityServerOptions>(builder.Configuration.GetSection(IdentityServerOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
+builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
+builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
+builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
+builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
+builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
+builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
+// FR-MCP-QBEXEC-003: full-fidelity inter-brain session logging (full prompt+output text, secret-redacted).
+builder.Services.AddScoped<IBrainInteractionSessionLogger, BrainInteractionSessionLogger>();
+builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestrationService>();
+// FR-MCP-QBEXEC-002: concrete internal-tool executor routes QuadBrain's MCP-internal mutations through the
+// transaction-gated services; it is injected into the chat service's optional executor parameter, replacing the
+// NoopInternalToolExecutor fallback.
+builder.Services.AddScoped<IQuadBrainInternalToolExecutor, QuadBrainInternalToolExecutor>();
+builder.Services.AddScoped<IQuadBrainOpenAiChatService, QuadBrainOpenAiChatService>();
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
 
@@ -439,7 +524,8 @@ builder.Services.AddFederationStateAdapters();
 builder.Services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
 builder.Services.AddSingleton<FederationStateAdapterRegistry>();
 builder.Services.AddSingleton<IFederationEnvelopeSigner, FederationEnvelopeSigner>();
-builder.Services.AddSingleton<IFederationOperationApplyService, FederationOperationApplyService>();
+builder.Services.AddSingleton<FederationOperationApplyService>();
+builder.Services.AddSingleton<IFederationOperationApplyService, TurnTransactionFederationOperationApplyService>();
 builder.Services.AddSingleton<IFederationLocalExecutionService, FederationLocalExecutionService>();
 builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
     .ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.HttpClientHandler
@@ -448,7 +534,8 @@ builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
         AutomaticDecompression = System.Net.DecompressionMethods.None,
     });
 builder.Services.AddHealthChecks()
-    .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"]);
+    .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"])
+    .AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"]);
 
 // FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
 // Register the HTTP client and data client used by federation decorators.
@@ -479,7 +566,13 @@ builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederation
     builder.Services.Remove(innerSession);
     builder.Services.AddScoped<ISessionLogService>(sp =>
     {
-        var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+        var local = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+        var inner = new TransactionGatedSessionLogService(
+            local,
+            sp.GetRequiredService<McpDbContext>(),
+            sp.GetService<ITurnTransactionCoordinator>(),
+            sp.GetService<WorkspaceContext>(),
+            sp.GetService<IOptions<TurnTransactionOptions>>());
         return new FederatedSessionLogService(
             inner,
             sp.GetRequiredService<FederationRegistry>(),
@@ -497,11 +590,15 @@ builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederation
     builder.Services.AddScoped<IGraphRagService>(sp =>
     {
         var inner = (IGraphRagService)ActivatorUtilities.CreateInstance(sp, innerType);
-        return new McpServer.Support.Mcp.GraphRag.FederatedGraphRagService(
+        var federated = new McpServer.Support.Mcp.GraphRag.FederatedGraphRagService(
             inner,
             sp.GetRequiredService<FederationRegistry>(),
             sp.GetRequiredService<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(),
             sp.GetRequiredService<ILogger<McpServer.Support.Mcp.GraphRag.FederatedGraphRagService>>());
+        return new TransactionGatedGraphRagService(
+            federated,
+            sp.GetService<ITurnTransactionCoordinator>(),
+            sp.GetService<IOptions<TurnTransactionOptions>>());
     });
 }
 
@@ -528,6 +625,7 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService<FederationLocalProxyEnrollmentService>();
     builder.Services.AddHostedService<FederationQueuedOperationReplayService>();
     builder.Services.AddHostedService<FederationFanoutSyncService>();
+    builder.Services.AddHostedService<TransactionPubSubReplayWorker>();
     // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
     builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }
@@ -537,6 +635,11 @@ if (!builder.Environment.IsEnvironment("Test"))
 // file get materialized into the DB before the first request.
 builder.Services.AddHostedService<TodoBootstrapImporter>();
 
+// FR-MCP-QBSEED-001: provision the Quad-Brain from Mcp:BrainSlots:Slots at startup (gated, idempotent).
+// Registered after TodoBootstrapImporter so the database and workspace registrations are ready; the seeder
+// is a no-op unless execution is enabled and slots are configured, and never aborts startup on failure.
+builder.Services.AddHostedService<BrainSlotStartupSeeder>();
+
 var mvcBuilder = builder.Services.AddControllers();
 #if !DEBUG
 if (!builder.Environment.IsStaging())
@@ -544,7 +647,7 @@ if (!builder.Environment.IsStaging())
         mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
 #endif
 
-// FR-SUPPORT-010B / TR-PLANNED-013A: Replace ASP.NET's default invalid-model-state
+// FR-SUPPORT-012 / TR-PLANNED-CORE-014: Replace ASP.NET's default invalid-model-state
 // response shape ({"errors":{"dto":["..."]}}) with RFC 7807 ProblemDetails that
 // cites the actual offending JSON path. The "dto" key is the action parameter
 // name; surfacing it confuses callers into thinking a wrapper field is required.
@@ -627,7 +730,7 @@ if (!app.Environment.IsEnvironment("Test"))
 
     using (var scope = app.Services.CreateScope())
     {
-        var bucketService = scope.ServiceProvider.GetRequiredService<IToolBucketService>();
+        var bucketService = scope.ServiceProvider.GetRequiredService<ToolBucketService>();
         var toolRegistryOpts = scope.ServiceProvider.GetRequiredService<IOptions<ToolRegistryOptions>>().Value;
         foreach (var entry in toolRegistryOpts.DefaultBuckets)
         {
@@ -671,7 +774,7 @@ if (!app.Environment.IsEnvironment("Test"))
 }
 
 {
-    var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName);
+    var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName, app.Services);
     if (!string.IsNullOrWhiteSpace(apiKeyWorkspacePath))
     {
         var tokenService = app.Services.GetRequiredService<WorkspaceTokenService>();
@@ -714,12 +817,16 @@ app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
     MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtimeInfo))
     .ExcludeFromDescription();
 
-app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configuration) =>
-    MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
+app.MapGet("/marker-file-timestamp", async (string? repoPath, IConfiguration configuration, IWorkspaceService workspaceSvc) =>
+{
+    var workspacePaths = (await workspaceSvc.ListAsync()).Items.Select(w => w.WorkspacePath);
+    return MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
         repoPath,
         configuration,
         app.Environment.ContentRootPath,
-        restrictToCurrentRepoRoot: false))
+        workspacePaths,
+        restrictToCurrentRepoRoot: false);
+})
     .ExcludeFromDescription();
 
 app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService, ApiKeyIssuanceGuard apiKeyIssuanceGuard) =>
@@ -735,7 +842,7 @@ app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService,
     context.Response.Headers.CacheControl = "no-store, no-cache";
     context.Response.Headers.Pragma = "no-cache";
 
-    var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName) ?? string.Empty;
+    var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName, app.Services) ?? string.Empty;
     if (string.IsNullOrWhiteSpace(workspacePath))
         return Results.Problem("No workspace configured.", statusCode: 503);
 
@@ -764,7 +871,7 @@ app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService,
         "Default API token issued: RemoteIp={RemoteIp}; Workspace={WorkspacePath}",
         context.Connection.RemoteIpAddress?.ToString() ?? "loopback",
         workspacePath);
-    return Results.Ok(new { apiKey = defaultToken });
+    return Results.Ok(new { apiKey = defaultToken, workspacePath });
 }).ExcludeFromDescription();
 
 app.MapMcp("/mcp-transport");
@@ -1012,23 +1119,34 @@ static bool HasAnyRole(ClaimsPrincipal user, params string[] requiredRoles)
     return false;
 }
 
-static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName)
+static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName, IServiceProvider? services = null)
 {
+    // Prefer the DB-registered primary workspace (workspaces live in the DB now, not appsettings).
+    if (services is not null)
+    {
+        try
+        {
+            using var scope = services.CreateScope();
+            var svc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+            var items = svc.ListAsync().GetAwaiter().GetResult().Items;
+            var primary = items.FirstOrDefault(w => w.IsPrimary && w.IsEnabled)
+                       ?? items.FirstOrDefault(w => w.IsEnabled);
+            if (!string.IsNullOrWhiteSpace(primary?.WorkspacePath))
+                return NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+        }
+        catch when (environment.IsEnvironment("Test"))
+        {
+            // Test hosts create their isolated schema after Program startup.
+            // Fall through to RepoRoot so auth-token seeding stays hermetic.
+        }
+    }
+
+    // Legacy fallback: Mcp:RepoRoot config value (used by integration tests and bare deployments).
     var effectiveRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "RepoRoot");
     if (!string.IsNullOrWhiteSpace(effectiveRepoRoot))
         return NormalizeWorkspacePathForToken(effectiveRepoRoot, environment.ContentRootPath);
 
-    var workspaces = configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-    var primary = workspaces
-        .Where(w => w.IsPrimary && w.IsEnabled)
-        .FirstOrDefault();
-    primary ??= workspaces
-        .Where(w => w.IsEnabled)
-        .FirstOrDefault();
-
-    return string.IsNullOrWhiteSpace(primary?.WorkspacePath)
-        ? null
-        : NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+    return null;
 }
 
 static string NormalizeWorkspacePathForToken(string workspacePath, string contentRootPath)

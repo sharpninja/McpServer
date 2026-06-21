@@ -123,6 +123,12 @@ public class Iteration2_AllTestsValidation
         Assert.NotNull(SessionLogCommandShapes.AppendDialogMethod);
         Assert.NotNull(SessionLogCommandShapes.AppendActionsMethod);
         Assert.NotNull(SessionLogCommandShapes.QueryHistoryMethod);
+        Assert.Equal("workflow.memory", MemoryCommandShapes.MethodNamespace);
+        Assert.NotNull(MemoryCommandShapes.ListMethod);
+        Assert.NotNull(MemoryCommandShapes.GetMethod);
+        Assert.NotNull(MemoryCommandShapes.AddMethod);
+        Assert.NotNull(MemoryCommandShapes.UpdateMethod);
+        Assert.NotNull(MemoryCommandShapes.RemoveMethod);
     }
 
     [Fact]
@@ -141,6 +147,19 @@ public class Iteration2_AllTestsValidation
         Assert.NotNull(interfaceType.GetMethod("AppendDialogAsync"));
         Assert.NotNull(interfaceType.GetMethod("AppendActionsAsync"));
         Assert.NotNull(interfaceType.GetMethod("QueryHistoryAsync"));
+    }
+
+    [Fact]
+    public void Validation_IMemoryWorkflow_InterfaceExists()
+    {
+        var interfaceType = typeof(IMemoryWorkflow);
+
+        Assert.True(interfaceType.IsInterface);
+        Assert.NotNull(interfaceType.GetMethod("ListAsync"));
+        Assert.NotNull(interfaceType.GetMethod("GetAsync"));
+        Assert.NotNull(interfaceType.GetMethod("AddAsync"));
+        Assert.NotNull(interfaceType.GetMethod("UpdateAsync"));
+        Assert.NotNull(interfaceType.GetMethod("RemoveAsync"));
     }
 
     [Fact]

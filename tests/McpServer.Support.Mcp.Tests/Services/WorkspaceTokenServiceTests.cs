@@ -161,4 +161,28 @@ public sealed class WorkspaceTokenServiceTests
         Assert.Contains("beta", resolvedB!, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("gamma", resolvedC!, StringComparison.OrdinalIgnoreCase);
     }
+    // --- Readiness signal (TR-MCP-AUTH-011 / TEST-MCP-AUTH-012) ---
+
+    /// <summary>TEST-MCP-AUTH-012: IsInitialized is false before any full token is generated.</summary>
+    [Fact]
+    public void IsInitialized_NoTokens_ReturnsFalse()
+    {
+        Assert.False(_sut.IsInitialized);
+    }
+
+    /// <summary>TEST-MCP-AUTH-012: IsInitialized becomes true once a full token is generated.</summary>
+    [Fact]
+    public void IsInitialized_AfterGenerateToken_ReturnsTrue()
+    {
+        _sut.GenerateToken(@"C:\projects\test");
+        Assert.True(_sut.IsInitialized);
+    }
+
+    /// <summary>TEST-MCP-AUTH-012: A default (anonymous) token alone does not mark the subsystem initialized.</summary>
+    [Fact]
+    public void IsInitialized_DefaultTokenOnly_ReturnsFalse()
+    {
+        _sut.GenerateDefaultToken(@"C:\projects\test");
+        Assert.False(_sut.IsInitialized);
+    }
 }

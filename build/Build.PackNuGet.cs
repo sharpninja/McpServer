@@ -7,21 +7,31 @@ partial class Build
     [Parameter("Package version for NuGet pack (defaults to GitVersion output)")]
     readonly string PackageVersion;
 
-    /// <summary>Pack McpServer.Client as a NuGet package.</summary>
+    /// <summary>Pack public McpServer libraries as NuGet packages.</summary>
     public Target PackNuGet => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
-            var project = SourceDirectory / "McpServer.Client" / "McpServer.Client.csproj";
+            var projects = new[]
+            {
+                SourceDirectory / "McpServer.Client" / "McpServer.Client.csproj",
+                SourceDirectory / "McpServer.Cqrs" / "McpServer.Cqrs.csproj",
+                SourceDirectory / "McpServer.Cqrs.Mvvm" / "McpServer.Cqrs.Mvvm.csproj",
+                SourceDirectory / "McpServer.Repl.Core" / "McpServer.Repl.Core.csproj",
+                SourceDirectory / "McpServer.McpAgent" / "McpServer.McpAgent.csproj",
+            };
 
-            var settings = new DotNetPackSettings()
-                .SetProject(project)
-                .SetConfiguration(Configuration)
-                .SetOutputDirectory(ArtifactsDirectory / "nupkg");
+            foreach (var project in projects)
+            {
+                var settings = new DotNetPackSettings()
+                    .SetProject(project)
+                    .SetConfiguration(Configuration)
+                    .SetOutputDirectory(ArtifactsDirectory / "nupkg");
 
-            if (!string.IsNullOrWhiteSpace(PackageVersion))
-                settings = settings.SetProperty("PackageVersion", PackageVersion);
+                if (!string.IsNullOrWhiteSpace(PackageVersion))
+                    settings = settings.SetProperty("PackageVersion", PackageVersion);
 
-            DotNetPack(_ => settings);
+                DotNetPack(_ => settings);
+            }
         });
 }

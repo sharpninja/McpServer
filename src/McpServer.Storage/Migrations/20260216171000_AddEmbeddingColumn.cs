@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace McpServer.Support.Mcp.Storage.Migrations;
 
 /// <summary>
-/// TR-PLANNED-013: Add nullable Embedding BLOB column to Chunks table for vector search.
+/// TR-PLANNED-CORE-013: Add nullable Embedding BLOB column to Chunks table for vector search.
 /// </summary>
 public partial class AddEmbeddingColumn : Migration
 {

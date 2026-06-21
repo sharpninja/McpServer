@@ -551,8 +551,8 @@ public sealed class WorkspaceService : IWorkspaceService
     };
 
     /// <summary>
-    /// Resolves the path to <c>appsettings.yaml</c> or <c>appsettings.json</c>, preferring YAML when present.
-    /// Falls back to the application base directory when the file does not exist under the content root.
+    /// Resolves the path to <c>appsettings.yaml</c> or <c>appsettings.json</c>, preferring content-root
+    /// configuration before falling back to the application base directory.
     /// </summary>
     internal string ResolveAppsettingsPath()
     {
@@ -562,11 +562,11 @@ public sealed class WorkspaceService : IWorkspaceService
         var yamlContentRoot = Path.Combine(contentRoot, "appsettings.yaml");
         if (File.Exists(yamlContentRoot)) return yamlContentRoot;
 
-        var yamlBaseDir = Path.Combine(baseDir, "appsettings.yaml");
-        if (File.Exists(yamlBaseDir)) return yamlBaseDir;
-
         var jsonContentRoot = Path.Combine(contentRoot, "appsettings.json");
         if (File.Exists(jsonContentRoot)) return jsonContentRoot;
+
+        var yamlBaseDir = Path.Combine(baseDir, "appsettings.yaml");
+        if (File.Exists(yamlBaseDir)) return yamlBaseDir;
 
         var jsonBaseDir = Path.Combine(baseDir, "appsettings.json");
         if (File.Exists(jsonBaseDir)) return jsonBaseDir;
@@ -803,6 +803,7 @@ public sealed class WorkspaceService : IWorkspaceService
             BannedOrganizations = NormalizePolicyList(e.BannedOrganizations) ?? [],
             BannedIndividuals = NormalizePolicyList(e.BannedIndividuals) ?? [],
             GitRemoteUrl = await GetGitRemoteUrlAsync(e.WorkspacePath, ct).ConfigureAwait(false),
+            AgentPath = string.IsNullOrWhiteSpace(e.AgentPath) ? null : e.AgentPath,
         };
         return dto;
     }

@@ -143,10 +143,22 @@ public static class RequirementsCommandShapes
     public const string CreateFrMethod = "workflow.requirements.createFr";
 
     /// <summary>
+    /// Command method for creating multiple functional requirements atomically.
+    /// Method: <c>workflow.requirements.createFrBatch</c>
+    /// </summary>
+    public const string CreateFrBatchMethod = "workflow.requirements.createFrBatch";
+
+    /// <summary>
     /// Command method for updating an existing functional requirement.
     /// Method: <c>workflow.requirements.updateFr</c>
     /// </summary>
     public const string UpdateFrMethod = "workflow.requirements.updateFr";
+
+    /// <summary>
+    /// Command method for updating multiple functional requirements atomically.
+    /// Method: <c>workflow.requirements.updateFrBatch</c>
+    /// </summary>
+    public const string UpdateFrBatchMethod = "workflow.requirements.updateFrBatch";
 
     /// <summary>
     /// Command method for deleting a functional requirement.
@@ -173,10 +185,22 @@ public static class RequirementsCommandShapes
     public const string CreateTrMethod = "workflow.requirements.createTr";
 
     /// <summary>
+    /// Command method for creating multiple technical requirements atomically.
+    /// Method: <c>workflow.requirements.createTrBatch</c>
+    /// </summary>
+    public const string CreateTrBatchMethod = "workflow.requirements.createTrBatch";
+
+    /// <summary>
     /// Command method for updating an existing technical requirement.
     /// Method: <c>workflow.requirements.updateTr</c>
     /// </summary>
     public const string UpdateTrMethod = "workflow.requirements.updateTr";
+
+    /// <summary>
+    /// Command method for updating multiple technical requirements atomically.
+    /// Method: <c>workflow.requirements.updateTrBatch</c>
+    /// </summary>
+    public const string UpdateTrBatchMethod = "workflow.requirements.updateTrBatch";
 
     /// <summary>
     /// Command method for deleting a technical requirement.
@@ -203,16 +227,40 @@ public static class RequirementsCommandShapes
     public const string CreateTestMethod = "workflow.requirements.createTest";
 
     /// <summary>
+    /// Command method for creating multiple testing requirements atomically.
+    /// Method: <c>workflow.requirements.createTestBatch</c>
+    /// </summary>
+    public const string CreateTestBatchMethod = "workflow.requirements.createTestBatch";
+
+    /// <summary>
     /// Command method for updating an existing test requirement.
     /// Method: <c>workflow.requirements.updateTest</c>
     /// </summary>
     public const string UpdateTestMethod = "workflow.requirements.updateTest";
 
     /// <summary>
+    /// Command method for updating multiple testing requirements atomically.
+    /// Method: <c>workflow.requirements.updateTestBatch</c>
+    /// </summary>
+    public const string UpdateTestBatchMethod = "workflow.requirements.updateTestBatch";
+
+    /// <summary>
     /// Command method for deleting a test requirement.
     /// Method: <c>workflow.requirements.deleteTest</c>
     /// </summary>
     public const string DeleteTestMethod = "workflow.requirements.deleteTest";
+
+    /// <summary>
+    /// Command method for creating mixed FR/TR/TEST requirements atomically.
+    /// Method: <c>workflow.requirements.createBatch</c>
+    /// </summary>
+    public const string CreateBatchMethod = "workflow.requirements.createBatch";
+
+    /// <summary>
+    /// Command method for updating mixed FR/TR/TEST requirements atomically.
+    /// Method: <c>workflow.requirements.updateBatch</c>
+    /// </summary>
+    public const string UpdateBatchMethod = "workflow.requirements.updateBatch";
 
     /// <summary>
     /// Command method for listing requirement mappings.

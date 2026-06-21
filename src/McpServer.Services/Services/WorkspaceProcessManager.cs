@@ -129,6 +129,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         foreach (var ws in workspaces.Items)
         {
             if (!ws.IsEnabled) continue;
+            if (string.IsNullOrWhiteSpace(ws.WorkspacePath)) continue;
             var key = NormalizeKey(ws.WorkspacePath);
             if (!_activeWorkspaces.ContainsKey(key)) continue;
 
@@ -180,6 +181,12 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
                 if (!ws.IsEnabled)
                 {
                     _logger.LogInformation("  ⊘ {Name} skipped (disabled)", ws.Name);
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(ws.WorkspacePath))
+                {
+                    _logger.LogInformation("  ⊘ {Name} skipped (no workspace path)", ws.Name);
                     continue;
                 }
 

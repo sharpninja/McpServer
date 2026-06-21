@@ -43,6 +43,13 @@ public sealed class RequirementEntity
     /// <summary>Optional operator notes that are not part of the canonical body text.</summary>
     public string? Notes { get; set; }
 
+    /// <summary>
+    /// TR-MCP-REQAC-001: acceptance criteria serialized as a JSON array of
+    /// {id, text, isSatisfied, evidence} objects (same shape as TODO acceptance criteria).
+    /// Null or empty when the requirement has no criteria.
+    /// </summary>
+    public string? AcceptanceCriteriaJson { get; set; }
+
     /// <summary>UTC timestamp when the row was first created.</summary>
     [Required]
     [MaxLength(64)]

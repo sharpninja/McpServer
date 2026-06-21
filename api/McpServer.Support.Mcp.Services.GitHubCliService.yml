@@ -31,7 +31,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Runs gh CLI for issues and PRs; parses JSON output.
+    TR-PLANNED-CORE-013: Runs gh CLI for issues and PRs; parses JSON output.
 
     FR-SUPPORT-010: Local gh auth only; no API tokens.
   example: []
@@ -67,7 +67,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Constructor with IProcessRunner for testability.'
+  summary: 'TR-PLANNED-CORE-013: Constructor with IProcessRunner for testability.'
   example: []
   syntax:
     content: public GitHubCliService(IProcessRunner processRunner)

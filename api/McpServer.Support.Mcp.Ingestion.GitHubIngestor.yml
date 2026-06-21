@@ -22,7 +22,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013: Ingests GitHub issues and PRs via IGitHubCliService into ContextDocument/Chunk pairs.
+    TR-PLANNED-CORE-013: Ingests GitHub issues and PRs via IGitHubCliService into ContextDocument/Chunk pairs.
 
     FR-SUPPORT-010: Indexes GitHub context for hybrid search.
   example: []
@@ -56,7 +56,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public GitHubIngestor(Chunker chunker, IGitHubCliService github, ILogger<GitHubIngestor> logger)
@@ -90,7 +90,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Ingest all issues and PRs into document/chunk pairs.'
+  summary: 'TR-PLANNED-CORE-013: Ingest all issues and PRs into document/chunk pairs.'
   example: []
   syntax:
     content: public Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>> IngestAsync(CancellationToken ct = default)

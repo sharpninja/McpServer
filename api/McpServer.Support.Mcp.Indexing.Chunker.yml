@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Splits content into fixed-size chunks for full-text and vector indexing.'
+  summary: 'TR-PLANNED-CORE-013: Splits content into fixed-size chunks for full-text and vector indexing.'
   example: []
   syntax:
     content: public sealed class Chunker
@@ -54,7 +54,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Creates a chunker with optional max tokens per chunk.'
+  summary: 'TR-PLANNED-CORE-013: Creates a chunker with optional max tokens per chunk.'
   example: []
   syntax:
     content: public Chunker(int maxTokensPerChunk = 512)
@@ -85,7 +85,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Chunks text and returns chunk records with stable IDs.'
+  summary: 'TR-PLANNED-CORE-013: Chunks text and returns chunk records with stable IDs.'
   example: []
   syntax:
     content: public IReadOnlyList<ContextChunk> Chunk(string documentId, string content)
@@ -122,7 +122,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Estimates token count (approx 4 chars per token).'
+  summary: 'TR-PLANNED-CORE-013: Estimates token count (approx 4 chars per token).'
   example: []
   syntax:
     content: public static int EstimateTokenCount(string text)

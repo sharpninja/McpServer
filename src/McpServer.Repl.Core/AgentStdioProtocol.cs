@@ -33,6 +33,9 @@ public interface IAgentStdioProtocol
 /// </summary>
 public sealed class AgentStdioProtocol : IAgentStdioProtocol
 {
+    private const string CommandTimeoutEnvVar = "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS";
+    private static readonly TimeSpan DefaultCommandTimeout = TimeSpan.FromMinutes(2);
+
     private readonly IYamlSerializer _serializer;
     private readonly IReplCommandDispatcher _dispatcher;
 
@@ -71,6 +74,17 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
                 continue;
             }
 
+            // FR-MCP-REPL-005: NDJSON fast path - a complete single-line JSON
+            // envelope is a full document; dispatch it immediately instead of
+            // waiting for a blank-line/--- boundary. This makes persistent
+            // bridge clients that write one JSON line per request first-class.
+            if (buffer.Length == 0 && IsCompleteSingleLineJson(line))
+            {
+                buffer.AppendLine(line);
+                await FlushAsync(buffer, writer, cancellationToken).ConfigureAwait(false);
+                continue;
+            }
+
             buffer.AppendLine(line);
         }
 
@@ -87,6 +101,25 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
 
         var trimmed = line.TrimEnd();
         return trimmed == "---";
+    }
+
+    private static bool IsCompleteSingleLineJson(string line)
+    {
+        var trimmed = line.Trim();
+        if (trimmed.Length < 2 || trimmed[0] != '{' || trimmed[^1] != '}')
+        {
+            return false;
+        }
+
+        try
+        {
+            using var _ = System.Text.Json.JsonDocument.Parse(trimmed);
+            return true;
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return false;
+        }
     }
 
     private async Task FlushAsync(StringBuilder buffer, TextWriter writer, CancellationToken cancellationToken)
@@ -126,13 +159,39 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         }
 
         IYamlEnvelope response;
+        using var commandCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        commandCts.CancelAfter(ResolveCommandTimeout());
+
         try
         {
-            response = await _dispatcher.DispatchAsync(envelope, cancellationToken).ConfigureAwait(false);
+            if (_dispatcher is IStreamingReplCommandDispatcher streamingDispatcher)
+            {
+                response = await streamingDispatcher.DispatchAsync(
+                    envelope,
+                    async evt => await WriteEnvelopeAsync(evt, writer, cancellationToken).ConfigureAwait(false),
+                    commandCts.Token).ConfigureAwait(false);
+            }
+            else
+            {
+                response = await _dispatcher.DispatchAsync(envelope, commandCts.Token).ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (OperationCanceledException)
         {
-            throw;
+            response = new YamlEnvelope
+            {
+                Type = "error",
+                Payload = new ErrorPayload
+                {
+                    RequestId = (envelope.Payload as IRequestPayload)?.RequestId ?? "unknown",
+                    Code = "command_timeout",
+                    Message = $"Command timed out after {ResolveCommandTimeout().TotalSeconds:0} seconds.",
+                },
+            };
         }
         catch (Exception ex)
         {
@@ -151,16 +210,30 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         await WriteEnvelopeAsync(response, writer, cancellationToken).ConfigureAwait(false);
     }
 
+    private static TimeSpan ResolveCommandTimeout()
+    {
+        var configured = Environment.GetEnvironmentVariable(CommandTimeoutEnvVar);
+        if (int.TryParse(configured, out var seconds) && seconds > 0)
+        {
+            return TimeSpan.FromSeconds(seconds);
+        }
+
+        return DefaultCommandTimeout;
+    }
+
     private async Task WriteEnvelopeAsync(IYamlEnvelope envelope, TextWriter writer, CancellationToken cancellationToken)
     {
         var yaml = _serializer.Serialize(envelope);
-        // Envelopes are framed by a blank line, matching the inbound convention.
+        // FR-MCP-REPL-005: envelopes are framed by a blank line (legacy shell
+        // contract) AND a '---' document separator (the framing persistent bridge
+        // clients parse) so one process can serve many requests for both styles.
         await writer.WriteAsync(yaml.AsMemory(), cancellationToken).ConfigureAwait(false);
         if (!yaml.EndsWith('\n'))
         {
             await writer.WriteLineAsync().ConfigureAwait(false);
         }
         await writer.WriteLineAsync().ConfigureAwait(false);
+        await writer.WriteLineAsync("---".AsMemory(), cancellationToken).ConfigureAwait(false);
         await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
     }
 

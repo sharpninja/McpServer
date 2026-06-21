@@ -84,7 +84,7 @@ EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, Postgr
 
 ### Requirement Traceability
 
-All source files reference FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`. Requirements traceability is validated in CI via `./build.ps1 ValidateTraceability`.
+All source files reference FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-CORE-013: Constructor.</summary>`). When adding new functionality, reference the relevant ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`. Requirements traceability is validated in CI via `./build.ps1 ValidateTraceability`.
 
 ### Central Package Management
 
@@ -116,10 +116,10 @@ Use `pwsh.exe` (PowerShell 7+) for all scripts. Do not use `powershell.exe`.
 ### Session Start (Run Once Per Session)
 
 1. **Read `AGENTS-README-FIRST.yaml`** in the repo root for the current API key, endpoints, and base URL
-2. **Verify marker signature** using HMAC-SHA256 with the workspace API key before contacting the server
-3. **GET `/health`** with a random nonce — confirm the response echoes that exact nonce
-4. **Review recent session history** and current TODOs only after verification succeeds
-5. **POST an initial session log turn** for the session
+2. **Bootstrap the required plugin interface** before any state-changing MCP call. For Claude Code, use the `mcpserver-claude-code-plugin` wrapper and its `workflow.*` / `client.*` methods. "Not in the visible tool list" does not mean unavailable; use the documented wrapper invocation form.
+3. **Verify marker signature and health** through the required plugin status/bootstrap path. Use direct REST only for read-only diagnosis after the documented plugin path fails.
+4. **Review recent session history and current TODOs** through the required plugin only after verification succeeds
+5. **POST an initial session log turn** through the required plugin
 6. **THEN** begin working on the user's request
 
 If signature verification, `/health`, or nonce verification fails: log `MCP_UNTRUSTED`, continue without the MCP server, and do not probe additional MCP endpoints.
@@ -140,7 +140,7 @@ If signature verification, `/health`, or nonce verification fails: log `MCP_UNTR
 
 ### Authentication
 
-All `/mcpserver/*` endpoints require a per-workspace auth token (from `AGENTS-README-FIRST.yaml`):
+All `/mcpserver/*` endpoints require a per-workspace auth token (from `AGENTS-README-FIRST.yaml`). These details are for plugin internals, typed client integration, and read-only diagnosis after plugin failure; they are not permission to bypass the required plugin route for session log, TODO, requirements, import/export, or traceability operations:
 - Header: `X-Api-Key: <token>`
 - Or query param: `?api_key=<token>`
 - If you receive a 401, re-read the marker file — the token rotates on each server restart

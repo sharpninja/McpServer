@@ -23,7 +23,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of listing issues.'
+  summary: 'TR-PLANNED-CORE-013: Result of listing issues.'
   example: []
   syntax:
     content: 'public sealed record GitHubIssueListResult : IEquatable<GitHubIssueListResult>'
@@ -57,7 +57,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of listing issues.'
+  summary: 'TR-PLANNED-CORE-013: Result of listing issues.'
   example: []
   syntax:
     content: public GitHubIssueListResult(bool Success, string? Error, IReadOnlyList<GitHubIssueItem> Issues)

@@ -56,6 +56,14 @@ public interface IRequirementsRepository
     /// <summary>Delete a TEST entry by id.</summary>
     Task DeleteTestAsync(string id, CancellationToken ct = default);
 
+    // -- Batch --
+
+    /// <summary>Add FR/TR/TEST entries as one all-or-nothing batch.</summary>
+    Task<RequirementsBatchEntries> AddBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default);
+
+    /// <summary>Update FR/TR/TEST entries as one all-or-nothing batch.</summary>
+    Task<RequirementsBatchEntries> UpdateBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default);
+
     // -- Mapping --
 
     /// <summary>Get all FR-to-TR mapping rows.</summary>

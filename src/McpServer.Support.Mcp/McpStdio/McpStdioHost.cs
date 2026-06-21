@@ -1,4 +1,4 @@
-// TR-PLANNED-013: Runs the MCP server over STDIO (stdin/stdout JSON-RPC) when --transport stdio.
+// TR-PLANNED-CORE-013: Runs the MCP server over STDIO (stdin/stdout JSON-RPC) when --transport stdio.
 
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
@@ -10,7 +10,10 @@ using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
+using McpServer.TransactionSecurity.Options;
+using McpServer.TransactionSecurity.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +25,7 @@ using ModelContextProtocol.Server;
 namespace McpServer.Support.Mcp.McpStdio;
 
 /// <summary>
-/// TR-PLANNED-013: Host for MCP STDIO transport; registers shared services and runs MCP server.
+/// TR-PLANNED-CORE-013: Host for MCP STDIO transport; registers shared services and runs MCP server.
 /// </summary>
 public static class McpStdioHost
 {
@@ -50,12 +53,11 @@ public static class McpStdioHost
         builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
         builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
         builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
+        builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
         var requiredRepoAllowlistPatterns = new[]
         {
             "src/McpServer.Cqrs/**/*.cs",
             "src/McpServer.Cqrs.Mvvm/**/*.cs",
-            "src/McpServer.UI.Core/**/*.cs",
-            "src/McpServer.Director/**/*.cs",
             "docs/README.md",
             "docs/MCP-SERVER.md",
             "docs/USER-GUIDE.md",
@@ -114,6 +116,7 @@ public static class McpStdioHost
             new TemplateStorageOptionsPostConfigure(builder.Configuration, instanceName));
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
         builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
+        AddStdioTransactionSecurity(builder.Services, builder.Configuration);
         builder.Services.AddHttpClient(WebsiteIngestor.HttpClientName, (sp, client) =>
         {
             var options = sp.GetRequiredService<IOptions<IngestionOptions>>().Value;
@@ -134,23 +137,65 @@ public static class McpStdioHost
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
         builder.Services.AddSingleton<IProcessSpawner, DefaultProcessSpawner>();
-        builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
-        builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
+        builder.Services.AddSingleton<FileGitHubWorkspaceTokenStore>();
+        builder.Services.AddSingleton<IGitHubWorkspaceTokenStore>(sp =>
+            new TransactionGatedGitHubWorkspaceTokenStore(
+                sp.GetRequiredService<FileGitHubWorkspaceTokenStore>(),
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>()));
+        builder.Services.AddSingleton<GitHubCliService>();
+        builder.Services.AddSingleton<IGitHubCliService>(sp =>
+            new TransactionGatedGitHubCliService(
+                sp.GetRequiredService<GitHubCliService>(),
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>()));
         builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
         builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());
         builder.Services.AddSingleton<TodoServiceResolver>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<WorkspaceServiceAccessor>();
         builder.Services.AddSingleton<TodoCreationService>();
-        builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
+        builder.Services.AddSingleton<IssueTodoSyncService>();
+        builder.Services.AddSingleton<IIssueTodoSyncService>(sp =>
+            new TransactionGatedIssueTodoSyncService(
+                sp.GetRequiredService<IssueTodoSyncService>(),
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>()));
         builder.Services.AddSingleton<TodoUpdateService>();
-        builder.Services.AddScoped<ITodoExecutionService, TodoExecutionService>();
+        builder.Services.AddScoped<ITransactionGatedTodoMutationService, TransactionGatedTodoMutationService>();
+        builder.Services.AddScoped<TodoExecutionService>();
+        builder.Services.AddScoped<ITodoExecutionService>(sp =>
+        {
+            var service = sp.GetRequiredService<TodoExecutionService>();
+            return new TransactionGatedTodoExecutionService(
+                service,
+                service,
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>());
+        });
         builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
         builder.Services.AddSingleton<RequirementsDatabaseDocumentService>();
-        builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
-        builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
+        builder.Services.AddSingleton<IRequirementsDocumentService>(sp =>
+        {
+            var service = sp.GetRequiredService<RequirementsDatabaseDocumentService>();
+            return new TransactionGatedRequirementsDocumentService(
+                service,
+                service,
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>());
+        });
+        builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
         builder.Services.AddSingleton<PromptTemplateRenderer>();
-        builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
+        builder.Services.AddSingleton<PromptTemplateService>();
+        builder.Services.AddSingleton<IPromptTemplateService>(sp =>
+        {
+            var service = sp.GetRequiredService<PromptTemplateService>();
+            return new TransactionGatedPromptTemplateService(
+                service,
+                service,
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>());
+        });
         builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
         builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
         builder.Services.AddCopilotClient();
@@ -169,12 +214,39 @@ public static class McpStdioHost
         builder.Services.AddScoped<IssueIngestor>();
         builder.Services.AddScoped<IWebsiteIngestor, WebsiteIngestor>();
         builder.Services.AddScoped<IngestionCoordinator>();
-        builder.Services.AddScoped<IRepoFileService, RepoFileService>();
+        builder.Services.AddScoped<RepoFileService>();
+        builder.Services.AddScoped<IRepoFileService>(sp =>
+        {
+            var service = sp.GetRequiredService<RepoFileService>();
+            return new TransactionGatedRepoFileService(
+                service,
+                service,
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>());
+        });
         builder.Services.AddScoped<DesktopLaunchService>();
-        builder.Services.AddScoped<ISessionLogService, SessionLogService>();
+        builder.Services.AddScoped<ISessionLogService>(sp =>
+        {
+            var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+            return new TransactionGatedSessionLogService(
+                inner,
+                sp.GetRequiredService<McpDbContext>(),
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<WorkspaceContext>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>());
+        });
+        builder.Services.AddScoped<IMemoryService, MemoryService>();
+        builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
+        builder.Services.AddScoped<IBrainSlotCredentialResolver, BrainSlotCredentialResolver>();
+        builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFactory>();
+        builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
+        builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
+        builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
+        builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestrationService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
         builder.Services.AddMcpGraphRag();
+        DecorateGraphRagService(builder.Services);
         builder.Services.AddScoped<WorkspaceContext>();
         builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
         builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
@@ -198,4 +270,23 @@ public static class McpStdioHost
 
         await host.RunAsync(cancellationToken).ConfigureAwait(false);
     }
+
+    private static void DecorateGraphRagService(IServiceCollection services)
+    {
+        var innerGraphRag = services.Single(d => d.ServiceType == typeof(IGraphRagService));
+        var innerType = innerGraphRag.ImplementationType!;
+        services.Remove(innerGraphRag);
+        services.AddScoped<IGraphRagService>(sp =>
+        {
+            var inner = (IGraphRagService)ActivatorUtilities.CreateInstance(sp, innerType);
+            return new TransactionGatedGraphRagService(
+                inner,
+                sp.GetService<ITurnTransactionCoordinator>(),
+                sp.GetService<IOptions<TurnTransactionOptions>>());
+        });
+    }
+
+    /// <summary>TR-MCP-TXN-001: Registers transaction services required by stdio mutation gates.</summary>
+    internal static void AddStdioTransactionSecurity(IServiceCollection services, IConfiguration configuration)
+        => services.AddInProcessTransactionSecurity(configuration);
 }

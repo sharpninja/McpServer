@@ -72,6 +72,17 @@ public sealed class WorkspaceResolutionMiddleware
     {
         var path = context.Request.Path;
 
+        // FR-MCP-QBOPENAI-001: the QuadBrain OpenAI-compatible endpoint (/v1) authenticates with the
+        // workspace token presented as a Bearer credential (or X-Api-Key) and does not send X-Workspace-Path.
+        // Resolve and scope the workspace from that token so workspace-scoped brain slots are visible to the
+        // orchestration loop. Unresolved requests still proceed; the controller enforces token validity.
+        if (path.StartsWithSegments("/v1", StringComparison.OrdinalIgnoreCase))
+        {
+            await ResolveQuadBrainOpenAiWorkspaceAsync(context, workspaceContext, tokenService, workspaceService, dbContext)
+                .ConfigureAwait(false);
+            return;
+        }
+
         // Only resolve for /mcpserver/* and /mcp-transport routes.
         if (!path.StartsWithSegments("/mcpserver", StringComparison.OrdinalIgnoreCase)
             && !path.StartsWithSegments("/mcp-transport", StringComparison.OrdinalIgnoreCase))
@@ -164,6 +175,47 @@ public sealed class WorkspaceResolutionMiddleware
                 ? """{"error":"Workspace required. Bearer-authenticated requests must send X-Workspace-Path for tenant-scoped routes."}"""
                 : """{"error":"Workspace required. Send X-Workspace-Path header."}""",
             context.RequestAborted).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// FR-MCP-QBOPENAI-001: Resolves the workspace for a QuadBrain OpenAI (/v1) request from an explicit
+    /// X-Workspace-Path header, otherwise from the bearer/API-key token, then populates the scoped
+    /// <see cref="WorkspaceContext"/> (and overrides the DbContext workspace id) so brain-slot queries are
+    /// scoped to the caller's workspace. The request always proceeds; the controller enforces token validity.
+    /// </summary>
+    private async Task ResolveQuadBrainOpenAiWorkspaceAsync(
+        HttpContext context,
+        WorkspaceContext workspaceContext,
+        WorkspaceTokenService tokenService,
+        IWorkspaceService workspaceService,
+        McpDbContext? dbContext)
+    {
+        string? resolvedPath;
+        var isDefault = false;
+
+        var headerValue = context.Request.Headers[WorkspacePathHeader].FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(headerValue))
+        {
+            resolvedPath = headerValue;
+        }
+        else
+        {
+            var token = OpenAiBearerAuth.ExtractToken(
+                context.Request.Headers.Authorization,
+                context.Request.Headers[WorkspaceAuthMiddleware.HeaderName]);
+            resolvedPath = string.IsNullOrWhiteSpace(token)
+                ? null
+                : tokenService.ResolveWorkspaceByToken(token, out isDefault);
+        }
+
+        if (resolvedPath is not null)
+        {
+            var ws = await workspaceService.GetAsync(resolvedPath, context.RequestAborted).ConfigureAwait(false);
+            if (ws is not null)
+                PopulateContext(workspaceContext, ws, isDefault, context, dbContext);
+        }
+
+        await _next(context).ConfigureAwait(false);
     }
 
     private static bool IsWorkspaceIndependent(PathString path, bool hasBearerToken)

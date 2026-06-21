@@ -1,0 +1,14 @@
+# Handoff for PLAN-AGENTPARITY work (MCP_UNTRUSTED in current context)
+# Created: 2026-05-28
+# Reason: Marker signature verification failed in this shell (F:\GitHub context vs. PAYTON-LEGION2 server key)
+# Action required: In a fully trusted workspace that passes Initialize-McpTodo (marker + /health nonce):
+#   1. Import-Module McpTodo.psm1; Initialize-McpTodo
+#   2. New-McpTodo -Id "PLAN-AGENTPARITY-001" -Title "Agent Plugin Operational Parity v1.0" -Section "Plugins" -Priority high -Description "See docs/plans/plan-agent-plugin-operational-parity-v1.0.md"
+#   3. Create child PLAN-AGENTPARITY-010 (core), -020..-027 (per plugin), etc.
+#   4. Begin Phase 0 execution per the plan.
+# Primary artifact: docs/plans/plan-agent-plugin-operational-parity-v1.0.md
+# Also update: docs/Project/*-Requirements.md with the drafted FR/TR blocks
+handoffType: PLAN-AGENTPARITY
+status: ready-for-trusted-execution
+planFile: docs/plans/plan-agent-plugin-operational-parity-v1.0.md
+createdBy: Grok-4.3 (Byrd Process PLAN phase)

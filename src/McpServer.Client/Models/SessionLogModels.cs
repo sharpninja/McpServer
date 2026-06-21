@@ -311,6 +311,26 @@ public sealed class SessionLogSubmitResult
     public string? SessionId { get; set; }
 }
 
+/// <summary>Result of upserting a single session log turn.</summary>
+public sealed class SessionLogTurnSubmitResult
+{
+    /// <summary>Database row ID for the upserted turn.</summary>
+    [JsonPropertyName("turnId")]
+    public long TurnId { get; set; }
+
+    /// <summary>Agent source type.</summary>
+    [JsonPropertyName("agent")]
+    public string? Agent { get; set; }
+
+    /// <summary>Session identifier.</summary>
+    [JsonPropertyName("sessionId")]
+    public string? SessionId { get; set; }
+
+    /// <summary>Request identifier for the upserted turn.</summary>
+    [JsonPropertyName("requestId")]
+    public string? RequestId { get; set; }
+}
+
 /// <summary>Result of appending dialog items.</summary>
 public sealed class DialogAppendResult
 {
@@ -329,4 +349,64 @@ public sealed class DialogAppendResult
     /// <summary>Total dialog items after append.</summary>
     [JsonPropertyName("totalDialogCount")]
     public int TotalDialogCount { get; set; }
+}
+
+/// <summary>FR-SUPPORT-014: Result of the stateless open-session lifecycle call.</summary>
+public sealed class SessionLifecycleOpenResult
+{
+    /// <summary>Agent source type.</summary>
+    [JsonPropertyName("agent")]
+    public string? Agent { get; set; }
+
+    /// <summary>Session identifier.</summary>
+    [JsonPropertyName("sessionId")]
+    public string? SessionId { get; set; }
+
+    /// <summary>True when the call created the session; false when it already existed.</summary>
+    [JsonPropertyName("created")]
+    public bool Created { get; set; }
+}
+
+/// <summary>
+/// FR-SUPPORT-010G: Result of a replace (PUT) or remove (DELETE) operation on a
+/// session, turn, section, or item. Only the fields relevant to the called
+/// endpoint are populated.
+/// </summary>
+public sealed class SessionLogMutationResult
+{
+    /// <summary>Database row ID for the affected turn, when applicable.</summary>
+    [JsonPropertyName("turnId")]
+    public long TurnId { get; set; }
+
+    /// <summary>Agent source type.</summary>
+    [JsonPropertyName("agent")]
+    public string? Agent { get; set; }
+
+    /// <summary>Session identifier.</summary>
+    [JsonPropertyName("sessionId")]
+    public string? SessionId { get; set; }
+
+    /// <summary>Turn request identifier, when applicable.</summary>
+    [JsonPropertyName("requestId")]
+    public string? RequestId { get; set; }
+
+    /// <summary>Section name, when the operation targeted a section.</summary>
+    [JsonPropertyName("section")]
+    public string? Section { get; set; }
+
+    /// <summary>Item key, when the operation removed a single item.</summary>
+    [JsonPropertyName("itemKey")]
+    public string? ItemKey { get; set; }
+
+    /// <summary>True when a turn or section was replaced.</summary>
+    [JsonPropertyName("replaced")]
+    public bool Replaced { get; set; }
+
+    /// <summary>True when a section was cleared.</summary>
+    [JsonPropertyName("cleared")]
+    public bool Cleared { get; set; }
+
+    /// <summary>True when a session, turn, or item was deleted.</summary>
+    [JsonPropertyName("deleted")]
+    public bool Deleted { get; set; }
 }

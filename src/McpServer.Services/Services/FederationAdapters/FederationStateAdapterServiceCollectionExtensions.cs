@@ -14,6 +14,7 @@ public static class FederationStateAdapterServiceCollectionExtensions
     public static IServiceCollection AddFederationStateAdapters(this IServiceCollection services)
     {
         services.AddSingleton<IFederationStateAdapter, WorkspaceFederationStateAdapter>();
+        services.AddSingleton<IFederationStateAdapter, MemoryFederationStateAdapter>();
         services.AddSingleton<IFederationStateAdapter, TodoFederationStateAdapter>();
         services.AddSingleton<IFederationStateAdapter, SessionLogFederationStateAdapter>();
         services.AddSingleton<IFederationStateAdapter, RequirementsFederationStateAdapter>();

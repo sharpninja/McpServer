@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Ingestion;
 
-/// <summary>TR-PLANNED-013: Statistics from a session log import run.</summary>
+/// <summary>TR-PLANNED-CORE-013: Statistics from a session log import run.</summary>
 public sealed record SessionLogImportResult
 {
     /// <summary>Total JSON files scanned in the sessions directory.</summary>
@@ -29,7 +29,7 @@ public sealed record SessionLogImportResult
 }
 
 /// <summary>
-/// TR-PLANNED-013: Ingests session logs from docs/sessions/, normalizes to UnifiedModel.
+/// TR-PLANNED-CORE-013: Ingests session logs from docs/sessions/, normalizes to UnifiedModel.
 /// FR-SUPPORT-010: Supports .md and .json session log files.
 /// </summary>
 public sealed class SessionLogIngestor
@@ -41,7 +41,7 @@ public sealed class SessionLogIngestor
     private readonly ILogger<SessionLogIngestor> _logger;
     private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing sessions path.</param>
     /// <param name="workspaceContext">Resolved workspace context for per-workspace ingestion.</param>
@@ -165,7 +165,7 @@ public sealed class SessionLogIngestor
     }
 
     /// <summary>
-    /// TR-PLANNED-013: Imports all JSON session log files from SessionsPath into the 4NF session log tables.
+    /// TR-PLANNED-CORE-013: Imports all JSON session log files from SessionsPath into the 4NF session log tables.
     /// Skips .md files (no structured data). Uses upsert via <see cref="ISessionLogService.SubmitAsync"/>.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>

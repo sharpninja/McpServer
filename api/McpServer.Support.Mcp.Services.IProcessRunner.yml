@@ -20,7 +20,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Abstraction for running external processes, enabling testability.'
+  summary: 'TR-PLANNED-CORE-013: Abstraction for running external processes, enabling testability.'
   example: []
   syntax:
     content: public interface IProcessRunner
@@ -43,7 +43,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Run an external process and return its result.'
+  summary: 'TR-PLANNED-CORE-013: Run an external process and return its result.'
   example: []
   syntax:
     content: Task<ProcessRunResult> RunAsync(string fileName, string arguments, CancellationToken ct = default)

@@ -24,7 +24,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Repository file read/list/write with path allowlist and audit.
+    TR-PLANNED-CORE-013: Repository file read/list/write with path allowlist and audit.
 
     FR-SUPPORT-010: Path allowlist enforced; write operations audited.
   example: []
@@ -60,7 +60,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public RepoFileService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog)

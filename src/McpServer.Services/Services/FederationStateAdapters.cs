@@ -61,6 +61,9 @@ public sealed class FederationStateOperation
     /// <summary>Resource identifier inside the adapter domain.</summary>
     public string? ResourceId { get; set; }
 
+    /// <summary>Hub-wide workspace identifier affected by the operation.</summary>
+    public string? GlobalWorkspaceId { get; set; }
+
     /// <summary>Proxy-observed base version.</summary>
     public string? BaseVersion { get; set; }
 
@@ -122,6 +125,7 @@ public sealed class FederationStateAdapterRegistry
     public static readonly IReadOnlyList<string> RequiredDomains =
     [
         "workspace",
+        "memory",
         "todo",
         "session_log",
         "requirements",

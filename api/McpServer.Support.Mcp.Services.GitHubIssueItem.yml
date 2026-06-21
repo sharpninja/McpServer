@@ -24,7 +24,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Single issue item.'
+  summary: 'TR-PLANNED-CORE-013: Single issue item.'
   example: []
   syntax:
     content: 'public sealed record GitHubIssueItem : IEquatable<GitHubIssueItem>'
@@ -58,7 +58,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Single issue item.'
+  summary: 'TR-PLANNED-CORE-013: Single issue item.'
   example: []
   syntax:
     content: public GitHubIssueItem(int Number, string Title, string? Url, string? State)

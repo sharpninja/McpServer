@@ -83,6 +83,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
             workspaceAccessor,
             Substitute.For<ITodoPromptService>(),
             Substitute.For<ISessionLogService>(),
+            Substitute.For<IMemoryService>(),
             gitHubCliService,
             Substitute.For<IRequirementsDocumentService>(),
             desktopLaunchService,

@@ -11,7 +11,7 @@ MCP Server is a local AI-agent integration server that exposes project context â
 **As a Windows service:**
 
 ```powershell
-gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
+gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 ```
 
 **From the command line (development):**
@@ -285,7 +285,7 @@ Both share the same backend services and run on the same port.
 ### How do I install as a Windows service?
 
 ```powershell
-gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
+gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 ```
 
 The Nuke target handles elevation, backup/restore, publish, service registration/update, restart, and health verification. The service is configured with auto-start and automatic recovery on failure.
@@ -297,7 +297,7 @@ Published to `C:\ProgramData\McpServer\` as a self-contained single-file executa
 ### How do I update the service?
 
 ```powershell
-gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
+gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 ```
 
 The Nuke target stops the service, creates backups, publishes, restores configuration and data, restarts the service, and verifies health. A timestamped archive is saved to `%USERPROFILE%\McpServer-Backups\` for rollback. Do not update the Windows service by manually copying files or by running lower-level deployment scripts directly.

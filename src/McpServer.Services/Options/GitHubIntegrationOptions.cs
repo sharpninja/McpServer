@@ -26,6 +26,12 @@ public sealed class GitHubIntegrationOptions
     /// </summary>
     public bool AllowCliFallback { get; set; } = true;
 
+    /// <summary>
+    /// Optional repository selector passed to GitHub CLI as <c>--repo</c>.
+    /// Accepts <c>OWNER/REPO</c>, <c>HOST/OWNER/REPO</c>, or a GitHub remote URL.
+    /// </summary>
+    public string? Repository { get; set; }
+
     /// <summary>OAuth app configuration used to bootstrap browser/device login flows.</summary>
     public GitHubOAuthOptions OAuth { get; set; } = new();
 }

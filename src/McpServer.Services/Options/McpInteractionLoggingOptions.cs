@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Options;
 
 /// <summary>
-/// TR-PLANNED-013: Options for MCP interaction structured logging and optional async submission to a logging service.
+/// TR-PLANNED-CORE-013: Options for MCP interaction structured logging and optional async submission to a logging service.
 /// </summary>
 public sealed class McpInteractionLoggingOptions
 {

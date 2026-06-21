@@ -61,3 +61,29 @@ public interface IPromptTemplateService
     /// <returns>Test result with rendered content or error details.</returns>
     Task<PromptTemplateTestResult> TestInlineAsync(PromptTemplateTestRequest request, CancellationToken cancellationToken = default);
 }
+
+/// <summary>
+/// TR-MCP-TXN-001: Captures and restores prompt-template storage for transactional mutation compensation.
+/// </summary>
+public interface IPromptTemplateCompensation
+{
+    /// <summary>Captures the current prompt-template storage snapshot.</summary>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    /// <returns>The current prompt-template file snapshot.</returns>
+    Task<PromptTemplateFileSnapshot> CaptureFileAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Restores the prompt-template storage snapshot after a failed transaction commit.</summary>
+    /// <param name="snapshot">Snapshot captured before the mutation.</param>
+    /// <param name="expectedCurrentContentSha256">Expected current content hash after the rejected transaction write.</param>
+    /// <param name="cancellationToken">Token to cancel the operation.</param>
+    Task RestoreFileAsync(
+        PromptTemplateFileSnapshot snapshot,
+        string expectedCurrentContentSha256,
+        CancellationToken cancellationToken = default);
+}
+
+/// <summary>TR-MCP-TXN-001: Prompt-template file state snapshot used for rollback compensation.</summary>
+/// <param name="Exists">Whether the prompt-template storage file exists.</param>
+/// <param name="Content">Raw file content, or <see langword="null"/> when the file does not exist.</param>
+/// <param name="ContentSha256">SHA-256 hash of the raw file content, or empty when the file does not exist.</param>
+public sealed record PromptTemplateFileSnapshot(bool Exists, string? Content, string ContentSha256);

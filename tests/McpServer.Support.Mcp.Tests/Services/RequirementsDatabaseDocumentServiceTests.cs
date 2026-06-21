@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
@@ -114,6 +115,114 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Equal("high", test.Priority);
         Assert.Equal("completed", test.Status);
         Assert.Equal("reviewed", test.Notes);
+    }
+
+    /// <summary>Atomic batch creation persists all FR/TR/TEST rows when every record is valid.</summary>
+    [Fact]
+    public async Task AddBatchAsync_ValidMixedRecords_PersistsAllRows()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("batch-create"));
+        var service = fixture.CreateService();
+
+        var result = await service.AddBatchAsync(new RequirementsBatchEntries(
+            [new FrEntry("FR-MCP-903", "Batch FR", "FR body", Priority: "high")],
+            [new TrEntry("TR-MCP-BATCH-903", "Batch TR", "TR body", Priority: "high")],
+            [new TestEntry("TEST-MCP-903", "TEST body", Title: "Batch TEST", Priority: "high")])).ConfigureAwait(true);
+
+        Assert.Equal(3, result.Count);
+        Assert.Equal("high", Assert.Single(result.Functional).Priority);
+        Assert.Equal("FR-MCP-903", (await service.GetFrAsync("FR-MCP-903").ConfigureAwait(true))?.Id);
+        Assert.Equal("TR-MCP-BATCH-903", (await service.GetTrAsync("TR-MCP-BATCH-903").ConfigureAwait(true))?.Id);
+        Assert.Equal("TEST-MCP-903", (await service.GetTestAsync("TEST-MCP-903").ConfigureAwait(true))?.Id);
+    }
+
+    /// <summary>Atomic batch updates preserve structured acceptance criteria through database storage.</summary>
+    [Fact]
+    public async Task UpdateBatchAsync_PreservesAcceptanceCriteria()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("batch-update-ac"));
+        var service = fixture.CreateService();
+        await service.AddFrAsync(new FrEntry("FR-MCP-906", "Existing", "Existing body")).ConfigureAwait(true);
+
+        var result = await service.UpdateBatchAsync(new RequirementsBatchEntries(
+            [
+                new FrEntry(
+                    "FR-MCP-906",
+                    "Updated",
+                    "Updated body",
+                    AcceptanceCriteria:
+                    [
+                        new AcceptanceCriterion
+                        {
+                            Id = "FR-MCP-906-AC001",
+                            Text = "Batch update preserves criteria.",
+                            IsSatisfied = false
+                        }
+                    ])
+            ],
+            [],
+            [])).ConfigureAwait(true);
+
+        var resultCriteria = Assert.Single(Assert.Single(result.Functional).AcceptanceCriteria!);
+        Assert.Equal("FR-MCP-906-AC001", resultCriteria.Id);
+        Assert.Equal("Batch update preserves criteria.", resultCriteria.Text);
+        Assert.False(resultCriteria.IsSatisfied);
+
+        var reloaded = await service.GetFrAsync("FR-MCP-906").ConfigureAwait(true);
+        var persistedCriteria = Assert.Single(reloaded!.AcceptanceCriteria!);
+        Assert.Equal("FR-MCP-906-AC001", persistedCriteria.Id);
+        Assert.Equal("Batch update preserves criteria.", persistedCriteria.Text);
+        Assert.False(persistedCriteria.IsSatisfied);
+    }
+
+    /// <summary>Atomic batch creation rejects conflicts before committing any later record.</summary>
+    [Fact]
+    public async Task AddBatchAsync_ExistingConflict_RollsBackWholeBatch()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("batch-conflict"));
+        var service = fixture.CreateService();
+        await service.AddFrAsync(new FrEntry("FR-MCP-904", "Existing", "Existing body")).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<RequirementsConflictException>(() =>
+            service.AddBatchAsync(new RequirementsBatchEntries(
+                [
+                    new FrEntry("FR-MCP-904", "Conflict", "Conflict body"),
+                    new FrEntry("FR-MCP-905", "Should not persist", "Should not persist body")
+                ],
+                [],
+                []))).ConfigureAwait(true);
+
+        Assert.Null(await service.GetFrAsync("FR-MCP-905").ConfigureAwait(true));
+    }
+
+    /// <summary>Transaction compensation restores the prior requirements snapshot and allows retrying a rolled-back ID.</summary>
+    [Fact]
+    public async Task RestoreRequirementsSnapshotAsync_SoftDeletesCreatedRowsAndAllowsRetry()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("compensation-retry"));
+        var service = fixture.CreateService();
+        await service.AddFrAsync(new FrEntry("FR-MCP-907", "Original", "Original body")).ConfigureAwait(true);
+
+        var snapshot = await service.CaptureRequirementsSnapshotAsync(CancellationToken.None).ConfigureAwait(true);
+        await service.UpdateFrAsync(new FrEntry("FR-MCP-907", "Changed", "Changed body")).ConfigureAwait(true);
+        await service.AddTrAsync(new TrEntry("TR-MCP-REQ-907", "Created TR", "Created body")).ConfigureAwait(true);
+
+        await service.RestoreRequirementsSnapshotAsync(snapshot, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal("Original body", (await service.GetFrAsync("FR-MCP-907").ConfigureAwait(true))?.Body);
+        Assert.Null(await service.GetTrAsync("TR-MCP-REQ-907").ConfigureAwait(true));
+
+        await service.AddTrAsync(new TrEntry("TR-MCP-REQ-907", "Retry TR", "Retry body")).ConfigureAwait(true);
+
+        var retried = await service.GetTrAsync("TR-MCP-REQ-907").ConfigureAwait(true);
+        Assert.NotNull(retried);
+        Assert.Equal("Retry body", retried!.Body);
+        var rows = await fixture.GetRequirementRowsAsync().ConfigureAwait(true);
+        Assert.Single(rows, row => row.Kind == "tr" && row.Id == "TR-MCP-REQ-907");
     }
 
     /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>

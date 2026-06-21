@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>McpServer.QBAgent.Tools</RootNamespace>
+    <AssemblyName>McpServer.QBAgent.Tools</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\McpServer.McpAgent\McpServer.McpAgent.csproj" />
+    <ProjectReference Include="..\McpServer.Services\McpServer.Services.csproj" />
+    <ProjectReference Include="..\McpServer.QBAgent.Skills\McpServer.QBAgent.Skills.csproj" />
+  </ItemGroup>
+</Project>

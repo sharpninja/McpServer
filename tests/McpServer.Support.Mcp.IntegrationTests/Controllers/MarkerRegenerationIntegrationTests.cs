@@ -3,9 +3,14 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
@@ -129,7 +134,9 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var updateResponse = await _client.PutAsJsonAsync(
             new Uri("/mcpserver/workspace/prompt", UriKind.Relative),
             new { template = customPrompt }).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
+        var updateBody = await updateResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(updateResponse.StatusCode == HttpStatusCode.OK,
+            $"Global prompt update failed ({updateResponse.StatusCode}): {updateBody}");
 
         var promptResult = await updateResponse.Content.ReadFromJsonAsync<GlobalPromptResult>().ConfigureAwait(true);
         Assert.NotNull(promptResult);
@@ -158,7 +165,9 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var updateResponse = await _client.PutAsJsonAsync(
             new Uri($"/mcpserver/workspace/{key}", UriKind.Relative),
             new { promptTemplate = workspacePrompt }).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
+        var updateBody = await updateResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(updateResponse.StatusCode == HttpStatusCode.OK,
+            $"Workspace prompt update failed ({updateResponse.StatusCode}): {updateBody}");
 
         // 3. Wait for FSW latch then validate.
         await markerChanged.ConfigureAwait(true);
@@ -180,7 +189,9 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var globalResponse = await _client.PutAsJsonAsync(
             new Uri("/mcpserver/workspace/prompt", UriKind.Relative),
             new { template = globalPrompt }).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, globalResponse.StatusCode);
+        var globalBody = await globalResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(globalResponse.StatusCode == HttpStatusCode.OK,
+            $"Global prompt update failed ({globalResponse.StatusCode}): {globalBody}");
         await settingsChanged.ConfigureAwait(true);
         await markerGlobal.ConfigureAwait(true);
 
@@ -195,7 +206,9 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var wsResponse = await _client.PutAsJsonAsync(
             new Uri($"/mcpserver/workspace/{key}", UriKind.Relative),
             new { promptTemplate = workspacePrompt }).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, wsResponse.StatusCode);
+        var wsBody = await wsResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(wsResponse.StatusCode == HttpStatusCode.OK,
+            $"Workspace prompt update failed ({wsResponse.StatusCode}): {wsBody}");
         await settingsChanged2.ConfigureAwait(true);
         await markerWs.ConfigureAwait(true);
 
@@ -274,6 +287,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.OK, listResponse.StatusCode);
         var listBody = await listResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.Contains("marker-test", listBody);
+        Assert.Contains(_workspacePath.Replace("\\", "\\\\", StringComparison.Ordinal), listBody);
     }
 
     private async Task StartWorkspaceAndWaitForMarkerAsync(string key)
@@ -338,6 +352,10 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             var templateStoragePath = Path.Combine(ResolveSolutionRoot(), "templates", "prompt-templates.yaml");
+            var dataPath = Path.Combine(_workspacePath, ".mcp-test-data");
+            Directory.CreateDirectory(dataPath);
+            var databasePath = Path.Combine(dataPath, "mcp.db");
+            var todoDatabasePath = Path.Combine(dataPath, "todo.db");
             builder.UseEnvironment("Test");
             // Program.cs sets ContentRootPath to the primary workspace from the repo's
             // appsettings.json.  Override to point at the test workspace folder so
@@ -349,15 +367,17 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                 config.AddJsonFile(Path.Combine(_workspacePath, "appsettings.json"), optional: false, reloadOnChange: true);
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:DataSource", databasePath },
+                    { "Mcp:DataDirectory", dataPath },
                     { "Mcp:Port", _temporaryPort.ToString(System.Globalization.CultureInfo.InvariantCulture) },
                     { "Mcp:Tunnel:Port", _temporaryPort.ToString(System.Globalization.CultureInfo.InvariantCulture) },
                     { "Mcp:RepoRoot", _workspacePath },
                     { "Mcp:TodoFilePath", "docs/todo.yaml" },
                     { "Mcp:TodoStorage:Provider", "sqlite" },
-                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" },
+                    { "Mcp:TodoStorage:SqliteDataSource", todoDatabasePath },
                     { "Mcp:Database:Provider", "sqlite" },
-                    { "Mcp:Database:Sqlite:DataSource", "mcp.db" },
+                    { "Mcp:Database:Sqlite:DataSource", databasePath },
+                    { "Mcp:UseInMemoryDatabaseForTests", "false" },
                     { "Mcp:TemplateStorage:FilePath", templateStoragePath },
                 });
             });
@@ -365,13 +385,43 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
             // Re-register it so auto-start writes the initial marker file.
             builder.ConfigureServices(services =>
             {
+                ConfigureTestDatabase(services, databasePath);
                 services.RemoveAll<ServerRuntimeInfo>();
                 services.AddSingleton(new ServerRuntimeInfo(DateTimeOffset.UtcNow, _temporaryPort));
                 services.PostConfigure<TodoPromptOptions>(options => options.BaseUrl = IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort));
                 services.PostConfigure<TunnelOptions>(options => options.Port = _temporaryPort);
+                services.AddHostedService<TestDatabaseInitializer>();
                 services.AddHostedService(sp =>
                     (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
             });
+        }
+
+        private static void ConfigureTestDatabase(IServiceCollection services, string databasePath)
+        {
+            var connectionString = $"Data Source={databasePath}";
+            var providerOptions = McpDatabaseProviderFactory.CreateOptions("sqlite", connectionString);
+
+            services.RemoveAll<DbContextOptions>();
+            services.RemoveAll<DbContextOptions<McpDbContext>>();
+            services.RemoveAll<IDbContextOptionsConfiguration<McpDbContext>>();
+            services.RemoveAll<McpDatabaseProviderOptions>();
+            services.RemoveAll<McpDatabaseRuntimeOptions>();
+            services.AddSingleton(providerOptions);
+            services.AddSingleton(new McpDatabaseRuntimeOptions(
+                providerOptions,
+                new McpDatabaseEncryptionOptions(
+                    enabled: false,
+                    sqliteKey: null,
+                    sqliteSeeToolPath: null,
+                    postgreSqlKeyProvider: null,
+                    postgreSqlPrincipalKey: null,
+                    sqlServerCertificateName: null,
+                    sqlServerDatabaseEncryptionKeyName: null)));
+            services.AddDbContext<McpDbContext>(options =>
+            {
+                McpDatabaseProviderFactory.Configure(options, providerOptions);
+                options.EnableSensitiveDataLogging();
+            }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
         }
 
         private static string ResolveSolutionRoot()
@@ -387,6 +437,25 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
             }
 
             throw new DirectoryNotFoundException("Could not locate the solution root for marker regeneration integration tests.");
+        }
+
+        private sealed class TestDatabaseInitializer : IHostedService
+        {
+            private readonly IServiceProvider _services;
+
+            public TestDatabaseInitializer(IServiceProvider services)
+            {
+                _services = services;
+            }
+
+            public async Task StartAsync(CancellationToken cancellationToken)
+            {
+                using var scope = _services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+                await db.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
         }
     }
 }

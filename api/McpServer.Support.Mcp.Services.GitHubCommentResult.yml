@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of adding a comment.'
+  summary: 'TR-PLANNED-CORE-013: Result of adding a comment.'
   example: []
   syntax:
     content: 'public sealed record GitHubCommentResult : IEquatable<GitHubCommentResult>'
@@ -56,7 +56,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of adding a comment.'
+  summary: 'TR-PLANNED-CORE-013: Result of adding a comment.'
   example: []
   syntax:
     content: public GitHubCommentResult(bool Success, string? Error)

@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Channel-based buffer for interaction log entries. Non-blocking enqueue; async dequeue for background submission.'
+  summary: 'TR-PLANNED-CORE-013: Channel-based buffer for interaction log entries. Non-blocking enqueue; async dequeue for background submission.'
   example: []
   syntax:
     content: 'public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionChannel'
@@ -56,7 +56,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public InteractionLogSubmissionChannel(IOptions<McpInteractionLoggingOptions> options)

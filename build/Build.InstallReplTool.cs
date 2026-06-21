@@ -1,6 +1,8 @@
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Serilog;
+using System.IO;
+using System.Security;
 
 partial class Build
 {
@@ -24,9 +26,27 @@ partial class Build
                 return;
             }
 
+            var packageSource = SecurityElement.Escape(LocalPackagesDirectory.ToString());
+            var nugetConfig = LocalPackagesDirectory / "NuGet.LocalTool.config";
+            File.WriteAllText(
+                nugetConfig,
+                $"""
+                <?xml version="1.0" encoding="utf-8"?>
+                <configuration>
+                  <packageSources>
+                    <clear />
+                    <add key="local-packages" value="{packageSource}" />
+                  </packageSources>
+                </configuration>
+                """);
+
+            var versionArgs = string.IsNullOrWhiteSpace(PackageVersion)
+                ? string.Empty
+                : $" --version {PackageVersion}";
+
             var args = UpdateTool
-                ? $"tool update --global {packageId} --add-source \"{LocalPackagesDirectory}\""
-                : $"tool install --global {packageId} --add-source \"{LocalPackagesDirectory}\"";
+                ? $"tool update --global {packageId} --configfile \"{nugetConfig}\"{versionArgs}"
+                : $"tool install --global {packageId} --configfile \"{nugetConfig}\"{versionArgs}";
 
             Log.Information("{Action} {Package}...", UpdateTool ? "Updating" : "Installing", packageId);
             ProcessTasks.StartProcess("dotnet", args).AssertZeroExitCode();

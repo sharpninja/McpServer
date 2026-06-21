@@ -24,7 +24,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
   summary: >-
-    TR-PLANNED-013: Abstraction for generating text embeddings for vector search.
+    TR-PLANNED-CORE-013: Abstraction for generating text embeddings for vector search.
 
     FR-SUPPORT-010: Supports ONNX-based embedding models (e.g. all-MiniLM-L6-v2).
   example: []
@@ -49,7 +49,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Generate an embedding vector for a single text.'
+  summary: 'TR-PLANNED-CORE-013: Generate an embedding vector for a single text.'
   example: []
   syntax:
     content: float[] GenerateEmbedding(string text)
@@ -83,7 +83,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Generate embedding vectors for a batch of texts.'
+  summary: 'TR-PLANNED-CORE-013: Generate embedding vectors for a batch of texts.'
   example: []
   syntax:
     content: ReadOnlyMemory<float>[] GenerateEmbeddings(IReadOnlyList<string> texts)
@@ -117,7 +117,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Embedding vector dimensions.'
+  summary: 'TR-PLANNED-CORE-013: Embedding vector dimensions.'
   example: []
   syntax:
     content: int Dimensions { get; }
@@ -144,7 +144,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Whether the embedding model is loaded and ready.'
+  summary: 'TR-PLANNED-CORE-013: Whether the embedding model is loaded and ready.'
   example: []
   syntax:
     content: bool IsAvailable { get; }

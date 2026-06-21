@@ -1,3 +1,5 @@
+using McpServer.Support.Mcp.Models;
+
 namespace McpServer.Support.Mcp.Requirements.Models;
 
 /// <summary>FR-MCP-026: Functional Requirement entry parsed from Functional-Requirements.md.</summary>
@@ -8,6 +10,7 @@ namespace McpServer.Support.Mcp.Requirements.Models;
 /// <param name="Priority">The requirement priority.</param>
 /// <param name="Status">The requirement status.</param>
 /// <param name="Notes">Optional operator notes.</param>
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 public sealed record FrEntry(
     string Id,
     string Title,
@@ -15,7 +18,8 @@ public sealed record FrEntry(
     string WorkspaceId = "",
     string Priority = "medium",
     string Status = "pending",
-    string? Notes = null);
+    string? Notes = null,
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>FR-MCP-026: Technical Requirement entry parsed from Technical-Requirements.md.</summary>
 /// <param name="Id">The TR identifier (e.g. TR-MCP-ARCH-001).</param>
@@ -25,6 +29,7 @@ public sealed record FrEntry(
 /// <param name="Priority">The requirement priority.</param>
 /// <param name="Status">The requirement status.</param>
 /// <param name="Notes">Optional operator notes.</param>
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 public sealed record TrEntry(
     string Id,
     string Title,
@@ -32,7 +37,8 @@ public sealed record TrEntry(
     string WorkspaceId = "",
     string Priority = "medium",
     string Status = "pending",
-    string? Notes = null);
+    string? Notes = null,
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>FR-MCP-026: Testing Requirement entry parsed from Testing-Requirements.md.</summary>
 /// <param name="Id">The TEST identifier (e.g. TEST-MCP-001).</param>
@@ -42,6 +48,7 @@ public sealed record TrEntry(
 /// <param name="Priority">The requirement priority.</param>
 /// <param name="Status">The requirement status.</param>
 /// <param name="Notes">Optional operator notes.</param>
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 public sealed record TestEntry(
     string Id,
     string Condition,
@@ -49,7 +56,26 @@ public sealed record TestEntry(
     string Title = "",
     string Priority = "medium",
     string Status = "pending",
-    string? Notes = null);
+    string? Notes = null,
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+
+/// <summary>
+/// FR-MCP-026: Grouped FR/TR/TEST requirement entries used by atomic batch mutations.
+/// </summary>
+/// <param name="Functional">Functional requirement entries in the batch.</param>
+/// <param name="Technical">Technical requirement entries in the batch.</param>
+/// <param name="Testing">Testing requirement entries in the batch.</param>
+public sealed record RequirementsBatchEntries(
+    IReadOnlyList<FrEntry> Functional,
+    IReadOnlyList<TrEntry> Technical,
+    IReadOnlyList<TestEntry> Testing)
+{
+    /// <summary>An empty requirements batch.</summary>
+    public static RequirementsBatchEntries Empty { get; } = new([], [], []);
+
+    /// <summary>Total number of entries across all requirement kinds.</summary>
+    public int Count => Functional.Count + Technical.Count + Testing.Count;
+}
 
 /// <summary>FR-MCP-026: FR-to-TR mapping row from TR-per-FR-Mapping.md.</summary>
 public sealed record FrTrMapping

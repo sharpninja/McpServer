@@ -23,7 +23,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of running an external process.'
+  summary: 'TR-PLANNED-CORE-013: Result of running an external process.'
   example: []
   syntax:
     content: 'public sealed record ProcessRunResult : IEquatable<ProcessRunResult>'
@@ -57,7 +57,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Result of running an external process.'
+  summary: 'TR-PLANNED-CORE-013: Result of running an external process.'
   example: []
   syntax:
     content: public ProcessRunResult(int ExitCode, string? Stdout, string? Stderr)

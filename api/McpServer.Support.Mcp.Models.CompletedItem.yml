@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: A completed item summary entry.'
+  summary: 'TR-PLANNED-CORE-013: A completed item summary entry.'
   example: []
   syntax:
     content: public sealed class CompletedItem

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-013: Tests verifying MD normalization produces structured text suitable for chunking.</summary>
+/// <summary>TR-PLANNED-CORE-013: Tests verifying MD normalization produces structured text suitable for chunking.</summary>
 public sealed class SessionLogIngestorChunkingTests : IDisposable
 {
     private readonly McpDbContext _db;

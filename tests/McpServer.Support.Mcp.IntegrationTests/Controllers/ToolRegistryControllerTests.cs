@@ -173,6 +173,8 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
 
         var updateReq = new { tags = new[] { "new1", "new2", "new3" } };
         var response = await _client.PutAsJsonAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative), updateReq).ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(response.StatusCode == HttpStatusCode.OK, $"Update failed ({response.StatusCode}): {body}");
         var result = await response.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
 
         Assert.Equal(3, result!.Tool!.Tags.Count);
@@ -189,7 +191,8 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
         var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
 
         var response = await _client.DeleteAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative)).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(response.StatusCode == HttpStatusCode.OK, $"Delete failed ({response.StatusCode}): {body}");
     }
 
     [Fact]

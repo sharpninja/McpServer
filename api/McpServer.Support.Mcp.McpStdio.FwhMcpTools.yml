@@ -42,7 +42,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
   summary: >-
-    TR-PLANNED-013: MCP tools exposed over STDIO; same capabilities as HTTP /mcpserver/context, /mcpserver/repo, /mcpserver/sync.
+    TR-PLANNED-CORE-013: MCP tools exposed over STDIO; same capabilities as HTTP /mcpserver/context, /mcpserver/repo, /mcpserver/sync.
 
     Includes TODO, Session Log, and GitHub tools for full STDIO parity.
   example: []
@@ -86,7 +86,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Constructor for DI.'
+  summary: 'TR-PLANNED-CORE-013: Constructor for DI.'
   example: []
   syntax:
     content: public FwhMcpTools(McpDbContext db, IRepoFileService repoFileService, IngestionCoordinator coordinator, ISyncStatusStore syncStatusStore, IContextSearchService searchService, ITodoService todoService, ISessionLogService sessionLogService, IGitHubCliService gitHubCliService)
@@ -514,7 +514,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: List/search TODO items.'
+  summary: 'TR-PLANNED-CORE-013: List/search TODO items.'
   example: []
   syntax:
     content: >-
@@ -566,7 +566,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Get a single TODO by id.'
+  summary: 'TR-PLANNED-CORE-013: Get a single TODO by id.'
   example: []
   syntax:
     content: >-
@@ -614,7 +614,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Create a new TODO item.'
+  summary: 'TR-PLANNED-CORE-013: Create a new TODO item.'
   example: []
   syntax:
     content: >-
@@ -672,7 +672,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Update an existing TODO item.'
+  summary: 'TR-PLANNED-CORE-013: Update an existing TODO item.'
   example: []
   syntax:
     content: >-
@@ -728,7 +728,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Delete a TODO item by id.'
+  summary: 'TR-PLANNED-CORE-013: Delete a TODO item by id.'
   example: []
   syntax:
     content: >-
@@ -776,7 +776,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Submit a session log payload.'
+  summary: 'TR-PLANNED-CORE-013: Submit a session log payload.'
   example: []
   syntax:
     content: >-
@@ -824,7 +824,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Query session logs.'
+  summary: 'TR-PLANNED-CORE-013: Query session logs.'
   example: []
   syntax:
     content: >-
@@ -882,7 +882,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Append processing dialog items to an existing session log entry.'
+  summary: 'TR-PLANNED-CORE-013: Append processing dialog items to an existing session log entry.'
   example: []
   syntax:
     content: >-
@@ -936,7 +936,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: List GitHub issues.'
+  summary: 'TR-PLANNED-CORE-013: List GitHub issues.'
   example: []
   syntax:
     content: >-
@@ -986,7 +986,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: List GitHub pull requests.'
+  summary: 'TR-PLANNED-CORE-013: List GitHub pull requests.'
   example: []
   syntax:
     content: >-
@@ -1036,7 +1036,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Create a GitHub issue.'
+  summary: 'TR-PLANNED-CORE-013: Create a GitHub issue.'
   example: []
   syntax:
     content: >-
@@ -1086,7 +1086,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Comment on a GitHub issue.'
+  summary: 'TR-PLANNED-CORE-013: Comment on a GitHub issue.'
   example: []
   syntax:
     content: >-
@@ -1136,7 +1136,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Comment on a GitHub pull request.'
+  summary: 'TR-PLANNED-CORE-013: Comment on a GitHub pull request.'
   example: []
   syntax:
     content: >-

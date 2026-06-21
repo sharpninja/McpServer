@@ -23,7 +23,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: Single processing dialog entry recording model reasoning during request execution.'
+  summary: 'TR-PLANNED-CORE-013: Single processing dialog entry recording model reasoning during request execution.'
   example: []
   syntax:
     content: public sealed class ProcessingDialogItemDto

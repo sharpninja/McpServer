@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Audit log for repo write operations.
+/// TR-PLANNED-CORE-013: Audit log for repo write operations.
 /// FR-SUPPORT-010: Enforce audit trail for repo.write.
 /// </summary>
 public interface IWriteAuditLog
@@ -17,7 +17,7 @@ public interface IWriteAuditLog
     IReadOnlyList<WriteAuditEntry> GetRecent(int count = 50);
 }
 
-/// <summary>TR-PLANNED-013: Single audit entry.</summary>
+/// <summary>TR-PLANNED-CORE-013: Single audit entry.</summary>
 /// <param name="RelativePath">Relative path of the written file.</param>
 /// <param name="At">UTC timestamp of the write.</param>
 public sealed record WriteAuditEntry(string RelativePath, DateTime At);

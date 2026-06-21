@@ -24,7 +24,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
     private readonly IRequirementsDocumentService _requirementsDocumentService = Substitute.For<IRequirementsDocumentService>();
     private readonly TodoExecutionService _sut;
-    private readonly ITodoService _todoService = Substitute.For<ITodoService>();
+    private readonly ITodoService _todoService = Substitute.For<ITodoService, ITodoCompensationService, ITodoCompensationCapability>();
     private readonly string _workspacePath;
 
     /// <summary>
@@ -78,6 +78,10 @@ public sealed class TodoExecutionServiceTests : IDisposable
                         Remaining = request.Remaining,
                     });
             });
+        ((ITodoCompensationCapability)_todoService).SupportsRollbackCompensation.Returns(true);
+        ((ITodoCompensationService)_todoService)
+            .DeleteCreatedAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new McpServer.Support.Mcp.Services.TodoMutationResult(true));
 
         var resolver = new TodoServiceResolver(
             _todoService,
@@ -144,6 +148,151 @@ public sealed class TodoExecutionServiceTests : IDisposable
 
         Assert.Equal("EXEC-TODO-001", result.TodoIds[0]);
         Assert.Equal("EXEC-TODO-002", result.TodoIds[1]);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies plan expansion deletes already-created legacy TODO rows when a later
+    /// legacy create fails before the execution-state file can be saved.
+    /// </summary>
+    [Fact]
+    public async Task CreateTodosFromPlanAsync_WhenLaterLegacyCreateFails_DeletesAlreadyCreatedTodo()
+    {
+        var phase = await _sut.CreateIterationPhaseAsync(
+            _workspacePath,
+            new CreateIterationPhaseRequest
+            {
+                Name = "Execution phase",
+                Summary = "Bounded execution tests"
+            }).ConfigureAwait(true);
+        var createCalls = 0;
+        _todoService.CreateAsync(Arg.Any<McpServer.Support.Mcp.Services.TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                createCalls++;
+                var request = call.Arg<McpServer.Support.Mcp.Services.TodoCreateRequest>()!;
+                return createCalls == 1
+                    ? new McpServer.Support.Mcp.Services.TodoMutationResult(
+                        true,
+                        null,
+                        new McpServer.Support.Mcp.Services.TodoFlatItem
+                        {
+                            Id = request.Id,
+                            Title = request.Title,
+                            Section = request.Section,
+                            Priority = request.Priority,
+                            Done = false,
+                        })
+                    : new McpServer.Support.Mcp.Services.TodoMutationResult(
+                        false,
+                        "second create failed",
+                        FailureKind: McpServer.Support.Mcp.Services.TodoMutationFailureKind.Conflict);
+            });
+
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _sut.CreateTodosFromPlanAsync(
+                    _workspacePath,
+                    new CreateTodosFromPlanRequest
+                    {
+                        PhaseId = phase.PhaseId,
+                        PlanId = "PLAN-001",
+                        Todos =
+                        [
+                            new PlanTodoInput
+                            {
+                                Title = "Execution todo one",
+                                Goal = "Support Byrd execution.",
+                                Summary = "Create first canonical execution TODO."
+                            },
+                            new PlanTodoInput
+                            {
+                                Title = "Execution todo two",
+                                Goal = "Support Byrd execution.",
+                                Summary = "Create second canonical execution TODO."
+                            }
+                        ]
+                    }))
+            .ConfigureAwait(true);
+        var executionTodo = await _sut.GetTodoAsync(_workspacePath, "EXEC-TODO-001").ConfigureAwait(true);
+
+        Assert.Contains("second create failed", ex.Message, StringComparison.Ordinal);
+        Assert.Null(executionTodo);
+        await ((ITodoCompensationService)_todoService)
+            .Received(1)
+            .DeleteCreatedAsync("EXEC-TODO-001", Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies projection failures that return a created legacy item are compensated
+    /// because the authoritative TODO row may already exist even though the mutation result failed.
+    /// </summary>
+    [Fact]
+    public async Task CreateTodosFromPlanAsync_WhenLegacyCreateProjectionFailsAfterDatabaseCommit_DeletesReturnedCreatedTodo()
+    {
+        var phase = await _sut.CreateIterationPhaseAsync(
+            _workspacePath,
+            new CreateIterationPhaseRequest
+            {
+                Name = "Execution phase",
+                Summary = "Bounded execution tests"
+            }).ConfigureAwait(true);
+        var createCalls = 0;
+        _todoService.CreateAsync(Arg.Any<McpServer.Support.Mcp.Services.TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                createCalls++;
+                var request = call.Arg<McpServer.Support.Mcp.Services.TodoCreateRequest>()!;
+                var item = new McpServer.Support.Mcp.Services.TodoFlatItem
+                {
+                    Id = request.Id,
+                    Title = request.Title,
+                    Section = request.Section,
+                    Priority = request.Priority,
+                    Done = false,
+                };
+                return createCalls == 1
+                    ? new McpServer.Support.Mcp.Services.TodoMutationResult(true, null, item)
+                    : new McpServer.Support.Mcp.Services.TodoMutationResult(
+                        false,
+                        "projection failed",
+                        item,
+                        McpServer.Support.Mcp.Services.TodoMutationFailureKind.ProjectionFailed);
+            });
+
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _sut.CreateTodosFromPlanAsync(
+                    _workspacePath,
+                    new CreateTodosFromPlanRequest
+                    {
+                        PhaseId = phase.PhaseId,
+                        PlanId = "PLAN-001",
+                        Todos =
+                        [
+                            new PlanTodoInput
+                            {
+                                Title = "Execution todo one",
+                                Goal = "Support Byrd execution.",
+                                Summary = "Create first canonical execution TODO."
+                            },
+                            new PlanTodoInput
+                            {
+                                Title = "Execution todo two",
+                                Goal = "Support Byrd execution.",
+                                Summary = "Create second canonical execution TODO."
+                            }
+                        ]
+                    }))
+            .ConfigureAwait(true);
+
+        Assert.Contains("projection failed", ex.Message, StringComparison.Ordinal);
+        await ((ITodoCompensationService)_todoService)
+            .Received(1)
+            .DeleteCreatedAsync("EXEC-TODO-001", Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await ((ITodoCompensationService)_todoService)
+            .Received(1)
+            .DeleteCreatedAsync("EXEC-TODO-002", Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
@@ -219,17 +220,33 @@ public sealed class TodoBootstrapImporterTests : IDisposable
     {
         var services = new ServiceCollection();
         services.AddDbContext<McpDbContext>(opts => opts.UseSqlite(_conn));
-        var sp = services.BuildServiceProvider();
-        using (var s = sp.CreateScope())
-            s.ServiceProvider.GetRequiredService<McpDbContext>().Database.EnsureCreated();
-
         var dict = new Dictionary<string, string?>();
+        var workspaceDtos = new List<WorkspaceDto>();
         for (var i = 0; i < workspaces.Count; i++)
         {
             dict[$"Mcp:Workspaces:{i}:WorkspacePath"] = workspaces[i].Workspace;
             dict[$"Mcp:Workspaces:{i}:Name"] = $"ws-{i}";
             dict[$"Mcp:Workspaces:{i}:TodoPath"] = workspaces[i].TodoPath;
+            workspaceDtos.Add(new WorkspaceDto
+            {
+                WorkspacePath = workspaces[i].Workspace,
+                Name = $"ws-{i}",
+                TodoPath = workspaces[i].TodoPath,
+                IsEnabled = true,
+                StatusPrompt = "status",
+                ImplementPrompt = "implement",
+                PlanPrompt = "plan",
+            });
         }
+        var workspaceService = Substitute.For<IWorkspaceService>();
+        workspaceService.ListAsync(Arg.Any<CancellationToken>())
+            .Returns(new WorkspaceListResult(workspaceDtos, workspaceDtos.Count));
+        services.AddSingleton(workspaceService);
+
+        var sp = services.BuildServiceProvider();
+        using (var s = sp.CreateScope())
+            s.ServiceProvider.GetRequiredService<McpDbContext>().Database.EnsureCreated();
+
         var config = new ConfigurationBuilder().AddInMemoryCollection(dict).Build();
 
         return new TodoBootstrapImporter(

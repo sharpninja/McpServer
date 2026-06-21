@@ -24,7 +24,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
   summary: >-
-    TR-PLANNED-013: 4NF tag entity. One row per tag on a session log entry.
+    TR-PLANNED-CORE-013: 4NF tag entity. One row per tag on a session log entry.
 
     FR-SUPPORT-010: Eliminates multi-valued dependency on tags.
   example: []
@@ -58,7 +58,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Auto-generated primary key.'
+  summary: 'TR-PLANNED-CORE-013: Auto-generated primary key.'
   example: []
   syntax:
     content: >-
@@ -95,7 +95,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Foreign key to parent entry.'
+  summary: 'TR-PLANNED-CORE-013: Foreign key to parent entry.'
   example: []
   syntax:
     content: public long SessionLogEntryId { get; set; }
@@ -122,7 +122,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Tag value.'
+  summary: 'TR-PLANNED-CORE-013: Tag value.'
   example: []
   syntax:
     content: >-
@@ -168,7 +168,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to parent entry.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to parent entry.'
   example: []
   syntax:
     content: public SessionLogEntryEntity? SessionLogEntry { get; set; }

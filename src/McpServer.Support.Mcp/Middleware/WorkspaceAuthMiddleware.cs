@@ -139,74 +139,74 @@ public sealed class WorkspaceAuthMiddleware
 
         // ── API key path (agents only) ────────────────────────────────────────
         var workspacePath = workspaceContext.WorkspacePath ?? configuration["Mcp:RepoRoot"] ?? string.Empty;
+        var expected = string.IsNullOrWhiteSpace(workspacePath) ? null : tokenService.GetToken(workspacePath);
 
-        // Fail closed when workspace resolution or token initialization is unavailable.
-        if (string.IsNullOrWhiteSpace(workspacePath))
+        if (expected is not null)
         {
-            _logger.LogWarning("[WS-Auth] {Method} {Path} | Workspace unresolved for API-key auth → 503",
-                method, path);
-            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
-            context.Response.ContentType = "application/json";
-            var unresolvedWorkspaceBody = new
-            {
-                error = "Workspace authentication is unavailable because no workspace could be resolved for this request. Send X-Workspace-Path or retry after startup completes."
-            };
-            await context.Response.WriteAsync(
-                JsonSerializer.Serialize(unresolvedWorkspaceBody, s_json),
-                context.RequestAborted).ConfigureAwait(false);
-            return;
-        }
-
-        var expected = tokenService.GetToken(workspacePath);
-        if (expected is null)
-        {
-            _logger.LogWarning("[WS-Auth] {Method} {Path} | Full workspace token missing for {WorkspacePath} → 503",
-                method, path, workspacePath);
-            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
-            context.Response.ContentType = "application/json";
-            var missingTokenBody = new
-            {
-                error = "Workspace authentication is temporarily unavailable because the workspace API token has not been initialized. Retry after startup completes."
-            };
-            await context.Response.WriteAsync(
-                JsonSerializer.Serialize(missingTokenBody, s_json),
-                context.RequestAborted).ConfigureAwait(false);
-            return;
-        }
-
-        // Full-access token — unrestricted.
-        if (tokenService.ValidateToken(workspacePath, provided))
-        {
-            await _next(context).ConfigureAwait(false);
-            return;
-        }
-
-        // Default (anonymous) token — read-only only.
-        if (tokenService.ValidateDefaultToken(workspacePath, provided))
-        {
-            context.Items[IsDefaultKeyItem] = true;
-            var isReadOnly = s_readOnlyMethods.Contains(context.Request.Method);
-
-            if (isReadOnly)
+            // Full-access token — unrestricted.
+            if (tokenService.ValidateToken(workspacePath, provided))
             {
                 await _next(context).ConfigureAwait(false);
                 return;
             }
 
-            // Write operation with only a default key — reject.
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
-            context.Response.ContentType = "application/json";
-            var forbiddenBody = new
+            // Default (anonymous) token — read-only only.
+            if (tokenService.ValidateDefaultToken(workspacePath, provided))
             {
-                error = "Default API key grants read-only access only. " +
-                        "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file or a valid JWT Bearer token for write operations."
+                context.Items[IsDefaultKeyItem] = true;
+                if (s_readOnlyMethods.Contains(context.Request.Method))
+                {
+                    await _next(context).ConfigureAwait(false);
+                    return;
+                }
+
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                context.Response.ContentType = "application/json";
+                var forbiddenBody = new
+                {
+                    error = "Default API key grants read-only access only. " +
+                            "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file or a valid JWT Bearer token for write operations."
+                };
+                await context.Response.WriteAsync(
+                    JsonSerializer.Serialize(forbiddenBody, s_json),
+                    context.RequestAborted).ConfigureAwait(false);
+                return;
+            }
+
+            // Known workspace, wrong key → 401.
+            await WriteUnauthorizedAsync(context).ConfigureAwait(false);
+            return;
+        }
+
+        // `expected` is null: no full token for the effective workspace path.
+        // TR-MCP-AUTH-010: 503 is reserved strictly for genuine startup readiness — no full token
+        // has been seeded for any workspace yet, so we cannot authenticate anyone.
+        if (!tokenService.IsInitialized)
+        {
+            _logger.LogWarning("[WS-Auth] {Method} {Path} | Auth-token subsystem not initialized → 503 (startup)",
+                method, path);
+            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+            context.Response.Headers.RetryAfter = "5";
+            context.Response.ContentType = "application/json";
+            var startupBody = new
+            {
+                error = "Workspace authentication is starting up: the per-workspace token subsystem has not been initialized yet. Retry shortly."
             };
             await context.Response.WriteAsync(
-                JsonSerializer.Serialize(forbiddenBody, s_json),
+                JsonSerializer.Serialize(startupBody, s_json),
                 context.RequestAborted).ConfigureAwait(false);
             return;
         }
 
+        // Subsystem is initialized: a valid full/default token would have reverse-resolved a workspace
+        // in WorkspaceResolutionMiddleware and produced a non-null expected token here.
+        _logger.LogWarning("[WS-Auth] {Method} {Path} | Unresolved workspace / unknown API key (initialized) → 401",
+            method, path);
+        await WriteUnauthorizedAsync(context).ConfigureAwait(false);
+    }
+
+    private static async Task WriteUnauthorizedAsync(HttpContext context)
+    {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
         context.Response.ContentType = "application/json";
         var body = new

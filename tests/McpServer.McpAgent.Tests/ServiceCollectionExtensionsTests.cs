@@ -64,6 +64,36 @@ public sealed class ServiceCollectionExtensionsTests
     }
 
     /// <summary>
+    /// TEST-MCP-186: Verifies that the ACID profile projects stable Agent Framework metadata and
+    /// strict invariants through normal dependency injection without changing default registration.
+    /// </summary>
+    [Fact]
+    public void AddMcpServerMcpAgent_RegistersAcidTightlyCoupledProfile()
+    {
+        var services = new ServiceCollection();
+        services.AddMcpServerMcpAgent(options =>
+        {
+            options.UseAcidTightlyCoupledProfile();
+            options.ApiKey = "acid-token";
+            options.BaseUrl = new Uri("http://localhost:7147");
+            options.WorkspacePath = @"E:\github\McpServer";
+        });
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var hostedAgent = serviceProvider.GetRequiredService<IMcpHostedAgent>();
+        var agentOptions = serviceProvider.GetRequiredService<ChatClientAgentOptions>();
+        var definition = QBAgentDefinition.Instance;
+
+        Assert.Equal(McpAgentExecutionProfile.AcidTightlyCoupled, hostedAgent.ExecutionProfile);
+        Assert.Equal(definition.AgentId, hostedAgent.AgentOptions.Id);
+        Assert.Equal(definition.AgentName, hostedAgent.AgentOptions.Name);
+        Assert.Equal(definition.Description, hostedAgent.AgentOptions.Description);
+        Assert.Equal(definition.SourceType, hostedAgent.SourceType);
+        Assert.Equal(definition.AgentId, agentOptions.Id);
+        Assert.Equal("acid-token", hostedAgent.Client.ApiKey);
+    }
+
+    /// <summary>
     /// TEST-MCP-089: Verifies that the registration surface exposes the options validator for fast-fail host startup behavior.
     /// The test resolves validators from a local service provider because this todo only covers registration wiring, not runtime workflow execution.
     /// </summary>
@@ -194,6 +224,28 @@ public sealed class ServiceCollectionExtensionsTests
             () => serviceProvider.GetRequiredService<IMcpHostedAgent>());
 
         Assert.Contains("WorkspacePath must be fully qualified", exception.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-186: Verifies that the ACID profile fails closed when the host omits the required
+    /// workspace binding used for audit and transaction scope.
+    /// </summary>
+    [Fact]
+    public void AddMcpServerMcpAgent_ThrowsWhenAcidProfileWorkspacePathIsMissing()
+    {
+        var services = new ServiceCollection();
+        services.AddMcpServerMcpAgent(options =>
+        {
+            options.UseAcidTightlyCoupledProfile();
+            options.ApiKey = "token";
+        });
+
+        using var serviceProvider = services.BuildServiceProvider();
+
+        var exception = Assert.Throws<OptionsValidationException>(
+            () => serviceProvider.GetRequiredService<IMcpHostedAgent>());
+
+        Assert.Contains("WorkspacePath is required for the ACID tightly coupled", exception.Message, StringComparison.Ordinal);
     }
 
     /// <summary>

@@ -42,7 +42,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
   summary: >-
-    TR-PLANNED-013: 4NF session log entry entity. One row per request/response pair.
+    TR-PLANNED-CORE-013: 4NF session log entry entity. One row per request/response pair.
 
     FR-SUPPORT-010: Child of <xref href="McpServer.Support.Mcp.Storage.Entities.SessionLogEntity" data-throw-if-not-resolved="false"></xref>.
   example: []
@@ -76,7 +76,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Auto-generated primary key.'
+  summary: 'TR-PLANNED-CORE-013: Auto-generated primary key.'
   example: []
   syntax:
     content: >-
@@ -113,7 +113,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Foreign key to parent session.'
+  summary: 'TR-PLANNED-CORE-013: Foreign key to parent session.'
   example: []
   syntax:
     content: public long SessionLogId { get; set; }
@@ -140,7 +140,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Unique request identifier within the session.'
+  summary: 'TR-PLANNED-CORE-013: Unique request identifier within the session.'
   example: []
   syntax:
     content: >-
@@ -179,7 +179,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Timestamp of the request (UTC).'
+  summary: 'TR-PLANNED-CORE-013: Timestamp of the request (UTC).'
   example: []
   syntax:
     content: public DateTimeOffset? Timestamp { get; set; }
@@ -206,7 +206,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: AI model used for this entry.'
+  summary: 'TR-PLANNED-CORE-013: AI model used for this entry.'
   example: []
   syntax:
     content: >-
@@ -245,7 +245,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Model provider (e.g. OpenAI, Anthropic).'
+  summary: 'TR-PLANNED-CORE-013: Model provider (e.g. OpenAI, Anthropic).'
   example: []
   syntax:
     content: >-
@@ -284,7 +284,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Full user query text.'
+  summary: 'TR-PLANNED-CORE-013: Full user query text.'
   example: []
   syntax:
     content: public string? QueryText { get; set; }
@@ -311,7 +311,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Short title summarizing the query.'
+  summary: 'TR-PLANNED-CORE-013: Short title summarizing the query.'
   example: []
   syntax:
     content: >-
@@ -350,7 +350,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Agent response text.'
+  summary: 'TR-PLANNED-CORE-013: Agent response text.'
   example: []
   syntax:
     content: public string? Response { get; set; }
@@ -377,7 +377,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Agent interpretation of the request.'
+  summary: 'TR-PLANNED-CORE-013: Agent interpretation of the request.'
   example: []
   syntax:
     content: public string? Interpretation { get; set; }
@@ -404,7 +404,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Entry status (e.g. completed, in_progress).'
+  summary: 'TR-PLANNED-CORE-013: Entry status (e.g. completed, in_progress).'
   example: []
   syntax:
     content: >-
@@ -443,7 +443,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Token count for this entry.'
+  summary: 'TR-PLANNED-CORE-013: Token count for this entry.'
   example: []
   syntax:
     content: public int? TokenCount { get; set; }
@@ -470,7 +470,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Failure note if the entry failed.'
+  summary: 'TR-PLANNED-CORE-013: Failure note if the entry failed.'
   example: []
   syntax:
     content: public string? FailureNote { get; set; }
@@ -497,7 +497,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Success score for this entry.'
+  summary: 'TR-PLANNED-CORE-013: Success score for this entry.'
   example: []
   syntax:
     content: public double? Score { get; set; }
@@ -524,7 +524,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Whether this was a premium request.'
+  summary: 'TR-PLANNED-CORE-013: Whether this was a premium request.'
   example: []
   syntax:
     content: public bool? IsPremium { get; set; }
@@ -551,7 +551,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Raw context data serialized as JSON text.'
+  summary: 'TR-PLANNED-CORE-013: Raw context data serialized as JSON text.'
   example: []
   syntax:
     content: public string? RawContextJson { get; set; }
@@ -578,7 +578,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Original entry before normalization serialized as JSON text.'
+  summary: 'TR-PLANNED-CORE-013: Original entry before normalization serialized as JSON text.'
   example: []
   syntax:
     content: public string? OriginalEntryJson { get; set; }
@@ -605,7 +605,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to parent session.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to parent session.'
   example: []
   syntax:
     content: public SessionLogEntity? SessionLog { get; set; }
@@ -632,7 +632,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to actions.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to actions.'
   example: []
   syntax:
     content: public ICollection<SessionLogActionEntity> Actions { get; set; }
@@ -659,7 +659,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to tags.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to tags.'
   example: []
   syntax:
     content: public ICollection<SessionLogEntryTagEntity> Tags { get; set; }
@@ -686,7 +686,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to context items.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to context items.'
   example: []
   syntax:
     content: public ICollection<SessionLogEntryContextEntity> ContextItems { get; set; }
@@ -713,7 +713,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to processing dialog items. The AI model can independently append entries.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to processing dialog items. The AI model can independently append entries.'
   example: []
   syntax:
     content: public ICollection<SessionLogProcessingDialogEntity> ProcessingDialog { get; set; }

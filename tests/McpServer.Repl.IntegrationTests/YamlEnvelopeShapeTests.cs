@@ -35,13 +35,14 @@ public sealed class YamlEnvelopeShapeTests
 
         var yaml = _yamlSerializer.Serialize(helloEnvelope);
         Assert.Contains("type: hello", yaml);
-        Assert.Contains("protocolVersion: \"1.0\"", yaml);
         Assert.Contains("auth", yaml);
         Assert.Contains("workspace-multi", yaml);
 
         var deserialized = _yamlDeserializer.Deserialize<Dictionary<string, object>>(yaml);
         Assert.NotNull(deserialized);
         Assert.True(deserialized.ContainsKey("type") || deserialized.ContainsKey("Type"));
+        var payload = Assert.IsAssignableFrom<IDictionary<object, object>>(deserialized["payload"]);
+        Assert.Equal("1.0", payload["protocolVersion"].ToString());
     }
 
     [Fact]

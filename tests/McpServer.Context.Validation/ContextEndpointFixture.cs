@@ -1,4 +1,5 @@
 using System.Text.Json;
+using McpServer.Validation;
 using Xunit;
 
 namespace McpServer.Context.Validation;
@@ -48,9 +49,7 @@ public sealed class ContextEndpointFixture : IDisposable
     public ContextEndpointFixture()
     {
         Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-        var apiKey = ResolvePreferredApiKeyAsync(Client).GetAwaiter().GetResult();
-        if (!string.IsNullOrEmpty(apiKey))
-            Client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
+        ValidationAuth.AddPreferredApiKey(Client);
     }
 
     private static async Task<string?> ResolvePreferredApiKeyAsync(HttpClient client)

@@ -63,6 +63,7 @@ public sealed class FederationOperationApplyService : IFederationOperationApplyS
             SourceOperationId = operation.SourceOperationId,
             Domain = operation.Domain,
             ResourceId = operation.ResourceId,
+            GlobalWorkspaceId = operation.GlobalWorkspaceId,
             BaseVersion = operation.BaseVersion,
             PayloadJson = payloadJson,
             HttpMethod = operation.HttpMethod,

@@ -34,3 +34,30 @@ public interface IRequirementsDocumentService : IRequirementsRepository
     /// <returns>Metadata for the workspace files written by the export.</returns>
     Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default);
 }
+
+/// <summary>
+/// TR-MCP-TXN-001: Captures and restores requirements repository state for transaction rollback compensation.
+/// </summary>
+public interface IRequirementsCompensation
+{
+    /// <summary>Captures the current requirements repository state for rollback.</summary>
+    Task<RequirementsCompensationSnapshot> CaptureRequirementsSnapshotAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Restores a previously captured requirements repository state.</summary>
+    Task RestoreRequirementsSnapshotAsync(RequirementsCompensationSnapshot snapshot, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// TR-MCP-TXN-001: Requirements repository snapshot used by transaction rollback compensation.
+/// </summary>
+public sealed record RequirementsCompensationSnapshot(
+    IReadOnlyList<FrEntry> Functional,
+    IReadOnlyList<TrEntry> Technical,
+    IReadOnlyList<TestEntry> Testing,
+    IReadOnlyList<FrTrMapping> Mappings,
+    string Provider = "generic",
+    object? State = null)
+{
+    /// <summary>An empty requirements repository snapshot.</summary>
+    public static RequirementsCompensationSnapshot Empty { get; } = new([], [], [], []);
+}

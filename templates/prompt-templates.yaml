@@ -283,7 +283,7 @@ templates:
 
       1. Read this marker file for connection details and API key.
 
-      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`.
+      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Get the plugin through the MCP Server tool registry before relying on local root hints: search `/mcpserver/tools/search?keyword=<plugin_name>` for the installed tool definition and select the result whose `name` exactly equals `<plugin_name>`; if that exact tool definition is missing, install the definition from `/mcpserver/tools/buckets/official/install?toolName=<plugin_name>`, then search again. Execute the exact tool definition''s returned `commandTemplate` with `targetParent` set to the plugin parent directory to clone or update the plugin repository. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`; Grok must use `mcpserver-grok-plugin`.
 
       3. Verify the marker signature using the workspace API key in this file before contacting the server.
 
@@ -299,11 +299,37 @@ templates:
       ## Required Agent Plugins
 
       - `agent_plugins.policy` is `required`. The plugin contract or deterministic digest is covered by marker signature verification.
-      - If your matching plugin is unavailable, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis.
+      - Plugin acquisition is the bootstrap exception to the normal plugin-only rule: if the matching plugin is not already available locally, use the authenticated tool registry endpoints in this marker to locate/install the matching `mcpserver-*-plugin` tool definition from the `official` bucket and run its clone/update command. After acquisition, bootstrap and use the matching plugin for normal MCP work.
+      - If your matching plugin cannot be acquired through the tool registry or remains unavailable after acquisition, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis.
       - Do not substitute raw REST, generic `mcpserver-repl`, helper modules, or another agent''s plugin for normal session, TODO, requirements, import/export, or traceability operations.
       - Another agent''s plugin may be inspected only for read-only diagnosis of plugin installation or contract drift.
       - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract.
-      - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`.
+      - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks/MCP server declarations must satisfy `agent_plugins.agents.Grok`.
+      - For Grok, the Streamable HTTP MCP server exposes tool names such as `sessionlog_*`, `todo_*`, `requirements_*`, and memory tools when available; hosted-agent `mcp_*` names are not expected from that transport. `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.memory.*`, and `workflow.requirements.*` are plugin shim/REPL method names used by the Grok skills and `repl-invoke` helpers; they are not expected to appear as literal `search_tool` results.
+      - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source.
+
+
+      ## MCP Memories
+
+      MCP memories are durable operator guidance managed by the MCP Server. Global memories apply to every workspace; Workspace memories apply only to the active workspace. Memory IDs use `MEMORY-{CATEGORY}-{NNN}`.
+
+      Agents that support request-boundary injection must render required memories exactly as:
+
+      REQUIRED MEMORIES
+      - MEMORY-REQ-001: Raw memory text.
+
+      If no required memories are visible, render:
+
+      REQUIRED MEMORIES
+      - None.
+
+      Preserve raw memory text exactly; do not summarize, paraphrase, reorder within a scope, silently generate new memories, or add secrets. MCP memories are not a secret store. Effective memory order is Global memories first sorted by ID, then current Workspace memories sorted by ID.
+
+      Existing agent-local memory stores are caches or migration sources only; the MCP memory store is the authoritative shared record. Import agent-local memories only when the operator approves the scope, the content belongs to this workspace or is intentionally Global, and the import does not leak secrets, private notes, or unrelated workspace guidance.
+
+      Attribute memory mutations with the real agent or user identity via `updatedBy` when supported, and record successful memory add/update/remove operations in the active session log through `workflow.sessionlog.appendActions`. Keep import provenance in the session log or dialog instead of adding private source paths to memory text.
+
+      Manage memories through the required plugin or MCP tool surface: `memory_add`, `memory_list`, `memory_update`, `memory_remove`; REPL `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`; or REST `/mcpserver/memory` when explicitly allowed for non-plugin diagnostics.
 
 
       ## Codex MCP Quickstart
@@ -316,7 +342,22 @@ templates:
 
       3. Complete the session-log turn intentionally with `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <final response>` before the final answer when the stop gate cannot infer completion.
 
-      4. For `mcpserver-repl --agent-stdio`, send one YAML envelope per document separated by `---`. Do not send a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
+      4. For `mcpserver-repl --agent-stdio`, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
+
+
+      ## PowerShell Command Quoting
+
+      For every Windows PowerShell Core command:
+
+      - Invoke `pwsh.exe` with `-NoProfile -NonInteractive`. Do not use `powershell.exe`.
+
+      - The PowerShell escape character is the backtick `` ` ``, not the backslash. Never use C or bash-style `\"` escaping inside PowerShell command strings.
+
+      - Prefer single-quoted PowerShell strings for literal regex, paths, JSON/YAML snippets, and text containing pipeline characters such as `|`.
+
+      - When a command needs nested quoting, choose one of these patterns before improvising: `-File` with explicit arguments; piping stdin to the called tool or script; single-quoted or double-quoted here-strings; `-EncodedCommand` for complex inline PowerShell; or correct backtick escaping for embedded PowerShell quotes.
+
+      - If a regex or literal argument contains `|`, `&`, `;`, parentheses, braces, or quotes, verify it is inside a single PowerShell argument before running.
 
 
       ## Federation Topology
@@ -345,6 +386,23 @@ templates:
       - /health nonce verification fails.
       - Any /mcpserver/* call returns 401.
       - The marker endpoint/key changes after a server restart.
+
+
+      ## Continuing After a Server Restart
+
+      The workspace API key rotates on every server restart, so an in-flight agent will begin seeing 401 on /mcpserver/* calls. When that happens, resume through your required agent plugin - do not hand-roll raw REST for session, TODO, or requirements work:
+
+      1. Treat the first 401 (or a /health failure) as a restart signal and stop using the cached API key immediately.
+
+      2. Re-read this marker file (AGENTS-README-FIRST.yaml) for the rotated apiKey and current endpoints.
+
+      3. Re-verify trust before resuming: recompute the marker signature with the new key and call /health with a fresh nonce.
+
+      4. Re-bootstrap and resume through your required agent plugin. Codex: run `Invoke-CodexMcpPlugin.ps1 -Command Status` to re-establish marker trust, health nonce, workspace, and the current session/turn, then continue with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>`. Other agents: re-run the plugin session-start hook/command, then continue via the plugin session tools.
+
+      5. Recover the open turn instead of starting over: query session history through the plugin (workflow.sessionlog.queryHistory), find the in-progress turn, then keep updating and complete it via the plugin. Do not open a duplicate session for the same work.
+
+      6. If the plugin cannot re-establish trust after the restart, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` and continue with non-MCP local diagnosis only.
 
 
       ## Rules
@@ -376,7 +434,7 @@ templates:
       10. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
-      11. Use the Byrd Development Process V3 for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps. A Byrd gate requires 100% test success before moving to the next iteration: zero failed tests and zero skipped tests in the executed validation scope. Tests are the progress ledger; do not hide unfinished work with skipped tests. Track deferred scope in MCP TODO/requirements and add its tests when that slice begins.
+      11. Use the Byrd Development Process V4 for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps. A Byrd gate requires 100% test success before moving to the next iteration: zero failed tests and zero skipped tests in the executed validation scope. Tests are the progress ledger; do not hide unfinished work with skipped tests. Track deferred scope in MCP TODO/requirements and add its tests when that slice begins.
 
 
       ## Planning Standard
@@ -490,7 +548,7 @@ templates:
       ## Protocols
 
 
-      - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Swagger UI: {{baseUrl}}/swagger
+      - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Use this for typed client/API integration and read-only diagnosis after the required plugin/tool route fails. Do not bypass the required plugin for session log, TODO, requirements, import/export, or traceability operations. Swagger UI: {{baseUrl}}/swagger
 
       - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
 
@@ -594,10 +652,6 @@ templates:
       - McpServer.Cqrs (CQRS framework)
 
       - McpServer.Cqrs.Mvvm (MVVM support)
-
-      - McpServer.UI.Core (Core UI logic)
-
-      - McpServer.Director (Director CLI)
 
 
       ---

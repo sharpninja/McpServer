@@ -7,7 +7,7 @@
 // namespace McpServer.Support.Mcp.Services;
 
 // / <summary>
-// / TR-PLANNED-013: Background service that dequeues interaction log entries and submits them asynchronously to the configured logging service URL.
+// / TR-PLANNED-CORE-013: Background service that dequeues interaction log entries and submits them asynchronously to the configured logging service URL.
 // / </summary>
 // public sealed class InteractionLogSubmissionService : BackgroundService
 // {
@@ -17,7 +17,7 @@
 //     private readonly McpInteractionLoggingOptions _options;
 //     private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-//     /// <summary>TR-PLANNED-013: Constructor.</summary>
+//     /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
 //     /// <param name="channel">Channel for dequeuing log entries.</param>
 //     /// <param name="httpClientFactory">Factory for creating HTTP clients.</param>
 //     /// <param name="logger">Logger instance.</param>

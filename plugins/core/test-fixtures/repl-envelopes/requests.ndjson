@@ -1,0 +1,2 @@
+{"type":"request","payload":{"requestId":"req-20260612T000001Z-fixture-json-1","method":"client.diagnostic.GetExecutionPathAsync"}}
+{"type":"request","payload":{"requestId":"req-20260612T000002Z-fixture-json-2","method":"client.diagnostic.GetExecutionPathAsync"}}

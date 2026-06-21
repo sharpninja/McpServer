@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Hybrid search service blending FTS5 BM25 and HNSW vector results using Reciprocal Rank Fusion.
+/// TR-PLANNED-CORE-013: Hybrid search service blending FTS5 BM25 and HNSW vector results using Reciprocal Rank Fusion.
 /// FR-SUPPORT-010: Graceful degradation to FTS5-only, vector-only, or LINQ fallback.
 /// </summary>
 internal sealed class HybridSearchService : IContextSearchService
@@ -18,7 +18,7 @@ internal sealed class HybridSearchService : IContextSearchService
     private readonly McpDbContext _db;
     private readonly ILogger<HybridSearchService> _logger;
 
-    /// <summary>TR-PLANNED-013: Constructor with all search mode dependencies.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor with all search mode dependencies.</summary>
     public HybridSearchService(
         Fts5SearchService fts5,
         IVectorIndexService vectorIndex,
@@ -29,7 +29,7 @@ internal sealed class HybridSearchService : IContextSearchService
     {
     }
 
-    /// <summary>TR-PLANNED-013: Internal constructor for testing with any IContextSearchService.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Internal constructor for testing with any IContextSearchService.</summary>
     internal HybridSearchService(
         IContextSearchService fts5,
         IVectorIndexService vectorIndex,

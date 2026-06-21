@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using McpServer.Client.Models;
 
 namespace McpServer.Repl.Core;
@@ -30,23 +31,48 @@ public interface IReplCommandDispatcher
 }
 
 /// <summary>
+/// Dispatches parsed YAML envelopes and can emit additional envelopes while a command is still running.
+/// This is used for commands that naturally stream progress events before returning a final result.
+/// </summary>
+public interface IStreamingReplCommandDispatcher : IReplCommandDispatcher
+{
+    /// <summary>
+    /// Dispatches a parsed YAML envelope and emits any intermediate envelopes through the supplied callback.
+    /// </summary>
+    /// <param name="envelope">The inbound envelope to dispatch. Must have a non-null payload.</param>
+    /// <param name="emitEnvelopeAsync">Callback used to write intermediate envelopes to the caller, or null to buffer only.</param>
+    /// <param name="cancellationToken">Cancellation token propagated to handlers.</param>
+    /// <returns>The final response envelope to emit back to the caller.</returns>
+    Task<IYamlEnvelope> DispatchAsync(
+        IYamlEnvelope envelope,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken);
+}
+
+/// <summary>
 /// Default <see cref="IReplCommandDispatcher"/> implementation. Routes <c>hello</c> envelopes
 /// to a handshake response and <c>request</c> envelopes with the <c>client.&lt;clientName&gt;.&lt;methodName&gt;</c>
 /// method shape to <see cref="IGenericClientPassthrough.InvokeAsync"/>. All other method
 /// namespaces produce a <c>method_not_found</c> error envelope.
 /// </summary>
-public sealed class ReplCommandDispatcher : IReplCommandDispatcher
+public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
 {
+    private const string StreamCommandTimeoutEnvVar = "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS";
     private const string ServerProtocolVersion = "1.0";
+    private static readonly TimeSpan DefaultStreamCommandTimeout = TimeSpan.FromMinutes(2);
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true,
+        Converters = { new FlexibleBooleanJsonConverter() },
     };
 
     private readonly IGenericClientPassthrough _passthrough;
     private readonly ISessionLogWorkflow? _sessionLogWorkflow;
     private readonly IRequirementsWorkflow? _requirementsWorkflow;
     private readonly ITodoWorkflow? _todoWorkflow;
+    private readonly IMemoryWorkflow? _memoryWorkflow;
+    private readonly IGraphRagWorkflow? _graphRagWorkflow;
+    private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
     /// Initializes a new <see cref="ReplCommandDispatcher"/>.
@@ -55,20 +81,37 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
     /// <param name="sessionLogWorkflow">The optional session-log workflow used to invoke <c>workflow.sessionlog.*</c> methods.</param>
     /// <param name="requirementsWorkflow">The optional requirements workflow used to invoke <c>workflow.requirements.*</c> methods.</param>
     /// <param name="todoWorkflow">The optional TODO workflow used to invoke <c>workflow.todo.*</c> methods.</param>
+    /// <param name="memoryWorkflow">The optional memory workflow used to invoke <c>workflow.memory.*</c> methods.</param>
+    /// <param name="clientMutationPolicy">The optional policy used to block unsafe generic <c>client.*</c> mutations.</param>
+    /// <param name="graphRagWorkflow">The optional GraphRAG workflow used to invoke <c>workflow.graphrag.*</c> methods.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
         IRequirementsWorkflow? requirementsWorkflow = null,
-        ITodoWorkflow? todoWorkflow = null)
+        ITodoWorkflow? todoWorkflow = null,
+        IMemoryWorkflow? memoryWorkflow = null,
+        IClientMutationPolicy? clientMutationPolicy = null,
+        IGraphRagWorkflow? graphRagWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
         _requirementsWorkflow = requirementsWorkflow;
         _todoWorkflow = todoWorkflow;
+        _memoryWorkflow = memoryWorkflow;
+        _graphRagWorkflow = graphRagWorkflow;
+        _clientMutationPolicy = clientMutationPolicy;
     }
 
     /// <inheritdoc />
-    public async Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
+    public Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
+        => DispatchAsync(envelope, emitEnvelopeAsync: null, cancellationToken);
+
+    /// <inheritdoc />
+    /// <inheritdoc />
+    public async Task<IYamlEnvelope> DispatchAsync(
+        IYamlEnvelope envelope,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(envelope);
 
@@ -85,7 +128,7 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         code: "invalid_envelope",
                         message: "Request envelope is missing a request payload.");
                 }
-                return await DispatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                return await DispatchRequestAsync(request, emitEnvelopeAsync, cancellationToken).ConfigureAwait(false);
 
             case "batch":
                 return BuildUnsupportedBatchEnvelopeError(envelope.Payload);
@@ -98,39 +141,234 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
     }
 
-    private async Task<IYamlEnvelope> DispatchRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    private async Task<IYamlEnvelope> DispatchRequestAsync(
+        IRequestPayload request,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         var method = request.Method ?? "";
+        var schemaValidation = ReplYamlMessageValidator.ValidateRequest(request);
+        if (!schemaValidation.IsValid)
+        {
+            return BuildError(
+                requestId: string.IsNullOrWhiteSpace(request.RequestId) ? "unknown" : request.RequestId,
+                code: "schema_validation_failed",
+                message: "YAML request failed schema validation.",
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = method,
+                    ["errors"] = schemaValidation.Errors,
+                });
+        }
 
         if (method.StartsWith("client.", StringComparison.Ordinal))
         {
             return await DispatchClientRequestAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
+        // FR-MCP-REPL-006: every workflow.* namespace is DEPRECATED in favor of the
+        // client.<Client>.<Method> passthrough surface (and the stateless session
+        // lifecycle verbs). Responses carry deprecated: true so callers migrate.
         if (method.StartsWith(RequirementsCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchRequirementsRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return MarkWorkflowDeprecated(await DispatchRequirementsRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
         if (method.StartsWith(SessionLogCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchSessionLogRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return MarkWorkflowDeprecated(await DispatchSessionLogRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
         if (method.StartsWith(TodoCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchTodoRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return MarkWorkflowDeprecated(await DispatchTodoRequestAsync(request, emitEnvelopeAsync, cancellationToken).ConfigureAwait(false));
+        }
+
+        if (method.StartsWith(MemoryCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return MarkWorkflowDeprecated(await DispatchMemoryRequestAsync(request, cancellationToken).ConfigureAwait(false));
+        }
+
+        if (method.StartsWith(GraphRagCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return MarkWorkflowDeprecated(await DispatchGraphRagRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
         return BuildError(
             requestId: request.RequestId,
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
-                     $"Supported namespaces: client.<clientName>.<methodName>, {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*.");
+                     $"Primary namespace: client.<clientName>.<methodName>. " +
+                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
+    }
+
+    private static IYamlEnvelope MarkWorkflowDeprecated(IYamlEnvelope response)
+    {
+        if (response.Type == "result" && response.Payload is ResultPayload result)
+        {
+            result.Deprecated = true;
+        }
+
+        return response;
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-006: routes workflow.sessionlog lifecycle verbs that carry
+    /// explicit (agent, sessionId) identifiers straight to the stateless
+    /// SessionLog client lifecycle methods. Returns null when the verb is not a
+    /// lifecycle verb or the identifiers are absent (legacy stateful path).
+    /// </summary>
+    private async Task<IYamlEnvelope?> TryDispatchStatelessLifecycleAsync(
+        IRequestPayload request,
+        Dictionary<string, object?> args,
+        CancellationToken cancellationToken)
+    {
+        var agent = GetString(args, "agent") ?? GetString(args, "sourceType");
+        var sessionId = GetString(args, "sessionId");
+        if (string.IsNullOrWhiteSpace(agent) || string.IsNullOrWhiteSpace(sessionId))
+        {
+            return null;
+        }
+
+        string clientMethod;
+        Dictionary<string, object?> clientArgs;
+        Dictionary<string, object?> resultShape;
+
+        switch (request.Method)
+        {
+            case SessionLogCommandShapes.OpenSessionMethod:
+                clientMethod = "OpenSessionAsync";
+                clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["agent"] = agent,
+                    ["sessionId"] = sessionId,
+                    ["title"] = GetString(args, "title"),
+                    ["model"] = GetString(args, "model"),
+                };
+                resultShape = new Dictionary<string, object?> { ["sessionId"] = sessionId, ["opened"] = true };
+                break;
+
+            case SessionLogCommandShapes.BeginTurnMethod:
+                clientMethod = "BeginTurnAsync";
+                clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+                {
+                    ["agent"] = agent,
+                    ["sessionId"] = sessionId,
+                    ["requestId"] = GetString(args, "requestId"),
+                    ["queryTitle"] = GetString(args, "queryTitle"),
+                    ["queryText"] = GetString(args, "queryText"),
+                    ["model"] = GetString(args, "model"),
+                };
+                resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "in_progress" };
+                break;
+
+            case SessionLogCommandShapes.CompleteTurnMethod:
+                clientMethod = "CompleteTurnAsync";
+                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);
+                resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "completed" };
+                break;
+
+            case SessionLogCommandShapes.FailTurnMethod:
+                clientMethod = "FailTurnAsync";
+                clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: GetString(args, "errorMessage") ?? GetString(args, "failureNote"));
+                resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "failed" };
+                break;
+
+            default:
+                return null;
+        }
+
+        try
+        {
+            await _passthrough.InvokeAsync("SessionLog", clientMethod, clientArgs, cancellationToken).ConfigureAwait(false);
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = resultShape,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private static Dictionary<string, object?> BuildFinalizeArgs(
+        string agent,
+        string sessionId,
+        Dictionary<string, object?> args,
+        string? failureNote)
+    {
+        // Forward the turn payload either verbatim (params.payload) or assembled
+        // from the flat legacy parameter names so existing callers keep working.
+        var payload = args.TryGetValue("payload", out var explicitPayload) && explicitPayload is not null
+            ? explicitPayload
+            : BuildPayloadFromFlatArgs(args, failureNote);
+
+        return new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["agent"] = agent,
+            ["sessionId"] = sessionId,
+            ["requestId"] = GetString(args, "requestId"),
+            ["payload"] = payload,
+        };
+    }
+
+    private static Dictionary<string, object?> BuildPayloadFromFlatArgs(Dictionary<string, object?> args, string? failureNote)
+    {
+        var payload = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+        foreach (var key in new[]
+                 {
+                     "response", "interpretation", "tokenCount", "model", "tags", "contextList",
+                     "designDecisions", "commits", "actions", "filesModified", "blockers", "processingDialog",
+                 })
+        {
+            if (args.TryGetValue(key, out var value) && value is not null)
+            {
+                payload[key] = value;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(failureNote))
+        {
+            payload["failureNote"] = failureNote;
+        }
+
+        return payload;
     }
 
     private async Task<IYamlEnvelope> DispatchSessionLogRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
     {
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        // FR-MCP-REPL-006: lifecycle verbs carrying explicit (agent, sessionId)
+        // identifiers route STATELESSLY through the SessionLog client - no
+        // in-process active-session state is consulted or required. The legacy
+        // stateful path below remains only for callers that omit the identifiers.
+        var statelessResponse = await TryDispatchStatelessLifecycleAsync(request, args, cancellationToken).ConfigureAwait(false);
+        if (statelessResponse is not null)
+        {
+            return statelessResponse;
+        }
+
         if (_sessionLogWorkflow is null)
         {
             return BuildError(
@@ -140,9 +378,6 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
 
         var workflow = _sessionLogWorkflow;
-        var args = request.Params is null
-            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
-            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
 
         try
         {
@@ -274,7 +509,10 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
     }
 
-    private async Task<IYamlEnvelope> DispatchTodoRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    private async Task<IYamlEnvelope> DispatchTodoRequestAsync(
+        IRequestPayload request,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         if (_todoWorkflow is null)
         {
@@ -344,22 +582,51 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                     break;
 
                 case TodoCommandShapes.AnalyzeRequirementsMethod:
+                    var policyError = BuildClientMutationPolicyErrorIfRejected(
+                        request.RequestId,
+                        "todo",
+                        "AnalyzeRequirementsAsync",
+                        args);
+                    if (policyError is not null)
+                        return policyError;
+
                     result = await workflow.AnalyzeRequirementsAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false);
                     break;
 
                 case TodoCommandShapes.StreamStatusMethod:
                     result = await CollectTodoEventsAsync(
-                        callback => workflow.StreamStatusAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                        request.RequestId,
+                        request.Method,
+                        (callback, streamCancellationToken) => workflow.StreamStatusAsync(
+                            RequireString(args, "id"),
+                            callback,
+                            streamCancellationToken),
+                        emitEnvelopeAsync,
+                        cancellationToken).ConfigureAwait(false);
                     break;
 
                 case TodoCommandShapes.StreamPlanMethod:
                     result = await CollectTodoEventsAsync(
-                        callback => workflow.StreamPlanAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                        request.RequestId,
+                        request.Method,
+                        (callback, streamCancellationToken) => workflow.StreamPlanAsync(
+                            RequireString(args, "id"),
+                            callback,
+                            streamCancellationToken),
+                        emitEnvelopeAsync,
+                        cancellationToken).ConfigureAwait(false);
                     break;
 
                 case TodoCommandShapes.StreamImplementMethod:
                     result = await CollectTodoEventsAsync(
-                        callback => workflow.StreamImplementAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                        request.RequestId,
+                        request.Method,
+                        (callback, streamCancellationToken) => workflow.StreamImplementAsync(
+                            RequireString(args, "id"),
+                            callback,
+                            streamCancellationToken),
+                        emitEnvelopeAsync,
+                        cancellationToken).ConfigureAwait(false);
                     break;
 
                 case TodoCommandShapes.GetProjectionStatusMethod:
@@ -384,6 +651,256 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         requestId: request.RequestId,
                         code: "method_not_found",
                         message: $"Method '{request.Method}' is not routed by the TODO workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private async Task<IYamlEnvelope> DispatchMemoryRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_memoryWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Memory workflow is not registered.");
+        }
+
+        var workflow = _memoryWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            object? result = request.Method switch
+            {
+                MemoryCommandShapes.ListMethod =>
+                    await workflow.ListAsync(
+                        GetMemoryListScope(args, "scope"),
+                        GetString(args, "category"),
+                        GetString(args, "keyword"),
+                        cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.GetMethod =>
+                    await workflow.GetAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.AddMethod =>
+                    await workflow.AddAsync(BuildMemoryAddRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.UpdateMethod =>
+                    await workflow.UpdateAsync(
+                        RequireString(args, "id"),
+                        BuildMemoryUpdateRequest(GetRequestArgs(args)),
+                        cancellationToken).ConfigureAwait(false),
+                MemoryCommandShapes.RemoveMethod =>
+                    await workflow.RemoveAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false),
+                _ => null,
+            };
+
+            if (result is null)
+            {
+                return BuildError(
+                    requestId: request.RequestId,
+                    code: "method_not_found",
+                    message: $"Method '{request.Method}' is not routed by the memory workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private async Task<IYamlEnvelope> DispatchGraphRagRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_graphRagWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "GraphRAG workflow is not registered.");
+        }
+
+        var workflow = _graphRagWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+        var requestArgs = GetRequestArgs(args);
+
+        try
+        {
+            object? result;
+            switch (request.Method)
+            {
+                case GraphRagCommandShapes.StatusMethod:
+                    result = await workflow.GetStatusAsync(cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.IndexMethod:
+                    result = await workflow.IndexAsync(
+                        GetBool(requestArgs, "force") ?? false,
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.QueryMethod:
+                    var queryRequest = BuildGraphRagQueryRequest(requestArgs);
+                    result = await workflow.QueryAsync(
+                        queryRequest.Query,
+                        queryRequest.Mode,
+                        queryRequest.MaxChunks,
+                        queryRequest.IncludeContextChunks,
+                        queryRequest.MaxEntities,
+                        queryRequest.MaxRelationships,
+                        queryRequest.CommunityDepth,
+                        queryRequest.ResponseTokenBudget,
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.IngestMethod:
+                    result = await workflow.IngestTextAsync(
+                        BuildGraphRagIngestTextRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.DocumentsListMethod:
+                    result = await workflow.ListDocumentsAsync(
+                        GetInt(requestArgs, "skip") ?? 0,
+                        GetInt(requestArgs, "take") ?? 50,
+                        GetString(requestArgs, "sourceType"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.DocumentsChunksMethod:
+                    result = await workflow.GetDocumentChunksAsync(
+                        RequireString(args, requestArgs, "documentId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.DocumentsDeleteMethod:
+                    result = await workflow.DeleteDocumentAsync(
+                        RequireString(args, requestArgs, "documentId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesCreateMethod:
+                    result = await workflow.CreateEntityAsync(
+                        BuildGraphEntityRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesListMethod:
+                    result = await workflow.ListEntitiesAsync(
+                        GetInt(requestArgs, "skip") ?? 0,
+                        GetInt(requestArgs, "take") ?? 50,
+                        GetString(requestArgs, "entityType"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesGetMethod:
+                    result = await workflow.GetEntityAsync(
+                        RequireString(args, requestArgs, "entityId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesUpdateMethod:
+                    result = await workflow.UpdateEntityAsync(
+                        RequireString(args, requestArgs, "entityId"),
+                        BuildGraphEntityRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.EntitiesDeleteMethod:
+                    await workflow.DeleteEntityAsync(
+                        RequireString(args, requestArgs, "entityId"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["deleted"] = true };
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsCreateMethod:
+                    result = await workflow.CreateRelationshipAsync(
+                        BuildGraphRelationshipRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsListMethod:
+                    result = await workflow.ListRelationshipsAsync(
+                        GetInt(requestArgs, "skip") ?? 0,
+                        GetInt(requestArgs, "take") ?? 50,
+                        GetString(requestArgs, "entityId"),
+                        GetString(requestArgs, "type"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsGetMethod:
+                    result = await workflow.GetRelationshipAsync(
+                        RequireString(args, requestArgs, "relationshipId"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsUpdateMethod:
+                    result = await workflow.UpdateRelationshipAsync(
+                        RequireString(args, requestArgs, "relationshipId"),
+                        BuildGraphRelationshipRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case GraphRagCommandShapes.RelationshipsDeleteMethod:
+                    await workflow.DeleteRelationshipAsync(
+                        RequireString(args, requestArgs, "relationshipId"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["deleted"] = true };
+                    break;
+
+                default:
+                    return BuildError(
+                        requestId: request.RequestId,
+                        code: "method_not_found",
+                        message: $"Method '{request.Method}' is not routed by the GraphRAG workflow.");
             }
 
             return new YamlEnvelope
@@ -446,6 +963,8 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateFrBatchMethod =>
+                    await _requirementsWorkflow.CreateFrBatchAsync(RequireParams<CreateFrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateFrMethod =>
                     await _requirementsWorkflow.UpdateFrAsync(new FrUpdateRequestModel
                     {
@@ -456,6 +975,8 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateFrBatchMethod =>
+                    await _requirementsWorkflow.UpdateFrBatchAsync(RequireParams<UpdateFrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.DeleteFrMethod =>
                     await DeleteAndReturnAsync(() => _requirementsWorkflow.DeleteFrAsync(RequireString(args, "id"), cancellationToken), RequireString(args, "id")).ConfigureAwait(false),
                 RequirementsCommandShapes.ListTrMethod =>
@@ -473,6 +994,8 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         Subarea = RequireString(args, "subarea"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateTrBatchMethod =>
+                    await _requirementsWorkflow.CreateTrBatchAsync(RequireParams<CreateTrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateTrMethod =>
                     await _requirementsWorkflow.UpdateTrAsync(new TrUpdateRequestModel
                     {
@@ -483,6 +1006,8 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateTrBatchMethod =>
+                    await _requirementsWorkflow.UpdateTrBatchAsync(RequireParams<UpdateTrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.DeleteTrMethod =>
                     await DeleteAndReturnAsync(() => _requirementsWorkflow.DeleteTrAsync(RequireString(args, "id"), cancellationToken), RequireString(args, "id")).ConfigureAwait(false),
                 RequirementsCommandShapes.ListTestMethod =>
@@ -500,6 +1025,8 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         TestType = GetString(args, "testType") ?? "unit",
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateTestBatchMethod =>
+                    await _requirementsWorkflow.CreateTestBatchAsync(RequireParams<CreateTestBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateTestMethod =>
                     await _requirementsWorkflow.UpdateTestAsync(new TestUpdateRequestModel
                     {
@@ -510,8 +1037,14 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateTestBatchMethod =>
+                    await _requirementsWorkflow.UpdateTestBatchAsync(RequireParams<UpdateTestBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.DeleteTestMethod =>
                     await DeleteAndReturnAsync(() => _requirementsWorkflow.DeleteTestAsync(RequireString(args, "id"), cancellationToken), RequireString(args, "id")).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateBatchMethod =>
+                    await _requirementsWorkflow.CreateBatchAsync(RequireParams<CreateRequirementsBatchRequest>(args), cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateBatchMethod =>
+                    await _requirementsWorkflow.UpdateBatchAsync(RequireParams<UpdateRequirementsBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.ListMappingsMethod =>
                     await _requirementsWorkflow.ListMappingsAsync(GetString(args, "frId"), GetString(args, "trId"), GetString(args, "testId"), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CreateMappingMethod =>
@@ -602,6 +1135,10 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         var args = request.Params is null
             ? new Dictionary<string, object?>()
             : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        var policyError = BuildClientMutationPolicyErrorIfRejected(request.RequestId, clientName, methodName, args);
+        if (policyError is not null)
+            return policyError;
 
         try
         {
@@ -698,6 +1235,18 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         return JsonSerializer.Deserialize<T>(json, JsonOptions);
     }
 
+    private static T RequireParams<T>(IReadOnlyDictionary<string, object?> args)
+        where T : class
+    {
+        var value = ConvertValue<T>(args);
+        if (value is null)
+        {
+            throw new ArgumentException("Request params could not be converted to the expected batch payload.");
+        }
+
+        return value;
+    }
+
     private static string? FirstNonEmpty(params string?[] values)
     {
         foreach (var value in values)
@@ -750,6 +1299,29 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
             DependsOn = GetStringList(args, "dependsOn"),
             FunctionalRequirements = GetStringList(args, "functionalRequirements"),
             TechnicalRequirements = GetStringList(args, "technicalRequirements"),
+        };
+    }
+
+    private static MemoryAddRequest BuildMemoryAddRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new MemoryAddRequest
+        {
+            Id = GetString(args, "id"),
+            Category = RequireString(args, "category"),
+            Scope = GetMemoryScope(args, "scope") ?? MemoryScope.Workspace,
+            Text = RequireString(args, "text"),
+            UpdatedBy = GetString(args, "updatedBy"),
+        };
+    }
+
+    private static MemoryUpdateRequest BuildMemoryUpdateRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new MemoryUpdateRequest
+        {
+            Category = GetString(args, "category"),
+            Scope = GetMemoryScope(args, "scope"),
+            Text = GetString(args, "text"),
+            UpdatedBy = GetString(args, "updatedBy"),
         };
     }
 
@@ -809,6 +1381,82 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         return null;
     }
 
+    private static MemoryScope? GetMemoryScope(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is MemoryScope typed)
+        {
+            return typed;
+        }
+
+        if (value is JsonElement element)
+        {
+            value = element.ValueKind switch
+            {
+                JsonValueKind.String => element.GetString(),
+                JsonValueKind.Number when element.TryGetInt32(out var numeric) => numeric,
+                _ => element.ToString(),
+            };
+        }
+
+        if (value is string text)
+        {
+            if (int.TryParse(text, out _)
+                || !Enum.TryParse(text, ignoreCase: true, out MemoryScope parsed)
+                || !Enum.IsDefined(parsed))
+            {
+                throw new ArgumentException("Memory scope must be Global or Workspace.");
+            }
+
+            return parsed;
+        }
+
+        if (value is IConvertible convertible)
+        {
+            var convertibleText = Convert.ToString(convertible, System.Globalization.CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(convertibleText)
+                && !int.TryParse(convertibleText, out _)
+                && Enum.TryParse(convertibleText, ignoreCase: true, out MemoryScope parsed)
+                && Enum.IsDefined(parsed))
+            {
+                return parsed;
+            }
+        }
+
+        throw new ArgumentException("Memory scope must be Global or Workspace.");
+    }
+
+    private static MemoryScope? GetMemoryListScope(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is JsonElement { ValueKind: JsonValueKind.String } element)
+        {
+            value = element.GetString();
+        }
+
+        if (value is string text && string.Equals(text.Trim(), "Effective", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        try
+        {
+            return GetMemoryScope(args, name);
+        }
+        catch (ArgumentException ex)
+        {
+            throw new ArgumentException("Memory list scope must be Effective, Global, or Workspace.", ex);
+        }
+    }
+
     private static object? NormalizeJsonElement(object? value)
     {
         if (value is not JsonElement element)
@@ -828,6 +1476,25 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
             JsonValueKind.Null => null,
             _ => element.ToString(),
         };
+    }
+
+    private sealed class FlexibleBooleanJsonConverter : JsonConverter<bool>
+    {
+        public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return reader.TokenType switch
+            {
+                JsonTokenType.True => true,
+                JsonTokenType.False => false,
+                JsonTokenType.String when bool.TryParse(reader.GetString(), out var value) => value,
+                _ => throw new JsonException($"The JSON value could not be converted to {typeToConvert}.")
+            };
+        }
+
+        public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
+        {
+            writer.WriteBooleanValue(value);
+        }
     }
 
     private static bool? GetBool(IReadOnlyDictionary<string, object?> args, string name)
@@ -931,6 +1598,105 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
 
         return value;
+    }
+
+    private static string RequireString(
+        IReadOnlyDictionary<string, object?> args,
+        IReadOnlyDictionary<string, object?> fallbackArgs,
+        string name)
+    {
+        var value = GetString(args, name) ?? GetString(fallbackArgs, name);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new ArgumentException($"Missing required parameter: {name}");
+        }
+
+        return value;
+    }
+
+    private static double? GetDouble(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is double typed)
+        {
+            return typed;
+        }
+
+        if (value is JsonElement element)
+        {
+            return element.ValueKind switch
+            {
+                JsonValueKind.Number when element.TryGetDouble(out var parsed) => parsed,
+                JsonValueKind.String when double.TryParse(element.GetString(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var parsed) => parsed,
+                _ => null,
+            };
+        }
+
+        if (value is IConvertible convertible)
+        {
+            var text = Convert.ToString(convertible, System.Globalization.CultureInfo.InvariantCulture);
+            if (double.TryParse(text, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var parsed))
+            {
+                return parsed;
+            }
+        }
+
+        return null;
+    }
+
+    private static GraphRagQueryRequest BuildGraphRagQueryRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphRagQueryRequest
+        {
+            Query = RequireString(args, "query"),
+            Mode = GetString(args, "mode"),
+            MaxChunks = GetInt(args, "maxChunks"),
+            IncludeContextChunks = GetBool(args, "includeContextChunks") ?? true,
+            MaxEntities = GetInt(args, "maxEntities"),
+            MaxRelationships = GetInt(args, "maxRelationships"),
+            CommunityDepth = GetInt(args, "communityDepth"),
+            ResponseTokenBudget = GetInt(args, "responseTokenBudget"),
+        };
+    }
+
+    private static GraphRagIngestTextRequest BuildGraphRagIngestTextRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphRagIngestTextRequest
+        {
+            Content = RequireString(args, "content"),
+            Title = GetString(args, "title"),
+            SourceType = GetString(args, "sourceType"),
+            SourceKey = GetString(args, "sourceKey"),
+            TriggerReindex = GetBool(args, "triggerReindex") ?? false,
+        };
+    }
+
+    private static GraphEntityRequest BuildGraphEntityRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphEntityRequest
+        {
+            Name = RequireString(args, "name"),
+            EntityType = RequireString(args, "entityType"),
+            Description = GetString(args, "description"),
+            Metadata = GetString(args, "metadata"),
+        };
+    }
+
+    private static GraphRelationshipRequest BuildGraphRelationshipRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new GraphRelationshipRequest
+        {
+            SourceEntityId = RequireString(args, "sourceEntityId"),
+            TargetEntityId = RequireString(args, "targetEntityId"),
+            RelationshipType = RequireString(args, "relationshipType"),
+            Description = GetString(args, "description"),
+            Weight = GetDouble(args, "weight") ?? 1.0,
+            Metadata = GetString(args, "metadata"),
+        };
     }
 
     private static IReadOnlyDictionary<string, RequirementsIngestDocument>? GetRequirementsDocumentMap(IReadOnlyDictionary<string, object?> args)
@@ -1122,16 +1888,95 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         };
     }
 
-    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(Func<Func<IStreamingEvent, Task>, Task> stream)
+    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
+        string requestId,
+        string method,
+        Func<Func<IStreamingEvent, Task>, CancellationToken, Task> stream,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         var events = new List<IStreamingEvent>();
-        await stream(evt =>
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeoutCts.CancelAfter(ResolveStreamCommandTimeout());
+
+        try
         {
-            events.Add(evt);
-            return Task.CompletedTask;
-        }).ConfigureAwait(false);
+            await stream(async evt =>
+            {
+                events.Add(evt);
+                if (emitEnvelopeAsync is not null)
+                {
+                    await emitEnvelopeAsync(BuildTodoStreamEventEnvelope(requestId, method, evt)).ConfigureAwait(false);
+                }
+            }, timeoutCts.Token).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            if (events.Count == 0 || !events[^1].EventType.EndsWith(".cancelled", StringComparison.OrdinalIgnoreCase))
+            {
+                var timeoutEvent = new DispatcherStreamingEvent(
+                    "stream.timeout",
+                    new Dictionary<string, object?>
+                    {
+                        ["requestId"] = requestId,
+                        ["message"] = $"Stream command timed out after {ResolveStreamCommandTimeout().TotalSeconds:0} seconds.",
+                    },
+                    DateTimeOffset.UtcNow,
+                    events.Count + 1);
+                events.Add(timeoutEvent);
+                if (emitEnvelopeAsync is not null)
+                {
+                    await emitEnvelopeAsync(BuildTodoStreamEventEnvelope(requestId, method, timeoutEvent)).ConfigureAwait(false);
+                }
+            }
+        }
 
         return events;
+    }
+
+    private static TimeSpan ResolveStreamCommandTimeout()
+    {
+        var configured = Environment.GetEnvironmentVariable(StreamCommandTimeoutEnvVar);
+        if (int.TryParse(configured, out var seconds) && seconds > 0)
+        {
+            return TimeSpan.FromSeconds(seconds);
+        }
+
+        return DefaultStreamCommandTimeout;
+    }
+
+    private static IYamlEnvelope BuildTodoStreamEventEnvelope(string requestId, string method, IStreamingEvent evt)
+        => new YamlEnvelope
+        {
+            Type = "event",
+            Payload = new EventPayload
+            {
+                Event = method,
+                Data = new Dictionary<string, object?>
+                {
+                    ["requestId"] = requestId,
+                    ["eventType"] = evt.EventType,
+                    ["sequence"] = evt.Sequence,
+                    ["data"] = evt.Data,
+                },
+                Timestamp = evt.Timestamp,
+            },
+        };
+
+    private sealed class DispatcherStreamingEvent : IStreamingEvent
+    {
+        public DispatcherStreamingEvent(string eventType, object? data, DateTimeOffset timestamp, int sequence)
+        {
+            EventType = eventType;
+            Data = data;
+            Timestamp = timestamp;
+            Sequence = sequence;
+        }
+
+        public string EventType { get; }
+        public object? Data { get; }
+        public DateTimeOffset Timestamp { get; }
+        public int Sequence { get; }
     }
 
     private static async Task<object> DeleteAndReturnAsync(Func<Task> delete, string id)
@@ -1336,6 +2181,30 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
 
         value = raw.ToString();
         return !string.IsNullOrWhiteSpace(value);
+    }
+
+    private IYamlEnvelope? BuildClientMutationPolicyErrorIfRejected(
+        string requestId,
+        string clientName,
+        string methodName,
+        IReadOnlyDictionary<string, object?> args)
+    {
+        var decision = _clientMutationPolicy?.Evaluate(clientName, methodName, args) ?? ClientMutationPolicyDecision.Allow();
+        if (decision.Allowed)
+            return null;
+
+        return BuildError(
+            requestId: requestId,
+            code: string.IsNullOrWhiteSpace(decision.ErrorCode) ? "mutation_not_transactional" : decision.ErrorCode,
+            message: string.IsNullOrWhiteSpace(decision.Message)
+                ? $"Client method client.{clientName}.{methodName} is blocked by mutation policy."
+                : decision.Message,
+            details: new Dictionary<string, object?>
+            {
+                ["clientName"] = clientName,
+                ["methodName"] = methodName,
+                ["policy"] = nameof(IClientMutationPolicy),
+            });
     }
 
     private static IYamlEnvelope BuildError(

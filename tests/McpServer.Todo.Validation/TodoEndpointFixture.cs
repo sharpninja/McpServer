@@ -1,6 +1,7 @@
 using Xunit;
 using System.Text.Json;
 using System.Threading;
+using McpServer.Validation;
 
 namespace McpServer.Todo.Validation;
 
@@ -32,12 +33,7 @@ public sealed class TodoEndpointFixture : IDisposable
     public TodoEndpointFixture()
     {
         Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-        var apiKey = ResolvePreferredApiKeyAsync(Client).GetAwaiter().GetResult();
-        if (!string.IsNullOrWhiteSpace(apiKey))
-        {
-            Client.DefaultRequestHeaders.Remove("X-Api-Key");
-            Client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
-        }
+        ValidationAuth.AddPreferredApiKey(Client);
     }
 
     private static async Task<string?> ResolvePreferredApiKeyAsync(HttpClient client)

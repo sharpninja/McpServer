@@ -1,0 +1,10 @@
+type: request
+payload:
+  requestId: req-20260612T000003Z-fixture-yaml-1
+  method: client.diagnostic.GetExecutionPathAsync
+---
+type: request
+payload:
+  requestId: req-20260612T000004Z-fixture-yaml-2
+  method: client.diagnostic.GetExecutionPathAsync
+

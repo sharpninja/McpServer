@@ -48,19 +48,18 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REQ-003 | ✅ Complete | RequirementsController, FwhMcpTools, Program.cs (requirements DI/config) |
 | TR-MCP-DRY-001 | ✅ Active directive | All code and scripts |
 | TR-MCP-DOC-002 | ✅ Active directive | .github/copilot-instructions.md, AGENTS.md |
-| TR-LOC-001 | 🔲 Planned | — |
-| FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService, LoginDialog) |
+| FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServerManager moved Director auth surfaces |
 | FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
 | FR-MCP-028 | 🔲 Planned | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
 | FR-MCP-029 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
-| FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
+| FR-MCP-030 | ✅ Complete | McpServerManager moved Director CLI/TUI surfaces |
 | FR-MCP-031 | 🔲 Planned | — |
 | FR-MCP-032 | 🔲 Planned | — |
 | FR-MCP-033 | ✅ Complete | WorkspaceController (POST /mcpserver/workspace/policy), WorkspacePolicyService, WorkspacePolicyDirectiveParser, McpServerMcpTools.workspace_policy_apply |
 | FR-MCP-034 | ✅ Complete | IWorkspaceService, MarkerFileService, WorkspaceModels |
 | FR-MCP-035 | ✅ Complete | templates/prompt-templates.yaml |
 | FR-MCP-036 | ✅ Complete | AuditedCopilotClient, Program.cs (ICopilotClient decorator), McpStdioHost (ICopilotClient decorator), CopilotServiceCollectionExtensions |
-| FR-MCP-037 | ✅ Complete | McpServer.Director (Program exec/list-viewmodels), McpServer.Cqrs.Mvvm (IViewModelRegistry) |
+| FR-MCP-037 | ✅ Complete | McpServerManager moved Director exec/list-viewmodels surfaces, McpServer.Cqrs.Mvvm (IViewModelRegistry) |
 | FR-MCP-038 | ✅ Complete | templates/prompt-templates.yaml |
 | FR-MCP-039 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, templates/prompt-templates.yaml |
 | FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
@@ -68,10 +67,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
 | FR-MCP-043 | ✅ In Progress | WorkspaceResolutionMiddleware, WorkspaceContext, WorkspaceTokenService |
 | FR-MCP-044 | ✅ In Progress | McpDbContext (global query filter), all entities (WorkspaceId) |
-| TR-MCP-AUTH-001–003 | ✅ Complete | OidcAuthOptions, Program.cs (JwtBearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService) |
+| TR-MCP-AUTH-001–003 | ✅ Complete | OidcAuthOptions, Program.cs (JwtBearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServerManager moved Director auth surfaces |
 | TR-MCP-AGENT-001–003 | ✅ Complete | AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext, AgentDefaults, AgentService, AgentController, Program.cs (startup seeding), WorkspaceAppFactory (primary-only controller exposure) |
 | TR-MCP-CQRS-001–005 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
-| TR-MCP-DIR-001–003 | ✅ Complete | McpServer.Director (System.CommandLine CLI, CQRS dispatch, OIDC auth, exec command, Terminal.Gui interactive mode) |
+| TR-MCP-DIR-001–003 | ✅ Complete | McpServerManager moved Director CLI/TUI surfaces |
 | TR-MCP-COMP-001–003 | ✅ Complete | IWorkspaceService, MarkerFileService |
 | TR-MCP-AUDIT-001 | ✅ Complete | AuditedCopilotClient, Program.cs decorator wiring, McpStdioHost decorator wiring |
 | TR-MCP-POL-001 | ✅ Complete | WorkspacePolicyService, WorkspacePolicyDirectiveParser, WorkspaceController policy endpoint, McpServerMcpTools.workspace_policy_apply |
@@ -88,7 +87,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-VOICE-001–003 | ✅ Complete | VoiceConversationService, VoiceController, VoiceConversationOptions |
 | TR-MCP-CFG-004 | ✅ Complete | Program.cs, NetEscapades.Configuration.Yaml |
 | TR-MCP-DESKTOP-001 | ✅ Complete | DesktopProcessLauncher, NativeMethods, DesktopLaunchService, DesktopController, FwhMcpTools.DesktopLaunch |
-| FR-MCP-049 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, TemplateClient, TemplatesScreen |
+| FR-MCP-049 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, TemplateClient, McpServerManager moved TemplatesScreen |
 | TR-MCP-TPL-001 | ✅ Complete | PromptTemplateService, TemplateStorageOptions |
 | TR-MCP-TPL-002 | ✅ Complete | PromptTemplateRenderer |
 | TR-MCP-TPL-003 | ✅ Complete | PromptTemplateController, FwhMcpTools |
@@ -102,7 +101,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-054 | ✅ Complete | AgentPoolController, AgentPoolService (notification and per-job stream fan-out) |
 | FR-MCP-055 | ✅ Complete | AgentPoolService (intent/context routing and default agent resolution), AgentPoolModels |
 | FR-MCP-056 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, AgentPoolService.ResolvePromptAsync, AgentPoolController queue/resolve |
-| FR-MCP-057 | ✅ Complete | AgentPoolClient, Client.Models.AgentPoolModels, McpServerClient.AgentPool, AgentPoolScreen, MainScreen tab wiring |
+| FR-MCP-057 | ✅ Complete | AgentPoolClient, Client.Models.AgentPoolModels, McpServerClient.AgentPool, McpServerManager moved Agent Pool UI surfaces |
 | FR-MCP-058 | ✅ Complete | AgentPoolController SSE endpoints, AgentPoolService stream subscriptions, VoiceConversationService agent-session reuse/one-shot guard, VoiceController |
 | TR-MCP-AGENT-004 | ✅ Complete | AgentPoolOptions, AgentPoolDefinitionOptions, AgentPoolOptionsValidator, Program.cs options validation/DI |
 | TR-MCP-AGENT-005 | ✅ Complete | IAgentPoolService, AgentPoolService, AgentPoolController |
@@ -110,9 +109,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-API-003 | ✅ Complete | AgentPoolController notifications/jobs SSE, AgentPoolService notification + job stream channels |
 | TR-MCP-TPL-006 | ✅ Complete | PromptTemplateController, PromptTemplateRenderer, AgentPoolService template/context prompt resolution |
 | TR-MCP-VOICE-004 | ✅ Complete | VoiceConversationService pooled agent reuse + one-shot guard, AgentPoolService voice-runtime dispatch integration |
-| TR-MCP-DIR-004 | ✅ Complete | AgentPoolClient, AgentPoolScreen, MainScreen tab integration, DirectorMcpContext typed client usage |
+| TR-MCP-DIR-004 | ✅ Complete | AgentPoolClient, McpServerManager moved Agent Pool tab integration |
 | FR-MCP-059 | 🔲 Planned | McpServer.Support.Mcp services/registries/managers/providers (DI SSOT state flow) |
-| FR-MCP-060 | ✅ Complete | McpServer.UI.Core (Messages/Handlers/ViewModels), McpServer.Director (MainScreen, DirectorCommands/AuthCommands, ITabRegistry/DirectorTabRegistry), McpServer.Client adapters |
+| FR-MCP-060 | ✅ Complete | McpServerManager moved Core UI and Director surfaces, McpServer.Client adapters |
 | FR-MCP-061 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, TodoCreationService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
 | TR-MCP-DIR-005–008 | ✅ Complete | Endpoint-to-handler parity, ViewModel conventions, RBAC visibility/action mapping, declarative tab registry |
 | TR-MCP-ARCH-002 | 🔲 Planned | DI lifetimes for state ownership, pull-notify flow via INotifyPropertyChanged, ActivatorUtilities remediation audit |
@@ -151,7 +150,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `McpSessionIdentifierFactory` |
 | TEST-MCP-089 | ✅ Complete | `HostedAgentWorkflowIntegrationTests`, `McpHostedAgentAdapterTests`, `DesktopClientTests`, `DesktopControllerTests`, `SessionLogWorkflowTests`, `TodoWorkflowTests`, `ServiceCollectionExtensionsTests`, `PowerShellSessions_ExecuteInteractiveCommand_PreservesHostLocalSessionState` |
 | FR-MCP-067 | 🔲 Planned | — |
-| TR-MCP-HTTP-002 | 🔲 Planned | — |
+| TR-MCP-HTTP-002 | ✅ Complete | Program.cs centralized ProblemDetails handling, SessionLogController error paths |
 | TEST-MCP-090 | 🔲 Planned | — |
 | FR-MCP-068 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
 | TR-MCP-CFG-006 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
@@ -168,11 +167,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-071 | ✅ Complete | IssueTodoSyncService, TodoUpdateService, GitHubController, TodoController |
 | TR-MCP-GH-007 | ✅ Complete | IssueTodoSyncService |
 | TEST-MCP-095 | ✅ Complete | IssueTodoSyncServiceTests, IssueTodoGitHubRoundTripIntegrationTests |
-| FR-MCP-072 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoController, TodoClient, McpServerMcpTools, TodoServiceFactory |
-| TR-MCP-TODO-005 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoServiceFactory, TodoStorageOptions, McpInstanceResolver, appsettings*.yaml |
-| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, SqliteTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
-| TEST-MCP-096 | ✅ Complete | SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
-| TEST-MCP-097 | ✅ Complete | SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
+| FR-MCP-072 | ✅ Complete | EfTodoService, TodoYamlFileSerializer, TodoController, TodoClient, McpServerMcpTools, TodoServiceFactory, TodoBootstrapImporter |
+| TR-MCP-TODO-005 | ✅ Complete | EfTodoService, TodoItemEntity, TodoAuditHistoryEntity, TodoDocumentMetadataEntity, McpDbContext, TodoYamlFileSerializer, TodoServiceFactory, TodoStorageOptions, McpInstanceResolver, appsettings*.yaml |
+| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, EfTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
+| TEST-MCP-096 | ✅ Complete | EfTodoServiceTests, TodoBootstrapImporterTests, SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
+| TEST-MCP-097 | ✅ Complete | EfTodoServiceTests, SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
 | FR-MCP-073 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
 | TR-MCP-LOG-003 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
 | TEST-MCP-098 | ✅ Complete | ParseableEventFormatterTests |
@@ -185,6 +184,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-076 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
 | TR-MCP-SEC-003 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1 |
 | TR-MCP-AGENT-014 | ✅ Complete | tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
+| TR-MCP-AGENT-015 | ✅ Complete | QBAgentDefinition, McpAgentOptions, McpHostedAgent, McpAcidHostedAgentRuntime, McpHostedAgentAdapterTests, ServiceCollectionExtensionsTests |
+| TR-MCP-AGENT-016 | ✅ Complete | McpHostedAgentToolAdapter, McpQuadBrainCodingAgentRequest, QBAgentDefinition, McpHostedAgentAdapterTests, HostedAgentWorkflowIntegrationTests |
 | TEST-MCP-101 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/HealthEndpointTests.cs, tools/powershell/McpSession.Tests.ps1, tools/powershell/McpTodo.Tests.ps1 |
 | FR-MCP-077 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/McpDatabaseProviderKind.cs, src/McpServer.Storage/Database/McpDatabaseProviderOptions.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations, docs/USER-GUIDE.md |
 | TR-MCP-SEC-004 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
@@ -202,12 +203,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (TodoCommandShapes, SessionLogCommandShapes, RequirementsCommandShapes, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
 | TR-MCP-REPL-006 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
 | TR-MCP-REPL-007 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
-| FR-SUPPORT-010A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
-| FR-SUPPORT-010B | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
-| FR-SUPPORT-010C | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
+| FR-SUPPORT-011 | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
+| FR-SUPPORT-012 | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
+| TR-SUPPORT-LOG-010 | ✅ Complete | Technical-Requirements.md, Program.cs, SessionLogController |
+| FR-SUPPORT-013 | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
 | FR-MCP-REPL-007 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/McpServer.Repl.Host/Program.cs (--workspace-path, --marker-file), src/McpServer.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
-| TR-MCP-MT-003A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
-| TR-PLANNED-013A | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
+| TR-MCP-MT-004 | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
+| TR-PLANNED-CORE-014 | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
 | TR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs |
 | TEST-MCP-REPL-001 | ✅ Complete | tests/McpServer.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
 | TEST-MCP-REPL-002 | ✅ Complete | tests/McpServer.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
@@ -252,9 +254,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-GRAPHRAG-ADHOC-001 | ✅ Complete | src/McpServer.GraphRag, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs |
 | TR-GRAPHRAG-ADHOC-002 | ✅ Complete | src/McpServer.GraphRag |
 | TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/McpServer.GraphRag |
-| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md |
+| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md, tests/Build.Tests/DocumentationGuidanceTests.cs |
 | TR-MCP-TODO-007 | ✅ Complete | src/McpServer.Support.Mcp/Services/TodoCreationService.cs |
-| TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Support.Mcp/Services/SqliteTodoService.cs |
+| TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Storage/McpDbContext.cs, EfTodoService, TodoBootstrapImporter, AddTodoWorkspaceScoping migrations |
 | TEST-MCP-001 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Configuration |
 | TEST-MCP-002 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs |
 | TEST-MCP-003 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests (workspace isolation), src/McpServer.Storage/McpDbContext.cs (HasQueryFilter) |
@@ -406,35 +408,25 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
 | TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
 | TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
-| FR-01 | Tracked | Functional-Requirements.md |
-| FR-02 | Tracked | Functional-Requirements.md |
-| FR-03 | Tracked | Functional-Requirements.md |
-| FR-04 | Tracked | Functional-Requirements.md |
-| FR-05 | Tracked | Functional-Requirements.md |
-| FR-06 | Tracked | Functional-Requirements.md |
-| FR-07 | Tracked | Functional-Requirements.md |
-| FR-08 | Tracked | Functional-Requirements.md |
-| FR-09 | Tracked | Functional-Requirements.md |
-| FR-10 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-008 | 🟡 Partial | Federated memory state |
+| TR-MCP-FED-MEMORY-001 | 🟡 Partial | Memory federation adapter contract |
+| TEST-MCP-MEMORY-FED-001 | 🟡 Partial | Memory federation tests |
+| FR-MCP-109 | ✅ Complete | Requirements batch mutation |
+| TR-MCP-BATCH-109 | ✅ Complete | Requirements batch endpoint and workflow support |
+| TR-MCP-SCHEMA-109 | ✅ Complete | REPL request schema enforcement |
+| TR-MCP-STDIO-109 | ✅ Complete | Plugin stdio JSON request envelopes |
+| TEST-MCP-145 | ✅ Complete | Requirements batch validation coverage |
+| TEST-MCP-146 | ✅ Complete | Plugin stdio and schema validation coverage |
+| TEST-MCP-147 | ✅ Complete | Documentation guidance contract tests |
+| FR-MCP-110 | ✅ Complete | Deterministic Nuke PowerShell execution |
+| TR-MCP-NUKE-001 | ✅ Complete | Non-interactive PowerShell hosts for Nuke automation |
+| TEST-MCP-148 | ✅ Complete | Nuke PowerShell non-interactive guard tests |
 | FR-MCP-104 | Tracked | Functional-Requirements.md |
 | FR-MCP-105 | Tracked | Functional-Requirements.md |
 | FR-MCP-106 | Tracked | Functional-Requirements.md |
 | FR-MCP-107 | Tracked | Functional-Requirements.md |
 | FR-MCP-108 | Tracked | Functional-Requirements.md |
-| TR-01 | Tracked | Technical-Requirements.md |
-| TR-02 | Tracked | Technical-Requirements.md |
-| TR-03 | Tracked | Technical-Requirements.md |
-| TR-04 | Tracked | Technical-Requirements.md |
-| TR-05 | Tracked | Technical-Requirements.md |
-| TR-06 | Tracked | Technical-Requirements.md |
-| TR-07 | Tracked | Technical-Requirements.md |
-| TR-08 | Tracked | Technical-Requirements.md |
-| TR-09 | Tracked | Technical-Requirements.md |
-| TR-10 | Tracked | Technical-Requirements.md |
-| TR-11 | Tracked | Technical-Requirements.md |
-| TR-12 | Tracked | Technical-Requirements.md |
-| TR-13 | Tracked | Technical-Requirements.md |
-| TR-14 | Tracked | Technical-Requirements.md |
+| FR-WFL-001 | Tracked | Functional-Requirements.md |
 | TR-MCP-BYRD-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-002 | Tracked | Technical-Requirements.md |
@@ -445,10 +437,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
 | TR-MCP-TODO-009 | Tracked | Technical-Requirements.md |
 | TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-001 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-002 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-003 | Tracked | Technical-Requirements.md |
-| TR-MCP-WEB-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-001 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
+| TR-MCP-WEB-002 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
+| TR-MCP-WEB-003 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
+| TR-MCP-WEB-004 | 🔲 Planned | Deferred to McpServerManager ownership boundary |
+| TR-TEST-INTEG-001 | Tracked | Technical-Requirements.md |
+| TR-WFL-FULL-001 | Tracked | Technical-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |
@@ -464,10 +458,318 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-142 | Tracked | Testing-Requirements.md |
 | TEST-MCP-143 | Tracked | Testing-Requirements.md |
 | TEST-MCP-144 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-021 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-022 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-023 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-024 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-016 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-017 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-018 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-019 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-020 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-021 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-022 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-023 | ✅ Complete | SessionLogControllerTests, SessionLogServiceTests |
+| TEST-WFL-001 | Tracked | Testing-Requirements.md |
+| FR-GEN-001 | Tracked | Functional-Requirements.md |
+| FR-TEST-002 | Tracked | Functional-Requirements.md |
+| TR-GEN-YAML-001 | Tracked | Technical-Requirements.md |
+| FR-TEST-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-111 | Tracked | Functional-Requirements.md |
+| FR-MCP-112 | Tracked | Functional-Requirements.md |
+| FR-MCP-113 | Tracked | Functional-Requirements.md |
+| FR-MCP-114 | Tracked | Functional-Requirements.md |
+| FR-MCP-115 | Tracked | Functional-Requirements.md |
+| FR-MCP-AGENT-PARITY-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-AGENT-PARITY-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-BATCH-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-MEMORY-001 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-MEMORY-002 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-MEMORY-003 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-MEMORY-004 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-MEMORY-005 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-MEMORY-006 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-MEMORY-007 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-PLUGIN-BATCH-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-PLUGIN-SKILLS-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-REQAC-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-REQAC-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-REQAC-PLUGIN-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-REQACPLUGIN-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-REQACPLUGIN-002 | Tracked | Functional-Requirements.md |
+| TR-MCP-AGENT-PARITY-010 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-011 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-012 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-013 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020..027 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-030 | Tracked | Technical-Requirements.md |
+| TR-MCP-BATCH-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-BATCHTS-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-MEMORY-001 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-MEMORY-002 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-MEMORY-003 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-MEMORY-004 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-MEMORY-005 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-MEMORY-006 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-MEMORY-007 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-MEMORY-008 | ✅ Complete | Technical-Requirements.md |
+| TEST-MCP-MEMORY-001 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-002 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-003 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-004 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-005 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-006 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-007 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-008 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-MEMORY-009 | ✅ Complete | Testing-Requirements.md |
+| TR-MCP-PLUGIN-009 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-SKILLS-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQAC-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQAC-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQAC-PLUGIN-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQACPLUGIN-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQACPLUGIN-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-REQEXPORT-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-SKILLS-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-SKILLS-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-SKILLS-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-TODO-010 | Tracked | Technical-Requirements.md |
+| TEST-MCP-149 | Tracked | Testing-Requirements.md |
+| TEST-MCP-150 | Tracked | Testing-Requirements.md |
+| TEST-MCP-151 | Tracked | Testing-Requirements.md |
+| TEST-MCP-152 | Tracked | Testing-Requirements.md |
+| TEST-MCP-153 | Tracked | Testing-Requirements.md |
+| TEST-MCP-154 | Tracked | Testing-Requirements.md |
+| TEST-MCP-155 | Tracked | Testing-Requirements.md |
+| TEST-MCP-BATCH-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQAC-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQAC-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQAC-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQAC-004 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQACPLUGIN-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQACPLUGIN-002 | Tracked | Testing-Requirements.md |
+| TEST-REQAC-LIVE-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-116 | Tracked | Functional-Requirements.md |
+| FR-MCP-117 | Tracked | Functional-Requirements.md |
+| FR-MCP-118 | ✅ Complete | KeyServerController, McpServer.KeyServer Program, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| FR-MCP-119 | ✅ Complete | InMemorySubscriberCommitService, SubscriberController, SubscriberClient, McpServer.Subscriber Program, TransactionSecurityControllerTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
+| FR-MCP-120 | ✅ Complete | TransactionSecurityModels, TurnTransactionCoordinator, TransactionPubSubServices, TurnTransactionFederationOperationApplyService, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, McpServerMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests, DurableTransactionSecurityStorageTests |
+| FR-MCP-121 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionsController, TransactionPubSubReplayWorker, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TurnTransactionsControllerTests, TransactionPubSubReplayWorkerTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests, Functional-Requirements.md |
+| FR-MCP-122 | ✅ Complete | Functional-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests |
+| FR-MCP-123 | ✅ Complete | Functional-Requirements.md, TurnTransactions-Architecture-Round1.md, TurnTransactions-Design-Round2.md, PlanTransactionReviewTests, TurnTransactionPlanArtifactTests |
+| FR-MCP-124 | ✅ Complete | Functional-Requirements.md |
+| FR-MCP-125 | ✅ Complete | Functional-Requirements.md, TurnTransactions-Design-Round2.md, Testing-Requirements.md, TurnTransactionPlanArtifactTests |
+| FR-MCP-126 | ✅ Complete | Functional-Requirements.md, PlanTransactionReviewTests |
+| FR-MCP-127 | ✅ Complete | Functional-Requirements.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, TurnTransactionCoordinatorTests |
+| FR-MCP-128 | ✅ Complete | Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests |
+| FR-MCP-129 | ✅ Complete | Functional-Requirements.md, BrainSlotRegistryServiceTests, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotCredentialResolverTests, BrainSlotInvocationTransactionTests, BrainSlotContractArtifactTests |
+| FR-MCP-130 | ✅ Complete | Functional-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotContainmentTests |
+| FR-MCP-131 | ✅ Complete | Functional-Requirements.md, QuadBrainOrchestrationServiceTests, BrainSlotContainmentTests, TurnTransactionPlanArtifactTests |
+| FR-MCP-132 | ✅ Complete | Functional-Requirements.md, WorkspaceAuthMiddleware, WorkspaceTokenService, WorkspaceAuthMiddlewareTests, WorkspaceTokenServiceTests |
+| FR-MCP-133 | ✅ Complete | Functional-Requirements.md, WorkspaceReadinessHealthCheck, WorkspaceReadinessHealthCheckTests, ReadinessAndAuthIntegrationTests |
+| FR-MCP-134 | ✅ Complete | Functional-Requirements.md, QuadBrainOrchestrationService, QuadBrainOrchestrationServiceTests, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests |
+| FR-MCP-135 | ✅ Complete | Functional-Requirements.md, BrainSlotDefinitionEntity, QuadBrainOrchestrationService, AddBrainSlotWeights migrations, QuadBrainOrchestrationServiceTests |
+| FR-MCP-136 | ✅ Complete | Functional-Requirements.md, QBAgentDefinition, McpAgentOptions, McpHostedAgent, McpHostedAgentAdapterTests, ServiceCollectionExtensionsTests |
+| FR-MCP-137 | ✅ Complete | Functional-Requirements.md, McpHostedAgentToolAdapter, McpHostedAgent, QBAgentDefinition, McpHostedAgentAdapterTests, HostedAgentWorkflowIntegrationTests |
+| TR-MCP-GH-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-010 | Tracked | Technical-Requirements.md |
+| TR-MCP-KEYSERVER-001 | ✅ Complete | McpServer.KeyServer Program, KeyServerController, KeyServerClient, HttpKeyServerManifestService, TransactionSecurityServices, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TransactionSecurityStateStores, TransactionSecurityModels, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-CRYPTO-001 | ✅ Complete | Technical-Requirements.md, TransactionSecurityModels, TransactionSecurityServices, TransactionSecurityControllerTests, TransactionSecurityClientTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-SUBSCRIBER-001 | ✅ Complete | TransactionSecurityServices, TransactionSecurityStateStores, SubscriberController, SubscriberClient, McpServer.Subscriber Program, TransactionSecurityControllerTests, DiffgramEncryptionIntegrationTests, DurableTransactionSecurityStorageTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-TXN-001 | ✅ Complete | TransactionSecurityModels, TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinator, TransactionPubSubServices, TransactionSecurityStateStores, TurnTransactionFederationOperationApplyService, TransactionPubSubReplayWorker, TransactionGatedMemoryService, TransactionalTodoWorkflow, ITodoCompensationService, EfTodoService, FederatedTodoService, TransactionGatedTodoMutationService, TransactionGatedRepoFileService, TransactionGatedPromptTemplateService, TransactionGatedRequirementsDocumentService, TransactionGatedRequirementsAnalysisService, TransactionGatedTodoExecutionService, TransactionGatedSessionLogService, TransactionGatedToolRegistryService, TransactionGatedToolBucketService, TransactionGatedGraphRagService, TransactionGatedGitHubCliService, TransactionGatedGitHubWorkspaceTokenStore, TransactionGatedIssueTodoSyncService, TransactionGatedVoiceConversationService, TransactionGatedAgentPoolService, IClientMutationPolicy, KnownUnsafeClientMutationPolicy, GenericClientPassthrough, ReplCommandDispatcher, FederationController, TurnTransactionsController, MemoryController, TodoController, RepoController, PromptTemplateController, RequirementsController, SessionLogController, ToolRegistryController, GraphRagController, GitHubController, ContextController, VoiceController, AgentPoolController, McpServerMcpTools, FwhMcpTools.Todo, FwhMcpTools.GitHub, FwhMcpTools.Requirements, FwhMcpTools.SessionLog, FwhMcpTools.Context, McpStdioHost, Program.cs, ServiceCollectionExtensions.cs, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionalTodoWorkflowTests, TransactionGatedTodoMutationServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, TurnTransactionsControllerTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, ToolRegistryScopeTests, ToolBucketServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, RequirementsDatabaseDocumentServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, DurableTransactionSecurityStorageTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests |
+| TR-MCP-TXNAUDIT-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Mutation-Endpoint-Audit.md, TurnTransactionPlanArtifactTests, TransactionPubSubReplayWorkerTests, DurableTransactionSecurityStorageTests |
+| TR-MCP-TXNCOMPAT-001 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-TXNBYRD-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Design-Round2.md, Testing-Requirements.md, TurnTransactionPlanArtifactTests |
+| TR-MCP-TXNAIUNIT-001 | ✅ Complete | Technical-Requirements.md |
+| TR-MCP-TXNDIAGRAMS-001 | ✅ Complete | Technical-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, DiffgramEncryptionIntegrationTests |
+| TR-MCP-TXNARCH-001 | ✅ Complete | Technical-Requirements.md, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactions-Architecture-Round1.md, TurnTransactionPlanArtifactTests |
+| TR-MCP-TXNDESIGN-001 | ✅ Complete | Technical-Requirements.md, TurnTransactions-Design-Round2.md, PlanTransactionReviewTests, TurnTransactionPlanArtifactTests |
+| TR-MCP-QUAD-001 | ✅ Complete | Technical-Requirements.md, BrainSlotRegistryServiceTests, BrainSlotsControllerTests, BrainSlotClientTests |
+| TR-MCP-QUAD-002 | ✅ Complete | Technical-Requirements.md, BrainSlotCredentialResolverTests, BrainSlotInvocationTransactionTests |
+| TR-MCP-QUAD-003 | ✅ Complete | Technical-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotContainmentTests |
+| TR-MCP-QUAD-004 | ✅ Complete | Technical-Requirements.md, QuadBrainOrchestrationServiceTests, BrainSlotContainmentTests, TurnTransactionPlanArtifactTests |
+| TR-MCP-QUAD-005 | ✅ Complete | Technical-Requirements.md, QuadBrainOrchestrationService, BrainSlotsController, BrainSlotClient, FwhMcpTools, brain-slots.ts, QuadBrainOrchestrationServiceTests, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, brain-slots.test.ts |
+| TR-MCP-QUAD-006 | ✅ Complete | Technical-Requirements.md, QuadBrainOrchestrationService, BrainSlotInvocationService, QuadBrainOrchestrationServiceTests |
+| TR-MCP-QUAD-007 | ✅ Complete | Technical-Requirements.md, BrainSlotDefinitionEntity, QuadBrainOrchestrationService, AddBrainSlotWeights migrations, QuadBrainOrchestrationServiceTests |
+| TR-MCP-AUTH-010 | ✅ Complete | Technical-Requirements.md, WorkspaceAuthMiddleware, WorkspaceAuthMiddlewareTests |
+| TR-MCP-AUTH-011 | ✅ Complete | Technical-Requirements.md, WorkspaceTokenService, WorkspaceAuthMiddleware, WorkspaceTokenServiceTests, WorkspaceAuthMiddlewareTests |
+| TR-MCP-HEALTH-002 | ✅ Complete | Technical-Requirements.md, WorkspaceReadinessHealthCheck, Program health checks, WorkspaceReadinessHealthCheckTests, ReadinessAndAuthIntegrationTests |
+| TEST-MCP-156 | Tracked | Testing-Requirements.md |
+| TEST-MCP-157 | Tracked | Testing-Requirements.md |
+| TEST-MCP-158 | ✅ Complete | Testing-Requirements.md, DurableTransactionSecurityStorageTests, TransactionSecurityControllerTests |
+| TEST-MCP-159 | ✅ Complete | Testing-Requirements.md, TransactionSecurityControllerTests, DurableTransactionSecurityStorageTests, DiffgramEncryptionIntegrationTests, SeparateTransactionServiceIntegrationTests |
+| TEST-MCP-160 | ✅ Complete | SeparateTransactionServiceIntegrationTests, DurableTransactionSecurityStorageTests, TransactionSecurityControllerTests, TransactionSecurityClientTests |
+| TEST-MCP-161 | ✅ Complete | TransactionSecurityOptions, TransactionSecurityServiceCollectionExtensions, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests, TurnTransactionsControllerTests, TransactionalTodoWorkflowTests, ClientMutationPolicyTests, FederationControllerTests, FederationControllerPushTests, RequirementsControllerTransactionGateTests, ContextControllerTransactionGateTests, TransactionGatedVoiceConversationServiceTests, TransactionGatedAgentPoolServiceTests, VoiceControllerTests, TransactionGatedMemoryServiceTests, TransactionGatedRepoFileServiceTests, TransactionGatedPromptTemplateServiceTests, TransactionGatedRequirementsDocumentServiceTests, TransactionGatedRequirementsAnalysisServiceTests, TransactionGatedTodoExecutionServiceTests, TransactionGatedTodoMutationServiceTests, TransactionGatedSessionLogServiceTests, TransactionGatedToolRegistryServiceTests, TransactionGatedToolBucketServiceTests, TransactionGatedGraphRagServiceTests, TransactionGatedGitHubCliServiceTests, TransactionGatedGitHubWorkspaceTokenStoreTests, TransactionGatedIssueTodoSyncServiceTests, TransactionGatedStdioRoutingTests, GitHubControllerTests, RequirementsDatabaseDocumentServiceTests, RepoFileServiceTests, PromptTemplateServiceTests, TodoExecutionServiceTests, EfTodoServiceTests, ToolRegistryScopeTests, ToolBucketServiceTests, MemoryControllerTests, MemoryMcpToolTests, TodoControllerTests, TodoExecutionMcpToolTests, GraphRagControllerAdHocTests, GraphRagMcpToolTests, GraphRagToolAdapterTests, ContextClientTests, SessionLogControllerTests, SessionLogReplaceDeleteControllerTests, DurableTransactionSecurityStorageTests, FederationOperationApplyServiceTests, SeparateTransactionServiceIntegrationTests, TurnTransactions-Mutation-Endpoint-Audit.md |
+| TEST-MCP-162 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Functional-Requirements.md, Technical-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-163 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md, TurnTransactions-Mutation-Endpoint-Audit.md |
+| TEST-MCP-164 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-165 | ✅ Complete | Testing-Requirements.md |
+| TEST-MCP-166 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md |
+| TEST-MCP-167 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, SeparateTransactionServiceIntegrationTests, DiffgramEncryptionIntegrationTests |
+| TEST-MCP-168 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactionCoordinatorTests, TransactionPubSubTests, TransactionPubSubReplayWorkerTests |
+| TEST-MCP-169 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md |
+| TEST-MCP-170 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Quad-Model-Transactional-Diffgram-Plan.md |
+| TEST-MCP-171 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Architecture-Round1.md |
+| TEST-MCP-172 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Design-Round2.md |
+| TEST-MCP-173 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, TurnTransactions-Mutation-Endpoint-Audit.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-174 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests |
+| TEST-MCP-175 | ✅ Complete | Testing-Requirements.md, BrainSlotRegistryServiceTests |
+| TEST-MCP-176 | ✅ Complete | Testing-Requirements.md, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, brain-slots.test.ts |
+| TEST-MCP-177 | ✅ Complete | Testing-Requirements.md, BrainSlotCredentialResolverTests, BrainSlotInvocationTransactionTests |
+| TEST-MCP-178 | ✅ Complete | Testing-Requirements.md, BrainSlotInvocationTransactionTests |
+| TEST-MCP-179 | ✅ Complete | Testing-Requirements.md, BrainSlotInvocationTransactionTests, BrainSlotContainmentTests |
+| TEST-MCP-180 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests, BrainSlotContainmentTests |
+| TEST-MCP-181 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests |
+| TEST-MCP-182 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests |
+| TEST-MCP-183 | ✅ Complete | Testing-Requirements.md, QuadBrainOrchestrationServiceTests |
+| TEST-MCP-184 | ✅ Complete | Testing-Requirements.md, BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, brain-slots.test.ts |
+| TEST-MCP-185 | ✅ Complete | Testing-Requirements.md, TurnTransactionPlanArtifactTests, Requirements-Matrix.md |
+| TEST-MCP-186 | ✅ Complete | Testing-Requirements.md, McpHostedAgentAdapterTests, ServiceCollectionExtensionsTests, HostedAgentWorkflowIntegrationTests |
+| TEST-MCP-187 | ✅ Complete | Testing-Requirements.md, McpHostedAgentAdapterTests, HostedAgentWorkflowIntegrationTests |
+| TEST-MCP-AUTH-010 | ✅ Complete | Testing-Requirements.md, WorkspaceAuthMiddlewareTests |
+| TEST-MCP-AUTH-011 | ✅ Complete | Testing-Requirements.md, WorkspaceAuthMiddlewareTests |
+| TEST-MCP-AUTH-012 | ✅ Complete | Testing-Requirements.md, WorkspaceTokenServiceTests |
+| TEST-MCP-HEALTH-002 | ✅ Complete | Testing-Requirements.md, WorkspaceReadinessHealthCheckTests |
+| TEST-MCP-HEALTH-003 | ✅ Complete | Testing-Requirements.md, ReadinessAndAuthIntegrationTests |
+| TEST-MCP-TRACE-LEGACY-001 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-TRACE-LEGACY-002 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-TRACE-LEGACY-003 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-MCP-TRACE-REPL-001 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| TEST-SUPPORT-010 | ✅ Complete | Testing-Requirements.md, Requirements-Matrix.md, TR-per-FR-Mapping.md |
+| FR-MCP-PLUGINCORE-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-PLUGINCORE-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-PLUGINCORE-003 | Tracked | Functional-Requirements.md |
+| FR-MCP-REPL-006 | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-014 | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-015 | Tracked | Functional-Requirements.md |
+| TR-MCP-PLUGINCORE-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGINCORE-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGINCORE-003 | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-CORE-014 | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-CORE-015 | Tracked | Technical-Requirements.md |
+| TEST-MCP-PLUGINCORE-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGINCORE-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGINCORE-003 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-014 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-015 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-004 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-005 | Tracked | Testing-Requirements.md |
+| TEST-MCP-ACID-006 | Tracked | Testing-Requirements.md |
+| FR-MCP-SUBLOG-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-SUBLOG-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-SUBLOG-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBAGENT-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBAGENT-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBAGENT-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBOPENAI-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBOPENAI-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBOPENAI-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBEXEC-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBEXEC-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBEXEC-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBINT-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBAGENTINT-001 | Planned | Testing-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| FR-MCP-QBSEED-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBSEED-002 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBSEED-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBLIVE-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBLIVEINT-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBTOOLS-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBTOOLS-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBTOOLS-003 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBTOOLS-004 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBTOOLS-006 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBTOOLS-007 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBTOOLS-000 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-006 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-008 | Tracked | Technical-Requirements.md |
+| FR-MCP-QBSKILLS-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBSKILLS-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBSKILLS-003 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBSKILLS-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBSKILLS-002 | Tracked | Technical-Requirements.md |
+| FR-MCP-QBEXEC-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-QBEXEC-003 | Tracked | Functional-Requirements.md |
+| TR-MCP-QBEXEC-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBEXEC-003 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBTOOLS-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBTOOLS-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBTOOLS-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBTOOLS-007 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBTOOLSINT-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBSKILLS-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBSKILLS-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBSKILLS-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBEXEC-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBEXEC-003 | Tracked | Testing-Requirements.md |
+| FR-MCP-QUAD-SESSION-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-QUAD-SESSION-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QUAD-SESSION-001 | Tracked | Testing-Requirements.md |
+| [] | Tracked | Functional-Requirements.md |
+| FR-01 | Tracked | Functional-Requirements.md |
+| FR-02 | Tracked | Functional-Requirements.md |
+| FR-03 | Tracked | Functional-Requirements.md |
+| FR-04 | Tracked | Functional-Requirements.md |
+| FR-05 | Tracked | Functional-Requirements.md |
+| FR-06 | Tracked | Functional-Requirements.md |
+| FR-07 | Tracked | Functional-Requirements.md |
+| FR-08 | Tracked | Functional-Requirements.md |
+| FR-09 | Tracked | Functional-Requirements.md |
+| FR-10 | Tracked | Functional-Requirements.md |
+| FR-MCP-LIVE-CODEX-20260603T2014Z | Tracked | Functional-Requirements.md |
+| FR-MCP-LIVE-CODEX-20260603T2015Z | Tracked | Functional-Requirements.md |
+| FR-MCP-QBTOOLS-005 | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-010A | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-010B | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-010C | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-010E | Tracked | Functional-Requirements.md |
+| FR-SUPPORT-010F | Tracked | Functional-Requirements.md |
+| TR-01 | Tracked | Technical-Requirements.md |
+| TR-02 | Tracked | Technical-Requirements.md |
+| TR-03 | Tracked | Technical-Requirements.md |
+| TR-04 | Tracked | Technical-Requirements.md |
+| TR-05 | Tracked | Technical-Requirements.md |
+| TR-06 | Tracked | Technical-Requirements.md |
+| TR-07 | Tracked | Technical-Requirements.md |
+| TR-08 | Tracked | Technical-Requirements.md |
+| TR-09 | Tracked | Technical-Requirements.md |
+| TR-10 | Tracked | Technical-Requirements.md |
+| TR-11 | Tracked | Technical-Requirements.md |
+| TR-12 | Tracked | Technical-Requirements.md |
+| TR-13 | Tracked | Technical-Requirements.md |
+| TR-14 | Tracked | Technical-Requirements.md |
+| TR-LOC-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TR-MCP-MT-003A | Tracked | Technical-Requirements.md |
+| TR-MCP-QBSKILLS-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBTOOLS-007 | Tracked | Technical-Requirements.md |
+| TR-PLANNED-013A | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-010E | Tracked | Technical-Requirements.md |
+| TR-SUPPORT-010F | Tracked | Technical-Requirements.md |
+| TR-TEST-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBTOOLS-004 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBTOOLS-005 | Tracked | Testing-Requirements.md |
+| TEST-MCP-QBTOOLS-006 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-4 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQAC-PLUGIN-BASH | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQACPLUGIN-BASH | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQACPLUGIN-CAPTURE | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQACPLUGIN-LIVE | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQAC-PLUGIN-TS | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQACPLUGIN-TS | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010A-1 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010A-2 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010B-1 | Tracked | Testing-Requirements.md |
@@ -475,3 +777,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-SUPPORT-010C-1 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010C-2 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010C-3 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010E | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010F | Tracked | Testing-Requirements.md |

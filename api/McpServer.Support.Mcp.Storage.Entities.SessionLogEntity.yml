@@ -43,7 +43,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
   summary: >-
-    TR-PLANNED-013: 4NF session log entity. One row per session, keyed by (SourceType, SessionId).
+    TR-PLANNED-CORE-013: 4NF session log entity. One row per session, keyed by (SourceType, SessionId).
 
     FR-SUPPORT-010: Persisted in MCP SQLite database for session log normalization.
   example: []
@@ -77,7 +77,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Auto-generated primary key.'
+  summary: 'TR-PLANNED-CORE-013: Auto-generated primary key.'
   example: []
   syntax:
     content: >-
@@ -114,7 +114,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Agent source type (e.g. Cursor, Copilot). Unique with SessionId.'
+  summary: 'TR-PLANNED-CORE-013: Agent source type (e.g. Cursor, Copilot). Unique with SessionId.'
   example: []
   syntax:
     content: >-
@@ -160,7 +160,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Unique session identifier within the source type.'
+  summary: 'TR-PLANNED-CORE-013: Unique session identifier within the source type.'
   example: []
   syntax:
     content: >-
@@ -206,7 +206,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Human-readable session title.'
+  summary: 'TR-PLANNED-CORE-013: Human-readable session title.'
   example: []
   syntax:
     content: >-
@@ -245,7 +245,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: AI model used for the session.'
+  summary: 'TR-PLANNED-CORE-013: AI model used for the session.'
   example: []
   syntax:
     content: >-
@@ -284,7 +284,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Session start timestamp (UTC).'
+  summary: 'TR-PLANNED-CORE-013: Session start timestamp (UTC).'
   example: []
   syntax:
     content: public DateTimeOffset? Started { get; set; }
@@ -311,7 +311,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Last update timestamp (UTC).'
+  summary: 'TR-PLANNED-CORE-013: Last update timestamp (UTC).'
   example: []
   syntax:
     content: public DateTimeOffset? LastUpdated { get; set; }
@@ -338,7 +338,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Session status (e.g. completed, in_progress).'
+  summary: 'TR-PLANNED-CORE-013: Session status (e.g. completed, in_progress).'
   example: []
   syntax:
     content: >-
@@ -377,7 +377,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Number of request/response entries.'
+  summary: 'TR-PLANNED-CORE-013: Number of request/response entries.'
   example: []
   syntax:
     content: public int EntryCount { get; set; }
@@ -404,7 +404,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Total token count across all entries.'
+  summary: 'TR-PLANNED-CORE-013: Total token count across all entries.'
   example: []
   syntax:
     content: public int? TotalTokens { get; set; }
@@ -431,7 +431,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Cursor-specific session label.'
+  summary: 'TR-PLANNED-CORE-013: Cursor-specific session label.'
   example: []
   syntax:
     content: >-
@@ -470,7 +470,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Average success score across entries.'
+  summary: 'TR-PLANNED-CORE-013: Average success score across entries.'
   example: []
   syntax:
     content: public double? CopilotAvgSuccessScore { get; set; }
@@ -497,7 +497,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Total net tokens used.'
+  summary: 'TR-PLANNED-CORE-013: Total net tokens used.'
   example: []
   syntax:
     content: public int? CopilotTotalNetTokens { get; set; }
@@ -524,7 +524,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Total net premium requests.'
+  summary: 'TR-PLANNED-CORE-013: Total net premium requests.'
   example: []
   syntax:
     content: public int? CopilotTotalNetPremiumRequests { get; set; }
@@ -551,7 +551,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Number of completed entries.'
+  summary: 'TR-PLANNED-CORE-013: Number of completed entries.'
   example: []
   syntax:
     content: public int? CopilotCompletedCount { get; set; }
@@ -578,7 +578,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Number of in-progress entries.'
+  summary: 'TR-PLANNED-CORE-013: Number of in-progress entries.'
   example: []
   syntax:
     content: public int? CopilotInProgressCount { get; set; }
@@ -605,7 +605,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Project name from workspace.'
+  summary: 'TR-PLANNED-CORE-013: Project name from workspace.'
   example: []
   syntax:
     content: >-
@@ -644,7 +644,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Target framework from workspace.'
+  summary: 'TR-PLANNED-CORE-013: Target framework from workspace.'
   example: []
   syntax:
     content: >-
@@ -683,7 +683,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Repository URL or name from workspace.'
+  summary: 'TR-PLANNED-CORE-013: Repository URL or name from workspace.'
   example: []
   syntax:
     content: >-
@@ -722,7 +722,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Git branch name from workspace.'
+  summary: 'TR-PLANNED-CORE-013: Git branch name from workspace.'
   example: []
   syntax:
     content: >-
@@ -761,7 +761,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Full path to the source JSON file that was imported.'
+  summary: 'TR-PLANNED-CORE-013: Full path to the source JSON file that was imported.'
   example: []
   syntax:
     content: >-
@@ -800,7 +800,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: SHA-256 hash of the source file content at the time the record was last updated. Used to skip unchanged files during sync.'
+  summary: 'TR-PLANNED-CORE-013: SHA-256 hash of the source file content at the time the record was last updated. Used to skip unchanged files during sync.'
   example: []
   syntax:
     content: >-
@@ -839,7 +839,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to session log entries.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to session log entries.'
   example: []
   syntax:
     content: public ICollection<SessionLogEntryEntity> Entries { get; set; }

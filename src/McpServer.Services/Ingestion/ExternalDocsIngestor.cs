@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013: Ingests external docs from cached path (e.g. docs/external).
+/// TR-PLANNED-CORE-013: Ingests external docs from cached path (e.g. docs/external).
 /// FR-SUPPORT-010: Only cached copies under ExternalDocsPath are indexed.
 /// </summary>
 public sealed class ExternalDocsIngestor
@@ -19,7 +19,7 @@ public sealed class ExternalDocsIngestor
     private readonly ILogger<ExternalDocsIngestor> _logger;
 
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing external docs path.</param>
     /// <param name="workspaceContext">Resolved workspace context for per-workspace ingestion.</param>

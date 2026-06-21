@@ -25,6 +25,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
 {
     private readonly McpDbContext _db;
     private readonly ITodoExecutionService _todoExecutionService = Substitute.For<ITodoExecutionService>();
+    private readonly ITransactionGatedTodoMutationService _todoMutations = Substitute.For<ITransactionGatedTodoMutationService>();
     private readonly FwhMcpTools _tools;
 
     /// <summary>
@@ -85,6 +86,7 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             workspaceAccessor,
             Substitute.For<ITodoPromptService>(),
             Substitute.For<ISessionLogService>(),
+            Substitute.For<IMemoryService>(),
             gitHubCliService,
             Substitute.For<IRequirementsDocumentService>(),
             desktopLaunchService,
@@ -97,7 +99,8 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             todoUpdateService,
             _todoExecutionService,
             Substitute.For<IPromptTemplateService>(),
-            NullLogger<FwhMcpTools>.Instance);
+            NullLogger<FwhMcpTools>.Instance,
+            todoMutations: _todoMutations);
     }
 
     /// <summary>
@@ -130,6 +133,140 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
         Assert.NotNull(result);
         Assert.Equal("TODO-201", result!.TodoId);
         Assert.Equal(TodoExecutionStatus.TestDesign, result.Status);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that the <c>todo_update</c> STDIO MCP tool routes through the transaction gate.
+    /// </summary>
+    [Fact]
+    public async Task TodoUpdate_WhenTransactionGateRegistered_UsesGatedUpdateService()
+    {
+        _todoMutations.UpdateAsync("TODO-TXN-STDIO-001", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                true,
+                null,
+                new TodoFlatItem
+                {
+                    Id = "TODO-TXN-STDIO-001",
+                    Title = "After",
+                    Section = "Backlog",
+                    Priority = "high",
+                    Done = false,
+                }));
+
+        var json = await _tools.TodoUpdate("TODO-TXN-STDIO-001", ".", title: "After").ConfigureAwait(true);
+        using var document = JsonDocument.Parse(json);
+
+        Assert.True(document.RootElement.GetProperty("success").GetBoolean());
+        await _todoMutations.Received(1)
+            .UpdateAsync("TODO-TXN-STDIO-001", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that the <c>todo_create</c> STDIO MCP tool routes through the transaction gate.
+    /// </summary>
+    [Fact]
+    public async Task TodoCreate_WhenTransactionGateRegistered_UsesGatedCreateService()
+    {
+        _todoMutations.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                true,
+                null,
+                new TodoFlatItem
+                {
+                    Id = "TODO-TXN-STDIO-CREATE-001",
+                    Title = "Created",
+                    Section = "Backlog",
+                    Priority = "high",
+                    Done = false,
+                }));
+
+        var json = await _tools.TodoCreate("TODO-TXN-STDIO-CREATE-001", "Created", "Backlog", "high", ".").ConfigureAwait(true);
+        using var document = JsonDocument.Parse(json);
+
+        Assert.True(document.RootElement.GetProperty("success").GetBoolean());
+        await _todoMutations.Received(1)
+            .CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that the <c>todo_delete</c> STDIO MCP tool routes through the transaction gate.
+    /// </summary>
+    [Fact]
+    public async Task TodoDelete_WhenTransactionGateRegistered_UsesGatedDeleteService()
+    {
+        _todoMutations.DeleteAsync("TODO-TXN-STDIO-DELETE-001", Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(true));
+
+        var json = await _tools.TodoDelete("TODO-TXN-STDIO-DELETE-001", ".").ConfigureAwait(true);
+        using var document = JsonDocument.Parse(json);
+
+        Assert.True(document.RootElement.GetProperty("success").GetBoolean());
+        await _todoMutations.Received(1)
+            .DeleteAsync("TODO-TXN-STDIO-DELETE-001", Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that the <c>todo_move</c> STDIO MCP tool routes through the transaction gate.
+    /// </summary>
+    [Fact]
+    public async Task TodoMove_WhenTransactionGateRegistered_UsesGatedMoveService()
+    {
+        _todoMutations.MoveAsync("TODO-TXN-STDIO-MOVE-001", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                true,
+                null,
+                new TodoFlatItem
+                {
+                    Id = "TODO-TXN-STDIO-MOVE-001",
+                    Title = "Moved",
+                    Section = "Backlog",
+                    Priority = "high",
+                    Done = false,
+                }));
+
+        var json = await _tools.TodoMove(
+                "TODO-TXN-STDIO-MOVE-001",
+                ".",
+                @"F:\GitHub\McpServer.Target")
+            .ConfigureAwait(true);
+        using var document = JsonDocument.Parse(json);
+
+        Assert.True(document.RootElement.GetProperty("success").GetBoolean());
+        await _todoMutations.Received(1)
+            .MoveAsync(
+                "TODO-TXN-STDIO-MOVE-001",
+                Arg.Is<TodoMoveRequest>(request => request != null && request.TargetWorkspacePath == @"F:\GitHub\McpServer.Target"),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-161: Verifies that gated <c>todo_move</c> failures return the standard error JSON.
+    /// </summary>
+    [Fact]
+    public async Task TodoMove_WhenGatedMoveFails_ReturnsErrorJson()
+    {
+        _todoMutations.MoveAsync("TODO-TXN-STDIO-MOVE-002", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(
+                false,
+                "move rejected",
+                FailureKind: TodoMutationFailureKind.Conflict));
+
+        var json = await _tools.TodoMove(
+                "TODO-TXN-STDIO-MOVE-002",
+                ".",
+                @"F:\GitHub\McpServer.Target")
+            .ConfigureAwait(true);
+        using var document = JsonDocument.Parse(json);
+
+        Assert.Equal("move rejected", document.RootElement.GetProperty("error").GetString());
+        await _todoMutations.Received(1)
+            .MoveAsync("TODO-TXN-STDIO-MOVE-002", Arg.Any<TodoMoveRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
     }
 
     /// <summary>

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Service for querying and managing TODO items.
+/// TR-PLANNED-CORE-013: Service for querying and managing TODO items.
 /// Provides CRUD operations, search, and audit-history access.
 /// </summary>
 public interface ITodoService
@@ -26,14 +26,66 @@ public interface ITodoService
     /// <summary>Get append-only audit history for a TODO item.</summary>
     Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default);
 
-    /// <summary>TR-MCP-TODO-006: Get projection status for SQLite-authoritative TODO storage.</summary>
+    /// <summary>TR-MCP-TODO-006: Get projection status for database-authoritative TODO storage.</summary>
     Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default);
 
-    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from database-authoritative TODO storage.</summary>
     Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default);
 }
 
-/// <summary>TR-PLANNED-013: Query parameters for searching TODO items.</summary>
+/// <summary>
+/// TR-MCP-TXN-001: Internal store capability for restoring TODO state during transaction rollback compensation.
+/// </summary>
+public interface ITodoCompensationService
+{
+    /// <summary>Captures the provider-specific current state needed to restore a TODO item later.</summary>
+    Task<TodoCompensationSnapshot?> CaptureForRestoreAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Updates a TODO item while atomically capturing its restore point under the provider write lock.</summary>
+    Task<TodoCompensatedMutationResult> UpdateWithRestorePointAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Deletes a TODO item while atomically capturing its restore point under the provider write lock.</summary>
+    Task<TodoCompensatedMutationResult> DeleteWithRestorePointAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Deletes a TODO item created by an uncommitted transaction during rollback compensation.</summary>
+    Task<TodoMutationResult> DeleteCreatedAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Restores a previously captured provider-specific TODO state.</summary>
+    Task<TodoMutationResult> RestoreAsync(TodoCompensationSnapshot snapshot, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// TR-MCP-TXN-001: Advertises whether a TODO service can actually perform rollback compensation.
+/// </summary>
+public interface ITodoCompensationCapability
+{
+    /// <summary>
+    /// Gets a value indicating whether rollback compensation can be performed without deferring failure to mutation time.
+    /// </summary>
+    bool SupportsRollbackCompensation { get; }
+}
+
+/// <summary>TR-MCP-TXN-001: Opaque provider-specific TODO compensation snapshot.</summary>
+public sealed record TodoCompensationSnapshot
+{
+    /// <summary>Provider identifier that owns the snapshot payload.</summary>
+    public required string Provider { get; init; }
+
+    /// <summary>Provider-specific state. Only the provider that created the snapshot should interpret it.</summary>
+    public required object State { get; init; }
+}
+
+/// <summary>TR-MCP-TXN-001: TODO mutation result paired with the pre-mutation restore point captured by the provider.</summary>
+public sealed record TodoCompensatedMutationResult
+{
+    /// <summary>The TODO mutation result returned by the provider.</summary>
+    public required TodoMutationResult Result { get; init; }
+
+    /// <summary>The pre-mutation restore point, or <see langword="null"/> when no item existed to restore.</summary>
+    public TodoCompensationSnapshot? Snapshot { get; init; }
+}
+
+/// <summary>TR-PLANNED-CORE-013: Query parameters for searching TODO items.</summary>
 public sealed record TodoQueryRequest
 {
     /// <summary>Free-text keyword to match against id, title, description, and technical details.</summary>
@@ -52,10 +104,10 @@ public sealed record TodoQueryRequest
     public bool? Done { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Result of a TODO query.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of a TODO query.</summary>
 public sealed record TodoQueryResult(IReadOnlyList<TodoFlatItem> Items, int TotalCount);
 
-/// <summary>TR-PLANNED-013: A flattened TODO item with section and priority context.</summary>
+/// <summary>TR-PLANNED-CORE-013: A flattened TODO item with section and priority context.</summary>
 public sealed record TodoFlatItem
 {
     /// <summary>Item id (e.g. MVP-APP-001).</summary>
@@ -116,10 +168,10 @@ public sealed record TodoFlatItem
     public IReadOnlyList<string>? TechnicalRequirements { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Flattened implementation task.</summary>
+/// <summary>TR-PLANNED-CORE-013: Flattened implementation task.</summary>
 public sealed record TodoFlatTask(string Task, bool Done);
 
-/// <summary>TR-PLANNED-013: Request to create a new TODO item.</summary>
+/// <summary>TR-PLANNED-CORE-013: Request to create a new TODO item.</summary>
 public sealed record TodoCreateRequest
 {
     /// <summary>Item id (e.g. MVP-APP-006). Required.</summary>
@@ -165,7 +217,7 @@ public sealed record TodoCreateRequest
     public IReadOnlyList<string>? TechnicalRequirements { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Request to update an existing TODO item.</summary>
+/// <summary>TR-PLANNED-CORE-013: Request to update an existing TODO item.</summary>
 public sealed record TodoUpdateRequest
 {
     /// <summary>Updated title (null = no change).</summary>
@@ -243,7 +295,7 @@ public enum TodoMutationFailureKind
     ExternalSyncFailed = 5,
 }
 
-/// <summary>TR-PLANNED-013: Result of a TODO mutation (create/update/delete).</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of a TODO mutation (create/update/delete).</summary>
 public sealed record TodoMutationResult(
     bool Success,
     string? Error = null,
@@ -253,7 +305,7 @@ public sealed record TodoMutationResult(
 /// <summary>TR-MCP-TODO-005: Result of querying TODO audit history.</summary>
 public sealed record TodoAuditQueryResult(IReadOnlyList<TodoAuditEntry> Entries, int TotalCount);
 
-/// <summary>TR-MCP-TODO-006: Status of SQLite-authoritative TODO.yaml projection health and consistency.</summary>
+/// <summary>TR-MCP-TODO-006: Status of database-authoritative TODO.yaml projection health and consistency.</summary>
 public sealed record TodoProjectionStatusResult(
     string AuthoritativeStore,
     string AuthoritativeDataSource,

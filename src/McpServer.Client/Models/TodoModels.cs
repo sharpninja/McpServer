@@ -227,6 +227,14 @@ public sealed class TodoUpdateRequest
     public IReadOnlyList<string>? TechnicalRequirements { get; set; }
 }
 
+/// <summary>Request to move a TODO item to another registered workspace.</summary>
+public sealed class TodoMoveRequest
+{
+    /// <summary>Absolute path of the target workspace.</summary>
+    [JsonPropertyName("targetWorkspacePath")]
+    public string TargetWorkspacePath { get; set; } = string.Empty;
+}
+
 /// <summary>Result of a TODO query.</summary>
 public sealed class TodoQueryResult
 {
@@ -294,14 +302,14 @@ public sealed class TodoAuditQueryResult
     public int TotalCount { get; set; }
 }
 
-/// <summary>Status of SQLite-authoritative TODO.yaml projection health and consistency.</summary>
+/// <summary>Status of database-authoritative TODO.yaml projection health and consistency.</summary>
 public sealed class TodoProjectionStatusResult
 {
     /// <summary>Authoritative storage provider name.</summary>
     [JsonPropertyName("authoritativeStore")]
     public string AuthoritativeStore { get; set; } = string.Empty;
 
-    /// <summary>Absolute path to the authoritative SQLite data source.</summary>
+    /// <summary>Authoritative TODO data source identifier.</summary>
     [JsonPropertyName("authoritativeDataSource")]
     public string AuthoritativeDataSource { get; set; } = string.Empty;
 
@@ -313,7 +321,7 @@ public sealed class TodoProjectionStatusResult
     [JsonPropertyName("projectionTargetExists")]
     public bool ProjectionTargetExists { get; set; }
 
-    /// <summary>Whether the projected TODO.yaml content matches authoritative SQLite state.</summary>
+    /// <summary>Whether the projected TODO.yaml content matches authoritative database state.</summary>
     [JsonPropertyName("projectionConsistent")]
     public bool ProjectionConsistent { get; set; }
 
@@ -325,11 +333,11 @@ public sealed class TodoProjectionStatusResult
     [JsonPropertyName("verifiedAtUtc")]
     public string VerifiedAtUtc { get; set; } = string.Empty;
 
-    /// <summary>UTC timestamp of the last YAML import into SQLite, when known.</summary>
+    /// <summary>UTC timestamp of the last YAML import into the authoritative store, when known.</summary>
     [JsonPropertyName("lastImportedFromYamlUtc")]
     public string? LastImportedFromYamlUtc { get; set; }
 
-    /// <summary>UTC timestamp of the last successful projection from SQLite to YAML, when known.</summary>
+    /// <summary>UTC timestamp of the last successful projection from the authoritative store to YAML, when known.</summary>
     [JsonPropertyName("lastProjectedToYamlUtc")]
     public string? LastProjectedToYamlUtc { get; set; }
 

@@ -2,6 +2,7 @@ using McpServer.McpAgent.SessionLog;
 using McpServer.McpAgent.Todo;
 using McpServer.McpAgent.PowerShellSessions;
 using McpServer.Client;
+using McpServer.Client.Models;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 
@@ -28,6 +29,11 @@ public interface IMcpHostedAgent
     /// Gets the canonical source type reserved for hosted-agent session-log workflow integration.
     /// </summary>
     string SourceType { get; }
+
+    /// <summary>
+    /// Gets the execution profile used when creating Microsoft Agent Framework run options.
+    /// </summary>
+    McpAgentExecutionProfile ExecutionProfile { get; }
 
     /// <summary>
     /// Gets the canonical identifier helper bound to the hosted agent's configured source type.
@@ -73,6 +79,28 @@ public interface IMcpHostedAgent
     /// <param name="chatClient">The chat client that should power the hosted agent.</param>
     /// <returns>A <see cref="ChatClientAgent"/> configured with this hosted agent's metadata.</returns>
     ChatClientAgent CreateChatClientAgent(IChatClient chatClient);
+
+    /// <summary>
+    /// Creates an ACID tightly coupled Agent Framework runtime bundle.
+    /// The hosted agent must be configured with <see cref="McpAgentOptions.UseAcidTightlyCoupledProfile"/>.
+    /// </summary>
+    /// <param name="chatClient">The chat client that should power the hosted agent.</param>
+    /// <param name="baseOptions">Optional caller-supplied run options to clone before ACID capabilities are attached.</param>
+    /// <returns>The ACID runtime bundle containing the agent, sealed run options, definition, and exposed tools.</returns>
+    QBAgentRuntime CreateAcidTightlyCoupledRuntime(
+        IChatClient chatClient,
+        ChatClientAgentRunOptions? baseOptions = null);
+
+    /// <summary>
+    /// Executes a coding task through MCP Server Quad Brain orchestration using the same route exposed
+    /// by the model-visible <c>mcp_quadbrain_coding_execute</c> tool.
+    /// </summary>
+    /// <param name="request">The coding-agent request containing prompt, turn id, and metadata.</param>
+    /// <param name="cancellationToken">Cancellation token for the MCP Server request.</param>
+    /// <returns>The committed Quad Brain orchestration response returned by MCP Server.</returns>
+    Task<QuadBrainOrchestrationResponse> ExecuteQuadBrainCodingTaskAsync(
+        McpQuadBrainCodingAgentRequest request,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
      /// Creates <see cref="ChatClientAgentRunOptions"/> that attach the built-in MCP workflow tools

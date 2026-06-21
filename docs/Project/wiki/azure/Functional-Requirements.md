@@ -1,5 +1,9 @@
 # Functional Requirements (MCP Server)
 
+## [] []
+
+Placeholder requirement backfilled for TODO link [].
+
 ## FR-01 FR-01
 
 Placeholder requirement backfilled by DB-FK-001.
@@ -262,9 +266,7 @@ Agents must follow a session continuity protocol: at session start, read the mar
 
 ## FR-MCP-039 MCP Context Indexing for New Projects
 
-All source files from `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.UI.Core`, and `McpServer.Director` shall be indexed into the MCP context store for semantic search. The marker prompt lists these projects in the Available Capabilities section.
-
-**Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` allowlist merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `templates/prompt-templates.yaml` (default-marker-prompt)
+Repo-local source files from McpServer.Cqrs and McpServer.Cqrs.Mvvm shall be indexed into the MCP context store for semantic search. McpServer.UI.Core and McpServer.Director have moved to the separate McpServerManager repository and must not be advertised as indexed capabilities in this repository marker.
 
 ## FR-MCP-040 Requirements Document CRUD Management
 
@@ -705,9 +707,13 @@ FAQ wiki page: the documentation wiki output (Azure DevOps wiki under `docs/Proj
 
 ## FR-MCP-103 Hub-and-Spoke Federation
 
-The server shall support hub-and-spoke federation where a `Hub` instance is authoritative for enrolled `LocalProxy` servers, global workspace inventory, operation intake, sync fanout, queue status, and conflicts. Existing point-to-point federation remains supported as `DirectProxy`; `Standalone` continues to serve only local workspaces. A LocalProxy shall forward MCP requests to the configured hub, queue mutating requests durably during hub outages, replay queued operations when connectivity returns, and expose role, hub URL, proxy id, queue depth, stale/queued status, and conflict status to agents and operators.
-
-**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationMiddleware`, `FederationProxyService`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, provider migrations, `templates/prompt-templates.yaml`
+The server shall support hub-and-spoke federation where a Hub instance is authoritative for enrolled LocalProxy servers, global workspace inventory, operation intake, sync fanout, queue status, and conflicts. Existing point-to-point federation remains supported as DirectProxy; Standalone continues to serve only local workspaces. A LocalProxy shall forward MCP requests to the configured hub, queue mutating requests durably during hub outages, replay queued operations when connectivity returns, and expose role, hub URL, proxy id, queue depth, stale/queued status, and conflict status to agents and operators.
+**Acceptance Criteria:**
+- [ ] Adapter diagnostics enumerate every required mutable state domain and distinguish covered, local-only, and apply-supported domains.
+- [ ] LocalProxy live forwarding continues to route /mcpserver/* requests, including /mcpserver/memory, through existing proxy middleware when the hub is reachable.
+- [ ] Mutating LocalProxy requests that are eligible for replay are queued durably during hub outages with operation id, domain, resource id, workspace id, headers, body, and base version.
+- [ ] Queued operations replay through signed envelopes when signing is configured.
+- [ ] Stale base-version operations create federation conflicts and do not overwrite authoritative hub state.
 
 ## FR-MCP-104 Decision-complete agent plans
 
@@ -728,6 +734,497 @@ MCP Server must support an audited consolidation plan that inventories outstandi
 ## FR-MCP-108 TODO Markdown description preservation
 
 TODO create, update, read, audit, and projection paths shall preserve description Markdown formatting and whitespace instead of normalizing or stripping meaningful content.
+
+## FR-MCP-109 Batch requirements mutation
+
+The MCP Server shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
+
+## FR-MCP-110 Deterministic Nuke PowerShell execution
+
+Nuke build and deployment automation SHALL run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
+
+## FR-MCP-111 Package workflow closeout skills across McpServer plugins
+
+All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit and push interrupted work, and close out MCP-backed work consistently across plugin families.
+
+## FR-MCP-112 Requirements export description and AC formatting
+
+Requirements exports shall render requirement descriptions as readable Markdown text and shall display structured acceptance criteria as a bulleted list instead of hiding or flattening AC into dense table cells.
+**Acceptance Criteria:**
+- [x] Wiki exports render TEST requirement descriptions outside dense table cells so long descriptions remain readable. (evidence: RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria asserts per-TEST headings and paragraphs.)
+- [x] Wiki exports render structured acceptance criteria under an Acceptance Criteria label as Markdown checklist bullets. (evidence: The same focused test asserts unchecked and checked AC bullets, including evidence text.)
+- [x] Azure and GitHub wiki exports use the same requirement description and AC formatting. (evidence: The focused service test asserts GitHub and Azure Testing-Requirements.md output are equal.)
+
+## FR-MCP-113 Plugin requirement batch payload parsing
+
+The system SHALL accept valid YAML and JSON records arrays for requirement batch operations while preserving nested acceptance criteria.
+**Acceptance Criteria:**
+- [ ] workflow.requirements.updateFrBatch accepts unindented records YAML and preserves nested acceptance criteria.
+
+## FR-MCP-114 Parent TODO completion isolation
+
+The system SHALL keep a TODO item's top-level done state independent from nested implementation task done state. Updating implementationTasks[].done SHALL NOT mark the parent TODO done unless the update request explicitly sets the parent done field or the TODO completion workflow deliberately satisfies the parent completion criteria.
+**Acceptance Criteria:**
+- [x] Updating a nested implementation task done value does not include or change the top-level TODO done field when the caller did not explicitly set it. (evidence: Focused Bats test TODO HTTP body does not promote implementation task done to parent done passed in all five Bash plugin repos.)
+- [x] A live TODO update can mark one implementation task done while the parent TODO remains not done. (evidence: Temporary live TODO TEMP-ISSUE39-001 remained done=false after updating one implementation task to done=true, then was deleted.)
+
+## FR-MCP-115 Session and compaction hook output schema compliance
+
+MCP plugin session and compaction hooks SHALL emit schema-valid hook outputs for their event type. Status-only SessionStart, SessionEnd, PreCompact, and PostCompact outcomes SHALL emit an empty JSON object; hooks that emit hookSpecificOutput SHALL include the matching hookEventName and only fields supported by that event. PostCompact SHALL NOT emit additionalContext because that event cannot inject context.
+**Acceptance Criteria:**
+- [x] SessionStart, SessionEnd, PreCompact, and PostCompact status-only hook scripts emit {} instead of non-spec hookSpecificOutput status payloads. (evidence: Hook Bats suites assert exact {} output for the affected session and compact hooks.)
+- [x] PostCompact does not emit additionalContext. (evidence: Hook Bats suites assert post-compact output is {} and does not contain additionalContext.)
+
+## FR-MCP-116 GitHub CLI service-account ownership resilience
+
+The system SHALL allow GitHub-backed TODO and issue operations to run under service accounts even when Git rejects the workspace repository as dubious ownership, without requiring an untracked global Git configuration mutation.
+
+## FR-MCP-117 Codex plugin wrapper bounded execution
+
+The Codex MCP plugin wrapper SHALL return successful workflow responses promptly or fail within a caller-controlled bounded timeout with actionable diagnostics instead of forcing raw REST fallback.
+
+## FR-MCP-118 Keyserver trust service
+
+McpServer SHALL provide keyserver trust services that register trusted parties, manage public key metadata, sign transaction manifests, verify signed manifests, reject invalid or replayed manifests, preserve historical signing descriptors for verification, and persist audit evidence without exposing private key material.
+**Acceptance Criteria:**
+- [x] Publisher, subscriber, arbiter, and future model parties can be provisioned with party ID, role, active signing key ID, active encryption key ID, status, created/updated UTC, and audit metadata.
+- [x] Manifest signing binds transaction ID, turn ID, publisher party, subscriber party, key IDs, sequence, nonce, issued UTC, expiry UTC, algorithms, diffgram SHA-256, and encrypted body SHA-256.
+- [x] Manifest verification succeeds for an unchanged canonical payload and valid keyserver signature and rejects unknown parties, disabled parties, unknown keys, disabled keys, expired manifests, replayed nonces, stale sequences, malformed signatures, and hash mismatches with deterministic reason codes.
+- [x] Keyserver signing never returns, serializes, or logs private key material; external signing private PEM can be provisioned from file-backed startup configuration.
+- [x] Key rotation supports a new active signing key while retaining old public descriptors for historic verification; full lifecycle automation beyond file-backed startup provisioning is deferred and explicit future scope.
+
+## FR-MCP-119 Subscriber diffgram commit service
+
+McpServer SHALL provide subscriber services that verify keyserver-signed manifests, decrypt intended diffgrams, validate encrypted and plaintext hashes, durably commit accepted diffgrams, expose abort/status flows, and reject invalid or conflicting commits.
+**Acceptance Criteria:**
+- [x] Subscriber accepts a commit only when manifest verification succeeds against keyserver trust and the protected payload is addressed to the subscriber party/key ID.
+- [x] Subscriber validates encrypted body SHA-256 before decrypt and plaintext diffgram SHA-256 after decrypt.
+- [x] First valid commit persists transaction ID, diffgram ID, manifest hash, sequence, status, committed UTC, reason details, and audit metadata durably.
+- [x] Duplicate commit with identical transaction/diffgram/hash is idempotent and returns committed; duplicate commit with mismatched payload, manifest, hash, or sequence is rejected as conflict.
+- [x] Abort records aborted status, refuses later commit, and status exposes pending, committed, rejected, aborted, and reason details without exposing secrets.
+- [x] Subscriber encryption private key rings decrypt old and rotated protected envelopes and bind separate-host configuration to the configured subscriber key material.
+
+## FR-MCP-120 MCP Server transaction gating
+
+McpServer SHALL gate first-party mutating user-turn paths behind transaction manifest signing and subscriber commit confirmation before returning committed success, or fail closed before uncompensated side effects when a safe compensation boundary is not yet available.
+**Acceptance Criteria:**
+- [x] Federation adapter apply, memory add/update/delete, TODO create/update/delete/move, repository write, prompt-template mutations, TODO execution state/plan mutations, requirements repository/export writes, session-log writes, tool registry mutations, voice/external interactive mutations, agent-pool lifecycle mutations, GraphRAG mutations, GitHub external side-effect mutations, context rebuild/website/sync mutations, and federation control-plane mutations either route through compensation-capable coordinator gates or fail closed while required transactions are active.
+- [x] Memory add rollback restores or preserves the created memory record, clears soft-delete metadata when exact EF restoration is available, and same-ID retry conflicts after rollback.
+- [x] Server-side TODO compensation captures update/delete/move restore points under the provider write lock, deletes uncommitted local create rows, restores source snapshots on move rollback, and rejects ISSUE-backed TODO mutation while GitHub side-effect compensation remains future scope.
+- [x] Session-log rollback restores or preserves add-style created session records and restores captured full session graphs for replace/delete inside an explicit database transaction.
+- [x] Generic REPL client passthrough blocks unsafe protected namespaces and unclassified client namespaces while required transaction gating is active, while explicitly service-gated namespaces remain routed to server-side gates.
+- [x] Complete provider-level isolation across delayed subscriber rejection and bucket/GitHub whole-orchestration compensation remain documented future enhancements, not committed-success claims for this slice.
+
+## FR-MCP-121 Degraded mode and rollback
+
+McpServer SHALL enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads or explicitly fail-closed operations, and preserve audit records through rollback.
+**Acceptance Criteria:**
+- [x] Coordinator status exposes enabled/degraded state, last reason, message, and transaction dependency health.
+- [x] Required transaction gates reject mutation before side effects when the coordinator is degraded or required transaction dependencies cannot sign or commit.
+- [x] Commit failure invokes available rollback compensation and reports rollback success or rollback failure without deleting audit evidence.
+- [x] Durable pending commit handoffs are canceled after successful rollback compensation or commit timeout settlement.
+- [x] Runtime/control-plane endpoints without complete remote compensation fail closed or remain explicitly deferred until future compensation slices.
+
+## FR-MCP-122 Byrd v4 execution control
+
+The transactional diffgram implementation SHALL follow Byrd Development Process v4 with requirements-first, failing-test-first, mocks-first, refactor, explicit validation, and zero-failure zero-skip validation gates for each executed scope.
+**Acceptance Criteria:**
+- [x] The plan records FR/TR/TEST identifiers and mappings before implementation closeout.
+- [x] Each implementation slice names focused tests and validates zero failures and zero skips for the executed scope.
+- [x] Deferred work is tracked as TODO/requirements state instead of skipped test placeholders.
+- [x] Final closeout validation includes focused transaction tests, full affected unit suites, traceability validation, and solution build evidence.
+
+## FR-MCP-123 Quad-model future scaffolding
+
+The transaction foundation SHALL preserve the imported quad-model architecture while keeping Curiosity execution, AoT reconciliation execution, quad-model orchestration, and weight-update execution disabled by default until later requirements authorize them.
+**Acceptance Criteria:**
+- [x] Imported diagrams retain stable IDs and future branch annotations for Curiosity, AoT reconciliation, weight redistribution, and quad orchestration.
+- [x] Current production code implements transaction security and mutation gating only; direct model execution and weight-update execution remain disabled/deferred.
+- [x] Deferred future scope is explicitly documented in the plan, mutation audit, design rounds, TEST-MCP-163, and TEST-MCP-170.
+
+## FR-MCP-124 Imported document and diagram preservation
+
+The imported Quad-Model transactional diffgram document SHALL be preserved as local project-contract artifacts, including its diagrams, branch IDs, source references, and implementation-scope annotations.
+**Acceptance Criteria:**
+- [x] All six imported Mermaid diagram IDs are present in `docs/Project/Quad-Model-Transactional-Diffgram-Plan.md`.
+- [x] Each imported diagram section includes a Mermaid block, imported source-section reference, and repository annotations.
+- [x] Diagram-derived implemented and deferred branches map to TEST-MCP-165 through TEST-MCP-173.
+
+## FR-MCP-125 Federation and compatibility preservation
+
+The transactional diffgram implementation SHALL remain additive to existing federation behavior and SHALL preserve existing HMAC federation envelope compatibility while adding transaction-specific trust boundaries.
+**Acceptance Criteria:**
+- [x] Federation HMAC envelopes remain separate from transaction manifest signing and protected diffgram encryption.
+- [x] Global federation mutation-adapter apply paths are transaction-gated through the coordinator.
+- [x] Federation control-plane mutations fail closed while required transaction gating is active until full compensation is designed.
+- [x] Existing proxy/federation compatibility expectations remain documented separately from transaction crypto.
+
+## FR-MCP-126 aiUnit plan review
+
+The transaction plan SHALL include a test-only aiUnit plan review gate that fails on critical or high findings and records run-log evidence before closeout.
+**Acceptance Criteria:**
+- [x] `tests/McpServer.PlanReview.Tests` validates aiUnit plan-review run-log evidence for PLAN-TURNTRANSACTIONS-001.
+- [x] The gate fails when run-log findings contain critical or high severity findings.
+- [x] The run-log artifact records prompt scope, provider/model metadata, findings status, and reviewed scope.
+- [x] Explicit future-disabled work is treated as non-blocking only when it does not hide a safety, correctness, or validation gap.
+
+## FR-MCP-127 Diagram-derived implementation tests
+
+In-scope branches from imported activity and sequence diagrams SHALL have implementation-test coverage or an explicit deferred requirement before related code is written.
+**Acceptance Criteria:**
+- [x] SD-DIFFGRAM-001 valid, invalid, signing, verification, encryption, and hash branches are covered by keyserver/subscriber/client/integration tests.
+- [x] AD-TXN-001 commit, subscriber unavailable, degraded, rollback, timeout, and audit branches are covered by coordinator, pub-sub, federation, and mutation-gating tests.
+- [x] Deferred diagram branches for Curiosity, AoT, weight redistribution, and full quad execution are explicitly documented as disabled future scope.
+- [x] TEST-MCP-165 through TEST-MCP-173 preserve diagram IDs, branch IDs, design mappings, and traceability closeout evidence.
+
+## FR-MCP-128 Two-round architecture and design review
+
+The implementation SHALL include two architecture/design rounds before closeout: a first architecture round defining boundaries, ownership, trust, storage, threat model, and gap analysis, and a second implementable design round defining DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and test mappings.
+**Acceptance Criteria:**
+- [x] `TurnTransactions-Architecture-Round1.md` captures component boundaries, trust model, storage boundaries, rollback/audit rules, threat model, and gap analysis.
+- [x] `TurnTransactions-Design-Round2.md` captures implementable DTOs, entities, options, interfaces, endpoint contracts, reason codes, canonicalization, audit payloads, XMLDoc obligations, and TEST-MCP-158 through TEST-MCP-173 mappings.
+- [x] `TurnTransactions-Mutation-Endpoint-Audit.md` captures current gated, fail-closed, and explicitly deferred mutation surfaces.
+- [x] Requirements matrix and FR/TR mapping rows link FR-MCP-118 through FR-MCP-128 to transaction TR and TEST records.
+
+## FR-MCP-129 Durable external brain-slot registry and live invocation
+
+The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth, including CRUD, readiness status projection, and individually gated live model invocation.
+**Acceptance Criteria:**
+- [x] Brain-slot definitions are durable CRUD records scoped by workspace and role.
+- [x] Exactly one enabled slot per workspace and role is allowed; enabling a replacement requires replaceExisting=true and writes an audit entry.
+- [x] A workspace is quad-ready only when all four roles have enabled slots with valid provider, model, endpoint policy, credential reference, and trusted party mapping.
+- [x] CRUD stores and returns credentialReference only; raw API keys are never persisted or returned.
+- [x] REST, client, and STDIO/MCP surfaces expose list/get/upsert/delete/enable/disable/status/invoke parity.
+- [x] Invocation is rejected unless brain-slot execution is enabled, the slot is enabled, endpoint policy passes, credentials resolve, and required turn transactions are enabled.
+- [x] No implicit fallback model is used; fallback behavior remains fail-closed with structured reason codes unless a configured slot is invoked and committed.
+
+## FR-MCP-130 Transaction-gated Curiosity external result admission
+
+The CuriosityEngine slot MAY request GraphRAG or context admission for external model output only after the related brain-slot invocation transaction commits successfully through the subscriber path.
+**Acceptance Criteria:**
+- [x] No model output is returned to the caller until the subscriber commit succeeds.
+- [x] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
+- [x] Only CuriosityEngine may request GraphRAG/context admission.
+- [x] Left, Right, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
+- [x] Curiosity admission records the committed transaction and admission metadata for audit.
+
+## FR-MCP-131 Quad containment and authorization boundary
+
+The MCP runtime SHALL keep Quad-Brain branches fail-closed unless explicit branch requirements authorize them. FR-MCP-134 and FR-MCP-135 now authorize AoT reconciliation execution, durable weight updates, and full Quad-Brain orchestration; unauthorized cache mutation and implicit fallback remain contained.
+**Acceptance Criteria:**
+- [x] AoT reconciliation execution is authorized only through the transaction-gated ArbiterOfTruth slot path.
+- [x] Weight update execution is authorized only through the safety-gated, transaction-coordinated weight update path.
+- [x] Full automatic quad orchestration is authorized only when the workspace is quad-ready and all role outputs commit successfully.
+- [x] Individual brain-slot invocation authorization still does not authorize non-Curiosity GraphRAG/cache mutation or implicit fallback model behavior.
+
+## FR-MCP-132 Accurate HTTP semantics for /mcpserver/* credential failures
+
+All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API keys. 503 Service Unavailable is returned only when the per-workspace auth-token subsystem has not yet been initialized, and per-workspace tokens rotating on restart must surface as 401, never as a blanket 503.
+**Acceptance Criteria:**
+- [x] All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API key
+- [x] 503 Service Unavailable returned only when per-workspace auth-token subsystem not initialized
+- [x] Every 503 includes Retry-After header and JSON body
+- [x] Rotated/stale API key surfaces as 401, never as blanket 503
+
+## FR-MCP-133 Readiness reflects the workspace/token subsystem
+
+The readiness endpoint /ready reports Unhealthy when no enabled workspace is registered, primary workspace has no seeded auth token, or auth-token subsystem is uninitialized. Readiness never reports Healthy while /mcpserver/* would be rejected with 503.
+**Acceptance Criteria:**
+- [x] /ready endpoint checks workspace/token subsystem readiness
+- [x] /ready reports Unhealthy when no enabled workspace registered
+- [x] /ready reports Unhealthy when primary workspace has no seeded auth token
+- [x] /ready never reports Healthy while /mcpserver/* would return 503
+
+## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
+
+The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+**Acceptance Criteria:**
+- [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
+- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
+- [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
+- [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
+
+## FR-MCP-135 Quad-Brain weight update controls
+
+The MCP runtime SHALL support durable, audited Quad-Brain role weight updates with AoT approval, admin approval, explicit safety-gate acknowledgement, version checks, before/after snapshots, and rollback metadata, while rejecting unsafe or stale updates without mutating slot state.
+**Acceptance Criteria:**
+- [x] Weight updates require AoT approval, admin approval, safety gates passed, and a non-empty reason before slot weights change.
+- [x] Each accepted update increments slot weight versions and records previous and new values in DataAuditLogs.
+- [x] Stale expected versions, missing roles, disabled slots, invalid weights, or missing approvals return structured fail-closed reason codes.
+- [x] Full orchestration can apply an explicit approved weight update but never performs an implicit self-improvement update.
+
+## FR-MCP-136 ACID-coupled Microsoft Agent Framework agent definition
+
+The system SHALL expose an explicit ACID-compliant, tightly coupled hosted-agent definition for Microsoft Agent Framework hosts, extending the existing ChatClientAgent integration while requiring authenticated workspace binding, serialized tool invocation, durable audit/session-log boundaries, and fail-closed tool exposure.
+**Acceptance Criteria:**
+- [x] The ACID profile has stable public metadata including id, name, source type, consistency model, coupling mode, and Microsoft Agent Framework extension type.
+- [x] The ACID profile requires authentication, workspace scoping, session-turn boundaries, durable audit, transaction-required mutation policy, and serialized model tool invocation.
+- [x] Generic passthrough, shell, desktop, repository-write, TODO-mutation, and GraphRAG-mutation tools are not exposed by default in the ACID profile.
+- [x] Default hosted-agent registration remains backward compatible when the ACID profile is not selected.
+
+## FR-MCP-137 Quad Brain coding agent execution
+
+Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes coding tasks through QuadBrain orchestration, never bypassing the Quad Brain transaction/admission contract. ACID profile includes Quad Brain coding tool while excluding generic passthrough and other uncontrolled tools.
+**Acceptance Criteria:**
+- [x] Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
+- [x] Tool calls McpServerClient.BrainSlots.OrchestrateAsync with coding metadata
+- [x] Tool never bypasses Quad Brain transaction/admission contract
+- [x] ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools
+- [x] Host code can execute same coding-agent path through typed runtime method
+
+## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
+
+Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+
+## FR-MCP-AGENT-PARITY-002 FR-MCP-AGENT-PARITY-002
+
+Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+
+## FR-MCP-BATCH-001 Plugin requirement batch payload parsing
+
+All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+
+## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-MEMORY-001 Global and workspace memory storage
+
+The MCP Server SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.
+**Acceptance Criteria:**
+- [x] A memory record has a stable ID, scope, category, raw text, version, author metadata, and created/updated timestamps.
+- [x] Global memories are returned for every workspace and are not stamped with a workspace owner.
+- [x] Workspace memories require an owning workspace and are not returned for any other workspace.
+- [x] Removed memories are hidden from normal reads and lists without physically deleting the row.
+- [x] Memory text round-trips exactly, including internal newlines and punctuation.
+
+## FR-MCP-MEMORY-002 Memory CRUD tools
+
+The MCP Server SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.
+**Acceptance Criteria:**
+- [x] Add creates a memory and returns ID, text, scope, category, version, and timestamps.
+- [x] List returns the effective memory set for the active workspace by default.
+- [x] Update replaces raw text, increments version, and can change scope under validated rules.
+- [x] Remove soft-deletes a memory by ID.
+- [x] Invalid IDs, duplicate active IDs, invalid scopes, empty text, and unauthorized scope changes return clear errors.
+
+## FR-MCP-MEMORY-003 Required memories injection format
+
+Supported agents SHALL receive active memories at each host-supported request boundary in a deterministic `REQUIRED MEMORIES` block. Memory text SHALL be raw text and SHALL NOT be summarized, decorated, or rewritten.
+**Acceptance Criteria:**
+- [x] The injected block header is exactly `REQUIRED MEMORIES`.
+- [x] Each memory renders as `- MEMORY-CATEGORY-001: Raw memory text`.
+- [x] An empty memory set renders exactly `REQUIRED MEMORIES` followed by `- None`.
+- [x] Scope labels, timestamps, source metadata, confidence, and summaries do not appear in the injected block.
+- [x] Hosts without request-boundary injection document the limitation and expose the best available explicit memory-list fallback without claiming automatic injection.
+
+## FR-MCP-MEMORY-004 Marker template memory guidance
+
+Generated `AGENTS-README-FIRST.yaml` instructions SHALL explain MCP memories, the memory tools, the ID format, scope behavior, and the exact `REQUIRED MEMORIES` rendering contract.
+**Acceptance Criteria:**
+- [x] templates/prompt-templates.yaml contains an MCP Memories section in the default marker prompt. (evidence: templates/prompt-templates.yaml MCP Memories section.)
+- [x] The section names memory_add, memory_list, memory_update, and memory_remove. (evidence: templates/prompt-templates.yaml MCP Memories tool list.)
+- [x] The section documents Global versus Workspace scope and the MEMORY-{CATEGORY}-{NNN} ID format. (evidence: templates/prompt-templates.yaml scope and ID guidance.)
+- [x] The section states that memory text is raw text, not a secret store, and must not be silently generated. (evidence: templates/prompt-templates.yaml memory rules.)
+- [x] The section documents agent-local memory import safeguards, updatedBy attribution, and session-log action recording for memory mutations. (evidence: docs/context/memory.md and templates/prompt-templates.yaml import and attribution rules.)
+- [x] A marker-template contract test fails if the required section, tools, render format, import safeguards, or attribution rules are missing. (evidence: MemoryContractArtifactTests.MemoryContextDocumentation_IncludesImportAndAttributionRules.)
+
+## FR-MCP-MEMORY-005 REPL memory namespace
+
+The REPL SHALL expose typed `workflow.memory.*` operations for memory add, list, update, and remove.
+**Acceptance Criteria:**
+- [x] `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, and `workflow.memory.remove` dispatch through typed workflow code.
+- [x] Valid REPL memory commands return standard result envelopes.
+- [x] Invalid memory method names return the normal method-not-found envelope.
+- [x] Invalid request payloads return standard structured error envelopes without crashing the REPL process.
+
+## FR-MCP-MEMORY-006 Memory scope management and ordering
+
+The MCP Server SHALL allow memories to be marked Global or Workspace and SHALL return Global memories before Workspace memories, with each group sorted by ID ascending.
+**Acceptance Criteria:**
+- [x] Add supports explicit `Scope` and defaults to Workspace only when omitted.
+- [x] Update can change a memory between Global and Workspace under validated rules.
+- [x] List APIs, REPL methods, stdio tools, and required-memory injection all use Global-first grouping.
+- [x] Each scope group sorts by ID ascending using ordinal string comparison.
+- [x] Global rows never appear after workspace rows, and workspace rows from other workspaces are excluded.
+
+## FR-MCP-MEMORY-007 Agent plugin memory integration
+
+Official McpServer agent plugins SHALL expose memory tools and SHALL inject the `REQUIRED MEMORIES` block at host-supported request boundaries, or SHALL document a host limitation and expose an explicit memory-list fallback.
+**Acceptance Criteria:**
+- [x] Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline v1, Cline v2, and OpenCode plugin lanes validate memory tool availability. (evidence: Shell plugin Bats memory tests and TypeScript memory tests.)
+- [x] Plugins with request-boundary injection hooks render REQUIRED MEMORIES on every supported user prompt boundary. (evidence: Plugin validation and marker memory injection coverage.)
+- [x] Plugins without a usable request-boundary injection hook document the host limitation without claiming automatic injection. (evidence: Plugin docs and validation expectations.)
+- [x] Plugin validation identifies the host hook or fallback, workspace marker path, and example REQUIRED MEMORIES output. (evidence: Plugin validation coverage.)
+- [x] Plugin memory mutations append session-log actions and clear local failsafe entries after server acknowledgement. (evidence: Shell Bats and TypeScript memory tests for mutation action append and failsafe cleanup.)
+
+## FR-MCP-MEMORY-008 Federated Memory State
+
+The MCP Server SHALL federate Memory as a first-class mutable federation domain. Memory federation uses the existing /mcpserver/memory REST surface and federation operation envelope pipeline, not new public memory endpoints. Adapter diagnostics, LocalProxy outage queueing, signed replay, hub conflict detection, and fanout apply semantics SHALL include the memory domain.
+**Acceptance Criteria:**
+- [ ] Federation adapter diagnostics list memory as covered, non-local-only, and apply-supported.
+- [ ] /mcpserver/memory maps to federation domain memory.
+- [ ] LocalProxy live forwarding of memory REST requests continues through existing proxy middleware.
+- [ ] Offline queued memory creates require an explicit valid MEMORY-* ID.
+- [ ] Offline memory creates without an explicit valid ID are not queued.
+- [ ] Offline queued memory update and delete operations replay through signed envelopes.
+- [ ] Stale memory base-version operations create federation conflicts and do not overwrite hub state.
+
+## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
+
+All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+
+## FR-MCP-PLUGINCORE-001 Canonical plugin core with sync and checksum guard
+
+A single canonical plugin core SHALL be distributed into plugin repos by a sync tool that writes a per-file sha256 manifest, and a checksum guard SHALL fail CI when a synced file is edited locally.
+
+## FR-MCP-PLUGINCORE-002 No-duplication CI guard for plugin lib files
+
+Plugin CI SHALL fail when a lib file is neither covered by the core manifest nor declared as plugin residual.
+
+## FR-MCP-PLUGINCORE-003 Persistent REPL daemon
+
+A persistent REPL daemon SHALL serve many requests from one long-lived repl child over NDJSON framing, with auto-start, crash-restart, and spawn-per-call fallback.
+
+## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
+
+All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
+
+## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
+
+QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On startup it SHALL read the marker file (AGENTS-README-FIRST.yaml) in its start directory and use that marker's apiKey and baseUrl to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
+**Acceptance Criteria:**
+- [x] A valid marker binds baseUrl and apiKey from the marker and applies the QBAgent profile.
+- [x] A marker missing apiKey or with a non-absolute baseUrl is rejected as invalid.
+- [x] With no marker present QBAgent exits gracefully with exit code 0 and contacts no endpoint.
+- [x] An interactive run loop routes each prompt through the bound runtime, handles blank lines and exit commands, stops at end of input, and reports runner failures without aborting.
+
+## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
+
+QuadBrain SHALL execute MCP-internal tools (those exposed by McpServer itself - session, TODO, requirements, repo, graphrag, etc.) directly server-side during orchestration rather than emitting them to the agent, which improves performance and removes dependence on model behavior. Tools OUTSIDE McpServer SHALL be emitted as OpenAI tool_calls for QBAgent to execute. QuadBrain orchestration SHALL perform session logging. When role models elect MCP-internal mutating tools (TODO and Requirements add/update), the Arbiter-of-Truth SHALL intercept the call and gate it through the turn transaction coordinator; on commit it executes the tool in McpServer and strips that tool_call from the chat-completion response before returning to QBAgent.
+**Acceptance Criteria:**
+- [x] Tools are classified MCP-internal (mcp_ prefix) versus external.
+- [x] The interceptor executes internal tools server-side and strips them; only external calls are emitted to the agent as tool commands.
+- [x] Internal tool failures and unhandled internal tools are surfaced to the agent as a note and earmarked as Session Log failures, never as tool commands.
+- [ ] A concrete executor routes TODO and Requirements mutations through the transaction-gated services so the AoT commit applies them server-side.
+- [ ] QuadBrain orchestration performs the Session Log write for the turn including internal-tool failure entries.
+
+## FR-MCP-QBEXEC-002 Concrete QuadBrain internal-tool executor
+
+QuadBrain SHALL provide a concrete IQuadBrainInternalToolExecutor (replacing the default NoopInternalToolExecutor) that routes MCP-internal tool calls - mcp_todo_*, mcp_requirements_*, mcp_repo_write, mcp_repo_edit, and mutating mcp_git - through the existing transaction-gated services (TransactionGatedTodoMutationService, the transaction-gated requirements document service, and TransactionGatedRepoFileService) so each mutation commits through the turn transaction coordinator, and maps each result to InternalToolExecutionOutcome.Ok/Fail/Unhandled.
+**Acceptance Criteria:**
+- [ ] mcp_todo_update / mcp_todo_create / mcp_todo_delete route through ITransactionGatedTodoMutationService and commit via the coordinator.
+- [ ] mcp_requirements_* mutations route through the transaction-gated requirements document service.
+- [ ] mcp_repo_write and mcp_repo_edit route through TransactionGatedRepoFileService with snapshot rollback on transaction reject.
+- [ ] An unknown mcp_ tool returns InternalToolExecutionOutcome.Unhandled (left for the agent), and the executor replaces NoopInternalToolExecutor in DI.
+
+## FR-MCP-QBEXEC-003 Full-fidelity inter-brain session logging
+
+QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
+**Acceptance Criteria:**
+- [ ] Each brain-slot invocation writes full prompt + full output text to the session log (not only SHA-256 hashes), under the correct TurnId.
+- [ ] AoT reconciliation input and output are logged in full to the session log.
+- [ ] Internal-tool executed and failed outcomes (interception Executed/Failed) are recorded to the session log as the turn proceeds.
+- [ ] Secret values (api keys, bearer tokens) are redacted before logging; the existing hashed BrainSlotInvocationEntity audit row is retained as the durable index.
+
+## FR-MCP-QBOPENAI-001 QuadBrain OpenAI-compatible chat-completions endpoint
+
+QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (chat/completions shape) backed by QuadBrain orchestration, accepting standard OpenAI chat messages and tool/function definitions and returning OpenAI-shaped completions - including assistant tool_calls when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent (FR-MCP-QBAGENT-001) consumes this endpoint as its IChatClient and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.
+**Acceptance Criteria:**
+- [x] An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message.
+- [x] Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.
+- [x] Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.
+- [x] QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.
+
+## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
+
+The server provisions the four GLOBAL Quad-Brain roles (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, as a single global set. The /v1 OpenAI-compatible endpoint resolves the caller workspace from its token to scope server-side internal-tool mutations, not brain-slot visibility (brains are global).
+**Acceptance Criteria:**
+- [x] When Mcp:BrainSlots:ExecutionEnabled is true and Slots is populated, the startup seeder upserts and enables each configured slot as a single global set and the quad becomes ready in every workspace context.
+- [x] Provisioning is idempotent across restarts and does not abort host startup when a single slot definition is invalid.
+- [x] When execution is disabled or no slots are configured, the seeder provisions nothing.
+- [x] A /v1/chat/completions request runs the real four-role orchestration over the global brains; the token workspace scopes only the internal-tool mutations.
+
+## FR-MCP-QBSKILLS-001 Agent Skills registry and progressive disclosure
+
+QBAgent provides an agentskills.io-compatible skill registry/loader. Discovery loads only each skill name+description; Activation loads the full SKILL.md on demand; Execution follows the instructions using the baseline tools. SKILL.md frontmatter requires name and description (optional license/version/allowed-tools).
+**Acceptance Criteria:**
+- [ ] Discovery returns only name+description for every available skill; load returns the full SKILL.md body.
+- [ ] A SKILL.md missing name or description is rejected by the manifest parser.
+
+## FR-MCP-QBSKILLS-002 Skill tool (list_skills / load_skill)
+
+QBAgent exposes external tools list_skills and load_skill(name) so the model can discover and activate skills at runtime under progressive disclosure.
+**Acceptance Criteria:**
+- [ ] list_skills returns the discovery list; load_skill returns the named skill body.
+
+## FR-MCP-QBSKILLS-003 Vendor dotnet/skills and author workspace skills
+
+The repo vendors dotnet/skills (agentskills.io) and authors workspace skills in SKILL.md format: byrd-tdd-process, mcp-session-logging, mcp-todo, mcp-requirements-traceability, and usage skills for the git/bash/edit tools. Discovery scans both vendored and workspace skill roots.
+**Acceptance Criteria:**
+- [ ] Discovery includes both vendored dotnet/skills and authored workspace skills.
+- [ ] Authored workspace SKILL.md files pass frontmatter validation.
+
+## FR-MCP-QBTOOLS-001 QBAgent external file tools
+
+QBAgent exposes agent-side external tools read_file, write_file, edit_file, and list_files that operate on the workspace through the MCP client (server RepoFileService), so the server path-traversal/reparse/allowlist safety governs all file access from both planes.
+**Acceptance Criteria:**
+- [ ] read_file/write_file/edit_file/list_files are registered as non-mcp_ external AITools and execute in the QBAgent loop.
+- [ ] All four route through the MCP client to the server RepoFileService; path traversal and out-of-root access are rejected server-side.
+
+## FR-MCP-QBTOOLS-002 QBAgent run_powershell tool
+
+QBAgent exposes a run_powershell external tool backed by the in-process HostedPowerShellSessionManager runspace, returning output/error/exit streams.
+**Acceptance Criteria:**
+- [ ] run_powershell executes a command in a hosted runspace and returns captured output and error streams.
+
+## FR-MCP-QBTOOLS-003 QBAgent run_bash tool (optional Git Bash)
+
+QBAgent exposes an optional run_bash external tool that resolves bash.exe (Git for Windows) from PATH via ProcessRunner; when bash is unavailable it returns a structured unavailable result rather than failing the agent. PowerShell remains primary.
+**Acceptance Criteria:**
+- [ ] When bash.exe is present, run_bash executes a command and returns stdout/stderr/exit code.
+- [ ] When bash.exe is absent, run_bash returns available=false without throwing.
+
+## FR-MCP-QBTOOLS-004 QBAgent git tool (full, push to origin)
+
+QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing Azure DevOps origin remote only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
+**Acceptance Criteria:**
+- [ ] Read subcommands (status/diff/log/branch) run against the workspace repo and return output.
+- [ ] add/commit/checkout/reset/push are supported; push targets origin only and never a non-origin remote.
+- [ ] Unknown subcommands are rejected.
+
+## FR-MCP-QBTOOLS-005 Server-side mcp_repo_edit, mcp_bash, mcp_git tools
+
+The MCP tool adapter exposes server-side mcp_repo_edit, mcp_bash, and mcp_git tools (mcp_ prefix) executed server-side by QuadBrain via the internal-tool executor; mutating variants are transaction-gated. One core implementation per capability is shared with the agent-side external tools.
+**Acceptance Criteria:**
+- [ ] mcp_repo_edit/mcp_bash/mcp_git are present in the adapter tool surface with mcp_ prefix.
+- [ ] Mutating mcp_ tools are gated through the turn transaction coordinator and share the single core capability with the external plane.
+
+## FR-MCP-QBTOOLS-006 RepoFileService targeted edit
+
+IRepoFileService gains EditAsync(relativePath, oldString, newString, expectedOccurrences?) performing a targeted string replacement with the same path-safety, audit, and change-event behavior as Write; ambiguous or missing matches fail; transactional compensation reuses the snapshot/restore path.
+**Acceptance Criteria:**
+- [ ] A unique oldString is replaced; a missing oldString fails; an ambiguous match fails unless replaceAll/expectedOccurrences is set.
+- [ ] Transaction-gated EditAsync rolls back to the original content when the transaction is rejected.
+
+## FR-MCP-QBTOOLS-007 QBAgent registers full tool and skill surface
+
+QBAgent registers the full external tool set (file/powershell/bash/git) plus the skill tools on every run via baseOptions.ChatOptions.Tools, and injects the skill discovery list into the system prompt.
+**Acceptance Criteria:**
+- [ ] Every QBAgent run exposes the external tool set and the skill tools to the Agent Framework loop.
+
+## FR-MCP-QUAD-SESSION-001 Per-session QuadBrain instances over global brains
+
+QuadBrain brain definitions are global, but a running orchestration is an instance attached to a single session; multiple instances may run concurrently, each bound to its own session. A /v1/chat/completions request declares its session via the X-Session-Id header (optional X-Turn-Id), and the server threads that session and turn into the orchestration so inter-brain logging, internal-tool-failure logging, and turn transactions are correlated and concurrent instances stay isolated.
+**Acceptance Criteria:**
+- [x] A /v1 request X-Session-Id (and optional X-Turn-Id) header is threaded into the orchestration request metadata (sessionId/turnId) and TurnId.
+- [x] Inter-brain logging and internal-tool-failure logging use the attached session/turn and are a no-op when absent.
+- [x] A request with no X-Session-Id attaches no session metadata and runs as an anonymous instance.
+- [x] Multiple concurrent /v1 requests with different X-Session-Id values are independent instances over the shared global brains.
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
@@ -790,11 +1287,54 @@ All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are c
 
 ---
 
+## FR-MCP-REPL-006 Deprecate workflow.* REPL namespaces in favor of client.* passthrough
+
+The REPL SHALL mark every workflow.* response deprecated and route workflow.sessionlog lifecycle verbs with explicit identifiers statelessly through the SessionLog client.
+
 ## FR-MCP-REPL-007 REPL Credential Discovery Diagnostics
 
 `mcpserver-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `McpServerClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
+
+## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
+
+FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
+
+## FR-MCP-REQAC-002 Copy acceptance criteria from a TODO to a requirement
+
+A copy operation populates a requirement's acceptance criteria from a TODO's acceptance criteria verbatim (field-for-field).
+
+## FR-MCP-REQAC-PLUGIN-001 Plugin acceptanceCriteria rollout
+
+All Bash and TypeScript MCP plugin families expose structured acceptanceCriteria on FR/TR/TEST create and update flows, including copy-from-TODO support where applicable.
+**Acceptance Criteria:**
+- [x] Bash and TypeScript plugin live gates preserve structured acceptanceCriteria through workflow and REST round-trip verification. (evidence: Live FR-CODEXBIND-001 workflow create/get plus REST GET returned AC-CODEXBIND-001 after service and REPL tool updates.)
+
+## FR-MCP-REQACPLUGIN-001 Plugins expose AcceptanceCriteria on requirements surface
+
+Every MCP server plugin (bash and TypeScript families) lets its agent set and read structured acceptanceCriteria ({id,text,isSatisfied,evidence}) on FR/TR/TEST create/update via the plugin command surface, including hydration on partial updates.
+**Acceptance Criteria:**
+- [ ] Bash family typed-params builder emits acceptanceCriteria block on create+update for FR/TR/TEST
+- [ ] TypeScript family tool inputSchema declares acceptanceCriteria + typedParams forwards it
+- [ ] Plugin tests cover both create and partial-update hydration paths
+
+## FR-MCP-REQACPLUGIN-002 Plugins fail on proven AcceptanceCriteria loss
+
+Every MCP server plugin that accepts caller-supplied requirement acceptanceCriteria must either preserve the supplied criteria or fail loudly when the mutation response proves the criteria were dropped.
+**Acceptance Criteria:**
+- [x] Criteria-only requirement updates preserve the caller-supplied acceptanceCriteria block instead of replacing it with an empty or stale hydrated list. (evidence: Direct sourced shell assertions passed for Codex, Claude Code, Claude Cowork, Copilot, and Grok; Jest criteria-only update tests passed for Cline, Cline v2, and OpenCode.)
+- [x] If a caller supplies acceptanceCriteria and a successful mutation response explicitly returns acceptanceCriteria empty, the plugin reports requirements_acceptance_criteria_not_captured instead of success. (evidence: Direct sourced shell assertions and focused Jest tests exercise the explicit empty-response case.)
+- [x] Requirement create/update calls without acceptanceCriteria continue to work without injecting an empty criteria list. (evidence: Shell no-AC create assertions passed and existing TypeScript focused tests remain green.)
+
+## FR-MCP-SUBLOG-001 Subscriber high-performance message logging
+
+The transaction subscriber SHALL log every received transaction message (commit and abort outcomes) to a high-performance log store (Parseable) when configured, capturing transaction id, event, reason, status, manifest and encrypted-body hashes, diffgram id, and party ids; logging is best-effort and SHALL never block or fail the commit path on sink errors.
+**Acceptance Criteria:**
+- [x] A pluggable ISubscriberMessageLog seam exists with a no-op default and a Parseable HTTP sink.
+- [x] The Parseable sink POSTs a flat JSON batch to the ingest endpoint with the X-P-Stream header and basic auth.
+- [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
+- [x] Sink transport errors are swallowed and never break the transaction.
 
 ## FR-SUPPORT-010 MCP Context Unification
 
@@ -819,4 +1359,58 @@ Session log POST shall return RFC 7807 ProblemDetails on body-binding or validat
 Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
+
+## FR-SUPPORT-010E Stateless session lifecycle endpoints
+
+The session-log API SHALL expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
+
+## FR-SUPPORT-010F Additive partial session-log submits
+
+Whole-session submit SHALL merge additively: omitted session and turn fields never overwrite previously persisted values.
+
+## FR-SUPPORT-011 SessionLog Workspace Stamping
+
+Session log POST shall stamp the resolved workspace ID on every persisted row (parent SessionLog plus all child entities: turns, actions, tags, context items, processing dialog, commits, string-list items) so a POST followed by a GET under the same workspace context returns the same record. When no workspace context is resolved (ingestion / batch import paths), WorkspaceId defaults to empty string and the DbContext-level auto-stamp populates it from _workspaceId if available.
+**Acceptance Criteria:**
+- [ ] Session log POST stamps resolved workspace ID on parent and all child entities
+- [ ] POST followed by GET under same workspace returns same record with workspace ID preserved
+- [ ] When no workspace context is resolved, WorkspaceId defaults to empty string and DbContext auto-stamp populates from _workspaceId if available
+
+## FR-SUPPORT-012 SessionLog ProblemDetails Errors
+
+Session log POST shall return RFC 7807 ProblemDetails on body-binding or validation failure. Error responses cite the offending JSON path under errors, never the action-parameter name. Content-Type is application/problem+json. The accepted top-level shape is documented in the response detail.
+**Acceptance Criteria:**
+- [ ] Session log POST returns RFC 7807 ProblemDetails on body-binding failure
+- [ ] Session log POST returns RFC 7807 ProblemDetails on validation failure
+- [ ] Error responses cite offending JSON path under errors, not action-parameter name
+- [ ] Content-Type is application/problem+json and accepted top-level shape is documented in response detail
+
+## FR-SUPPORT-013 SessionLog REST Surface Completion
+
+Session log REST shall expose GET /mcpserver/sessionlog/{agent}/{sessionId} (single-record fetch under tenancy) and POST /mcpserver/sessionlog/{agent}/{sessionId}/turn (turn-append by RequestId). Unsupported verbs return 405 Method Not Allowed with Allow header. Terminal-turn audit-evidence gate enforced only for Quad-Brain ACID hosted-agent source type (QBAgent), not standard agents.
+**Acceptance Criteria:**
+- [ ] GET /mcpserver/sessionlog/{agent}/{sessionId} returns single-record fetch under tenancy
+- [ ] POST /mcpserver/sessionlog/{agent}/{sessionId}/turn appends turn by RequestId
+- [ ] Unsupported verbs return 405 Method Not Allowed with Allow header
+- [ ] Terminal-turn audit-evidence gate enforced only for QBAgent (ACID hosted-agent), not standard agents
+
+## FR-SUPPORT-014 Stateless session lifecycle endpoints
+
+The session-log API shall expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
+**Acceptance Criteria:**
+- [ ] Session-log API exposes stateless open/begin/complete/fail lifecycle operations
+- [ ] Lifecycle operations are keyed by (agent, sessionId, requestId) tuple
+- [ ] Operations require no in-process active-session state to function
+
+## FR-SUPPORT-015 Additive partial session-log submits
+
+Whole-session submit shall merge additively: omitted session and turn fields never overwrite previously persisted values. This ensures partial updates preserve existing state.
+**Acceptance Criteria:**
+- [ ] Whole-session submit merges additively without overwriting omitted fields
+- [ ] Omitted session fields are never overwritten during additive merge
+- [ ] Omitted turn fields are never overwritten during additive merge
+
+## FR-TEST-002 FR-TEST-002
+
+Placeholder requirement backfilled for TODO link FR-TEST-002.
 

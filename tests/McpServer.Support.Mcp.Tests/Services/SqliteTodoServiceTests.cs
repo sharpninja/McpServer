@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Services;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
@@ -120,6 +121,14 @@ public sealed class SqliteTodoServiceTests : IDisposable
         var deleted = await _sut.DeleteAsync("SQL-TODO-002").ConfigureAwait(true);
         Assert.True(deleted.Success);
         Assert.Null(await _sut.GetByIdAsync("SQL-TODO-002").ConfigureAwait(true));
+
+        var deletionRow = await ReadTodoDeletionRowAsync("SQL-TODO-002").ConfigureAwait(true);
+        Assert.Equal(1, deletionRow.Count);
+        Assert.Equal(1, deletionRow.IsDeleted);
+        Assert.False(string.IsNullOrWhiteSpace(deletionRow.DeletedAtUtc));
+        Assert.Equal("api", deletionRow.DeletedBy);
+        Assert.Equal("todo_delete", deletionRow.DeleteReason);
+
         await _eventBus.Received(1).PublishAsync(
             Arg.Is<ChangeEvent>(e => e != null
                                      && e.Category == ChangeEventCategories.Todo
@@ -527,5 +536,32 @@ public sealed class SqliteTodoServiceTests : IDisposable
         {
             // Best-effort cleanup for temp test artifacts.
         }
+    }
+
+    private async Task<(long Count, long IsDeleted, string? DeletedAtUtc, string? DeletedBy, string? DeleteReason)> ReadTodoDeletionRowAsync(string id)
+    {
+        await using var connection = new SqliteConnection($"Data Source={_tempDbPath}");
+        await connection.OpenAsync().ConfigureAwait(true);
+
+        await using var command = connection.CreateCommand();
+        command.CommandText = """
+            SELECT COUNT(*) AS row_count,
+                   COALESCE(MAX(is_deleted), 0) AS is_deleted,
+                   MAX(deleted_at_utc) AS deleted_at_utc,
+                   MAX(deleted_by) AS deleted_by,
+                   MAX(delete_reason) AS delete_reason
+            FROM todo_items
+            WHERE id = $id;
+            """;
+        command.Parameters.AddWithValue("$id", id);
+
+        await using var reader = await command.ExecuteReaderAsync().ConfigureAwait(true);
+        Assert.True(await reader.ReadAsync().ConfigureAwait(true));
+        return (
+            reader.GetInt64(0),
+            reader.GetInt64(1),
+            reader.IsDBNull(2) ? null : reader.GetString(2),
+            reader.IsDBNull(3) ? null : reader.GetString(3),
+            reader.IsDBNull(4) ? null : reader.GetString(4));
     }
 }

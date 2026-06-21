@@ -9,7 +9,7 @@ using YamlDotNet.Serialization;
 namespace McpServer.Support.Mcp.Models;
 
 /// <summary>
-/// TR-PLANNED-013: Root model for TODO.yaml file.
+/// TR-PLANNED-CORE-013: Root model for TODO.yaml file.
 /// Sections are arbitrary string keys with no semantic meaning to the service;
 /// they are informational for agents only.
 /// Serialization is handled by <see cref="TodoFileYamlConverter"/>.
@@ -29,7 +29,7 @@ public sealed class TodoFile
     public List<string>? Notes { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: A section grouping TODO items by priority level.</summary>
+/// <summary>TR-PLANNED-CORE-013: A section grouping TODO items by priority level.</summary>
 public sealed class TodoSection
 {
     /// <summary>High-priority TODO items.</summary>
@@ -45,7 +45,7 @@ public sealed class TodoSection
     public List<TodoItem>? LowPriority { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: A single TODO item with metadata and implementation tasks.</summary>
+/// <summary>TR-PLANNED-CORE-013: A single TODO item with metadata and implementation tasks.</summary>
 public sealed class TodoItem
 {
     /// <summary>Unique identifier for the TODO item (e.g. <c>APP-001</c>).</summary>
@@ -192,7 +192,7 @@ public sealed class LegacyTodoFlatItem
     public string? Reference { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: A sub-task within a TODO item.</summary>
+/// <summary>TR-PLANNED-CORE-013: A sub-task within a TODO item.</summary>
 public sealed class ImplementationTask
 {
     /// <summary>Description of the implementation task.</summary>
@@ -204,7 +204,7 @@ public sealed class ImplementationTask
     public bool Done { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: Code review remediation section with phases.</summary>
+/// <summary>TR-PLANNED-CORE-013: Code review remediation section with phases.</summary>
 public sealed class CodeReviewSection
 {
     /// <summary>Reference link for the code review.</summary>
@@ -216,7 +216,7 @@ public sealed class CodeReviewSection
     public List<CodeReviewPhase>? Phases { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: A code review remediation phase.</summary>
+/// <summary>TR-PLANNED-CORE-013: A code review remediation phase.</summary>
 public sealed class CodeReviewPhase
 {
     /// <summary>Unique identifier for the phase.</summary>
@@ -244,7 +244,7 @@ public sealed class CodeReviewPhase
     public List<ImplementationTask>? ImplementationTasks { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: A group of completed items by date.</summary>
+/// <summary>TR-PLANNED-CORE-013: A group of completed items by date.</summary>
 public sealed class CompletedGroup
 {
     /// <summary>Completion date for this group.</summary>
@@ -256,7 +256,7 @@ public sealed class CompletedGroup
     public List<CompletedItem>? Items { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: A completed item summary entry.</summary>
+/// <summary>TR-PLANNED-CORE-013: A completed item summary entry.</summary>
 public sealed class CompletedItem
 {
     /// <summary>Unique identifier for the completed item.</summary>
@@ -291,6 +291,17 @@ internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
         {
             while (!parser.TryConsume<SequenceEnd>(out _))
             {
+                // ISS-TODO-001 (FR-MCP-108): a scalar list entry is one Markdown line and must be
+                // preserved verbatim - including blank lines, indentation, and trailing whitespace -
+                // so formatted descriptions survive the YAML projection/import round-trip. Only the
+                // structured legacy forms (nested sequence/mapping) are collapsed and whitespace-filtered.
+                if (parser.Current is Scalar)
+                {
+                    parser.TryConsume<Scalar>(out var scalar);
+                    values.Add(scalar?.Value ?? string.Empty);
+                    continue;
+                }
+
                 var value = ReadNodeAsText(parser);
                 if (!string.IsNullOrWhiteSpace(value))
                 {
@@ -298,6 +309,13 @@ internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
                 }
             }
 
+            return values;
+        }
+
+        if (parser.Current is Scalar)
+        {
+            parser.TryConsume<Scalar>(out var singleScalar);
+            values.Add(singleScalar?.Value ?? string.Empty);
             return values;
         }
 
@@ -320,7 +338,25 @@ internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
         emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
         foreach (var item in values)
         {
-            serializer(item ?? string.Empty, typeof(string));
+            var text = item ?? string.Empty;
+
+            // ISS-TODO-001 (FR-MCP-108): plain YAML scalars drop trailing whitespace and cannot
+            // represent an empty or leading-whitespace line. Force a double-quoted scalar whenever
+            // the line is empty or its edges carry whitespace so blank lines, indentation, and
+            // trailing content are preserved exactly through the projection. Normal lines stay plain.
+            if (text.Length == 0 || char.IsWhiteSpace(text[0]) || char.IsWhiteSpace(text[^1]))
+            {
+                emitter.Emit(new Scalar(
+                    anchor: null,
+                    tag: null,
+                    value: text,
+                    style: ScalarStyle.DoubleQuoted,
+                    isPlainImplicit: false,
+                    isQuotedImplicit: true));
+                continue;
+            }
+
+            serializer(text, typeof(string));
         }
 
         emitter.Emit(new SequenceEnd());

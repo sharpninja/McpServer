@@ -167,6 +167,216 @@ public class YamlPipeExecutionTests
     }
 
     /// <summary>
+    /// Requirements batch commands are schema-validated by the dispatcher before invoking
+    /// the requirements workflow, preventing empty or malformed records arrays from reaching
+    /// endpoint-backed workflow methods.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_InvalidRequirementsBatch_ReturnsSchemaValidationFailed()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-batch-invalid",
+                Method = RequirementsCommandShapes.CreateFrBatchMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["records"] = Array.Empty<object>(),
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("schema_validation_failed", err.Code);
+        Assert.NotNull(err.Details);
+        var errors = Assert.IsAssignableFrom<IEnumerable<string>>(err.Details!["errors"]);
+        Assert.Contains(errors, error => error.Contains("records", StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// A valid requirements batch request survives schema validation and is converted to the
+    /// typed batch request DTO before the workflow is invoked.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_ValidRequirementsBatch_DelegatesToRequirementsWorkflow()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        requirements
+            .CreateFrBatchAsync(Arg.Any<CreateFrBatchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new RequirementsBatchResult
+            {
+                Success = true,
+                Operation = "create",
+                Kind = "fr",
+                Total = 1,
+            }));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-batch-valid",
+                Method = RequirementsCommandShapes.CreateFrBatchMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["records"] = new[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["id"] = "FR-MCP-001",
+                            ["title"] = "Batch FR",
+                            ["body"] = "Create requirements in batches.",
+                        },
+                    },
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await requirements.Received(1).CreateFrBatchAsync(
+            Arg.Is<CreateFrBatchRequest>(request =>
+                request != null &&
+                request.Records.Count == 1 &&
+                request.Records[0].Id == "FR-MCP-001" &&
+                request.Records[0].Title == "Batch FR" &&
+                request.Records[0].Body == "Create requirements in batches."),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// Verifies FR batch update dispatch preserves structured acceptance criteria.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_UpdateFrBatch_PreservesAcceptanceCriteria()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        requirements
+            .UpdateFrBatchAsync(Arg.Any<UpdateFrBatchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new RequirementsBatchResult
+            {
+                Success = true,
+                Operation = "update",
+                Kind = "fr",
+                Total = 1,
+            }));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-batch-update-ac",
+                Method = RequirementsCommandShapes.UpdateFrBatchMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["records"] = new[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["id"] = "FR-MCP-113",
+                            ["title"] = "Plugin requirement batch payload parsing",
+                            ["description"] = "The system SHALL preserve nested acceptance criteria in requirement batch updates.",
+                            ["acceptanceCriteria"] = new[]
+                            {
+                                new Dictionary<string, object?>
+                                {
+                                    ["id"] = "FR-MCP-113-AC001",
+                                    ["text"] = "Batch update preserves nested acceptance criteria.",
+                                    ["isSatisfied"] = false,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await requirements.Received(1).UpdateFrBatchAsync(
+            Arg.Is<UpdateFrBatchRequest>(request =>
+                request != null &&
+                request.Records.Count == 1 &&
+                request.Records[0].Id == "FR-MCP-113" &&
+                request.Records[0].AcceptanceCriteria != null &&
+                request.Records[0].AcceptanceCriteria!.Count == 1 &&
+                request.Records[0].AcceptanceCriteria![0].Id == "FR-MCP-113-AC001" &&
+                request.Records[0].AcceptanceCriteria![0].Text == "Batch update preserves nested acceptance criteria." &&
+                request.Records[0].AcceptanceCriteria![0].IsSatisfied == false),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// Verifies YAML request envelopes preserve nested acceptance criteria booleans in typed batch dispatch.
+    /// </summary>
+    [Fact]
+    public async Task AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        requirements
+            .UpdateFrBatchAsync(Arg.Any<UpdateFrBatchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new RequirementsBatchResult
+            {
+                Success = true,
+                Operation = "update",
+                Kind = "fr",
+                Total = 1,
+            }));
+        var sut = new AgentStdioProtocol(new YamlSerializer(), new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements));
+
+        var input = new StringBuilder()
+            .AppendLine("type: request")
+            .AppendLine("payload:")
+            .AppendLine("  requestId: req-batch-update-yaml-ac")
+            .AppendLine("  method: workflow.requirements.updateFrBatch")
+            .AppendLine("  params:")
+            .AppendLine("    records:")
+            .AppendLine("    - id: FR-MCP-113")
+            .AppendLine("      title: Plugin requirement batch payload parsing")
+            .AppendLine("      description: The system SHALL preserve nested acceptance criteria in requirement batch updates.")
+            .AppendLine("      acceptanceCriteria:")
+            .AppendLine("      - id: FR-MCP-113-AC001")
+            .AppendLine("        text: Batch update preserves nested acceptance criteria.")
+            .AppendLine("        isSatisfied: false")
+            .AppendLine()
+            .ToString();
+
+        using var reader = new StringReader(input);
+        using var writer = new StringWriter();
+
+        await sut.RunAsync(reader, writer, CancellationToken.None);
+
+        var output = writer.ToString();
+        Assert.Contains("type: result", output, StringComparison.Ordinal);
+        await requirements.Received(1).UpdateFrBatchAsync(
+            Arg.Is<UpdateFrBatchRequest>(request =>
+                request != null &&
+                request.Records.Count == 1 &&
+                request.Records[0].AcceptanceCriteria != null &&
+                request.Records[0].AcceptanceCriteria!.Count == 1 &&
+                request.Records[0].AcceptanceCriteria![0].IsSatisfied == false),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
     /// A workflow.sessionlog.importRecovery request is routed to the session-log workflow
     /// with the recovered turns parsed from YAML params. This route performs the safe
     /// query-merge-submit behavior in the workflow layer.
@@ -271,6 +481,187 @@ public class YamlPipeExecutionTests
         Assert.Equal("result", response.Type);
         await todo.Received(1).QueryAsync("auth", "high", "Backlog", "MCP-TODO-001", false, Arg.Any<CancellationToken>());
         await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+    }
+
+    /// <summary>
+    /// A workflow.memory.list request is routed through the typed memory workflow and applies
+    /// schema-validated scope/category/keyword filters.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryListRequest_DelegatesToMemoryWorkflow()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var memory = Substitute.For<IMemoryWorkflow>();
+        memory.ListAsync(MemoryScope.Global, "agent", "PowerShell", Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new MemoryQueryResult { Items = [], TotalCount = 0 }));
+
+        var sut = new ReplCommandDispatcher(passthrough, memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-list",
+                Method = MemoryCommandShapes.ListMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["scope"] = "Global",
+                    ["category"] = "agent",
+                    ["keyword"] = "PowerShell",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await memory.Received(1).ListAsync(MemoryScope.Global, "agent", "PowerShell", Arg.Any<CancellationToken>());
+        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+    }
+
+    /// <summary>
+    /// workflow.memory.list accepts Effective as an explicit alias for the default
+    /// effective Global + Workspace list.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryListRequest_EffectiveScopeForwardsNullScope()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        memory.ListAsync(null, null, null, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new MemoryQueryResult { TotalCount = 0 }));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-list-effective",
+                Method = MemoryCommandShapes.ListMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["scope"] = "Effective",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await memory.Received(1).ListAsync(null, null, null, Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// A workflow.memory.add request is normalized into the typed memory add request and keeps
+    /// agent identity metadata intact.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryAddRequest_AcceptsFlatYamlShape()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        memory.AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new MemoryMutationResult { Success = true }));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-add",
+                Method = MemoryCommandShapes.AddMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "MEMORY-AGENT-001",
+                    ["category"] = "agent",
+                    ["scope"] = "Workspace",
+                    ["text"] = "Use the Codex plugin wrapper for MCP state.",
+                    ["updatedBy"] = "Codex",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await memory.Received(1).AddAsync(
+            Arg.Is<MemoryAddRequest>(request => request != null
+                && request.Id == "MEMORY-AGENT-001"
+                && request.Category == "agent"
+                && request.Scope == MemoryScope.Workspace
+                && request.Text == "Use the Codex plugin wrapper for MCP state."
+                && request.UpdatedBy == "Codex"),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// workflow.memory.add requires memory text, so malformed YAML is rejected before transport.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryAddRequest_MissingText_ReturnsSchemaError()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-add-invalid",
+                Method = MemoryCommandShapes.AddMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["category"] = "agent",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("schema_validation_failed", err.Code);
+        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, default);
+    }
+
+    /// <summary>
+    /// workflow.memory.add rejects explicit ids that do not match the canonical
+    /// MEMORY-{CATEGORY}-{NNN} format before invoking the workflow.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_MemoryAddRequest_InvalidId_ReturnsSchemaError()
+    {
+        var memory = Substitute.For<IMemoryWorkflow>();
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), memoryWorkflow: memory);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-memory-add-invalid-id",
+                Method = MemoryCommandShapes.AddMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "not-a-memory-id",
+                    ["category"] = "agent",
+                    ["text"] = "This id must be rejected.",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("schema_validation_failed", err.Code);
+        var errors = Assert.IsAssignableFrom<IReadOnlyList<string>>(err.Details!["errors"]);
+        Assert.Contains(errors, error => error.Contains("MEMORY-{CATEGORY}-{NNN}", StringComparison.Ordinal));
+        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, default);
     }
 
     /// <summary>

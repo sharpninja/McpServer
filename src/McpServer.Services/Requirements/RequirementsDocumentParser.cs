@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements.Models;
 
 namespace McpServer.Support.Mcp.Requirements;
@@ -17,6 +18,14 @@ internal static class RequirementsDocumentParser
         @"^\s*-\s+(?<id>TEST-[^:\r\n]+):\s*(?<condition>.+?)\s*$",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
+    private static readonly Regex s_testHeadingRegex = new(
+        @"^\s*###\s+(?<id>TEST-[^\r\n]+?)\s*$",
+        RegexOptions.Compiled);
+
+    private static readonly Regex s_acceptanceCriterionRegex = new(
+        @"^\s*-\s+\[(?<state>[xX\s])\]\s+(?<text>.*?)(?:\s+\(evidence:\s*(?<evidence>.*?)\))?\s*$",
+        RegexOptions.Compiled);
+
     private static readonly Regex s_trBoldTitleRegex = new(
         @"^\*\*(?<title>.+?)\*\*\s*[—-]\s*(?<rest>.*)$",
         RegexOptions.Compiled);
@@ -34,11 +43,11 @@ internal static class RequirementsDocumentParser
 
             var id = match.Groups["id"].Value.Trim();
             var title = CleanHeadingTitle(match.Groups["title"].Value);
-            var body = NormalizeBody(match.Groups["body"].Value);
+            var (body, acceptanceCriteria) = SplitAcceptanceCriteria(NormalizeBody(match.Groups["body"].Value));
             if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(title))
                 continue;
 
-            list.Add(new FrEntry(id, title, body));
+            list.Add(new FrEntry(id, title, body, AcceptanceCriteria: acceptanceCriteria));
         }
 
         return list;
@@ -60,8 +69,9 @@ internal static class RequirementsDocumentParser
                 continue;
 
             var bodyRaw = NormalizeBody(match.Groups["body"].Value);
-            var (title, body) = SplitTechnicalTitle(bodyRaw);
-            list.Add(new TrEntry(id, title, body));
+            var (title, bodyWithCriteria) = SplitTechnicalTitle(bodyRaw);
+            var (body, acceptanceCriteria) = SplitAcceptanceCriteria(bodyWithCriteria);
+            list.Add(new TrEntry(id, title, body, AcceptanceCriteria: acceptanceCriteria));
         }
 
         return list;
@@ -74,13 +84,8 @@ internal static class RequirementsDocumentParser
 
         var list = new List<TestEntry>();
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (Match match in s_testEntryRegex.Matches(content))
-        {
-            if (!match.Success)
-                continue;
-
-            AddTestEntry(list, seen, match.Groups["id"].Value, match.Groups["condition"].Value);
-        }
+        ParseTestingSections(list, seen, content);
+        ParseTestingListItems(list, seen, content);
 
         foreach (var line in content.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
         {
@@ -92,6 +97,51 @@ internal static class RequirementsDocumentParser
         }
 
         return list;
+    }
+
+    private static void ParseTestingSections(
+        ICollection<TestEntry> entries,
+        ISet<string> seen,
+        string content)
+    {
+        var lines = NormalizeLines(content);
+        for (var i = 0; i < lines.Length;)
+        {
+            var heading = s_testHeadingRegex.Match(lines[i]);
+            if (!heading.Success)
+            {
+                i++;
+                continue;
+            }
+
+            var id = heading.Groups["id"].Value;
+            i++;
+            var block = ReadTestBlock(lines, ref i);
+            AddTestEntry(entries, seen, id, block.Condition, block.AcceptanceCriteria);
+        }
+    }
+
+    private static void ParseTestingListItems(
+        ICollection<TestEntry> entries,
+        ISet<string> seen,
+        string content)
+    {
+        var lines = NormalizeLines(content);
+        for (var i = 0; i < lines.Length;)
+        {
+            var match = s_testEntryRegex.Match(lines[i]);
+            if (!match.Success)
+            {
+                i++;
+                continue;
+            }
+
+            var id = match.Groups["id"].Value;
+            var condition = match.Groups["condition"].Value;
+            i++;
+            var block = ReadTestBlock(lines, ref i, condition);
+            AddTestEntry(entries, seen, id, block.Condition, block.AcceptanceCriteria);
+        }
     }
 
     public static IReadOnlyList<FrTrMapping> ParseMapping(string? content)
@@ -178,6 +228,37 @@ internal static class RequirementsDocumentParser
         return (title, NormalizeBody(rebuiltBody));
     }
 
+    private static (string Body, IReadOnlyList<AcceptanceCriterion> AcceptanceCriteria) SplitAcceptanceCriteria(string body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return (string.Empty, []);
+
+        var bodyLines = new List<string>();
+        var criteria = new List<AcceptanceCriterion>();
+        var readingCriteria = false;
+        foreach (var line in NormalizeLines(body))
+        {
+            var trimmed = line.Trim();
+            if (trimmed.Equals("**Acceptance Criteria:**", StringComparison.OrdinalIgnoreCase))
+            {
+                readingCriteria = true;
+                continue;
+            }
+
+            if (readingCriteria)
+            {
+                var criterion = ParseAcceptanceCriterion(line);
+                if (criterion is not null)
+                    criteria.Add(criterion);
+                continue;
+            }
+
+            bodyLines.Add(line);
+        }
+
+        return (NormalizeBody(string.Join('\n', bodyLines)), criteria);
+    }
+
     private static string NormalizeBody(string body)
     {
         if (string.IsNullOrWhiteSpace(body))
@@ -188,11 +269,90 @@ internal static class RequirementsDocumentParser
             .Trim();
     }
 
+    private static TestBlock ReadTestBlock(string[] lines, ref int index, string? firstConditionLine = null)
+    {
+        var conditionLines = new List<string>();
+        if (!string.IsNullOrWhiteSpace(firstConditionLine))
+            conditionLines.Add(firstConditionLine.Trim());
+
+        var criteria = new List<AcceptanceCriterion>();
+        var readingCriteria = false;
+        while (index < lines.Length)
+        {
+            var line = lines[index];
+            var trimmed = line.Trim();
+            if (IsTestBlockBoundary(line))
+                break;
+
+            if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                index++;
+                continue;
+            }
+
+            if (trimmed.Equals("**Acceptance Criteria:**", StringComparison.OrdinalIgnoreCase))
+            {
+                readingCriteria = true;
+                index++;
+                continue;
+            }
+
+            if (readingCriteria)
+            {
+                var criterion = ParseAcceptanceCriterion(line);
+                if (criterion is not null)
+                    criteria.Add(criterion);
+            }
+            else
+            {
+                conditionLines.Add(trimmed);
+            }
+
+            index++;
+        }
+
+        return new TestBlock(string.Join("\n", conditionLines).Trim(), criteria);
+    }
+
+    private static bool IsTestBlockBoundary(string line)
+    {
+        if (s_testEntryRegex.IsMatch(line) || s_testHeadingRegex.IsMatch(line))
+            return true;
+
+        var trimmed = line.TrimStart();
+        return trimmed.StartsWith("## ", StringComparison.Ordinal)
+               || (trimmed.StartsWith('|') && trimmed.Contains("TEST-", StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static AcceptanceCriterion? ParseAcceptanceCriterion(string line)
+    {
+        var match = s_acceptanceCriterionRegex.Match(line);
+        if (!match.Success)
+            return null;
+
+        var text = match.Groups["text"].Value.Trim();
+        if (string.IsNullOrWhiteSpace(text))
+            return null;
+
+        return new AcceptanceCriterion
+        {
+            Text = text,
+            IsSatisfied = match.Groups["state"].Value.Equals("x", StringComparison.OrdinalIgnoreCase),
+            Evidence = match.Groups["evidence"].Success ? match.Groups["evidence"].Value.Trim() : null
+        };
+    }
+
+    private static string[] NormalizeLines(string content) =>
+        content.Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Replace('\r', '\n')
+            .Split('\n');
+
     private static void AddTestEntry(
         ICollection<TestEntry> entries,
         ISet<string> seen,
         string rawId,
-        string rawCondition)
+        string rawCondition,
+        IReadOnlyList<AcceptanceCriterion> criteria)
     {
         var id = rawId.Trim();
         var condition = rawCondition.Trim();
@@ -204,8 +364,15 @@ internal static class RequirementsDocumentParser
             return;
         }
 
-        entries.Add(new TestEntry(id, condition));
+        entries.Add(new TestEntry(id, condition, AcceptanceCriteria: criteria));
     }
+
+    private static void AddTestEntry(
+        ICollection<TestEntry> entries,
+        ISet<string> seen,
+        string rawId,
+        string rawCondition) =>
+        AddTestEntry(entries, seen, rawId, rawCondition, []);
 
     private static IReadOnlyList<string> SplitMarkdownTableRow(string line)
     {
@@ -231,4 +398,6 @@ internal static class RequirementsDocumentParser
         value
             .Replace("<br>", "\n", StringComparison.OrdinalIgnoreCase)
             .Trim();
+
+    private sealed record TestBlock(string Condition, IReadOnlyList<AcceptanceCriterion> AcceptanceCriteria);
 }

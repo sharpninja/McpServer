@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013, TR-MCP-MT-004: In-memory store for last sync run result, workspace-keyed.
+/// TR-PLANNED-CORE-013, TR-MCP-MT-004: In-memory store for last sync run result, workspace-keyed.
 /// </summary>
 public sealed class SyncStatusStore : ISyncStatusStore
 {

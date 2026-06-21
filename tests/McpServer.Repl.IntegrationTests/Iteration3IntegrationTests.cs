@@ -293,8 +293,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         _replProcess.ClearStdout();
 
+        var streamRequestId = GenerateRequestId("stream-status");
         var streamEnvelope = YamlEnvelopeBuilder.CreateTodoStreamStatusRequest(
-            GenerateRequestId("stream-status"),
+            streamRequestId,
             todoId);
 
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope));
@@ -316,6 +317,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
             {
             }
         }
+
+        await WaitForResponseAsync(streamRequestId, TimeSpan.FromSeconds(30));
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoDeleteRequest(GenerateRequestId("cleanup"), todoId));
@@ -339,8 +342,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         _replProcess.ClearStdout();
 
+        var streamRequestId = GenerateRequestId("stream-plan");
         var streamEnvelope = YamlEnvelopeBuilder.CreateTodoStreamPlanRequest(
-            GenerateRequestId("stream-plan"),
+            streamRequestId,
             todoId);
 
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope));
@@ -348,6 +352,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
 
         Assert.True(_replProcess.StdoutLines.Count > 0, "Should receive plan streaming events");
+
+        await WaitForResponseAsync(streamRequestId, TimeSpan.FromSeconds(30));
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoDeleteRequest(GenerateRequestId("cleanup"), todoId));
@@ -371,8 +377,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         _replProcess.ClearStdout();
 
+        var streamRequestId = GenerateRequestId("stream-implement");
         var streamEnvelope = YamlEnvelopeBuilder.CreateTodoStreamImplementRequest(
-            GenerateRequestId("stream-implement"),
+            streamRequestId,
             todoId);
 
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope));
@@ -380,6 +387,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
 
         Assert.True(_replProcess.StdoutLines.Count > 0, "Should receive implement streaming events");
+
+        await WaitForResponseAsync(streamRequestId, TimeSpan.FromSeconds(30));
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoDeleteRequest(GenerateRequestId("cleanup"), todoId));
@@ -566,33 +575,39 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         _replProcess.ClearStdout();
 
+        var statusRequestId = GenerateRequestId("stream-status");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamStatusRequest(
-                GenerateRequestId("stream-status"),
+                statusRequestId,
                 todoId)));
 
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
         var statusEventCount = _replProcess.StdoutLines.Count;
+        await WaitForResponseAsync(statusRequestId, TimeSpan.FromSeconds(30));
 
         _replProcess.ClearStdout();
 
+        var planRequestId = GenerateRequestId("stream-plan");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamPlanRequest(
-                GenerateRequestId("stream-plan"),
+                planRequestId,
                 todoId)));
 
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
         var planEventCount = _replProcess.StdoutLines.Count;
+        await WaitForResponseAsync(planRequestId, TimeSpan.FromSeconds(30));
 
         _replProcess.ClearStdout();
 
+        var implementRequestId = GenerateRequestId("stream-implement");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamImplementRequest(
-                GenerateRequestId("stream-implement"),
+                implementRequestId,
                 todoId)));
 
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
         var implementEventCount = _replProcess.StdoutLines.Count;
+        await WaitForResponseAsync(implementRequestId, TimeSpan.FromSeconds(30));
 
         Assert.True(statusEventCount > 0, "Should receive status events");
         Assert.True(planEventCount > 0, "Should receive plan events");
@@ -794,21 +809,29 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         _replProcess.ClearStdout();
 
+        var streamRequestId = GenerateRequestId("stream-status");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamStatusRequest(
-                GenerateRequestId("stream-status"),
+                streamRequestId,
                 todoId)));
 
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
 
         var eventLines = _replProcess.StdoutLines.ToList();
-        
+
         foreach (var line in eventLines)
         {
+            // FR-MCP-REPL-005: '---' document separators are part of the framing
+            // contract between envelopes, not envelope content.
+            if (string.IsNullOrWhiteSpace(line) || line.TrimEnd() == "---")
+                continue;
+
             var envelope = _yamlDeserializer.Deserialize<Dictionary<string, object>>(line);
             Assert.NotNull(envelope);
             Assert.True(envelope.ContainsKey("type") || envelope.ContainsKey("Type"));
         }
+
+        await WaitForResponseAsync(streamRequestId, TimeSpan.FromSeconds(30));
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoDeleteRequest(GenerateRequestId("cleanup"), todoId));
@@ -832,9 +855,10 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         _replProcess.ClearStdout();
 
+        var streamRequestId = GenerateRequestId("stream-plan");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamPlanRequest(
-                GenerateRequestId("stream-plan"),
+                streamRequestId,
                 todoId)));
 
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
@@ -852,6 +876,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
             {
             }
         }
+
+        await WaitForResponseAsync(streamRequestId, TimeSpan.FromSeconds(30));
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoDeleteRequest(GenerateRequestId("cleanup"), todoId));
@@ -1011,25 +1037,31 @@ public sealed class Iteration3IntegrationTests : IDisposable
                 todoId));
 
         _replProcess.ClearStdout();
+        var statusRequestId = GenerateRequestId("stream-status");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamStatusRequest(
-                GenerateRequestId("stream-status"),
+                statusRequestId,
                 todoId)));
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+        await WaitForResponseAsync(statusRequestId, TimeSpan.FromSeconds(30));
 
         _replProcess.ClearStdout();
+        var planRequestId = GenerateRequestId("stream-plan");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamPlanRequest(
-                GenerateRequestId("stream-plan"),
+                planRequestId,
                 todoId)));
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+        await WaitForResponseAsync(planRequestId, TimeSpan.FromSeconds(30));
 
         _replProcess.ClearStdout();
+        var implementRequestId = GenerateRequestId("stream-implement");
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamImplementRequest(
-                GenerateRequestId("stream-implement"),
+                implementRequestId,
                 todoId)));
         await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+        await WaitForResponseAsync(implementRequestId, TimeSpan.FromSeconds(30));
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoGetProjectionStatusRequest(
@@ -1153,15 +1185,24 @@ public sealed class Iteration3IntegrationTests : IDisposable
     {
         var initialCount = _replProcess.StdoutLines.Count;
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(envelope));
-        await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(initialCount + 1, TimeSpan.FromSeconds(15));
+        Assert.True(foundResponse, BuildTimeoutMessage(initialCount + 1));
         await Task.Delay(100);
     }
 
-    private static string GenerateRequestId(string suffix)
+    private string BuildTimeoutMessage(int expectedCount)
+        => $"Timed out waiting for stdout document count {expectedCount}. "
+           + $"STDOUT: {string.Join(Environment.NewLine + "--- stdout document ---" + Environment.NewLine, _replProcess.StdoutLines)} "
+           + $"STDERR: {string.Join(Environment.NewLine, _replProcess.StderrLines)}";
+
+    private async Task WaitForResponseAsync(string requestId, TimeSpan timeout)
     {
-        var timestamp = DateTimeOffset.UtcNow.ToString("yyyyMMddTHHmmss", CultureInfo.InvariantCulture);
-        return $"req-{timestamp}Z-{suffix}";
+        var foundResponse = await _replProcess.WaitForStdoutResponseAsync(requestId, timeout);
+        Assert.True(foundResponse, $"Timed out waiting for response '{requestId}'. {_replProcess.Diagnostics}");
     }
+
+    private static string GenerateRequestId(string suffix)
+        => TestRequestIds.Next(suffix);
 
     public void Dispose()
     {

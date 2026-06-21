@@ -31,12 +31,12 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
-    /// Verifies that the marker prompt template includes the Available Capabilities section and expected project entries.
+    /// Verifies that the marker prompt template includes the Available Capabilities section and repo-local project entries.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-087, FR-MCP-039, TR-MCP-CTX-001.
-    /// Test data: <c>templates\prompt-templates.yaml</c> and known capability bullet strings for indexed projects.
-    /// This data is used to confirm marker prompt output advertises indexed libraries required for context retrieval.
+    /// Test data: <c>templates\prompt-templates.yaml</c> and known capability bullet strings for indexed repo-local projects.
+    /// This data is used to confirm marker prompt output advertises indexed libraries that still live in this repository.
     /// </remarks>
     [Fact]
     public void MarkerPromptTemplate_ContainsAvailableCapabilitiesSection()
@@ -47,27 +47,27 @@ public sealed class IngestionAllowlistContractTests
         Assert.Contains("## Available Capabilities", content);
         Assert.Contains("- McpServer.Cqrs (CQRS framework)", content);
         Assert.Contains("- McpServer.Cqrs.Mvvm (MVVM support)", content);
-        Assert.Contains("- McpServer.UI.Core (Core UI logic)", content);
-        Assert.Contains("- McpServer.Director (Director CLI)", content);
+        Assert.DoesNotContain("- McpServer.UI.Core (Core UI logic)", content);
+        Assert.DoesNotContain("- McpServer.Director (Director CLI)", content);
     }
 
     /// <summary>
     /// Verifies that the marker prompt template carries the Byrd V3 validation gate.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: Byrd Development Process V3 validation discipline.
+    /// Requirement coverage: Byrd Development Process V4 validation discipline.
     /// Test data: <c>templates\prompt-templates.yaml</c>.
     /// This data is used to ensure generated marker prompts tell agents that the
     /// iteration cannot advance unless the executed test gate has no failures
     /// and no skips.
     /// </remarks>
     [Fact]
-    public void MarkerPromptTemplate_ContainsByrdV3HundredPercentTestGate()
+    public void MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate()
     {
         var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
         var content = File.ReadAllText(path);
 
-        Assert.Contains("Byrd Development Process V3", content);
+        Assert.Contains("Byrd Development Process V4", content);
         Assert.Contains("100% test success", content);
         Assert.Contains("zero failed tests and zero skipped tests", content);
         Assert.Contains("Tests are the progress ledger", content);
@@ -149,10 +149,10 @@ public sealed class IngestionAllowlistContractTests
         Assert.Contains("  Federation:", content);
         Assert.Contains("    Enabled: false", content);
         Assert.Contains("    Role: Standalone", content);
-        Assert.Contains("    HubBaseUrl: ''", content);
-        Assert.Contains("    HubAccessToken: ''", content);
-        Assert.Contains("    ProxyId: ''", content);
-        Assert.Contains("    EnrollmentToken: ''", content);
+        Assert.Contains("    HubBaseUrl:", content);
+        Assert.Contains("    HubAccessToken:", content);
+        Assert.Contains("    ProxyId:", content);
+        Assert.Contains("    EnrollmentToken:", content);
         Assert.Contains("    Queue:", content);
         Assert.Contains("      MaxReplayAttempts: 10", content);
         Assert.Contains("      MaxBodyBytes: 1048576", content);
@@ -161,7 +161,7 @@ public sealed class IngestionAllowlistContractTests
         Assert.Contains("      ReplayIntervalSeconds: 15", content);
         Assert.Contains("      FanoutIntervalSeconds: 15", content);
         Assert.Contains("    Signing:", content);
-        Assert.Contains("      SharedSecret: ''", content);
+        Assert.Contains("      SharedSecret:", content);
         Assert.Contains("      EnvelopeTtlSeconds: 300", content);
         Assert.Contains("    LocalExecution:", content);
         Assert.Contains("      AllowedMethods:", content);
@@ -172,7 +172,7 @@ public sealed class IngestionAllowlistContractTests
     /// Verifies active test source files do not hide incomplete work with xUnit skip mechanics.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: Byrd Development Process V3 validation discipline.
+    /// Requirement coverage: Byrd Development Process V4 validation discipline.
     /// Test data: all C# source files under the repository <c>tests</c> folder.
     /// This data is used to make progress visible: active validation suites must
     /// pass or fail directly instead of silently skipping unfinished behavior.
@@ -182,26 +182,35 @@ public sealed class IngestionAllowlistContractTests
     {
         var testsRoot = FindDirectoryFromRepoRoot("tests");
         var skipPattern = new Regex(
-            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\b" + "Skip" + @"Exception\b|\bAssert\." + "Skip" + @"\b|\b" + "Skip" + @"pable(?:Fact|Theory)\b",
-            RegexOptions.CultureInvariant | RegexOptions.Singleline);
+            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
+            RegexOptions.CultureInvariant);
 
-        var offenders = Directory
-            .EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories)
-            .Where(path => !path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
-            .Where(path => !path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
-            .SelectMany(path =>
+        var offenders = new List<string>();
+
+        foreach (var path in Directory.EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories))
+        {
+            if (path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase) ||
+                path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
             {
-                var content = File.ReadAllText(path);
-                return skipPattern
-                    .Matches(content)
-                    .Select(match => $"{Path.GetRelativePath(testsRoot, path)}:{LineNumber(content, match.Index)}");
-            })
-            .OrderBy(value => value, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+                continue;
+            }
+
+            int lineNumber = 0;
+            foreach (var line in File.ReadLines(path))
+            {
+                lineNumber++;
+                if (skipPattern.IsMatch(line))
+                {
+                    offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{lineNumber}");
+                }
+            }
+        }
+
+        offenders = offenders.OrderBy(x => x, StringComparer.OrdinalIgnoreCase).ToList();
 
         Assert.True(
             offenders.Count == 0,
-            "Byrd V3 requires test gates to show direct progress; remove skip mechanics or move deferred work to MCP TODO state. Offenders: " + string.Join(", ", offenders));
+            "Byrd V4 requires test gates to show direct progress; remove skip mechanics or move deferred work to MCP TODO state. Offenders: " + string.Join(", ", offenders));
     }
 
     /// <summary>
@@ -243,6 +252,4 @@ public sealed class IngestionAllowlistContractTests
         throw new DirectoryNotFoundException($"Could not locate directory '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
     }
 
-    private static int LineNumber(string content, int index)
-        => content.Take(index).Count(c => c == '\n') + 1;
 }

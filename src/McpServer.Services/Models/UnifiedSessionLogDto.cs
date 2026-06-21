@@ -54,20 +54,20 @@ public sealed class UnifiedSessionLogDto
     [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
     public List<UnifiedRequestEntryDto>? Turns { get; set; }
 
-    /// <summary>TR-PLANNED-013: Total token count across all turns.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Total token count across all turns.</summary>
     [JsonPropertyName("totalTokens")]
     public int? TotalTokens { get; set; }
 
-    /// <summary>TR-PLANNED-013: Cursor-specific session label.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Cursor-specific session label.</summary>
     [JsonPropertyName("cursorSessionLabel")]
     public string? CursorSessionLabel { get; set; }
 
-    /// <summary>TR-PLANNED-013: Copilot-specific aggregate statistics.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Copilot-specific aggregate statistics.</summary>
     [JsonPropertyName("copilotStatistics")]
     public CopilotStatisticsDto? CopilotStatistics { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: Copilot aggregate statistics for a session.</summary>
+/// <summary>TR-PLANNED-CORE-013: Copilot aggregate statistics for a session.</summary>
 public sealed class CopilotStatisticsDto
 {
     /// <summary>Average success score across turns.</summary>
@@ -148,51 +148,51 @@ public sealed class UnifiedRequestEntryDto
     [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
     public List<UnifiedActionDto>? Actions { get; set; }
 
-    /// <summary>TR-PLANNED-013: AI model used for this specific entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: AI model used for this specific entry.</summary>
     [JsonPropertyName("model")]
     public string? Model { get; set; }
 
-    /// <summary>TR-PLANNED-013: Model provider (e.g. OpenAI, Anthropic).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Model provider (e.g. OpenAI, Anthropic).</summary>
     [JsonPropertyName("modelProvider")]
     public string? ModelProvider { get; set; }
 
-    /// <summary>TR-PLANNED-013: Token count for this entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Token count for this entry.</summary>
     [JsonPropertyName("tokenCount")]
     public int? TokenCount { get; set; }
 
-    /// <summary>TR-PLANNED-013: Tags associated with this entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Tags associated with this entry.</summary>
     [JsonPropertyName("tags")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
     [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
     public List<string>? Tags { get; set; }
 
-    /// <summary>TR-PLANNED-013: Context items referenced by this entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Context items referenced by this entry.</summary>
     [JsonPropertyName("contextList")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
     [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
     public List<string>? ContextList { get; set; }
 
-    /// <summary>TR-PLANNED-013: Failure note if the entry failed.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Failure note if the entry failed.</summary>
     [JsonPropertyName("failureNote")]
     public string? FailureNote { get; set; }
 
-    /// <summary>TR-PLANNED-013: Success score for this entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Success score for this entry.</summary>
     [JsonPropertyName("score")]
     public double? Score { get; set; }
 
-    /// <summary>TR-PLANNED-013: Whether this was a premium request.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Whether this was a premium request.</summary>
     [JsonPropertyName("isPremium")]
     public bool? IsPremium { get; set; }
 
-    /// <summary>TR-PLANNED-013: Raw context data (stored as JSON).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Raw context data (stored as JSON).</summary>
     [JsonPropertyName("rawContext")]
     public object? RawContext { get; set; }
 
-    /// <summary>TR-PLANNED-013: Original entry before normalization (stored as JSON).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Original entry before normalization (stored as JSON).</summary>
     [JsonPropertyName("originalEntry")]
     public object? OriginalEntry { get; set; }
 
-    /// <summary>TR-PLANNED-013: Processing dialog — model reasoning, tool calls, and execution trace appended during request execution.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Processing dialog — model reasoning, tool calls, and execution trace appended during request execution.</summary>
     [JsonPropertyName("processingDialog")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
     [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
@@ -229,7 +229,7 @@ public sealed class UnifiedRequestEntryDto
     public List<string>? Blockers { get; set; }
 }
 
-/// <summary>TR-PLANNED-013: Single processing dialog entry recording model reasoning during request execution.</summary>
+/// <summary>TR-PLANNED-CORE-013: Single processing dialog entry recording model reasoning during request execution.</summary>
 public sealed class ProcessingDialogItemDto
 {
     /// <summary>ISO 8601 timestamp when this dialog item was recorded.</summary>

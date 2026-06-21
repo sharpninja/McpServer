@@ -81,6 +81,38 @@ public sealed class FederatedSessionLogService : ISessionLogService
     public Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
         => _inner.UpsertTurnAsync(sourceType, sessionId, turn, cancellationToken);
 
+    /// <inheritdoc />
+    public Task<long> ReplaceTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
+        => _inner.ReplaceTurnAsync(sourceType, sessionId, turn, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<bool> ReplaceTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, UnifiedRequestEntryDto payload, CancellationToken cancellationToken = default)
+        => _inner.ReplaceTurnSectionAsync(sourceType, sessionId, requestId, section, payload, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<bool> ClearTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, CancellationToken cancellationToken = default)
+        => _inner.ClearTurnSectionAsync(sourceType, sessionId, requestId, section, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<bool> DeleteTurnItemAsync(string sourceType, string sessionId, string requestId, string section, string itemKey, CancellationToken cancellationToken = default)
+        => _inner.DeleteTurnItemAsync(sourceType, sessionId, requestId, section, itemKey, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<bool> DeleteTurnAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
+        => _inner.DeleteTurnAsync(sourceType, sessionId, requestId, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<bool> DeleteSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
+        => _inner.DeleteSessionAsync(sourceType, sessionId, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<bool> OpenSessionAsync(string sourceType, string sessionId, string? title = null, string? model = null, CancellationToken cancellationToken = default)
+        => _inner.OpenSessionAsync(sourceType, sessionId, title, model, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
+        => _inner.RepairWorkspaceStampsAsync(dryRun, cancellationToken);
+
     private static SessionLogQueryResult MergeResults(SessionLogQueryResult local, SessionLogQueryResult remote)
     {
         var localKeys = new HashSet<string>(

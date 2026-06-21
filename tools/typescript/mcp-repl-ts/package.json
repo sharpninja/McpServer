@@ -1,0 +1,27 @@
+{
+  "name": "@sharpninja/mcp-repl",
+  "version": "0.2.0",
+  "description": "Shared TypeScript surface for McpServer REPL protocol: typed messages, envelope serialization, and stdio client. Used by Cline, Cline V2, OpenCode, and other TS agent plugins.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  },
+  "exports": {
+    "./types": "./dist/types.js",
+    "./transport/ReplBridge": "./dist/transport/ReplBridge.js",
+    ".": "./dist/index.js",
+    "./client/McpAgentClient": "./dist/client/McpAgentClient.js",
+    "./cache/CacheManager": "./dist/cache/CacheManager.js",
+    "./discovery/MarkerResolver": "./dist/discovery/MarkerResolver.js"
+  }
+}

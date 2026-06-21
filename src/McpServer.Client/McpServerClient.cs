@@ -84,7 +84,9 @@ public sealed class McpServerClient
 
         Todo = new TodoClient(http, options, holder);
         Context = new ContextClient(http, options, holder);
+        GraphRag = new GraphRagClient(http, options, holder);
         SessionLog = new SessionLogClient(http, options, holder);
+        Memory = new MemoryClient(http, options, holder);
         GitHub = new GitHubClient(http, options, holder);
         Requirements = new RequirementsClient(http, options, holder);
         Voice = new VoiceClient(http, options, holder);
@@ -102,11 +104,15 @@ public sealed class McpServerClient
         Agent = new AgentClient(http, options, holder);
         Health = new HealthClient(http, options, holder);
         Federation = new FederationClient(http, options, holder);
+        KeyServer = new KeyServerClient(http, options, holder);
+        Subscriber = new SubscriberClient(http, options, holder);
+        BrainSlots = new BrainSlotClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
-            Todo, Context, SessionLog, GitHub, Requirements, Voice, Events,
-            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health, Federation
+            Todo, Context, GraphRag, SessionLog, Memory, GitHub, Requirements, Voice, Events,
+            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
+            Federation, KeyServer, Subscriber, BrainSlots
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -279,10 +285,22 @@ public sealed class McpServerClient
     public ContextClient Context { get; }
 
     /// <summary>
+    /// GraphRAG endpoints — lifecycle, query, ingest, document, entity, and relationship operations.
+    /// <para>See <see cref="GraphRagClient"/> for the full method list.</para>
+    /// </summary>
+    public GraphRagClient GraphRag { get; }
+
+    /// <summary>
     /// Session log endpoints — submit, query, and append dialog items to session logs.
     /// <para>See <see cref="SessionLogClient"/> for the full method list.</para>
     /// </summary>
     public SessionLogClient SessionLog { get; }
+
+    /// <summary>
+    /// Memory endpoints - add, list, update, and remove agent memories.
+    /// <para>See <see cref="MemoryClient"/> for the full method list.</para>
+    /// </summary>
+    public MemoryClient Memory { get; }
 
     /// <summary>
     /// GitHub integration endpoints — issues, pull requests, comments, and sync.
@@ -387,4 +405,22 @@ public sealed class McpServerClient
     /// <para>See <see cref="FederationClient"/> for the full method list.</para>
     /// </summary>
     public FederationClient Federation { get; }
+
+    /// <summary>
+    /// Transaction keyserver endpoints — party registration, key lookup, manifest signing, and verification.
+    /// <para>See <see cref="KeyServerClient"/> for the full method list.</para>
+    /// </summary>
+    public KeyServerClient KeyServer { get; }
+
+    /// <summary>
+    /// Transaction subscriber endpoints — encrypted diffgram commit, status, and abort operations.
+    /// <para>See <see cref="SubscriberClient"/> for the full method list.</para>
+    /// </summary>
+    public SubscriberClient Subscriber { get; }
+
+    /// <summary>
+    /// External brain-slot registry and invocation endpoints.
+    /// <para>See <see cref="BrainSlotClient"/> for the full method list.</para>
+    /// </summary>
+    public BrainSlotClient BrainSlots { get; }
 }

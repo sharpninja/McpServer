@@ -88,6 +88,8 @@ jobs:
     name: Package
     needs: build-test
     runs-on: windows-latest
+    outputs:
+      package-version: ${{ steps.package-version.outputs.package-version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -98,8 +100,30 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Compute package version
+        id: package-version
+        run: |
+          $toolPath = Join-Path $HOME '.dotnet/tools'
+          $env:PATH = "$toolPath$([IO.Path]::PathSeparator)$env:PATH"
+
+          dotnet tool update --global GitVersion.Tool | Out-Host
+          if ($LASTEXITCODE -ne 0) {
+            dotnet tool install --global GitVersion.Tool | Out-Host
+          }
+
+          $gvJson = dotnet-gitversion /output json | Out-String
+          $gv = $gvJson | ConvertFrom-Json
+          $isMain = '${{ github.ref }}' -eq 'refs/heads/main'
+          $version = if ($isMain) { $gv.MajorMinorPatch } else { $gv.SemVer }
+
+          Write-Host "GitVersion FullSemVer: $($gv.FullSemVer)"
+          Write-Host "GitVersion SemVer: $($gv.SemVer)"
+          Write-Host "PackageVersion: $version"
+          "package-version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        shell: pwsh
+
       - name: Pack NuGet
-        run: ./build.ps1 PackNuGet --configuration Release
+        run: ./build.ps1 PackNuGet --configuration Release --package-version "${{ steps.package-version.outputs.package-version }}"
         shell: pwsh
 
       - name: Pack REPL Tool
@@ -111,6 +135,25 @@ jobs:
         with:
           name: nuget-packages
           path: artifacts/nupkg/*.nupkg
+
+      - name: Push to NuGet (main only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          NUGET_API_KEY: ${{ secrets.NuGetApiKey || secrets.NUGET_API_KEY }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:NUGET_API_KEY)) {
+            Write-Host "NuGetApiKey secret not set; skipping nuget.org publish."
+            exit 0
+          }
+
+          $packages = Get-ChildItem -Path "${{ github.workspace }}/artifacts/nupkg" -Filter *.nupkg | Select-Object -ExpandProperty FullName
+          foreach ($package in $packages) {
+            dotnet nuget push $package --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
+            if ($LASTEXITCODE -ne 0) {
+              throw "dotnet nuget push failed for $package"
+            }
+          }
+        shell: pwsh
 
       - name: Upload REPL tool package
         uses: actions/upload-artifact@v4

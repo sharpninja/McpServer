@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013: Ingests repository files under allowlist; computes hashes and chunks.
+/// TR-PLANNED-CORE-013: Ingests repository files under allowlist; computes hashes and chunks.
 /// FR-SUPPORT-010: Path allowlist and repo root only.
 /// </summary>
 public sealed class RepoIngestor
@@ -20,7 +20,7 @@ public sealed class RepoIngestor
     private readonly ILogger<RepoIngestor> _logger;
 
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing repo root and allowlist.</param>
     /// <param name="workspaceContext">Resolved workspace context for per-workspace ingestion.</param>
@@ -35,7 +35,7 @@ public sealed class RepoIngestor
         _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
     }
 
-    /// <summary>TR-PLANNED-013: Ingests allowlisted files under RepoRoot; returns documents and chunks.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Ingests allowlisted files under RepoRoot; returns documents and chunks.</summary>
     /// <param name="cancellationToken">Token to cancel the operation.</param>
     /// <returns>List of ingested documents with their chunks.</returns>
     public async Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>> IngestAsync(

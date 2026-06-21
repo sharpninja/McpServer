@@ -38,6 +38,7 @@ public sealed class FederationStateAdapterRegistryTests
             localOnlyDomains);
 
         Assert.Contains(coverage, row => row.Domain == "todo" && row.ApplySupported);
+        Assert.Contains(coverage, row => row.Domain == "memory" && row.Covered && row.ApplySupported && !row.LocalOnly);
         Assert.Contains(coverage, row => row.Domain == "session_log" && row.Covered && row.ApplySupported);
         Assert.Contains(coverage, row => row.Domain == "mcp_transport" && row.LocalOnly && !row.ApplySupported);
         Assert.Collection(
@@ -47,6 +48,7 @@ public sealed class FederationStateAdapterRegistryTests
             row => Assert.Equal(("github_metadata", true, false), row),
             row => Assert.Equal(("marker_state", true, false), row),
             row => Assert.Equal(("mcp_transport", true, false), row),
+            row => Assert.Equal(("memory", false, true), row),
             row => Assert.Equal(("repo_file_changes", true, false), row),
             row => Assert.Equal(("requirements", false, true), row),
             row => Assert.Equal(("session_log", false, true), row),
@@ -54,6 +56,7 @@ public sealed class FederationStateAdapterRegistryTests
             row => Assert.Equal(("tools_buckets", false, true), row),
             row => Assert.Equal(("workspace", false, true), row));
         Assert.True(registry.CanApply("todo"));
+        Assert.True(registry.CanApply("memory"));
         Assert.True(registry.CanApply("session_log"));
         Assert.False(registry.CanApply("mcp_transport"));
     }
@@ -543,6 +546,81 @@ public sealed class FederationStateAdapterRegistryTests
             .ConfigureAwait(true);
     }
 
+    /// <summary>Session log DELETE replay soft-deletes the retained session graph instead of physically removing rows.</summary>
+    [Fact]
+    public async Task SessionLogAdapter_DeleteReplaySoftDeletesRetainedSessionGraph()
+    {
+        const string sessionId = "Codex-20260522T000000Z-delete-replay";
+        using var provider = CreateProvider();
+        await SeedAsync(provider, db =>
+        {
+            db.SessionLogs.Add(new SessionLogEntity
+            {
+                WorkspaceId = WorkspacePath,
+                SourceType = "Codex",
+                SessionId = sessionId,
+                Status = "completed",
+                Started = DateTimeOffset.Parse("2026-05-22T00:00:00Z"),
+                LastUpdated = DateTimeOffset.Parse("2026-05-22T00:01:00Z"),
+                Turns =
+                [
+                    new SessionLogTurnEntity
+                    {
+                        WorkspaceId = WorkspacePath,
+                        RequestId = "req-delete-replay",
+                        Status = "completed",
+                        Actions =
+                        [
+                            new SessionLogActionEntity
+                            {
+                                WorkspaceId = WorkspacePath,
+                                Order = 0,
+                                Description = "delete replay action",
+                                Type = "test",
+                                Status = "completed",
+                            },
+                        ],
+                        Tags =
+                        [
+                            new SessionLogTurnTagEntity
+                            {
+                                WorkspaceId = WorkspacePath,
+                                Tag = "delete-replay",
+                            },
+                        ],
+                    },
+                ],
+            });
+        }).ConfigureAwait(true);
+        var adapter = ResolveAdapter(provider, "session_log");
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-session-delete",
+            Domain = "session_log",
+            ResourceId = $"Codex/{sessionId}",
+            HttpMethod = "DELETE",
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await using var scope = provider.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        Assert.Empty(await db.SessionLogs.Where(session => session.SessionId == sessionId).ToListAsync().ConfigureAwait(true));
+
+        var retained = await db.SessionLogs
+            .IgnoreQueryFilters()
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.Actions)
+            .Include(session => session.Turns)
+                .ThenInclude(turn => turn.Tags)
+            .SingleAsync(session => session.SessionId == sessionId)
+            .ConfigureAwait(true);
+        AssertSoftDeleted(db, retained);
+        Assert.All(retained.Turns, turn => AssertSoftDeleted(db, turn));
+        Assert.All(retained.Turns.SelectMany(turn => turn.Actions), action => AssertSoftDeleted(db, action));
+        Assert.All(retained.Turns.SelectMany(turn => turn.Tags), tag => AssertSoftDeleted(db, tag));
+    }
+
     /// <summary>Local-only adapters reject apply attempts and explain the exemption.</summary>
     [Fact]
     public async Task LocalOnlyAdapter_RejectsApply()
@@ -572,6 +650,9 @@ public sealed class FederationStateAdapterRegistryTests
         seed(db);
         await db.SaveChangesAsync().ConfigureAwait(false);
     }
+
+    private static void AssertSoftDeleted(McpDbContext db, object entity)
+        => Assert.True(db.Entry(entity).Property("IsDeleted").CurrentValue is true);
 
     private static ServiceProvider CreateProvider(Action<IServiceCollection>? configureServices = null)
     {

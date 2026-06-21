@@ -27,7 +27,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
   summary: >-
-    TR-PLANNED-013: Configuration options for the HNSW vector index.
+    TR-PLANNED-CORE-013: Configuration options for the HNSW vector index.
 
     FR-SUPPORT-010: Controls graph parameters and persistence path.
   example: []
@@ -61,7 +61,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Whether vector search is enabled (default true). Set false for CI or lightweight deployments.'
+  summary: 'TR-PLANNED-CORE-013: Whether vector search is enabled (default true). Set false for CI or lightweight deployments.'
   example: []
   syntax:
     content: public bool Enabled { get; set; }
@@ -88,7 +88,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Embedding vector dimensions (default 384).'
+  summary: 'TR-PLANNED-CORE-013: Embedding vector dimensions (default 384).'
   example: []
   syntax:
     content: public int Dimensions { get; set; }
@@ -115,7 +115,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Maximum number of elements in the index.'
+  summary: 'TR-PLANNED-CORE-013: Maximum number of elements in the index.'
   example: []
   syntax:
     content: public int MaxElements { get; set; }
@@ -142,7 +142,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: HNSW M parameter — number of bi-directional links per node.'
+  summary: 'TR-PLANNED-CORE-013: HNSW M parameter — number of bi-directional links per node.'
   example: []
   syntax:
     content: public int M { get; set; }
@@ -169,7 +169,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Size of dynamic candidate list during construction.'
+  summary: 'TR-PLANNED-CORE-013: Size of dynamic candidate list during construction.'
   example: []
   syntax:
     content: public int EfConstruction { get; set; }
@@ -196,7 +196,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Size of dynamic candidate list during search.'
+  summary: 'TR-PLANNED-CORE-013: Size of dynamic candidate list during search.'
   example: []
   syntax:
     content: public int EfSearch { get; set; }
@@ -223,7 +223,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: File path for persisting the HNSW index.'
+  summary: 'TR-PLANNED-CORE-013: File path for persisting the HNSW index.'
   example: []
   syntax:
     content: public string IndexPath { get; set; }

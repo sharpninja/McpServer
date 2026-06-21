@@ -1,6 +1,7 @@
 using System.Text.Json;
 using McpServer.Cqrs.Search;
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using YamlDotNet.Core;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -19,14 +21,14 @@ namespace McpServer.Support.Mcp.Services;
 /// <c>McpDatabaseProviderFactory</c> (TR-MCP-CFG-007).
 /// </summary>
 /// <remarks>
-/// Functional parity with <c>SqliteTodoService</c> for CRUD + audit is the
-/// acceptance criteria for phase 3. YAML-projection (TR-MCP-TODO-006) is
-/// reduced to a no-op status reporter in this initial port; the full
-/// projection refactor is tracked as a follow-up inside the same TR.
+/// Functional parity with <c>SqliteTodoService</c> covers CRUD, append-only
+/// audit history, deterministic YAML projection, projection-status checks,
+/// and operator-requested projection repair.
 /// </remarks>
-internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
+internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensationService, IDisposable
 {
     private const int RequirementIdMaxLength = 128;
+    private const string DefaultTodoRelativePath = "docs/Project/TODO.yaml";
     private const string StandardItemKind = "standard";
     private const string CodeReviewPhaseItemKind = "code_review_phase";
     private const string CodeReviewSectionKey = "code-review-remediation";
@@ -65,6 +67,126 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
 
     /// <inheritdoc />
     public void Dispose() => _writeLock.Dispose();
+
+    /// <inheritdoc />
+    public async Task<TodoCompensationSnapshot?> CaptureForRestoreAsync(string id, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(id);
+
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            return await CaptureForRestoreCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<TodoMutationResult> RestoreAsync(TodoCompensationSnapshot snapshot, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        if (snapshot.State is not EfTodoCompensationState state)
+        {
+            return new TodoMutationResult(
+                false,
+                $"TODO compensation snapshot provider '{snapshot.Provider}' is not supported by {nameof(EfTodoService)}.",
+                FailureKind: TodoMutationFailureKind.Conflict);
+        }
+
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            var workspaceId = string.IsNullOrWhiteSpace(state.Item.WorkspaceId)
+                ? ctx.CurrentWorkspaceId
+                : state.Item.WorkspaceId;
+            var existing = await ctx.TodoItems
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.Id == state.Item.Id, cancellationToken)
+                .ConfigureAwait(false);
+            TodoItemEntity restored;
+            if (existing is null)
+            {
+                restored = CloneTodoItem(state.Item);
+                ctx.TodoItems.Add(restored);
+            }
+            else
+            {
+                CopyTodoItem(state.Item, existing);
+                restored = existing;
+            }
+
+            ApplySoftDeleteState(ctx.Entry(restored), state.SoftDelete);
+            await RestoreDocumentMetadataAsync(ctx, state.DocumentMetadata, cancellationToken).ConfigureAwait(false);
+
+            var restoredFlat = ToFlatItem(restored);
+            await SyncTodoRequirementLinksAsync(ctx, restored, restoredFlat, cancellationToken).ConfigureAwait(false);
+            await AppendAuditAsync(ctx, restored.Id, "restored", restoredFlat, null, "transaction_rollback", cancellationToken).ConfigureAwait(false);
+            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+            return await FinalizeMutationAsync(ChangeEventActions.Updated, restored.Id, restoredFlat, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<TodoCompensatedMutationResult> UpdateWithRestorePointAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(id);
+        ArgumentNullException.ThrowIfNull(request);
+
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var snapshot = await CaptureForRestoreCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
+            var result = await UpdateCoreAsync(scope.Context, id, request, cancellationToken).ConfigureAwait(false);
+            return new TodoCompensatedMutationResult
+            {
+                Result = result,
+                Snapshot = snapshot,
+            };
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<TodoCompensatedMutationResult> DeleteWithRestorePointAsync(string id, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(id);
+
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var snapshot = await CaptureForRestoreCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
+            var result = await DeleteCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
+            return new TodoCompensatedMutationResult
+            {
+                Result = result,
+                Snapshot = snapshot,
+            };
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public Task<TodoMutationResult> DeleteCreatedAsync(string id, CancellationToken cancellationToken = default)
+        => DeleteAsync(id, cancellationToken);
 
     /// <inheritdoc />
     public async Task<TodoQueryResult> QueryAsync(TodoQueryRequest request, CancellationToken cancellationToken = default)
@@ -160,8 +282,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
             await AppendAuditAsync(ctx, entity.Id, ChangeEventActions.Created, flat, null, ApiSource, cancellationToken).ConfigureAwait(false);
             await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-            await PublishChangeSafeAsync(ChangeEventActions.Created, entity.Id, cancellationToken).ConfigureAwait(false);
-            return new TodoMutationResult(true, Item: flat);
+            return await FinalizeMutationAsync(ChangeEventActions.Created, entity.Id, flat, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -179,69 +300,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
         try
         {
             await using var scope = CreateScope();
-            var ctx = scope.Context;
-
-            var existing = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);
-            if (existing is null)
-                return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
-
-            var previousFlat = ToFlatItem(existing);
-            var updatedSection = NormalizeSection(request.Section ?? existing.Section);
-            var updatedPriority = NormalizePriority(updatedSection, request.Priority ?? existing.Priority);
-            var priorityError = TodoValidator.ValidatePriority(updatedPriority);
-            if (priorityError is not null)
-                return new TodoMutationResult(false, priorityError, FailureKind: TodoMutationFailureKind.Validation);
-
-            var updatedKind = DetermineItemKind(updatedSection);
-            var prevSection = existing.Section;
-            var prevPriority = existing.Priority;
-            var prevKind = existing.ItemKind;
-
-            existing.Title = request.Title ?? existing.Title;
-            existing.Section = updatedSection;
-            existing.Priority = updatedPriority;
-            existing.Done = request.Done ?? existing.Done;
-            existing.Estimate = request.Estimate ?? existing.Estimate;
-            existing.Note = request.Note ?? existing.Note;
-            existing.DescriptionJson = request.Description is null ? existing.DescriptionJson : SerializeList(request.Description);
-            existing.TechnicalDetailsJson = request.TechnicalDetails is null ? existing.TechnicalDetailsJson : SerializeList(request.TechnicalDetails);
-            existing.ImplementationTasksJson = request.ImplementationTasks is null ? existing.ImplementationTasksJson : SerializeTasks(request.ImplementationTasks);
-            existing.CompletedDate = request.CompletedDate ?? existing.CompletedDate;
-            existing.DoneSummary = request.DoneSummary ?? existing.DoneSummary;
-            existing.Remaining = request.Remaining ?? existing.Remaining;
-            existing.Reference = request.Reference ?? existing.Reference;
-            existing.DependsOnJson = request.DependsOn is null ? existing.DependsOnJson : SerializeList(request.DependsOn);
-            existing.FunctionalRequirementsJson = request.FunctionalRequirements is null ? existing.FunctionalRequirementsJson : SerializeList(request.FunctionalRequirements);
-            existing.TechnicalRequirementsJson = request.TechnicalRequirements is null ? existing.TechnicalRequirementsJson : SerializeList(request.TechnicalRequirements);
-            existing.ItemKind = updatedKind;
-            existing.PhaseLabel = updatedKind == CodeReviewPhaseItemKind
-                ? request.Phase ?? existing.PhaseLabel ?? existing.Title
-                : null;
-
-            var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
-            var all = allEntities.Select(ToFlatItem).ToList();
-            var depIdError = TodoValidator.ValidateDependencyIds(DeserializeList(existing.DependsOnJson), all, "dependsOn");
-            if (depIdError is not null)
-                return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);
-            var depError = TodoValidator.ValidateDependencies(id, DeserializeList(existing.DependsOnJson)?.ToList() ?? [], all);
-            if (depError is not null)
-                return new TodoMutationResult(false, depError, FailureKind: TodoMutationFailureKind.Validation);
-
-            existing.SectionOrder = await ResolveSectionOrderAsync(ctx, existing.Section, cancellationToken).ConfigureAwait(false);
-            if (!string.Equals(prevSection, existing.Section, StringComparison.OrdinalIgnoreCase)
-                || !string.Equals(prevPriority, existing.Priority, StringComparison.OrdinalIgnoreCase)
-                || !string.Equals(prevKind, existing.ItemKind, StringComparison.OrdinalIgnoreCase))
-            {
-                existing.ItemOrder = await GetNextItemOrderAsync(ctx, existing.Section, existing.Priority, existing.ItemKind, cancellationToken).ConfigureAwait(false);
-            }
-
-            var updatedFlat = ToFlatItem(existing);
-            await SyncTodoRequirementLinksAsync(ctx, existing, updatedFlat, cancellationToken).ConfigureAwait(false);
-            await AppendAuditAsync(ctx, existing.Id, ChangeEventActions.Updated, updatedFlat, previousFlat, ApiSource, cancellationToken).ConfigureAwait(false);
-            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-
-            await PublishChangeSafeAsync(ChangeEventActions.Updated, existing.Id, cancellationToken).ConfigureAwait(false);
-            return new TodoMutationResult(true, Item: updatedFlat);
+            return await UpdateCoreAsync(scope.Context, id, request, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -258,20 +317,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
         try
         {
             await using var scope = CreateScope();
-            var ctx = scope.Context;
-
-            var existing = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);
-            if (existing is null)
-                return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
-
-            var snapshot = ToFlatItem(existing);
-            await SoftDeleteTodoRequirementLinksAsync(ctx, existing, cancellationToken).ConfigureAwait(false);
-            ctx.TodoItems.Remove(existing);
-            await AppendAuditAsync(ctx, id, ChangeEventActions.Deleted, snapshot, snapshot, ApiSource, cancellationToken).ConfigureAwait(false);
-            await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-
-            await PublishChangeSafeAsync(ChangeEventActions.Deleted, id, cancellationToken).ConfigureAwait(false);
-            return new TodoMutationResult(true);
+            return await DeleteCoreAsync(scope.Context, id, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -339,32 +385,415 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
     /// <inheritdoc />
     public async Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)
     {
-        await using var scope = CreateScope();
-        var ctx = scope.Context;
-        var meta = await ctx.TodoDocumentMetadata.AsNoTracking().FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
-        var todoPath = ResolveTodoPath();
-        var targetExists = !string.IsNullOrWhiteSpace(todoPath) && File.Exists(todoPath);
-        return new TodoProjectionStatusResult(
-            AuthoritativeStore: "database",
-            AuthoritativeDataSource: _storageOptions.Value.Provider ?? TodoStorageOptions.DatabaseProvider,
-            ProjectionTargetPath: todoPath ?? string.Empty,
-            ProjectionTargetExists: targetExists,
-            ProjectionConsistent: true,
-            RepairRequired: false,
-            VerifiedAtUtc: DateTime.UtcNow.ToString("O"),
-            LastImportedFromYamlUtc: meta?.LastImportedFromYamlUtc,
-            LastProjectedToYamlUtc: meta?.LastProjectedToYamlUtc,
-            LastProjectionFailureUtc: meta?.LastProjectionFailureUtc,
-            LastProjectionFailure: meta?.LastProjectionFailureMessage,
-            Message: "Projection to TODO.yaml is deferred in the EF port; database is authoritative (TR-MCP-TODO-005).");
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await GetProjectionStatusCoreAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
     }
 
     /// <inheritdoc />
     public async Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
     {
-        var status = await GetProjectionStatusAsync(cancellationToken).ConfigureAwait(false);
-        return new TodoProjectionRepairResult(true, null, status);
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            try
+            {
+                await ProjectDatabaseToYamlAsync(cancellationToken).ConfigureAwait(false);
+                var status = await GetProjectionStatusCoreAsync(cancellationToken).ConfigureAwait(false);
+                return new TodoProjectionRepairResult(true, null, status);
+            }
+            catch (Exception ex) when (IsProjectionException(ex))
+            {
+                var todoPath = ResolveTodoPath();
+                _logger.LogError(ex, "Operator-requested TODO projection repair failed for {TodoFilePath}.", todoPath);
+                await TryRecordProjectionFailureAsync(ex).ConfigureAwait(false);
+                var status = await GetProjectionStatusCoreAsync(cancellationToken).ConfigureAwait(false);
+                return new TodoProjectionRepairResult(false, $"Failed to repair TODO projection at '{todoPath}': {ex.Message}", status);
+            }
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
     }
+
+    private async Task<TodoCompensationSnapshot?> CaptureForRestoreCoreAsync(
+        McpDbContext ctx,
+        string id,
+        CancellationToken cancellationToken)
+    {
+        var workspaceId = ctx.CurrentWorkspaceId;
+        var item = await ctx.TodoItems
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.Id == id, cancellationToken)
+            .ConfigureAwait(false);
+        if (item is null)
+            return null;
+
+        var metadata = await ctx.TodoDocumentMetadata
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(row => row.WorkspaceId == workspaceId, cancellationToken)
+            .ConfigureAwait(false);
+        var state = new EfTodoCompensationState(
+            CloneTodoItem(item),
+            ReadSoftDeleteState(ctx.Entry(item)),
+            metadata is null
+                ? null
+                : new EfTodoDocumentMetadataState(
+                    CloneDocumentMetadata(metadata),
+                    ReadSoftDeleteState(ctx.Entry(metadata))));
+
+        return new TodoCompensationSnapshot
+        {
+            Provider = nameof(EfTodoService),
+            State = state,
+        };
+    }
+
+    private async Task<TodoMutationResult> UpdateCoreAsync(
+        McpDbContext ctx,
+        string id,
+        TodoUpdateRequest request,
+        CancellationToken cancellationToken)
+    {
+        var existing = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);
+        if (existing is null)
+            return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
+
+        var previousFlat = ToFlatItem(existing);
+        var updatedSection = NormalizeSection(request.Section ?? existing.Section);
+        var updatedPriority = NormalizePriority(updatedSection, request.Priority ?? existing.Priority);
+        var priorityError = TodoValidator.ValidatePriority(updatedPriority);
+        if (priorityError is not null)
+            return new TodoMutationResult(false, priorityError, FailureKind: TodoMutationFailureKind.Validation);
+
+        var updatedKind = DetermineItemKind(updatedSection);
+        var prevSection = existing.Section;
+        var prevPriority = existing.Priority;
+        var prevKind = existing.ItemKind;
+
+        existing.Title = request.Title ?? existing.Title;
+        existing.Section = updatedSection;
+        existing.Priority = updatedPriority;
+        existing.Done = request.Done ?? existing.Done;
+        existing.Estimate = request.Estimate ?? existing.Estimate;
+        existing.Note = request.Note ?? existing.Note;
+        existing.DescriptionJson = request.Description is null ? existing.DescriptionJson : SerializeList(request.Description);
+        existing.TechnicalDetailsJson = request.TechnicalDetails is null ? existing.TechnicalDetailsJson : SerializeList(request.TechnicalDetails);
+        existing.ImplementationTasksJson = request.ImplementationTasks is null ? existing.ImplementationTasksJson : SerializeTasks(request.ImplementationTasks);
+        existing.CompletedDate = request.CompletedDate ?? existing.CompletedDate;
+        existing.DoneSummary = request.DoneSummary ?? existing.DoneSummary;
+        existing.Remaining = request.Remaining ?? existing.Remaining;
+        existing.Reference = request.Reference ?? existing.Reference;
+        existing.DependsOnJson = request.DependsOn is null ? existing.DependsOnJson : SerializeList(request.DependsOn);
+        existing.FunctionalRequirementsJson = request.FunctionalRequirements is null ? existing.FunctionalRequirementsJson : SerializeList(request.FunctionalRequirements);
+        existing.TechnicalRequirementsJson = request.TechnicalRequirements is null ? existing.TechnicalRequirementsJson : SerializeList(request.TechnicalRequirements);
+        existing.ItemKind = updatedKind;
+        existing.PhaseLabel = updatedKind == CodeReviewPhaseItemKind
+            ? request.Phase ?? existing.PhaseLabel ?? existing.Title
+            : null;
+        if (updatedKind == CodeReviewPhaseItemKind && request.Reference is not null)
+        {
+            var metadata = await GetOrCreateDocumentMetadataAsync(ctx, cancellationToken).ConfigureAwait(false);
+            metadata.CodeReviewReference = request.Reference;
+        }
+
+        var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
+        var all = allEntities.Select(ToFlatItem).ToList();
+        var depIdError = TodoValidator.ValidateDependencyIds(DeserializeList(existing.DependsOnJson), all, "dependsOn");
+        if (depIdError is not null)
+            return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);
+        var depError = TodoValidator.ValidateDependencies(id, DeserializeList(existing.DependsOnJson)?.ToList() ?? [], all);
+        if (depError is not null)
+            return new TodoMutationResult(false, depError, FailureKind: TodoMutationFailureKind.Validation);
+
+        existing.SectionOrder = await ResolveSectionOrderAsync(ctx, existing.Section, cancellationToken).ConfigureAwait(false);
+        if (!string.Equals(prevSection, existing.Section, StringComparison.OrdinalIgnoreCase)
+            || !string.Equals(prevPriority, existing.Priority, StringComparison.OrdinalIgnoreCase)
+            || !string.Equals(prevKind, existing.ItemKind, StringComparison.OrdinalIgnoreCase))
+        {
+            existing.ItemOrder = await GetNextItemOrderAsync(ctx, existing.Section, existing.Priority, existing.ItemKind, cancellationToken).ConfigureAwait(false);
+        }
+
+        var updatedFlat = ToFlatItem(existing);
+        await SyncTodoRequirementLinksAsync(ctx, existing, updatedFlat, cancellationToken).ConfigureAwait(false);
+        await AppendAuditAsync(ctx, existing.Id, ChangeEventActions.Updated, updatedFlat, previousFlat, ApiSource, cancellationToken).ConfigureAwait(false);
+        await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        return await FinalizeMutationAsync(ChangeEventActions.Updated, existing.Id, updatedFlat, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<TodoMutationResult> DeleteCoreAsync(
+        McpDbContext ctx,
+        string id,
+        CancellationToken cancellationToken)
+    {
+        var existing = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);
+        if (existing is null)
+            return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
+
+        var snapshot = ToFlatItem(existing);
+        await SoftDeleteTodoRequirementLinksAsync(ctx, existing, cancellationToken).ConfigureAwait(false);
+        ctx.TodoItems.Remove(existing);
+        await AppendAuditAsync(ctx, id, ChangeEventActions.Deleted, snapshot, snapshot, ApiSource, cancellationToken).ConfigureAwait(false);
+        await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        return await FinalizeMutationAsync(ChangeEventActions.Deleted, id, null, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<TodoMutationResult> FinalizeMutationAsync(
+        string action,
+        string id,
+        TodoFlatItem? item,
+        CancellationToken cancellationToken)
+    {
+        await PublishChangeSafeAsync(action, id, cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            await ProjectDatabaseToYamlAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (IsProjectionException(ex))
+        {
+            var todoPath = ResolveTodoPath();
+            await TryRecordProjectionFailureAsync(ex).ConfigureAwait(false);
+            _logger.LogError(ex, "TODO mutation for {Id} committed in database but projection to {TodoFilePath} failed.", id, todoPath);
+            var message = $"TODO '{id}' was committed to authoritative database storage, but projection to '{todoPath}' failed: {ex.Message}";
+            return new TodoMutationResult(false, message, item, TodoMutationFailureKind.ProjectionFailed);
+        }
+
+        return new TodoMutationResult(true, Item: item);
+    }
+
+    private async Task ProjectDatabaseToYamlAsync(CancellationToken cancellationToken)
+    {
+        var todoPath = ResolveTodoPath();
+        var file = await BuildProjectedTodoFileAsync(cancellationToken).ConfigureAwait(false);
+        await TodoYamlFileSerializer.WriteAtomicallyAsync(todoPath, file, cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            await using var scope = CreateScope();
+            var metadata = await GetOrCreateDocumentMetadataAsync(scope.Context, CancellationToken.None).ConfigureAwait(false);
+            metadata.LastProjectedToYamlUtc = DateTime.UtcNow.ToString("O");
+            metadata.LastProjectionFailureUtc = null;
+            metadata.LastProjectionFailureMessage = null;
+            await scope.Context.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or DbUpdateException)
+        {
+            _logger.LogWarning(ex, "TODO.yaml projection succeeded for {TodoFilePath}, but projection metadata could not be updated.", todoPath);
+        }
+    }
+
+    private async Task<TodoFile> BuildProjectedTodoFileAsync(CancellationToken cancellationToken)
+    {
+        await using var scope = CreateScope();
+        var ctx = scope.Context;
+        var items = await ctx.TodoItems
+            .AsNoTracking()
+            .OrderBy(static item => item.SectionOrder)
+            .ThenBy(static item => item.Section)
+            .ThenBy(static item => item.Priority)
+            .ThenBy(static item => item.ItemOrder)
+            .ThenBy(static item => item.Id)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var metadata = await ReadDocumentMetadataAsync(ctx, cancellationToken).ConfigureAwait(false);
+        return BuildProjectedTodoFile(items, metadata);
+    }
+
+    private TodoFile BuildProjectedTodoFile(IReadOnlyList<TodoItemEntity> items, TodoDocumentMetadataEntity metadata)
+    {
+        var file = new TodoFile();
+        foreach (var sectionGroup in items
+            .Where(static item => string.Equals(item.ItemKind, StandardItemKind, StringComparison.OrdinalIgnoreCase))
+            .GroupBy(static item => item.Section, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(static group => group.Min(static item => item.SectionOrder))
+            .ThenBy(static group => group.Key, StringComparer.OrdinalIgnoreCase))
+        {
+            var section = new TodoSection
+            {
+                HighPriority = BuildPriorityItems(sectionGroup, "high"),
+                MediumPriority = BuildPriorityItems(sectionGroup, "medium"),
+                LowPriority = BuildPriorityItems(sectionGroup, "low"),
+            };
+
+            file.Sections[sectionGroup.Key] = section;
+        }
+
+        var phases = items
+            .Where(static item => string.Equals(item.ItemKind, CodeReviewPhaseItemKind, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(static item => item.ItemOrder)
+            .ThenBy(static item => item.Id, StringComparer.OrdinalIgnoreCase)
+            .Select(item => new CodeReviewPhase
+            {
+                Id = item.Id,
+                Phase = item.PhaseLabel,
+                Estimate = item.Estimate,
+                Done = item.Done,
+                Title = item.Title,
+                ImplementationTasks = DeserializeTasks(item.ImplementationTasksJson)?
+                    .Select(static task => new ImplementationTask { Task = task.Task, Done = task.Done })
+                    .ToList(),
+            })
+            .ToList();
+
+        if (phases.Count > 0 || !string.IsNullOrWhiteSpace(metadata.CodeReviewReference))
+        {
+            file.CodeReviewRemediation = new CodeReviewSection
+            {
+                Reference = metadata.CodeReviewReference,
+                Phases = phases.Count == 0 ? null : phases,
+            };
+        }
+
+        file.Completed = DeserializeJson<List<CompletedGroup>>(metadata.CompletedJson);
+        file.Notes = DeserializeJson<List<string>>(metadata.NotesJson);
+        return file;
+    }
+
+    private async Task<TodoProjectionStatusResult> GetProjectionStatusCoreAsync(CancellationToken cancellationToken)
+    {
+        await using var scope = CreateScope();
+        var ctx = scope.Context;
+        var metadata = await ReadDocumentMetadataAsync(ctx, cancellationToken).ConfigureAwait(false);
+        var projectedFile = await BuildProjectedTodoFileAsync(cancellationToken).ConfigureAwait(false);
+        var todoPath = ResolveTodoPath();
+
+        var projectionTargetExists = File.Exists(todoPath);
+        var projectionConsistent = false;
+        string? consistencyMessage = null;
+
+        if (!projectionTargetExists)
+        {
+            consistencyMessage = Directory.Exists(todoPath)
+                ? $"Projected TODO target '{todoPath}' is a directory instead of a file."
+                : $"Projected TODO file '{todoPath}' does not exist.";
+        }
+        else
+        {
+            try
+            {
+                var actualFile = await TodoYamlFileSerializer.ReadIfExistsAsync(todoPath, cancellationToken).ConfigureAwait(false);
+                if (actualFile is null)
+                {
+                    consistencyMessage = $"Projected TODO file '{todoPath}' could not be loaded for consistency verification.";
+                }
+                else
+                {
+                    projectionConsistent = string.Equals(
+                        NormalizeYaml(TodoYamlFileSerializer.Serialize(actualFile)),
+                        NormalizeYaml(TodoYamlFileSerializer.Serialize(projectedFile)),
+                        StringComparison.Ordinal);
+
+                    if (!projectionConsistent)
+                        consistencyMessage = $"Projected TODO file '{todoPath}' does not match authoritative database state.";
+                }
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or YamlException)
+            {
+                consistencyMessage = $"Projected TODO file '{todoPath}' could not be read for consistency verification: {ex.Message}";
+            }
+        }
+
+        var repairRequired = !projectionTargetExists || !projectionConsistent;
+        var historicalFailureMessage = string.IsNullOrWhiteSpace(metadata.LastProjectionFailureMessage)
+            ? null
+            : $"Last recorded projection failure at {metadata.LastProjectionFailureUtc ?? "an unknown time"}: {metadata.LastProjectionFailureMessage}";
+
+        var message = consistencyMessage
+            ?? (repairRequired
+                ? historicalFailureMessage ?? "TODO.yaml requires repair to match authoritative database state."
+                : historicalFailureMessage is null
+                    ? "TODO.yaml matches authoritative database state."
+                    : $"TODO.yaml matches authoritative database state. {historicalFailureMessage}");
+
+        return new TodoProjectionStatusResult(
+            AuthoritativeStore: "database",
+            AuthoritativeDataSource: _storageOptions.Value.Provider ?? TodoStorageOptions.DatabaseProvider,
+            ProjectionTargetPath: todoPath,
+            ProjectionTargetExists: projectionTargetExists,
+            ProjectionConsistent: projectionConsistent,
+            RepairRequired: repairRequired,
+            VerifiedAtUtc: DateTime.UtcNow.ToString("O"),
+            LastImportedFromYamlUtc: metadata.LastImportedFromYamlUtc,
+            LastProjectedToYamlUtc: metadata.LastProjectedToYamlUtc,
+            LastProjectionFailureUtc: metadata.LastProjectionFailureUtc,
+            LastProjectionFailure: metadata.LastProjectionFailureMessage,
+            Message: message);
+    }
+
+    private async Task TryRecordProjectionFailureAsync(Exception ex)
+    {
+        try
+        {
+            await using var scope = CreateScope();
+            var metadata = await GetOrCreateDocumentMetadataAsync(scope.Context, CancellationToken.None).ConfigureAwait(false);
+            metadata.LastProjectionFailureUtc = DateTime.UtcNow.ToString("O");
+            metadata.LastProjectionFailureMessage = ex.Message;
+            await scope.Context.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception recordEx) when (recordEx is InvalidOperationException or DbUpdateException)
+        {
+            _logger.LogWarning(recordEx, "Failed to persist TODO projection failure metadata for {TodoFilePath}.", ResolveTodoPath());
+        }
+    }
+
+    private static async Task<TodoDocumentMetadataEntity> ReadDocumentMetadataAsync(McpDbContext ctx, CancellationToken cancellationToken)
+        => await ctx.TodoDocumentMetadata.AsNoTracking().FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false)
+            ?? new TodoDocumentMetadataEntity { SingletonId = 1 };
+
+    private static async Task<TodoDocumentMetadataEntity> GetOrCreateDocumentMetadataAsync(McpDbContext ctx, CancellationToken cancellationToken)
+    {
+        var metadata = await ctx.TodoDocumentMetadata.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+        if (metadata is not null)
+            return metadata;
+
+        metadata = new TodoDocumentMetadataEntity { SingletonId = 1 };
+        ctx.TodoDocumentMetadata.Add(metadata);
+        return metadata;
+    }
+
+    private List<TodoItem>? BuildPriorityItems(IEnumerable<TodoItemEntity> group, string priority)
+    {
+        var items = group
+            .Where(item => string.Equals(item.Priority, priority, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(static item => item.ItemOrder)
+            .ThenBy(static item => item.Id, StringComparer.OrdinalIgnoreCase)
+            .Select(ToProjectedTodoItem)
+            .ToList();
+
+        return items.Count == 0 ? null : items;
+    }
+
+    private TodoItem ToProjectedTodoItem(TodoItemEntity item) => new()
+    {
+        Id = item.Id,
+        Title = item.Title,
+        Estimate = item.Estimate,
+        Note = item.Note,
+        Done = item.Done,
+        CompletedDate = item.CompletedDate,
+        Description = DeserializeList(item.DescriptionJson)?.ToList(),
+        DoneSummary = item.DoneSummary,
+        Remaining = item.Remaining,
+        TechnicalDetails = DeserializeList(item.TechnicalDetailsJson)?.ToList(),
+        PriorityNote = item.PriorityNote,
+        Reference = item.Reference,
+        DependsOn = DeserializeList(item.DependsOnJson)?.ToList(),
+        FunctionalRequirements = DeserializeList(item.FunctionalRequirementsJson)?.ToList(),
+        TechnicalRequirements = DeserializeList(item.TechnicalRequirementsJson)?.ToList(),
+        ImplementationTasks = DeserializeTasks(item.ImplementationTasksJson)?
+            .Select(static task => new ImplementationTask { Task = task.Task, Done = task.Done })
+            .ToList(),
+    };
 
     private async Task AppendAuditAsync(
         McpDbContext ctx,
@@ -566,6 +995,117 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
         entry.Property("DeleteReason").CurrentValue = reason;
     }
 
+    private static SoftDeleteState ReadSoftDeleteState(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+        => new(
+            entry.Property("IsDeleted").CurrentValue is true,
+            entry.Property("DeletedAtUtc").CurrentValue as DateTimeOffset?,
+            entry.Property("DeletedBy").CurrentValue as string,
+            entry.Property("DeleteReason").CurrentValue as string);
+
+    private static void ApplySoftDeleteState(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, SoftDeleteState state)
+    {
+        entry.Property("IsDeleted").CurrentValue = state.IsDeleted;
+        entry.Property("DeletedAtUtc").CurrentValue = state.DeletedAtUtc;
+        entry.Property("DeletedBy").CurrentValue = state.DeletedBy;
+        entry.Property("DeleteReason").CurrentValue = state.DeleteReason;
+    }
+
+    private async Task RestoreDocumentMetadataAsync(
+        McpDbContext ctx,
+        EfTodoDocumentMetadataState? state,
+        CancellationToken cancellationToken)
+    {
+        var workspaceId = state?.Metadata.WorkspaceId ?? ctx.CurrentWorkspaceId;
+        var existing = await ctx.TodoDocumentMetadata
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(row => row.WorkspaceId == workspaceId, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (state is null)
+        {
+            if (existing is not null)
+                ctx.TodoDocumentMetadata.Remove(existing);
+            return;
+        }
+
+        if (existing is null)
+        {
+            existing = CloneDocumentMetadata(state.Metadata);
+            ctx.TodoDocumentMetadata.Add(existing);
+        }
+        else
+        {
+            CopyDocumentMetadata(state.Metadata, existing);
+        }
+
+        ApplySoftDeleteState(ctx.Entry(existing), state.SoftDelete);
+    }
+
+    private static TodoItemEntity CloneTodoItem(TodoItemEntity source)
+    {
+        var target = new TodoItemEntity
+        {
+            WorkspaceId = source.WorkspaceId,
+            Id = source.Id,
+            Title = source.Title,
+            Section = source.Section,
+            Priority = source.Priority,
+        };
+        CopyTodoItem(source, target);
+        return target;
+    }
+
+    private static void CopyTodoItem(TodoItemEntity source, TodoItemEntity target)
+    {
+        target.WorkspaceId = source.WorkspaceId;
+        target.Id = source.Id;
+        target.Title = source.Title;
+        target.Section = source.Section;
+        target.Priority = source.Priority;
+        target.Done = source.Done;
+        target.Estimate = source.Estimate;
+        target.Note = source.Note;
+        target.DescriptionJson = source.DescriptionJson;
+        target.TechnicalDetailsJson = source.TechnicalDetailsJson;
+        target.ImplementationTasksJson = source.ImplementationTasksJson;
+        target.CompletedDate = source.CompletedDate;
+        target.DoneSummary = source.DoneSummary;
+        target.Remaining = source.Remaining;
+        target.PriorityNote = source.PriorityNote;
+        target.Reference = source.Reference;
+        target.DependsOnJson = source.DependsOnJson;
+        target.FunctionalRequirementsJson = source.FunctionalRequirementsJson;
+        target.TechnicalRequirementsJson = source.TechnicalRequirementsJson;
+        target.ItemKind = source.ItemKind;
+        target.SectionOrder = source.SectionOrder;
+        target.ItemOrder = source.ItemOrder;
+        target.PhaseLabel = source.PhaseLabel;
+    }
+
+    private static TodoDocumentMetadataEntity CloneDocumentMetadata(TodoDocumentMetadataEntity source)
+    {
+        var target = new TodoDocumentMetadataEntity
+        {
+            WorkspaceId = source.WorkspaceId,
+            SingletonId = source.SingletonId,
+        };
+        CopyDocumentMetadata(source, target);
+        return target;
+    }
+
+    private static void CopyDocumentMetadata(TodoDocumentMetadataEntity source, TodoDocumentMetadataEntity target)
+    {
+        target.WorkspaceId = source.WorkspaceId;
+        target.SingletonId = source.SingletonId;
+        target.NotesJson = source.NotesJson;
+        target.CompletedJson = source.CompletedJson;
+        target.CodeReviewReference = source.CodeReviewReference;
+        target.LastImportedFromYamlUtc = source.LastImportedFromYamlUtc;
+        target.LastProjectedToYamlUtc = source.LastProjectedToYamlUtc;
+        target.LastProjectionFailureUtc = source.LastProjectionFailureUtc;
+        target.LastProjectionFailureMessage = source.LastProjectionFailureMessage;
+    }
+
     private async Task<int> ResolveSectionOrderAsync(McpDbContext ctx, string section, CancellationToken cancellationToken)
     {
         var existing = await ctx.TodoItems
@@ -616,12 +1156,12 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
         }
     }
 
-    private string? ResolveTodoPath()
+    private string ResolveTodoPath()
     {
         var repoRoot = _ingestionOptions.Value.RepoRoot ?? ".";
-        var todoRel = _ingestionOptions.Value.TodoFilePath;
-        if (string.IsNullOrWhiteSpace(todoRel))
-            return null;
+        var todoRel = string.IsNullOrWhiteSpace(_ingestionOptions.Value.TodoFilePath)
+            ? DefaultTodoRelativePath
+            : _ingestionOptions.Value.TodoFilePath;
         return Path.GetFullPath(Path.IsPathRooted(todoRel) ? todoRel : Path.Combine(repoRoot, todoRel));
     }
 
@@ -729,14 +1269,30 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
 
     private string? SerializeFlatItem(TodoFlatItem? item) => item is null ? null : JsonSerializer.Serialize(item, _json);
 
+    private T? DeserializeJson<T>(string? value)
+        => string.IsNullOrWhiteSpace(value)
+            ? default
+            : JsonSerializer.Deserialize<T>(value, _json);
+
     private List<string>? DeserializeList(string? value)
-        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<List<string>>(value, _json);
+        => DeserializeJson<List<string>>(value);
 
     private List<TodoFlatTask>? DeserializeTasks(string? value)
-        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<List<TodoFlatTask>>(value, _json);
+        => DeserializeJson<List<TodoFlatTask>>(value);
 
     private TodoFlatItem? DeserializeFlatItem(string? value)
-        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<TodoFlatItem>(value, _json);
+        => DeserializeJson<TodoFlatItem>(value);
+
+    private static string NormalizeYaml(string yaml)
+        => yaml.Replace("\r\n", "\n", StringComparison.Ordinal).Trim();
+
+    private static bool IsProjectionException(Exception ex)
+        => ex is IOException
+            or UnauthorizedAccessException
+            or JsonException
+            or YamlException
+            or InvalidOperationException
+            or DbUpdateException;
 
     private static List<TodoFlatItem> ApplyFilters(List<TodoFlatItem> items, TodoQueryRequest request)
     {
@@ -772,4 +1328,19 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
                 .Concat(item.TechnicalDetails ?? Array.Empty<string>())
                 .Concat(item.ImplementationTasks?.Select(static task => task.Task) ?? Array.Empty<string>())
                 .Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    private sealed record EfTodoCompensationState(
+        TodoItemEntity Item,
+        SoftDeleteState SoftDelete,
+        EfTodoDocumentMetadataState? DocumentMetadata);
+
+    private sealed record EfTodoDocumentMetadataState(
+        TodoDocumentMetadataEntity Metadata,
+        SoftDeleteState SoftDelete);
+
+    private readonly record struct SoftDeleteState(
+        bool IsDeleted,
+        DateTimeOffset? DeletedAtUtc,
+        string? DeletedBy,
+        string? DeleteReason);
 }

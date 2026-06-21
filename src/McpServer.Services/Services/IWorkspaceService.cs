@@ -199,6 +199,9 @@ public sealed record WorkspaceDto
 
     /// <summary>Git remote URL (origin) for this workspace.</summary>
     public string? GitRemoteUrl { get; init; }
+
+    /// <summary>Path to the Copilot agent executable for this workspace.</summary>
+    public string? AgentPath { get; init; }
 }
 
 /// <summary>Result of listing workspaces.</summary>

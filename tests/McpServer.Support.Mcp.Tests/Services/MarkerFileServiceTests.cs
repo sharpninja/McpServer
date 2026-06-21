@@ -365,6 +365,46 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
+    /// Verifies marker removal archives active marker files instead of deleting them.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TR-MCP-DB-003 no-hard-delete behavior for durable MCP workspace artifacts.
+    /// Test data: temp workspace directory with a single marker file containing sentinel text.
+    /// This data is used to prove the active marker path is removed from discovery while the contents remain recoverable.
+    /// </remarks>
+    [Fact]
+    public async Task RemoveMarker_ArchivesMarkerFileInsteadOfDeletingIt()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-remove-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            var markerPath = Path.Combine(tempDir, MarkerFileService.MarkerFileName);
+            await File.WriteAllTextAsync(markerPath, "sentinel marker content").ConfigureAwait(true);
+
+            MarkerFileService.RemoveMarker(tempDir);
+
+            Assert.False(File.Exists(markerPath));
+            var archived = Directory.GetFiles(tempDir, MarkerFileService.MarkerFileName + ".deleted-*");
+            var archivePath = Assert.Single(archived);
+            Assert.Equal("sentinel marker content", await File.ReadAllTextAsync(archivePath).ConfigureAwait(true));
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(tempDir))
+                    Directory.Delete(tempDir, recursive: true);
+            }
+            catch
+            {
+                // Best-effort cleanup for temp test directory.
+            }
+        }
+    }
+
+    /// <summary>
     /// Verifies that marker-signature payload generation is deterministic for the same marker content.
     /// </summary>
     /// <remarks>

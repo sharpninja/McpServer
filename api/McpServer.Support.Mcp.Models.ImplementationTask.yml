@@ -21,7 +21,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: A sub-task within a TODO item.'
+  summary: 'TR-PLANNED-CORE-013: A sub-task within a TODO item.'
   example: []
   syntax:
     content: public sealed class ImplementationTask

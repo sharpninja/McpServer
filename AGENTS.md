@@ -26,7 +26,7 @@ On every subsequent user message:
 
 ## Byrd Test Gate
 
-The canonical process is `docs/Development-Process-draft-v3.md`. To leave a Byrd implementation slice, the entire unit test suite for the current iteration and previous iterations must be completely passing. In this workspace, skipped tests are not passing tests: a validation gate requires zero failures and zero skips in the executed scope. Tests should directly track progress; deferred work belongs in MCP TODO/requirements state until that slice starts, not in skipped test placeholders.
+The canonical process is `docs/Development-Process-draft-v4.md`. To leave a Byrd implementation slice, the entire unit test suite for the current iteration and previous iterations must be completely passing. In this workspace, skipped tests are not passing tests: a validation gate requires zero failures and zero skips in the executed scope. Tests should directly track progress; deferred work belongs in MCP TODO/requirements state until that slice starts, not in skipped test placeholders.
 
 ## Where Things Live
 
@@ -148,3 +148,4 @@ At regular intervals during long sessions (~10 interactions):
 
 - Do not use table-style output in responses.
 - Use concise bullets or short paragraphs instead.
+

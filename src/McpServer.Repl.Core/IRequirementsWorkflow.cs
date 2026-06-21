@@ -17,19 +17,19 @@ namespace McpServer.Repl.Core;
 /// <list type="bullet">
 /// <item>
 /// <term>Functional Requirement ID</term>
-/// <description>Format: <c>FR-&lt;AREA&gt;-###</c>. Regex: <c>^FR-[A-Z]+-\d{3}$</c></description>
+/// <description>Format: <c>FR-&lt;AREA&gt;[-&lt;QUALIFIER&gt;]-###</c>. Regex: <c>^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$</c></description>
 /// </item>
 /// <item>
 /// <term>Technical Requirement ID</term>
-/// <description>Format: <c>TR-&lt;AREA&gt;-&lt;SUBAREA&gt;-###</c>. Regex: <c>^TR-[A-Z]+-[A-Z]+-\d{3}$</c></description>
+/// <description>Format: <c>TR-&lt;AREA&gt;-&lt;SUBAREA&gt;[-&lt;QUALIFIER&gt;]-###</c>. Regex: <c>^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\d{3}$</c></description>
 /// </item>
 /// <item>
 /// <term>Test Requirement ID</term>
-/// <description>Format: <c>TEST-&lt;AREA&gt;-###</c>. Regex: <c>^TEST-[A-Z]+-\d{3}$</c></description>
+/// <description>Format: <c>TEST-&lt;AREA&gt;[-&lt;QUALIFIER&gt;]-###</c>. Regex: <c>^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$</c></description>
 /// </item>
 /// <item>
 /// <term>Valid examples</term>
-/// <description><c>FR-MCP-001</c>, <c>TR-MCP-ARCH-001</c>, <c>TEST-MCP-001</c></description>
+/// <description><c>FR-MCP-001</c>, <c>FR-MCP-MEMORY-001</c>, <c>TR-MCP-ARCH-001</c>, <c>TR-MCP-MEMORY-001</c>, <c>TEST-MCP-001</c>, <c>TEST-MCP-MEMORY-001</c></description>
 /// </item>
 /// <item>
 /// <term>Invalid examples</term>
@@ -239,6 +239,70 @@ public interface IRequirementsWorkflow
     /// Deleting a TEST also removes all mappings that reference it. This operation cannot be undone.
     /// </remarks>
     Task DeleteTestAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates multiple functional requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing FR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateFrBatchAsync(CreateFrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates multiple functional requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing FR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateFrBatchAsync(UpdateFrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates multiple technical requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateTrBatchAsync(CreateTrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates multiple technical requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateTrBatchAsync(UpdateTrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates multiple testing requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TEST records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateTestBatchAsync(CreateTestBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates multiple testing requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TEST records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateTestBatchAsync(UpdateTestBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates mixed FR/TR/TEST requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing mixed requirement records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateBatchAsync(CreateRequirementsBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates mixed FR/TR/TEST requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing mixed requirement records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateBatchAsync(UpdateRequirementsBatchRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Lists all requirement mappings with optional filtering.
@@ -475,6 +539,13 @@ public interface IFrItem
     string? Notes { get; }
 
     /// <summary>
+    /// FR-MCP-REQAC-001: gets the structured acceptance criteria attached to this requirement.
+    /// Null when the requirement has no criteria; never used to signal "absent" - callers should
+    /// treat null and empty list identically.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
     string CreatedAt { get; }
@@ -520,6 +591,9 @@ public interface IFrCreateRequest
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -559,6 +633,9 @@ public interface IFrUpdateRequest
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -640,6 +717,9 @@ public interface ITrItem
     /// </summary>
     string? Notes { get; }
 
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this requirement.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
     /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
@@ -691,6 +771,9 @@ public interface ITrCreateRequest
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -730,6 +813,9 @@ public interface ITrUpdateRequest
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -811,6 +897,9 @@ public interface ITestItem
     /// </summary>
     string? Notes { get; }
 
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this requirement.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
     /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
@@ -863,6 +952,9 @@ public interface ITestCreateRequest
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -902,6 +994,9 @@ public interface ITestUpdateRequest
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>

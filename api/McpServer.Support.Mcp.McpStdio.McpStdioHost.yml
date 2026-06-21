@@ -20,7 +20,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.McpStdio
-  summary: 'TR-PLANNED-013: Host for MCP STDIO transport; registers shared services and runs MCP server.'
+  summary: 'TR-PLANNED-CORE-013: Host for MCP STDIO transport; registers shared services and runs MCP server.'
   example: []
   syntax:
     content: public static class McpStdioHost
