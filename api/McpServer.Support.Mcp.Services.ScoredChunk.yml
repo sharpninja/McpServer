@@ -26,7 +26,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: A chunk with its relevance score and optional snippet.'
+  summary: 'TR-PLANNED-CORE-013: A chunk with its relevance score and optional snippet.'
   example: []
   syntax:
     content: 'public sealed record ScoredChunk : IEquatable<ScoredChunk>'

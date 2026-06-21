@@ -1,4 +1,4 @@
-// TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
+// TR-PLANNED-CORE-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
 using System.Net;
@@ -465,7 +465,13 @@ builder.Services.AddScoped<IBrainSlotChatClientFactory, BrainSlotChatClientFacto
 builder.Services.AddScoped<IBrainSlotRegistryService, BrainSlotRegistryService>();
 builder.Services.AddScoped<IBrainSlotContextAdmissionService, BrainSlotContextAdmissionService>();
 builder.Services.AddScoped<IBrainSlotInvocationService, BrainSlotInvocationService>();
+// FR-MCP-QBEXEC-003: full-fidelity inter-brain session logging (full prompt+output text, secret-redacted).
+builder.Services.AddScoped<IBrainInteractionSessionLogger, BrainInteractionSessionLogger>();
 builder.Services.AddScoped<IQuadBrainOrchestrationService, QuadBrainOrchestrationService>();
+// FR-MCP-QBEXEC-002: concrete internal-tool executor routes QuadBrain's MCP-internal mutations through the
+// transaction-gated services; it is injected into the chat service's optional executor parameter, replacing the
+// NoopInternalToolExecutor fallback.
+builder.Services.AddScoped<IQuadBrainInternalToolExecutor, QuadBrainInternalToolExecutor>();
 builder.Services.AddScoped<IQuadBrainOpenAiChatService, QuadBrainOpenAiChatService>();
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
@@ -629,6 +635,11 @@ if (!builder.Environment.IsEnvironment("Test"))
 // file get materialized into the DB before the first request.
 builder.Services.AddHostedService<TodoBootstrapImporter>();
 
+// FR-MCP-QBSEED-001: provision the Quad-Brain from Mcp:BrainSlots:Slots at startup (gated, idempotent).
+// Registered after TodoBootstrapImporter so the database and workspace registrations are ready; the seeder
+// is a no-op unless execution is enabled and slots are configured, and never aborts startup on failure.
+builder.Services.AddHostedService<BrainSlotStartupSeeder>();
+
 var mvcBuilder = builder.Services.AddControllers();
 #if !DEBUG
 if (!builder.Environment.IsStaging())
@@ -636,7 +647,7 @@ if (!builder.Environment.IsStaging())
         mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
 #endif
 
-// FR-SUPPORT-010B / TR-PLANNED-013A: Replace ASP.NET's default invalid-model-state
+// FR-SUPPORT-012 / TR-PLANNED-CORE-014: Replace ASP.NET's default invalid-model-state
 // response shape ({"errors":{"dto":["..."]}}) with RFC 7807 ProblemDetails that
 // cites the actual offending JSON path. The "dto" key is the action parameter
 // name; surfacing it confuses callers into thinking a wrapper field is required.

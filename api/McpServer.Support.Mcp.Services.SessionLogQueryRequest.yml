@@ -26,7 +26,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Query parameters for session log search.'
+  summary: 'TR-PLANNED-CORE-013: Query parameters for session log search.'
   example: []
   syntax:
     content: 'public sealed record SessionLogQueryRequest : IEquatable<SessionLogQueryRequest>'

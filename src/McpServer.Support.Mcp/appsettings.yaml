@@ -83,6 +83,18 @@ Mcp:
     QueryTimeoutSeconds: 120
     MaxConcurrentIndexJobsPerWorkspace: 1
     ArtifactVersion: v1
+  # FR-MCP-QBSEED-001: Quad-Brain external slot runtime + startup provisioning.
+  # Disabled by default. To run the live four-brain loop, set ExecutionEnabled: true and populate
+  # Slots (one per role: LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth). The
+  # ready-to-use slot definitions live in config/brain-slots/quad-brain-slot-assignments.yaml.
+  # Credentials must be referenced (env:, config:, file:), never inlined.
+  BrainSlots:
+    ExecutionEnabled: false
+    AllowLoopbackEndpoints: false
+    DefaultTimeoutSeconds: 30
+    MaxTimeoutSeconds: 300
+    AllowedEndpointHosts: []
+    Slots: []
   TodoStorage:
     Provider: sqlite
     SqliteDataSource: mcp.db

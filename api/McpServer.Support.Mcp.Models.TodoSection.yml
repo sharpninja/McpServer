@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: A section grouping TODO items by priority level.'
+  summary: 'TR-PLANNED-CORE-013: A section grouping TODO items by priority level.'
   example: []
   syntax:
     content: public sealed class TodoSection

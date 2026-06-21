@@ -32,13 +32,13 @@ public sealed class TraceabilityValidatorTests
     {
         string[] lines =
         [
-            "- TEST-SUPPORT-010A-1: workspace stamping coverage",
+            "- TEST-SUPPORT-016: workspace stamping coverage",
             "- TEST-MCP-REQACPLUGIN-BASH: plugin acceptance criteria coverage",
         ];
 
         var ids = TraceabilityValidator.GetTestIds(lines);
 
-        Assert.Contains("TEST-SUPPORT-010A-1", ids);
+        Assert.Contains("TEST-SUPPORT-016", ids);
         Assert.Contains("TEST-MCP-REQACPLUGIN-BASH", ids);
     }
 
@@ -54,12 +54,12 @@ public sealed class TraceabilityValidatorTests
     [Fact]
     public void GetMappingFrIds_ExtractsLetterSuffixedFrIdsFromTable()
     {
-        string[] lines = ["| FR-SUPPORT-010A | TR-MCP-MT-003A | TEST-SUPPORT-010A-1 |"];
+        string[] lines = ["| FR-SUPPORT-011 | TR-MCP-MT-004 | TEST-SUPPORT-016 |"];
 
         var ids = TraceabilityValidator.GetMappingFrIds(lines);
 
         Assert.Single(ids);
-        Assert.Equal("FR-SUPPORT-010A", ids[0]);
+        Assert.Equal("FR-SUPPORT-011", ids[0]);
     }
 
     [Fact]
@@ -134,15 +134,15 @@ public sealed class TraceabilityValidatorTests
     [Fact]
     public void Validate_LetterSuffixedRequirements_AreCovered()
     {
-        string[] fr = ["## FR-SUPPORT-010A SessionLog Workspace Stamping"];
-        string[] tr = ["## TR-MCP-MT-003A"];
-        string[] test = ["- TEST-SUPPORT-010A-1: workspace stamping coverage"];
-        string[] mapping = ["| FR-SUPPORT-010A | TR-MCP-MT-003A | TEST-SUPPORT-010A-1 |"];
+        string[] fr = ["## FR-SUPPORT-011 SessionLog Workspace Stamping"];
+        string[] tr = ["## TR-MCP-MT-004"];
+        string[] test = ["- TEST-SUPPORT-016: workspace stamping coverage"];
+        string[] mapping = ["| FR-SUPPORT-011 | TR-MCP-MT-004 | TEST-SUPPORT-016 |"];
         string[] matrix =
         [
-            "| FR-SUPPORT-010A | Tracked | Functional-Requirements.md |",
-            "| TR-MCP-MT-003A | Tracked | Technical-Requirements.md |",
-            "| TEST-SUPPORT-010A-1 | Tracked | Testing-Requirements.md |",
+            "| FR-SUPPORT-011 | Tracked | Functional-Requirements.md |",
+            "| TR-MCP-MT-004 | Tracked | Technical-Requirements.md |",
+            "| TEST-SUPPORT-016 | Tracked | Testing-Requirements.md |",
         ];
 
         var result = TraceabilityValidator.Validate(fr, tr, test, mapping, matrix);
@@ -156,18 +156,18 @@ public sealed class TraceabilityValidatorTests
     [Fact]
     public void Validate_LetterSuffixedRequirementsMissingTraceability_AreReported()
     {
-        string[] fr = ["## FR-SUPPORT-010A SessionLog Workspace Stamping"];
-        string[] tr = ["## TR-MCP-MT-003A"];
-        string[] test = ["- TEST-SUPPORT-010A-1: workspace stamping coverage"];
+        string[] fr = ["## FR-SUPPORT-011 SessionLog Workspace Stamping"];
+        string[] tr = ["## TR-MCP-MT-004"];
+        string[] test = ["- TEST-SUPPORT-016: workspace stamping coverage"];
         string[] mapping = [];
         string[] matrix = [];
 
         var result = TraceabilityValidator.Validate(fr, tr, test, mapping, matrix);
 
-        Assert.Contains("FR-SUPPORT-010A", result.MissingFrInMapping);
-        Assert.Contains("FR-SUPPORT-010A", result.MissingFrInMatrix);
-        Assert.Contains("TR-MCP-MT-003A", result.MissingTrInMatrix);
-        Assert.Contains("TEST-SUPPORT-010A-1", result.MissingTestInMatrix);
+        Assert.Contains("FR-SUPPORT-011", result.MissingFrInMapping);
+        Assert.Contains("FR-SUPPORT-011", result.MissingFrInMatrix);
+        Assert.Contains("TR-MCP-MT-004", result.MissingTrInMatrix);
+        Assert.Contains("TEST-SUPPORT-016", result.MissingTestInMatrix);
     }
 
     [Fact]

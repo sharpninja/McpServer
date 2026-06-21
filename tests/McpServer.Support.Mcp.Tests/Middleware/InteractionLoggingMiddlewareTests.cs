@@ -11,7 +11,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Middleware;
 
-/// <summary>TR-PLANNED-013: Unit tests for InteractionLoggingMiddleware.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for InteractionLoggingMiddleware.</summary>
 public sealed class InteractionLoggingMiddlewareTests
 {
     private static ILogger<McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware> CreateLogger() =>

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Middleware;
 
 /// <summary>
-/// TR-PLANNED-013: Middleware that logs every request/response with structured data
+/// TR-PLANNED-CORE-013: Middleware that logs every request/response with structured data
 /// (including input/output bodies) and optionally enqueues entries for async submission
 /// to a logging service.
 /// </summary>
@@ -19,7 +19,7 @@ public sealed class InteractionLoggingMiddleware
     private readonly McpInteractionLoggingOptions _options;
     private readonly IInteractionLogSubmissionChannel? _channel;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <param name="next">The next middleware in the pipeline.</param>
     /// <param name="logger">Logger instance.</param>
     /// <param name="options">Interaction logging options.</param>

@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Options
-  summary: 'TR-PLANNED-013: Configuration for TODO persistence backend.'
+  summary: 'TR-PLANNED-CORE-013: Configuration for TODO persistence backend.'
   example: []
   syntax:
     content: public sealed class TodoStorageOptions

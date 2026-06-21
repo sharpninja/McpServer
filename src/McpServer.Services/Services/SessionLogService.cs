@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
+/// TR-PLANNED-CORE-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
 /// FR-SUPPORT-010: Persists session logs in 4NF-normalized SQLite tables via <see cref="McpDbContext"/>.
 /// </summary>
 public sealed class SessionLogService : ISessionLogService
@@ -26,9 +26,9 @@ public sealed class SessionLogService : ISessionLogService
     private readonly ILogger<SessionLogService> _logger;
     private readonly WorkspaceContext? _workspaceContext;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <remarks>
-    /// TR-MCP-MT-003A: <paramref name="workspaceContext"/> is optional so the
+    /// TR-MCP-MT-004: <paramref name="workspaceContext"/> is optional so the
     /// ingestion / batch import paths (which run without an HTTP scope) keep
     /// working; in those cases <c>WorkspaceId</c> defaults to empty string.
     /// </remarks>
@@ -906,7 +906,7 @@ public sealed class SessionLogService : ISessionLogService
         if (!IsTerminalTurnStatus(turn.Status))
             return;
 
-        // FR-SUPPORT-010C: the terminal-turn audit-evidence gate is a Quad-Brain ACID
+        // FR-SUPPORT-013: the terminal-turn audit-evidence gate is a Quad-Brain ACID
         // requirement (FR-MCP-136 durable audit/session-log boundaries). It applies only
         // to the ACID hosted-agent source type and must not gate standard session-log
         // endpoints used by ordinary agents (ClaudeCode, Cursor, Copilot, ...).
@@ -968,7 +968,7 @@ public sealed class SessionLogService : ISessionLogService
 
     private static void MapDtoToEntity(UnifiedSessionLogDto dto, SessionLogEntity entity)
     {
-        // FR-SUPPORT-010F: ADDITIVE merge. Agents routinely send partial session
+        // FR-SUPPORT-015: ADDITIVE merge. Agents routinely send partial session
         // payloads (e.g. a bare status-only close); omitted (null) fields must
         // never clobber existing values. TurnCount/Started/LastUpdated are
         // recomputed from turns by RefreshSessionSummaryFromTurns after mapping.
@@ -1050,7 +1050,7 @@ public sealed class SessionLogService : ISessionLogService
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {
-                // FR-SUPPORT-010F: whole-session submit merges turns additively -
+                // FR-SUPPORT-015: whole-session submit merges turns additively -
                 // omitted turn fields never clobber previously persisted values.
                 UpdateEntryFromDto(existingEntry, dto, mergeOmittedFields: true);
             }

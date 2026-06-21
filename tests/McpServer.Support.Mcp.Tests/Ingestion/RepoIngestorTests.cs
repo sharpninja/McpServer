@@ -6,7 +6,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-013: Unit tests for RepoIngestor file discovery and chunking.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for RepoIngestor file discovery and chunking.</summary>
 public sealed class RepoIngestorTests : IDisposable
 {
     private readonly string _tempDir;

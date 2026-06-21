@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// TR-PLANNED-013: Session log submit and query endpoints (MVP-SUPPORT-011).
+/// TR-PLANNED-CORE-013: Session log submit and query endpoints (MVP-SUPPORT-011).
 /// FR-SUPPORT-010: Agents POST session log payloads; clients GET with optional filters.
 /// </summary>
 [ApiController]
@@ -18,7 +18,7 @@ public sealed class SessionLogController : ControllerBase
     private readonly ISessionLogService _service;
     private readonly ILogger<SessionLogController> _logger;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public SessionLogController(ISessionLogService service,
         ILogger<SessionLogController> logger)
     {
@@ -27,7 +27,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// TR-PLANNED-013: Submit a session log (upsert by SourceType + SessionId).
+    /// TR-PLANNED-CORE-013: Submit a session log (upsert by SourceType + SessionId).
     /// </summary>
     /// <param name="dto">Unified session log payload.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -71,7 +71,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// TR-PLANNED-013: Query session logs with optional filters and pagination.
+    /// TR-PLANNED-CORE-013: Query session logs with optional filters and pagination.
     /// </summary>
     /// <param name="agent">Filter by agent source type.</param>
     /// <param name="agentDefinitionId">Filter by linked agent definition identifier.</param>
@@ -113,7 +113,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: Fetch a single session log by (agent, sessionId). Returns
+    /// FR-SUPPORT-013: Fetch a single session log by (agent, sessionId). Returns
     /// 404 when the session does not exist or is excluded by the current workspace
     /// tenancy filter.
     /// </summary>
@@ -140,7 +140,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: Upsert a single turn on an existing session by RequestId.
+    /// FR-SUPPORT-013: Upsert a single turn on an existing session by RequestId.
     /// Use this for incremental turn updates without re-POSTing the whole session
     /// payload.
     /// </summary>
@@ -181,7 +181,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// TR-PLANNED-013: Append processing dialog items to an existing turn.
+    /// TR-PLANNED-CORE-013: Append processing dialog items to an existing turn.
     /// The AI model calls this endpoint on the fly to record reasoning, tool calls, and execution trace.
     /// </summary>
     /// <param name="agent">Agent source type (e.g. Cursor, Copilot).</param>
@@ -226,7 +226,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: Idempotent ensure-session keyed by (agent, sessionId).
+    /// FR-SUPPORT-014: Idempotent ensure-session keyed by (agent, sessionId).
     /// Creates the session when missing; otherwise leaves it untouched. Stateless:
     /// callable from any process with no prior in-process session state.
     /// </summary>
@@ -256,7 +256,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: Begins (or re-opens) a turn keyed by
+    /// FR-SUPPORT-014: Begins (or re-opens) a turn keyed by
     /// (agent, sessionId, requestId) with status in_progress. Stateless: no
     /// in-process "active session" is required or kept.
     /// </summary>
@@ -290,7 +290,7 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: Completes a turn keyed by (agent, sessionId, requestId),
+    /// FR-SUPPORT-014: Completes a turn keyed by (agent, sessionId, requestId),
     /// merging the supplied payload onto the existing turn (omitted fields are
     /// preserved). The terminal-turn compliance gate requires at least one design
     /// decision, action, or commit.
@@ -314,7 +314,7 @@ public sealed class SessionLogController : ControllerBase
         => FinalizeTurnAsync(agent, sessionId, requestId, body, "completed", cancellationToken);
 
     /// <summary>
-    /// FR-SUPPORT-010E: Fails a turn keyed by (agent, sessionId, requestId),
+    /// FR-SUPPORT-014: Fails a turn keyed by (agent, sessionId, requestId),
     /// recording the failure note. Subject to the same terminal-turn compliance
     /// gate as complete.
     /// </summary>
@@ -595,12 +595,12 @@ public sealed class SessionLogController : ControllerBase
     }
 }
 
-/// <summary>FR-SUPPORT-010E: Optional body for the stateless open-session endpoint.</summary>
+/// <summary>FR-SUPPORT-014: Optional body for the stateless open-session endpoint.</summary>
 /// <param name="Title">Human-readable session title.</param>
 /// <param name="Model">AI model identifier.</param>
 public sealed record SessionLifecycleOpenRequest(string? Title, string? Model);
 
-/// <summary>FR-SUPPORT-010E: Optional body for the stateless begin-turn endpoint.</summary>
+/// <summary>FR-SUPPORT-014: Optional body for the stateless begin-turn endpoint.</summary>
 /// <param name="QueryTitle">Short turn title.</param>
 /// <param name="QueryText">Full user query text.</param>
 /// <param name="Timestamp">ISO 8601 turn timestamp; defaults to now.</param>

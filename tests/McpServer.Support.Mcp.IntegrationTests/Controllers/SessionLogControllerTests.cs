@@ -8,7 +8,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
-/// <summary>TR-PLANNED-013: Integration tests for SessionLogController endpoints (MVP-SUPPORT-011).</summary>
+/// <summary>TR-PLANNED-CORE-013: Integration tests for SessionLogController endpoints (MVP-SUPPORT-011).</summary>
 public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly HttpClient _client;
@@ -179,7 +179,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010B: Body-binding failure returns RFC 7807 ProblemDetails with
+    /// FR-SUPPORT-012: Body-binding failure returns RFC 7807 ProblemDetails with
     /// the offending JSON path; the response must not echo the action parameter
     /// name (<c>dto</c>) which misleads callers into thinking a wrapper is required.
     /// </summary>
@@ -199,7 +199,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010B: Domain validation (missing SourceType) returns ProblemDetails
+    /// FR-SUPPORT-012: Domain validation (missing SourceType) returns ProblemDetails
     /// not the legacy <c>{"error":"..."}</c> plain object.
     /// </summary>
     [Fact]
@@ -216,7 +216,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>GET /mcpserver/sessionlog/{agent}/{sessionId}</c> returns
+    /// FR-SUPPORT-013: <c>GET /mcpserver/sessionlog/{agent}/{sessionId}</c> returns
     /// the just-created record so a POST/GET round-trip via REST works without
     /// scanning the list endpoint.
     /// </summary>
@@ -237,7 +237,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>GET</c> by sessionId returns 404 when the session is
+    /// FR-SUPPORT-013: <c>GET</c> by sessionId returns 404 when the session is
     /// not found.
     /// </summary>
     [Fact]
@@ -251,7 +251,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>POST /mcpserver/sessionlog/{agent}/{sessionId}/turn</c>
+    /// FR-SUPPORT-013: <c>POST /mcpserver/sessionlog/{agent}/{sessionId}/turn</c>
     /// appends a turn to an existing session and the turn is retrievable.
     /// </summary>
     [Fact]
@@ -305,7 +305,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: Closing a turn through the REST turn endpoint for a Quad-Brain
+    /// FR-SUPPORT-013: Closing a turn through the REST turn endpoint for a Quad-Brain
     /// ACID agent session (SourceType <c>QBAgent</c>) requires at least one decision,
     /// action, or commit item so audit-empty completions are rejected.
     /// </summary>
@@ -337,7 +337,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: A standard (non-Quad-Brain) agent session closes a turn through
+    /// FR-SUPPORT-013: A standard (non-Quad-Brain) agent session closes a turn through
     /// the REST turn endpoint without any decision/action/commit evidence and succeeds;
     /// the ACID compliance gate must not leak into the standard session-log endpoints.
     /// </summary>
@@ -491,10 +491,10 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
     private sealed record RepairWorkspaceStampsResult(int Repaired);
 
-    #region Phase 1a - stateless session lifecycle (FR-SUPPORT-010E)
+    #region Phase 1a - stateless session lifecycle (FR-SUPPORT-014)
 
     /// <summary>
-    /// FR-SUPPORT-010E: open is an idempotent ensure-session keyed by
+    /// FR-SUPPORT-014: open is an idempotent ensure-session keyed by
     /// (agent, sessionId); calling it twice yields one session and 200 both times.
     /// </summary>
     [Fact]
@@ -515,7 +515,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: begin creates an in_progress turn keyed by
+    /// FR-SUPPORT-014: begin creates an in_progress turn keyed by
     /// (agent, sessionId, requestId) with no in-process server state.
     /// </summary>
     [Fact]
@@ -537,7 +537,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         Assert.Equal("in_progress", turn.Status);
     }
 
-    /// <summary>FR-SUPPORT-010E: begin on a missing session maps to 404.</summary>
+    /// <summary>FR-SUPPORT-014: begin on a missing session maps to 404.</summary>
     [Fact]
     public async Task BeginTurn_SessionMissing_Returns404()
     {
@@ -550,7 +550,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: complete merges the payload onto the existing turn and
+    /// FR-SUPPORT-014: complete merges the payload onto the existing turn and
     /// finalizes it; audit evidence (decision/action/commit) satisfies the
     /// terminal-turn compliance gate, and omitted fields (queryText) survive.
     /// </summary>
@@ -582,7 +582,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: a standard (non-Quad-Brain) agent completes a turn without any
+    /// FR-SUPPORT-014: a standard (non-Quad-Brain) agent completes a turn without any
     /// decision/action/commit evidence and the turn finalizes successfully. The ACID
     /// compliance gate must not leak into the standard lifecycle endpoints.
     /// </summary>
@@ -604,7 +604,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: a Quad-Brain ACID agent (SourceType <c>QBAgent</c>) completing
+    /// FR-SUPPORT-014: a Quad-Brain ACID agent (SourceType <c>QBAgent</c>) completing
     /// a turn without any decision/action/commit evidence is rejected by the terminal-turn
     /// compliance gate with 400.
     /// </summary>
@@ -627,7 +627,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     }
 
     /// <summary>
-    /// FR-SUPPORT-010E: fail finalizes the turn as failed, records the failure
+    /// FR-SUPPORT-014: fail finalizes the turn as failed, records the failure
     /// note, and still honors the compliance gate via supplied evidence.
     /// </summary>
     [Fact]

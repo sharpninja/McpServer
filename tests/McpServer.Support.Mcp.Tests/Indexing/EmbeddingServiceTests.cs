@@ -4,7 +4,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Indexing;
 
-/// <summary>TR-PLANNED-013: Unit tests for EmbeddingService (stub mode and ONNX integration).</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for EmbeddingService (stub mode and ONNX integration).</summary>
 public sealed class EmbeddingServiceTests : IDisposable
 {
     private readonly EmbeddingService _sut = new(new EmbeddingOptions(), NullLogger<EmbeddingService>.Instance);

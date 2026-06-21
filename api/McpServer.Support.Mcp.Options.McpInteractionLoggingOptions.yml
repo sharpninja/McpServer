@@ -26,7 +26,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Options
-  summary: 'TR-PLANNED-013: Options for MCP interaction structured logging and optional async submission to a logging service.'
+  summary: 'TR-PLANNED-CORE-013: Options for MCP interaction structured logging and optional async submission to a logging service.'
   example: []
   syntax:
     content: public sealed class McpInteractionLoggingOptions

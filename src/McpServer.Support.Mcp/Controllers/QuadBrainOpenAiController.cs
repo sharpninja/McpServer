@@ -41,13 +41,32 @@ public sealed class QuadBrainOpenAiController : ControllerBase
         if (request is null || request.Messages is not { Count: > 0 })
             return BadRequest(new { error = "messages is required." });
 
+        // FR-MCP-QUAD-SESSION-001: a QuadBrain instance is attached to a single session via the X-Session-Id
+        // header (multiple instances run concurrently, one per session). X-Turn-Id optionally correlates the turn.
+        var sessionId = Request.Headers["X-Session-Id"].FirstOrDefault();
+        var turnId = Request.Headers["X-Turn-Id"].FirstOrDefault();
+
         try
         {
-            return Ok(await _chat.CompleteAsync(request, cancellationToken).ConfigureAwait(false));
+            return Ok(await _chat.CompleteAsync(request, sessionId, turnId, cancellationToken).ConfigureAwait(false));
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new { error = ex.Message });
+            // FR-MCP-QBOPENAI-001: invalid request shape maps to an OpenAI-compatible 400 error envelope.
+            return BadRequest(new { error = new { message = ex.Message, type = "invalid_request_error" } });
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // The client aborted; nothing to return.
+            throw;
+        }
+        catch (Exception ex)
+        {
+            // FR-MCP-QBOPENAI-001 (G-016): orchestration/provider failures map to an OpenAI-compatible 500 error
+            // envelope rather than a raw stack trace, so OpenAI clients can parse the failure consistently.
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new { error = new { message = ex.Message, type = "server_error" } });
         }
     }
 }

@@ -185,10 +185,10 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Contains("- [ ] Path resolution is covered by a focused assertion.", githubTesting);
         Assert.Contains("- [x] Validation evidence is retained. (evidence: RequirementsDocumentServiceTests)", githubTesting);
         Assert.Contains("## TEST-MCP-REPL", githubTesting);
-        Assert.Contains("### TEST-MCP-REPL-007-1", githubTesting);
+        Assert.Contains("### TEST-MCP-REPL-021", githubTesting);
         Assert.Contains("Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked.", githubTesting);
         Assert.Contains("## TEST-SUPPORT", githubTesting);
-        Assert.Contains("### TEST-SUPPORT-010A-1", githubTesting);
+        Assert.Contains("### TEST-SUPPORT-016", githubTesting);
         Assert.Contains("Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id.", githubTesting);
         Assert.DoesNotContain("| ID | Requirement |", githubTesting);
         Assert.DoesNotContain("- TEST-MCP-001:", githubTesting);
@@ -261,13 +261,13 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
 
             | ID | Requirement |
             | --- | --- |
-            | TEST-MCP-REPL-007-1 | Given marker diagnostics, when no marker exists, then searched paths are listed. |
+            | TEST-MCP-REPL-021 | Given marker diagnostics, when no marker exists, then searched paths are listed. |
             """);
 
         Assert.Equal(2, parsed.Count);
         Assert.Equal("TEST-MCP-001", parsed[0].Id);
         Assert.Equal("Given A | B, when C, then D.", parsed[0].Condition);
-        Assert.Equal("TEST-MCP-REPL-007-1", parsed[1].Id);
+        Assert.Equal("TEST-MCP-REPL-021", parsed[1].Id);
     }
 
     [Fact]
@@ -398,8 +398,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
               **Acceptance Criteria:**
               - [ ] Path resolution is covered by a focused assertion.
               - [x] Validation evidence is retained. (evidence: RequirementsDocumentServiceTests)
-            - TEST-MCP-REPL-007-1: Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked.
-            - TEST-SUPPORT-010A-1: Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id.
+            - TEST-MCP-REPL-021: Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked.
+            - TEST-SUPPORT-016: Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id.
             """);
 
         File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """

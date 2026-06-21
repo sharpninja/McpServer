@@ -33,6 +33,33 @@ public sealed class RepoClient : McpClientBase
         return await PostAsync<RepoWriteResult>("mcpserver/repo/file", request, cancellationToken);
     }
 
+    /// <summary>FR-MCP-QBTOOLS-006: Apply a targeted string replacement to a repository file.</summary>
+    /// <param name="path">File path relative to repo root.</param>
+    /// <param name="oldString">Exact text to find.</param>
+    /// <param name="newString">Replacement text.</param>
+    /// <param name="replaceAll">When true, replaces every occurrence instead of requiring a unique match.</param>
+    /// <param name="expectedOccurrences">Optional expected match-count guard.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The edit result.</returns>
+    public async Task<RepoEditResult> EditFileAsync(
+        string path,
+        string oldString,
+        string newString,
+        bool replaceAll = false,
+        int? expectedOccurrences = null,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new RepoEditRequest
+        {
+            Path = path,
+            OldString = oldString,
+            NewString = newString,
+            ReplaceAll = replaceAll,
+            ExpectedOccurrences = expectedOccurrences,
+        };
+        return await PostAsync<RepoEditResult>("mcpserver/repo/edit", request, cancellationToken);
+    }
+
     /// <summary>List files and directories under a path.</summary>
     public async Task<RepoListResult> ListAsync(string? path = null, CancellationToken cancellationToken = default)
     {

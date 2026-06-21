@@ -1,4 +1,4 @@
-﻿// TR-PLANNED-013: Formats a single log event as Parseable-compatible JSON (per-event formatter for HTTP sink).
+﻿// TR-PLANNED-CORE-013: Formats a single log event as Parseable-compatible JSON (per-event formatter for HTTP sink).
 
 using System.Globalization;
 using System.IO;
@@ -10,7 +10,7 @@ using Serilog.Formatting;
 namespace McpServer.Support.Mcp.Logging;
 
 /// <summary>
-/// TR-PLANNED-013: Formats one log event as a single JSON object for Parseable per
+/// TR-PLANNED-CORE-013: Formats one log event as a single JSON object for Parseable per
 /// https://www.parseable.com/docs/ingest-data/programming-languages/dotnet.
 /// Used as the HTTP sink's text formatter so batched payloads use this shape.
 /// </summary>

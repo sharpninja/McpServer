@@ -25,7 +25,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
   summary: >-
-    TR-PLANNED-013: Configuration options for the ONNX embedding service.
+    TR-PLANNED-CORE-013: Configuration options for the ONNX embedding service.
 
     FR-SUPPORT-010: Controls model acquisition and inference parameters for all-MiniLM-L6-v2.
   example: []
@@ -59,7 +59,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Whether embedding generation is enabled (default true). Set false for CI or lightweight deployments.'
+  summary: 'TR-PLANNED-CORE-013: Whether embedding generation is enabled (default true). Set false for CI or lightweight deployments.'
   example: []
   syntax:
     content: public bool Enabled { get; set; }
@@ -86,7 +86,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Path to the ONNX model file. If null, uses auto-download to LocalAppData.'
+  summary: 'TR-PLANNED-CORE-013: Path to the ONNX model file. If null, uses auto-download to LocalAppData.'
   example: []
   syntax:
     content: public string? ModelPath { get; set; }
@@ -113,7 +113,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Embedding vector dimensions (default 384 for MiniLM).'
+  summary: 'TR-PLANNED-CORE-013: Embedding vector dimensions (default 384 for MiniLM).'
   example: []
   syntax:
     content: public int Dimensions { get; set; }
@@ -140,7 +140,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Maximum input sequence length in tokens (default 128).'
+  summary: 'TR-PLANNED-CORE-013: Maximum input sequence length in tokens (default 128).'
   example: []
   syntax:
     content: public int MaxSequenceLength { get; set; }
@@ -167,7 +167,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Indexing
-  summary: 'TR-PLANNED-013: Whether to auto-download the model on first use.'
+  summary: 'TR-PLANNED-CORE-013: Whether to auto-download the model on first use.'
   example: []
   syntax:
     content: public bool AutoDownload { get; set; }

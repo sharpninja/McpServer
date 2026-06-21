@@ -6,7 +6,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-013: Unit tests for TodoService CRUD operations and query filters.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for TodoService CRUD operations and query filters.</summary>
 public sealed class TodoServiceTests : IDisposable
 {
     private readonly string _tempFile;

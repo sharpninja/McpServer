@@ -24,7 +24,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Logging
-  summary: 'TR-PLANNED-013: IHttpClient implementation that POSTs to Parseable with X-P-Stream and Basic auth.'
+  summary: 'TR-PLANNED-CORE-013: IHttpClient implementation that POSTs to Parseable with X-P-Stream and Basic auth.'
   example: []
   syntax:
     content: 'public sealed class ParseableHttpClient : IHttpClient, IDisposable'
@@ -84,7 +84,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Logging
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public ParseableHttpClient(string streamName, string username, string password)

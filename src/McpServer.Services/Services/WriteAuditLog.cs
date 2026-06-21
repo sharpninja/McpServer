@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: In-memory audit log for repo writes (last N entries).
+/// TR-PLANNED-CORE-013: In-memory audit log for repo writes (last N entries).
 /// </summary>
 public sealed class WriteAuditLog : IWriteAuditLog
 {

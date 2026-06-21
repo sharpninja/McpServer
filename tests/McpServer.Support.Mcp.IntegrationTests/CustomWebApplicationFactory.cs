@@ -19,7 +19,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace McpServer.Support.Mcp.IntegrationTests;
 
-/// <summary>TR-PLANNED-013: Web application factory for MCP API integration tests.</summary>
+/// <summary>TR-PLANNED-CORE-013: Web application factory for MCP API integration tests.</summary>
 public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEntryPoint>
 {
     private static readonly string[] GuardedRepositoryPaths =

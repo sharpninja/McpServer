@@ -25,7 +25,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: A code review remediation phase.'
+  summary: 'TR-PLANNED-CORE-013: A code review remediation phase.'
   example: []
   syntax:
     content: public sealed class CodeReviewPhase

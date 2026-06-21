@@ -5,12 +5,12 @@ using Serilog.Parsing;
 
 namespace McpServer.Support.Mcp.Tests.Logging;
 
-/// <summary>TR-PLANNED-013, TR-MCP-LOG-003, TEST-MCP-098: Unit tests for ParseableEventFormatter field-cap enforcement and reserved-field preservation using synthetic Serilog log events with deterministic property names.</summary>
+/// <summary>TR-PLANNED-CORE-013, TR-MCP-LOG-003, TEST-MCP-098: Unit tests for ParseableEventFormatter field-cap enforcement and reserved-field preservation using synthetic Serilog log events with deterministic property names.</summary>
 public sealed class ParseableEventFormatterTests
 {
     private static readonly MessageTemplate s_messageTemplate = new MessageTemplateParser().Parse("Example message");
 
-    /// <summary>TR-PLANNED-013, TR-MCP-LOG-003, TEST-MCP-098: Verifies a log event with 300 scalar properties plus reserved-name collisions is capped at 250 total emitted fields so Parseable receives a compliant payload and reserved metadata fields keep their canonical values.</summary>
+    /// <summary>TR-PLANNED-CORE-013, TR-MCP-LOG-003, TEST-MCP-098: Verifies a log event with 300 scalar properties plus reserved-name collisions is capped at 250 total emitted fields so Parseable receives a compliant payload and reserved metadata fields keep their canonical values.</summary>
     [Fact]
     public void ToParseableObject_WhenPropertiesExceedMaximumFieldCount_CapsOutputAndPreservesReservedFields()
     {
@@ -29,7 +29,7 @@ public sealed class ParseableEventFormatterTests
         Assert.DoesNotContain("field246", result.Keys);
     }
 
-    /// <summary>TR-PLANNED-013, TR-MCP-LOG-003, TEST-MCP-098: Verifies formatter JSON output stays parseable and retains all available fields when the synthetic event uses only a small number of non-reserved properties, proving the cap does not truncate normal events.</summary>
+    /// <summary>TR-PLANNED-CORE-013, TR-MCP-LOG-003, TEST-MCP-098: Verifies formatter JSON output stays parseable and retains all available fields when the synthetic event uses only a small number of non-reserved properties, proving the cap does not truncate normal events.</summary>
     [Fact]
     public void Format_WhenEventIsBelowFieldLimit_WritesAllNonReservedFieldsAsJson()
     {

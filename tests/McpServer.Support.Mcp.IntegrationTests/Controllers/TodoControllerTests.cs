@@ -11,7 +11,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
-/// <summary>TR-PLANNED-013: Integration tests for TODO CRUD endpoints.</summary>
+/// <summary>TR-PLANNED-CORE-013: Integration tests for TODO CRUD endpoints.</summary>
 public sealed class TodoControllerTests : IDisposable
 {
     private readonly HttpClient _client;
@@ -670,7 +670,7 @@ public sealed class TodoControllerTests : IDisposable
 
     #region Test Factory
 
-    /// <summary>TR-PLANNED-013: WebApplicationFactory that seeds a temporary TODO.yaml.</summary>
+    /// <summary>TR-PLANNED-CORE-013: WebApplicationFactory that seeds a temporary TODO.yaml.</summary>
     public sealed class TodoWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
     {
         private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "mcp-todo-tests-" + Guid.NewGuid().ToString("N")[..8]);

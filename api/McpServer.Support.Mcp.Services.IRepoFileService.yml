@@ -23,7 +23,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
   summary: >-
-    TR-PLANNED-013: Repository file read/list/write with path allowlist.
+    TR-PLANNED-CORE-013: Repository file read/list/write with path allowlist.
 
     FR-SUPPORT-010: Path allowlist enforced; write audit log.
   example: []

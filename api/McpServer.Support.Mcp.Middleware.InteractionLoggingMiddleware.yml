@@ -22,7 +22,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Middleware
   summary: >-
-    TR-PLANNED-013: Middleware that logs every request/response with structured data
+    TR-PLANNED-CORE-013: Middleware that logs every request/response with structured data
 
     (including input/output bodies) and optionally enqueues entries for async submission
 
@@ -58,7 +58,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Middleware
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public InteractionLoggingMiddleware(RequestDelegate next, ILogger<InteractionLoggingMiddleware> logger, IOptions<McpInteractionLoggingOptions> options, IInteractionLogSubmissionChannel? channel = null)

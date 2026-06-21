@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: FTS5 full-text search implementation using SQLite's FTS5 module.
+/// TR-PLANNED-CORE-013: FTS5 full-text search implementation using SQLite's FTS5 module.
 /// FR-SUPPORT-010: BM25 ranking, snippet extraction, optional sourceType filter.
 /// </summary>
 internal sealed class Fts5SearchService : IContextSearchService
@@ -14,7 +14,7 @@ internal sealed class Fts5SearchService : IContextSearchService
     private readonly ILogger<Fts5SearchService> _logger;
     private readonly bool _isSqliteProvider;
 
-    /// <summary>TR-PLANNED-013: Constructor for DI.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor for DI.</summary>
     public Fts5SearchService(McpDbContext db, ILogger<Fts5SearchService> logger)
     {
         _db = db;

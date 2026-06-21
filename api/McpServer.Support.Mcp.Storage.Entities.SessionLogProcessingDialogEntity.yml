@@ -28,7 +28,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
   summary: >-
-    TR-PLANNED-013: 4NF processing dialog entity. One row per model reasoning/processing note
+    TR-PLANNED-CORE-013: 4NF processing dialog entity. One row per model reasoning/processing note
 
     appended during request execution. The AI model can independently append entries
 
@@ -64,7 +64,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Auto-generated primary key.'
+  summary: 'TR-PLANNED-CORE-013: Auto-generated primary key.'
   example: []
   syntax:
     content: >-
@@ -101,7 +101,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Foreign key to parent entry.'
+  summary: 'TR-PLANNED-CORE-013: Foreign key to parent entry.'
   example: []
   syntax:
     content: public long SessionLogEntryId { get; set; }
@@ -128,7 +128,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Ordinal position within the dialog sequence.'
+  summary: 'TR-PLANNED-CORE-013: Ordinal position within the dialog sequence.'
   example: []
   syntax:
     content: public int Ordinal { get; set; }
@@ -155,7 +155,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: ISO 8601 timestamp when this dialog item was recorded.'
+  summary: 'TR-PLANNED-CORE-013: ISO 8601 timestamp when this dialog item was recorded.'
   example: []
   syntax:
     content: public DateTimeOffset Timestamp { get; set; }
@@ -182,7 +182,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Role of the speaker (e.g. model, tool, system, user).'
+  summary: 'TR-PLANNED-CORE-013: Role of the speaker (e.g. model, tool, system, user).'
   example: []
   syntax:
     content: >-
@@ -228,7 +228,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Content of the processing dialog entry.'
+  summary: 'TR-PLANNED-CORE-013: Content of the processing dialog entry.'
   example: []
   syntax:
     content: >-
@@ -265,7 +265,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Optional category (e.g. reasoning, tool_call, tool_result, observation, decision).'
+  summary: 'TR-PLANNED-CORE-013: Optional category (e.g. reasoning, tool_call, tool_result, observation, decision).'
   example: []
   syntax:
     content: >-
@@ -304,7 +304,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Navigation to parent entry.'
+  summary: 'TR-PLANNED-CORE-013: Navigation to parent entry.'
   example: []
   syntax:
     content: public SessionLogEntryEntity? SessionLogEntry { get; set; }

@@ -35,7 +35,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: 'TR-PLANNED-013: A single TODO item with metadata and implementation tasks.'
+  summary: 'TR-PLANNED-CORE-013: A single TODO item with metadata and implementation tasks.'
   example: []
   syntax:
     content: public sealed class TodoItem

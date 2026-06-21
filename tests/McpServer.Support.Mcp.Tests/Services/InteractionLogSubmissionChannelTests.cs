@@ -7,7 +7,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-013: Unit tests for InteractionLogSubmissionChannel.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for InteractionLogSubmissionChannel.</summary>
 public sealed class InteractionLogSubmissionChannelTests
 {
     /// <summary>TryEnqueue accepts entry and TryDequeueAsync returns it.</summary>

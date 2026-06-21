@@ -26,7 +26,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Persisted chunk for full-text and vector retrieval.'
+  summary: 'TR-PLANNED-CORE-013: Persisted chunk for full-text and vector retrieval.'
   example: []
   syntax:
     content: public sealed class ContextChunkEntity
@@ -58,7 +58,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Unique chunk identifier.'
+  summary: 'TR-PLANNED-CORE-013: Unique chunk identifier.'
   example: []
   syntax:
     content: >-
@@ -104,7 +104,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Parent document identifier.'
+  summary: 'TR-PLANNED-CORE-013: Parent document identifier.'
   example: []
   syntax:
     content: >-
@@ -150,7 +150,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Chunk text content.'
+  summary: 'TR-PLANNED-CORE-013: Chunk text content.'
   example: []
   syntax:
     content: >-
@@ -187,7 +187,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Estimated token count.'
+  summary: 'TR-PLANNED-CORE-013: Estimated token count.'
   example: []
   syntax:
     content: public int TokenCount { get; set; }
@@ -214,7 +214,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Zero-based index within document.'
+  summary: 'TR-PLANNED-CORE-013: Zero-based index within document.'
   example: []
   syntax:
     content: public int ChunkIndex { get; set; }
@@ -241,7 +241,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Embedding vector stored as BLOB (nullable, populated during ingestion).'
+  summary: 'TR-PLANNED-CORE-013: Embedding vector stored as BLOB (nullable, populated during ingestion).'
   example: []
   syntax:
     content: public byte[]? Embedding { get; set; }

@@ -22,7 +22,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: In-memory audit log for repo writes (last N entries).'
+  summary: 'TR-PLANNED-CORE-013: In-memory audit log for repo writes (last N entries).'
   example: []
   syntax:
     content: 'public sealed class WriteAuditLog : IWriteAuditLog'

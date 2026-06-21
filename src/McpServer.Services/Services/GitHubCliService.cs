@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013, TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
+/// TR-PLANNED-CORE-013, TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
 /// </summary>
 public sealed class GitHubCliService : IGitHubCliService
 {
@@ -33,7 +33,7 @@ public sealed class GitHubCliService : IGitHubCliService
     private readonly IOptionsMonitor<GitHubIntegrationOptions>? _githubOptions;
     private readonly WorkspaceServiceAccessor? _workspaceAccessor;
 
-    /// <summary>TR-PLANNED-013: Constructor with IProcessRunner for testability.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor with IProcessRunner for testability.</summary>
     public GitHubCliService(
         IProcessRunner processRunner,
         ILogger<GitHubCliService> logger,

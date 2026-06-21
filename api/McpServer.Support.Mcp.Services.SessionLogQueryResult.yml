@@ -23,7 +23,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Paginated result of a session log query.'
+  summary: 'TR-PLANNED-CORE-013: Paginated result of a session log query.'
   example: []
   syntax:
     content: 'public sealed record SessionLogQueryResult : IEquatable<SessionLogQueryResult>'

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013: Hosted service that monitors docs/sessions/ for new and updated JSON and Markdown files.
+/// TR-PLANNED-CORE-013: Hosted service that monitors docs/sessions/ for new and updated JSON and Markdown files.
 /// When a file change is detected, the session log is re-imported into the 4NF tables.
 /// Uses a debounce window to coalesce rapid successive writes into a single import.
 /// </summary>
@@ -23,7 +23,7 @@ public sealed class SessionLogFileWatcher : IHostedService, IDisposable
     private readonly ConcurrentDictionary<string, byte> _pendingFiles = new(StringComparer.OrdinalIgnoreCase);
     private static readonly TimeSpan s_debounceInterval = TimeSpan.FromSeconds(2);
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public SessionLogFileWatcher(
         IServiceScopeFactory scopeFactory,
         IOptions<IngestionOptions> options,

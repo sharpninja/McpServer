@@ -24,7 +24,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: 'TR-PLANNED-013: Query parameters for searching TODO items.'
+  summary: 'TR-PLANNED-CORE-013: Query parameters for searching TODO items.'
   example: []
   syntax:
     content: 'public sealed record TodoQueryRequest : IEquatable<TodoQueryRequest>'

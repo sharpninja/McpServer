@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Options;
 
 /// <summary>
-/// TR-PLANNED-013: Options for sending Serilog logs to Parseable (local Docker or remote).
+/// TR-PLANNED-CORE-013: Options for sending Serilog logs to Parseable (local Docker or remote).
 /// When using Docker (scripts/Setup-Parseable.ps1), Parseable listens on port 8000 for both UI and ingestion; set Url to http://localhost:8000.
 /// </summary>
 public sealed class McpParseableOptions

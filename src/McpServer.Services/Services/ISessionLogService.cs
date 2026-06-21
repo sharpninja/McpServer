@@ -3,13 +3,13 @@ using McpServer.Support.Mcp.Models;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Service for submitting and querying session logs (MVP-SUPPORT-011).
+/// TR-PLANNED-CORE-013: Service for submitting and querying session logs (MVP-SUPPORT-011).
 /// FR-SUPPORT-010: Agents POST session log payloads; clients GET with optional filters.
 /// </summary>
 public interface ISessionLogService
 {
     /// <summary>
-    /// TR-PLANNED-013: Submit (upsert) a session log. Inserts or replaces by (SourceType, SessionId).
+    /// TR-PLANNED-CORE-013: Submit (upsert) a session log. Inserts or replaces by (SourceType, SessionId).
     /// </summary>
     /// <param name="dto">Unified session log payload conforming to the schema.</param>
     /// <param name="sourceFilePath">Full path to the source JSON file, or null for API submissions.</param>
@@ -19,7 +19,7 @@ public interface ISessionLogService
     Task<long> SubmitAsync(UnifiedSessionLogDto dto, string? sourceFilePath = null, string? contentHash = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// TR-PLANNED-013: Checks whether a session with the given key already exists with the specified content hash.
+    /// TR-PLANNED-CORE-013: Checks whether a session with the given key already exists with the specified content hash.
     /// </summary>
     /// <param name="sourceType">Agent source type.</param>
     /// <param name="sessionId">Session identifier.</param>
@@ -29,7 +29,7 @@ public interface ISessionLogService
     Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// TR-PLANNED-013: Append one or more processing dialog items to an existing turn.
+    /// TR-PLANNED-CORE-013: Append one or more processing dialog items to an existing turn.
     /// The AI model calls this on the fly to record reasoning, tool calls, and execution trace.
     /// </summary>
     /// <param name="sourceType">Agent source type.</param>
@@ -46,7 +46,7 @@ public interface ISessionLogService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// TR-PLANNED-013: Query session logs with optional filters and pagination.
+    /// TR-PLANNED-CORE-013: Query session logs with optional filters and pagination.
     /// </summary>
     /// <param name="request">Query parameters.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -54,7 +54,7 @@ public interface ISessionLogService
     Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// FR-SUPPORT-010C: Fetch a single session log by (sourceType, sessionId) within
+    /// FR-SUPPORT-013: Fetch a single session log by (sourceType, sessionId) within
     /// the current workspace context. Returns null when the session does not exist
     /// or is filtered out by tenancy.
     /// </summary>
@@ -65,7 +65,7 @@ public interface ISessionLogService
     Task<UnifiedSessionLogDto?> GetAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// FR-SUPPORT-010C: Upsert a single turn on an existing session by RequestId.
+    /// FR-SUPPORT-013: Upsert a single turn on an existing session by RequestId.
     /// Does not delete sibling turns.
     /// </summary>
     /// <param name="sourceType">Agent source type of the parent session.</param>
@@ -157,7 +157,7 @@ public interface ISessionLogService
     Task<bool> DeleteSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// FR-SUPPORT-010E: Idempotent ensure-session keyed by (sourceType, sessionId)
+    /// FR-SUPPORT-014: Idempotent ensure-session keyed by (sourceType, sessionId)
     /// within the current workspace. Creates the session with status in_progress
     /// when missing; otherwise leaves the existing session untouched.
     /// </summary>
@@ -181,7 +181,7 @@ public interface ISessionLogService
     Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default);
 }
 
-/// <summary>TR-PLANNED-013: Query parameters for session log search.</summary>
+/// <summary>TR-PLANNED-CORE-013: Query parameters for session log search.</summary>
 public sealed record SessionLogQueryRequest
 {
     /// <summary>Filter by agent source type (e.g. Cursor, Copilot).</summary>
@@ -209,7 +209,7 @@ public sealed record SessionLogQueryRequest
     public int Offset { get; init; }
 }
 
-/// <summary>TR-PLANNED-013: Paginated result of a session log query.</summary>
+/// <summary>TR-PLANNED-CORE-013: Paginated result of a session log query.</summary>
 public sealed record SessionLogQueryResult
 {
     /// <summary>Total number of matching sessions (before pagination).</summary>

@@ -17,7 +17,7 @@ public sealed class ProcessRunnerOptions
 }
 
 /// <summary>
-/// TR-PLANNED-013: Default process runner using System.Diagnostics.Process.
+/// TR-PLANNED-CORE-013: Default process runner using System.Diagnostics.Process.
 /// Applies RunAs environment and GH_TOKEN via <see cref="IProcessEnvironmentService"/>.
 /// </summary>
 public sealed class ProcessRunner(

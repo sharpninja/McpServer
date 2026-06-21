@@ -917,6 +917,24 @@ The MCP runtime SHALL keep Quad-Brain branches fail-closed unless explicit branc
 - [x] Full automatic quad orchestration is authorized only when the workspace is quad-ready and all role outputs commit successfully.
 - [x] Individual brain-slot invocation authorization still does not authorize non-Curiosity GraphRAG/cache mutation or implicit fallback model behavior.
 
+## FR-MCP-132 Accurate HTTP semantics for /mcpserver/* credential failures
+
+All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API keys. 503 Service Unavailable is returned only when the per-workspace auth-token subsystem has not yet been initialized, and per-workspace tokens rotating on restart must surface as 401, never as a blanket 503.
+**Acceptance Criteria:**
+- [x] All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API key
+- [x] 503 Service Unavailable returned only when per-workspace auth-token subsystem not initialized
+- [x] Every 503 includes Retry-After header and JSON body
+- [x] Rotated/stale API key surfaces as 401, never as blanket 503
+
+## FR-MCP-133 Readiness reflects the workspace/token subsystem
+
+The readiness endpoint /ready reports Unhealthy when no enabled workspace is registered, primary workspace has no seeded auth token, or auth-token subsystem is uninitialized. Readiness never reports Healthy while /mcpserver/* would be rejected with 503.
+**Acceptance Criteria:**
+- [x] /ready endpoint checks workspace/token subsystem readiness
+- [x] /ready reports Unhealthy when no enabled workspace registered
+- [x] /ready reports Unhealthy when primary workspace has no seeded auth token
+- [x] /ready never reports Healthy while /mcpserver/* would return 503
+
 ## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
 
 The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
@@ -943,6 +961,16 @@ The system SHALL expose an explicit ACID-compliant, tightly coupled hosted-agent
 - [x] The ACID profile requires authentication, workspace scoping, session-turn boundaries, durable audit, transaction-required mutation policy, and serialized model tool invocation.
 - [x] Generic passthrough, shell, desktop, repository-write, TODO-mutation, and GraphRAG-mutation tools are not exposed by default in the ACID profile.
 - [x] Default hosted-agent registration remains backward compatible when the ACID profile is not selected.
+
+## FR-MCP-137 Quad Brain coding agent execution
+
+Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes coding tasks through QuadBrain orchestration, never bypassing the Quad Brain transaction/admission contract. ACID profile includes Quad Brain coding tool while excluding generic passthrough and other uncontrolled tools.
+**Acceptance Criteria:**
+- [x] Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
+- [x] Tool calls McpServerClient.BrainSlots.OrchestrateAsync with coding metadata
+- [x] Tool never bypasses Quad Brain transaction/admission contract
+- [x] ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools
+- [x] Host code can execute same coding-agent path through typed runtime method
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
@@ -1085,6 +1113,24 @@ QuadBrain SHALL execute MCP-internal tools (those exposed by McpServer itself - 
 - [ ] A concrete executor routes TODO and Requirements mutations through the transaction-gated services so the AoT commit applies them server-side.
 - [ ] QuadBrain orchestration performs the Session Log write for the turn including internal-tool failure entries.
 
+## FR-MCP-QBEXEC-002 Concrete QuadBrain internal-tool executor
+
+QuadBrain SHALL provide a concrete IQuadBrainInternalToolExecutor (replacing the default NoopInternalToolExecutor) that routes MCP-internal tool calls - mcp_todo_*, mcp_requirements_*, mcp_repo_write, mcp_repo_edit, and mutating mcp_git - through the existing transaction-gated services (TransactionGatedTodoMutationService, the transaction-gated requirements document service, and TransactionGatedRepoFileService) so each mutation commits through the turn transaction coordinator, and maps each result to InternalToolExecutionOutcome.Ok/Fail/Unhandled.
+**Acceptance Criteria:**
+- [ ] mcp_todo_update / mcp_todo_create / mcp_todo_delete route through ITransactionGatedTodoMutationService and commit via the coordinator.
+- [ ] mcp_requirements_* mutations route through the transaction-gated requirements document service.
+- [ ] mcp_repo_write and mcp_repo_edit route through TransactionGatedRepoFileService with snapshot rollback on transaction reject.
+- [ ] An unknown mcp_ tool returns InternalToolExecutionOutcome.Unhandled (left for the agent), and the executor replaces NoopInternalToolExecutor in DI.
+
+## FR-MCP-QBEXEC-003 Full-fidelity inter-brain session logging
+
+QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
+**Acceptance Criteria:**
+- [ ] Each brain-slot invocation writes full prompt + full output text to the session log (not only SHA-256 hashes), under the correct TurnId.
+- [ ] AoT reconciliation input and output are logged in full to the session log.
+- [ ] Internal-tool executed and failed outcomes (interception Executed/Failed) are recorded to the session log as the turn proceeds.
+- [ ] Secret values (api keys, bearer tokens) are redacted before logging; the existing hashed BrainSlotInvocationEntity audit row is retained as the durable index.
+
 ## FR-MCP-QBOPENAI-001 QuadBrain OpenAI-compatible chat-completions endpoint
 
 QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (chat/completions shape) backed by QuadBrain orchestration, accepting standard OpenAI chat messages and tool/function definitions and returning OpenAI-shaped completions - including assistant tool_calls when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent (FR-MCP-QBAGENT-001) consumes this endpoint as its IChatClient and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.
@@ -1093,6 +1139,92 @@ QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (c
 - [x] Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.
 - [x] Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.
 - [x] QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.
+
+## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
+
+The server provisions the four GLOBAL Quad-Brain roles (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, as a single global set. The /v1 OpenAI-compatible endpoint resolves the caller workspace from its token to scope server-side internal-tool mutations, not brain-slot visibility (brains are global).
+**Acceptance Criteria:**
+- [x] When Mcp:BrainSlots:ExecutionEnabled is true and Slots is populated, the startup seeder upserts and enables each configured slot as a single global set and the quad becomes ready in every workspace context.
+- [x] Provisioning is idempotent across restarts and does not abort host startup when a single slot definition is invalid.
+- [x] When execution is disabled or no slots are configured, the seeder provisions nothing.
+- [x] A /v1/chat/completions request runs the real four-role orchestration over the global brains; the token workspace scopes only the internal-tool mutations.
+
+## FR-MCP-QBSKILLS-001 Agent Skills registry and progressive disclosure
+
+QBAgent provides an agentskills.io-compatible skill registry/loader. Discovery loads only each skill name+description; Activation loads the full SKILL.md on demand; Execution follows the instructions using the baseline tools. SKILL.md frontmatter requires name and description (optional license/version/allowed-tools).
+**Acceptance Criteria:**
+- [ ] Discovery returns only name+description for every available skill; load returns the full SKILL.md body.
+- [ ] A SKILL.md missing name or description is rejected by the manifest parser.
+
+## FR-MCP-QBSKILLS-002 Skill tool (list_skills / load_skill)
+
+QBAgent exposes external tools list_skills and load_skill(name) so the model can discover and activate skills at runtime under progressive disclosure.
+**Acceptance Criteria:**
+- [ ] list_skills returns the discovery list; load_skill returns the named skill body.
+
+## FR-MCP-QBSKILLS-003 Vendor dotnet/skills and author workspace skills
+
+The repo vendors dotnet/skills (agentskills.io) and authors workspace skills in SKILL.md format: byrd-tdd-process, mcp-session-logging, mcp-todo, mcp-requirements-traceability, and usage skills for the git/bash/edit tools. Discovery scans both vendored and workspace skill roots.
+**Acceptance Criteria:**
+- [ ] Discovery includes both vendored dotnet/skills and authored workspace skills.
+- [ ] Authored workspace SKILL.md files pass frontmatter validation.
+
+## FR-MCP-QBTOOLS-001 QBAgent external file tools
+
+QBAgent exposes agent-side external tools read_file, write_file, edit_file, and list_files that operate on the workspace through the MCP client (server RepoFileService), so the server path-traversal/reparse/allowlist safety governs all file access from both planes.
+**Acceptance Criteria:**
+- [ ] read_file/write_file/edit_file/list_files are registered as non-mcp_ external AITools and execute in the QBAgent loop.
+- [ ] All four route through the MCP client to the server RepoFileService; path traversal and out-of-root access are rejected server-side.
+
+## FR-MCP-QBTOOLS-002 QBAgent run_powershell tool
+
+QBAgent exposes a run_powershell external tool backed by the in-process HostedPowerShellSessionManager runspace, returning output/error/exit streams.
+**Acceptance Criteria:**
+- [ ] run_powershell executes a command in a hosted runspace and returns captured output and error streams.
+
+## FR-MCP-QBTOOLS-003 QBAgent run_bash tool (optional Git Bash)
+
+QBAgent exposes an optional run_bash external tool that resolves bash.exe (Git for Windows) from PATH via ProcessRunner; when bash is unavailable it returns a structured unavailable result rather than failing the agent. PowerShell remains primary.
+**Acceptance Criteria:**
+- [ ] When bash.exe is present, run_bash executes a command and returns stdout/stderr/exit code.
+- [ ] When bash.exe is absent, run_bash returns available=false without throwing.
+
+## FR-MCP-QBTOOLS-004 QBAgent git tool (full, push to origin)
+
+QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing Azure DevOps origin remote only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
+**Acceptance Criteria:**
+- [ ] Read subcommands (status/diff/log/branch) run against the workspace repo and return output.
+- [ ] add/commit/checkout/reset/push are supported; push targets origin only and never a non-origin remote.
+- [ ] Unknown subcommands are rejected.
+
+## FR-MCP-QBTOOLS-005 Server-side mcp_repo_edit, mcp_bash, mcp_git tools
+
+The MCP tool adapter exposes server-side mcp_repo_edit, mcp_bash, and mcp_git tools (mcp_ prefix) executed server-side by QuadBrain via the internal-tool executor; mutating variants are transaction-gated. One core implementation per capability is shared with the agent-side external tools.
+**Acceptance Criteria:**
+- [ ] mcp_repo_edit/mcp_bash/mcp_git are present in the adapter tool surface with mcp_ prefix.
+- [ ] Mutating mcp_ tools are gated through the turn transaction coordinator and share the single core capability with the external plane.
+
+## FR-MCP-QBTOOLS-006 RepoFileService targeted edit
+
+IRepoFileService gains EditAsync(relativePath, oldString, newString, expectedOccurrences?) performing a targeted string replacement with the same path-safety, audit, and change-event behavior as Write; ambiguous or missing matches fail; transactional compensation reuses the snapshot/restore path.
+**Acceptance Criteria:**
+- [ ] A unique oldString is replaced; a missing oldString fails; an ambiguous match fails unless replaceAll/expectedOccurrences is set.
+- [ ] Transaction-gated EditAsync rolls back to the original content when the transaction is rejected.
+
+## FR-MCP-QBTOOLS-007 QBAgent registers full tool and skill surface
+
+QBAgent registers the full external tool set (file/powershell/bash/git) plus the skill tools on every run via baseOptions.ChatOptions.Tools, and injects the skill discovery list into the system prompt.
+**Acceptance Criteria:**
+- [ ] Every QBAgent run exposes the external tool set and the skill tools to the Agent Framework loop.
+
+## FR-MCP-QUAD-SESSION-001 Per-session QuadBrain instances over global brains
+
+QuadBrain brain definitions are global, but a running orchestration is an instance attached to a single session; multiple instances may run concurrently, each bound to its own session. A /v1/chat/completions request declares its session via the X-Session-Id header (optional X-Turn-Id), and the server threads that session and turn into the orchestration so inter-brain logging, internal-tool-failure logging, and turn transactions are correlated and concurrent instances stay isolated.
+**Acceptance Criteria:**
+- [x] A /v1 request X-Session-Id (and optional X-Turn-Id) header is threaded into the orchestration request metadata (sessionId/turnId) and TurnId.
+- [x] Inter-brain logging and internal-tool-failure logging use the attached session/turn and are a no-op when absent.
+- [x] A request with no X-Session-Id attaches no session metadata and runs as an anonymous instance.
+- [x] Multiple concurrent /v1 requests with different X-Session-Id values are independent instances over the shared global brains.
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
@@ -1235,6 +1367,48 @@ The session-log API SHALL expose stateless open/begin/complete/fail lifecycle op
 ## FR-SUPPORT-010F Additive partial session-log submits
 
 Whole-session submit SHALL merge additively: omitted session and turn fields never overwrite previously persisted values.
+
+## FR-SUPPORT-011 SessionLog Workspace Stamping
+
+Session log POST shall stamp the resolved workspace ID on every persisted row (parent SessionLog plus all child entities: turns, actions, tags, context items, processing dialog, commits, string-list items) so a POST followed by a GET under the same workspace context returns the same record. When no workspace context is resolved (ingestion / batch import paths), WorkspaceId defaults to empty string and the DbContext-level auto-stamp populates it from _workspaceId if available.
+**Acceptance Criteria:**
+- [ ] Session log POST stamps resolved workspace ID on parent and all child entities
+- [ ] POST followed by GET under same workspace returns same record with workspace ID preserved
+- [ ] When no workspace context is resolved, WorkspaceId defaults to empty string and DbContext auto-stamp populates from _workspaceId if available
+
+## FR-SUPPORT-012 SessionLog ProblemDetails Errors
+
+Session log POST shall return RFC 7807 ProblemDetails on body-binding or validation failure. Error responses cite the offending JSON path under errors, never the action-parameter name. Content-Type is application/problem+json. The accepted top-level shape is documented in the response detail.
+**Acceptance Criteria:**
+- [ ] Session log POST returns RFC 7807 ProblemDetails on body-binding failure
+- [ ] Session log POST returns RFC 7807 ProblemDetails on validation failure
+- [ ] Error responses cite offending JSON path under errors, not action-parameter name
+- [ ] Content-Type is application/problem+json and accepted top-level shape is documented in response detail
+
+## FR-SUPPORT-013 SessionLog REST Surface Completion
+
+Session log REST shall expose GET /mcpserver/sessionlog/{agent}/{sessionId} (single-record fetch under tenancy) and POST /mcpserver/sessionlog/{agent}/{sessionId}/turn (turn-append by RequestId). Unsupported verbs return 405 Method Not Allowed with Allow header. Terminal-turn audit-evidence gate enforced only for Quad-Brain ACID hosted-agent source type (QBAgent), not standard agents.
+**Acceptance Criteria:**
+- [ ] GET /mcpserver/sessionlog/{agent}/{sessionId} returns single-record fetch under tenancy
+- [ ] POST /mcpserver/sessionlog/{agent}/{sessionId}/turn appends turn by RequestId
+- [ ] Unsupported verbs return 405 Method Not Allowed with Allow header
+- [ ] Terminal-turn audit-evidence gate enforced only for QBAgent (ACID hosted-agent), not standard agents
+
+## FR-SUPPORT-014 Stateless session lifecycle endpoints
+
+The session-log API shall expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
+**Acceptance Criteria:**
+- [ ] Session-log API exposes stateless open/begin/complete/fail lifecycle operations
+- [ ] Lifecycle operations are keyed by (agent, sessionId, requestId) tuple
+- [ ] Operations require no in-process active-session state to function
+
+## FR-SUPPORT-015 Additive partial session-log submits
+
+Whole-session submit shall merge additively: omitted session and turn fields never overwrite previously persisted values. This ensures partial updates preserve existing state.
+**Acceptance Criteria:**
+- [ ] Whole-session submit merges additively without overwriting omitted fields
+- [ ] Omitted session fields are never overwritten during additive merge
+- [ ] Omitted turn fields are never overwritten during additive merge
 
 ## FR-TEST-002 FR-TEST-002
 

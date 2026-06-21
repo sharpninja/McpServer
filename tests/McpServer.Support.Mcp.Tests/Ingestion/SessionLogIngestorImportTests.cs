@@ -11,7 +11,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-013: Tests for SessionLogIngestor.ImportToSessionLogTablesAsync (MVP-SUPPORT-011).</summary>
+/// <summary>TR-PLANNED-CORE-013: Tests for SessionLogIngestor.ImportToSessionLogTablesAsync (MVP-SUPPORT-011).</summary>
 public sealed class SessionLogIngestorImportTests : IDisposable
 {
     private readonly McpDbContext _db;

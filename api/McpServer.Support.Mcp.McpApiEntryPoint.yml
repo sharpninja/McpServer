@@ -19,7 +19,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp
-  summary: 'TR-PLANNED-013: Marker type for WebApplicationFactory (integration tests).'
+  summary: 'TR-PLANNED-CORE-013: Marker type for WebApplicationFactory (integration tests).'
   example: []
   syntax:
     content: public sealed class McpApiEntryPoint

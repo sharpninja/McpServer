@@ -5,7 +5,7 @@ using System.IO.Enumeration;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013/TR-MCP-DESKTOP-001: Shared segment-wise glob matcher used by repo and
+/// TR-PLANNED-CORE-013/TR-MCP-DESKTOP-001: Shared segment-wise glob matcher used by repo and
 /// desktop-launch path allowlists.
 /// </summary>
 internal static class PathGlobMatcher
@@ -13,7 +13,7 @@ internal static class PathGlobMatcher
     private static readonly char[] s_trimSlashChars = ['/', '\\'];
 
     /// <summary>
-    /// TR-PLANNED-013/TR-MCP-DESKTOP-001: Returns whether the candidate path matches any configured glob pattern.
+    /// TR-PLANNED-CORE-013/TR-MCP-DESKTOP-001: Returns whether the candidate path matches any configured glob pattern.
     /// </summary>
     /// <param name="candidatePath">Candidate path to evaluate.</param>
     /// <param name="patterns">Glob patterns using <c>*</c>, <c>?</c>, and <c>**</c> semantics.</param>
@@ -33,7 +33,7 @@ internal static class PathGlobMatcher
     }
 
     /// <summary>
-    /// TR-PLANNED-013/TR-MCP-DESKTOP-001: Returns whether the directory path is an ancestor
+    /// TR-PLANNED-CORE-013/TR-MCP-DESKTOP-001: Returns whether the directory path is an ancestor
     /// of any configured glob pattern.
     /// </summary>
     /// <param name="directoryPath">Directory path to evaluate.</param>

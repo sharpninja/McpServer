@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations;
 namespace McpServer.Support.Mcp.Storage.Entities;
 
 /// <summary>
-/// TR-PLANNED-013: 4NF commit entity. One row per git commit within a session log entry.
+/// TR-PLANNED-CORE-013: 4NF commit entity. One row per git commit within a session log entry.
 /// FR-SUPPORT-010: Eliminates multi-valued dependency on commits.
 /// </summary>
 public sealed class SessionLogCommitEntity
 {
-    /// <summary>TR-PLANNED-013: Auto-generated primary key.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Auto-generated primary key.</summary>
     [Key]
     public long Id { get; set; }
 
     /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
     public string WorkspaceId { get; set; } = string.Empty;
 
-    /// <summary>TR-PLANNED-013: Foreign key to parent entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Foreign key to parent entry.</summary>
     public long SessionLogTurnId { get; set; }
 
     /// <summary>Ordinal position within the entry's commit list.</summary>
@@ -42,7 +42,7 @@ public sealed class SessionLogCommitEntity
     /// <summary>JSON-serialized list of file paths changed in this commit.</summary>
     public string? FilesChangedJson { get; set; }
 
-    /// <summary>TR-PLANNED-013: Navigation to parent entry.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Navigation to parent entry.</summary>
     public SessionLogTurnEntity? SessionLogTurn { get; set; }
 }
 

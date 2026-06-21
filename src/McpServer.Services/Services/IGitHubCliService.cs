@@ -3,7 +3,7 @@ using McpServer.Support.Mcp.Models;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013, TR-GH-013-001: Wrapper for GitHub CLI (gh) for issues and PRs.
+/// TR-PLANNED-CORE-013, TR-GH-013-001: Wrapper for GitHub CLI (gh) for issues and PRs.
 /// FR-SUPPORT-010, FR-SUPPORT-013: Uses existing local gh auth.
 /// </summary>
 public interface IGitHubCliService
@@ -99,40 +99,40 @@ public interface IGitHubCliService
     Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default);
 }
 
-/// <summary>TR-PLANNED-013: Result of listing issues.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of listing issues.</summary>
 /// <param name="Success">Whether the gh command succeeded.</param>
 /// <param name="Error">Error message if <paramref name="Success"/> is <see langword="false"/>.</param>
 /// <param name="Issues">List of issue items.</param>
 public sealed record GitHubIssueListResult(bool Success, string? Error, IReadOnlyList<GitHubIssueItem> Issues);
 
-/// <summary>TR-PLANNED-013: Single issue item.</summary>
+/// <summary>TR-PLANNED-CORE-013: Single issue item.</summary>
 /// <param name="Number">Issue number.</param>
 /// <param name="Title">Issue title.</param>
 /// <param name="Url">Issue URL on GitHub.</param>
 /// <param name="State">Issue state (open, closed).</param>
 public sealed record GitHubIssueItem(int Number, string Title, string? Url, string? State);
 
-/// <summary>TR-PLANNED-013: Result of listing PRs.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of listing PRs.</summary>
 /// <param name="Success">Whether the gh command succeeded.</param>
 /// <param name="Error">Error message if <paramref name="Success"/> is <see langword="false"/>.</param>
 /// <param name="Pulls">List of pull request items.</param>
 public sealed record GitHubPullListResult(bool Success, string? Error, IReadOnlyList<GitHubPullItem> Pulls);
 
-/// <summary>TR-PLANNED-013: Single PR item.</summary>
+/// <summary>TR-PLANNED-CORE-013: Single PR item.</summary>
 /// <param name="Number">Pull request number.</param>
 /// <param name="Title">Pull request title.</param>
 /// <param name="Url">Pull request URL on GitHub.</param>
 /// <param name="State">Pull request state (open, closed, merged).</param>
 public sealed record GitHubPullItem(int Number, string Title, string? Url, string? State);
 
-/// <summary>TR-PLANNED-013: Result of creating an issue.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of creating an issue.</summary>
 /// <param name="Success">Whether the issue was created.</param>
 /// <param name="Number">New issue number, or <see langword="null"/> on failure.</param>
 /// <param name="Url">New issue URL, or <see langword="null"/> on failure.</param>
 /// <param name="Error">Error message on failure.</param>
 public sealed record GitHubCreateIssueResult(bool Success, int? Number, string? Url, string? Error);
 
-/// <summary>TR-PLANNED-013: Result of adding a comment.</summary>
+/// <summary>TR-PLANNED-CORE-013: Result of adding a comment.</summary>
 /// <param name="Success">Whether the comment was added.</param>
 /// <param name="Error">Error message on failure.</param>
 public sealed record GitHubCommentResult(bool Success, string? Error);

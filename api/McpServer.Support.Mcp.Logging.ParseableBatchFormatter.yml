@@ -22,7 +22,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Logging
   summary: >-
-    TR-PLANNED-013: Formats Serilog batches for Parseable ingest API per
+    TR-PLANNED-CORE-013: Formats Serilog batches for Parseable ingest API per
 
     https://www.parseable.com/docs/ingest-data/programming-languages/dotnet.
 

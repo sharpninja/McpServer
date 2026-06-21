@@ -1,4 +1,4 @@
-// TR-PLANNED-013: Wraps System.Net.Http.HttpClient to implement Serilog.Sinks.Http.IHttpClient for Parseable ingest (custom headers).
+// TR-PLANNED-CORE-013: Wraps System.Net.Http.HttpClient to implement Serilog.Sinks.Http.IHttpClient for Parseable ingest (custom headers).
 
 using System.IO;
 using System.Net.Http;
@@ -10,7 +10,7 @@ using Serilog;
 namespace McpServer.Support.Mcp.Logging;
 
 /// <summary>
-/// TR-PLANNED-013: IHttpClient implementation that POSTs to Parseable with X-P-Stream and Basic auth.
+/// TR-PLANNED-CORE-013: IHttpClient implementation that POSTs to Parseable with X-P-Stream and Basic auth.
 /// </summary>
 public sealed class ParseableHttpClient : Serilog.Sinks.Http.IHttpClient, IDisposable
 {
@@ -19,7 +19,7 @@ public sealed class ParseableHttpClient : Serilog.Sinks.Http.IHttpClient, IDispo
 
     private readonly HttpClient _httpClient;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <param name="streamName">Parseable stream name (X-P-Stream header).</param>
     /// <param name="username">Basic auth username.</param>
     /// <param name="password">Basic auth password.</param>

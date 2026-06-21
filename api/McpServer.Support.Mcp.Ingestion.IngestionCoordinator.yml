@@ -22,7 +22,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
   summary: >-
-    TR-PLANNED-013, TR-GH-013-004: Runs repo, session-log, and issue ingestion, persists to McpDbContext.
+    TR-PLANNED-CORE-013, TR-GH-013-004: Runs repo, session-log, and issue ingestion, persists to McpDbContext.
 
     FR-SUPPORT-010: Records sync status for sync.run / sync.status. Generates embeddings for vector search.
   example: []
@@ -56,7 +56,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Ingestion
-  summary: 'TR-PLANNED-013: Constructor.'
+  summary: 'TR-PLANNED-CORE-013: Constructor.'
   example: []
   syntax:
     content: public IngestionCoordinator(McpDbContext db, RepoIngestor repoIngestor, SessionLogIngestor sessionLogIngestor, ExternalDocsIngestor externalDocsIngestor, GitHubIngestor gitHubIngestor, IssueIngestor issueIngestor, ISyncStatusStore syncStatusStore, IEmbeddingService embeddingService, IVectorIndexService vectorIndexService, ILogger<IngestionCoordinator> logger)

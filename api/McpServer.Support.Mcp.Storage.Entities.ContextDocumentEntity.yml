@@ -26,7 +26,7 @@ items:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
   summary: >-
-    TR-PLANNED-013: Persisted document record for MCP indexing.
+    TR-PLANNED-CORE-013: Persisted document record for MCP indexing.
 
     FR-SUPPORT-010: Stored in SQLite for full-text and metadata.
   example: []
@@ -60,7 +60,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Unique document identifier.'
+  summary: 'TR-PLANNED-CORE-013: Unique document identifier.'
   example: []
   syntax:
     content: >-
@@ -152,7 +152,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Source path or URL.'
+  summary: 'TR-PLANNED-CORE-013: Source path or URL.'
   example: []
   syntax:
     content: >-
@@ -225,7 +225,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Storage.Entities
-  summary: 'TR-PLANNED-013: Hash for change detection.'
+  summary: 'TR-PLANNED-CORE-013: Hash for change detection.'
   example: []
   syntax:
     content: >-

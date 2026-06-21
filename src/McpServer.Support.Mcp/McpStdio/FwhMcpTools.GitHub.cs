@@ -20,7 +20,7 @@ public sealed partial class FwhMcpTools
 {
     // ── GROUP C: GitHub tools ────────────────────────────────────────────
 
-    /// <summary>TR-PLANNED-013: List GitHub issues.</summary>
+    /// <summary>TR-PLANNED-CORE-013: List GitHub issues.</summary>
     [McpServerTool(Name = "github_list_issues"), Description("List GitHub issues. Optional state filter and limit.")]
     public async Task<string> GitHubListIssues(
         [Description("State filter (open/closed/all)")] string? state = null,
@@ -40,7 +40,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: List GitHub pull requests.</summary>
+    /// <summary>TR-PLANNED-CORE-013: List GitHub pull requests.</summary>
     [McpServerTool(Name = "github_list_pulls"), Description("List GitHub pull requests. Optional state filter and limit.")]
     public async Task<string> GitHubListPulls(
         [Description("State filter (open/closed/all)")] string? state = null,
@@ -60,7 +60,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Create a GitHub issue.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Create a GitHub issue.</summary>
     [McpServerTool(Name = "github_create_issue"), Description("Create a GitHub issue with title and optional body.")]
     public async Task<string> GitHubCreateIssue(
         [Description("Issue title")] string title,
@@ -80,7 +80,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Comment on a GitHub issue.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Comment on a GitHub issue.</summary>
     [McpServerTool(Name = "github_comment_issue"), Description("Add a comment to a GitHub issue.")]
     public async Task<string> GitHubCommentIssue(
         [Description("Issue number or id")] string issueId,
@@ -100,7 +100,7 @@ public sealed partial class FwhMcpTools
         }
     }
 
-    /// <summary>TR-PLANNED-013: Comment on a GitHub pull request.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Comment on a GitHub pull request.</summary>
     [McpServerTool(Name = "github_comment_pull"), Description("Add a comment to a GitHub pull request.")]
     public async Task<string> GitHubCommentPull(
         [Description("PR number or id")] string prId,

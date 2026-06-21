@@ -71,6 +71,8 @@ public sealed class QuadBrainOpenAiAuthTests
     {
         public Task<OpenAiChatCompletionResponse> CompleteAsync(
             OpenAiChatCompletionRequest request,
+            string? sessionId = null,
+            string? turnId = null,
             CancellationToken cancellationToken = default)
             => Task.FromResult(new OpenAiChatCompletionResponse
             {

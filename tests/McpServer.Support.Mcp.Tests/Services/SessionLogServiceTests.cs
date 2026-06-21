@@ -11,7 +11,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-013: Unit tests for SessionLogService submit and query (MVP-SUPPORT-011).</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for SessionLogService submit and query (MVP-SUPPORT-011).</summary>
 public sealed class SessionLogServiceTests : IDisposable
 {
     private const string WorkspacePath = @"E:\tests\sessionlog-service";
@@ -29,7 +29,7 @@ public sealed class SessionLogServiceTests : IDisposable
         _db.Database.EnsureCreated();
         _db.OverrideWorkspaceId(WorkspacePath);
         _eventBus = Substitute.For<IChangeEventBus>();
-        // TR-MCP-MT-003A: default fixture mirrors the production wiring with a
+        // TR-MCP-MT-004: default fixture mirrors the production wiring with a
         // WorkspaceContext so SubmitAsync stamps WorkspaceId on every row; the
         // global query filter on read then matches and existing tests keep working.
         _sut = new SessionLogService(
@@ -666,7 +666,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// TR-MCP-MT-003A: SubmitAsync must stamp the resolved workspace context onto the
+    /// TR-MCP-MT-004: SubmitAsync must stamp the resolved workspace context onto the
     /// persisted SessionLogEntity so subsequent reads under the same workspace context
     /// are not hidden by the global query filter.
     /// </summary>
@@ -686,7 +686,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// TR-MCP-MT-003A: Child entities (turns, actions, tags, context items, dialog,
+    /// TR-MCP-MT-004: Child entities (turns, actions, tags, context items, dialog,
     /// commits, string-list items) must also carry the parent's WorkspaceId so they
     /// pass the per-entity query filters at <see cref="McpDbContext.OnModelCreating"/>.
     /// </summary>
@@ -737,7 +737,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// TR-MCP-MT-003A: When no workspace context is injected (ingestion / batch import
+    /// TR-MCP-MT-004: When no workspace context is injected (ingestion / batch import
     /// path) and the DbContext has no workspace override either, WorkspaceId must
     /// default to empty string and not crash. Uses a dedicated DbContext so the
     /// fixture-level <see cref="McpDbContext.OverrideWorkspaceId"/> does not auto-fill
@@ -901,7 +901,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> creates a new turn on an existing
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> creates a new turn on an existing
     /// session without deleting any sibling turns. Guards the per-turn helper
     /// against the delete-stale behavior of the full-session upsert.
     /// </summary>
@@ -945,7 +945,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> persists structured turn fields so
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> persists structured turn fields so
     /// agents do not have to fold audit data into the response text.
     /// </summary>
     [Fact]
@@ -997,7 +997,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> on an existing requestId updates the
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> on an existing requestId updates the
     /// row in place rather than inserting a duplicate.
     /// </summary>
     [Fact]
@@ -1032,7 +1032,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: Incremental per-turn updates preserve existing structured
+    /// FR-SUPPORT-013: Incremental per-turn updates preserve existing structured
     /// child rows when the later DTO omits those collections.
     /// </summary>
     [Fact]
@@ -1090,7 +1090,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> rejects terminal turn states without
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> rejects terminal turn states without
     /// decision, action, or commit evidence ONLY for Quad-Brain ACID agent sessions
     /// (SourceType <c>QBAgent</c> = <c>McpHostedAgentDefaults.QBAgentSourceType</c>).
     /// </summary>
@@ -1119,7 +1119,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> allows a standard (non-Quad-Brain) agent
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> allows a standard (non-Quad-Brain) agent
     /// session to close a terminal turn without decision, action, or commit evidence.
     /// The ACID compliance gate must not leak into the standard session-log endpoints.
     /// </summary>
@@ -1144,7 +1144,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> throws when the parent session does
+    /// FR-SUPPORT-013: <c>UpsertTurnAsync</c> throws when the parent session does
     /// not exist so the controller can map to 404.
     /// </summary>
     [Fact]
@@ -1164,7 +1164,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010A: After submit, <c>GetAsync</c> by (sourceType, sessionId)
+    /// FR-SUPPORT-011: After submit, <c>GetAsync</c> by (sourceType, sessionId)
     /// returns the same record under the same workspace context.
     /// </summary>
     [Fact]
@@ -1182,7 +1182,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010A: <c>GetAsync</c> returns null for a session that does not
+    /// FR-SUPPORT-011: <c>GetAsync</c> returns null for a session that does not
     /// exist (controller maps to 404).
     /// </summary>
     [Fact]
@@ -1389,7 +1389,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010D isolation guard: with child query filters removed, dialog append
+    /// FR-SUPPORT-016 isolation guard: with child query filters removed, dialog append
     /// keyed by (sourceType, sessionId, requestId) must still resolve the turn through
     /// the workspace-filtered parent session and never touch another workspace's turn
     /// that shares the same identifiers.
@@ -1486,7 +1486,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010F: whole-session submit is ADDITIVE. Omitted session scalars
+    /// FR-SUPPORT-015: whole-session submit is ADDITIVE. Omitted session scalars
     /// (title, model) survive a partial submit; supplied scalars update.
     /// </summary>
     [Fact]
@@ -1523,7 +1523,7 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
-    /// FR-SUPPORT-010F: re-submitting an existing turn through whole-session submit
+    /// FR-SUPPORT-015: re-submitting an existing turn through whole-session submit
     /// merges instead of clobbering - omitted turn scalars (response, queryText)
     /// survive; previously appended collections survive.
     /// </summary>

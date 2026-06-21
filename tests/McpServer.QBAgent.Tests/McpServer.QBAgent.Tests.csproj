@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.QBAgent\McpServer.QBAgent.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.QBAgent.Tools\McpServer.QBAgent.Tools.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

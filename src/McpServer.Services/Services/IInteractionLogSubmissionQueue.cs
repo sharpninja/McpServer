@@ -3,7 +3,7 @@ using McpServer.Support.Mcp.Models;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Channel for enqueueing interaction log entries to be submitted asynchronously to a logging service.
+/// TR-PLANNED-CORE-013: Channel for enqueueing interaction log entries to be submitted asynchronously to a logging service.
 /// </summary>
 public interface IInteractionLogSubmissionChannel
 {

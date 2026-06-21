@@ -3,7 +3,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
-/// <summary>TR-PLANNED-013: Integration tests for the default API-key issuance endpoint.</summary>
+/// <summary>TR-PLANNED-CORE-013: Integration tests for the default API-key issuance endpoint.</summary>
 public sealed class ApiKeyEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;

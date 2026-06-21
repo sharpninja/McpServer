@@ -3,7 +3,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-013: Unit tests for MarkdownSessionLogParser.</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for MarkdownSessionLogParser.</summary>
 public sealed class MarkdownSessionLogParserTests
 {
     [Fact]

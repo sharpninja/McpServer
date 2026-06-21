@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// TR-PLANNED-013: Context retrieval endpoints for MCP.
+/// TR-PLANNED-CORE-013: Context retrieval endpoints for MCP.
 /// FR-SUPPORT-010: Hybrid search and deterministic context packs.
 /// </summary>
 [ApiController]
@@ -32,7 +32,7 @@ public sealed class ContextController : ControllerBase
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     public ContextController(
         McpDbContext db,
         IContextSearchService searchService,
@@ -51,7 +51,7 @@ public sealed class ContextController : ControllerBase
         _transactionOptions = transactionOptions;
     }
 
-    /// <summary>TR-PLANNED-013: Hybrid search with filters (context.search).</summary>
+    /// <summary>TR-PLANNED-CORE-013: Hybrid search with filters (context.search).</summary>
     /// <param name="request">Search request body.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Search results.</returns>
@@ -122,7 +122,7 @@ public sealed class ContextController : ControllerBase
         });
     }
 
-    /// <summary>TR-PLANNED-013: Rebuild the FTS5 search index.</summary>
+    /// <summary>TR-PLANNED-CORE-013: Rebuild the FTS5 search index.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Status of the rebuild operation.</returns>
     [HttpPost("rebuild-index")]
@@ -182,7 +182,7 @@ public sealed class ContextController : ControllerBase
         });
     }
 
-    /// <summary>TR-PLANNED-013: List indexed sources (context.sources).</summary>
+    /// <summary>TR-PLANNED-CORE-013: List indexed sources (context.sources).</summary>
     [HttpGet("sources")]
     public async Task<ActionResult<object>> GetSourcesAsync(CancellationToken cancellationToken)
     {
@@ -356,7 +356,7 @@ public sealed class ContextController : ControllerBase
         => status.Enabled && (_transactionOptions?.Value.RequiredForMutations ?? true);
 }
 
-/// <summary>Request for context search. TR-PLANNED-013.</summary>
+/// <summary>Request for context search. TR-PLANNED-CORE-013.</summary>
 public sealed class ContextSearchRequest
 {
     /// <summary>Search query text.</summary>

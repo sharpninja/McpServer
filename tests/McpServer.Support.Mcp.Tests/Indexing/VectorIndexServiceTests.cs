@@ -4,7 +4,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Indexing;
 
-/// <summary>TR-PLANNED-013: Unit tests for VectorIndexService (HNSW).</summary>
+/// <summary>TR-PLANNED-CORE-013: Unit tests for VectorIndexService (HNSW).</summary>
 public sealed class VectorIndexServiceTests : IDisposable
 {
     private readonly VectorIndexService _sut = new(new VectorIndexOptions { MaxElements = 1000 }, NullLogger<VectorIndexService>.Instance);
