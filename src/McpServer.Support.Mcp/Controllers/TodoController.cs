@@ -202,7 +202,17 @@ public sealed class TodoController : ControllerBase
         {
             var gatedResult = await _todoMutations.MoveAsync(id, request, cancellationToken).ConfigureAwait(false);
             if (!gatedResult.Success)
+            {
+                // A post-target-create source-delete failure leaves the move partially applied (the item exists
+                // in the target while the source copy could not be removed). That is a server-side inconsistency,
+                // not a client conflict, so surface it as a standardized 500 via the error middleware - matching
+                // the non-gated move path below, which throws for the same condition.
+                if (gatedResult.FailureKind == TodoMutationFailureKind.ProjectionFailed)
+                    throw new InvalidOperationException(gatedResult.Error
+                        ?? $"TODO move failed after target creation succeeded for item '{id}'; source deletion failed.");
+
                 return ToMutationFailureResult(gatedResult);
+            }
 
             return Ok(gatedResult);
         }

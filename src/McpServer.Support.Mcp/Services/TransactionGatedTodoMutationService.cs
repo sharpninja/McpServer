@@ -507,7 +507,11 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
                     false,
                     $"Failed to delete from source workspace after target creation succeeded: {deleteResult.Error}",
                     createResult.Item,
-                    deleteResult.FailureKind == TodoMutationFailureKind.None ? TodoMutationFailureKind.Conflict : deleteResult.FailureKind),
+                    // The item now exists in the target while the source copy could not be removed: the move
+                    // partially applied and the persisted state is inconsistent. Classify as ProjectionFailed so
+                    // callers surface a server-side 500 (not a client 409 conflict) and the coordinator treats the
+                    // mutation as possibly-applied for rollback.
+                    deleteResult.FailureKind == TodoMutationFailureKind.None ? TodoMutationFailureKind.ProjectionFailed : deleteResult.FailureKind),
                 rollback);
         }
 
