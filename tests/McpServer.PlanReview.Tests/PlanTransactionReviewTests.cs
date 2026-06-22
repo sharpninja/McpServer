@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using SharpNinja.AiUnit.Review;
 using Xunit.Abstractions;
@@ -40,12 +41,25 @@ public sealed class PlanTransactionReviewTests
         _output.WriteLine(resultJson);
 
         Assert.Equal("aiunit.review.runlog.v1", RequiredString(root, "schemaVersion"));
-        Assert.Equal("plan", RequiredString(root, "reviewType"));
+        var reviewType = RequiredString(root, "reviewType");
+        Assert.Equal("plan", reviewType);
         Assert.Contains("PLAN-TURNTRANSACTIONS-001", prompt, StringComparison.Ordinal);
         Assert.Contains("FR-MCP-118 through FR-MCP-128", prompt, StringComparison.Ordinal);
         Assert.Contains("TEST-MCP-158 through TEST-MCP-173", prompt, StringComparison.Ordinal);
 
         Assert.True(root.TryGetProperty("findings", out var findings), "aiUnit run-log must include findings evidence.");
+
+        // Persist the prompt and response (findings) to a timestamped markdown artifact under docs/reviews so
+        // every run leaves a durable, human-readable record. Written before the blocking assertion below so the
+        // artifact is produced even when the review fails the gate.
+        var savedReview = SaveReviewArtifactMarkdown(
+            Path.Combine(FindRepositoryRoot(), "docs", "reviews"),
+            Path.GetFileNameWithoutExtension(runLogPath),
+            reviewType,
+            runLogPath,
+            prompt,
+            findings.GetRawText());
+        _output.WriteLine("aiUnit review markdown: " + savedReview);
         Assert.Equal(AiReviewFindingsSchema.SchemaVersion, RequiredString(findings, "schemaVersion"));
         Assert.Equal("plan", RequiredString(findings, "reviewType"));
         Assert.NotEqual("error", RequiredString(findings, "status"));
@@ -79,6 +93,45 @@ public sealed class PlanTransactionReviewTests
         }
 
         throw new DirectoryNotFoundException("Could not locate repository root from " + AppContext.BaseDirectory);
+    }
+
+    /// <summary>
+    /// Writes the review prompt and response (findings JSON) to a timestamped markdown file under docs/reviews.
+    /// The file name carries the aiUnit run-log timestamp so the artifact is traceable and re-running the same
+    /// review overwrites rather than accumulates. Returns the absolute path written.
+    /// </summary>
+    private static string SaveReviewArtifactMarkdown(
+        string reviewsDirectory,
+        string runLogBaseName,
+        string reviewType,
+        string runLogPath,
+        string prompt,
+        string responseJson)
+    {
+        Directory.CreateDirectory(reviewsDirectory);
+        var path = Path.Combine(reviewsDirectory, runLogBaseName + ".md");
+
+        var markdown = new StringBuilder()
+            .Append("# aiUnit Review: ").AppendLine(reviewType)
+            .AppendLine()
+            .Append("- Run-log: `").Append(Path.GetFileName(runLogPath)).AppendLine("`")
+            .Append("- Source: `").Append(runLogPath).AppendLine("`")
+            .AppendLine()
+            .AppendLine("## Prompt")
+            .AppendLine()
+            .AppendLine("```text")
+            .AppendLine(prompt.TrimEnd())
+            .AppendLine("```")
+            .AppendLine()
+            .AppendLine("## Response")
+            .AppendLine()
+            .AppendLine("```json")
+            .AppendLine(responseJson.TrimEnd())
+            .AppendLine("```")
+            .ToString();
+
+        File.WriteAllText(path, markdown);
+        return path;
     }
 
     private static bool IsCriticalOrHigh(JsonElement finding)
