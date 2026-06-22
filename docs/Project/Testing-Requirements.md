@@ -1,25 +1,5 @@
 # Testing Requirements (MCP Server)
 
-- TEST-MCP-ACID-001: Baseline full ACID turn-transaction lifecycle with all three participants (MCP Server coordinator, third-party key server, subscriber) mocked in-process. Covers happy-path commit, mutation-failure abort + rollback, subscriber-unavailable degraded mode + rollback, and every published-message failure case (manifest signature mismatch, encrypted-body hash mismatch, plaintext hash mismatch, stale sequence, sign replay nonce), plus status and abort. Implemented in `tests/McpServer.Acid.IntegrationTests/AcidFullLifecycleTests.cs` via the pluggable `AcidTransactionHarness`.
-  **Acceptance Criteria:**
-  - [x] The coordinator is the real system under test; the harness mocks the MCP Server caller by driving `ExecuteAsync` directly.
-  - [x] Each collaborator (key server, subscriber) is selectable as Mock (in-process) or Running (real spun-up host) through `AcidParticipants`.
-  - [x] The all-mocked baseline drives the full transaction lifecycle and is green for all cases.
-- TEST-MCP-ACID-002: The same lifecycle commits when the key server and subscriber are real instances - an already-running host on its port when present, otherwise a `WebApplicationFactory` host spun up for the test and disposed afterwards. Implemented in `tests/McpServer.Acid.IntegrationTests/AcidRunningInstanceTests.cs`.
-  **Acceptance Criteria:**
-  - [x] Coordinator drives manifest signing and subscriber commit over the HTTP transports against the running hosts.
-  - [x] Spun-up hosts are torn down on harness disposal.
-- TEST-MCP-ACID-003: Key server `SignManifest` request-outcome matrix - success, unknown party, unknown key, replay nonce, stale sequence. (`KeyServerSignMatrixTests`)
-- TEST-MCP-ACID-004: Key server `VerifyManifest` request-outcome matrix - valid, signature mismatch, wrong subscriber. (`KeyServerVerifyMatrixTests`)
-- TEST-MCP-ACID-005: Subscriber `CommitDiffgram` request-outcome matrix - committed, idempotent re-commit, signature mismatch, encrypted-body mismatch, plaintext mismatch, stale sequence, wrong subscriber, decrypt-required failure. Exercises the subscriber validating the key server's verification result. (`SubscriberCommitMatrixTests`)
-- TEST-MCP-ACID-006: Coordinator transaction-outcome matrix - committed, bypassed (disabled / non-mutating), aborted, rejected when validating a key-server sign failure (fail-closed before mutation), rejected when validating a subscriber commit rejection (rollback), and degraded when the subscriber is unavailable. Exercises the coordinator validating the key server's and subscriber's results. (`CoordinatorOutcomeMatrixTests`)
-- TEST-MCP-SUBLOG-001: Subscriber high-performance message logging (FR-MCP-SUBLOG-001) - the Parseable sink POSTs a flat JSON batch to `/api/v1/ingest` with `X-P-Stream` and basic auth; transport errors are swallowed (best-effort); the subscriber emits one message-log entry per received message (committed and rejected) at the audit chokepoint. (`SubscriberMessageLogTests`)
-- TEST-MCP-QBAGENT-001: QBAgent marker bootstrap (FR-MCP-QBAGENT-001) - a valid `AGENTS-README-FIRST.yaml` marker binds `baseUrl`/`apiKey` from the marker and applies the QBAgent (QuadBrain-only) profile; a missing `apiKey` or non-absolute `baseUrl` is rejected as invalid; with no marker present QBAgent reports a graceful no-marker exit and contacts no endpoint (`QBAgentBootstrapperTests`). The interactive QuadBrain run loop dispatches each prompt to the executor, skips blank lines and exit commands, stops at end of input, and reports executor errors without aborting (`QBAgentRunLoopTests`).
-- TEST-MCP-QBOPENAI-001: QuadBrain OpenAI-compatible chat-completions surface (FR-MCP-QBOPENAI-001). Slice 1: an inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message; empty messages rejected (`QuadBrainOpenAiChatServiceTests`). Slice 2: tool definitions flow through and a `{"tool_calls":...}` Arbiter output becomes assistant `tool_calls`; plain output stays content (`QuadBrainOpenAiChatServiceTests`). Slice 3: Bearer/api-key extraction and 401 on missing/invalid token vs 200 on a valid workspace token (`QuadBrainOpenAiAuthTests`). Slice 4: QBAgent builds the `/v1` OpenAI chat client, uses the non-ACID QBAgent profile, and runs prompts through the Agent Framework loop (`QBAgentChatClientFactoryTests`, `QBAgentBootstrapperTests`, `QBAgentRunLoopTests`).
-- TEST-MCP-QBINT-001: Integration tests for the QuadBrain OpenAI endpoint (POST /v1/chat/completions) through the real ASP.NET pipeline (FR-MCP-QBOPENAI-001, FR-MCP-QBEXEC-001) - 401 without a token, Arbiter content with a token, external tool returned as a tool call, internal tool executed and stripped, internal failure surfaced as a note. (`QuadBrainOpenAiEndpointIntegrationTests`)
-- TEST-MCP-QBAGENTINT-001: Integration tests for QBAgent sending a request to QuadBrain, receiving a response with/without tool actions, and the agent executing the returned (external) tool calls via the Agent Framework loop (FR-MCP-QBAGENT-001, FR-MCP-QBOPENAI-001). *(Planned)*
-- TEST-MCP-QBEXEC-001: QuadBrain server-side tool execution (FR-MCP-QBEXEC-001) - the classifier marks `mcp_` tools internal; the interceptor executes handled internal tools and strips them, keeps only external as tool commands, and reports internal failures/unhandled as failures (never tool commands); the OpenAI surface emits only external tool calls (none when all ran server-side) and renders internal failures as an assistant-content note. (`QuadBrainToolInterceptionTests`, `QuadBrainOpenAiChatServiceTests`)
-
 - TEST-GRAPHRAG-ADHOC-001: GraphEntityEntity/GraphRelationshipEntity persist with all fields, workspace isolation, cascade delete, FK validation, and RemoveVector correctness.
 - TEST-GRAPHRAG-ADHOC-002: IngestTextAsync creates document + chunks, generates embeddings, registers vectors, handles empty content, defaults SourceType/SourceKey, and optionally triggers reindex.
 - TEST-GRAPHRAG-ADHOC-003: ListDocumentsAsync pagination and filtering, GetDocumentChunksAsync ordering, DeleteDocumentAsync cascade and vector cleanup.
@@ -222,7 +202,7 @@
   - [x] `TurnTransactionPlanArtifactTests.TransactionPlanRequirements_AreConcreteAndMapped` fails if transaction FR/TR/TEST records regress to placeholder backfills or lose matrix/mapping rows.
 - TEST-MCP-163: Deferred-scope documentation tests SHALL prove remaining future autonomous Quad-Model branches, direct agent execution, desktop launch, tunnels, workspace/auth/server configuration, full remote/runtime compensation, complete delayed-rollback isolation, bucket/GitHub compensation, quarantine/fine-tuning automation, implicit fallback behavior, and full key-rotation lifecycle automation remain explicit future work rather than silently reported as complete.
   **Acceptance Criteria:**
-  - [x] `TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds` validates deferred scope and design artifacts.
+  - [x] TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds validates deferred scope and design artifacts while distinguishing authorized Quad-Brain branches from remaining future scope. (evidence: tests/McpServer.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs)
 - TEST-MCP-164: aiUnit plan review tests SHALL validate committed aiUnit run-log evidence for PLAN-TURNTRANSACTIONS-001 and fail on critical/high findings.
   **Acceptance Criteria:**
   - [x] `PlanTransactionReviewTests` validates `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`, reviewed scope, pass status, and absence of critical/high findings.
@@ -240,68 +220,97 @@
   - [x] Coordinator and transaction pub-sub tests cover signed manifest handoff, subscriber commit acknowledgement, timeout, degraded status, and durable replay.
 - TEST-MCP-169: Degraded rollback reconciliation tests SHALL validate AD-TXN-001 and AD-AOT-001 in-scope rollback/audit behavior while requiring AoT execution to use the authorized ArbiterOfTruth transaction path.
   **Acceptance Criteria:**
-  - [x] Transaction-gated services and pub-sub tests verify rollback compensation, rollback failure reporting, durable pending-commit cancellation, and additive audit evidence.
+  - [x] Transaction-gated services and pub-sub tests verify rollback compensation, rollback failure reporting, durable pending-commit cancellation, additive audit evidence, and authorized AoT transaction routing. (evidence: BrainSlotInvocationTransactionTests and TurnTransactionPlanArtifactTests)
 - TEST-MCP-170: Quad scope enforcement tests SHALL prove Curiosity admission, weight updates, AoT execution, and quad orchestration execute only through FR-MCP-129 through FR-MCP-135 authorization gates, while unrelated autonomous branches remain fail-closed.
   **Acceptance Criteria:**
-- [x] Plan artifact tests validate the implemented/deferred split and reject stale claims that authorized AoT, weight update, or full orchestration branches remain disabled.
+  - [x] Plan artifact tests validate the implemented/deferred split and reject stale claims that authorized AoT, weight update, or full orchestration branches remain disabled. (evidence: TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds)
 - TEST-MCP-171: Quad architecture conformance tests SHALL validate ARCH-QUAD-001 component mapping, trust boundaries, authorized quad branches, and remaining future branches.
   **Acceptance Criteria:**
-  - [x] Plan artifact tests validate architecture/design artifacts and repo component references.
+  - [x] Plan artifact tests validate architecture/design artifacts, repo component references, authorized branch routing, and remaining future branch documentation. (evidence: TurnTransactionPlanArtifactTests.PlanArtifacts_PreserveDeferredScopeAndDesignRounds)
 - TEST-MCP-172: Architecture Round 1 conformance tests SHALL validate trust model, component boundaries, storage boundaries, threat model, rollback/audit decisions, and gap analysis.
   **Acceptance Criteria:**
   - [x] `TurnTransactions-Architecture-Round1.md` is covered by `TurnTransactionPlanArtifactTests`.
 - TEST-MCP-173: Design Round 2 conformance tests SHALL validate DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and AC-to-test mapping.
   **Acceptance Criteria:**
   - [x] `TurnTransactions-Design-Round2.md`, `TurnTransactions-Mutation-Endpoint-Audit.md`, requirements docs, matrix, and mappings are covered by `TurnTransactionPlanArtifactTests`.
-- TEST-MCP-174: Brain slot documentation and plan artifact coverage SHALL prove FR-MCP-129 through FR-MCP-135, TR-MCP-QUAD-001 through TR-MCP-QUAD-007, TEST-MCP-174 through TEST-MCP-185, diagram annotations, and the `AD-CURIOSITY-001-BR-EXTERNAL`, `AD-AOT-001`, `AD-WEIGHT-001`, and full quad orchestration implementation split are present.
+- TEST-MCP-174: Brain slot documentation and plan artifact coverage SHALL prove FR-MCP-129 through FR-MCP-135, TR-MCP-QUAD-001 through TR-MCP-QUAD-007, TEST-MCP-174 through TEST-MCP-185, diagram annotations, and the AD-CURIOSITY-001-BR-EXTERNAL, AD-AOT-001, AD-WEIGHT-001, and full quad orchestration implementation split are present.
   **Acceptance Criteria:**
-  - [x] `TurnTransactionPlanArtifactTests` fails if brain-slot requirement IDs, diagram annotations, mapping rows, or matrix rows are missing.
-- TEST-MCP-175: Brain slot durable registry coverage SHALL prove workspace-scoped CRUD, role validation, one enabled slot per workspace and role, `replaceExisting` replacement audit, soft delete/disable semantics, credentialReference-only persistence, status projection, and workspace isolation.
+  - [x] TurnTransactionPlanArtifactTests fails if brain-slot requirement IDs, diagram annotations, mapping rows, or matrix rows are missing. (evidence: TurnTransactionPlanArtifactTests)
+- TEST-MCP-175: Brain slot durable registry coverage SHALL prove workspace-scoped CRUD, role validation, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete/disable semantics, credentialReference-only persistence, status projection, and workspace isolation.
   **Acceptance Criteria:**
-  - [x] `BrainSlotRegistryServiceTests` covers create, update, enable, disable, delete, replacement, audit, readiness, and workspace isolation.
-- TEST-MCP-176: Brain slot REST, client, and STDIO contract coverage SHALL prove list/get/upsert/delete/enable/disable/status/invoke/orchestrate/aot-reconcile/weight-update routes serialize the public DTOs correctly, hide raw credentials, enforce `AgentManager` policy behavior, and preserve workspace/auth propagation.
+  - [x] BrainSlotRegistryServiceTests covers create, update, enable, disable, delete, replacement, audit, readiness, and workspace isolation. (evidence: BrainSlotRegistryServiceTests)
+- TEST-MCP-176: Brain slot REST, client, and STDIO contract coverage SHALL prove list/get/upsert/delete/enable/disable/status/invoke/orchestrate/aot-reconcile/weight-update routes serialize the public DTOs correctly, hide raw credentials, enforce AgentManager policy behavior, and preserve workspace/auth propagation.
   **Acceptance Criteria:**
-  - [x] `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, and plugin tests cover every public brain-slot operation.
-- TEST-MCP-177: Brain slot provider and credential coverage SHALL prove `env:`, `config:`, and `file:` credential references resolve without persistence or response leakage; OpenAI and OpenAI-compatible client creation validates endpoint policy; disallowed hosts, loopback without explicit allowance, timeout, and cancellation fail closed without live network dependency.
+  - [x] BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, and plugin tests cover every public brain-slot operation. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
+- TEST-MCP-177: Brain slot provider and credential coverage SHALL prove env:, config:, and file: credential references resolve without persistence or response leakage; OpenAI and OpenAI-compatible client creation validates endpoint policy; disallowed hosts, loopback without explicit allowance, timeout, and cancellation fail closed without live network dependency.
   **Acceptance Criteria:**
-  - [x] `BrainSlotCredentialResolverTests` and fake invocation/provider tests never require live network credentials.
+  - [x] BrainSlotCredentialResolverTests and fake invocation/provider tests never require live network credentials. (evidence: BrainSlotCredentialResolverTests and fake provider coverage)
 - TEST-MCP-178: Brain slot transaction admission coverage SHALL prove execution is rejected unless brain-slot execution and required turn transactions are enabled, no output is returned before subscriber commit, commit failure/timeout/degradation discards output, and diffgrams contain slot metadata and hashes.
   **Acceptance Criteria:**
-  - [x] `BrainSlotInvocationTransactionTests` covers disabled gates, failed commits, delayed commits, and committed output return.
-- TEST-MCP-179: Curiosity admission coverage SHALL prove only `CuriosityEngine` can request GraphRAG/context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache/GraphRAG, and Left/Right/Arbiter invocations never mutate cache.
+  - [x] BrainSlotInvocationTransactionTests covers disabled gates, failed commits, delayed commits, and committed output return. (evidence: BrainSlotInvocationTransactionTests)
+- TEST-MCP-179: Curiosity admission coverage SHALL prove only CuriosityEngine can request GraphRAG/context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache/GraphRAG, and Left/Right/Arbiter invocations never mutate cache.
   **Acceptance Criteria:**
-  - [x] `BrainSlotInvocationTransactionTests` and `BrainSlotContainmentTests` cover committed Curiosity admission and rejected non-Curiosity admission.
+  - [x] BrainSlotInvocationTransactionTests and BrainSlotContainmentTests cover committed Curiosity admission and rejected non-Curiosity admission. (evidence: BrainSlotInvocationTransactionTests; BrainSlotContainmentTests)
 - TEST-MCP-180: Quad containment coverage SHALL prove AoT reconciliation execution, weight update execution, and full automatic quad orchestration are available only through explicit FR-MCP-134/FR-MCP-135 gates, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
   **Acceptance Criteria:**
-  - [x] `QuadBrainOrchestrationServiceTests` covers the authorized quad branches and `BrainSlotContainmentTests` covers the remaining cache-mutation boundary.
+  - [x] QuadBrainOrchestrationServiceTests covers the authorized quad branches and BrainSlotContainmentTests covers the remaining cache-mutation boundary. (evidence: QuadBrainOrchestrationServiceTests; BrainSlotContainmentTests)
 - TEST-MCP-181: Quad orchestration service coverage SHALL prove full Quad-Brain orchestration rejects non-ready workspaces, invokes roles through transaction-gated slots in the required order, and returns final committed AoT output with role transaction metadata.
   **Acceptance Criteria:**
-  - [x] `QuadBrainOrchestrationServiceTests` covers ready and non-ready orchestration paths.
+  - [x] QuadBrainOrchestrationServiceTests covers ready and non-ready orchestration paths. (evidence: QuadBrainOrchestrationServiceTests)
 - TEST-MCP-182: AoT reconciliation execution coverage SHALL prove AoT reconciliation executes through the ArbiterOfTruth slot, includes Left/Right/Curiosity evidence, returns committed output only after subscriber acknowledgement, and fails closed without fallback.
   **Acceptance Criteria:**
-  - [x] `QuadBrainOrchestrationServiceTests` covers Arbiter invocation and committed final output.
+  - [x] QuadBrainOrchestrationServiceTests covers Arbiter invocation and committed final output. (evidence: QuadBrainOrchestrationServiceTests)
 - TEST-MCP-183: Quad weight update coverage SHALL prove approved weight updates persist weights and versions with audits, while missing approvals, stale versions, invalid roles, disabled slots, and invalid weights are rejected without mutation.
   **Acceptance Criteria:**
-  - [x] `QuadBrainOrchestrationServiceTests` covers approved persistence/audit and missing-approval rejection.
+  - [x] QuadBrainOrchestrationServiceTests covers approved persistence/audit and missing-approval rejection. (evidence: QuadBrainOrchestrationServiceTests)
 - TEST-MCP-184: Quad public contract parity coverage SHALL prove REST, client, STDIO, and Node plugin surfaces expose orchestration, AoT reconciliation, and weight update contracts consistently.
   **Acceptance Criteria:**
-  - [x] `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, and `brain-slots.test.ts` cover public parity.
+  - [x] BrainSlotsControllerTests, BrainSlotClientTests, BrainSlotContractArtifactTests, and brain-slots.test.ts cover public parity. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
 - TEST-MCP-185: Quad traceability closure coverage SHALL prove FR-MCP-134 through FR-MCP-135, TR-MCP-QUAD-005 through TR-MCP-QUAD-007, TEST-MCP-181 through TEST-MCP-185, and the imported diagrams no longer describe AoT, weight updates, or full quad orchestration as deferred once implemented.
   **Acceptance Criteria:**
-  - [x] `TurnTransactionPlanArtifactTests` covers the implemented/deferred split and matrix rows.
-- TEST-MCP-186: ACID hosted-agent profile tests SHALL verify the ACID tightly coupled Microsoft Agent Framework profile metadata, strict option defaults, filtered model-visible tools, serialized function invocation settings, DI compatibility, and backward compatibility for default hosted-agent registration.
+  - [x] TurnTransactionPlanArtifactTests covers the implemented/deferred split and matrix rows. (evidence: TurnTransactionPlanArtifactTests)
+- TEST-MCP-186: Tests SHALL verify the ACID tightly coupled Microsoft Agent Framework profile metadata, strict option defaults, filtered model-visible tools, serialized function invocation settings, DI compatibility, and backward compatibility for default hosted-agent registration.
   **Acceptance Criteria:**
   - [x] A red test fails until the ACID profile metadata and option defaults are implemented.
   - [x] A red test fails until ACID run options filter unsafe tools and preserve serialized function invocation.
   - [x] A regression test proves default non-ACID hosted-agent registration still exposes the existing tool surface.
-
-- TEST-MCP-187: Quad Brain coding-agent prompt integration tests SHALL verify that the hosted MCP coding agent executes coding prompts through the Quad Brain orchestration client surface without live external model calls.
+  - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
+- TEST-MCP-187: Verifies that the hosted MCP coding agent executes coding prompts through the Quad Brain orchestration client surface without live external model calls. Integration test invokes mcp_quadbrain_coding_execute for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape. Tests use in-memory MCP HTTP handler without live external model credentials or network calls.
   **Acceptance Criteria:**
   - [x] A prompt-array integration test invokes `mcp_quadbrain_coding_execute` for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape.
   - [x] An ACID profile test proves the Quad Brain coding tool is exposed while unsafe tools remain blocked.
   - [x] Tests use an in-memory MCP HTTP handler and do not require live external model credentials or network calls.
   - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
+- TEST-MCP-ACID-001: Baseline full ACID turn-transaction lifecycle with key server and subscriber mocked in-process and the coordinator as system under test; happy commit, mutation-abort+rollback, subscriber-unavailable degraded+rollback, and all published-message rejections.
+- TEST-MCP-ACID-002: Same lifecycle commits with key server and subscriber as real spun-up WebApplicationFactory hosts torn down after the test; coordinator drives sign and commit over the HTTP transports.
+- TEST-MCP-ACID-003: SignManifest success plus rejections - unknown party, unknown key, replay nonce, stale sequence.
+- TEST-MCP-ACID-004: VerifyManifest valid plus rejections relying parties act on - signature mismatch, wrong subscriber.
+- TEST-MCP-ACID-005: Commit, idempotent re-commit, and rejections - signature mismatch, encrypted-body mismatch, plaintext mismatch, stale sequence, wrong subscriber, decrypt-required failure. Subscriber validates the key server verification result.
+- TEST-MCP-ACID-006: Committed, bypassed (disabled/non-mutating), aborted, rejected on key-server sign failure fail-closed before mutation, rejected on subscriber commit rejection with rollback, degraded on subscriber unavailable. Coordinator validates key server and subscriber results.
+- TEST-MCP-AUTH-010: Given the auth-token subsystem is initialized, when a request hits a workspace-independent /mcpserver/* route with an unknown or missing API key and no X-Workspace-Path, then WorkspaceAuthMiddleware returns 401. This is a regression test (previously returned 503).
+  **Acceptance Criteria:**
+  - [x] Unknown API key with unresolved workspace returns 401.
+  - [x] Missing API key with unresolved workspace returns 401.
+  - [x] Empty RepoRoot fallback path with unresolved workspace returns 401.
+- TEST-MCP-AUTH-011: When WorkspaceTokenService.IsInitialized is false, WorkspaceAuthMiddleware returns 503 with a Retry-After header and a JSON body.
+  **Acceptance Criteria:**
+  - [x] Uninitialized subsystem returns 503 with Retry-After header and JSON body.
+- TEST-MCP-AUTH-012: WorkspaceTokenService.IsInitialized is false before any token is generated and true after GenerateToken.
+  **Acceptance Criteria:**
+  - [x] IsInitialized returns false before any token is generated.
+  - [x] IsInitialized returns true after GenerateToken.
 - TEST-MCP-BATCH-001: Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
+- TEST-MCP-HEALTH-002: WorkspaceReadinessHealthCheck returns Healthy when an enabled primary workspace is registered and has a seeded token; returns Unhealthy when the token subsystem is uninitialized, no enabled workspace is registered, or the primary workspace has no seeded token.
+  **Acceptance Criteria:**
+  - [x] Returns Healthy when enabled primary workspace is registered with seeded token.
+  - [x] Returns Unhealthy when token subsystem is uninitialized.
+  - [x] Returns Unhealthy when no enabled workspace is registered.
+  - [x] Returns Unhealthy when primary workspace has no seeded token.
+- TEST-MCP-HEALTH-003: Integration test with the data layer up: /mcpserver/todo returns 200 with a valid token and no X-Workspace-Path; unknown or missing keys return 401; /ready returns 200 Healthy with workspace-ready check listed.
+  **Acceptance Criteria:**
+  - [x] /mcpserver/todo returns 200 with valid token and no X-Workspace-Path.
+  - [x] Unknown or missing API keys return 401.
+  - [x] /ready returns 200 Healthy with workspace-ready check.
 - TEST-MCP-MEMORY-001: Storage isolation tests SHALL prove Global memories and Workspace memories in two workspaces list as Global plus current workspace only, and that update/remove by ID cannot mutate another workspace-local memory.
 - TEST-MCP-MEMORY-002: CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.
 - TEST-MCP-MEMORY-003: ID generation tests SHALL prove MEMORY-{CATEGORY}-{NNN} IDs are globally unique across Global and Workspace scopes, category counters are independent, and manually supplied duplicate active IDs are rejected.
@@ -327,6 +336,97 @@
 - TEST-MCP-PLUGINCORE-001: bats: sync writes manifest+sha256; guard OK after sync; fails on edit; fails on deletion; manifest required; re-sync repairs.
 - TEST-MCP-PLUGINCORE-002: core-guard job fails on a seeded undeclared lib file and passes when declared in PLUGIN-RESIDUAL.txt.
 - TEST-MCP-PLUGINCORE-003: bats: daemon roundtrip with --- terminator; one child serves N sends; auto-restart after kill; concurrent sends; persistent wrapper threads JSON params and honors fallback.
+- TEST-MCP-QBAGENT-001: Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
+  **Acceptance Criteria:**
+  - [x] With a valid marker, QBAgent binds baseUrl/apiKey and applies the QBAgent profile. (evidence: QBAgentBootstrapperTests valid-marker cases.)
+  - [x] With no marker, QBAgent exits gracefully (exit 0) contacting no endpoint. (evidence: QBAgentBootstrapperTests no-marker case + QBAgentRunLoopTests.)
+  - [x] The chat client targets the QuadBrain /v1 endpoint derived from the marker base URL. (evidence: QBAgentChatClientFactoryTests BuildEndpoint/Create.)
+- TEST-MCP-QBAGENTINT-001: Integration tests for QBAgent sending a request to QuadBrain, receiving a response with or without tool actions, and executing the returned external tool calls via the Microsoft Agent Framework loop.
+  **Acceptance Criteria:**
+  - [x] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned. (evidence: QBAgentSendingIntegrationTests.QBAgent_NoToolAction_ReturnsPlainResponse - real Agent Framework loop over OpenAI wire, 1 orchestration round, plain text returned.)
+  - [x] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolCall_AgentExecutesAndContinues - external apply_patch executed by FunctionInvokingChatClient, 2 rounds, final answer returned.)
+  - [x] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent. (evidence: QBAgentSendingIntegrationTests.QBAgent_InternalTool_ExecutedServerSide_NeverReachesAgent - mcp_todo_update ran in the internal executor and was stripped; agent invoked no tool, single round.)
+- TEST-MCP-QBEXEC-001: Classifier marks mcp_ tools internal; interceptor executes handled internal tools and strips them while keeping external and failed/unhandled internal; the OpenAI surface strips internal tool calls and emits only external ones (and emits none when all elected tools ran server-side).
+  **Acceptance Criteria:**
+  - [x] Tools are classified internal (mcp_ prefix) vs external. (evidence: QuadBrainToolInterceptionTests classifier cases.)
+  - [x] Internal tools execute server-side and are stripped; only external calls are emitted. (evidence: QuadBrainToolInterceptionTests + endpoint test ChatCompletions_InternalToolExecuted_IsStripped.)
+  - [x] Internal-tool failures surface as a note, never as a tool command. (evidence: endpoint test ChatCompletions_InternalToolFailure_BecomesNote.)
+- TEST-MCP-QBEXEC-002: Unit tests asserting mcp_todo_update routes through ITransactionGatedTodoMutationService, mcp_repo_edit through TransactionGatedRepoFileService, mcp_git push via ProcessRunner targets origin, and an unknown mcp_ tool returns Unhandled.
+  **Acceptance Criteria:**
+  - [ ] todo/requirements/repo routes go through the transaction-gated services; unknown mcp_ returns Unhandled.
+- TEST-MCP-QBEXEC-003: Unit tests asserting each brain invocation's full prompt+output is written to the session log under TurnId, AoT reconciliation is logged, and internal-tool executed/failed outcomes are recorded with secrets redacted.
+  **Acceptance Criteria:**
+  - [ ] Each brain invocation full prompt+output logged under TurnId; AoT logged; executed/failed outcomes recorded; secrets redacted.
+- TEST-MCP-QBINT-001: Integration tests over POST /v1/chat/completions through the real ASP.NET pipeline with orchestration and the internal-tool executor replaced by deterministic doubles.
+  **Acceptance Criteria:**
+  - [x] A request without a workspace token returns 401.
+  - [x] An authorized request returns the Arbiter decision as the assistant message.
+  - [x] An external tool elected by QuadBrain is returned to the agent as a tool call.
+  - [x] An MCP-internal tool executed server-side is stripped from the response.
+  - [x] An internal tool failure is surfaced as a note rather than a tool call.
+- TEST-MCP-QBLIVE-001: Service-composition coverage of the real four-role Quad-Brain loop (QuadBrainOrchestrationService + BrainSlotInvocationService + BrainSlotRegistryService + in-memory key server), faking only IBrainSlotChatClientFactory and the committing transaction coordinator.
+  **Acceptance Criteria:**
+  - [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
+  - [x] A tool_calls Arbiter output is returned verbatim as the orchestration output.
+  - [x] With only three roles seeded the loop rejects QuadNotReady without calling any brain.
+  - [x] With execution disabled no brain is called and the loop rejects ExecutionDisabled.
+- TEST-MCP-QBLIVEINT-001: Integration coverage that drives the real orchestration through POST /v1/chat/completions over four seeded slots, faking only the per-brain LLM call and the transaction coordinator.
+  **Acceptance Criteria:**
+  - [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) with all four roles invoked.
+  - [x] A tool_calls Arbiter output surfaces as an OpenAI assistant tool call (finish_reason tool_calls).
+  - [x] With no slots seeded the endpoint returns an empty decision (loop rejects QuadNotReady).
+- TEST-MCP-QBOPENAI-001: An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.
+  **Acceptance Criteria:**
+  - [x] An OpenAI ChatCompletion request maps to QuadBrain orchestration and returns the Arbiter output as the assistant message. (evidence: QuadBrainOpenAiChatServiceTests + QuadBrainOpenAiEndpointIntegrationTests.ChatCompletions_Authorized_ReturnsArbiterContent.)
+  - [x] Tool definitions flow through and assistant tool_calls are emitted for external tools. (evidence: QuadBrainOpenAiChatServiceTests tool-call parsing + endpoint test ChatCompletions_ExternalTool_ReturnedAsToolCall.)
+  - [x] Bearer / X-Api-Key auth is enforced (401 on missing/invalid token). (evidence: QuadBrainOpenAiAuthTests + endpoint test ChatCompletions_NoToken_Returns401.)
+- TEST-MCP-QBSEED-001: Unit coverage for BrainSlotStartupSeeder over a real in-memory McpDbContext, real BrainSlotRegistryService, and the in-memory key server (only the credential resolver stubbed).
+  **Acceptance Criteria:**
+  - [x] With execution enabled and four roles configured, StartAsync makes the quad ready (all roles enabled).
+  - [x] Running the seeder twice is idempotent (exactly four enabled slots, no exception).
+  - [x] With execution disabled, or with no slots configured, nothing is provisioned.
+  - [x] One invalid slot is skipped without throwing and the remaining valid slots are still provisioned.
+- TEST-MCP-QBSKILLS-001: Unit tests asserting the parser requires name+description, rejects missing name, and reads optional allowed-tools.
+  **Acceptance Criteria:**
+  - [ ] Requires name+description; rejects missing name; reads optional allowed-tools.
+- TEST-MCP-QBSKILLS-002: Unit tests asserting discovery returns name+description only, load returns the full body, and discovery includes vendored + workspace skills.
+  **Acceptance Criteria:**
+  - [ ] Discovery returns name+description only; load returns full body; both roots included.
+- TEST-MCP-QBSKILLS-003: Unit tests asserting list_skills and load_skill are exposed as external tools and return the discovery list and named body respectively.
+  **Acceptance Criteria:**
+  - [ ] list_skills returns discovery; load_skill returns the named skill body.
+- TEST-MCP-QBTOOLS-001: Unit tests asserting read_file/write_file/edit_file/list_files are registered as non-mcp_ external tools and delegate to the MCP client Repo surface (no direct filesystem access).
+  **Acceptance Criteria:**
+  - [ ] The four file tools are present, non-mcp_-prefixed, and delegate to the MCP client.
+  - [ ] A path-traversal request is rejected server-side.
+- TEST-MCP-QBTOOLS-002: Unit tests (mock IProcessRunner) asserting git status builds expected args and parses output, push targets origin only, and an unknown subcommand is rejected.
+  **Acceptance Criteria:**
+  - [ ] status/diff/log build expected args and parse results.
+  - [ ] push args never include a non-origin remote; unknown subcommand rejected.
+- TEST-MCP-QBTOOLS-003: Unit test (mock ResolveExecutable) asserting run_bash returns available=false when bash.exe is missing and runs the command when present.
+  **Acceptance Criteria:**
+  - [ ] bash absent yields available=false without throwing; bash present returns stdout/stderr/exit.
+- TEST-MCP-QBTOOLS-004: Unit tests for EditAsync: replace-unique, ambiguous-fails, replace-all, missing-old-fails, traversal-rejected, nonexistent-fails, audit+updated-event.
+  **Acceptance Criteria:**
+  - [ ] Unique replace succeeds; missing/ambiguous fail per rules; traversal and nonexistent rejected; audit + change event emitted.
+- TEST-MCP-QBTOOLS-005: Unit tests asserting gated EditAsync commits+audits, rolls back to original on transaction reject, and fails under a degraded coordinator.
+  **Acceptance Criteria:**
+  - [ ] Commit applies + audits; reject restores original; degraded coordinator fails.
+- TEST-MCP-QBTOOLS-006: Unit tests asserting McpHostedAgentToolAdapter exposes mcp_repo_edit, mcp_bash, and mcp_git, and that mutating variants route through the transaction-gated core.
+  **Acceptance Criteria:**
+  - [ ] mcp_repo_edit/mcp_bash/mcp_git present; mutating ones transaction-gated.
+- TEST-MCP-QBTOOLS-007: Unit tests asserting run_powershell executes a command in a hosted runspace and returns captured output/error streams.
+  **Acceptance Criteria:**
+  - [ ] run_powershell runs a command and returns output and error streams from the hosted runspace.
+- TEST-MCP-QBTOOLSINT-001: Integration tests (CustomWebApplicationFactory + in-memory transport) where the agent loads a skill then calls edit_file (applied through server RepoFileService) and git status; plus internal mcp_repo_edit executed server-side never reaching the agent.
+  **Acceptance Criteria:**
+  - [ ] Agent loads a skill body then calls edit_file and the edit lands through the server.
+  - [ ] git status runs externally and returns; mcp_repo_edit executes server-side and is stripped.
+- TEST-MCP-QUAD-SESSION-001: Per-session QuadBrain instance attachment over global brains with session metadata propagation.
+  **Acceptance Criteria:**
+  - [x] CompleteAsync with a sessionId/turnId attaches them to the orchestration request metadata and TurnId.
+  - [x] Without a session id, no session metadata is attached (anonymous instance).
+  - [x] A /v1 request's X-Session-Id header reaches the orchestration (integration).
 - TEST-MCP-REPL-001: ✅ **Complete** - Given a REPL host process, when a well-formed YAML command envelope is sent to stdin, then a YAML response envelope is emitted to stdout with `type: result` and the expected result payload. **Covered by:** `Iteration1_IntegrationTests`, `YamlFramingTests`, `YamlEnvelopeShapeTests`
 - TEST-MCP-REPL-002: ✅ **Complete** - Given a REPL host process, when malformed YAML is sent to stdin, then a structured error response is emitted with `type: error` and descriptive error details, without crashing the host process. **Covered by:** `FakeYamlSerializerTests`, `YamlFramingTests`
 - TEST-MCP-REPL-003: ✅ **Complete** - Given a REPL host with no bootstrap invocation, when an operational command is sent, then the response contains `type: error` and appropriate error code. **Covered by:** `ProtocolHandshakeTests`, `TrustBootstrapFlowTests`
@@ -334,10 +434,10 @@
 - TEST-MCP-REPL-005: ✅ **Complete** - Given a REPL host with completed bootstrap, when the API key in the marker file is rotated, then the host detects rotation via marker file watch and emits appropriate notifications. **Covered by:** `AuthRotationTests`, `AuthKeyAndWorkspaceTests`, `StubAuthRotationHandlerTests`
 - TEST-MCP-REPL-006: ✅ **Complete** - Given bootstrapped REPL commands for TODO operations (`workflow.todo.*`), when invoked with valid args, then results match the equivalent client operation semantics. **Covered by:** `TodoWorkflowTests`, `Iteration3IntegrationTests`, `TodoWorkflowTestExtensions`
 - TEST-MCP-REPL-007: ✅ **Complete** - Given bootstrapped REPL commands for session log operations (`workflow.session.*`), when invoked with valid args, then results match the equivalent client operation semantics. **Covered by:** `SessionLogWorkflowTests`, `SessionLogWorkflowIntegration2Tests`, `SessionLogWorkflowProductionTests`, `Iteration2IntegrationTests`
-- TEST-MCP-REPL-021: Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked from the start path to its root. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths`
-- TEST-MCP-REPL-022: Given an explicit `workspacePathOverride` pointing to a workspace with a valid marker, when `TryResolveWithDiagnostics` is called, then resolution succeeds and the returned options carry the marker's API key. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_AcceptsExplicitWorkspaceArgument`
-- TEST-MCP-REPL-023: Given a marker file whose canonicalization is tampered, when `TryResolveWithDiagnostics` is called, then the error names the marker path and identifies "signature" failure. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenSignatureFails_ReportsReason`
-- TEST-MCP-REPL-024: Given a marker whose HMAC payload is signed with LF-only (`\n`) line endings (matching the production server's `MarkerFileService.AppendPayloadLine`), when `TryResolveWithDiagnostics` is called on Windows or any platform where `Environment.NewLine` differs from `\n`, then signature verification succeeds. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_VerifiesSignatureBuiltWithLfLineEndings`
+- TEST-MCP-REPL-007-1: Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked from the start path to its root. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths`
+- TEST-MCP-REPL-007-2: Given an explicit `workspacePathOverride` pointing to a workspace with a valid marker, when `TryResolveWithDiagnostics` is called, then resolution succeeds and the returned options carry the marker's API key. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_AcceptsExplicitWorkspaceArgument`
+- TEST-MCP-REPL-007-3: Given a marker file whose canonicalization is tampered, when `TryResolveWithDiagnostics` is called, then the error names the marker path and identifies "signature" failure. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenSignatureFails_ReportsReason`
+- TEST-MCP-REPL-007-4: Given a marker whose HMAC payload is signed with LF-only (`\n`) line endings (matching the production server's `MarkerFileService.AppendPayloadLine`), when `TryResolveWithDiagnostics` is called on Windows or any platform where `Environment.NewLine` differs from `\n`, then signature verification succeeds. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_VerifiesSignatureBuiltWithLfLineEndings`
 - TEST-MCP-REPL-008: ✅ **Complete** - Given bootstrapped REPL commands for context operations (`client.context.*`), when invoked with valid args, then results match the equivalent client operation semantics. **Covered by:** `GenericClientPassthroughTests`, `Iteration5IntegrationTests`
 - TEST-MCP-REPL-009: ✅ **Complete** - Given bootstrapped REPL commands for requirements management (`workflow.requirements.*`), when invoked with valid args, then results match the equivalent client operation semantics. **Covered by:** `RequirementsWorkflowTests`, `Iteration4IntegrationTests`
 - TEST-MCP-REPL-010: ✅ **Complete** - Given bootstrapped REPL commands for workspace selection, when invoked with valid workspace paths, then workspace context resolution matches expected behavior. **Covered by:** `WorkspaceSelectionTests`, `AuthKeyAndWorkspaceTests`
@@ -351,6 +451,22 @@
 - TEST-MCP-REPL-018: ✅ **Complete** - Given orchestration rules for trust and auth, when workflows execute, then trust-before-auth and nonce-validation rules are enforced. **Covered by:** `OrchestrationRulesTests`, `TrustBootstrapFlowTests`
 - TEST-MCP-REPL-019: ✅ **Complete** - Given namespace-organized command shapes, when workflows execute, then operations delegate to typed client contracts without duplicating business logic. **Covered by:** `TodoWorkflowTests`, `SessionLogWorkflowTests`, `RequirementsWorkflowTests`, `GenericClientPassthroughTests`
 - TEST-MCP-REPL-020: ✅ **Complete** - Given concurrent REPL operations, when workflows maintain stateful context, then session state and TODO selection are properly isolated per workflow instance. **Covered by:** `SessionLogWorkflowTests` (state management), `TodoWorkflowTests` (selection state)
+- TEST-MCP-REPL-021: When TryResolveWithDiagnostics is called on a workspace path containing no marker file, the error message enumerates every directory walked from the start path to its root. This verifies diagnostic usability when marker files cannot be found during workspace resolution.
+  **Acceptance Criteria:**
+  - [x] Error message enumerates all directories walked from start path to root
+  - [x] Test passes with implementation in MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths
+- TEST-MCP-REPL-022: When an explicit workspacePathOverride pointing to a workspace with a valid marker is provided to TryResolveWithDiagnostics, resolution succeeds and the returned options carry the marker's API key.
+  **Acceptance Criteria:**
+  - [x] Resolution succeeds when explicit workspace path points to valid marker
+  - [x] Returned options contain the marker's API key
+- TEST-MCP-REPL-023: When a marker file's canonicalization is tampered and TryResolveWithDiagnostics is called, the error names the marker path and identifies 'signature' failure. This verifies secure marker validation and error reporting.
+  **Acceptance Criteria:**
+  - [x] Error message names the marker path
+  - [x] Error identifies 'signature' as the failure reason
+- TEST-MCP-REPL-024: Given a marker whose HMAC payload is signed with LF-only (\n) line endings (matching production MarkerFileService.AppendPayloadLine), when TryResolveWithDiagnostics is called on Windows or any platform where Environment.NewLine differs from \n, signature verification succeeds. This ensures cross-platform marker compatibility.
+  **Acceptance Criteria:**
+  - [x] Signature verification succeeds for LF-only signed payload on all platforms
+  - [x] Test validates cross-platform Environment.NewLine compatibility
 - TEST-MCP-REQAC-001: Creating FR/TR/TEST with acceptanceCriteria and reading them back returns an identical AcceptanceCriterion list (id/text/isSatisfied/evidence), workspace-scoped.
 - TEST-MCP-REQAC-002: Null or empty acceptanceCriteria round-trips as an empty list with no null leakage.
 - TEST-MCP-REQAC-003: The requirements document renderer emits a deterministic Acceptance Criteria block and the parser tolerates it without throwing.
@@ -361,130 +477,76 @@
   - [x] Direct sourced shell assertions pass for all five Bash plugin repos: criteria-only update emits caller criteria, no-criteria create omits criteria, and explicit empty response returns requirements_acceptance_criteria_not_captured. (evidence: Focused shell assertions passed for Codex, Claude Code, Claude Cowork, Copilot, and Grok.)
   - [x] Focused Jest tests pass for Cline, Cline v2, and OpenCode covering criteria-only update forwarding and explicit empty-response failure. (evidence: Cline and Cline v2 requirements.test.ts passed; OpenCode complex-tools.test.ts passed with coverage disabled for focused scope after full file tests passed.)
   - [x] TypeScript plugin builds pass after the guard is added. (evidence: npm run build passed for Cline, Cline v2, and OpenCode.)
+- TEST-MCP-REQAC-PLUGIN-BASH: Bash plugin repl-invoke shim tests cover acceptanceCriteria create/update blocks and copyAcceptanceCriteriaFromTodo dispatch, with focused Bats gates passing for all five Bash plugins.
+  **Acceptance Criteria:**
+  - [x] Codex, Claude Code, Claude Cowork, Copilot, and Grok Bash plugin focused Bats gates pass for acceptanceCriteria and copyAcceptanceCriteriaFromTodo. (evidence: Focused WSL Bats filters returned AC_EXIT=0 and COPY_EXIT=0 for all five Bash plugin repos.)
+- TEST-MCP-REQACPLUGIN-BASH: In each bash plugin, tests/repl-invoke-shim.bats (or tests/plugin-helpers.bats) proves typed-params emits acceptanceCriteria on create and hydrates it from existing on partial update with zero failures and zero skips.
+- TEST-MCP-REQACPLUGIN-CAPTURE: Plugin regression tests prove caller-supplied acceptanceCriteria is not silently lost when requirement create/update responses explicitly report an empty criteria list.
+- TEST-MCP-REQACPLUGIN-LIVE: Per plugin family, a live invocation of workflow.requirements.createFr with acceptanceCriteria populated round-trips through the deployed server (commit 6d376ea+) and the resulting REST GET returns the structured criteria.
+- TEST-MCP-REQAC-PLUGIN-TS: TypeScript plugin tests cover requirements acceptanceCriteria schemas, typed parameter shaping, and live-equivalent request handling for Cline, Cline v2, and Opencode.
+  **Acceptance Criteria:**
+  - [x] Cline, Cline v2, and Opencode build/test gates pass with acceptanceCriteria coverage. (evidence: Cline and Cline v2 npm build/test passed; Opencode npm build and full Jest passed with coverage thresholds.)
+- TEST-MCP-REQACPLUGIN-TS: In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) proves req_create_fr/req_update_fr/req_create_test forward acceptanceCriteria into the request payload with zero failures and zero skips.
+- TEST-MCP-SUBLOG-001: Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream and basic auth; the subscriber invokes the message log once per received message with correct status/reason; sink errors do not fail the commit; no-op default logs nothing.
+  **Acceptance Criteria:**
+  - [x] A no-op subscriber message-log default exists and a Parseable HTTP sink POSTs a flat JSON batch with X-P-Stream + basic auth. (evidence: SubscriberMessageLogTests Parseable sink cases.)
+  - [x] One message-log entry is emitted per received message at the audit chokepoint, independent of the durable audit gate. (evidence: SubscriberMessageLogTests chokepoint case.)
+- TEST-MCP-TRACE-LEGACY-001: Traceability audit coverage for completed legacy MCP baseline rows FR-MCP-001 through FR-MCP-025. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented; the requirements matrix remains the evidence source.
+- TEST-MCP-TRACE-LEGACY-002: Traceability audit coverage for completed auth, agent, CQRS, workspace, prompt, voice, desktop, and template rows FR-MCP-026 through FR-MCP-050. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+- TEST-MCP-TRACE-LEGACY-003: Traceability audit coverage for completed agent-pool, change-event, GitHub, GraphRAG, and Byrd process rows FR-MCP-052 through FR-MCP-083. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+- TEST-MCP-TRACE-REPL-001: Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   **Acceptance Criteria:**
   - [ ] Criterion A
   - [x] Criterion B (evidence: passed via integration test)
-- TEST-SUPPORT-016: Given a `SessionLogService` constructed with a non-null `WorkspaceContext`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` and every child entity's `WorkspaceId` equal the context's `WorkspacePath`. **Covered by:** `SessionLogServiceTests.SubmitAsync_StampsWorkspaceIdOnSessionEntity`, `SessionLogServiceTests.SubmitAsync_StampsWorkspaceIdOnEveryChildEntity`
-- TEST-SUPPORT-017: Given a `SessionLogService` constructed with `workspaceContext: null` and a DbContext without `_workspaceId`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` remains empty string. **Covered by:** `SessionLogServiceTests.SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty`
-- TEST-SUPPORT-018: Given a malformed POST body that fails JSON deserialization against `UnifiedSessionLogDto`, when the controller returns 400, then the response content-type is `application/problem+json` and the errors object contains `$.workspace` (or the offending field path), never the `dto` parameter name. **Covered by:** `SessionLogControllerTests.WhenPostingMalformedWorkspaceFieldThenReturnsProblemDetailsWithoutDtoKey`
-- TEST-SUPPORT-019: Given a POST body missing `sourceType`, when domain validation rejects it, then the response is `application/problem+json` with `sourceType` cited (not the legacy `{"error":"..."}` plain shape). **Covered by:** `SessionLogControllerTests.WhenPostingMissingSourceTypeThenReturnsProblemDetails`
-- TEST-SUPPORT-020: Given a successful POST to `/mcpserver/sessionlog`, when `GET /mcpserver/sessionlog/{agent}/{sessionId}` is called under the same workspace context, then the response is 200 OK with the round-tripped session. **Covered by:** `SessionLogControllerTests.WhenPostingThenGetBySessionIdReturnsRecord`
-- TEST-SUPPORT-021: Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` carries a `UnifiedRequestEntryDto`, then 201 is returned and the subsequent GET shows the appended turn. **Covered by:** `SessionLogControllerTests.WhenPostingTurnViaRestThenTurnIsRetrievable`, `SessionLogServiceTests.UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings`
-- TEST-SUPPORT-022: Given the turn-append route, when PUT is used instead of POST, then 405 is returned with `Allow: POST`. **Covered by:** `SessionLogControllerTests.WhenPuttingTurnRouteThenReturns405WithAllowHeader`
-- TEST-SUPPORT-014: Integration tests: open idempotent, begin creates in_progress, complete merges+finalizes with evidence gate, fail records note, missing session 404.
-- TEST-SUPPORT-015: SQLite tests: partial session submit preserves omitted title/model; sparse turn submit preserves omitted response/queryText and prior collections.
-- TEST-MCP-AUTH-010: Given the auth-token subsystem is initialized and a request hits a workspace-independent `/mcpserver/*` route with an unknown or missing API key and no `X-Workspace-Path` (so the workspace is unresolved and the `Mcp:RepoRoot` fallback path has no seeded token or is empty), `WorkspaceAuthMiddleware` returns `401` (regression: previously `503` "token not initialized"). **Covered by:** `WorkspaceAuthMiddlewareTests.UnknownApiKey_Unresolved_Initialized_Returns401`, `WorkspaceAuthMiddlewareTests.NoApiKey_Unresolved_Initialized_Returns401`, `WorkspaceAuthMiddlewareTests.EmptyRepoRoot_Unresolved_Initialized_Returns401`
-- TEST-MCP-AUTH-011: When `!WorkspaceTokenService.IsInitialized`, `WorkspaceAuthMiddleware` returns `503` with a `Retry-After` header and a JSON body. **Covered by:** `WorkspaceAuthMiddlewareTests.SubsystemNotInitialized_Returns503WithRetryAfter`
-- TEST-MCP-AUTH-012: `WorkspaceTokenService.IsInitialized` is `false` before any token is generated and `true` after `GenerateToken`. **Covered by:** `WorkspaceTokenServiceTests.IsInitialized_NoTokens_ReturnsFalse`, `WorkspaceTokenServiceTests.IsInitialized_AfterGenerateToken_ReturnsTrue`
-- TEST-MCP-HEALTH-002: `WorkspaceReadinessHealthCheck` returns `Healthy` when an enabled primary workspace is registered and has a seeded token; `Unhealthy` when the token subsystem is uninitialized, no enabled workspace is registered, or the primary workspace has no seeded token. **Covered by:** `WorkspaceReadinessHealthCheckTests`
-- TEST-MCP-HEALTH-003: Integration: with the data layer up, `/mcpserver/todo` returns `200` with a valid token and no `X-Workspace-Path`; unknown or missing keys return `401`; `/ready` returns `200` Healthy and its body lists the `workspace-ready` check. **Covered by:** `ReadinessAndAuthIntegrationTests`
-- TEST-MCP-TRACE-LEGACY-001: Traceability audit coverage for completed legacy MCP baseline rows FR-MCP-001 through FR-MCP-025. The mapping file must no longer report these complete rows as `*(Planned)*`; when precise historical TEST rows are unavailable, this TEST ID records the explicit traceability audit classification and points maintainers to the matrix source-file evidence for those shipped baseline server features.
+- TEST-SUPPORT-010: Traceability audit coverage for the original broad FR-SUPPORT-010 support surface row. This broad parent row predates the later FR-SUPPORT-010A through FR-SUPPORT-010F split and maps to this explicit audit TEST ID while split child rows retain their dedicated support test IDs.
+- TEST-SUPPORT-010A-1: Given a `SessionLogService` constructed with a non-null `WorkspaceContext`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` and every child entity's `WorkspaceId` equal the context's `WorkspacePath`. **Covered by:** `SessionLogServiceTests.SubmitAsync_StampsWorkspaceIdOnSessionEntity`, `SessionLogServiceTests.SubmitAsync_StampsWorkspaceIdOnEveryChildEntity`
+- TEST-SUPPORT-010A-2: Given a `SessionLogService` constructed with `workspaceContext: null` and a DbContext without `_workspaceId`, when `SubmitAsync` persists a session, then `SessionLogEntity.WorkspaceId` remains empty string. **Covered by:** `SessionLogServiceTests.SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty`
+- TEST-SUPPORT-010B-1: Given a malformed POST body that fails JSON deserialization against `UnifiedSessionLogDto`, when the controller returns 400, then the response content-type is `application/problem+json` and the errors object contains `$.workspace` (or the offending field path), never the `dto` parameter name. **Covered by:** `SessionLogControllerTests.WhenPostingMalformedWorkspaceFieldThenReturnsProblemDetailsWithoutDtoKey`
+- TEST-SUPPORT-010B-2: Given a POST body missing `sourceType`, when domain validation rejects it, then the response is `application/problem+json` with `sourceType` cited (not the legacy `{"error":"..."}` plain shape). **Covered by:** `SessionLogControllerTests.WhenPostingMissingSourceTypeThenReturnsProblemDetails`
+- TEST-SUPPORT-010C-1: Given a successful POST to `/mcpserver/sessionlog`, when `GET /mcpserver/sessionlog/{agent}/{sessionId}` is called under the same workspace context, then the response is 200 OK with the round-tripped session. **Covered by:** `SessionLogControllerTests.WhenPostingThenGetBySessionIdReturnsRecord`
+- TEST-SUPPORT-010C-2: Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` carries a `UnifiedRequestEntryDto`, then 201 is returned and the subsequent GET shows the appended turn. **Covered by:** `SessionLogControllerTests.WhenPostingTurnViaRestThenTurnIsRetrievable`, `SessionLogServiceTests.UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings`
+- TEST-SUPPORT-010C-3: Given the turn-append route, when PUT is used instead of POST, then 405 is returned with `Allow: POST`. **Covered by:** `SessionLogControllerTests.WhenPuttingTurnRouteThenReturns405WithAllowHeader`
+- TEST-SUPPORT-010E: Integration tests: open idempotent, begin creates in_progress, complete merges+finalizes with evidence gate, fail records note, missing session 404.
+- TEST-SUPPORT-010F: SQLite tests: partial session submit preserves omitted title/model; sparse turn submit preserves omitted response/queryText and prior collections.
+- TEST-SUPPORT-014: Integration tests verify session log operations: open idempotent, begin creates in_progress, complete merges and finalizes with evidence gate, fail records note, missing session returns 404.
   **Acceptance Criteria:**
-  - [x] Completed FR-MCP-001..025 mapping rows use this TEST ID instead of `*(Planned)*` where no more precise TEST ID is documented.
-  - [x] Requirements-Matrix.md remains the source-file evidence record for the shipped baseline server features in this band.
-- TEST-MCP-TRACE-LEGACY-002: Traceability audit coverage for completed auth, agent, CQRS, workspace, prompt, voice, desktop, and template rows FR-MCP-026 through FR-MCP-050. The mapping file must use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+  - [x] Open operation is idempotent
+  - [x] Begin creates session in in_progress state
+  - [x] Complete merges and finalizes with evidence gate
+  - [x] Fail records note in session
+- TEST-SUPPORT-015: SQLite tests verify that partial session submit preserves omitted title/model and sparse turn submit preserves omitted response/queryText and prior collections.
   **Acceptance Criteria:**
-  - [x] Completed FR-MCP-026..050 mapping rows use this TEST ID instead of `*(Planned)*` where no more precise TEST ID is documented.
-  - [x] Rows that are still planned or in progress remain unchanged and are not reclassified as complete.
-- TEST-MCP-TRACE-LEGACY-003: Traceability audit coverage for completed agent-pool, change-event, GitHub, GraphRAG, and Byrd process rows FR-MCP-052 through FR-MCP-083. The mapping file must use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
+  - [x] Partial session submit preserves omitted title and model fields
+  - [x] Sparse turn submit preserves omitted response and queryText fields
+  - [x] Prior collections are preserved during partial updates
+- TEST-SUPPORT-016: When SessionLogService with a non-null WorkspaceContext calls SubmitAsync, SessionLogEntity.WorkspaceId and every child entity's WorkspaceId equal the context's WorkspacePath. This ensures proper workspace isolation for session logs.
   **Acceptance Criteria:**
-  - [x] Completed FR-MCP-052..083 mapping rows use this TEST ID instead of `*(Planned)*` where no more precise TEST ID is documented.
-  - [x] Planned and in-progress FRs in the same numeric range remain visibly planned rather than being swept into completed audit coverage.
-- TEST-MCP-TRACE-REPL-001: Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
+  - [x] SessionLogEntity.WorkspaceId matches context WorkspacePath
+  - [x] Every child entity's WorkspaceId matches context WorkspacePath
+- TEST-SUPPORT-017: When SessionLogService is constructed with workspaceContext: null and a DbContext without _workspaceId, SubmitAsync persists a session with SessionLogEntity.WorkspaceId remaining empty string.
   **Acceptance Criteria:**
-  - [x] Completed FR-MCP-REPL-001..005 mapping rows use this TEST ID instead of `*(Planned)*`.
-  - [x] The REPL test family remains documented in Testing-Requirements.md with concrete focused test classes.
-- TEST-SUPPORT-010: Traceability audit coverage for the original FR-SUPPORT-010 support surface row. This row is broad and predates the later FR-SUPPORT-011..010F split; the mapping file must use this explicit audit TEST ID instead of leaving the parent row as `*(Planned)*`.
+  - [x] WorkspaceId remains empty string when workspace context is null
+  - [x] Session persists successfully without workspace context
+- TEST-SUPPORT-018: When a malformed POST body fails JSON deserialization against UnifiedSessionLogDto, the controller returns 400 with application/problem+json content-type and errors object contains the field path (e.g., $.workspace), never the dto parameter name.
   **Acceptance Criteria:**
-  - [x] FR-SUPPORT-010 maps to this TEST ID while split child rows retain their dedicated support test IDs.
-  - [x] Later support slices remain mapped to their narrower dedicated TEST rows.
-- TEST-MCP-QBSEED-001: Unit coverage for `BrainSlotStartupSeeder` over a real in-memory `McpDbContext`, real `BrainSlotRegistryService`, and the in-memory key server (only the credential resolver stubbed).
+  - [x] Response content-type is application/problem+json
+  - [x] Errors object contains field path ($.workspace) not parameter name
+- TEST-SUPPORT-019: When a POST body is missing sourceType, domain validation rejects it with application/problem+json response citing sourceType (not legacy {"error":"..."} plain shape).
   **Acceptance Criteria:**
-  - [x] With execution enabled and four roles configured, `StartAsync` makes the quad ready (all roles enabled).
-  - [x] Running the seeder twice is idempotent (exactly four enabled slots, no exception).
-  - [x] With execution disabled, or with no slots configured, nothing is provisioned.
-  - [x] One invalid slot is skipped without throwing and the remaining valid slots are still provisioned.
-- TEST-MCP-QBLIVE-001: Service-composition coverage of the real four-role Quad-Brain loop (`QuadBrainOrchestrationService` + `BrainSlotInvocationService` + `BrainSlotRegistryService` + in-memory key server), faking only `IBrainSlotChatClientFactory` and the committing transaction coordinator.
+  - [x] Response is application/problem+json format
+  - [x] sourceType field is cited in error response
+- TEST-SUPPORT-020: When a successful POST to /mcpserver/sessionlog completes, GET /mcpserver/sessionlog/{agent}/{sessionId} under the same workspace context returns 200 OK with the round-tripped session.
   **Acceptance Criteria:**
-  - [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
-  - [x] A `tool_calls` Arbiter output is returned verbatim as the orchestration output.
-  - [x] With only three roles seeded the loop rejects `QuadNotReady` without calling any brain.
-  - [x] With execution disabled no brain is called and the loop rejects `ExecutionDisabled`.
-- TEST-MCP-QBLIVEINT-001: Integration coverage that drives the real orchestration through `POST /v1/chat/completions` over four seeded slots, faking only the per-brain LLM call and the transaction coordinator.
+  - [x] POST to /mcpserver/sessionlog succeeds
+  - [x] GET /mcpserver/sessionlog/{agent}/{sessionId} returns 200 OK
+  - [x] Response contains the round-tripped session data
+- TEST-SUPPORT-021: When the turn-append route receives a POST to /mcpserver/sessionlog/{agent}/{sessionId}/turn with a UnifiedRequestEntryDto, 201 is returned and the subsequent GET shows the appended turn.
   **Acceptance Criteria:**
-  - [x] A plain Arbiter decision is returned as the assistant message (finish_reason `stop`) and all four roles were invoked.
-  - [x] A `tool_calls` Arbiter output surfaces as an OpenAI assistant tool call (finish_reason `tool_calls`).
-  - [x] With no slots seeded the endpoint returns an empty decision (the real loop rejected `QuadNotReady`).
-
-- TEST-MCP-QBTOOLS-001: Verifies the QBAgent external tool surface exposes the file/powershell/bash/git primitives by name and that they are NOT mcp_-prefixed, so the QuadBrain interceptor treats them as external tools the agent executes (FR-MCP-QBTOOLS-001/007, TR-MCP-QBTOOLS-000).
+  - [x] POST to turn route returns 201 Created
+  - [x] Subsequent GET shows the appended turn
+- TEST-SUPPORT-022: When PUT is used on the turn-append route instead of POST, the endpoint returns 405 Method Not Allowed with 'Allow: POST' header.
   **Acceptance Criteria:**
-  - [x] All seven external primitives (read_file, write_file, list_files, edit_file, run_powershell, run_bash, git) are present by name
-  - [x] No external tool carries the mcp_ prefix
-  - [x] Disposing the tool set is idempotent
-
-- TEST-MCP-QBTOOLS-002: Verifies the QBAgent git tool builds expected git invocations, constrains push to the origin remote, gates push behind the opt-in, and rejects unknown subcommands (FR-MCP-QBTOOLS-004).
-  **Acceptance Criteria:**
-  - [x] status builds `git status` in the workspace and reports success
-  - [x] argument strings are appended after the subcommand
-  - [x] unknown subcommands are rejected and git is never launched
-  - [x] push is refused when the opt-in is off and git is never launched
-  - [x] push to a non-origin remote is rejected even when push is enabled
-  - [x] push with no remote injects origin so it never relies on ambient defaults
-  - [x] push to origin with a branch is allowed and passed through
-  - [x] GuardPush appends origin when only flags are present
-  - [x] push -u origin main is allowed (upstream flag precedes origin remote)
-  - [x] push to a URL remote is rejected before git is launched
-  - [x] push to an scp-style remote (git@host:repo) is rejected
-  - [x] mutating subcommands (commit) run in the workspace directory
-
-- TEST-MCP-QBTOOLS-003: Verifies the optional run_bash tool reports unavailability cleanly when Git Bash is not installed and returns output when it is (FR-MCP-QBTOOLS-003).
-  **Acceptance Criteria:**
-  - [x] When bash.exe is missing, the runner returns -1/"not found" and the tool reports available=false
-  - [x] When bash runs, the tool reports available=true and surfaces stdout and exit code
-  - [x] A non-zero bash exit is available but not successful
-
-- TEST-MCP-QBTOOLS-007: Verifies the run_powershell tool creates a hosted session lazily and executes the command against it (FR-MCP-QBTOOLS-002).
-  **Acceptance Criteria:**
-  - [x] The tool creates one session and runs the command, returning the captured output
-  - [x] A second call reuses the same session (no new session created)
-  - [x] An empty command is rejected before any session work
-  - [x] When session creation fails, the tool surfaces the error and does not execute a command
-  - [x] Disposing the tool closes the reused session
-
-- TEST-MCP-QBTOOLSINT-001: End-to-end test of the QBAgent tool + skill surface. The real Microsoft Agent Framework loop runs with QuadBrain (scripted) as the model over the in-memory server; the agent loads a skill then writes and edits a workspace file, with the file tools routed through the MCP client to the server's RepoFileService (FR-MCP-QBTOOLS-001/006/007, FR-MCP-QBSKILLS-002).
-  **Acceptance Criteria:**
-  - [x] The agent loads a skill, then write_file + edit_file land on the server workspace file
-  - [x] edit_file replaces the specified string in the target file
-  - [x] File content persists correctly across write and edit operations
-
-- TEST-MCP-QBSKILLS-001: **SKILL.md Frontmatter Parser Validation** - Verifies the manifest parser extracts name, description, license, allowed-tools fields; rejects missing required fields with descriptive errors; handles CRLF and LF line endings; separates body from frontmatter. (evidence: SkillManifestParserTests validates parsing of valid manifests and rejection cases including missing fields, missing frontmatter, and line ending normalization.)
-
-- TEST-MCP-QBSKILLS-002: **Skill Registry Discovery and Loading** - Verifies the registry discovers skills recursively from flat and nested layouts; returns summary list (name+description) via Discover(); loads full manifest body via Load(name); silently skips invalid skills and nonexistent roots; all seven authored workspace skills parse with non-empty bodies. (evidence: SkillRegistryTests validates discovery across flat/nested layouts, load behavior, graceful error handling, and AuthoredSkillsTests confirms all authored skills are discoverable with bodies.)
-
-- TEST-MCP-QBSKILLS-003: **Skill Tools External Tool Exposure** - Verifies list_skills and load_skill are exposed as non-mcp_ prefixed external tools; list_skills returns discovery summaries; load_skill returns skill body for known skills and not-found message for unknown skills. (evidence: SkillToolTests validates tool names, descriptions, and return values for both discovery and load operations.)
-
-
-
-- TEST-MCP-QBEXEC-002: Concrete internal-tool executor (FR-MCP-QBEXEC-002, TR-MCP-QBEXEC-002). Verifies `QuadBrainInternalToolExecutor.TryExecuteAsync` routes `mcp_todo_create`, `mcp_todo_update`, `mcp_todo_delete` through gated TODO service with parsed id/request validation; routes `mcp_repo_write` and `mcp_repo_edit` through repo service with path/content parsing; returns `Unhandled` for unknown tools; returns `Fail` for missing required fields and JSON parse errors; never throws. Implemented in `tests/McpServer.Support.Mcp.Tests/Services/QuadBrainInternalToolExecutorTests.cs`.
-  **Acceptance Criteria:**
-  - [x] `mcp_todo_create` with valid JSON routes through gated create and returns Ok outcome.
-  - [x] `mcp_todo_update` with missing id returns Fail without service call.
-  - [x] `mcp_repo_write` routes through repo write service with path and content arguments.
-  - [x] `mcp_repo_edit` routes through repo edit service with path, oldString, newString, replaceAll, and expectedOccurrences.
-  - [x] Unknown tool names return Unhandled outcome.
-  - [x] Invalid JSON arguments return Fail outcome without calling service.
-
-- TEST-MCP-QBEXEC-003: Inter-brain session logging (FR-MCP-QBEXEC-003, TR-MCP-QBEXEC-003). Verifies `BrainInteractionSessionLogger.LogInteractionAsync` appends full prompt and output as two dialog items with role tag, timestamps, and source type; validates non-empty session/turn context (no-op when null/empty/whitespace); redacts Bearer tokens and API key patterns before logging; swallows append exceptions and logs at Warning level; never propagates logging failure. Implemented in `tests/McpServer.Support.Mcp.Tests/Services/BrainInteractionSessionLoggerTests.cs`.
-  **Acceptance Criteria:**
-  - [x] Full prompt appends as user observation item with role tag and timestamp.
-  - [x] Full output appends as model reasoning item with role tag and timestamp.
-  - [x] Null/empty/whitespace sessionId or turnId results in no-op without append attempt.
-  - [x] Bearer tokens (Bearer prefix followed by non-whitespace) are redacted to `Bearer [REDACTED]`.
-  - [x] API key patterns (api_key, x-api-key, apikey with colon or equals separator) are redacted to `[key_name] [REDACTED]`.
-  - [x] Append exceptions are caught and logged at Warning, not re-thrown.
-- TEST-MCP-QUAD-SESSION-001: Per-session QuadBrain instance attachment over global brains (FR-MCP-QUAD-SESSION-001).
-  **Acceptance Criteria:**
-  - [x] CompleteAsync with a sessionId/turnId attaches them to the orchestration request metadata and TurnId.
-  - [x] Without a session id, no session metadata is attached (anonymous instance).
-  - [x] A /v1 request's X-Session-Id header reaches the orchestration (integration).
+  - [x] PUT request returns 405 Method Not Allowed
+  - [x] Response includes Allow: POST header
+- TEST-WFL-001: Test requirement for complete workflow
