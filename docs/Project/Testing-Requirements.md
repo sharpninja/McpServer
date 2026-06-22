@@ -287,6 +287,12 @@
 - TEST-MCP-ACID-004: VerifyManifest valid plus rejections relying parties act on - signature mismatch, wrong subscriber.
 - TEST-MCP-ACID-005: Commit, idempotent re-commit, and rejections - signature mismatch, encrypted-body mismatch, plaintext mismatch, stale sequence, wrong subscriber, decrypt-required failure. Subscriber validates the key server verification result.
 - TEST-MCP-ACID-006: Committed, bypassed (disabled/non-mutating), aborted, rejected on key-server sign failure fail-closed before mutation, rejected on subscriber commit rejection with rollback, degraded on subscriber unavailable. Coordinator validates key server and subscriber results.
+- TEST-MCP-AIUNIT-001: Add tests in tests/Build.Tests/ covering:
+- Build target properties AiCodeReview and AiProjectReview exist.
+- The McpServer.Review.Tests project builds and contains two Theory tests marked [AiCodeReview] and [AiProjectReview] (with prompt literals).
+- When executed (via the Nuke targets' `dotnet test`), the tests aggregate the prompt and review response to MD under docs/reviews.
+- The Nuke targets run `dotnet test` with filter selecting the marked tests; regular Test excludes the review project.
+- Write helpers for reviews produce correct MD.
 - TEST-MCP-AUTH-010: Given the auth-token subsystem is initialized, when a request hits a workspace-independent /mcpserver/* route with an unknown or missing API key and no X-Workspace-Path, then WorkspaceAuthMiddleware returns 401. This is a regression test (previously returned 503).
   **Acceptance Criteria:**
   - [x] Unknown API key with unresolved workspace returns 401.
@@ -438,8 +444,6 @@
 - TEST-MCP-REPL-007-2: Given an explicit `workspacePathOverride` pointing to a workspace with a valid marker, when `TryResolveWithDiagnostics` is called, then resolution succeeds and the returned options carry the marker's API key. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_AcceptsExplicitWorkspaceArgument`
 - TEST-MCP-REPL-007-3: Given a marker file whose canonicalization is tampered, when `TryResolveWithDiagnostics` is called, then the error names the marker path and identifies "signature" failure. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenSignatureFails_ReportsReason`
 - TEST-MCP-REPL-007-4: Given a marker whose HMAC payload is signed with LF-only (`\n`) line endings (matching the production server's `MarkerFileService.AppendPayloadLine`), when `TryResolveWithDiagnostics` is called on Windows or any platform where `Environment.NewLine` differs from `\n`, then signature verification succeeds. **Covered by:** `MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_VerifiesSignatureBuiltWithLfLineEndings`
-- TEST-MCP-REPL-022: REPL CLI accepts `--agent <name>` on --agent-stdio and --interactive; value is propagated to MarkerFileClientOptionsResolver.TryResolveWithDiagnostics and used to key per-agent verified marker cache (WorkspacePath + Agent) preventing cross-agent mixing (Codex vs ClaudeCode on same workspace). **Covered by:** Program.cs option handling + CreateHost, MarkerFileClientOptionsResolver (AgentOverride, GetCurrentAgent, cache lookup/save), updated resolver integration tests exercising AgentOverride.
-- TEST-MCP-REPL-023: Every plugin core call site to mcpserver-repl (bash _repl_run_*, PS ProcessStartInfo/ArgumentList, Node spawn + replArgs, daemon, persistent) includes `--agent` derived from MCP_AGENT_NAME/PLUGIN_AGENT_* envs. **Covered by:** lib-sh/repl-invoke.sh, repl-persistent.sh, repl-daemon.js; lib-ps/repl-invoke.ps1; lib-node repl-bridge.ts; core bats/plugin test fixtures.
 - TEST-MCP-REPL-008: ✅ **Complete** - Given bootstrapped REPL commands for context operations (`client.context.*`), when invoked with valid args, then results match the equivalent client operation semantics. **Covered by:** `GenericClientPassthroughTests`, `Iteration5IntegrationTests`
 - TEST-MCP-REPL-009: ✅ **Complete** - Given bootstrapped REPL commands for requirements management (`workflow.requirements.*`), when invoked with valid args, then results match the equivalent client operation semantics. **Covered by:** `RequirementsWorkflowTests`, `Iteration4IntegrationTests`
 - TEST-MCP-REPL-010: ✅ **Complete** - Given bootstrapped REPL commands for workspace selection, when invoked with valid workspace paths, then workspace context resolution matches expected behavior. **Covered by:** `WorkspaceSelectionTests`, `AuthKeyAndWorkspaceTests`
@@ -551,4 +555,3 @@
   **Acceptance Criteria:**
   - [x] PUT request returns 405 Method Not Allowed
   - [x] Response includes Allow: POST header
-- TEST-WFL-001: Test requirement for complete workflow

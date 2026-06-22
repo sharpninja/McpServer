@@ -1,7 +1,7 @@
 # aiUnit Review: plan
 
 - Run-log: `aiunit-review-plan-20260612T060729.901Z.json`
-- Source: `F:\github\mcpserver\artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`
+- Source: `F:\GitHub\McpServer\artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`
 
 ## Prompt
 

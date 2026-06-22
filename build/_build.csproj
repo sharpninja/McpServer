@@ -20,6 +20,12 @@
     <PackageReference Include="Microsoft.Build.Utilities.Core" />
     <PackageReference Include="NuGet.Packaging" />
     <PackageReference Include="Nuke.Common" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="SharpNinja.aiUnit" />
     <PackageReference Include="System.Security.Cryptography.Xml" />
   </ItemGroup>
 

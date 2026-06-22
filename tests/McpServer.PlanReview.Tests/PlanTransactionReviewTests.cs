@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using SharpNinja.AiUnit.Review;
-using Xunit.Abstractions;
+using Abstractions = Xunit.Abstractions;
 
 namespace McpServer.PlanReview.Tests;
 
@@ -12,11 +12,11 @@ public sealed class PlanTransactionReviewTests
 {
     private const string ReviewArtifactRelativePath = "artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json";
 
-    private readonly ITestOutputHelper _output;
+    private readonly Abstractions.ITestOutputHelper _output;
 
     /// <summary>Initializes a new instance of the <see cref="PlanTransactionReviewTests"/> class.</summary>
     /// <param name="output">xUnit output helper.</param>
-    public PlanTransactionReviewTests(ITestOutputHelper output)
+    public PlanTransactionReviewTests(Abstractions.ITestOutputHelper output)
     {
         _output = output;
     }

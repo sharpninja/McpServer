@@ -212,6 +212,19 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 **TR-MCP-AGENT-PARITY-030** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
+## TR-MCP-AIUNIT-001
+
+**Implement CreateAiUnitClient and library-triggered Send in Nuke build for reviews** — In build/Build.cs add public CreateAiUnitClient(string reviewType) that:
+- Builds IConfigurationRoot loading appsettings.aiunit.json (root preferred, fallback to tests/McpServer.PlanReview.Tests/appsettings.aiunit.json), env.
+- Resolves ActiveStrategy.
+- Instantiates and returns a client (ResilientFrontierClient or adapter implementing SendAsync(FrontierRequest)->FrontierResponse) that actually delegates to the aiUnit strategy executor (cli etc).
+
+AiCodeReview / AiProjectReview targets (already sketched) call it and use the response to populate runlog + MD via WriteAiUnitReviewMarkdownFromData.
+
+Update Build.Ai*.cs if needed for correct using/ctor of FrontierRequest (use named or positional consistent with lib).
+
+Add using Microsoft.Extensions.Configuration*; ensure _build.csproj and Directory.Packages.props have the Json binder.
+
 ## TR-MCP-API-001
 
 REST routes for todo/session/context/repo/github with OpenAPI.

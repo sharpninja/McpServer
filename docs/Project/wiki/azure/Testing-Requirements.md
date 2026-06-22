@@ -1056,6 +1056,20 @@ Committed, bypassed (disabled/non-mutating), aborted, rejected on key-server sig
 
 
 
+## TEST-MCP-AIUNIT
+
+### TEST-MCP-AIUNIT-001
+
+Add tests in tests/Build.Tests/ covering:
+- Build target properties AiCodeReview and AiProjectReview exist.
+- WriteAiUnitReviewMarkdownFromData produces correct MD file with prompt + response sections.
+- CreateAiUnitClient (internal or exposed) constructs without throw when given valid IConfiguration stub (mocked config for ActiveStrategy, Strategies section); returns non-null client-like object.
+- Optional: stubbed SendAsync test verifies that the returned client is called with correct FrontierRequest shape for given reviewType.
+
+These tests must pass with mocks before the real client construction logic is filled (BDP).
+
+
+
 ## TEST-MCP-AUTH
 
 ### TEST-MCP-AUTH-010

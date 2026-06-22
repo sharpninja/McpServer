@@ -237,6 +237,18 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         switch (request.Method)
         {
             case SessionLogCommandShapes.OpenSessionMethod:
+                // Call workflow.Open to set local REPL state (_state) so subsequent beginTurn/appendActions (workflow.*) find active session.
+                // Also route via client for server-side open/submit (passthrough).
+                // agent/sessionId already validated non-empty above; no magic "Codex" default.
+                if (_sessionLogWorkflow is not null)
+                {
+                    await _sessionLogWorkflow.OpenSessionAsync(
+                        agent,
+                        RequireString(args, "sessionId"),
+                        RequireString(args, "title"),
+                        GetString(args, "model") ?? "unknown",
+                        cancellationToken).ConfigureAwait(false);
+                }
                 clientMethod = "OpenSessionAsync";
                 clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -249,6 +261,16 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 break;
 
             case SessionLogCommandShapes.BeginTurnMethod:
+                // Mirror to local workflow state so that subsequent appendActions (even if sent without ids)
+                // will find an active turn in _state. The client passthrough handles the server side.
+                if (_sessionLogWorkflow is not null)
+                {
+                    await _sessionLogWorkflow.BeginTurnAsync(
+                        RequireString(args, "requestId"),
+                        RequireString(args, "queryTitle"),
+                        RequireString(args, "queryText"),
+                        cancellationToken).ConfigureAwait(false);
+                }
                 clientMethod = "BeginTurnAsync";
                 clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -263,16 +285,50 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 break;
 
             case SessionLogCommandShapes.CompleteTurnMethod:
+                if (_sessionLogWorkflow is not null)
+                {
+                    // Mirror completion to clear local active turn for any follow-on legacy commands.
+                    var resp = GetString(args, "response") ?? "completed";
+                    await _sessionLogWorkflow.CompleteTurnAsync(resp, cancellationToken).ConfigureAwait(false);
+                }
                 clientMethod = "CompleteTurnAsync";
                 clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: null);
                 resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "completed" };
                 break;
 
             case SessionLogCommandShapes.FailTurnMethod:
+                if (_sessionLogWorkflow is not null)
+                {
+                    var err = GetString(args, "errorMessage") ?? GetString(args, "failureNote") ?? "failed";
+                    await _sessionLogWorkflow.FailTurnAsync(err, GetString(args, "errorCode"), cancellationToken).ConfigureAwait(false);
+                }
                 clientMethod = "FailTurnAsync";
                 clientArgs = BuildFinalizeArgs(agent, sessionId, args, failureNote: GetString(args, "errorMessage") ?? GetString(args, "failureNote"));
                 resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "failed" };
                 break;
+
+            case SessionLogCommandShapes.AppendActionsMethod:
+                // When ids are present we can still honor appendActions by routing through the (now populated) local workflow state.
+                // This keeps the legacy append path working even after a begin that carried explicit ids.
+                if (_sessionLogWorkflow is not null)
+                {
+                    var acts = GetSessionActions(args, "actions");
+                    if (acts.Count > 0)
+                    {
+                        await _sessionLogWorkflow.AppendActionsAsync(acts, cancellationToken).ConfigureAwait(false);
+                    }
+                }
+                // Return success directly (the workflow Submit already persisted the turn+actions).
+                return new YamlEnvelope
+                {
+                    Type = "result",
+                    Payload = new ResultPayload
+                    {
+                        RequestId = request.RequestId,
+                        Result = new Dictionary<string, object?> { ["appended"] = true },
+                        Deprecated = true,
+                    },
+                };
 
             default:
                 return null;
@@ -390,8 +446,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case SessionLogCommandShapes.OpenSessionMethod:
+                    // Legacy no-ids path: still require a sensible agent from params; no silent Codex.
                     await workflow.OpenSessionAsync(
-                        GetString(args, "agent") ?? GetString(args, "sourceType") ?? "Codex",
+                        GetString(args, "agent") ?? GetString(args, "sourceType") ?? "unknown",
                         RequireString(args, "sessionId"),
                         RequireString(args, "title"),
                         GetString(args, "model") ?? "unknown",
