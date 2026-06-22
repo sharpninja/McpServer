@@ -917,6 +917,9 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             return;
         }
 
+        if (!IsValidRequirementId(id, kind))
+            return;
+
         // Use a stable ancient timestamp for backfills to avoid "createdAt at list/read time" symptom.
         // Title==id and placeholder body are intentional markers for dangling TODO links; consumers
         // should prefer list + filter or explicit creates over relying on these.
@@ -961,9 +964,9 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
 
     private static IEnumerable<(string Kind, string Id)> NormalizeRequirementLinks(TodoFlatItem flat)
     {
-        foreach (var id in NormalizeRequirementIds(flat.FunctionalRequirements))
+        foreach (var id in NormalizeRequirementIds(flat.FunctionalRequirements).Where(id => IsValidRequirementId(id, "fr")))
             yield return ("fr", id);
-        foreach (var id in NormalizeRequirementIds(flat.TechnicalRequirements))
+        foreach (var id in NormalizeRequirementIds(flat.TechnicalRequirements).Where(id => IsValidRequirementId(id, "tr")))
             yield return ("tr", id);
     }
 
@@ -987,6 +990,19 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         return trimmed.Length <= RequirementIdMaxLength
             ? trimmed
             : trimmed[..RequirementIdMaxLength];
+    }
+
+    private static bool IsValidRequirementId(string id, string kind)
+    {
+        if (string.IsNullOrWhiteSpace(id)) return false;
+        var k = kind.ToLowerInvariant();
+        if (k == "fr")
+            return System.Text.RegularExpressions.Regex.IsMatch(id, @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (k == "tr")
+            return System.Text.RegularExpressions.Regex.IsMatch(id, @"^TR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (k == "test")
+            return System.Text.RegularExpressions.Regex.IsMatch(id, @"^TEST-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        return true;
     }
 
     private static string BuildTodoRequirementKey(string kind, string id) => kind.ToLowerInvariant() + ":" + id;

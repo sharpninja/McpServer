@@ -49,6 +49,36 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     }
 
     /// <inheritdoc />
+    public async Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        await _gate.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            var before = _frEntries.Count;
+            _frEntries.RemoveAll(IsInvalidPlaceholder);
+            if (_frEntries.Count != before)
+            {
+                await PersistFunctionalAsync(ct).ConfigureAwait(false);
+                await PublishRequirementsChangeSafeAsync("repaired", "*", ct).ConfigureAwait(false);
+            }
+            return before - _frEntries.Count;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
+    private static bool IsInvalidPlaceholder(FrEntry e)
+    {
+        if (e?.Body == null || !e.Body.StartsWith("Placeholder requirement backfilled", StringComparison.Ordinal))
+            return false;
+        // Keep only canonical FR ids like FR-XXX-001 or FR-XXX-SUB-001
+        return !System.Text.RegularExpressions.Regex.IsMatch(e.Id, @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+    }
+
+    /// <inheritdoc />
     public Task<FrEntry?> GetFrAsync(string id, CancellationToken ct = default)
     {
         ct.ThrowIfCancellationRequested();

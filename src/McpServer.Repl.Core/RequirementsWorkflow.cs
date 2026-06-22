@@ -45,21 +45,16 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<IFrQueryResult> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var entries = await _client.ListFrAsync(cancellationToken);
-        var filtered = entries.AsEnumerable();
-
-        if (!string.IsNullOrEmpty(area))
-        {
-            filtered = filtered.Where(e => ExtractArea(e.Id) == area);
-        }
-
-        if (!string.IsNullOrEmpty(status))
-        {
-            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
-        }
-
-        var items = filtered.Select(e => new FrItemAdapter(e)).ToList();
+        var entries = await _client.ListFrAsync(area, status, cancellationToken);
+        var items = entries.Select(e => new FrItemAdapter(e)).ToList();
         return new FrQueryResultAdapter(items);
+    }
+
+    /// <inheritdoc />
+    public async Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken cancellationToken = default)
+    {
+        // The underlying client call hits the /repair endpoint.
+        return await _client.RepairFrPlaceholdersAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

@@ -24,10 +24,30 @@ public sealed class RequirementsClient : McpClientBase
     internal RequirementsClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
         : base(http, options, holder) { }
 
-    /// <summary>Lists all functional requirements.</summary>
-    public async Task<IReadOnlyList<FrEntry>> ListFrAsync(CancellationToken cancellationToken = default)
+    /// <summary>Lists functional requirements, optionally filtered by area or status.</summary>
+    public async Task<IReadOnlyList<FrEntry>> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<IReadOnlyList<FrEntry>>("mcpserver/requirements/fr", cancellationToken);
+        var url = "mcpserver/requirements/fr";
+        var qs = new List<string>();
+        if (!string.IsNullOrWhiteSpace(area)) qs.Add($"area={Uri.EscapeDataString(area)}");
+        if (!string.IsNullOrWhiteSpace(status)) qs.Add($"status={Uri.EscapeDataString(status)}");
+        if (qs.Count > 0) url += "?" + string.Join("&", qs);
+        return await GetAsync<IReadOnlyList<FrEntry>>(url, cancellationToken);
+    }
+
+    /// <summary>Lists all functional requirements (unfiltered).</summary>
+    public async Task<IReadOnlyList<FrEntry>> ListFrAsync(CancellationToken cancellationToken = default)
+        => await ListFrAsync(null, null, cancellationToken);
+
+    /// <summary>Repairs the FR catalog by purging invalid backfilled placeholders. Returns purged count.</summary>
+    public async Task<int> RepairFrPlaceholdersAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await PostAsync<object>("mcpserver/requirements/fr/repair", null, cancellationToken).ConfigureAwait(false);
+        if (result is System.Text.Json.JsonElement je && je.TryGetProperty("purged", out var p) && p.TryGetInt32(out var n))
+            return n;
+        if (result is System.Collections.IDictionary dict && dict["purged"] is int i)
+            return i;
+        return 0;
     }
 
     /// <summary>Gets a functional requirement by ID.</summary>

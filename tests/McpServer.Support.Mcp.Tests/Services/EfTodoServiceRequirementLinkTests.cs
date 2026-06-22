@@ -101,8 +101,8 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             Title = "Link legacy requirement labels",
             Section = "Backlog",
             Priority = "high",
-            FunctionalRequirements = ["FR-06: Client must throw typed exceptions for HTTP error responses"],
-            TechnicalRequirements = ["TR-MCP-REQ-002 RequirementsDocumentService parses all four files"],
+            FunctionalRequirements = ["FR-REQ-006: Client must throw typed exceptions for HTTP error responses"],
+            TechnicalRequirements = ["TR-MCP-002: RequirementsDocumentService parses all four files"],
         }).ConfigureAwait(true);
 
         Assert.True(created.Success, created.Error);
@@ -115,7 +115,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             .ToListAsync()
             .ConfigureAwait(true);
 
-        Assert.Equal(["fr:FR-06", "tr:TR-MCP-REQ-002"], links);
+        Assert.Equal(["fr:FR-REQ-006", "tr:TR-MCP-002"], links);
         Assert.DoesNotContain(links, link => link.Contains(' ', StringComparison.Ordinal));
     }
 
@@ -132,20 +132,20 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             Title = "Link requirements",
             Section = "Backlog",
             Priority = "high",
-            FunctionalRequirements = ["FR-LINK-OLD"],
-            TechnicalRequirements = ["TR-LINK-OLD"],
+            FunctionalRequirements = ["FR-LINK-OLD-001"],
+            TechnicalRequirements = ["TR-OLD-001"],
         }).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
 
         var updated = await _sut.UpdateAsync("TODO-LINK-002", new TodoUpdateRequest
         {
-            FunctionalRequirements = ["FR-LINK-NEW"],
-            TechnicalRequirements = ["TR-LINK-NEW"],
+            FunctionalRequirements = ["FR-LINK-NEW-001"],
+            TechnicalRequirements = ["TR-NEW-001"],
         }).ConfigureAwait(true);
 
         Assert.True(updated.Success, updated.Error);
-        Assert.Equal(["FR-LINK-NEW"], updated.Item!.FunctionalRequirements);
-        Assert.Equal(["TR-LINK-NEW"], updated.Item!.TechnicalRequirements);
+        Assert.Equal(["FR-LINK-NEW-001"], updated.Item!.FunctionalRequirements);
+        Assert.Equal(["TR-NEW-001"], updated.Item!.TechnicalRequirements);
 
         using var scope = _serviceProvider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
@@ -154,11 +154,11 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             .Select(row => row.RequirementKind + ":" + row.RequirementId)
             .ToListAsync()
             .ConfigureAwait(true);
-        Assert.Equal(["fr:FR-LINK-NEW", "tr:TR-LINK-NEW"], activeLinks);
+        Assert.Equal(["fr:FR-LINK-NEW-001", "tr:TR-NEW-001"], activeLinks);
 
         var oldLinks = await db.TodoRequirementLinks
             .IgnoreQueryFilters()
-            .Where(row => row.RequirementId == "FR-LINK-OLD" || row.RequirementId == "TR-LINK-OLD")
+            .Where(row => row.RequirementId == "FR-LINK-OLD-001" || row.RequirementId == "TR-OLD-001")
             .ToListAsync()
             .ConfigureAwait(true);
         Assert.Equal(2, oldLinks.Count);

@@ -151,7 +151,7 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Before",
             Section = "Backlog",
             Priority = "high",
-            FunctionalRequirements = ["FR-BEFORE"],
+            FunctionalRequirements = ["FR-BEFORE-001"],
         }).ConfigureAwait(true);
         Assert.True(create.Success, create.Error);
 
@@ -163,7 +163,7 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "After",
             Note = "note after",
             Remaining = "remaining after",
-            FunctionalRequirements = ["FR-AFTER"],
+            FunctionalRequirements = ["FR-AFTER-001"],
         }).ConfigureAwait(true);
         Assert.True(update.Success, update.Error);
 
@@ -175,7 +175,7 @@ public sealed class EfTodoServiceTests : IDisposable
         Assert.Equal("Before", restored!.Title);
         Assert.Null(restored.Note);
         Assert.Null(restored.Remaining);
-        Assert.Equal(["FR-BEFORE"], restored.FunctionalRequirements);
+        Assert.Equal(["FR-BEFORE-001"], restored.FunctionalRequirements);
 
         using var scope = _serviceProvider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
@@ -184,7 +184,7 @@ public sealed class EfTodoServiceTests : IDisposable
             .Select(row => row.RequirementId)
             .ToListAsync()
             .ConfigureAwait(true);
-        Assert.Equal(["FR-BEFORE"], links);
+        Assert.Equal(["FR-BEFORE-001"], links);
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Delete rollback",
             Section = "Backlog",
             Priority = "medium",
-            FunctionalRequirements = ["FR-DELETE-BEFORE"],
+            FunctionalRequirements = ["FR-DELETE-BEFORE-001"],
         }).ConfigureAwait(true);
         Assert.True(create.Success, create.Error);
 
@@ -216,7 +216,7 @@ public sealed class EfTodoServiceTests : IDisposable
         var restored = await _sut.GetByIdAsync("EF-TXN-002").ConfigureAwait(true);
         Assert.NotNull(restored);
         Assert.Equal("Delete rollback", restored!.Title);
-        Assert.Equal(["FR-DELETE-BEFORE"], restored.FunctionalRequirements);
+        Assert.Equal(["FR-DELETE-BEFORE-001"], restored.FunctionalRequirements);
     }
 
     /// <summary>

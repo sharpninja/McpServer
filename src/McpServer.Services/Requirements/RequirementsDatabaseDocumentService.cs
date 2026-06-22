@@ -161,6 +161,37 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
+    public async Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)
+    {
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
+
+            var toDelete = await scope.Context.Requirements
+                .Where(x => x.Kind == FrKind &&
+                            x.Body != null &&
+                            x.Body.StartsWith("Placeholder requirement backfilled") &&
+                            !System.Text.RegularExpressions.Regex.IsMatch(x.Id, @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
+
+            if (toDelete.Count > 0)
+            {
+                scope.Context.Requirements.RemoveRange(toDelete);
+                await scope.Context.SaveChangesAsync(ct).ConfigureAwait(false);
+            }
+
+            return toDelete.Count;
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<FrEntry?> GetFrAsync(string id, CancellationToken ct = default)
     {
         ValidateId(id, nameof(id));

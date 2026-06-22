@@ -121,6 +121,29 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         Assert.Null(coordinator.Request);
     }
 
+    /// <summary>
+    /// TEST for repair endpoint: purge is treated as a mutating operation and goes through the txn coordinator.
+    /// </summary>
+    [Fact]
+    public async Task PurgeInvalidPlaceholdersAsync_WhenCoordinatorCommits_RecordsOperationAndPurges()
+    {
+        var inner = new RecordingRequirementsDocumentService();
+        // Seed some canonical + one bad placeholder
+        await inner.AddFrAsync(new FrEntry("FR-MCP-001", "Good", "ok"), CancellationToken.None).ConfigureAwait(true);
+        await inner.AddFrAsync(new FrEntry("FR-SOCIAL-*", "Bad", "Placeholder requirement backfilled for TODO link FR-SOCIAL-*."), CancellationToken.None).ConfigureAwait(true);
+        var coordinator = new CapturingCoordinator();
+        var sut = CreateSut(inner, coordinator);
+
+        var purged = await sut.PurgeInvalidPlaceholdersAsync(CancellationToken.None).ConfigureAwait(true);
+
+        Assert.Equal(1, purged);
+        Assert.Equal(1, inner.PurgeCalls);
+        Assert.Equal(0, (await sut.GetAllFrAsync(CancellationToken.None).ConfigureAwait(true)).Count(e => e.Id.Contains("*")));
+        Assert.NotNull(coordinator.Request);
+        Assert.Equal("requirements.fr.repair", coordinator.Request.OperationName);
+        Assert.True(coordinator.Request.Mutating);
+    }
+
     /// <summary>requirements.export.generateAll signs and commits before returning the export result.</summary>
     [Fact]
     public async Task GenerateAllAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsExport()
@@ -216,6 +239,8 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
 
         public int UpdateFrCalls { get; private set; }
 
+        public int PurgeCalls { get; private set; }
+
         public Task<RequirementsCompensationSnapshot> CaptureRequirementsSnapshotAsync(CancellationToken cancellationToken = default)
         {
             CaptureCalls++;
@@ -262,6 +287,20 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
                     .ToArray()
             };
             return Task.CompletedTask;
+        }
+
+        public Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)
+        {
+            PurgeCalls++;
+            var before = _state.Functional.Count;
+            var valid = _state.Functional
+                .Where(e => !string.IsNullOrEmpty(e.Id) && System.Text.RegularExpressions.Regex.IsMatch(e.Id, @"^FR-[A-Z0-9]+-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                .ToArray();
+            if (valid.Length != before)
+            {
+                _state = _state with { Functional = valid };
+            }
+            return Task.FromResult(before - valid.Length);
         }
 
         public Task<IReadOnlyList<TrEntry>> GetAllTrAsync(CancellationToken ct = default)

@@ -21,7 +21,7 @@ public sealed class RequirementsClientTests
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var result = await client.ListFrAsync();
+        var result = await client.ListFrAsync(CancellationToken.None);
 
         Assert.Single(result);
         Assert.Equal("FR-MCP-001", result[0].Id);
@@ -444,5 +444,22 @@ public sealed class RequirementsClientTests
         Assert.Contains("\"preferredWikiFormat\":\"github\"", handler.LastRequestBody!, StringComparison.Ordinal);
         Assert.Contains("\"documents\"", handler.LastRequestBody!, StringComparison.Ordinal);
         Assert.Equal("github", result.SelectedWikiFormat);
+    }
+
+    /// <summary>
+    /// Verifies RepairFrPlaceholdersAsync posts to the fr/repair endpoint and parses the purged count.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RepairFrPlaceholdersAsync_PostsToRepairEndpointAndReturnsPurgedCount()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"purged":3}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var purged = await client.RepairFrPlaceholdersAsync();
+
+        Assert.Equal(3, purged);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/fr/repair", handler.LastRequest.RequestUri!.AbsolutePath);
     }
 }

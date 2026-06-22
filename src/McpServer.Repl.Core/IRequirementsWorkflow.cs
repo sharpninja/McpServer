@@ -78,6 +78,12 @@ public interface IRequirementsWorkflow
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Purges invalid placeholder FRs (non-canonical IDs) from the catalog.
+    /// Returns the number of entries removed.
+    /// </summary>
+    Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets a specific functional requirement by its identifier.
     /// </summary>
     /// <param name="id">The FR identifier conforming to canonical rules (e.g., "FR-MCP-001").</param>

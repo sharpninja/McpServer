@@ -22,6 +22,12 @@ public interface IRequirementsRepository
     /// <summary>Delete an FR entry by id.</summary>
     Task DeleteFrAsync(string id, CancellationToken ct = default);
 
+    /// <summary>
+    /// Purges invalid placeholder FR entries (backfilled with non-canonical IDs).
+    /// Returns the number of entries removed.
+    /// </summary>
+    Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default);
+
     // -- TR --
 
     /// <summary>Get all Technical Requirement entries.</summary>
