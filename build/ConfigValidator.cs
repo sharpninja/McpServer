@@ -165,15 +165,18 @@ static partial class ConfigValidator
             else
                 ports[instance.Port.Value] = name;
 
-            var provider = (instance.TodoProvider ?? "yaml").Trim().ToLowerInvariant();
-            if (provider is not "yaml" and not "sqlite")
+            var provider = (instance.TodoProvider ?? "database").Trim().ToLowerInvariant();
+            if (provider == "yaml")
             {
-                errors.Add($"Instance '{name}' has unsupported TodoStorage provider '{provider}'. Allowed: yaml, sqlite.");
+                errors.Add($"Instance '{name}' uses the removed TodoStorage provider 'yaml'. The database is the sole source of truth; use 'database'.");
                 continue;
             }
 
-            if (provider == "sqlite" && string.IsNullOrWhiteSpace(instance.SqliteDataSource))
-                errors.Add($"Instance '{name}' provider sqlite requires TodoStorage.SqliteDataSource.");
+            if (provider is not "database" and not "sqlite")
+            {
+                errors.Add($"Instance '{name}' has unsupported TodoStorage provider '{provider}'. Allowed: database (legacy alias: sqlite).");
+                continue;
+            }
         }
 
         return errors;

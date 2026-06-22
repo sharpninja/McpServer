@@ -5,7 +5,6 @@ using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Configuration;
@@ -13,53 +12,6 @@ namespace McpServer.Support.Mcp.Tests.Configuration;
 public sealed class ConfigurablePathIntegrationTests : IDisposable
 {
     private readonly List<string> _tempDirectories = [];
-
-    [Fact]
-    public async Task TodoService_ResolvesRelativeTodoPath_AgainstRepoRoot()
-    {
-        var tempRoot = CreateTempDirectory();
-        var relativeTodoPath = Path.Combine("docs", "custom", "todo.yaml");
-        var expectedPath = Path.Combine(tempRoot, relativeTodoPath);
-
-        using var sut = new TodoService(
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = tempRoot, TodoFilePath = relativeTodoPath }),
-            Substitute.For<IWriteAuditLog>(),
-            NullLogger<TodoService>.Instance);
-
-        var createResult = await sut.CreateAsync(new TodoCreateRequest
-        {
-            Id = "CFG-TODO-001",
-            Title = "Path resolution test",
-            Section = "mvp-support",
-            Priority = "high",
-        }).ConfigureAwait(true);
-
-        Assert.True(createResult.Success);
-        Assert.True(File.Exists(expectedPath));
-    }
-
-    [Fact]
-    public async Task TodoService_UsesAbsoluteTodoPath_AsIs()
-    {
-        var repoRoot = CreateTempDirectory();
-        var absoluteTodoPath = Path.Combine(CreateTempDirectory(), "absolute.todo.yaml");
-
-        using var sut = new TodoService(
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = repoRoot, TodoFilePath = absoluteTodoPath }),
-            Substitute.For<IWriteAuditLog>(),
-            NullLogger<TodoService>.Instance);
-
-        var createResult = await sut.CreateAsync(new TodoCreateRequest
-        {
-            Id = "CFG-ABS-001",
-            Title = "Absolute path test",
-            Section = "mvp-support",
-            Priority = "high",
-        }).ConfigureAwait(true);
-
-        Assert.True(createResult.Success);
-        Assert.True(File.Exists(absoluteTodoPath));
-    }
 
     [Fact]
     public async Task RepoIngestor_ResolvesRelativeRepoRoot_AgainstCurrentDirectory()

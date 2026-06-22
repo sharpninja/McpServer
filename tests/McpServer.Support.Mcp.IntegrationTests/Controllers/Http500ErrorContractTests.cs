@@ -115,11 +115,15 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:DataSource", Path.Combine(_tempDir, "mcp.db") },
+                    { "Mcp:Database:Provider", "sqlite" },
+                    { "Mcp:Database:Sqlite:DataSource", Path.Combine(_tempDir, "mcp.db") },
+                    { "Mcp:UseInMemoryDatabaseForTests", "true" },
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
-                    { "Mcp:TodoStorage:Provider", "yaml" }
+                    // The yaml TODO provider was removed: the database is the sole source of truth.
+                    { "Mcp:TodoStorage:Provider", "database" }
                 });
             });
             builder.ConfigureTestServices(services =>
@@ -265,7 +269,13 @@ public sealed class FailingDeleteTodoService : ITodoService
         return _inner.QueryAsync(request, cancellationToken);
     }
 
-    public Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken) => _inner.GetByIdAsync(id, cancellationToken);
+    // Return a synthetic source item for TEST-001 so the move flow reaches the source-delete step without
+    // depending on database seeding; this is a contract test for the delete-failure error envelope, not a
+    // test of authoritative reads.
+    public Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken)
+        => id == "TEST-001"
+            ? Task.FromResult<TodoFlatItem?>(new TodoFlatItem { Id = "TEST-001", Title = "Test item one", Section = "mvp-app", Priority = "high", Done = false })
+            : _inner.GetByIdAsync(id, cancellationToken);
     public Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default)
         => _inner.GetAuditAsync(id, limit, offset, cancellationToken);
     public Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)

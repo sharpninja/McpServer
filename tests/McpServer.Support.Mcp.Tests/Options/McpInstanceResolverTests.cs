@@ -90,8 +90,13 @@ public sealed class McpInstanceResolverTests
         McpInstanceResolver.ValidateTodoStorage(configuration, null);
     }
 
+    /// <summary>
+    /// TR-MCP-TODO-005: The removed <c>yaml</c> TODO provider is rejected with a clear error so stale
+    /// configuration fails fast rather than silently degrading. Uses an in-memory config with
+    /// <c>Mcp:TodoStorage:Provider=yaml</c>.
+    /// </summary>
     [Fact]
-    public void ValidateTodoStorage_AcceptsYamlProvider_WithoutDatabaseConfigured()
+    public void ValidateTodoStorage_RejectsRemovedYamlProvider()
     {
         var data = new Dictionary<string, string?>
         {
@@ -99,7 +104,10 @@ public sealed class McpInstanceResolverTests
         };
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
 
-        McpInstanceResolver.ValidateTodoStorage(configuration, null);
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => McpInstanceResolver.ValidateTodoStorage(configuration, null));
+        Assert.Contains("yaml", ex.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("database", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

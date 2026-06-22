@@ -15,7 +15,7 @@ public sealed class ConfigValidatorTests
         "      RepoRoot: F:\\GitHub\\McpServer",
         "      Port: 7147",
         "      TodoStorage:",
-        "        Provider: yaml",
+        "        Provider: database",
         "    alt-local:",
         "      RepoRoot: F:\\GitHub\\McpServer",
         "      Port: 7148",
@@ -46,7 +46,7 @@ public sealed class ConfigValidatorTests
     public void ParseInstances_ValidYaml_ParsesTodoStorage()
     {
         var instances = ConfigValidator.ParseInstances(ValidYaml)!;
-        Assert.Equal("yaml", instances["default"].TodoProvider);
+        Assert.Equal("database", instances["default"].TodoProvider);
         Assert.Equal("sqlite", instances["alt-local"].TodoProvider);
         Assert.Equal("todo.db", instances["alt-local"].SqliteDataSource);
     }
@@ -129,16 +129,17 @@ public sealed class ConfigValidatorTests
     }
 
     [Fact]
-    public void Validate_SqliteWithoutDataSource_ReturnsError()
+    public void Validate_RemovedYamlProvider_ReturnsError()
     {
         var instances = new Dictionary<string, ConfigValidator.InstanceConfig>
         {
-            ["test"] = new() { RepoRoot = @"C:\test", Port = 7147, TodoProvider = "sqlite", SqliteDataSource = null },
+            ["test"] = new() { RepoRoot = @"C:\test", Port = 7147, TodoProvider = "yaml" },
         };
 
         var errors = ConfigValidator.Validate(instances, _ => true);
         Assert.Single(errors);
-        Assert.Contains("SqliteDataSource", errors[0]);
+        Assert.Contains("removed", errors[0], StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("yaml", errors[0], StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -146,7 +147,7 @@ public sealed class ConfigValidatorTests
     {
         var instances = new Dictionary<string, ConfigValidator.InstanceConfig>
         {
-            ["default"] = new() { RepoRoot = @"C:\test", Port = 7147, TodoProvider = "yaml" },
+            ["default"] = new() { RepoRoot = @"C:\test", Port = 7147, TodoProvider = "database" },
             ["alt"] = new() { RepoRoot = @"C:\test", Port = 7148, TodoProvider = "sqlite", SqliteDataSource = "todo.db" },
         };
 

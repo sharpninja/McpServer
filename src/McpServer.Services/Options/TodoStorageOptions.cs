@@ -19,19 +19,14 @@ public sealed class TodoStorageOptions
     public const string DatabaseProvider = "database";
 
     /// <summary>
-    /// Literal YAML-only provider; bypasses the database entirely.
-    /// </summary>
-    public const string YamlProvider = "yaml";
-
-    /// <summary>
     /// Legacy provider alias retained for backward compatibility with older appsettings files.
     /// Treated as a synonym of <see cref="DatabaseProvider"/> with a one-time warning log.
     /// </summary>
     public const string LegacySqliteAlias = "sqlite";
 
     /// <summary>
-    /// Backend provider name: <c>yaml</c> or <c>database</c> (recommended).
-    /// Legacy value <c>sqlite</c> is accepted and mapped to <c>database</c> with a warning.
+    /// Backend provider name: only <c>database</c> is supported. Legacy value <c>sqlite</c> is
+    /// accepted and mapped to <c>database</c> with a warning. The removed <c>yaml</c> value is rejected.
     /// </summary>
     public string Provider { get; set; } = DatabaseProvider;
 

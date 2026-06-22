@@ -127,9 +127,10 @@ public static class McpInstanceResolver
     /// Validates TODO storage provider and provider-specific settings for the selected effective instance.
     /// </summary>
     /// <remarks>
-    /// TR-MCP-TODO-005 (provider-agnostic): accepts <c>yaml</c> or <c>database</c>. The legacy
+    /// TR-MCP-TODO-005 (provider-agnostic): accepts only <c>database</c>. The legacy
     /// <c>sqlite</c> value is accepted and mapped to <c>database</c> with a one-time warning
-    /// logged via <see cref="System.Diagnostics.Trace"/>. When provider is <c>database</c> the
+    /// logged via <see cref="System.Diagnostics.Trace"/>. The removed <c>yaml</c> provider is
+    /// rejected with a clear error. When provider is <c>database</c> the
     /// <c>Mcp:Database:Provider</c> setting (TR-MCP-CFG-007) must be non-empty.
     /// </remarks>
     public static void ValidateTodoStorage(IConfiguration configuration, string? instanceName)
@@ -147,9 +148,15 @@ public static class McpInstanceResolver
             provider = "DATABASE";
         }
 
-        if (provider is not ("YAML" or "DATABASE"))
+        if (provider == "YAML")
             throw new InvalidOperationException(
-                $"Unsupported TODO storage provider '{rawProvider}'. Allowed values: yaml, database (legacy alias: sqlite).");
+                "Mcp:TodoStorage:Provider='yaml' has been removed; the database is the sole source of truth and " +
+                "TODO.yaml is a read-only projection. Set Mcp:TodoStorage:Provider='database' and configure " +
+                "Mcp:Database:Provider (TR-MCP-CFG-007).");
+
+        if (provider != "DATABASE")
+            throw new InvalidOperationException(
+                $"Unsupported TODO storage provider '{rawProvider}'. Allowed value: database (legacy alias: sqlite).");
 
         if (provider == "DATABASE")
         {

@@ -11,11 +11,10 @@ namespace McpServer.Support.Mcp.Services;
 /// Factory for constructing TODO service implementations from configured storage provider settings.
 /// </summary>
 /// <remarks>
-/// TR-MCP-TODO-005 (provider-agnostic): canonical provider values are
-/// <c>yaml</c> and <c>database</c>. The legacy <c>sqlite</c> value is aliased to
-/// <c>database</c> (see <c>McpInstanceResolver.ValidateTodoStorage</c>) so it
-/// flows through <c>McpDbContext</c> + <c>McpDatabaseProviderFactory</c>
-/// (TR-MCP-CFG-007) rather than a hardcoded sqlite file.
+/// TR-MCP-TODO-005 (provider-agnostic): the database is the sole TODO provider. The legacy
+/// <c>sqlite</c> value is aliased to <c>database</c> (see <c>McpInstanceResolver.ValidateTodoStorage</c>)
+/// so it flows through <c>McpDbContext</c> + <c>McpDatabaseProviderFactory</c> (TR-MCP-CFG-007).
+/// The removed <c>yaml</c> provider is rejected; <c>TODO.yaml</c> is now only a read-only projection.
 /// </remarks>
 internal sealed class TodoServiceFactory : ITodoServiceFactory
 {
@@ -49,18 +48,11 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
     }
 
     /// <inheritdoc />
-    public ITodoService CreatePrimary() => GetProvider() switch
+    public ITodoService CreatePrimary()
     {
-        TodoProviderKind.Database => new EfTodoService(
-            _scopeFactory,
-            _ingestionOptions,
-            _storageOptions,
-            _auditLog,
-            _loggerFactory.CreateLogger<EfTodoService>(),
-            _eventBus,
-            _httpContextAccessor),
-        _ => new TodoService(_ingestionOptions, _auditLog, _loggerFactory.CreateLogger<TodoService>(), _eventBus),
-    };
+        EnsureDatabaseProvider();
+        return BuildEfTodoService();
+    }
 
     /// <inheritdoc />
     public ITodoService CreateForWorkspace(string workspacePath, WorkspaceContext workspaceContext)
@@ -68,41 +60,28 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
         ArgumentException.ThrowIfNullOrWhiteSpace(workspacePath);
         ArgumentNullException.ThrowIfNull(workspaceContext);
 
-        var todoRelPath = workspaceContext.TodoFilePath ?? "docs/Project/TODO.yaml";
-        var todoFullPath = Path.GetFullPath(
-            Path.IsPathRooted(todoRelPath) ? todoRelPath : Path.Combine(workspacePath, todoRelPath));
+        EnsureDatabaseProvider();
 
-        if (GetProvider() == TodoProviderKind.Database)
-        {
-            // Database provider is process-wide; workspace path is preserved for future projection hooks
-            // but the database itself is selected by Mcp:Database:Provider (TR-MCP-CFG-007).
-            return new EfTodoService(
-                _scopeFactory,
-                _ingestionOptions,
-                _storageOptions,
-                _auditLog,
-                _loggerFactory.CreateLogger<EfTodoService>(),
-                _eventBus,
-                _httpContextAccessor);
-        }
-
-        return new TodoService(todoFullPath, _auditLog, _loggerFactory.CreateLogger<TodoService>(), _eventBus);
+        // The database provider is process-wide (selected by Mcp:Database:Provider, TR-MCP-CFG-007);
+        // workspaceContext is preserved for projection hooks but no longer selects a per-workspace store.
+        return BuildEfTodoService();
     }
 
-    private TodoProviderKind GetProvider()
+    private EfTodoService BuildEfTodoService() => new(
+        _scopeFactory,
+        _ingestionOptions,
+        _storageOptions,
+        _auditLog,
+        _loggerFactory.CreateLogger<EfTodoService>(),
+        _eventBus,
+        _httpContextAccessor);
+
+    private void EnsureDatabaseProvider()
     {
         var raw = (_storageOptions.Value.Provider ?? TodoStorageOptions.DatabaseProvider).Trim().ToUpperInvariant();
-        return raw switch
-        {
-            "YAML" => TodoProviderKind.Yaml,
-            "DATABASE" or "SQLITE" => TodoProviderKind.Database,
-            _ => TodoProviderKind.Database,
-        };
-    }
-
-    private enum TodoProviderKind
-    {
-        Yaml,
-        Database,
+        if (raw == "YAML")
+            throw new InvalidOperationException(
+                "Mcp:TodoStorage:Provider='yaml' has been removed; the database is the sole source of truth and " +
+                "TODO.yaml is a read-only projection. Set Mcp:TodoStorage:Provider='database'.");
     }
 }
