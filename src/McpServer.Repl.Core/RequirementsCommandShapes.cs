@@ -131,6 +131,12 @@ public static class RequirementsCommandShapes
     public const string ListFrMethod = "workflow.requirements.listFr";
 
     /// <summary>
+    /// Command method for repairing/purging invalid placeholder FRs.
+    /// Method: <c>workflow.requirements.repairPlaceholders</c>
+    /// </summary>
+    public const string RepairPlaceholdersMethod = "workflow.requirements.repairPlaceholders";
+
+    /// <summary>
     /// Command method for getting a specific functional requirement.
     /// Method: <c>workflow.requirements.getFr</c>
     /// </summary>

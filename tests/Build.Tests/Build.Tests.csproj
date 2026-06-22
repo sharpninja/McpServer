@@ -13,6 +13,10 @@
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="coverlet.collector" />
+    <!-- Exclude v2 xunit packages pulled transitively (e.g. via SkippableFact) to prevent CS0433 duplicate with v3 -->
+    <PackageReference Include="Xunit.SkippableFact" PrivateAssets="all" ExcludeAssets="compile;build;buildTransitive" />
+    <PackageReference Include="xunit.extensibility.core" PrivateAssets="all" ExcludeAssets="compile;build;buildTransitive" />
+    <PackageReference Include="xunit.extensibility.execution" PrivateAssets="all" ExcludeAssets="compile;build;buildTransitive" />
   </ItemGroup>
 
   <ItemGroup>

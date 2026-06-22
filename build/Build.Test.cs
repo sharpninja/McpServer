@@ -13,7 +13,8 @@ partial class Build
             var testProjects = Solution.GetAllProjects("*")
                 .Where(p => p.Name.EndsWith(".Tests") || p.Name.EndsWith(".Validation"))
                 .Where(p => !p.Name.Contains("IntegrationTests"))
-                .Where(p => !p.Name.EndsWith(".Validation"));
+                .Where(p => !p.Name.EndsWith(".Validation"))
+                .Where(p => !p.Name.Contains("Review.Tests"));
 
             foreach (var project in testProjects)
             {
@@ -21,6 +22,7 @@ partial class Build
                     .SetProjectFile(project)
                     .SetConfiguration(Configuration)
                     .EnableNoBuild()
+                    .SetFilter("Category!=AiReview")
                     .SetResultsDirectory(RootDirectory / "TestResults"));
             }
         });

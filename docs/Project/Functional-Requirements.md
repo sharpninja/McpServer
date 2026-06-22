@@ -1,5 +1,49 @@
 # Functional Requirements (MCP Server)
 
+## [] []
+
+Placeholder requirement backfilled for TODO link [].
+
+## FR-01 FR-01
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-02 FR-02
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-03 FR-03
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-04 FR-04
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-05 FR-05
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-06 FR-06
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-07 FR-07
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-08 FR-08
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-09 FR-09
+
+Placeholder requirement backfilled by DB-FK-001.
+
+## FR-10 FR-10
+
+Placeholder requirement backfilled by DB-FK-001.
+
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -928,6 +972,20 @@ Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes 
 - [x] ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools
 - [x] Host code can execute same coding-agent path through typed runtime method
 
+## FR-MCP-138 AiCodeReview and AiProjectReview Nuke targets via aiUnit attributes in tests
+
+AiCodeReview and AiProjectReview Nuke targets SHALL execute `dotnet test` against a dedicated test project containing tests marked with [AiCodeReview] and [AiProjectReview] attributes from aiUnit. The attributes drive the actual AI review execution via the library's xUnit integration and configured strategy. The tests aggregate the prompt and response into MD files under docs/reviews.
+
+**Acceptance Criteria:**
+- A test project (e.g. McpServer.Review.Tests) exists with two tests marked with the respective attributes supplying the review prompts.
+- The tests aggregate the supplied prompt and the review response (via runlog or data) to MD files under docs/reviews.
+- Invoking the Nuke target (e.g. ./build.ps1 AiCodeReview) executes `dotnet test` on the review test project with filter selecting the marked test.
+- Fresh runlog artifacts and MD are produced under the expected locations.
+- Regular `Test` target excludes the review test project.
+- The review tests are distinct from normal unit tests.
+- Build tests cover client creation and markdown writing with mocks/stubs.
+- All prior tests + new remain green (Byrd gate).
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
@@ -939,6 +997,14 @@ Legacy agent-parity functional TODO link retained for historical traceability. S
 ## FR-MCP-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+
+## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
+
+## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
+
+Temporary live verification for plugin acceptanceCriteria rollout.
 
 ## FR-MCP-MEMORY-001 Global and workspace memory storage
 
@@ -1245,16 +1311,6 @@ The REPL SHALL mark every workflow.* response deprecated and route workflow.sess
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
 
-## FR-MCP-REPL-008 REPL Agent CLI Parameter for Per-Agent Isolation
-
-`mcpserver-repl --agent-stdio` and `--interactive` modes SHALL accept `--agent <name>` (examples: Codex, ClaudeCode, GrokCode). The supplied agent identifier SHALL be used to key per-agent caches and state (e.g. verified marker trust cache in MarkerFileClientOptionsResolver) so that distinct agents operating concurrently against the same workspace maintain completely isolated trust bootstrap, credential, and session artifacts. The REPL host SHALL surface the parameter in diagnostics and usage. All plugin invocation layers (bash, PowerShell, Node) SHALL derive the agent from the established env vars (MCP_AGENT_NAME / PLUGIN_AGENT_NAME / PLUGIN_AGENT_DEFAULT) and SHALL include `--agent <name>` on **every** direct or indirect call to mcpserver-repl.
-
-**Status:** ✅ Complete
-
-**Technical Implementation:** [TR-MCP-REPL-009](./Technical-Requirements.md#tr-mcp-repl-009) | [Mapping](./TR-per-FR-Mapping.md)
-
-**Covered by:** `src/McpServer.Repl.Host/Program.cs` (option + forwarding + AgentOverride), `MarkerFileClientOptionsResolver.cs` (TryResolveWithDiagnostics signature, GetCurrentAgent, AgentOverride + per-agent VerifiedMarkerCacheEntry), `plugins/core/lib-sh/repl-invoke.sh`, `lib-ps/repl-invoke.ps1`, `lib-node/src/transport/repl-bridge.ts`, `lib-sh/repl-daemon.js`, `lib-sh/repl-persistent.sh` (all invocation sites)
-
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
 FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
@@ -1371,8 +1427,4 @@ Whole-session submit shall merge additively: omitted session and turn fields nev
 ## FR-TEST-002 FR-TEST-002
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
-
-## FR-WFL-001 Complete Workflow FR
-
-Functional requirement for complete workflow test
 

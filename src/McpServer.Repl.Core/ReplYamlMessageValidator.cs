@@ -239,6 +239,7 @@ internal static class ReplYamlMessageValidator
                 OptionalText(args, "area", errors);
                 OptionalText(args, "status", errors);
             },
+            [RequirementsCommandShapes.RepairPlaceholdersMethod] = static (args, errors) => { /* no params */ },
             [RequirementsCommandShapes.GetFrMethod] = static (args, errors) => RequireText(args, "id", errors),
             [RequirementsCommandShapes.DeleteFrMethod] = static (args, errors) => RequireText(args, "id", errors),
             [RequirementsCommandShapes.CreateFrMethod] = static (args, errors) =>

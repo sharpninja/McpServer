@@ -769,7 +769,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-SUPPORT-010C-3 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010E | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010F | Tracked | Testing-Requirements.md |
-| [] | Tracked | Functional-Requirements.md |
 | FR-01 | Tracked | Functional-Requirements.md |
 | FR-02 | Tracked | Functional-Requirements.md |
 | FR-03 | Tracked | Functional-Requirements.md |
@@ -780,6 +779,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-08 | Tracked | Functional-Requirements.md |
 | FR-09 | Tracked | Functional-Requirements.md |
 | FR-10 | Tracked | Functional-Requirements.md |
+| FR-MCP-138 | Tracked | Functional-Requirements.md |
 | FR-MCP-LIVE-CODEX-20260603T2014Z | Tracked | Functional-Requirements.md |
 | FR-MCP-LIVE-CODEX-20260603T2015Z | Tracked | Functional-Requirements.md |
+| TR-MCP-AIUNIT-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-AIUNIT-001 | Tracked | Testing-Requirements.md |
+| [] | Tracked | Functional-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

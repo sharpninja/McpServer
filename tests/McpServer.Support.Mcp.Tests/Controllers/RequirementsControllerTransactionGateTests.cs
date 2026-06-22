@@ -98,6 +98,28 @@ public sealed class RequirementsControllerTransactionGateTests
             .ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-REP-001: The repair endpoint delegates to PurgeInvalidPlaceholdersAsync on the
+    /// (gated) requirements service and returns the purged count. Mocks validate the call.
+    /// </summary>
+    [Fact]
+    public async Task RepairFrPlaceholdersAsync_CallsPurgeOnServiceAndReturnsPurgedCount()
+    {
+        var requirements = Substitute.For<IRequirementsDocumentService>();
+        requirements.PurgeInvalidPlaceholdersAsync(Arg.Any<CancellationToken>()).Returns(5);
+
+        var controller = CreateController(requirements, new CapturingCoordinator(degraded: false, message: "ready"));
+
+        var result = await controller.RepairFrPlaceholdersAsync(CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result);
+        // The controller returns anonymous { purged = N }
+        Assert.NotNull(ok.Value);
+        var json = System.Text.Json.JsonSerializer.Serialize(ok.Value);
+        Assert.Contains("\"purged\":5", json);
+        await requirements.Received(1).PurgeInvalidPlaceholdersAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
     private static RequirementsController CreateController(
         IRequirementsDocumentService requirements,
         ITurnTransactionCoordinator coordinator,

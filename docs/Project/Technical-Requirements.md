@@ -212,6 +212,17 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 **TR-MCP-AGENT-PARITY-030** — Legacy agent-parity TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 
+## TR-MCP-AIUNIT-001
+
+**AiCodeReview / AiProjectReview Nuke targets run marked tests** — The targets in Build.AiCodeReview.cs and Build.AiProjectReview.cs execute `dotnet test` (with appropriate filter) against the test project holding the [AiCodeReview] and [AiProjectReview] marked tests.
+
+The test project (McpServer.Review.Tests) must:
+- Reference SharpNinja.aiUnit and copy appsettings.aiunit.json.
+- Contain Theory tests decorated with the attributes (supplying the review prompt as constant).
+- In the test body, aggregate the prompt and the response/findings produced by the attribute-driven review execution into MD files under docs/reviews (modeled after plan review aggregation).
+
+Regular Test target excludes the review tests project. No direct Frontier/SendAsync code in the Nuke targets themselves.
+
 ## TR-MCP-API-001
 
 REST routes for todo/session/context/repo/github with OpenAPI.
@@ -1080,65 +1091,65 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-QUAD-001
 
 **Brain-slot storage, DTOs, CRUD, and validation** — Persist BrainSlotDefinition and BrainSlotInvocation rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete, and readiness status.
+**Status:** ✅ Complete.
+**Covered by:** `BrainSlotRegistryServiceTests`, `BrainSlotDefinitionEntity`, `BrainSlotInvocationEntity`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `brain-slots.test.ts`
 **Acceptance Criteria:**
 - [x] Brain-slot definitions and invocations persist per workspace with role validation, one-enabled-slot enforcement, soft delete, credentialReference-only storage, and readiness projection. (evidence: BrainSlotRegistryServiceTests; BrainSlotDefinitionEntity; BrainSlotInvocationEntity)
 - [x] REST, client, STDIO, and plugin DTOs round-trip slot CRUD without returning raw credential material. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
-**Status:** ✅ Complete.
-**Covered by:** `BrainSlotRegistryService`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `McpDbContext`, `BrainSlotRegistryServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotStartupSeederTests`
 
 ## TR-MCP-QUAD-002
 
 **External model provider adapter, credentials, endpoint allowlist, timeout, and redaction** — Resolve credentials from env:, config:, or file: references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
+**Status:** ✅ Complete.
+**Covered by:** `BrainSlotCredentialResolverTests`, `BrainSlotProviderTests`
 **Acceptance Criteria:**
 - [x] Credential references resolve from env:, config:, and file: sources without persisting or logging raw secrets. (evidence: BrainSlotCredentialResolverTests)
 - [x] OpenAI-compatible endpoints enforce host allowlists, explicit loopback allowance, timeout, cancellation, and redaction gates. (evidence: BrainSlotProviderTests and invocation tests)
-**Status:** ✅ Complete.
-**Covered by:** `BrainSlotCredentialResolver`, `BrainSlotChatClientFactory`, `BrainSlotCredentialResolverTests`, `BrainSlotInvocationTransactionTests`
 
 ## TR-MCP-QUAD-003
 
 **Keyserver party mapping and transaction diffgram admission** — Require enabled trusted party/key mapping before invocation; invoke external models only when brain-slot execution and required turn transactions are enabled; commit brain-slot.invoke diffgrams before returning output.
+**Status:** ✅ Complete.
+**Covered by:** `BrainSlotInvocationTransactionTests`
 **Acceptance Criteria:**
 - [x] Invocation rejects until execution, slot, endpoint, credential, party/key, and required transaction gates pass. (evidence: BrainSlotInvocationTransactionTests)
 - [x] brain-slot.invoke diffgrams include slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before output is returned. (evidence: BrainSlotInvocationTransactionTests)
-**Status:** ✅ Complete.
-**Covered by:** `BrainSlotInvocationService`, `TurnTransactionCoordinator`, `BrainSlotInvocationTransactionTests`, `BrainSlotContainmentTests`
 
 ## TR-MCP-QUAD-004
 
 **Quad branch containment and authorization** — Provide explicit runtime gates proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration execute only through FR-MCP-134/FR-MCP-135 paths, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
+**Status:** ✅ Complete.
+**Covered by:** `QuadBrainOrchestrationServiceTests`, `BrainSlotContainmentTests`
 **Acceptance Criteria:**
 - [x] Authorized AoT reconciliation, full orchestration, and weight updates route through FR-MCP-134/135 services only. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed. (evidence: BrainSlotContainmentTests)
-**Status:** ✅ Complete.
-**Covered by:** `QuadBrainOrchestrationService`, `BrainSlotContainmentTests`, `QuadBrainOrchestrationServiceTests`, `TurnTransactionPlanArtifactTests`
 
 ## TR-MCP-QUAD-005
 
 **Quad orchestration service and contracts** — Add service, DTO, REST, client, STDIO, and plugin contracts for full Quad-Brain orchestration and AoT reconciliation while reusing the existing transaction-gated brain-slot invocation path.
+**Status:** ✅ Complete.
+**Covered by:** `BrainSlotContracts`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `brain-slots.ts`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`
 **Acceptance Criteria:**
 - [x] Quad orchestration DTOs, services, REST endpoints, typed client methods, STDIO tools, and Node plugin tools are present for orchestrate, AoT reconcile, and weight update operations. (evidence: BrainSlotContracts; BrainSlotsController; BrainSlotClient; FwhMcpTools; brain-slots.ts)
 - [x] Public contract tests prove route/tool parity and mutation failsafe classification. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
-**Status:** ✅ Complete.
-**Covered by:** `QuadBrainOrchestrationService`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `plugins/core/lib-node/src/tools/brain-slots.ts`, `QuadBrainOrchestrationServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `brain-slots.test.ts`
 
 ## TR-MCP-QUAD-006
 
 **AoT reconciliation decision loop** — Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram IDs preserved for every role.
+**Status:** ✅ Complete.
+**Covered by:** `QuadBrainOrchestrationServiceTests`
 **Acceptance Criteria:**
 - [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
 - [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot)
-**Status:** ✅ Complete.
-**Covered by:** `QuadBrainOrchestrationService`, `BrainSlotInvocationService`, `QuadBrainOrchestrationServiceTests`
 
 ## TR-MCP-QUAD-007
 
 **Durable weight versioning and safety gates** — Persist role weights and versions on brain-slot definitions, enforce dual-control and safety-gate validation, audit before/after snapshots, and expose explicit weight update APIs.
+**Status:** ✅ Complete.
+**Covered by:** `QuadBrainOrchestrationServiceTests`, `QuadBrainOrchestrationService`, `AddBrainSlotWeights migrations`
 **Acceptance Criteria:**
 - [x] Weight updates require AoT approval, admin approval, safety gates, reason text, valid enabled roles, valid weights, and expected versions before mutation. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Approved updates persist weight/version/timestamp changes, audit before/after snapshots, and provide rollback metadata through the transaction coordinator. (evidence: QuadBrainOrchestrationService; AddBrainSlotWeights migrations; QuadBrainOrchestrationServiceTests)
-**Status:** ✅ Complete.
-**Covered by:** `BrainSlotDefinitionEntity`, `QuadBrainOrchestrationService`, `AddBrainSlotWeights` migrations, `QuadBrainOrchestrationServiceTests`
 
 ## TR-MCP-QUAD-SESSION-001
 
@@ -1200,12 +1211,6 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-REPL-008
 
 `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
-
-## TR-MCP-REPL-009
-
-REPL `--agent` CLI Parameter and Per-Agent Propagation — The REPL host command line parser (`Program.cs`) SHALL accept `--agent <name>` on agent-stdio and interactive commands and forward it to `CreateHost` and `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(..., agent)`. The resolver SHALL honor the value by setting `AgentOverride` (which `GetCurrentAgent()` checks before env vars) and SHALL include the agent in the key for `VerifiedMarkerCacheEntry` (WorkspacePath + Agent) used by the 24h trust cache. All shared plugin core layers SHALL ensure the agent is supplied via `--agent` (derived from MCP_AGENT_NAME / PLUGIN_AGENT_* env) on every spawn or pipe-to `mcpserver-repl --agent-stdio` call site.
-
-**Covered by:** Program.cs, MarkerFileClientOptionsResolver (GetCurrentAgent, Try* methods, cache save/lookup), plugins/core invocation scripts and bridges listed under FR-MCP-REPL-008.
 
 ## TR-MCP-REQ-001
 
@@ -1659,8 +1664,4 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-TEST-001
 
 **TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
-
-## TR-WFL-FULL-001
-
-**Complete Workflow TR** — Technical requirement for complete workflow test
 

@@ -50,10 +50,40 @@ public sealed class RequirementsController : ControllerBase
         _transactionOptions = transactionOptions;
     }
 
-    /// <summary>Gets all Functional Requirement entries.</summary>
+    /// <summary>Gets all Functional Requirement entries, optionally filtered by area or status.</summary>
     [HttpGet("fr")]
-    public async Task<ActionResult<IReadOnlyList<FrEntry>>> GetFrAsync(CancellationToken cancellationToken)
-        => Ok(await _requirements.GetAllFrAsync(cancellationToken).ConfigureAwait(false));
+    public async Task<ActionResult<IReadOnlyList<FrEntry>>> GetFrAsync([FromQuery] string? area = null, [FromQuery] string? status = null, CancellationToken cancellationToken = default)
+    {
+        var all = await _requirements.GetAllFrAsync(cancellationToken).ConfigureAwait(false);
+        IEnumerable<FrEntry> filtered = all;
+        if (!string.IsNullOrEmpty(area))
+        {
+            filtered = filtered.Where(e => ExtractArea(e.Id) == area);
+        }
+        if (!string.IsNullOrEmpty(status))
+        {
+            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
+        }
+        return Ok(filtered.ToList());
+    }
+
+    /// <summary>
+    /// Repairs/purges invalid placeholder FR entries (e.g. those with wildcard or free-text IDs
+    /// like "FR-SOCIAL-*" or "A" that were backfilled by DB-FK or TODO-link logic).
+    /// </summary>
+    [HttpPost("fr/repair")]
+    public async Task<IActionResult> RepairFrPlaceholdersAsync(CancellationToken cancellationToken)
+    {
+        var purged = await _requirements.PurgeInvalidPlaceholdersAsync(cancellationToken).ConfigureAwait(false);
+        return Ok(new { purged });
+    }
+
+    private static string ExtractArea(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return string.Empty;
+        var parts = id.Split('-');
+        return parts.Length > 1 ? parts[1] : string.Empty;
+    }
 
     /// <summary>Gets a Functional Requirement entry by id.</summary>
     [HttpGet("fr/{id}")]

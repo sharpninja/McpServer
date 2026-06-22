@@ -972,6 +972,20 @@ Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes 
 - [x] ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools
 - [x] Host code can execute same coding-agent path through typed runtime method
 
+## FR-MCP-138 AiCodeReview and AiProjectReview Nuke targets trigger aiUnit via library
+
+AiCodeReview and AiProjectReview Nuke targets SHALL integrate directly with the aiUnit Frontier library to trigger the AI review (code or project reviewType) from inside the target execution. This replaces any reliance on externally pre-run AI sessions or static artifacts.
+
+**Acceptance Criteria:**
+- Execute `dotnet build` of the _build project succeeds with the integration.
+- Invoking the target (e.g. ./build.ps1 AiCodeReview) results in real SendAsync call to a Frontier client resolved from config.
+- Produces a fresh aiunit.review.runlog.v1 JSON under artifacts/aiunit-code-review/ (and project equivalent).
+- Produces a matching combined MD under docs/reviews/ containing the prompt and the findings JSON.
+- Configuration loaded from appsettings.aiunit.json (falling back to the one in PlanReview.Tests) + env vars; uses ActiveStrategy (e.g. claude CLI).
+- The targets do not depend on or execute unit test filters for review triggering (review is distinct from `Test`).
+- Build tests cover client creation and markdown writing with mocks/stubs.
+- All prior tests + new remain green (Byrd gate).
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.

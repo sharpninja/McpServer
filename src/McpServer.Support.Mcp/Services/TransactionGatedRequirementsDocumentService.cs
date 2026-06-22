@@ -174,6 +174,14 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
             token => _inner.GenerateWikiAsync(outputRootPath, generatedAtUtc, token),
             ct);
 
+    /// <inheritdoc />
+    public Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)
+        => ExecuteMutationAsync(
+            "requirements.fr.repair",
+            new { operation = "purge-invalid-placeholders" },
+            token => _inner.PurgeInvalidPlaceholdersAsync(token),
+            ct);
+
     private async Task ExecuteMutationAsync(
         string operationName,
         object operationBody,
