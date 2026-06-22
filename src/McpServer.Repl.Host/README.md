@@ -65,7 +65,7 @@ mcpserver-repl --interactive
 Agent STDIO mode implements the MCP protocol over standard input/output for programmatic integration:
 
 ```bash
-mcpserver-repl --agent-stdio
+mcpserver-repl --agent-stdio --agent Codex
 ```
 
 This mode is designed for:

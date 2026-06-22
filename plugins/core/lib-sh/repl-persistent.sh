@@ -44,6 +44,6 @@ process.stdout.write(JSON.stringify({type:"request",payload:{requestId:rid,metho
         printf '%s\n' "$envelope" | node "$(_repl_persistent_native_path "$_repl_persistent_script_dir/repl-daemon.js")" --send
     else
         # Fallback: classic one-process-per-request invocation.
-        printf '%s\n' "$envelope" | "${MCPSERVER_REPL_BIN:-mcpserver-repl}" --agent-stdio
+        printf '%s\n' "$envelope" | "${MCPSERVER_REPL_BIN:-mcpserver-repl}" --agent-stdio --agent "${MCP_AGENT_NAME:-${PLUGIN_AGENT_DEFAULT:-default}}"
     fi
 }

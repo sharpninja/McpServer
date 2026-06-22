@@ -679,6 +679,11 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
             return "failed";
         }
 
+        if (statuses.Contains("superseded", StringComparer.OrdinalIgnoreCase))
+        {
+            return "superseded";
+        }
+
         if (statuses.Contains("completed", StringComparer.OrdinalIgnoreCase))
         {
             return "completed";
@@ -710,6 +715,11 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
             status.StartsWith("interrupted", StringComparison.OrdinalIgnoreCase))
         {
             return "failed";
+        }
+
+        if (status.StartsWith("superseded", StringComparison.OrdinalIgnoreCase))
+        {
+            return "superseded";
         }
 
         if (status.StartsWith("completed", StringComparison.OrdinalIgnoreCase) ||
@@ -811,10 +821,15 @@ internal sealed class SessionLogState : ISessionLogState
             throw new InvalidOperationException($"Turn with request ID {requestId} already exists");
         }
 
-        // Check if another turn is already active
+        // If another turn is already active, supersede it to prevent permanent in_progress orphans.
+        // This is server/REPL side mitigation for plugin layers that overwrite current-turn without
+        // first issuing complete/fail on the prior (see STALE-TURNS reports).
         if (_activeTurn != null)
         {
-            throw new InvalidOperationException("A turn is already in progress");
+            _activeTurn.Status = "superseded";
+            _activeTurn.FailureNote = "Superseded by subsequent beginTurn without explicit complete/fail";
+            _turns.Add(_activeTurn);
+            _activeTurn = null;
         }
 
         _activeTurn = new TurnState(requestId, queryTitle, queryText, timestamp);

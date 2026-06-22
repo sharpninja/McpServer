@@ -3,6 +3,7 @@
 // TR-MCP-REPL-002: DI-Integrated REPL Host - Service registration and composition root
 // TR-MCP-REPL-003: Command Loop Lifecycle - Interactive and agent STDIO mode selection
 // FR-MCP-REPL-007 / TR-MCP-REPL-008: --workspace-path / --marker-file CLI overrides
+// FR-MCP-REPL-008 / TR-MCP-REPL-009: --agent CLI parameter for per-agent isolation + plugin enforcement
 // TEST-MCP-REPL-001: REPL host processes well-formed YAML command envelopes
 // TEST-MCP-REPL-013: REPL host terminates gracefully on EOF or exit command
 
@@ -18,15 +19,18 @@ var rootCommand = new RootCommand("MCP Server REPL Host");
 
 var workspacePathOption = new Option<string?>("--workspace-path", "Override the workspace root used to discover AGENTS-README-FIRST.yaml.");
 var markerFileOption = new Option<string?>("--marker-file", "Explicit path to AGENTS-README-FIRST.yaml; bypasses ancestor walking.");
+var agentOption = new Option<string?>("--agent", "Agent identifier (e.g. Codex, ClaudeCode, Grok) for per-agent caching, session isolation, and trust state. Must be provided by calling plugins. // FR-MCP-REPL-008 TR-MCP-REPL-009");
 
 var agentStdioCommand = new Command("--agent-stdio", "Run in agent STDIO mode for MCP protocol communication");
 agentStdioCommand.AddOption(workspacePathOption);
 agentStdioCommand.AddOption(markerFileOption);
+agentStdioCommand.AddOption(agentOption);
 agentStdioCommand.SetHandler(async (context) =>
 {
     var workspacePath = context.ParseResult.GetValueForOption(workspacePathOption);
     var markerFile = context.ParseResult.GetValueForOption(markerFileOption);
-    var host = CreateHost(workspacePath, markerFile, suppressConsoleLogging: true);
+    var agent = context.ParseResult.GetValueForOption(agentOption);
+    var host = CreateHost(workspacePath, markerFile, agent, suppressConsoleLogging: true);
     var agentStdioHandler = host.Services.GetRequiredService<AgentStdioHandler>();
     await agentStdioHandler.RunAsync(context.GetCancellationToken());
 });
@@ -34,11 +38,13 @@ agentStdioCommand.SetHandler(async (context) =>
 var interactiveCommand = new Command("--interactive", "Run in interactive REPL mode");
 interactiveCommand.AddOption(workspacePathOption);
 interactiveCommand.AddOption(markerFileOption);
+interactiveCommand.AddOption(agentOption);
 interactiveCommand.SetHandler(async (context) =>
 {
     var workspacePath = context.ParseResult.GetValueForOption(workspacePathOption);
     var markerFile = context.ParseResult.GetValueForOption(markerFileOption);
-    var host = CreateHost(workspacePath, markerFile, suppressConsoleLogging: false);
+    var agent = context.ParseResult.GetValueForOption(agentOption);
+    var host = CreateHost(workspacePath, markerFile, agent, suppressConsoleLogging: false);
     var interactiveHandler = host.Services.GetRequiredService<InteractiveHandler>();
     await interactiveHandler.RunAsync(context.GetCancellationToken());
 });
@@ -64,13 +70,21 @@ rootCommand.SetHandler(() =>
     Console.WriteLine("Per-command options:");
     Console.WriteLine("  --workspace-path <dir>     Override workspace root used to discover AGENTS-README-FIRST.yaml");
     Console.WriteLine("  --marker-file <path>       Explicit path to AGENTS-README-FIRST.yaml");
+    Console.WriteLine("  --agent <name>             Agent identifier (Codex, ClaudeCode, Grok, etc.) for per-agent cache and isolation");
     Console.WriteLine();
 });
 
 return await rootCommand.InvokeAsync(args);
 
-static IHost CreateHost(string? workspacePathOverride, string? markerFileOverride, bool suppressConsoleLogging)
+static IHost CreateHost(string? workspacePathOverride, string? markerFileOverride, string? agentOverride, bool suppressConsoleLogging)
 {
+    // Set agent early so the marker resolver and per-agent cache (for Codex vs Claude etc.)
+    // can key trust state correctly. This must be done before any resolution.
+    if (!string.IsNullOrWhiteSpace(agentOverride))
+    {
+        MarkerFileClientOptionsResolver.AgentOverride = agentOverride;
+    }
+
     return Host.CreateDefaultBuilder()
         .ConfigureLogging(logging =>
         {
@@ -90,7 +104,8 @@ static IHost CreateHost(string? workspacePathOverride, string? markerFileOverrid
                     workspacePathOverride,
                     markerFileOverride,
                     out var options,
-                    out var error);
+                    out var error,
+                    agentOverride);
                 if (!ok || options is null)
                 {
                     // Fall back to the legacy resolver so the CLI does not crash; the

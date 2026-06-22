@@ -16,6 +16,10 @@ REPL_INVOKE_CACHE_DIR="${REPL_INVOKE_PLUGIN_ROOT}/cache"
 source "${REPL_INVOKE_SCRIPT_DIR}/cache-scope.sh"
 cache_scope_init "$REPL_INVOKE_PLUGIN_ROOT" "$(pwd)"
 
+# Agent for per-agent REPL cache and isolation. Plugins must pass --agent on every invocation.
+# Preferred: MCP_AGENT_NAME (set by plugin-env), fallback to PLUGIN_AGENT_DEFAULT.
+AGENT_NAME="${MCP_AGENT_NAME:-${PLUGIN_AGENT_DEFAULT:-${MCP_SESSION_AGENT:-default}}}"
+
 _repl_now_iso() {
     date -u +%Y-%m-%dT%H:%M:%SZ
 }
@@ -1034,7 +1038,7 @@ ${indented_params}"
     fi
 
     local response
-    response="$(printf '%s\n' "$envelope" | _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio 2>/dev/null)"
+    response="$(printf '%s\n' "$envelope" | _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio --agent "$AGENT_NAME" 2>/dev/null)"
 
     local exit_code=$?
     if [ $exit_code -eq 0 ]; then
@@ -1374,7 +1378,7 @@ ${indented_params}"
                 export MCP_SERVER_URL="$base_url"
                 export MCPSERVER_BASE_URL="$base_url"
             fi
-            _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio
+            _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio --agent "$AGENT_NAME"
         ) 2>"$stderr_file"
     )"
 

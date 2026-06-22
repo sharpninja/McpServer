@@ -44,13 +44,18 @@ function readState() {
 function spawnRepl() {
   // A .js repl (used by tests / future node transports) runs under this same
   // node; anything else is treated as a native executable.
+  const agent = process.env.MCP_AGENT_NAME || process.env.PLUGIN_AGENT_NAME || process.env.PLUGIN_AGENT_DEFAULT || 'default';
+  const replArgs = ['--agent-stdio'];
+  if (agent && agent !== 'default') {
+    replArgs.push('--agent', agent);
+  }
   if (REPL_BIN.endsWith(".js")) {
-    return spawn(process.execPath, [REPL_BIN, "--agent-stdio"], {
+    return spawn(process.execPath, [REPL_BIN, ...replArgs], {
       stdio: ["pipe", "pipe", "ignore"],
       env: process.env,
     });
   }
-  return spawn(REPL_BIN, ["--agent-stdio"], {
+  return spawn(REPL_BIN, replArgs, {
     stdio: ["pipe", "pipe", "ignore"],
     env: process.env,
   });

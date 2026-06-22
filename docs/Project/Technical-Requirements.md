@@ -1201,6 +1201,12 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
 
+## TR-MCP-REPL-009
+
+REPL `--agent` CLI Parameter and Per-Agent Propagation — The REPL host command line parser (`Program.cs`) SHALL accept `--agent <name>` on agent-stdio and interactive commands and forward it to `CreateHost` and `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(..., agent)`. The resolver SHALL honor the value by setting `AgentOverride` (which `GetCurrentAgent()` checks before env vars) and SHALL include the agent in the key for `VerifiedMarkerCacheEntry` (WorkspacePath + Agent) used by the 24h trust cache. All shared plugin core layers SHALL ensure the agent is supplied via `--agent` (derived from MCP_AGENT_NAME / PLUGIN_AGENT_* env) on every spawn or pipe-to `mcpserver-repl --agent-stdio` call site.
+
+**Covered by:** Program.cs, MarkerFileClientOptionsResolver (GetCurrentAgent, Try* methods, cache save/lookup), plugins/core invocation scripts and bridges listed under FR-MCP-REPL-008.
+
 ## TR-MCP-REQ-001
 
 **AI Requirements Analysis Service** — `RequirementsService` invokes `ICopilotClient` with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from `docs/Project/` and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`) for robustness. Discovered IDs are merged (deduplicated, order-preserved) back into the TODO via `ITodoService.UpdateAsync`.

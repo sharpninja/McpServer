@@ -208,9 +208,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-SUPPORT-LOG-010 | ✅ Complete | Technical-Requirements.md, Program.cs, SessionLogController |
 | FR-SUPPORT-013 | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
 | FR-MCP-REPL-007 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/McpServer.Repl.Host/Program.cs (--workspace-path, --marker-file), src/McpServer.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
+| FR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/Program.cs (--agent option + forwarding), MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics + agent param, AgentOverride, GetCurrentAgent + per-agent VerifiedMarkerCacheEntry), plugins/core (repl-invoke.sh, repl-invoke.ps1, repl-bridge.ts, repl-daemon.js, repl-persistent.sh — all call sites) |
 | TR-MCP-MT-004 | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
 | TR-PLANNED-CORE-014 | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
 | TR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs |
+| TR-MCP-REPL-009 | ✅ Complete | src/McpServer.Repl.Host/Program.cs, MarkerFileClientOptionsResolver.cs (agent propagation + cache keying), plugins/core/* (enforced --agent on every repl call) |
 | TEST-MCP-REPL-001 | ✅ Complete | tests/McpServer.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
 | TEST-MCP-REPL-002 | ✅ Complete | tests/McpServer.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
 | TEST-MCP-REPL-003 | ✅ Complete | tests/McpServer.Repl.Core.Tests (ProtocolHandshakeTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
@@ -750,6 +752,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-4 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-018 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-019 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-022 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-023 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQAC-PLUGIN-BASH | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQACPLUGIN-BASH | Tracked | Testing-Requirements.md |
 | TEST-MCP-REQACPLUGIN-CAPTURE | Tracked | Testing-Requirements.md |

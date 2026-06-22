@@ -1245,6 +1245,16 @@ The REPL SHALL mark every workflow.* response deprecated and route workflow.sess
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
 
+## FR-MCP-REPL-008 REPL Agent CLI Parameter for Per-Agent Isolation
+
+`mcpserver-repl --agent-stdio` and `--interactive` modes SHALL accept `--agent <name>` (examples: Codex, ClaudeCode, GrokCode). The supplied agent identifier SHALL be used to key per-agent caches and state (e.g. verified marker trust cache in MarkerFileClientOptionsResolver) so that distinct agents operating concurrently against the same workspace maintain completely isolated trust bootstrap, credential, and session artifacts. The REPL host SHALL surface the parameter in diagnostics and usage. All plugin invocation layers (bash, PowerShell, Node) SHALL derive the agent from the established env vars (MCP_AGENT_NAME / PLUGIN_AGENT_NAME / PLUGIN_AGENT_DEFAULT) and SHALL include `--agent <name>` on **every** direct or indirect call to mcpserver-repl.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-REPL-009](./Technical-Requirements.md#tr-mcp-repl-009) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `src/McpServer.Repl.Host/Program.cs` (option + forwarding + AgentOverride), `MarkerFileClientOptionsResolver.cs` (TryResolveWithDiagnostics signature, GetCurrentAgent, AgentOverride + per-agent VerifiedMarkerCacheEntry), `plugins/core/lib-sh/repl-invoke.sh`, `lib-ps/repl-invoke.ps1`, `lib-node/src/transport/repl-bridge.ts`, `lib-sh/repl-daemon.js`, `lib-sh/repl-persistent.sh` (all invocation sites)
+
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
 FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.

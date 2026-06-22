@@ -51,9 +51,14 @@ export class ReplBridge {
       return;
     }
     const replCommand = process.env.MCPSERVER_REPL_COMMAND || 'mcpserver-repl';
-    const replArgs = process.env.MCPSERVER_REPL_ARGS
+    let replArgs = process.env.MCPSERVER_REPL_ARGS
       ? process.env.MCPSERVER_REPL_ARGS.split(' ').filter(Boolean)
       : ['--agent-stdio'];
+    // Ensure --agent is passed on every invocation for per-agent cache isolation (Codex vs Claude etc.)
+    const agent = process.env.MCP_AGENT_NAME || process.env.PLUGIN_AGENT_NAME || process.env.PLUGIN_AGENT_DEFAULT;
+    if (agent && agent !== 'default' && !replArgs.includes('--agent')) {
+      replArgs = [...replArgs, '--agent', agent];
+    }
     this.proc = spawn(replCommand, replArgs, {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env },

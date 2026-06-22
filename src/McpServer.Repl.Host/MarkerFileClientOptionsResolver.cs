@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using McpServer.Client;
 
 namespace McpServer.Repl.Host;
@@ -10,6 +11,60 @@ namespace McpServer.Repl.Host;
 public static class MarkerFileClientOptionsResolver
 {
     private const string MarkerFileName = "AGENTS-README-FIRST.yaml";
+
+    // Cache for verified marker trust to avoid repeating the full discovery + HMAC
+    // signature verification (the "trust chain") on every mcpserver-repl --agent-stdio
+    // invocation. Cache lives in ~/.mcpserver/verified-markers.json (or override for tests).
+    // Entries are valid for 24 hours or until the apiKey in the marker file changes.
+    // FR-MCP-REPL-008 / TR-MCP-REPL-009: keyed by (WorkspacePath, Agent) for isolation.
+    private const int VerifiedCacheHours = 24;
+    private static readonly string s_verifiedCacheDir = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".mcpserver");
+    private static readonly string s_verifiedCachePath = Path.Combine(s_verifiedCacheDir, "verified-markers.json");
+    private static readonly JsonSerializerOptions s_cacheJsonOpts = new(JsonSerializerDefaults.Web);
+
+    /// <summary>
+    /// Test hook only. Allows integration tests to redirect the verified marker cache
+    /// file to a temporary directory instead of the real user profile.
+    /// </summary>
+    public static string? CacheDirectoryOverride { get; set; }
+
+    /// <summary>
+    /// Test hook only. Allows tests to simulate a specific agent (e.g. "Codex", "ClaudeCode")
+    /// so per-agent cache isolation can be verified.
+    /// </summary>
+    public static string? AgentOverride { get; set; }
+
+    private static string GetVerifiedCachePath()
+    {
+        var dir = CacheDirectoryOverride ?? s_verifiedCacheDir;
+        return Path.Combine(dir, "verified-markers.json");
+    }
+
+    private static string GetCurrentAgent()
+    {
+        if (!string.IsNullOrWhiteSpace(AgentOverride))
+            return AgentOverride;
+
+        return Environment.GetEnvironmentVariable("MCP_AGENT_NAME")
+            ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_NAME")
+            ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_DEFAULT")
+            ?? "default";
+    }
+    // FR-MCP-REPL-008 TR-MCP-REPL-009: agent sourced from CLI --agent (via AgentOverride) or env for per-agent cache keys.
+
+    /// <summary>
+    /// Represents a previously verified marker for fast-path trust within TTL.
+    /// Keyed by (WorkspacePath, Agent) so Codex and Claude (etc.) sessions do not mix
+    /// their cached trust state even when operating on the same workspace.
+    /// </summary>
+    private sealed record VerifiedMarkerCacheEntry(
+        string WorkspacePath,
+        string Agent,
+        string ApiKey,
+        string SignatureValue,
+        DateTimeOffset VerifiedAtUtc,
+        DateTimeOffset ExpiresAtUtc);
 
     /// <summary>
     /// Builds REPL client options, preferring trusted marker-file settings when available.
@@ -68,10 +123,16 @@ public static class MarkerFileClientOptionsResolver
     /// </summary>
     /// <param name="workspacePath">The workspace path used as the marker discovery root.</param>
     /// <param name="marker">The verified marker settings when discovery succeeds.</param>
+    /// <param name="agent">Optional agent identifier for per-agent cache.</param>
     /// <returns><see langword="true"/> when a valid trusted marker file is found; otherwise, <see langword="false"/>.</returns>
-    public static bool TryLoadTrustedMarker(string workspacePath, out MarkerSettings marker)
+    public static bool TryLoadTrustedMarker(string workspacePath, out MarkerSettings marker, string? agent = null)
     {
         marker = default;
+        if (!string.IsNullOrWhiteSpace(agent))
+        {
+            AgentOverride = agent;
+        }
+
         var markerPath = FindMarkerFile(workspacePath);
         if (string.IsNullOrWhiteSpace(markerPath) || !File.Exists(markerPath))
         {
@@ -84,12 +145,20 @@ public static class MarkerFileClientOptionsResolver
             return false;
         }
 
+        // Prefer cache hit (same rules as TryResolveWithDiagnostics) before re-verifying.
+        if (TryUseCachedVerification(parsed.Value, out _))
+        {
+            marker = parsed.Value;
+            return true;
+        }
+
         if (!VerifyMarkerSignature(parsed.Value))
         {
             return false;
         }
 
         marker = parsed.Value;
+        SaveVerifiedCacheEntry(parsed.Value);
         return true;
     }
 
@@ -141,15 +210,22 @@ public static class MarkerFileClientOptionsResolver
     /// <param name="markerPathOverride">Optional explicit marker file path (CLI <c>--marker-file</c>).</param>
     /// <param name="options">The resolved options on success.</param>
     /// <param name="error">Diagnostic message on failure.</param>
+    /// <param name="agent">Optional agent identifier (e.g. Codex, ClaudeCode). Used for per-agent cache isolation.</param>
     /// <returns><see langword="true"/> when resolution succeeds; otherwise <see langword="false"/>.</returns>
     public static bool TryResolveWithDiagnostics(
         string? workspacePathOverride,
         string? markerPathOverride,
         out McpServerClientOptions? options,
-        out string error)
+        out string error,
+        string? agent = null)
     {
         options = null;
         error = string.Empty;
+
+        if (!string.IsNullOrWhiteSpace(agent))
+        {
+            AgentOverride = agent;
+        }
 
         string? markerPath;
         IReadOnlyList<string> searchedPaths;
@@ -188,6 +264,15 @@ public static class MarkerFileClientOptionsResolver
             return false;
         }
 
+        // Use local verified marker cache (24h TTL, invalidated on apiKey change in marker)
+        // to avoid repeating the full marker discovery + signature verification trust chain
+        // on every agent REPL invocation.
+        if (TryUseCachedVerification(parsed.Value, out var cachedOptions) && cachedOptions is not null)
+        {
+            options = cachedOptions;
+            return true;
+        }
+
         if (!VerifyMarkerSignature(parsed.Value))
         {
             error = $"Marker file at '{markerPath}' failed HMAC-SHA256 signature verification. Either the marker is stale (server restarted) or has been tampered with. Re-read the file or restart the server.";
@@ -200,6 +285,9 @@ public static class MarkerFileClientOptionsResolver
             ApiKey = parsed.Value.ApiKey,
             WorkspacePath = parsed.Value.WorkspacePath,
         };
+
+        // Persist successful verification for future calls within TTL.
+        SaveVerifiedCacheEntry(parsed.Value);
         return true;
     }
 
@@ -390,6 +478,98 @@ public static class MarkerFileClientOptionsResolver
             .Append('=')
             .Append((value?.ToString() ?? string.Empty).ReplaceLineEndings("\n"))
             .Append('\n');
+    }
+
+    private static bool TryUseCachedVerification(MarkerSettings current, out McpServerClientOptions? options)
+    {
+        options = null;
+        try
+        {
+            var agentId = GetCurrentAgent();
+            var cachePath = GetVerifiedCachePath();
+            if (!File.Exists(cachePath))
+                return false;
+
+            var json = File.ReadAllText(cachePath);
+            var entries = JsonSerializer.Deserialize<List<VerifiedMarkerCacheEntry>>(json, s_cacheJsonOpts) ?? new();
+
+            var hit = entries.FirstOrDefault(e =>
+                string.Equals(e.WorkspacePath, current.WorkspacePath, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.Agent ?? "default", agentId, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.ApiKey, current.ApiKey, StringComparison.Ordinal) &&
+                string.Equals(e.SignatureValue, current.SignatureValue, StringComparison.Ordinal) &&
+                e.ExpiresAtUtc > DateTimeOffset.UtcNow);
+
+            if (hit is null)
+                return false;
+
+            // Cache hit for this exact (workspace + agent) marker within TTL.
+            // Short-circuits the trust chain (marker parse + sig verify) repetition.
+            // The current marker was still read to obtain ApiKey/Signature for matching.
+            // Per-agent keying ensures Codex and Claude (etc.) active sessions on the
+            // same workspace do not mix their cached trust state.
+            options = new McpServerClientOptions
+            {
+                BaseUrl = new Uri(current.BaseUrl),
+                ApiKey = current.ApiKey,
+                WorkspacePath = current.WorkspacePath,
+            };
+            return true;
+        }
+        catch
+        {
+            // Best-effort cache; ignore errors and fall through to full verification.
+            return false;
+        }
+    }
+
+    private static void SaveVerifiedCacheEntry(MarkerSettings verified)
+    {
+        try
+        {
+            var agentId = GetCurrentAgent();
+            var cachePath = GetVerifiedCachePath();
+            var dir = Path.GetDirectoryName(cachePath)!;
+            Directory.CreateDirectory(dir);
+
+            List<VerifiedMarkerCacheEntry> entries = new();
+            if (File.Exists(cachePath))
+            {
+                try
+                {
+                    var json = File.ReadAllText(cachePath);
+                    entries = JsonSerializer.Deserialize<List<VerifiedMarkerCacheEntry>>(json, s_cacheJsonOpts) ?? new();
+                }
+                catch { /* ignore corrupt cache */ }
+            }
+
+            // Remove any prior entry for this (workspace, agent) combination
+            // (treat missing Agent as "default" for backward compat with pre-per-agent caches)
+            entries.RemoveAll(e =>
+                string.Equals(e.WorkspacePath, verified.WorkspacePath, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.Agent ?? "default", agentId, StringComparison.OrdinalIgnoreCase));
+
+            var newEntry = new VerifiedMarkerCacheEntry(
+                WorkspacePath: verified.WorkspacePath,
+                Agent: agentId,
+                ApiKey: verified.ApiKey,
+                SignatureValue: verified.SignatureValue,
+                VerifiedAtUtc: DateTimeOffset.UtcNow,
+                ExpiresAtUtc: DateTimeOffset.UtcNow.AddHours(VerifiedCacheHours));
+
+            entries.Add(newEntry);
+
+            // Trim very old entries
+            var cutoff = DateTimeOffset.UtcNow.AddDays(-7);
+            entries = entries.Where(e => e.ExpiresAtUtc > cutoff).ToList();
+
+            var outJson = JsonSerializer.Serialize(entries, s_cacheJsonOpts);
+            File.WriteAllText(cachePath, outJson);
+        }
+        catch
+        {
+            // Best effort; do not fail resolution on cache write problems.
+        }
     }
 
     /// <summary>
