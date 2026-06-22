@@ -312,15 +312,20 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
 
-            foreach (var value in EnumerateBatch(entries))
-            {
-                if (await ctx.Requirements.AnyAsync(x => x.Kind == value.Kind && x.Id == value.Id, ct).ConfigureAwait(false))
-                    throw new RequirementsConflictException($"{value.Kind.ToUpperInvariant()} '{value.Id}' already exists.");
-            }
-
             var workspaceId = RequireWorkspaceId(ctx);
             var now = Now();
+            var toInsert = new List<RequirementBatchValue>();
             foreach (var value in EnumerateBatch(entries))
+            {
+                bool exists = await ctx.Requirements.AnyAsync(x => x.Kind == value.Kind && x.Id == value.Id, ct).ConfigureAwait(false);
+                if (!exists)
+                {
+                    toInsert.Add(value);
+                }
+                // Idempotent create: pre-existing records are left as-is (mitigates double-submit races from clients/plugins that send the batch twice).
+            }
+
+            foreach (var value in toInsert)
             {
                 ctx.Requirements.Add(new RequirementEntity
                 {

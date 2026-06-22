@@ -177,25 +177,33 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.False(persistedCriteria.IsSatisfied);
     }
 
-    /// <summary>Atomic batch creation rejects conflicts before committing any later record.</summary>
+    /// <summary>Batch create is now idempotent: pre-existing records are skipped (no overwrite, no throw), other new records in the batch are created. This prevents client double-submit races from aborting successful prior creates.</summary>
     [Fact]
-    public async Task AddBatchAsync_ExistingConflict_RollsBackWholeBatch()
+    public async Task AddBatchAsync_ExistingConflict_SkipsExistingAndCreatesOthers()
     {
         using var fixture = new RequirementsDbFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("batch-conflict"));
         var service = fixture.CreateService();
         await service.AddFrAsync(new FrEntry("FR-MCP-904", "Existing", "Existing body")).ConfigureAwait(true);
 
-        await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            service.AddBatchAsync(new RequirementsBatchEntries(
-                [
-                    new FrEntry("FR-MCP-904", "Conflict", "Conflict body"),
-                    new FrEntry("FR-MCP-905", "Should not persist", "Should not persist body")
-                ],
-                [],
-                []))).ConfigureAwait(true);
+        // Should NOT throw; the conflicting record is skipped, the new one is created.
+        var result = await service.AddBatchAsync(new RequirementsBatchEntries(
+            [
+                new FrEntry("FR-MCP-904", "Conflict", "Conflict body"),  // exists -> skipped
+                new FrEntry("FR-MCP-905", "New from batch", "New body")
+            ],
+            [],
+            [])).ConfigureAwait(true);
 
-        Assert.Null(await service.GetFrAsync("FR-MCP-905").ConfigureAwait(true));
+        // Existing not overwritten
+        var existing = await service.GetFrAsync("FR-MCP-904").ConfigureAwait(true);
+        Assert.NotNull(existing);
+        Assert.Equal("Existing body", existing.Body);
+
+        // New one was added
+        var added = await service.GetFrAsync("FR-MCP-905").ConfigureAwait(true);
+        Assert.NotNull(added);
+        Assert.Equal("New from batch", added.Title);
     }
 
     /// <summary>Transaction compensation restores the prior requirements snapshot and allows retrying a rolled-back ID.</summary>

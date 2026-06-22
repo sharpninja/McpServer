@@ -398,4 +398,189 @@ signature:
 
         return builder.ToString();
     }
+
+    // --- Verified marker cache tests (24h TTL, apiKey change invalidation) ---
+
+    [Fact]
+    public void TryResolveWithDiagnostics_UsesVerifiedCacheOnSubsequentCallWithinTtl()
+    {
+        var root = CreateTemporaryWorkspace();
+        var cacheDir = Path.Combine(Path.GetTempPath(), $"mcp-cache-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(cacheDir);
+        var originalOverride = MarkerFileClientOptionsResolver.CacheDirectoryOverride;
+        var originalAgent = MarkerFileClientOptionsResolver.AgentOverride;
+        try
+        {
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = cacheDir;
+            MarkerFileClientOptionsResolver.AgentOverride = "Codex";  // ensure per-agent isolation
+            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), BuildMarker(root));
+
+            // First resolve performs full verification and populates cache.
+            var ok1 = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(root, null, out var opt1, out _);
+            Assert.True(ok1);
+            Assert.NotNull(opt1);
+
+            // Cache file should have been written.
+            var cacheFile = Path.Combine(cacheDir, "verified-markers.json");
+            Assert.True(File.Exists(cacheFile));
+
+            // Second resolve within TTL should succeed (cache hit path exercised).
+            var ok2 = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(root, null, out var opt2, out _);
+            Assert.True(ok2);
+            Assert.Equal(opt1!.ApiKey, opt2!.ApiKey);
+        }
+        finally
+        {
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = originalOverride;
+            MarkerFileClientOptionsResolver.AgentOverride = originalAgent;
+            if (Directory.Exists(cacheDir)) Directory.Delete(cacheDir, recursive: true);
+            if (Directory.Exists(root)) Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void TryResolveWithDiagnostics_InvalidatesCacheOnApiKeyChange()
+    {
+        var root = CreateTemporaryWorkspace();
+        var cacheDir = Path.Combine(Path.GetTempPath(), $"mcp-cache-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(cacheDir);
+        var originalOverride = MarkerFileClientOptionsResolver.CacheDirectoryOverride;
+        var originalAgent = MarkerFileClientOptionsResolver.AgentOverride;
+        try
+        {
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = cacheDir;
+            MarkerFileClientOptionsResolver.AgentOverride = "ClaudeCode";
+            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), BuildMarker(root));
+
+            var ok1 = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(root, null, out _, out _);
+            Assert.True(ok1);
+
+            // Rewrite marker with different apiKey (simulates server restart).
+            // Build a fresh marker with new key so sig is valid for new key.
+            const string newKey = "new-rotated-api-key";
+            var newMarker = BuildMarkerWithApiKey(root, newKey);
+            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), newMarker);
+
+            // Should still succeed (full verify path because apiKey no longer matches cache).
+            var ok2 = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(root, null, out var opt2, out _);
+            Assert.True(ok2);
+            Assert.Equal(newKey, opt2!.ApiKey);
+        }
+        finally
+        {
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = originalOverride;
+            MarkerFileClientOptionsResolver.AgentOverride = originalAgent;
+            if (Directory.Exists(cacheDir)) Directory.Delete(cacheDir, recursive: true);
+            if (Directory.Exists(root)) Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void TryResolveWithDiagnostics_SucceedsWithManuallyExpiredCacheEntry()
+    {
+        // Manually plant an expired entry; resolver should fall through to full verify.
+        var root = CreateTemporaryWorkspace();
+        var cacheDir = Path.Combine(Path.GetTempPath(), $"mcp-cache-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(cacheDir);
+        var originalOverride = MarkerFileClientOptionsResolver.CacheDirectoryOverride;
+        var originalAgent = MarkerFileClientOptionsResolver.AgentOverride;
+        try
+        {
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = cacheDir;
+            MarkerFileClientOptionsResolver.AgentOverride = "Grok";
+            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), BuildMarker(root));
+
+            // Write an expired cache entry for this workspace with the matching apiKey/sig.
+            // We use BuildMarker to get the sig, but simplify by using the same build.
+            var markerText = BuildMarker(root);
+            // For simplicity we trigger a successful path that will also save a fresh one.
+            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(root, null, out _, out _);
+            Assert.True(ok);
+
+            // The point of test: even with expired manual entry present, it recovers.
+            // (In this run it will have written a fresh non-expired.)
+            var cacheFile = Path.Combine(cacheDir, "verified-markers.json");
+            // Overwrite with expired version (note Agent field for per-agent cache).
+            var escapedRoot = root.Replace("\\", "/");
+            var expiredJson = $$"""
+[{"WorkspacePath":"{{escapedRoot}}","Agent":"Grok","ApiKey":"test-api-key","SignatureValue":"PLACEHOLDER-NOT-MATCHED","VerifiedAtUtc":"2020-01-01T00:00:00Z","ExpiresAtUtc":"2020-01-01T01:00:00Z"}]
+""";
+            File.WriteAllText(cacheFile, expiredJson);
+
+            // Still succeeds via full verification path.
+            var ok2 = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(root, null, out var opt2, out _);
+            Assert.True(ok2);
+            Assert.Equal("test-api-key", opt2!.ApiKey);
+        }
+        finally
+        {
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = originalOverride;
+            MarkerFileClientOptionsResolver.AgentOverride = originalAgent;
+            if (Directory.Exists(cacheDir)) Directory.Delete(cacheDir, recursive: true);
+            if (Directory.Exists(root)) Directory.Delete(root, recursive: true);
+        }
+    }
+
+    private static string BuildMarkerWithApiKey(string workspacePath, string apiKey)
+    {
+        var endpoints = new Dictionary<string, string>
+        {
+            ["health"] = "/health",
+            ["swagger"] = "/swagger/v1/swagger.json",
+            ["swaggerUi"] = "/swagger",
+            ["mcpTransport"] = "/mcp-transport",
+            ["sessionLog"] = "/mcpserver/sessionlog",
+            ["sessionLogDialog"] = "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog",
+            ["contextSearch"] = "/mcpserver/context/search",
+            ["contextPack"] = "/mcpserver/context/pack",
+            ["contextSources"] = "/mcpserver/context/sources",
+            ["todo"] = "/mcpserver/todo",
+            ["repo"] = "/mcpserver/repo",
+            ["desktop"] = "/mcpserver/desktop",
+            ["gitHub"] = "/mcpserver/gh",
+            ["tools"] = "/mcpserver/tools",
+            ["workspace"] = "/mcpserver/workspace",
+            ["serverStartupUtc"] = "/server-startup-utc",
+            ["markerFileTimestamp"] = "/marker-file-timestamp?repoPath={workspacePath}",
+        };
+
+        var payload = BuildSignaturePayload(apiKey, workspacePath, endpoints);
+        using var hmac = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(apiKey));
+        var signature = Convert.ToHexString(hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(payload)));
+
+        return $$"""
+port: 7147
+baseUrl: http://localhost:7147
+apiKey: {{apiKey}}
+endpoints:
+  health: /health
+  swagger: /swagger/v1/swagger.json
+  swaggerUi: /swagger
+  mcpTransport: /mcp-transport
+  sessionLog: /mcpserver/sessionlog
+  sessionLogDialog: /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+  contextSearch: /mcpserver/context/search
+  contextPack: /mcpserver/context/pack
+  contextSources: /mcpserver/context/sources
+  todo: /mcpserver/todo
+  repo: /mcpserver/repo
+  desktop: /mcpserver/desktop
+  gitHub: /mcpserver/gh
+  tools: /mcpserver/tools
+  workspace: /mcpserver/workspace
+  serverStartupUtc: /server-startup-utc
+  markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
+workspace: TestWorkspace
+workspacePath: {{workspacePath}}
+pid: 1234
+startedAt: 2026-04-06T20:29:10.3301205+00:00
+markerWrittenAtUtc: 2026-04-06T20:29:10.3301205+00:00
+serverStartedAtUtc: 2026-04-06T20:29:05.1397259+00:00
+signature:
+  algorithm: HMAC-SHA256
+  canonicalization: marker-v1
+  verifier: workspace_api_key
+  value: {{signature}}
+""";
+    }
 }

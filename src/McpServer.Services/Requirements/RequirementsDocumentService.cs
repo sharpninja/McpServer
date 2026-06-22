@@ -280,19 +280,21 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         await _gate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            ThrowIfAnyExists(_frEntries, entries.Functional, static item => item.Id, static item => item.Id, "FR");
-            ThrowIfAnyExists(_trEntries, entries.Technical, static item => item.Id, static item => item.Id, "TR");
-            ThrowIfAnyExists(_testEntries, entries.Testing, static item => item.Id, static item => item.Id, "TEST");
+            // Idempotent create batch: skip records that already exist. Prevents whole-batch abort on retry/double-submit
+            // from client/plugin layers (e.g. compat+typed send paths sending same logical batch).
+            var newFr = entries.Functional.Where(f => !_frEntries.Any(e => string.Equals(e.Id, f.Id, StringComparison.OrdinalIgnoreCase))).ToList();
+            var newTr = entries.Technical.Where(t => !_trEntries.Any(e => string.Equals(e.Id, t.Id, StringComparison.OrdinalIgnoreCase))).ToList();
+            var newTest = entries.Testing.Where(t => !_testEntries.Any(e => string.Equals(e.Id, t.Id, StringComparison.OrdinalIgnoreCase))).ToList();
 
-            _frEntries.AddRange(entries.Functional);
-            _trEntries.AddRange(entries.Technical);
-            _testEntries.AddRange(entries.Testing);
+            _frEntries.AddRange(newFr);
+            _trEntries.AddRange(newTr);
+            _testEntries.AddRange(newTest);
 
-            if (entries.Functional.Count > 0)
+            if (newFr.Count > 0)
                 await PersistFunctionalAsync(ct).ConfigureAwait(false);
-            if (entries.Technical.Count > 0)
+            if (newTr.Count > 0)
                 await PersistTechnicalAsync(ct).ConfigureAwait(false);
-            if (entries.Testing.Count > 0)
+            if (newTest.Count > 0)
                 await PersistTestingAsync(ct).ConfigureAwait(false);
 
             await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Created, entries, ct).ConfigureAwait(false);

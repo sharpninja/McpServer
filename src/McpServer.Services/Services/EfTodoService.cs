@@ -917,6 +917,10 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             return;
         }
 
+        // Use a stable ancient timestamp for backfills to avoid "createdAt at list/read time" symptom.
+        // Title==id and placeholder body are intentional markers for dangling TODO links; consumers
+        // should prefer list + filter or explicit creates over relying on these.
+        var backfillTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
         ctx.Requirements.Add(new RequirementEntity
         {
             WorkspaceId = workspaceId,
@@ -926,8 +930,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             Body = $"Placeholder requirement backfilled for TODO link {id}.",
             Priority = "medium",
             Status = "pending",
-            CreatedAtUtc = now.ToString("O"),
-            UpdatedAtUtc = now.ToString("O"),
+            CreatedAtUtc = backfillTime.ToString("O"),
+            UpdatedAtUtc = backfillTime.ToString("O"),
         });
     }
 

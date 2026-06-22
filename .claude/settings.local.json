@@ -30,7 +30,8 @@
       "Bash(pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass -File F:/GitHub/McpServer/create-graphrag-todos.ps1)",
       "Bash(date +%s%N)",
       "Bash(git -C F:/GitHub/McpServer status --short)",
-      "Bash(git -C F:/GitHub/McpServer log --oneline -5)"
+      "Bash(git -C F:/GitHub/McpServer log --oneline -5)",
+      "PowerShell(git *)"
     ]
   }
 }
