@@ -22,6 +22,9 @@ function Resolve-McpCacheDir {
     [CmdletBinding()]
     param()
 
+    if ($env:REPL_INVOKE_CACHE_DIR) {
+        return $env:REPL_INVOKE_CACHE_DIR
+    }
     if ($env:MCP_CACHE_DIR_OVERRIDE) {
         return $env:MCP_CACHE_DIR_OVERRIDE
     }

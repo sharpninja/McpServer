@@ -71,7 +71,15 @@ function Invoke-ReplRaw {
 
     $envelope = "type: request`npayload:`n  requestId: $requestId`n  method: $Method"
     if ($ParamsYaml) {
-        $indented = ($ParamsYaml -split "`n" | ForEach-Object { "    $_" }) -join "`n"
+        $ParamsYaml = $ParamsYaml -replace "`r`n", "`n" -replace "`r", ""
+        # Uniform indent the entire inner params block by 4 spaces (preserves relative indents
+        # inside block scalars like "response: |" and nested structures).
+        # Then fix top-level list items (that land at the same column as keys) by pushing them
+        # +2 spaces. This avoids mangling multi-line while keeping lists attached.
+        $base = ($ParamsYaml -split "`n" | ForEach-Object { "    $_" }) -join "`n"
+        $base = $base -replace '(?m)^(    -)', '      -'
+        $base = $base -replace '(?m)^(      )(?!-)', '        '
+        $indented = $base
         $envelope += "`n  params:`n$indented"
     }
 
@@ -96,7 +104,15 @@ function Invoke-ReplRaw {
         $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
 
         $proc = [System.Diagnostics.Process]::Start($psi)
-        $proc.StandardInput.WriteLine($envelope)
+        $envFile = Join-Path (Get-ReplInvokeCacheDir) "envelope-$requestId.tmp"
+        [System.IO.File]::WriteAllText($envFile, $envelope, [System.Text.Encoding]::UTF8)
+        try {
+            $fs = [System.IO.File]::OpenRead($envFile)
+            $fs.CopyTo($proc.StandardInput.BaseStream)
+            $fs.Close()
+        } finally {
+            Remove-Item $envFile -ErrorAction SilentlyContinue
+        }
         $proc.StandardInput.Close()
 
         # Drain stdout BEFORE waiting for exit. With a redirected pipe, the
@@ -376,24 +392,106 @@ function Get-ReplTurnCacheField {
     return ($line.Line -replace "^${Field}:\s*", '').Trim()
 }
 
+function Get-ReplNormalizedActionsBlock {
+    # Returns bare list content under the 'actions:' key (common indent stripped).
+    # Twin of _repl_normalized_actions_block + _repl_list_block_get.
+    # Safe for map-style turn docs (preserves nesting) and top-level actions: lists.
+    param([string]$ParamsYaml)
+    if (-not $ParamsYaml) { return '' }
+    $text = $ParamsYaml -replace "`r`n", "`n" -replace "`r", ""
+    $lines = $text -split "`n"
+    $capture = $false
+    $keyIndent = -1
+    $stripIndent = -1
+    $result = @()
+    foreach ($line in $lines) {
+        if (-not $capture) {
+            if ($line -match '^\s*actions:\s*$') {
+                $capture = $true
+                $m = [regex]::Match($line, '^(\s*)')
+                $keyIndent = $m.Groups[1].Value.Length
+                continue
+            }
+            continue
+        }
+        if ($line -match '^\s*$') {
+            $result += $line
+            continue
+        }
+        $m = [regex]::Match($line, '^(\s*)')
+        $lineIndent = $m.Groups[1].Value.Length
+        if ($lineIndent -le $keyIndent -and $line -notmatch '^\s*-') {
+            break
+        }
+        if ($stripIndent -lt 0) { $stripIndent = $lineIndent }
+        if ($stripIndent -gt 0 -and $line.Length -ge $stripIndent) {
+            $result += $line.Substring($stripIndent)
+        } else {
+            $result += $line
+        }
+    }
+    return ($result -join "`n").TrimEnd()
+}
+
+function Update-ReplTurnAudit {
+    param([Parameter(Mandatory)][string]$Field, [int]$Increment = 0)
+    if ($Increment -le 0) { return $false }
+    $turnFile = Join-Path (Get-ReplInvokeCacheDir) 'current-turn.yaml'
+    if (-not (Test-Path $turnFile)) { return $false }
+    $lines = Get-Content -Path $turnFile
+    $current = 0
+    foreach ($l in $lines) {
+        if ($l -match "^${Field}:\s*(\d+)") {
+            $current = [int]$Matches[1]
+            break
+        }
+    }
+    $new = $current + $Increment
+    $found = $false
+    $updated = $lines | ForEach-Object {
+        if ($_ -match "^${Field}:") { $found = $true; "${Field}: $new" } else { $_ }
+    }
+    if (-not $found) {
+        # append if field missing (defensive; init should have written audits)
+        $updated += "${Field}: $new"
+    }
+    Set-Content -Path $turnFile -Value ($updated -join "`n") -NoNewline:$false
+    return $true
+}
+
 function Invoke-WorkflowAppendActions {
     param([string]$ParamsYaml)
     $turnFile = Join-Path (Get-ReplInvokeCacheDir) 'current-turn.yaml'
     if (-not (Test-Path $turnFile)) { return $true }
 
     $added = 0
+    $actionsBlock = ''
     if ($ParamsYaml) {
-        $added = ([regex]::Matches($ParamsYaml, '(?m)^\s*filePath:\s*\S')).Count
+        $p = $ParamsYaml -replace "`r`n", "`n" -replace "`r", ""
+        $actionsBlock = Get-ReplNormalizedActionsBlock -ParamsYaml $p
+        # Count only real filePath: fields (with value) for codeEdits. Substring matches in
+        # descriptions must be ignored. Non-file actions (design_decision etc.) must persist.
+        $added = ([regex]::Matches($p, '(?m)^\s*filePath:\s*\S')).Count
     }
-    if ($added -le 0) { return $true }
 
-    Update-ReplTurnCacheEdits -Increment $added | Out-Null
+    if ($ParamsYaml -and $ParamsYaml.Trim()) {
+        if ($added -gt 0) {
+            Update-ReplTurnCacheEdits -Increment $added | Out-Null
+        }
+        $actionC = ([regex]::Matches($ParamsYaml, '(?m)^\s*type:')).Count
+        $decC = ([regex]::Matches($ParamsYaml, '(?m)^\s*type:\s*design_decision\b')).Count
+        $comC = ([regex]::Matches($ParamsYaml, '(?m)^\s*type:\s*commit\b')).Count
+        Update-ReplTurnAudit -Field 'auditActions' -Increment $actionC | Out-Null
+        Update-ReplTurnAudit -Field 'auditFiles' -Increment $added | Out-Null
+        Update-ReplTurnAudit -Field 'auditDecisions' -Increment $decC | Out-Null
+        Update-ReplTurnAudit -Field 'auditCommits' -Increment $comC | Out-Null
 
-    $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-    $title = Get-ReplTurnCacheField -Field 'queryTitle'
-    Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-        -Status 'in_progress' -ResponseText 'Actions appended.' `
-        -ActionsYaml $ParamsYaml | Out-Null
+        $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
+        $title = Get-ReplTurnCacheField -Field 'queryTitle'
+        Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+            -Status 'in_progress' -ResponseText 'Actions appended.' `
+            -ActionsYaml $actionsBlock | Out-Null
+    }
     return $true
 }
 
@@ -413,12 +511,17 @@ function Invoke-WorkflowCompleteTurn {
         $responseText = $Matches[1].Trim()
     }
 
+    $actionsBlock = ''
+    if ($ParamsYaml -and ($ParamsYaml -match '(?m)^\s*actions:' -or $ParamsYaml -match '(?m)^\s*actions:\s*\S')) {
+        $actionsBlock = Get-ReplNormalizedActionsBlock -ParamsYaml ($ParamsYaml -replace "`r`n", "`n" -replace "`r", "")
+    }
+
     Update-ReplTurnCacheStatus -NewStatus 'completed' | Out-Null
 
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
     $title = Get-ReplTurnCacheField -Field 'queryTitle'
     Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-        -Status 'completed' -ResponseText $responseText | Out-Null
+        -Status 'completed' -ResponseText $responseText -ActionsYaml $actionsBlock | Out-Null
     return $true
 }
 

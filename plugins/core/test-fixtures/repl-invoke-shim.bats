@@ -633,6 +633,16 @@ response: |
     [ "$(read_edits)" = "0" ]
 }
 
+@test "appendActions ignores substring 'filePath' appearing in description text (not a field)" {
+    write_turn "in_progress" 0
+    source "$LIB"
+    repl_invoke "workflow.sessionlog.appendActions" "actions:
+  - description: 'talks about filePath in prose but provides no filePath: entry'
+    type: design_decision
+    status: completed"
+    [ "$(read_edits)" = "0" ]
+}
+
 @test "appendActions accumulates across multiple invocations" {
     write_turn "in_progress" 1
     source "$LIB"

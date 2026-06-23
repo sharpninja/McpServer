@@ -1031,14 +1031,21 @@ payload:
 
     if [ -n "$params_yaml" ]; then
         local indented_params
-        indented_params="$(printf '%s\n' "$params_yaml" | sed 's/^/    /')"
+        # Uniform +4 preserves relative indents inside turn: { actions: [..], response: | ... }
+        # Only adjust bare top-level list items (starting - after indent) for callers that pass list params.
+        indented_params="$(printf '%s\n' "$params_yaml" | tr -d '\r' | sed 's/^/    /')"
+        indented_params="$(printf '%s\n' "$indented_params" | sed 's/^    -/      -/; /^      [^ -]/ s/^      /        /')"
         envelope="${envelope}
   params:
 ${indented_params}"
     fi
 
+    local tmp_env="${REPL_INVOKE_CACHE_DIR}/envelope-${request_id}.$$.yaml"
+    mkdir -p "$(dirname "$tmp_env")" 2>/dev/null || true
+    printf '%s\n' "$envelope" > "$tmp_env"
     local response
-    response="$(printf '%s\n' "$envelope" | _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio --agent "$AGENT_NAME" 2>/dev/null)"
+    response="$(cat "$tmp_env" | _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio --agent "$AGENT_NAME" 2>/dev/null)"
+    rm -f "$tmp_env" 2>/dev/null || true
 
     local exit_code=$?
     if [ $exit_code -eq 0 ]; then
@@ -1355,7 +1362,8 @@ payload:
 
     if [ -n "$params_yaml" ]; then
         local indented_params
-        indented_params="$(printf '%s\n' "$params_yaml" | sed 's/^/    /')"
+        indented_params="$(printf '%s\n' "$params_yaml" | tr -d '\r' | sed 's/^/    /')"
+        indented_params="$(printf '%s\n' "$indented_params" | sed 's/^    -/      -/; /^      [^ -]/ s/^      /        /')"
         envelope="${envelope}
   params:
 ${indented_params}"
@@ -1364,8 +1372,11 @@ ${indented_params}"
     local response stderr_file
     stderr_file="${REPL_INVOKE_CACHE_DIR}/repl-${request_id}.$$.$RANDOM.stderr"
     mkdir -p "$REPL_INVOKE_CACHE_DIR"
+    local tmp_env="${REPL_INVOKE_CACHE_DIR}/envelope-${request_id}.$$.yaml"
+    mkdir -p "$(dirname "$tmp_env")" 2>/dev/null || true
+    printf '%s\n' "$envelope" > "$tmp_env"
     response="$(
-        printf '%s\n' "$envelope" | (
+        cat "$tmp_env" | (
             cd "$workspace_cwd" || exit 1
             if [ -n "$workspace_env_path" ]; then
                 export MCP_WORKSPACE_PATH="$workspace_env_path"
@@ -1381,6 +1392,7 @@ ${indented_params}"
             _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio --agent "$AGENT_NAME"
         ) 2>"$stderr_file"
     )"
+    rm -f "$tmp_env" 2>/dev/null || true
 
     local exit_code=$?
     if [ -n "$cleanup_dir" ]; then
@@ -3207,10 +3219,22 @@ _repl_submit_session() {
 }
 
 _repl_normalized_actions_block() {
+    local block
+    block="$(_repl_json_array_block_get "$1" "actions" 2>/dev/null || true)"
+    if [ -n "$block" ]; then
+        printf '%s\n' "$block"
+        return 0
+    fi
     _repl_list_block_get "$1" "actions"
 }
 
 _repl_normalized_dialog_items_block() {
+    local block
+    block="$(_repl_json_array_block_get "$1" "dialogItems" 2>/dev/null || true)"
+    if [ -n "$block" ]; then
+        printf '%s\n' "$block"
+        return 0
+    fi
     _repl_list_block_get "$1" "dialogItems"
 }
 
@@ -3622,8 +3646,12 @@ _repl_workflow_append_actions() {
     local turn_file="${REPL_INVOKE_CACHE_DIR}/current-turn.yaml"
     [ -f "$turn_file" ] || return 0
 
+    local actions_block
+    actions_block="$(_repl_normalized_actions_block "$params")"
+
     local added current new tmp
-    added="$(printf '%s\n' "$params" | grep -c '^[[:space:]]*filePath:' || true)"
+    # Count non-empty filePath: from the (possibly JSON-normalized) block only.
+    added="$(printf '%s\n' "$actions_block" | grep -E '^[[:space:]]*filePath:[[:space:]]*("?)[^"[:space:]]' | grep -c . || true)"
     added="${added:-0}"
 
     current="$(_repl_current_turn_value "codeEdits")"
@@ -3636,24 +3664,21 @@ _repl_workflow_append_actions() {
         { print }
     ' "$turn_file" > "$tmp" && mv "$tmp" "$turn_file"
 
-    # PLAN-SESSIONLOGENFORCEMENT-001: keep per-turn audit counters in sync so the stop-gate
-    # and audit report can prove the turn recorded actions, modified files, design decisions,
-    # and commits instead of relying on agent discipline.
+    # PLAN-SESSIONLOGENFORCEMENT-001: keep per-turn audit counters in sync
     local action_count decision_count commit_count
-    action_count="$(_repl_count_lines "$params" '^[[:space:]]*type:')"
-    decision_count="$(_repl_count_lines "$params" '^[[:space:]]*type:[[:space:]]*design_decision')"
-    commit_count="$(_repl_count_lines "$params" '^[[:space:]]*type:[[:space:]]*commit')"
+    action_count="$(_repl_count_lines "$actions_block" '^[[:space:]]*type:')"
+    decision_count="$(_repl_count_lines "$actions_block" '^[[:space:]]*type:[[:space:]]*design_decision')"
+    commit_count="$(_repl_count_lines "$actions_block" '^[[:space:]]*type:[[:space:]]*commit')"
     _repl_turn_bump "$turn_file" "auditActions" "$action_count"
     _repl_turn_bump "$turn_file" "auditFiles" "$added"
     _repl_turn_bump "$turn_file" "auditDecisions" "$decision_count"
     _repl_turn_bump "$turn_file" "auditCommits" "$commit_count"
 
-    local req_id title status actions_block
+    local req_id title status
     req_id="$(_repl_current_turn_value "turnRequestId")"
     title="$(_repl_current_turn_value "queryTitle")"
     status="$(_repl_current_turn_value "status")"
     [ -z "$status" ] && status="in_progress"
-    actions_block="$(_repl_normalized_actions_block "$params")"
     _repl_persist_turn "$req_id" "$title" "$status" "Actions appended." "$actions_block" || true
 
     _repl_emit_response "  ok: true
@@ -4274,7 +4299,8 @@ payload:
 
     if [ -n "$params_yaml" ]; then
         local indented_params
-        indented_params="$(printf '%s\n' "$params_yaml" | sed 's/^/    /')"
+        indented_params="$(printf '%s\n' "$params_yaml" | tr -d '\r' | sed 's/^/    /')"
+        indented_params="$(printf '%s\n' "$indented_params" | sed 's/^    -/      -/; /^      [^ -]/ s/^      /        /')"
         envelope="${envelope}
   params:
 ${indented_params}"
@@ -4289,7 +4315,7 @@ _repl_read_stdin_if_ready() {
     fi
 
     if read -r -t 0; then
-        cat 2>/dev/null || true
+        cat 2>/dev/null | tr -d '\r' || true
     fi
 }
 
@@ -4301,8 +4327,13 @@ if [ "${BASH_SOURCE[0]}" = "$0" ]; then
     fi
 
     params_yaml="$(_repl_read_stdin_if_ready)"
+    if [ -z "$params_yaml" ] && [ $# -ge 2 ]; then
+        params_yaml="$2"
+    fi
     repl_invoke "$method" "$params_yaml"
-    exit $?
+    # Exit 0 so that type: error envelopes (which are valid responses) are not masked by
+    # wrapper callers that throw on non-zero. Usage error (64) is handled before.
+    exit 0
 fi
 
 export -f _repl_read_stdin_if_ready 2>/dev/null || true
