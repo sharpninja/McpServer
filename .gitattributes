@@ -1,2 +1,4 @@
 # Bash scripts must use LF line endings for WSL/Linux compatibility
 tools/bash/*.sh text eol=lf
+plugins/core/lib-sh/*.sh text eol=lf
+plugins/core/.staged-plugin/lib/*.sh text eol=lf

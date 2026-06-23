@@ -3290,13 +3290,14 @@ $(printf '%s\n' "$file_paths" | sed 's/^/        - /')"
     fi
     local actions_json='[]'
     if [ -n "$actions_block" ]; then
-        actions_json=$(printf '%s\n' "$actions_block" | node -e '
-          const fs=require("fs"); const txt=fs.readFileSync(0,"utf8"); const lines=txt.split(/\r?\n/); let cur=null,arr=[];
-          for(const raw of lines){const t=raw.trim();if(!t)continue;
-            if(t.startsWith("- ")){if(cur)arr.push(cur);cur={};const r=t.slice(2).trim();if(r.includes(":")){const[k,...v]=r.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["' + "'" + ']|["' + "'" + ']$/g,"");}}
-            else if(cur&&t.includes(":")){const[k,...v]=t.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["' + "'" + ']|["' + "'" + ']$/g,"");}
-          }if(cur)arr.push(cur);console.log(JSON.stringify(arr));
-        ' 2>/dev/null || echo '[]')
+        actions_json=$(printf '%s\n' "$actions_block" | node -e "$(cat <<'NODEEOF'
+const fs=require("fs"); const txt=fs.readFileSync(0,"utf8"); const lines=txt.split(/\r?\n/); let cur=null,arr=[];
+for(const raw of lines){const t=raw.trim();if(!t)continue;
+  if(t.startsWith("- ")){if(cur)arr.push(cur);cur={};const r=t.slice(2).trim();if(r.includes(":")){const[k,...v]=r.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["']|["']$/g,"");}}
+  else if(cur&&t.includes(":")){const[k,...v]=t.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["']|["']$/g,"");}
+}if(cur)arr.push(cur);console.log(JSON.stringify(arr));
+NODEEOF
+)" 2>/dev/null || echo '[]')
     fi
     node -e '
       console.log(JSON.stringify({
@@ -3353,14 +3354,15 @@ $(printf '%s\n' "$file_paths" | sed 's/^/    - /')"
 
     local actions_json="[]"
     if [ -n "$actions_block" ]; then
-        actions_json=$(printf '%s\n' "$actions_block" | node -e '
-          const fs=require("fs"); const txt=fs.readFileSync(0,"utf8");
-          const lines=txt.split(/\r?\n/); let cur=null, arr=[];
-          for(const l of lines){ const t=l.trim(); if(!t)continue;
-            if(t.startsWith("- ")){if(cur)arr.push(cur);cur={}; const r=t.slice(2).trim(); if(r.includes(":")){const[k,...v]=r.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["' + "'" + ']|["' + "'" + ']$/g,"");}}
-            else if(cur && t.includes(":")){const[k,...v]=t.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["' + "'" + ']|["' + "'" + ']$/g,"");}
-          }if(cur)arr.push(cur); console.log(JSON.stringify(arr));
-        ' 2>/dev/null || echo "[]")
+        actions_json=$(printf '%s\n' "$actions_block" | node -e "$(cat <<'NODEEOF'
+const fs=require("fs"); const txt=fs.readFileSync(0,"utf8");
+const lines=txt.split(/\r?\n/); let cur=null, arr=[];
+for(const l of lines){ const t=l.trim(); if(!t)continue;
+  if(t.startsWith("- ")){if(cur)arr.push(cur);cur={}; const r=t.slice(2).trim(); if(r.includes(":")){const[k,...v]=r.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["']|["']$/g,"");}}
+  else if(cur && t.includes(":")){const[k,...v]=t.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["']|["']$/g,"");}
+}if(cur)arr.push(cur); console.log(JSON.stringify(arr));
+NODEEOF
+)" 2>/dev/null || echo "[]")
     fi
 
     node -e '
@@ -3418,25 +3420,25 @@ _repl_persist_turn() {
       SOURCE_TYPE="$source_type" SESSION_ID="$session_id" REQ_ID="$req_id" \
       TITLE="$title" STATUS="$status" RESPONSE_B64="$response_b64" \
       ACTIONS_B64="$actions_b64" MODEL="$model" TIMESTAMP="$started" \
-      node -e '
-        const src=process.env.SOURCE_TYPE, sid=process.env.SESSION_ID, rid=process.env.REQ_ID;
-        const title=process.env.TITLE||"", status=process.env.STATUS||"in_progress";
-        const model=process.env.MODEL||"codex", ts=process.env.TIMESTAMP||new Date().toISOString();
-        const resp=Buffer.from(process.env.RESPONSE_B64||"","base64").toString("utf8");
-        let actions=[];
-        if(process.env.ACTIONS_B64){
-          const txt=Buffer.from(process.env.ACTIONS_B64,"base64").toString("utf8");
-          const lines=txt.split(/\r?\n/); let cur=null;
-          for(const raw of lines){const line=raw.trim();if(!line)continue;
-            if(line.startsWith("- ")){if(cur)actions.push(cur);cur={};
-              const rest=line.slice(2).trim();if(rest.includes(":")){const[k,...v]=rest.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["'+"'"'+'"]|["'+"'"'+'"]$/g,"");}}
-            else if(cur&&line.includes(":")){const[k,...v]=line.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["'+"'"'+'"]|["'+"'"'+'"]$/g,"");}
-          }if(cur)actions.push(cur);
-        }
-        const turn={agent:src,sessionId:sid,turn:{requestId:rid,timestamp:ts,queryTitle:title,response:resp,status,model,tokenCount:0,actions}};
-        const env={type:"request",payload:{requestId:"req-"+Date.now().toString(16),method:"client.SessionLog.UpsertTurnAsync",params:turn}};
-        console.log(JSON.stringify(env));
-      '
+      node <<'NODEEOF'
+const src=process.env.SOURCE_TYPE, sid=process.env.SESSION_ID, rid=process.env.REQ_ID;
+const title=process.env.TITLE||"", status=process.env.STATUS||"in_progress";
+const model=process.env.MODEL||"codex", ts=process.env.TIMESTAMP||new Date().toISOString();
+const resp=Buffer.from(process.env.RESPONSE_B64||"","base64").toString("utf8");
+let actions=[];
+if(process.env.ACTIONS_B64){
+  const txt=Buffer.from(process.env.ACTIONS_B64,"base64").toString("utf8");
+  const lines=txt.split(/\r?\n/); let cur=null;
+  for(const raw of lines){const line=raw.trim();if(!line)continue;
+    if(line.startsWith("- ")){if(cur)actions.push(cur);cur={};
+      const rest=line.slice(2).trim();if(rest.includes(":")){const[k,...v]=rest.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["']|["']$/g,"");}}
+    else if(cur&&line.includes(":")){const[k,...v]=line.split(":");cur[k.trim()]=v.join(":").trim().replace(/^["']|["']$/g,"");}
+  }if(cur)actions.push(cur);
+}
+const turn={agent:src,sessionId:sid,turn:{requestId:rid,timestamp:ts,queryTitle:title,response:resp,status,model,tokenCount:0,actions}};
+const env={type:"request",payload:{requestId:"req-"+Date.now().toString(16),method:"client.SessionLog.UpsertTurnAsync",params:turn}};
+console.log(JSON.stringify(env));
+NODEEOF
     )
 
     local failsafe_file
