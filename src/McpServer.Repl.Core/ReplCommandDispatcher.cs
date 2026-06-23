@@ -1009,7 +1009,10 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 RequirementsCommandShapes.ListFrMethod =>
                     await _requirementsWorkflow.ListFrAsync(GetString(args, "area"), GetString(args, "status"), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.RepairPlaceholdersMethod =>
-                    await _requirementsWorkflow.PurgeInvalidPlaceholdersAsync(cancellationToken).ConfigureAwait(false),
+                    new Dictionary<string, object?>
+                    {
+                        ["purged"] = await _requirementsWorkflow.PurgeInvalidPlaceholdersAsync(cancellationToken).ConfigureAwait(false)
+                    },
                 RequirementsCommandShapes.GetFrMethod =>
                     await _requirementsWorkflow.GetFrAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CreateFrMethod =>

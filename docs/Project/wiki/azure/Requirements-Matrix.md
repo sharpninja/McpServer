@@ -784,5 +784,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-LIVE-CODEX-20260603T2015Z | Tracked | Functional-Requirements.md |
 | TR-MCP-AIUNIT-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-AIUNIT-001 | Tracked | Testing-Requirements.md |
-| [] | Tracked | Functional-Requirements.md |
+| [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

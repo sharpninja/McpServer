@@ -45,8 +45,18 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<IFrQueryResult> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var entries = await _client.ListFrAsync(area, status, cancellationToken);
-        var items = entries.Select(e => new FrItemAdapter(e)).ToList();
+        // Always fetch unfiltered from server (to avoid any query param issues), then apply filter client-side for reliability.
+        var entries = await _client.ListFrAsync(cancellationToken);
+        IEnumerable<FrEntry> filtered = entries;
+        if (!string.IsNullOrEmpty(area))
+        {
+            filtered = filtered.Where(e => string.Equals(ExtractArea(e.Id), area, StringComparison.OrdinalIgnoreCase));
+        }
+        if (!string.IsNullOrEmpty(status))
+        {
+            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
+        }
+        var items = filtered.Select(e => new FrItemAdapter(e)).ToList();
         return new FrQueryResultAdapter(items);
     }
 

@@ -1,49 +1,5 @@
 # Functional Requirements (MCP Server)
 
-## [] []
-
-Placeholder requirement backfilled for TODO link [].
-
-## FR-01 FR-01
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-02 FR-02
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-03 FR-03
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-04 FR-04
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-05 FR-05
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-06 FR-06
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-07 FR-07
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-08 FR-08
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-09 FR-09
-
-Placeholder requirement backfilled by DB-FK-001.
-
-## FR-10 FR-10
-
-Placeholder requirement backfilled by DB-FK-001.
-
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*

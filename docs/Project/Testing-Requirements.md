@@ -555,3 +555,35 @@
   **Acceptance Criteria:**
   - [x] PUT request returns 405 Method Not Allowed
   - [x] Response includes Allow: POST header
+- TEST-MCP-163 (WS-A): xUnit v3 migration for remaining v2 projects (PlanReview.Tests, Support.Mcp.Tests etc.) must complete with zero failures/zero skips in focused test runs; custom aiUnit review attributes + Theory tests must continue to execute and produce review markdown; no duplicate type resolution or attribute breakage.
+  **Acceptance Criteria:**
+  - [ ] PlanReview.Tests migrates to xunit.v3 + runner; tests still discover and run (including any review traits).
+  - [ ] Large suites (Support.Mcp.Tests) migrate without introducing new skips or build warnings for xunit.
+  - [ ] aiUnit [AiCodeReview]/[AiProjectReview] Theory tests continue to supply data and write docs/reviews artifacts post-migration.
+  - [ ] Build targets (AiCodeReview, AiProjectReview) and review aggregation logic unaffected.
+- TEST-MCP-164 (WS-A): Review hardening: aiUnit review tests and markdown aggregation must be deterministic, cover more core components (REPL, requirements, auth), produce better-structured findings, and have unit coverage for the aggregation helper itself.
+  **Acceptance Criteria:**
+  - [ ] Aggregation in AiReviewTests prefers supplied prompt/responseJson over fragile file discovery when available.
+  - [ ] At least one new [Ai*Review] test added for a core area (e.g. the repair endpoint or session log).
+  - [ ] Review output MD includes consistent headings, severity counts, and traceability to FR/TR ids where relevant.
+  - [ ] Focused tests for review aggregation pass (no reliance on external ai runlogs for unit verification).
+- TEST-MCP-159: PurgeInvalidPlaceholdersAsync (via repair endpoint) must safely remove all placeholder FR entries whose IDs fail the canonical pattern (wildcards e.g. "FR-SOCIAL-*", free-text word IDs e.g. "A"/"Ensure"/"Keep", null or empty IDs) without throwing on Regex.IsMatch or FK constraint violations on RequirementTraceabilityLinks, and must delete the referencing links before removing the FR rows.
+  **Acceptance Criteria:**
+  - [ ] Unit/integration test seeds DB rows for bad placeholder FRs (with and without links), calls purge, asserts only bad ones removed, links cleaned, no exceptions, good canonical FRs untouched.
+  - [ ] Same coverage for file-backed RequirementsDocumentService purge.
+  - [ ] Repair endpoint returns {purged: N} for the count of removed bad rows.
+- TEST-MCP-160: EfTodoService backfill guards (IsValidRequirementId + Normalize filters) must reject and skip insertion of any FR/TR/TEST id that does not match the canonical regex ^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$, including wildcards, word tokens, and free-text extracted from TODO bodies; no placeholder row is ever created for such ids.
+  **Acceptance Criteria:**
+  - [ ] Test creates TODO with functionalRequirements containing ["FR-SOCIAL-*", "A", "Ensure", "FR-ADMIN-001"] (mix good/bad), asserts only canonical ones result in Requirement rows and links.
+  - [ ] Same for technical and test requirements.
+  - [ ] Direct calls to EnsureRequirementAsync with bad id return without insert (no exception, no row added).
+- TEST-MCP-161: listFr (REST + REPL workflow) with area filter must return only matching-area items even when the catalog contains bad/malformed placeholder FRs; after successful purge the bad items are absent from subsequent lists (with or without area filter); area filter must be case-insensitive.
+  **Acceptance Criteria:**
+  - [ ] With bad placeholders present across areas, listFr?area=SOCIAL and REPL listFr(area:"SOCIAL") return only SOCIAL items (no FR-ADMIN leakage).
+  - [ ] Post-purge listFr shows zero bad placeholders.
+  - [ ] Tests cover client-side fallback filter in RequirementsWorkflow.ListFrAsync.
+- TEST-MCP-162: Repair/purge path must not produce generic "internal_server_error" masking for edge bad-data cases; controller must log full exception details and return diagnostic payload; operation must succeed (or surface clean error) even without active turn transaction.
+  **Acceptance Criteria:**
+  - [ ] Repair controller catches exceptions from purge, logs via ILogger with full ex, returns 500 with {error, message, exceptionType} (or succeeds).
+  - [ ] Purge callable via REPL/REST succeeds when txn gate would otherwise block (bypass for repair).
+  - [ ] No unhandled exceptions on null Id, wildcard Id, or linked bad FRs.

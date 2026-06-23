@@ -58,7 +58,7 @@ public sealed class RequirementsController : ControllerBase
         IEnumerable<FrEntry> filtered = all;
         if (!string.IsNullOrEmpty(area))
         {
-            filtered = filtered.Where(e => ExtractArea(e.Id) == area);
+            filtered = filtered.Where(e => string.Equals(ExtractArea(e.Id), area, StringComparison.OrdinalIgnoreCase));
         }
         if (!string.IsNullOrEmpty(status))
         {
@@ -74,8 +74,23 @@ public sealed class RequirementsController : ControllerBase
     [HttpPost("fr/repair")]
     public async Task<IActionResult> RepairFrPlaceholdersAsync(CancellationToken cancellationToken)
     {
-        var purged = await _requirements.PurgeInvalidPlaceholdersAsync(cancellationToken).ConfigureAwait(false);
-        return Ok(new { purged });
+        try
+        {
+            var purged = await _requirements.PurgeInvalidPlaceholdersAsync(cancellationToken).ConfigureAwait(false);
+            return Ok(new { purged });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Repair placeholders failed. Full exception: {Exception}", ex.ToString());
+            // Return detailed info so that the caller (REPL) gets the real cause instead of opaque internal_server_error
+            return StatusCode(500, new 
+            { 
+                error = "internal_server_error", 
+                message = ex.Message, 
+                exceptionType = ex.GetType().FullName,
+                details = ex.ToString()
+            });
+        }
     }
 
     private static string ExtractArea(string id)

@@ -176,11 +176,12 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
 
     /// <inheritdoc />
     public Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)
-        => ExecuteMutationAsync(
-            "requirements.fr.repair",
-            new { operation = "purge-invalid-placeholders" },
-            token => _inner.PurgeInvalidPlaceholdersAsync(token),
-            ct);
+    {
+        // Repair is a special admin/cleanup operation to remove corrupted placeholder data.
+        // Bypass the turn transaction gate so it can always run (even outside an active turn)
+        // to unblock polluted workspaces. Other mutations remain gated.
+        return _inner.PurgeInvalidPlaceholdersAsync(ct);
+    }
 
     private async Task ExecuteMutationAsync(
         string operationName,

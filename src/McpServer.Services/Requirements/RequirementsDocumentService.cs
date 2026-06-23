@@ -70,12 +70,18 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         }
     }
 
+    private static readonly System.Text.RegularExpressions.Regex CanonicalFrIdRegex = new(
+        @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
     private static bool IsInvalidPlaceholder(FrEntry e)
     {
         if (e?.Body == null || !e.Body.StartsWith("Placeholder requirement backfilled", StringComparison.Ordinal))
             return false;
         // Keep only canonical FR ids like FR-XXX-001 or FR-XXX-SUB-001
-        return !System.Text.RegularExpressions.Regex.IsMatch(e.Id, @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        // Treat null/empty Id as invalid (delete)
+        var id = e.Id ?? string.Empty;
+        return string.IsNullOrEmpty(id) || !CanonicalFrIdRegex.IsMatch(id);
     }
 
     /// <inheritdoc />

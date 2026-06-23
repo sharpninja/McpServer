@@ -175,3 +175,27 @@
 | FR-SUPPORT-010C | TR-MCP-MT-003A | TEST-SUPPORT-010C-1, TEST-SUPPORT-010C-2, TEST-SUPPORT-010C-3 |
 | FR-SUPPORT-010E | TR-SUPPORT-010E | TEST-SUPPORT-010E |
 | FR-SUPPORT-010F | TR-SUPPORT-010F | TEST-SUPPORT-010F |
+| FR-MCP-132 | *(none)* | *(none)* |
+| FR-MCP-133 | *(none)* | *(none)* |
+| FR-MCP-137 | *(none)* | *(none)* |
+| FR-MCP-AGENT-PARITY-001 | *(none)* | *(none)* |
+| FR-MCP-AGENT-PARITY-002 | *(none)* | *(none)* |
+| FR-MCP-BATCH-001 | *(none)* | *(none)* |
+| FR-MCP-LIVE-CODEX-20260603T2014Z | *(none)* | *(none)* |
+| FR-MCP-LIVE-CODEX-20260603T2015Z | *(none)* | *(none)* |
+| FR-MCP-MEMORY-001 | *(none)* | *(none)* |
+| FR-MCP-MEMORY-002 | *(none)* | *(none)* |
+| FR-MCP-MEMORY-003 | *(none)* | *(none)* |
+| FR-MCP-MEMORY-004 | *(none)* | *(none)* |
+| FR-MCP-MEMORY-005 | *(none)* | *(none)* |
+| FR-MCP-MEMORY-006 | *(none)* | *(none)* |
+| FR-MCP-MEMORY-007 | *(none)* | *(none)* |
+| FR-MCP-PLUGIN-BATCH-001 | *(none)* | *(none)* |
+| FR-MCP-PLUGIN-SKILLS-001 | *(none)* | *(none)* |
+| FR-MCP-QBSEED-001 | *(none)* | *(none)* |
+| FR-MCP-QUAD-SESSION-001 | *(none)* | *(none)* |
+| FR-SUPPORT-011 | *(none)* | *(none)* |
+| FR-SUPPORT-012 | *(none)* | *(none)* |
+| FR-SUPPORT-013 | *(none)* | *(none)* |
+| FR-SUPPORT-014 | *(none)* | *(none)* |
+| FR-SUPPORT-015 | *(none)* | *(none)* |

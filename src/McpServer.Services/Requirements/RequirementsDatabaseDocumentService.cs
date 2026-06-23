@@ -24,6 +24,10 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private const string FrKind = "fr";
     private const string TrKind = "tr";
     private const string TestKind = "test";
+
+    private static readonly System.Text.RegularExpressions.Regex CanonicalFrIdRegex = new(
+        @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
 
     // TR-MCP-REQAC-001: AcceptanceCriterion carries [JsonPropertyName] attributes, so default
@@ -169,16 +173,32 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await using var scope = CreateScope();
             await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
 
-            var toDelete = await scope.Context.Requirements
+            // Fetch translatable part first (Body startsWith is supported), then apply non-translatable regex + null check in memory to avoid EF translation failure.
+            var candidates = await scope.Context.Requirements
                 .Where(x => x.Kind == FrKind &&
                             x.Body != null &&
-                            x.Body.StartsWith("Placeholder requirement backfilled") &&
-                            !System.Text.RegularExpressions.Regex.IsMatch(x.Id, @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                            x.Body.StartsWith("Placeholder requirement backfilled"))
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
 
+            var toDelete = candidates
+                .Where(x => string.IsNullOrEmpty(x.Id) || !CanonicalFrIdRegex.IsMatch(x.Id))
+                .ToList();
+
             if (toDelete.Count > 0)
             {
+                var badFrIds = toDelete.Select(x => x.Id).ToList();
+                // Load links using the (workspace filtered) ctx and remove to avoid FK on req delete. Use per-id to ensure tracked entities.
+                foreach (var id in badFrIds.Where(i => !string.IsNullOrEmpty(i)))
+                {
+                    var linksForId = await scope.Context.RequirementTraceabilityLinks
+                        .IgnoreQueryFilters()
+                        .Where(l => l.FrId == id)
+                        .ToListAsync(ct)
+                        .ConfigureAwait(false);
+                    if (linksForId.Count > 0)
+                        scope.Context.RequirementTraceabilityLinks.RemoveRange(linksForId);
+                }
                 scope.Context.Requirements.RemoveRange(toDelete);
                 await scope.Context.SaveChangesAsync(ct).ConfigureAwait(false);
             }
