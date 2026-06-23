@@ -3412,6 +3412,7 @@ _repl_persist_turn() {
     # Object + JSON serialization for the envelope (no hand-built YAML text).
     # Fixes "Malformed YAML envelope" for turns with actions lists + multiline responses.
     local response_b64 actions_b64
+    actions_b64=""
     response_b64=$(printf '%s' "$response_text" | base64 | tr -d '\r\n')
     [ -n "$actions_block" ] && actions_b64=$(printf '%s' "$actions_block" | base64 | tr -d '\r\n')
 

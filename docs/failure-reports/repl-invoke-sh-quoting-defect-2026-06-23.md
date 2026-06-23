@@ -54,7 +54,9 @@ Contributing: missing `eol=lf` in `.gitattributes` for `plugins/core/lib-sh/*.sh
    plugins/core/.staged-plugin/lib/*.sh text eol=lf
    ```
 
-4. Verified: `bash -n` (both Git bash and WSL bash) now clean. No more `else if...` leakage.
+4. Initialized the persisted-turn action payload to an empty string before conditional base64 assignment. This keeps action-less `updateTurn` calls from failing under `set -u` while preserving action-bearing `appendActions` and `completeTurn` payloads.
+
+5. Verified: `bash -n` (both Git bash and WSL bash) now clean. No more `else if...` leakage.
 
 ## Impact / Verification
 - The "object + JSON" approach for envelopes (and actions normalization) is retained.
