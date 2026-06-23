@@ -186,8 +186,9 @@ export class ReplBridge {
         },
       };
 
-      const yamlStr = yaml.dump(envelope, { lineWidth: -1 });
-      this.proc!.stdin!.write(yamlStr + '---\n');
+      // Object then serialize (JSON preferred to avoid any YAML construction issues)
+      const jsonStr = JSON.stringify(envelope);
+      this.proc!.stdin!.write(jsonStr + '\n');
     });
   }
 
@@ -220,8 +221,9 @@ export class ReplBridge {
         payload: { requestId, method, params },
       };
 
-      const yamlStr = yaml.dump(envelope, { lineWidth: -1 });
-      this.proc!.stdin!.write(yamlStr + '---\n');
+      // Object then serialize to JSON
+      const jsonStr = JSON.stringify(envelope);
+      this.proc!.stdin!.write(jsonStr + '\n');
     });
   }
 
