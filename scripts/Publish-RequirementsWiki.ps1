@@ -84,6 +84,26 @@ function Reset-Directory {
     return $full
 }
 
+function Remove-DirectoryBestEffort {
+    param([Parameter(Mandatory)][string]$Path)
+
+    $full = Resolve-FullPath $Path
+    if (-not (Test-Path -LiteralPath $full)) {
+        return
+    }
+
+    try {
+        Remove-Item -LiteralPath $full -Recurse -Force -ErrorAction Stop
+        return
+    } catch {
+        try {
+            [System.IO.Directory]::Delete($full, $true)
+        } catch {
+            Write-Warning "Unable to remove temporary directory '$full': $($_.Exception.Message)"
+        }
+    }
+}
+
 function Copy-DirectoryContents {
     param(
         [Parameter(Mandatory)][string]$Source,
@@ -213,9 +233,7 @@ Copy-DirectoryContents -Source $sourceFolder -Destination $stagedFolder
 Add-UserDocumentationSection -HomePath (Join-Path $stagedFolder 'Home.md') -Platform $Target -DocsBranch $UserDocsBranch
 
 if (-not $Push) {
-    if (Test-Path -LiteralPath $extractRoot) {
-        Remove-Item -LiteralPath $extractRoot -Recurse -Force
-    }
+    Remove-DirectoryBestEffort -Path $extractRoot
 
     Write-Host "Prepared $Target wiki files at $stagedFolder."
     exit 0

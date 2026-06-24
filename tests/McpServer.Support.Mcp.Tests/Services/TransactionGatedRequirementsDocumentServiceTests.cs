@@ -122,10 +122,10 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
     }
 
     /// <summary>
-    /// TEST for repair endpoint: purge is treated as a mutating operation and goes through the txn coordinator.
+    /// TEST-MCP-REP-001: Repair purge bypasses the transaction gate so polluted workspaces can be cleaned.
     /// </summary>
     [Fact]
-    public async Task PurgeInvalidPlaceholdersAsync_WhenCoordinatorCommits_RecordsOperationAndPurges()
+    public async Task PurgeInvalidPlaceholdersAsync_BypassesCoordinatorAndPurgesInvalidPlaceholders()
     {
         var inner = new RecordingRequirementsDocumentService();
         // Seed some canonical + one bad placeholder
@@ -139,9 +139,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         Assert.Equal(1, purged);
         Assert.Equal(1, inner.PurgeCalls);
         Assert.Equal(0, (await sut.GetAllFrAsync(CancellationToken.None).ConfigureAwait(true)).Count(e => e.Id.Contains("*")));
-        Assert.NotNull(coordinator.Request);
-        Assert.Equal("requirements.fr.repair", coordinator.Request.OperationName);
-        Assert.True(coordinator.Request.Mutating);
+        Assert.Null(coordinator.Request);
     }
 
     /// <summary>requirements.export.generateAll signs and commits before returning the export result.</summary>

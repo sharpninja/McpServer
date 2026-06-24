@@ -230,6 +230,67 @@ timestamp: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 EOF
 }
 
+_hook_epoch_from_iso() {
+    local value="${1:-}"
+    value="$(printf '%s' "$value" | tr -d '\r' | sed 's/^"\(.*\)"$/\1/; s/^'\''\(.*\)'\''$/\1/')"
+    [ -n "$value" ] || return 1
+    date -u -d "$value" +%s 2>/dev/null
+}
+
+_hook_file_mtime_epoch() {
+    local file="$1"
+    stat -c %Y "$file" 2>/dev/null || stat -f %m "$file" 2>/dev/null
+}
+
+_hook_session_state_last_seen_epoch() {
+    local file="$1" value epoch key
+    for key in lastUpdated timestamp started; do
+        value="$(yaml_get "$file" "$key" 2>/dev/null || true)"
+        epoch="$(_hook_epoch_from_iso "$value" 2>/dev/null || true)"
+        if [ -n "$epoch" ]; then
+            printf '%s' "$epoch"
+            return 0
+        fi
+    done
+
+    _hook_file_mtime_epoch "$file"
+}
+
+_hook_discard_stale_cached_session() {
+    # Explicit MCP_SESSION_ID means the caller intentionally selected the session.
+    [ -z "${MCP_SESSION_ID:-}" ] || return 0
+
+    local session_file="$CACHE_DIR/session-state.yaml"
+    [ -f "$session_file" ] || return 0
+
+    local max_idle="${MCP_SESSION_CACHE_MAX_IDLE_SECONDS:-86400}"
+    case "$max_idle" in
+        ''|*[!0-9]*) max_idle=86400 ;;
+    esac
+    [ "$max_idle" -gt 0 ] || return 0
+
+    local last_seen now age session_id active_file active_id
+    last_seen="$(_hook_session_state_last_seen_epoch "$session_file" 2>/dev/null || true)"
+    [ -n "$last_seen" ] || return 0
+    now="$(date -u +%s)"
+    age=$((now - last_seen))
+    [ "$age" -gt "$max_idle" ] || return 0
+
+    session_id="$(yaml_get "$session_file" sessionId 2>/dev/null || true)"
+    active_file="${MCP_PLUGIN_WORKSPACE_CACHE_DIR:-}/active-session"
+    if [ -n "$active_file" ] && [ -f "$active_file" ]; then
+        active_id="$(head -1 "$active_file" 2>/dev/null | tr -d '\r')"
+        if [ -z "$session_id" ] || [ "$active_id" = "$session_id" ]; then
+            rm -f "$active_file"
+        fi
+    fi
+
+    rm -f "$session_file" "$CACHE_DIR/current-turn.yaml"
+    if type cache_scope_init >/dev/null 2>&1; then
+        cache_scope_init "$MCP_PLUGIN_ROOT" "${1:-$(pwd)}"
+    fi
+}
+
 session_start_main() {
     local output_mode="${MCP_HOOK_OUTPUT_MODE:-hook}"
     local start_dir="${1:-${MCP_WORKSPACE_START_DIR:-$(pwd)}}"
@@ -276,6 +337,10 @@ session_start_main() {
         session_id="$(_repl_generate_session_id "$session_agent" "$session_title" "${MCPSERVER_WORKSPACE:-$(basename "$start_dir")}")"
     else
         session_id="${session_agent}-$(date -u +%Y%m%dT%H%M%SZ)-plugin"
+    fi
+
+    if type cache_scope_select_session >/dev/null 2>&1; then
+        cache_scope_select_session "$session_id" "$MCP_PLUGIN_ROOT" "$start_dir"
     fi
 
     local session_params="agent: ${session_agent}
@@ -426,6 +491,8 @@ user_prompt_submit_main() {
 
     local user_prompt
     user_prompt="$(payload_field "$payload" '.prompt' 'prompt')"
+
+    _hook_discard_stale_cached_session "$PWD"
 
     # Self-bootstrap (codex): when SessionStart never fired, run the
     # session-start wrapper so the hook is self-contained, then re-scope.

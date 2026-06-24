@@ -13,19 +13,20 @@ setup() {
     export CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT"
     export PLUGIN_ROOT_OVERRIDE="$SANDBOX"
     init_test_cache "$SANDBOX/workspace" "ClaudeCode-20260423T000000Z-test"
+    now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-    cat > "$TEST_CACHE_DIR/session-state.yaml" <<'EOF'
+    cat > "$TEST_CACHE_DIR/session-state.yaml" <<EOF
 status: verified
 sessionId: ClaudeCode-20260423T000000Z-test
 sourceType: ClaudeCode
 title: Prompt submit test
 model: claude-code
-started: 2026-04-23T00:00:00Z
-lastUpdated: 2026-04-23T00:00:00Z
+started: $now
+lastUpdated: $now
 workspacePath: "/tmp/ws"
 workspace: "test"
 baseUrl: "http://localhost:1"
-timestamp: "2026-04-23T00:00:00Z"
+timestamp: "$now"
 EOF
 
     cat > "$SANDBOX/bin/mcpserver-repl" <<'EOF'
@@ -70,6 +71,61 @@ teardown() {
     grep -Fq "MEMORY-REQ-001: Keep exact wording." <<<"$output"
     grep -Fq "MEMORY-USER-002: Preserve workspace preference." <<<"$output"
     grep -Fq "Use TODO and requirements tools only as needed." <<<"$output"
+}
+
+@test "user-prompt-submit discards cached session idle more than 24 hours before opening turn" {
+    stale_id="ClaudeCode-20260423T000000Z-stale"
+    cache_scope_select_session "$stale_id"
+    TEST_CACHE_DIR="$CACHE_DIR"
+    export TEST_CACHE_DIR
+    fresh_id="ClaudeCode-20260424T000000Z-fresh"
+    cat > "$SANDBOX/session-start-stub.sh" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+source "$PLUGIN_ROOT/lib/cache-scope.sh"
+cache_scope_init "$SANDBOX" "$TEST_WORKSPACE"
+cache_scope_select_session "$fresh_id"
+cat > "\$CACHE_DIR/session-state.yaml" <<STATE
+status: verified
+sessionId: $fresh_id
+sourceType: ClaudeCode
+title: Fresh prompt submit test
+model: claude-code
+started: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+lastUpdated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+workspacePath: "$TEST_WORKSPACE"
+workspace: "test"
+baseUrl: "http://localhost:1"
+timestamp: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+STATE
+EOF
+    chmod +x "$SANDBOX/session-start-stub.sh"
+    export MCP_SESSION_START_SCRIPT="$SANDBOX/session-start-stub.sh"
+    cat > "$TEST_CACHE_DIR/session-state.yaml" <<EOF
+status: verified
+sessionId: $stale_id
+sourceType: ClaudeCode
+title: Stale prompt submit test
+model: claude-code
+started: 1970-01-01T00:00:00Z
+lastUpdated: 1970-01-01T00:00:00Z
+workspacePath: "$TEST_WORKSPACE"
+workspace: "test"
+baseUrl: "http://localhost:1"
+timestamp: "1970-01-01T00:00:00Z"
+EOF
+    payload='{"prompt":"Open a new turn after stale cache."}'
+
+    run bash "$USER_PROMPT_SUBMIT" <<<"$payload"
+
+    [ "$status" -eq 0 ]
+    grep -q '"status":"turn-opened"' <<<"$output"
+    active_session="$(head -1 "$MCP_PLUGIN_WORKSPACE_CACHE_DIR/active-session")"
+    [ "$active_session" = "$fresh_id" ]
+    refresh_test_cache
+    grep -q '^sessionId: ' "$TEST_CACHE_DIR/session-state.yaml"
+    ! grep -q "$stale_id" "$TEST_CACHE_DIR/session-state.yaml"
+    [ -f "$(test_cache_file current-turn.yaml)" ]
 }
 
 @test "user-prompt-submit emits MCP-backed internal TODO guidance when enabled" {
