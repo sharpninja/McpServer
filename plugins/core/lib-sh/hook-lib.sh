@@ -114,6 +114,27 @@ run_with_timeout() {
     "$@"
 }
 
+# hook_capture_stdin
+# Hook runtimes normally close stdin after sending the JSON payload. Some manual
+# and MCP-hosted invocations keep stdin open with no bytes, so plain cat would
+# block forever before the hook can reach its own timeout gates.
+hook_capture_stdin() {
+    local timeout_value="${MCP_HOOK_STDIN_CAPTURE_TIMEOUT:-1s}"
+
+    if command -v timeout >/dev/null 2>&1; then
+        timeout --kill-after=1s "$timeout_value" cat 2>/dev/null || true
+        return 0
+    fi
+
+    local first_line=""
+    if IFS= read -r -t "${MCP_HOOK_STDIN_FIRST_LINE_TIMEOUT:-1}" first_line; then
+        printf '%s\n' "$first_line"
+        cat 2>/dev/null || true
+    elif [ -n "$first_line" ]; then
+        printf '%s' "$first_line"
+    fi
+}
+
 # acquire_hook_lock <name>
 # Creates $CACHE_DIR/<name>.lock with stale-lock recovery. Returns 1 when
 # another instance holds the lock; the caller emits its hook-specific output.
@@ -522,7 +543,7 @@ user_prompt_submit_main() {
 
     # Read stdin into PAYLOAD (may be empty)
     local payload
-    payload="$(cat 2>/dev/null || true)"
+    payload="$(hook_capture_stdin)"
 
     local user_prompt
     user_prompt="$(payload_field "$payload" '.prompt' 'prompt')"
@@ -662,7 +683,7 @@ stop_gate_main() {
     local turn_file="$CACHE_DIR/current-turn.yaml"
 
     # Read stdin (may be empty) so the hook runtime doesn't complain.
-    cat >/dev/null 2>&1 || true
+    hook_capture_stdin >/dev/null
 
     # Avoid re-prompting loops: if the runtime already set stop_hook_active
     # on a previous block, let this Stop through.
@@ -793,7 +814,7 @@ code_verify_main() {
     hook_require_repl_invoke
 
     local payload
-    payload="$(cat 2>/dev/null || true)"
+    payload="$(hook_capture_stdin)"
 
     local file_path
     file_path="$(payload_field "$payload" '.tool_input.file_path' 'file_path')"
@@ -1144,7 +1165,7 @@ for (const sub of subs) {
 
 export -f hook_env_init hook_require_repl_invoke hook_require_repl_invoke_strict \
     hook_require_marker_resolver hook_require_cache_manager hook_require_memory_context \
-    run_with_timeout acquire_hook_lock yaml_get hook_json_escape payload_field \
+    run_with_timeout hook_capture_stdin acquire_hook_lock yaml_get hook_json_escape payload_field \
     repl_invoke_timed hook_emit_noop hook_emit_block hook_emit_event cli_emit_status \
     _hook_write_untrusted session_start_main session_end_main pre_compact_main \
     post_compact_main user_prompt_submit_main stop_gate_main code_verify_main \

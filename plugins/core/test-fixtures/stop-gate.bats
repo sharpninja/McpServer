@@ -81,6 +81,17 @@ run_stop_gate() {
     [ "$out" = "{}" ]
 }
 
+@test "open empty stdin does not hang stop-gate" {
+    rm -f "$(test_cache_file current-turn.yaml)"
+    fifo="$SANDBOX/open-stdin.fifo"
+    mkfifo "$fifo"
+
+    run timeout --kill-after=2s 5s bash -c 'exec 0<>"$1"; "$2"' _ "$fifo" "$STOP_GATE"
+
+    [ "$status" -eq 0 ]
+    [ "$output" = "{}" ]
+}
+
 @test "in_progress turn → self-heal emits no-op (not block)" {
     write_turn "in_progress"
     out="$(run_stop_gate)"
