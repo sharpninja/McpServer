@@ -53,7 +53,12 @@ var todos = await client.Todo.QueryAsync();
 | `Workspace` | Manage workspace lifecycle |
 | `Tools` | Tool registry search, CRUD, bucket management |
 | `AgentPool` | Pooled agent lifecycle, one-shot queueing, and SSE monitoring |
+| `Triage` | Incidental bug report intake, queue dashboards, AI run history, and triage-created TODO lookup |
+
+## Endpoint Contract
+
+The package includes `docs/ENDPOINTS.md`, which lists every `SharpNinja.McpServer.Client` REST/SSE endpoint, the client method that calls it, the request DTO/body, the response DTO/body, and the JSON DTO property names declared by the client models.
 
 ## Target Framework
 
-- `net9.0`
+- `net10.0`

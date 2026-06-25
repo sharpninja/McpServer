@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="ENDPOINTS.md" Pack="true" PackagePath="docs\" />
   </ItemGroup>
 
   <ItemGroup>
