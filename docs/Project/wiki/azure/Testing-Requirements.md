@@ -1195,6 +1195,16 @@ Memory federation tests SHALL prove memory adapter diagnostics, /mcpserver/memor
 - [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
 
 
+## TEST-MCP-PLUGIN-TRIAGE
+
+### TEST-MCP-PLUGIN-TRIAGE-001
+
+Every plugin skill bundle documents when and how to submit triage reports and the async expectation.
+
+**Acceptance Criteria:**
+- [ ] Skill tests or repository checks verify every plugin bundle includes triage guidance.
+
+
 ## TEST-MCP-PLUGINCORE
 
 ### TEST-MCP-PLUGINCORE-001
@@ -1583,6 +1593,16 @@ Given a marker whose HMAC payload is signed with LF-only (\n) line endings (matc
 - [x] Test validates cross-platform Environment.NewLine compatibility
 
 
+## TEST-MCP-REPL-TRIAGE
+
+### TEST-MCP-REPL-TRIAGE-001
+
+Full client.triage.* and workflow.triage.* REPL surface works with correct envelopes.
+
+**Acceptance Criteria:**
+- [ ] REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors.
+
+
 ## TEST-MCP-REQAC
 
 ### TEST-MCP-REQAC-001
@@ -1710,6 +1730,61 @@ Traceability audit coverage for completed agent-pool, change-event, GitHub, Grap
 
 Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
 
+
+
+## TEST-MCP-TRIAGE
+
+### TEST-MCP-TRIAGE-001
+
+Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
+
+**Acceptance Criteria:**
+- [ ] Unit and integration tests cover valid and invalid report submission through public surfaces.
+
+### TEST-MCP-TRIAGE-002
+
+Deterministic grouping, McpServer workspace routing for core and plugin bugs, and 15-minute quiet-window behavior are verified.
+
+**Acceptance Criteria:**
+- [ ] Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior.
+
+### TEST-MCP-TRIAGE-003
+
+Research worker invokes configured direct agent with group JSON and prompt.
+
+**Acceptance Criteria:**
+- [ ] Tests verify dispatch input and configured prompt rendering.
+
+### TEST-MCP-TRIAGE-004
+
+Schema-valid research output creates exactly one BUG-TRIAGE-### TODO.
+
+**Acceptance Criteria:**
+- [ ] Tests verify idempotent TODO creation from valid research output.
+
+### TEST-MCP-TRIAGE-005
+
+Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state.
+
+**Acceptance Criteria:**
+- [ ] Tests verify failed runs preserve output or errors and do not create TODOs.
+
+### TEST-MCP-TRIAGE-006
+
+Multi-workspace isolation prevents cross-workspace grouping and status leakage.
+
+**Acceptance Criteria:**
+- [ ] Tests verify query filters and grouping scope never cross workspace boundaries.
+
+
+## TEST-MCP-TRIAGE-REQAC
+
+### TEST-MCP-TRIAGE-REQAC-001
+
+Every new FR/TR/TEST acceptance criterion is referenced by at least one test and passes ValidateTraceability.
+
+**Acceptance Criteria:**
+- [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
 
 
 ## TEST-REQAC-LIVE
@@ -1850,3 +1925,24 @@ When PUT is used on the turn-append route instead of POST, the endpoint returns 
 **Acceptance Criteria:**
 - [x] PUT request returns 405 Method Not Allowed
 - [x] Response includes Allow: POST header
+
+
+## TEST-TRIAGE
+
+### TEST-TRIAGE-001
+
+Unit and contract tests cover triage dashboard bucketing data, group/report/result rendering inputs, empty/error states, workspace filtering, and typed client dispatch for Director and MCP Web consumers.
+
+**Acceptance Criteria:**
+- [ ] Service tests cover dashboard queue composition, run history/result mapping, workspace isolation, and empty data.
+- [ ] Controller tests cover dashboard, run query, run detail, and not-found/error envelopes.
+- [ ] Client tests cover new typed triage methods and query-string dispatch.
+
+### TEST-TRIAGE-002
+
+Unit and client tests cover triage-created TODO listing, workspace filtering, missing TODO anchors, group/run context mapping, and typed client dispatch.
+
+**Acceptance Criteria:**
+- [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
+- [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)

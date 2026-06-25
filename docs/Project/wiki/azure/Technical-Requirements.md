@@ -871,6 +871,12 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Probe TR id pattern** — Probe only; should not be created if id validation fails or duplicate cleanup is needed.
 
+## TR-MCP-PLUGIN-TRIAGE-001
+
+**Triage plugin guidance** — Plugin skills and wrapper commands expose triage consistently.
+**Acceptance Criteria:**
+- [ ] Plugin skills document triage commands, asynchronous behavior, and when not to use triage.
+
 ## TR-MCP-POL-001
 
 **Natural Language Policy Management** — `PolicyManagementTool` MCP STDIO tool + `POST /mcpserver/workspace/policy` REST endpoint. Accepts natural language directives, parses intent (action, category, value, scope) via LLM, applies workspace config mutations via `IWorkspaceService.UpdateAsync`, logs `policy_change` actions per affected workspace session log.
@@ -1200,6 +1206,12 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
 
+## TR-MCP-REPL-TRIAGE-001
+
+**Triage REPL surface** — REPL parity for triage through client passthrough and typed workflow wrappers.
+**Acceptance Criteria:**
+- [ ] All triage operations are available through client.triage.* and workflow.triage.* envelopes.
+
 ## TR-MCP-REQ-001
 
 **AI Requirements Analysis Service** — `RequirementsService` invokes `ICopilotClient` with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from `docs/Project/` and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`) for robustness. Discovered IDs are merged (deduplicated, order-preserved) back into the TODO via `ITodoService.UpdateAsync`.
@@ -1444,6 +1456,31 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 **Tool Registry Default Bucket Seeding** — On startup, `Program.cs` reads `Mcp:ToolRegistry:DefaultBuckets` and calls `IToolBucketService.EnsureDefaultBucketsAsync` to register any configured buckets not already in the database. Idempotent: existing buckets are not modified.
 
+## TR-MCP-TRIAGE-001
+
+**Durable triage storage** — Durable EF entities store reports, groups, research runs, statuses, idempotency keys, and workspace filters.
+**Acceptance Criteria:**
+- [ ] Triage reports, groups, and research runs persist in the MCP database and are query-filtered by workspace.
+
+## TR-MCP-TRIAGE-002
+
+**Deterministic triage grouping** — The grouping service uses workspace, dedupeKey, component, path, symbol, error signature, normalized title tokens, and McpServer workspace routing for MCP Server core and plugin bugs.
+**Acceptance Criteria:**
+- [ ] Matching reports in one workspace share a group; matching reports across workspaces do not unless routed to the registered McpServer workspace by MCP Server bug detection.
+- [ ] MCP Server core and plugin bug reports target the registered McpServer workspace only when the workspace registry contains it.
+
+## TR-MCP-TRIAGE-003
+
+**Async triage worker** — A background worker handles quiet-period expiry, configured agent execution, prompt rendering, and timeouts.
+**Acceptance Criteria:**
+- [ ] The worker dispatches only after the configured quiet period unless a group is manually flushed.
+
+## TR-MCP-TRIAGE-004
+
+**Triage schema and TODO creation** — Triage research output is schema-validated and converted idempotently into BUG-TRIAGE TODOs.
+**Acceptance Criteria:**
+- [ ] Valid research output creates one backlog TODO and failed output creates none.
+
 ## TR-MCP-TUN-001
 
 **Tunnel Strategy Pattern** — DI registration in `Program.cs` reads `Mcp:Tunnel:Provider`, normalizes to uppercase, and uses `ActivatorUtilities.CreateInstance<T>` to instantiate the matching provider (`NgrokTunnelProvider`, `CloudflareTunnelProvider`, or `FrpTunnelProvider`). The provider is registered as both a singleton and an `IHostedService`, conditionally on the provider name being non-empty.
@@ -1652,4 +1689,20 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-TEST-001
 
 **TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
+
+## TR-TRIAGE-CLIENT-001
+
+**Typed triage dashboard client endpoints** — SharpNinja.McpServer.Client exposes typed triage dashboard and run-history methods backed by REST endpoints for queue contents, groupings, AI triage runs, results, and current status.
+**Acceptance Criteria:**
+- [ ] McpServerClient.Triage exposes methods to query the dashboard, query runs, and get an individual run.
+- [ ] REST and client request/response models preserve status, result JSON, raw output, prompt metadata, created TODO id, errors, timestamps, and workspace filters.
+- [ ] Existing QueryGroupsAsync, GetGroupAsync, and GetReportAsync remain compatible for the planned shared UI.Core view model.
+
+## TR-TRIAGE-CLIENT-002
+
+**Typed triage TODO client endpoint** — REST, service, and SharpNinja.McpServer.Client typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and current triage status context.
+**Acceptance Criteria:**
+- [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+- [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
+- [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 

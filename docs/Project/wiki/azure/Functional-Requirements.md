@@ -1306,6 +1306,40 @@ The transaction subscriber SHALL log every received transaction message (commit 
 - [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
 - [x] Sink transport errors are swallowed and never break the transaction.
 
+## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
+
+Agents can submit workspace-scoped incidental bug reports without leaving their current task.
+**Acceptance Criteria:**
+- [ ] REST, client, REPL, and plugin tool paths all accept the same report contract.
+- [ ] Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc.
+- [ ] Intake does not run research or create a TODO synchronously.
+
+## FR-MCP-TRIAGE-002 Async triage grouping and research
+
+Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.
+**Acceptance Criteria:**
+- [ ] Groups are deterministic and workspace-isolated.
+- [ ] New matching reports reset the 15-minute quiet window.
+- [ ] A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.
+- [ ] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.
+- [ ] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.
+
+## FR-MCP-TRIAGE-003 REPL triage parity
+
+The REPL exposes the complete triage surface through client passthrough and typed workflow wrappers.
+**Acceptance Criteria:**
+- [ ] client.triage.* works through generic passthrough after adding McpServerClient.Triage.
+- [ ] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.
+- [ ] YAML validation, error envelopes, and request/response shapes are covered.
+
+## FR-MCP-TRIAGE-004 Plugin triage skills
+
+All plugin distributions teach agents when and how to use triage.
+**Acceptance Criteria:**
+- [ ] Each plugin skill bundle includes triage guidance.
+- [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
+- [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
+
 ## FR-SUPPORT-010 MCP Context Unification
 
 Local MCP server providing context retrieval, TODO management, repository access, session logging, and ingestion capabilities for AI agent integration.
@@ -1383,4 +1417,20 @@ Whole-session submit shall merge additively: omitted session and turn fields nev
 ## FR-TEST-002 FR-TEST-002
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
+
+## FR-TRIAGE-001 Triage dashboard inspection
+
+Users can inspect triage queue contents, grouped report queues, and AI triage run history with result details and current status for Director and MCP Web UI dashboards.
+**Acceptance Criteria:**
+- [ ] A read-only dashboard contract exposes triage queue, report group queue, and run history without inferring Agent Pool data.
+- [ ] Group details include status, title, summary, report count, quiet deadline, created TODO id, last error, linked report summaries, and latest AI run results when available.
+- [ ] The API supports workspace-scoped queries so Director and MCP Web can use the active workspace path.
+
+## FR-TRIAGE-002 Triage-created TODO index
+
+Users can query TODO item IDs created by triage, including the datetime each TODO anchor was created, so Director and MCP Web can link triage outcomes to backlog items.
+**Acceptance Criteria:**
+- [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 
