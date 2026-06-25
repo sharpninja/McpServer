@@ -169,6 +169,147 @@ public sealed record TriageGroupQueryResult
 }
 
 /// <summary>
+/// FR-TRIAGE-001: AI triage research run detail for Director and MCP Web dashboards.
+/// </summary>
+public sealed record TriageResearchRunDetail
+{
+    /// <summary>Durable research run id.</summary>
+    public required string RunId { get; init; }
+
+    /// <summary>Triage group id researched by this run.</summary>
+    public required string GroupId { get; init; }
+
+    /// <summary>Current run status.</summary>
+    public required string Status { get; init; }
+
+    /// <summary>Effective workspace path that owns the run.</summary>
+    public string? WorkspacePath { get; init; }
+
+    /// <summary>Current group status when the group is available.</summary>
+    public string? GroupStatus { get; init; }
+
+    /// <summary>Representative group title when the group is available.</summary>
+    public string? GroupTitle { get; init; }
+
+    /// <summary>Representative group summary when the group is available.</summary>
+    public string? GroupSummary { get; init; }
+
+    /// <summary>Number of reports in the researched group.</summary>
+    public int ReportCount { get; init; }
+
+    /// <summary>Prompt template id used for this run.</summary>
+    public string? PromptTemplateId { get; init; }
+
+    /// <summary>Rendered prompt sent to the triage agent.</summary>
+    public string? Prompt { get; init; }
+
+    /// <summary>Serialized group JSON supplied to the triage agent.</summary>
+    public string? GroupJson { get; init; }
+
+    /// <summary>Raw agent output.</summary>
+    public string? RawOutput { get; init; }
+
+    /// <summary>Schema-valid agent JSON after validation.</summary>
+    public string? ResponseJson { get; init; }
+
+    /// <summary>Failure text when the run failed.</summary>
+    public string? Error { get; init; }
+
+    /// <summary>Created TODO id, if any.</summary>
+    public string? CreatedTodoId { get; init; }
+
+    /// <summary>UTC timestamp when the run started.</summary>
+    public DateTimeOffset StartedUtc { get; init; }
+
+    /// <summary>UTC timestamp when the run completed.</summary>
+    public DateTimeOffset? CompletedUtc { get; init; }
+}
+
+/// <summary>
+/// FR-TRIAGE-001: Query result for AI triage run history.
+/// </summary>
+public sealed record TriageRunQueryResult
+{
+    /// <summary>Matching triage research runs.</summary>
+    public IReadOnlyList<TriageResearchRunDetail> Items { get; init; } = [];
+
+    /// <summary>Total matching runs.</summary>
+    public int TotalCount { get; init; }
+}
+
+/// <summary>
+/// FR-TRIAGE-002: TODO created from a triage group or research run.
+/// </summary>
+public sealed record TriageCreatedTodoDetail
+{
+    /// <summary>Canonical TODO identifier created by triage.</summary>
+    public required string TodoId { get; init; }
+
+    /// <summary>Persisted UTC timestamp when the TODO anchor was created.</summary>
+    public DateTimeOffset CreatedAtUtc { get; init; }
+
+    /// <summary>Workspace path that owns the triage-created TODO.</summary>
+    public string? WorkspacePath { get; init; }
+
+    /// <summary>Triage group that produced the TODO, when available.</summary>
+    public string? GroupId { get; init; }
+
+    /// <summary>Research run that produced the TODO, when available.</summary>
+    public string? RunId { get; init; }
+
+    /// <summary>Current triage group status, when available.</summary>
+    public string? GroupStatus { get; init; }
+
+    /// <summary>Current research run status, when available.</summary>
+    public string? RunStatus { get; init; }
+
+    /// <summary>Representative group title, when available.</summary>
+    public string? GroupTitle { get; init; }
+
+    /// <summary>Representative group summary, when available.</summary>
+    public string? GroupSummary { get; init; }
+
+    /// <summary>Number of reports attached to the group, when available.</summary>
+    public int ReportCount { get; init; }
+
+    /// <summary>Current quiet deadline for the group, when available.</summary>
+    public DateTimeOffset? QuietDeadlineUtc { get; init; }
+}
+
+/// <summary>
+/// FR-TRIAGE-002: Query result for TODOs created by triage.
+/// </summary>
+public sealed record TriageCreatedTodoQueryResult
+{
+    /// <summary>Matching triage-created TODOs with creation timestamps.</summary>
+    public IReadOnlyList<TriageCreatedTodoDetail> Items { get; init; } = [];
+
+    /// <summary>Total matching triage-created TODOs.</summary>
+    public int TotalCount { get; init; }
+}
+
+/// <summary>
+/// FR-TRIAGE-001: Read-only dashboard state for triage queue, report-group queue, and run history.
+/// </summary>
+public sealed record TriageDashboardResult
+{
+    /// <summary>Groups still collecting or waiting for their quiet window.</summary>
+    public IReadOnlyList<TriageGroupDetail> TriageQueue { get; init; } = [];
+
+    /// <summary>Groups ready for or currently in report-group processing.</summary>
+    public IReadOnlyList<TriageGroupDetail> ReportGroupQueue { get; init; } = [];
+
+    /// <summary>AI triage run history with results and current statuses.</summary>
+    public IReadOnlyList<TriageResearchRunDetail> RunHistory { get; init; } = [];
+
+    /// <summary>Total groups visible to the dashboard query.</summary>
+    public int TotalGroupCount { get; init; }
+
+    /// <summary>Total runs visible to the dashboard query.</summary>
+    public int TotalRunCount { get; init; }
+}
+
+/// <summary>
 /// FR-MCP-TRIAGE-002: Result of a background triage sweep.
 /// </summary>
 public sealed record TriageSweepResult(int ProcessedGroups);
@@ -246,8 +387,26 @@ public interface ITriageService
     /// <summary>Queries triage groups.</summary>
     Task<TriageGroupQueryResult> QueryGroupsAsync(string? status = null, string? workspacePath = null, CancellationToken cancellationToken = default);
 
+    /// <summary>Gets read-only dashboard state for triage queue, report-group queue, and AI run history.</summary>
+    Task<TriageDashboardResult> GetDashboardAsync(string? workspacePath = null, CancellationToken cancellationToken = default);
+
     /// <summary>Gets a triage group by id.</summary>
     Task<TriageGroupDetail> GetGroupAsync(string groupId, CancellationToken cancellationToken = default);
+
+    /// <summary>Queries AI triage research runs by optional status, group, and workspace filters.</summary>
+    Task<TriageRunQueryResult> QueryRunsAsync(
+        string? status = null,
+        string? groupId = null,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Gets an AI triage research run by id.</summary>
+    Task<TriageResearchRunDetail> GetRunAsync(string runId, CancellationToken cancellationToken = default);
+
+    /// <summary>Queries TODO ids created by triage with persisted TODO creation timestamps.</summary>
+    Task<TriageCreatedTodoQueryResult> QueryCreatedTodosAsync(
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default);
 
     /// <summary>Forces a group to be ready for research immediately.</summary>
     Task<TriageGroupDetail> FlushGroupAsync(string groupId, CancellationToken cancellationToken = default);

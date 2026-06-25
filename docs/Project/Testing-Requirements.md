@@ -584,3 +584,15 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] PUT request returns 405 Method Not Allowed
   - [x] Response includes Allow: POST header
 - TEST-WFL-001: Test requirement for complete workflow
+
+- TEST-TRIAGE-001: Unit and contract tests cover triage dashboard bucketing data, group/report/result rendering inputs, empty/error states, workspace filtering, and typed client dispatch for Director and MCP Web consumers.
+  **Acceptance Criteria:**
+  - [x] Service tests cover dashboard queue composition, run history/result mapping, workspace isolation, and empty data. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`, `TriageServiceTests.GetDashboardAsync_NoRows_ReturnsEmptyCollections`, `TriageServiceTests.QueryRunsAsync_WithFilters_ReturnsWorkspaceScopedRuns`)
+  - [x] Controller tests cover dashboard, run query, run detail, and not-found/error envelopes. (evidence: `TriageControllerTests.GetDashboardAsync_ReturnsDashboardState`, `TriageControllerTests.QueryRunsAsync_ReturnsRunHistory`, `TriageControllerTests.GetRunAsync_WhenMissing_ReturnsNotFound`)
+  - [x] Client tests cover new typed triage methods and query-string dispatch. (evidence: `TriageClientTests.GetDashboardAsync_SendsWorkspaceFilter`, `TriageClientTests.QueryRunsAsync_SendsFilters`, `TriageClientTests.GetRunAsync_SendsCorrectUrl`)
+
+- TEST-TRIAGE-002: Unit and client tests cover triage-created TODO listing, workspace filtering, missing TODO anchors, group/run context mapping, and typed client dispatch.
+  **Acceptance Criteria:**
+  - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
+  - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: `TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex`)
+  - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: `TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter`)

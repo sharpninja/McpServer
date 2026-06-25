@@ -1715,3 +1715,19 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Complete Workflow TR** — Technical requirement for complete workflow test
 
+## TR-TRIAGE-CLIENT-001
+
+**Typed triage dashboard client endpoints** — `SharpNinja.McpServer.Client` exposes typed triage dashboard and run-history methods backed by REST endpoints for queue contents, groupings, AI triage runs, results, and current status.
+**Acceptance Criteria:**
+- [x] `McpServerClient.Triage` exposes methods to query the dashboard, query runs, and get an individual run. (evidence: `TriageClientTests.GetDashboardAsync_SendsWorkspaceFilter`, `TriageClientTests.QueryRunsAsync_SendsFilters`, `TriageClientTests.GetRunAsync_SendsCorrectUrl`)
+- [x] REST and client request/response models preserve status, result JSON, raw output, prompt metadata, created TODO id, errors, timestamps, and workspace filters. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`)
+- [x] Existing `QueryGroupsAsync`, `GetGroupAsync`, and `GetReportAsync` remain compatible for the planned shared UI.Core view model. (evidence: existing `TriageClientTests` for group/report methods)
+
+## TR-TRIAGE-CLIENT-002
+
+**Typed triage TODO client endpoint** — REST, service, and `SharpNinja.McpServer.Client` typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and current triage status context.
+**Acceptance Criteria:**
+- [x] `McpServerClient.Triage` exposes a typed method for querying triage-created TODOs. (evidence: `TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter`)
+- [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: `TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex`)
+- [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
+

@@ -118,6 +118,83 @@ public sealed class TriageClientTests
         Assert.Contains("/mcpserver/triage/groups/triage-group-001/retry", handler.LastRequest.RequestUri!.AbsolutePath);
     }
 
+    /// <summary>TEST-TRIAGE-001: GetDashboardAsync reads queue buckets and run history for a workspace.</summary>
+    [Fact]
+    public async Task GetDashboardAsync_SendsWorkspaceFilter()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"triageQueue":[],"reportGroupQueue":[],"runHistory":[],"totalGroupCount":0,"totalRunCount":0}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.GetDashboardAsync("F:\\GitHub\\McpServer");
+
+        Assert.Equal(0, result.TotalGroupCount);
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/dashboard", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("workspacePath=F%3A%5CGitHub%5CMcpServer", handler.LastRequest.RequestUri.Query);
+    }
+
+    /// <summary>TEST-TRIAGE-001: QueryRunsAsync sends status, group, and workspace filters.</summary>
+    [Fact]
+    public async Task QueryRunsAsync_SendsFilters()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[],"totalCount":0}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.QueryRunsAsync(
+            status: "failed",
+            groupId: "triage-group-001",
+            workspacePath: "F:\\GitHub\\McpServer");
+
+        Assert.Equal(0, result.TotalCount);
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/runs", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("status=failed", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("groupId=triage-group-001", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("workspacePath=F%3A%5CGitHub%5CMcpServer", handler.LastRequest.RequestUri.Query);
+    }
+
+    /// <summary>TEST-TRIAGE-001: GetRunAsync reads AI triage run result details by id.</summary>
+    [Fact]
+    public async Task GetRunAsync_SendsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"runId":"triage-run-001","groupId":"triage-group-001","status":"completed","startedUtc":"2026-06-25T05:00:00Z","responseJson":"{\"title\":\"Fix\"}"}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.GetRunAsync("triage-run-001");
+
+        Assert.Equal("triage-run-001", result.RunId);
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/runs/triage-run-001", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("Fix", result.ResponseJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>TEST-TRIAGE-002: QueryCreatedTodosAsync reads TODO ids created by triage.</summary>
+    [Fact]
+    public async Task QueryCreatedTodosAsync_SendsWorkspaceFilter()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"items":[{"todoId":"BUG-TRIAGE-001","createdAtUtc":"2026-06-25T05:03:00Z","workspacePath":"F:\\GitHub\\McpServer","groupId":"triage-group-001","runId":"triage-run-001","groupStatus":"completed","runStatus":"completed"}],"totalCount":1}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.QueryCreatedTodosAsync("F:\\GitHub\\McpServer");
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("BUG-TRIAGE-001", item.TodoId);
+        Assert.Equal(new DateTimeOffset(2026, 6, 25, 5, 3, 0, TimeSpan.Zero), item.CreatedAtUtc);
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/todos", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("workspacePath=F%3A%5CGitHub%5CMcpServer", handler.LastRequest.RequestUri.Query);
+    }
+
     /// <summary>TEST-MCP-REPL-TRIAGE-001: McpServerClient exposes Triage for generic client passthrough.</summary>
     [Fact]
     public void McpServerClient_ExposesTriageAndPropagatesWorkspacePath()

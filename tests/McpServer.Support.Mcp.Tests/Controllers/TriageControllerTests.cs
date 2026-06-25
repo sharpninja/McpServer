@@ -112,4 +112,123 @@ public sealed class TriageControllerTests
         var ok = Assert.IsType<OkObjectResult>(action.Result);
         Assert.Same(group, ok.Value);
     }
+
+    /// <summary>TEST-TRIAGE-001: GET /mcpserver/triage/dashboard returns queue and run history state.</summary>
+    [Fact]
+    public async Task GetDashboardAsync_ReturnsDashboardState()
+    {
+        var service = Substitute.For<ITriageService>();
+        var dashboard = new TriageDashboardResult
+        {
+            TriageQueue =
+            [
+                new TriageGroupDetail
+                {
+                    GroupId = "triage-group-new",
+                    Status = "new",
+                    ReportCount = 1,
+                    QuietDeadlineUtc = DateTimeOffset.UtcNow,
+                },
+            ],
+            RunHistory =
+            [
+                new TriageResearchRunDetail
+                {
+                    RunId = "triage-run-001",
+                    GroupId = "triage-group-new",
+                    Status = "completed",
+                    StartedUtc = DateTimeOffset.UtcNow,
+                },
+            ],
+            TotalGroupCount = 1,
+            TotalRunCount = 1,
+        };
+        service.GetDashboardAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>()).Returns(dashboard);
+
+        var action = await new TriageController(service).GetDashboardAsync("F:\\GitHub\\McpServer", CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(dashboard, ok.Value);
+        await service.Received(1).GetDashboardAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>TEST-TRIAGE-001: run-history query endpoint returns current AI triage run statuses.</summary>
+    [Fact]
+    public async Task QueryRunsAsync_ReturnsRunHistory()
+    {
+        var service = Substitute.For<ITriageService>();
+        var query = new TriageRunQueryResult
+        {
+            Items =
+            [
+                new TriageResearchRunDetail
+                {
+                    RunId = "triage-run-001",
+                    GroupId = "triage-group-001",
+                    Status = "failed",
+                    Error = "schema validation failed",
+                    StartedUtc = DateTimeOffset.UtcNow,
+                },
+            ],
+            TotalCount = 1,
+        };
+        service.QueryRunsAsync("failed", "triage-group-001", "F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+            .Returns(query);
+
+        var action = await new TriageController(service).QueryRunsAsync(
+            "failed",
+            "triage-group-001",
+            "F:\\GitHub\\McpServer",
+            CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(query, ok.Value);
+    }
+
+    /// <summary>TEST-TRIAGE-002: triage TODO endpoint returns created TODO ids with timestamps.</summary>
+    [Fact]
+    public async Task QueryCreatedTodosAsync_ReturnsCreatedTodoIndex()
+    {
+        var service = Substitute.For<ITriageService>();
+        var query = new TriageCreatedTodoQueryResult
+        {
+            Items =
+            [
+                new TriageCreatedTodoDetail
+                {
+                    TodoId = "BUG-TRIAGE-001",
+                    CreatedAtUtc = new DateTimeOffset(2026, 6, 25, 5, 3, 0, TimeSpan.Zero),
+                    WorkspacePath = "F:\\GitHub\\McpServer",
+                    GroupId = "triage-group-001",
+                    RunId = "triage-run-001",
+                    GroupStatus = "completed",
+                    RunStatus = "completed",
+                },
+            ],
+            TotalCount = 1,
+        };
+        service.QueryCreatedTodosAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>()).Returns(query);
+
+        var action = await new TriageController(service).QueryCreatedTodosAsync(
+            "F:\\GitHub\\McpServer",
+            CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(query, ok.Value);
+        await service.Received(1).QueryCreatedTodosAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>TEST-TRIAGE-001: run detail endpoint returns not-found envelopes for missing runs.</summary>
+    [Fact]
+    public async Task GetRunAsync_WhenMissing_ReturnsNotFound()
+    {
+        var service = Substitute.For<ITriageService>();
+        service.GetRunAsync("triage-run-missing", Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<TriageResearchRunDetail>(new KeyNotFoundException("missing run")));
+
+        var action = await new TriageController(service).GetRunAsync("triage-run-missing", CancellationToken.None);
+
+        var notFound = Assert.IsType<NotFoundObjectResult>(action.Result);
+        Assert.Contains("missing run", notFound.Value!.ToString(), StringComparison.Ordinal);
+    }
 }

@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -270,6 +271,157 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Contains("schema", group.LastError, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// TEST-TRIAGE-001: the Director/Web dashboard endpoint returns read-only queue buckets,
+    /// linked reports, and AI run history with result/status fields for the active workspace.
+    /// </summary>
+    [Fact]
+    public async Task GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.AddRange(
+                SeedGroup("triage-group-new", "new", now),
+                SeedGroup("triage-group-processing", "processing", now.AddMinutes(-1)),
+                SeedGroup("triage-group-completed", "completed", now.AddMinutes(-2), createdTodoId: "BUG-TRIAGE-001"));
+            db.TriageReports.AddRange(
+                SeedReport("triage-report-new", "triage-group-new", "New queue report", now),
+                SeedReport("triage-report-processing", "triage-group-processing", "Processing queue report", now.AddMinutes(-1)),
+                SeedReport("triage-report-completed", "triage-group-completed", "Completed report", now.AddMinutes(-2)));
+            db.TriageResearchRuns.Add(SeedRun(
+                "triage-run-completed",
+                "triage-group-completed",
+                "completed",
+                now.AddMinutes(-3),
+                completedUtc: now.AddMinutes(-2),
+                responseJson: """{"title":"Fix dashboard","summary":"Expose run status."}""",
+                rawOutput: """{"title":"Fix dashboard"}""",
+                createdTodoId: "BUG-TRIAGE-001"));
+            await db.SaveChangesAsync();
+        }
+
+        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace);
+
+        var triageQueueGroup = Assert.Single(dashboard.TriageQueue);
+        Assert.Equal("triage-group-new", triageQueueGroup.GroupId);
+        Assert.Equal("New queue report", triageQueueGroup.Reports.Single().Title);
+        var reportGroupQueueGroup = Assert.Single(dashboard.ReportGroupQueue);
+        Assert.Equal("triage-group-processing", reportGroupQueueGroup.GroupId);
+        var run = Assert.Single(dashboard.RunHistory);
+        Assert.Equal("triage-run-completed", run.RunId);
+        Assert.Equal("completed", run.Status);
+        Assert.Equal("completed", run.GroupStatus);
+        Assert.Equal("BUG-TRIAGE-001", run.CreatedTodoId);
+        Assert.Contains("Expose run status", run.ResponseJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>TEST-TRIAGE-001: dashboard reads return explicit empty collections when no triage rows exist.</summary>
+    [Fact]
+    public async Task GetDashboardAsync_NoRows_ReturnsEmptyCollections()
+    {
+        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace);
+
+        Assert.Empty(dashboard.TriageQueue);
+        Assert.Empty(dashboard.ReportGroupQueue);
+        Assert.Empty(dashboard.RunHistory);
+        Assert.Equal(0, dashboard.TotalGroupCount);
+        Assert.Equal(0, dashboard.TotalRunCount);
+    }
+
+    /// <summary>TEST-TRIAGE-001: run-history queries preserve workspace, status, and group filters.</summary>
+    [Fact]
+    public async Task QueryRunsAsync_WithFilters_ReturnsWorkspaceScopedRuns()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup("triage-group-primary", "completed", now));
+            db.TriageResearchRuns.AddRange(
+                SeedRun("triage-run-primary", "triage-group-primary", "completed", now),
+                SeedRun("triage-run-processing", "triage-group-primary", "processing", now.AddMinutes(1)));
+            await db.SaveChangesAsync();
+        }
+
+        using (var db = CreateDb(AlternateWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup("triage-group-other", "completed", now, workspacePath: AlternateWorkspace));
+            db.TriageResearchRuns.Add(SeedRun(
+                "triage-run-other",
+                "triage-group-other",
+                "completed",
+                now,
+                workspacePath: AlternateWorkspace));
+            await db.SaveChangesAsync();
+        }
+
+        var result = await CreateService(PrimaryWorkspace).QueryRunsAsync(
+            status: "completed",
+            groupId: "triage-group-primary",
+            workspacePath: PrimaryWorkspace);
+
+        var run = Assert.Single(result.Items);
+        Assert.Equal("triage-run-primary", run.RunId);
+        Assert.Equal(PrimaryWorkspace, run.WorkspacePath);
+        Assert.Equal(1, result.TotalCount);
+    }
+
+    /// <summary>
+    /// TEST-TRIAGE-002: triage-created TODO queries return TODO ids and persisted TODO creation
+    /// timestamps while preserving group/run context and workspace isolation.
+    /// </summary>
+    [Fact]
+    public async Task QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup(
+                "triage-group-completed",
+                "completed",
+                now,
+                createdTodoId: "BUG-TRIAGE-001"));
+            db.TriageGroups.Add(SeedGroup(
+                "triage-group-missing-anchor",
+                "completed",
+                now.AddMinutes(-1),
+                createdTodoId: "BUG-TRIAGE-999"));
+            db.TriageResearchRuns.Add(SeedRun(
+                "triage-run-completed",
+                "triage-group-completed",
+                "completed",
+                now.AddMinutes(1),
+                completedUtc: now.AddMinutes(2),
+                createdTodoId: "BUG-TRIAGE-001"));
+            db.TodoRecords.Add(SeedTodoRecord("BUG-TRIAGE-001", now.AddMinutes(3)));
+            await db.SaveChangesAsync();
+        }
+
+        using (var db = CreateDb(AlternateWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup(
+                "triage-group-other",
+                "completed",
+                now,
+                createdTodoId: "BUG-TRIAGE-002",
+                workspacePath: AlternateWorkspace));
+            db.TodoRecords.Add(SeedTodoRecord("BUG-TRIAGE-002", now.AddMinutes(4), AlternateWorkspace));
+            await db.SaveChangesAsync();
+        }
+
+        var result = await CreateService(PrimaryWorkspace).QueryCreatedTodosAsync(PrimaryWorkspace);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("BUG-TRIAGE-001", item.TodoId);
+        Assert.Equal(now.AddMinutes(3), item.CreatedAtUtc);
+        Assert.Equal(PrimaryWorkspace, item.WorkspacePath);
+        Assert.Equal("triage-group-completed", item.GroupId);
+        Assert.Equal("triage-run-completed", item.RunId);
+        Assert.Equal("completed", item.GroupStatus);
+        Assert.Equal("completed", item.RunStatus);
+        Assert.Equal(1, result.TotalCount);
+    }
+
     private static TriageReportRequest CreateReport(string dedupeKey) => new()
     {
         Title = "REPL triage wrapper failure",
@@ -279,6 +431,86 @@ public sealed class TriageServiceTests : IDisposable
         DedupeKey = dedupeKey,
         AffectedPaths = ["src/McpServer.Repl.Core/ReplCommandDispatcher.cs"],
     };
+
+    private static TriageGroupEntity SeedGroup(
+        string groupId,
+        string status,
+        DateTimeOffset timestamp,
+        string? createdTodoId = null,
+        string workspacePath = PrimaryWorkspace)
+        => new()
+        {
+            WorkspaceId = workspacePath,
+            GroupId = groupId,
+            GroupKey = $"{workspacePath}|{groupId}",
+            EffectiveWorkspacePath = workspacePath,
+            Title = $"{groupId} title",
+            Summary = $"{groupId} summary",
+            Status = status,
+            ReportCount = 1,
+            FirstReportAtUtc = timestamp,
+            LastReportAtUtc = timestamp,
+            QuietDeadlineUtc = timestamp.AddMinutes(15),
+            CreatedTodoId = createdTodoId,
+        };
+
+    private static TriageReportEntity SeedReport(
+        string reportId,
+        string groupId,
+        string title,
+        DateTimeOffset timestamp,
+        string workspacePath = PrimaryWorkspace)
+        => new()
+        {
+            WorkspaceId = workspacePath,
+            ReportId = reportId,
+            GroupId = groupId,
+            OriginalWorkspacePath = workspacePath,
+            EffectiveWorkspacePath = workspacePath,
+            Title = title,
+            Summary = $"{title} summary",
+            Fingerprint = $"{reportId}-fingerprint",
+            Status = "grouped",
+            CreatedUtc = timestamp,
+        };
+
+    private static TriageResearchRunEntity SeedRun(
+        string runId,
+        string groupId,
+        string status,
+        DateTimeOffset startedUtc,
+        DateTimeOffset? completedUtc = null,
+        string? responseJson = null,
+        string? rawOutput = null,
+        string? createdTodoId = null,
+        string workspacePath = PrimaryWorkspace)
+        => new()
+        {
+            WorkspaceId = workspacePath,
+            RunId = runId,
+            GroupId = groupId,
+            Status = status,
+            PromptTemplateId = "triage-research-bug-report",
+            Prompt = "rendered prompt",
+            GroupJson = """{"groupId":"test"}""",
+            RawOutput = rawOutput,
+            ResponseJson = responseJson,
+            StartedUtc = startedUtc,
+            CompletedUtc = completedUtc,
+            CreatedTodoId = createdTodoId,
+        };
+
+    private static TodoRecordEntity SeedTodoRecord(
+        string todoId,
+        DateTimeOffset createdAtUtc,
+        string workspacePath = PrimaryWorkspace)
+        => new()
+        {
+            WorkspaceId = workspacePath,
+            TodoId = todoId,
+            CreatedAtUtc = createdAtUtc,
+            UpdatedAtUtc = createdAtUtc,
+        };
 
     private TriageService CreateService(
         string workspacePath,

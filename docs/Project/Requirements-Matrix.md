@@ -805,3 +805,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-TRIAGE-REQAC-001 | Complete | Testing-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| FR-TRIAGE-001 | Complete | Functional-Requirements.md |
+| TR-TRIAGE-CLIENT-001 | Complete | Technical-Requirements.md |
+| TEST-TRIAGE-001 | Complete | Testing-Requirements.md |
+| FR-TRIAGE-002 | Complete | Functional-Requirements.md |
+| TR-TRIAGE-CLIENT-002 | Complete | Technical-Requirements.md |
+| TEST-TRIAGE-002 | Complete | Testing-Requirements.md |

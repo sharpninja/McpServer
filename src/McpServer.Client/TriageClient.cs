@@ -32,9 +32,37 @@ public sealed class TriageClient : McpClientBase
         CancellationToken cancellationToken = default)
         => GetAsync<TriageGroupQueryResult>($"mcpserver/triage/groups{BuildQueryString(status, workspacePath)}", cancellationToken);
 
+    /// <summary>Gets triage dashboard queue buckets and AI run history for an optional workspace.</summary>
+    public Task<TriageDashboardResult> GetDashboardAsync(
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+        => GetAsync<TriageDashboardResult>($"mcpserver/triage/dashboard{BuildQueryString(workspacePath: workspacePath)}", cancellationToken);
+
     /// <summary>Gets a triage group by id.</summary>
     public Task<TriageGroupDetail> GetGroupAsync(string id, CancellationToken cancellationToken = default)
         => GetAsync<TriageGroupDetail>($"mcpserver/triage/groups/{Encode(id)}", cancellationToken);
+
+    /// <summary>Queries AI triage research runs by optional status, group, and workspace filters.</summary>
+    public Task<TriageRunQueryResult> QueryRunsAsync(
+        string? status = null,
+        string? groupId = null,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+        => GetAsync<TriageRunQueryResult>(
+            $"mcpserver/triage/runs{BuildQueryString(status, workspacePath, groupId)}",
+            cancellationToken);
+
+    /// <summary>Gets an AI triage research run by id.</summary>
+    public Task<TriageResearchRunDetail> GetRunAsync(string id, CancellationToken cancellationToken = default)
+        => GetAsync<TriageResearchRunDetail>($"mcpserver/triage/runs/{Encode(id)}", cancellationToken);
+
+    /// <summary>Queries TODO ids created by triage with persisted TODO creation timestamps.</summary>
+    public Task<TriageCreatedTodoQueryResult> QueryCreatedTodosAsync(
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+        => GetAsync<TriageCreatedTodoQueryResult>(
+            $"mcpserver/triage/todos{BuildQueryString(workspacePath: workspacePath)}",
+            cancellationToken);
 
     /// <summary>Flushes a triage group for immediate research eligibility.</summary>
     public Task<TriageGroupDetail> FlushGroupAsync(string id, CancellationToken cancellationToken = default)
@@ -44,11 +72,13 @@ public sealed class TriageClient : McpClientBase
     public Task<TriageGroupDetail> RetryGroupAsync(string id, CancellationToken cancellationToken = default)
         => PostAsync<TriageGroupDetail>($"mcpserver/triage/groups/{Encode(id)}/retry", null, cancellationToken);
 
-    private static string BuildQueryString(string? status, string? workspacePath)
+    private static string BuildQueryString(string? status = null, string? workspacePath = null, string? groupId = null)
     {
         var parts = new List<string>();
         if (!string.IsNullOrWhiteSpace(status))
             parts.Add($"status={Encode(status)}");
+        if (!string.IsNullOrWhiteSpace(groupId))
+            parts.Add($"groupId={Encode(groupId)}");
         if (!string.IsNullOrWhiteSpace(workspacePath))
             parts.Add($"workspacePath={Encode(workspacePath)}");
         return parts.Count == 0 ? string.Empty : "?" + string.Join("&", parts);

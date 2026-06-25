@@ -58,6 +58,15 @@ public sealed class TriageController : ControllerBase
         return Ok(await _triageService.QueryGroupsAsync(status, workspacePath, cancellationToken).ConfigureAwait(false));
     }
 
+    /// <summary>FR-TRIAGE-001: Get triage queue, report-group queue, and AI run history dashboard state.</summary>
+    [HttpGet("dashboard")]
+    public async Task<ActionResult<TriageDashboardResult>> GetDashboardAsync(
+        [FromQuery] string? workspacePath,
+        CancellationToken cancellationToken)
+    {
+        return Ok(await _triageService.GetDashboardAsync(workspacePath, cancellationToken).ConfigureAwait(false));
+    }
+
     /// <summary>FR-MCP-TRIAGE-002: Get a triage group by id.</summary>
     [HttpGet("groups/{id}")]
     public async Task<ActionResult<TriageGroupDetail>> GetGroupAsync(string id, CancellationToken cancellationToken)
@@ -70,6 +79,40 @@ public sealed class TriageController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
+    }
+
+    /// <summary>FR-TRIAGE-001: Query AI triage research runs by optional status, group, and workspace filters.</summary>
+    [HttpGet("runs")]
+    public async Task<ActionResult<TriageRunQueryResult>> QueryRunsAsync(
+        [FromQuery] string? status,
+        [FromQuery] string? groupId,
+        [FromQuery] string? workspacePath,
+        CancellationToken cancellationToken)
+    {
+        return Ok(await _triageService.QueryRunsAsync(status, groupId, workspacePath, cancellationToken).ConfigureAwait(false));
+    }
+
+    /// <summary>FR-TRIAGE-001: Get AI triage research run detail by id.</summary>
+    [HttpGet("runs/{id}")]
+    public async Task<ActionResult<TriageResearchRunDetail>> GetRunAsync(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _triageService.GetRunAsync(id, cancellationToken).ConfigureAwait(false));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-TRIAGE-002: Query TODO ids created by triage with persisted creation timestamps.</summary>
+    [HttpGet("todos")]
+    public async Task<ActionResult<TriageCreatedTodoQueryResult>> QueryCreatedTodosAsync(
+        [FromQuery] string? workspacePath,
+        CancellationToken cancellationToken)
+    {
+        return Ok(await _triageService.QueryCreatedTodosAsync(workspacePath, cancellationToken).ConfigureAwait(false));
     }
 
     /// <summary>FR-MCP-TRIAGE-002: Flush a group so it is eligible for immediate research.</summary>

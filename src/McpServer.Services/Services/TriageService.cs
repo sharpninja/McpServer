@@ -24,6 +24,8 @@ public sealed class TriageService : ITriageService
     private const string StatusFailed = "failed";
     private const string ReportStatusGrouped = "grouped";
     private const string TodoPrefix = "BUG-TRIAGE-";
+    private static readonly string[] TriageQueueStatuses = ["new", "quieting", "pending", StatusCollecting];
+    private static readonly string[] ReportGroupQueueStatuses = ["ready", "queued", "in_progress", StatusProcessing, "retry_pending"];
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -222,10 +224,173 @@ public sealed class TriageService : ITriageService
     }
 
     /// <inheritdoc />
+    public async Task<TriageDashboardResult> GetDashboardAsync(
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!string.IsNullOrWhiteSpace(workspacePath))
+            _db.OverrideWorkspaceId(workspacePath.Trim());
+
+        var groups = (await _db.TriageGroups
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false))
+            .OrderByDescending(g => g.LastReportAtUtc)
+            .ToList();
+
+        var details = new List<TriageGroupDetail>(groups.Count);
+        foreach (var group in groups)
+            details.Add(await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false));
+
+        var runHistory = await QueryRunsAsync(workspacePath: workspacePath, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return new TriageDashboardResult
+        {
+            TriageQueue = details.Where(group => HasStatus(group.Status, TriageQueueStatuses)).ToList(),
+            ReportGroupQueue = details.Where(group => HasStatus(group.Status, ReportGroupQueueStatuses)).ToList(),
+            RunHistory = runHistory.Items,
+            TotalGroupCount = details.Count,
+            TotalRunCount = runHistory.TotalCount,
+        };
+    }
+
+    /// <inheritdoc />
     public async Task<TriageGroupDetail> GetGroupAsync(string groupId, CancellationToken cancellationToken = default)
     {
         var group = await GetGroupEntityAsync(groupId, cancellationToken).ConfigureAwait(false);
         return await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task<TriageRunQueryResult> QueryRunsAsync(
+        string? status = null,
+        string? groupId = null,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!string.IsNullOrWhiteSpace(workspacePath))
+            _db.OverrideWorkspaceId(workspacePath.Trim());
+
+        var query = _db.TriageResearchRuns.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(status))
+        {
+            var trimmedStatus = status.Trim();
+            query = query.Where(run => run.Status == trimmedStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(groupId))
+        {
+            var trimmedGroupId = groupId.Trim();
+            query = query.Where(run => run.GroupId == trimmedGroupId);
+        }
+
+        var runs = (await query
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false))
+            .OrderByDescending(run => run.StartedUtc)
+            .ToList();
+
+        var details = await ToRunDetailsAsync(runs, cancellationToken).ConfigureAwait(false);
+        return new TriageRunQueryResult { Items = details, TotalCount = details.Count };
+    }
+
+    /// <inheritdoc />
+    public async Task<TriageResearchRunDetail> GetRunAsync(string runId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(runId))
+            throw new ArgumentException("Run id is required.", nameof(runId));
+
+        var run = await _db.TriageResearchRuns
+            .FirstOrDefaultAsync(r => r.RunId == runId, cancellationToken)
+            .ConfigureAwait(false);
+        if (run is null)
+            throw new KeyNotFoundException($"Triage run '{runId}' was not found.");
+
+        return (await ToRunDetailsAsync([run], cancellationToken).ConfigureAwait(false)).Single();
+    }
+
+    /// <inheritdoc />
+    public async Task<TriageCreatedTodoQueryResult> QueryCreatedTodosAsync(
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!string.IsNullOrWhiteSpace(workspacePath))
+            _db.OverrideWorkspaceId(workspacePath.Trim());
+
+        var runs = await _db.TriageResearchRuns
+            .Where(run => !string.IsNullOrEmpty(run.CreatedTodoId))
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var runGroupIds = runs
+            .Select(run => run.GroupId)
+            .Where(static groupId => !string.IsNullOrWhiteSpace(groupId))
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+
+        var groups = await _db.TriageGroups
+            .Where(group => !string.IsNullOrEmpty(group.CreatedTodoId) || runGroupIds.Contains(group.GroupId))
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var todoIds = groups
+            .Select(group => group.CreatedTodoId)
+            .Concat(runs.Select(run => run.CreatedTodoId))
+            .Where(static todoId => !string.IsNullOrWhiteSpace(todoId))
+            .Select(static todoId => todoId!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+        if (todoIds.Length == 0)
+            return new TriageCreatedTodoQueryResult();
+
+        var todoRecords = await _db.TodoRecords
+            .Where(record => todoIds.Contains(record.TodoId))
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var groupsById = groups.ToDictionary(group => group.GroupId, StringComparer.Ordinal);
+        var groupsByTodoId = groups
+            .Where(group => !string.IsNullOrWhiteSpace(group.CreatedTodoId))
+            .GroupBy(group => group.CreatedTodoId!, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(
+                group => group.Key,
+                group => group.OrderByDescending(item => item.LastReportAtUtc).First(),
+                StringComparer.OrdinalIgnoreCase);
+        var runsByTodoId = runs
+            .Where(run => !string.IsNullOrWhiteSpace(run.CreatedTodoId))
+            .GroupBy(run => run.CreatedTodoId!, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(
+                group => group.Key,
+                group => group
+                    .OrderByDescending(item => item.CompletedUtc ?? item.StartedUtc)
+                    .First(),
+                StringComparer.OrdinalIgnoreCase);
+
+        var items = todoRecords
+            .OrderByDescending(record => record.CreatedAtUtc)
+            .Select(record =>
+            {
+                runsByTodoId.TryGetValue(record.TodoId, out var run);
+                TriageGroupEntity? group = null;
+                if (!groupsByTodoId.TryGetValue(record.TodoId, out group)
+                    && run is not null)
+                {
+                    groupsById.TryGetValue(run.GroupId, out group);
+                }
+
+                return new TriageCreatedTodoDetail
+                {
+                    TodoId = record.TodoId,
+                    CreatedAtUtc = record.CreatedAtUtc,
+                    WorkspacePath = group?.EffectiveWorkspacePath ?? record.WorkspaceId,
+                    GroupId = group?.GroupId ?? run?.GroupId,
+                    RunId = run?.RunId,
+                    GroupStatus = group?.Status,
+                    RunStatus = run?.Status,
+                    GroupTitle = group?.Title,
+                    GroupSummary = group?.Summary,
+                    ReportCount = group?.ReportCount ?? 0,
+                    QuietDeadlineUtc = group?.QuietDeadlineUtc,
+                };
+            })
+            .ToList();
+
+        return new TriageCreatedTodoQueryResult { Items = items, TotalCount = items.Count };
     }
 
     /// <inheritdoc />
@@ -462,6 +627,47 @@ public sealed class TriageService : ITriageService
         CreatedUtc = report.CreatedUtc,
     };
 
+    private async Task<IReadOnlyList<TriageResearchRunDetail>> ToRunDetailsAsync(
+        IReadOnlyList<TriageResearchRunEntity> runs,
+        CancellationToken cancellationToken)
+    {
+        var groupIds = runs
+            .Select(run => run.GroupId)
+            .Where(static id => !string.IsNullOrWhiteSpace(id))
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        var groups = await _db.TriageGroups
+            .Where(group => groupIds.Contains(group.GroupId))
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var groupsById = groups.ToDictionary(group => group.GroupId, StringComparer.Ordinal);
+
+        return runs.Select(run =>
+        {
+            groupsById.TryGetValue(run.GroupId, out var group);
+            return new TriageResearchRunDetail
+            {
+                RunId = run.RunId,
+                GroupId = run.GroupId,
+                Status = run.Status,
+                WorkspacePath = group?.EffectiveWorkspacePath ?? run.WorkspaceId,
+                GroupStatus = group?.Status,
+                GroupTitle = group?.Title,
+                GroupSummary = group?.Summary,
+                ReportCount = group?.ReportCount ?? 0,
+                PromptTemplateId = run.PromptTemplateId,
+                Prompt = run.Prompt,
+                GroupJson = run.GroupJson,
+                RawOutput = run.RawOutput,
+                ResponseJson = run.ResponseJson,
+                Error = run.Error,
+                CreatedTodoId = run.CreatedTodoId,
+                StartedUtc = run.StartedUtc,
+                CompletedUtc = run.CompletedUtc,
+            };
+        }).ToList();
+    }
+
     private static TriageReportSubmitResult Accepted(
         string reportId,
         string groupId,
@@ -485,6 +691,9 @@ public sealed class TriageService : ITriageService
             return "summary is required.";
         return null;
     }
+
+    private static bool HasStatus(string status, IReadOnlyList<string> statuses)
+        => statuses.Contains(status, StringComparer.OrdinalIgnoreCase);
 
     private string ResolveSubmittingWorkspace(TriageReportRequest request)
     {

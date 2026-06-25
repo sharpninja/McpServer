@@ -207,3 +207,171 @@ public sealed record TriageGroupQueryResult
     [JsonPropertyName("totalCount")]
     public int TotalCount { get; init; }
 }
+
+/// <summary>FR-TRIAGE-001: AI triage research run detail for dashboard consumers.</summary>
+public sealed record TriageResearchRunDetail
+{
+    /// <summary>Durable research run id.</summary>
+    [JsonPropertyName("runId")]
+    public required string RunId { get; init; }
+
+    /// <summary>Triage group id researched by this run.</summary>
+    [JsonPropertyName("groupId")]
+    public required string GroupId { get; init; }
+
+    /// <summary>Current run status.</summary>
+    [JsonPropertyName("status")]
+    public required string Status { get; init; }
+
+    /// <summary>Effective workspace path that owns the run.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; init; }
+
+    /// <summary>Current group status when the group is available.</summary>
+    [JsonPropertyName("groupStatus")]
+    public string? GroupStatus { get; init; }
+
+    /// <summary>Representative group title when the group is available.</summary>
+    [JsonPropertyName("groupTitle")]
+    public string? GroupTitle { get; init; }
+
+    /// <summary>Representative group summary when the group is available.</summary>
+    [JsonPropertyName("groupSummary")]
+    public string? GroupSummary { get; init; }
+
+    /// <summary>Number of reports in the researched group.</summary>
+    [JsonPropertyName("reportCount")]
+    public int ReportCount { get; init; }
+
+    /// <summary>Prompt template id used for this run.</summary>
+    [JsonPropertyName("promptTemplateId")]
+    public string? PromptTemplateId { get; init; }
+
+    /// <summary>Rendered prompt sent to the triage agent.</summary>
+    [JsonPropertyName("prompt")]
+    public string? Prompt { get; init; }
+
+    /// <summary>Serialized group JSON supplied to the triage agent.</summary>
+    [JsonPropertyName("groupJson")]
+    public string? GroupJson { get; init; }
+
+    /// <summary>Raw agent output.</summary>
+    [JsonPropertyName("rawOutput")]
+    public string? RawOutput { get; init; }
+
+    /// <summary>Schema-valid agent JSON after validation.</summary>
+    [JsonPropertyName("responseJson")]
+    public string? ResponseJson { get; init; }
+
+    /// <summary>Failure text when the run failed.</summary>
+    [JsonPropertyName("error")]
+    public string? Error { get; init; }
+
+    /// <summary>Created TODO id, if any.</summary>
+    [JsonPropertyName("createdTodoId")]
+    public string? CreatedTodoId { get; init; }
+
+    /// <summary>UTC timestamp when the run started.</summary>
+    [JsonPropertyName("startedUtc")]
+    public DateTimeOffset StartedUtc { get; init; }
+
+    /// <summary>UTC timestamp when the run completed.</summary>
+    [JsonPropertyName("completedUtc")]
+    public DateTimeOffset? CompletedUtc { get; init; }
+}
+
+/// <summary>FR-TRIAGE-001: Query result for AI triage run history.</summary>
+public sealed record TriageRunQueryResult
+{
+    /// <summary>Matching triage research runs.</summary>
+    [JsonPropertyName("items")]
+    public IReadOnlyList<TriageResearchRunDetail> Items { get; init; } = [];
+
+    /// <summary>Total matching runs.</summary>
+    [JsonPropertyName("totalCount")]
+    public int TotalCount { get; init; }
+}
+
+/// <summary>FR-TRIAGE-002: TODO created from a triage group or research run.</summary>
+public sealed record TriageCreatedTodoDetail
+{
+    /// <summary>Canonical TODO identifier created by triage.</summary>
+    [JsonPropertyName("todoId")]
+    public required string TodoId { get; init; }
+
+    /// <summary>Persisted UTC timestamp when the TODO anchor was created.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset CreatedAtUtc { get; init; }
+
+    /// <summary>Workspace path that owns the triage-created TODO.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; init; }
+
+    /// <summary>Triage group that produced the TODO, when available.</summary>
+    [JsonPropertyName("groupId")]
+    public string? GroupId { get; init; }
+
+    /// <summary>Research run that produced the TODO, when available.</summary>
+    [JsonPropertyName("runId")]
+    public string? RunId { get; init; }
+
+    /// <summary>Current triage group status, when available.</summary>
+    [JsonPropertyName("groupStatus")]
+    public string? GroupStatus { get; init; }
+
+    /// <summary>Current research run status, when available.</summary>
+    [JsonPropertyName("runStatus")]
+    public string? RunStatus { get; init; }
+
+    /// <summary>Representative group title, when available.</summary>
+    [JsonPropertyName("groupTitle")]
+    public string? GroupTitle { get; init; }
+
+    /// <summary>Representative group summary, when available.</summary>
+    [JsonPropertyName("groupSummary")]
+    public string? GroupSummary { get; init; }
+
+    /// <summary>Number of reports attached to the group, when available.</summary>
+    [JsonPropertyName("reportCount")]
+    public int ReportCount { get; init; }
+
+    /// <summary>Current quiet deadline for the group, when available.</summary>
+    [JsonPropertyName("quietDeadlineUtc")]
+    public DateTimeOffset? QuietDeadlineUtc { get; init; }
+}
+
+/// <summary>FR-TRIAGE-002: Query result for TODOs created by triage.</summary>
+public sealed record TriageCreatedTodoQueryResult
+{
+    /// <summary>Matching triage-created TODOs with creation timestamps.</summary>
+    [JsonPropertyName("items")]
+    public IReadOnlyList<TriageCreatedTodoDetail> Items { get; init; } = [];
+
+    /// <summary>Total matching triage-created TODOs.</summary>
+    [JsonPropertyName("totalCount")]
+    public int TotalCount { get; init; }
+}
+
+/// <summary>FR-TRIAGE-001: Read-only dashboard state for triage queue, report-group queue, and run history.</summary>
+public sealed record TriageDashboardResult
+{
+    /// <summary>Groups still collecting or waiting for their quiet window.</summary>
+    [JsonPropertyName("triageQueue")]
+    public IReadOnlyList<TriageGroupDetail> TriageQueue { get; init; } = [];
+
+    /// <summary>Groups ready for or currently in report-group processing.</summary>
+    [JsonPropertyName("reportGroupQueue")]
+    public IReadOnlyList<TriageGroupDetail> ReportGroupQueue { get; init; } = [];
+
+    /// <summary>AI triage run history with results and current statuses.</summary>
+    [JsonPropertyName("runHistory")]
+    public IReadOnlyList<TriageResearchRunDetail> RunHistory { get; init; } = [];
+
+    /// <summary>Total groups visible to the dashboard query.</summary>
+    [JsonPropertyName("totalGroupCount")]
+    public int TotalGroupCount { get; init; }
+
+    /// <summary>Total runs visible to the dashboard query.</summary>
+    [JsonPropertyName("totalRunCount")]
+    public int TotalRunCount { get; init; }
+}
