@@ -25,8 +25,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private const string TrKind = "tr";
     private const string TestKind = "test";
 
-    private static readonly System.Text.RegularExpressions.Regex CanonicalFrIdRegex = new(
-        @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$",
+    private static readonly System.Text.RegularExpressions.Regex RequirementIdShapeRegex = new(
+        @"^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*$",
+        System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+    private static readonly System.Text.RegularExpressions.Regex RequirementTokenRegex = new(
+        @"^[A-Z0-9]+$",
         System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
 
@@ -165,6 +169,23 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
+    public async Task<IReadOnlyList<FrEntry>> QueryFrAsync(string? area = null, string? status = null, CancellationToken ct = default)
+    {
+        await using var scope = CreateScope();
+        await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
+        var query = scope.Context.Requirements
+            .AsNoTracking()
+            .Where(x => x.Kind == FrKind);
+        query = ApplyAreaFilter(query, "FR", area);
+        query = ApplyStatusFilter(query, status);
+        var rows = await query
+            .OrderBy(x => x.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        return rows.Select(MapFr).ToArray();
+    }
+
+    /// <inheritdoc />
     public async Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
@@ -181,8 +202,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
 
-            var toDelete = candidates
-                .Where(x => string.IsNullOrEmpty(x.Id) || !CanonicalFrIdRegex.IsMatch(x.Id))
+        var toDelete = candidates
+                .Where(x => string.IsNullOrEmpty(x.Id) || !IsValidRequirementId(x.Id, "FR"))
                 .ToList();
 
             if (toDelete.Count > 0)
@@ -273,6 +294,24 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
+    public async Task<IReadOnlyList<TrEntry>> QueryTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken ct = default)
+    {
+        await using var scope = CreateScope();
+        await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
+        var query = scope.Context.Requirements
+            .AsNoTracking()
+            .Where(x => x.Kind == TrKind);
+        query = ApplyAreaFilter(query, "TR", area);
+        query = ApplyTrSubareaFilter(query, subarea);
+        query = ApplyStatusFilter(query, status);
+        var rows = await query
+            .OrderBy(x => x.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        return rows.Select(MapTr).ToArray();
+    }
+
+    /// <inheritdoc />
     public async Task<TrEntry?> GetTrAsync(string id, CancellationToken ct = default)
     {
         ValidateId(id, nameof(id));
@@ -311,6 +350,23 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var rows = await scope.Context.Requirements
             .AsNoTracking()
             .Where(x => x.Kind == TestKind)
+            .OrderBy(x => x.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        return rows.Select(MapTest).ToArray();
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<TestEntry>> QueryTestAsync(string? area = null, string? status = null, CancellationToken ct = default)
+    {
+        await using var scope = CreateScope();
+        await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
+        var query = scope.Context.Requirements
+            .AsNoTracking()
+            .Where(x => x.Kind == TestKind);
+        query = ApplyAreaFilter(query, "TEST", area);
+        query = ApplyStatusFilter(query, status);
+        var rows = await query
             .OrderBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
@@ -1037,10 +1093,47 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static string? ReadFileIfExists(string? path) =>
         string.IsNullOrWhiteSpace(path) || !File.Exists(path) ? null : File.ReadAllText(path);
 
+    private static IQueryable<RequirementEntity> ApplyAreaFilter(IQueryable<RequirementEntity> query, string expectedPrefix, string? area)
+    {
+        var token = NormalizeRequirementToken(area);
+        if (token is null)
+            return query;
+
+        var idPrefix = expectedPrefix + "-" + token + "-";
+        return query.Where(x => EF.Functions.Like(x.Id, idPrefix + "%"));
+    }
+
+    private static IQueryable<RequirementEntity> ApplyTrSubareaFilter(IQueryable<RequirementEntity> query, string? subarea)
+    {
+        var token = NormalizeRequirementToken(subarea);
+        if (token is null)
+            return query;
+
+        return query.Where(x => EF.Functions.Like(x.Id, "TR-%-" + token + "-%"));
+    }
+
+    private static IQueryable<RequirementEntity> ApplyStatusFilter(IQueryable<RequirementEntity> query, string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return query;
+
+        var normalized = NormalizeStatus(status);
+        return query.Where(x => x.Status == normalized);
+    }
+
+    private static string? NormalizeRequirementToken(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return null;
+
+        var token = value.Trim().ToUpperInvariant();
+        return RequirementTokenRegex.IsMatch(token) ? token : "\0";
+    }
+
     private static void ValidateFr(FrEntry entry)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        ValidateId(entry.Id, nameof(entry.Id));
+        ValidateId(entry.Id, nameof(entry.Id), "FR");
         if (string.IsNullOrWhiteSpace(entry.Title))
             throw new ArgumentException("FR title is required.", nameof(entry));
         if (string.IsNullOrWhiteSpace(entry.Body))
@@ -1050,7 +1143,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static void ValidateTr(TrEntry entry)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        ValidateId(entry.Id, nameof(entry.Id));
+        ValidateId(entry.Id, nameof(entry.Id), "TR");
         if (string.IsNullOrWhiteSpace(entry.Body))
             throw new ArgumentException("TR body is required.", nameof(entry));
     }
@@ -1058,7 +1151,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static void ValidateTest(TestEntry entry)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        ValidateId(entry.Id, nameof(entry.Id));
+        ValidateId(entry.Id, nameof(entry.Id), "TEST");
         if (string.IsNullOrWhiteSpace(entry.Condition))
             throw new ArgumentException("TEST condition is required.", nameof(entry));
     }
@@ -1072,14 +1165,27 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static void ValidateMapping(FrTrMapping mapping)
     {
         ArgumentNullException.ThrowIfNull(mapping);
-        ValidateId(mapping.FrId, nameof(mapping.FrId));
+        ValidateId(mapping.FrId, nameof(mapping.FrId), "FR");
+        ArgumentNullException.ThrowIfNull(mapping.TrIds);
+        ArgumentNullException.ThrowIfNull(mapping.TestIds);
+        foreach (var trId in mapping.TrIds)
+            ValidateId(trId, nameof(mapping.TrIds), "TR");
+        foreach (var testId in mapping.TestIds)
+            ValidateId(testId, nameof(mapping.TestIds), "TEST");
     }
 
-    private static void ValidateId(string id, string paramName)
+    private static void ValidateId(string id, string paramName, string? expectedPrefix = null)
     {
         if (string.IsNullOrWhiteSpace(id))
             throw new ArgumentException("ID is required.", paramName);
+        if (expectedPrefix is not null && !IsValidRequirementId(id, expectedPrefix))
+            throw new ArgumentException($"Requirement ID '{id}' must match the {expectedPrefix} identifier shape.", paramName);
     }
+
+    private static bool IsValidRequirementId(string id, string expectedPrefix) =>
+        RequirementIdShapeRegex.IsMatch(id)
+        && id.StartsWith(expectedPrefix + "-", StringComparison.OrdinalIgnoreCase)
+        && !id.Contains('*', StringComparison.Ordinal);
 
     private static bool IdEquals(string left, string right) =>
         string.Equals(left?.Trim(), right?.Trim(), StringComparison.OrdinalIgnoreCase);

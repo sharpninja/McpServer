@@ -54,17 +54,8 @@ public sealed class RequirementsController : ControllerBase
     [HttpGet("fr")]
     public async Task<ActionResult<IReadOnlyList<FrEntry>>> GetFrAsync([FromQuery] string? area = null, [FromQuery] string? status = null, CancellationToken cancellationToken = default)
     {
-        var all = await _requirements.GetAllFrAsync(cancellationToken).ConfigureAwait(false);
-        IEnumerable<FrEntry> filtered = all;
-        if (!string.IsNullOrEmpty(area))
-        {
-            filtered = filtered.Where(e => string.Equals(ExtractArea(e.Id), area, StringComparison.OrdinalIgnoreCase));
-        }
-        if (!string.IsNullOrEmpty(status))
-        {
-            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
-        }
-        return Ok(filtered.ToList());
+        var entries = await _requirements.QueryFrAsync(area, status, cancellationToken).ConfigureAwait(false);
+        return Ok(entries);
     }
 
     /// <summary>
@@ -196,10 +187,17 @@ public sealed class RequirementsController : ControllerBase
         return Ok(new { success = true });
     }
 
-    /// <summary>Gets all Technical Requirement entries.</summary>
+    /// <summary>Gets all Technical Requirement entries, optionally filtered by area, subarea, or status.</summary>
     [HttpGet("tr")]
-    public async Task<ActionResult<IReadOnlyList<TrEntry>>> GetTrAsync(CancellationToken cancellationToken)
-        => Ok(await _requirements.GetAllTrAsync(cancellationToken).ConfigureAwait(false));
+    public async Task<ActionResult<IReadOnlyList<TrEntry>>> GetTrAsync(
+        [FromQuery] string? area = null,
+        [FromQuery] string? subarea = null,
+        [FromQuery] string? status = null,
+        CancellationToken cancellationToken = default)
+    {
+        var entries = await _requirements.QueryTrAsync(area, subarea, status, cancellationToken).ConfigureAwait(false);
+        return Ok(entries);
+    }
 
     /// <summary>Gets a Technical Requirement entry by id.</summary>
     [HttpGet("tr/{id}")]
@@ -297,10 +295,13 @@ public sealed class RequirementsController : ControllerBase
         return Ok(new { success = true });
     }
 
-    /// <summary>Gets all Testing Requirement entries.</summary>
+    /// <summary>Gets all Testing Requirement entries, optionally filtered by area or status.</summary>
     [HttpGet("test")]
-    public async Task<ActionResult<IReadOnlyList<TestEntry>>> GetTestAsync(CancellationToken cancellationToken)
-        => Ok(await _requirements.GetAllTestAsync(cancellationToken).ConfigureAwait(false));
+    public async Task<ActionResult<IReadOnlyList<TestEntry>>> GetTestAsync([FromQuery] string? area = null, [FromQuery] string? status = null, CancellationToken cancellationToken = default)
+    {
+        var entries = await _requirements.QueryTestAsync(area, status, cancellationToken).ConfigureAwait(false);
+        return Ok(entries);
+    }
 
     /// <summary>Gets a Testing Requirement entry by id.</summary>
     [HttpGet("test/{id}")]

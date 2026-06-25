@@ -10,6 +10,9 @@ public interface IRequirementsRepository
     /// <summary>Get all Functional Requirement entries.</summary>
     Task<IReadOnlyList<FrEntry>> GetAllFrAsync(CancellationToken ct = default);
 
+    /// <summary>Query Functional Requirement entries with optional area and status filters.</summary>
+    Task<IReadOnlyList<FrEntry>> QueryFrAsync(string? area = null, string? status = null, CancellationToken ct = default);
+
     /// <summary>Get a single FR entry by id.</summary>
     Task<FrEntry?> GetFrAsync(string id, CancellationToken ct = default);
 
@@ -33,6 +36,9 @@ public interface IRequirementsRepository
     /// <summary>Get all Technical Requirement entries.</summary>
     Task<IReadOnlyList<TrEntry>> GetAllTrAsync(CancellationToken ct = default);
 
+    /// <summary>Query Technical Requirement entries with optional area, subarea, and status filters.</summary>
+    Task<IReadOnlyList<TrEntry>> QueryTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken ct = default);
+
     /// <summary>Get a single TR entry by id.</summary>
     Task<TrEntry?> GetTrAsync(string id, CancellationToken ct = default);
 
@@ -49,6 +55,9 @@ public interface IRequirementsRepository
 
     /// <summary>Get all Testing Requirement entries.</summary>
     Task<IReadOnlyList<TestEntry>> GetAllTestAsync(CancellationToken ct = default);
+
+    /// <summary>Query Testing Requirement entries with optional area and status filters.</summary>
+    Task<IReadOnlyList<TestEntry>> QueryTestAsync(string? area = null, string? status = null, CancellationToken ct = default);
 
     /// <summary>Get a single TEST entry by id.</summary>
     Task<TestEntry?> GetTestAsync(string id, CancellationToken ct = default);

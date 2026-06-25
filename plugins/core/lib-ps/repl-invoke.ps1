@@ -44,6 +44,78 @@ if (-not (Get-Command Resolve-McpCacheDir -ErrorAction SilentlyContinue)) {
 # Resolved lazily so per-call context (workspace / env) governs path.
 function script:Get-ReplInvokeCacheDir { Resolve-McpCacheDir }
 
+function Convert-ReplParamsYamlToObject {
+    param([string]$ParamsYaml)
+
+    if (-not $ParamsYaml) { return $null }
+
+    $normalized = $ParamsYaml -replace "`r`n", "`n" -replace "`r", ""
+    if ($normalized.TrimStart() -match '^[\{\[]') {
+        return ($normalized | ConvertFrom-Json -Depth 100 -ErrorAction Stop)
+    }
+
+    $node = Get-Command node -ErrorAction SilentlyContinue
+    if (-not $node) {
+        throw 'node is required to parse YAML params'
+    }
+
+    $script = @'
+const fs = require("fs");
+const path = require("path");
+const input = fs.readFileSync(0, "utf8");
+const scriptDir = process.argv[1] || "";
+const pluginRoot = process.argv[2] || "";
+const cwd = process.cwd();
+const candidates = [
+  path.join(pluginRoot, "node_modules"),
+  path.join(scriptDir, "..", "node_modules"),
+  path.join(scriptDir, "..", "..", "lib-node", "node_modules"),
+  path.join(pluginRoot, "..", "McpServer", "plugins", "core", "lib-node", "node_modules"),
+  path.join(cwd, "plugins", "core", "lib-node", "node_modules"),
+  path.join(cwd, "node_modules")
+];
+let yaml;
+try {
+  yaml = require(require.resolve("js-yaml", { paths: candidates }));
+} catch (error) {
+  yaml = null;
+}
+try {
+  const parsed = yaml ? yaml.load(input) : require(path.join(scriptDir, "yaml-subset-parser.js")).parseYamlSubset(input);
+  process.stdout.write(JSON.stringify(parsed ?? null));
+} catch (error) {
+  console.error("ERROR: failed to parse YAML params: " + error.message);
+  process.exit(1);
+}
+'@
+
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = $node.Source
+    $psi.ArgumentList.Add('-e')
+    $psi.ArgumentList.Add($script)
+    $psi.ArgumentList.Add($PSScriptRoot)
+    $psi.ArgumentList.Add($script:ReplInvokePluginRoot)
+    $psi.RedirectStandardInput = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
+    $proc = [System.Diagnostics.Process]::Start($psi)
+    $proc.StandardInput.Write($normalized)
+    $proc.StandardInput.Close()
+    $stdoutTask = $proc.StandardOutput.ReadToEndAsync()
+    $stderrTask = $proc.StandardError.ReadToEndAsync()
+    $proc.WaitForExit()
+    $stdout = $stdoutTask.Result
+    $stderr = $stderrTask.Result
+    if ($proc.ExitCode -ne 0) {
+        throw "YAML parameter parsing failed: $stderr"
+    }
+
+    return ($stdout | ConvertFrom-Json -Depth 100 -ErrorAction Stop)
+}
+
 function Get-ReplSessionMeta {
     $f = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
     if (-not (Test-Path $f)) { return $null }
@@ -72,13 +144,7 @@ function Invoke-ReplRaw {
     # Build as object then serialize to JSON (no manual YAML text construction).
     # Consistent with bash (node) and node transport.
     if ($ParamsYaml) {
-        $ParamsYaml = $ParamsYaml -replace "`r`n", "`n" -replace "`r", ""
-        $p = $null
-        if ($ParamsYaml -match '^\s*[\{\[]') {
-            try { $p = $ParamsYaml | ConvertFrom-Json -ErrorAction Stop } catch { $p = $ParamsYaml }
-        } else {
-            $p = $ParamsYaml
-        }
+        $p = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
         $envObj = [ordered]@{
             type = 'request'
             payload = [ordered]@{

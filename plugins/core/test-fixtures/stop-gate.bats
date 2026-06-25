@@ -17,15 +17,30 @@ source "$PLUGIN_ROOT/tests/cache-scope-helper.bash"
 
 setup() {
     SANDBOX="$(mktemp -d)"
-    mkdir -p "$SANDBOX/cache" "$SANDBOX/workspace"
+    mkdir -p "$SANDBOX/cache" "$SANDBOX/workspace" "$SANDBOX/bin"
+    local node_path node_dir
+    export ORIGINAL_PATH="$PATH"
+    node_path="$(command -v node 2>/dev/null || true)"
+    node_dir=""
+    [ -n "$node_path" ] && node_dir="$(dirname "$node_path")"
+    export PATH="$SANDBOX/bin:/usr/bin:/bin:/mingw64/bin"
+    [ -n "$node_dir" ] && export PATH="$PATH:$node_dir"
+    cat > "$SANDBOX/bin/mcpserver-repl" <<'STUB'
+#!/usr/bin/env bash
+cat >/dev/null
+printf 'type: response\npayload:\n  ok: true\n'
+STUB
+    chmod +x "$SANDBOX/bin/mcpserver-repl"
 
     export CLAUDE_PLUGIN_ROOT="$PLUGIN_ROOT"
     export PLUGIN_ROOT_OVERRIDE="$SANDBOX"
     unset CLAUDE_STOP_HOOK_ACTIVE
     init_test_cache "$SANDBOX/workspace" "ClaudeCode-20260419T000000Z-test"
+    write_session_state
 }
 
 teardown() {
+    [ -n "${ORIGINAL_PATH:-}" ] && export PATH="$ORIGINAL_PATH"
     rm -rf "$SANDBOX"
 }
 
@@ -38,6 +53,19 @@ openedAt: 2026-04-19T00:00:00Z
 status: ${status}
 codeEdits: ${edits}
 lastBuildStatus: ${build}
+EOF
+}
+
+write_session_state() {
+    local timestamp="${1:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
+    cat > "$(test_cache_file session-state.yaml)" <<EOF
+status: verified
+sourceType: ClaudeCode
+sessionId: ${TEST_SESSION_ID}
+workspacePath: "${TEST_WORKSPACE}"
+workspace: "test"
+baseUrl: "http://localhost:1"
+timestamp: "${timestamp}"
 EOF
 }
 
@@ -97,15 +125,6 @@ run_stop_gate() {
 @test "end-to-end: shim's completeTurn flips cache so stop-gate passes" {
     write_turn "in_progress"
 
-    cat > "$(test_cache_file session-state.yaml)" <<EOF
-status: verified
-sessionId: ClaudeCode-20260419T000000Z-test
-workspacePath: "/tmp/ws"
-workspace: "test"
-baseUrl: "http://localhost:1"
-timestamp: "2026-04-19T00:00:00Z"
-EOF
-
     # shellcheck source=/dev/null
     ( source "$LIB" && repl_invoke "workflow.sessionlog.completeTurn" "requestId: req-test-stop-001
 response: |
@@ -116,6 +135,33 @@ response: |
 
     out="$(run_stop_gate)"
     [ "$out" = "{}" ]
+}
+
+@test "stale cached session blocks instead of reusing old turn" {
+    write_turn "completed"
+    write_session_state "1970-01-01T00:00:00Z"
+
+    out="$(run_stop_gate)"
+    echo "$out" | grep -qF '"decision":"block"'
+    echo "$out" | grep -qF 'stale'
+    echo "$out" | grep -qF 'req-test-stop-001'
+}
+
+@test "in_progress self-heal timeout blocks instead of hanging" {
+    cat > "$SANDBOX/bin/mcpserver-repl" <<'STUB'
+#!/usr/bin/env bash
+cat >/dev/null
+sleep 5
+printf 'type: response\npayload:\n  ok: true\n'
+STUB
+    chmod +x "$SANDBOX/bin/mcpserver-repl"
+    export MCP_STOP_GATE_COMPLETE_TIMEOUT_SECONDS=1
+    write_turn "in_progress"
+
+    out="$(run_stop_gate)"
+    unset MCP_STOP_GATE_COMPLETE_TIMEOUT_SECONDS
+    echo "$out" | grep -qF '"decision":"block"'
+    echo "$out" | grep -qF 'could not be auto-closed within 1s'
 }
 
 @test "CLAUDE_STOP_HOOK_ACTIVE=true short-circuits with schema-valid no-op" {

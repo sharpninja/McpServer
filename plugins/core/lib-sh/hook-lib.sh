@@ -291,6 +291,41 @@ _hook_discard_stale_cached_session() {
     fi
 }
 
+_hook_cached_session_stale_reason() {
+    # Stop-gate must not reuse a scoped cache that prompt submission would discard.
+    # Explicit MCP_SESSION_ID means the caller intentionally selected the session.
+    [ -z "${MCP_SESSION_ID:-}" ] || return 0
+
+    local session_file="$CACHE_DIR/session-state.yaml"
+    [ -f "$session_file" ] || return 0
+
+    local max_idle="${MCP_SESSION_CACHE_MAX_IDLE_SECONDS:-86400}"
+    case "$max_idle" in
+        ''|*[!0-9]*) max_idle=86400 ;;
+    esac
+    [ "$max_idle" -gt 0 ] || return 0
+
+    local last_seen now age session_id turn_file turn_id
+    last_seen="$(_hook_session_state_last_seen_epoch "$session_file" 2>/dev/null || true)"
+    [ -n "$last_seen" ] || return 0
+    now="$(date -u +%s)"
+    age=$((now - last_seen))
+    [ "$age" -gt "$max_idle" ] || return 0
+
+    session_id="$(yaml_get "$session_file" sessionId 2>/dev/null || true)"
+    turn_file="${1:-$CACHE_DIR/current-turn.yaml}"
+    turn_id=""
+    if [ -f "$turn_file" ]; then
+        turn_id="$(yaml_get "$turn_file" turnRequestId 2>/dev/null || true)"
+    fi
+
+    printf 'Cached MCP session %s is stale (%ss idle; limit %ss)' "${session_id:-unknown}" "$age" "$max_idle"
+    if [ -n "$turn_id" ]; then
+        printf ' and points at turn %s' "$turn_id"
+    fi
+    printf '. Start a fresh session before stop-gate can close this turn.'
+}
+
 session_start_main() {
     local output_mode="${MCP_HOOK_OUTPUT_MODE:-hook}"
     local start_dir="${1:-${MCP_WORKSPACE_START_DIR:-$(pwd)}}"
@@ -645,6 +680,13 @@ stop_gate_main() {
         exit 0
     fi
 
+    local stale_reason
+    stale_reason="$(_hook_cached_session_stale_reason "$turn_file" 2>/dev/null || true)"
+    if [ -n "$stale_reason" ]; then
+        hook_emit_block "$stale_reason"
+        exit 0
+    fi
+
     local turn_status turn_id build_status code_edits
     turn_status="$(yaml_get "$turn_file" status || true)"
     turn_id="$(yaml_get "$turn_file" turnRequestId || true)"
@@ -656,10 +698,6 @@ stop_gate_main() {
     # the repl-invoke shim, enriched from the Codex JSONL when recorded.
     if [ "$turn_status" = "in_progress" ]; then
         if [ -f "$HOOK_LIB_DIR/repl-invoke.sh" ]; then
-            # shellcheck source=./repl-invoke.sh
-            source "$HOOK_LIB_DIR/repl-invoke.sh" 2>/dev/null || true
-        fi
-        if type _repl_workflow_complete_turn >/dev/null 2>&1; then
             local codex_jsonl_path_sg auto_params jsonl_params
             codex_jsonl_path_sg="$(yaml_get "$turn_file" codexJsonlPath 2>/dev/null | tr -d '"' || true)"
             auto_params="response: |
@@ -668,14 +706,25 @@ stop_gate_main() {
                 jsonl_params="$(node "${HOOK_LIB_DIR}/codex-jsonl-enrich.js" "$codex_jsonl_path_sg" "Auto-closed by stop-gate.sh (turn self-heal; enriched from Codex JSONL)" 2>/dev/null || true)"
                 [ -n "$jsonl_params" ] && auto_params="$jsonl_params"
             fi
-            local previous_timeout="${REPL_TIMEOUT:-}"
-            export REPL_TIMEOUT="${REPL_SESSIONLOG_REPL_TIMEOUT:-8}"
-            _repl_workflow_complete_turn "$auto_params" >/dev/null 2>&1 || true
-            if [ -n "$previous_timeout" ]; then
-                export REPL_TIMEOUT="$previous_timeout"
-            else
-                unset REPL_TIMEOUT
+            local complete_timeout complete_params_file
+            complete_timeout="${MCP_STOP_GATE_COMPLETE_TIMEOUT_SECONDS:-${REPL_SESSIONLOG_REPL_TIMEOUT:-8}}"
+            case "$complete_timeout" in
+                ''|*[!0-9]*) complete_timeout=8 ;;
+            esac
+            complete_params_file="${CACHE_DIR}/stop-gate-complete-$$.yaml"
+            printf '%s\n' "$auto_params" > "$complete_params_file"
+            if ! REPL_INVOKE_CACHE_DIR="$CACHE_DIR" REPL_TIMEOUT="$complete_timeout" \
+                run_with_timeout "$complete_timeout" bash -c '
+                    set -uo pipefail
+                    # shellcheck source=/dev/null
+                    source "$1"
+                    _repl_workflow_complete_turn "$(cat "$2")"
+                ' _ "$HOOK_LIB_DIR/repl-invoke.sh" "$complete_params_file" >/dev/null 2>&1; then
+                rm -f "$complete_params_file" 2>/dev/null || true
+                hook_emit_block "Session log turn ${turn_id} could not be auto-closed within ${complete_timeout}s. Check MCP server availability or repair the scoped cache."
+                exit 0
             fi
+            rm -f "$complete_params_file" 2>/dev/null || true
             turn_status="$(yaml_get "$turn_file" status || true)"
         fi
         if [ "$turn_status" = "in_progress" ]; then

@@ -117,6 +117,46 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Equal("reviewed", test.Notes);
     }
 
+    /// <summary>Filtered requirement queries apply area, subarea, and status filters in the repository layer.</summary>
+    [Fact]
+    public async Task QueryRequirements_AppliesAreaSubareaAndStatusFilters()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("query"));
+        var service = fixture.CreateService();
+
+        await service.AddFrAsync(new FrEntry("FR-MCP-910", "MCP FR", "FR body", Status: "pending")).ConfigureAwait(true);
+        await service.AddFrAsync(new FrEntry("FR-OTHER-910", "Other FR", "FR body", Status: "completed")).ConfigureAwait(true);
+        await service.AddTrAsync(new TrEntry("TR-MCP-REQ-910", "MCP TR", "TR body", Status: "completed")).ConfigureAwait(true);
+        await service.AddTrAsync(new TrEntry("TR-MCP-OTHER-910", "Other TR", "TR body", Status: "completed")).ConfigureAwait(true);
+        await service.AddTestAsync(new TestEntry("TEST-MCP-910", "TEST body", Status: "completed")).ConfigureAwait(true);
+        await service.AddTestAsync(new TestEntry("TEST-OTHER-910", "TEST body", Status: "pending")).ConfigureAwait(true);
+
+        Assert.Equal("FR-MCP-910", Assert.Single(await service.QueryFrAsync("MCP", "pending").ConfigureAwait(true)).Id);
+        Assert.Equal("TR-MCP-REQ-910", Assert.Single(await service.QueryTrAsync("MCP", "REQ", "completed").ConfigureAwait(true)).Id);
+        Assert.Equal("TEST-MCP-910", Assert.Single(await service.QueryTestAsync("MCP", "completed").ConfigureAwait(true)).Id);
+    }
+
+    /// <summary>Public mutations reject wildcard and free-text requirement IDs before they can become stored rows.</summary>
+    [Fact]
+    public async Task RequirementMutations_RejectWildcardAndFreeTextIds()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("reject-bad-ids"));
+        var service = fixture.CreateService();
+
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            service.AddFrAsync(new FrEntry("FR-SOCIAL-*", "Bad", "body"))).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            service.AddFrAsync(new FrEntry("Ensure", "Bad", "body"))).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            service.AddTrAsync(new TrEntry("TR-SOCIAL-*", "Bad", "body"))).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            service.AddTestAsync(new TestEntry("TEST-SOCIAL-*", "body"))).ConfigureAwait(true);
+
+        Assert.Empty(await fixture.GetRequirementRowsAsync().ConfigureAwait(true));
+    }
+
     /// <summary>Atomic batch creation persists all FR/TR/TEST rows when every record is valid.</summary>
     [Fact]
     public async Task AddBatchAsync_ValidMixedRecords_PersistsAllRows()

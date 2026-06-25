@@ -255,6 +255,16 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         public Task<IReadOnlyList<FrEntry>> GetAllFrAsync(CancellationToken ct = default)
             => Task.FromResult<IReadOnlyList<FrEntry>>(_state.Functional);
 
+        public Task<IReadOnlyList<FrEntry>> QueryFrAsync(string? area = null, string? status = null, CancellationToken ct = default)
+        {
+            var filtered = _state.Functional.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(area))
+                filtered = filtered.Where(entry => string.Equals(GetSegment(entry.Id, 1), area, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(status))
+                filtered = filtered.Where(entry => string.Equals(entry.Status, status, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult<IReadOnlyList<FrEntry>>(filtered.ToArray());
+        }
+
         public Task<FrEntry?> GetFrAsync(string id, CancellationToken ct = default)
             => Task.FromResult(_state.Functional.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.OrdinalIgnoreCase)));
 
@@ -304,6 +314,18 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         public Task<IReadOnlyList<TrEntry>> GetAllTrAsync(CancellationToken ct = default)
             => Task.FromResult<IReadOnlyList<TrEntry>>(_state.Technical);
 
+        public Task<IReadOnlyList<TrEntry>> QueryTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken ct = default)
+        {
+            var filtered = _state.Technical.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(area))
+                filtered = filtered.Where(entry => string.Equals(GetSegment(entry.Id, 1), area, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(subarea))
+                filtered = filtered.Where(entry => string.Equals(GetSegment(entry.Id, 2), subarea, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(status))
+                filtered = filtered.Where(entry => string.Equals(entry.Status, status, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult<IReadOnlyList<TrEntry>>(filtered.ToArray());
+        }
+
         public Task<TrEntry?> GetTrAsync(string id, CancellationToken ct = default)
             => Task.FromResult(_state.Technical.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.OrdinalIgnoreCase)));
 
@@ -338,6 +360,16 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         public Task<IReadOnlyList<TestEntry>> GetAllTestAsync(CancellationToken ct = default)
             => Task.FromResult<IReadOnlyList<TestEntry>>(_state.Testing);
 
+        public Task<IReadOnlyList<TestEntry>> QueryTestAsync(string? area = null, string? status = null, CancellationToken ct = default)
+        {
+            var filtered = _state.Testing.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(area))
+                filtered = filtered.Where(entry => string.Equals(GetSegment(entry.Id, 1), area, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(status))
+                filtered = filtered.Where(entry => string.Equals(entry.Status, status, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult<IReadOnlyList<TestEntry>>(filtered.ToArray());
+        }
+
         public Task<TestEntry?> GetTestAsync(string id, CancellationToken ct = default)
             => Task.FromResult(_state.Testing.FirstOrDefault(x => string.Equals(x.Id, id, StringComparison.OrdinalIgnoreCase)));
 
@@ -367,6 +399,12 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
                     .ToArray()
             };
             return Task.CompletedTask;
+        }
+
+        private static string? GetSegment(string id, int index)
+        {
+            var parts = id.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            return index < parts.Length ? parts[index] : null;
         }
 
         public Task<RequirementsBatchEntries> AddBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)

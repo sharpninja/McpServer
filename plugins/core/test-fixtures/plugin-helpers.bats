@@ -109,7 +109,40 @@ EOF
         -BashPath "$(to_host_path "$BASH")"
 
     [ "$status" -eq 0 ]
-    grep -Fq 'keyword: $(cat /should-not-run)' "$STUB_LOG"
+    node -e '
+const fs = require("fs");
+const log = fs.readFileSync(process.argv[1], "utf8");
+const json = log.split("\n---")[0].trim();
+const env = JSON.parse(json);
+if (env.payload.params.keyword !== "$(cat /should-not-run)") process.exit(1);
+' "$STUB_LOG"
+}
+
+@test "PowerShell wrapper parses YAML params as object" {
+    command -v node >/dev/null 2>&1 || skip "node not available"
+    write_turn_state
+    pwsh_bin="$(find_pwsh)"
+    [ -n "$pwsh_bin" ] || skip "pwsh is not available"
+
+    run "$pwsh_bin" -NoLogo -NoProfile -File "$(to_host_path "$PLUGIN_ROOT/lib/Invoke-ClaudeMcpPlugin.ps1")" \
+        -Command Invoke \
+        -Method client.Todo.QueryAsync \
+        -Params $'keyword: from-powershell\ndone: false' \
+        -PluginRoot "$(to_host_path "$PLUGIN_ROOT")" \
+        -CacheRoot "$(to_host_path "$SANDBOX")" \
+        -WorkspacePath "$(to_host_path "$TEST_WORKSPACE")" \
+        -BashPath "$(to_host_path "$BASH")"
+
+    [ "$status" -eq 0 ]
+    node -e '
+const fs = require("fs");
+const log = fs.readFileSync(process.argv[1], "utf8");
+const json = log.split("\n---")[0].trim();
+const env = JSON.parse(json);
+if (typeof env.payload.params !== "object" || Array.isArray(env.payload.params)) process.exit(1);
+if (env.payload.params.keyword !== "from-powershell") process.exit(1);
+if (env.payload.params.done !== false) process.exit(1);
+' "$STUB_LOG"
 }
 
 @test "PowerShell wrapper passes params through stdin without shell expansion" {
@@ -135,8 +168,14 @@ EOF
         "$(to_host_path "$BASH")"
 
     [ "$status" -eq 0 ]
-    grep -Fq 'keyword: from-stdin' "$STUB_LOG"
-    grep -Fq 'literal: $(cat /should-not-run)' "$STUB_LOG"
+    node -e '
+const fs = require("fs");
+const log = fs.readFileSync(process.argv[1], "utf8");
+const json = log.split("\n---")[0].trim();
+const env = JSON.parse(json);
+if (env.payload.params.keyword !== "from-stdin") process.exit(1);
+if (env.payload.params.literal !== "$(cat /should-not-run)") process.exit(1);
+' "$STUB_LOG"
 }
 
 @test "PowerShell wrapper status uses Claude helper and scoped cache" {

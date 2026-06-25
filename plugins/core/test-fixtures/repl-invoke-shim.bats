@@ -34,7 +34,31 @@ read_stdin_if_ready() {
     timeout 0.5s cat 2>/dev/null || true
 }
 input="$(read_stdin_if_ready)"
-method="$(printf '%s\n' "$input" | grep '^[[:space:]]*method:' | head -1 | sed 's/^[[:space:]]*method:[[:space:]]*//')"
+json_value() {
+    local key="$1"
+    printf '%s\n' "$input" | node -e '
+const fs = require("fs");
+const key = process.argv[1];
+try {
+  const env = JSON.parse(fs.readFileSync(0, "utf8"));
+  if (key === "__method") {
+    const method = env?.payload?.method ?? env?.method;
+    if (method !== undefined && method !== null) process.stdout.write(String(method));
+    process.exit(0);
+  }
+  const params = env?.payload?.params ?? env?.params ?? {};
+  const value = params?.[key];
+  if (value === undefined || value === null) process.exit(0);
+  process.stdout.write(Array.isArray(value) ? value.join(",") : String(value));
+} catch {
+  process.exit(0);
+}
+' "$key"
+}
+method="$(json_value __method)"
+if [ -z "$method" ]; then
+    method="$(printf '%s\n' "$input" | grep '^[[:space:]]*method:' | head -1 | sed 's/^[[:space:]]*method:[[:space:]]*//')"
+fi
 {
     printf 'method=%s\n' "$method"
     printf 'cwd=%s\n' "$(pwd)"
@@ -45,6 +69,12 @@ method="$(printf '%s\n' "$input" | grep '^[[:space:]]*method:' | head -1 | sed '
 } >> "${STUB_LOG:-/dev/null}"
 
 extract_yaml_value() {
+    local json
+    json="$(json_value "$1")"
+    if [ -n "$json" ]; then
+        printf '%s' "$json"
+        return 0
+    fi
     printf '%s\n' "$input" | grep "^[[:space:]]*$1:" | tail -1 | sed "s/^[[:space:]]*$1:[[:space:]]*//"
 }
 
@@ -180,15 +210,30 @@ case "$method" in
         ;;
     client.Requirements.GetFrAsync)
         id="$(extract_yaml_value id)"
+        if [ "${STUB_REQUIREMENTS_GET_NOT_FOUND:-}" = "1" ]; then
+            printf 'type: error\npayload:\n  code: method_invocation_error\n  message: %s not found\n' "$id"
+            exit 0
+        fi
         printf 'type: result\npayload:\n  result:\n    item:\n      id: %s\n      title: Stored FR\n      description: Stored body\n      priority: medium\n      status: pending\n      area: MCP\n      notes: Stored notes\n' "$id"
         ;;
     client.Requirements.GetTrAsync)
         id="$(extract_yaml_value id)"
+        if [ "${STUB_REQUIREMENTS_GET_NOT_FOUND:-}" = "1" ]; then
+            printf 'type: error\npayload:\n  code: method_invocation_error\n  message: %s not found\n' "$id"
+            exit 0
+        fi
         printf 'type: result\npayload:\n  result:\n    item:\n      id: %s\n      title: Stored TR\n      description: Stored TR body\n      priority: medium\n      status: pending\n      area: MCP\n      subarea: Plugin\n      notes: Stored TR notes\n' "$id"
         ;;
     client.Requirements.GetTestAsync)
         id="$(extract_yaml_value id)"
+        if [ "${STUB_REQUIREMENTS_GET_NOT_FOUND:-}" = "1" ]; then
+            printf 'type: error\npayload:\n  code: method_invocation_error\n  message: %s not found\n' "$id"
+            exit 0
+        fi
         printf 'type: result\npayload:\n  result:\n    item:\n      id: %s\n      title: Stored TEST\n      condition: Stored TEST condition\n      priority: medium\n      status: pending\n      area: MCP\n      testType: integration\n      notes: Stored TEST notes\n' "$id"
+        ;;
+    client.Requirements.CreateFrBatchAsync|client.Requirements.CreateTrBatchAsync|client.Requirements.CreateTestBatchAsync|client.Requirements.CreateBatchAsync|client.Requirements.UpdateFrBatchAsync|client.Requirements.UpdateTrBatchAsync|client.Requirements.UpdateTestBatchAsync|client.Requirements.UpdateBatchAsync)
+        printf 'type: result\npayload:\n  result:\n    success: true\n    total: 1\n'
         ;;
     client.Requirements.GenerateAsync)
         doc="$(extract_yaml_value doc)"
@@ -1062,7 +1107,7 @@ priority: medium"
     [ "$(read_status)" = "completed" ]
 }
 
-@test "completeTurn still flips cache when mcpserver-repl is unavailable" {
+@test "completeTurn fails closed when mcpserver-repl is unavailable" {
     write_turn "in_progress"
     # Strip our stub bin from PATH; coreutils stay reachable.
     PATH_BACKUP="$PATH"
@@ -1070,8 +1115,9 @@ priority: medium"
     source "$LIB"
     run repl_invoke "workflow.sessionlog.completeTurn" "response: offline"
     export PATH="$PATH_BACKUP"
-    [ "$status" -eq 0 ]
-    [ "$(read_status)" = "completed" ]
+    [ "$status" -ne 0 ]
+    [ "$(read_status)" = "in_progress" ]
+    echo "$output" | grep -q "session_turn_persist_failed"
 }
 
 @test "workflow.memory.list is routed through the memory workflow shim" {
@@ -1256,6 +1302,44 @@ area: MCP"
     grep -q "method=client.Requirements.CreateFrAsync" "$STUB_LOG"
     grep -q "method=client.Requirements.GetFrAsync" "$STUB_LOG"
     ! grep -q "method=workflow.requirements.createFr" "$STUB_LOG"
+}
+
+@test "workflow.requirements.createFrBatch verifies persisted records by readback" {
+    write_requirements_state
+    source "$LIB"
+
+    run repl_invoke "workflow.requirements.createFrBatch" "records:
+  - id: FR-MCP-BATCH-001
+    title: Batch verification
+    description: Batch records must be read back.
+    priority: high
+    area: MCP"
+
+    [ "$status" -eq 0 ]
+    grep -q "method=client.Requirements.CreateFrBatchAsync" "$STUB_LOG"
+    grep -q "method=client.Requirements.GetFrAsync" "$STUB_LOG"
+    echo "$output" | grep -q "success: true"
+}
+
+@test "workflow.requirements.createTrBatch fails when readback cannot verify persistence" {
+    write_requirements_state
+    export STUB_REQUIREMENTS_GET_NOT_FOUND=1
+    source "$LIB"
+
+    run repl_invoke "workflow.requirements.createTrBatch" "records:
+  - id: TR-MCP-BATCH-001
+    title: Missing batch record
+    description: False success must be rejected.
+    priority: high
+    area: MCP
+    subarea: Requirements"
+
+    unset STUB_REQUIREMENTS_GET_NOT_FOUND
+    [ "$status" -ne 0 ]
+    grep -q "method=client.Requirements.CreateTrBatchAsync" "$STUB_LOG"
+    grep -q "method=client.Requirements.GetTrAsync" "$STUB_LOG"
+    echo "$output" | grep -q "requirements_batch_persist_verification_failed"
+    echo "$output" | grep -q "TR-MCP-BATCH-001"
 }
 
 @test "workflow.requirements.createFr listFr getFr works through typed fallback" {
@@ -1507,11 +1591,26 @@ documents:
     lastModifiedUtc: 2026-05-08T12:00:00Z"
     [ "$status" -eq 0 ]
     grep -q "method=client.Requirements.IngestAsync" "$STUB_LOG"
-    grep -q "input:       sourceFormat: wiki" "$STUB_LOG"
-    grep -q "input:       preferredWikiFormat: github" "$STUB_LOG"
-    grep -q "input:       documents:" "$STUB_LOG"
+    grep -q "sourceFormat" "$STUB_LOG"
+    grep -q "preferredWikiFormat" "$STUB_LOG"
+    grep -q "documents" "$STUB_LOG"
     grep -q "github/Functional-Requirements.md" "$STUB_LOG"
-    grep -q "lastModifiedUtc: 2026-05-08T12:00:00Z" "$STUB_LOG"
+    grep -q "lastModifiedUtc" "$STUB_LOG"
+}
+
+@test "workflow.requirements.ingestDocument passes inline content to typed ingest first" {
+    write_requirements_state
+    source "$LIB"
+    run repl_invoke "workflow.requirements.ingestDocument" "sourceFormat: markdown
+content: |
+  # Functional Requirements
+  - FR-MCP-INLINE-001: Inline ingest must not fall back to default files."
+
+    [ "$status" -eq 0 ]
+    grep -q "method=client.Requirements.IngestAsync" "$STUB_LOG"
+    ! grep -q "method=workflow.requirements.ingestDocument" "$STUB_LOG"
+    grep -q "functionalMarkdown" "$STUB_LOG"
+    grep -q "FR-MCP-INLINE-001" "$STUB_LOG"
 }
 
 @test "workflow.requirements uses session-state workspace path and base URL for mcpserver-repl" {

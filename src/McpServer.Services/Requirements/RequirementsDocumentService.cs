@@ -49,6 +49,18 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     }
 
     /// <inheritdoc />
+    public Task<IReadOnlyList<FrEntry>> QueryFrAsync(string? area = null, string? status = null, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        var filtered = _frEntries.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(area))
+            filtered = filtered.Where(entry => string.Equals(GetRequirementArea(entry.Id, "FR"), area, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(status))
+            filtered = filtered.Where(entry => string.Equals(entry.Status, status, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult<IReadOnlyList<FrEntry>>(filtered.ToArray());
+    }
+
+    /// <inheritdoc />
     public async Task<int> PurgeInvalidPlaceholdersAsync(CancellationToken ct = default)
     {
         ct.ThrowIfCancellationRequested();
@@ -70,8 +82,8 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         }
     }
 
-    private static readonly System.Text.RegularExpressions.Regex CanonicalFrIdRegex = new(
-        @"^FR-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$",
+    private static readonly System.Text.RegularExpressions.Regex RequirementIdShapeRegex = new(
+        @"^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*$",
         System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
     private static bool IsInvalidPlaceholder(FrEntry e)
@@ -81,7 +93,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         // Keep only canonical FR ids like FR-XXX-001 or FR-XXX-SUB-001
         // Treat null/empty Id as invalid (delete)
         var id = e.Id ?? string.Empty;
-        return string.IsNullOrEmpty(id) || !CanonicalFrIdRegex.IsMatch(id);
+        return string.IsNullOrEmpty(id) || !IsValidRequirementId(id, "FR");
     }
 
     /// <inheritdoc />
@@ -164,6 +176,20 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     }
 
     /// <inheritdoc />
+    public Task<IReadOnlyList<TrEntry>> QueryTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        var filtered = _trEntries.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(area))
+            filtered = filtered.Where(entry => string.Equals(GetRequirementArea(entry.Id, "TR"), area, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(subarea))
+            filtered = filtered.Where(entry => string.Equals(GetRequirementSubarea(entry.Id, "TR"), subarea, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(status))
+            filtered = filtered.Where(entry => string.Equals(entry.Status, status, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult<IReadOnlyList<TrEntry>>(filtered.ToArray());
+    }
+
+    /// <inheritdoc />
     public Task<TrEntry?> GetTrAsync(string id, CancellationToken ct = default)
     {
         ct.ThrowIfCancellationRequested();
@@ -243,6 +269,18 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     {
         ct.ThrowIfCancellationRequested();
         return Task.FromResult<IReadOnlyList<TestEntry>>(_testEntries.ToArray());
+    }
+
+    /// <inheritdoc />
+    public Task<IReadOnlyList<TestEntry>> QueryTestAsync(string? area = null, string? status = null, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        var filtered = _testEntries.AsEnumerable();
+        if (!string.IsNullOrWhiteSpace(area))
+            filtered = filtered.Where(entry => string.Equals(GetRequirementArea(entry.Id, "TEST"), area, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(status))
+            filtered = filtered.Where(entry => string.Equals(entry.Status, status, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult<IReadOnlyList<TestEntry>>(filtered.ToArray());
     }
 
     /// <inheritdoc />
@@ -614,7 +652,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private static void ValidateFr(FrEntry entry)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        ValidateId(entry.Id, nameof(entry.Id));
+        ValidateId(entry.Id, nameof(entry.Id), "FR");
         if (string.IsNullOrWhiteSpace(entry.Title))
             throw new ArgumentException("FR title is required.", nameof(entry));
         if (string.IsNullOrWhiteSpace(entry.Body))
@@ -624,7 +662,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private static void ValidateTr(TrEntry entry)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        ValidateId(entry.Id, nameof(entry.Id));
+        ValidateId(entry.Id, nameof(entry.Id), "TR");
         if (string.IsNullOrWhiteSpace(entry.Body))
             throw new ArgumentException("TR body is required.", nameof(entry));
     }
@@ -632,7 +670,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private static void ValidateTest(TestEntry entry)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        ValidateId(entry.Id, nameof(entry.Id));
+        ValidateId(entry.Id, nameof(entry.Id), "TEST");
         if (string.IsNullOrWhiteSpace(entry.Condition))
             throw new ArgumentException("TEST condition is required.", nameof(entry));
     }
@@ -640,14 +678,39 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private static void ValidateMapping(FrTrMapping mapping)
     {
         ArgumentNullException.ThrowIfNull(mapping);
-        ValidateId(mapping.FrId, nameof(mapping.FrId));
+        ValidateId(mapping.FrId, nameof(mapping.FrId), "FR");
         ArgumentNullException.ThrowIfNull(mapping.TrIds);
+        ArgumentNullException.ThrowIfNull(mapping.TestIds);
+        foreach (var trId in mapping.TrIds)
+            ValidateId(trId, nameof(mapping.TrIds), "TR");
+        foreach (var testId in mapping.TestIds)
+            ValidateId(testId, nameof(mapping.TestIds), "TEST");
     }
 
-    private static void ValidateId(string id, string paramName)
+    private static void ValidateId(string id, string paramName, string? expectedPrefix = null)
     {
         if (string.IsNullOrWhiteSpace(id))
             throw new ArgumentException("ID is required.", paramName);
+        if (expectedPrefix is not null && !IsValidRequirementId(id, expectedPrefix))
+            throw new ArgumentException($"Requirement ID '{id}' must match the {expectedPrefix} identifier shape.", paramName);
+    }
+
+    private static bool IsValidRequirementId(string id, string expectedPrefix) =>
+        RequirementIdShapeRegex.IsMatch(id)
+        && id.StartsWith(expectedPrefix + "-", StringComparison.OrdinalIgnoreCase)
+        && !id.Contains('*', StringComparison.Ordinal);
+
+    private static string? GetRequirementArea(string id, string expectedPrefix) =>
+        SplitRequirementId(id, expectedPrefix) is { Length: >= 2 } parts ? parts[1] : null;
+
+    private static string? GetRequirementSubarea(string id, string expectedPrefix) =>
+        SplitRequirementId(id, expectedPrefix) is { Length: >= 3 } parts ? parts[2] : null;
+
+    private static string[]? SplitRequirementId(string id, string expectedPrefix)
+    {
+        if (!IsValidRequirementId(id, expectedPrefix))
+            return null;
+        return id.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
     private static bool IdEquals(string left, string right) =>

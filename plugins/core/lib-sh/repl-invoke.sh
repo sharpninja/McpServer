@@ -499,6 +499,58 @@ _repl_response_is_nonempty_success() {
     ! _repl_response_is_error "$response" && ! _repl_response_has_empty_result "$response"
 }
 
+_repl_params_json() {
+    local params_yaml="${1:-}"
+    [ -z "$params_yaml" ] && {
+        printf 'null'
+        return 0
+    }
+
+    if ! command -v node >/dev/null 2>&1; then
+        echo "ERROR: node is required to parse YAML params" >&2
+        return 1
+    fi
+
+    printf '%s' "$params_yaml" | node -e '
+const fs = require("fs");
+const path = require("path");
+const input = fs.readFileSync(0, "utf8");
+const scriptDir = process.argv[1] || "";
+const pluginRoot = process.argv[2] || "";
+const cwd = process.cwd();
+const candidates = [
+  path.join(pluginRoot, "node_modules"),
+  path.join(scriptDir, "..", "node_modules"),
+  path.join(scriptDir, "..", "..", "lib-node", "node_modules"),
+  path.join(pluginRoot, "..", "McpServer", "plugins", "core", "lib-node", "node_modules"),
+  path.join(cwd, "plugins", "core", "lib-node", "node_modules"),
+  path.join(cwd, "node_modules")
+];
+let yaml;
+try {
+  yaml = require(require.resolve("js-yaml", { paths: candidates }));
+} catch (error) {
+  yaml = null;
+}
+try {
+  const trimmed = input.trim();
+  if (!trimmed) {
+    process.stdout.write("null");
+  } else if (/^[\[{]/.test(trimmed)) {
+    process.stdout.write(JSON.stringify(JSON.parse(trimmed)));
+  } else if (yaml) {
+    process.stdout.write(JSON.stringify(yaml.load(input) ?? null));
+  } else {
+    const fallback = require(path.join(scriptDir, "yaml-subset-parser.js"));
+    process.stdout.write(JSON.stringify(fallback.parseYamlSubset(input) ?? null));
+  }
+} catch (error) {
+  console.error("ERROR: failed to parse params as JSON/YAML: " + error.message);
+  process.exit(1);
+}
+' "$REPL_INVOKE_SCRIPT_DIR" "$REPL_INVOKE_PLUGIN_ROOT"
+}
+
 _repl_json_escape() {
     printf '%s' "${1:-}" | awk '
         BEGIN { ORS = "" }
@@ -820,7 +872,7 @@ _repl_workflow_requirements_prefers_typed() {
     fi
 
     case "${1:-}" in
-        createFr|createFrBatch|updateFr|updateFrBatch|createTr|createTrBatch|updateTr|updateTrBatch|createTest|createTestBatch|updateTest|updateTestBatch|createBatch|updateBatch) return 0 ;;
+        createFr|createFrBatch|updateFr|updateFrBatch|createTr|createTrBatch|updateTr|updateTrBatch|createTest|createTestBatch|updateTest|updateTestBatch|createBatch|updateBatch|ingestDocument) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -1042,12 +1094,7 @@ _repl_invoke_raw() {
     # params may be JSON string or legacy YAML (for legacy, we stringify the string as params for compatibility; complex paths should pass JSON).
     local params_json_for_node="null"
     if [ -n "$params_yaml" ]; then
-        if [[ "$params_yaml" == \{* ]] || [[ "$params_yaml" == \[* ]]; then
-            params_json_for_node="$params_yaml"
-        else
-            # legacy YAML string: wrap as string param (rare for complex); prefer callers pass JSON now
-            params_json_for_node=$(node -e 'console.log(JSON.stringify(process.argv[1]))' "$params_yaml" 2>/dev/null || echo "null")
-        fi
+        params_json_for_node="$(_repl_params_json "$params_yaml")" || return 1
     fi
 
     local envelope_json
@@ -1321,10 +1368,17 @@ EOF
 
 _repl_requirements_bootstrap_state() {
     local params_yaml="${1:-}"
-    local start_dir
+    local start_dir existing_workspace
     start_dir="$(_repl_yaml_get "$params_yaml" "workspacePath")"
     start_dir="$(_repl_unquote "$start_dir")"
-    [ -z "$start_dir" ] && start_dir="$(pwd)"
+    if [ -z "$start_dir" ]; then
+        existing_workspace="$(_repl_unquote "$(_repl_session_state_value "workspacePath")")"
+        if [ -n "$existing_workspace" ]; then
+            start_dir="$existing_workspace"
+        else
+            start_dir="$(pwd)"
+        fi
+    fi
 
     local bootstrap_dir
     bootstrap_dir="$(_repl_path_for_bash "$start_dir" 2>/dev/null || printf '%s' "$start_dir")"
@@ -1377,7 +1431,7 @@ _repl_invoke_raw_in_workspace() {
     # Object + JSON serialize (no manual YAML text)
     local pjson="null"
     if [ -n "$params_yaml" ]; then
-        if [[ "$params_yaml" == \{* ]] || [[ "$params_yaml" == \[* ]]; then pjson="$params_yaml"; else pjson=$(node -e 'console.log(JSON.stringify(process.argv[1]))' "$params_yaml" 2>/dev/null || echo "null"); fi
+        pjson="$(_repl_params_json "$params_yaml")" || return 1
     fi
     local envelope_json=$(node -e '
       const p = process.argv[3] && process.argv[3]!=="null" ? JSON.parse(process.argv[3]) : undefined;
@@ -1677,6 +1731,124 @@ _repl_requirements_create_workflow_get_method() {
     esac
 }
 
+_repl_requirements_batch_ids() {
+    local params_yaml="${1:-}" params_json
+    params_json="$(_repl_params_json "$params_yaml")" || return 1
+    printf '%s' "$params_json" | node -e '
+const fs = require("fs");
+const data = JSON.parse(fs.readFileSync(0, "utf8") || "null");
+const records = Array.isArray(data?.records) ? data.records : Array.isArray(data?.request?.records) ? data.request.records : [];
+for (const record of records) {
+  if (record && typeof record.id === "string" && record.id.trim()) console.log(record.id.trim());
+}
+'
+}
+
+_repl_requirements_get_method_for_batch_id() {
+    local operation="$1" id="$2"
+    case "$operation" in
+        createFrBatch|updateFrBatch) printf 'client.Requirements.GetFrAsync' ;;
+        createTrBatch|updateTrBatch) printf 'client.Requirements.GetTrAsync' ;;
+        createTestBatch|updateTestBatch) printf 'client.Requirements.GetTestAsync' ;;
+        createBatch|updateBatch)
+            case "$id" in
+                FR-*) printf 'client.Requirements.GetFrAsync' ;;
+                TR-*) printf 'client.Requirements.GetTrAsync' ;;
+                TEST-*) printf 'client.Requirements.GetTestAsync' ;;
+                *) return 1 ;;
+            esac
+            ;;
+        *) return 1 ;;
+    esac
+}
+
+_repl_requirements_workflow_get_method_for_batch_id() {
+    local operation="$1" id="$2"
+    case "$operation" in
+        createFrBatch|updateFrBatch) printf 'workflow.requirements.getFr' ;;
+        createTrBatch|updateTrBatch) printf 'workflow.requirements.getTr' ;;
+        createTestBatch|updateTestBatch) printf 'workflow.requirements.getTest' ;;
+        createBatch|updateBatch)
+            case "$id" in
+                FR-*) printf 'workflow.requirements.getFr' ;;
+                TR-*) printf 'workflow.requirements.getTr' ;;
+                TEST-*) printf 'workflow.requirements.getTest' ;;
+                *) return 1 ;;
+            esac
+            ;;
+        *) return 1 ;;
+    esac
+}
+
+_repl_requirements_batch_persisted_result_ok() {
+    local operation="$1" params_yaml="${2:-}" ids id get_method workflow_get_method get_params response status missing
+    case "$operation" in
+        createFrBatch|updateFrBatch|createTrBatch|updateTrBatch|createTestBatch|updateTestBatch|createBatch|updateBatch)
+            ;;
+        *)
+            return 0
+            ;;
+    esac
+
+    ids="$(_repl_requirements_batch_ids "$params_yaml" 2>/dev/null || true)"
+    [ -n "$ids" ] || return 0
+
+    missing=""
+    while IFS= read -r id; do
+        [ -n "$id" ] || continue
+        get_params="$(printf 'id: %s\n' "$id")"
+        workflow_get_method="$(_repl_requirements_workflow_get_method_for_batch_id "$operation" "$id" 2>/dev/null || true)"
+        if [ -n "$workflow_get_method" ]; then
+            response="$(_repl_invoke_raw_in_workspace "$workflow_get_method" "$get_params" "compat" 2>&1)"
+            status=$?
+            if [ $status -eq 0 ] && _repl_response_is_nonempty_success "$response"; then
+                continue
+            fi
+            response="$(_repl_invoke_raw_in_workspace "$workflow_get_method" "$get_params" 2>&1)"
+            status=$?
+            if [ $status -eq 0 ] && _repl_response_is_nonempty_success "$response"; then
+                continue
+            fi
+        fi
+
+        get_method="$(_repl_requirements_get_method_for_batch_id "$operation" "$id" 2>/dev/null || true)"
+        if [ -n "$get_method" ]; then
+            response="$(_repl_invoke_raw_in_workspace "$get_method" "$get_params" "compat" 2>&1)"
+            status=$?
+            if [ $status -eq 0 ] && _repl_response_is_nonempty_success "$response"; then
+                continue
+            fi
+            response="$(_repl_invoke_raw_in_workspace "$get_method" "$get_params" 2>&1)"
+            status=$?
+            if [ $status -eq 0 ] && _repl_response_is_nonempty_success "$response"; then
+                continue
+            fi
+        fi
+        missing="${missing}
+    - ${id}"
+    done <<EOF
+${ids}
+EOF
+
+    [ -z "$missing" ] && return 0
+
+    printf 'type: error\npayload:\n'
+    printf '  code: requirements_batch_persist_verification_failed\n'
+    printf '  message: batch mutation returned success but one or more records could not be read back.\n'
+    printf '  details:\n'
+    printf '    operation: %s\n' "$operation"
+    printf '    missingIds:\n'
+    printf '%s\n' "$missing"
+    return 1
+}
+
+_repl_requirements_mutation_result_ok() {
+    local operation="$1" params_yaml="${2:-}" response="${3:-}"
+    _repl_requirements_acceptance_criteria_result_ok "$operation" "$params_yaml" "$response" || return 1
+    _repl_requirements_batch_persisted_result_ok "$operation" "$params_yaml" || return 1
+    return 0
+}
+
 _repl_requirements_created_response_after_empty_success() {
     local operation="$1"
     local params_yaml="${2:-}"
@@ -1943,8 +2115,11 @@ _repl_requirements_typed_params() {
             printf 'format: %s\n' "$format"
             ;;
         ingestDocument)
-            content="$(_repl_param_text "$params_yaml" "content")"
             documents_block="$(_repl_list_block_get "$params_yaml" "documents")"
+            content=""
+            if [ -z "$documents_block" ]; then
+                content="$(_repl_param_text "$params_yaml" "content")"
+            fi
             source_format="$(_repl_yaml_get "$params_yaml" "sourceFormat")"
             preferred_wiki_format="$(_repl_yaml_get "$params_yaml" "preferredWikiFormat")"
             printf 'request:\n'
@@ -3058,7 +3233,7 @@ _repl_workflow_requirements() {
         response="$(_repl_invoke_raw_in_workspace "$typed_method" "$typed_params" "compat" 2>&1)"
         status=$?
         if [ $status -eq 0 ] && _repl_response_is_nonempty_success "$response"; then
-            _repl_requirements_acceptance_criteria_result_ok "$operation" "$params_yaml" "$response" || return 1
+            _repl_requirements_mutation_result_ok "$operation" "$params_yaml" "$response" || return 1
             _repl_failsafe_clear "$failsafe_file"
             printf '%s\n' "$response"
             return 0
@@ -3075,7 +3250,7 @@ _repl_workflow_requirements() {
         response="$(_repl_invoke_raw_in_workspace "$typed_method" "$typed_params" 2>&1)"
         status=$?
         if [ $status -eq 0 ] && _repl_response_is_nonempty_success "$response"; then
-            _repl_requirements_acceptance_criteria_result_ok "$operation" "$params_yaml" "$response" || return 1
+            _repl_requirements_mutation_result_ok "$operation" "$params_yaml" "$response" || return 1
             _repl_failsafe_clear "$failsafe_file"
             printf '%s\n' "$response"
             return 0
@@ -3100,7 +3275,7 @@ _repl_workflow_requirements() {
                 return 0
             fi
         else
-            _repl_requirements_acceptance_criteria_result_ok "$operation" "$params_yaml" "$response" || return 1
+            _repl_requirements_mutation_result_ok "$operation" "$params_yaml" "$response" || return 1
             _repl_failsafe_clear "$failsafe_file"
             printf '%s\n' "$response"
             return 0
@@ -3109,14 +3284,14 @@ _repl_workflow_requirements() {
 
     response="$(_repl_invoke_raw_in_workspace "$method" "$workflow_params" 2>&1)"
     status=$?
-    if [ $status -eq 0 ] && ! _repl_response_is_error "$response"; then
+    if [ $status -eq 0 ] && _repl_response_is_nonempty_success "$response"; then
         if [ "$operation" = "generateDocument" ]; then
             if _repl_requirements_emit_generate_response "$response" "$params_yaml"; then
                 _repl_failsafe_clear "$failsafe_file"
                 return 0
             fi
         else
-            _repl_requirements_acceptance_criteria_result_ok "$operation" "$params_yaml" "$response" || return 1
+            _repl_requirements_mutation_result_ok "$operation" "$params_yaml" "$response" || return 1
             _repl_failsafe_clear "$failsafe_file"
             printf '%s\n' "$response"
             return 0
@@ -3133,7 +3308,7 @@ _repl_workflow_requirements() {
                     return 0
                 fi
             else
-                _repl_requirements_acceptance_criteria_result_ok "$operation" "$params_yaml" "$response" || return 1
+                _repl_requirements_mutation_result_ok "$operation" "$params_yaml" "$response" || return 1
                 _repl_failsafe_clear "$failsafe_file"
                 printf '%s\n' "$response"
                 return 0
@@ -3157,7 +3332,7 @@ _repl_workflow_requirements() {
                     return 0
                 fi
             else
-                _repl_requirements_acceptance_criteria_result_ok "$operation" "$params_yaml" "$response" || return 1
+                _repl_requirements_mutation_result_ok "$operation" "$params_yaml" "$response" || return 1
                 _repl_failsafe_clear "$failsafe_file"
                 printf '%s\n' "$response"
                 return 0
@@ -3191,6 +3366,9 @@ _repl_workflow_requirements() {
         fi
     fi
     printf '%s\n' "$response"
+    if [ $status -eq 0 ]; then
+        return 1
+    fi
     return $status
 }
 
@@ -3448,17 +3626,40 @@ NODEEOF
     local tmp_env="${REPL_INVOKE_CACHE_DIR}/envelope-${req_id}.$$.json"
     mkdir -p "$(dirname "$tmp_env")" 2>/dev/null || true
     printf '%s\n' "$json_envelope" > "$tmp_env"
-    local response
-    response="$(cat "$tmp_env" | _repl_run_repl_with_timeout "${REPL_TIMEOUT:-30}" mcpserver-repl --agent-stdio --agent "$AGENT_NAME" 2>/dev/null || true)"
+    local response stderr_file persist_status timeout_seconds
+    timeout_seconds="${REPL_TIMEOUT:-30}"
+    stderr_file="${tmp_env}.stderr"
+    response="$(_repl_run_repl_with_timeout "$timeout_seconds" mcpserver-repl --agent-stdio --agent "$AGENT_NAME" < "$tmp_env" 2>"$stderr_file")"
+    persist_status=$?
     rm -f "$tmp_env" 2>/dev/null || true
 
-    if [ $? -eq 0 ] && ! _repl_response_is_error "$response"; then
+    if [ $persist_status -eq 0 ] && ! _repl_response_is_error "$response"; then
         _repl_failsafe_clear "$failsafe_file"
+        rm -f "$stderr_file" 2>/dev/null || true
         return 0
     fi
 
+    if [ $persist_status -eq 124 ]; then
+        echo "ERROR: mcpserver-repl timed out after ${timeout_seconds}s while persisting session turn ${req_id}" >&2
+    else
+        echo "ERROR: mcpserver-repl failed while persisting session turn ${req_id} (exit ${persist_status})" >&2
+    fi
+    if [ -s "$stderr_file" ]; then
+        sed 's/^/stderr: /' "$stderr_file" >&2
+    fi
+    rm -f "$stderr_file" 2>/dev/null || true
     printf '%s\n' "$response" >&2
     return 1
+}
+
+_repl_mark_current_turn_completed() {
+    local turn_file="$1" tmp
+    [ -f "$turn_file" ] || return 0
+    tmp="${turn_file}.tmp.$$"
+    awk '
+        /^status:/ { print "status: completed"; next }
+        { print }
+    ' "$turn_file" > "$tmp" && mv "$tmp" "$turn_file"
 }
 
 _repl_workflow_bootstrap() {
@@ -3748,23 +3949,17 @@ _repl_workflow_complete_turn() {
         return 0
     }
 
-    local req_id title response_text tmp
+    local req_id title response_text
     req_id="$(_repl_current_turn_value "turnRequestId")"
     title="$(_repl_current_turn_value "queryTitle")"
     response_text="$(_repl_yaml_block_get "$params" "response")"
     [ -z "$response_text" ] && response_text="$(_repl_yaml_get "$params" "response")"
     [ -z "$response_text" ] && response_text="(no response provided)"
 
-    tmp="${turn_file}.tmp.$$"
-    awk '
-        /^status:/ { print "status: completed"; next }
-        { print }
-    ' "$turn_file" > "$tmp" && mv "$tmp" "$turn_file"
-
     # When rich params (interpretation field) are present, route to importRecovery
     # so all JSONL-extracted fields reach the server instead of the minimal turn block.
     if printf '%s\n' "$params" | grep -q '^interpretation:' 2>/dev/null && command -v node >/dev/null 2>&1; then
-        local opened_at source_type session_id model started import_yaml
+        local opened_at source_type session_id model started import_yaml import_response import_status
         opened_at="$(_repl_current_turn_value "openedAt")"
         [ -z "$opened_at" ] && opened_at="$(_repl_now_iso)"
         source_type="$(_repl_session_state_value "sourceType")"
@@ -3779,16 +3974,35 @@ _repl_workflow_complete_turn() {
             "$session_id" "$source_type" "$model" "$started" "$req_id" "$title" "$opened_at" 2>/dev/null || true)"
 
         if [ -n "$import_yaml" ]; then
-            _repl_workflow_import_recovery "$import_yaml" >/dev/null 2>&1 || true
+            import_response="$(_repl_workflow_import_recovery "$import_yaml" 2>&1)"
+            import_status=$?
+            if [ $import_status -ne 0 ] || ! _repl_response_is_nonempty_success "$import_response"; then
+                printf 'type: error\npayload:\n'
+                printf '  code: session_turn_persist_failed\n'
+                printf '  message: completeTurn importRecovery did not persist turn %s\n' "$req_id"
+                printf '  details:\n'
+                printf '    response: |\n'
+                printf '%s\n' "$import_response" | sed 's/^/      /'
+                return 1
+            fi
+            _repl_mark_current_turn_completed "$turn_file"
             _repl_emit_response "  ok: true
   status: completed"
             return 0
         fi
     fi
 
-    _repl_persist_turn "$req_id" "$title" "completed" "$response_text" "" || true
-    _repl_emit_response "  ok: true
+    if _repl_persist_turn "$req_id" "$title" "completed" "$response_text" ""; then
+        _repl_mark_current_turn_completed "$turn_file"
+        _repl_emit_response "  ok: true
   status: completed"
+        return 0
+    fi
+
+    printf 'type: error\npayload:\n'
+    printf '  code: session_turn_persist_failed\n'
+    printf '  message: completeTurn did not persist turn %s\n' "$req_id"
+    return 1
 }
 
 # PLAN-SESSIONLOGENFORCEMENT-001: single close-turn helper. Appends any supplied actions
@@ -4349,7 +4563,7 @@ repl_build_envelope() {
 
     local pjson="null"
     if [ -n "$params_yaml" ]; then
-        if [[ "$params_yaml" == \{* ]] || [[ "$params_yaml" == \[* ]]; then pjson="$params_yaml"; else pjson=$(node -e 'console.log(JSON.stringify(process.argv[1]))' "$params_yaml" 2>/dev/null || echo "null"); fi
+        pjson="$(_repl_params_json "$params_yaml")" || return 1
     fi
     node -e '
       const p = process.argv[3] && process.argv[3]!=="null" ? JSON.parse(process.argv[3]) : undefined;
@@ -4379,12 +4593,10 @@ if [ "${BASH_SOURCE[0]}" = "$0" ]; then
         params_yaml="$2"
     fi
     repl_invoke "$method" "$params_yaml"
-    # Exit 0 so that type: error envelopes (which are valid responses) are not masked by
-    # wrapper callers that throw on non-zero. Usage error (64) is handled before.
-    exit 0
+    exit $?
 fi
 
 export -f _repl_read_stdin_if_ready 2>/dev/null || true
 export -f _repl_turn_upsert_params 2>/dev/null || true
 
-export -f repl_invoke repl_build_envelope _repl_bool_to_enabled _repl_compat_marker_endpoint_field _repl_compat_marker_field _repl_create_compat_marker _repl_failsafe_clear _repl_failsafe_dir _repl_failsafe_plugin_name _repl_failsafe_workspace_root _repl_failsafe_write _repl_first_param_text _repl_internal_todo_is_enabled _repl_internal_todo_mode_value _repl_internal_todo_state_file _repl_invoke_raw _repl_invoke_raw_in_workspace _repl_invoke_with_fallback _repl_bootstrap_state _repl_emit_response _repl_generate_session_id _repl_json_array_block_get _repl_json_escape _repl_normalized_actions_block _repl_normalized_dialog_items_block _repl_param_text _repl_path_for_bash _repl_path_for_repl _repl_pending_import_file _repl_pending_import_todo_exists _repl_persist_turn _repl_records_block_get _repl_records_block_normalize _repl_requirements_acceptance_criteria_result_ok _repl_requirements_bootstrap_state _repl_requirements_copy_acceptance_http_fallback _repl_requirements_existing_for_update _repl_requirements_generate_http_fallback _repl_requirements_normalize_generate_response _repl_requirements_typed_doc_type _repl_requirements_typed_method _repl_requirements_typed_params _repl_requirements_update_get_method _repl_requirements_update_workflow_get_method _repl_requirements_workflow_doc_type _repl_requirements_workflow_params _repl_requirement_list_field _repl_response_has_empty_result _repl_response_is_error _repl_response_is_nonempty_success _repl_run_repl_with_timeout _repl_session_meta _repl_session_state_value _repl_sessionlog_import_recovery_http_fallback _repl_sessionlog_submit_http_fallback _repl_state_value _repl_submit_session _repl_todo_http_fallback _repl_todo_json_body _repl_turns_block _repl_url_path_segment _repl_turn_bump _repl_count_lines _repl_turn_has_audit_schema _repl_turn_audit_missing _repl_workflow_audit _repl_workflow_close_turn _repl_workflow_append_actions _repl_workflow_append_dialog _repl_workflow_begin_turn _repl_workflow_bootstrap _repl_workflow_complete_turn _repl_workflow_import_pending _repl_workflow_import_recovery _repl_workflow_memory _repl_workflow_memory_is_mutation _repl_workflow_memory_append_action _repl_workflow_open_session _repl_workflow_query_history _repl_workflow_requirements _repl_workflow_requirements_is_mutation _repl_workflow_requirements_prefers_typed _repl_workflow_todo _repl_workflow_todo_internal_tracking _repl_workflow_todo_is_mutation _repl_workflow_todo_select _repl_workflow_todo_update_selected _repl_workflow_update_turn _repl_emit_acceptance_criteria_block _repl_emit_acceptance_criteria_hydrate _repl_has_acceptance_criteria_block _repl_yaml_block_get _repl_yaml_field _repl_yaml_get 2>/dev/null || true
+export -f repl_invoke repl_build_envelope _repl_bool_to_enabled _repl_compat_marker_endpoint_field _repl_compat_marker_field _repl_create_compat_marker _repl_failsafe_clear _repl_failsafe_dir _repl_failsafe_plugin_name _repl_failsafe_workspace_root _repl_failsafe_write _repl_first_param_text _repl_internal_todo_is_enabled _repl_internal_todo_mode_value _repl_internal_todo_state_file _repl_invoke_raw _repl_invoke_raw_in_workspace _repl_invoke_with_fallback _repl_bootstrap_state _repl_emit_response _repl_generate_session_id _repl_json_array_block_get _repl_json_escape _repl_normalized_actions_block _repl_normalized_dialog_items_block _repl_param_text _repl_path_for_bash _repl_path_for_repl _repl_pending_import_file _repl_pending_import_todo_exists _repl_persist_turn _repl_records_block_get _repl_records_block_normalize _repl_requirements_acceptance_criteria_result_ok _repl_requirements_batch_ids _repl_requirements_batch_persisted_result_ok _repl_requirements_bootstrap_state _repl_requirements_copy_acceptance_http_fallback _repl_requirements_existing_for_update _repl_requirements_generate_http_fallback _repl_requirements_get_method_for_batch_id _repl_requirements_mutation_result_ok _repl_requirements_normalize_generate_response _repl_requirements_typed_doc_type _repl_requirements_typed_method _repl_requirements_typed_params _repl_requirements_update_get_method _repl_requirements_update_workflow_get_method _repl_requirements_workflow_doc_type _repl_requirements_workflow_get_method_for_batch_id _repl_requirements_workflow_params _repl_requirement_list_field _repl_response_has_empty_result _repl_response_is_error _repl_response_is_nonempty_success _repl_run_repl_with_timeout _repl_session_meta _repl_session_state_value _repl_sessionlog_import_recovery_http_fallback _repl_sessionlog_submit_http_fallback _repl_state_value _repl_submit_session _repl_todo_http_fallback _repl_todo_json_body _repl_turns_block _repl_url_path_segment _repl_turn_bump _repl_count_lines _repl_turn_has_audit_schema _repl_turn_audit_missing _repl_workflow_audit _repl_workflow_close_turn _repl_workflow_append_actions _repl_workflow_append_dialog _repl_workflow_begin_turn _repl_workflow_bootstrap _repl_workflow_complete_turn _repl_workflow_import_pending _repl_workflow_import_recovery _repl_workflow_memory _repl_workflow_memory_is_mutation _repl_workflow_memory_append_action _repl_workflow_open_session _repl_workflow_query_history _repl_workflow_requirements _repl_workflow_requirements_is_mutation _repl_workflow_requirements_prefers_typed _repl_workflow_todo _repl_workflow_todo_internal_tracking _repl_workflow_todo_is_mutation _repl_workflow_todo_select _repl_workflow_todo_update_selected _repl_workflow_update_turn _repl_emit_acceptance_criteria_block _repl_emit_acceptance_criteria_hydrate _repl_has_acceptance_criteria_block _repl_yaml_block_get _repl_yaml_field _repl_yaml_get 2>/dev/null || true

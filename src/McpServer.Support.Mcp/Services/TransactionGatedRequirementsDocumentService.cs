@@ -55,6 +55,10 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
         => _inner.GetAllFrAsync(ct);
 
     /// <inheritdoc />
+    public Task<IReadOnlyList<FrEntry>> QueryFrAsync(string? area = null, string? status = null, CancellationToken ct = default)
+        => _inner.QueryFrAsync(area, status, ct);
+
+    /// <inheritdoc />
     public Task<FrEntry?> GetFrAsync(string id, CancellationToken ct = default)
         => _inner.GetFrAsync(id, ct);
 
@@ -75,6 +79,10 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
         => _inner.GetAllTrAsync(ct);
 
     /// <inheritdoc />
+    public Task<IReadOnlyList<TrEntry>> QueryTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken ct = default)
+        => _inner.QueryTrAsync(area, subarea, status, ct);
+
+    /// <inheritdoc />
     public Task<TrEntry?> GetTrAsync(string id, CancellationToken ct = default)
         => _inner.GetTrAsync(id, ct);
 
@@ -93,6 +101,10 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
     /// <inheritdoc />
     public Task<IReadOnlyList<TestEntry>> GetAllTestAsync(CancellationToken ct = default)
         => _inner.GetAllTestAsync(ct);
+
+    /// <inheritdoc />
+    public Task<IReadOnlyList<TestEntry>> QueryTestAsync(string? area = null, string? status = null, CancellationToken ct = default)
+        => _inner.QueryTestAsync(area, status, ct);
 
     /// <inheritdoc />
     public Task<TestEntry?> GetTestAsync(string id, CancellationToken ct = default)

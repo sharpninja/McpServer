@@ -45,18 +45,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<IFrQueryResult> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        // Always fetch unfiltered from server (to avoid any query param issues), then apply filter client-side for reliability.
-        var entries = await _client.ListFrAsync(cancellationToken);
-        IEnumerable<FrEntry> filtered = entries;
-        if (!string.IsNullOrEmpty(area))
-        {
-            filtered = filtered.Where(e => string.Equals(ExtractArea(e.Id), area, StringComparison.OrdinalIgnoreCase));
-        }
-        if (!string.IsNullOrEmpty(status))
-        {
-            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
-        }
-        var items = filtered.Select(e => new FrItemAdapter(e)).ToList();
+        var entries = await _client.ListFrAsync(area, status, cancellationToken);
+        var items = entries.Select(e => new FrItemAdapter(e)).ToList();
         return new FrQueryResultAdapter(items);
     }
 
@@ -138,25 +128,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<ITrQueryResult> ListTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var entries = await _client.ListTrAsync(cancellationToken);
-        var filtered = entries.AsEnumerable();
-
-        if (!string.IsNullOrEmpty(area))
-        {
-            filtered = filtered.Where(e => ExtractTrArea(e.Id) == area);
-        }
-
-        if (!string.IsNullOrEmpty(subarea))
-        {
-            filtered = filtered.Where(e => ExtractTrSubarea(e.Id) == subarea);
-        }
-
-        if (!string.IsNullOrEmpty(status))
-        {
-            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
-        }
-
-        var items = filtered.Select(e => new TrItemAdapter(e)).ToList();
+        var entries = await _client.ListTrAsync(area, subarea, status, cancellationToken);
+        var items = entries.Select(e => new TrItemAdapter(e)).ToList();
         return new TrQueryResultAdapter(items);
     }
 
@@ -231,20 +204,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<ITestQueryResult> ListTestAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var entries = await _client.ListTestAsync(cancellationToken);
-        var filtered = entries.AsEnumerable();
-
-        if (!string.IsNullOrEmpty(area))
-        {
-            filtered = filtered.Where(e => ExtractTestArea(e.Id) == area);
-        }
-
-        if (!string.IsNullOrEmpty(status))
-        {
-            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
-        }
-
-        var items = filtered.Select(e => new TestItemAdapter(e)).ToList();
+        var entries = await _client.ListTestAsync(area, status, cancellationToken);
+        var items = entries.Select(e => new TestItemAdapter(e)).ToList();
         return new TestQueryResultAdapter(items);
     }
 

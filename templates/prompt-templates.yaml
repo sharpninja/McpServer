@@ -345,11 +345,17 @@ templates:
       4. For `mcpserver-repl --agent-stdio`, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
 
 
-      ## PowerShell Command Quoting
+      ## PowerShell.Mcp Command Routing
 
-      For every Windows PowerShell Core command:
+      For every PowerShell Core (`pwsh`) invocation on every operating system:
 
-      - Invoke `pwsh.exe` with `-NoProfile -NonInteractive`. Do not use `powershell.exe`.
+      - Use the `PowerShell.Mcp` module from PSGallery as the command runner. Install it from PSGallery if the agent environment does not already provide it.
+
+      - Route `pwsh` commands through a `PowerShell.Mcp` session instead of launching ad hoc PowerShell processes. On Windows, keep one `PowerShell.Mcp` session open for the workspace and reuse it.
+
+      - On Windows, route all `node` invocations through the open `PowerShell.Mcp` session. Do not create fresh Node sessions or one-off Node shells per Node call.
+
+      - When `PowerShell.Mcp` must launch PowerShell Core directly, invoke `pwsh.exe` with `-NoProfile -NonInteractive`. Do not use `powershell.exe`.
 
       - The PowerShell escape character is the backtick `` ` ``, not the backslash. Never use C or bash-style `\"` escaping inside PowerShell command strings.
 
@@ -358,6 +364,11 @@ templates:
       - When a command needs nested quoting, choose one of these patterns before improvising: `-File` with explicit arguments; piping stdin to the called tool or script; single-quoted or double-quoted here-strings; `-EncodedCommand` for complex inline PowerShell; or correct backtick escaping for embedded PowerShell quotes.
 
       - If a regex or literal argument contains `|`, `&`, `;`, parentheses, braces, or quotes, verify it is inside a single PowerShell argument before running.
+
+
+      ## Byrd Development Process
+
+      `Byrd Dev Process`, `BDP`, `BPDv4`, and `Byrd Development Process` refer to `F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`.
 
 
       ## Federation Topology

@@ -30,6 +30,40 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task ListRequirementsAsync_EncodesFilters()
+    {
+        var frHandler = new MockHttpHandler(HttpStatusCode.OK, """[]""");
+        using var frHttp = new HttpClient(frHandler);
+        var client = new RequirementsClient(frHttp, DefaultOptions);
+
+        await client.ListFrAsync("MCP QA", "in_progress");
+
+        Assert.Contains("area=MCP%20QA", frHandler.LastRequest!.RequestUri!.Query);
+        Assert.Contains("status=in_progress", frHandler.LastRequest.RequestUri.Query);
+
+        var trHandler = new MockHttpHandler(HttpStatusCode.OK, """[]""");
+        using var trHttp = new HttpClient(trHandler);
+        var trClient = new RequirementsClient(trHttp, DefaultOptions);
+
+        await trClient.ListTrAsync("MCP", "REQ", "completed");
+
+        Assert.Equal("/mcpserver/requirements/tr", trHandler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("area=MCP", trHandler.LastRequest.RequestUri.Query);
+        Assert.Contains("subarea=REQ", trHandler.LastRequest.RequestUri.Query);
+        Assert.Contains("status=completed", trHandler.LastRequest.RequestUri.Query);
+
+        var testHandler = new MockHttpHandler(HttpStatusCode.OK, """[]""");
+        using var testHttp = new HttpClient(testHandler);
+        var testClient = new RequirementsClient(testHttp, DefaultOptions);
+
+        await testClient.ListTestAsync("MCP", "completed");
+
+        Assert.Equal("/mcpserver/requirements/test", testHandler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("area=MCP", testHandler.LastRequest.RequestUri.Query);
+        Assert.Contains("status=completed", testHandler.LastRequest.RequestUri.Query);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task GetFrAsync_EncodesIdAndDeserializes()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"FR/MCP/001","title":"Title","body":"Body"}""");

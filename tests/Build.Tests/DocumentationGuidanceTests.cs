@@ -32,6 +32,25 @@ public sealed class DocumentationGuidanceTests
     }
 
     /// <summary>
+    /// TEST-MCP-188: Verifies the marker template pins PowerShell and Node
+    /// execution to PowerShell.Mcp and names the Byrd process source document.
+    /// </summary>
+    [Fact]
+    public async Task MarkerTemplate_DefinesPowerShellMcpAndByrdProcessGuidance()
+    {
+        var text = await ReadRepositoryTextAsync(Path.Combine("templates", "prompt-templates.yaml")).ConfigureAwait(true);
+
+        Assert.Contains("PowerShell.Mcp", text, StringComparison.Ordinal);
+        Assert.Contains("PSGallery", text, StringComparison.Ordinal);
+        Assert.Contains("For every PowerShell Core (`pwsh`) invocation on every operating system", text, StringComparison.Ordinal);
+        Assert.Contains("keep one `PowerShell.Mcp` session open for the workspace", text, StringComparison.Ordinal);
+        Assert.Contains("route all `node` invocations through the open `PowerShell.Mcp` session", text, StringComparison.Ordinal);
+        Assert.Contains("Do not create fresh Node sessions or one-off Node shells per Node call", text, StringComparison.Ordinal);
+        Assert.Contains("`Byrd Dev Process`, `BDP`, `BPDv4`, and `Byrd Development Process`", text, StringComparison.Ordinal);
+        Assert.Contains(@"F:\GitHub\McpServer\docs\Development-Process-draft-v4.md", text, StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// TEST-MCP-147: Verifies pipeline documentation references the live
     /// Azure Pipelines and GitHub Actions files that exist in the repository.
     /// </summary>

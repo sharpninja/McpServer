@@ -27,11 +27,7 @@ public sealed class RequirementsClient : McpClientBase
     /// <summary>Lists functional requirements, optionally filtered by area or status.</summary>
     public async Task<IReadOnlyList<FrEntry>> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        var url = "mcpserver/requirements/fr";
-        var qs = new List<string>();
-        if (!string.IsNullOrWhiteSpace(area)) qs.Add($"area={Uri.EscapeDataString(area)}");
-        if (!string.IsNullOrWhiteSpace(status)) qs.Add($"status={Uri.EscapeDataString(status)}");
-        if (qs.Count > 0) url += "?" + string.Join("&", qs);
+        var url = BuildQueryUrl("mcpserver/requirements/fr", ("area", area), ("status", status));
         return await GetAsync<IReadOnlyList<FrEntry>>(url, cancellationToken);
     }
 
@@ -86,11 +82,16 @@ public sealed class RequirementsClient : McpClientBase
         return await DeleteAsync<RequirementsMutationResult>($"mcpserver/requirements/fr/{Uri.EscapeDataString(id)}", cancellationToken);
     }
 
-    /// <summary>Lists all technical requirements.</summary>
-    public async Task<IReadOnlyList<TrEntry>> ListTrAsync(CancellationToken cancellationToken = default)
+    /// <summary>Lists technical requirements, optionally filtered by area, subarea, or status.</summary>
+    public async Task<IReadOnlyList<TrEntry>> ListTrAsync(string? area = null, string? subarea = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<IReadOnlyList<TrEntry>>("mcpserver/requirements/tr", cancellationToken);
+        var url = BuildQueryUrl("mcpserver/requirements/tr", ("area", area), ("subarea", subarea), ("status", status));
+        return await GetAsync<IReadOnlyList<TrEntry>>(url, cancellationToken);
     }
+
+    /// <summary>Lists all technical requirements (unfiltered).</summary>
+    public async Task<IReadOnlyList<TrEntry>> ListTrAsync(CancellationToken cancellationToken = default)
+        => await ListTrAsync(null, null, null, cancellationToken);
 
     /// <summary>Gets a technical requirement by ID.</summary>
     public async Task<TrEntry> GetTrAsync(string id, CancellationToken cancellationToken = default)
@@ -128,11 +129,16 @@ public sealed class RequirementsClient : McpClientBase
         return await DeleteAsync<RequirementsMutationResult>($"mcpserver/requirements/tr/{Uri.EscapeDataString(id)}", cancellationToken);
     }
 
-    /// <summary>Lists all testing requirements.</summary>
-    public async Task<IReadOnlyList<TestEntry>> ListTestAsync(CancellationToken cancellationToken = default)
+    /// <summary>Lists testing requirements, optionally filtered by area or status.</summary>
+    public async Task<IReadOnlyList<TestEntry>> ListTestAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<IReadOnlyList<TestEntry>>("mcpserver/requirements/test", cancellationToken);
+        var url = BuildQueryUrl("mcpserver/requirements/test", ("area", area), ("status", status));
+        return await GetAsync<IReadOnlyList<TestEntry>>(url, cancellationToken);
     }
+
+    /// <summary>Lists all testing requirements (unfiltered).</summary>
+    public async Task<IReadOnlyList<TestEntry>> ListTestAsync(CancellationToken cancellationToken = default)
+        => await ListTestAsync(null, null, cancellationToken);
 
     /// <summary>Gets a testing requirement by ID.</summary>
     public async Task<TestEntry> GetTestAsync(string id, CancellationToken cancellationToken = default)
@@ -246,5 +252,17 @@ public sealed class RequirementsClient : McpClientBase
     public async Task<RequirementsIngestResult> IngestAsync(RequirementsIngestRequest? request = null, CancellationToken cancellationToken = default)
     {
         return await PostAsync<RequirementsIngestResult>("mcpserver/requirements/ingest", request, cancellationToken);
+    }
+
+    private static string BuildQueryUrl(string path, params (string Name, string? Value)[] query)
+    {
+        var qs = new List<string>();
+        foreach (var (name, value) in query)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+                qs.Add($"{name}={Uri.EscapeDataString(value)}");
+        }
+
+        return qs.Count == 0 ? path : path + "?" + string.Join("&", qs);
     }
 }
