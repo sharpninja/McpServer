@@ -34,6 +34,11 @@ public sealed class McpServerClientTests
         Assert.NotNull(client.AgentPool);
         Assert.NotNull(client.Agent);
         Assert.NotNull(client.Health);
+        Assert.NotNull(client.KeyServer);
+        Assert.NotNull(client.Subscriber);
+        Assert.NotNull(client.TurnTransactions);
+        Assert.NotNull(client.BrainSlots);
+        Assert.NotNull(client.Triage);
     }
 
     [Fact]
@@ -105,6 +110,11 @@ public sealed class McpServerClientTests
         Assert.Equal(9999, client.AgentPool.Port);
         Assert.Equal(9999, client.Agent.Port);
         Assert.Equal(9999, client.Health.Port);
+        Assert.Equal(9999, client.KeyServer.Port);
+        Assert.Equal(9999, client.Subscriber.Port);
+        Assert.Equal(9999, client.TurnTransactions.Port);
+        Assert.Equal(9999, client.BrainSlots.Port);
+        Assert.Equal(9999, client.Triage.Port);
     }
 
     [Fact]
@@ -131,6 +141,11 @@ public sealed class McpServerClientTests
         Assert.Equal("default-anon-key", client.AgentPool.ApiKey);
         Assert.Equal("default-anon-key", client.Agent.ApiKey);
         Assert.Equal("default-anon-key", client.Health.ApiKey);
+        Assert.Equal("default-anon-key", client.KeyServer.ApiKey);
+        Assert.Equal("default-anon-key", client.Subscriber.ApiKey);
+        Assert.Equal("default-anon-key", client.TurnTransactions.ApiKey);
+        Assert.Equal("default-anon-key", client.BrainSlots.ApiKey);
+        Assert.Equal("default-anon-key", client.Triage.ApiKey);
         Assert.Contains("/api-key", handler.LastRequest!.RequestUri!.ToString());
     }
 

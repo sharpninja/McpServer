@@ -106,13 +106,15 @@ public sealed class McpServerClient
         Federation = new FederationClient(http, options, holder);
         KeyServer = new KeyServerClient(http, options, holder);
         Subscriber = new SubscriberClient(http, options, holder);
+        TurnTransactions = new TurnTransactionsClient(http, options, holder);
         BrainSlots = new BrainSlotClient(http, options, holder);
+        Triage = new TriageClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, GraphRag, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
-            Federation, KeyServer, Subscriber, BrainSlots
+            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -419,8 +421,20 @@ public sealed class McpServerClient
     public SubscriberClient Subscriber { get; }
 
     /// <summary>
+    /// Turn-transaction diagnostic endpoints — gate status, persisted pub/sub status, replay, and retention purge.
+    /// <para>See <see cref="TurnTransactionsClient"/> for the full method list.</para>
+    /// </summary>
+    public TurnTransactionsClient TurnTransactions { get; }
+
+    /// <summary>
     /// External brain-slot registry and invocation endpoints.
     /// <para>See <see cref="BrainSlotClient"/> for the full method list.</para>
     /// </summary>
     public BrainSlotClient BrainSlots { get; }
+
+    /// <summary>
+    /// FR-MCP-TRIAGE-001: Incidental bug triage endpoints for report intake, group status, flush, and retry.
+    /// <para>See <see cref="TriageClient"/> for the full method list.</para>
+    /// </summary>
+    public TriageClient Triage { get; }
 }

@@ -928,17 +928,17 @@ Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes 
 - [x] ACID profile includes Quad Brain coding tool while excluding generic passthrough, shell, write, desktop, todo, and graphrag mutation tools
 - [x] Host code can execute same coding-agent path through typed runtime method
 
-## FR-MCP-138 AiCodeReview and AiProjectReview Nuke targets via aiUnit attributes in tests
+## FR-MCP-138 AiCodeReview and AiProjectReview Nuke targets trigger aiUnit via library
 
-AiCodeReview and AiProjectReview Nuke targets SHALL execute `dotnet test` against a dedicated test project containing tests marked with [AiCodeReview] and [AiProjectReview] attributes from aiUnit. The attributes drive the actual AI review execution via the library's xUnit integration and configured strategy. The tests aggregate the prompt and response into MD files under docs/reviews.
+AiCodeReview and AiProjectReview Nuke targets SHALL integrate directly with the aiUnit Frontier library to trigger the AI review (code or project reviewType) from inside the target execution. This replaces any reliance on externally pre-run AI sessions or static artifacts.
 
 **Acceptance Criteria:**
-- A test project (e.g. McpServer.Review.Tests) exists with two tests marked with the respective attributes supplying the review prompts.
-- The tests aggregate the supplied prompt and the review response (via runlog or data) to MD files under docs/reviews.
-- Invoking the Nuke target (e.g. ./build.ps1 AiCodeReview) executes `dotnet test` on the review test project with filter selecting the marked test.
-- Fresh runlog artifacts and MD are produced under the expected locations.
-- Regular `Test` target excludes the review test project.
-- The review tests are distinct from normal unit tests.
+- Execute `dotnet build` of the _build project succeeds with the integration.
+- Invoking the target (e.g. ./build.ps1 AiCodeReview) results in real SendAsync call to a Frontier client resolved from config.
+- Produces a fresh aiunit.review.runlog.v1 JSON under artifacts/aiunit-code-review/ (and project equivalent).
+- Produces a matching combined MD under docs/reviews/ containing the prompt and the findings JSON.
+- Configuration loaded from appsettings.aiunit.json (falling back to the one in PlanReview.Tests) + env vars; uses ActiveStrategy (e.g. claude CLI).
+- The targets do not depend on or execute unit test filters for review triggering (review is distinct from `Test`).
 - Build tests cover client creation and markdown writing with mocks/stubs.
 - All prior tests + new remain green (Byrd gate).
 
@@ -1306,6 +1306,40 @@ The transaction subscriber SHALL log every received transaction message (commit 
 - [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
 - [x] Sink transport errors are swallowed and never break the transaction.
 
+## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
+
+Agents can submit workspace-scoped incidental bug reports without leaving their current task.
+**Acceptance Criteria:**
+- [x] REST, client, REPL, and plugin tool paths all accept the same report contract. (evidence: TriageControllerTests, TriageClientTests, TriageWorkflowTests, TriageMcpToolTests.)
+- [x] Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc. (evidence: TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch.)
+- [x] Intake does not run research or create a TODO synchronously. (evidence: TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch.)
+
+## FR-MCP-TRIAGE-002 Async triage grouping and research
+
+Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.
+**Acceptance Criteria:**
+- [x] Groups are deterministic and workspace-isolated. (evidence: TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline and SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups.)
+- [x] New matching reports reset the 15-minute quiet window. (evidence: TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline.)
+- [x] A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo and TriagePromptTemplateTests.)
+- [x] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo and ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure.)
+- [x] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace. (evidence: TriageServiceTests.SubmitReportAsync_McpServerPluginBug_RoutesToRegisteredMcpServerWorkspace and SubmitReportAsync_McpServerPluginBugWithoutMcpServerWorkspace_StaysInSubmittingWorkspace.)
+
+## FR-MCP-TRIAGE-003 REPL triage parity
+
+The REPL exposes the complete triage surface through client passthrough and typed workflow wrappers.
+**Acceptance Criteria:**
+- [x] client.triage.* works through generic passthrough after adding McpServerClient.Triage. (evidence: TriageClientTests and TriageWorkflowTests.)
+- [x] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces. (evidence: TriageWorkflowTests.)
+- [x] YAML validation, error envelopes, and request/response shapes are covered. (evidence: TriageWorkflowTests and plugin repl-yaml-message schema tests.)
+
+## FR-MCP-TRIAGE-004 Plugin triage skills
+
+All plugin distributions teach agents when and how to use triage.
+**Acceptance Criteria:**
+- [x] Each plugin skill bundle includes triage guidance. (evidence: TriageSkillBundleTests and plugin local skill tests.)
+- [x] Skills say to use triage for incidental bugs, not for the user's active requested fix. (evidence: TriageSkillBundleTests and plugin local skill tests.)
+- [x] Skills explicitly say not to expect immediate resolution and to continue the current task after submission. (evidence: TriageSkillBundleTests and plugin local skill tests.)
+
 ## FR-SUPPORT-010 MCP Context Unification
 
 Local MCP server providing context retrieval, TODO management, repository access, session logging, and ingestion capabilities for AI agent integration.
@@ -1380,5 +1414,11 @@ Whole-session submit shall merge additively: omitted session and turn fields nev
 - [ ] Omitted session fields are never overwritten during additive merge
 - [ ] Omitted turn fields are never overwritten during additive merge
 
+## FR-TEST-002 FR-TEST-002
 
+Placeholder requirement backfilled for TODO link FR-TEST-002.
+
+## FR-WFL-001 Complete Workflow FR
+
+Functional requirement for complete workflow test
 

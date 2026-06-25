@@ -619,6 +619,118 @@ public sealed class TransactionAbortResponse
 }
 
 /// <summary>
+/// Turn-transaction gate status returned by <c>/mcpserver/turntransactions/status</c>.
+/// </summary>
+public sealed class TurnTransactionStatusResponse
+{
+    /// <summary>Whether turn transactions are enabled.</summary>
+    [JsonPropertyName("enabled")]
+    public bool Enabled { get; set; }
+
+    /// <summary>Whether the transaction pipeline is degraded.</summary>
+    [JsonPropertyName("degraded")]
+    public bool Degraded { get; set; }
+
+    /// <summary>Last recorded transaction failure reason.</summary>
+    [JsonPropertyName("lastReason")]
+    public TransactionFailureReason LastReason { get; set; }
+
+    /// <summary>Last transaction identifier associated with the current status.</summary>
+    [JsonPropertyName("lastTransactionId")]
+    public string? LastTransactionId { get; set; }
+
+    /// <summary>Human-readable status message.</summary>
+    [JsonPropertyName("message")]
+    public string Message { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// Persisted transaction pub/sub message state returned by diagnostics endpoints.
+/// </summary>
+public sealed class TransactionPubSubMessageStatus
+{
+    /// <summary>Stable operation identifier.</summary>
+    [JsonPropertyName("operationId")]
+    public string OperationId { get; set; } = string.Empty;
+
+    /// <summary>Transaction identifier associated with the message.</summary>
+    [JsonPropertyName("transactionId")]
+    public string TransactionId { get; set; } = string.Empty;
+
+    /// <summary>Message kind.</summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; set; } = string.Empty;
+
+    /// <summary>Pub/sub topic name.</summary>
+    [JsonPropertyName("topicName")]
+    public string TopicName { get; set; } = string.Empty;
+
+    /// <summary>Subscriber identifier.</summary>
+    [JsonPropertyName("subscriberId")]
+    public string SubscriberId { get; set; } = string.Empty;
+
+    /// <summary>Current persisted message status.</summary>
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    /// <summary>Number of replay or delivery attempts.</summary>
+    [JsonPropertyName("attemptCount")]
+    public int AttemptCount { get; set; }
+
+    /// <summary>Structured result or failure reason.</summary>
+    [JsonPropertyName("reason")]
+    public TransactionFailureReason Reason { get; set; }
+
+    /// <summary>UTC timestamp when the message was created.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset CreatedAtUtc { get; set; }
+
+    /// <summary>UTC timestamp when the message was last updated.</summary>
+    [JsonPropertyName("updatedAtUtc")]
+    public DateTimeOffset UpdatedAtUtc { get; set; }
+}
+
+/// <summary>
+/// Result returned after replaying persisted transaction pub/sub messages.
+/// </summary>
+public sealed class TransactionPubSubReplayResult
+{
+    /// <summary>Number of messages attempted during replay.</summary>
+    [JsonPropertyName("attemptedCount")]
+    public int AttemptedCount { get; set; }
+
+    /// <summary>Number of messages acknowledged during replay.</summary>
+    [JsonPropertyName("acknowledgedCount")]
+    public int AcknowledgedCount { get; set; }
+
+    /// <summary>Number of messages still pending after replay.</summary>
+    [JsonPropertyName("pendingCount")]
+    public int PendingCount { get; set; }
+}
+
+/// <summary>
+/// Result returned after purging completed transaction pub/sub messages.
+/// </summary>
+public sealed class TransactionPubSubRetentionResult
+{
+    /// <summary>Cutoff timestamp used for the purge.</summary>
+    [JsonPropertyName("completedBeforeUtc")]
+    public DateTimeOffset CompletedBeforeUtc { get; set; }
+
+    /// <summary>Maximum number of messages considered for purge.</summary>
+    [JsonPropertyName("maxMessages")]
+    public int MaxMessages { get; set; }
+
+    /// <summary>Number of completed messages purged.</summary>
+    [JsonPropertyName("purgedCount")]
+    public int PurgedCount { get; set; }
+
+    /// <summary>Number of pending messages retained.</summary>
+    [JsonPropertyName("retainedPendingCount")]
+    public int RetainedPendingCount { get; set; }
+}
+
+/// <summary>
 /// Structured transaction failure reason codes shared by keyserver and subscriber APIs.
 /// FR-MCP-124, TR-MCP-TXNAUDIT-001.
 /// </summary>

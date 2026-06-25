@@ -175,6 +175,7 @@ builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(Ag
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
 builder.Services.Configure<AgentProcessManagerOptions>(builder.Configuration.GetSection(AgentProcessManagerOptions.SectionName));
+builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(TriageOptions.SectionName));
 builder.Services.AddInProcessTransactionSecurity(builder.Configuration);
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
@@ -366,6 +367,7 @@ builder.Services.AddSingleton<IRequirementsDocumentService>(sp =>
 builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
+builder.Services.AddTriageServices();
 builder.Services.AddSingleton<VoiceConversationService>();
 builder.Services.AddSingleton<IVoiceConversationService>(sp =>
     new TransactionGatedVoiceConversationService(
@@ -626,6 +628,7 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService<FederationQueuedOperationReplayService>();
     builder.Services.AddHostedService<FederationFanoutSyncService>();
     builder.Services.AddHostedService<TransactionPubSubReplayWorker>();
+    builder.Services.AddHostedService<TriageQueueWorker>();
     // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
     builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }

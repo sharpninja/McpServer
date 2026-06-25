@@ -1,0 +1,102 @@
+using McpServer.Support.Mcp.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace McpServer.Support.Mcp.Controllers;
+
+/// <summary>
+/// FR-MCP-TRIAGE-001..003: REST API for incidental bug triage intake, group status,
+/// flush, and retry operations.
+/// </summary>
+[ApiController]
+[Route("mcpserver/triage")]
+public sealed class TriageController : ControllerBase
+{
+    private readonly ITriageService _triageService;
+
+    /// <summary>Initializes a new instance of the <see cref="TriageController"/> class.</summary>
+    public TriageController(ITriageService triageService)
+    {
+        _triageService = triageService ?? throw new ArgumentNullException(nameof(triageService));
+    }
+
+    /// <summary>FR-MCP-TRIAGE-001: Submit an incidental bug report and return accepted queue state.</summary>
+    [HttpPost("reports")]
+    public async Task<ActionResult<TriageReportSubmitResult>> SubmitReportAsync(
+        [FromBody] TriageReportRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest(new TriageReportSubmitResult { Success = false, Error = "Request body is required." });
+
+        var result = await _triageService.SubmitReportAsync(request, cancellationToken).ConfigureAwait(false);
+        return result.Success
+            ? Accepted(result)
+            : BadRequest(result);
+    }
+
+    /// <summary>FR-MCP-TRIAGE-001: Get a submitted triage report by id.</summary>
+    [HttpGet("reports/{id}")]
+    public async Task<ActionResult<TriageReportDetail>> GetReportAsync(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _triageService.GetReportAsync(id, cancellationToken).ConfigureAwait(false));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-MCP-TRIAGE-002: Query triage groups by optional status and workspace.</summary>
+    [HttpGet("groups")]
+    public async Task<ActionResult<TriageGroupQueryResult>> QueryGroupsAsync(
+        [FromQuery] string? status,
+        [FromQuery] string? workspacePath,
+        CancellationToken cancellationToken)
+    {
+        return Ok(await _triageService.QueryGroupsAsync(status, workspacePath, cancellationToken).ConfigureAwait(false));
+    }
+
+    /// <summary>FR-MCP-TRIAGE-002: Get a triage group by id.</summary>
+    [HttpGet("groups/{id}")]
+    public async Task<ActionResult<TriageGroupDetail>> GetGroupAsync(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _triageService.GetGroupAsync(id, cancellationToken).ConfigureAwait(false));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-MCP-TRIAGE-002: Flush a group so it is eligible for immediate research.</summary>
+    [HttpPost("groups/{id}/flush")]
+    public async Task<ActionResult<TriageGroupDetail>> FlushGroupAsync(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _triageService.FlushGroupAsync(id, cancellationToken).ConfigureAwait(false));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-MCP-TRIAGE-002: Retry a failed triage group.</summary>
+    [HttpPost("groups/{id}/retry")]
+    public async Task<ActionResult<TriageGroupDetail>> RetryGroupAsync(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _triageService.RetryGroupAsync(id, cancellationToken).ConfigureAwait(false));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+}

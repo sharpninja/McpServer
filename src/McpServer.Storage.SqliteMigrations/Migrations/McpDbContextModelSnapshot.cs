@@ -2373,6 +2373,307 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.ToTable("ToolDefinitionTags");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageGroupEntity", b =>
+                {
+                    b.Property<string>("GroupId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedTodoId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EffectiveWorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("FirstReportAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GroupKey")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsMcpServerRelated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LastError")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("LastReportAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("QuietDeadlineUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReportCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("GroupId");
+
+                    b.HasIndex("CreatedTodoId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "GroupKey")
+                        .IsUnique();
+
+                    b.HasIndex("WorkspaceId", "Status", "QuietDeadlineUtc");
+
+                    b.ToTable("TriageGroups");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", b =>
+                {
+                    b.Property<string>("ReportId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AffectedPathsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AffectedSymbolsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Component")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CurrentTodoId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DedupeKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EffectiveWorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ErrorSignature")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EvidenceJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExpectedBehavior")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Fingerprint")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IdempotencyKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ObservedBehavior")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OriginalWorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReporterAgent")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReproductionHintsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Severity")
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TagsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TurnId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ReportId");
+
+                    b.HasIndex("CreatedUtc");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "Fingerprint");
+
+                    b.HasIndex("WorkspaceId", "GroupId");
+
+                    b.HasIndex("WorkspaceId", "IdempotencyKey")
+                        .IsUnique()
+                        .HasFilter("\"IdempotencyKey\" IS NOT NULL");
+
+                    b.ToTable("TriageReports");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageResearchRunEntity", b =>
+                {
+                    b.Property<string>("RunId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("CompletedUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedTodoId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GroupJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Prompt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PromptTemplateId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RawOutput")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResponseJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("StartedUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("RunId");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "GroupId", "StartedUtc");
+
+                    b.ToTable("TriageResearchRuns");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -2945,6 +3246,33 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .IsRequired();
 
                     b.Navigation("ToolDefinition");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageGroupEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageResearchRunEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>

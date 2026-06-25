@@ -72,6 +72,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly ITodoWorkflow? _todoWorkflow;
     private readonly IMemoryWorkflow? _memoryWorkflow;
     private readonly IGraphRagWorkflow? _graphRagWorkflow;
+    private readonly ITriageWorkflow? _triageWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
@@ -84,6 +85,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="memoryWorkflow">The optional memory workflow used to invoke <c>workflow.memory.*</c> methods.</param>
     /// <param name="clientMutationPolicy">The optional policy used to block unsafe generic <c>client.*</c> mutations.</param>
     /// <param name="graphRagWorkflow">The optional GraphRAG workflow used to invoke <c>workflow.graphrag.*</c> methods.</param>
+    /// <param name="triageWorkflow">The optional triage workflow used to invoke <c>workflow.triage.*</c> methods.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
@@ -91,7 +93,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         ITodoWorkflow? todoWorkflow = null,
         IMemoryWorkflow? memoryWorkflow = null,
         IClientMutationPolicy? clientMutationPolicy = null,
-        IGraphRagWorkflow? graphRagWorkflow = null)
+        IGraphRagWorkflow? graphRagWorkflow = null,
+        ITriageWorkflow? triageWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
@@ -99,6 +102,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _todoWorkflow = todoWorkflow;
         _memoryWorkflow = memoryWorkflow;
         _graphRagWorkflow = graphRagWorkflow;
+        _triageWorkflow = triageWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
     }
 
@@ -189,6 +193,11 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             return MarkWorkflowDeprecated(await DispatchMemoryRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
+        if (method.StartsWith(TriageCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return MarkWorkflowDeprecated(await DispatchTriageRequestAsync(request, cancellationToken).ConfigureAwait(false));
+        }
+
         if (method.StartsWith(GraphRagCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
             return MarkWorkflowDeprecated(await DispatchGraphRagRequestAsync(request, cancellationToken).ConfigureAwait(false));
@@ -199,7 +208,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
                      $"Primary namespace: client.<clientName>.<methodName>. " +
-                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
+                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
     }
 
     private static IYamlEnvelope MarkWorkflowDeprecated(IYamlEnvelope response)
@@ -813,6 +822,80 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
     }
 
+    private async Task<IYamlEnvelope> DispatchTriageRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_triageWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Triage workflow is not registered.");
+        }
+
+        var workflow = _triageWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+        var requestArgs = GetRequestArgs(args);
+
+        try
+        {
+            object? result = request.Method switch
+            {
+                TriageCommandShapes.ReportMethod =>
+                    await workflow.ReportAsync(BuildTriageReportRequest(requestArgs), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.GetReportMethod =>
+                    await workflow.GetReportAsync(RequireString(args, requestArgs, "reportId"), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.QueryGroupsMethod =>
+                    await workflow.QueryGroupsAsync(
+                        GetString(requestArgs, "status"),
+                        GetString(requestArgs, "workspacePath"),
+                        cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.GetGroupMethod =>
+                    await workflow.GetGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.FlushGroupMethod =>
+                    await workflow.FlushGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.RetryGroupMethod =>
+                    await workflow.RetryGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
+                _ => null,
+            };
+
+            if (result is null)
+            {
+                return BuildError(
+                    requestId: request.RequestId,
+                    code: "method_not_found",
+                    message: $"Method '{request.Method}' is not routed by the triage workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
     private async Task<IYamlEnvelope> DispatchGraphRagRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
     {
         if (_graphRagWorkflow is null)
@@ -1387,6 +1470,29 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         };
     }
 
+    private static TriageReportRequest BuildTriageReportRequest(IReadOnlyDictionary<string, object?> args) => new()
+    {
+        Title = RequireString(args, "title"),
+        Summary = RequireString(args, "summary"),
+        ObservedBehavior = GetString(args, "observedBehavior"),
+        ExpectedBehavior = GetString(args, "expectedBehavior"),
+        Severity = GetString(args, "severity"),
+        Component = GetString(args, "component"),
+        DedupeKey = GetString(args, "dedupeKey"),
+        ErrorSignature = GetString(args, "errorSignature"),
+        AffectedPaths = GetStringList(args, "affectedPaths"),
+        AffectedSymbols = GetStringList(args, "affectedSymbols"),
+        Evidence = GetStringMap(args, "evidence"),
+        ReproductionHints = GetStringList(args, "reproductionHints"),
+        Tags = GetStringList(args, "tags"),
+        ReporterAgent = GetString(args, "reporterAgent"),
+        SessionId = GetString(args, "sessionId"),
+        TurnId = GetString(args, "turnId"),
+        CurrentTodoId = GetString(args, "currentTodoId"),
+        WorkspacePath = GetString(args, "workspacePath"),
+        IdempotencyKey = GetString(args, "idempotencyKey"),
+    };
+
     private static Dictionary<string, object?> GetRequestArgs(Dictionary<string, object?> args)
     {
         if (!args.TryGetValue("request", out var requestValue) || requestValue is null)
@@ -1874,6 +1980,32 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         return new[] { Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty }
             .Where(v => !string.IsNullOrWhiteSpace(v))
             .ToArray();
+    }
+
+    private static IReadOnlyDictionary<string, string>? GetStringMap(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        var raw = ToStringObjectDictionary(value);
+        if (raw is null || raw.Count == 0)
+        {
+            return null;
+        }
+
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var pair in raw)
+        {
+            var text = Convert.ToString(NormalizeJsonElement(pair.Value), System.Globalization.CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(pair.Key) && !string.IsNullOrWhiteSpace(text))
+            {
+                result[pair.Key] = text!;
+            }
+        }
+
+        return result.Count == 0 ? null : result;
     }
 
     private static IReadOnlyList<ITodoSubtask> GetTodoSubtasks(IReadOnlyDictionary<string, object?> args, string name)

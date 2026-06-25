@@ -54,6 +54,7 @@ public static class McpStdioHost
         builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
         builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
         builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
+        builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(TriageOptions.SectionName));
         var requiredRepoAllowlistPatterns = new[]
         {
             "src/McpServer.Cqrs/**/*.cs",
@@ -207,6 +208,8 @@ public static class McpStdioHost
                 sp.GetRequiredService<IHttpContextAccessor>(),
                 sp.GetRequiredService<IOptions<IngestionOptions>>(),
                 sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
+        builder.Services.AddAgentExecutionStrategies();
+        builder.Services.AddTriageServices();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
         builder.Services.AddScoped<ExternalDocsIngestor>();

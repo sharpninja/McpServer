@@ -57,6 +57,8 @@
     <!-- Phase 10: OpenCode plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
     <Compile Include="..\AgentPluginParity\Plugins\OpenCode_GapTests.cs" />
     <Compile Include="..\AgentPluginParity\Plugins\OpenCode_V4ParityTests.cs" />
+    <!-- TEST-MCP-PLUGIN-TRIAGE-001: TDD coverage for triage guidance added to all MCP plugin bundles. -->
+    <Compile Include="..\AgentPluginParity\Plugins\TriageSkillBundleTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -74,6 +74,17 @@ public sealed class ContextClient : McpClientBase
         return await PostAsync<WebsiteIngestResult>("mcpserver/context/ingest-website", request, cancellationToken);
     }
 
+    /// <summary>
+    /// Streams website ingestion progress for a URL ingestion request via SSE.
+    /// </summary>
+    /// <param name="request">Website ingestion request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async stream of raw SSE <c>data:</c> payloads.</returns>
+    public IAsyncEnumerable<string> StreamIngestWebsiteAsync(
+        WebsiteIngestRequest request,
+        CancellationToken cancellationToken = default)
+        => StreamSseAsync(HttpMethod.Post, "mcpserver/context/ingest-website/stream", request, cancellationToken);
+
     /// <summary>Get GraphRAG status for the active workspace.</summary>
     public async Task<GraphRagStatusResult> GraphRagStatusAsync(CancellationToken cancellationToken = default)
     {

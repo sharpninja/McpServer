@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -275,6 +276,42 @@ public sealed class SessionLogCommitDto
     public List<string>? FilesChanged { get; set; }
 }
 
+/// <summary>Request-object overload payload for querying session logs with all controller filters.</summary>
+public sealed class SessionLogQueryRequest
+{
+    /// <summary>Optional source agent filter.</summary>
+    [JsonPropertyName("agent")]
+    public string? Agent { get; set; }
+
+    /// <summary>Optional agent-definition identifier filter.</summary>
+    [JsonPropertyName("agentDefinitionId")]
+    public string? AgentDefinitionId { get; set; }
+
+    /// <summary>Optional model filter.</summary>
+    [JsonPropertyName("model")]
+    public string? Model { get; set; }
+
+    /// <summary>Optional text search filter.</summary>
+    [JsonPropertyName("text")]
+    public string? Text { get; set; }
+
+    /// <summary>Optional inclusive lower timestamp filter.</summary>
+    [JsonPropertyName("from")]
+    public DateTimeOffset? From { get; set; }
+
+    /// <summary>Optional inclusive upper timestamp filter.</summary>
+    [JsonPropertyName("to")]
+    public DateTimeOffset? To { get; set; }
+
+    /// <summary>Page size limit.</summary>
+    [JsonPropertyName("limit")]
+    public int Limit { get; set; } = 100;
+
+    /// <summary>Page offset.</summary>
+    [JsonPropertyName("offset")]
+    public int Offset { get; set; }
+}
+
 /// <summary>Result of a session log query.</summary>
 public sealed class SessionLogQueryResult
 {
@@ -293,6 +330,18 @@ public sealed class SessionLogQueryResult
     /// <summary>Session log items.</summary>
     [JsonPropertyName("items")]
     public IReadOnlyList<UnifiedSessionLogDto> Items { get; set; } = [];
+}
+
+/// <summary>Result returned by the session-log workspace stamp repair endpoint.</summary>
+public sealed class SessionLogWorkspaceStampRepairResult
+{
+    /// <summary>Number of child rows repaired, or counted when dry-run is enabled.</summary>
+    [JsonPropertyName("repaired")]
+    public int Repaired { get; set; }
+
+    /// <summary>Whether the endpoint ran without persisting changes.</summary>
+    [JsonPropertyName("dryRun")]
+    public bool DryRun { get; set; }
 }
 
 /// <summary>Result of submitting a session log.</summary>

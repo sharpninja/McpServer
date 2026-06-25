@@ -452,7 +452,7 @@ public sealed class TransactionalTodoWorkflowTests
             };
         }
 
-        public TurnTransactionStatusResponse GetStatus()
+        public McpServer.TransactionSecurity.Models.TurnTransactionStatusResponse GetStatus()
             => new()
             {
                 Enabled = true,

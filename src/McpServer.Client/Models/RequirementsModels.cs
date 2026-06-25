@@ -764,6 +764,14 @@ public sealed class UpsertFrTrMappingRequest
     public IReadOnlyList<string> TestIds { get; set; } = [];
 }
 
+/// <summary>Request payload for copying TODO acceptance criteria onto a requirement.</summary>
+public sealed class CopyAcceptanceCriteriaFromTodoRequest
+{
+    /// <summary>TODO identifier whose acceptance criteria should be copied.</summary>
+    [JsonPropertyName("todoId")]
+    public string TodoId { get; set; } = string.Empty;
+}
+
 /// <summary>Result of a mutation operation.</summary>
 public sealed class RequirementsMutationResult
 {

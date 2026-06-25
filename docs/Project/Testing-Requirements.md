@@ -289,10 +289,11 @@
 - TEST-MCP-ACID-006: Committed, bypassed (disabled/non-mutating), aborted, rejected on key-server sign failure fail-closed before mutation, rejected on subscriber commit rejection with rollback, degraded on subscriber unavailable. Coordinator validates key server and subscriber results.
 - TEST-MCP-AIUNIT-001: Add tests in tests/Build.Tests/ covering:
 - Build target properties AiCodeReview and AiProjectReview exist.
-- The McpServer.Review.Tests project builds and contains two Theory tests marked [AiCodeReview] and [AiProjectReview] (with prompt literals).
-- When executed (via the Nuke targets' `dotnet test`), the tests aggregate the prompt and review response to MD under docs/reviews.
-- The Nuke targets run `dotnet test` with filter selecting the marked tests; regular Test excludes the review project.
-- Write helpers for reviews produce correct MD.
+- WriteAiUnitReviewMarkdownFromData produces correct MD file with prompt + response sections.
+- CreateAiUnitClient (internal or exposed) constructs without throw when given valid IConfiguration stub (mocked config for ActiveStrategy, Strategies section); returns non-null client-like object.
+- Optional: stubbed SendAsync test verifies that the returned client is called with correct FrontierRequest shape for given reviewType.
+
+These tests must pass with mocks before the real client construction logic is filled (BDP).
 - TEST-MCP-AUTH-010: Given the auth-token subsystem is initialized, when a request hits a workspace-independent /mcpserver/* route with an unknown or missing API key and no X-Workspace-Path, then WorkspaceAuthMiddleware returns 401. This is a regression test (previously returned 503).
   **Acceptance Criteria:**
   - [x] Unknown API key with unresolved workspace returns 401.
@@ -342,6 +343,9 @@
 - TEST-MCP-PLUGINCORE-001: bats: sync writes manifest+sha256; guard OK after sync; fails on edit; fails on deletion; manifest required; re-sync repairs.
 - TEST-MCP-PLUGINCORE-002: core-guard job fails on a seeded undeclared lib file and passes when declared in PLUGIN-RESIDUAL.txt.
 - TEST-MCP-PLUGINCORE-003: bats: daemon roundtrip with --- terminator; one child serves N sends; auto-restart after kill; concurrent sends; persistent wrapper threads JSON params and honors fallback.
+- TEST-MCP-PLUGIN-TRIAGE-001: Every plugin skill bundle documents when and how to submit triage reports and the async expectation.
+  **Acceptance Criteria:**
+  - [x] Skill tests or repository checks verify every plugin bundle includes triage guidance. (evidence: TriageSkillBundleTests plus Codex manifest.bats, Claude skills.bats, Copilot skills.bats, Cline skills.test.ts, and Grok skills.bats.)
 - TEST-MCP-QBAGENT-001: Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
   **Acceptance Criteria:**
   - [x] With a valid marker, QBAgent binds baseUrl/apiKey and applies the QBAgent profile. (evidence: QBAgentBootstrapperTests valid-marker cases.)
@@ -473,6 +477,9 @@
   **Acceptance Criteria:**
   - [x] Signature verification succeeds for LF-only signed payload on all platforms
   - [x] Test validates cross-platform Environment.NewLine compatibility
+- TEST-MCP-REPL-TRIAGE-001: Full client.triage.* and workflow.triage.* REPL surface works with correct envelopes.
+  **Acceptance Criteria:**
+  - [x] REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors. (evidence: TriageClientTests and TriageWorkflowTests.)
 - TEST-MCP-REQAC-001: Creating FR/TR/TEST with acceptanceCriteria and reading them back returns an identical AcceptanceCriterion list (id/text/isSatisfied/evidence), workspace-scoped.
 - TEST-MCP-REQAC-002: Null or empty acceptanceCriteria round-trips as an empty list with no null leakage.
 - TEST-MCP-REQAC-003: The requirements document renderer emits a deterministic Acceptance Criteria block and the parser tolerates it without throwing.
@@ -501,6 +508,27 @@
 - TEST-MCP-TRACE-LEGACY-002: Traceability audit coverage for completed auth, agent, CQRS, workspace, prompt, voice, desktop, and template rows FR-MCP-026 through FR-MCP-050. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
 - TEST-MCP-TRACE-LEGACY-003: Traceability audit coverage for completed agent-pool, change-event, GitHub, GraphRAG, and Byrd process rows FR-MCP-052 through FR-MCP-083. Completed rows use this explicit audit TEST ID instead of stale planned placeholders when exact older TEST IDs are not documented.
 - TEST-MCP-TRACE-REPL-001: Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
+- TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
+  **Acceptance Criteria:**
+  - [x] Unit and integration tests cover valid and invalid report submission through public surfaces. (evidence: TriageControllerTests, TriageClientTests, TriageWorkflowTests, and TriageMcpToolTests.)
+- TEST-MCP-TRIAGE-002: Deterministic grouping, McpServer workspace routing for core and plugin bugs, and 15-minute quiet-window behavior are verified.
+  **Acceptance Criteria:**
+  - [x] Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior. (evidence: TriageServiceTests matching, workspace, and McpServer routing cases.)
+- TEST-MCP-TRIAGE-003: Research worker invokes configured direct agent with group JSON and prompt.
+  **Acceptance Criteria:**
+- [x] Tests verify dispatch input, configured prompt rendering, and direct-agent options. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo, TriagePromptTemplateTests, and ConfiguredTriageResearchRunnerTests.)
+- TEST-MCP-TRIAGE-004: Schema-valid research output creates exactly one BUG-TRIAGE-### TODO.
+  **Acceptance Criteria:**
+  - [x] Tests verify idempotent TODO creation from valid research output. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo.)
+- TEST-MCP-TRIAGE-005: Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state.
+  **Acceptance Criteria:**
+  - [x] Tests verify failed runs preserve output or errors and do not create TODOs. (evidence: TriageServiceTests.ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure.)
+- TEST-MCP-TRIAGE-006: Multi-workspace isolation prevents cross-workspace grouping and status leakage.
+  **Acceptance Criteria:**
+  - [x] Tests verify query filters and grouping scope never cross workspace boundaries. (evidence: TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups.)
+- TEST-MCP-TRIAGE-REQAC-001: Every new FR/TR/TEST acceptance criterion is referenced by at least one test and passes ValidateTraceability.
+  **Acceptance Criteria:**
+  - [x] Traceability validation covers all triage requirement IDs and acceptance criteria. (evidence: ValidateTraceability target.)
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   **Acceptance Criteria:**
   - [ ] Criterion A
@@ -555,35 +583,4 @@
   **Acceptance Criteria:**
   - [x] PUT request returns 405 Method Not Allowed
   - [x] Response includes Allow: POST header
-- TEST-MCP-163 (WS-A): xUnit v3 migration for remaining v2 projects (PlanReview.Tests, Support.Mcp.Tests etc.) must complete with zero failures/zero skips in focused test runs; custom aiUnit review attributes + Theory tests must continue to execute and produce review markdown; no duplicate type resolution or attribute breakage.
-  **Acceptance Criteria:**
-  - [ ] PlanReview.Tests migrates to xunit.v3 + runner; tests still discover and run (including any review traits).
-  - [ ] Large suites (Support.Mcp.Tests) migrate without introducing new skips or build warnings for xunit.
-  - [ ] aiUnit [AiCodeReview]/[AiProjectReview] Theory tests continue to supply data and write docs/reviews artifacts post-migration.
-  - [ ] Build targets (AiCodeReview, AiProjectReview) and review aggregation logic unaffected.
-- TEST-MCP-164 (WS-A): Review hardening: aiUnit review tests and markdown aggregation must be deterministic, cover more core components (REPL, requirements, auth), produce better-structured findings, and have unit coverage for the aggregation helper itself.
-  **Acceptance Criteria:**
-  - [ ] Aggregation in AiReviewTests prefers supplied prompt/responseJson over fragile file discovery when available.
-  - [ ] At least one new [Ai*Review] test added for a core area (e.g. the repair endpoint or session log).
-  - [ ] Review output MD includes consistent headings, severity counts, and traceability to FR/TR ids where relevant.
-  - [ ] Focused tests for review aggregation pass (no reliance on external ai runlogs for unit verification).
-- TEST-MCP-159: PurgeInvalidPlaceholdersAsync (via repair endpoint) must safely remove all placeholder FR entries whose IDs fail the canonical pattern (wildcards e.g. "FR-SOCIAL-*", free-text word IDs e.g. "A"/"Ensure"/"Keep", null or empty IDs) without throwing on Regex.IsMatch or FK constraint violations on RequirementTraceabilityLinks, and must delete the referencing links before removing the FR rows.
-  **Acceptance Criteria:**
-  - [ ] Unit/integration test seeds DB rows for bad placeholder FRs (with and without links), calls purge, asserts only bad ones removed, links cleaned, no exceptions, good canonical FRs untouched.
-  - [ ] Same coverage for file-backed RequirementsDocumentService purge.
-  - [ ] Repair endpoint returns {purged: N} for the count of removed bad rows.
-- TEST-MCP-160: EfTodoService backfill guards (IsValidRequirementId + Normalize filters) must reject and skip insertion of any FR/TR/TEST id that does not match the canonical regex ^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*-\d+$, including wildcards, word tokens, and free-text extracted from TODO bodies; no placeholder row is ever created for such ids.
-  **Acceptance Criteria:**
-  - [ ] Test creates TODO with functionalRequirements containing ["FR-SOCIAL-*", "A", "Ensure", "FR-ADMIN-001"] (mix good/bad), asserts only canonical ones result in Requirement rows and links.
-  - [ ] Same for technical and test requirements.
-  - [ ] Direct calls to EnsureRequirementAsync with bad id return without insert (no exception, no row added).
-- TEST-MCP-161: listFr (REST + REPL workflow) with area filter must return only matching-area items even when the catalog contains bad/malformed placeholder FRs; after successful purge the bad items are absent from subsequent lists (with or without area filter); area filter must be case-insensitive.
-  **Acceptance Criteria:**
-  - [ ] With bad placeholders present across areas, listFr?area=SOCIAL and REPL listFr(area:"SOCIAL") return only SOCIAL items (no FR-ADMIN leakage).
-  - [ ] Post-purge listFr shows zero bad placeholders.
-  - [ ] Tests cover client-side fallback filter in RequirementsWorkflow.ListFrAsync.
-- TEST-MCP-162: Repair/purge path must not produce generic "internal_server_error" masking for edge bad-data cases; controller must log full exception details and return diagnostic payload; operation must succeed (or surface clean error) even without active turn transaction.
-  **Acceptance Criteria:**
-  - [ ] Repair controller catches exceptions from purge, logs via ILogger with full ex, returns 500 with {error, message, exceptionType} (or succeeds).
-  - [ ] Purge callable via REPL/REST succeeds when txn gate would otherwise block (bypass for repair).
-  - [ ] No unhandled exceptions on null Id, wildcard Id, or linked bad FRs.
+- TEST-WFL-001: Test requirement for complete workflow

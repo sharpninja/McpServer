@@ -483,3 +483,70 @@ public sealed class AgentValidateResult
     [JsonPropertyName("path")]
     public string? Path { get; set; }
 }
+
+/// <summary>
+/// Runtime lifecycle state for a managed agent process.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum AgentProcessStatus
+{
+    /// <summary>The process is starting but has not yet been confirmed as running.</summary>
+    Starting,
+
+    /// <summary>The process is currently running.</summary>
+    Running,
+
+    /// <summary>The process has stopped normally.</summary>
+    Stopped,
+
+    /// <summary>The process terminated with a failure.</summary>
+    Failed,
+}
+
+/// <summary>
+/// Runtime process information for a workspace agent.
+/// </summary>
+public sealed class AgentProcessInfo
+{
+    /// <summary>Operating-system process identifier when available.</summary>
+    [JsonPropertyName("processId")]
+    public int? ProcessId { get; set; }
+
+    /// <summary>Logical agent identifier.</summary>
+    [JsonPropertyName("agentId")]
+    public string AgentId { get; set; } = string.Empty;
+
+    /// <summary>Workspace path that owns the process.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string WorkspacePath { get; set; } = string.Empty;
+
+    /// <summary>UTC timestamp when the process started.</summary>
+    [JsonPropertyName("startedAt")]
+    public DateTime StartedAt { get; set; }
+
+    /// <summary>Current runtime status.</summary>
+    [JsonPropertyName("status")]
+    public AgentProcessStatus Status { get; set; }
+
+    /// <summary>Process exit code when the process has exited.</summary>
+    [JsonPropertyName("exitCode")]
+    public int? ExitCode { get; set; }
+
+    /// <summary>Effective working directory used for process launch.</summary>
+    [JsonPropertyName("workDirectory")]
+    public string? WorkDirectory { get; set; }
+
+    /// <summary>Human-readable error message when launch or execution fails.</summary>
+    [JsonPropertyName("errorMessage")]
+    public string? ErrorMessage { get; set; }
+}
+
+/// <summary>
+/// Result payload for listing running workspace agents.
+/// </summary>
+public sealed class AgentRunningListResult
+{
+    /// <summary>Running agent processes.</summary>
+    [JsonPropertyName("agents")]
+    public IReadOnlyList<AgentProcessInfo> Agents { get; set; } = [];
+}

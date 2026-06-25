@@ -55,7 +55,8 @@ internal static class ReplYamlMessageValidator
         else if (method.StartsWith(SessionLogCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
                  method.StartsWith(TodoCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
                  method.StartsWith(RequirementsCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
-                 method.StartsWith(MemoryCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+                 method.StartsWith(MemoryCommandShapes.MethodNamespace + ".", StringComparison.Ordinal) ||
+                 method.StartsWith(TriageCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
             errors.Add($"No YAML schema is registered for method '{method}'.");
         }
@@ -233,6 +234,38 @@ internal static class ReplYamlMessageValidator
                 OptionalText(source, "text", errors);
                 OptionalText(source, "updatedBy", errors);
             },
+
+            [TriageCommandShapes.ReportMethod] = static (args, errors) =>
+            {
+                var source = UnwrapRequest(args);
+                RequireText(source, "title", errors);
+                RequireText(source, "summary", errors);
+                OptionalText(source, "observedBehavior", errors);
+                OptionalText(source, "expectedBehavior", errors);
+                OptionalText(source, "severity", errors);
+                OptionalText(source, "component", errors);
+                OptionalText(source, "dedupeKey", errors);
+                OptionalText(source, "errorSignature", errors);
+                OptionalStringList(source, "affectedPaths", errors);
+                OptionalStringList(source, "affectedSymbols", errors);
+                OptionalStringList(source, "reproductionHints", errors);
+                OptionalStringList(source, "tags", errors);
+                OptionalText(source, "reporterAgent", errors);
+                OptionalText(source, "sessionId", errors);
+                OptionalText(source, "turnId", errors);
+                OptionalText(source, "currentTodoId", errors);
+                OptionalText(source, "workspacePath", errors);
+                OptionalText(source, "idempotencyKey", errors);
+            },
+            [TriageCommandShapes.GetReportMethod] = static (args, errors) => RequireText(args, "reportId", errors),
+            [TriageCommandShapes.QueryGroupsMethod] = static (args, errors) =>
+            {
+                OptionalText(args, "status", errors);
+                OptionalText(args, "workspacePath", errors);
+            },
+            [TriageCommandShapes.GetGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
+            [TriageCommandShapes.FlushGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
+            [TriageCommandShapes.RetryGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
 
             [RequirementsCommandShapes.ListFrMethod] = static (args, errors) =>
             {

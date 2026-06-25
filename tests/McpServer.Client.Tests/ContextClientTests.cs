@@ -138,4 +138,32 @@ public sealed class ContextClientTests
         Assert.Equal("completed", result.Status);
         Assert.Single(result.UrlResults);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task StreamIngestWebsiteAsync_PostsRequestAndYieldsDataLines()
+    {
+        var sse = "data: {\"event\":\"started\"}\n\ndata: {\"event\":\"completed\"}\n\nevent: done\ndata: \n\n";
+        var handler = new MockHttpHandler(HttpStatusCode.OK, sse, "text/event-stream");
+        using var http = new HttpClient(handler);
+        var client = new ContextClient(http, DefaultOptions);
+
+        var lines = new System.Collections.Generic.List<string>();
+        await foreach (var line in client.StreamIngestWebsiteAsync(new Models.WebsiteIngestRequest
+        {
+            Url = "https://example.com",
+            IncludeSubpages = true,
+            MaxPages = 2
+        }))
+        {
+            lines.Add(line);
+        }
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/context/ingest-website/stream", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"url\":\"https://example.com\"", handler.LastRequestBody!);
+        Assert.Contains("\"includeSubpages\":true", handler.LastRequestBody!);
+        Assert.Equal(2, lines.Count);
+        Assert.Contains("started", lines[0]);
+        Assert.Contains("completed", lines[1]);
+    }
 }

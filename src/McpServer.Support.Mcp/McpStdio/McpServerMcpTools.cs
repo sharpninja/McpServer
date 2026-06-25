@@ -65,6 +65,7 @@ public sealed partial class FwhMcpTools
     private readonly IQuadBrainOrchestrationService? _quadBrainOrchestration;
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
+    private readonly ITriageService? _triageService;
     private readonly ILogger<FwhMcpTools> _logger;
 
 
@@ -98,7 +99,8 @@ public sealed partial class FwhMcpTools
         IOptions<TurnTransactionOptions>? transactionOptions = null,
         IBrainSlotRegistryService? brainSlotRegistry = null,
         IBrainSlotInvocationService? brainSlotInvocation = null,
-        IQuadBrainOrchestrationService? quadBrainOrchestration = null)
+        IQuadBrainOrchestrationService? quadBrainOrchestration = null,
+        ITriageService? triageService = null)
     {
         _logger = logger;
         _db = db;
@@ -130,6 +132,7 @@ public sealed partial class FwhMcpTools
         _quadBrainOrchestration = quadBrainOrchestration;
         _transactionCoordinator = transactionCoordinator;
         _transactionOptions = transactionOptions;
+        _triageService = triageService;
     }
 
     /// <summary>

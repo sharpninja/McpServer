@@ -71,6 +71,67 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    [Fact]
+    public void Build_HasPublishNuGetTarget()
+    {
+        var prop = BuildType.GetProperty("PublishNuGet");
+        Assert.NotNull(prop);
+    }
+
+    [Fact]
+    public void PublishNuGet_UsesNUGET_API_KEYEnvironmentVariable()
+    {
+        Assert.Equal("NUGET_API_KEY", Build.NuGetApiKeyEnvironmentVariable);
+        Assert.Equal("https://api.nuget.org/v3/index.json", Build.NuGetOrgSource);
+    }
+
+    [Fact]
+    public void ResolveNuGetApiKey_ReturnsEnvironmentValue()
+    {
+        var value = Build.ResolveNuGetApiKey(name => name == Build.NuGetApiKeyEnvironmentVariable ? "secret-key" : null);
+
+        Assert.Equal("secret-key", value);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("$(NUGET_API_KEY)")]
+    public void ResolveNuGetApiKey_RejectsMissingOrUnresolvedValue(string? value)
+    {
+        var ex = Assert.Throws<InvalidOperationException>(
+            () => Build.ResolveNuGetApiKey(name => name == Build.NuGetApiKeyEnvironmentVariable ? value : null));
+
+        Assert.Contains(Build.NuGetApiKeyEnvironmentVariable, ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void GetNuGetPackagesToPublish_ReturnsSortedNonSymbolPackages()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"mcpserver-nupkg-test-{Guid.NewGuid():N}");
+
+        try
+        {
+            Directory.CreateDirectory(directory);
+            File.WriteAllText(Path.Combine(directory, "SharpNinja.B.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "ignored.txt"), "");
+
+            var packages = Build.GetNuGetPackagesToPublish((AbsolutePath)directory)
+                .Select(path => path.Name)
+                .ToArray();
+
+            Assert.Equal(["SharpNinja.A.1.0.0.nupkg", "SharpNinja.B.1.0.0.nupkg"], packages);
+        }
+        finally
+        {
+            if (Directory.Exists(directory))
+                Directory.Delete(directory, true);
+        }
+    }
+
     [Theory]
     [InlineData("BuildTrustedThirdParty")]
     [InlineData("PublishTrustedThirdParty")]

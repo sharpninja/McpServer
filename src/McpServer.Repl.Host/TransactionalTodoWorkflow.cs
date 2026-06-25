@@ -354,7 +354,7 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         };
     }
 
-    private bool RequiresMutationTransactions(TurnTransactionStatusResponse status)
+    private bool RequiresMutationTransactions(McpServer.TransactionSecurity.Models.TurnTransactionStatusResponse status)
         => status.Enabled && (_transactionOptions?.Value.RequiredForMutations ?? true);
 
     private long NextSequence()

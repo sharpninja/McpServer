@@ -266,10 +266,88 @@ public sealed class TransactionSecurityClientTests
 
         Assert.IsType<KeyServerClient>(client.KeyServer);
         Assert.IsType<SubscriberClient>(client.Subscriber);
+        Assert.IsType<TurnTransactionsClient>(client.TurnTransactions);
         Assert.Equal(7155, handler.LastRequest!.RequestUri!.Port);
         Assert.True(handler.LastRequest.Headers.TryGetValues("X-Api-Key", out var apiKeys));
         Assert.Contains("rotated-key", apiKeys);
         Assert.Equal("sign-1", result.KeyId);
+    }
+
+    /// <summary>Turn transaction status reads the gate-state endpoint and deserializes failure metadata.</summary>
+    [Fact]
+    public async Task TurnTransactionsClient_GetStatusAsync_GetsStatusEndpoint()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"enabled":true,"degraded":false,"lastReason":0,"lastTransactionId":"txn-1","message":"ok"}""");
+        using var http = new HttpClient(handler);
+        var client = new TurnTransactionsClient(http, DefaultOptions);
+
+        var result = await client.GetStatusAsync();
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/turntransactions/status", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.True(result.Enabled);
+        Assert.Equal("txn-1", result.LastTransactionId);
+    }
+
+    /// <summary>Pub/sub diagnostics append the maxMessages query value and deserialize message status rows.</summary>
+    [Fact]
+    public async Task TurnTransactionsClient_GetPubSubStatusAsync_AppendsMaxMessages()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """[{"operationId":"op-1","transactionId":"txn-1","kind":"commit","topicName":"turns","subscriberId":"sub-1","status":"pending","attemptCount":2,"reason":20,"createdAtUtc":"2026-06-11T12:00:00Z","updatedAtUtc":"2026-06-11T12:01:00Z"}]""");
+        using var http = new HttpClient(handler);
+        var client = new TurnTransactionsClient(http, DefaultOptions);
+
+        var result = await client.GetPubSubStatusAsync(maxMessages: 7);
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/turntransactions/pubsub/status", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("maxMessages=7", handler.LastRequest.RequestUri.Query);
+        var message = Assert.Single(result);
+        Assert.Equal("op-1", message.OperationId);
+        Assert.Equal(TransactionFailureReason.CommitTimeout, message.Reason);
+    }
+
+    /// <summary>Pub/sub replay posts to the replay endpoint and deserializes replay counts.</summary>
+    [Fact]
+    public async Task TurnTransactionsClient_ReplayPubSubAsync_PostsReplayEndpoint()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"attemptedCount":3,"acknowledgedCount":2,"pendingCount":1}""");
+        using var http = new HttpClient(handler);
+        var client = new TurnTransactionsClient(http, DefaultOptions);
+
+        var result = await client.ReplayPubSubAsync(maxMessages: 3);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/turntransactions/pubsub/replay", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("maxMessages=3", handler.LastRequest.RequestUri.Query);
+        Assert.Equal(2, result.AcknowledgedCount);
+    }
+
+    /// <summary>Pub/sub retention purge posts cutoff and limit query values.</summary>
+    [Fact]
+    public async Task TurnTransactionsClient_PurgePubSubRetentionAsync_PostsRetentionEndpoint()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"completedBeforeUtc":"2026-06-11T12:00:00Z","maxMessages":5,"purgedCount":4,"retainedPendingCount":1}""");
+        using var http = new HttpClient(handler);
+        var client = new TurnTransactionsClient(http, DefaultOptions);
+
+        var result = await client.PurgePubSubRetentionAsync(
+            DateTimeOffset.Parse("2026-06-11T12:00:00Z"),
+            maxMessages: 5);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/turntransactions/pubsub/retention/purge", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("completedBeforeUtc=", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("maxMessages=5", handler.LastRequest.RequestUri.Query);
+        Assert.Equal(4, result.PurgedCount);
     }
 
     private static TransactionManifestSignRequest CreateSignRequest()

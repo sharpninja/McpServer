@@ -16,7 +16,7 @@
         "requestId": { "type": "string", "minLength": 1 },
         "method": {
           "type": "string",
-          "pattern": "^(client\\.[A-Za-z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*|workflow\\.(sessionlog|todo|memory|requirements|graphrag)\\..+)$"
+          "pattern": "^(client\\.[A-Za-z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*|workflow\\.(sessionlog|todo|memory|requirements|graphrag|triage)\\..+)$"
         },
         "params": { "type": "object", "additionalProperties": true }
       }
@@ -27,7 +27,8 @@
     { "$ref": "#/$defs/todoRules" },
     { "$ref": "#/$defs/memoryRules" },
     { "$ref": "#/$defs/requirementsRules" },
-    { "$ref": "#/$defs/graphRagRules" }
+    { "$ref": "#/$defs/graphRagRules" },
+    { "$ref": "#/$defs/triageRules" }
   ],
   "$defs": {
     "stringArray": {
@@ -40,6 +41,32 @@
     "status": { "type": "string", "enum": ["pending", "in_progress", "completed", "deferred"] },
     "emptyParams": {
       "type": "object",
+      "additionalProperties": true
+    },
+    "triageReportParams": {
+      "type": "object",
+      "required": ["title", "summary"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 },
+        "workspacePath": { "type": "string" },
+        "observedBehavior": { "type": "string" },
+        "expectedBehavior": { "type": "string" },
+        "severity": { "type": "string" },
+        "component": { "type": "string" },
+        "dedupeKey": { "type": "string" },
+        "errorSignature": { "type": "string" },
+        "affectedPaths": { "$ref": "#/$defs/stringArray" },
+        "affectedSymbols": { "$ref": "#/$defs/stringArray" },
+        "reproductionHints": { "$ref": "#/$defs/stringArray" },
+        "tags": { "$ref": "#/$defs/stringArray" },
+        "evidence": { "type": "object", "additionalProperties": true },
+        "reporterAgent": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "turnId": { "type": "string" },
+        "currentTodoId": { "type": "string" },
+        "idempotencyKey": { "type": "string" }
+      },
       "additionalProperties": true
     },
     "todoSubtask": {
@@ -751,6 +778,76 @@
                         }
                       }
                     },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "triageRules": {
+      "allOf": [
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.report" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": { "params": { "$ref": "#/$defs/triageReportParams" } }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.getReport" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["reportId"],
+                    "properties": { "reportId": { "type": "string", "minLength": 1 } },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.queryGroups" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "workspacePath": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.triage.getGroup", "workflow.triage.flushGroup", "workflow.triage.retryGroup"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["groupId"],
+                    "properties": { "groupId": { "type": "string", "minLength": 1 } },
                     "additionalProperties": true
                   }
                 }

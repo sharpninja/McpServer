@@ -120,6 +120,15 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-QUAD-001: Durable external brain-slot invocation audit rows.</summary>
     public DbSet<BrainSlotInvocationEntity> BrainSlotInvocations => Set<BrainSlotInvocationEntity>();
 
+    /// <summary>TR-MCP-TRIAGE-001: Durable incidental bug triage reports.</summary>
+    public DbSet<TriageReportEntity> TriageReports => Set<TriageReportEntity>();
+
+    /// <summary>TR-MCP-TRIAGE-001: Durable deterministic triage report groups.</summary>
+    public DbSet<TriageGroupEntity> TriageGroups => Set<TriageGroupEntity>();
+
+    /// <summary>TR-MCP-TRIAGE-001: Durable triage research run audit rows.</summary>
+    public DbSet<TriageResearchRunEntity> TriageResearchRuns => Set<TriageResearchRunEntity>();
+
     /// <summary>FR-MCP-103: Enrolled local federation proxies known by the hub.</summary>
     public DbSet<FederationProxyEntity> FederationProxies => Set<FederationProxyEntity>();
 
@@ -449,6 +458,29 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<TriageReportEntity>(e =>
+        {
+            e.HasIndex(x => new { x.WorkspaceId, x.GroupId });
+            e.HasIndex(x => new { x.WorkspaceId, x.Fingerprint });
+            e.HasIndex(x => new { x.WorkspaceId, x.IdempotencyKey })
+                .IsUnique()
+                .HasFilter(TriageNullableUniqueIndexFilter(nameof(TriageReportEntity.IdempotencyKey)));
+            e.HasIndex(x => x.CreatedUtc);
+        });
+
+        modelBuilder.Entity<TriageGroupEntity>(e =>
+        {
+            e.HasIndex(x => new { x.WorkspaceId, x.GroupKey }).IsUnique();
+            e.HasIndex(x => new { x.WorkspaceId, x.Status, x.QuietDeadlineUtc });
+            e.HasIndex(x => x.CreatedTodoId);
+        });
+
+        modelBuilder.Entity<TriageResearchRunEntity>(e =>
+        {
+            e.HasIndex(x => new { x.WorkspaceId, x.GroupId, x.StartedUtc });
+            e.HasIndex(x => x.Status);
+        });
+
         modelBuilder.Entity<FederationProxyEntity>(e =>
         {
             e.HasIndex(x => x.Status);
@@ -543,6 +575,9 @@ public sealed class McpDbContext : DbContext
             || (!string.IsNullOrEmpty(_workspaceId)
                 && e.Scope == MemoryEntity.WorkspaceScope
                 && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<TriageReportEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<TriageGroupEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<TriageResearchRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         // TR-MCP-QUAD-001: the QuadBrain subsystem is GLOBAL (one quad shared by every workspace and session).
         // Brain-slot definitions and their invocation audit rows are stored under the global workspace
         // (WorkspaceId == "") and visible in every workspace context; the per-session dimension is carried by the
@@ -578,6 +613,9 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<MemoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<BrainSlotInvocationEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<TriageReportEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<TriageGroupEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<TriageResearchRunEntity>().HasIndex(e => e.WorkspaceId);
 
         ApplyDbFkConventions(modelBuilder);
     }
@@ -611,6 +649,14 @@ public sealed class McpDbContext : DbContext
         if (providerName.Contains("SqlServer", StringComparison.OrdinalIgnoreCase))
             return "[Enabled] = 1 AND [IsDeleted] = 0";
         return "\"Enabled\" = 1 AND \"IsDeleted\" = 0";
+    }
+
+    private string TriageNullableUniqueIndexFilter(string propertyName)
+    {
+        var providerName = Database.ProviderName ?? string.Empty;
+        if (providerName.Contains("SqlServer", StringComparison.OrdinalIgnoreCase))
+            return $"[{propertyName}] IS NOT NULL";
+        return $"\"{propertyName}\" IS NOT NULL";
     }
 
     private static void ApplyWorkspaceForeignKeys(ModelBuilder modelBuilder)

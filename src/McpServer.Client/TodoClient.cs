@@ -257,6 +257,60 @@ public sealed class TodoClient : McpClientBase
     public IAsyncEnumerable<string> StreamPlanAsync(string id, CancellationToken cancellationToken = default)
         => StreamSseAsync($"mcpserver/todo/{Encode(id)}/prompt/plan", cancellationToken);
 
+    /// <summary>
+    /// Enqueues a TODO status prompt through the agent-pool one-shot queue.
+    /// </summary>
+    /// <param name="id">TODO item ID.</param>
+    /// <param name="request">Optional one-shot queue overrides.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Queue job metadata.</returns>
+    public async Task<AgentPoolEnqueueResult> QueueStatusPromptAsync(
+        string id,
+        AgentPoolOneShotRequest? request = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<AgentPoolEnqueueResult>(
+            $"mcpserver/todo/{Encode(id)}/prompt/status/queue",
+            request,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Enqueues a TODO implementation prompt through the agent-pool one-shot queue.
+    /// </summary>
+    /// <param name="id">TODO item ID.</param>
+    /// <param name="request">Optional one-shot queue overrides.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Queue job metadata.</returns>
+    public async Task<AgentPoolEnqueueResult> QueueImplementPromptAsync(
+        string id,
+        AgentPoolOneShotRequest? request = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<AgentPoolEnqueueResult>(
+            $"mcpserver/todo/{Encode(id)}/prompt/implement/queue",
+            request,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Enqueues a TODO planning prompt through the agent-pool one-shot queue.
+    /// </summary>
+    /// <param name="id">TODO item ID.</param>
+    /// <param name="request">Optional one-shot queue overrides.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Queue job metadata.</returns>
+    public async Task<AgentPoolEnqueueResult> QueuePlanPromptAsync(
+        string id,
+        AgentPoolOneShotRequest? request = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<AgentPoolEnqueueResult>(
+            $"mcpserver/todo/{Encode(id)}/prompt/plan/queue",
+            request,
+            cancellationToken);
+    }
+
     private static string Encode(string value) => System.Uri.EscapeDataString(value);
 
     private static string BuildQueryString(string? keyword, string? priority, string? section, string? id, bool? done)

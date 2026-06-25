@@ -389,6 +389,55 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task CopyFrAcceptanceCriteriaFromTodoAsync_PostsCopyEndpoint()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"id":"FR-MCP-001","title":"Title","body":"Body","acceptanceCriteria":[{"id":"AC-1","text":"Copied","isSatisfied":false}]}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.CopyFrAcceptanceCriteriaFromTodoAsync(
+            "FR/MCP/001",
+            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" });
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/fr/FR%2FMCP%2F001/acceptance-criteria/copy-from-todo", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"todoId\":\"TODO-001\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Equal("Copied", Assert.Single(result.AcceptanceCriteria!).Text);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task CopyTrAndTestAcceptanceCriteriaFromTodoAsync_PostExpectedKindRoutes()
+    {
+        var trHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"id":"TR-MCP-001","title":"TR","body":"Body","acceptanceCriteria":[]}""");
+        using var trHttp = new HttpClient(trHandler);
+        var trClient = new RequirementsClient(trHttp, DefaultOptions);
+
+        await trClient.CopyTrAcceptanceCriteriaFromTodoAsync(
+            "TR-MCP-001",
+            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" });
+
+        Assert.Equal(HttpMethod.Post, trHandler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/tr/TR-MCP-001/acceptance-criteria/copy-from-todo", trHandler.LastRequest.RequestUri!.AbsolutePath);
+
+        var testHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"id":"TEST-MCP-001","condition":"Condition","acceptanceCriteria":[]}""");
+        using var testHttp = new HttpClient(testHandler);
+        var testClient = new RequirementsClient(testHttp, DefaultOptions);
+
+        await testClient.CopyTestAcceptanceCriteriaFromTodoAsync(
+            "TEST-MCP-001",
+            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" });
+
+        Assert.Equal(HttpMethod.Post, testHandler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/test/TEST-MCP-001/acceptance-criteria/copy-from-todo", testHandler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task UpsertMappingAsync_PutsMappingPayload()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"frId":"FR-MCP-001","trIds":["TR-MCP-001","TR-MCP-002"]}""");

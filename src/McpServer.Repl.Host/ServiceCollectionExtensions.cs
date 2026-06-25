@@ -59,6 +59,13 @@ public static class ServiceCollectionExtensions
             return new McpServer.Repl.Core.MemoryWorkflow(clientFactory.Memory);
         });
 
+        // Register triage workflow for the workflow.triage namespace.
+        services.AddSingleton<ITriageWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new McpServer.Repl.Core.TriageWorkflow(clientFactory.Triage);
+        });
+
         // Register requirements workflow so agent plugins can invoke the
         // workflow.requirements namespace without falling back to raw REST.
         services.AddSingleton<IRequirementsWorkflow>(sp =>
@@ -102,7 +109,8 @@ public static class ServiceCollectionExtensions
                 sp.GetRequiredService<ITodoWorkflow>(),
                 sp.GetRequiredService<IMemoryWorkflow>(),
                 sp.GetRequiredService<IClientMutationPolicy>(),
-                sp.GetRequiredService<IGraphRagWorkflow>()));
+                sp.GetRequiredService<IGraphRagWorkflow>(),
+                sp.GetRequiredService<ITriageWorkflow>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

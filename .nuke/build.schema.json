@@ -37,6 +37,7 @@
         "PackReplTool",
         "Publish",
         "PublishAgent",
+        "PublishNuGet",
         "PublishTrustedThirdParty",
         "Restore",
         "StartServer",

@@ -245,4 +245,71 @@ public sealed class AgentClientTests
         Assert.Contains("/mcpserver/agents/validate", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);
         Assert.Contains("workspace=%2Frepo", handler.LastRequest.RequestUri.Query, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task LaunchAgentAsync_PostsLaunchEndpoint()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"processId":1234,"agentId":"cursor","workspacePath":"/repo","startedAt":"2026-06-25T12:00:00Z","status":"Running","workDirectory":"/repo"}""");
+        using var http = new HttpClient(handler);
+        var client = new AgentClient(http, DefaultOptions);
+
+        var result = await client.LaunchAgentAsync("cursor", "/repo");
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/agents/cursor/launch", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);
+        Assert.Contains("workspace=%2Frepo", handler.LastRequest.RequestUri.Query, StringComparison.Ordinal);
+        Assert.Equal(1234, result.ProcessId);
+        Assert.Equal(AgentProcessStatus.Running, result.Status);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task StopAgentAsync_PostsStopEndpoint()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
+        using var http = new HttpClient(handler);
+        var client = new AgentClient(http, DefaultOptions);
+
+        var result = await client.StopAgentAsync("cursor", "/repo");
+
+        Assert.True(result.Success);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/agents/cursor/stop", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);
+        Assert.Contains("workspace=%2Frepo", handler.LastRequest.RequestUri.Query, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetProcessStatusAsync_GetsProcessStatusEndpoint()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"processId":1234,"agentId":"cursor","workspacePath":"/repo","startedAt":"2026-06-25T12:00:00Z","status":"Running","workDirectory":"/repo"}""");
+        using var http = new HttpClient(handler);
+        var client = new AgentClient(http, DefaultOptions);
+
+        var result = await client.GetProcessStatusAsync("cursor", "/repo");
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/agents/cursor/process-status", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);
+        Assert.Contains("workspace=%2Frepo", handler.LastRequest.RequestUri.Query, StringComparison.Ordinal);
+        Assert.Equal(AgentProcessStatus.Running, result.Status);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ListRunningAgentsAsync_GetsRunningEndpoint()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"agents":[{"processId":1234,"agentId":"cursor","workspacePath":"/repo","startedAt":"2026-06-25T12:00:00Z","status":"Running","workDirectory":"/repo"}]}""");
+        using var http = new HttpClient(handler);
+        var client = new AgentClient(http, DefaultOptions);
+
+        var result = await client.ListRunningAgentsAsync("/repo");
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/agents/running", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);
+        Assert.Contains("workspace=%2Frepo", handler.LastRequest.RequestUri.Query, StringComparison.Ordinal);
+        Assert.Equal("cursor", Assert.Single(result.Agents).AgentId);
+    }
 }

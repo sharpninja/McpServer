@@ -188,6 +188,33 @@ public sealed class RequirementsClient : McpClientBase
         return await DeleteAsync<RequirementsMutationResult>($"mcpserver/requirements/test/{Uri.EscapeDataString(id)}", cancellationToken);
     }
 
+    /// <summary>Copies a TODO item's acceptance criteria onto a functional requirement.</summary>
+    public async Task<FrEntry> CopyFrAcceptanceCriteriaFromTodoAsync(
+        string id,
+        CopyAcceptanceCriteriaFromTodoRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await CopyAcceptanceCriteriaFromTodoAsync<FrEntry>("fr", id, request, cancellationToken);
+    }
+
+    /// <summary>Copies a TODO item's acceptance criteria onto a technical requirement.</summary>
+    public async Task<TrEntry> CopyTrAcceptanceCriteriaFromTodoAsync(
+        string id,
+        CopyAcceptanceCriteriaFromTodoRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await CopyAcceptanceCriteriaFromTodoAsync<TrEntry>("tr", id, request, cancellationToken);
+    }
+
+    /// <summary>Copies a TODO item's acceptance criteria onto a testing requirement.</summary>
+    public async Task<TestEntry> CopyTestAcceptanceCriteriaFromTodoAsync(
+        string id,
+        CopyAcceptanceCriteriaFromTodoRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await CopyAcceptanceCriteriaFromTodoAsync<TestEntry>("test", id, request, cancellationToken);
+    }
+
     /// <summary>Lists all FR-to-TR mapping rows.</summary>
     public async Task<IReadOnlyList<FrTrMapping>> ListMappingsAsync(CancellationToken cancellationToken = default)
     {
@@ -252,6 +279,18 @@ public sealed class RequirementsClient : McpClientBase
     public async Task<RequirementsIngestResult> IngestAsync(RequirementsIngestRequest? request = null, CancellationToken cancellationToken = default)
     {
         return await PostAsync<RequirementsIngestResult>("mcpserver/requirements/ingest", request, cancellationToken);
+    }
+
+    private async Task<TRequirement> CopyAcceptanceCriteriaFromTodoAsync<TRequirement>(
+        string kind,
+        string id,
+        CopyAcceptanceCriteriaFromTodoRequest request,
+        CancellationToken cancellationToken)
+    {
+        return await PostAsync<TRequirement>(
+            $"mcpserver/requirements/{Uri.EscapeDataString(kind)}/{Uri.EscapeDataString(id)}/acceptance-criteria/copy-from-todo",
+            request,
+            cancellationToken);
     }
 
     private static string BuildQueryUrl(string path, params (string Name, string? Value)[] query)

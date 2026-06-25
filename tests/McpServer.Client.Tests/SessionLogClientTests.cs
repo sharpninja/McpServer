@@ -47,6 +47,43 @@ public sealed class SessionLogClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task QueryAsync_RequestObjectPassesAgentDefinitionFilter()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"totalCount":0,"limit":25,"offset":5,"items":[]}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        await client.QueryAsync(new SessionLogQueryRequest
+        {
+            Agent = "Codex",
+            AgentDefinitionId = "mcpserver-triage",
+            Limit = 25,
+            Offset = 5,
+        });
+
+        Assert.Contains("agent=Codex", handler.LastRequest!.RequestUri!.Query);
+        Assert.Contains("agentDefinitionId=mcpserver-triage", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("limit=25", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("offset=5", handler.LastRequest.RequestUri.Query);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RepairWorkspaceStampsAsync_PostsRepairEndpoint()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"repaired":12,"dryRun":true}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        var result = await client.RepairWorkspaceStampsAsync(dryRun: true);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/sessionlog/repair-workspace-stamps", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("dryRun=true", handler.LastRequest.RequestUri.Query);
+        Assert.Equal(12, result.Repaired);
+        Assert.True(result.DryRun);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task AppendDialogAsync_PostsItems()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"agent":"Copilot","sessionId":"s1","requestId":"r1","totalDialogCount":2}""");

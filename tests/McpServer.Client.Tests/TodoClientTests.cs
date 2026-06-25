@@ -571,6 +571,54 @@ public sealed class TodoClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task QueueStatusPromptAsync_PostsQueueEndpoint()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"jobId":"job-status","agentName":"triage","renderedPrompt":"status"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.QueueStatusPromptAsync(
+            "MVP-001",
+            new Models.AgentPoolOneShotRequest { AgentName = "triage", Context = Models.AgentPoolOneShotContext.Status });
+
+        Assert.True(result.Success);
+        Assert.Equal("job-status", result.JobId);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo/MVP-001/prompt/status/queue", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"agentName\":\"triage\"", handler.LastRequestBody!, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task QueueImplementPromptAsync_PostsQueueEndpoint()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"jobId":"job-implement","agentName":"builder","renderedPrompt":"implement"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.QueueImplementPromptAsync("MVP-001");
+
+        Assert.True(result.Success);
+        Assert.Equal("job-implement", result.JobId);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo/MVP-001/prompt/implement/queue", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task QueuePlanPromptAsync_PostsQueueEndpoint()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"jobId":"job-plan","agentName":"planner","renderedPrompt":"plan"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.QueuePlanPromptAsync("MVP-001");
+
+        Assert.True(result.Success);
+        Assert.Equal("job-plan", result.JobId);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo/MVP-001/prompt/plan/queue", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task StreamSse_WithoutApiKey_ThrowsInvalidOperation()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "", "text/event-stream");

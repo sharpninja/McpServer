@@ -192,6 +192,74 @@ public sealed class AgentClient : McpClientBase
     }
 
     /// <summary>
+    /// Launches a configured agent runtime for a workspace.
+    /// </summary>
+    /// <param name="agentId">Agent identifier.</param>
+    /// <param name="workspacePath">Optional workspace query parameter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Runtime process information for the launched agent.</returns>
+    public async Task<AgentProcessInfo> LaunchAgentAsync(
+        string agentId,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<AgentProcessInfo>(
+            $"mcpserver/agents/{Encode(agentId)}/launch{BuildWorkspaceQuery(workspacePath)}",
+            null,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Stops a running configured agent runtime for a workspace.
+    /// </summary>
+    /// <param name="agentId">Agent identifier.</param>
+    /// <param name="workspacePath">Optional workspace query parameter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Mutation result indicating whether the agent was stopped.</returns>
+    public async Task<AgentMutationResult> StopAgentAsync(
+        string agentId,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<AgentMutationResult>(
+            $"mcpserver/agents/{Encode(agentId)}/stop{BuildWorkspaceQuery(workspacePath)}",
+            null,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Gets runtime process status for the specified workspace agent.
+    /// </summary>
+    /// <param name="agentId">Agent identifier.</param>
+    /// <param name="workspacePath">Optional workspace query parameter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Runtime process information.</returns>
+    public async Task<AgentProcessInfo> GetProcessStatusAsync(
+        string agentId,
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<AgentProcessInfo>(
+            $"mcpserver/agents/{Encode(agentId)}/process-status{BuildWorkspaceQuery(workspacePath)}",
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Lists running agent runtimes, optionally filtered to a workspace.
+    /// </summary>
+    /// <param name="workspacePath">Optional workspace query parameter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Running agent process list.</returns>
+    public async Task<AgentRunningListResult> ListRunningAgentsAsync(
+        string? workspacePath = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<AgentRunningListResult>(
+            $"mcpserver/agents/running{BuildWorkspaceQuery(workspacePath)}",
+            cancellationToken);
+    }
+
+    /// <summary>
     /// Logs an agent lifecycle event.
     /// </summary>
     /// <param name="agentId">Agent identifier in the route.</param>

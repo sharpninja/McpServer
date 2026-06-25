@@ -70,6 +70,49 @@ templates:
       Please follow all workspace conventions and log your actions.
 
       '
+  triage-research-bug-report:
+    title: Triage Research Bug Report
+    category: system
+    tags:
+    - triage
+    - bug
+    - research
+    description: Prompt for the configured direct triage agent that researches grouped incidental bug reports and returns schema-valid JSON.
+    engine: handlebars
+    variables:
+    - name: groupJson
+      description: Serialized triage group detail including reports.
+      required: true
+    - name: groupId
+      description: Triage group identifier.
+      required: false
+    - name: workspacePath
+      description: Effective workspace path for the group.
+      required: false
+    - name: reportCount
+      description: Number of reports currently in the group.
+      required: false
+    content: |
+      You are the configured MCP Server bug triage agent.
+
+      Research the grouped incidental bug reports below. Return only schema-valid JSON with this shape:
+
+      {
+        "title": "short actionable bug title",
+        "summary": "concise researched summary",
+        "severity": "critical|high|medium|low",
+        "acceptanceCriteria": ["observable criterion"],
+        "implementationNotes": ["optional implementation note"]
+      }
+
+      Do not create TODOs yourself. Do not include markdown or prose outside the JSON object.
+
+      Group id: {{groupId}}
+      Workspace: {{workspacePath}}
+      Report count: {{reportCount}}
+
+      Group JSON:
+      {{{groupJson}}}
   todo-status-prompt:
     title: TODO Status Prompt
     category: system

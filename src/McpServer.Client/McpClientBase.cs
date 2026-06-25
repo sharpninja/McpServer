@@ -468,13 +468,32 @@ public abstract class McpClientBase
     /// <returns>An async stream of text lines from the SSE response.</returns>
     /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
     /// <exception cref="McpServerException">Any non-success HTTP status.</exception>
+    protected IAsyncEnumerable<string> StreamSseAsync(
+        string path, CancellationToken cancellationToken)
+        => StreamSseAsync(HttpMethod.Get, path, null, cancellationToken);
+
+    /// <summary>
+    /// Sends an SSE (Server-Sent Events) request using the supplied HTTP method and
+    /// optional JSON body, then yields each <c>data:</c> line as a string. The stream
+    /// terminates when the server sends an <c>event: done</c> message or closes the connection.
+    /// </summary>
+    /// <param name="method">HTTP method used for the streaming request.</param>
+    /// <param name="path">Relative API path.</param>
+    /// <param name="body">Optional JSON body sent with the streaming request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async stream of text lines from the SSE response.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
+    /// <exception cref="McpServerException">Any non-success HTTP status.</exception>
     protected async IAsyncEnumerable<string> StreamSseAsync(
-        string path, [EnumeratorCancellation] CancellationToken cancellationToken)
+        HttpMethod method,
+        string path,
+        object? body,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         EnsureAuthenticated();
 
         var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
-        using var request = new HttpRequestMessage(HttpMethod.Get, uri);
+        using var request = new HttpRequestMessage(method, uri);
         if (!string.IsNullOrWhiteSpace(BearerToken))
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
         else if (!string.IsNullOrWhiteSpace(ApiKey))
@@ -483,14 +502,17 @@ public abstract class McpClientBase
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
         AppendCustomHeaders(request);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
+        if (body is not null)
+            request.Content = new StringContent(
+                JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
 
         using var response = await _http.SendAsync(
             request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
-            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
-            ThrowForStatus(response.StatusCode, body);
+            var errorContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
+            ThrowForStatus(response.StatusCode, errorContent);
         }
 
         using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(true);

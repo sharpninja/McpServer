@@ -45,14 +45,36 @@ public sealed class SessionLogClient : McpClientBase
         DateTimeOffset? from = null, DateTimeOffset? to = null,
         int limit = 100, int offset = 0, CancellationToken cancellationToken = default)
     {
+        return await QueryAsync(
+            new SessionLogQueryRequest
+            {
+                Agent = agent,
+                Model = model,
+                Text = text,
+                From = from,
+                To = to,
+                Limit = limit,
+                Offset = offset,
+            },
+            cancellationToken);
+    }
+
+    /// <summary>Query session logs with the full controller filter surface.</summary>
+    public async Task<SessionLogQueryResult> QueryAsync(
+        SessionLogQueryRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
         var parts = new List<string>();
-        if (agent is not null) parts.Add($"agent={Uri.EscapeDataString(agent)}");
-        if (model is not null) parts.Add($"model={Uri.EscapeDataString(model)}");
-        if (text is not null) parts.Add($"text={Uri.EscapeDataString(text)}");
-        if (from.HasValue) parts.Add($"from={Uri.EscapeDataString(from.Value.ToString("o"))}");
-        if (to.HasValue) parts.Add($"to={Uri.EscapeDataString(to.Value.ToString("o"))}");
-        if (limit != 100) parts.Add($"limit={limit}");
-        if (offset != 0) parts.Add($"offset={offset}");
+        if (request.Agent is not null) parts.Add($"agent={Uri.EscapeDataString(request.Agent)}");
+        if (request.AgentDefinitionId is not null) parts.Add($"agentDefinitionId={Uri.EscapeDataString(request.AgentDefinitionId)}");
+        if (request.Model is not null) parts.Add($"model={Uri.EscapeDataString(request.Model)}");
+        if (request.Text is not null) parts.Add($"text={Uri.EscapeDataString(request.Text)}");
+        if (request.From.HasValue) parts.Add($"from={Uri.EscapeDataString(request.From.Value.ToString("o"))}");
+        if (request.To.HasValue) parts.Add($"to={Uri.EscapeDataString(request.To.Value.ToString("o"))}");
+        if (request.Limit != 100) parts.Add($"limit={request.Limit}");
+        if (request.Offset != 0) parts.Add($"offset={request.Offset}");
         var qs = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
         return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken);
     }
@@ -64,6 +86,22 @@ public sealed class SessionLogClient : McpClientBase
     {
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/dialog";
         return await PostAsync<DialogAppendResult>(path, items, cancellationToken);
+    }
+
+    /// <summary>
+    /// Repairs session-log child rows whose workspace stamp drifted from their parent session.
+    /// </summary>
+    /// <param name="dryRun">When true, counts affected rows without persisting changes.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Repair count and dry-run flag.</returns>
+    public async Task<SessionLogWorkspaceStampRepairResult> RepairWorkspaceStampsAsync(
+        bool dryRun = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<SessionLogWorkspaceStampRepairResult>(
+            $"mcpserver/sessionlog/repair-workspace-stamps?dryRun={dryRun.ToString().ToLowerInvariant()}",
+            null,
+            cancellationToken);
     }
 
     /// <summary>
@@ -195,4 +233,3 @@ public sealed class SessionLogClient : McpClientBase
         return await DeleteAsync<SessionLogMutationResult>(path, cancellationToken);
     }
 }
-
