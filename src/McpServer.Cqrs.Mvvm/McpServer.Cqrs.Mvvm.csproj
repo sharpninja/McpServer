@@ -9,7 +9,6 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>SharpNinja.McpServer.Cqrs.Mvvm</PackageId>
-    <Version>0.1.0</Version>
     <Authors>SharpNinja</Authors>
     <Description>MVVM bridge for McpServer.Cqrs — provides IRelayCommand implementations that dispatch CQRS commands/queries through the Dispatcher, with ObservableObject base class integration.</Description>
     <PackageTags>cqrs;mvvm;relay-command;observable;viewmodel</PackageTags>

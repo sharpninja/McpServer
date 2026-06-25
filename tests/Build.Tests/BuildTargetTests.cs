@@ -132,6 +132,84 @@ public sealed class BuildTargetTests
         }
     }
 
+    [Fact]
+    public void ResolveNuGetPackageVersion_ReturnsExplicitParameter()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var gitVersionPath = (AbsolutePath)Path.Combine(repoRoot, "GitVersion.yml");
+
+        var version = Build.ResolveNuGetPackageVersion(" 2.3.4 ", gitVersionPath);
+
+        Assert.Equal("2.3.4", version);
+    }
+
+    [Fact]
+    public void ResolveNuGetPackageVersionFromGitVersion_ReadsNextVersion()
+    {
+        const string content = """
+            mode: ContinuousDelivery
+            next-version: 1.0.1 # local publish default
+            branches:
+              main:
+                regex: ^master$|^main$
+            """;
+
+        var version = Build.ResolveNuGetPackageVersionFromGitVersion(content);
+
+        Assert.Equal("1.0.1", version);
+    }
+
+    [Fact]
+    public void PackNuGet_PublicPackageProjects_DoNotPinDivergentVersionMetadata()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var packageProjects = new[]
+        {
+            "src/McpServer.Client/McpServer.Client.csproj",
+            "src/McpServer.Cqrs/McpServer.Cqrs.csproj",
+            "src/McpServer.Cqrs.Mvvm/McpServer.Cqrs.Mvvm.csproj",
+            "src/McpServer.Repl.Core/McpServer.Repl.Core.csproj",
+            "src/McpServer.McpAgent/McpServer.McpAgent.csproj",
+        };
+
+        foreach (var project in packageProjects)
+        {
+            var content = File.ReadAllText(Path.Combine(repoRoot, project.Replace('/', Path.DirectorySeparatorChar)));
+
+            Assert.DoesNotContain("<Version>", content, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain("<PackageVersion>", content, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    [Fact]
+    public void CleanNuGetPackageOutput_RemovesOnlyTopLevelNuGetPackages()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"mcpserver-nupkg-clean-test-{Guid.NewGuid():N}");
+
+        try
+        {
+            Directory.CreateDirectory(directory);
+            var nested = Path.Combine(directory, "nested");
+            Directory.CreateDirectory(nested);
+            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "keep.txt"), "");
+            File.WriteAllText(Path.Combine(nested, "Nested.1.0.0.nupkg"), "");
+
+            Build.CleanNuGetPackageOutput((AbsolutePath)directory);
+
+            Assert.False(File.Exists(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg")));
+            Assert.False(File.Exists(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg")));
+            Assert.True(File.Exists(Path.Combine(directory, "keep.txt")));
+            Assert.True(File.Exists(Path.Combine(nested, "Nested.1.0.0.nupkg")));
+        }
+        finally
+        {
+            if (Directory.Exists(directory))
+                Directory.Delete(directory, true);
+        }
+    }
+
     [Theory]
     [InlineData("BuildTrustedThirdParty")]
     [InlineData("PublishTrustedThirdParty")]
