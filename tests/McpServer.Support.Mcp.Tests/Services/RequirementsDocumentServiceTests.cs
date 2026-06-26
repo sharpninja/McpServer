@@ -93,6 +93,28 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
     }
 
+    /// <summary>
+    /// MCP-REQEXPORT-READONLY-001: Requirements markdown exports are projections and are
+    /// marked read-only so agents do not accidentally edit them as the source of truth.
+    /// </summary>
+    [Fact]
+    public async Task GenerateAllAsync_MarksExportedMarkdownFilesReadOnly()
+    {
+        SeedCanonicalDocs();
+        var service = CreateService();
+        var outputRoot = Path.Combine(_tempRoot, "export", "canonical-readonly");
+
+        var result = await service.GenerateAllAsync(outputRoot).ConfigureAwait(true);
+
+        Assert.All(result.Files, file =>
+        {
+            var attributes = File.GetAttributes(file.FullPath);
+            Assert.True(
+                attributes.HasFlag(FileAttributes.ReadOnly),
+                $"{file.RelativePath} should be marked read-only.");
+        });
+    }
+
     [Fact]
     public async Task GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds()
     {
@@ -160,6 +182,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Contains("\"Requirements-Matrix.md\"", manifest, StringComparison.Ordinal);
         Assert.False(File.Exists(Path.Combine(outputRoot, "azure", "Old.md")));
         Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, "github", "_Sidebar.md")));
+        Assert.All(result.Files, file => Assert.True(File.GetAttributes(file.FullPath).HasFlag(FileAttributes.ReadOnly)));
     }
 
     [Fact]

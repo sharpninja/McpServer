@@ -1310,35 +1310,35 @@ The transaction subscriber SHALL log every received transaction message (commit 
 
 Agents can submit workspace-scoped incidental bug reports without leaving their current task.
 **Acceptance Criteria:**
-- [x] REST, client, REPL, and plugin tool paths all accept the same report contract. (evidence: TriageControllerTests, TriageClientTests, TriageWorkflowTests, TriageMcpToolTests.)
-- [x] Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc. (evidence: TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch.)
-- [x] Intake does not run research or create a TODO synchronously. (evidence: TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch.)
+- [ ] REST, client, REPL, and plugin tool paths all accept the same report contract.
+- [ ] Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc.
+- [ ] Intake does not run research or create a TODO synchronously.
 
 ## FR-MCP-TRIAGE-002 Async triage grouping and research
 
 Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.
 **Acceptance Criteria:**
-- [x] Groups are deterministic and workspace-isolated. (evidence: TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline and SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups.)
-- [x] New matching reports reset the 15-minute quiet window. (evidence: TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline.)
-- [x] A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo and TriagePromptTemplateTests.)
-- [x] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo and ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure.)
-- [x] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace. (evidence: TriageServiceTests.SubmitReportAsync_McpServerPluginBug_RoutesToRegisteredMcpServerWorkspace and SubmitReportAsync_McpServerPluginBugWithoutMcpServerWorkspace_StaysInSubmittingWorkspace.)
+- [ ] Groups are deterministic and workspace-isolated.
+- [ ] New matching reports reset the 15-minute quiet window.
+- [ ] A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.
+- [ ] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.
+- [ ] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.
 
 ## FR-MCP-TRIAGE-003 REPL triage parity
 
 The REPL exposes the complete triage surface through client passthrough and typed workflow wrappers.
 **Acceptance Criteria:**
-- [x] client.triage.* works through generic passthrough after adding McpServerClient.Triage. (evidence: TriageClientTests and TriageWorkflowTests.)
-- [x] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces. (evidence: TriageWorkflowTests.)
-- [x] YAML validation, error envelopes, and request/response shapes are covered. (evidence: TriageWorkflowTests and plugin repl-yaml-message schema tests.)
+- [ ] client.triage.* works through generic passthrough after adding McpServerClient.Triage.
+- [ ] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.
+- [ ] YAML validation, error envelopes, and request/response shapes are covered.
 
 ## FR-MCP-TRIAGE-004 Plugin triage skills
 
 All plugin distributions teach agents when and how to use triage.
 **Acceptance Criteria:**
-- [x] Each plugin skill bundle includes triage guidance. (evidence: TriageSkillBundleTests and plugin local skill tests.)
-- [x] Skills say to use triage for incidental bugs, not for the user's active requested fix. (evidence: TriageSkillBundleTests and plugin local skill tests.)
-- [x] Skills explicitly say not to expect immediate resolution and to continue the current task after submission. (evidence: TriageSkillBundleTests and plugin local skill tests.)
+- [ ] Each plugin skill bundle includes triage guidance.
+- [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
+- [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
 
 ## FR-SUPPORT-010 MCP Context Unification
 
@@ -1418,23 +1418,57 @@ Whole-session submit shall merge additively: omitted session and turn fields nev
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
 
-## FR-WFL-001 Complete Workflow FR
-
-Functional requirement for complete workflow test
-
 ## FR-TRIAGE-001 Triage dashboard inspection
 
 Users can inspect triage queue contents, grouped report queues, and AI triage run history with result details and current status for Director and MCP Web UI dashboards.
 **Acceptance Criteria:**
-- [x] A read-only dashboard contract exposes triage queue, report group queue, and run history without inferring Agent Pool data. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`)
-- [x] Group details include status, title, summary, report count, quiet deadline, created TODO id, last error, linked report summaries, and latest AI run results when available. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`)
-- [x] The API supports workspace-scoped queries so Director and MCP Web can use the active workspace path. (evidence: `TriageServiceTests.QueryRunsAsync_WithFilters_ReturnsWorkspaceScopedRuns`)
+- [ ] A read-only dashboard contract exposes triage queue, report group queue, and run history without inferring Agent Pool data.
+- [ ] Group details include status, title, summary, report count, quiet deadline, created TODO id, last error, linked report summaries, and latest AI run results when available.
+- [ ] The API supports workspace-scoped queries so Director and MCP Web can use the active workspace path.
 
 ## FR-TRIAGE-002 Triage-created TODO index
 
 Users can query TODO item IDs created by triage, including the datetime each TODO anchor was created, so Director and MCP Web can link triage outcomes to backlog items.
 **Acceptance Criteria:**
-- [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
-- [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
-- [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
+- [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+
+## FR-WFL-001 Complete Workflow FR
+
+Functional requirement for complete workflow test
+
+## FR-MCP-PLUGIN-PSONLY-001 Plugin runtime uses PowerShell only
+
+All MCP plugin distributions shall use PowerShell Core (`pwsh`) through the `PowerShell.MCP` runtime for normal operation. Hook, REPL, cache, status, session, TODO, requirements, triage, and sync workflows shall not require Bash or Node helper runtimes.
+**Acceptance Criteria:**
+- [x] Generated plugin packages contain PowerShell runtime scripts for normal hook and workflow execution. (evidence: PluginPowerShellOnly.Tests.ps1, PluginPowerShellRuntime.Tests.ps1)
+- [x] Legacy Bats behaviors are inventoried and represented by Pester tests so parity is measured at scenario level. (evidence: PluginLegacyBatsBehavior.Tests.ps1, BATS-PESTER-PARITY.md)
+- [x] Package validation rejects Bash and Node runtime files or references in shipped plugin runtime surfaces. (evidence: ValidatePluginPowerShellOnly)
+
+## FR-MCP-PLUGIN-PSONLY-002 Bash is only allowed for PowerShell installation bootstrap
+
+Bash shall be permitted only in an isolated PowerShell installation bootstrap. Normal plugin execution, skills, hooks, and tests shall not instruct agents to use Bash.
+**Acceptance Criteria:**
+- [x] Static package validation allows only `bootstrap/install-powershell.sh` as the Bash bootstrap exception. (evidence: Build.SyncAgentPlugins.ValidatePluginPowerShellOnlyPackage)
+- [x] Plugin skill bundles no longer instruct agents to invoke Bash wrappers for normal operation. (evidence: TEST-MCP-PLUGIN-PSONLY-002)
+- [x] Pester coverage replaces the current Bats-tested behaviors before Bash/Bats runtime surfaces are removed. (evidence: TEST-MCP-PLUGIN-PSONLY-001)
+
+## FR-MCP-PLUGIN-PSONLY-003 Plugins fail closed without PowerShell.MCP
+
+When `pwsh` or the `PowerShell.MCP` module is unavailable, plugins shall fail closed, report `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and perform no MCP actions.
+**Acceptance Criteria:**
+- [x] PowerShell runtime checks for `pwsh` and `PowerShell.MCP` availability before normal MCP operations. (evidence: plugin-hook.ps1, PluginPowerShellRuntime.Tests.ps1)
+- [x] Fail-closed paths are covered by Pester tests and do not create MCP side effects. (evidence: PluginLegacyBatsBehavior.Tests.ps1, PluginPowerShellOnly.Tests.ps1)
+- [x] Untrusted or missing marker bootstrap state returns a safe empty hook response and records inspectable unavailable/untrusted state. (evidence: PluginLegacyBatsBehavior.Tests.ps1)
+
+## FR-MCP-MARKER-TRIAGE-001 Marker instructions route MCP/plugin failures to triage
+
+Generated marker instructions shall tell agents that MCP Server failures and required-plugin failures discovered while working are reported through the triage tool only, and that agents continue the user's active task after submission.
+**Acceptance Criteria:**
+- [x] The rendered marker prompt tells agents to report MCP Server failures and required-plugin failures through the triage tool only. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents not to wait for triage research, TODO creation, or resolution before continuing the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt forbids substitute TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user's active request is to fix that failure. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to write a normal failsafe YAML triage report for later replay when the failure prevents live triage submission. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to write detailed triage reports for separate code, docs, requirements, plugin, deployment, or configuration repair workflows, then continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 

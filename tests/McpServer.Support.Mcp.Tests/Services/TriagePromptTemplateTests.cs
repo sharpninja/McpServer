@@ -13,6 +13,49 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class TriagePromptTemplateTests
 {
     /// <summary>
+    /// TEST-MCP-MARKER-TRIAGE-001: the production marker prompt tells agents to
+    /// report MCP Server and plugin failures through triage only, then continue work.
+    /// </summary>
+    [Fact]
+    public async Task DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance()
+    {
+        using var sut = new PromptTemplateService(
+            Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions
+            {
+                FilePath = Path.Combine(FindRepositoryRoot(), "templates", "prompt-templates.yaml"),
+            }),
+            new PromptTemplateRenderer(NullLogger<PromptTemplateRenderer>.Instance),
+            NullLogger<PromptTemplateService>.Instance);
+
+        var result = await sut.TestAsync(
+            "default-marker-prompt",
+            new PromptTemplateTestRequest
+            {
+                Variables = MarkerFileService.BuildTemplateContext(
+                    "http://localhost:7147",
+                    "test-token",
+                    workspace: null,
+                    workspacePath: @"F:\GitHub\McpServer",
+                    workspaceName: "McpServer"),
+            }).ConfigureAwait(true);
+
+        Assert.True(result.Success, result.Error);
+        Assert.Contains("## MCP and Plugin Failure Reporting", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains(
+            "MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only.",
+            result.RenderedContent,
+            StringComparison.Ordinal);
+        Assert.Contains("continue the user's active task", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Do not wait for triage research, TODO creation, or resolution.", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("separate repair workflow", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("needed changes, acceptance criteria, and validation evidence", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("normal failsafe YAML document", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("plugin/REPL failsafe or pending YAML queue", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.report", result.RenderedContent, StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-003: the triage research template exists in the repository
     /// template file and renders with the required group JSON variable.
     /// </summary>

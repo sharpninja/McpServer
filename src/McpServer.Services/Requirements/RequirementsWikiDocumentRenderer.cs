@@ -220,8 +220,10 @@ internal static class RequirementsDocumentExportWriter
                 $".{Path.GetFileName(fullPath)}.{Guid.NewGuid():N}.tmp");
             await File.WriteAllTextAsync(tempPath, document.Content, RequirementsWikiDocumentRenderer.Utf8NoBom, ct).ConfigureAwait(false);
             File.SetLastWriteTimeUtc(tempPath, generatedAtUtc.UtcDateTime);
+            ClearReadOnly(fullPath);
             File.Move(tempPath, fullPath, overwrite: true);
             File.SetLastWriteTimeUtc(fullPath, generatedAtUtc.UtcDateTime);
+            SetReadOnly(fullPath);
 
             written.Add(new RequirementsDocumentExportFile
             {
@@ -266,7 +268,10 @@ internal static class RequirementsDocumentExportWriter
             {
                 ct.ThrowIfCancellationRequested();
                 if (!expected.Contains(Path.GetFullPath(file)))
+                {
+                    ClearReadOnly(file);
                     File.Delete(file);
+                }
             }
 
             foreach (var directory in Directory.EnumerateDirectories(fullDirectory, "*", SearchOption.AllDirectories)
@@ -293,6 +298,23 @@ internal static class RequirementsDocumentExportWriter
         }
 
         return fullPath;
+    }
+
+    private static void ClearReadOnly(string path)
+    {
+        if (!File.Exists(path))
+            return;
+
+        var attributes = File.GetAttributes(path);
+        if (attributes.HasFlag(FileAttributes.ReadOnly))
+            File.SetAttributes(path, attributes & ~FileAttributes.ReadOnly);
+    }
+
+    private static void SetReadOnly(string path)
+    {
+        var attributes = File.GetAttributes(path);
+        if (!attributes.HasFlag(FileAttributes.ReadOnly))
+            File.SetAttributes(path, attributes | FileAttributes.ReadOnly);
     }
 }
 

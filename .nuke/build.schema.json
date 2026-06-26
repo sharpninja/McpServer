@@ -41,12 +41,14 @@
         "PublishTrustedThirdParty",
         "Restore",
         "StartServer",
+        "SyncAgentPlugins",
         "Test",
         "TestGraphRagSmoke",
         "TestMultiInstance",
         "UpdateService",
         "UpdateTrustedThirdPartyService",
         "ValidateConfig",
+        "ValidatePluginPowerShellOnly",
         "ValidateTraceability"
       ]
     },

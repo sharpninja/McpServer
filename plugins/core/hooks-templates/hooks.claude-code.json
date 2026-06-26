@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-start.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-start.ps1\"",
             "timeout": 15,
             "statusMessage": "Connecting to McpServer..."
           }
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-end.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-end.ps1\"",
             "timeout": 10,
             "statusMessage": "Finalizing MCP session..."
           }
@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pre-compact.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pre-compact.ps1\"",
             "timeout": 10,
             "statusMessage": "Persisting session state..."
           }
@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/post-compact.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/post-compact.ps1\"",
             "timeout": 15,
             "statusMessage": "Reloading MCP context..."
           }
@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/user-prompt-submit.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/user-prompt-submit.ps1\"",
             "timeout": 10,
             "statusMessage": "Opening session log turn..."
           }
@@ -66,7 +66,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/stop-gate.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/stop-gate.ps1\"",
             "timeout": 10,
             "statusMessage": "Verifying session log + build gates..."
           }
@@ -79,7 +79,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/plan-approved.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/plan-approved.ps1\"",
             "timeout": 15,
             "statusMessage": "Creating MCP TODO for approved plan..."
           }
@@ -90,14 +90,14 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/plan-modified.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/plan-modified.ps1\"",
             "if": "Write(**/plans/**)|Edit(**/plans/**)",
             "timeout": 10,
             "statusMessage": "Syncing plan changes to MCP TODO..."
           },
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/code-verify.sh",
+            "command": "pwsh -NoLogo -NoProfile -NonInteractive -File \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/code-verify.ps1\"",
             "timeout": 120,
             "statusMessage": "Verifying build after code edit..."
           }

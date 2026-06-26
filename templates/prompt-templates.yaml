@@ -352,6 +352,19 @@ templates:
       - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source.
 
 
+      ## MCP and Plugin Failure Reporting
+
+      - MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only. Use the active agent''s triage surface (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) with the failing command or endpoint, observed error, workspace path, and relevant component.
+
+      - After submitting the triage report, continue the user''s active task. Do not wait for triage research, TODO creation, or resolution.
+
+      - When the failure means code, docs, requirements, plugin skills, package sync, deployment, or configuration need a separate repair workflow, write a detailed triage report with the needed changes, acceptance criteria, and validation evidence, then move on with the active user task.
+
+      - Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user''s active request is to fix that failure.
+
+      - If the MCP Server or plugin failure prevents triage submission, write the report as a normal failsafe YAML document for later replay through the plugin/REPL failsafe or pending YAML queue. Preserve the triage method (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) plus title, summary, observed behavior, expected behavior, severity, component, workspace path, dedupe key or error signature, affected paths, evidence, reproduction hints, tags, reporter agent, session id, turn id, and current TODO id when known. Then record the local unavailable state (`MCP_UNTRUSTED` or `MCP_PLUGIN_UNAVAILABLE:<Agent>`) and continue non-MCP work; do not use raw REST or another reporting channel as a substitute.
+
+
       ## MCP Memories
 
       MCP memories are durable operator guidance managed by the MCP Server. Global memories apply to every workspace; Workspace memories apply only to the active workspace. Memory IDs use `MEMORY-{CATEGORY}-{NNN}`.

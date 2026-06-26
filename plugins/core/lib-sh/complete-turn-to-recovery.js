@@ -47,12 +47,14 @@ function parseFlat(text) {
     if (rest === "|" || rest === "|+" || rest === "|-") {
       const baseIndent = line.match(/^(\s*)/)[1].length;
       const blockLines = [];
+      let blockIndent = null;
       while (i < lines.length) {
         const bl = lines[i];
         if (!bl.trim()) { blockLines.push(""); i++; continue; }
         const blIndent = bl.match(/^(\s*)/)[1].length;
         if (blIndent <= baseIndent && bl.trim()) break;
-        blockLines.push(bl.slice(blIndent)); i++;
+        if (blockIndent === null) blockIndent = blIndent;
+        blockLines.push(bl.slice(Math.min(blockIndent, blIndent))); i++;
       }
       obj[key] = blockLines.join("\n");
       continue;

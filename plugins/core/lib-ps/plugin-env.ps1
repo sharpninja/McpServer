@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    plugin-env.ps1 - PowerShell twin of lib-sh/plugin-env.template.sh.
+    plugin-env.ps1 - host knob defaults for the shared PowerShell runtime.
 .DESCRIPTION
     Maps host-specific environment variables onto the neutral knob surface
     consumed by the core libraries. Dot-source after setting
     $env:MCP_PLUGIN_HOST (claude-code | cowork | codex | copilot | grok).
-    See plugin-env.template.sh for the canonical per-host value table.
+    Keep host defaults in this file so generated wrappers stay minimal.
 #>
 
 if ($env:MCP_PLUGIN_ENV_LOADED) { return }
@@ -71,7 +71,7 @@ if (-not $env:MCP_SESSION_AGENT) { $env:MCP_SESSION_AGENT = $env:PLUGIN_AGENT_DE
 if (-not $env:MCP_SESSION_MODEL) { $env:MCP_SESSION_MODEL = $env:PLUGIN_MODEL_DEFAULT }
 if (-not $env:MCP_SESSION_TITLE) { $env:MCP_SESSION_TITLE = "$($env:PLUGIN_AGENT_DEFAULT) plugin session" }
 
-# complete-turn-to-recovery.js host identity.
+# Turn recovery host identity.
 if (-not $env:CT2R_SOURCE_TYPE) { $env:CT2R_SOURCE_TYPE = $env:PLUGIN_AGENT_DEFAULT }
 if (-not $env:CT2R_MODEL) { $env:CT2R_MODEL = $env:PLUGIN_MODEL_DEFAULT }
 if (-not $env:CT2R_TITLE) { $env:CT2R_TITLE = "$($env:PLUGIN_AGENT_DEFAULT) turn" }

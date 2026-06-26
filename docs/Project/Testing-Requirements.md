@@ -345,7 +345,7 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-PLUGINCORE-003: bats: daemon roundtrip with --- terminator; one child serves N sends; auto-restart after kill; concurrent sends; persistent wrapper threads JSON params and honors fallback.
 - TEST-MCP-PLUGIN-TRIAGE-001: Every plugin skill bundle documents when and how to submit triage reports and the async expectation.
   **Acceptance Criteria:**
-  - [x] Skill tests or repository checks verify every plugin bundle includes triage guidance. (evidence: TriageSkillBundleTests plus Codex manifest.bats, Claude skills.bats, Copilot skills.bats, Cline skills.test.ts, and Grok skills.bats.)
+  - [ ] Skill tests or repository checks verify every plugin bundle includes triage guidance.
 - TEST-MCP-QBAGENT-001: Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
   **Acceptance Criteria:**
   - [x] With a valid marker, QBAgent binds baseUrl/apiKey and applies the QBAgent profile. (evidence: QBAgentBootstrapperTests valid-marker cases.)
@@ -479,7 +479,7 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Test validates cross-platform Environment.NewLine compatibility
 - TEST-MCP-REPL-TRIAGE-001: Full client.triage.* and workflow.triage.* REPL surface works with correct envelopes.
   **Acceptance Criteria:**
-  - [x] REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors. (evidence: TriageClientTests and TriageWorkflowTests.)
+  - [ ] REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors.
 - TEST-MCP-REQAC-001: Creating FR/TR/TEST with acceptanceCriteria and reading them back returns an identical AcceptanceCriterion list (id/text/isSatisfied/evidence), workspace-scoped.
 - TEST-MCP-REQAC-002: Null or empty acceptanceCriteria round-trips as an empty list with no null leakage.
 - TEST-MCP-REQAC-003: The requirements document renderer emits a deterministic Acceptance Criteria block and the parser tolerates it without throwing.
@@ -510,25 +510,25 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-TRACE-REPL-001: Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
 - TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
   **Acceptance Criteria:**
-  - [x] Unit and integration tests cover valid and invalid report submission through public surfaces. (evidence: TriageControllerTests, TriageClientTests, TriageWorkflowTests, and TriageMcpToolTests.)
+  - [ ] Unit and integration tests cover valid and invalid report submission through public surfaces.
 - TEST-MCP-TRIAGE-002: Deterministic grouping, McpServer workspace routing for core and plugin bugs, and 15-minute quiet-window behavior are verified.
   **Acceptance Criteria:**
-  - [x] Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior. (evidence: TriageServiceTests matching, workspace, and McpServer routing cases.)
+  - [ ] Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior.
 - TEST-MCP-TRIAGE-003: Research worker invokes configured direct agent with group JSON and prompt.
   **Acceptance Criteria:**
-- [x] Tests verify dispatch input, configured prompt rendering, and direct-agent options. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo, TriagePromptTemplateTests, and ConfiguredTriageResearchRunnerTests.)
+  - [ ] Tests verify dispatch input and configured prompt rendering.
 - TEST-MCP-TRIAGE-004: Schema-valid research output creates exactly one BUG-TRIAGE-### TODO.
   **Acceptance Criteria:**
-  - [x] Tests verify idempotent TODO creation from valid research output. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo.)
+  - [ ] Tests verify idempotent TODO creation from valid research output.
 - TEST-MCP-TRIAGE-005: Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state.
   **Acceptance Criteria:**
-  - [x] Tests verify failed runs preserve output or errors and do not create TODOs. (evidence: TriageServiceTests.ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure.)
+  - [ ] Tests verify failed runs preserve output or errors and do not create TODOs.
 - TEST-MCP-TRIAGE-006: Multi-workspace isolation prevents cross-workspace grouping and status leakage.
   **Acceptance Criteria:**
-  - [x] Tests verify query filters and grouping scope never cross workspace boundaries. (evidence: TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups.)
+  - [ ] Tests verify query filters and grouping scope never cross workspace boundaries.
 - TEST-MCP-TRIAGE-REQAC-001: Every new FR/TR/TEST acceptance criterion is referenced by at least one test and passes ValidateTraceability.
   **Acceptance Criteria:**
-  - [x] Traceability validation covers all triage requirement IDs and acceptance criteria. (evidence: ValidateTraceability target.)
+  - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   **Acceptance Criteria:**
   - [ ] Criterion A
@@ -583,16 +583,31 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [x] PUT request returns 405 Method Not Allowed
   - [x] Response includes Allow: POST header
-- TEST-WFL-001: Test requirement for complete workflow
-
 - TEST-TRIAGE-001: Unit and contract tests cover triage dashboard bucketing data, group/report/result rendering inputs, empty/error states, workspace filtering, and typed client dispatch for Director and MCP Web consumers.
   **Acceptance Criteria:**
-  - [x] Service tests cover dashboard queue composition, run history/result mapping, workspace isolation, and empty data. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`, `TriageServiceTests.GetDashboardAsync_NoRows_ReturnsEmptyCollections`, `TriageServiceTests.QueryRunsAsync_WithFilters_ReturnsWorkspaceScopedRuns`)
-  - [x] Controller tests cover dashboard, run query, run detail, and not-found/error envelopes. (evidence: `TriageControllerTests.GetDashboardAsync_ReturnsDashboardState`, `TriageControllerTests.QueryRunsAsync_ReturnsRunHistory`, `TriageControllerTests.GetRunAsync_WhenMissing_ReturnsNotFound`)
-  - [x] Client tests cover new typed triage methods and query-string dispatch. (evidence: `TriageClientTests.GetDashboardAsync_SendsWorkspaceFilter`, `TriageClientTests.QueryRunsAsync_SendsFilters`, `TriageClientTests.GetRunAsync_SendsCorrectUrl`)
-
+  - [ ] Service tests cover dashboard queue composition, run history/result mapping, workspace isolation, and empty data.
+  - [ ] Controller tests cover dashboard, run query, run detail, and not-found/error envelopes.
+  - [ ] Client tests cover new typed triage methods and query-string dispatch.
 - TEST-TRIAGE-002: Unit and client tests cover triage-created TODO listing, workspace filtering, missing TODO anchors, group/run context mapping, and typed client dispatch.
   **Acceptance Criteria:**
-  - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
-  - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: `TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex`)
-  - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: `TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter`)
+  - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+  - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
+  - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+- TEST-UPD-001: Original description
+- TEST-WFL-001: Test requirement for complete workflow
+- TEST-MCP-PLUGIN-PSONLY-001: Bats-to-Pester parity covers every legacy Bats scenario for the plugin PowerShell-only migration.
+  **Acceptance Criteria:**
+  - [x] The parity inventory maps each legacy Bats scenario to a Pester requirement/test case. (evidence: BATS-PESTER-PARITY.md, bats-pester-parity.generated.json)
+  - [x] Pester discovery creates one executable test for each legacy Bats scenario plus focused PowerShell runtime/static tests. (evidence: Invoke-Pester plugins/core/test-fixtures/pester)
+  - [x] The parity suite passes with zero failures and zero skips. (evidence: 341 passed, 0 failed, 0 skipped)
+- TEST-MCP-PLUGIN-PSONLY-002: PowerShell-only package, runtime, fail-closed, and plugin skill validation blocks Bash and Node runtime regressions.
+  **Acceptance Criteria:**
+  - [x] Pester tests verify generated packages, wrappers, runtime paths, fail-closed paths, and skill guidance. (evidence: PluginPowerShellOnly.Tests.ps1, PluginPowerShellRuntime.Tests.ps1, PluginLegacyBatsBehavior.Tests.ps1)
+  - [x] `ValidatePluginPowerShellOnly` rejects forbidden runtime files and stale Bash/Node helper references across all plugin package roots. (evidence: build.ps1 ValidatePluginPowerShellOnly)
+  - [x] The staged plugin and all supported plugin repo copies are synchronized from the same PowerShell runtime source. (evidence: sync-plugin-core.ps1)
+- TEST-MCP-MARKER-TRIAGE-001: Production default marker template rendering covers MCP Server and plugin failure triage guidance.
+  **Acceptance Criteria:**
+  - [x] A render test verifies the production default marker prompt tells agents to report MCP Server and plugin failures through the triage tool only. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies agents are told not to wait for triage resolution and to continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies failed live triage submissions are written as normal failsafe YAML documents for later replay. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies separate code, docs, requirements, plugin, deployment, or configuration repair workflows are captured as detailed triage reports. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)

@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-    Sends a YAML request envelope to mcpserver-repl --agent-stdio.
+    Sends a YAML request envelope through the PowerShell MCP runtime.
 .DESCRIPTION
-    PowerShell parallel of lib/repl-invoke.sh. Constructs a YAML envelope
-    and pipes it to the mcpserver-repl dotnet tool.
+    Constructs a YAML envelope and routes it through the configured
+    PowerShell MCP invocation path.
 
     Translation shim: workflow.sessionlog.* methods are not server routes
     — the dispatcher rejects them as method_not_found. They are plugin-
@@ -54,66 +54,160 @@ function Convert-ReplParamsYamlToObject {
         return ($normalized | ConvertFrom-Json -Depth 100 -ErrorAction Stop)
     }
 
-    $node = Get-Command node -ErrorAction SilentlyContinue
-    if (-not $node) {
-        throw 'node is required to parse YAML params'
+    if (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue) {
+        try {
+            return ($normalized | ConvertFrom-Yaml -ErrorAction Stop)
+        } catch {
+            # Fall through to the local subset parser so plugin runtime remains
+            # self-contained when the optional YAML module cannot parse input.
+        }
     }
 
-    $script = @'
-const fs = require("fs");
-const path = require("path");
-const input = fs.readFileSync(0, "utf8");
-const scriptDir = process.argv[1] || "";
-const pluginRoot = process.argv[2] || "";
-const cwd = process.cwd();
-const candidates = [
-  path.join(pluginRoot, "node_modules"),
-  path.join(scriptDir, "..", "node_modules"),
-  path.join(scriptDir, "..", "..", "lib-node", "node_modules"),
-  path.join(pluginRoot, "..", "McpServer", "plugins", "core", "lib-node", "node_modules"),
-  path.join(cwd, "plugins", "core", "lib-node", "node_modules"),
-  path.join(cwd, "node_modules")
-];
-let yaml;
-try {
-  yaml = require(require.resolve("js-yaml", { paths: candidates }));
-} catch (error) {
-  yaml = null;
+    return (ConvertFrom-ReplYamlSubset -Text $normalized)
 }
-try {
-  const parsed = yaml ? yaml.load(input) : require(path.join(scriptDir, "yaml-subset-parser.js")).parseYamlSubset(input);
-  process.stdout.write(JSON.stringify(parsed ?? null));
-} catch (error) {
-  console.error("ERROR: failed to parse YAML params: " + error.message);
-  process.exit(1);
-}
-'@
 
-    $psi = [System.Diagnostics.ProcessStartInfo]::new()
-    $psi.FileName = $node.Source
-    $psi.ArgumentList.Add('-e')
-    $psi.ArgumentList.Add($script)
-    $psi.ArgumentList.Add($PSScriptRoot)
-    $psi.ArgumentList.Add($script:ReplInvokePluginRoot)
-    $psi.RedirectStandardInput = $true
-    $psi.RedirectStandardOutput = $true
-    $psi.RedirectStandardError = $true
-    $psi.UseShellExecute = $false
-    $psi.CreateNoWindow = $true
-    $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
-    $proc = [System.Diagnostics.Process]::Start($psi)
-    $proc.StandardInput.Write($normalized)
-    $proc.StandardInput.Close()
-    $stdoutTask = $proc.StandardOutput.ReadToEndAsync()
-    $stderrTask = $proc.StandardError.ReadToEndAsync()
-    $proc.WaitForExit()
-    $stdout = $stdoutTask.Result
-    $stderr = $stderrTask.Result
-    if ($proc.ExitCode -ne 0) {
-        throw "YAML parameter parsing failed: $stderr"
+function ConvertFrom-ReplYamlScalar {
+    param([string]$Value)
+
+    $trimmed = $Value.Trim()
+    if ($trimmed -eq '') { return '' }
+    if ($trimmed -eq '{}') { return [ordered]@{} }
+    if ($trimmed -eq '[]') { return @() }
+    if ($trimmed -match '^(true|false)$') { return [bool]::Parse($trimmed) }
+    if ($trimmed -match '^-?\d+$') { return [int64]$trimmed }
+    if (($trimmed.StartsWith('"') -and $trimmed.EndsWith('"')) -or ($trimmed.StartsWith("'") -and $trimmed.EndsWith("'"))) {
+        return $trimmed.Substring(1, $trimmed.Length - 2)
     }
 
-    return ($stdout | ConvertFrom-Json -Depth 100 -ErrorAction Stop)
+    return $trimmed
+}
+
+function Get-ReplYamlIndent {
+    param([string]$Line)
+
+    return ([regex]::Match($Line, '^\s*').Value.Length)
+}
+
+function ConvertFrom-ReplYamlSubset {
+    param([string]$Text)
+
+    $lines = @($Text -split "`n")
+    $index = 0
+    return (Read-ReplYamlBlock -Lines $lines -Index ([ref]$index) -Indent 0)
+}
+
+function Read-ReplYamlBlock {
+    param(
+        [string[]]$Lines,
+        [ref]$Index,
+        [int]$Indent
+    )
+
+    while ($Index.Value -lt $Lines.Count -and $Lines[$Index.Value].Trim() -eq '') {
+        $Index.Value++
+    }
+
+    if ($Index.Value -ge $Lines.Count) { return [ordered]@{} }
+
+    $first = $Lines[$Index.Value]
+    $isList = (Get-ReplYamlIndent $first) -eq $Indent -and $first.Substring($Indent).TrimStart().StartsWith('- ')
+    if ($isList) {
+        $items = [System.Collections.Generic.List[object]]::new()
+        while ($Index.Value -lt $Lines.Count) {
+            $line = $Lines[$Index.Value]
+            if ($line.Trim() -eq '') { $Index.Value++; continue }
+            $currentIndent = Get-ReplYamlIndent $line
+            if ($currentIndent -lt $Indent) { break }
+            if ($currentIndent -ne $Indent) { break }
+            $content = $line.Substring($Indent).TrimStart()
+            if (-not $content.StartsWith('- ')) { break }
+
+            $itemText = $content.Substring(2).Trim()
+            $Index.Value++
+            if ($itemText -match '^([^:]+):\s*(.*)$') {
+                $item = [ordered]@{}
+                $key = $Matches[1].Trim()
+                $value = $Matches[2]
+                if ($value -eq '') {
+                    $item[$key] = Read-ReplYamlBlock -Lines $Lines -Index $Index -Indent ($Indent + 2)
+                } else {
+                    $item[$key] = ConvertFrom-ReplYamlScalar $value
+                }
+
+                while ($Index.Value -lt $Lines.Count) {
+                    $nextLine = $Lines[$Index.Value]
+                    if ($nextLine.Trim() -eq '') { $Index.Value++; continue }
+                    $nextIndent = Get-ReplYamlIndent $nextLine
+                    if ($nextIndent -le $Indent) { break }
+                    $nextContent = $nextLine.Substring($nextIndent)
+                    if ($nextContent -notmatch '^([^:]+):\s*(.*)$') { break }
+                    $nextKey = $Matches[1].Trim()
+                    $nextValue = $Matches[2]
+                    $Index.Value++
+                    if ($nextValue -eq '|') {
+                        $item[$nextKey] = Read-ReplYamlLiteralBlock -Lines $Lines -Index $Index -Indent ($nextIndent + 2)
+                    } elseif ($nextValue -eq '') {
+                        $item[$nextKey] = Read-ReplYamlBlock -Lines $Lines -Index $Index -Indent ($nextIndent + 2)
+                    } else {
+                        $item[$nextKey] = ConvertFrom-ReplYamlScalar $nextValue
+                    }
+                }
+
+                $items.Add([pscustomobject]$item)
+            } else {
+                $items.Add((ConvertFrom-ReplYamlScalar $itemText))
+            }
+        }
+
+        return $items.ToArray()
+    }
+
+    $map = [ordered]@{}
+    while ($Index.Value -lt $Lines.Count) {
+        $line = $Lines[$Index.Value]
+        if ($line.Trim() -eq '') { $Index.Value++; continue }
+        $currentIndent = Get-ReplYamlIndent $line
+        if ($currentIndent -lt $Indent) { break }
+        if ($currentIndent -gt $Indent) { break }
+
+        $content = $line.Substring($Indent)
+        if ($content -notmatch '^([^:]+):\s*(.*)$') { $Index.Value++; continue }
+        $key = $Matches[1].Trim()
+        $value = $Matches[2]
+        $Index.Value++
+
+        if ($value -eq '|') {
+            $map[$key] = Read-ReplYamlLiteralBlock -Lines $Lines -Index $Index -Indent ($Indent + 2)
+        } elseif ($value -eq '') {
+            $map[$key] = Read-ReplYamlBlock -Lines $Lines -Index $Index -Indent ($Indent + 2)
+        } else {
+            $map[$key] = ConvertFrom-ReplYamlScalar $value
+        }
+    }
+
+    return [pscustomobject]$map
+}
+
+function Read-ReplYamlLiteralBlock {
+    param(
+        [string[]]$Lines,
+        [ref]$Index,
+        [int]$Indent
+    )
+
+    $items = [System.Collections.Generic.List[string]]::new()
+    while ($Index.Value -lt $Lines.Count) {
+        $line = $Lines[$Index.Value]
+        if ($line.Trim() -ne '' -and (Get-ReplYamlIndent $line) -lt $Indent) { break }
+        if ($line.Length -ge $Indent) {
+            $items.Add($line.Substring($Indent))
+        } else {
+            $items.Add('')
+        }
+        $Index.Value++
+    }
+
+    return ($items -join "`n").TrimEnd()
 }
 
 function Get-ReplSessionMeta {
@@ -141,8 +235,8 @@ function Invoke-ReplRaw {
     $requestId = "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$((Get-Random -Maximum 0xFFFF).ToString('x4'))"
     $timeout = if ($env:REPL_TIMEOUT) { [int]$env:REPL_TIMEOUT } else { 30 }
 
-    # Build as object then serialize to JSON (no manual YAML text construction).
-    # Consistent with bash (node) and node transport.
+    # Build as an object and serialize to JSON so request envelopes keep a
+    # single canonical shape across plugin hosts.
     if ($ParamsYaml) {
         $p = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
         $envObj = [ordered]@{
