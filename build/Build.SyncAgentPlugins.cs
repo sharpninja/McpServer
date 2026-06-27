@@ -70,6 +70,8 @@ partial class Build
                 ValidatePluginPowerShellOnlyPackage(pluginRoot);
             }
 
+            RefreshNodePluginCoreVendorPackages(RootDirectory, pluginRoots);
+
             var stagedRoot = RootDirectory / "plugins" / "core" / ".staged-plugin";
             var stagedHost = "claude-code";
             ProcessTasks.StartProcess(
@@ -281,7 +283,10 @@ partial class Build
             rootPackage["version"] = version;
         }
 
-        return root.ToJsonString(s_pluginJsonOptions) + Environment.NewLine;
+        var json = root.ToJsonString(s_pluginJsonOptions)
+            .Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Replace("\r", "\n", StringComparison.Ordinal);
+        return json + "\n";
     }
 
     private static bool TryParseSemanticVersion(string? value, out PluginSemanticVersion version)
@@ -376,6 +381,53 @@ partial class Build
             content,
             @"(\bbash\b|\blib-sh\b|\blib-node\b|\bnode\s|\bnode\.exe\b|repl-daemon\.js|complete-turn-to-recovery\.js|\.sh\b|\.bash\b|repl-invoke\.sh|mcpserver-repl --agent-stdio|repl_invoke)",
             RegexOptions.IgnoreCase);
+    }
+
+    private static void RefreshNodePluginCoreVendorPackages(
+        AbsolutePath rootDirectory,
+        IReadOnlyList<AbsolutePath> pluginRoots)
+    {
+        const string packageFileName = "sharpninja-mcpserver-plugin-core-0.1.0.tgz";
+        var vendorTargets = pluginRoots
+            .Select(root => root / "vendor" / packageFileName)
+            .Where(path => File.Exists(path.ToString()))
+            .ToArray();
+        if (vendorTargets.Length == 0)
+            return;
+
+        var nodeCoreRoot = rootDirectory / "plugins" / "core" / "lib-node";
+        if (!Directory.Exists(nodeCoreRoot.ToString()))
+            throw new DirectoryNotFoundException($"Node plugin core source was not found at {nodeCoreRoot}.");
+
+        Log.Information("Building Node plugin core package for {Count} plugin vendor target(s)", vendorTargets.Length);
+        ProcessTasks.StartProcess("npm", "run build", workingDirectory: nodeCoreRoot.ToString())
+            .AssertZeroExitCode();
+
+        var pack = ProcessTasks.StartProcess(
+            "npm",
+            "pack --silent",
+            workingDirectory: nodeCoreRoot.ToString(),
+            logOutput: false);
+        pack.WaitForExit();
+        pack.AssertZeroExitCode();
+
+        var packedFileName = pack.Output
+            .Select(static output => output.Text.Trim())
+            .LastOrDefault(static text => text.EndsWith(".tgz", StringComparison.OrdinalIgnoreCase));
+        if (string.IsNullOrWhiteSpace(packedFileName))
+            packedFileName = packageFileName;
+
+        var packedPath = nodeCoreRoot / packedFileName;
+        if (!File.Exists(packedPath.ToString()))
+            throw new FileNotFoundException("npm pack did not produce the expected Node plugin core package.", packedPath.ToString());
+
+        foreach (var target in vendorTargets)
+        {
+            File.Copy(packedPath.ToString(), target.ToString(), overwrite: true);
+            Log.Information("Refreshed Node plugin core vendor package {Target}", target);
+        }
+
+        File.Delete(packedPath.ToString());
     }
 
     private static void RefreshKnownPluginCaches(IReadOnlyList<AbsolutePath> pluginRoots, string version)

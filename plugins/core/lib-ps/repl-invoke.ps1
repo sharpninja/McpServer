@@ -44,6 +44,46 @@ if (-not (Get-Command Resolve-McpCacheDir -ErrorAction SilentlyContinue)) {
 # Resolved lazily so per-call context (workspace / env) governs path.
 function script:Get-ReplInvokeCacheDir { Resolve-McpCacheDir }
 
+function Resolve-ReplWorkspaceDirectory {
+    $candidates = @(
+        $env:MCP_WORKSPACE_PATH,
+        $env:MCPSERVER_WORKSPACE_PATH,
+        $env:MCP_WORKSPACE_START_DIR,
+        $env:CLAUDE_PROJECT_DIR
+    )
+
+    try {
+        $location = Get-Location
+        if ($location.Provider.Name -eq 'FileSystem') {
+            $candidates += $location.ProviderPath
+        }
+    } catch {
+        # Fall through to the .NET current directory fallback.
+    }
+
+    $candidates += [Environment]::CurrentDirectory
+
+    foreach ($candidate in $candidates) {
+        if ([string]::IsNullOrWhiteSpace($candidate)) { continue }
+        if (Test-Path -LiteralPath $candidate -PathType Container) {
+            return (Resolve-Path -LiteralPath $candidate).ProviderPath
+        }
+    }
+
+    return (Get-Location).ProviderPath
+}
+
+function Set-ReplProcessWorkspace {
+    param([Parameter(Mandatory)][System.Diagnostics.ProcessStartInfo]$StartInfo)
+
+    $workspace = Resolve-ReplWorkspaceDirectory
+    $StartInfo.WorkingDirectory = $workspace
+    $StartInfo.Environment['MCP_WORKSPACE_PATH'] = $workspace
+    $StartInfo.Environment['MCPSERVER_WORKSPACE_PATH'] = $workspace
+    $StartInfo.Environment['MCP_WORKSPACE_START_DIR'] = $workspace
+    $StartInfo.Environment['CLAUDE_PROJECT_DIR'] = $workspace
+}
+
 function Convert-ReplParamsYamlToObject {
     param([string]$ParamsYaml)
 
@@ -274,6 +314,7 @@ function Invoke-ReplRaw {
         # its pipe buffer fills (Windows ~4 KB), causing WaitForExit to hang.
         $psi.UseShellExecute = $false
         $psi.CreateNoWindow = $true
+        Set-ReplProcessWorkspace -StartInfo $psi
         # mcpserver-repl writes UTF-8 (with BOM). Without explicit encoding,
         # PowerShell decodes as cp437 and BOM bytes (EF BB BF) become box-
         # drawing glyphs that break the '^type: error' regex anchor.
@@ -547,6 +588,7 @@ function Invoke-ReplPersistTurn {
         $psi.RedirectStandardOutput = $true
         $psi.UseShellExecute = $false
         $psi.CreateNoWindow = $true
+        Set-ReplProcessWorkspace -StartInfo $psi
         $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
         $proc = [System.Diagnostics.Process]::Start($psi)
         $fs = [System.IO.File]::OpenRead($tmp)

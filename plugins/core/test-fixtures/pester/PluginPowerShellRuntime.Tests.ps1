@@ -82,6 +82,57 @@ acceptanceCriteria:
         $parsed.response | Should -Be "line one`nline two`n"
     }
 
+    It 'TEST-MCP-PLUGIN-PSONLY-001 starts mcpserver-repl in the PowerShell workspace when the .NET current directory differs' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $wrongCurrentDirectory = Join-Path $root 'home'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($wrongCurrentDirectory)
+
+        $oldLocation = (Get-Location).ProviderPath
+        $oldCurrentDirectory = [Environment]::CurrentDirectory
+        $envNames = @(
+            'MCP_WORKSPACE_PATH',
+            'MCPSERVER_WORKSPACE_PATH',
+            'MCP_WORKSPACE_START_DIR',
+            'CLAUDE_PROJECT_DIR'
+        )
+        $previousEnv = @{}
+        foreach ($name in $envNames) {
+            $previousEnv[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
+            Remove-Item "Env:\$name" -ErrorAction SilentlyContinue
+        }
+
+        try {
+            Set-Location -LiteralPath $workspace
+            [Environment]::CurrentDirectory = $wrongCurrentDirectory
+
+            $psi = [System.Diagnostics.ProcessStartInfo]::new()
+            $psi.UseShellExecute = $false
+            Set-ReplProcessWorkspace -StartInfo $psi
+
+            $expectedWorkspace = (Resolve-Path -LiteralPath $workspace).ProviderPath
+            $psi.WorkingDirectory | Should -Be $expectedWorkspace
+            $psi.Environment['MCP_WORKSPACE_PATH'] | Should -Be $expectedWorkspace
+            $psi.Environment['MCPSERVER_WORKSPACE_PATH'] | Should -Be $expectedWorkspace
+            $psi.Environment['MCP_WORKSPACE_START_DIR'] | Should -Be $expectedWorkspace
+            $psi.Environment['CLAUDE_PROJECT_DIR'] | Should -Be $expectedWorkspace
+        } finally {
+            Set-Location -LiteralPath $oldLocation
+            [Environment]::CurrentDirectory = $oldCurrentDirectory
+            foreach ($name in $envNames) {
+                if ($null -ne $previousEnv[$name]) {
+                    [Environment]::SetEnvironmentVariable($name, [string]$previousEnv[$name], 'Process')
+                } else {
+                    Remove-Item "Env:\$name" -ErrorAction SilentlyContinue
+                }
+            }
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 FR-MCP-PLUGIN-PSONLY-003 fails closed before MCP work when the runtime is refused' {
         $result = Invoke-PluginChildProcess `
             -ScriptPath (Join-Path $script:StagedRoot 'lib\plugin-hook.ps1') `
@@ -136,6 +187,63 @@ acceptanceCriteria:
         $status.namespaces | Should -Contain 'workflow.todo'
         $status.namespaces | Should -Contain 'workflow.requirements'
         $status.namespaces | Should -Contain 'workflow.triage'
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 forces each PowerShell host identity over inherited agent environment' {
+        $cases = @(
+            @{ Host = 'claude-code'; Agent = 'ClaudeCode'; Model = 'claude'; Tag = 'claude-code' },
+            @{ Host = 'claude-cowork'; Agent = 'ClaudeCowork'; Model = 'claude'; Tag = 'claude-cowork' },
+            @{ Host = 'codex'; Agent = 'Codex'; Model = 'codex'; Tag = 'codex' },
+            @{ Host = 'copilot'; Agent = 'Copilot'; Model = 'copilot'; Tag = 'copilot' },
+            @{ Host = 'grok'; Agent = 'GrokCode'; Model = 'grok'; Tag = 'grok' },
+            @{ Host = 'cline'; Agent = 'Cline'; Model = 'cline'; Tag = 'cline' },
+            @{ Host = 'cline-v2'; Agent = 'Cline'; Model = 'cline'; Tag = 'cline-v2' },
+            @{ Host = 'opencode'; Agent = 'OpenCode'; Model = 'opencode'; Tag = 'opencode' }
+        )
+
+        $envScript = (Join-Path $script:LibRoot 'plugin-env.ps1').Replace("'", "''")
+        $probe = Join-Path $script:SmokeCache 'identity-probe.ps1'
+        [System.IO.Directory]::CreateDirectory($script:SmokeCache) | Out-Null
+        [System.IO.File]::WriteAllText($probe, @"
+. '$envScript'
+[pscustomobject]@{
+  agent = `$env:MCP_AGENT_NAME
+  agentId = `$env:MCP_AGENT_ID
+  sessionAgent = `$env:MCP_SESSION_AGENT
+  sourceType = `$env:CT2R_SOURCE_TYPE
+  model = `$env:MCP_SESSION_MODEL
+  tag = `$env:PLUGIN_TAG
+} | ConvertTo-Json -Compress
+"@)
+
+        foreach ($case in $cases) {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath $probe `
+                -Environment @{
+                    MCP_PLUGIN_HOST = $case.Host
+                    MCP_PLUGIN_ENV_LOADED = '1'
+                    MCP_AGENT_NAME = 'WrongAgent'
+                    MCP_AGENT_ID = 'WrongAgent'
+                    MCP_SESSION_AGENT = 'WrongAgent'
+                    CT2R_SOURCE_TYPE = 'WrongAgent'
+                    PLUGIN_AGENT_DEFAULT = 'WrongAgent'
+                    PLUGIN_TAG = 'wrong-plugin'
+                    MCP_SESSION_MODEL = 'wrong-model'
+                    MCP_PLUGIN_ROOT = $script:StagedRoot
+                    PLUGIN_ROOT_OVERRIDE = $script:SmokeCache
+                    MCP_WORKSPACE_PATH = $script:RepoRoot
+                    MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
+                }
+
+            $result.ExitCode | Should -Be 0
+            $status = $result.Stdout | ConvertFrom-Json
+            $status.agent | Should -Be $case.Agent
+            $status.agentId | Should -Be $case.Agent
+            $status.sessionAgent | Should -Be $case.Agent
+            $status.sourceType | Should -Be $case.Agent
+            $status.model | Should -Be $case.Model
+            $status.tag | Should -Be $case.Tag
+        }
     }
 
     It 'TEST-MCP-PLUGIN-PSONLY-002 synced manifest contains PowerShell runtime files only' {

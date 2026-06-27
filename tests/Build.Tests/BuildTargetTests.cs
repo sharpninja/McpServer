@@ -87,6 +87,22 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    /// <summary>TEST-MCP-PLUGIN-PSONLY-001: Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>
+    [Fact]
+    public void SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.SyncAgentPlugins.cs"));
+        const string refreshCall = "RefreshNodePluginCoreVendorPackages(RootDirectory, pluginRoots);";
+        const string cacheCall = "RefreshKnownPluginCaches(pluginRoots, nextVersion);";
+
+        Assert.Contains(refreshCall, source, StringComparison.Ordinal);
+        Assert.Contains("sharpninja-mcpserver-plugin-core-0.1.0.tgz", source, StringComparison.Ordinal);
+        Assert.True(
+            source.IndexOf(refreshCall, StringComparison.Ordinal) < source.IndexOf(cacheCall, StringComparison.Ordinal),
+            "Node plugin core vendor packages must be refreshed before installed plugin caches are copied.");
+    }
+
     /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent has dedicated pack and deploy targets.</summary>
     [Fact]
     public void Build_HasQBAgentToolTargets()
@@ -244,6 +260,8 @@ public sealed class BuildTargetTests
             Assert.Contains(updates, update => update.Path.EndsWith("package-lock.json", StringComparison.OrdinalIgnoreCase));
             Assert.DoesNotContain(updates, update => update.Path.Contains("node_modules", StringComparison.OrdinalIgnoreCase));
             Assert.All(updates, update => Assert.Contains("1.4.0", update.UpdatedContent, StringComparison.Ordinal));
+            Assert.All(updates, update => Assert.DoesNotContain("\r", update.UpdatedContent, StringComparison.Ordinal));
+            Assert.All(updates, update => Assert.EndsWith("\n", update.UpdatedContent, StringComparison.Ordinal));
         }
         finally
         {

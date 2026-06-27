@@ -160,6 +160,11 @@ export function setMarkerEnvironment(marker: MarkerContext, agentName: string): 
   process.env.MCP_WORKSPACE_PATH = marker.workspacePath;
   process.env.MCPSERVER_WORKSPACE = marker.workspace;
   process.env.PLUGIN_AGENT_NAME = agentName;
+  process.env.PLUGIN_AGENT_DEFAULT = agentName;
+  process.env.MCP_AGENT_NAME = agentName;
+  process.env.MCP_AGENT_ID = agentName;
+  process.env.MCP_SESSION_AGENT = agentName;
+  process.env.CT2R_SOURCE_TYPE = agentName;
 }
 
 function coreAgent(): string {

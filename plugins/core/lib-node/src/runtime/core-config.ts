@@ -36,6 +36,7 @@ let activeConfig: McpServerPluginCoreConfig = {};
 
 export function setCoreConfig(config: McpServerPluginCoreConfig): void {
   activeConfig = { ...config };
+  publishCoreIdentity(activeConfig);
 }
 
 export function getCoreConfig(): McpServerPluginCoreConfig {
@@ -48,4 +49,19 @@ export function coreAgentName(): string {
 
 export function corePluginId(): string {
   return activeConfig.pluginId || process.env.PLUGIN_TAG || 'cline-v2';
+}
+
+function publishCoreIdentity(config: McpServerPluginCoreConfig): void {
+  const agentName = config.agentName || process.env.PLUGIN_AGENT_NAME || 'Cline';
+  const pluginId = config.pluginId || process.env.PLUGIN_TAG || 'cline-v2';
+  process.env.PLUGIN_AGENT_NAME = agentName;
+  process.env.PLUGIN_AGENT_DEFAULT = agentName;
+  process.env.PLUGIN_TAG = pluginId;
+  process.env.MCP_AGENT_NAME = agentName;
+  process.env.MCP_AGENT_ID = agentName;
+  process.env.MCP_SESSION_AGENT = agentName;
+  process.env.MCP_SESSION_MODEL = pluginId;
+  process.env.CT2R_SOURCE_TYPE = agentName;
+  process.env.CT2R_MODEL = pluginId;
+  process.env.CT2R_TAGS = pluginId;
 }
