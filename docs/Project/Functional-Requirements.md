@@ -584,6 +584,10 @@ The server shall expose a structured `adb_step` surface for safe Android validat
 ## FR-MCP-084 Requirements Wiki Workspace Export/Import
 
 The server, REPL, and agent plugins shall support requirements export and import in wiki format. Wiki export shall write both Azure DevOps Wiki and GitHub Wiki document folders directly under docs/Project/wiki. Wiki import shall detect wiki document folders, select the authoritative platform source using manifest and file modified timestamps, and create, update, delete, or ignore requirements and mappings to match the selected source.
+**Acceptance Criteria:**
+- [x] Wiki export writes both Azure DevOps Wiki and GitHub Wiki folders directly under docs/Project/wiki.
+- [x] Wiki export clears the read-only attribute on existing generated files only while replacing or deleting them, then restores read-only on written export files before returning or after failed replacement attempts.
+- [x] Wiki import detects wiki document folders, selects the authoritative platform source using manifest and file modified timestamps, and synchronizes requirements and mappings to match the selected source.
 
 **Status:** ✅ Complete
 
@@ -891,12 +895,16 @@ The readiness endpoint /ready reports Unhealthy when no enabled workspace is reg
 - [x] /ready reports Unhealthy when primary workspace has no seeded auth token
 - [x] /ready never reports Healthy while /mcpserver/* would return 503
 
-## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
+## FR-MCP-134 Full QuadBrain orchestration, AoT reconciliation, and escalation
 
-The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+The MCP runtime SHALL execute the real-time QuadBrain decision loop by dispatching LeftHemisphere and RightHemisphere in parallel for the active work, gating ArbiterOfTruth until both hemisphere responses have completed, and returning only the committed Arbiter decision. ArbiterOfTruth MAY choose the left response, choose the right response, combine both responses, or reject both responses. CuriosityEngine SHALL NOT participate in the normal real-time response path; it is invoked only when both hemispheres fail to produce valid committed output, where it evaluates frustration/research context and may initiate deeper research/context admission without directly responding to the user. Arbiter rejection SHALL trigger the voting/reconciliation mechanism before the runtime fails closed.
 **Acceptance Criteria:**
 - [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
-- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
+- [x] LeftHemisphere and RightHemisphere are invoked in parallel through existing transaction-gated slot invocation, and ArbiterOfTruth reconciliation does not run until both hemisphere responses have completed.
+- [x] Role prompts describe LeftHemisphere as creative, RightHemisphere as absolute-accuracy focused, CuriosityEngine as a curious researcher, and ArbiterOfTruth as arbiter of truth for code tasks plus enforcer of rules for all tasks; RightHemisphere invocations set provider temperature to 0.0 while LeftHemisphere invocations leave temperature unset.
+- [x] CuriosityEngine is not invoked when either hemisphere produces valid committed evidence for ArbiterOfTruth.
+- [x] When both hemispheres produce no valid committed evidence, CuriosityEngine may admit research/context evidence but its output is never returned directly to the caller.
+- [x] AoT reconciliation may choose Left, choose Right, combine both, or reject both; rejection triggers the voting/reconciliation mechanism before final fail-closed rejection.
 - [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
 - [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
 
@@ -1072,6 +1080,10 @@ QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On 
 - [x] A marker missing apiKey or with a non-absolute baseUrl is rejected as invalid.
 - [x] With no marker present QBAgent exits gracefully with exit code 0 and contacts no endpoint.
 - [x] An interactive run loop routes each prompt through the bound runtime, handles blank lines and exit commands, stops at end of input, and reports runner failures without aborting.
+- [x] QBAgent executes external agent actions through its real registered tool surface against an isolated workspace; a coding prompt that elects a file-write action creates the requested file on disk with the requested content. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+- [x] QBAgent feeds external tool execution results back into QuadBrain and displays the continued final answer instead of claiming success from the initial tool-call request alone. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+- [x] QBAgent action transcripts and session evidence include the user prompt, emitted external tool call, executed action path/result, and final displayed output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-create-hello-world-cpp-*.jsonl)
+- [x] If the required external tool is unavailable or execution fails, QBAgent surfaces the failure and does not fabricate a completed action. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
 
 ## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
 

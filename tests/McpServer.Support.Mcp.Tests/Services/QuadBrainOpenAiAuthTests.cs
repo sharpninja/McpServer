@@ -40,7 +40,7 @@ public sealed class QuadBrainOpenAiAuthTests
             new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "hi" }] },
             CancellationToken.None).ConfigureAwait(true);
 
-        Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<OkObjectResult>(result);
     }
 
     /// <summary>A missing token is rejected with 401.</summary>
@@ -53,7 +53,7 @@ public sealed class QuadBrainOpenAiAuthTests
             new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "hi" }] },
             CancellationToken.None).ConfigureAwait(true);
 
-        Assert.IsType<UnauthorizedObjectResult>(result.Result);
+        Assert.IsType<UnauthorizedObjectResult>(result);
     }
 
     private static QuadBrainOpenAiController BuildController(WorkspaceTokenService tokenService, string? authorizationHeader)

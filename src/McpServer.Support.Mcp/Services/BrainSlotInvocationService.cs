@@ -112,7 +112,7 @@ public sealed class BrainSlotInvocationService : IBrainSlotInvocationService
             using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeoutCts.CancelAfter(TimeSpan.FromSeconds(slot.TimeoutSeconds <= 0 ? _brainSlotOptions.CurrentValue.DefaultTimeoutSeconds : slot.TimeoutSeconds));
             var client = _chatClientFactory.Create(slot, credential);
-            output = await client.CompleteAsync(slot, request.Input, timeoutCts.Token).ConfigureAwait(false);
+            output = await client.CompleteAsync(slot, request.Input, request.Temperature, timeoutCts.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
@@ -135,6 +135,7 @@ public sealed class BrainSlotInvocationService : IBrainSlotInvocationService
             promptSha256 = promptHash,
             outputSha256 = outputHash,
             admissionTarget = request.AdmitToGraphRag ? "GraphRAG" : "none",
+            temperature = request.Temperature,
             metadata = request.Metadata,
             startedAtUtc = started,
             modelCompletedAtUtc = DateTimeOffset.UtcNow,

@@ -364,6 +364,10 @@ public sealed class BrainSlotInvokeRequest
     [JsonPropertyName("admitToGraphRag")]
     public bool AdmitToGraphRag { get; set; }
 
+    /// <summary>Optional provider temperature override for this invocation.</summary>
+    [JsonPropertyName("temperature")]
+    public double? Temperature { get; set; }
+
     /// <summary>Caller metadata preserved in transaction evidence.</summary>
     [JsonPropertyName("metadata")]
     public IReadOnlyDictionary<string, string> Metadata { get; set; } = new Dictionary<string, string>();
@@ -458,9 +462,9 @@ public sealed class AotReconciliationRequest
     [JsonPropertyName("rightOutput")]
     public string RightOutput { get; set; } = string.Empty;
 
-    /// <summary>CuriosityEngine committed output.</summary>
+    /// <summary>Optional CuriosityEngine research/context output for escalated reconciliation.</summary>
     [JsonPropertyName("curiosityOutput")]
-    public string CuriosityOutput { get; set; } = string.Empty;
+    public string? CuriosityOutput { get; set; }
 
     /// <summary>Owning session-log turn identifier.</summary>
     [JsonPropertyName("turnId")]

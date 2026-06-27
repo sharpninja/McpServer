@@ -517,7 +517,7 @@ Given the Byrd execution REST controller, STDIO MCP tools, typed client, and `ad
 
 ### TEST-MCP-106
 
-Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, and GitHub includes `_Sidebar.md` and `_Footer.md`.
+Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, GitHub includes `_Sidebar.md` and `_Footer.md`, existing generated read-only files are made writable only for export replacement/deletion, and written export files are read-only after export.
 
 
 ### TEST-MCP-107
@@ -1293,8 +1293,11 @@ Integration tests over POST /v1/chat/completions through the real ASP.NET pipeli
 
 Service-composition coverage of the real four-role Quad-Brain loop (QuadBrainOrchestrationService + BrainSlotInvocationService + BrainSlotRegistryService + in-memory key server), faking only IBrainSlotChatClientFactory and the committing transaction coordinator.
 
-**Acceptance Criteria:**
-- [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
+  **Acceptance Criteria:**
+  - [x] Normal orchestration dispatches LeftHemisphere and RightHemisphere in parallel, waits for both responses, then invokes ArbiterOfTruth and returns the committed Arbiter decision.
+  - [x] Role prompt/option coverage verifies LeftHemisphere emphasizes creativity with no temperature override, RightHemisphere emphasizes absolute accuracy with provider temperature 0.0, CuriosityEngine is described as a curious researcher, and ArbiterOfTruth is described as arbiter of truth for code tasks plus enforcer of rules for all tasks.
+  - [x] CuriosityEngine is invoked only when both hemispheres fail to produce valid committed output and no Curiosity output is returned directly.
+- [x] Arbiter semantic rejection triggers a voting/reconciliation round before the loop returns a final decision or fails closed.
 - [x] A tool_calls Arbiter output is returned verbatim as the orchestration output.
 - [x] With only three roles seeded the loop rejects QuadNotReady without calling any brain.
 - [x] With execution disabled no brain is called and the loop rejects ExecutionDisabled.
@@ -1307,7 +1310,7 @@ Service-composition coverage of the real four-role Quad-Brain loop (QuadBrainOrc
 Integration coverage that drives the real orchestration through POST /v1/chat/completions over four seeded slots, faking only the per-brain LLM call and the transaction coordinator.
 
 **Acceptance Criteria:**
-- [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) with all four roles invoked.
+- [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) after the normal Left, Right, Arbiter path.
 - [x] A tool_calls Arbiter output surfaces as an OpenAI assistant tool call (finish_reason tool_calls).
 - [x] With no slots seeded the endpoint returns an empty decision (loop rejects QuadNotReady).
 

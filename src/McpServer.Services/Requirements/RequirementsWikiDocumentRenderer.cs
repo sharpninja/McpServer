@@ -221,9 +221,16 @@ internal static class RequirementsDocumentExportWriter
             await File.WriteAllTextAsync(tempPath, document.Content, RequirementsWikiDocumentRenderer.Utf8NoBom, ct).ConfigureAwait(false);
             File.SetLastWriteTimeUtc(tempPath, generatedAtUtc.UtcDateTime);
             ClearReadOnly(fullPath);
-            File.Move(tempPath, fullPath, overwrite: true);
-            File.SetLastWriteTimeUtc(fullPath, generatedAtUtc.UtcDateTime);
-            SetReadOnly(fullPath);
+            try
+            {
+                File.Move(tempPath, fullPath, overwrite: true);
+                File.SetLastWriteTimeUtc(fullPath, generatedAtUtc.UtcDateTime);
+            }
+            finally
+            {
+                if (File.Exists(fullPath))
+                    SetReadOnly(fullPath);
+            }
 
             written.Add(new RequirementsDocumentExportFile
             {
@@ -270,7 +277,15 @@ internal static class RequirementsDocumentExportWriter
                 if (!expected.Contains(Path.GetFullPath(file)))
                 {
                     ClearReadOnly(file);
-                    File.Delete(file);
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    finally
+                    {
+                        if (File.Exists(file))
+                            SetReadOnly(file);
+                    }
                 }
             }
 

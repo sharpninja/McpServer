@@ -102,7 +102,7 @@
 - TEST-MCP-103: Given a Byrd execution TODO, when unit tests are not defined, then the service rejects transition to `Implementing`; when unit tests are defined through the test-plan API, then the TODO advances to `TestReady`.
 - TEST-MCP-104: Given a Byrd execution TODO linked to requirements, session turns, and modified files, when bounded execution context or checkpoint delta context is requested, then the server returns only concise snippets, recent turn summaries, relevant files, artifacts, commits, and updated next action for that TODO.
 - TEST-MCP-105: Given the Byrd execution REST controller, STDIO MCP tools, typed client, and `adb_step` surface, when representative phase creation, active TODO lookup, status progression, and screenshot validation calls are executed, then structured contracts remain stable and Android validation results are returned without arbitrary shell passthrough.
-- TEST-MCP-106: Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, and GitHub includes `_Sidebar.md` and `_Footer.md`.
+- TEST-MCP-106: Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, GitHub includes `_Sidebar.md` and `_Footer.md`, existing generated read-only files are made writable only for export replacement/deletion, and written export files are read-only after export.
 - TEST-MCP-107: Given wiki ingest with Azure and GitHub document folders, when manifest and file modified timestamps identify a newer source, then import selects that source; when the two checks disagree, import fails unless preferredWikiFormat is supplied.
 - TEST-MCP-108: Given the REPL requirements workflow, when wiki export or import is invoked, then export returns format, docType, generatedAtUtc, outputRoot, and written file metadata, and import accepts path-keyed documents with per-document timestamps.
 - TEST-MCP-109: Given Codex, Claude Code, Copilot, and Cline agent plugins, when requirements wiki workflows are used, then each plugin exposes the wiki requirements contract and routes generate/ingest envelopes without expecting archive bytes.
@@ -356,6 +356,14 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned. (evidence: QBAgentSendingIntegrationTests.QBAgent_NoToolAction_ReturnsPlainResponse - real Agent Framework loop over OpenAI wire, 1 orchestration round, plain text returned.)
   - [x] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolCall_AgentExecutesAndContinues - external apply_patch executed by FunctionInvokingChatClient, 2 rounds, final answer returned.)
   - [x] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent. (evidence: QBAgentSendingIntegrationTests.QBAgent_InternalTool_ExecutedServerSide_NeverReachesAgent - mcp_todo_update ran in the internal executor and was stripped; agent invoked no tool, single round.)
+  - [x] A QBAgent coding prompt executes the real QBAgent file-write tool against an isolated temp workspace and asserts the requested file exists on disk with the requested content. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+  - [x] The same test asserts QBAgent sends the real file-tool result back into QuadBrain and displays the continued final answer. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+  - [x] The same test writes a JSONL transcript with prompt, tool call, executed action path/result, and final displayed output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-create-hello-world-cpp-*.jsonl)
+  - [x] Negative integration coverage proves QBAgent does not fake success when the required external tool is unavailable or the real tool fails. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+- TEST-MCP-QBAGENTINT-002: Negative integration coverage for QBAgent required external-tool failures.
+  **Acceptance Criteria:**
+  - [x] When the real write_file tool is rejected by the MCP server, QBAgent creates no file, does not consume the scripted success response, and displays an explicit failure that the requested action was not completed. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+  - [x] The test writes a JSONL transcript with the prompt, emitted tool call, rejected tool result, and displayed failure output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-tool-failure-*.jsonl)
 - TEST-MCP-QBEXEC-001: Classifier marks mcp_ tools internal; interceptor executes handled internal tools and strips them while keeping external and failed/unhandled internal; the OpenAI surface strips internal tool calls and emits only external ones (and emits none when all elected tools ran server-side).
   **Acceptance Criteria:**
   - [x] Tools are classified internal (mcp_ prefix) vs external. (evidence: QuadBrainToolInterceptionTests classifier cases.)
@@ -376,15 +384,27 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] An internal tool failure is surfaced as a note rather than a tool call.
 - TEST-MCP-QBLIVE-001: Service-composition coverage of the real four-role Quad-Brain loop (QuadBrainOrchestrationService + BrainSlotInvocationService + BrainSlotRegistryService + in-memory key server), faking only IBrainSlotChatClientFactory and the committing transaction coordinator.
   **Acceptance Criteria:**
-  - [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
+  - [x] Normal orchestration dispatches LeftHemisphere and RightHemisphere in parallel, waits for both responses, then invokes ArbiterOfTruth and returns the committed Arbiter decision.
+  - [x] Role prompt/option coverage verifies LeftHemisphere emphasizes creativity with no temperature override, RightHemisphere emphasizes absolute accuracy with provider temperature 0.0, CuriosityEngine is described as a curious researcher, and ArbiterOfTruth is described as arbiter of truth for code tasks plus enforcer of rules for all tasks.
+  - [x] CuriosityEngine is invoked only when both hemispheres fail to produce valid committed output and no Curiosity output is returned directly.
+  - [x] Arbiter semantic rejection triggers a voting/reconciliation round before the loop returns a final decision or fails closed.
   - [x] A tool_calls Arbiter output is returned verbatim as the orchestration output.
   - [x] With only three roles seeded the loop rejects QuadNotReady without calling any brain.
   - [x] With execution disabled no brain is called and the loop rejects ExecutionDisabled.
 - TEST-MCP-QBLIVEINT-001: Integration coverage that drives the real orchestration through POST /v1/chat/completions over four seeded slots, faking only the per-brain LLM call and the transaction coordinator.
   **Acceptance Criteria:**
-  - [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) with all four roles invoked.
+  - [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) after the normal Left, Right, Arbiter path.
   - [x] A tool_calls Arbiter output surfaces as an OpenAI assistant tool call (finish_reason tool_calls).
   - [x] With no slots seeded the endpoint returns an empty decision (loop rejects QuadNotReady).
+- TEST-MCP-QBOLLAMA-001: Local Ollama integration coverage that assigns the default local Ollama model to all four QuadBrain slots and drives POST /v1/chat/completions without faking per-brain LLM calls.
+  **Acceptance Criteria:**
+  - [x] The test resolves the local default Ollama model from the running Ollama server, unless MCP_QUADBRAIN_OLLAMA_MODEL is explicitly set.
+  - [x] All four slots are seeded as OpenAICompatible with http://localhost:11434/v1 and the same resolved model.
+  - [x] Sending "Hello" and "Create Hello World in C++" through the OpenAI-compatible endpoint returns a non-empty assistant response for each prompt.
+  - [x] The normal workflow invokes LeftHemisphere and RightHemisphere before ArbiterOfTruth, and does not invoke CuriosityEngine.
+  - [x] OpenAI-compatible `content`, `reasoning`, and `reasoning_content` assistant fields are extracted as brain output.
+  - [x] A real QBAgent session and turn are opened, passed to the endpoint via X-Session-Id and X-Turn-Id, and the persisted MCP session processing dialog captures each invoked role prompt and selected output.
+  - [x] Each integration run writes the generated sessionId, turnId, routes, selected outputs, fetched session-log snapshot, and a JSONL transcript to `TestResults/QuadBrainOllamaEndpointIntegrationTests`.
 - TEST-MCP-QBOPENAI-001: An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.
   **Acceptance Criteria:**
   - [x] An OpenAI ChatCompletion request maps to QuadBrain orchestration and returns the Arbiter output as the assistant message. (evidence: QuadBrainOpenAiChatServiceTests + QuadBrainOpenAiEndpointIntegrationTests.ChatCompletions_Authorized_ReturnsArbiterContent.)
