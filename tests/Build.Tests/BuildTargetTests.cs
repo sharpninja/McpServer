@@ -1,4 +1,5 @@
 using Nuke.Common.IO;
+using System.Xml.Linq;
 
 namespace NukeBuild.Tests;
 
@@ -84,6 +85,32 @@ public sealed class BuildTargetTests
         var prop = BuildType.GetProperty("SyncAgentPlugins");
 
         Assert.NotNull(prop);
+    }
+
+    /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent has dedicated pack and deploy targets.</summary>
+    [Fact]
+    public void Build_HasQBAgentToolTargets()
+    {
+        Assert.NotNull(BuildType.GetProperty("PackQBAgentTool"));
+        Assert.NotNull(BuildType.GetProperty("DeployQBAgentTool"));
+    }
+
+    /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent is configured as a .NET global tool package.</summary>
+    [Fact]
+    public void QBAgentProject_IsConfiguredAsDotNetTool()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var projectPath = Path.Combine(repoRoot, "src", "McpServer.QBAgent", "McpServer.QBAgent.csproj");
+        var properties = XDocument.Load(projectPath)
+            .Descendants("PropertyGroup")
+            .Elements()
+            .ToDictionary(element => element.Name.LocalName, element => element.Value, StringComparer.OrdinalIgnoreCase);
+
+        Assert.Equal("Exe", properties["OutputType"]);
+        Assert.Equal("true", properties["IsPackable"]);
+        Assert.Equal("true", properties["PackAsTool"]);
+        Assert.Equal("qbagent", properties["ToolCommandName"]);
+        Assert.Equal("SharpNinja.McpServer.QBAgent", properties["PackageId"]);
     }
 
     [Fact]

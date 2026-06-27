@@ -1084,6 +1084,7 @@ QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On 
 - [x] QBAgent feeds external tool execution results back into QuadBrain and displays the continued final answer instead of claiming success from the initial tool-call request alone. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
 - [x] QBAgent action transcripts and session evidence include the user prompt, emitted external tool call, executed action path/result, and final displayed output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-create-hello-world-cpp-*.jsonl)
 - [x] If the required external tool is unavailable or execution fails, QBAgent surfaces the failure and does not fabricate a completed action. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+- [x] QBAgent is packable and deployable as a .NET global tool using the `qbagent` command. (evidence: BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool; DeployQBAgentTool; `qbagent --version`)
 
 ## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
 

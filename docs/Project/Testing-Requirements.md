@@ -364,6 +364,11 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [x] When the real write_file tool is rejected by the MCP server, QBAgent creates no file, does not consume the scripted success response, and displays an explicit failure that the requested action was not completed. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
   - [x] The test writes a JSONL transcript with the prompt, emitted tool call, rejected tool result, and displayed failure output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-tool-failure-*.jsonl)
+- TEST-MCP-QBAGENTTOOL-001: Build tests and deployment smoke checks cover QBAgent .NET global-tool packaging.
+  **Acceptance Criteria:**
+  - [x] Build tests verify QBAgent has pack/deploy NUKE targets. (evidence: BuildTargetTests.Build_HasQBAgentToolTargets)
+  - [x] Build tests verify the QBAgent project is configured with PackAsTool, ToolCommandName `qbagent`, and PackageId `SharpNinja.McpServer.QBAgent`. (evidence: BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool)
+  - [x] Deployment validation proves `qbagent --version` resolves to the freshly packed package version/build. (evidence: DeployQBAgentTool; `qbagent --version` -> `1.3.0+0228849741389a66e24c37a49577468333b78a44`)
 - TEST-MCP-QBEXEC-001: Classifier marks mcp_ tools internal; interceptor executes handled internal tools and strips them while keeping external and failed/unhandled internal; the OpenAI surface strips internal tool calls and emits only external ones (and emits none when all elected tools ran server-side).
   **Acceptance Criteria:**
   - [x] Tools are classified internal (mcp_ prefix) vs external. (evidence: QuadBrainToolInterceptionTests classifier cases.)

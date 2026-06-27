@@ -1028,6 +1028,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 - [x] Hosted QBAgent execution registers the real QBAgent external tool surface for file, shell, and git actions; integration tests use the real file tool instead of an in-memory recording delegate. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
 - [x] File-writing tools scope writes to the configured workspace root and integration tests prove the expected file is written under an isolated temp workspace. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
 - [x] Tool execution failures propagate back through the Agent Framework loop as failures, not as fabricated completed outputs. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+- [x] QBAgent project metadata sets PackAsTool/ToolCommandName/PackageId and a NUKE target packs, force-installs, and verifies the `qbagent` global tool from local packages. (evidence: BuildTargetTests.Build_HasQBAgentToolTargets; BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool; DeployQBAgentTool)
 
 ## TR-MCP-QBEXEC-001
 
