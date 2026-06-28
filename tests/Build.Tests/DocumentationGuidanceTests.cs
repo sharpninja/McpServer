@@ -99,10 +99,58 @@ public sealed class DocumentationGuidanceTests
         Assert.True(File.Exists(Path.Combine(githubRoot, "_Footer.md")), "Missing GitHub wiki _Footer.md file.");
     }
 
+    /// <summary>
+    /// DOC-SCRATCHINTEGRATION-001: Verifies future-agent documentation covers
+    /// scratch workspace SQLite seeding, server startup, marker gating, marker
+    /// derived auth, cleanup, and xUnit sequencing requirements.
+    /// </summary>
+    [Fact]
+    public async Task ScratchWorkspaceIntegrationGuide_CoversMarkerGatedSqliteHarness()
+    {
+        var text = await ReadRepositoryTextAsync(Path.Combine("docs", "context", "scratch-workspace-integration-tests.md"))
+            .ConfigureAwait(true);
+
+        AssertContainsAll(
+            text,
+            "scratch root",
+            "scratch workspace",
+            "docs/Project/TODO.yaml",
+            "templates/prompt-templates.yaml",
+            "SQLite",
+            "McpDbContext",
+            "McpServer.Storage.SqliteMigrations",
+            "WorkspaceEntity",
+            "CurrentRequirementLayerKey",
+            "random high port",
+            "McpServer.Support.Mcp",
+            "FileSystemWatcher",
+            "AGENTS-README-FIRST.yaml",
+            "one minute",
+            "baseUrl",
+            "apiKey",
+            "--agent-stdio",
+            "--workspace-path",
+            "--marker-file",
+            "IAsyncLifetime.InitializeAsync",
+            "collection fixture",
+            "xUnit does not guarantee method ordering",
+            "Do not use cached",
+            "Do not patch production startup marker generation",
+            "process tree");
+    }
+
     private static async Task<string> ReadRepositoryTextAsync(string relativePath)
     {
         var path = Path.Combine(FindRepositoryRoot(), relativePath);
         return await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken).ConfigureAwait(true);
+    }
+
+    private static void AssertContainsAll(string text, params string[] requiredText)
+    {
+        foreach (var value in requiredText)
+        {
+            Assert.Contains(value, text, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     private static string FindRepositoryRoot()
