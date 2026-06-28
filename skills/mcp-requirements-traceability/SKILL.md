@@ -142,3 +142,7 @@ like `FR-MCP-001-003`, which expand to each ID in the inclusive range.
   in separate namespaces and separate plugin methods.
 - Re-creating an existing ID returns `requirement_already_exists`; use the matching
   `update*` method instead of `create*`.
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`.

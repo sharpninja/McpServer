@@ -2716,6 +2716,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<int?>("AgentExitCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AgentStderr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AgentStdout")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset?>("CompletedUtc")
                         .HasColumnType("datetimeoffset");
 

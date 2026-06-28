@@ -2677,6 +2677,15 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("AgentExitCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AgentStderr")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentStdout")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTimeOffset?>("CompletedUtc")
                         .HasColumnType("TEXT");
 

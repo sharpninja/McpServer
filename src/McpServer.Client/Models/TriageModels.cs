@@ -295,6 +295,18 @@ public sealed record TriageResearchRunDetail
     [JsonPropertyName("rawOutput")]
     public string? RawOutput { get; init; }
 
+    /// <summary>Raw stdout stream captured from the launched triage agent process.</summary>
+    [JsonPropertyName("agentStdout")]
+    public string? AgentStdout { get; init; }
+
+    /// <summary>Raw stderr stream captured from the launched triage agent process.</summary>
+    [JsonPropertyName("agentStderr")]
+    public string? AgentStderr { get; init; }
+
+    /// <summary>Launched triage agent process exit code, when available.</summary>
+    [JsonPropertyName("agentExitCode")]
+    public int? AgentExitCode { get; init; }
+
     /// <summary>Schema-valid agent JSON after validation.</summary>
     [JsonPropertyName("responseJson")]
     public string? ResponseJson { get; init; }

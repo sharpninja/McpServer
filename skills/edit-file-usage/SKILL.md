@@ -83,3 +83,7 @@ rollback compensation via `IRepoFileCompensation` (TR-MCP-TXN-001).
 - Re-running an identical failed edit instead of re-reading and adjusting context.
 - Assuming a rejected edit left a partial write: the transactional rollback guarantees the
   file is untouched, so diagnose and correct rather than clean up.
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`.

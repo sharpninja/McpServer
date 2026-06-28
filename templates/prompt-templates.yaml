@@ -3,95 +3,81 @@ templates:
     title: Example Greeting Template
     category: custom
     tags:
-    - example
-    - getting-started
+      - example
+      - getting-started
     description: A simple greeting template demonstrating Handlebars syntax.
     engine: handlebars
     variables:
-    - name: name
-      description: Name of the person to greet
-      required: true
-      example: Alice
-    - name: role
-      description: Role or title of the person
-      required: false
-      defaultValue: developer
-    content: 'Hello, {{name}}!
-
+      - name: name
+        description: Name of the person to greet
+        required: true
+        example: Alice
+      - name: role
+        description: Role or title of the person
+        required: false
+        defaultValue: developer
+    content: |
+      Hello, {{name}}!
       {{#if role}}You are a {{role}}.{{/if}}
-
       Welcome to the MCP Server template system.
-
-      '
   example-agent-briefing:
     title: Agent Briefing Template
     category: agent
     tags:
-    - agent
-    - onboarding
-    - example
+      - agent
+      - onboarding
+      - example
     description: Template for briefing an AI agent about a workspace context.
     engine: handlebars
     variables:
-    - name: agentName
-      description: Name of the AI agent
-      required: true
-      example: Copilot
-    - name: workspaceName
-      description: Name of the current workspace
-      required: true
-      example: McpServer
-    - name: objectives
-      description: List of objectives for the agent
-      required: false
-    content: '## Agent Briefing: {{agentName}}
-
+      - name: agentName
+        description: Name of the AI agent
+        required: true
+        example: Copilot
+      - name: workspaceName
+        description: Name of the current workspace
+        required: true
+        example: McpServer
+      - name: objectives
+        description: List of objectives for the agent
+        required: false
+    content: |
+      ## Agent Briefing: {{agentName}}
 
       You are operating in the **{{workspaceName}}** workspace.
 
-
       {{#if objectives}}
-
       ### Objectives
-
       {{#each objectives}}
-
       - {{this}}
-
       {{/each}}
-
       {{else}}
-
       No specific objectives have been set. Await instructions.
-
       {{/if}}
 
-
       Please follow all workspace conventions and log your actions.
-
-      '
   triage-research-bug-report:
     title: Triage Research Bug Report
     category: system
     tags:
-    - triage
-    - bug
-    - research
+      - triage
+      - bug
+      - research
     description: Prompt for the configured direct triage agent that researches grouped incidental bug reports and returns schema-valid JSON.
     engine: handlebars
     variables:
-    - name: groupJson
-      description: Serialized triage group detail including reports.
-      required: true
-    - name: groupId
-      description: Triage group identifier.
-      required: false
-    - name: workspacePath
-      description: Effective workspace path for the group.
-      required: false
-    - name: reportCount
-      description: Number of reports currently in the group.
-      required: false
+      - name: groupJson
+        description: Serialized triage group detail including reports.
+        required: true
+      - name: groupId
+        description: Triage group identifier.
+        required: false
+      - name: workspacePath
+        description: Effective workspace path for the group.
+        required: false
+      - name: reportCount
+        description: Number of reports currently in the group.
+        required: false
     content: |
       You are the configured MCP Server bug triage agent.
 
@@ -117,618 +103,517 @@ templates:
     title: TODO Status Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - status
+      - todo
+      - prompt
+      - status
     description: 'Prompt template for generating TODO status reports. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: false
-    - name: baseUrl
-      description: Server base URL
-      required: false
-      default-value: http://localhost:7147
-    content: 'Get the current status of TODO {id}. Report the following in structured markdown:
-
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: false
+      - name: baseUrl
+        description: Server base URL
+        required: false
+        default-value: http://localhost:7147
+    content: |
+      Get the current status of TODO {id}. Report the following in structured markdown:
 
       - Title, priority, section, done status
-
       - Description and technical details
-
       - Implementation task completion progress (count done vs total)
-
       - Any blockers or next steps
-
       - Dependencies and their current status
-
-      '
   todo-implement-prompt:
     title: TODO Implement Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - implement
+      - todo
+      - prompt
+      - implement
     description: 'Prompt template for driving Copilot to implement a TODO item. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: true
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      default-value: http://localhost:7147
-    content: "Implement TODO {id}: {title}\n\nFollow this procedure:\n\n1. IMPLEMENT TASKS: Work through each implementation\
-      \ task that is not yet done.\n   After completing each task, immediately update the TODO via:\n   curl -X PUT {baseUrl}/mcpserver/todo/{id}\
-      \ \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\"implementationTasks\": [ ...full array with updated\
-      \ done flags... ]}'\n   This makes progress visible in real time.\n\n2. UPDATE DEPENDENTS: After all tasks are complete,\
-      \ query all TODOs:\n   curl {baseUrl}/mcpserver/todo\n   Find any TODO whose dependsOn array contains \"{id}\". For\
-      \ each dependent:\n   - Update its technicalDetails or note to reflect that {id} is now complete.\n   - If all of the\
-      \ dependent's own dependencies are satisfied, update its\n     remaining estimate and note accordingly.\n\n3. MARK DONE:\
-      \ When all implementationTasks are done, mark the TODO itself done:\n   curl -X PUT {baseUrl}/mcpserver/todo/{id} \\\
-      \n     -H \"Content-Type: application/json\" \\\n     -d '{\"done\": true}'\n\n4. Update the session log throughout.\
-      \ Run to completion, do not wait for user.\n"
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: true
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        default-value: http://localhost:7147
+    content: |
+      Implement TODO {id}: {title}
+
+      Follow this procedure:
+
+      1. IMPLEMENT TASKS: Work through each implementation task that is not yet done.
+         After completing each task, immediately update the TODO via:
+         curl -X PUT {baseUrl}/mcpserver/todo/{id} \
+           -H "Content-Type: application/json" \
+           -d '{"implementationTasks": [ ...full array with updated done flags... ]}'
+         This makes progress visible in real time.
+
+      2. UPDATE DEPENDENTS: After all tasks are complete, query all TODOs:
+         curl {baseUrl}/mcpserver/todo
+         Find any TODO whose dependsOn array contains "{id}". For each dependent:
+         - Update its technicalDetails or note to reflect that {id} is now complete.
+         - If all of the dependent's own dependencies are satisfied, update its
+           remaining estimate and note accordingly.
+
+      3. MARK DONE: When all implementationTasks are done, mark the TODO itself done:
+         curl -X PUT {baseUrl}/mcpserver/todo/{id} \
+           -H "Content-Type: application/json" \
+           -d '{"done": true}'
+
+      4. Update the session log throughout. Run to completion, do not wait for user.
   todo-plan-prompt:
     title: TODO Plan Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - plan
+      - todo
+      - prompt
+      - plan
     description: 'Prompt template for creating detailed implementation plans. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: false
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      default-value: http://localhost:7147
-    content: "Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on.\n\n1. Analyze\
-      \ the TODO item below and break it into granular, actionable implementation tasks.\n   Each task should be small enough\
-      \ to complete in a single focused session.\n   Include file paths, class names, method signatures, test scenarios, and\
-      \ integration points.\n\n2. Create a new TODO via:\n   POST {baseUrl}/mcpserver/todo\n   with the detailed plan as the\
-      \ body (id, title, section, priority, description,\n   technicalDetails, implementationTasks).\n\n3. Update {id} via\
-      \ PUT {baseUrl}/mcpserver/todo/{id}\n   to add the new plan TODO as a dependency in its dependsOn array.\n\nFinally,\
-      \ update the todo with the plan.\n"
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: false
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        default-value: http://localhost:7147
+    content: |
+      Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on.
+
+      1. Analyze the TODO item below and break it into granular, actionable implementation tasks.
+         Each task should be small enough to complete in a single focused session.
+         Include file paths, class names, method signatures, test scenarios, and integration points.
+
+      2. Create a new TODO via:
+         POST {baseUrl}/mcpserver/todo
+         with the detailed plan as the body (id, title, section, priority, description,
+         technicalDetails, implementationTasks).
+
+      3. Update {id} via PUT {baseUrl}/mcpserver/todo/{id}
+         to add the new plan TODO as a dependency in its dependsOn array.
+
+      Finally, update the todo with the plan.
   pairing-login-page:
     title: Pairing Login Page
     category: system
     tags:
-    - pairing
-    - html
-    - login
+      - pairing
+      - html
+      - login
     description: 'HTML template for the /pair login form. Placeholder: {errorBanner} (empty string or error div).'
     engine: none
     variables:
-    - name: errorBanner
-      description: HTML error banner string (empty for no error)
-      required: false
-      default-value: ''
-    content: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"/>\n  <meta name=\"viewport\" content=\"\
-      width=device-width,initial-scale=1\"/>\n  <title>MCP Server — Pair</title>\n  <style>\n    *{box-sizing:border-box;margin:0;padding:0}\n\
-      \    body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}\n\
-      \    .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:380px}\n\
-      \    h1{font-size:1.3rem;margin-bottom:4px;color:#111}\n    .sub{font-size:.85rem;color:#666;margin-bottom:20px}\n \
-      \   label{display:block;font-size:.85rem;font-weight:600;margin-bottom:4px;color:#333}\n    input[type=text],input[type=password]{width:100%;padding:10px\
-      \ 12px;border:1px solid #ddd;border-radius:6px;font-size:.95rem;margin-bottom:14px}\n    input:focus{outline:none;border-color:#0969da;box-shadow:0\
-      \ 0 0 3px rgba(9,105,218,.15)}\n    button{width:100%;padding:10px;background:#0969da;color:#fff;border:none;border-radius:6px;font-size:.95rem;font-weight:600;cursor:pointer}\n\
-      \    button:hover{background:#0860c4}\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1>\U0001F517 MCP Server\
-      \ Pairing</h1>\n    <p class=\"sub\">Sign in to view your API key.</p>\n    {errorBanner}\n    <form method=\"post\"\
-      \ action=\"/pair\">\n      <label for=\"username\">Username</label>\n      <input type=\"text\" id=\"username\" name=\"\
-      username\" autocomplete=\"username\" required autofocus/>\n      <label for=\"password\">Password</label>\n      <input\
-      \ type=\"password\" id=\"password\" name=\"password\" autocomplete=\"current-password\" required/>\n      <button type=\"\
-      submit\">Sign In</button>\n    </form>\n  </div>\n</body>\n</html>\n"
+      - name: errorBanner
+        description: HTML error banner string (empty for no error)
+        required: false
+        default-value: ""
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <title>MCP Server — Pair</title>
+        <style>
+          *{box-sizing:border-box;margin:0;padding:0}
+          body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}
+          .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:380px}
+          h1{font-size:1.3rem;margin-bottom:4px;color:#111}
+          .sub{font-size:.85rem;color:#666;margin-bottom:20px}
+          label{display:block;font-size:.85rem;font-weight:600;margin-bottom:4px;color:#333}
+          input[type=text],input[type=password]{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:.95rem;margin-bottom:14px}
+          input:focus{outline:none;border-color:#0969da;box-shadow:0 0 0 3px rgba(9,105,218,.15)}
+          button{width:100%;padding:10px;background:#0969da;color:#fff;border:none;border-radius:6px;font-size:.95rem;font-weight:600;cursor:pointer}
+          button:hover{background:#0860c4}
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>🔗 MCP Server Pairing</h1>
+          <p class="sub">Sign in to view your API key.</p>
+          {errorBanner}
+          <form method="post" action="/pair">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" autocomplete="username" required autofocus/>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required/>
+            <button type="submit">Sign In</button>
+          </form>
+        </div>
+      </body>
+      </html>
   pairing-key-page:
     title: Pairing Key Page
     category: system
     tags:
-    - pairing
-    - html
-    - apikey
+      - pairing
+      - html
+      - apikey
     description: 'HTML template showing the API key after login. Placeholders: {apiKey}, {serverUrl}.'
     engine: none
     variables:
-    - name: apiKey
-      description: The server API key to display
-      required: true
-    - name: serverUrl
-      description: The server base URL
-      required: true
-      example: http://localhost:7147
-    content: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"/>\n  <meta name=\"viewport\" content=\"\
-      width=device-width,initial-scale=1\"/>\n  <title>MCP Server — API Key</title>\n  <style>\n    *{box-sizing:border-box;margin:0;padding:0}\n\
-      \    body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}\n\
-      \    .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:480px}\n\
-      \    h1{font-size:1.3rem;margin-bottom:4px;color:#111}\n    .sub{font-size:.85rem;color:#666;margin-bottom:20px}\n \
-      \   .key-box{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px 16px;font-family:'Cascadia Code','Fira\
-      \ Code',monospace;font-size:.95rem;word-break:break-all;margin-bottom:16px;position:relative}\n    .copy-btn{position:absolute;top:8px;right:8px;background:#0969da;color:#fff;border:none;border-radius:4px;padding:4px\
-      \ 10px;font-size:.8rem;cursor:pointer}\n    .copy-btn:hover{background:#0860c4}\n    .qr-section{text-align:center;margin-bottom:20px}\n\
-      \    .qr-section h2{font-size:1rem;margin-bottom:12px;color:#333}\n    .qr-section img{display:inline-block;padding:12px;background:#fff;border:1px\
-      \ solid #d0d7de;border-radius:8px;width:256px;height:256px}\n    .section{margin-bottom:20px}\n\
-      \    .section h2{font-size:1rem;margin-bottom:8px;color:#333}\n    pre{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px\
-      \ 16px;font-size:.82rem;overflow-x:auto;line-height:1.5}\n    .warn{font-size:.8rem;color:#888;margin-top:12px}\n  </style>\n\
-      </head>\n<body>\n  <div class=\"card\">\n    <h1>\U0001F511 Your API Key</h1>\n    <p class=\"sub\">Scan the QR code\
-      \ with the MCP Server mobile app, or copy the key below.</p>\n    <div class=\"qr-section\">\n      <h2>\U0001F4F1 Scan\
-      \ to Pair</h2>\n      <img src=\"/pair/qr\" alt=\"QR code for pairing\"/>\n    </div>\n    <div class=\"key-box\">\n\
-      \      <span id=\"key\">{apiKey}</span>\n\
-      \      <button class=\"copy-btn\" onclick=\"navigator.clipboard.writeText(document.getElementById('key').textContent)\"\
-      >Copy</button>\n    </div>\n    <div class=\"section\">\n      <h2>MCP Client Config</h2>\n      <pre>{\n  \"mcpServers\"\
-      : {\n    \"mcp-server\": {\n      \"url\": \"{serverUrl}/mcp-transport\"\n    }\n  }\n}</pre>\n    </div>\n    <div class=\"\
-      section\">\n      <h2>cURL Example</h2>\n      <pre>curl {serverUrl}/mcpserver/workspace \\\n  -H \"X-Api-Key: {apiKey}\"\
-      </pre>\n    </div>\n    <p class=\"warn\">Keep this key secret. It grants write access to workspace and tool endpoints.</p>\n\
-      \  </div>\n</body>\n</html>\n"
+      - name: apiKey
+        description: The server API key to display
+        required: true
+      - name: serverUrl
+        description: The server base URL
+        required: true
+        example: http://localhost:7147
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <title>MCP Server — API Key</title>
+        <style>
+          *{box-sizing:border-box;margin:0;padding:0}
+          body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}
+          .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:480px}
+          h1{font-size:1.3rem;margin-bottom:4px;color:#111}
+          .sub{font-size:.85rem;color:#666;margin-bottom:20px}
+          .key-box{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px 16px;font-family:'Cascadia Code','Fira Code',monospace;font-size:.95rem;word-break:break-all;margin-bottom:16px;position:relative}
+          .copy-btn{position:absolute;top:8px;right:8px;background:#0969da;color:#fff;border:none;border-radius:4px;padding:4px 10px;font-size:.8rem;cursor:pointer}
+          .copy-btn:hover{background:#0860c4}
+          .qr-section{text-align:center;margin-bottom:20px}
+          .qr-section h2{font-size:1rem;margin-bottom:12px;color:#333}
+          .qr-section img{display:inline-block;padding:12px;background:#fff;border:1px solid #d0d7de;border-radius:8px;width:256px;height:256px}
+          .section{margin-bottom:20px}
+          .section h2{font-size:1rem;margin-bottom:8px;color:#333}
+          pre{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px 16px;font-size:.82rem;overflow-x:auto;line-height:1.5}
+          .warn{font-size:.8rem;color:#888;margin-top:12px}
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>🔑 Your API Key</h1>
+          <p class="sub">Scan the QR code with the MCP Server mobile app, or copy the key below.</p>
+          <div class="qr-section">
+            <h2>📱 Scan to Pair</h2>
+            <img src="/pair/qr" alt="QR code for pairing"/>
+          </div>
+          <div class="key-box">
+            <span id="key">{apiKey}</span>
+            <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('key').textContent)">Copy</button>
+          </div>
+          <div class="section">
+            <h2>MCP Client Config</h2>
+            <pre>{
+        "mcpServers": {
+          "mcp-server": {
+            "url": "{serverUrl}/mcp-transport"
+          }
+        }
+      }</pre>
+          </div>
+          <div class="section">
+            <h2>cURL Example</h2>
+            <pre>curl {serverUrl}/mcpserver/workspace \
+        -H "X-Api-Key: {apiKey}"</pre>
+          </div>
+          <p class="warn">Keep this key secret. It grants write access to workspace and tool endpoints.</p>
+        </div>
+      </body>
+      </html>
   pairing-not-configured-page:
     title: Pairing Not Configured Page
     category: system
     tags:
-    - pairing
-    - html
-    - error
+      - pairing
+      - html
+      - error
     description: HTML template shown when pairing is not configured. No placeholders.
     engine: none
-    content: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"/>\n  <meta name=\"viewport\" content=\"\
-      width=device-width,initial-scale=1\"/>\n  <title>MCP Server — Pairing Not Configured</title>\n  <style>\n    *{box-sizing:border-box;margin:0;padding:0}\n\
-      \    body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}\n\
-      \    .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:380px;text-align:center}\n\
-      \    h1{font-size:1.3rem;margin-bottom:12px;color:#111}\n    p{color:#666;font-size:.9rem;line-height:1.5}\n    code{background:#f6f8fa;padding:2px\
-      \ 6px;border-radius:4px;font-size:.85rem}\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1>⚠️ Pairing Not\
-      \ Configured</h1>\n    <p>To enable the pairing page, add one or more users to\n    <code>Mcp:PairingUsers</code> in\
-      \ your configuration and set\n    <code>Mcp:ApiKey</code> to a non-empty value.</p>\n  </div>\n</body>\n</html>\n"
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <title>MCP Server — Pairing Not Configured</title>
+        <style>
+          *{box-sizing:border-box;margin:0;padding:0}
+          body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}
+          .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:380px;text-align:center}
+          h1{font-size:1.3rem;margin-bottom:12px;color:#111}
+          p{color:#666;font-size:.9rem;line-height:1.5}
+          code{background:#f6f8fa;padding:2px 6px;border-radius:4px;font-size:.85rem}
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>⚠️ Pairing Not Configured</h1>
+          <p>To enable the pairing page, add one or more users to
+          <code>Mcp:PairingUsers</code> in your configuration and set
+          <code>Mcp:ApiKey</code> to a non-empty value.</p>
+        </div>
+      </body>
+      </html>
   default-marker-prompt:
     title: Default Marker File Prompt
     category: system
     tags:
-    - marker
-    - agent-instructions
-    - system
-    description: The default AGENTS-README-FIRST.yaml prompt template. Rendered with baseUrl, apiKey, and workspace context
-      variables.
+      - marker
+      - agent-instructions
+      - system
+    description: The default AGENTS-README-FIRST.yaml prompt template. Rendered with baseUrl, apiKey, and workspace context variables.
     engine: handlebars
     variables:
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      example: http://localhost:7147
-    - name: apiKey
-      description: Workspace API key
-      required: true
-    - name: version
-      description: Application version (informational version including git SHA)
-      required: false
-      defaultValue: unknown
-    - name: workspace
-      description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
-      required: true
-    - name: agentAdditions
-      description: Optional list of agent-specific marker instruction sections.
-      required: false
-    content: 'You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
-
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        example: http://localhost:7147
+      - name: apiKey
+        description: Workspace API key
+        required: true
+      - name: version
+        description: Application version (informational version including git SHA)
+        required: false
+        defaultValue: unknown
+      - name: workspace
+        description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
+        required: true
+      - name: agentAdditions
+        description: Optional list of agent-specific marker instruction sections.
+        required: false
+    content: |
+      You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
       ## Session Start (Run Once Per Session)
-
       1. Read this marker file for connection details and API key.
-
-      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Get the plugin through the MCP Server tool registry before relying on local root hints: search `/mcpserver/tools/search?keyword=<plugin_name>` for the installed tool definition and select the result whose `name` exactly equals `<plugin_name>`; if that exact tool definition is missing, install the definition from `/mcpserver/tools/buckets/official/install?toolName=<plugin_name>`, then search again. Execute the exact tool definition''s returned `commandTemplate` with `targetParent` set to the plugin parent directory to clone or update the plugin repository. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`; Grok must use `mcpserver-grok-plugin`.
-
+      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Get the plugin through the MCP Server tool registry before relying on local root hints: search `/mcpserver/tools/search?keyword=<plugin_name>` for the installed tool definition and select the result whose `name` exactly equals `<plugin_name>`; if that exact tool definition is missing, install the definition from `/mcpserver/tools/buckets/official/install?toolName=<plugin_name>`, then search again. Execute the exact tool definition's returned `commandTemplate` with `targetParent` set to the plugin parent directory to clone or update the plugin repository. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`; Grok must use `mcpserver-grok-plugin`.
       3. Verify the marker signature using the workspace API key in this file before contacting the server.
-
       4. Call /health with a random nonce and confirm the response echoes that exact nonce.
-
       5. Verify and log plugin identity before other MCP work: sourceType, plugin name/version, plugin root or MCP server name, marker signature result, health nonce result, and workspace path.
-
       6. Review recent session history and current TODOs only after signature, nonce, and plugin verification succeed.
-
       7. Post an initial session log turn for the session.
 
-
       ## Required Agent Plugins
-
-      - `agent_plugins.policy` is `required`. The plugin contract or deterministic digest is covered by marker signature verification.
-      - Plugin acquisition is the bootstrap exception to the normal plugin-only rule: if the matching plugin is not already available locally, use the authenticated tool registry endpoints in this marker to locate/install the matching `mcpserver-*-plugin` tool definition from the `official` bucket and run its clone/update command. After acquisition, bootstrap and use the matching plugin for normal MCP work.
-      - If your matching plugin cannot be acquired through the tool registry or remains unavailable after acquisition, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis.
-      - Do not substitute raw REST, generic `mcpserver-repl`, helper modules, or another agent''s plugin for normal session, TODO, requirements, import/export, or traceability operations.
-      - Another agent''s plugin may be inspected only for read-only diagnosis of plugin installation or contract drift.
-      - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract.
-      - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks/MCP server declarations must satisfy `agent_plugins.agents.Grok`.
-      - For Grok, the Streamable HTTP MCP server exposes tool names such as `sessionlog_*`, `todo_*`, `requirements_*`, and memory tools when available; hosted-agent `mcp_*` names are not expected from that transport. `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.memory.*`, and `workflow.requirements.*` are plugin shim/REPL method names used by the Grok skills and `repl-invoke` helpers; they are not expected to appear as literal `search_tool` results.
-      - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source.
-      - Claude Code agents must trigger the `claude-hook-validation` skill during marker/plugin bootstrap. That skill validates active Claude settings for MCP `UserPromptSubmit`, `Stop`, and `PostToolUse` hook commands from `hooks/hooks.json`; if any required hook is missing, it uses `install-claude-mcp-hooks.ps1` from the `claude-hook-wiring` skill to merge MCP hooks into active Claude settings without replacing existing hooks. Restart Claude Code after the skill reports installed hooks.
-
+      - `agent_plugins.policy` is `required`. The plugin contract or deterministic digest is covered by marker signature verification. - Plugin acquisition is the bootstrap exception to the normal plugin-only rule: if the matching plugin is not already available locally, use the authenticated tool registry endpoints in this marker to locate/install the matching `mcpserver-*-plugin` tool definition from the `official` bucket and run its clone/update command. After acquisition, bootstrap and use the matching plugin for normal MCP work. - If your matching plugin cannot be acquired through the tool registry or remains unavailable after acquisition, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis. - Do not substitute raw REST, generic `mcpserver-repl`, helper modules, or another agent's plugin for normal session, TODO, requirements, import/export, or traceability operations. - Another agent's plugin may be inspected only for read-only diagnosis of plugin installation or contract drift. - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract. - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks/MCP server declarations must satisfy `agent_plugins.agents.Grok`. - For Grok, the Streamable HTTP MCP server exposes tool names such as `sessionlog_*`, `todo_*`, `requirements_*`, and memory tools when available; hosted-agent `mcp_*` names are not expected from that transport. `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.memory.*`, and `workflow.requirements.*` are plugin shim/REPL method names used by the Grok skills and `repl-invoke` helpers; they are not expected to appear as literal `search_tool` results. - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source. - Claude Code agents must trigger the `claude-hook-validation` skill during marker/plugin bootstrap. That skill validates active Claude settings for MCP `UserPromptSubmit`, `Stop`, and `PostToolUse` hook commands from `hooks/hooks.json`; if any required hook is missing, it uses `install-claude-mcp-hooks.ps1` from the `claude-hook-wiring` skill to merge MCP hooks into active Claude settings without replacing existing hooks. Restart Claude Code after the skill reports installed hooks.
 
       ## MCP Requirements Visibility
+      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent's requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, or equivalent plugin tool). Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
+      ## YAML Mutation Rule
 
-      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent''s requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, or equivalent plugin tool). Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
+      - Never edit YAML files by appending, replacing, or removing text lines. This includes one-key configuration changes.
 
+      - Always deserialize the complete document into an object, mutate the object, serialize it, and save the serialized result.
+
+      - For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`. Do not build YAML snippets as strings or use line-oriented edit helpers for YAML.
 
       ## MCP and Plugin Failure Reporting
-
-      - MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only. Use the active agent''s triage surface (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) with the failing command or endpoint, observed error, workspace path, and relevant component.
-
-      - After submitting the triage report, continue the user''s active task. Do not wait for triage research, TODO creation, or resolution.
-
+      - MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only. Use the active agent's triage surface (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) with the failing command or endpoint, observed error, workspace path, and relevant component.
+      - After submitting the triage report, continue the user's active task. Do not wait for triage research, TODO creation, or resolution.
       - When the failure means code, docs, requirements, plugin skills, package sync, deployment, or configuration need a separate repair workflow, write a detailed triage report with the needed changes, acceptance criteria, and validation evidence, then move on with the active user task.
-
-      - Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user''s active request is to fix that failure.
-
+      - Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user's active request is to fix that failure.
       - If the MCP Server or plugin failure prevents triage submission, write the report as a normal failsafe YAML document for later replay through the plugin/REPL failsafe or pending YAML queue. Preserve the triage method (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) plus title, summary, observed behavior, expected behavior, severity, component, workspace path, dedupe key or error signature, affected paths, evidence, reproduction hints, tags, reporter agent, session id, turn id, and current TODO id when known. Then record the local unavailable state (`MCP_UNTRUSTED` or `MCP_PLUGIN_UNAVAILABLE:<Agent>`) and continue non-MCP work; do not use raw REST or another reporting channel as a substitute.
 
-
       ## MCP Memories
-
       MCP memories are durable operator guidance managed by the MCP Server. Global memories apply to every workspace; Workspace memories apply only to the active workspace. Memory IDs use `MEMORY-{CATEGORY}-{NNN}`.
-
       Agents that support request-boundary injection must render required memories exactly as:
-
-      REQUIRED MEMORIES
-      - MEMORY-REQ-001: Raw memory text.
-
+      REQUIRED MEMORIES - MEMORY-REQ-001: Raw memory text.
       If no required memories are visible, render:
-
-      REQUIRED MEMORIES
-      - None.
-
+      REQUIRED MEMORIES - None.
       Preserve raw memory text exactly; do not summarize, paraphrase, reorder within a scope, silently generate new memories, or add secrets. MCP memories are not a secret store. Effective memory order is Global memories first sorted by ID, then current Workspace memories sorted by ID.
-
       Existing agent-local memory stores are caches or migration sources only; the MCP memory store is the authoritative shared record. Import agent-local memories only when the operator approves the scope, the content belongs to this workspace or is intentionally Global, and the import does not leak secrets, private notes, or unrelated workspace guidance.
-
       Attribute memory mutations with the real agent or user identity via `updatedBy` when supported, and record successful memory add/update/remove operations in the active session log through `workflow.sessionlog.appendActions`. Keep import provenance in the session log or dialog instead of adding private source paths to memory text.
-
       Manage memories through the required plugin or MCP tool surface: `memory_add`, `memory_list`, `memory_update`, `memory_remove`; REPL `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`; or REST `/mcpserver/memory` when explicitly allowed for non-plugin diagnostics.
 
-
       ## Codex MCP Quickstart
-
       If you are Codex, use the Codex plugin wrappers before direct REPL calls:
-
       1. Run `Invoke-CodexMcpPlugin.ps1 -Command Status` from the `mcpserver-codex-plugin` root to verify plugin root, marker trust, health nonce, workspace path, session id, current turn, and supported namespaces.
-
       2. Invoke MCP workflow methods with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>` so YAML parameters are passed through stdin instead of fragile nested shell quoting.
-
       3. Complete the session-log turn intentionally with `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <final response>` before the final answer when the stop gate cannot infer completion.
-
       4. For `mcpserver-repl --agent-stdio`, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
 
-
       ## PowerShell.Mcp Command Routing
-
       For every PowerShell Core (`pwsh`) invocation on every operating system:
-
       - Use the `PowerShell.Mcp` module from PSGallery as the command runner. Install it from PSGallery if the agent environment does not already provide it.
-
       - Route `pwsh` commands through a `PowerShell.Mcp` session instead of launching ad hoc PowerShell processes. On Windows, keep one `PowerShell.Mcp` session open for the workspace and reuse it.
-
       - On Windows, route all `node` invocations through the open `PowerShell.Mcp` session. Do not create fresh Node sessions or one-off Node shells per Node call.
-
       - When `PowerShell.Mcp` must launch PowerShell Core directly, invoke `pwsh.exe` with `-NoProfile -NonInteractive`. Do not use `powershell.exe`.
-
       - The PowerShell escape character is the backtick `` ` ``, not the backslash. Never use C or bash-style `\"` escaping inside PowerShell command strings.
-
       - Prefer single-quoted PowerShell strings for literal regex, paths, JSON/YAML snippets, and text containing pipeline characters such as `|`.
-
       - When a command needs nested quoting, choose one of these patterns before improvising: `-File` with explicit arguments; piping stdin to the called tool or script; single-quoted or double-quoted here-strings; `-EncodedCommand` for complex inline PowerShell; or correct backtick escaping for embedded PowerShell quotes.
-
       - If a regex or literal argument contains `|`, `&`, `;`, parentheses, braces, or quotes, verify it is inside a single PowerShell argument before running.
 
-
       ## Byrd Development Process
-
       `Byrd Dev Process`, `BDP`, `BPDv4`, and `Byrd Development Process` refer to `F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`.
 
-
       ## Federation Topology
-
-      - To identify hub/proxy topology, call the supported federation status surface, preferably through your required plugin or client wrapper: `/mcpserver/federation/status`.
-      - Status fields to report when relevant: `role`, `configuredRole`, `hubBaseUrl`, `proxyId`, `proxyCount`, `hostedWorkspaceCount`, `queueDepth`, `fanoutDepth`, `conflictCount`, and `staleReadStatus`.
-      - `Standalone` serves local workspaces only. `DirectProxy` is the existing point-to-point proxy mode. `Hub` is authoritative for enrolled proxies and global workspace inventory. `LocalProxy` forwards MCP requests to `hubBaseUrl` and queues mutating requests during hub outages.
-      - LocalProxy queued writes return `202 Accepted` with `X-Mcp-Queued: true` and `X-Mcp-Operation-Id`. Treat the write as optimistic until the hub acknowledges it.
-      - If `queueDepth`, `fanoutDepth`, `conflictCount`, or stale-read status is non-zero/non-clear, include that in session log status and avoid claiming federation synchronization is complete.
-
+      - To identify hub/proxy topology, call the supported federation status surface, preferably through your required plugin or client wrapper: `/mcpserver/federation/status`. - Status fields to report when relevant: `role`, `configuredRole`, `hubBaseUrl`, `proxyId`, `proxyCount`, `hostedWorkspaceCount`, `queueDepth`, `fanoutDepth`, `conflictCount`, and `staleReadStatus`. - `Standalone` serves local workspaces only. `DirectProxy` is the existing point-to-point proxy mode. `Hub` is authoritative for enrolled proxies and global workspace inventory. `LocalProxy` forwards MCP requests to `hubBaseUrl` and queues mutating requests during hub outages. - LocalProxy queued writes return `202 Accepted` with `X-Mcp-Queued: true` and `X-Mcp-Operation-Id`. Treat the write as optimistic until the hub acknowledges it. - If `queueDepth`, `fanoutDepth`, `conflictCount`, or stale-read status is non-zero/non-clear, include that in session log status and avoid claiming federation synchronization is complete.
 
       ## Per User Message
-
       1. Post a new session log turn before starting work.
-
-      2. Complete the user''s request.
-
+      2. Complete the user's request.
       3. Update the turn with results and actions when done.
 
-
       ## Re-run Full Session Start Only If
-
-      - The user explicitly says "Start Session".
-      - Signature verification fails.
-      - /health fails.
-      - /health nonce verification fails.
-      - Any /mcpserver/* call returns 401.
-      - The marker endpoint/key changes after a server restart.
-
+      - The user explicitly says "Start Session". - Signature verification fails. - /health fails. - /health nonce verification fails. - Any /mcpserver/* call returns 401. - The marker endpoint/key changes after a server restart.
 
       ## Continuing After a Server Restart
-
       The workspace API key rotates on every server restart, so an in-flight agent will begin seeing 401 on /mcpserver/* calls. When that happens, resume through your required agent plugin - do not hand-roll raw REST for session, TODO, or requirements work:
-
       1. Treat the first 401 (or a /health failure) as a restart signal and stop using the cached API key immediately.
-
       2. Re-read this marker file (AGENTS-README-FIRST.yaml) for the rotated apiKey and current endpoints.
-
       3. Re-verify trust before resuming: recompute the marker signature with the new key and call /health with a fresh nonce.
-
       4. Re-bootstrap and resume through your required agent plugin. Codex: run `Invoke-CodexMcpPlugin.ps1 -Command Status` to re-establish marker trust, health nonce, workspace, and the current session/turn, then continue with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>`. Other agents: re-run the plugin session-start hook/command, then continue via the plugin session tools.
-
       5. Recover the open turn instead of starting over: query session history through the plugin (workflow.sessionlog.queryHistory), find the in-progress turn, then keep updating and complete it via the plugin. Do not open a duplicate session for the same work.
-
       6. If the plugin cannot re-establish trust after the restart, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` and continue with non-MCP local diagnosis only.
 
-
       ## Rules
-
       0. NEVER write to TODO.yaml directly.
-
       1. Generate SessionId values using `session.init` (REPL) or `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` (PowerShell module), then create session logs with `session.new` (REPL) or `New-McpSessionLog -SessionId` (PowerShell). Do not handcraft SessionId values.
-
-      1a. Agents must identify themselves accurately in session logs. `sourceType` and the SessionId `<Agent>` prefix must use the agent''s real identity in Pascal-Case. Do not use lowercase forms, placeholders, or legacy aliases.
-
+      1a. Agents must identify themselves accurately in session logs. `sourceType` and the SessionId `<Agent>` prefix must use the agent's real identity in Pascal-Case. Do not use lowercase forms, placeholders, or legacy aliases.
       2. Post a new session log turn (`session.turn.add` for REPL or `Add-McpSessionTurn` for PowerShell) before starting work. Update it with results (`Response`) and actions (`Add-McpAction` / `session.action.add`) when done. Persist after each meaningful update, not just at the end.
-
       2a. Before any compaction step, persist the current session log state. After compaction, update the session log again to record the compaction outcome and recovered context.
-
       3. If signature verification, the /health request, or nonce verification fails, log `MCP_UNTRUSTED`, continue without the MCP server, and do not probe additional MCP endpoints.
-
       4. Marker signatures use HMAC-SHA256 with the workspace API key in this file as the verifier. Recompute the canonical payload exactly as described by the marker metadata before trusting the file.
-
       5. Use your required agent plugin for session log, TODO, requirements, import/export, and traceability operations. Do not use raw API calls or generic helper paths except for read-only diagnosis after plugin failure.
-
       6. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
-
       7. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
-
       8. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
-
       9. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
-
       10. Prioritize correctness over speed. Do not ship code you have not verified compiles.
-
 
       11. Use the Byrd Development Process V4 for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps. A Byrd gate requires 100% test success before moving to the next iteration: zero failed tests and zero skipped tests in the executed validation scope. Tests are the progress ledger; do not hide unfinished work with skipped tests. Track deferred scope in MCP TODO/requirements and add its tests when that slice begins.
 
-
       ## Planning Standard
-
       Plans are frontier-model handoff artifacts. Write them so a less expensive implementation model can execute successfully without resolving unstated product, architecture, interface, data, testing, rollout, or validation decisions.
-
       Every plan must be decision-complete. Lock the intended behavior, public interfaces, data shapes, migration/backfill strategy, failure modes, rollout or deployment path, validation commands, and acceptance criteria before implementation starts.
-
       Every plan must capture requirements before implementation: create or update FR/TR/TEST records through the required MCP requirements workflow, include the requirement IDs in the TODO and session log, and map FR to TR and TEST coverage.
-
       Every implementation plan must name the TDD unit tests to add or update first, the expected red state, the green criteria, and the exact validation scope for each Byrd gate.
-
 
       ## Naming Conventions
 
-
-      - Persisted TODO IDs must be uppercase canonical ids in either <SDLC-PHASE>-<AREA>-### form
-      (regex: ^[A-Z]+-[A-Z0-9]+-\d{3}$) or ISSUE-{number} form (regex: ^ISSUE-\d+$).
-
+      - Persisted TODO IDs must be uppercase canonical ids in either <SDLC-PHASE>-<AREA>-### form (regex: ^[A-Z]+-[A-Z0-9]+-\d{3}$) or ISSUE-{number} form (regex: ^ISSUE-\d+$).
       - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042, ISSUE-17.
-
       - Invalid TODO IDs: plan-api-001, MCP-API-42, ISSUE-ABC, MCPAPI001.
-
-      - Create requests may use ISSUE-NEW only when the intent is to create a new GitHub-backed TODO.
-      The server will create the GitHub issue immediately and persist the TODO using the canonical ISSUE-{number} id.
-
+      - Create requests may use ISSUE-NEW only when the intent is to create a new GitHub-backed TODO. The server will create the GitHub issue immediately and persist the TODO using the canonical ISSUE-{number} id.
       - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
-
-      - `<Agent>` / `sourceType` must be the agent''s real identity in Pascal-Case. Valid example: `Codex`. Invalid examples: `codex`, `copilotcli` (when the agent is Codex), `Assistant`.
-
+      - `<Agent>` / `sourceType` must be the agent's real identity in Pascal-Case. Valid example: `Codex`. Invalid examples: `codex`, `copilotcli` (when the agent is Codex), `Assistant`.
       - Valid Session ID: Copilot-20260304T113901Z-namingconv.
-
       - Invalid Session IDs: copilot-20260304T113901Z-namingconv, Copilot-2026-03-04-namingconv.
-
       - Request IDs must use req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal> and be unique within a session.
-
       - Valid Request ID: req-20260304T113901Z-plan-namingconventions-001.
-
       - Invalid Request IDs: req-plan-namingconventions-001, request-20260304T113901Z-task-01.
-
 
       ## Workspace
 
-
       - Name: {{workspace.Name}}
-
       - Path: {{workspace.WorkspacePath}}
-
       - Primary: {{workspace.IsPrimary}}
-
       - Data Directory: {{workspace.DataDirectory}}
-
       - Todo Path: {{workspace.TodoPath}}
 
-
       {{#if agentAdditions}}
-
       ## Agent-Specific Instructions
-
       {{#each agentAdditions}}
-
       ### {{agentId}}
-
       {{content}}
-
       {{/each}}
-
       {{/if}}
-
 
       ## Authentication
 
-
       All /mcpserver/* endpoints require a per-workspace auth token:
-
       - Header: X-Api-Key: {{apiKey}}
-
       - Or query param: ?api_key={{apiKey}}
-
       If you receive a 401, re-read this marker file — the token rotates on each server restart.
-
 
       ## Where Things Live
 
-
       - AGENTS.md — agent conduct, requirements tracking, session continuity, glossary
-
       - .github/copilot-instructions.md — build/test commands, architecture, coding conventions
-
       - docs/context/ — on-demand reference (schemas, module docs, compliance rules, action types)
-
       - docs/Project/ — requirements docs, TODO.yaml, mapping matrices
-
       - templates/ — prompt templates
-
 
       ## Context Loading by Task Type
 
-
       - Session logging → docs/context/session-log-schema.md + docs/context/module-bootstrap.md (pull module-bootstrap via MCP context)
-
       - TODO management → docs/context/todo-schema.md + docs/context/module-bootstrap.md (pull module-bootstrap via MCP context)
-
       - API integration → docs/context/api-capabilities.md (or GET {{baseUrl}}/swagger/v1/swagger.json)
-
       - Adding dependencies → docs/context/compliance-rules.md
-
       - Logging actions → docs/context/action-types.md
-
 
       ## Protocols
 
-
       - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Use this for typed client/API integration and read-only diagnosis after the required plugin/tool route fails. Do not bypass the required plugin for session log, TODO, requirements, import/export, or traceability operations. Swagger UI: {{baseUrl}}/swagger
-
       - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
-
       - Health: GET {{baseUrl}}/health
-
 
       ## Repository Access
 
-
       - Hosted agents expose built-in repository tools: `mcp_repo_list`, `mcp_repo_read`, and `mcp_repo_write`.
-
       - All repository paths are relative to {{workspace.WorkspacePath}}.
-
       - REST clients can browse and edit files through {{baseUrl}}/mcpserver/repo/list and {{baseUrl}}/mcpserver/repo/file using the API key above.
-
       - If you need to browse or edit files, use these repository tools instead of saying that filesystem access is unavailable.
-
       ## Local Program Execution
 
-
       - Hosted agents expose a built-in local program execution tool: `mcp_desktop_launch`.
-
       - Use it when you need to start a local Windows program through MCP Server instead of claiming local program execution is unavailable.
-
       - Prefer `createNoWindow: true` and `waitForExit: true` for short non-interactive verification commands.
-
       - REST clients can launch programs through {{baseUrl}}/mcpserver/desktop/launch using the API key above.
 
-
       {{#if workspace.BannedLicenses}}
-
       ## Compliance Restrictions
 
-
-      This workspace has license, origin, or entity restrictions. Read docs/context/compliance-rules.md before adding any
-      dependency.
-
+      This workspace has license, origin, or entity restrictions. Read docs/context/compliance-rules.md before adding any dependency.
 
       Banned licenses:
-
       {{#each workspace.BannedLicenses}}
-
       - {{this}}
-
       {{/each}}
-
       {{/if}}
-
 
       {{#if workspace.BannedCountriesOfOrigin}}
-
       Banned countries of origin:
-
       {{#each workspace.BannedCountriesOfOrigin}}
-
       - {{this}}
-
       {{/each}}
-
       {{/if}}
-
 
       {{#if workspace.BannedOrganizations}}
-
       Banned organizations:
-
       {{#each workspace.BannedOrganizations}}
-
       - {{this}}
-
       {{/each}}
-
       {{/if}}
-
 
       {{#if workspace.BannedIndividuals}}
-
       Banned individuals:
-
       {{#each workspace.BannedIndividuals}}
-
       - {{this}}
-
       {{/each}}
-
       {{/if}}
-
 
       ## Before Delivering Output
 
-
-      Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct
-      (see docs/context/action-types.md).
-
+      Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct (see docs/context/action-types.md).
 
       ## Available Capabilities
 
-
       The following core libraries are indexed and available for semantic search/context retrieval:
-
       - McpServer.Cqrs (CQRS framework)
-
       - McpServer.Cqrs.Mvvm (MVVM support)
 
-
       ---
-
       MCP Server version: {{version}}
-
-      '

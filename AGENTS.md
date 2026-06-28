@@ -23,6 +23,7 @@ On every subsequent user message:
 9. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
 10. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
 11. When writing session logs or other audit records, agents must identify themselves accurately using their real agent identity in Pascal-Case. Do not use placeholder, legacy, or misleading sourceType values.
+12. Never edit YAML by appending, replacing, or removing text lines. Deserialize the complete document into an object, mutate the object, serialize it, and save it. Use `plugins/core/lib-ps/yaml-object-mutation.ps1` for PowerShell work.
 
 ## Byrd Test Gate
 
@@ -38,6 +39,7 @@ The canonical process is `docs/Development-Process-draft-v4.md`. To leave a Byrd
 - `tools/powershell/McpContext.psm1` — PowerShell module for context ingestion/query workflows
 - `tools/powershell/McpContext.USER.md` — user-level guide for the McpContext module
 - `tools/powershell/McpContext.AGENT.md` — agent workflow instructions for the McpContext module
+- `plugins/core/lib-ps/yaml-object-mutation.ps1` — object-first YAML mutation helper for agents and plugin maintenance
 
 ## MCP Interaction via REPL Tools
 

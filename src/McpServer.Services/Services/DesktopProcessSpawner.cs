@@ -37,6 +37,12 @@ public sealed class DesktopProcessSpawner : IProcessSpawner
             return _fallback.Spawn(startInfo);
         }
 
+        if (Environment.UserInteractive)
+        {
+            _logger.LogDebug("Host is already interactive; using default process spawner for {FileName}", startInfo.FileName);
+            return _fallback.Spawn(startInfo);
+        }
+
         var args = SerializeArguments(startInfo);
         var envVars = ExtractEnvironment(startInfo);
 
@@ -79,15 +85,20 @@ public sealed class DesktopProcessSpawner : IProcessSpawner
     /// Extracts environment variables set on the <see cref="ProcessStartInfo"/>
     /// into a dictionary for <see cref="DesktopProcessLauncher"/>.
     /// </summary>
-    private static Dictionary<string, string>? ExtractEnvironment(ProcessStartInfo psi)
+    internal static Dictionary<string, string>? ExtractEnvironment(ProcessStartInfo psi)
     {
         if (psi.Environment.Count == 0)
             return null;
 
         var result = new Dictionary<string, string>(psi.Environment.Count, StringComparer.OrdinalIgnoreCase);
+        var currentEnvironment = Environment.GetEnvironmentVariables();
         foreach (var (key, value) in psi.Environment)
         {
-            if (value is not null)
+            if (value is null)
+                continue;
+
+            var currentValue = currentEnvironment[key] as string;
+            if (!string.Equals(currentValue, value, StringComparison.Ordinal))
                 result[key] = value;
         }
 

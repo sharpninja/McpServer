@@ -2,23 +2,20 @@ Logging:
   LogLevel:
     Default: Information
     Microsoft.AspNetCore: Warning
-
 Serilog:
   MinimumLevel:
     Default: Information
     Override:
       Microsoft.AspNetCore: Warning
       McpServer.Support.Mcp.Logging: Verbose
-
 VoiceConversation:
   DefaultExecutionStrategy: copilot-cli
   ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
-
 Mcp:
   Port: 7147
   DataSource: mcp.db
-  DataDirectory: "."
-  RepoRoot: "."
+  DataDirectory: .
+  RepoRoot: .
   TodoFilePath: docs/Project/TODO.yaml
   TodoStorage:
     Provider: sqlite
@@ -27,14 +24,14 @@ Mcp:
     - WorkspacePath: E:\github\McpServer
       Name: McpServer
       TodoPath: docs/Project/TODO.yaml
-      DateTimeCreated: "2026-02-21T00:00:00+00:00"
-      DateTimeModified: "2026-02-23T00:00:00+00:00"
+      DateTimeCreated: 2026-02-21T00:00:00+00:00
+      DateTimeModified: 2026-02-23T00:00:00+00:00
   Instances:
     default:
       Port: 7147
       DataSource: mcp.db
-      DataDirectory: "."
-      RepoRoot: "."
+      DataDirectory: .
+      RepoRoot: .
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
         Provider: sqlite
@@ -42,7 +39,7 @@ Mcp:
     alt-local:
       Port: 7157
       DataSource: mcp-alt.db
-      DataDirectory: "."
+      DataDirectory: .
       RepoRoot: docs
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
@@ -54,5 +51,15 @@ Mcp:
     IncludeQueryString: false
   Parseable:
     Enabled: false
-    Url: ''
+    Url: ""
     StreamName: mcp
+Triage:
+  QuietPeriod: 00:15:00
+  SweepInterval: 00:01:00
+  MaxRunTime: 00:10:00
+  PromptTemplateId: triage-research-bug-report
+  AgentName: triage
+  AgentPath: C:\Users\kingd\AppData\Roaming\npm\codex.cmd
+  AgentModel: auto
+  ExecutionStrategy: codex-cli
+  AgentParameters: {}

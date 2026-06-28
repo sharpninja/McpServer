@@ -97,3 +97,7 @@ resolvable on `PATH`.
   plugin `workflow.*` / `client.*` methods.
 - Relying on working-directory persistence between tool calls. Use absolute paths every
   time.
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`.

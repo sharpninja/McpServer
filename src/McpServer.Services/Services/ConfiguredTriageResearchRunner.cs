@@ -54,7 +54,7 @@ internal sealed class ConfiguredTriageResearchRunner(
         await session.EndAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
         return result.State == CopilotResultState.Success
-            ? new TriageResearchRunResult(true, result.Body, null)
-            : new TriageResearchRunResult(false, result.Body, result.Stderr);
+            ? new TriageResearchRunResult(true, result.Body, null, result.Stdout, result.Stderr, result.ExitCode)
+            : new TriageResearchRunResult(false, result.Body, result.Stderr, result.Stdout, result.Stderr, result.ExitCode);
     }
 }

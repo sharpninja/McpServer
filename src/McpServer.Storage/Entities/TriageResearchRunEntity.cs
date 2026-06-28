@@ -40,6 +40,15 @@ public sealed class TriageResearchRunEntity
     /// <summary>Raw agent output.</summary>
     public string? RawOutput { get; set; }
 
+    /// <summary>Raw stdout stream captured from the launched triage agent process.</summary>
+    public string? AgentStdout { get; set; }
+
+    /// <summary>Raw stderr stream captured from the launched triage agent process.</summary>
+    public string? AgentStderr { get; set; }
+
+    /// <summary>Exit code returned by the launched triage agent process.</summary>
+    public int? AgentExitCode { get; set; }
+
     /// <summary>Schema-valid agent JSON after validation.</summary>
     public string? ResponseJson { get; set; }
 

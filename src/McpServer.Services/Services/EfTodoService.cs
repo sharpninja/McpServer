@@ -41,6 +41,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     private readonly ILogger<EfTodoService> _logger;
     private readonly IChangeEventBus? _eventBus;
     private readonly IHttpContextAccessor? _httpContextAccessor;
+    private readonly string? _fixedWorkspacePath;
     private readonly SemaphoreSlim _writeLock = new(1, 1);
     private readonly JsonSerializerOptions _json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
@@ -54,7 +55,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         IWriteAuditLog auditLog,
         ILogger<EfTodoService> logger,
         IChangeEventBus? eventBus = null,
-        IHttpContextAccessor? httpContextAccessor = null)
+        IHttpContextAccessor? httpContextAccessor = null,
+        string? fixedWorkspacePath = null)
     {
         _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
         _ingestionOptions = ingestionOptions ?? throw new ArgumentNullException(nameof(ingestionOptions));
@@ -63,6 +65,9 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _eventBus = eventBus;
         _httpContextAccessor = httpContextAccessor;
+        _fixedWorkspacePath = string.IsNullOrWhiteSpace(fixedWorkspacePath)
+            ? null
+            : Path.GetFullPath(fixedWorkspacePath);
     }
 
     /// <inheritdoc />
@@ -1196,10 +1201,13 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         // request (STDIO/hosted services/tests) we leave the fresh scope's
         // WorkspaceContext as-is.
         var requestCtx = _httpContextAccessor?.HttpContext?.RequestServices.GetService<WorkspaceContext>();
-        if (requestCtx is not null && !string.IsNullOrEmpty(requestCtx.WorkspacePath))
+        var workspacePath = requestCtx is not null && !string.IsNullOrEmpty(requestCtx.WorkspacePath)
+            ? requestCtx.WorkspacePath
+            : _fixedWorkspacePath;
+        if (!string.IsNullOrEmpty(workspacePath))
         {
             var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            ctx.OverrideWorkspaceId(requestCtx.WorkspacePath);
+            ctx.OverrideWorkspaceId(workspacePath);
             return new DbScope(scope, ctx);
         }
         return new DbScope(scope);

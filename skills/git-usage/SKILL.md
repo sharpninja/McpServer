@@ -91,3 +91,7 @@ Remote action (network, opt-in):
 - Amending or hard-resetting to "tidy up" and silently dropping work. Prefer additive new commits; confirm before any destructive reset.
 - Staging everything (`add` with no paths or a broad glob) and committing another concurrent agent's in-flight edits.
 - Bypassing a failing hook with `--no-verify` instead of fixing the underlying problem.
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`.

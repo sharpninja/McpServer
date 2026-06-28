@@ -42,63 +42,103 @@ Mcp:
     SqliteDataSource: mcp.db
   DesktopLaunch:
     Enabled: false
-    AccessToken: ''
+    AccessToken: ""
     AllowedExecutables: []
   Workspaces:
-  - WorkspacePath: E:\github\McpServer
-    Name: McpServer
-    TodoPath: docs/Project/TODO.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: &o0
-      DateTime: 0001-01-01T00:00:00.0000000
-      UtcDateTime: 0001-01-01T00:00:00.0000000Z
-      LocalDateTime: 0001-01-01T00:00:00.0000000-06:00
-      Date: 0001-01-01T00:00:00.0000000
-      Day: 1
-      DayOfWeek: Monday
-      DayOfYear: 1
-      Hour: 0
-      Millisecond: 0
-      Microsecond: 0
-      Nanosecond: 0
-      Minute: 0
-      Month: 1
-      Offset: 00:00:00
-      TotalOffsetMinutes: 0
-      Second: 0
-      Ticks: 0
-      UtcTicks: 0
-      TimeOfDay: 00:00:00
-      Year: 1
-    DateTimeModified: *o0
-  - WorkspacePath: F:\GitHub\Requirements
-    Name: Requirements
-    TodoPath: docs/TODO.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: &o1
-      DateTime: 2026-04-06T00:00:00.0000000
-      UtcDateTime: 2026-04-06T00:00:00.0000000Z
-      LocalDateTime: 2026-04-05T18:00:00.0000000-06:00
-      Date: 2026-04-06T00:00:00.0000000
-      Day: 6
-      DayOfWeek: Monday
-      DayOfYear: 96
-      Hour: 0
-      Millisecond: 0
-      Microsecond: 0
-      Nanosecond: 0
-      Minute: 0
-      Month: 4
-      Offset: 00:00:00
-      TotalOffsetMinutes: 0
-      Second: 0
-      Ticks: 0
-      UtcTicks: 0
-      TimeOfDay: 00:00:00
-      Year: 2026
-    DateTimeModified: *o1
+    - WorkspacePath: E:\github\McpServer
+      Name: McpServer
+      TodoPath: docs/Project/TODO.yaml
+      IsPrimary: false
+      IsEnabled: true
+      DateTimeCreated:
+        DateTime: 0001-01-01T00:00:00.0000000
+        UtcDateTime: 0001-01-01T00:00:00.0000000Z
+        LocalDateTime: 0001-01-01T00:00:00.0000000-06:00
+        Date: 0001-01-01T00:00:00.0000000
+        Day: 1
+        DayOfWeek: Monday
+        DayOfYear: 1
+        Hour: 0
+        Millisecond: 0
+        Microsecond: 0
+        Nanosecond: 0
+        Minute: 0
+        Month: 1
+        Offset: 00:00:00
+        TotalOffsetMinutes: 0
+        Second: 0
+        Ticks: 0
+        UtcTicks: 0
+        TimeOfDay: 00:00:00
+        Year: 1
+      DateTimeModified:
+        DateTime: 0001-01-01T00:00:00.0000000
+        UtcDateTime: 0001-01-01T00:00:00.0000000Z
+        LocalDateTime: 0001-01-01T00:00:00.0000000-06:00
+        Date: 0001-01-01T00:00:00.0000000
+        Day: 1
+        DayOfWeek: Monday
+        DayOfYear: 1
+        Hour: 0
+        Millisecond: 0
+        Microsecond: 0
+        Nanosecond: 0
+        Minute: 0
+        Month: 1
+        Offset: 00:00:00
+        TotalOffsetMinutes: 0
+        Second: 0
+        Ticks: 0
+        UtcTicks: 0
+        TimeOfDay: 00:00:00
+        Year: 1
+    - WorkspacePath: F:\GitHub\Requirements
+      Name: Requirements
+      TodoPath: docs/TODO.yaml
+      IsPrimary: false
+      IsEnabled: true
+      DateTimeCreated:
+        DateTime: 2026-04-06T00:00:00.0000000
+        UtcDateTime: 2026-04-06T00:00:00.0000000Z
+        LocalDateTime: 2026-04-05T18:00:00.0000000-06:00
+        Date: 2026-04-06T00:00:00.0000000
+        Day: 6
+        DayOfWeek: Monday
+        DayOfYear: 96
+        Hour: 0
+        Millisecond: 0
+        Microsecond: 0
+        Nanosecond: 0
+        Minute: 0
+        Month: 4
+        Offset: 00:00:00
+        TotalOffsetMinutes: 0
+        Second: 0
+        Ticks: 0
+        UtcTicks: 0
+        TimeOfDay: 00:00:00
+        Year: 2026
+      DateTimeModified:
+        DateTime: 2026-04-06T00:00:00.0000000
+        UtcDateTime: 2026-04-06T00:00:00.0000000Z
+        LocalDateTime: 2026-04-05T18:00:00.0000000-06:00
+        Date: 2026-04-06T00:00:00.0000000
+        Day: 6
+        DayOfWeek: Monday
+        DayOfYear: 96
+        Hour: 0
+        Millisecond: 0
+        Microsecond: 0
+        Nanosecond: 0
+        Minute: 0
+        Month: 4
+        Offset: 00:00:00
+        TotalOffsetMinutes: 0
+        Second: 0
+        Ticks: 0
+        UtcTicks: 0
+        TimeOfDay: 00:00:00
+        Year: 2026
   Instances:
     default:
       Port: 7147
@@ -119,20 +159,20 @@ Mcp:
         Provider: sqlite
         SqliteDataSource: mcp-alt.db
   InteractionLogging:
-    LoggingServiceUrl: ''
+    LoggingServiceUrl: ""
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
     Enabled: false
-    Url: ''
+    Url: ""
     StreamName: mcp
-    Username: ''
-    Password: ''
+    Username: ""
+    Password: ""
     FallbackLogPath: logs/mcp-.log
   IdentityServer:
     Enabled: true
-    IssuerUri: ''
-    ConnectionString: ''
+    IssuerUri: ""
+    ConnectionString: ""
     DatabaseName: McpIdentity
     SeedDefaults: true
     DefaultAdminUser: admin
@@ -146,3 +186,13 @@ Mcp:
     Targets:
       - Name: ngrok
         BaseUrl: https://zeugmatically-unindicative-calista.ngrok-free.dev
+Triage:
+  QuietPeriod: 00:15:00
+  SweepInterval: 00:01:00
+  MaxRunTime: 00:10:00
+  PromptTemplateId: triage-research-bug-report
+  AgentName: triage
+  AgentPath: C:\Users\kingd\AppData\Roaming\npm\codex.cmd
+  AgentModel: auto
+  ExecutionStrategy: codex-cli
+  AgentParameters: {}

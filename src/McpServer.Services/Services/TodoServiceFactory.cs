@@ -51,7 +51,7 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
     public ITodoService CreatePrimary()
     {
         EnsureDatabaseProvider();
-        return BuildEfTodoService();
+        return BuildEfTodoService(Path.GetFullPath(_ingestionOptions.Value.RepoRoot ?? "."));
     }
 
     /// <inheritdoc />
@@ -64,17 +64,18 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
 
         // The database provider is process-wide (selected by Mcp:Database:Provider, TR-MCP-CFG-007);
         // workspaceContext is preserved for projection hooks but no longer selects a per-workspace store.
-        return BuildEfTodoService();
+        return BuildEfTodoService(Path.GetFullPath(workspacePath));
     }
 
-    private EfTodoService BuildEfTodoService() => new(
+    private EfTodoService BuildEfTodoService(string workspacePath) => new(
         _scopeFactory,
         _ingestionOptions,
         _storageOptions,
         _auditLog,
         _loggerFactory.CreateLogger<EfTodoService>(),
         _eventBus,
-        _httpContextAccessor);
+        _httpContextAccessor,
+        workspacePath);
 
     private void EnsureDatabaseProvider()
     {

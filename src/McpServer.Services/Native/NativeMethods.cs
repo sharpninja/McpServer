@@ -128,6 +128,23 @@ internal static partial class NativeMethods
         out NativeStructs.PROCESS_INFORMATION lpProcessInformation);
 
     /// <summary>
+    /// Creates an environment block for the specified user token.
+    /// </summary>
+    [DllImport("userenv.dll", EntryPoint = "CreateEnvironmentBlock", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool CreateEnvironmentBlock(
+        out IntPtr lpEnvironment,
+        IntPtr hToken,
+        [MarshalAs(UnmanagedType.Bool)] bool bInherit);
+
+    /// <summary>
+    /// Destroys an environment block returned by <see cref="CreateEnvironmentBlock"/>.
+    /// </summary>
+    [DllImport("userenv.dll", EntryPoint = "DestroyEnvironmentBlock", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool DestroyEnvironmentBlock(IntPtr lpEnvironment);
+
+    /// <summary>
     /// Sets information for an access token.
     /// Used to assign the token to an interactive desktop session via <c>TokenSessionId</c>.
     /// </summary>

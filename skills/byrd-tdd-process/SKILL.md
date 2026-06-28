@@ -79,3 +79,7 @@ The canonical reference is `docs/Development-Process-draft-v4.md`. This process 
 - Running integration tests before the unit suite is green, hiding unit-level regressions behind integration noise.
 - Editing `docs/Project/TODO.yaml` or session-log files directly instead of routing through the MCP plugin tools.
 - Treating a requirement defect surfaced by a test as a test problem and weakening the assertion, instead of refining the requirement.
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`.

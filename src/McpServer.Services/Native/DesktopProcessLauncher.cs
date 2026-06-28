@@ -160,7 +160,7 @@ internal sealed class DesktopProcessLauncher
             };
 
             var creationFlags = NativeConstants.CREATE_UNICODE_ENVIRONMENT | NativeConstants.CREATE_NO_WINDOW;
-            var envBlock = BuildEnvironmentBlock(environmentVariables);
+            using var envBlock = BuildEnvironmentBlock(token, environmentVariables);
 
             var commandLine = BuildCommandLine(executablePath, arguments);
 
@@ -182,7 +182,7 @@ internal sealed class DesktopProcessLauncher
                     IntPtr.Zero,
                     true, // bInheritHandles — required for stdio pipes
                     creationFlags,
-                    envBlock,
+                    envBlock.Pointer,
                     workingDirectory,
                     ref si,
                     out pi);
@@ -195,7 +195,7 @@ internal sealed class DesktopProcessLauncher
                     null,
                     commandLine,
                     creationFlags,
-                    envBlock,
+                    envBlock.Pointer,
                     workingDirectory,
                     ref si,
                     out pi);
@@ -301,7 +301,7 @@ internal sealed class DesktopProcessLauncher
             };
 
             var creationFlags = NativeConstants.CREATE_UNICODE_ENVIRONMENT | NativeConstants.CREATE_NEW_CONSOLE;
-            var envBlock = BuildEnvironmentBlock(environmentVariables);
+            using var envBlock = BuildEnvironmentBlock(token, environmentVariables);
 
             var commandLine = BuildCommandLine(executablePath, arguments);
 
@@ -323,7 +323,7 @@ internal sealed class DesktopProcessLauncher
                     IntPtr.Zero,
                     false,
                     creationFlags,
-                    envBlock,
+                    envBlock.Pointer,
                     workingDirectory,
                     ref si,
                     out pi);
@@ -336,7 +336,7 @@ internal sealed class DesktopProcessLauncher
                     null,
                     commandLine,
                     creationFlags,
-                    envBlock,
+                    envBlock.Pointer,
                     workingDirectory,
                     ref si,
                     out pi);
@@ -573,23 +573,15 @@ internal sealed class DesktopProcessLauncher
         return string.IsNullOrEmpty(arguments) ? exe : $"{exe} {arguments}";
     }
 
-    private static IntPtr BuildEnvironmentBlock(Dictionary<string, string>? environmentVariables)
+    private static DesktopEnvironmentBlock BuildEnvironmentBlock(
+        IntPtr userToken,
+        Dictionary<string, string>? environmentVariables)
     {
-        if (environmentVariables is not { Count: > 0 })
-            return IntPtr.Zero;
+        var env = TryReadUserEnvironment(userToken) ?? ReadCurrentEnvironment();
 
-        var env = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var entry in Environment.GetEnvironmentVariables())
-        {
-            if (entry is System.Collections.DictionaryEntry de &&
-                de.Key is string key && de.Value is string value)
-            {
+        if (environmentVariables is { Count: > 0 })
+            foreach (var (key, value) in environmentVariables)
                 env[key] = value;
-            }
-        }
-
-        foreach (var (key, value) in environmentVariables)
-            env[key] = value;
 
         var sb = new StringBuilder();
         foreach (var (key, value) in env)
@@ -601,7 +593,76 @@ internal sealed class DesktopProcessLauncher
         }
 
         sb.Append('\0');
-        return Marshal.StringToHGlobalUni(sb.ToString());
+        return new DesktopEnvironmentBlock(Marshal.StringToHGlobalUni(sb.ToString()));
+    }
+
+    private static SortedDictionary<string, string>? TryReadUserEnvironment(IntPtr userToken)
+    {
+        if (!NativeMethods.CreateEnvironmentBlock(out var environmentBlock, userToken, true))
+            return null;
+
+        try
+        {
+            return ParseEnvironmentBlock(environmentBlock);
+        }
+        finally
+        {
+            NativeMethods.DestroyEnvironmentBlock(environmentBlock);
+        }
+    }
+
+    private static SortedDictionary<string, string> ReadCurrentEnvironment()
+    {
+        var env = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in Environment.GetEnvironmentVariables())
+        {
+            if (entry is System.Collections.DictionaryEntry de &&
+                de.Key is string key &&
+                de.Value is string value)
+            {
+                env[key] = value;
+            }
+        }
+
+        return env;
+    }
+
+    private static SortedDictionary<string, string> ParseEnvironmentBlock(IntPtr environmentBlock)
+    {
+        var env = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var offset = 0;
+
+        while (true)
+        {
+            var entry = Marshal.PtrToStringUni(IntPtr.Add(environmentBlock, offset));
+            if (string.IsNullOrEmpty(entry))
+                break;
+
+            offset += (entry.Length + 1) * sizeof(char);
+            var separator = entry[0] == '='
+                ? entry.IndexOf('=', 1)
+                : entry.IndexOf('=');
+            if (separator <= 0)
+                continue;
+
+            env[entry[..separator]] = entry[(separator + 1)..];
+        }
+
+        return env;
+    }
+
+    private sealed class DesktopEnvironmentBlock(IntPtr pointer) : IDisposable
+    {
+        public IntPtr Pointer { get; private set; } = pointer;
+
+        public void Dispose()
+        {
+            if (Pointer == IntPtr.Zero)
+                return;
+
+            Marshal.FreeHGlobal(Pointer);
+            Pointer = IntPtr.Zero;
+        }
     }
 
     private static void CloseIfValid(IntPtr handle)

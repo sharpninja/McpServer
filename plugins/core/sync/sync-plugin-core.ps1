@@ -2,8 +2,9 @@
 .SYNOPSIS
     FR-MCP-PLUGINCORE-001: Sync the canonical plugin core into a plugin repo.
 .DESCRIPTION
-    Copies lib-ps/ into <plugin>/lib/ and writes CORE-MANIFEST.yaml with
-    per-file sha256 hashes so CI can detect local edits.
+    Copies lib-ps/ into <plugin>/lib/ and writes CORE-MANIFEST.yaml by
+    serializing a PowerShell object with per-file sha256 hashes so CI can detect
+    local edits.
 .PARAMETER PluginRoot
     Root of the target plugin repository.
 .PARAMETER IncludePs
@@ -29,15 +30,49 @@ $manifest = Join-Path $PluginRoot 'CORE-MANIFEST.yaml'
 
 New-Item -ItemType Directory -Force (Join-Path $PluginRoot 'lib') | Out-Null
 
+function Import-YamlSerializer {
+    if (-not (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue) -or
+        -not (Get-Command ConvertTo-Yaml -ErrorAction SilentlyContinue)) {
+        Import-Module powershell-yaml -ErrorAction Stop
+    }
+}
+
+function Read-CoreManifest {
+    param([Parameter(Mandatory)][string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
+        return $null
+    }
+
+    Import-YamlSerializer
+    return (ConvertFrom-Yaml -Yaml ([System.IO.File]::ReadAllText($Path)) -Ordered -ErrorAction Stop)
+}
+
+function Get-CoreManifestFileKeys {
+    param($ManifestDocument)
+
+    if ($null -eq $ManifestDocument) {
+        return @()
+    }
+
+    if ($ManifestDocument -isnot [System.Collections.IDictionary] -or
+        -not $ManifestDocument.Contains('files') -or
+        $ManifestDocument['files'] -isnot [System.Collections.IDictionary]) {
+        return @()
+    }
+
+    return @($ManifestDocument['files'].Keys)
+}
+
 function Remove-PreviousCoreFiles {
-    if (Test-Path -LiteralPath $manifest) {
-        foreach ($line in Get-Content -LiteralPath $manifest) {
-            if ($line -match '^  (lib/[^:]+):\s*[0-9a-f]{64}$') {
-                $target = Join-Path $PluginRoot ($Matches[1] -replace '/', [System.IO.Path]::DirectorySeparatorChar)
-                if (Test-Path -LiteralPath $target -PathType Leaf) {
-                    Remove-Item -LiteralPath $target -Force
-                }
-            }
+    foreach ($relativePath in Get-CoreManifestFileKeys (Read-CoreManifest -Path $manifest)) {
+        if ($relativePath -notlike 'lib/*') {
+            continue
+        }
+
+        $target = Join-Path $PluginRoot ($relativePath -replace '/', [System.IO.Path]::DirectorySeparatorChar)
+        if (Test-Path -LiteralPath $target -PathType Leaf) {
+            Remove-Item -LiteralPath $target -Force
         }
     }
 
@@ -63,10 +98,7 @@ function Remove-PreviousCoreFiles {
 
 Remove-PreviousCoreFiles
 
-$lines = [System.Collections.Generic.List[string]]::new()
-$lines.Add("coreVersion: $coreVersion")
-$lines.Add("syncedAtUtc: $syncedAt")
-$lines.Add('files:')
+$manifestFiles = [ordered]@{}
 
 function Sync-Tree {
     param([string]$SourceDir)
@@ -78,12 +110,19 @@ function Sync-Tree {
         New-Item -ItemType Directory -Force (Split-Path -Parent $dest) | Out-Null
         Copy-Item $_.FullName $dest -Force
         $hash = (Get-FileHash -Path $dest -Algorithm SHA256).Hash.ToLowerInvariant()
-        $lines.Add("  lib/${rel}: $hash")
+        $manifestFiles["lib/$rel"] = $hash
     }
 }
 
 Sync-Tree (Join-Path $coreRoot 'lib-ps')
 
-[System.IO.File]::WriteAllText($manifest, (($lines -join "`n") + "`n"), [System.Text.UTF8Encoding]::new($false))
-$count = ($lines | Where-Object { $_ -like '  lib/*' }).Count
+Import-YamlSerializer
+$manifestObject = [ordered]@{
+    coreVersion = $coreVersion
+    syncedAtUtc = $syncedAt
+    files = $manifestFiles
+}
+$manifestYaml = ConvertTo-Yaml -Data $manifestObject -Options WithIndentedSequences
+[System.IO.File]::WriteAllText($manifest, ($manifestYaml.TrimEnd() + "`n"), [System.Text.UTF8Encoding]::new($false))
+$count = $manifestFiles.Count
 Write-Output "synced $count core files into $PluginRoot/lib (core $coreVersion)"

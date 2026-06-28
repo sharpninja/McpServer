@@ -248,6 +248,60 @@ public sealed class TriageServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGE-004: background worker scopes do not have an ambient HTTP workspace,
+    /// but due workspace triage groups must still run and create one backlog TODO.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        TriageResearchRequest? researchRequest = null;
+        runner.RunAsync(Arg.Do<TriageResearchRequest>(request => researchRequest = request), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                {"title":"Fix background triage","summary":"The worker must see workspace groups.","severity":"medium","acceptanceCriteria":["Background worker processes due workspace groups"],"implementationNotes":[]}
+                """,
+                null));
+
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call => new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = ((TodoCreateRequest)call[0]!).Id,
+                    Title = ((TodoCreateRequest)call[0]!).Title,
+                    Section = ((TodoCreateRequest)call[0]!).Section,
+                    Priority = ((TodoCreateRequest)call[0]!).Priority,
+                    Done = false,
+                }));
+
+        var foreground = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await foreground.SubmitReportAsync(CreateReport("background-scope"));
+        var background = CreateService(string.Empty, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+
+        var processed = await background.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        Assert.NotNull(researchRequest);
+        Assert.Equal(PrimaryWorkspace, researchRequest.WorkspacePath);
+        await todo.Received(1).CreateAsync(
+            Arg.Is<TodoCreateRequest>(request =>
+                request != null &&
+                request.Id == "BUG-TRIAGE-001" &&
+                request.Title == "Fix background triage"),
+            Arg.Any<CancellationToken>());
+
+        var verifier = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var group = await verifier.GetGroupAsync(submit.GroupId);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-005: invalid research output creates no TODO and leaves an inspectable
     /// failure state on the group and research run.
     /// </summary>
@@ -338,7 +392,14 @@ public sealed class TriageServiceTests : IDisposable
         {
             db.TriageGroups.Add(SeedGroup("triage-group-primary", "completed", now));
             db.TriageResearchRuns.AddRange(
-                SeedRun("triage-run-primary", "triage-group-primary", "completed", now),
+                SeedRun(
+                    "triage-run-primary",
+                    "triage-group-primary",
+                    "completed",
+                    now,
+                    agentStdout: "codex stdout",
+                    agentStderr: "codex stderr",
+                    agentExitCode: 0),
                 SeedRun("triage-run-processing", "triage-group-primary", "processing", now.AddMinutes(1)));
             await db.SaveChangesAsync();
         }
@@ -363,6 +424,9 @@ public sealed class TriageServiceTests : IDisposable
         var run = Assert.Single(result.Items);
         Assert.Equal("triage-run-primary", run.RunId);
         Assert.Equal(PrimaryWorkspace, run.WorkspacePath);
+        Assert.Equal("codex stdout", run.AgentStdout);
+        Assert.Equal("codex stderr", run.AgentStderr);
+        Assert.Equal(0, run.AgentExitCode);
         Assert.Equal(1, result.TotalCount);
     }
 
@@ -576,6 +640,9 @@ public sealed class TriageServiceTests : IDisposable
         DateTimeOffset? completedUtc = null,
         string? responseJson = null,
         string? rawOutput = null,
+        string? agentStdout = null,
+        string? agentStderr = null,
+        int? agentExitCode = null,
         string? createdTodoId = null,
         string workspacePath = PrimaryWorkspace)
         => new()
@@ -588,6 +655,9 @@ public sealed class TriageServiceTests : IDisposable
             Prompt = "rendered prompt",
             GroupJson = """{"groupId":"test"}""",
             RawOutput = rawOutput,
+            AgentStdout = agentStdout,
+            AgentStderr = agentStderr,
+            AgentExitCode = agentExitCode,
             ResponseJson = responseJson,
             StartedUtc = startedUtc,
             CompletedUtc = completedUtc,
