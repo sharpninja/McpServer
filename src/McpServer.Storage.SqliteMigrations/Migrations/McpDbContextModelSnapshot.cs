@@ -2181,45 +2181,6 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.ToTable("TodoItems");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRecordEntity", b =>
-                {
-                    b.Property<string>("WorkspaceId")
-                        .HasMaxLength(1024)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TodoId")
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DeleteReason")
-                        .HasMaxLength(1024)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("WorkspaceId", "TodoId");
-
-                    b.HasIndex("UpdatedAtUtc");
-
-                    b.ToTable("TodoRecords");
-                });
-
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -3277,15 +3238,6 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRecordEntity", b =>
-                {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
-                        .WithMany()
-                        .HasForeignKey("WorkspaceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3294,7 +3246,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoRecordEntity", "TodoRecord")
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
                         .WithMany()
                         .HasForeignKey("WorkspaceId", "TodoId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3308,7 +3260,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.Navigation("Requirement");
 
-                    b.Navigation("TodoRecord");
+                    b.Navigation("TodoItem");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity", b =>

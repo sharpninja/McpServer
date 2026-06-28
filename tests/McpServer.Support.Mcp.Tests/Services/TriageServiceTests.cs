@@ -457,7 +457,7 @@ public sealed class TriageServiceTests : IDisposable
                 now.AddMinutes(1),
                 completedUtc: now.AddMinutes(2),
                 createdTodoId: "BUG-TRIAGE-001"));
-            db.TodoRecords.Add(SeedTodoRecord("BUG-TRIAGE-001", now.AddMinutes(3)));
+            db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-001", "Created triage TODO"));
             await db.SaveChangesAsync();
         }
 
@@ -469,7 +469,7 @@ public sealed class TriageServiceTests : IDisposable
                 now,
                 createdTodoId: "BUG-TRIAGE-002",
                 workspacePath: AlternateWorkspace));
-            db.TodoRecords.Add(SeedTodoRecord("BUG-TRIAGE-002", now.AddMinutes(4), AlternateWorkspace));
+            db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-002", "Other workspace triage TODO", AlternateWorkspace));
             await db.SaveChangesAsync();
         }
 
@@ -477,7 +477,7 @@ public sealed class TriageServiceTests : IDisposable
 
         var item = Assert.Single(result.Items);
         Assert.Equal("BUG-TRIAGE-001", item.TodoId);
-        Assert.Equal(now.AddMinutes(3), item.CreatedAtUtc);
+        Assert.Equal(now.AddMinutes(2), item.CreatedAtUtc);
         Assert.Equal(PrimaryWorkspace, item.WorkspacePath);
         Assert.Equal("triage-group-completed", item.GroupId);
         Assert.Equal("triage-run-completed", item.RunId);
@@ -664,16 +664,17 @@ public sealed class TriageServiceTests : IDisposable
             CreatedTodoId = createdTodoId,
         };
 
-    private static TodoRecordEntity SeedTodoRecord(
+    private static TodoItemEntity SeedTodoItem(
         string todoId,
-        DateTimeOffset createdAtUtc,
+        string title,
         string workspacePath = PrimaryWorkspace)
         => new()
         {
             WorkspaceId = workspacePath,
-            TodoId = todoId,
-            CreatedAtUtc = createdAtUtc,
-            UpdatedAtUtc = createdAtUtc,
+            Id = todoId,
+            Title = title,
+            Section = "Backlog",
+            Priority = "high",
         };
 
     private TriageService CreateService(

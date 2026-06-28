@@ -93,9 +93,6 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-TODO-005 (provider-agnostic): Authoritative TODO items.</summary>
     public DbSet<TodoItemEntity> TodoItems => Set<TodoItemEntity>();
 
-    /// <summary>TR-MCP-DB-005: Durable TODO lifecycle anchors used by relational links.</summary>
-    public DbSet<TodoRecordEntity> TodoRecords => Set<TodoRecordEntity>();
-
     /// <summary>TR-MCP-DB-005: Normalized TODO-to-requirement link rows.</summary>
     public DbSet<TodoRequirementLinkEntity> TodoRequirementLinks => Set<TodoRequirementLinkEntity>();
 
@@ -360,17 +357,11 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Done);
         });
 
-        modelBuilder.Entity<TodoRecordEntity>(e =>
-        {
-            e.HasKey(x => new { x.WorkspaceId, x.TodoId });
-            e.HasIndex(x => x.UpdatedAtUtc);
-        });
-
         modelBuilder.Entity<TodoRequirementLinkEntity>(e =>
         {
             e.HasKey(x => new { x.WorkspaceId, x.TodoId, x.RequirementKind, x.RequirementId });
             e.HasIndex(x => new { x.WorkspaceId, x.RequirementKind, x.RequirementId });
-            e.HasOne(x => x.TodoRecord)
+            e.HasOne(x => x.TodoItem)
                 .WithMany()
                 .HasForeignKey(x => new { x.WorkspaceId, x.TodoId })
                 .OnDelete(DeleteBehavior.Restrict);

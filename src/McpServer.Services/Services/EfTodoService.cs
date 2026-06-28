@@ -837,27 +837,6 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             ? ctx.CurrentWorkspaceId
             : entity.WorkspaceId;
         var now = DateTimeOffset.UtcNow;
-        var todoRecord = await ctx.TodoRecords
-            .IgnoreQueryFilters()
-            .SingleOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.TodoId == entity.Id, cancellationToken)
-            .ConfigureAwait(false);
-        if (todoRecord is null)
-        {
-            todoRecord = new TodoRecordEntity
-            {
-                WorkspaceId = workspaceId,
-                TodoId = entity.Id,
-                CreatedAtUtc = now,
-                UpdatedAtUtc = now,
-            };
-            ctx.TodoRecords.Add(todoRecord);
-        }
-        else
-        {
-            todoRecord.UpdatedAtUtc = now;
-            SetSoftDeleteState(ctx.Entry(todoRecord), false, null);
-        }
-
         var desired = NormalizeRequirementLinks(flat)
             .Select(link => (WorkspaceId: workspaceId, TodoId: entity.Id, link.Kind, link.Id))
             .ToArray();
@@ -959,12 +938,6 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         {
             ctx.TodoRequirementLinks.Remove(link);
         }
-
-        var record = await ctx.TodoRecords
-            .SingleOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.TodoId == entity.Id, cancellationToken)
-            .ConfigureAwait(false);
-        if (record is not null)
-            ctx.TodoRecords.Remove(record);
     }
 
     private static IEnumerable<(string Kind, string Id)> NormalizeRequirementLinks(TodoFlatItem flat)

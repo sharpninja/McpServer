@@ -347,7 +347,7 @@ public sealed record TriageCreatedTodoDetail
     [JsonPropertyName("todoId")]
     public required string TodoId { get; init; }
 
-    /// <summary>Persisted UTC timestamp when the TODO anchor was created.</summary>
+    /// <summary>Persisted UTC timestamp for the triage run that created the TODO.</summary>
     [JsonPropertyName("createdAtUtc")]
     public DateTimeOffset CreatedAtUtc { get; init; }
 

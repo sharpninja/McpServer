@@ -287,7 +287,7 @@ public sealed record TriageCreatedTodoDetail
     /// <summary>Canonical TODO identifier created by triage.</summary>
     public required string TodoId { get; init; }
 
-    /// <summary>Persisted UTC timestamp when the TODO anchor was created.</summary>
+    /// <summary>Persisted UTC timestamp for the triage run that created the TODO.</summary>
     public DateTimeOffset CreatedAtUtc { get; init; }
 
     /// <summary>Workspace path that owns the triage-created TODO.</summary>

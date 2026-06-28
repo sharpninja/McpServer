@@ -340,8 +340,8 @@ public sealed class TriageService : ITriageService
         if (todoIds.Length == 0)
             return new TriageCreatedTodoQueryResult();
 
-        var todoRecords = await _db.TodoRecords
-            .Where(record => todoIds.Contains(record.TodoId))
+        var todoItems = await _db.TodoItems
+            .Where(todo => todoIds.Contains(todo.Id))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         var groupsById = groups.ToDictionary(group => group.GroupId, StringComparer.Ordinal);
@@ -362,13 +362,12 @@ public sealed class TriageService : ITriageService
                     .First(),
                 StringComparer.OrdinalIgnoreCase);
 
-        var items = todoRecords
-            .OrderByDescending(record => record.CreatedAtUtc)
-            .Select(record =>
+        var items = todoItems
+            .Select(todo =>
             {
-                runsByTodoId.TryGetValue(record.TodoId, out var run);
+                runsByTodoId.TryGetValue(todo.Id, out var run);
                 TriageGroupEntity? group = null;
-                if (!groupsByTodoId.TryGetValue(record.TodoId, out group)
+                if (!groupsByTodoId.TryGetValue(todo.Id, out group)
                     && run is not null)
                 {
                     groupsById.TryGetValue(run.GroupId, out group);
@@ -376,9 +375,9 @@ public sealed class TriageService : ITriageService
 
                 return new TriageCreatedTodoDetail
                 {
-                    TodoId = record.TodoId,
-                    CreatedAtUtc = record.CreatedAtUtc,
-                    WorkspacePath = group?.EffectiveWorkspacePath ?? record.WorkspaceId,
+                    TodoId = todo.Id,
+                    CreatedAtUtc = run?.CompletedUtc ?? run?.StartedUtc ?? group?.LastReportAtUtc ?? group?.FirstReportAtUtc ?? default,
+                    WorkspacePath = group?.EffectiveWorkspacePath ?? todo.WorkspaceId,
                     GroupId = group?.GroupId ?? run?.GroupId,
                     RunId = run?.RunId,
                     GroupStatus = group?.Status,
@@ -389,6 +388,7 @@ public sealed class TriageService : ITriageService
                     QuietDeadlineUtc = group?.QuietDeadlineUtc,
                 };
             })
+            .OrderByDescending(item => item.CreatedAtUtc)
             .ToList();
 
         return new TriageCreatedTodoQueryResult { Items = items, TotalCount = items.Count };
