@@ -19,13 +19,14 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class TriageService : ITriageService
 {
     private const string StatusCollecting = "collecting";
+    private const string StatusQueued = "queued";
     private const string StatusProcessing = "processing";
     private const string StatusCompleted = "completed";
     private const string StatusFailed = "failed";
     private const string ReportStatusGrouped = "grouped";
     private const string TodoPrefix = "BUG-TRIAGE-";
     private static readonly string[] TriageQueueStatuses = ["new", "quieting", "pending", StatusCollecting];
-    private static readonly string[] ReportGroupQueueStatuses = ["ready", "queued", "in_progress", StatusProcessing, "retry_pending"];
+    private static readonly string[] ReportGroupQueueStatuses = ["ready", StatusQueued, "in_progress", StatusProcessing, "retry_pending"];
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -441,17 +442,18 @@ public sealed class TriageService : ITriageService
             EffectiveWorkspacePath = workspacePath,
             Title = TrimOrNull(request.Title) ?? selection.Reports.OrderBy(report => report.CreatedUtc).First().Title,
             Summary = TrimOrNull(request.Summary) ?? selection.Reports.OrderBy(report => report.CreatedUtc).First().Summary,
-            Status = StatusCollecting,
+            Status = StatusQueued,
             ReportCount = 0,
             FirstReportAtUtc = now,
             LastReportAtUtc = now,
-            QuietDeadlineUtc = now.Add(_options.QuietPeriod),
+            QuietDeadlineUtc = now,
             IsMcpServerRelated = selection.SourceGroups.Any(group => group.IsMcpServerRelated),
         };
         _db.TriageGroups.Add(group);
 
         var movedCount = MoveReportsToGroup(selection.Reports, group);
         RefreshGroupAggregate(group, selection.Reports, group.Title, group.Summary, group.QuietDeadlineUtc);
+        QueueManualGroup(group, now);
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         var removedGroupIds = await RemoveEmptySourceGroupsAsync(
             selection.SourceGroups,
@@ -483,6 +485,7 @@ public sealed class TriageService : ITriageService
         if (!string.Equals(workspacePath, targetGroup.EffectiveWorkspacePath, StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException("Selected triage reports must belong to the target group workspace.");
 
+        var now = _timeProvider.GetUtcNow();
         var movedCount = MoveReportsToGroup(selection.Reports, targetGroup);
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -495,7 +498,8 @@ public sealed class TriageService : ITriageService
             targetReports,
             targetGroup.Title,
             targetGroup.Summary,
-            _timeProvider.GetUtcNow().Add(_options.QuietPeriod));
+            now.Add(_options.QuietPeriod));
+        QueueManualGroup(targetGroup, now);
         var removedGroupIds = await RemoveEmptySourceGroupsAsync(
             selection.SourceGroups,
             targetGroup.GroupId,
@@ -668,6 +672,13 @@ public sealed class TriageService : ITriageService
         group.LastError = null;
     }
 
+    private static void QueueManualGroup(TriageGroupEntity group, DateTimeOffset now)
+    {
+        group.Status = StatusQueued;
+        group.QuietDeadlineUtc = now;
+        group.LastError = null;
+    }
+
     private async Task<IReadOnlyList<string>> RemoveEmptySourceGroupsAsync(
         IReadOnlyList<TriageGroupEntity> sourceGroups,
         string targetGroupId,
@@ -713,7 +724,7 @@ public sealed class TriageService : ITriageService
     {
         var now = _timeProvider.GetUtcNow();
         var candidates = await _db.TriageGroups
-            .Where(g => g.Status == StatusCollecting || g.Status == "queued")
+            .Where(g => g.Status == StatusCollecting || g.Status == StatusQueued)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         var due = candidates

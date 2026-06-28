@@ -448,10 +448,17 @@ public sealed class TriageServiceTests : IDisposable
 
         Assert.Equal("Manual group", result.Group.Title);
         Assert.Equal("Grouped manually", result.Group.Summary);
+        Assert.Equal("queued", result.Group.Status);
+        Assert.Equal(now, result.Group.QuietDeadlineUtc);
         Assert.Equal(2, result.Group.ReportCount);
         Assert.Equal(2, result.MovedReportCount);
         Assert.Equal(["triage-group-source-a", "triage-group-source-b"], result.RemovedGroupIds.Order(StringComparer.Ordinal));
         Assert.All(result.Group.Reports, report => Assert.Equal(result.Group.GroupId, report.GroupId));
+
+        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace);
+        Assert.DoesNotContain(dashboard.TriageQueue, group => group.GroupId == result.Group.GroupId);
+        var queuedGroup = Assert.Single(dashboard.ReportGroupQueue, group => group.GroupId == result.Group.GroupId);
+        Assert.Equal("queued", queuedGroup.Status);
     }
 
     /// <summary>TEST-TRIAGE-003: selected groups can be merged into an existing editable target group.</summary>
@@ -475,6 +482,8 @@ public sealed class TriageServiceTests : IDisposable
             new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] });
 
         Assert.Equal("triage-group-target", result.Group.GroupId);
+        Assert.Equal("queued", result.Group.Status);
+        Assert.Equal(now, result.Group.QuietDeadlineUtc);
         Assert.Equal(2, result.Group.ReportCount);
         Assert.Equal(1, result.MovedReportCount);
         Assert.Equal(["triage-group-source"], result.RemovedGroupIds);
