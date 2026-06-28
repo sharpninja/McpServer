@@ -420,6 +420,294 @@ public sealed class TriageService : ITriageService
     }
 
     /// <inheritdoc />
+    public async Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var selection = await ResolveSelectionAsync(request, excludedGroupId: null, cancellationToken).ConfigureAwait(false);
+        await EnsureEditableGroupsAsync(selection.SourceGroups, cancellationToken).ConfigureAwait(false);
+        var workspacePath = EnsureSingleWorkspace(selection.Reports);
+        _db.OverrideWorkspaceId(workspacePath);
+
+        var now = _timeProvider.GetUtcNow();
+        var groupKey = Hash($"{workspacePath}|manual|{Guid.NewGuid():N}");
+        var group = new TriageGroupEntity
+        {
+            WorkspaceId = workspacePath,
+            GroupId = $"triage-group-{groupKey[..16]}",
+            GroupKey = groupKey,
+            EffectiveWorkspacePath = workspacePath,
+            Title = TrimOrNull(request.Title) ?? selection.Reports.OrderBy(report => report.CreatedUtc).First().Title,
+            Summary = TrimOrNull(request.Summary) ?? selection.Reports.OrderBy(report => report.CreatedUtc).First().Summary,
+            Status = StatusCollecting,
+            ReportCount = 0,
+            FirstReportAtUtc = now,
+            LastReportAtUtc = now,
+            QuietDeadlineUtc = now.Add(_options.QuietPeriod),
+            IsMcpServerRelated = selection.SourceGroups.Any(group => group.IsMcpServerRelated),
+        };
+        _db.TriageGroups.Add(group);
+
+        var movedCount = MoveReportsToGroup(selection.Reports, group);
+        RefreshGroupAggregate(group, selection.Reports, group.Title, group.Summary, group.QuietDeadlineUtc);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        var removedGroupIds = await RemoveEmptySourceGroupsAsync(
+            selection.SourceGroups,
+            group.GroupId,
+            cancellationToken).ConfigureAwait(false);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        return new TriageGroupEditResult
+        {
+            Group = await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false),
+            RemovedGroupIds = removedGroupIds,
+            MovedReportCount = movedCount,
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<TriageGroupEditResult> ConsolidateIntoGroupAsync(
+        string targetGroupId,
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var targetGroup = await GetGroupEntityAsync(targetGroupId, cancellationToken).ConfigureAwait(false);
+        var selection = await ResolveSelectionAsync(request, targetGroup.GroupId, cancellationToken).ConfigureAwait(false);
+        await EnsureEditableGroupsAsync(selection.SourceGroups.Append(targetGroup).DistinctBy(group => group.GroupId).ToList(), cancellationToken)
+            .ConfigureAwait(false);
+
+        var workspacePath = EnsureSingleWorkspace(selection.Reports);
+        if (!string.Equals(workspacePath, targetGroup.EffectiveWorkspacePath, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("Selected triage reports must belong to the target group workspace.");
+
+        var movedCount = MoveReportsToGroup(selection.Reports, targetGroup);
+        var targetReports = await _db.TriageReports
+            .Where(report => report.GroupId == targetGroup.GroupId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        RefreshGroupAggregate(
+            targetGroup,
+            targetReports,
+            targetGroup.Title,
+            targetGroup.Summary,
+            _timeProvider.GetUtcNow().Add(_options.QuietPeriod));
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        var removedGroupIds = await RemoveEmptySourceGroupsAsync(
+            selection.SourceGroups,
+            targetGroup.GroupId,
+            cancellationToken).ConfigureAwait(false);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        return new TriageGroupEditResult
+        {
+            Group = await ToGroupDetailAsync(targetGroup, includeReports: true, cancellationToken).ConfigureAwait(false),
+            RemovedGroupIds = removedGroupIds,
+            MovedReportCount = movedCount,
+        };
+    }
+
+    /// <inheritdoc />
+    public Task<TriageGroupEditResult> MergeGroupsAsync(
+        string targetGroupId,
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var groupIds = NormalizeIds(request.GroupIds).ToArray();
+        if (groupIds.Length == 0)
+            throw new ArgumentException("At least one source group id is required.", nameof(request));
+
+        return ConsolidateIntoGroupAsync(
+            targetGroupId,
+            request with { GroupIds = groupIds },
+            cancellationToken);
+    }
+
+    private async Task<TriageSelection> ResolveSelectionAsync(
+        TriageGroupSelectionRequest request,
+        string? excludedGroupId,
+        CancellationToken cancellationToken)
+    {
+        var requestedGroupIds = NormalizeIds(request.GroupIds)
+            .Where(groupId => !string.Equals(groupId, excludedGroupId, StringComparison.Ordinal))
+            .ToArray();
+        var requestedReportIds = NormalizeIds(request.ReportIds).ToArray();
+        if (requestedGroupIds.Length == 0 && requestedReportIds.Length == 0)
+            throw new ArgumentException("At least one group or report id is required.", nameof(request));
+
+        var groups = requestedGroupIds.Length == 0
+            ? []
+            : await _db.TriageGroups
+                .Where(group => requestedGroupIds.Contains(group.GroupId))
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+        var missingGroupIds = requestedGroupIds
+            .Except(groups.Select(group => group.GroupId), StringComparer.Ordinal)
+            .ToArray();
+        if (missingGroupIds.Length > 0)
+            throw new KeyNotFoundException($"Triage group '{missingGroupIds[0]}' was not found.");
+
+        var reports = await _db.TriageReports
+            .Where(report =>
+                requestedGroupIds.Contains(report.GroupId)
+                || requestedReportIds.Contains(report.ReportId))
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        if (!string.IsNullOrWhiteSpace(excludedGroupId))
+            reports = reports
+                .Where(report => !string.Equals(report.GroupId, excludedGroupId, StringComparison.Ordinal))
+                .ToList();
+
+        var foundReportIds = reports.Select(report => report.ReportId).ToHashSet(StringComparer.Ordinal);
+        var missingReportIds = requestedReportIds
+            .Where(reportId => !foundReportIds.Contains(reportId))
+            .ToArray();
+        if (missingReportIds.Length > 0)
+            throw new KeyNotFoundException($"Triage report '{missingReportIds[0]}' was not found.");
+        if (reports.Count == 0)
+            throw new InvalidOperationException("Selection did not include any source reports.");
+
+        var reportGroupIds = reports
+            .Select(report => report.GroupId)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        var knownGroupIds = groups.Select(group => group.GroupId).ToHashSet(StringComparer.Ordinal);
+        var missingReportGroupIds = reportGroupIds
+            .Where(groupId => !knownGroupIds.Contains(groupId))
+            .ToArray();
+        if (missingReportGroupIds.Length > 0)
+        {
+            var reportGroups = await _db.TriageGroups
+                .Where(group => missingReportGroupIds.Contains(group.GroupId))
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            groups.AddRange(reportGroups);
+        }
+
+        return new TriageSelection(reports, groups);
+    }
+
+    private async Task EnsureEditableGroupsAsync(
+        IReadOnlyList<TriageGroupEntity> groups,
+        CancellationToken cancellationToken)
+    {
+        var groupIds = groups
+            .Select(group => group.GroupId)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        if (groupIds.Length == 0)
+            return;
+
+        var blockedGroup = groups.FirstOrDefault(group =>
+            !string.IsNullOrWhiteSpace(group.CreatedTodoId)
+            || string.Equals(group.Status, StatusProcessing, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(group.Status, StatusCompleted, StringComparison.OrdinalIgnoreCase));
+        if (blockedGroup is not null)
+            throw new InvalidOperationException($"Triage group '{blockedGroup.GroupId}' cannot be edited after processing has started.");
+
+        var hasRuns = await _db.TriageResearchRuns
+            .AnyAsync(run => groupIds.Contains(run.GroupId), cancellationToken)
+            .ConfigureAwait(false);
+        if (hasRuns)
+            throw new InvalidOperationException("Triage groups with run history cannot be edited.");
+    }
+
+    private static string EnsureSingleWorkspace(IEnumerable<TriageReportEntity> reports)
+    {
+        var workspacePaths = reports
+            .Select(report => report.EffectiveWorkspacePath)
+            .Where(static workspacePath => !string.IsNullOrWhiteSpace(workspacePath))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
+        return workspacePaths.Length switch
+        {
+            0 => throw new InvalidOperationException("Selected triage reports do not have a workspace."),
+            1 => workspacePaths[0],
+            _ => throw new InvalidOperationException("Selected triage reports must belong to the same workspace."),
+        };
+    }
+
+    private static int MoveReportsToGroup(IReadOnlyList<TriageReportEntity> reports, TriageGroupEntity targetGroup)
+    {
+        var moved = 0;
+        foreach (var report in reports)
+        {
+            if (string.Equals(report.GroupId, targetGroup.GroupId, StringComparison.Ordinal))
+                continue;
+
+            report.GroupId = targetGroup.GroupId;
+            moved++;
+        }
+
+        return moved;
+    }
+
+    private static void RefreshGroupAggregate(
+        TriageGroupEntity group,
+        IReadOnlyList<TriageReportEntity> reports,
+        string title,
+        string summary,
+        DateTimeOffset quietDeadline)
+    {
+        if (reports.Count == 0)
+            throw new InvalidOperationException($"Triage group '{group.GroupId}' has no reports.");
+
+        var orderedReports = reports.OrderBy(report => report.CreatedUtc).ToList();
+        group.Title = TrimOrNull(title) ?? orderedReports[0].Title;
+        group.Summary = TrimOrNull(summary) ?? orderedReports[0].Summary;
+        group.ReportCount = orderedReports.Count;
+        group.FirstReportAtUtc = orderedReports[0].CreatedUtc;
+        group.LastReportAtUtc = orderedReports[^1].CreatedUtc;
+        group.QuietDeadlineUtc = quietDeadline;
+        group.Status = StatusCollecting;
+        group.LastError = null;
+    }
+
+    private async Task<IReadOnlyList<string>> RemoveEmptySourceGroupsAsync(
+        IReadOnlyList<TriageGroupEntity> sourceGroups,
+        string targetGroupId,
+        CancellationToken cancellationToken)
+    {
+        var removedGroupIds = new List<string>();
+        foreach (var sourceGroup in sourceGroups
+            .Where(group => !string.Equals(group.GroupId, targetGroupId, StringComparison.Ordinal))
+            .DistinctBy(group => group.GroupId))
+        {
+            var remainingReports = await _db.TriageReports
+                .Where(report => report.GroupId == sourceGroup.GroupId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            if (remainingReports.Count == 0)
+            {
+                _db.TriageGroups.Remove(sourceGroup);
+                removedGroupIds.Add(sourceGroup.GroupId);
+                continue;
+            }
+
+            RefreshGroupAggregate(
+                sourceGroup,
+                remainingReports,
+                sourceGroup.Title,
+                sourceGroup.Summary,
+                sourceGroup.QuietDeadlineUtc);
+        }
+
+        return removedGroupIds;
+    }
+
+    private static IEnumerable<string> NormalizeIds(IEnumerable<string>? values)
+        => values?
+            .Select(TrimOrNull)
+            .Where(static value => !string.IsNullOrWhiteSpace(value))
+            .Distinct(StringComparer.Ordinal)
+            .Cast<string>()
+        ?? [];
+
+    /// <inheritdoc />
     public async Task<TriageSweepResult> ProcessDueGroupsAsync(CancellationToken cancellationToken = default)
     {
         var now = _timeProvider.GetUtcNow();

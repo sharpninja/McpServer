@@ -208,6 +208,42 @@ public sealed record TriageGroupQueryResult
     public int TotalCount { get; init; }
 }
 
+/// <summary>FR-TRIAGE-003: Selected reports or groups to move into a new or existing triage group.</summary>
+public sealed record TriageGroupSelectionRequest
+{
+    /// <summary>Selected triage group ids. All reports in each group are moved.</summary>
+    [JsonPropertyName("groupIds")]
+    public IReadOnlyList<string>? GroupIds { get; init; }
+
+    /// <summary>Selected triage report ids.</summary>
+    [JsonPropertyName("reportIds")]
+    public IReadOnlyList<string>? ReportIds { get; init; }
+
+    /// <summary>Optional representative title for a newly created group.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; init; }
+
+    /// <summary>Optional representative summary for a newly created group.</summary>
+    [JsonPropertyName("summary")]
+    public string? Summary { get; init; }
+}
+
+/// <summary>FR-TRIAGE-003: Result returned after moving or merging triage reports.</summary>
+public sealed record TriageGroupEditResult
+{
+    /// <summary>Target group after the edit.</summary>
+    [JsonPropertyName("group")]
+    public required TriageGroupDetail Group { get; init; }
+
+    /// <summary>Source group ids deleted because all reports were moved out.</summary>
+    [JsonPropertyName("removedGroupIds")]
+    public IReadOnlyList<string> RemovedGroupIds { get; init; } = [];
+
+    /// <summary>Number of reports moved into the target group.</summary>
+    [JsonPropertyName("movedReportCount")]
+    public int MovedReportCount { get; init; }
+}
+
 /// <summary>FR-TRIAGE-001: AI triage research run detail for dashboard consumers.</summary>
 public sealed record TriageResearchRunDetail
 {

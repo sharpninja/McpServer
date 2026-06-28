@@ -72,6 +72,32 @@ public sealed class TriageClient : McpClientBase
     public Task<TriageGroupDetail> RetryGroupAsync(string id, CancellationToken cancellationToken = default)
         => PostAsync<TriageGroupDetail>($"mcpserver/triage/groups/{Encode(id)}/retry", null, cancellationToken);
 
+    /// <summary>Creates a new triage group from selected reports and groups.</summary>
+    public Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<TriageGroupEditResult>("mcpserver/triage/groups/new", request, cancellationToken);
+
+    /// <summary>Moves selected reports and groups into an existing triage group.</summary>
+    public Task<TriageGroupEditResult> ConsolidateIntoGroupAsync(
+        string targetGroupId,
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<TriageGroupEditResult>(
+            $"mcpserver/triage/groups/{Encode(targetGroupId)}/consolidate",
+            request,
+            cancellationToken);
+
+    /// <summary>Merges selected source groups into an existing target triage group.</summary>
+    public Task<TriageGroupEditResult> MergeGroupsAsync(
+        string targetGroupId,
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<TriageGroupEditResult>(
+            $"mcpserver/triage/groups/{Encode(targetGroupId)}/merge",
+            request,
+            cancellationToken);
+
     private static string BuildQueryString(string? status = null, string? workspacePath = null, string? groupId = null)
     {
         var parts = new List<string>();

@@ -169,6 +169,39 @@ public sealed record TriageGroupQueryResult
 }
 
 /// <summary>
+/// FR-TRIAGE-003: Selected reports or groups to move into a new or existing triage group.
+/// </summary>
+public sealed record TriageGroupSelectionRequest
+{
+    /// <summary>Selected triage group ids. All reports in each group are moved.</summary>
+    public IReadOnlyList<string>? GroupIds { get; init; }
+
+    /// <summary>Selected triage report ids.</summary>
+    public IReadOnlyList<string>? ReportIds { get; init; }
+
+    /// <summary>Optional representative title for a newly created group.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Optional representative summary for a newly created group.</summary>
+    public string? Summary { get; init; }
+}
+
+/// <summary>
+/// FR-TRIAGE-003: Result returned after moving or merging triage reports.
+/// </summary>
+public sealed record TriageGroupEditResult
+{
+    /// <summary>Target group after the edit.</summary>
+    public required TriageGroupDetail Group { get; init; }
+
+    /// <summary>Source group ids deleted because all reports were moved out.</summary>
+    public IReadOnlyList<string> RemovedGroupIds { get; init; } = [];
+
+    /// <summary>Number of reports moved into the target group.</summary>
+    public int MovedReportCount { get; init; }
+}
+
+/// <summary>
 /// FR-TRIAGE-001: AI triage research run detail for Director and MCP Web dashboards.
 /// </summary>
 public sealed record TriageResearchRunDetail
@@ -413,6 +446,23 @@ public interface ITriageService
 
     /// <summary>Retries a failed group by resetting it to collecting state.</summary>
     Task<TriageGroupDetail> RetryGroupAsync(string groupId, CancellationToken cancellationToken = default);
+
+    /// <summary>Creates a new group from selected triage reports and groups.</summary>
+    Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Moves selected triage reports and groups into an existing target group.</summary>
+    Task<TriageGroupEditResult> ConsolidateIntoGroupAsync(
+        string targetGroupId,
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Merges selected source groups into an existing target group.</summary>
+    Task<TriageGroupEditResult> MergeGroupsAsync(
+        string targetGroupId,
+        TriageGroupSelectionRequest request,
+        CancellationToken cancellationToken = default);
 
     /// <summary>Processes due groups whose quiet window has expired.</summary>
     Task<TriageSweepResult> ProcessDueGroupsAsync(CancellationToken cancellationToken = default);

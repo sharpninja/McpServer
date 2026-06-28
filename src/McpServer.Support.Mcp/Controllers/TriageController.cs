@@ -142,4 +142,87 @@ public sealed class TriageController : ControllerBase
             return NotFound(new { error = ex.Message });
         }
     }
+
+    /// <summary>FR-TRIAGE-003: Create a new triage group from selected reports and groups.</summary>
+    [HttpPost("groups/new")]
+    public async Task<ActionResult<TriageGroupEditResult>> CreateGroupFromSelectionAsync(
+        [FromBody] TriageGroupSelectionRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest(new { error = "Request body is required." });
+
+        try
+        {
+            return Ok(await _triageService.CreateGroupFromSelectionAsync(request, cancellationToken).ConfigureAwait(false));
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-TRIAGE-003: Move selected reports and groups into an existing triage group.</summary>
+    [HttpPost("groups/{id}/consolidate")]
+    public async Task<ActionResult<TriageGroupEditResult>> ConsolidateIntoGroupAsync(
+        string id,
+        [FromBody] TriageGroupSelectionRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest(new { error = "Request body is required." });
+
+        try
+        {
+            return Ok(await _triageService.ConsolidateIntoGroupAsync(id, request, cancellationToken).ConfigureAwait(false));
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>FR-TRIAGE-003: Merge selected source groups into an existing target triage group.</summary>
+    [HttpPost("groups/{id}/merge")]
+    public async Task<ActionResult<TriageGroupEditResult>> MergeGroupsAsync(
+        string id,
+        [FromBody] TriageGroupSelectionRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest(new { error = "Request body is required." });
+
+        try
+        {
+            return Ok(await _triageService.MergeGroupsAsync(id, request, cancellationToken).ConfigureAwait(false));
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
 }
