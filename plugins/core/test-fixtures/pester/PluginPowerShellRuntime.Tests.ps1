@@ -82,6 +82,153 @@ acceptanceCriteria:
         $parsed.response | Should -Be "line one`nline two`n"
     }
 
+    It 'TEST-MCP-PLUGIN-PSONLY-001 imports shim module and serializes DTO contracts with PowerShell-native JSON' {
+        Remove-Module McpPluginShim -Force -ErrorAction SilentlyContinue
+        Import-Module (Join-Path $script:LibRoot 'McpPluginShim.psm1') -Force
+
+        $request = New-McpPluginReplRequest `
+            -RequestId 'req-20260628T030000Z-pester' `
+            -Method 'workflow.todo.query' `
+            -Params @{ done = $false }
+        $request.GetType().Name | Should -Be 'McpPluginReplRequest'
+        $requestJson = ConvertTo-McpPluginJson -InputObject $request -Depth 20 -Compress
+        $requestJson | Should -Be '{"type":"request","payload":{"requestId":"req-20260628T030000Z-pester","method":"workflow.todo.query","params":{"done":false}}}'
+
+        $action = New-McpPluginActionRecord -Values @{
+            type = 'edit'
+            filePath = 'src/Example.cs'
+            status = 'succeeded'
+        }
+        $turn = New-McpPluginTurnUpsertRequest `
+            -Agent 'Codex' `
+            -SessionId 'Codex-20260628T030000Z-pester' `
+            -RequestId 'req-20260628T030000Z-pester' `
+            -Timestamp '2026-06-28T03:00:00Z' `
+            -QueryText 'Hello' `
+            -Title 'Hello' `
+            -Status 'completed' `
+            -ResponseText 'Done' `
+            -Model 'codex' `
+            -FilesModified @('src/Example.cs') `
+            -Actions @($action.ToMap())
+
+        $turn.GetType().Name | Should -Be 'McpPluginTurnUpsertRequest'
+        $params = $turn.ToParamsObject()
+        $params.agent | Should -Be 'Codex'
+        $params.sessionId | Should -Be 'Codex-20260628T030000Z-pester'
+        $params.turn.filesModified | Should -Be @('src/Example.cs')
+        $params.turn.actions[0].filePath | Should -Be 'src/Example.cs'
+
+        $failsafe = New-McpPluginFailsafeRecord `
+            -Method 'client.SessionLog.UpsertTurnAsync' `
+            -Label 'session_upsertTurn' `
+            -Timestamp '20260628T030000Z' `
+            -ParamsYaml '{"type":"request"}'
+        $failsafe.ToYaml() | Should -Match 'method: client\.SessionLog\.UpsertTurnAsync'
+        $failsafe.ToYaml() | Should -Match 'params:'
+
+        $result = New-McpPluginReplResult -Success $true -Output 'type: result' -ExitCode 0
+        $result.GetType().Name | Should -Be 'McpPluginReplResult'
+        $result.Success | Should -BeTrue
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 documents every public shim DTO member through discoverable help' {
+        Remove-Module McpPluginShim -Force -ErrorAction SilentlyContinue
+        Import-Module (Join-Path $script:LibRoot 'McpPluginShim.psm1') -Force
+
+        $expectedHelp = @{
+            'New-McpPluginInvocationOptions' = @(
+                'McpPluginInvocationOptions',
+                'Command',
+                'Method',
+                'Params',
+                'ParamsPath',
+                'Response',
+                'ResponsePath',
+                'WorkspacePath',
+                'PluginRoot',
+                'CacheRoot',
+                'TimeoutSeconds'
+            )
+            'New-McpPluginReplRequest' = @(
+                'McpPluginReplRequest',
+                'Type',
+                'RequestId',
+                'Method',
+                'Params'
+            )
+            'New-McpPluginReplResult' = @(
+                'McpPluginReplResult',
+                'Success',
+                'Output',
+                'ExitCode',
+                'Error'
+            )
+            'New-McpPluginSessionMeta' = @(
+                'McpPluginSessionMeta',
+                'SourceType',
+                'SessionId'
+            )
+            'New-McpPluginActionRecord' = @(
+                'McpPluginActionRecord',
+                'Values'
+            )
+            'New-McpPluginTurnUpsertRequest' = @(
+                'McpPluginTurnUpsertRequest',
+                'Agent',
+                'SessionId',
+                'Turn',
+                'requestId',
+                'timestamp',
+                'queryText',
+                'queryTitle',
+                'response',
+                'status',
+                'model',
+                'tokenCount',
+                'filesModified',
+                'actions'
+            )
+            'New-McpPluginFailsafeRecord' = @(
+                'McpPluginFailsafeRecord',
+                'Method',
+                'Label',
+                'Timestamp',
+                'ParamsYaml',
+                'Path'
+            )
+            'ConvertTo-McpPluginJson' = @(
+                'InputObject',
+                'Depth',
+                'Compress'
+            )
+        }
+
+        foreach ($entry in $expectedHelp.GetEnumerator()) {
+            $help = Get-Help $entry.Key -Full | Out-String -Width 200
+            foreach ($member in $entry.Value) {
+                $help | Should -Match ([regex]::Escape($member))
+            }
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 wires source entrypoints through the shim module DTO factories' {
+        $invokeContent = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'Invoke-McpPlugin.ps1'))
+        $replContent = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $invokeContent | Should -Match 'McpPluginShim\.psm1'
+        $invokeContent | Should -Match 'New-McpPluginInvocationOptions'
+
+        $replContent | Should -Match 'McpPluginShim\.psm1'
+        $replContent | Should -Match 'New-McpPluginReplRequest'
+        $replContent | Should -Match 'New-McpPluginReplResult'
+        $replContent | Should -Match 'New-McpPluginSessionMeta'
+        $replContent | Should -Match 'New-McpPluginActionRecord'
+        $replContent | Should -Match 'New-McpPluginTurnUpsertRequest'
+        $replContent | Should -Match 'New-McpPluginFailsafeRecord'
+        $replContent | Should -Match 'ConvertTo-McpPluginJson'
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 starts mcpserver-repl in the PowerShell workspace when the .NET current directory differs' {
         . (Join-Path $script:LibRoot 'repl-invoke.ps1')
 
@@ -264,6 +411,7 @@ acceptanceCriteria:
         Test-Path -LiteralPath $manifest | Should -BeTrue
 
         $content = [System.IO.File]::ReadAllText($manifest)
+        $content | Should -Match 'lib/McpPluginShim.psm1'
         $content | Should -Match 'lib/plugin-hook.ps1'
         $content | Should -Match 'lib/repl-invoke.ps1'
         $content | Should -Not -Match '\.sh:'

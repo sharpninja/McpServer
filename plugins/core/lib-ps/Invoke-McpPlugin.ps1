@@ -26,6 +26,21 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
+Import-Module $shimModule -ErrorAction Stop
+
+$script:McpPluginInvocation = New-McpPluginInvocationOptions `
+    -Command $Command `
+    -Method ($Method ?? '') `
+    -Params ($Params ?? '') `
+    -ParamsPath ($ParamsPath ?? '') `
+    -Response ($Response ?? '') `
+    -ResponsePath ($ResponsePath ?? '') `
+    -WorkspacePath $WorkspacePath `
+    -PluginRoot $PluginRoot `
+    -CacheRoot ($CacheRoot ?? '') `
+    -TimeoutSeconds $TimeoutSeconds
+
 function Resolve-FullPath {
     param([Parameter(Mandatory)][string]$Path)
 
@@ -97,10 +112,10 @@ function Invoke-PluginPowerShellScript {
         [string]$StandardInput = ''
     )
 
-    $pluginRootFull = Resolve-FullPath $PluginRoot
-    $workspaceFull = Resolve-OptionalDirectory $WorkspacePath
-    $cacheRootFull = if ($CacheRoot) {
-        Resolve-OptionalDirectory $CacheRoot
+    $pluginRootFull = Resolve-FullPath $script:McpPluginInvocation.PluginRoot
+    $workspaceFull = Resolve-OptionalDirectory $script:McpPluginInvocation.WorkspacePath
+    $cacheRootFull = if ($script:McpPluginInvocation.CacheRoot) {
+        Resolve-OptionalDirectory $script:McpPluginInvocation.CacheRoot
     } elseif ($env:PLUGIN_ROOT_OVERRIDE) {
         Resolve-OptionalDirectory $env:PLUGIN_ROOT_OVERRIDE
     } else {
@@ -141,7 +156,7 @@ function Invoke-PluginPowerShellScript {
 
     $stdoutTask = $process.StandardOutput.ReadToEndAsync()
     $stderrTask = $process.StandardError.ReadToEndAsync()
-    $boundedTimeout = [Math]::Max(1, $TimeoutSeconds)
+    $boundedTimeout = [Math]::Max(1, $script:McpPluginInvocation.TimeoutSeconds)
     if (-not $process.WaitForExit($boundedTimeout * 1000)) {
         try {
             $process.Kill($true)
@@ -168,22 +183,22 @@ function Invoke-PluginPowerShellScript {
     }
 }
 
-$pluginRootFull = Resolve-FullPath $PluginRoot
+$pluginRootFull = Resolve-FullPath $script:McpPluginInvocation.PluginRoot
 
-switch ($Command) {
+switch ($script:McpPluginInvocation.Command) {
     'Status' {
         Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'mcp-status.ps1')
     }
     'Invoke' {
-        if (-not $Method) {
+        if (-not $script:McpPluginInvocation.Method) {
             throw '-Method is required when -Command Invoke is used.'
         }
 
-        $paramsText = Read-OptionalText -Inline $Params -HasInline:$($PSBoundParameters.ContainsKey('Params')) -Path $ParamsPath -AllowRedirectedInput
-        Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $Method, '-ParamsYaml', ($paramsText ?? ''))
+        $paramsText = Read-OptionalText -Inline $script:McpPluginInvocation.Params -HasInline:$($PSBoundParameters.ContainsKey('Params')) -Path $script:McpPluginInvocation.ParamsPath -AllowRedirectedInput
+        Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))
     }
     'CompleteTurn' {
-        $responseText = Read-OptionalText -Inline $Response -HasInline:$($PSBoundParameters.ContainsKey('Response')) -Path $ResponsePath -AllowRedirectedInput
+        $responseText = Read-OptionalText -Inline $script:McpPluginInvocation.Response -HasInline:$($PSBoundParameters.ContainsKey('Response')) -Path $script:McpPluginInvocation.ResponsePath -AllowRedirectedInput
         if (-not $responseText) {
             $responseText = 'Turn completed.'
         }

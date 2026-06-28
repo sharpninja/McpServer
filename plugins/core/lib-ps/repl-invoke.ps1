@@ -25,6 +25,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+$shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
+Import-Module $shimModule -ErrorAction Stop
+
 $script:ReplInvokePluginRoot = if ($env:PLUGIN_ROOT_OVERRIDE) {
     $env:PLUGIN_ROOT_OVERRIDE
 } else {
@@ -259,7 +262,7 @@ function Get-ReplSessionMeta {
     $sid = ($line.Line -replace '^sessionId:\s*', '').Trim()
     if (-not $sid) { return $null }
     $prefix = ($sid -split '-', 2)[0]
-    [pscustomobject]@{ SourceType = $prefix; SessionId = $sid }
+    New-McpPluginSessionMeta -SourceType $prefix -SessionId $sid
 }
 
 function Invoke-ReplRaw {
@@ -269,7 +272,7 @@ function Invoke-ReplRaw {
     )
     if (-not (Get-Command mcpserver-repl -ErrorAction SilentlyContinue)) {
         Write-Error 'mcpserver-repl not found on PATH'
-        return @{ Success = $false; Output = '' }
+        return (New-McpPluginReplResult -Success $false -Output '' -Error 'mcpserver-repl not found on PATH')
     }
 
     $requestId = "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$((Get-Random -Maximum 0xFFFF).ToString('x4'))"
@@ -277,27 +280,12 @@ function Invoke-ReplRaw {
 
     # Build as an object and serialize to JSON so request envelopes keep a
     # single canonical shape across plugin hosts.
+    $paramsObject = $null
     if ($ParamsYaml) {
-        $p = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
-        $envObj = [ordered]@{
-            type = 'request'
-            payload = [ordered]@{
-                requestId = $requestId
-                method = $Method
-            }
-        }
-        if ($p) { $envObj.payload.params = $p }
-        $envelope = $envObj | ConvertTo-Json -Depth 20 -Compress
-    } else {
-        $envObj = [ordered]@{
-            type = 'request'
-            payload = [ordered]@{
-                requestId = $requestId
-                method = $Method
-            }
-        }
-        $envelope = $envObj | ConvertTo-Json -Depth 20 -Compress
+        $paramsObject = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
     }
+    $request = New-McpPluginReplRequest -RequestId $requestId -Method $Method -Params $paramsObject
+    $envelope = ConvertTo-McpPluginJson -InputObject $request -Depth 20 -Compress
 
     try {
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
@@ -341,7 +329,7 @@ function Invoke-ReplRaw {
         if (-not $readTask.Wait($timeout * 1000)) {
             $proc.Kill()
             Write-Error "mcpserver-repl timed out after ${timeout}s"
-            return @{ Success = $false; Output = '' }
+            return (New-McpPluginReplResult -Success $false -Output '' -Error "mcpserver-repl timed out after ${timeout}s")
         }
         $output = $readTask.Result
         $proc.WaitForExit()
@@ -352,13 +340,13 @@ function Invoke-ReplRaw {
         $output = $output -replace "[\uFEFF]", ''
         $isError = $output -match '(?m)^type:\s*error\b'
         if ($proc.ExitCode -ne 0 -or $isError) {
-            return @{ Success = $false; Output = $output }
+            return (New-McpPluginReplResult -Success $false -Output $output -ExitCode $proc.ExitCode)
         }
-        return @{ Success = $true; Output = $output }
+        return (New-McpPluginReplResult -Success $true -Output $output -ExitCode $proc.ExitCode)
     }
     catch {
         Write-Error "mcpserver-repl invocation failed for method ${Method}: $_"
-        return @{ Success = $false; Output = '' }
+        return (New-McpPluginReplResult -Success $false -Output '' -Error $_.ToString())
     }
 }
 
@@ -415,8 +403,8 @@ function Write-ReplFailsafe {
         [void][System.IO.Directory]::CreateDirectory($dir)
         $stamp = Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ'
         $file = Join-Path $dir ("{0}-{1}-{2:x4}.yaml" -f $stamp, $Label, (Get-Random -Maximum 0xFFFF))
-        $doc = "method: $Method`nlabel: $Label`ntimestamp: $stamp`nparams:`n"
-        $doc += (($ParamsYaml -split "`n" | ForEach-Object { "  $_" }) -join "`n") + "`n"
+        $record = New-McpPluginFailsafeRecord -Method $Method -Label $Label -Timestamp $stamp -ParamsYaml $ParamsYaml -Path $file
+        $doc = $record.ToYaml()
         Set-Content -Path $file -Value $doc -NoNewline
         return $file
     }
@@ -470,7 +458,7 @@ function Invoke-ReplTurnUpsertParams {
         foreach ($l in $lines) {
             $t = $l.Trim()
             if ($t -match '^-') {
-                if ($cur) { $actions += $cur }
+                if ($cur) { $actions += (New-McpPluginActionRecord -Values $cur).ToMap() }
                 $cur = @{}
                 if ($t -match 'type:\s*(.+)$') { $cur.type = ($Matches[1] -replace '^["'']|["'']$','').Trim() }
             } elseif ($cur -and $t -match '^(\w+):\s*(.+)$') {
@@ -479,32 +467,23 @@ function Invoke-ReplTurnUpsertParams {
                 $cur[$k] = $v
             }
         }
-        if ($cur) { $actions += $cur }
+        if ($cur) { $actions += (New-McpPluginActionRecord -Values $cur).ToMap() }
     }
 
-    $turn = [ordered]@{
-        requestId = $RequestId
-        timestamp = $timestamp
-        queryText = $queryText
-        queryTitle = $Title
-        response = $ResponseText
-        status = $Status
-        model = $model
-        tokenCount = 0
-    }
-    if ($filePaths.Count -gt 0) {
-        $turn.filesModified = $filePaths
-    }
-    if ($actions.Count -gt 0) {
-        $turn.actions = $actions
-    }
+    $request = New-McpPluginTurnUpsertRequest `
+        -Agent $SourceType `
+        -SessionId $SessionId `
+        -RequestId $RequestId `
+        -Timestamp $timestamp `
+        -QueryText $queryText `
+        -Title $Title `
+        -Status $Status `
+        -ResponseText $ResponseText `
+        -Model $model `
+        -FilesModified $filePaths `
+        -Actions $actions
 
-    $obj = [ordered]@{
-        agent = $SourceType
-        sessionId = $SessionId
-        turn = $turn
-    }
-    return $obj
+    return $request.ToParamsObject()
 }
 
 function Invoke-ReplSubmitSessionFallback {
@@ -561,15 +540,11 @@ function Invoke-ReplPersistTurn {
         -SessionId $meta.SessionId -RequestId $RequestId -Title $Title `
         -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml
 
-    $envelope = [ordered]@{
-        type = "request"
-        payload = [ordered]@{
-            requestId = "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$(Get-Random -Maximum 0xffff)"
-            method = "client.SessionLog.UpsertTurnAsync"
-            params = $turnObj
-        }
-    }
-    $jsonEnvelope = $envelope | ConvertTo-Json -Depth 10 -Compress
+    $envelope = New-McpPluginReplRequest `
+        -RequestId "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$(Get-Random -Maximum 0xffff)" `
+        -Method 'client.SessionLog.UpsertTurnAsync' `
+        -Params $turnObj
+    $jsonEnvelope = ConvertTo-McpPluginJson -InputObject $envelope -Depth 10 -Compress
 
     $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.UpsertTurnAsync' `
         -ParamsYaml $jsonEnvelope -Label 'session_upsertTurn'
