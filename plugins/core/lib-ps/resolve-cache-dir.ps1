@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Workspace-aware cache path resolver (PowerShell parallel of resolve-cache-dir.sh).
+    Workspace-aware cache path resolver for the PowerShell plugin runtime.
 .DESCRIPTION
     Cache state belongs to the workspace the marker file lives in, not to
     the plugin install directory. This helper returns the correct cache dir.
@@ -22,9 +22,6 @@ function Resolve-McpCacheDir {
     [CmdletBinding()]
     param()
 
-    if ($env:REPL_INVOKE_CACHE_DIR) {
-        return $env:REPL_INVOKE_CACHE_DIR
-    }
     if ($env:MCP_CACHE_DIR_OVERRIDE) {
         return $env:MCP_CACHE_DIR_OVERRIDE
     }

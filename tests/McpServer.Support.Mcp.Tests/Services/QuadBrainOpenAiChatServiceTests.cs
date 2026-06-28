@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Xunit;
@@ -79,6 +80,111 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Contains("edit_local_file", orchestration.LastRequest!.Input, StringComparison.Ordinal);
     }
 
+    /// <summary>FR-MCP-QBOPENAI-001 (G-018): multiple external tool calls are preserved for the agent loop.</summary>
+    [Fact]
+    public async Task CompleteAsync_OrchestrationEmitsMultipleToolCalls_ReturnsAllToolCalls()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "{\"tool_calls\":[{\"name\":\"edit_local_file\",\"arguments\":{\"path\":\"a.txt\"}},{\"name\":\"run_tests\",\"arguments\":{\"filter\":\"QBAgent\"}}]}",
+        });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+
+        var response = await service.CompleteAsync(
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "do both" }] })
+            .ConfigureAwait(true);
+
+        var choice = Assert.Single(response.Choices);
+        Assert.Equal("tool_calls", choice.FinishReason);
+        Assert.Collection(
+            choice.Message.ToolCalls!,
+            first => Assert.Equal("edit_local_file", first.Function.Name),
+            second => Assert.Equal("run_tests", second.Function.Name));
+    }
+
+    /// <summary>FR-MCP-QBOPENAI-001 (G-017): <c>tool_choice: none</c> suppresses tool calls and withholds tool definitions from orchestration.</summary>
+    [Fact]
+    public async Task CompleteAsync_ToolChoiceNone_SuppressesToolCallsAndToolPrompt()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "{\"tool_calls\":[{\"name\":\"edit_local_file\",\"arguments\":{\"path\":\"a.txt\"}}]}",
+        });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+        var request = new OpenAiChatCompletionRequest
+        {
+            Messages = [new OpenAiChatMessage { Role = "user", Content = "answer only" }],
+            Tools = [Tool("edit_local_file")],
+            ToolChoice = ToolChoice("\"none\""),
+        };
+
+        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+
+        var choice = Assert.Single(response.Choices);
+        Assert.Equal("stop", choice.FinishReason);
+        Assert.Null(choice.Message.ToolCalls);
+        Assert.Contains("tool_calls", choice.Message.Content!, StringComparison.Ordinal);
+        Assert.DoesNotContain("Available tools", orchestration.LastRequest!.Input, StringComparison.Ordinal);
+    }
+
+    /// <summary>FR-MCP-QBOPENAI-001 (G-017): <c>tool_choice: required</c> rejects requests that provide no callable tools.</summary>
+    [Fact]
+    public async Task CompleteAsync_ToolChoiceRequiredWithoutTools_Throws()
+    {
+        var service = new QuadBrainOpenAiChatService(new CapturingOrchestrationService(new QuadBrainOrchestrationResponse()));
+        var request = new OpenAiChatCompletionRequest
+        {
+            Messages = [new OpenAiChatMessage { Role = "user", Content = "call a tool" }],
+            ToolChoice = ToolChoice("\"required\""),
+        };
+
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => service.CompleteAsync(request)).ConfigureAwait(true);
+        Assert.Contains("requires at least one tool", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>FR-MCP-QBOPENAI-001 (G-017): a specific function choice must match a declared tool and is surfaced when selected.</summary>
+    [Fact]
+    public async Task CompleteAsync_SpecificToolChoice_ReturnsMatchingToolCall()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "{\"tool_calls\":[{\"name\":\"edit_local_file\",\"arguments\":{\"path\":\"a.txt\"}}]}",
+        });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+        var request = new OpenAiChatCompletionRequest
+        {
+            Messages = [new OpenAiChatMessage { Role = "user", Content = "edit the file" }],
+            Tools = [Tool("edit_local_file"), Tool("run_tests")],
+            ToolChoice = ToolChoice("{\"type\":\"function\",\"function\":{\"name\":\"edit_local_file\"}}"),
+        };
+
+        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+
+        var choice = Assert.Single(response.Choices);
+        Assert.Equal("tool_calls", choice.FinishReason);
+        Assert.Equal("edit_local_file", Assert.Single(choice.Message.ToolCalls!).Function.Name);
+        Assert.Contains("must call the tool 'edit_local_file'", orchestration.LastRequest!.Input, StringComparison.Ordinal);
+    }
+
+    /// <summary>FR-MCP-QBOPENAI-001 (G-017): a specific function choice cannot name a tool absent from the request.</summary>
+    [Fact]
+    public async Task CompleteAsync_SpecificToolChoiceForUnknownTool_Throws()
+    {
+        var service = new QuadBrainOpenAiChatService(new CapturingOrchestrationService(new QuadBrainOrchestrationResponse()));
+        var request = new OpenAiChatCompletionRequest
+        {
+            Messages = [new OpenAiChatMessage { Role = "user", Content = "edit the file" }],
+            Tools = [Tool("edit_local_file")],
+            ToolChoice = ToolChoice("{\"type\":\"function\",\"function\":{\"name\":\"run_tests\"}}"),
+        };
+
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => service.CompleteAsync(request)).ConfigureAwait(true);
+        Assert.Contains("run_tests", ex.Message, StringComparison.Ordinal);
+    }
+
     /// <summary>Plain (non-JSON) output is returned as assistant content, not tool calls.</summary>
     [Fact]
     public async Task CompleteAsync_PlainOutput_ReturnsContent()
@@ -100,6 +206,36 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Equal("stop", choice.FinishReason);
         Assert.Equal("here is the plan", choice.Message.Content);
         Assert.Null(choice.Message.ToolCalls);
+    }
+
+    /// <summary>TEST-MCP-QBAGENTINT-002: external tool failures stop before another orchestration round can fake success.</summary>
+    [Fact]
+    public async Task CompleteAsync_ExternalToolFailure_ReturnsFailureWithoutOrchestration()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "QBAgent action complete: wrote blocked/hello.cpp",
+        });
+        var service = new QuadBrainOpenAiChatService(orchestration);
+        var request = new OpenAiChatCompletionRequest
+        {
+            Messages =
+            [
+                new OpenAiChatMessage { Role = "user", Content = "Create Hello World in C++" },
+                new OpenAiChatMessage { Role = "tool", Content = "Error: Function failed. path not in allowlist" },
+            ],
+        };
+
+        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+
+        Assert.Null(orchestration.LastRequest);
+        var choice = Assert.Single(response.Choices);
+        Assert.Equal("stop", choice.FinishReason);
+        Assert.Null(choice.Message.ToolCalls);
+        Assert.Contains("external tool execution failed", choice.Message.Content!, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("requested action was not completed", choice.Message.Content!, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("QBAgent action complete", choice.Message.Content!, StringComparison.Ordinal);
     }
 
     /// <summary>MCP-internal tool calls are executed server-side and stripped; external calls reach the agent.</summary>
@@ -268,6 +404,38 @@ public sealed class QuadBrainOpenAiChatServiceTests
         Assert.Null(orchestration.LastRequest.TurnId);
     }
 
+    /// <summary>TEST-MCP-QBOLLAMA-001: A session-bound QuadBrain response completes the MCP session turn.</summary>
+    [Fact]
+    public async Task CompleteAsync_WithSessionAndTurn_CompletesSessionTurnWithAssistantResponse()
+    {
+        var orchestration = new CapturingOrchestrationService(new QuadBrainOrchestrationResponse
+        {
+            Status = "committed",
+            Output = "the final answer",
+            TransactionId = "txn-session",
+        });
+        var sessionLog = new RecordingSessionLogService();
+        var service = new QuadBrainOpenAiChatService(orchestration, sessionLog: sessionLog);
+
+        var response = await service.CompleteAsync(
+                new OpenAiChatCompletionRequest { Model = "qbagent", Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] },
+                sessionId: "session-1",
+                turnId: "turn-1")
+            .ConfigureAwait(true);
+
+        Assert.Equal("the final answer", Assert.Single(response.Choices).Message.Content);
+        Assert.Equal("QBAgent", sessionLog.SourceType);
+        Assert.Equal("session-1", sessionLog.SessionId);
+        Assert.NotNull(sessionLog.Turn);
+        Assert.Equal("turn-1", sessionLog.Turn!.RequestId);
+        Assert.Equal("completed", sessionLog.Turn.Status);
+        Assert.Equal("the final answer", sessionLog.Turn.Response);
+        Assert.Equal("qbagent", sessionLog.Turn.Model);
+        var action = Assert.Single(sessionLog.Turn.Actions!);
+        Assert.Equal("quadbrain_response", action.Type);
+        Assert.Equal("completed", action.Status);
+    }
+
     /// <summary>An empty message list is rejected.</summary>
     [Fact]
     public async Task CompleteAsync_NoMessages_Throws()
@@ -317,6 +485,110 @@ public sealed class QuadBrainOpenAiChatServiceTests
             FailedTools.Add((toolName, error));
             return Task.CompletedTask;
         }
+    }
+
+    private sealed class RecordingSessionLogService : ISessionLogService
+    {
+        public string? SourceType { get; private set; }
+
+        public string? SessionId { get; private set; }
+
+        public UnifiedRequestEntryDto? Turn { get; private set; }
+
+        public Task<long> UpsertTurnAsync(
+            string sourceType,
+            string sessionId,
+            UnifiedRequestEntryDto turn,
+            CancellationToken cancellationToken = default)
+        {
+            SourceType = sourceType;
+            SessionId = sessionId;
+            Turn = turn;
+            return Task.FromResult(1L);
+        }
+
+        public Task<long> SubmitAsync(
+            UnifiedSessionLogDto dto,
+            string? sourceFilePath = null,
+            string? contentHash = null,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<int> AppendProcessingDialogAsync(
+            string sourceType,
+            string sessionId,
+            string requestId,
+            IReadOnlyList<ProcessingDialogItemDto> items,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<UnifiedSessionLogDto?> GetAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<long> ReplaceTurnAsync(
+            string sourceType,
+            string sessionId,
+            UnifiedRequestEntryDto turn,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<bool> ReplaceTurnSectionAsync(
+            string sourceType,
+            string sessionId,
+            string requestId,
+            string section,
+            UnifiedRequestEntryDto payload,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<bool> ClearTurnSectionAsync(
+            string sourceType,
+            string sessionId,
+            string requestId,
+            string section,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<bool> DeleteTurnItemAsync(
+            string sourceType,
+            string sessionId,
+            string requestId,
+            string section,
+            string itemKey,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<bool> DeleteTurnAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<bool> DeleteSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<bool> OpenSessionAsync(
+            string sourceType,
+            string sessionId,
+            string? title = null,
+            string? model = null,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<int> RepairWorkspaceStampsAsync(bool dryRun = false, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+    }
+
+    private static OpenAiToolDefinition Tool(string name)
+        => new() { Function = new OpenAiFunctionDefinition { Name = name, Description = $"Run {name}." } };
+
+    private static JsonElement ToolChoice(string json)
+    {
+        using var document = JsonDocument.Parse(json);
+        return document.RootElement.Clone();
     }
 
     private sealed class CapturingOrchestrationService(QuadBrainOrchestrationResponse response)

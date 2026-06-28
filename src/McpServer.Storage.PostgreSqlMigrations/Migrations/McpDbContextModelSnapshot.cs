@@ -1265,6 +1265,17 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasColumnType("character varying(32)")
                         .HasDefaultValue("medium");
 
+                    b.Property<string>("ScopeEndLayerKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("ScopeStartLayerKey")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasDefaultValue("layer-1");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -1290,7 +1301,70 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasIndex("WorkspaceId", "Id");
 
+                    b.HasIndex("WorkspaceId", "ScopeEndLayerKey");
+
+                    b.HasIndex("WorkspaceId", "ScopeStartLayerKey");
+
                     b.ToTable("Requirements");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementScopeLayerEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("Key")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ScopeEndLayerKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("WorkspaceId", "Key");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "Order")
+                        .IsUnique();
+
+                    b.HasIndex("WorkspaceId", "ScopeEndLayerKey");
+
+                    b.ToTable("RequirementScopeLayers");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementTraceabilityLinkEntity", b =>
@@ -2733,6 +2807,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("BannedOrganizationsJson")
                         .HasColumnType("text");
 
+                    b.Property<string>("CurrentRequirementLayerKey")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
                     b.Property<string>("DataDirectory")
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
@@ -2817,6 +2896,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         new
                         {
                             WorkspaceId = "",
+                            CurrentRequirementLayerKey = "layer-1",
                             DateTimeCreated = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DateTimeModified = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -3021,6 +3101,15 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementScopeLayerEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()

@@ -287,6 +287,9 @@ public sealed class MarkerFileServiceTests
             Assert.Contains("signature:", yaml);
             Assert.Contains("trust_bootstrap:", yaml);
             Assert.Contains("agent_plugins:", yaml);
+            Assert.Contains("workflow.triage.*", yaml);
+            Assert.Contains("mcpserver triage tools", yaml);
+            Assert.Contains("triage_*", yaml);
             Assert.Contains("policy: required", yaml);
             Assert.Contains("MCP_PLUGIN_UNAVAILABLE:Codex", yaml);
             Assert.Contains("MCP_PLUGIN_UNAVAILABLE:Claude", yaml);

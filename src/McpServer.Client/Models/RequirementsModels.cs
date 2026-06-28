@@ -38,6 +38,14 @@ public sealed class FrEntry
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string ScopeStartLayerKey { get; set; } = "layer-1";
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>A technical requirement entry.</summary>
@@ -74,6 +82,14 @@ public sealed class TrEntry
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string ScopeStartLayerKey { get; set; } = "layer-1";
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>A testing requirement entry.</summary>
@@ -110,6 +126,114 @@ public sealed class TestEntry
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string ScopeStartLayerKey { get; set; } = "layer-1";
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
+}
+
+/// <summary>FR-MCP-REQSCOPE-001: requirement scope layer returned by layer catalog endpoints.</summary>
+public sealed class RequirementScopeLayer
+{
+    /// <summary>Stable layer key.</summary>
+    [JsonPropertyName("key")]
+    public string Key { get; set; } = string.Empty;
+
+    /// <summary>Immutable layer order.</summary>
+    [JsonPropertyName("order")]
+    public int Order { get; set; }
+
+    /// <summary>Human-readable layer name.</summary>
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>Optional layer description.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Optional last layer where requirements starting in this layer apply.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
+
+    /// <summary>Owning workspace discriminator.</summary>
+    [JsonPropertyName("workspaceId")]
+    public string WorkspaceId { get; set; } = string.Empty;
+
+    /// <summary>UTC creation timestamp.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset? CreatedAtUtc { get; set; }
+
+    /// <summary>UTC update timestamp.</summary>
+    [JsonPropertyName("updatedAtUtc")]
+    public DateTimeOffset? UpdatedAtUtc { get; set; }
+}
+
+/// <summary>FR-MCP-REQSCOPE-001: request payload for creating a requirement scope layer.</summary>
+public sealed class RequirementScopeLayerRequest
+{
+    /// <summary>Stable layer key.</summary>
+    [JsonPropertyName("key")]
+    public string Key { get; set; } = string.Empty;
+
+    /// <summary>Immutable layer order.</summary>
+    [JsonPropertyName("order")]
+    public int Order { get; set; }
+
+    /// <summary>Human-readable layer name.</summary>
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>Optional layer description.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Optional last layer where requirements starting in this layer apply.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
+}
+
+/// <summary>FR-MCP-REQSCOPE-001: request payload for updating mutable layer fields.</summary>
+public sealed class RequirementScopeLayerUpdate
+{
+    /// <summary>Optional new layer name.</summary>
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+
+    /// <summary>Optional new layer description.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Optional last layer where requirements starting in this layer apply.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
+}
+
+/// <summary>FR-MCP-REQSCOPE-003: effective requirement set resolved for a layer.</summary>
+public sealed class EffectiveRequirementsResult
+{
+    /// <summary>The layer used to resolve effective requirements.</summary>
+    [JsonPropertyName("currentLayer")]
+    public RequirementScopeLayer CurrentLayer { get; set; } = new();
+
+    /// <summary>Effective functional requirements.</summary>
+    [JsonPropertyName("functional")]
+    public IReadOnlyList<FrEntry> Functional { get; set; } = [];
+
+    /// <summary>Effective technical requirements.</summary>
+    [JsonPropertyName("technical")]
+    public IReadOnlyList<TrEntry> Technical { get; set; } = [];
+
+    /// <summary>Effective testing requirements.</summary>
+    [JsonPropertyName("testing")]
+    public IReadOnlyList<TestEntry> Testing { get; set; } = [];
+
+    /// <summary>Effective mappings whose linked requirements are also effective.</summary>
+    [JsonPropertyName("mappings")]
+    public IReadOnlyList<FrTrMapping> Mappings { get; set; } = [];
 }
 
 /// <summary>A functional-to-technical requirement mapping row.</summary>
@@ -162,6 +286,14 @@ public sealed class CreateFrRequest
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for updating a functional requirement entry.</summary>
@@ -190,6 +322,14 @@ public sealed class UpdateFrRequest
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for creating a technical requirement entry.</summary>
@@ -222,6 +362,14 @@ public sealed class CreateTrRequest
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for updating a technical requirement entry.</summary>
@@ -250,6 +398,14 @@ public sealed class UpdateTrRequest
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for creating a testing requirement entry.</summary>
@@ -282,6 +438,14 @@ public sealed class CreateTestRequest
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for updating a testing requirement entry.</summary>
@@ -310,6 +474,14 @@ public sealed class UpdateTestRequest
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for creating multiple functional requirements atomically.</summary>
@@ -354,6 +526,14 @@ public sealed class CreateFrBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for updating multiple functional requirements atomically.</summary>
@@ -398,6 +578,14 @@ public sealed class UpdateFrBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this FR applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for creating multiple technical requirements atomically.</summary>
@@ -442,6 +630,14 @@ public sealed class CreateTrBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for updating multiple technical requirements atomically.</summary>
@@ -486,6 +682,14 @@ public sealed class UpdateTrBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TR applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for creating multiple testing requirements atomically.</summary>
@@ -530,6 +734,14 @@ public sealed class CreateTestBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for updating multiple testing requirements atomically.</summary>
@@ -574,6 +786,14 @@ public sealed class UpdateTestBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for creating mixed FR/TR/TEST requirements atomically.</summary>
@@ -626,6 +846,14 @@ public sealed class CreateRequirementBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this mixed requirement applies.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this mixed requirement applies.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Request payload for updating mixed FR/TR/TEST requirements atomically.</summary>
@@ -678,6 +906,14 @@ public sealed class UpdateRequirementBatchRecord
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     [JsonPropertyName("acceptanceCriteria")]
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this mixed requirement applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeStartLayerKey")]
+    public string? ScopeStartLayerKey { get; set; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this mixed requirement applies. Null preserves the current value.</summary>
+    [JsonPropertyName("scopeEndLayerKey")]
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <summary>Structured response returned by requirements batch endpoints.</summary>

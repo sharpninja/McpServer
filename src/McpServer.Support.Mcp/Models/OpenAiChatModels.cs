@@ -34,7 +34,7 @@ public sealed class OpenAiChatCompletionRequest
     [JsonPropertyName("tool_choice")]
     public JsonElement? ToolChoice { get; set; }
 
-    /// <summary>Whether a streamed response was requested (streaming is a later slice; ignored for now).</summary>
+    /// <summary>Whether a streamed Server-Sent Events response was requested.</summary>
     [JsonPropertyName("stream")]
     public bool Stream { get; set; }
 }

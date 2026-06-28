@@ -1,0 +1,2945 @@
+[
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-ignore.bats",
+    "batsLine": 7,
+    "batsName": "mutable internal TODO cache state is ignored by git",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-IGNORE-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-ignore 001 mutable-internal-todo-cache-state-is-ignored-by-git"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-ignore.bats",
+    "batsLine": 15,
+    "batsName": "staged plugin root is ignored by git",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-IGNORE-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-ignore 002 staged-plugin-root-is-ignored-by-git"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 19,
+    "batsName": "cache_write creates a YAML file in cache/pending/ directory",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 001 cache-write-creates-a-yaml-file-in-cache-pending-directory"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 26,
+    "batsName": "cache_write uses monotonic sequence numbering (001, 002, 003...)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 002 cache-write-uses-monotonic-sequence-numbering-001-002-003"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 41,
+    "batsName": "cache_write stores method, params, and timestamp in the YAML file",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 003 cache-write-stores-method-params-and-timestamp-in-the-yaml-file"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 52,
+    "batsName": "cache_status returns 0 when no pending items",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 004 cache-status-returns-0-when-no-pending-items"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 57,
+    "batsName": "cache_status returns correct count of pending items",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 005 cache-status-returns-correct-count-of-pending-items"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 66,
+    "batsName": "cache_flush removes items from pending/ after successful replay",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 006 cache-flush-removes-items-from-pending-after-successful-replay"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 81,
+    "batsName": "cache_flush increments retryCount on failure",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 007 cache-flush-increments-retrycount-on-failure"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 99,
+    "batsName": "cache_flush skips items with retryCount >= 3",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-008",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 008 cache-flush-skips-items-with-retrycount-3"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 119,
+    "batsName": "cache_flush processes items in order",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-009",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 009 cache-flush-processes-items-in-order"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/cache-manager.bats",
+    "batsLine": 147,
+    "batsName": "cache-manager.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CACHE-MANAGER-010",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 cache-manager 010 cache-manager-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 32,
+    "batsName": "parse: extracts turns from parent rollout fixture",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 001 parse-extracts-turns-from-parent-rollout-fixture"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 39,
+    "batsName": "parse: parent fixture yields 2 turns",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 002 parse-parent-fixture-yields-2-turns"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 46,
+    "batsName": "parse: first turn has non-empty interpretation",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 003 parse-first-turn-has-non-empty-interpretation"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 53,
+    "batsName": "parse: first turn has non-empty queryText",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 004 parse-first-turn-has-non-empty-querytext"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 60,
+    "batsName": "parse: first turn has non-empty actions array",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 005 parse-first-turn-has-non-empty-actions-array"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 67,
+    "batsName": "parse: first turn captures file edit from patch_apply_end",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 006 parse-first-turn-captures-file-edit-from-patch-apply-end"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 74,
+    "batsName": "parse: first turn has non-empty processingDialog",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 007 parse-first-turn-has-non-empty-processingdialog"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 81,
+    "batsName": "parse: extracts requirement ID FR-MCP-007 from agent message",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-008",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 008 parse-extracts-requirement-id-fr-mcp-007-from-agent-message"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 88,
+    "batsName": "parse: extracts design decision from decision-phrased agent message",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-009",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 009 parse-extracts-design-decision-from-decision-phrased-agent-message"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 95,
+    "batsName": "parse: empty blockers array when no turn_aborted events",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-010",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 010 parse-empty-blockers-array-when-no-turn-aborted-events"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 102,
+    "batsName": "parse: subagent fixture yields 1 turn with subagent tag",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-011",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 011 parse-subagent-fixture-yields-1-turn-with-subagent-tag"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 109,
+    "batsName": "parse: subagent-2 fixture captures filesModified from patch_apply_end",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-012",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 012 parse-subagent-2-fixture-captures-filesmodified-from-patch-apply-end"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 116,
+    "batsName": "parse: exits non-zero for missing file",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-013",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 013 parse-exits-non-zero-for-missing-file"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 125,
+    "batsName": "subagents: discovers subagent transcripts by parent_thread_id",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-014",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 014 subagents-discovers-subagent-transcripts-by-parent-thread-id"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 139,
+    "batsName": "subagents: each descriptor has path, agentNickname, parentThreadId",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-015",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 015 subagents-each-descriptor-has-path-agentnickname-parentthreadid"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 154,
+    "batsName": "subagents: returns empty array when no subagents exist",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-016",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 016 subagents-returns-empty-array-when-no-subagents-exist"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 164,
+    "batsName": "import: emits tab-delimited lines for parent transcript",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-017",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 017 import-emits-tab-delimited-lines-for-parent-transcript"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 172,
+    "batsName": "import: each line has method, base64 params, and label fields",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-018",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 018 import-each-line-has-method-base64-params-and-label-fields"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 181,
+    "batsName": "import: base64 params decode to valid JSON with non-empty interpretation",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-019",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 019 import-base64-params-decode-to-valid-json-with-non-empty-interpretation"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 199,
+    "batsName": "import: subagent transcript includes subagent tag and parent link",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-020",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 020 import-subagent-transcript-includes-subagent-tag-and-parent-link"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 213,
+    "batsName": "import: subagent request IDs include nickname slug",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-021",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 021 import-subagent-request-ids-include-nickname-slug"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 222,
+    "batsName": "import: requires session-id argument",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-022",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 022 import-requires-session-id-argument"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 231,
+    "batsName": "import: running twice produces same request IDs (idempotent)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-023",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 023 import-running-twice-produces-same-request-ids-idempotent"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 243,
+    "batsName": "redaction: API key values are scrubbed from parsed output",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-024",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 024 redaction-api-key-values-are-scrubbed-from-parsed-output"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 264,
+    "batsName": "redaction: X-Api-Key header value is scrubbed",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-025",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 025 redaction-x-api-key-header-value-is-scrubbed"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 282,
+    "batsName": "enrich: emits valid YAML with response field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-026",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 026 enrich-emits-valid-yaml-with-response-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 288,
+    "batsName": "enrich: emits non-empty interpretation",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-027",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 027 enrich-emits-non-empty-interpretation"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 297,
+    "batsName": "enrich: emits actions array",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-028",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 028 enrich-emits-actions-array"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 303,
+    "batsName": "enrich: emits processingDialog array",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-029",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 029 enrich-emits-processingdialog-array"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/codex-jsonl.bats",
+    "batsLine": 309,
+    "batsName": "enrich: exits non-zero for missing JSONL file",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-CODEX-JSONL-030",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 codex-jsonl 030 enrich-exits-non-zero-for-missing-jsonl-file"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/ensure-repl.bats",
+    "batsLine": 8,
+    "batsName": "ensure-repl succeeds silently when mcpserver-repl is on PATH",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-ENSURE-REPL-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 ensure-repl 001 ensure-repl-succeeds-silently-when-mcpserver-repl-is-on-path"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/ensure-repl.bats",
+    "batsLine": 16,
+    "batsName": "ensure-repl exits 1 when dotnet is unavailable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-ENSURE-REPL-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 ensure-repl 002 ensure-repl-exits-1-when-dotnet-is-unavailable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/ensure-repl.bats",
+    "batsLine": 34,
+    "batsName": "ensure-repl exits 1 when gh is unavailable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-ENSURE-REPL-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 ensure-repl 003 ensure-repl-exits-1-when-gh-is-unavailable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/ensure-repl.bats",
+    "batsLine": 39,
+    "batsName": "ensure-repl.sh is executable and has shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-ENSURE-REPL-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 ensure-repl 004 ensure-repl-sh-is-executable-and-has-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 49,
+    "batsName": "hooks.json exists and is valid JSON",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 001 hooks-json-exists-and-is-valid-json"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 55,
+    "batsName": "hooks.json contains SessionStart hook",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 002 hooks-json-contains-sessionstart-hook"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 61,
+    "batsName": "hooks.json contains SessionEnd hook",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 003 hooks-json-contains-sessionend-hook"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 67,
+    "batsName": "hooks.json contains PreCompact hook",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 004 hooks-json-contains-precompact-hook"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 73,
+    "batsName": "hooks.json contains PostCompact hook",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 005 hooks-json-contains-postcompact-hook"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 79,
+    "batsName": "hooks.json contains PostToolUse hook",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 006 hooks-json-contains-posttooluse-hook"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 89,
+    "batsName": "session-start.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 007 session-start-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 93,
+    "batsName": "session-start.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-008",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 008 session-start-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 97,
+    "batsName": "session-start.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-009",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 009 session-start-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 101,
+    "batsName": "session-start.sh writes session-state.yaml on successful bootstrap",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-010",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 010 session-start-sh-writes-session-state-yaml-on-successful-bootstrap"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 147,
+    "batsName": "session-start.sh writes MCP_UNTRUSTED to session-state.yaml when bootstrap fails",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-011",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 011 session-start-sh-writes-mcp-untrusted-to-session-state-yaml-when-bootstrap-fails"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 176,
+    "batsName": "session-end.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-012",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 012 session-end-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 180,
+    "batsName": "session-end.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-013",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 013 session-end-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 184,
+    "batsName": "session-end.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-014",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 014 session-end-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 188,
+    "batsName": "session-end.sh calls cache_flush",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-015",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 015 session-end-sh-calls-cache-flush"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 216,
+    "batsName": "pre-compact.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-016",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 016 pre-compact-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 220,
+    "batsName": "pre-compact.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-017",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 017 pre-compact-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 224,
+    "batsName": "pre-compact.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-018",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 018 pre-compact-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 228,
+    "batsName": "pre-compact.sh flushes cache before compaction",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-019",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 019 pre-compact-sh-flushes-cache-before-compaction"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 261,
+    "batsName": "post-compact.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-020",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 020 post-compact-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 265,
+    "batsName": "post-compact.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-021",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 021 post-compact-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 269,
+    "batsName": "post-compact.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-022",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 022 post-compact-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 273,
+    "batsName": "post-compact.sh emits schema-valid no-op JSON",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-023",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 023 post-compact-sh-emits-schema-valid-no-op-json"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 307,
+    "batsName": "plan-approved.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-024",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 024 plan-approved-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 311,
+    "batsName": "plan-approved.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-025",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 025 plan-approved-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 315,
+    "batsName": "plan-approved.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-026",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 026 plan-approved-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 319,
+    "batsName": "plan-approved.sh extracts title from first # heading in plan file",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-027",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 027 plan-approved-sh-extracts-title-from-first-heading-in-plan-file"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 358,
+    "batsName": "plan-approved.sh writes to plan-todo-map.yaml after creating TODO",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-028",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 028 plan-approved-sh-writes-to-plan-todo-map-yaml-after-creating-todo"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 391,
+    "batsName": "plan-modified.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-029",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 029 plan-modified-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 395,
+    "batsName": "plan-modified.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-030",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 030 plan-modified-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 399,
+    "batsName": "plan-modified.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-031",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 031 plan-modified-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 403,
+    "batsName": "plan-modified.sh skips silently when no plan-todo-map entry exists",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-032",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 032 plan-modified-sh-skips-silently-when-no-plan-todo-map-entry-exists"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 426,
+    "batsName": "plan-modified.sh calls repl_invoke when plan-todo-map entry exists",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-033",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 033 plan-modified-sh-calls-repl-invoke-when-plan-todo-map-entry-exists"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 462,
+    "batsName": "plan-modified.sh no-file-path output includes PostToolUse hookEventName",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-034",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 034 plan-modified-sh-no-file-path-output-includes-posttooluse-hookeventname"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 482,
+    "batsName": "plan-modified.sh no-map skip output includes PostToolUse hookEventName",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-035",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 035 plan-modified-sh-no-map-skip-output-includes-posttooluse-hookeventname"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 502,
+    "batsName": "plan-modified.sh updated output includes PostToolUse hookEventName",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-036",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 036 plan-modified-sh-updated-output-includes-posttooluse-hookeventname"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 529,
+    "batsName": "plan-approved.sh no-plan skip output includes PostToolUse hookEventName",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-037",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 037 plan-approved-sh-no-plan-skip-output-includes-posttooluse-hookeventname"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 549,
+    "batsName": "plan-approved.sh created output includes PostToolUse hookEventName",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-038",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 038 plan-approved-sh-created-output-includes-posttooluse-hookeventname"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 580,
+    "batsName": "cache-flush.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-039",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 039 cache-flush-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 584,
+    "batsName": "cache-flush.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-040",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 040 cache-flush-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 588,
+    "batsName": "cache-flush.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-041",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 041 cache-flush-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 592,
+    "batsName": "cache-flush.sh outputs flush result summary",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-042",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 042 cache-flush-sh-outputs-flush-result-summary"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 615,
+    "batsName": "health-check.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-043",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 043 health-check-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 619,
+    "batsName": "health-check.sh has a shebang",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-044",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 044 health-check-sh-has-a-shebang"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 623,
+    "batsName": "health-check.sh is executable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-045",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 045 health-check-sh-is-executable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 627,
+    "batsName": "health-check.sh exits 0 when repl_invoke succeeds",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-046",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 046 health-check-sh-exits-0-when-repl-invoke-succeeds"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/hooks.bats",
+    "batsLine": 643,
+    "batsName": "health-check.sh exits 1 when repl_invoke fails",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-HOOKS-047",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 hooks 047 health-check-sh-exits-1-when-repl-invoke-fails"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/marker-resolver.bats",
+    "batsLine": 51,
+    "batsName": "find_marker_file finds marker in current directory",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-MARKER-RESOLVER-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 marker-resolver 001 find-marker-file-finds-marker-in-current-directory"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/marker-resolver.bats",
+    "batsLine": 59,
+    "batsName": "find_marker_file walks up to parent directories",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-MARKER-RESOLVER-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 marker-resolver 002 find-marker-file-walks-up-to-parent-directories"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/marker-resolver.bats",
+    "batsLine": 68,
+    "batsName": "find_marker_file returns exit 1 when no marker exists",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-MARKER-RESOLVER-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 marker-resolver 003 find-marker-file-returns-exit-1-when-no-marker-exists"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/marker-resolver.bats",
+    "batsLine": 77,
+    "batsName": "parse_marker_field extracts baseUrl correctly",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-MARKER-RESOLVER-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 marker-resolver 004 parse-marker-field-extracts-baseurl-correctly"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/marker-resolver.bats",
+    "batsLine": 83,
+    "batsName": "parse_marker_field extracts apiKey correctly",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-MARKER-RESOLVER-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 marker-resolver 005 parse-marker-field-extracts-apikey-correctly"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/marker-resolver.bats",
+    "batsLine": 89,
+    "batsName": "parse_marker_field extracts workspacePath correctly",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-MARKER-RESOLVER-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 marker-resolver 006 parse-marker-field-extracts-workspacepath-correctly"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/marker-resolver.bats",
+    "batsLine": 95,
+    "batsName": "marker-resolver.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-MARKER-RESOLVER-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 marker-resolver 007 marker-resolver-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/plugin-helpers.bats",
+    "batsLine": 69,
+    "batsName": "mcp.claude.status reports cache, marker, session, turn, namespaces, and wrappers",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-PLUGIN-HELPERS-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 plugin-helpers 001 mcp-claude-status-reports-cache-marker-session-turn-namespaces-and-wrappers"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/plugin-helpers.bats",
+    "batsLine": 88,
+    "batsName": "final-response helper completes the scoped current turn",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-PLUGIN-HELPERS-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 plugin-helpers 002 final-response-helper-completes-the-scoped-current-turn"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/plugin-helpers.bats",
+    "batsLine": 97,
+    "batsName": "PowerShell wrapper passes params through native parameter without shell expansion",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-PLUGIN-HELPERS-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 plugin-helpers 003 powershell-wrapper-passes-params-through-native-parameter-without-shell-expansio"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/plugin-helpers.bats",
+    "batsLine": 121,
+    "batsName": "PowerShell wrapper parses YAML params as object",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-PLUGIN-HELPERS-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 plugin-helpers 004 powershell-wrapper-parses-yaml-params-as-object"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/plugin-helpers.bats",
+    "batsLine": 148,
+    "batsName": "PowerShell wrapper passes params through stdin without shell expansion",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-PLUGIN-HELPERS-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 plugin-helpers 005 powershell-wrapper-passes-params-through-stdin-without-shell-expansion"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/plugin-helpers.bats",
+    "batsLine": 181,
+    "batsName": "PowerShell wrapper status uses Claude helper and scoped cache",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-PLUGIN-HELPERS-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 plugin-helpers 006 powershell-wrapper-status-uses-claude-helper-and-scoped-cache"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-contract.bats",
+    "batsLine": 18,
+    "batsName": "fixture files are well-formed (2 NDJSON lines, 2 YAML documents)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-CONTRACT-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-contract 001 fixture-files-are-well-formed-2-ndjson-lines-2-yaml-documents"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-contract.bats",
+    "batsLine": 24,
+    "batsName": "live: one repl process answers both NDJSON requests with --- terminators",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-CONTRACT-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-contract 002 live-one-repl-process-answers-both-ndjson-requests-with-terminators"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-contract.bats",
+    "batsLine": 34,
+    "batsName": "live: one repl process answers both YAML documents with --- terminators",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-CONTRACT-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-contract 003 live-one-repl-process-answers-both-yaml-documents-with-terminators"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-daemon.bats",
+    "batsLine": 66,
+    "batsName": "send auto-starts the daemon and returns a terminated response",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-DAEMON-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-daemon 001 send-auto-starts-the-daemon-and-returns-a-terminated-response"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-daemon.bats",
+    "batsLine": 73,
+    "batsName": "two sends are served by ONE repl child process",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-DAEMON-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-daemon 002 two-sends-are-served-by-one-repl-child-process"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-daemon.bats",
+    "batsLine": 80,
+    "batsName": "daemon restarts automatically after being killed",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-DAEMON-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-daemon 003 daemon-restarts-automatically-after-being-killed"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-daemon.bats",
+    "batsLine": 90,
+    "batsName": "concurrent sends both complete",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-DAEMON-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-daemon 004 concurrent-sends-both-complete"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 490,
+    "batsName": "internal TODO tracking defaults off and can be toggled in cache",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 001 internal-todo-tracking-defaults-off-and-can-be-toggled-in-cache"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 516,
+    "batsName": "internal TODO tracking env override wins over cached setting",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 002 internal-todo-tracking-env-override-wins-over-cached-setting"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 531,
+    "batsName": "GraphRAG workflow shim routes all 17 commands through workspace REPL",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 003 graphrag-workflow-shim-routes-all-17-commands-through-workspace-repl"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 641,
+    "batsName": "completeTurn flips current-turn.yaml status from in_progress to completed",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 004 completeturn-flips-current-turn-yaml-status-from-in-progress-to-completed"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 651,
+    "batsName": "completeTurn is idempotent on already-completed turns",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 005 completeturn-is-idempotent-on-already-completed-turns"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 659,
+    "batsName": "completeTurn no-ops gracefully when current-turn.yaml is missing",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 006 completeturn-no-ops-gracefully-when-current-turn-yaml-is-missing"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 666,
+    "batsName": "appendActions bumps codeEdits once per filePath: in params",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 007 appendactions-bumps-codeedits-once-per-filepath-in-params"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 679,
+    "batsName": "appendActions with no filePath: leaves codeEdits unchanged",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-008",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 008 appendactions-with-no-filepath-leaves-codeedits-unchanged"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 688,
+    "batsName": "appendActions ignores substring 'filePath' appearing in description text (not a field)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-009",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 009 appendactions-ignores-substring-filepath-appearing-in-description-text-not-a-fie"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 698,
+    "batsName": "appendActions accumulates across multiple invocations",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-010",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 010 appendactions-accumulates-across-multiple-invocations"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 708,
+    "batsName": "beginTurn initializes audit counters in current-turn.yaml",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-011",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 011 beginturn-initializes-audit-counters-in-current-turn-yaml"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 723,
+    "batsName": "appendActions bumps audit counters for actions, files, decisions, commits",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-012",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 012 appendactions-bumps-audit-counters-for-actions-files-decisions-commits"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 740,
+    "batsName": "appendDialog bumps audit dialog and decision counters",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-013",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 013 appenddialog-bumps-audit-dialog-and-decision-counters"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 765,
+    "batsName": "workflow.sessionlog.audit reports incomplete for code-edit turn missing audit",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-014",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 014 workflow-sessionlog-audit-reports-incomplete-for-code-edit-turn-missing-audit"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 774,
+    "batsName": "workflow.sessionlog.audit reports complete for a no-code-edit turn",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-015",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 015 workflow-sessionlog-audit-reports-complete-for-a-no-code-edit-turn"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 782,
+    "batsName": "workflow.sessionlog.closeTurn appends actions then completes with audit recorded",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-016",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 016 workflow-sessionlog-closeturn-appends-actions-then-completes-with-audit-recorded"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 797,
+    "batsName": "beginTurn creates current-turn.yaml when called directly",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-017",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 017 beginturn-creates-current-turn-yaml-when-called-directly"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 810,
+    "batsName": "openSession populates missing session metadata",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-018",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 018 opensession-populates-missing-session-metadata"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 829,
+    "batsName": "raw client.SessionLog.QueryAsync passes through to mcpserver-repl",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-019",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 019 raw-client-sessionlog-queryasync-passes-through-to-mcpserver-repl"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 836,
+    "batsName": "workflow.sessionlog.queryHistory uses compatibility marker without workspace env override",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-020",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 020 workflow-sessionlog-queryhistory-uses-compatibility-marker-without-workspace-env"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 856,
+    "batsName": "workflow.sessionlog.queryHistory honors explicit workspacePath in HTTP query",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-021",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 021 workflow-sessionlog-queryhistory-honors-explicit-workspacepath-in-http-query"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 876,
+    "batsName": "workflow.todo.query uses authenticated HTTP fallback before REPL",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-022",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 022 workflow-todo-query-uses-authenticated-http-fallback-before-repl"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 898,
+    "batsName": "workflow.todo.create typed fallback wraps flat YAML in request parameter",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-023",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 023 workflow-todo-create-typed-fallback-wraps-flat-yaml-in-request-parameter"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 915,
+    "batsName": "workflow.todo.get falls back to authenticated HTTP when typed client rejects id",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-024",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 024 workflow-todo-get-falls-back-to-authenticated-http-when-typed-client-rejects-id"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 934,
+    "batsName": "workflow.todo.update typed fallback wraps flat YAML in request parameter",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-025",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 025 workflow-todo-update-typed-fallback-wraps-flat-yaml-in-request-parameter"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 950,
+    "batsName": "workflow.todo.update falls back to authenticated HTTP with JSON body",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-026",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 026 workflow-todo-update-falls-back-to-authenticated-http-with-json-body"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 971,
+    "batsName": "TODO HTTP body folds doneSummary and maps implementationTasks objects",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-027",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 027 todo-http-body-folds-donesummary-and-maps-implementationtasks-objects"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 990,
+    "batsName": "TODO HTTP body does not promote implementation task done to parent done",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-028",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 028 todo-http-body-does-not-promote-implementation-task-done-to-parent-done"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1011,
+    "batsName": "TODO HTTP body accepts JSON request wrapper because JSON is YAML",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-029",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 029 todo-http-body-accepts-json-request-wrapper-because-json-is-yaml"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1024,
+    "batsName": "TODO HTTP body preserves blank lines and indentation in description Markdown",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-030",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 030 todo-http-body-preserves-blank-lines-and-indentation-in-description-markdown"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1043,
+    "batsName": "TODO typed params preserve multi-line Markdown description verbatim",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-031",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 031 todo-typed-params-preserve-multi-line-markdown-description-verbatim"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1064,
+    "batsName": "workflow.todo.create HTTP fallback preserves 4xx response body",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-032",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 032 workflow-todo-create-http-fallback-preserves-4xx-response-body"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1082,
+    "batsName": "workflow.todo.updateSelected uses selected TODO through workflow fallback",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-033",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 033 workflow-todo-updateselected-uses-selected-todo-through-workflow-fallback"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1100,
+    "batsName": "raw call returns exit 1 when mcpserver-repl emits type: error",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-034",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 034 raw-call-returns-exit-1-when-mcpserver-repl-emits-type-error"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1107,
+    "batsName": "workflow verbs never fall through to raw error path",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-035",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 035 workflow-verbs-never-fall-through-to-raw-error-path"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1117,
+    "batsName": "completeTurn fails closed when mcpserver-repl is unavailable",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-036",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 036 completeturn-fails-closed-when-mcpserver-repl-is-unavailable"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1130,
+    "batsName": "workflow.memory.list is routed through the memory workflow shim",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-037",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 037 workflow-memory-list-is-routed-through-the-memory-workflow-shim"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1140,
+    "batsName": "workflow.memory.add appends audit action and clears failsafe after success",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-038",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 038 workflow-memory-add-appends-audit-action-and-clears-failsafe-after-success"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1158,
+    "batsName": "workflow.requirements.listFr falls back to typed client instead of method_not_found",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-039",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 039 workflow-requirements-listfr-falls-back-to-typed-client-instead-of-method-not-fo"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1169,
+    "batsName": "workflow.requirements.updateFr uses typed client even when workflow would emit auth error",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-040",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 040 workflow-requirements-updatefr-uses-typed-client-even-when-workflow-would-emit-a"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1189,
+    "batsName": "workflow.requirements.updateFr hydrates existing entry for priority-only update",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-041",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 041 workflow-requirements-updatefr-hydrates-existing-entry-for-priority-only-update"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1207,
+    "batsName": "workflow.requirements.updateFr hydrates from workflow get before typed get",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-042",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 042 workflow-requirements-updatefr-hydrates-from-workflow-get-before-typed-get"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1225,
+    "batsName": "workflow.requirements update typed fallbacks preserve TR and TEST metadata",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-043",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 043 workflow-requirements-update-typed-fallbacks-preserve-tr-and-test-metadata"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1255,
+    "batsName": "workflow.requirements update typed fallbacks hydrate TR and TEST priority-only updates",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-044",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 044 workflow-requirements-update-typed-fallbacks-hydrate-tr-and-test-priority-only-u"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1276,
+    "batsName": "workflow.requirements.createFr uses typed client so workflow cannot swallow high priority",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-045",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 045 workflow-requirements-createfr-uses-typed-client-so-workflow-cannot-swallow-high"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1295,
+    "batsName": "workflow.requirements.createFr hydrates empty typed create result",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-046",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 046 workflow-requirements-createfr-hydrates-empty-typed-create-result"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1314,
+    "batsName": "workflow.requirements.createFrBatch verifies persisted records by readback",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-047",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 047 workflow-requirements-createfrbatch-verifies-persisted-records-by-readback"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1331,
+    "batsName": "workflow.requirements.createTrBatch fails when readback cannot verify persistence",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-048",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 048 workflow-requirements-createtrbatch-fails-when-readback-cannot-verify-persistenc"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1352,
+    "batsName": "workflow.requirements.createFr listFr getFr works through typed fallback",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-049",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 049 workflow-requirements-createfr-listfr-getfr-works-through-typed-fallback"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1373,
+    "batsName": "workflow.requirements.createFr typed params include acceptanceCriteria block when provided",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-050",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 050 workflow-requirements-createfr-typed-params-include-acceptancecriteria-block-whe"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1402,
+    "batsName": "workflow.requirements.createTest typed params include acceptanceCriteria block when provided",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-051",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 051 workflow-requirements-createtest-typed-params-include-acceptancecriteria-block-w"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1424,
+    "batsName": "workflow.requirements.updateFr typed params hydrate acceptanceCriteria from existing on partial update",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-052",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 052 workflow-requirements-updatefr-typed-params-hydrate-acceptancecriteria-from-exis"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1443,
+    "batsName": "workflow.requirements.updateFr typed params prefer caller acceptanceCriteria on criteria-only update",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-053",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 053 workflow-requirements-updatefr-typed-params-prefer-caller-acceptancecriteria-on"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1462,
+    "batsName": "workflow.requirements.updateFr typed params preserve JSON acceptanceCriteria on criteria-only update",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-054",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 054 workflow-requirements-updatefr-typed-params-preserve-json-acceptancecriteria-on"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1477,
+    "batsName": "workflow.requirements.updateFr fails when supplied acceptanceCriteria returns empty",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-055",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 055 workflow-requirements-updatefr-fails-when-supplied-acceptancecriteria-returns-em"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1496,
+    "batsName": "workflow.requirements.copyAcceptanceCriteriaFromTodo wrapper hits copy endpoint",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-056",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 056 workflow-requirements-copyacceptancecriteriafromtodo-wrapper-hits-copy-endpoint"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1517,
+    "batsName": "workflow.requirements.generateDocument returns content through typed fallback",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-057",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 057 workflow-requirements-generatedocument-returns-content-through-typed-fallback"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1529,
+    "batsName": "workflow.requirements.generateDocument returns wiki ZIP content instead of workspace metadata",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-058",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 058 workflow-requirements-generatedocument-returns-wiki-zip-content-instead-of-works"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1545,
+    "batsName": "workflow.requirements.generateDocument falls back when workflow rejects wiki format",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-059",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 059 workflow-requirements-generatedocument-falls-back-when-workflow-rejects-wiki-for"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1561,
+    "batsName": "workflow.requirements.generateDocument HTTP fallback returns wiki ZIP bytes",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-060",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 060 workflow-requirements-generatedocument-http-fallback-returns-wiki-zip-bytes"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1575,
+    "batsName": "workflow.requirements.generateDocument accepts JSON params because JSON is YAML",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-061",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 061 workflow-requirements-generatedocument-accepts-json-params-because-json-is-yaml"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1588,
+    "batsName": "workflow.requirements.ingestDocument passes wiki documents and timestamps to typed fallback",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-062",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 062 workflow-requirements-ingestdocument-passes-wiki-documents-and-timestamps-to-typ"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1608,
+    "batsName": "workflow.requirements.ingestDocument passes inline content to typed ingest first",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-063",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 063 workflow-requirements-ingestdocument-passes-inline-content-to-typed-ingest-first"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1623,
+    "batsName": "workflow.requirements uses session-state workspace path and base URL for mcpserver-repl",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-064",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 064 workflow-requirements-uses-session-state-workspace-path-and-base-url-for-mcpserv"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1633,
+    "batsName": "pending import transformer emits session recovery and TODO YAML commands",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-065",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 065 pending-import-transformer-emits-session-recovery-and-todo-yaml-commands"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1679,
+    "batsName": "workflow.sessionlog.importRecovery uses marker-auth HTTP submit before REPL",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-066",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 066 workflow-sessionlog-importrecovery-uses-marker-auth-http-submit-before-repl"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1695,
+    "batsName": "workflow.sessionlog.importRecovery accepts nested YAML sessionLog payloads",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-067",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 067 workflow-sessionlog-importrecovery-accepts-nested-yaml-sessionlog-payloads"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1730,
+    "batsName": "failsafe write stores replayable generic operation under workspace .mcpServer",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-068",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 068 failsafe-write-stores-replayable-generic-operation-under-workspace-mcpserver"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1752,
+    "batsName": "failsafe clear removes acknowledged operation",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-069",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 069 failsafe-clear-removes-acknowledged-operation"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1764,
+    "batsName": "workflow.requirements prefers compatibility marker when direct marker auth would fail",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-070",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 070 workflow-requirements-prefers-compatibility-marker-when-direct-marker-auth-would"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-targeted-issues.bats",
+    "batsLine": 29,
+    "batsName": "ISSUE-18 raw calls use persistent daemon and reuse one repl process",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-TARGETED-ISSUES-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-targeted-issues 001 issue-18-raw-calls-use-persistent-daemon-and-reuse-one-repl-process"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-targeted-issues.bats",
+    "batsLine": 58,
+    "batsName": "BUILD-REQPLUGIN-001 FR TR TEST typed params include acceptanceCriteria",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-TARGETED-ISSUES-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-targeted-issues 002 build-reqplugin-001-fr-tr-test-typed-params-include-acceptancecriteria"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-targeted-issues.bats",
+    "batsLine": 99,
+    "batsName": "ISSUE-19 stale in-progress turn is superseded before beginTurn opens a new turn",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-TARGETED-ISSUES-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-targeted-issues 003 issue-19-stale-in-progress-turn-is-superseded-before-beginturn-opens-a-new-turn"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-targeted-issues.bats",
+    "batsLine": 139,
+    "batsName": "ISSUE-19 raw invocation propagates nonzero repl process exit",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-TARGETED-ISSUES-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-targeted-issues 004 issue-19-raw-invocation-propagates-nonzero-repl-process-exit"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-targeted-issues.bats",
+    "batsLine": 152,
+    "batsName": "ISSUE-19 createBatch typed params preserve root JSON records arrays",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-TARGETED-ISSUES-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-targeted-issues 005 issue-19-createbatch-typed-params-preserve-root-json-records-arrays"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-targeted-issues.bats",
+    "batsLine": 164,
+    "batsName": "ISSUE-19 completeTurn recovery preserves relative indentation in multiline response",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-TARGETED-ISSUES-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-targeted-issues 006 issue-19-completeturn-recovery-preserves-relative-indentation-in-multiline-respo"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 8,
+    "batsName": "repl_invoke constructs valid JSON envelope with type, method, params, and requestId",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 001 repl-invoke-constructs-valid-json-envelope-with-type-method-params-and-requestid"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 36,
+    "batsName": "repl_invoke outputs the constructed JSON envelope correctly",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 002 repl-invoke-outputs-the-constructed-json-envelope-correctly"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 61,
+    "batsName": "repl_invoke requestId contains a timestamp in ISO format",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 003 repl-invoke-requestid-contains-a-timestamp-in-iso-format"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 83,
+    "batsName": "repl_build_envelope parses YAML params as an object",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 004 repl-build-envelope-parses-yaml-params-as-an-object"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 102,
+    "batsName": "repl_build_envelope parses nested YAML without installed js-yaml",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 005 repl-build-envelope-parses-nested-yaml-without-installed-js-yaml"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 135,
+    "batsName": "repl_build_envelope fallback parser accepts document path keys",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 006 repl-build-envelope-fallback-parser-accepts-document-path-keys"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 164,
+    "batsName": "script entrypoint exits non-zero for type error envelope",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 007 script-entrypoint-exits-non-zero-for-type-error-envelope"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 182,
+    "batsName": "repl_invoke returns exit 1 when mcpserver-repl is not available",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-008",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 008 repl-invoke-returns-exit-1-when-mcpserver-repl-is-not-available"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke.bats",
+    "batsLine": 198,
+    "batsName": "repl-invoke.sh is syntactically valid bash",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-009",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke 009 repl-invoke-sh-is-syntactically-valid-bash"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-persistent.bats",
+    "batsLine": 48,
+    "batsName": "invoke without params returns a result envelope",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-PERSISTENT-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-persistent 001 invoke-without-params-returns-a-result-envelope"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-persistent.bats",
+    "batsLine": 55,
+    "batsName": "invoke with JSON params threads them through to the repl",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-PERSISTENT-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-persistent 002 invoke-with-json-params-threads-them-through-to-the-repl"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-persistent.bats",
+    "batsLine": 61,
+    "batsName": "consecutive invocations reuse one repl child",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-PERSISTENT-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-persistent 003 consecutive-invocations-reuse-one-repl-child"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-persistent.bats",
+    "batsLine": 67,
+    "batsName": "MCPSERVER_REPL_PERSISTENT=0 falls back to spawn-per-call",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-PERSISTENT-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-persistent 004 mcpserver-repl-persistent-0-falls-back-to-spawn-per-call"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/requirements-batch-records.bats",
+    "batsLine": 46,
+    "batsName": "requirement batch parser accepts unindented PowerShell YAML records",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REQUIREMENTS-BATCH-RECORDS-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 requirements-batch-records 001 requirement-batch-parser-accepts-unindented-powershell-yaml-records"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/requirements-batch-records.bats",
+    "batsLine": 63,
+    "batsName": "requirement batch parser accepts indented YAML and inline JSON records",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REQUIREMENTS-BATCH-RECORDS-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 requirements-batch-records 002 requirement-batch-parser-accepts-indented-yaml-and-inline-json-records"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/session-log-upsert.bats",
+    "batsLine": 68,
+    "batsName": "turn upsert payload omits absent structured collections",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SESSION-LOG-UPSERT-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 session-log-upsert 001 turn-upsert-payload-omits-absent-structured-collections"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/session-log-upsert.bats",
+    "batsLine": 80,
+    "batsName": "turn upsert payload includes supplied actions and file paths",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SESSION-LOG-UPSERT-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 session-log-upsert 002 turn-upsert-payload-includes-supplied-actions-and-file-paths"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/session-log-upsert.bats",
+    "batsLine": 92,
+    "batsName": "persist turn uses UpsertTurnAsync without full session submit on success",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SESSION-LOG-UPSERT-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 session-log-upsert 003 persist-turn-uses-upsertturnasync-without-full-session-submit-on-success"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/session-log-upsert.bats",
+    "batsLine": 104,
+    "batsName": "persist turn falls back to SubmitAsync only when UpsertTurnAsync is missing",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SESSION-LOG-UPSERT-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 session-log-upsert 004 persist-turn-falls-back-to-submitasync-only-when-upsertturnasync-is-missing"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 36,
+    "batsName": "skills/todo/SKILL.md exists and is non-empty",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 001 skills-todo-skill-md-exists-and-is-non-empty"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 41,
+    "batsName": "skills/session/SKILL.md exists and is non-empty",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 002 skills-session-skill-md-exists-and-is-non-empty"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 46,
+    "batsName": "skills/requirements/SKILL.md exists and is non-empty",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 003 skills-requirements-skill-md-exists-and-is-non-empty"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 51,
+    "batsName": "skills/graphrag/SKILL.md exists and is non-empty",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 004 skills-graphrag-skill-md-exists-and-is-non-empty"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 56,
+    "batsName": "skills/workspace/SKILL.md exists and is non-empty",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 005 skills-workspace-skill-md-exists-and-is-non-empty"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 65,
+    "batsName": "skills/todo/SKILL.md has YAML frontmatter delimiters",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 006 skills-todo-skill-md-has-yaml-frontmatter-delimiters"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 69,
+    "batsName": "skills/session/SKILL.md has YAML frontmatter delimiters",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 007 skills-session-skill-md-has-yaml-frontmatter-delimiters"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 73,
+    "batsName": "skills/requirements/SKILL.md has YAML frontmatter delimiters",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-008",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 008 skills-requirements-skill-md-has-yaml-frontmatter-delimiters"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 77,
+    "batsName": "skills/graphrag/SKILL.md has YAML frontmatter delimiters",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-009",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 009 skills-graphrag-skill-md-has-yaml-frontmatter-delimiters"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 85,
+    "batsName": "skills/todo/SKILL.md frontmatter has name field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-010",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 010 skills-todo-skill-md-frontmatter-has-name-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 89,
+    "batsName": "skills/session/SKILL.md frontmatter has name field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-011",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 011 skills-session-skill-md-frontmatter-has-name-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 93,
+    "batsName": "skills/requirements/SKILL.md frontmatter has name field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-012",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 012 skills-requirements-skill-md-frontmatter-has-name-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 97,
+    "batsName": "skills/graphrag/SKILL.md frontmatter has name field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-013",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 013 skills-graphrag-skill-md-frontmatter-has-name-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 105,
+    "batsName": "skills/todo/SKILL.md frontmatter has description field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-014",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 014 skills-todo-skill-md-frontmatter-has-description-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 109,
+    "batsName": "skills/session/SKILL.md frontmatter has description field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-015",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 015 skills-session-skill-md-frontmatter-has-description-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 113,
+    "batsName": "skills/requirements/SKILL.md frontmatter has description field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-016",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 016 skills-requirements-skill-md-frontmatter-has-description-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 117,
+    "batsName": "skills/graphrag/SKILL.md frontmatter has description field",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-017",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 017 skills-graphrag-skill-md-frontmatter-has-description-field"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 125,
+    "batsName": "skills/todo/SKILL.md description contains at least 3 quoted trigger phrases",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-018",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 018 skills-todo-skill-md-description-contains-at-least-3-quoted-trigger-phrases"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 133,
+    "batsName": "skills/session/SKILL.md description contains at least 3 quoted trigger phrases",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-019",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 019 skills-session-skill-md-description-contains-at-least-3-quoted-trigger-phrases"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 141,
+    "batsName": "skills/requirements/SKILL.md description contains at least 3 quoted trigger phrases",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-020",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 020 skills-requirements-skill-md-description-contains-at-least-3-quoted-trigger-phra"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 149,
+    "batsName": "skills/graphrag/SKILL.md description contains at least 3 quoted trigger phrases",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-021",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 021 skills-graphrag-skill-md-description-contains-at-least-3-quoted-trigger-phrases"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 189,
+    "batsName": "skills/todo/SKILL.md body uses imperative form (first 5 prose lines do not start with 'You')",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-022",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 022 skills-todo-skill-md-body-uses-imperative-form-first-5-prose-lines-do-not-start"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 193,
+    "batsName": "skills/session/SKILL.md body uses imperative form (first 5 prose lines do not start with 'You')",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-023",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 023 skills-session-skill-md-body-uses-imperative-form-first-5-prose-lines-do-not-sta"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 197,
+    "batsName": "skills/requirements/SKILL.md body uses imperative form (first 5 prose lines do not start with 'You')",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-024",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 024 skills-requirements-skill-md-body-uses-imperative-form-first-5-prose-lines-do-no"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 201,
+    "batsName": "skills/graphrag/SKILL.md body uses imperative form (first 5 prose lines do not start with 'You')",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-025",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 025 skills-graphrag-skill-md-body-uses-imperative-form-first-5-prose-lines-do-not-st"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 209,
+    "batsName": "skills/todo/SKILL.md references mcpserver-repl --agent-stdio",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-026",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 026 skills-todo-skill-md-references-mcpserver-repl-agent-stdio"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 213,
+    "batsName": "skills/session/SKILL.md references mcpserver-repl --agent-stdio",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-027",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 027 skills-session-skill-md-references-mcpserver-repl-agent-stdio"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 217,
+    "batsName": "skills/requirements/SKILL.md references mcpserver-repl --agent-stdio",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-028",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 028 skills-requirements-skill-md-references-mcpserver-repl-agent-stdio"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 221,
+    "batsName": "skills/graphrag/SKILL.md references mcpserver-repl --agent-stdio",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-029",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 029 skills-graphrag-skill-md-references-mcpserver-repl-agent-stdio"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 229,
+    "batsName": "skills/todo/SKILL.md contains YAML envelope example (type: request)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-030",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 030 skills-todo-skill-md-contains-yaml-envelope-example-type-request"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 233,
+    "batsName": "skills/session/SKILL.md contains YAML envelope example (type: request)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-031",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 031 skills-session-skill-md-contains-yaml-envelope-example-type-request"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 237,
+    "batsName": "skills/requirements/SKILL.md contains YAML envelope example (type: request)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-032",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 032 skills-requirements-skill-md-contains-yaml-envelope-example-type-request"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 241,
+    "batsName": "skills/graphrag/SKILL.md contains YAML envelope example (type: request)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-033",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 033 skills-graphrag-skill-md-contains-yaml-envelope-example-type-request"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 245,
+    "batsName": "skills/workspace/SKILL.md documents workspace initialization commands",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-034",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 034 skills-workspace-skill-md-documents-workspace-initialization-commands"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 256,
+    "batsName": "skills/todo/SKILL.md references workflow.todo namespace",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-035",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 035 skills-todo-skill-md-references-workflow-todo-namespace"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 260,
+    "batsName": "skills/session/SKILL.md references workflow.sessionlog namespace",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-036",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 036 skills-session-skill-md-references-workflow-sessionlog-namespace"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 264,
+    "batsName": "skills/requirements/SKILL.md references workflow.requirements namespace",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-037",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 037 skills-requirements-skill-md-references-workflow-requirements-namespace"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 268,
+    "batsName": "skills/graphrag/SKILL.md references workflow.graphrag namespace",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-038",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 038 skills-graphrag-skill-md-references-workflow-graphrag-namespace"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 276,
+    "batsName": "skills/todo/SKILL.md description contains 'create a todo' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-039",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 039 skills-todo-skill-md-description-contains-create-a-todo-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 280,
+    "batsName": "skills/todo/SKILL.md description contains 'list todos' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-040",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 040 skills-todo-skill-md-description-contains-list-todos-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 284,
+    "batsName": "skills/todo/SKILL.md description contains 'mark todo done' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-041",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 041 skills-todo-skill-md-description-contains-mark-todo-done-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 288,
+    "batsName": "skills/session/SKILL.md description contains 'start session' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-042",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 042 skills-session-skill-md-description-contains-start-session-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 292,
+    "batsName": "skills/session/SKILL.md description contains 'begin turn' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-043",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 043 skills-session-skill-md-description-contains-begin-turn-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 296,
+    "batsName": "skills/session/SKILL.md description contains 'complete turn' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-044",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 044 skills-session-skill-md-description-contains-complete-turn-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 300,
+    "batsName": "skills/requirements/SKILL.md description contains 'create FR' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-045",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 045 skills-requirements-skill-md-description-contains-create-fr-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 304,
+    "batsName": "skills/requirements/SKILL.md description contains 'list requirements' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-046",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 046 skills-requirements-skill-md-description-contains-list-requirements-trigger-phra"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 308,
+    "batsName": "skills/requirements/SKILL.md description contains 'ingest requirements' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-047",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 047 skills-requirements-skill-md-description-contains-ingest-requirements-trigger-ph"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 312,
+    "batsName": "skills/graphrag/SKILL.md description contains 'create entity' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-048",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 048 skills-graphrag-skill-md-description-contains-create-entity-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 316,
+    "batsName": "skills/graphrag/SKILL.md description contains 'query knowledge graph' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-049",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 049 skills-graphrag-skill-md-description-contains-query-knowledge-graph-trigger-phra"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 320,
+    "batsName": "skills/graphrag/SKILL.md description contains 'delete document' trigger phrase",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-050",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 050 skills-graphrag-skill-md-description-contains-delete-document-trigger-phrase"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 328,
+    "batsName": "skills/todo/SKILL.md covers workflow.todo.query command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-051",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 051 skills-todo-skill-md-covers-workflow-todo-query-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 332,
+    "batsName": "skills/todo/SKILL.md covers workflow.todo.create command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-052",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 052 skills-todo-skill-md-covers-workflow-todo-create-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 336,
+    "batsName": "skills/todo/SKILL.md covers workflow.todo.update command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-053",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 053 skills-todo-skill-md-covers-workflow-todo-update-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 340,
+    "batsName": "skills/todo/SKILL.md covers workflow.todo.delete command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-054",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 054 skills-todo-skill-md-covers-workflow-todo-delete-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 344,
+    "batsName": "skills/todo/SKILL.md covers streamStatus command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-055",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 055 skills-todo-skill-md-covers-streamstatus-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 348,
+    "batsName": "skills/todo/SKILL.md covers ISSUE-NEW special create ID",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-056",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 056 skills-todo-skill-md-covers-issue-new-special-create-id"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 352,
+    "batsName": "skills/todo/SKILL.md documents the TODO ID regex pattern",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-057",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 057 skills-todo-skill-md-documents-the-todo-id-regex-pattern"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 360,
+    "batsName": "skills/session/SKILL.md covers openSession command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-058",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 058 skills-session-skill-md-covers-opensession-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 364,
+    "batsName": "skills/session/SKILL.md covers beginTurn command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-059",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 059 skills-session-skill-md-covers-beginturn-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 368,
+    "batsName": "skills/session/SKILL.md covers updateTurn command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-060",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 060 skills-session-skill-md-covers-updateturn-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 372,
+    "batsName": "skills/session/SKILL.md covers completeTurn command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-061",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 061 skills-session-skill-md-covers-completeturn-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 376,
+    "batsName": "skills/session/SKILL.md covers failTurn command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-062",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 062 skills-session-skill-md-covers-failturn-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 380,
+    "batsName": "skills/session/SKILL.md covers appendDialog command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-063",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 063 skills-session-skill-md-covers-appenddialog-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 384,
+    "batsName": "skills/session/SKILL.md covers appendActions command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-064",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 064 skills-session-skill-md-covers-appendactions-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 388,
+    "batsName": "skills/session/SKILL.md covers queryHistory command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-065",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 065 skills-session-skill-md-covers-queryhistory-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 392,
+    "batsName": "skills/session/SKILL.md documents session ID naming convention",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-066",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 066 skills-session-skill-md-documents-session-id-naming-convention"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 400,
+    "batsName": "skills/requirements/SKILL.md covers listFr command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-067",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 067 skills-requirements-skill-md-covers-listfr-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 404,
+    "batsName": "skills/requirements/SKILL.md covers createFr command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-068",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 068 skills-requirements-skill-md-covers-createfr-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 408,
+    "batsName": "skills/requirements/SKILL.md covers createTr command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-069",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 069 skills-requirements-skill-md-covers-createtr-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 412,
+    "batsName": "skills/requirements/SKILL.md covers listTest command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-070",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 070 skills-requirements-skill-md-covers-listtest-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 416,
+    "batsName": "skills/requirements/SKILL.md covers createMapping command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-071",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 071 skills-requirements-skill-md-covers-createmapping-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 420,
+    "batsName": "skills/requirements/SKILL.md covers generateDocument command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-072",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 072 skills-requirements-skill-md-covers-generatedocument-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 424,
+    "batsName": "skills/requirements/SKILL.md covers ingestDocument command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-073",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 073 skills-requirements-skill-md-covers-ingestdocument-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 432,
+    "batsName": "skills/graphrag/SKILL.md covers status command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-074",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 074 skills-graphrag-skill-md-covers-status-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 436,
+    "batsName": "skills/graphrag/SKILL.md covers index command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-075",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 075 skills-graphrag-skill-md-covers-index-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 440,
+    "batsName": "skills/graphrag/SKILL.md covers query command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-076",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 076 skills-graphrag-skill-md-covers-query-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 444,
+    "batsName": "skills/graphrag/SKILL.md covers ingest command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-077",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 077 skills-graphrag-skill-md-covers-ingest-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 448,
+    "batsName": "skills/graphrag/SKILL.md covers documents.list command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-078",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 078 skills-graphrag-skill-md-covers-documents-list-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 452,
+    "batsName": "skills/graphrag/SKILL.md covers documents.chunks command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-079",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 079 skills-graphrag-skill-md-covers-documents-chunks-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 456,
+    "batsName": "skills/graphrag/SKILL.md covers documents.delete command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-080",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 080 skills-graphrag-skill-md-covers-documents-delete-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 460,
+    "batsName": "skills/graphrag/SKILL.md covers entities.create command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-081",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 081 skills-graphrag-skill-md-covers-entities-create-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 464,
+    "batsName": "skills/graphrag/SKILL.md covers entities.list command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-082",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 082 skills-graphrag-skill-md-covers-entities-list-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 468,
+    "batsName": "skills/graphrag/SKILL.md covers entities.delete command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-083",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 083 skills-graphrag-skill-md-covers-entities-delete-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 472,
+    "batsName": "skills/graphrag/SKILL.md covers relationships.create command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-084",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 084 skills-graphrag-skill-md-covers-relationships-create-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 476,
+    "batsName": "skills/graphrag/SKILL.md covers relationships.list command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-085",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 085 skills-graphrag-skill-md-covers-relationships-list-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 480,
+    "batsName": "skills/graphrag/SKILL.md covers relationships.delete command",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-086",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 086 skills-graphrag-skill-md-covers-relationships-delete-command"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 484,
+    "batsName": "skills/graphrag/SKILL.md documents local/global/drift query modes",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-087",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 087 skills-graphrag-skill-md-documents-local-global-drift-query-modes"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 496,
+    "batsName": "workflow skills satisfy AC-SKILLS-001 and AC-SKILLS-002",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-088",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 088 workflow-skills-satisfy-ac-skills-001-and-ac-skills-002"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 505,
+    "batsName": "sync-logs skill documents AC-SKILLS-003",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-089",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 089 sync-logs-skill-documents-ac-skills-003"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 516,
+    "batsName": "commit-sync skill documents AC-SKILLS-004",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-090",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 090 commit-sync-skill-documents-ac-skills-004"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 527,
+    "batsName": "wrap-up skill documents AC-SKILLS-005",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-091",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 091 wrap-up-skill-documents-ac-skills-005"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/skills.bats",
+    "batsLine": 539,
+    "batsName": "workflow skills are exposed by plugin metadata for AC-SKILLS-006",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SKILLS-092",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 skills 092 workflow-skills-are-exposed-by-plugin-metadata-for-ac-skills-006"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 76,
+    "batsName": "no turn file → schema-valid no-op output",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 001 no-turn-file-schema-valid-no-op-output"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 84,
+    "batsName": "open empty stdin does not hang stop-gate",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 002 open-empty-stdin-does-not-hang-stop-gate"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 95,
+    "batsName": "in_progress turn → self-heal emits no-op (not block)",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 003 in-progress-turn-self-heal-emits-no-op-not-block"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 102,
+    "batsName": "in_progress self-heal flips turn to completed",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 004 in-progress-self-heal-flips-turn-to-completed"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 109,
+    "batsName": "completed turn (clean build) → schema-valid no-op output",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 005 completed-turn-clean-build-schema-valid-no-op-output"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 115,
+    "batsName": "completed turn with failed build + edits → decision:block",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 006 completed-turn-with-failed-build-edits-decision-block"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 122,
+    "batsName": "accept-failure marker unblocks failed-build stop",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-007",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 007 accept-failure-marker-unblocks-failed-build-stop"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 129,
+    "batsName": "accept-failure marker is consumed (deleted) after use",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-008",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 008 accept-failure-marker-is-consumed-deleted-after-use"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 136,
+    "batsName": "end-to-end: shim's completeTurn flips cache so stop-gate passes",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-009",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 009 end-to-end-shim-s-completeturn-flips-cache-so-stop-gate-passes"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 151,
+    "batsName": "stale cached session blocks instead of reusing old turn",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-010",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 010 stale-cached-session-blocks-instead-of-reusing-old-turn"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 161,
+    "batsName": "in_progress self-heal timeout blocks instead of hanging",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-011",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 011 in-progress-self-heal-timeout-blocks-instead-of-hanging"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 178,
+    "batsName": "CLAUDE_STOP_HOOK_ACTIVE=true short-circuits with schema-valid no-op",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-012",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 012 claude-stop-hook-active-true-short-circuits-with-schema-valid-no-op"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 186,
+    "batsName": "in_progress self-heal with codexJsonlPath passes and uses JSONL enrichment",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-013",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 013 in-progress-self-heal-with-codexjsonlpath-passes-and-uses-jsonl-enrichment"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 229,
+    "batsName": "completed code-edit turn with audit schema but no audit data -> decision:block",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-014",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 014 completed-code-edit-turn-with-audit-schema-but-no-audit-data-decision-block"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 236,
+    "batsName": "completed code-edit turn with full audit data -> schema-valid no-op output",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-015",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 015 completed-code-edit-turn-with-full-audit-data-schema-valid-no-op-output"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 242,
+    "batsName": "accept-incomplete-audit marker unblocks audit-incomplete stop and is consumed",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-016",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 016 accept-incomplete-audit-marker-unblocks-audit-incomplete-stop-and-is-consumed"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 251,
+    "batsName": "legacy turn without audit schema is exempt from the audit gate",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-017",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 017 legacy-turn-without-audit-schema-is-exempt-from-the-audit-gate"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/stop-gate.bats",
+    "batsLine": 257,
+    "batsName": "audit-schema turn with zero code edits is not blocked by the audit gate",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-STOP-GATE-018",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 stop-gate 018 audit-schema-turn-with-zero-code-edits-is-not-blocked-by-the-audit-gate"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/sync.bats",
+    "batsLine": 20,
+    "batsName": "sync copies lib-sh into plugin lib and writes manifest with sha256",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SYNC-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 sync 001 sync-copies-lib-sh-into-plugin-lib-and-writes-manifest-with-sha256"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/sync.bats",
+    "batsLine": 29,
+    "batsName": "integrity guard passes immediately after sync",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SYNC-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 sync 002 integrity-guard-passes-immediately-after-sync"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/sync.bats",
+    "batsLine": 36,
+    "batsName": "integrity guard fails when a synced file is edited locally",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SYNC-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 sync 003 integrity-guard-fails-when-a-synced-file-is-edited-locally"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/sync.bats",
+    "batsLine": 44,
+    "batsName": "integrity guard fails when a synced file is deleted",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SYNC-004",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 sync 004 integrity-guard-fails-when-a-synced-file-is-deleted"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/sync.bats",
+    "batsLine": 52,
+    "batsName": "integrity guard demands a manifest",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SYNC-005",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 sync 005 integrity-guard-demands-a-manifest"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/sync.bats",
+    "batsLine": 58,
+    "batsName": "re-sync repairs a tampered plugin copy",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-SYNC-006",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 sync 006 re-sync-repairs-a-tampered-plugin-copy"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/user-prompt-submit.bats",
+    "batsLine": 59,
+    "batsName": "user-prompt-submit opens a turn, writes cache, and emits default TODO guidance",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-USER-PROMPT-SUBMIT-001",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 user-prompt-submit 001 user-prompt-submit-opens-a-turn-writes-cache-and-emits-default-todo-guidance"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/user-prompt-submit.bats",
+    "batsLine": 76,
+    "batsName": "user-prompt-submit discards cached session idle more than 24 hours before opening turn",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-USER-PROMPT-SUBMIT-002",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 user-prompt-submit 002 user-prompt-submit-discards-cached-session-idle-more-than-24-hours-before-openin"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/user-prompt-submit.bats",
+    "batsLine": 131,
+    "batsName": "user-prompt-submit emits MCP-backed internal TODO guidance when enabled",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-USER-PROMPT-SUBMIT-003",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 user-prompt-submit 003 user-prompt-submit-emits-mcp-backed-internal-todo-guidance-when-enabled"
+  }
+]

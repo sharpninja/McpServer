@@ -27,6 +27,8 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private readonly List<TrEntry> _trEntries;
     private readonly List<TestEntry> _testEntries;
     private readonly List<FrTrMapping> _mappings;
+    private readonly List<RequirementScopeLayerEntry> _layers = [new(RequirementScopeLayerDefaults.DefaultLayerKey, 1, "Layer 1")];
+    private string _currentRequirementLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey;
 
     /// <summary>Initializes a new instance of the <see cref="RequirementsDocumentService"/> class.</summary>
     public RequirementsDocumentService(IOptions<RequirementsOptions> options, ILogger<RequirementsDocumentService> logger, IChangeEventBus? eventBus = null)
@@ -39,6 +41,97 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         _trEntries = RequirementsDocumentParser.ParseTechnical(ReadFileIfExists(_options.TechnicalRequirementsPath)).ToList();
         _testEntries = RequirementsDocumentParser.ParseTesting(ReadFileIfExists(_options.TestingRequirementsPath)).ToList();
         _mappings = RequirementsDocumentParser.ParseMapping(ReadFileIfExists(_options.MappingPath)).ToList();
+    }
+
+    /// <inheritdoc />
+    public Task<IReadOnlyList<RequirementScopeLayerEntry>> GetRequirementLayersAsync(CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        return Task.FromResult<IReadOnlyList<RequirementScopeLayerEntry>>(_layers.OrderBy(x => x.Order).ToArray());
+    }
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> CreateRequirementLayerAsync(RequirementScopeLayerEntry entry, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        ArgumentNullException.ThrowIfNull(entry);
+        if (_layers.Any(x => IdEquals(x.Key, entry.Key)))
+            throw new RequirementsConflictException($"Requirement scope layer '{entry.Key}' already exists.");
+        if (_layers.Any(x => x.Order == entry.Order))
+            throw new RequirementsConflictException($"Requirement scope layer order '{entry.Order}' already exists.");
+        ValidateLayerReference(entry.ScopeEndLayerKey);
+        var now = DateTimeOffset.UtcNow;
+        var normalized = entry with
+        {
+            Key = entry.Key.Trim(),
+            Name = string.IsNullOrWhiteSpace(entry.Name) ? entry.Key.Trim() : entry.Name.Trim(),
+            CreatedAtUtc = now,
+            UpdatedAtUtc = now
+        };
+        _layers.Add(normalized);
+        return Task.FromResult(normalized);
+    }
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequest request, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        ArgumentNullException.ThrowIfNull(request);
+        var index = _layers.FindIndex(x => IdEquals(x.Key, request.Key));
+        if (index < 0)
+            throw new RequirementsNotFoundException($"Requirement scope layer '{request.Key}' was not found.");
+        var existing = _layers[index];
+        if (request.Order.HasValue && request.Order.Value != existing.Order)
+            throw new InvalidOperationException("Requirement scope layer order is immutable.");
+        ValidateLayerReference(request.ScopeEndLayerKey);
+        var updated = existing with
+        {
+            Name = string.IsNullOrWhiteSpace(request.Name) ? existing.Name : request.Name.Trim(),
+            Description = request.Description ?? existing.Description,
+            ScopeEndLayerKey = string.IsNullOrWhiteSpace(request.ScopeEndLayerKey) ? existing.ScopeEndLayerKey : request.ScopeEndLayerKey.Trim(),
+            UpdatedAtUtc = DateTimeOffset.UtcNow
+        };
+        _layers[index] = updated;
+        return Task.FromResult(updated);
+    }
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> GetWorkspaceCurrentRequirementLayerAsync(CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        return Task.FromResult(FindLayer(_currentRequirementLayerKey));
+    }
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> SetWorkspaceCurrentRequirementLayerAsync(string layerKey, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        var layer = FindLayer(layerKey);
+        _currentRequirementLayerKey = layer.Key;
+        return Task.FromResult(layer);
+    }
+
+    /// <inheritdoc />
+    public Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        var layer = FindLayer(string.IsNullOrWhiteSpace(layerKey) ? _currentRequirementLayerKey : layerKey);
+        var fr = _frEntries.Where(x => IsEffective(x.ScopeStartLayerKey, x.ScopeEndLayerKey, layer.Order)).ToArray();
+        var tr = _trEntries.Where(x => IsEffective(x.ScopeStartLayerKey, x.ScopeEndLayerKey, layer.Order)).ToArray();
+        var test = _testEntries.Where(x => IsEffective(x.ScopeStartLayerKey, x.ScopeEndLayerKey, layer.Order)).ToArray();
+        var frIds = fr.Select(x => x.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var trIds = tr.Select(x => x.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var testIds = test.Select(x => x.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var mappings = _mappings
+            .Where(mapping => frIds.Contains(mapping.FrId))
+            .Select(mapping => new FrTrMapping(
+                mapping.FrId,
+                mapping.TrIds.Where(trIds.Contains).ToArray(),
+                mapping.TestIds.Where(testIds.Contains).ToArray(),
+                mapping.WorkspaceId))
+            .Where(mapping => mapping.TrIds.Count > 0 || mapping.TestIds.Count > 0)
+            .ToArray();
+        return Task.FromResult(new EffectiveRequirementsResult(layer, fr, tr, test, mappings));
     }
 
     /// <inheritdoc />
@@ -685,6 +778,38 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             ValidateId(trId, nameof(mapping.TrIds), "TR");
         foreach (var testId in mapping.TestIds)
             ValidateId(testId, nameof(mapping.TestIds), "TEST");
+    }
+
+    private RequirementScopeLayerEntry FindLayer(string? key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentException("Requirement scope layer key is required.", nameof(key));
+        return _layers.FirstOrDefault(x => IdEquals(x.Key, key))
+            ?? throw new RequirementsNotFoundException($"Requirement scope layer '{key}' was not found.");
+    }
+
+    private void ValidateLayerReference(string? key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            return;
+        _ = FindLayer(key);
+    }
+
+    private bool IsEffective(string scopeStartLayerKey, string? scopeEndLayerKey, int currentOrder)
+    {
+        var startLayer = FindLayer(string.IsNullOrWhiteSpace(scopeStartLayerKey) ? RequirementScopeLayerDefaults.DefaultLayerKey : scopeStartLayerKey);
+        if (startLayer.Order > currentOrder)
+            return false;
+        int? endOrder = null;
+        if (!string.IsNullOrWhiteSpace(scopeEndLayerKey))
+            endOrder = FindLayer(scopeEndLayerKey).Order;
+        if (!string.IsNullOrWhiteSpace(startLayer.ScopeEndLayerKey))
+        {
+            var layerEndOrder = FindLayer(startLayer.ScopeEndLayerKey).Order;
+            endOrder = endOrder.HasValue ? Math.Min(endOrder.Value, layerEndOrder) : layerEndOrder;
+        }
+
+        return !endOrder.HasValue || endOrder.Value >= currentOrder;
     }
 
     private static void ValidateId(string id, string paramName, string? expectedPrefix = null)

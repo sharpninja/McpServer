@@ -34,7 +34,7 @@ partial class Build
 
     /// <summary>
     /// Deploy the MCP server as a Windows service: stop, backup, publish, restore config, register, start, and health check.
-    /// Requires elevation (Administrator). Invoke via: gsudo ./build.ps1 UpdateService
+    /// Requires elevation (Administrator). Invoke via: sudo --chdir . pwsh -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 UpdateService
     /// </summary>
     public Target UpdateService => _ => _
         .Description("Deploy MCP server as a Windows service (stop → backup → publish → restore → register → start → verify)")
@@ -69,6 +69,9 @@ partial class Build
             Log.Information(">> 1/{Total}  Stopping service '{ServiceName}' ...", 8, ServiceName);
             WindowsServiceHelper.StopService(ServiceName, serviceProcessName);
 
+            var deploymentVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
+            Log.Information("  Deployment version: {Version}", deploymentVersion);
+
             // Step 3: Backup config and data
             Log.Information(">> 2/{Total}  Backing up config and data files ...", 8);
             var backup = WindowsServiceHelper.BackupPreservedState(InstallPath, backupDir, archivePath);
@@ -100,6 +103,9 @@ partial class Build
                     .SetRuntime("win-x64")
                     .SetProperty("PublishSingleFile", "true")
                     .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
+                    .SetProperty("PackageVersion", deploymentVersion)
+                    .SetProperty("Version", deploymentVersion)
+                    .SetProperty("InformationalVersion", deploymentVersion)
                     .SetOutput(stageDir));
 
                 // Publish launcher sidecar
@@ -117,6 +123,9 @@ partial class Build
                         .SetRuntime("win-x64")
                         .SetProperty("PublishSingleFile", "true")
                         .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
+                        .SetProperty("PackageVersion", deploymentVersion)
+                        .SetProperty("Version", deploymentVersion)
+                        .SetProperty("InformationalVersion", deploymentVersion)
                         .SetOutput(launcherStage));
 
                     var launcherExe = Path.Combine(launcherStage, LauncherExeName);

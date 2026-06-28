@@ -20,13 +20,26 @@ param(
 
     [string]$CacheRoot,
 
-    [string]$BashPath,
-
     [int]$TimeoutSeconds = $(if ($env:MCP_PLUGIN_TIMEOUT_SECONDS) { [int]$env:MCP_PLUGIN_TIMEOUT_SECONDS } else { 90 })
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+$shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
+Import-Module $shimModule -ErrorAction Stop
+
+$script:McpPluginInvocation = New-McpPluginInvocationOptions `
+    -Command $Command `
+    -Method ($Method ?? '') `
+    -Params ($Params ?? '') `
+    -ParamsPath ($ParamsPath ?? '') `
+    -Response ($Response ?? '') `
+    -ResponsePath ($ResponsePath ?? '') `
+    -WorkspacePath $WorkspacePath `
+    -PluginRoot $PluginRoot `
+    -CacheRoot ($CacheRoot ?? '') `
+    -TimeoutSeconds $TimeoutSeconds
 
 function Resolve-FullPath {
     param([Parameter(Mandatory)][string]$Path)
@@ -43,51 +56,6 @@ function Resolve-OptionalDirectory {
     }
 
     return (Resolve-FullPath $Path)
-}
-
-function Resolve-BashExecutable {
-    param([string]$Candidate)
-
-    if ($Candidate) {
-        return (Resolve-FullPath $Candidate)
-    }
-
-    if ($env:BASH -and (Test-Path -LiteralPath $env:BASH)) {
-        return (Resolve-FullPath $env:BASH)
-    }
-
-    foreach ($root in @(${env:ProgramFiles}, ${env:ProgramFiles(x86)})) {
-        if (-not $root) {
-            continue
-        }
-
-        $gitBash = Join-Path $root 'Git\bin\bash.exe'
-        if (Test-Path -LiteralPath $gitBash) {
-            return $gitBash
-        }
-    }
-
-    foreach ($name in @('bash.exe', 'bash')) {
-        $command = Get-Command $name -ErrorAction SilentlyContinue
-        if ($command) {
-            return $command.Source
-        }
-    }
-
-    throw 'Unable to find bash. Install Git for Windows or pass -BashPath.'
-}
-
-function ConvertTo-BashPath {
-    param([Parameter(Mandatory)][string]$Path)
-
-    $full = Resolve-FullPath $Path
-    if ($full -match '^([A-Za-z]):\\(.*)$') {
-        $drive = $Matches[1].ToLowerInvariant()
-        $tail = $Matches[2] -replace '\\', '/'
-        return "/$drive/$tail"
-    }
-
-    return ($full -replace '\\', '/')
 }
 
 function Read-RedirectedInput {
@@ -121,18 +89,33 @@ function Read-OptionalText {
     return ''
 }
 
-function Invoke-BashPluginScript {
+function Resolve-PluginPowerShellScript {
+    param(
+        [Parameter(Mandatory)][string]$Root,
+        [Parameter(Mandatory)][string]$Name
+    )
+
+    foreach ($libName in @('lib', 'lib-ps')) {
+        $candidate = Join-Path (Join-Path $Root $libName) $Name
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+    }
+
+    throw "Unable to find plugin PowerShell script '$Name' under '$Root'."
+}
+
+function Invoke-PluginPowerShellScript {
     param(
         [Parameter(Mandatory)][string]$ScriptPath,
         [string[]]$Arguments = @(),
         [string]$StandardInput = ''
     )
 
-    $bash = Resolve-BashExecutable $BashPath
-    $pluginRootFull = Resolve-FullPath $PluginRoot
-    $workspaceFull = Resolve-OptionalDirectory $WorkspacePath
-    $cacheRootFull = if ($CacheRoot) {
-        Resolve-OptionalDirectory $CacheRoot
+    $pluginRootFull = Resolve-FullPath $script:McpPluginInvocation.PluginRoot
+    $workspaceFull = Resolve-OptionalDirectory $script:McpPluginInvocation.WorkspacePath
+    $cacheRootFull = if ($script:McpPluginInvocation.CacheRoot) {
+        Resolve-OptionalDirectory $script:McpPluginInvocation.CacheRoot
     } elseif ($env:PLUGIN_ROOT_OVERRIDE) {
         Resolve-OptionalDirectory $env:PLUGIN_ROOT_OVERRIDE
     } else {
@@ -140,13 +123,17 @@ function Invoke-BashPluginScript {
     }
 
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
-    $startInfo.FileName = $bash
+    $startInfo.FileName = (Get-Command pwsh -ErrorAction Stop).Source
     $startInfo.WorkingDirectory = $workspaceFull
     $startInfo.UseShellExecute = $false
     $startInfo.RedirectStandardInput = $true
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
-    $startInfo.ArgumentList.Add((ConvertTo-BashPath $ScriptPath))
+    $startInfo.ArgumentList.Add('-NoLogo')
+    $startInfo.ArgumentList.Add('-NoProfile')
+    $startInfo.ArgumentList.Add('-NonInteractive')
+    $startInfo.ArgumentList.Add('-File')
+    $startInfo.ArgumentList.Add((Resolve-FullPath $ScriptPath))
     foreach ($argument in $Arguments) {
         $startInfo.ArgumentList.Add($argument)
     }
@@ -169,18 +156,15 @@ function Invoke-BashPluginScript {
 
     $stdoutTask = $process.StandardOutput.ReadToEndAsync()
     $stderrTask = $process.StandardError.ReadToEndAsync()
-    $boundedTimeout = [Math]::Max(1, $TimeoutSeconds)
+    $boundedTimeout = [Math]::Max(1, $script:McpPluginInvocation.TimeoutSeconds)
     if (-not $process.WaitForExit($boundedTimeout * 1000)) {
         try {
-            if ([System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT) {
-                & "$env:WINDIR\System32\taskkill.exe" /PID $process.Id /T /F > $null 2> $null
-            } else {
-                $process.Kill($true)
-            }
+            $process.Kill($true)
         } catch {
         }
         throw "Plugin command timed out after ${boundedTimeout}s."
     }
+
     $stdout = $stdoutTask.Result
     $stderr = $stderrTask.Result
 
@@ -199,61 +183,26 @@ function Invoke-BashPluginScript {
     }
 }
 
-$pluginRootFull = Resolve-FullPath $PluginRoot
+$pluginRootFull = Resolve-FullPath $script:McpPluginInvocation.PluginRoot
 
-function Resolve-StatusScript {
-    param([Parameter(Mandatory)][string]$Root)
-
-    if ($env:MCP_STATUS_SCRIPT -and (Test-Path -LiteralPath $env:MCP_STATUS_SCRIPT)) {
-        return $env:MCP_STATUS_SCRIPT
-    }
-
-    foreach ($libName in @('lib-sh', 'lib')) {
-        $libDir = Join-Path $Root $libName
-        $candidate = Get-ChildItem -LiteralPath $libDir -Filter 'mcp.*.status.sh' -ErrorAction SilentlyContinue |
-            Select-Object -First 1
-        if ($candidate) {
-            return $candidate.FullName
-        }
-    }
-
-    return (Resolve-PluginShellScript -Root $Root -Name 'mcp-status.sh')
-}
-
-function Resolve-PluginShellScript {
-    param(
-        [Parameter(Mandatory)][string]$Root,
-        [Parameter(Mandatory)][string]$Name
-    )
-
-    foreach ($libName in @('lib-sh', 'lib')) {
-        $candidate = Join-Path (Join-Path $Root $libName) $Name
-        if (Test-Path -LiteralPath $candidate) {
-            return $candidate
-        }
-    }
-
-    throw "Unable to find plugin shell script '$Name' under '$Root\\lib-sh' or '$Root\\lib'."
-}
-
-switch ($Command) {
+switch ($script:McpPluginInvocation.Command) {
     'Status' {
-        Invoke-BashPluginScript -ScriptPath (Resolve-StatusScript -Root $pluginRootFull)
+        Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'mcp-status.ps1')
     }
     'Invoke' {
-        if (-not $Method) {
+        if (-not $script:McpPluginInvocation.Method) {
             throw '-Method is required when -Command Invoke is used.'
         }
 
-        $paramsText = Read-OptionalText -Inline $Params -HasInline:$($PSBoundParameters.ContainsKey('Params')) -Path $ParamsPath -AllowRedirectedInput
-        Invoke-BashPluginScript -ScriptPath (Resolve-PluginShellScript -Root $pluginRootFull -Name 'repl-invoke.sh') -Arguments @($Method) -StandardInput ($paramsText ?? '')
+        $paramsText = Read-OptionalText -Inline $script:McpPluginInvocation.Params -HasInline:$($PSBoundParameters.ContainsKey('Params')) -Path $script:McpPluginInvocation.ParamsPath -AllowRedirectedInput
+        Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))
     }
     'CompleteTurn' {
-        $responseText = Read-OptionalText -Inline $Response -HasInline:$($PSBoundParameters.ContainsKey('Response')) -Path $ResponsePath -AllowRedirectedInput
+        $responseText = Read-OptionalText -Inline $script:McpPluginInvocation.Response -HasInline:$($PSBoundParameters.ContainsKey('Response')) -Path $script:McpPluginInvocation.ResponsePath -AllowRedirectedInput
         if (-not $responseText) {
             $responseText = 'Turn completed.'
         }
 
-        Invoke-BashPluginScript -ScriptPath (Resolve-PluginShellScript -Root $pluginRootFull -Name 'final-response.sh') -StandardInput $responseText
+        Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'final-response.ps1') -StandardInput $responseText
     }
 }

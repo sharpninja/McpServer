@@ -451,6 +451,37 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
             return Task.CompletedTask;
         }
 
+        public Task<IReadOnlyList<RequirementScopeLayerEntry>> GetRequirementLayersAsync(CancellationToken ct = default)
+            => Task.FromResult<IReadOnlyList<RequirementScopeLayerEntry>>([DefaultLayer()]);
+
+        public Task<RequirementScopeLayerEntry> CreateRequirementLayerAsync(RequirementScopeLayerEntry entry, CancellationToken ct = default)
+            => Task.FromResult(entry);
+
+        public Task<RequirementScopeLayerEntry> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequest request, CancellationToken ct = default)
+            => Task.FromResult(new RequirementScopeLayerEntry(
+                request.Key,
+                request.Order ?? 1,
+                request.Name ?? "Layer 1",
+                request.Description,
+                request.ScopeEndLayerKey));
+
+        public Task<RequirementScopeLayerEntry> GetWorkspaceCurrentRequirementLayerAsync(CancellationToken ct = default)
+            => Task.FromResult(DefaultLayer());
+
+        public Task<RequirementScopeLayerEntry> SetWorkspaceCurrentRequirementLayerAsync(string layerKey, CancellationToken ct = default)
+            => Task.FromResult(DefaultLayer() with { Key = layerKey });
+
+        public Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default)
+            => Task.FromResult(new EffectiveRequirementsResult(
+                DefaultLayer() with { Key = layerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey },
+                _state.Functional,
+                _state.Technical,
+                _state.Testing,
+                _state.Mappings));
+
+        private static RequirementScopeLayerEntry DefaultLayer()
+            => new(RequirementScopeLayerDefaults.DefaultLayerKey, 1, "Layer 1");
+
         public Task<(string Content, string MimeType)> GenerateDocumentAsync(RequirementsDocType docType, CancellationToken ct = default)
             => Task.FromResult(($"# Requirements\n\n{string.Join("\n", _state.Functional.Select(x => x.Id))}", "text/markdown"));
 

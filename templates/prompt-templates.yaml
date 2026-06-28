@@ -350,6 +350,25 @@ templates:
       - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks/MCP server declarations must satisfy `agent_plugins.agents.Grok`.
       - For Grok, the Streamable HTTP MCP server exposes tool names such as `sessionlog_*`, `todo_*`, `requirements_*`, and memory tools when available; hosted-agent `mcp_*` names are not expected from that transport. `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.memory.*`, and `workflow.requirements.*` are plugin shim/REPL method names used by the Grok skills and `repl-invoke` helpers; they are not expected to appear as literal `search_tool` results.
       - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source.
+      - Claude Code agents must trigger the `claude-hook-validation` skill during marker/plugin bootstrap. That skill validates active Claude settings for MCP `UserPromptSubmit`, `Stop`, and `PostToolUse` hook commands from `hooks/hooks.json`; if any required hook is missing, it uses `install-claude-mcp-hooks.ps1` from the `claude-hook-wiring` skill to merge MCP hooks into active Claude settings without replacing existing hooks. Restart Claude Code after the skill reports installed hooks.
+
+
+      ## MCP Requirements Visibility
+
+      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent''s requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, or equivalent plugin tool). Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
+
+
+      ## MCP and Plugin Failure Reporting
+
+      - MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only. Use the active agent''s triage surface (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) with the failing command or endpoint, observed error, workspace path, and relevant component.
+
+      - After submitting the triage report, continue the user''s active task. Do not wait for triage research, TODO creation, or resolution.
+
+      - When the failure means code, docs, requirements, plugin skills, package sync, deployment, or configuration need a separate repair workflow, write a detailed triage report with the needed changes, acceptance criteria, and validation evidence, then move on with the active user task.
+
+      - Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user''s active request is to fix that failure.
+
+      - If the MCP Server or plugin failure prevents triage submission, write the report as a normal failsafe YAML document for later replay through the plugin/REPL failsafe or pending YAML queue. Preserve the triage method (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) plus title, summary, observed behavior, expected behavior, severity, component, workspace path, dedupe key or error signature, affected paths, evidence, reproduction hints, tags, reporter agent, session id, turn id, and current TODO id when known. Then record the local unavailable state (`MCP_UNTRUSTED` or `MCP_PLUGIN_UNAVAILABLE:<Agent>`) and continue non-MCP work; do not use raw REST or another reporting channel as a substitute.
 
 
       ## MCP Memories

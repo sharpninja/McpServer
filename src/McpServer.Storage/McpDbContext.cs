@@ -108,6 +108,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>Authoritative workspace-scoped FR/TR/TEST requirements.</summary>
     public DbSet<RequirementEntity> Requirements => Set<RequirementEntity>();
 
+    /// <summary>FR-MCP-REQSCOPE-001: workspace-scoped requirement scope layers.</summary>
+    public DbSet<RequirementScopeLayerEntity> RequirementScopeLayers => Set<RequirementScopeLayerEntity>();
+
     /// <summary>Authoritative workspace-scoped FR-to-TR/TEST traceability links.</summary>
     public DbSet<RequirementTraceabilityLinkEntity> RequirementTraceabilityLinks => Set<RequirementTraceabilityLinkEntity>();
 
@@ -179,6 +182,7 @@ public sealed class McpDbContext : DbContext
                 Name = "global",
                 TodoPath = "docs/todo.yaml",
                 IsEnabled = true,
+                CurrentRequirementLayerKey = "layer-1",
                 DateTimeCreated = DateTimeOffset.UnixEpoch,
                 DateTimeModified = DateTimeOffset.UnixEpoch,
             });
@@ -406,8 +410,18 @@ public sealed class McpDbContext : DbContext
             e.HasKey(x => new { x.WorkspaceId, x.Kind, x.Id });
             e.HasIndex(x => new { x.WorkspaceId, x.Id });
             e.HasIndex(x => x.Kind);
+            e.HasIndex(x => new { x.WorkspaceId, x.ScopeStartLayerKey });
+            e.HasIndex(x => new { x.WorkspaceId, x.ScopeEndLayerKey });
             e.Property(x => x.Priority).HasDefaultValue("medium");
             e.Property(x => x.Status).HasDefaultValue("pending");
+            e.Property(x => x.ScopeStartLayerKey).HasDefaultValue("layer-1");
+        });
+
+        modelBuilder.Entity<RequirementScopeLayerEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.Key });
+            e.HasIndex(x => new { x.WorkspaceId, x.Order }).IsUnique();
+            e.HasIndex(x => new { x.WorkspaceId, x.ScopeEndLayerKey });
         });
 
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>(e =>
@@ -569,6 +583,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<RequirementScopeLayerEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<MemoryEntity>().HasQueryFilter("Workspace", e =>
             e.Scope == MemoryEntity.GlobalScope
@@ -610,6 +625,7 @@ public sealed class McpDbContext : DbContext
         // Version) index already covers the common filter paths.
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<RequirementScopeLayerEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<MemoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<BrainSlotInvocationEntity>().HasIndex(e => e.WorkspaceId);

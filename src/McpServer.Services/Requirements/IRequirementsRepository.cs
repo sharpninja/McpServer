@@ -5,6 +5,26 @@ namespace McpServer.Support.Mcp.Requirements;
 /// <summary>FR-MCP-026: Repository for reading and writing requirement entries backed by the four canonical Markdown files.</summary>
 public interface IRequirementsRepository
 {
+    // -- Scope layers --
+
+    /// <summary>Lists the requirement scope layers for the current workspace.</summary>
+    Task<IReadOnlyList<RequirementScopeLayerEntry>> GetRequirementLayersAsync(CancellationToken ct = default);
+
+    /// <summary>Creates a requirement scope layer in the current workspace.</summary>
+    Task<RequirementScopeLayerEntry> CreateRequirementLayerAsync(RequirementScopeLayerEntry entry, CancellationToken ct = default);
+
+    /// <summary>Updates mutable metadata for a requirement scope layer in the current workspace.</summary>
+    Task<RequirementScopeLayerEntry> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequest request, CancellationToken ct = default);
+
+    /// <summary>Gets the current requirement scope layer for the current workspace.</summary>
+    Task<RequirementScopeLayerEntry> GetWorkspaceCurrentRequirementLayerAsync(CancellationToken ct = default);
+
+    /// <summary>Sets the current requirement scope layer for the current workspace.</summary>
+    Task<RequirementScopeLayerEntry> SetWorkspaceCurrentRequirementLayerAsync(string layerKey, CancellationToken ct = default);
+
+    /// <summary>Gets requirements effective at the current workspace layer or an explicit preview layer.</summary>
+    Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default);
+
     // -- FR --
 
     /// <summary>Get all Functional Requirement entries.</summary>

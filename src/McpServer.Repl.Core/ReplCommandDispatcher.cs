@@ -1107,6 +1107,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Priority = RequireString(args, "priority"),
                         Area = RequireString(args, "area"),
                         Notes = GetString(args, "notes"),
+                        ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CreateFrBatchMethod =>
                     await _requirementsWorkflow.CreateFrBatchAsync(RequireParams<CreateFrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
@@ -1119,6 +1121,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateFrBatchMethod =>
                     await _requirementsWorkflow.UpdateFrBatchAsync(RequireParams<UpdateFrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
@@ -1138,6 +1142,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         Subarea = RequireString(args, "subarea"),
                         Notes = GetString(args, "notes"),
+                        ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CreateTrBatchMethod =>
                     await _requirementsWorkflow.CreateTrBatchAsync(RequireParams<CreateTrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
@@ -1150,6 +1156,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateTrBatchMethod =>
                     await _requirementsWorkflow.UpdateTrBatchAsync(RequireParams<UpdateTrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
@@ -1169,6 +1177,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         TestType = GetString(args, "testType") ?? "unit",
                         Notes = GetString(args, "notes"),
+                        ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CreateTestBatchMethod =>
                     await _requirementsWorkflow.CreateTestBatchAsync(RequireParams<CreateTestBatchRequest>(args), cancellationToken).ConfigureAwait(false),
@@ -1181,6 +1191,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateTestBatchMethod =>
                     await _requirementsWorkflow.UpdateTestBatchAsync(RequireParams<UpdateTestBatchRequest>(args), cancellationToken).ConfigureAwait(false),
@@ -1222,6 +1234,27 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         GetString(args, "sourceFormat"),
                         GetString(args, "preferredWikiFormat"),
                         cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.ListLayersMethod =>
+                    await _requirementsWorkflow.ListRequirementLayersAsync(cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateLayerMethod =>
+                    await _requirementsWorkflow.CreateRequirementLayerAsync(new RequirementScopeLayerCreateRequestModel
+                    {
+                        Key = RequireString(args, "key"),
+                        Order = GetInt(args, "order") ?? throw new ArgumentException("Missing required parameter: order"),
+                        Name = RequireString(args, "name"),
+                        Description = GetString(args, "description"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
+                    }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateLayerMethod =>
+                    await _requirementsWorkflow.UpdateRequirementLayerAsync(new RequirementScopeLayerUpdateRequestModel
+                    {
+                        Key = RequireString(args, "key"),
+                        Name = GetString(args, "name"),
+                        Description = GetString(args, "description"),
+                        ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
+                    }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.EffectiveMethod =>
+                    await _requirementsWorkflow.GetEffectiveRequirementsAsync(GetString(args, "layerKey"), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CurrentSelectionMethod => _requirementsWorkflow.CurrentSelection(),
                 _ => null,
             };

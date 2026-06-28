@@ -163,6 +163,42 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
             ct);
 
     /// <inheritdoc />
+    public Task<IReadOnlyList<RequirementScopeLayerEntry>> GetRequirementLayersAsync(CancellationToken ct = default)
+        => _inner.GetRequirementLayersAsync(ct);
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> CreateRequirementLayerAsync(RequirementScopeLayerEntry entry, CancellationToken ct = default)
+        => ExecuteMutationAsync(
+            "requirements.layer.create",
+            entry,
+            token => _inner.CreateRequirementLayerAsync(entry, token),
+            ct);
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequest request, CancellationToken ct = default)
+        => ExecuteMutationAsync(
+            "requirements.layer.update",
+            request,
+            token => _inner.UpdateRequirementLayerAsync(request, token),
+            ct);
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> GetWorkspaceCurrentRequirementLayerAsync(CancellationToken ct = default)
+        => _inner.GetWorkspaceCurrentRequirementLayerAsync(ct);
+
+    /// <inheritdoc />
+    public Task<RequirementScopeLayerEntry> SetWorkspaceCurrentRequirementLayerAsync(string layerKey, CancellationToken ct = default)
+        => ExecuteMutationAsync(
+            "requirements.workspace.currentLayer.set",
+            new RequirementLayerSelectionPayload(layerKey),
+            token => _inner.SetWorkspaceCurrentRequirementLayerAsync(layerKey, token),
+            ct);
+
+    /// <inheritdoc />
+    public Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default)
+        => _inner.GetEffectiveRequirementsAsync(layerKey, ct);
+
+    /// <inheritdoc />
     public Task<(string Content, string MimeType)> GenerateDocumentAsync(RequirementsDocType docType, CancellationToken ct = default)
         => _inner.GenerateDocumentAsync(docType, ct);
 
@@ -534,6 +570,8 @@ public sealed class TransactionGatedRequirementsDocumentService : IRequirementsD
         string Status);
 
     private sealed record RequirementDeletePayload(string Kind, string Id);
+
+    private sealed record RequirementLayerSelectionPayload(string LayerKey);
 
     private sealed record RequirementBatchPayload(string Operation, IReadOnlyList<RequirementEntryPayload> Entries);
 

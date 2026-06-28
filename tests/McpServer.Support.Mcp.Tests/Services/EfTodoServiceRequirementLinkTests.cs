@@ -89,6 +89,35 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     }
 
     /// <summary>
+    /// ISSUE-19/backfill placeholders: TODO-linked placeholder requirements use a stable
+    /// backfill timestamp instead of the current read/list time.
+    /// </summary>
+    [Fact]
+    public async Task CreateAsync_WithRequirementProjection_UsesStablePlaceholderTimestamp()
+    {
+        var created = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "TODO-LINK-004",
+            Title = "Link requirements",
+            Section = "Backlog",
+            Priority = "high",
+            FunctionalRequirements = ["FR-LINK-004"],
+        }).ConfigureAwait(true);
+
+        Assert.True(created.Success, created.Error);
+
+        using var scope = _serviceProvider.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var row = await db.Requirements
+            .SingleAsync(item => item.Kind == "fr" && item.Id == "FR-LINK-004")
+            .ConfigureAwait(true);
+
+        Assert.Equal("Placeholder requirement backfilled for TODO link FR-LINK-004.", row.Body);
+        Assert.Equal("1970-01-01T00:00:00.0000000+00:00", row.CreatedAtUtc);
+        Assert.Equal(row.CreatedAtUtc, row.UpdatedAtUtc);
+    }
+
+    /// <summary>
     /// TEST-MCP-140: Requirement projections may contain legacy display text; durable
     /// link rows use only the canonical bounded requirement identifier.
     /// </summary>

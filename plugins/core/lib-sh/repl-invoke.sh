@@ -205,7 +205,13 @@ for (const item of value) {
 
 _repl_records_block_get() {
     local params_yaml="$1"
-    local records_value records_block
+    local json_records records_value records_block
+    json_records="$(_repl_json_array_block_get "$params_yaml" "records" 2>/dev/null || true)"
+    if [ -n "$json_records" ]; then
+        printf '%s\n' "$json_records"
+        return 0
+    fi
+
     records_value="$(_repl_yaml_get "$params_yaml" "records" 2>/dev/null || true)"
     records_value="$(_repl_unquote "$records_value")"
     if printf '%s' "$records_value" | grep -Eq '^\[[[:space:]]*\{'; then
@@ -665,6 +671,58 @@ PWSH
     "$@"
 }
 
+_repl_persistent_native_path() {
+    if command -v cygpath >/dev/null 2>&1; then
+        cygpath -w "$1"
+    else
+        printf '%s\n' "$1"
+    fi
+}
+
+_repl_persistent_available() {
+    [ "${MCPSERVER_REPL_PERSISTENT:-1}" != "0" ] \
+        && command -v node >/dev/null 2>&1 \
+        && [ -f "${REPL_INVOKE_SCRIPT_DIR}/repl-daemon.js" ] \
+        && { [ -n "${MCPSERVER_REPL_BIN:-}" ] || command -v mcpserver-repl >/dev/null 2>&1; }
+}
+
+_repl_run_request_envelope() {
+    local timeout_seconds="${1:-30}"
+
+    if _repl_persistent_available; then
+        local daemon_dir repl_bin
+        daemon_dir="${MCPSERVER_REPL_DAEMON_DIR:-${REPL_INVOKE_CACHE_DIR}/daemon}"
+        mkdir -p "$daemon_dir" 2>/dev/null || true
+        repl_bin="${MCPSERVER_REPL_BIN:-}"
+        if [ -n "$repl_bin" ] && [ -e "$repl_bin" ]; then
+            repl_bin="$(_repl_persistent_native_path "$repl_bin")"
+        fi
+
+        local daemon_script
+        daemon_script="$(_repl_persistent_native_path "${REPL_INVOKE_SCRIPT_DIR}/repl-daemon.js")"
+        if command -v timeout >/dev/null 2>&1; then
+            MCPSERVER_REPL_DAEMON_DIR="$(_repl_persistent_native_path "$daemon_dir")" \
+            MCPSERVER_REPL_BIN="$repl_bin" \
+            MCP_AGENT_NAME="${MCP_AGENT_NAME:-$AGENT_NAME}" \
+                timeout --kill-after=2s "$timeout_seconds" node "$daemon_script" --send
+            return $?
+        fi
+
+        MCPSERVER_REPL_DAEMON_DIR="$(_repl_persistent_native_path "$daemon_dir")" \
+        MCPSERVER_REPL_BIN="$repl_bin" \
+        MCP_AGENT_NAME="${MCP_AGENT_NAME:-$AGENT_NAME}" \
+            node "$daemon_script" --send
+        return $?
+    fi
+
+    if ! command -v mcpserver-repl >/dev/null 2>&1; then
+        echo "ERROR: mcpserver-repl not found on PATH" >&2
+        return 1
+    fi
+
+    _repl_run_repl_with_timeout "$timeout_seconds" mcpserver-repl --agent-stdio --agent "$AGENT_NAME"
+}
+
 _repl_failsafe_plugin_name() {
     local root name
     root="$(cd "$REPL_INVOKE_SCRIPT_DIR/.." && pwd)"
@@ -1071,11 +1129,6 @@ _repl_invoke_raw() {
     local request_id="req-$(_repl_now_compact)-$(printf '%04x' $RANDOM)"
     local timeout="${REPL_TIMEOUT:-30}"
 
-    if ! command -v mcpserver-repl >/dev/null 2>&1; then
-        echo "ERROR: mcpserver-repl not found on PATH" >&2
-        return 1
-    fi
-
     # Always build envelope as object and serialize to JSON (preferred for complex params).
     # This eliminates all manual YAML text construction and indentation errors.
     # The repl supports JSON request envelopes.
@@ -1109,20 +1162,29 @@ _repl_invoke_raw() {
     local tmp_env="${REPL_INVOKE_CACHE_DIR}/envelope-${request_id}.$$.json"
     mkdir -p "$(dirname "$tmp_env")" 2>/dev/null || true
     printf '%s\n' "$envelope_json" > "$tmp_env"
-    local response
-    response="$(cat "$tmp_env" | _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio --agent "$AGENT_NAME" 2>/dev/null)"
+    local response stderr_file exit_code
+    stderr_file="${tmp_env}.stderr"
+    response="$(cat "$tmp_env" | _repl_run_request_envelope "$timeout" 2>"$stderr_file")"
+    exit_code=$?
     rm -f "$tmp_env" 2>/dev/null || true
-
-    local exit_code=$?
     if [ $exit_code -eq 0 ]; then
         printf '%s\n' "$response"
         if _repl_response_is_error "$response"; then
+            rm -f "$stderr_file" 2>/dev/null || true
             return 1
         fi
+        rm -f "$stderr_file" 2>/dev/null || true
         return 0
     fi
 
     echo "ERROR: mcpserver-repl invocation failed for method ${method}" >&2
+    if [ -s "$stderr_file" ]; then
+        sed 's/^/stderr: /' "$stderr_file" >&2
+    fi
+    if [ -n "$response" ]; then
+        printf '%s\n' "$response" >&2
+    fi
+    rm -f "$stderr_file" 2>/dev/null || true
     return 1
 }
 
@@ -1410,11 +1472,6 @@ _repl_invoke_raw_in_workspace() {
     local request_id="req-$(_repl_now_compact)-$(printf '%04x' $RANDOM)"
     local timeout="${REPL_TIMEOUT:-30}"
 
-    if ! command -v mcpserver-repl >/dev/null 2>&1; then
-        echo "ERROR: mcpserver-repl not found on PATH" >&2
-        return 1
-    fi
-
     local workspace_path workspace_env_path workspace_cwd base_url cleanup_dir
     workspace_path="$(_repl_unquote "$(_repl_session_state_value "workspacePath")")"
     workspace_env_path="$workspace_path"
@@ -1458,7 +1515,7 @@ _repl_invoke_raw_in_workspace() {
                 export MCP_SERVER_URL="$base_url"
                 export MCPSERVER_BASE_URL="$base_url"
             fi
-            _repl_run_repl_with_timeout "$timeout" mcpserver-repl --agent-stdio --agent "$AGENT_NAME"
+            _repl_run_request_envelope "$timeout"
         ) 2>"$stderr_file"
     )"
     rm -f "$tmp_env" 2>/dev/null || true
@@ -3629,7 +3686,7 @@ NODEEOF
     local response stderr_file persist_status timeout_seconds
     timeout_seconds="${REPL_TIMEOUT:-30}"
     stderr_file="${tmp_env}.stderr"
-    response="$(_repl_run_repl_with_timeout "$timeout_seconds" mcpserver-repl --agent-stdio --agent "$AGENT_NAME" < "$tmp_env" 2>"$stderr_file")"
+    response="$(_repl_run_request_envelope "$timeout_seconds" < "$tmp_env" 2>"$stderr_file")"
     persist_status=$?
     rm -f "$tmp_env" 2>/dev/null || true
 
@@ -3662,6 +3719,24 @@ _repl_mark_current_turn_completed() {
     ' "$turn_file" > "$tmp" && mv "$tmp" "$turn_file"
 }
 
+_repl_supersede_current_turn_if_in_progress() {
+    local turn_file="$1"
+    local next_request_id="$2"
+    [ -f "$turn_file" ] || return 0
+
+    local status old_request_id old_title
+    status="$(_repl_state_value "$turn_file" "status" 2>/dev/null || true)"
+    [ "$status" = "in_progress" ] || return 0
+
+    old_request_id="$(_repl_state_value "$turn_file" "turnRequestId" 2>/dev/null || true)"
+    [ -n "$old_request_id" ] || return 0
+
+    old_title="$(_repl_state_value "$turn_file" "queryTitle" 2>/dev/null || true)"
+    [ -z "$old_title" ] && old_title="Superseded turn"
+
+    _repl_persist_turn "$old_request_id" "$old_title" "canceled" "Superseded by ${next_request_id} before it was completed." "" || true
+}
+
 _repl_workflow_bootstrap() {
     local start_dir
     start_dir="$(_repl_yaml_get "$1" "workspacePath")"
@@ -3678,6 +3753,7 @@ _repl_workflow_open_session() {
     local params="$1"
     local start_dir
     start_dir="$(_repl_yaml_get "$params" "workspacePath")"
+    [ -z "$start_dir" ] && start_dir="$(_repl_unquote "$(_repl_session_state_value "workspacePath" 2>/dev/null || true)")"
     [ -z "$start_dir" ] && start_dir="$(pwd)"
 
     _repl_bootstrap_state "$start_dir" || return 1
@@ -3802,6 +3878,7 @@ _repl_workflow_begin_turn() {
     opened_at="$(_repl_now_iso)"
 
     mkdir -p "$REPL_INVOKE_CACHE_DIR"
+    _repl_supersede_current_turn_if_in_progress "$turn_file" "$turn_request_id"
     cat > "$turn_file" <<EOF
 turnRequestId: ${turn_request_id}
 queryTitle: ${query_title}
@@ -4599,4 +4676,4 @@ fi
 export -f _repl_read_stdin_if_ready 2>/dev/null || true
 export -f _repl_turn_upsert_params 2>/dev/null || true
 
-export -f repl_invoke repl_build_envelope _repl_bool_to_enabled _repl_compat_marker_endpoint_field _repl_compat_marker_field _repl_create_compat_marker _repl_failsafe_clear _repl_failsafe_dir _repl_failsafe_plugin_name _repl_failsafe_workspace_root _repl_failsafe_write _repl_first_param_text _repl_internal_todo_is_enabled _repl_internal_todo_mode_value _repl_internal_todo_state_file _repl_invoke_raw _repl_invoke_raw_in_workspace _repl_invoke_with_fallback _repl_bootstrap_state _repl_emit_response _repl_generate_session_id _repl_json_array_block_get _repl_json_escape _repl_normalized_actions_block _repl_normalized_dialog_items_block _repl_param_text _repl_path_for_bash _repl_path_for_repl _repl_pending_import_file _repl_pending_import_todo_exists _repl_persist_turn _repl_records_block_get _repl_records_block_normalize _repl_requirements_acceptance_criteria_result_ok _repl_requirements_batch_ids _repl_requirements_batch_persisted_result_ok _repl_requirements_bootstrap_state _repl_requirements_copy_acceptance_http_fallback _repl_requirements_existing_for_update _repl_requirements_generate_http_fallback _repl_requirements_get_method_for_batch_id _repl_requirements_mutation_result_ok _repl_requirements_normalize_generate_response _repl_requirements_typed_doc_type _repl_requirements_typed_method _repl_requirements_typed_params _repl_requirements_update_get_method _repl_requirements_update_workflow_get_method _repl_requirements_workflow_doc_type _repl_requirements_workflow_get_method_for_batch_id _repl_requirements_workflow_params _repl_requirement_list_field _repl_response_has_empty_result _repl_response_is_error _repl_response_is_nonempty_success _repl_run_repl_with_timeout _repl_session_meta _repl_session_state_value _repl_sessionlog_import_recovery_http_fallback _repl_sessionlog_submit_http_fallback _repl_state_value _repl_submit_session _repl_todo_http_fallback _repl_todo_json_body _repl_turns_block _repl_url_path_segment _repl_turn_bump _repl_count_lines _repl_turn_has_audit_schema _repl_turn_audit_missing _repl_workflow_audit _repl_workflow_close_turn _repl_workflow_append_actions _repl_workflow_append_dialog _repl_workflow_begin_turn _repl_workflow_bootstrap _repl_workflow_complete_turn _repl_workflow_import_pending _repl_workflow_import_recovery _repl_workflow_memory _repl_workflow_memory_is_mutation _repl_workflow_memory_append_action _repl_workflow_open_session _repl_workflow_query_history _repl_workflow_requirements _repl_workflow_requirements_is_mutation _repl_workflow_requirements_prefers_typed _repl_workflow_todo _repl_workflow_todo_internal_tracking _repl_workflow_todo_is_mutation _repl_workflow_todo_select _repl_workflow_todo_update_selected _repl_workflow_update_turn _repl_emit_acceptance_criteria_block _repl_emit_acceptance_criteria_hydrate _repl_has_acceptance_criteria_block _repl_yaml_block_get _repl_yaml_field _repl_yaml_get 2>/dev/null || true
+export -f repl_invoke repl_build_envelope _repl_bool_to_enabled _repl_compat_marker_endpoint_field _repl_compat_marker_field _repl_create_compat_marker _repl_failsafe_clear _repl_failsafe_dir _repl_failsafe_plugin_name _repl_failsafe_workspace_root _repl_failsafe_write _repl_first_param_text _repl_internal_todo_is_enabled _repl_internal_todo_mode_value _repl_internal_todo_state_file _repl_invoke_raw _repl_invoke_raw_in_workspace _repl_invoke_with_fallback _repl_bootstrap_state _repl_emit_response _repl_generate_session_id _repl_json_array_block_get _repl_json_escape _repl_normalized_actions_block _repl_normalized_dialog_items_block _repl_param_text _repl_path_for_bash _repl_path_for_repl _repl_pending_import_file _repl_pending_import_todo_exists _repl_persist_turn _repl_records_block_get _repl_records_block_normalize _repl_requirements_acceptance_criteria_result_ok _repl_requirements_batch_ids _repl_requirements_batch_persisted_result_ok _repl_requirements_bootstrap_state _repl_requirements_copy_acceptance_http_fallback _repl_requirements_existing_for_update _repl_requirements_generate_http_fallback _repl_requirements_get_method_for_batch_id _repl_requirements_mutation_result_ok _repl_requirements_normalize_generate_response _repl_requirements_typed_doc_type _repl_requirements_typed_method _repl_requirements_typed_params _repl_requirements_update_get_method _repl_requirements_update_workflow_get_method _repl_requirements_workflow_doc_type _repl_requirements_workflow_get_method_for_batch_id _repl_requirements_workflow_params _repl_requirement_list_field _repl_response_has_empty_result _repl_response_is_error _repl_response_is_nonempty_success _repl_run_repl_with_timeout _repl_persistent_available _repl_persistent_native_path _repl_run_request_envelope _repl_session_meta _repl_session_state_value _repl_sessionlog_import_recovery_http_fallback _repl_sessionlog_submit_http_fallback _repl_state_value _repl_submit_session _repl_todo_http_fallback _repl_todo_json_body _repl_turns_block _repl_url_path_segment _repl_turn_bump _repl_count_lines _repl_turn_has_audit_schema _repl_turn_audit_missing _repl_workflow_audit _repl_workflow_close_turn _repl_workflow_append_actions _repl_workflow_append_dialog _repl_workflow_begin_turn _repl_workflow_bootstrap _repl_workflow_complete_turn _repl_workflow_import_pending _repl_workflow_import_recovery _repl_workflow_memory _repl_workflow_memory_is_mutation _repl_workflow_memory_append_action _repl_workflow_open_session _repl_workflow_query_history _repl_workflow_requirements _repl_workflow_requirements_is_mutation _repl_workflow_requirements_prefers_typed _repl_workflow_todo _repl_workflow_todo_internal_tracking _repl_workflow_todo_is_mutation _repl_workflow_todo_select _repl_workflow_todo_update_selected _repl_workflow_update_turn _repl_emit_acceptance_criteria_block _repl_emit_acceptance_criteria_hydrate _repl_has_acceptance_criteria_block _repl_yaml_block_get _repl_yaml_field _repl_yaml_get 2>/dev/null || true

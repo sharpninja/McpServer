@@ -168,6 +168,59 @@ public sealed class RequirementAcceptanceCriteriaTests
     }
 
     /// <summary>
+    /// TEST-MCP-REQSCOPE-006: markdown export/import preserves requirement scope metadata for
+    /// FR/TR/TEST entries, including both open-ended and ended applicability windows.
+    /// </summary>
+    [Fact]
+    public void RenderAndParseRequirements_PreservesScopeMetadata()
+    {
+        var functionalMarkdown = RequirementsDocumentRenderer.RenderFunctional(
+        [
+            new FrEntry(
+                "FR-MCP-REQSCOPE-901",
+                "Scoped FR",
+                "Functional body.",
+                ScopeStartLayerKey: "layer-2",
+                ScopeEndLayerKey: "layer-4")
+        ]);
+        var technicalMarkdown = RequirementsDocumentRenderer.RenderTechnical(
+        [
+            new TrEntry(
+                "TR-MCP-REQSCOPE-901",
+                "Scoped TR",
+                "Technical body.",
+                ScopeStartLayerKey: "layer-3")
+        ]);
+        var testingMarkdown = RequirementsDocumentRenderer.RenderTesting(
+        [
+            new TestEntry(
+                "TEST-MCP-REQSCOPE-901",
+                "Testing condition.",
+                Title: "Scoped TEST",
+                ScopeStartLayerKey: "layer-2",
+                ScopeEndLayerKey: "layer-3")
+        ]);
+
+        Assert.Contains("Scope: layer-2..layer-4", functionalMarkdown, StringComparison.Ordinal);
+        Assert.Contains("Scope: layer-3+", technicalMarkdown, StringComparison.Ordinal);
+        Assert.Contains("  Scope: layer-2..layer-3", testingMarkdown, StringComparison.Ordinal);
+
+        var fr = Assert.Single(RequirementsDocumentParser.ParseFunctional(functionalMarkdown));
+        var tr = Assert.Single(RequirementsDocumentParser.ParseTechnical(technicalMarkdown));
+        var test = Assert.Single(RequirementsDocumentParser.ParseTesting(testingMarkdown));
+
+        Assert.Equal("Functional body.", fr.Body);
+        Assert.Equal("layer-2", fr.ScopeStartLayerKey);
+        Assert.Equal("layer-4", fr.ScopeEndLayerKey);
+        Assert.Equal("Technical body.", tr.Body);
+        Assert.Equal("layer-3", tr.ScopeStartLayerKey);
+        Assert.Null(tr.ScopeEndLayerKey);
+        Assert.Equal("Testing condition.", test.Condition);
+        Assert.Equal("layer-2", test.ScopeStartLayerKey);
+        Assert.Equal("layer-3", test.ScopeEndLayerKey);
+    }
+
+    /// <summary>
     /// TEST-MCP-MEMORY-FED-001: the memory-federation slice requires non-empty
     /// structured acceptance criteria on every touched FR, TR, and TEST entry so
     /// BDPv4 gates can fail before implementation evidence drifts.

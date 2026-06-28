@@ -82,6 +82,30 @@ public sealed class WorkspaceDto
     /// <summary>Git remote URL (origin) for this workspace.</summary>
     [JsonPropertyName("gitRemoteUrl")]
     public string? GitRemoteUrl { get; set; }
+
+    /// <summary>FR-MCP-WORKSPACE-LAYER-001: current requirement scope layer key for this workspace.</summary>
+    [JsonPropertyName("currentRequirementLayerKey")]
+    public string CurrentRequirementLayerKey { get; set; } = "layer-1";
+}
+
+/// <summary>FR-MCP-WORKSPACE-LAYER-001: current requirement layer response.</summary>
+public sealed class WorkspaceCurrentRequirementLayer
+{
+    /// <summary>The current requirement layer key.</summary>
+    [JsonPropertyName("currentLayerKey")]
+    public string CurrentLayerKey { get; set; } = "layer-1";
+
+    /// <summary>Resolved layer metadata for the current layer.</summary>
+    [JsonPropertyName("layer")]
+    public RequirementScopeLayer Layer { get; set; } = new();
+}
+
+/// <summary>FR-MCP-WORKSPACE-LAYER-001: request payload to change the current requirement layer.</summary>
+public sealed class WorkspaceCurrentRequirementLayerUpdate
+{
+    /// <summary>Target layer key.</summary>
+    [JsonPropertyName("layerKey")]
+    public string LayerKey { get; set; } = string.Empty;
 }
 
 /// <summary>Request to create a workspace.</summary>

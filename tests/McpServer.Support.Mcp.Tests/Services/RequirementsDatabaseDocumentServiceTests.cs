@@ -246,6 +246,61 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Equal("New from batch", added.Title);
     }
 
+    /// <summary>
+    /// ISSUE-19/RACE-409-CREATED: Requirement IDs are workspace-scoped, so a retry/idempotent
+    /// batch check in one workspace must not skip the same ID in a different workspace.
+    /// </summary>
+    [Fact]
+    public async Task AddBatchAsync_SameIdInDifferentWorkspace_CreatesWorkspaceScopedRow()
+    {
+        using var fixture = new RequirementsDbFixture();
+        var firstWorkspace = fixture.CreateWorkspace("batch-workspace-one");
+        var secondWorkspace = fixture.CreateWorkspace("batch-workspace-two");
+        var service = fixture.CreateService();
+
+        fixture.SetWorkspace(firstWorkspace);
+        await service.AddFrAsync(new FrEntry("FR-MCP-908", "First", "First body")).ConfigureAwait(true);
+
+        fixture.SetWorkspace(secondWorkspace);
+        var result = await service.AddBatchAsync(new RequirementsBatchEntries(
+            [new FrEntry("FR-MCP-908", "Second", "Second body")],
+            [],
+            [])).ConfigureAwait(true);
+
+        Assert.Equal(secondWorkspace, Assert.Single(result.Functional).WorkspaceId);
+        var second = await service.GetFrAsync("FR-MCP-908").ConfigureAwait(true);
+        Assert.NotNull(second);
+        Assert.Equal("Second body", second.Body);
+
+        var rows = await fixture.GetRequirementRowsAsync().ConfigureAwait(true);
+        Assert.Equal(2, rows.Count(row => row.Kind == "fr" && row.Id == "FR-MCP-908"));
+        Assert.Contains(rows, row => row.WorkspaceId == firstWorkspace && row.Body == "First body");
+        Assert.Contains(rows, row => row.WorkspaceId == secondWorkspace && row.Body == "Second body");
+    }
+
+    /// <summary>
+    /// ISSUE-19/RACE-409-CREATED: Single requirement creates also honor workspace isolation
+    /// when detecting existing rows.
+    /// </summary>
+    [Fact]
+    public async Task AddFrAsync_SameIdInDifferentWorkspace_DoesNotConflict()
+    {
+        using var fixture = new RequirementsDbFixture();
+        var firstWorkspace = fixture.CreateWorkspace("single-workspace-one");
+        var secondWorkspace = fixture.CreateWorkspace("single-workspace-two");
+        var service = fixture.CreateService();
+
+        fixture.SetWorkspace(firstWorkspace);
+        await service.AddFrAsync(new FrEntry("FR-MCP-909", "First", "First body")).ConfigureAwait(true);
+
+        fixture.SetWorkspace(secondWorkspace);
+        await service.AddFrAsync(new FrEntry("FR-MCP-909", "Second", "Second body")).ConfigureAwait(true);
+
+        var second = await service.GetFrAsync("FR-MCP-909").ConfigureAwait(true);
+        Assert.NotNull(second);
+        Assert.Equal("Second body", second.Body);
+    }
+
     /// <summary>Transaction compensation restores the prior requirements snapshot and allows retrying a rolled-back ID.</summary>
     [Fact]
     public async Task RestoreRequirementsSnapshotAsync_SoftDeletesCreatedRowsAndAllowsRetry()

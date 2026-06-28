@@ -1,4 +1,5 @@
 import { spawn, ChildProcess } from 'child_process';
+import { existsSync, statSync } from 'fs';
 import { createInterface } from 'readline';
 import * as yaml from 'js-yaml';
 
@@ -13,6 +14,32 @@ interface PendingRequest {
   events: ReplResponse[];
   onEvent?: (event: ReplResponse) => void;
   timer?: ReturnType<typeof setTimeout>;
+}
+
+function isDirectory(path: string): boolean {
+  try {
+    return existsSync(path) && statSync(path).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+export function resolveReplWorkingDirectory(): string {
+  const candidates = [
+    process.env.MCP_WORKSPACE_PATH,
+    process.env.MCPSERVER_WORKSPACE_PATH,
+    process.env.MCP_WORKSPACE_START_DIR,
+    process.env.CLAUDE_PROJECT_DIR,
+    process.env.PWD,
+  ];
+
+  for (const candidate of candidates) {
+    if (candidate && candidate.trim().length > 0 && isDirectory(candidate)) {
+      return candidate;
+    }
+  }
+
+  return process.cwd();
 }
 
 /**
@@ -62,6 +89,7 @@ export class ReplBridge {
     this.proc = spawn(replCommand, replArgs, {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env },
+      cwd: resolveReplWorkingDirectory(),
     });
 
     this.proc.stderr?.on('data', (data: Buffer) => {

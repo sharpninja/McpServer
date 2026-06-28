@@ -1,0 +1,21 @@
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$RemainingArguments
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$pluginRoot = (Resolve-Path -LiteralPath (Join-Path $scriptDir '__DEPTH__')).ProviderPath
+$env:MCP_PLUGIN_ROOT = $pluginRoot
+$env:MCP_PLUGIN_HOST = '__HOST__'
+
+& (Join-Path $pluginRoot 'lib\plugin-hook.ps1') -HookName '__HOOK_NAME__' -HostName '__HOST__' -CacheMode '__CACHE_MODE__' @RemainingArguments
+if (Get-Variable -Name LASTEXITCODE -Scope Global -ErrorAction SilentlyContinue) {
+    exit $global:LASTEXITCODE
+}
+
+exit 0

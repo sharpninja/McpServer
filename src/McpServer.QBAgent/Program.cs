@@ -7,10 +7,20 @@ using McpServer.Support.Mcp.Services;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 // FR-MCP-QBAGENT-001 / FR-MCP-QBOPENAI-001: QBAgent starts in a folder, reads the AGENTS-README-FIRST.yaml
 // marker there, binds to QuadBrain (as an OpenAI-compatible model), and runs the Microsoft Agent Framework
 // tool loop - executing the tool calls QuadBrain emits. With no marker present it exits gracefully.
+if (args.Length == 1 && string.Equals(args[0], "--version", StringComparison.OrdinalIgnoreCase))
+{
+    var version = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                  ?? typeof(Program).Assembly.GetName().Version?.ToString()
+                  ?? "unknown";
+    Console.WriteLine(version);
+    return 0;
+}
+
 var startDirectory = args.Length > 0 && !string.IsNullOrWhiteSpace(args[0])
     ? args[0]
     : Directory.GetCurrentDirectory();

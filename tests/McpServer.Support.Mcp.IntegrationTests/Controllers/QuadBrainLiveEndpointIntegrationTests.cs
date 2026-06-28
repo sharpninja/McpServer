@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -22,6 +23,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 public sealed class QuadBrainLiveEndpointIntegrationTests
 {
     private const string Endpoint = "v1/chat/completions";
+    private const string SourceType = "QBAgent";
 
     /// <summary>A plain Arbiter decision from the real loop is returned as the assistant message.</summary>
     [Fact]
@@ -38,8 +40,11 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         var choice = Assert.Single(body.Choices);
         Assert.Equal("stop", choice.FinishReason);
         Assert.Equal("the live arbiter decision", choice.Message.Content);
+        Assert.Equal(3, factory.InvokedRoles.Count);
+        Assert.Contains(BrainSlotRoles.LeftHemisphere, factory.InvokedRoles);
+        Assert.Contains(BrainSlotRoles.RightHemisphere, factory.InvokedRoles);
         Assert.Contains(BrainSlotRoles.ArbiterOfTruth, factory.InvokedRoles);
-        Assert.Equal(4, factory.InvokedRoles.Count);
+        Assert.DoesNotContain(BrainSlotRoles.CuriosityEngine, factory.InvokedRoles);
     }
 
     /// <summary>A tool_calls payload elected by the real Arbiter surfaces as an OpenAI tool call.</summary>
@@ -76,7 +81,33 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         Assert.Empty(factory.InvokedRoles);
     }
 
-    private static CustomWebApplicationFactory BuildFactory(RecordingChatClientFactory chatClientFactory)
+    /// <summary>TEST-MCP-QBLIVEINT-001: AoT completion survives a rejected session-log dialog transaction.</summary>
+    [Fact]
+    public async Task ChatCompletions_RealOrchestration_AotLoggerTransactionRejected_ReturnsArbiterContent()
+    {
+        var chatFactory = new RecordingChatClientFactory("arbiter decision despite rejected logger transaction");
+        var coordinator = new DialogRejectingTurnTransactionCoordinator();
+        using var app = BuildFactory(chatFactory, coordinator);
+        using var seedClient = SeedClient(app);
+        await SeedQuadAsync(seedClient, BrainSlotRoles.All).ConfigureAwait(true);
+        await SeedSessionAsync(seedClient, "QBAgent-20260627T011500Z-aot-logger-reject").ConfigureAwait(true);
+        using var client = Authorized(app);
+        client.DefaultRequestHeaders.Add("X-Session-Id", "QBAgent-20260627T011500Z-aot-logger-reject");
+        client.DefaultRequestHeaders.Add("X-Turn-Id", "req-20260627T011500Z-aot-logger-reject");
+
+        var body = await PostAsync(client, SimpleRequest()).ConfigureAwait(true);
+
+        var choice = Assert.Single(body.Choices);
+        Assert.Equal("stop", choice.FinishReason);
+        Assert.Equal("arbiter decision despite rejected logger transaction", choice.Message.Content);
+        Assert.Contains(BrainSlotRoles.ArbiterOfTruth, chatFactory.InvokedRoles);
+        Assert.Contains("sessionlog.dialog", coordinator.OperationNames);
+        Assert.True(coordinator.RejectedDialogTransactionCount > 0);
+    }
+
+    private static CustomWebApplicationFactory BuildFactory(
+        RecordingChatClientFactory chatClientFactory,
+        ITurnTransactionCoordinator? transactionCoordinator = null)
         => new(
             services =>
             {
@@ -85,7 +116,7 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
                 services.RemoveAll<IBrainSlotCredentialResolver>();
                 services.AddSingleton<IBrainSlotCredentialResolver, StubCredentialResolver>();
                 services.RemoveAll<ITurnTransactionCoordinator>();
-                services.AddSingleton<ITurnTransactionCoordinator, CommittingTurnTransactionCoordinator>();
+                services.AddSingleton(transactionCoordinator ?? new CommittingTurnTransactionCoordinator());
             },
             new Dictionary<string, string?>
             {
@@ -114,6 +145,15 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         }
     }
 
+    private static async Task SeedSessionAsync(HttpClient client, string sessionId)
+    {
+        var response = await client.PostAsJsonAsync(
+            new Uri($"mcpserver/sessionlog/{SourceType}/{sessionId}/open", UriKind.Relative),
+            new { Title = "AoT logger rejection", Model = "qbagent" }).ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(response.StatusCode == HttpStatusCode.OK, $"Expected session open OK, got {response.StatusCode}: {json}");
+    }
+
     private static HttpClient SeedClient(CustomWebApplicationFactory factory)
     {
         var client = factory.CreateClient();
@@ -136,8 +176,9 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
     private static async Task<OpenAiChatCompletionResponse> PostAsync(HttpClient client, OpenAiChatCompletionRequest request)
     {
         var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), request).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<OpenAiChatCompletionResponse>().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(response.StatusCode == HttpStatusCode.OK, $"Expected OK, got {response.StatusCode}: {json}");
+        var body = JsonSerializer.Deserialize<OpenAiChatCompletionResponse>(json, new JsonSerializerOptions(JsonSerializerDefaults.Web));
         Assert.NotNull(body);
         return body!;
     }
@@ -159,7 +200,11 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
 
         private sealed class RecordingChatClient(RecordingChatClientFactory owner, string arbiterOutput) : IBrainSlotChatClient
         {
-            public Task<string> CompleteAsync(BrainSlotDefinitionEntity slot, string input, CancellationToken cancellationToken = default)
+            public Task<string> CompleteAsync(
+                BrainSlotDefinitionEntity slot,
+                string input,
+                double? temperature,
+                CancellationToken cancellationToken = default)
             {
                 owner.Record(slot.Role);
                 var output = string.Equals(slot.Role, BrainSlotRoles.ArbiterOfTruth, StringComparison.Ordinal)
@@ -190,6 +235,59 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
             return new TurnTransactionResult
             {
                 TransactionId = "txn-" + Guid.NewGuid().ToString("N"),
+                Status = "committed",
+                DiffgramId = "diffgram-1",
+                MutationResult = mutationResult,
+                MutationApplied = mutationResult.Success,
+            };
+        }
+
+        public TurnTransactionStatusResponse GetStatus()
+            => new() { Enabled = true, Degraded = false };
+    }
+
+    private sealed class DialogRejectingTurnTransactionCoordinator : ITurnTransactionCoordinator
+    {
+        private readonly object _gate = new();
+        private readonly List<string> _operationNames = [];
+
+        public IReadOnlyList<string> OperationNames
+        {
+            get
+            {
+                lock (_gate)
+                    return _operationNames.ToArray();
+            }
+        }
+
+        public int RejectedDialogTransactionCount { get; private set; }
+
+        public async Task<TurnTransactionResult> ExecuteAsync(
+            TurnTransactionRequest request,
+            Func<CancellationToken, Task<TurnMutationResult>> mutation,
+            CancellationToken cancellationToken = default)
+        {
+            lock (_gate)
+                _operationNames.Add(request.OperationName);
+
+            if (string.Equals(request.OperationName, "sessionlog.dialog", StringComparison.Ordinal))
+            {
+                lock (_gate)
+                    RejectedDialogTransactionCount++;
+                return new TurnTransactionResult
+                {
+                    TransactionId = request.TransactionId ?? "rejected-sessionlog-dialog",
+                    Status = "rejected",
+                    Reason = TransactionFailureReason.Unknown,
+                    Message = "logger transaction rejected by test coordinator",
+                    MutationApplied = false,
+                };
+            }
+
+            var mutationResult = await mutation(cancellationToken).ConfigureAwait(false);
+            return new TurnTransactionResult
+            {
+                TransactionId = request.TransactionId ?? "txn-" + Guid.NewGuid().ToString("N"),
                 Status = "committed",
                 DiffgramId = "diffgram-1",
                 MutationResult = mutationResult,

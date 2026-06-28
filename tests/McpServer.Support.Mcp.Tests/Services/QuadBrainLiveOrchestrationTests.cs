@@ -23,7 +23,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 {
     private const string WorkspacePath = @"F:\GitHub\McpServer";
 
-    /// <summary>All four roles are invoked in order and the committed Arbiter decision is returned.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Left, Right, and Arbiter in order.</summary>
     [Fact]
     public async Task ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision()
     {
@@ -37,12 +37,12 @@ public sealed class QuadBrainLiveOrchestrationTests
 
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision", response.Output);
-        Assert.Equal(4, response.RoleResults.Count);
+        Assert.Equal(3, response.RoleResults.Count);
         Assert.Equal(
-            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine, BrainSlotRoles.ArbiterOfTruth],
+            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
             response.RoleResults.Select(result => result.Role).ToArray());
         Assert.Equal(
-            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine, BrainSlotRoles.ArbiterOfTruth],
+            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
             harness.Factory.InvokedRoles.ToArray());
     }
 
@@ -63,12 +63,14 @@ public sealed class QuadBrainLiveOrchestrationTests
         Assert.Equal(toolCalls, response.Output);
     }
 
-    /// <summary>When a role commits no usable output mid-loop, orchestration rejects before reaching the Arbiter.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: When both hemispheres produce no usable output, Curiosity gathers context but does not answer.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_WhenARoleProducesNoOutput_RejectsBeforeArbiter()
+    public async Task ExecuteFullOrchestrationAsync_WhenBothHemispheresProduceNoOutput_InvokesCuriosityWithoutReturningIt()
     {
         using var harness = await LiveQuadHarness.CreateAsync(
-            executionEnabled: true, arbiterOutput: "final decision", emptyOutputRole: BrainSlotRoles.CuriosityEngine).ConfigureAwait(true);
+            executionEnabled: true,
+            arbiterOutput: "final decision",
+            emptyOutputRoles: [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere]).ConfigureAwait(true);
 
         var response = await harness.Orchestration.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
         {
@@ -77,9 +79,33 @@ public sealed class QuadBrainLiveOrchestrationTests
         }).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
-        // Left + Right + Curiosity were invoked; the Arbiter is never reached because Curiosity did not commit output.
-        Assert.Contains(BrainSlotRoles.CuriosityEngine, harness.Factory.InvokedRoles);
+        Assert.Null(response.Output);
+        Assert.Equal(
+            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine],
+            harness.Factory.InvokedRoles.ToArray());
         Assert.DoesNotContain(BrainSlotRoles.ArbiterOfTruth, harness.Factory.InvokedRoles);
+    }
+
+    /// <summary>TEST-MCP-QBLIVE-001: Arbiter rejection triggers a Left/Right voting round before final response.</summary>
+    [Fact]
+    public async Task ExecuteFullOrchestrationAsync_WhenArbiterRejectsInitialEvidence_RunsVotingRound()
+    {
+        using var harness = await LiveQuadHarness.CreateAsync(
+            executionEnabled: true,
+            arbiterOutputs: ["REJECT: both responses need reconciliation.", "final decision after voting"]).ConfigureAwait(true);
+
+        var response = await harness.Orchestration.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = "decide this",
+            TurnId = "turn-vote",
+        }).ConfigureAwait(true);
+
+        Assert.Equal("committed", response.Status);
+        Assert.Equal("final decision after voting", response.Output);
+        Assert.Equal(
+            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth, BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+            harness.Factory.InvokedRoles.ToArray());
+        Assert.DoesNotContain(BrainSlotRoles.CuriosityEngine, harness.Factory.InvokedRoles);
     }
 
     /// <summary>With only three roles enabled the loop rejects without producing a decision.</summary>
@@ -142,9 +168,10 @@ public sealed class QuadBrainLiveOrchestrationTests
 
         public static async Task<LiveQuadHarness> CreateAsync(
             bool executionEnabled,
-            string arbiterOutput,
+            string? arbiterOutput = null,
+            IReadOnlyList<string>? arbiterOutputs = null,
             IReadOnlyList<string>? seedRoles = null,
-            string? emptyOutputRole = null)
+            IReadOnlyList<string>? emptyOutputRoles = null)
         {
             var workspace = new WorkspaceContext { WorkspacePath = WorkspacePath };
             var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
@@ -170,7 +197,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 
             var registry = new BrainSlotRegistryService(
                 db, keyServer, resolver, brainOptions, NullLogger<BrainSlotRegistryService>.Instance);
-            var factory = new RecordingChatClientFactory(arbiterOutput, emptyOutputRole);
+            var factory = new RecordingChatClientFactory(arbiterOutputs ?? [arbiterOutput ?? "final decision"], emptyOutputRoles ?? []);
             var contextAdmission = new StubContextAdmissionService();
             var invocation = new BrainSlotInvocationService(
                 db, registry, resolver, factory, contextAdmission, keyServer,
@@ -202,23 +229,36 @@ public sealed class QuadBrainLiveOrchestrationTests
         }
     }
 
-    private sealed class RecordingChatClientFactory(string arbiterOutput, string? emptyOutputRole = null) : IBrainSlotChatClientFactory
+    private sealed class RecordingChatClientFactory(IReadOnlyList<string> arbiterOutputs, IReadOnlyList<string> emptyOutputRoles) : IBrainSlotChatClientFactory
     {
+        private int _arbiterIndex;
+
         public List<string> InvokedRoles { get; } = [];
 
         public IBrainSlotChatClient Create(BrainSlotDefinitionEntity slot, string credential)
-            => new RecordingChatClient(this, arbiterOutput, emptyOutputRole);
+            => new RecordingChatClient(this, emptyOutputRoles);
 
-        private sealed class RecordingChatClient(RecordingChatClientFactory owner, string arbiterOutput, string? emptyOutputRole)
+        private string NextArbiterOutput()
+        {
+            var index = Math.Min(_arbiterIndex, arbiterOutputs.Count - 1);
+            _arbiterIndex++;
+            return arbiterOutputs[index];
+        }
+
+        private sealed class RecordingChatClient(RecordingChatClientFactory owner, IReadOnlyList<string> emptyOutputRoles)
             : IBrainSlotChatClient
         {
-            public Task<string> CompleteAsync(BrainSlotDefinitionEntity slot, string input, CancellationToken cancellationToken = default)
+            public Task<string> CompleteAsync(
+                BrainSlotDefinitionEntity slot,
+                string input,
+                double? temperature,
+                CancellationToken cancellationToken = default)
             {
                 owner.InvokedRoles.Add(slot.Role);
-                if (string.Equals(slot.Role, emptyOutputRole, StringComparison.Ordinal))
+                if (emptyOutputRoles.Contains(slot.Role, StringComparer.Ordinal))
                     return Task.FromResult(string.Empty);
                 var output = string.Equals(slot.Role, BrainSlotRoles.ArbiterOfTruth, StringComparison.Ordinal)
-                    ? arbiterOutput
+                    ? owner.NextArbiterOutput()
                     : slot.Role + " evidence";
                 return Task.FromResult(output);
             }

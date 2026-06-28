@@ -363,7 +363,7 @@ public static class MarkerFileService
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Codex",
                     RequiredEnvVars = ["CODEX_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Codex"],
                     HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"],
-                    ToolExpectations = ["workflow.sessionlog.*", "workflow.todo.*", "workflow.requirements.*"],
+                    ToolExpectations = ["workflow.sessionlog.*", "workflow.todo.*", "workflow.requirements.*", "workflow.triage.*"],
                     RootHints = [Sibling("mcpserver-codex-plugin"), "$CODEX_PLUGIN_ROOT"],
                 },
                 ["Claude"] = new()
@@ -376,7 +376,7 @@ public static class MarkerFileService
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Claude",
                     RequiredEnvVars = ["CLAUDE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Claude"],
                     HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"],
-                    ToolExpectations = ["mcpserver session tools", "mcpserver todo tools", "mcpserver requirements tools"],
+                    ToolExpectations = ["mcpserver session tools", "mcpserver todo tools", "mcpserver requirements tools", "mcpserver triage tools"],
                     RootHints = [Sibling("mcpserver-claude-code-plugin"), "$CLAUDE_PLUGIN_ROOT"],
                 },
                 ["Copilot"] = new()
@@ -389,7 +389,7 @@ public static class MarkerFileService
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Copilot",
                     RequiredEnvVars = ["COPILOT_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Copilot"],
                     HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"],
-                    ToolExpectations = ["mcpserver session tools", "mcpserver todo tools", "mcpserver requirements tools"],
+                    ToolExpectations = ["mcpserver session tools", "mcpserver todo tools", "mcpserver requirements tools", "mcpserver triage tools"],
                     RootHints = [Sibling("mcpserver-copilot-plugin"), "$COPILOT_PLUGIN_ROOT"],
                 },
                 ["Cline"] = new()
@@ -402,7 +402,7 @@ public static class MarkerFileService
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Cline",
                     RequiredEnvVars = ["CLINE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Cline"],
                     HookExpectations = ["MCP server startup", "tool call audit"],
-                    ToolExpectations = ["session_*", "req_*"],
+                    ToolExpectations = ["session_*", "req_*", "triage_*"],
                     RootHints = [Sibling("mcpserver-cline-plugin"), "$CLINE_PLUGIN_ROOT"],
                 },
                 ["Grok"] = new()
@@ -415,7 +415,7 @@ public static class MarkerFileService
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:GrokCode",
                     RequiredEnvVars = ["GROK_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=GrokCode"],
                     HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop", "PlanMode"],
-                    ToolExpectations = ["sessionlog_*", "todo_*", "requirements_*"],
+                    ToolExpectations = ["sessionlog_*", "todo_*", "requirements_*", "triage_*"],
                     RootHints = [Sibling("mcpserver-grok-plugin"), "$GROK_PLUGIN_ROOT"],
                 },
             },

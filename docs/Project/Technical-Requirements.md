@@ -875,7 +875,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Triage plugin guidance** — Plugin skills and wrapper commands expose triage consistently.
 **Acceptance Criteria:**
-- [x] Plugin skills document triage commands, asynchronous behavior, and when not to use triage. (evidence: TriageSkillBundleTests and Codex/Claude/Copilot/Cline/Grok plugin local tests.)
+- [ ] Plugin skills document triage commands, asynchronous behavior, and when not to use triage.
 
 ## TR-MCP-POL-001
 
@@ -1023,6 +1023,12 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-QBAGENT-001
 
 **QBAgent marker bootstrap and graceful no-marker exit** — QBAgent startup resolves baseUrl and apiKey from the AGENTS-README-FIRST.yaml marker in the working directory (not from defaulted McpAgentOptions); binds the QuadBrain coding route to that endpoint with X-Api-Key auth; rejects/omits all non-QuadBrain surfaces; and when no marker file is found performs a clean graceful shutdown (defined exit, informational log, no endpoint contact).
+**Acceptance Criteria:**
+- [x] Marker bootstrap resolves the QuadBrain endpoint and API key from AGENTS-README-FIRST.yaml and rejects missing/invalid marker data.
+- [x] Hosted QBAgent execution registers the real QBAgent external tool surface for file, shell, and git actions; integration tests use the real file tool instead of an in-memory recording delegate. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+- [x] File-writing tools scope writes to the configured workspace root and integration tests prove the expected file is written under an isolated temp workspace. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+- [x] Tool execution failures propagate back through the Agent Framework loop as failures, not as fabricated completed outputs. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+- [x] QBAgent project metadata sets PackAsTool/ToolCommandName/PackageId and a NUKE target packs, force-installs, and verifies the `qbagent` global tool from local packages. (evidence: BuildTargetTests.Build_HasQBAgentToolTargets; BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool; DeployQBAgentTool)
 
 ## TR-MCP-QBEXEC-001
 
@@ -1098,73 +1104,76 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-QUAD-001
 
-**Status:** ✅ Complete
-
 **Brain-slot storage, DTOs, CRUD, and validation** — Persist BrainSlotDefinition and BrainSlotInvocation rows per workspace; expose client DTOs, REST endpoints, and STDIO/MCP parity; validate known roles, credential-reference-only secrets, one enabled slot per workspace and role, replaceExisting replacement audit, soft delete, and readiness status.
 **Acceptance Criteria:**
 - [x] Brain-slot definitions and invocations persist per workspace with role validation, one-enabled-slot enforcement, soft delete, credentialReference-only storage, and readiness projection. (evidence: BrainSlotRegistryServiceTests; BrainSlotDefinitionEntity; BrainSlotInvocationEntity)
 - [x] REST, client, STDIO, and plugin DTOs round-trip slot CRUD without returning raw credential material. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
-**Covered by:** `BrainSlotRegistryServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `BrainSlotDefinitionEntity`, `BrainSlotInvocationEntity`
+**Status:** ✅ Complete.
+
+**Covered by:** `BrainSlotRegistryServiceTests`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `brain-slots.test.ts`
 
 ## TR-MCP-QUAD-002
-
-**Status:** ✅ Complete
 
 **External model provider adapter, credentials, endpoint allowlist, timeout, and redaction** — Resolve credentials from env:, config:, or file: references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
 **Acceptance Criteria:**
 - [x] Credential references resolve from env:, config:, and file: sources without persisting or logging raw secrets. (evidence: BrainSlotCredentialResolverTests)
 - [x] OpenAI-compatible endpoints enforce host allowlists, explicit loopback allowance, timeout, cancellation, and redaction gates. (evidence: BrainSlotProviderTests and invocation tests)
-**Covered by:** `BrainSlotCredentialResolverTests`, `BrainSlotProviderTests`, `BrainSlotInvocationTransactionTests`
+**Status:** ✅ Complete.
+
+**Covered by:** `BrainSlotCredentialResolverTests`, `BrainSlotProviderTests`, brain-slot invocation tests
 
 ## TR-MCP-QUAD-003
-
-**Status:** ✅ Complete
 
 **Keyserver party mapping and transaction diffgram admission** — Require enabled trusted party/key mapping before invocation; invoke external models only when brain-slot execution and required turn transactions are enabled; commit brain-slot.invoke diffgrams before returning output.
 **Acceptance Criteria:**
 - [x] Invocation rejects until execution, slot, endpoint, credential, party/key, and required transaction gates pass. (evidence: BrainSlotInvocationTransactionTests)
 - [x] brain-slot.invoke diffgrams include slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before output is returned. (evidence: BrainSlotInvocationTransactionTests)
-**Covered by:** `BrainSlotInvocationTransactionTests`, `TransactionSecurityStateStores`, `TurnTransactionCoordinator`
+**Status:** ✅ Complete.
+
+**Covered by:** `BrainSlotInvocationTransactionTests`
 
 ## TR-MCP-QUAD-004
-
-**Status:** ✅ Complete
 
 **Quad branch containment and authorization** — Provide explicit runtime gates proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration execute only through FR-MCP-134/FR-MCP-135 paths, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
 **Acceptance Criteria:**
 - [x] Authorized AoT reconciliation, full orchestration, and weight updates route through FR-MCP-134/135 services only. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed. (evidence: BrainSlotContainmentTests)
+**Status:** ✅ Complete.
+
 **Covered by:** `QuadBrainOrchestrationServiceTests`, `BrainSlotContainmentTests`
 
 ## TR-MCP-QUAD-005
-
-**Status:** ✅ Complete
 
 **Quad orchestration service and contracts** — Add service, DTO, REST, client, STDIO, and plugin contracts for full Quad-Brain orchestration and AoT reconciliation while reusing the existing transaction-gated brain-slot invocation path.
 **Acceptance Criteria:**
 - [x] Quad orchestration DTOs, services, REST endpoints, typed client methods, STDIO tools, and Node plugin tools are present for orchestrate, AoT reconcile, and weight update operations. (evidence: BrainSlotContracts; BrainSlotsController; BrainSlotClient; FwhMcpTools; brain-slots.ts)
 - [x] Public contract tests prove route/tool parity and mutation failsafe classification. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
-**Covered by:** `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`
+**Status:** ✅ Complete.
+
+**Covered by:** `BrainSlotContracts`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `brain-slots.test.ts`
 
 ## TR-MCP-QUAD-006
 
-**Status:** ✅ Complete
-
-**AoT reconciliation decision loop** — Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram IDs preserved for every role.
+**AoT reconciliation decision loop** — Implement deterministic orchestration prompts, parallel Left/Right role-output aggregation, ArbiterOfTruth reconciliation execution gated on receiving both hemisphere responses, conditional CuriosityEngine escalation, voting/reconciliation on Arbiter rejection, and final decision response shaping with transaction IDs and diffgram IDs preserved for every invoked role.
 **Acceptance Criteria:**
-- [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
+- [x] Normal orchestration starts LeftHemisphere and RightHemisphere in parallel, gates ArbiterOfTruth until both responses complete, and returns final committed Arbiter output without invoking CuriosityEngine. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision; QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_StartsRightBeforeLeftCompletesAndGatesAotOnBoth)
+- [x] Quad role invocation requests set temperature through the provider option surface when available: RightHemisphere uses 0.0, while LeftHemisphere, CuriosityEngine, and ArbiterOfTruth leave temperature unset; prompts still carry role-specific descriptions without using temperature prompt text. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_BuildsRoleSpecificPromptInstructions; BrainSlotChatClientFactoryTests.BuildOpenAiCompatibleRequestJson_WhenTemperatureSupplied_IncludesTemperature)
+- [x] CuriosityEngine is invoked only when both hemispheres fail to produce valid committed output and does not directly produce the caller response. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenBothHemispheresProduceNoValidOutput_InvokesCuriosityWithoutReturningIt)
+- [x] Arbiter semantic rejection triggers a voting/reconciliation round before final failure. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenArbiterRejectsInitialEvidence_RunsVotingRound)
 - [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot)
-**Covered by:** `QuadBrainOrchestrationService`, `QuadBrainOrchestrationServiceTests`
+**Status:** ✅ Complete.
+
+**Covered by:** `QuadBrainOrchestrationServiceTests`
 
 ## TR-MCP-QUAD-007
-
-**Status:** ✅ Complete
 
 **Durable weight versioning and safety gates** — Persist role weights and versions on brain-slot definitions, enforce dual-control and safety-gate validation, audit before/after snapshots, and expose explicit weight update APIs.
 **Acceptance Criteria:**
 - [x] Weight updates require AoT approval, admin approval, safety gates, reason text, valid enabled roles, valid weights, and expected versions before mutation. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Approved updates persist weight/version/timestamp changes, audit before/after snapshots, and provide rollback metadata through the transaction coordinator. (evidence: QuadBrainOrchestrationService; AddBrainSlotWeights migrations; QuadBrainOrchestrationServiceTests)
-**Covered by:** `QuadBrainOrchestrationService`, `QuadBrainOrchestrationServiceTests`, `AddBrainSlotWeights` migrations
+**Status:** ✅ Complete.
+
+**Covered by:** `QuadBrainOrchestrationService`, `AddBrainSlotWeights` migrations, `QuadBrainOrchestrationServiceTests`
 
 ## TR-MCP-QUAD-SESSION-001
 
@@ -1231,7 +1240,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Triage REPL surface** — REPL parity for triage through client passthrough and typed workflow wrappers.
 **Acceptance Criteria:**
-- [x] All triage operations are available through client.triage.* and workflow.triage.* envelopes. (evidence: TriageClientTests, TriageWorkflowTests, and repl-yaml-message schema tests.)
+- [ ] All triage operations are available through client.triage.* and workflow.triage.* envelopes.
 
 ## TR-MCP-REQ-001
 
@@ -1248,7 +1257,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-REQ-004
 
-**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, `Requirements-Matrix.md`, and `.mcp-requirements-manifest.json` with generatedAtUtc. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
+**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, `Requirements-Matrix.md`, and `.mcp-requirements-manifest.json` with generatedAtUtc. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. The export writer SHALL temporarily clear read-only attributes on generated files during replacement/deletion and restore read-only on exported files before returning or after failed replacement attempts. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
 
 ## TR-MCP-REQ-005
 
@@ -1481,26 +1490,26 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 **Durable triage storage** — Durable EF entities store reports, groups, research runs, statuses, idempotency keys, and workspace filters.
 **Acceptance Criteria:**
-- [x] Triage reports, groups, and research runs persist in the MCP database and are query-filtered by workspace. (evidence: TriageServiceTests, AddTriageStorage migrations, and SubmitReportAsync_SameIdempotencyKey_ReturnsOriginalReportWithoutDuplicate.)
+- [ ] Triage reports, groups, and research runs persist in the MCP database and are query-filtered by workspace.
 
 ## TR-MCP-TRIAGE-002
 
 **Deterministic triage grouping** — The grouping service uses workspace, dedupeKey, component, path, symbol, error signature, normalized title tokens, and McpServer workspace routing for MCP Server core and plugin bugs.
 **Acceptance Criteria:**
-- [x] Matching reports in one workspace share a group; matching reports across workspaces do not unless routed to the registered McpServer workspace by MCP Server bug detection. (evidence: TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline and SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups.)
-- [x] MCP Server core and plugin bug reports target the registered McpServer workspace only when the workspace registry contains it. (evidence: TriageServiceTests.SubmitReportAsync_McpServerPluginBug_RoutesToRegisteredMcpServerWorkspace and SubmitReportAsync_McpServerPluginBugWithoutMcpServerWorkspace_StaysInSubmittingWorkspace.)
+- [ ] Matching reports in one workspace share a group; matching reports across workspaces do not unless routed to the registered McpServer workspace by MCP Server bug detection.
+- [ ] MCP Server core and plugin bug reports target the registered McpServer workspace only when the workspace registry contains it.
 
 ## TR-MCP-TRIAGE-003
 
 **Async triage worker** — A background worker handles quiet-period expiry, configured agent execution, prompt rendering, and timeouts.
 **Acceptance Criteria:**
-- [x] The worker dispatches only after the configured quiet period unless a group is manually flushed. (evidence: TriageQueueWorker, ConfiguredTriageResearchRunnerTests, and TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo.)
+- [ ] The worker dispatches only after the configured quiet period unless a group is manually flushed.
 
 ## TR-MCP-TRIAGE-004
 
 **Triage schema and TODO creation** — Triage research output is schema-validated and converted idempotently into BUG-TRIAGE TODOs.
 **Acceptance Criteria:**
-- [x] Valid research output creates one backlog TODO and failed output creates none. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo and ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure.)
+- [ ] Valid research output creates one backlog TODO and failed output creates none.
 
 ## TR-MCP-TUN-001
 
@@ -1711,23 +1720,88 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
 
+## TR-TRIAGE-CLIENT-001
+
+**Typed triage dashboard client endpoints** — SharpNinja.McpServer.Client exposes typed triage dashboard and run-history methods backed by REST endpoints for queue contents, groupings, AI triage runs, results, and current status.
+**Acceptance Criteria:**
+- [ ] McpServerClient.Triage exposes methods to query the dashboard, query runs, and get an individual run.
+- [ ] REST and client request/response models preserve status, result JSON, raw output, prompt metadata, created TODO id, errors, timestamps, and workspace filters.
+- [ ] Existing QueryGroupsAsync, GetGroupAsync, and GetReportAsync remain compatible for the planned shared UI.Core view model.
+
+## TR-TRIAGE-CLIENT-002
+
+**Typed triage TODO client endpoint** — REST, service, and SharpNinja.McpServer.Client typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and current triage status context.
+**Acceptance Criteria:**
+- [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+- [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
+- [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+
 ## TR-WFL-FULL-001
 
 **Complete Workflow TR** — Technical requirement for complete workflow test
 
-## TR-TRIAGE-CLIENT-001
+## TR-MCP-PLUGIN-PSONLY-001
 
-**Typed triage dashboard client endpoints** — `SharpNinja.McpServer.Client` exposes typed triage dashboard and run-history methods backed by REST endpoints for queue contents, groupings, AI triage runs, results, and current status.
+**PowerShell-only plugin runtime surface** — All generated plugin hook, REPL, cache, status, session, TODO, requirements, triage, and sync runtime paths are implemented as `.ps1` scripts and distributed through `SyncAgentPlugins`.
 **Acceptance Criteria:**
-- [x] `McpServerClient.Triage` exposes methods to query the dashboard, query runs, and get an individual run. (evidence: `TriageClientTests.GetDashboardAsync_SendsWorkspaceFilter`, `TriageClientTests.QueryRunsAsync_SendsFilters`, `TriageClientTests.GetRunAsync_SendsCorrectUrl`)
-- [x] REST and client request/response models preserve status, result JSON, raw output, prompt metadata, created TODO id, errors, timestamps, and workspace filters. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`)
-- [x] Existing `QueryGroupsAsync`, `GetGroupAsync`, and `GetReportAsync` remain compatible for the planned shared UI.Core view model. (evidence: existing `TriageClientTests` for group/report methods)
+- [x] `SyncAgentPlugins` publishes PowerShell runtime files to the staged plugin and all supported plugin repo roots. (evidence: sync-plugin-core.ps1, generate-wrappers.ps1)
+- [x] Generated plugin packages contain no `.sh`, `.bash`, `lib-sh`, `lib-node`, or JavaScript runtime helper files except the isolated PowerShell installer bootstrap. (evidence: ValidatePluginPowerShellOnly)
+- [x] Hook wrappers for Claude Code, Claude Cowork, Codex, Copilot, and Grok are generated as PowerShell wrappers. (evidence: PluginPowerShellRuntime.Tests.ps1)
 
-## TR-TRIAGE-CLIENT-002
+## TR-MCP-PLUGIN-PSONLY-002
 
-**Typed triage TODO client endpoint** — REST, service, and `SharpNinja.McpServer.Client` typed triage APIs expose a triage-created TODO index with TODO IDs, created-at datetimes, workspace filters, group IDs, run IDs, and current triage status context.
+**PowerShell-native payload construction and parity tests** — Plugin JSON, YAML, request-envelope, cache, session-log, TODO, requirements, triage, and status operations use PowerShell objects and serializers rather than Node helper scripts. Existing Bats coverage is preserved as Pester parity before Bash/Bats surfaces are removed.
 **Acceptance Criteria:**
-- [x] `McpServerClient.Triage` exposes a typed method for querying triage-created TODOs. (evidence: `TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter`)
-- [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: `TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex`)
-- [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
+- [x] Runtime payload creation and cache replay are implemented in PowerShell modules/scripts. (evidence: repl-invoke.ps1, cache-manager.ps1, plugin-hook.ps1)
+- [x] Every legacy Bats scenario has an inventoried Pester test case. (evidence: BATS-PESTER-PARITY.md, bats-pester-parity.generated.json)
+- [x] Pester static gates reject stale Bash, Node, and legacy REPL helper references in shipped plugin runtime and skill surfaces. (evidence: PluginPowerShellOnly.Tests.ps1, ValidatePluginPowerShellOnly)
+
+## TR-MCP-MARKER-TRIAGE-001
+
+**Marker Failure Triage Guidance** — The production `default-marker-prompt` template in `templates/prompt-templates.yaml` shall include explicit MCP Server and required-plugin failure reporting guidance. The guidance shall name the triage surfaces, require continuing the active task after submission, and forbid substitute reporting channels unless the user's active request is to fix that failure.
+**Acceptance Criteria:**
+- [x] The marker template contains a dedicated MCP/plugin failure reporting section. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The guidance renders through the production prompt template service, not only as source YAML text. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The marker template instructs agents to write failed triage submissions as normal failsafe YAML documents for later replay through the plugin/REPL failsafe or pending queue. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The marker template requires detailed triage reports for separate repair workflows involving code, docs, requirements, plugin skills, package sync, deployment, or configuration changes. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+
+## TR-MCP-REQSCOPE-001
+
+Requirement scope layer storage shall add durable workspace-isolated layer catalog rows with layer sunset metadata, requirement applicability fields, workspace current layer state, migrations for every database provider, and validation for invalid layer references.
+
+**Acceptance Criteria:**
+- [ ] SQLite, SQL Server, and PostgreSQL migrations add requirement scope layers with nullable layer end scope, requirement scope start/end fields, and workspace current layer state.
+- [ ] Migrations seed `layer-1`, backfill existing requirements to `layer-1+`, backfill existing layers to no sunset, and backfill existing workspaces to current layer `layer-1`.
+- [ ] Repository queries and mutations enforce workspace isolation for layer catalog, current layer, requirement scope fields, and effective results.
+- [ ] Validation reports corrupt or missing layer metadata without silently treating it as effective.
+
+## TR-MCP-REQSCOPE-002
+
+REST, client, and REPL surfaces shall expose requirement layer catalog operations, layer sunset updates, workspace current layer operations, effective requirement queries, and requirement scope fields consistently.
+
+**Acceptance Criteria:**
+- [ ] REST endpoints expose layer catalog CRUD, layer sunset updates, workspace current layer get/set, and effective requirement query operations.
+- [ ] `McpServerClient` exposes typed methods and DTOs for layer catalog, layer sunset, workspace current layer, effective requirements, and requirement scope fields.
+- [ ] REPL workflow wrappers expose layer catalog, layer sunset, workspace current layer, effective requirements, and scoped create/update/batch requirement operations.
+- [ ] YAML validation covers new scope fields, invalid layer combinations, and deprecated metadata consistency for workflow namespaces.
+
+## TR-MCP-REQSCOPE-003
+
+Requirements import and export shall round-trip requirement layer scope metadata for markdown and wiki documents while remaining backward compatible with old documents.
+
+**Acceptance Criteria:**
+- [ ] Markdown and wiki export render scope metadata for every FR, TR, and TEST requirement.
+- [ ] Import parses scope metadata and preserves `scopeStartLayerKey` and `scopeEndLayerKey`.
+- [ ] Missing scope metadata imports as `layer-1+` without changing old requirement semantics.
+- [ ] Export followed by import is idempotent for requirement scope metadata.
+
+## TR-MCP-REQSCOPE-004
+
+Current requirements enforcement and traceability validation shall use workspace current-layer effective requirements while retaining all-record metadata integrity checks.
+
+**Acceptance Criteria:**
+- [ ] Traceability enforcement for implementation completion checks only requirements effective at the workspace current layer.
+- [ ] Plan-wide validation scans all requirements for invalid layer keys, missing layers, and broken scope metadata.
+- [ ] A requirement acceptance criterion cannot be treated as complete unless a passing test references it.
+- [ ] No BDPv4 phase exits with failing, skipped, or unmapped acceptance-criterion coverage.
 

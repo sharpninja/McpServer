@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using McpServer.Client.Models;
 using Xunit;
 
 namespace McpServer.Client.Tests;
@@ -182,5 +183,42 @@ public sealed class WorkspaceClientTests
         Assert.Contains("/mcpserver/workspace/abc123/status", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.IsRunning);
         Assert.Equal(1234, result.Pid);
+    }
+
+    /// <summary>
+    /// TEST-MCP-WORKSPACE-LAYER-001 / TEST-MCP-REQSCOPE-005: workspace current
+    /// requirement layer client methods use the workspace endpoints and typed DTOs.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task CurrentRequirementLayerAsync_UsesWorkspaceEndpoints()
+    {
+        var getHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"currentLayerKey":"layer-2","layer":{"key":"layer-2","order":2,"name":"Layer 2"}}""");
+        using var getHttp = new HttpClient(getHandler);
+        var getClient = new WorkspaceClient(getHttp, DefaultOptions);
+
+        var current = await getClient.GetCurrentRequirementLayerAsync();
+
+        Assert.Equal(HttpMethod.Get, getHandler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/workspace/current-requirement-layer", getHandler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("layer-2", current.CurrentLayerKey);
+        Assert.Equal("Layer 2", current.Layer.Name);
+
+        var setHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"currentLayerKey":"layer-3","layer":{"key":"layer-3","order":3,"name":"Layer 3"}}""");
+        using var setHttp = new HttpClient(setHandler);
+        var setClient = new WorkspaceClient(setHttp, DefaultOptions);
+
+        var updated = await setClient.SetCurrentRequirementLayerAsync(new WorkspaceCurrentRequirementLayerUpdate
+        {
+            LayerKey = "layer-3"
+        });
+
+        Assert.Equal(HttpMethod.Put, setHandler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/workspace/current-requirement-layer", setHandler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"layerKey\":\"layer-3\"", setHandler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Equal("layer-3", updated.CurrentLayerKey);
     }
 }

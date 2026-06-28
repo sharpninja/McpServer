@@ -30,6 +30,10 @@ internal static class RequirementsDocumentParser
         @"^\*\*(?<title>.+?)\*\*\s*[—-]\s*(?<rest>.*)$",
         RegexOptions.Compiled);
 
+    private static readonly Regex s_scopeLineRegex = new(
+        @"^\s*(?:[-*]\s*)?(?:\*\*)?Scope(?:\*\*)?\s*:\s*(?<value>.+?)\s*$",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
     public static IReadOnlyList<FrEntry> ParseFunctional(string? content)
     {
         if (string.IsNullOrWhiteSpace(content))
@@ -43,11 +47,18 @@ internal static class RequirementsDocumentParser
 
             var id = match.Groups["id"].Value.Trim();
             var title = CleanHeadingTitle(match.Groups["title"].Value);
-            var (body, acceptanceCriteria) = SplitAcceptanceCriteria(NormalizeBody(match.Groups["body"].Value));
+            var (bodyWithScope, acceptanceCriteria) = SplitAcceptanceCriteria(NormalizeBody(match.Groups["body"].Value));
+            var (body, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(bodyWithScope);
             if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(title))
                 continue;
 
-            list.Add(new FrEntry(id, title, body, AcceptanceCriteria: acceptanceCriteria));
+            list.Add(new FrEntry(
+                id,
+                title,
+                body,
+                AcceptanceCriteria: acceptanceCriteria,
+                ScopeStartLayerKey: scopeStartLayerKey,
+                ScopeEndLayerKey: scopeEndLayerKey));
         }
 
         return list;
@@ -70,8 +81,15 @@ internal static class RequirementsDocumentParser
 
             var bodyRaw = NormalizeBody(match.Groups["body"].Value);
             var (title, bodyWithCriteria) = SplitTechnicalTitle(bodyRaw);
-            var (body, acceptanceCriteria) = SplitAcceptanceCriteria(bodyWithCriteria);
-            list.Add(new TrEntry(id, title, body, AcceptanceCriteria: acceptanceCriteria));
+            var (bodyWithScope, acceptanceCriteria) = SplitAcceptanceCriteria(bodyWithCriteria);
+            var (body, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(bodyWithScope);
+            list.Add(new TrEntry(
+                id,
+                title,
+                body,
+                AcceptanceCriteria: acceptanceCriteria,
+                ScopeStartLayerKey: scopeStartLayerKey,
+                ScopeEndLayerKey: scopeEndLayerKey));
         }
 
         return list;
@@ -259,6 +277,52 @@ internal static class RequirementsDocumentParser
         return (NormalizeBody(string.Join('\n', bodyLines)), criteria);
     }
 
+    private static (string Body, string ScopeStartLayerKey, string? ScopeEndLayerKey) SplitScopeMetadata(string body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return (string.Empty, RequirementScopeLayerDefaults.DefaultLayerKey, null);
+
+        var bodyLines = new List<string>();
+        var scopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey;
+        string? scopeEndLayerKey = null;
+        foreach (var line in NormalizeLines(body))
+        {
+            var match = s_scopeLineRegex.Match(line);
+            if (!match.Success)
+            {
+                bodyLines.Add(line);
+                continue;
+            }
+
+            (scopeStartLayerKey, scopeEndLayerKey) = ParseScopeValue(match.Groups["value"].Value);
+        }
+
+        return (NormalizeBody(string.Join('\n', bodyLines)), scopeStartLayerKey, scopeEndLayerKey);
+    }
+
+    private static (string StartLayerKey, string? EndLayerKey) ParseScopeValue(string raw)
+    {
+        var value = (raw ?? string.Empty).Trim().Trim('`').Trim();
+        if (string.IsNullOrWhiteSpace(value))
+            return (RequirementScopeLayerDefaults.DefaultLayerKey, null);
+
+        if (value.EndsWith('+'))
+        {
+            var start = value[..^1].Trim();
+            return (string.IsNullOrWhiteSpace(start) ? RequirementScopeLayerDefaults.DefaultLayerKey : start, null);
+        }
+
+        var parts = value.Split("..", 2, StringSplitOptions.TrimEntries);
+        if (parts.Length == 2)
+        {
+            var start = string.IsNullOrWhiteSpace(parts[0]) ? RequirementScopeLayerDefaults.DefaultLayerKey : parts[0];
+            var end = string.IsNullOrWhiteSpace(parts[1]) ? null : parts[1];
+            return (start, end);
+        }
+
+        return (value, null);
+    }
+
     private static string NormalizeBody(string body)
     {
         if (string.IsNullOrWhiteSpace(body))
@@ -355,7 +419,7 @@ internal static class RequirementsDocumentParser
         IReadOnlyList<AcceptanceCriterion> criteria)
     {
         var id = rawId.Trim();
-        var condition = rawCondition.Trim();
+        var (condition, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(rawCondition.Trim());
         if (string.IsNullOrWhiteSpace(id)
             || string.IsNullOrWhiteSpace(condition)
             || !id.StartsWith("TEST-", StringComparison.OrdinalIgnoreCase)
@@ -364,7 +428,12 @@ internal static class RequirementsDocumentParser
             return;
         }
 
-        entries.Add(new TestEntry(id, condition, AcceptanceCriteria: criteria));
+        entries.Add(new TestEntry(
+            id,
+            condition,
+            AcceptanceCriteria: criteria,
+            ScopeStartLayerKey: scopeStartLayerKey,
+            ScopeEndLayerKey: scopeEndLayerKey));
     }
 
     private static void AddTestEntry(

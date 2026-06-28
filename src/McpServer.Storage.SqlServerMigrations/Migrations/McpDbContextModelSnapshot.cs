@@ -1265,6 +1265,17 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasColumnType("nvarchar(32)")
                         .HasDefaultValue("medium");
 
+                    b.Property<string>("ScopeEndLayerKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ScopeStartLayerKey")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)")
+                        .HasDefaultValue("layer-1");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -1290,7 +1301,70 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasIndex("WorkspaceId", "Id");
 
+                    b.HasIndex("WorkspaceId", "ScopeEndLayerKey");
+
+                    b.HasIndex("WorkspaceId", "ScopeStartLayerKey");
+
                     b.ToTable("Requirements");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementScopeLayerEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("Key")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ScopeEndLayerKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("WorkspaceId", "Key");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "Order")
+                        .IsUnique();
+
+                    b.HasIndex("WorkspaceId", "ScopeEndLayerKey");
+
+                    b.ToTable("RequirementScopeLayers");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementTraceabilityLinkEntity", b =>
@@ -2735,6 +2809,11 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("BannedOrganizationsJson")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CurrentRequirementLayerKey")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<string>("DataDirectory")
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
@@ -2819,6 +2898,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         new
                         {
                             WorkspaceId = "",
+                            CurrentRequirementLayerKey = "layer-1",
                             DateTimeCreated = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DateTimeModified = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -3023,6 +3103,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementScopeLayerEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()
