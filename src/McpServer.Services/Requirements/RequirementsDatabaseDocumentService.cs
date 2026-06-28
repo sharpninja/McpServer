@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
@@ -50,15 +51,19 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     /// <summary>Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria.</summary>
     private static FrEntry MapFr(RequirementEntity x) =>
-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
 
     /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
     private static TrEntry MapTr(RequirementEntity x) =>
-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
 
     /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria.</summary>
     private static TestEntry MapTest(RequirementEntity x) =>
-        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
+        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+
+    /// <summary>Maps a stored requirement scope layer row to the public model.</summary>
+    private static RequirementScopeLayerEntry MapLayer(RequirementScopeLayerEntity x) =>
+        new(x.Key, x.Order, x.Name, x.Description, x.ScopeEndLayerKey, x.WorkspaceId, x.CreatedAtUtc, x.UpdatedAtUtc);
 
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly RequirementsOptions _options;
@@ -84,6 +89,186 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     /// <inheritdoc />
     public void Dispose() => _writeLock.Dispose();
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<RequirementScopeLayerEntry>> GetRequirementLayersAsync(CancellationToken ct = default)
+    {
+        await using var scope = CreateScope();
+        var ctx = scope.Context;
+        await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+        var rows = await ctx.RequirementScopeLayers
+            .AsNoTracking()
+            .OrderBy(x => x.Order)
+            .ThenBy(x => x.Key)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        return rows.Select(MapLayer).ToArray();
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementScopeLayerEntry> CreateRequirementLayerAsync(RequirementScopeLayerEntry entry, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(entry);
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            var workspaceId = RequireWorkspaceId(ctx);
+            var normalized = NormalizeLayerEntry(entry, workspaceId);
+
+            if (await ctx.RequirementScopeLayers.AnyAsync(x => x.Key == normalized.Key, ct).ConfigureAwait(false))
+                throw new RequirementsConflictException($"Requirement scope layer '{normalized.Key}' already exists.");
+            if (await ctx.RequirementScopeLayers.AnyAsync(x => x.Order == normalized.Order, ct).ConfigureAwait(false))
+                throw new RequirementsConflictException($"Requirement scope layer order '{normalized.Order}' already exists.");
+
+            await ValidateLayerSunsetAsync(ctx, normalized.Key, normalized.Order, normalized.ScopeEndLayerKey, allowSelf: true, ct).ConfigureAwait(false);
+            var now = DateTimeOffset.UtcNow;
+            var row = new RequirementScopeLayerEntity
+            {
+                WorkspaceId = workspaceId,
+                Key = normalized.Key,
+                Order = normalized.Order,
+                Name = normalized.Name,
+                Description = normalized.Description,
+                ScopeEndLayerKey = NormalizeOptionalLayerKey(normalized.ScopeEndLayerKey),
+                CreatedAtUtc = now,
+                UpdatedAtUtc = now
+            };
+
+            ctx.RequirementScopeLayers.Add(row);
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+            return MapLayer(row);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementScopeLayerEntry> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequest request, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            var key = NormalizeLayerKey(request.Key);
+            var row = await ctx.RequirementScopeLayers.FirstOrDefaultAsync(x => x.Key == key, ct).ConfigureAwait(false)
+                ?? throw new RequirementsNotFoundException($"Requirement scope layer '{key}' was not found.");
+
+            if (request.Order.HasValue && request.Order.Value != row.Order)
+                throw new InvalidOperationException("Requirement scope layer order is immutable.");
+
+            if (!string.IsNullOrWhiteSpace(request.Name))
+                row.Name = request.Name.Trim();
+            if (request.Description is not null)
+                row.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
+            if (request.ScopeEndLayerKey is not null)
+            {
+                var scopeEnd = NormalizeOptionalLayerKey(request.ScopeEndLayerKey);
+                await ValidateLayerSunsetAsync(ctx, row.Key, row.Order, scopeEnd, allowSelf: true, ct).ConfigureAwait(false);
+                row.ScopeEndLayerKey = scopeEnd;
+            }
+
+            row.UpdatedAtUtc = DateTimeOffset.UtcNow;
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+            return MapLayer(row);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementScopeLayerEntry> GetWorkspaceCurrentRequirementLayerAsync(CancellationToken ct = default)
+    {
+        await using var scope = CreateScope();
+        var ctx = scope.Context;
+        await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+        var workspace = await EnsureWorkspaceRowAsync(ctx, RequireWorkspaceId(ctx), ct).ConfigureAwait(false);
+        var layer = await FindLayerAsync(ctx, workspace.CurrentRequirementLayerKey, ct).ConfigureAwait(false);
+        return MapLayer(layer);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementScopeLayerEntry> SetWorkspaceCurrentRequirementLayerAsync(string layerKey, CancellationToken ct = default)
+    {
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            var normalizedKey = NormalizeLayerKey(layerKey);
+            var layer = await FindLayerAsync(ctx, normalizedKey, ct).ConfigureAwait(false);
+            var workspace = await EnsureWorkspaceRowAsync(ctx, RequireWorkspaceId(ctx), ct).ConfigureAwait(false);
+            workspace.CurrentRequirementLayerKey = normalizedKey;
+            workspace.DateTimeModified = DateTimeOffset.UtcNow;
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+            return MapLayer(layer);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default)
+    {
+        await using var scope = CreateScope();
+        var ctx = scope.Context;
+        await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+        var workspace = await EnsureWorkspaceRowAsync(ctx, RequireWorkspaceId(ctx), ct).ConfigureAwait(false);
+        var resolvedKey = string.IsNullOrWhiteSpace(layerKey) ? workspace.CurrentRequirementLayerKey : NormalizeLayerKey(layerKey);
+        var currentLayer = await FindLayerAsync(ctx, resolvedKey, ct).ConfigureAwait(false);
+        var layers = await ctx.RequirementScopeLayers.AsNoTracking().ToListAsync(ct).ConfigureAwait(false);
+        var layerOrders = layers.ToDictionary(x => x.Key, x => x.Order, StringComparer.OrdinalIgnoreCase);
+        var layerEndOrders = layers.ToDictionary(
+            x => x.Key,
+            x => string.IsNullOrWhiteSpace(x.ScopeEndLayerKey) ? (int?)null : layerOrders[x.ScopeEndLayerKey!],
+            StringComparer.OrdinalIgnoreCase);
+        var rows = await ctx.Requirements
+            .AsNoTracking()
+            .OrderBy(x => x.Kind)
+            .ThenBy(x => x.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        var effectiveRows = rows
+            .Where(row => IsRequirementEffective(row, currentLayer.Order, layerOrders, layerEndOrders))
+            .ToList();
+        var effectiveKeys = effectiveRows
+            .Select(row => $"{row.Kind}\0{row.Id}")
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var links = await ctx.RequirementTraceabilityLinks
+            .AsNoTracking()
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        var effectiveLinks = links
+            .Where(link => effectiveKeys.Contains($"{FrKind}\0{link.FrId}") && effectiveKeys.Contains($"{link.TargetKind}\0{link.TargetId}"))
+            .GroupBy(link => link.FrId, StringComparer.OrdinalIgnoreCase)
+            .Select(group => new FrTrMapping(
+                group.Key,
+                group.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+                group.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+                RequireWorkspaceId(ctx)))
+            .ToArray();
+
+        return new EffectiveRequirementsResult(
+            MapLayer(currentLayer),
+            effectiveRows.Where(x => x.Kind == FrKind).Select(MapFr).ToArray(),
+            effectiveRows.Where(x => x.Kind == TrKind).Select(MapTr).ToArray(),
+            effectiveRows.Where(x => x.Kind == TestKind).Select(MapTest).ToArray(),
+            effectiveLinks);
+    }
 
     /// <inheritdoc />
     public async Task<RequirementsCompensationSnapshot> CaptureRequirementsSnapshotAsync(CancellationToken cancellationToken = default)
@@ -246,14 +431,14 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public async Task AddFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
+        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -325,14 +510,14 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public async Task AddTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -387,14 +572,14 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public async Task AddTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await AddRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await UpdateRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -424,6 +609,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             var toInsert = new List<RequirementBatchValue>();
             foreach (var value in EnumerateBatch(entries))
             {
+                _ = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);
                 bool exists = await ctx.Requirements.AnyAsync(x => x.Kind == value.Kind && x.Id == value.Id, ct).ConfigureAwait(false);
                 if (!exists)
                 {
@@ -434,6 +620,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
             foreach (var value in toInsert)
             {
+                var requirementScope = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);
                 ctx.Requirements.Add(new RequirementEntity
                 {
                     WorkspaceId = workspaceId,
@@ -445,6 +632,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                     Status = NormalizeStatus(value.Status),
                     Notes = value.Notes,
                     AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria),
+                    ScopeStartLayerKey = requirementScope.Start,
+                    ScopeEndLayerKey = requirementScope.End,
                     CreatedAtUtc = now,
                     UpdatedAtUtc = now
                 });
@@ -483,18 +672,22 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             {
                 var row = await FindRequirementAsync(ctx, value.Kind, value.Id, asTracking: true, ct).ConfigureAwait(false)
                     ?? throw new RequirementsNotFoundException($"{value.Kind.ToUpperInvariant()} '{value.Id}' was not found.");
+                _ = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);
                 updates.Add((row, value));
             }
 
             var now = Now();
             foreach (var (row, value) in updates)
             {
+                var requirementScope = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);
                 row.Title = value.Title;
                 row.Body = value.Body;
                 row.Priority = NormalizePriority(value.Priority);
                 row.Status = NormalizeStatus(value.Status);
                 row.Notes = value.Notes;
                 row.AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria);
+                row.ScopeStartLayerKey = requirementScope.Start;
+                row.ScopeEndLayerKey = requirementScope.End;
                 row.UpdatedAtUtc = now;
             }
 
@@ -706,7 +899,18 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             ct).ConfigureAwait(false);
     }
 
-    private async Task AddRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria, CancellationToken ct)
+    private async Task AddRequirementAsync(
+        string kind,
+        string id,
+        string title,
+        string body,
+        string priority,
+        string status,
+        string? notes,
+        IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria,
+        string? scopeStartLayerKey,
+        string? scopeEndLayerKey,
+        CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -714,6 +918,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await using var scope = CreateScope();
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            var requirementScope = await ValidateRequirementScopeAsync(ctx, scopeStartLayerKey, scopeEndLayerKey, ct).ConfigureAwait(false);
             var existing = await ctx.Requirements
                 .IgnoreQueryFilters(SoftDeleteQueryFilter)
                 .FirstOrDefaultAsync(x => x.Kind == kind && x.Id == id, ct)
@@ -735,6 +940,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                     Status = NormalizeStatus(status),
                     Notes = notes,
                     AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria),
+                    ScopeStartLayerKey = requirementScope.Start,
+                    ScopeEndLayerKey = requirementScope.End,
                     CreatedAtUtc = now,
                     UpdatedAtUtc = now
                 });
@@ -747,6 +954,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 existing.Status = NormalizeStatus(status);
                 existing.Notes = notes;
                 existing.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
+                existing.ScopeStartLayerKey = requirementScope.Start;
+                existing.ScopeEndLayerKey = requirementScope.End;
                 existing.CreatedAtUtc = now;
                 existing.UpdatedAtUtc = now;
                 ClearSoftDelete(ctx, existing);
@@ -761,7 +970,18 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private async Task UpdateRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria, CancellationToken ct)
+    private async Task UpdateRequirementAsync(
+        string kind,
+        string id,
+        string title,
+        string body,
+        string priority,
+        string status,
+        string? notes,
+        IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria,
+        string? scopeStartLayerKey,
+        string? scopeEndLayerKey,
+        CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -769,6 +989,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await using var scope = CreateScope();
             var ctx = scope.Context;
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            var requirementScope = await ValidateRequirementScopeAsync(ctx, scopeStartLayerKey, scopeEndLayerKey, ct).ConfigureAwait(false);
             var row = await FindRequirementAsync(ctx, kind, id, asTracking: true, ct).ConfigureAwait(false)
                 ?? throw new RequirementsNotFoundException($"{kind.ToUpperInvariant()} '{id}' was not found.");
             row.Title = title;
@@ -777,6 +998,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             row.Status = NormalizeStatus(status);
             row.Notes = notes;
             row.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
+            row.ScopeStartLayerKey = requirementScope.Start;
+            row.ScopeEndLayerKey = requirementScope.End;
             row.UpdatedAtUtc = Now();
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, id, ct).ConfigureAwait(false);
@@ -790,11 +1013,11 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static IEnumerable<RequirementBatchValue> EnumerateBatch(RequirementsBatchEntries entries)
     {
         foreach (var entry in entries.Functional)
-            yield return new RequirementBatchValue(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
+            yield return new RequirementBatchValue(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey);
         foreach (var entry in entries.Technical)
-            yield return new RequirementBatchValue(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
+            yield return new RequirementBatchValue(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey);
         foreach (var entry in entries.Testing)
-            yield return new RequirementBatchValue(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
+            yield return new RequirementBatchValue(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey);
     }
 
     private static RequirementsBatchEntries NormalizeBatchResult(RequirementsBatchEntries entries, string workspaceId) =>
@@ -804,7 +1027,9 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 {
                     WorkspaceId = workspaceId,
                     Priority = NormalizePriority(entry.Priority),
-                    Status = NormalizeStatus(entry.Status)
+                    Status = NormalizeStatus(entry.Status),
+                    ScopeStartLayerKey = string.IsNullOrWhiteSpace(entry.ScopeStartLayerKey) ? RequirementScopeLayerDefaults.DefaultLayerKey : entry.ScopeStartLayerKey.Trim(),
+                    ScopeEndLayerKey = NormalizeOptionalLayerKey(entry.ScopeEndLayerKey)
                 })
                 .ToArray(),
             entries.Technical
@@ -812,7 +1037,9 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 {
                     WorkspaceId = workspaceId,
                     Priority = NormalizePriority(entry.Priority),
-                    Status = NormalizeStatus(entry.Status)
+                    Status = NormalizeStatus(entry.Status),
+                    ScopeStartLayerKey = string.IsNullOrWhiteSpace(entry.ScopeStartLayerKey) ? RequirementScopeLayerDefaults.DefaultLayerKey : entry.ScopeStartLayerKey.Trim(),
+                    ScopeEndLayerKey = NormalizeOptionalLayerKey(entry.ScopeEndLayerKey)
                 })
                 .ToArray(),
             entries.Testing
@@ -820,7 +1047,9 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 {
                     WorkspaceId = workspaceId,
                     Priority = NormalizePriority(entry.Priority),
-                    Status = NormalizeStatus(entry.Status)
+                    Status = NormalizeStatus(entry.Status),
+                    ScopeStartLayerKey = string.IsNullOrWhiteSpace(entry.ScopeStartLayerKey) ? RequirementScopeLayerDefaults.DefaultLayerKey : entry.ScopeStartLayerKey.Trim(),
+                    ScopeEndLayerKey = NormalizeOptionalLayerKey(entry.ScopeEndLayerKey)
                 })
                 .ToArray());
 
@@ -921,6 +1150,10 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     private async Task EnsureBootstrappedAsync(McpDbContext ctx, CancellationToken ct)
     {
+        var workspaceId = RequireWorkspaceId(ctx);
+        await EnsureWorkspaceRowAsync(ctx, workspaceId, ct).ConfigureAwait(false);
+        await EnsureDefaultLayerAsync(ctx, workspaceId, ct).ConfigureAwait(false);
+
         if (await ctx.Requirements.AnyAsync(ct).ConfigureAwait(false))
             return;
 
@@ -929,7 +1162,6 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             return;
 
         var now = Now();
-        var workspaceId = RequireWorkspaceId(ctx);
         var staleLinks = await ctx.RequirementTraceabilityLinks.ToListAsync(ct).ConfigureAwait(false);
         if (staleLinks.Count > 0)
         {
@@ -942,19 +1174,19 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         {
             if (!importedRequirements.Add($"{FrKind}\0{entry.Id}"))
                 continue;
-            ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = FrKind, Id = entry.Id, Title = entry.Title, Body = entry.Body, CreatedAtUtc = now, UpdatedAtUtc = now });
+            ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = FrKind, Id = entry.Id, Title = entry.Title, Body = entry.Body, ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey, CreatedAtUtc = now, UpdatedAtUtc = now });
         }
         foreach (var entry in RequirementsDocumentParser.ParseTechnical(ReadFileIfExists(paths.Technical)))
         {
             if (!importedRequirements.Add($"{TrKind}\0{entry.Id}"))
                 continue;
-            ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = TrKind, Id = entry.Id, Title = entry.Title, Body = entry.Body, CreatedAtUtc = now, UpdatedAtUtc = now });
+            ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = TrKind, Id = entry.Id, Title = entry.Title, Body = entry.Body, ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey, CreatedAtUtc = now, UpdatedAtUtc = now });
         }
         foreach (var entry in RequirementsDocumentParser.ParseTesting(ReadFileIfExists(paths.Testing)))
         {
             if (!importedRequirements.Add($"{TestKind}\0{entry.Id}"))
                 continue;
-            ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = TestKind, Id = entry.Id, Title = string.Empty, Body = entry.Condition, CreatedAtUtc = now, UpdatedAtUtc = now });
+            ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = TestKind, Id = entry.Id, Title = string.Empty, Body = entry.Condition, ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey, CreatedAtUtc = now, UpdatedAtUtc = now });
         }
 
         var importedLinks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -978,6 +1210,50 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             }
         }
 
+        await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+    }
+
+    private static async Task<WorkspaceEntity> EnsureWorkspaceRowAsync(McpDbContext ctx, string workspaceId, CancellationToken ct)
+    {
+        var workspace = await ctx.Workspaces.FirstOrDefaultAsync(x => x.WorkspaceId == workspaceId, ct).ConfigureAwait(false);
+        if (workspace is not null)
+        {
+            if (string.IsNullOrWhiteSpace(workspace.CurrentRequirementLayerKey))
+                workspace.CurrentRequirementLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey;
+            return workspace;
+        }
+
+        workspace = new WorkspaceEntity
+        {
+            WorkspaceId = workspaceId,
+            WorkspacePath = workspaceId,
+            Name = string.IsNullOrWhiteSpace(Path.GetFileName(workspaceId)) ? "workspace" : Path.GetFileName(workspaceId),
+            TodoPath = "docs/todo.yaml",
+            CurrentRequirementLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
+            IsEnabled = true,
+            DateTimeCreated = DateTimeOffset.UtcNow,
+            DateTimeModified = DateTimeOffset.UtcNow
+        };
+        ctx.Workspaces.Add(workspace);
+        await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+        return workspace;
+    }
+
+    private static async Task EnsureDefaultLayerAsync(McpDbContext ctx, string workspaceId, CancellationToken ct)
+    {
+        if (await ctx.RequirementScopeLayers.AnyAsync(x => x.Key == RequirementScopeLayerDefaults.DefaultLayerKey, ct).ConfigureAwait(false))
+            return;
+
+        var now = DateTimeOffset.UtcNow;
+        ctx.RequirementScopeLayers.Add(new RequirementScopeLayerEntity
+        {
+            WorkspaceId = workspaceId,
+            Key = RequirementScopeLayerDefaults.DefaultLayerKey,
+            Order = 1,
+            Name = "Layer 1",
+            CreatedAtUtc = now,
+            UpdatedAtUtc = now
+        });
         await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
     }
 
@@ -1190,6 +1466,108 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static bool IdEquals(string left, string right) =>
         string.Equals(left?.Trim(), right?.Trim(), StringComparison.OrdinalIgnoreCase);
 
+    private static RequirementScopeLayerEntry NormalizeLayerEntry(RequirementScopeLayerEntry entry, string workspaceId)
+    {
+        var key = NormalizeLayerKey(entry.Key);
+        if (entry.Order < 1)
+            throw new ArgumentException("Requirement scope layer order must be greater than zero.", nameof(entry));
+        var name = string.IsNullOrWhiteSpace(entry.Name) ? key : entry.Name.Trim();
+        return entry with
+        {
+            Key = key,
+            Name = name,
+            Description = string.IsNullOrWhiteSpace(entry.Description) ? null : entry.Description.Trim(),
+            ScopeEndLayerKey = NormalizeOptionalLayerKey(entry.ScopeEndLayerKey),
+            WorkspaceId = workspaceId
+        };
+    }
+
+    private static string NormalizeLayerKey(string? key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentException("Requirement scope layer key is required.", nameof(key));
+
+        var normalized = key.Trim();
+        if (!Regex.IsMatch(normalized, @"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$", RegexOptions.CultureInvariant))
+            throw new ArgumentException($"Requirement scope layer key '{key}' is invalid.", nameof(key));
+        return normalized;
+    }
+
+    private static string? NormalizeOptionalLayerKey(string? key) =>
+        string.IsNullOrWhiteSpace(key) ? null : NormalizeLayerKey(key);
+
+    private static async Task<RequirementScopeLayerEntity> FindLayerAsync(McpDbContext ctx, string key, CancellationToken ct)
+    {
+        var normalized = NormalizeLayerKey(key);
+        return await ctx.RequirementScopeLayers.FirstOrDefaultAsync(x => x.Key == normalized, ct).ConfigureAwait(false)
+            ?? throw new RequirementsNotFoundException($"Requirement scope layer '{normalized}' was not found.");
+    }
+
+    private static async Task ValidateLayerSunsetAsync(
+        McpDbContext ctx,
+        string layerKey,
+        int layerOrder,
+        string? scopeEndLayerKey,
+        bool allowSelf,
+        CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(scopeEndLayerKey))
+            return;
+
+        var endKey = NormalizeLayerKey(scopeEndLayerKey);
+        if (allowSelf && IdEquals(layerKey, endKey))
+            return;
+
+        var endLayer = await FindLayerAsync(ctx, endKey, ct).ConfigureAwait(false);
+        if (endLayer.Order < layerOrder)
+            throw new InvalidOperationException("Requirement scope layer sunset cannot be before the layer being sunset.");
+    }
+
+    private static async Task<(string Start, string? End)> ValidateRequirementScopeAsync(
+        McpDbContext ctx,
+        string? scopeStartLayerKey,
+        string? scopeEndLayerKey,
+        CancellationToken ct)
+    {
+        var startKey = string.IsNullOrWhiteSpace(scopeStartLayerKey)
+            ? RequirementScopeLayerDefaults.DefaultLayerKey
+            : NormalizeLayerKey(scopeStartLayerKey);
+        var startLayer = await FindLayerAsync(ctx, startKey, ct).ConfigureAwait(false);
+        var endKey = NormalizeOptionalLayerKey(scopeEndLayerKey);
+        if (endKey is null)
+            return (startKey, null);
+
+        var endLayer = await FindLayerAsync(ctx, endKey, ct).ConfigureAwait(false);
+        if (endLayer.Order < startLayer.Order)
+            throw new InvalidOperationException("Requirement scope end layer cannot be before its start layer.");
+        return (startKey, endKey);
+    }
+
+    private static bool IsRequirementEffective(
+        RequirementEntity row,
+        int currentOrder,
+        IReadOnlyDictionary<string, int> layerOrders,
+        IReadOnlyDictionary<string, int?> layerEndOrders)
+    {
+        if (!layerOrders.TryGetValue(row.ScopeStartLayerKey, out var startOrder))
+            return false;
+        if (startOrder > currentOrder)
+            return false;
+
+        int? effectiveEnd = null;
+        if (!string.IsNullOrWhiteSpace(row.ScopeEndLayerKey))
+        {
+            if (!layerOrders.TryGetValue(row.ScopeEndLayerKey, out var requirementEndOrder))
+                return false;
+            effectiveEnd = requirementEndOrder;
+        }
+
+        if (layerEndOrders.TryGetValue(row.ScopeStartLayerKey, out var layerEndOrder) && layerEndOrder.HasValue)
+            effectiveEnd = effectiveEnd.HasValue ? Math.Min(effectiveEnd.Value, layerEndOrder.Value) : layerEndOrder.Value;
+
+        return !effectiveEnd.HasValue || effectiveEnd.Value >= currentOrder;
+    }
+
     private static string RequireWorkspaceId(McpDbContext ctx) =>
         string.IsNullOrWhiteSpace(ctx.CurrentWorkspaceId)
             ? throw new InvalidOperationException("Requirements operations require a resolved workspace.")
@@ -1314,6 +1692,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             Status = source.Status,
             Notes = source.Notes,
             AcceptanceCriteriaJson = source.AcceptanceCriteriaJson,
+            ScopeStartLayerKey = source.ScopeStartLayerKey,
+            ScopeEndLayerKey = source.ScopeEndLayerKey,
             CreatedAtUtc = source.CreatedAtUtc,
             UpdatedAtUtc = source.UpdatedAtUtc,
         };
@@ -1327,6 +1707,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         target.Status = source.Status;
         target.Notes = source.Notes;
         target.AcceptanceCriteriaJson = source.AcceptanceCriteriaJson;
+        target.ScopeStartLayerKey = source.ScopeStartLayerKey;
+        target.ScopeEndLayerKey = source.ScopeEndLayerKey;
         target.CreatedAtUtc = source.CreatedAtUtc;
         target.UpdatedAtUtc = source.UpdatedAtUtc;
     }
@@ -1425,7 +1807,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private readonly record struct RequirementBatchValue(string Kind, string Id, string Title, string Body, string Priority, string Status, string? Notes, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria);
+    private readonly record struct RequirementBatchValue(string Kind, string Id, string Title, string Body, string Priority, string Status, string? Notes, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria, string ScopeStartLayerKey, string? ScopeEndLayerKey);
 
     private readonly record struct RequirementDocumentPaths(string Functional, string Technical, string Testing, string Mapping, string Matrix);
 

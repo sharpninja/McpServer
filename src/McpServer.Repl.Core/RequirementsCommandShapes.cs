@@ -39,8 +39,12 @@ namespace McpServer.Repl.Core;
 /// <item><c>workflow.requirements.createMapping</c> — Create new requirement mapping</item>
 /// <item><c>workflow.requirements.deleteMapping</c> — Delete requirement mapping</item>
 /// <item><c>workflow.requirements.generateDocument</c> — Generate formatted requirement document</item>
-/// <item><c>workflow.requirements.ingestDocument</c> — Ingest external requirement document</item>
-/// <item><c>workflow.requirements.currentSelection</c> — Get current FR/TR/TEST selection state</item>
+    /// <item><c>workflow.requirements.ingestDocument</c> — Ingest external requirement document</item>
+    /// <item><c>workflow.requirements.listLayers</c> — List requirement scope layers</item>
+    /// <item><c>workflow.requirements.createLayer</c> — Create requirement scope layer</item>
+    /// <item><c>workflow.requirements.updateLayer</c> — Update requirement scope layer</item>
+    /// <item><c>workflow.requirements.effective</c> — Query effective requirements by layer</item>
+    /// <item><c>workflow.requirements.currentSelection</c> — Get current FR/TR/TEST selection state</item>
 /// </list>
 /// </para>
 /// <para>
@@ -297,6 +301,30 @@ public static class RequirementsCommandShapes
     /// Method: <c>workflow.requirements.ingestDocument</c>
     /// </summary>
     public const string IngestDocumentMethod = "workflow.requirements.ingestDocument";
+
+    /// <summary>
+    /// Command method for listing requirement scope layers.
+    /// Method: <c>workflow.requirements.listLayers</c>
+    /// </summary>
+    public const string ListLayersMethod = "workflow.requirements.listLayers";
+
+    /// <summary>
+    /// Command method for creating a requirement scope layer.
+    /// Method: <c>workflow.requirements.createLayer</c>
+    /// </summary>
+    public const string CreateLayerMethod = "workflow.requirements.createLayer";
+
+    /// <summary>
+    /// Command method for updating a requirement scope layer.
+    /// Method: <c>workflow.requirements.updateLayer</c>
+    /// </summary>
+    public const string UpdateLayerMethod = "workflow.requirements.updateLayer";
+
+    /// <summary>
+    /// Command method for querying effective requirements at a layer.
+    /// Method: <c>workflow.requirements.effective</c>
+    /// </summary>
+    public const string EffectiveMethod = "workflow.requirements.effective";
 
     /// <summary>
     /// Command method for getting current FR/TR/TEST selection state.

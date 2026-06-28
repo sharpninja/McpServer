@@ -77,6 +77,11 @@ public sealed class WorkspaceEntity
     [MaxLength(2048)]
     public string? AgentPath { get; set; }
 
+    /// <summary>FR-MCP-WORKSPACE-LAYER-001: current requirement scope layer for this workspace.</summary>
+    [Required]
+    [MaxLength(128)]
+    public string CurrentRequirementLayerKey { get; set; } = "layer-1";
+
     /// <summary>UTC timestamp when this workspace was first registered.</summary>
     public DateTimeOffset DateTimeCreated { get; set; }
 

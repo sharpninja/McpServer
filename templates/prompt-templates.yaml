@@ -353,6 +353,11 @@ templates:
       - Claude Code agents must trigger the `claude-hook-validation` skill during marker/plugin bootstrap. That skill validates active Claude settings for MCP `UserPromptSubmit`, `Stop`, and `PostToolUse` hook commands from `hooks/hooks.json`; if any required hook is missing, it uses `install-claude-mcp-hooks.ps1` from the `claude-hook-wiring` skill to merge MCP hooks into active Claude settings without replacing existing hooks. Restart Claude Code after the skill reports installed hooks.
 
 
+      ## MCP Requirements Visibility
+
+      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent''s requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, or equivalent plugin tool). Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
+
+
       ## MCP and Plugin Failure Reporting
 
       - MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only. Use the active agent''s triage surface (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) with the failing command or endpoint, observed error, workspace path, and relevant component.

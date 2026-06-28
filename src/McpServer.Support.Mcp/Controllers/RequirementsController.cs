@@ -50,6 +50,90 @@ public sealed class RequirementsController : ControllerBase
         _transactionOptions = transactionOptions;
     }
 
+    /// <summary>Gets requirement scope layers for the active workspace.</summary>
+    [HttpGet("layers")]
+    public async Task<ActionResult<IReadOnlyList<RequirementScopeLayerEntry>>> GetRequirementLayersAsync(CancellationToken cancellationToken)
+    {
+        var layers = await _requirements.GetRequirementLayersAsync(cancellationToken).ConfigureAwait(false);
+        return Ok(layers);
+    }
+
+    /// <summary>Creates a requirement scope layer for the active workspace.</summary>
+    [HttpPost("layers")]
+    public async Task<ActionResult<RequirementScopeLayerEntry>> CreateRequirementLayerAsync(
+        [FromBody] CreateRequirementScopeLayerRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest("Request body is required.");
+
+        try
+        {
+            var created = await _requirements.CreateRequirementLayerAsync(new RequirementScopeLayerEntry(
+                request.Key,
+                request.Order,
+                request.Name,
+                request.Description,
+                request.ScopeEndLayerKey), cancellationToken).ConfigureAwait(false);
+            return Created(new Uri($"/mcpserver/requirements/layers/{Uri.EscapeDataString(created.Key)}", UriKind.Relative), created);
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        {
+            return BadRequest(new { error = "invalid_requirement_scope_layer", message = ex.Message });
+        }
+    }
+
+    /// <summary>Updates mutable requirement scope layer fields for the active workspace.</summary>
+    [HttpPut("layers/{key}")]
+    public async Task<ActionResult<RequirementScopeLayerEntry>> UpdateRequirementLayerAsync(
+        string key,
+        [FromBody] UpdateRequirementScopeLayerRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+            return BadRequest("Request body is required.");
+
+        try
+        {
+            var updated = await _requirements.UpdateRequirementLayerAsync(new RequirementScopeLayerUpdateRequest(key)
+            {
+                Name = request.Name,
+                Description = request.Description,
+                ScopeEndLayerKey = request.ScopeEndLayerKey
+            }, cancellationToken).ConfigureAwait(false);
+            return Ok(updated);
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            return NotFound(new { error = "requirement_scope_layer_not_found", message = ex.Message });
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        {
+            return BadRequest(new { error = "invalid_requirement_scope_layer", message = ex.Message });
+        }
+    }
+
+    /// <summary>Gets requirements effective at the workspace current layer or an explicit preview layer.</summary>
+    [HttpGet("effective")]
+    public async Task<ActionResult<EffectiveRequirementsResult>> GetEffectiveRequirementsAsync(
+        [FromQuery] string? layerKey = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await _requirements.GetEffectiveRequirementsAsync(layerKey, cancellationToken).ConfigureAwait(false);
+            return Ok(result);
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            return NotFound(new { error = "requirement_scope_layer_not_found", message = ex.Message });
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        {
+            return BadRequest(new { error = "invalid_requirement_scope_layer", message = ex.Message });
+        }
+    }
+
     /// <summary>Gets all Functional Requirement entries, optionally filtered by area or status.</summary>
     [HttpGet("fr")]
     public async Task<ActionResult<IReadOnlyList<FrEntry>>> GetFrAsync([FromQuery] string? area = null, [FromQuery] string? status = null, CancellationToken cancellationToken = default)
@@ -113,7 +197,9 @@ public sealed class RequirementsController : ControllerBase
             Priority: request.Priority ?? "medium",
             Status: request.Status ?? "pending",
             Notes: request.Notes,
-            AcceptanceCriteria: request.AcceptanceCriteria);
+            AcceptanceCriteria: request.AcceptanceCriteria,
+            ScopeStartLayerKey: request.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+            ScopeEndLayerKey: request.ScopeEndLayerKey);
         try
         {
             await _requirements.AddFrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -150,7 +236,9 @@ public sealed class RequirementsController : ControllerBase
             Priority = request.Priority ?? existing.Priority,
             Status = request.Status ?? existing.Status,
             Notes = request.Notes ?? existing.Notes,
-            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria
+            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey ?? existing.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey ?? existing.ScopeEndLayerKey
         };
         try
         {
@@ -221,7 +309,9 @@ public sealed class RequirementsController : ControllerBase
             Priority: request.Priority ?? "medium",
             Status: request.Status ?? "pending",
             Notes: request.Notes,
-            AcceptanceCriteria: request.AcceptanceCriteria);
+            AcceptanceCriteria: request.AcceptanceCriteria,
+            ScopeStartLayerKey: request.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+            ScopeEndLayerKey: request.ScopeEndLayerKey);
         try
         {
             await _requirements.AddTrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -258,7 +348,9 @@ public sealed class RequirementsController : ControllerBase
             Priority = request.Priority ?? existing.Priority,
             Status = request.Status ?? existing.Status,
             Notes = request.Notes ?? existing.Notes,
-            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria
+            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey ?? existing.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey ?? existing.ScopeEndLayerKey
         };
         try
         {
@@ -325,7 +417,9 @@ public sealed class RequirementsController : ControllerBase
             Priority: request.Priority ?? "medium",
             Status: request.Status ?? "pending",
             Notes: request.Notes,
-            AcceptanceCriteria: request.AcceptanceCriteria);
+            AcceptanceCriteria: request.AcceptanceCriteria,
+            ScopeStartLayerKey: request.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+            ScopeEndLayerKey: request.ScopeEndLayerKey);
         try
         {
             await _requirements.AddTestAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -362,7 +456,9 @@ public sealed class RequirementsController : ControllerBase
             Priority = request.Priority ?? existing.Priority,
             Status = request.Status ?? existing.Status,
             Notes = request.Notes ?? existing.Notes,
-            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria
+            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey ?? existing.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey ?? existing.ScopeEndLayerKey
         };
         try
         {
@@ -965,7 +1061,9 @@ public sealed class RequirementsController : ControllerBase
             Priority: record.Priority ?? "medium",
             Status: record.Status ?? "pending",
             Notes: record.Notes,
-            AcceptanceCriteria: record.AcceptanceCriteria);
+            AcceptanceCriteria: record.AcceptanceCriteria,
+            ScopeStartLayerKey: record.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+            ScopeEndLayerKey: record.ScopeEndLayerKey);
 
     private static TrEntry ToTrEntry(CreateTrBatchRecord record) =>
         new(
@@ -975,7 +1073,9 @@ public sealed class RequirementsController : ControllerBase
             Priority: record.Priority ?? "medium",
             Status: record.Status ?? "pending",
             Notes: record.Notes,
-            AcceptanceCriteria: record.AcceptanceCriteria);
+            AcceptanceCriteria: record.AcceptanceCriteria,
+            ScopeStartLayerKey: record.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+            ScopeEndLayerKey: record.ScopeEndLayerKey);
 
     private static TestEntry ToTestEntry(CreateTestBatchRecord record) =>
         new(
@@ -985,7 +1085,9 @@ public sealed class RequirementsController : ControllerBase
             Priority: record.Priority ?? "medium",
             Status: record.Status ?? "pending",
             Notes: record.Notes,
-            AcceptanceCriteria: record.AcceptanceCriteria);
+            AcceptanceCriteria: record.AcceptanceCriteria,
+            ScopeStartLayerKey: record.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+            ScopeEndLayerKey: record.ScopeEndLayerKey);
 
     private static RequirementsBatchEntries ToCreateBatchEntries(IReadOnlyList<CreateRequirementBatchRecord> records)
     {
@@ -1006,7 +1108,9 @@ public sealed class RequirementsController : ControllerBase
                         Priority: record.Priority ?? "medium",
                         Status: record.Status ?? "pending",
                         Notes: record.Notes,
-                        AcceptanceCriteria: record.AcceptanceCriteria));
+                        AcceptanceCriteria: record.AcceptanceCriteria,
+                        ScopeStartLayerKey: record.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+                        ScopeEndLayerKey: record.ScopeEndLayerKey));
                     break;
                 case "tr":
                     tr.Add(new TrEntry(
@@ -1016,7 +1120,9 @@ public sealed class RequirementsController : ControllerBase
                         Priority: record.Priority ?? "medium",
                         Status: record.Status ?? "pending",
                         Notes: record.Notes,
-                        AcceptanceCriteria: record.AcceptanceCriteria));
+                        AcceptanceCriteria: record.AcceptanceCriteria,
+                        ScopeStartLayerKey: record.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+                        ScopeEndLayerKey: record.ScopeEndLayerKey));
                     break;
                 case "test":
                     test.Add(new TestEntry(
@@ -1026,7 +1132,9 @@ public sealed class RequirementsController : ControllerBase
                         Priority: record.Priority ?? "medium",
                         Status: record.Status ?? "pending",
                         Notes: record.Notes,
-                        AcceptanceCriteria: record.AcceptanceCriteria));
+                        AcceptanceCriteria: record.AcceptanceCriteria,
+                        ScopeStartLayerKey: record.ScopeStartLayerKey ?? RequirementScopeLayerDefaults.DefaultLayerKey,
+                        ScopeEndLayerKey: record.ScopeEndLayerKey));
                     break;
             }
         }
@@ -1050,7 +1158,9 @@ public sealed class RequirementsController : ControllerBase
                 Priority = record.Priority ?? existing.Priority,
                 Status = record.Status ?? existing.Status,
                 Notes = record.Notes ?? existing.Notes,
-                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria
+                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria,
+                ScopeStartLayerKey = record.ScopeStartLayerKey ?? existing.ScopeStartLayerKey,
+                ScopeEndLayerKey = record.ScopeEndLayerKey ?? existing.ScopeEndLayerKey
             });
         }
 
@@ -1073,7 +1183,9 @@ public sealed class RequirementsController : ControllerBase
                 Priority = record.Priority ?? existing.Priority,
                 Status = record.Status ?? existing.Status,
                 Notes = record.Notes ?? existing.Notes,
-                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria
+                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria,
+                ScopeStartLayerKey = record.ScopeStartLayerKey ?? existing.ScopeStartLayerKey,
+                ScopeEndLayerKey = record.ScopeEndLayerKey ?? existing.ScopeEndLayerKey
             });
         }
 
@@ -1096,7 +1208,9 @@ public sealed class RequirementsController : ControllerBase
                 Priority = record.Priority ?? existing.Priority,
                 Status = record.Status ?? existing.Status,
                 Notes = record.Notes ?? existing.Notes,
-                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria
+                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria,
+                ScopeStartLayerKey = record.ScopeStartLayerKey ?? existing.ScopeStartLayerKey,
+                ScopeEndLayerKey = record.ScopeEndLayerKey ?? existing.ScopeEndLayerKey
             });
         }
 
@@ -1125,7 +1239,9 @@ public sealed class RequirementsController : ControllerBase
                         Priority = record.Priority ?? existingFr.Priority,
                         Status = record.Status ?? existingFr.Status,
                         Notes = record.Notes ?? existingFr.Notes,
-                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingFr.AcceptanceCriteria
+                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingFr.AcceptanceCriteria,
+                        ScopeStartLayerKey = record.ScopeStartLayerKey ?? existingFr.ScopeStartLayerKey,
+                        ScopeEndLayerKey = record.ScopeEndLayerKey ?? existingFr.ScopeEndLayerKey
                     });
                     break;
                 case "tr":
@@ -1138,7 +1254,9 @@ public sealed class RequirementsController : ControllerBase
                         Priority = record.Priority ?? existingTr.Priority,
                         Status = record.Status ?? existingTr.Status,
                         Notes = record.Notes ?? existingTr.Notes,
-                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingTr.AcceptanceCriteria
+                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingTr.AcceptanceCriteria,
+                        ScopeStartLayerKey = record.ScopeStartLayerKey ?? existingTr.ScopeStartLayerKey,
+                        ScopeEndLayerKey = record.ScopeEndLayerKey ?? existingTr.ScopeEndLayerKey
                     });
                     break;
                 case "test":
@@ -1151,7 +1269,9 @@ public sealed class RequirementsController : ControllerBase
                         Priority = record.Priority ?? existingTest.Priority,
                         Status = record.Status ?? existingTest.Status,
                         Notes = record.Notes ?? existingTest.Notes,
-                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingTest.AcceptanceCriteria
+                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingTest.AcceptanceCriteria,
+                        ScopeStartLayerKey = record.ScopeStartLayerKey ?? existingTest.ScopeStartLayerKey,
+                        ScopeEndLayerKey = record.ScopeEndLayerKey ?? existingTest.ScopeEndLayerKey
                     });
                     break;
             }

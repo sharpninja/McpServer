@@ -635,4 +635,40 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] A render test verifies the production default marker prompt tells agents to report MCP Server and plugin failures through the triage tool only. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
   - [x] A render test verifies agents are told not to wait for triage resolution and to continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
   - [x] A render test verifies failed live triage submissions are written as normal failsafe YAML documents for later replay. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-  - [x] A render test verifies separate code, docs, requirements, plugin, deployment, or configuration repair workflows are captured as detailed triage reports. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] A render test verifies separate code, docs, requirements, plugin, deployment, or configuration repair workflows are captured as detailed triage reports. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+
+- TEST-MCP-REQSCOPE-001: Layer catalog CRUD, immutability, defaults, duplicate rejection, and workspace isolation tests cover FR-MCP-REQSCOPE-001 and TR-MCP-REQSCOPE-001 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Layer catalog tests prove seeded `layer-1`, persisted metadata, immutable order, duplicate rejection, invalid key/order rejection, layer sunset validation, and workspace isolation.
+
+- TEST-MCP-WORKSPACE-LAYER-001: Workspace current layer get/set and validation tests cover FR-MCP-WORKSPACE-LAYER-001 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Workspace current layer tests prove default `layer-1`, get/set endpoints, same-workspace validation, and current-visibility consumers using workspace state.
+
+- TEST-MCP-REQSCOPE-002: Requirement scope create, update, batch, import, and defaulting tests cover FR-MCP-REQSCOPE-002 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Requirement scope mutation tests prove FR/TR/TEST scope persistence, `layer-1+` defaults, missing layer rejection, and end-before-start rejection.
+
+- TEST-MCP-REQSCOPE-003: Effective current requirement visibility tests cover FR-MCP-REQSCOPE-003 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Effective visibility tests prove inclusive start layers, inclusive requirement end layers, inclusive layer sunset boundaries, expired requirement exclusion, layer-sunset exclusion, and effective-only mappings.
+
+- TEST-MCP-REQSCOPE-004: Traceability and enforcement tests cover TR-MCP-REQSCOPE-004 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Enforcement tests prove current-layer traceability, all-record metadata integrity validation, test evidence requirements, and zero-skip phase gates.
+
+- TEST-MCP-REQSCOPE-005: REST, client, REPL, YAML, and plugin surface parity tests cover TR-MCP-REQSCOPE-002 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Surface parity tests prove typed REST/client/REPL coverage, layer sunset updates, YAML validation, scoped requirement DTOs, and deprecated metadata consistency.
+
+- TEST-MCP-REQSCOPE-006: Markdown/wiki import-export round-trip tests cover TR-MCP-REQSCOPE-003 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Import-export tests prove scope metadata rendering, parsing, backward-compatible defaults, and idempotent re-import.
+
+- TEST-MCP-REQSCOPE-REPL-001: REPL integration final acceptance covers FR-MCP-REQSCOPE-004 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] REPL integration creates a new layer, adds a requirement starting in that layer, sunsets a layer after the new layer, sunsets a requirement before the new layer, and verifies current requirements before and after the new layer.
+
+- TEST-MCP-REQSCOPE-REQAC-001: Requirement acceptance-criterion traceability tests cover all new REQSCOPE FR/TR/TEST acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Every new REQSCOPE acceptance criterion is referenced by at least one passing test and validated by the plan-wide traceability gate.

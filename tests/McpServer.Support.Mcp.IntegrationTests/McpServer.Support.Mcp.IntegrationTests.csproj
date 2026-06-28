@@ -25,6 +25,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.Client\McpServer.Client.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.Repl.Host\McpServer.Repl.Host.csproj" />
     <ProjectReference Include="..\..\src\McpServer.QBAgent\McpServer.QBAgent.csproj" />
     <ProjectReference Include="..\..\src\McpServer.QBAgent.Tools\McpServer.QBAgent.Tools.csproj" />
     <ProjectReference Include="..\..\src\McpServer.McpAgent\McpServer.McpAgent.csproj" />

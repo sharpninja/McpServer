@@ -189,6 +189,19 @@ acceptanceCriteria:
         $status.namespaces | Should -Contain 'workflow.triage'
     }
 
+    It 'TEST-MCP-REQSCOPE-005 requirements skill tells agents to use current effective layer visibility' {
+        $skillPath = Join-Path $script:StagedRoot 'skills\requirements\SKILL.md'
+        Test-Path -LiteralPath $skillPath | Should -BeTrue
+
+        $content = [System.IO.File]::ReadAllText($skillPath)
+
+        $content | Should -Match 'current effective requirements'
+        $content | Should -Match 'workflow\.requirements\.effective'
+        $content | Should -Match 'active workspace layer'
+        $content | Should -Match 'future-layer requirements'
+        $content | Should -Match 'currently enforceable'
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 forces each PowerShell host identity over inherited agent environment' {
         $cases = @(
             @{ Host = 'claude-code'; Agent = 'ClaudeCode'; Model = 'claude'; Tag = 'claude-code' },

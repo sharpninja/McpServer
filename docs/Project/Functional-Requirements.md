@@ -1485,3 +1485,56 @@ Generated marker instructions shall tell agents that MCP Server failures and req
 - [x] The rendered marker prompt tells agents to write a normal failsafe YAML triage report for later replay when the failure prevents live triage submission. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 - [x] The rendered marker prompt tells agents to write detailed triage reports for separate code, docs, requirements, plugin, deployment, or configuration repair workflows, then continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 
+## FR-MCP-REQSCOPE-001 Requirement scope layer catalog
+
+MCP Server shall let each workspace define ordered requirement scope layers that describe when layers and the requirements that start in those layers become applicable for implementation and enforcement.
+
+**Acceptance Criteria:**
+- [ ] Each workspace has a seeded `layer-1` scope layer with order `1`, name, timestamps, and workspace isolation.
+- [ ] Layer records expose `key`, immutable numeric `order`, `name`, optional `description`, nullable `scopeEndLayerKey`, `createdAtUtc`, and `updatedAtUtc`.
+- [ ] Layer create/list/update APIs reject duplicate keys, duplicate orders, invalid keys, invalid orders, missing `scopeEndLayerKey` references, end-before-start layer sunsets, and cross-workspace access.
+- [ ] Layer updates can change only `name`, `description`, and `scopeEndLayerKey`; attempts to change `key` or `order` are rejected.
+- [ ] A layer `scopeEndLayerKey` sunsets requirements that start in that layer after the end layer; if a requirement also has an end layer, the earlier end boundary applies.
+
+## FR-MCP-WORKSPACE-LAYER-001 Workspace current requirement layer
+
+MCP Server shall track the current requirement scope layer for each workspace and expose it through workspace endpoints used by current-requirements visibility surfaces.
+
+**Acceptance Criteria:**
+- [ ] Workspace storage persists `CurrentRequirementLayerKey` and defaults existing and new workspaces to `layer-1`.
+- [ ] `GET /mcpserver/workspace/current-requirement-layer` returns the workspace current layer with resolved layer metadata.
+- [ ] `PUT /mcpserver/workspace/current-requirement-layer` changes the workspace current layer only when the target layer exists in that workspace.
+- [ ] All endpoints that need current requirements visibility use the workspace current layer by default.
+
+## FR-MCP-REQSCOPE-002 Requirement applicability windows
+
+MCP Server shall let FR, TR, and TEST requirements define the first layer where they apply and an optional last layer where they still apply.
+
+**Acceptance Criteria:**
+- [ ] FR, TR, and TEST records persist and return `scopeStartLayerKey` and nullable `scopeEndLayerKey`.
+- [ ] Requirements created or imported without scope metadata default to `scopeStartLayerKey: layer-1` and `scopeEndLayerKey: null`.
+- [ ] Create, update, batch, and import operations reject missing layer references and `scopeEndLayerKey` values whose order is before `scopeStartLayerKey`.
+- [ ] Authoring/list endpoints can still return all requirements without applying current-layer filtering.
+
+## FR-MCP-REQSCOPE-003 Effective current requirements
+
+MCP Server shall calculate effective requirements for a workspace by applying the workspace current layer to requirement applicability windows and layer sunset windows.
+
+**Acceptance Criteria:**
+- [ ] At current layer `N`, effective requirements include records whose start layer order is less than or equal to `N`.
+- [ ] Effective requirements exclude records whose requirement end layer order or start layer sunset order is less than `N`.
+- [ ] Effective requirements include records whose requirement end layer order or start layer sunset order equals `N`.
+- [ ] Effective mapping results include only relationships where the FR and linked TR/TEST records are effective at the resolved layer.
+
+## FR-MCP-REQSCOPE-004 REPL final acceptance workflow
+
+MCP Server shall prove requirement scope layers through a REPL-driven integration workflow that exercises layer creation, scoped requirements, layer sunset, requirement sunset, and before/after current requirement queries.
+
+**Acceptance Criteria:**
+- [ ] A REPL integration test creates a new requirement scope layer through workflow wrappers.
+- [ ] The REPL integration test adds a new requirement that starts in the new layer.
+- [ ] The REPL integration test sunsets a layer after the new layer.
+- [ ] The REPL integration test sunsets a requirement before the new layer.
+- [ ] The REPL integration test queries current requirements before the new layer and verifies future and expired requirements are excluded.
+- [ ] The REPL integration test queries current requirements after the new layer and verifies newly active and sunset requirements are included or excluded correctly.
+

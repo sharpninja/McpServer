@@ -11,6 +11,8 @@ namespace McpServer.Support.Mcp.Requirements.Models;
 /// <param name="Status">The requirement status.</param>
 /// <param name="Notes">Optional operator notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</param>
 public sealed record FrEntry(
     string Id,
     string Title,
@@ -19,7 +21,9 @@ public sealed record FrEntry(
     string Priority = "medium",
     string Status = "pending",
     string? Notes = null,
-    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
+    string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
+    string? ScopeEndLayerKey = null);
 
 /// <summary>FR-MCP-026: Technical Requirement entry parsed from Technical-Requirements.md.</summary>
 /// <param name="Id">The TR identifier (e.g. TR-MCP-ARCH-001).</param>
@@ -30,6 +34,8 @@ public sealed record FrEntry(
 /// <param name="Status">The requirement status.</param>
 /// <param name="Notes">Optional operator notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</param>
 public sealed record TrEntry(
     string Id,
     string Title,
@@ -38,7 +44,9 @@ public sealed record TrEntry(
     string Priority = "medium",
     string Status = "pending",
     string? Notes = null,
-    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
+    string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
+    string? ScopeEndLayerKey = null);
 
 /// <summary>FR-MCP-026: Testing Requirement entry parsed from Testing-Requirements.md.</summary>
 /// <param name="Id">The TEST identifier (e.g. TEST-MCP-001).</param>
@@ -49,6 +57,8 @@ public sealed record TrEntry(
 /// <param name="Status">The requirement status.</param>
 /// <param name="Notes">Optional operator notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</param>
 public sealed record TestEntry(
     string Id,
     string Condition,
@@ -57,7 +67,9 @@ public sealed record TestEntry(
     string Priority = "medium",
     string Status = "pending",
     string? Notes = null,
-    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
+    string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
+    string? ScopeEndLayerKey = null);
 
 /// <summary>
 /// FR-MCP-026: Grouped FR/TR/TEST requirement entries used by atomic batch mutations.
@@ -76,6 +88,57 @@ public sealed record RequirementsBatchEntries(
     /// <summary>Total number of entries across all requirement kinds.</summary>
     public int Count => Functional.Count + Technical.Count + Testing.Count;
 }
+
+/// <summary>Shared constants for requirement scope layers.</summary>
+public static class RequirementScopeLayerDefaults
+{
+    /// <summary>Default layer key applied to legacy requirements and workspaces.</summary>
+    public const string DefaultLayerKey = "layer-1";
+}
+
+/// <summary>FR-MCP-REQSCOPE-001: ordered workspace requirement scope layer.</summary>
+public sealed record RequirementScopeLayerEntry(
+    string Key,
+    int Order,
+    string Name,
+    string? Description = null,
+    string? ScopeEndLayerKey = null,
+    string WorkspaceId = "",
+    DateTimeOffset? CreatedAtUtc = null,
+    DateTimeOffset? UpdatedAtUtc = null);
+
+/// <summary>FR-MCP-REQSCOPE-001: layer update request allowing mutable metadata and layer sunset.</summary>
+public sealed class RequirementScopeLayerUpdateRequest
+{
+    /// <summary>Layer key to update.</summary>
+    public RequirementScopeLayerUpdateRequest(string key)
+    {
+        Key = key;
+    }
+
+    /// <summary>Layer key. Attempts to change it are rejected by the service.</summary>
+    public string Key { get; set; }
+
+    /// <summary>Optional immutable order value. Non-null mismatches are rejected.</summary>
+    public int? Order { get; set; }
+
+    /// <summary>Optional new layer name.</summary>
+    public string? Name { get; set; }
+
+    /// <summary>Optional new layer description.</summary>
+    public string? Description { get; set; }
+
+    /// <summary>Optional last layer where requirements starting in this layer apply.</summary>
+    public string? ScopeEndLayerKey { get; set; }
+}
+
+/// <summary>FR-MCP-REQSCOPE-003: effective requirements resolved for a workspace layer.</summary>
+public sealed record EffectiveRequirementsResult(
+    RequirementScopeLayerEntry CurrentLayer,
+    IReadOnlyList<FrEntry> Functional,
+    IReadOnlyList<TrEntry> Technical,
+    IReadOnlyList<TestEntry> Testing,
+    IReadOnlyList<FrTrMapping> Mappings);
 
 /// <summary>FR-MCP-026: FR-to-TR mapping row from TR-per-FR-Mapping.md.</summary>
 public sealed record FrTrMapping

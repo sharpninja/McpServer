@@ -1765,3 +1765,43 @@ Presence signaling SHALL be excluded from one-shot sessions.
 - [x] The marker template instructs agents to write failed triage submissions as normal failsafe YAML documents for later replay through the plugin/REPL failsafe or pending queue. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 - [x] The marker template requires detailed triage reports for separate repair workflows involving code, docs, requirements, plugin skills, package sync, deployment, or configuration changes. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 
+## TR-MCP-REQSCOPE-001
+
+Requirement scope layer storage shall add durable workspace-isolated layer catalog rows with layer sunset metadata, requirement applicability fields, workspace current layer state, migrations for every database provider, and validation for invalid layer references.
+
+**Acceptance Criteria:**
+- [ ] SQLite, SQL Server, and PostgreSQL migrations add requirement scope layers with nullable layer end scope, requirement scope start/end fields, and workspace current layer state.
+- [ ] Migrations seed `layer-1`, backfill existing requirements to `layer-1+`, backfill existing layers to no sunset, and backfill existing workspaces to current layer `layer-1`.
+- [ ] Repository queries and mutations enforce workspace isolation for layer catalog, current layer, requirement scope fields, and effective results.
+- [ ] Validation reports corrupt or missing layer metadata without silently treating it as effective.
+
+## TR-MCP-REQSCOPE-002
+
+REST, client, and REPL surfaces shall expose requirement layer catalog operations, layer sunset updates, workspace current layer operations, effective requirement queries, and requirement scope fields consistently.
+
+**Acceptance Criteria:**
+- [ ] REST endpoints expose layer catalog CRUD, layer sunset updates, workspace current layer get/set, and effective requirement query operations.
+- [ ] `McpServerClient` exposes typed methods and DTOs for layer catalog, layer sunset, workspace current layer, effective requirements, and requirement scope fields.
+- [ ] REPL workflow wrappers expose layer catalog, layer sunset, workspace current layer, effective requirements, and scoped create/update/batch requirement operations.
+- [ ] YAML validation covers new scope fields, invalid layer combinations, and deprecated metadata consistency for workflow namespaces.
+
+## TR-MCP-REQSCOPE-003
+
+Requirements import and export shall round-trip requirement layer scope metadata for markdown and wiki documents while remaining backward compatible with old documents.
+
+**Acceptance Criteria:**
+- [ ] Markdown and wiki export render scope metadata for every FR, TR, and TEST requirement.
+- [ ] Import parses scope metadata and preserves `scopeStartLayerKey` and `scopeEndLayerKey`.
+- [ ] Missing scope metadata imports as `layer-1+` without changing old requirement semantics.
+- [ ] Export followed by import is idempotent for requirement scope metadata.
+
+## TR-MCP-REQSCOPE-004
+
+Current requirements enforcement and traceability validation shall use workspace current-layer effective requirements while retaining all-record metadata integrity checks.
+
+**Acceptance Criteria:**
+- [ ] Traceability enforcement for implementation completion checks only requirements effective at the workspace current layer.
+- [ ] Plan-wide validation scans all requirements for invalid layer keys, missing layers, and broken scope metadata.
+- [ ] A requirement acceptance criterion cannot be treated as complete unless a passing test references it.
+- [ ] No BDPv4 phase exits with failing, skipped, or unmapped acceptance-criterion coverage.
+
