@@ -484,6 +484,8 @@ public sealed class TriageService : ITriageService
             throw new InvalidOperationException("Selected triage reports must belong to the target group workspace.");
 
         var movedCount = MoveReportsToGroup(selection.Reports, targetGroup);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
         var targetReports = await _db.TriageReports
             .Where(report => report.GroupId == targetGroup.GroupId)
             .ToListAsync(cancellationToken)
@@ -494,7 +496,6 @@ public sealed class TriageService : ITriageService
             targetGroup.Title,
             targetGroup.Summary,
             _timeProvider.GetUtcNow().Add(_options.QuietPeriod));
-        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         var removedGroupIds = await RemoveEmptySourceGroupsAsync(
             selection.SourceGroups,
             targetGroup.GroupId,
@@ -1205,4 +1206,8 @@ public sealed class TriageService : ITriageService
 
         public IReadOnlyList<string> ImplementationNotes { get; init; } = [];
     }
+
+    private sealed record TriageSelection(
+        IReadOnlyList<TriageReportEntity> Reports,
+        IReadOnlyList<TriageGroupEntity> SourceGroups);
 }

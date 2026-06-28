@@ -422,6 +422,91 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal(1, result.TotalCount);
     }
 
+    /// <summary>TEST-TRIAGE-003: selected reports can be moved into a new editable triage group.</summary>
+    [Fact]
+    public async Task CreateGroupFromSelectionAsync_MovesSelectedReportsToNewGroup()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.AddRange(
+                SeedGroup("triage-group-source-a", "collecting", now.AddMinutes(-2)),
+                SeedGroup("triage-group-source-b", "collecting", now.AddMinutes(-1)));
+            db.TriageReports.AddRange(
+                SeedReport("triage-report-a", "triage-group-source-a", "First report", now.AddMinutes(-2)),
+                SeedReport("triage-report-b", "triage-group-source-b", "Second report", now.AddMinutes(-1)));
+            await db.SaveChangesAsync();
+        }
+
+        var result = await CreateService(PrimaryWorkspace).CreateGroupFromSelectionAsync(new TriageGroupSelectionRequest
+        {
+            ReportIds = ["triage-report-a"],
+            GroupIds = ["triage-group-source-b"],
+            Title = "Manual group",
+            Summary = "Grouped manually",
+        });
+
+        Assert.Equal("Manual group", result.Group.Title);
+        Assert.Equal("Grouped manually", result.Group.Summary);
+        Assert.Equal(2, result.Group.ReportCount);
+        Assert.Equal(2, result.MovedReportCount);
+        Assert.Equal(["triage-group-source-a", "triage-group-source-b"], result.RemovedGroupIds.Order(StringComparer.Ordinal));
+        Assert.All(result.Group.Reports, report => Assert.Equal(result.Group.GroupId, report.GroupId));
+    }
+
+    /// <summary>TEST-TRIAGE-003: selected groups can be merged into an existing editable target group.</summary>
+    [Fact]
+    public async Task MergeGroupsAsync_MovesSourceGroupReportsIntoTargetGroup()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.AddRange(
+                SeedGroup("triage-group-target", "collecting", now.AddMinutes(-3)),
+                SeedGroup("triage-group-source", "collecting", now.AddMinutes(-2)));
+            db.TriageReports.AddRange(
+                SeedReport("triage-report-target", "triage-group-target", "Target report", now.AddMinutes(-3)),
+                SeedReport("triage-report-source", "triage-group-source", "Source report", now.AddMinutes(-2)));
+            await db.SaveChangesAsync();
+        }
+
+        var result = await CreateService(PrimaryWorkspace).MergeGroupsAsync(
+            "triage-group-target",
+            new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] });
+
+        Assert.Equal("triage-group-target", result.Group.GroupId);
+        Assert.Equal(2, result.Group.ReportCount);
+        Assert.Equal(1, result.MovedReportCount);
+        Assert.Equal(["triage-group-source"], result.RemovedGroupIds);
+        Assert.Contains(result.Group.Reports, report => report.ReportId == "triage-report-source");
+
+        using var verifyDb = CreateDb(PrimaryWorkspace);
+        Assert.Null(await verifyDb.TriageGroups.FindAsync("triage-group-source"));
+        Assert.Equal("triage-group-target", (await verifyDb.TriageReports.FindAsync("triage-report-source"))!.GroupId);
+    }
+
+    /// <summary>TEST-TRIAGE-003: groups with run history cannot be regrouped.</summary>
+    [Fact]
+    public async Task MergeGroupsAsync_WhenSourceGroupHasRunHistory_Throws()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.AddRange(
+                SeedGroup("triage-group-target", "collecting", now),
+                SeedGroup("triage-group-source", "collecting", now.AddMinutes(-1)));
+            db.TriageReports.Add(SeedReport("triage-report-source", "triage-group-source", "Source report", now.AddMinutes(-1)));
+            db.TriageResearchRuns.Add(SeedRun("triage-run-source", "triage-group-source", "completed", now));
+            await db.SaveChangesAsync();
+        }
+
+        var error = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            CreateService(PrimaryWorkspace).MergeGroupsAsync(
+                "triage-group-target",
+                new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] }));
+        Assert.Contains("run history", error.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
     private static TriageReportRequest CreateReport(string dedupeKey) => new()
     {
         Title = "REPL triage wrapper failure",

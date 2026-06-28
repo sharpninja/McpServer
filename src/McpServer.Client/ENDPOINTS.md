@@ -1060,6 +1060,14 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
   - Request DTO/body: none
   - Response DTO/body: TriageGroupDetail
   - Source: TriageClient.cs
+- ConsolidateIntoGroupAsync: POST /mcpserver/triage/groups/{id}/consolidate
+  - Request DTO/body: TriageGroupSelectionRequest
+  - Response DTO/body: TriageGroupEditResult
+  - Source: TriageClient.cs
+- CreateGroupFromSelectionAsync: POST /mcpserver/triage/groups/new
+  - Request DTO/body: TriageGroupSelectionRequest
+  - Response DTO/body: TriageGroupEditResult
+  - Source: TriageClient.cs
 - GetDashboardAsync: GET /mcpserver/triage/dashboard?workspacePath={workspacePath}
   - Request DTO/body: none
   - Response DTO/body: TriageDashboardResult
@@ -1087,6 +1095,10 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
 - QueryRunsAsync: GET /mcpserver/triage/runs?status={status}&groupId={groupId}&workspacePath={workspacePath}
   - Request DTO/body: none
   - Response DTO/body: TriageRunQueryResult
+  - Source: TriageClient.cs
+- MergeGroupsAsync: POST /mcpserver/triage/groups/{id}/merge
+  - Request DTO/body: TriageGroupSelectionRequest
+  - Response DTO/body: TriageGroupEditResult
   - Source: TriageClient.cs
 - RetryGroupAsync: POST /mcpserver/triage/groups/{id}/retry
   - Request DTO/body: none
@@ -3950,6 +3962,19 @@ Field names below are the exact JSON property names declared with [JsonPropertyN
 - runHistory: IReadOnlyList<TriageResearchRunDetail>
 - totalGroupCount: int
 - totalRunCount: int
+
+#### TriageGroupSelectionRequest (record)
+
+- groupIds: IReadOnlyList<string>?
+- reportIds: IReadOnlyList<string>?
+- title: string?
+- summary: string?
+
+#### TriageGroupEditResult (record)
+
+- group: TriageGroupDetail
+- removedGroupIds: IReadOnlyList<string>
+- movedReportCount: int
 
 ### TunnelModels.cs
 

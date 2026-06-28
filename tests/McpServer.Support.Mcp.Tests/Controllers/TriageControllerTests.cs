@@ -113,6 +113,62 @@ public sealed class TriageControllerTests
         Assert.Same(group, ok.Value);
     }
 
+    /// <summary>TEST-TRIAGE-003: group edit endpoints route selection commands through the service.</summary>
+    [Theory]
+    [InlineData("new")]
+    [InlineData("consolidate")]
+    [InlineData("merge")]
+    public async Task GroupEditAsync_WhenSelectionIsValid_ReturnsOkEditResult(string operation)
+    {
+        var service = Substitute.For<ITriageService>();
+        var request = new TriageGroupSelectionRequest
+        {
+            GroupIds = ["triage-group-source"],
+            ReportIds = ["triage-report-001"],
+        };
+        var result = new TriageGroupEditResult
+        {
+            Group = new TriageGroupDetail
+            {
+                GroupId = operation == "new" ? "triage-group-new" : "triage-group-target",
+                Status = "collecting",
+                ReportCount = 2,
+                QuietDeadlineUtc = DateTimeOffset.UtcNow,
+            },
+            MovedReportCount = 2,
+        };
+        service.CreateGroupFromSelectionAsync(request, Arg.Any<CancellationToken>()).Returns(result);
+        service.ConsolidateIntoGroupAsync("triage-group-target", request, Arg.Any<CancellationToken>()).Returns(result);
+        service.MergeGroupsAsync("triage-group-target", request, Arg.Any<CancellationToken>()).Returns(result);
+
+        var controller = new TriageController(service);
+        var action = operation switch
+        {
+            "new" => await controller.CreateGroupFromSelectionAsync(request, CancellationToken.None),
+            "consolidate" => await controller.ConsolidateIntoGroupAsync("triage-group-target", request, CancellationToken.None),
+            _ => await controller.MergeGroupsAsync("triage-group-target", request, CancellationToken.None),
+        };
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(result, ok.Value);
+    }
+
+    /// <summary>TEST-TRIAGE-003: group edit endpoints return Bad Request for invalid selections.</summary>
+    [Fact]
+    public async Task CreateGroupFromSelectionAsync_WhenSelectionInvalid_ReturnsBadRequest()
+    {
+        var service = Substitute.For<ITriageService>();
+        service.CreateGroupFromSelectionAsync(Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<TriageGroupEditResult>(new ArgumentException("At least one group or report id is required.")));
+
+        var action = await new TriageController(service).CreateGroupFromSelectionAsync(
+            new TriageGroupSelectionRequest(),
+            CancellationToken.None);
+
+        var badRequest = Assert.IsType<BadRequestObjectResult>(action.Result);
+        Assert.Contains("At least one group or report id is required.", badRequest.Value!.ToString(), StringComparison.Ordinal);
+    }
+
     /// <summary>TEST-TRIAGE-001: GET /mcpserver/triage/dashboard returns queue and run history state.</summary>
     [Fact]
     public async Task GetDashboardAsync_ReturnsDashboardState()

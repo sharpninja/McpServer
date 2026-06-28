@@ -118,6 +118,71 @@ public sealed class TriageClientTests
         Assert.Contains("/mcpserver/triage/groups/triage-group-001/retry", handler.LastRequest.RequestUri!.AbsolutePath);
     }
 
+    /// <summary>TEST-TRIAGE-003: CreateGroupFromSelectionAsync posts selected reports and groups.</summary>
+    [Fact]
+    public async Task CreateGroupFromSelectionAsync_PostsSelection()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"group":{"groupId":"triage-group-new","status":"collecting","reportCount":2,"quietDeadlineUtc":"2026-06-25T05:00:00Z"},"removedGroupIds":["triage-group-old"],"movedReportCount":2}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.CreateGroupFromSelectionAsync(new TriageGroupSelectionRequest
+        {
+            GroupIds = ["triage-group-old"],
+            ReportIds = ["triage-report-001"],
+            Title = "Grouped reports",
+        });
+
+        Assert.Equal("triage-group-new", result.Group.GroupId);
+        Assert.Equal(2, result.MovedReportCount);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/groups/new", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"groupIds\":[\"triage-group-old\"]", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Contains("\"reportIds\":[\"triage-report-001\"]", handler.LastRequestBody!, StringComparison.Ordinal);
+    }
+
+    /// <summary>TEST-TRIAGE-003: ConsolidateIntoGroupAsync posts selection to the target group.</summary>
+    [Fact]
+    public async Task ConsolidateIntoGroupAsync_PostsSelectionToTargetGroup()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"group":{"groupId":"triage-group-target","status":"collecting","reportCount":3,"quietDeadlineUtc":"2026-06-25T05:00:00Z"},"removedGroupIds":[],"movedReportCount":1}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.ConsolidateIntoGroupAsync(
+            "triage-group-target",
+            new TriageGroupSelectionRequest { ReportIds = ["triage-report-001"] });
+
+        Assert.Equal("triage-group-target", result.Group.GroupId);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/groups/triage-group-target/consolidate", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"reportIds\":[\"triage-report-001\"]", handler.LastRequestBody!, StringComparison.Ordinal);
+    }
+
+    /// <summary>TEST-TRIAGE-003: MergeGroupsAsync posts source groups to the target group.</summary>
+    [Fact]
+    public async Task MergeGroupsAsync_PostsSourceGroupsToTargetGroup()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"group":{"groupId":"triage-group-target","status":"collecting","reportCount":4,"quietDeadlineUtc":"2026-06-25T05:00:00Z"},"removedGroupIds":["triage-group-source"],"movedReportCount":2}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.MergeGroupsAsync(
+            "triage-group-target",
+            new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] });
+
+        Assert.Equal(["triage-group-source"], result.RemovedGroupIds);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/groups/triage-group-target/merge", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"groupIds\":[\"triage-group-source\"]", handler.LastRequestBody!, StringComparison.Ordinal);
+    }
+
     /// <summary>TEST-TRIAGE-001: GetDashboardAsync reads queue buckets and run history for a workspace.</summary>
     [Fact]
     public async Task GetDashboardAsync_SendsWorkspaceFilter()
