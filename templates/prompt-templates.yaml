@@ -3,19 +3,19 @@ templates:
     title: Example Greeting Template
     category: custom
     tags:
-      - example
-      - getting-started
+    - example
+    - getting-started
     description: A simple greeting template demonstrating Handlebars syntax.
     engine: handlebars
     variables:
-      - name: name
-        description: Name of the person to greet
-        required: true
-        example: Alice
-      - name: role
-        description: Role or title of the person
-        required: false
-        defaultValue: developer
+    - name: name
+      description: Name of the person to greet
+      required: true
+      example: Alice
+    - name: role
+      description: Role or title of the person
+      required: false
+      defaultValue: developer
     content: |
       Hello, {{name}}!
       {{#if role}}You are a {{role}}.{{/if}}
@@ -24,23 +24,23 @@ templates:
     title: Agent Briefing Template
     category: agent
     tags:
-      - agent
-      - onboarding
-      - example
+    - agent
+    - onboarding
+    - example
     description: Template for briefing an AI agent about a workspace context.
     engine: handlebars
     variables:
-      - name: agentName
-        description: Name of the AI agent
-        required: true
-        example: Copilot
-      - name: workspaceName
-        description: Name of the current workspace
-        required: true
-        example: McpServer
-      - name: objectives
-        description: List of objectives for the agent
-        required: false
+    - name: agentName
+      description: Name of the AI agent
+      required: true
+      example: Copilot
+    - name: workspaceName
+      description: Name of the current workspace
+      required: true
+      example: McpServer
+    - name: objectives
+      description: List of objectives for the agent
+      required: false
     content: |
       ## Agent Briefing: {{agentName}}
 
@@ -60,24 +60,24 @@ templates:
     title: Triage Research Bug Report
     category: system
     tags:
-      - triage
-      - bug
-      - research
+    - triage
+    - bug
+    - research
     description: Prompt for the configured direct triage agent that researches grouped incidental bug reports and returns schema-valid JSON.
     engine: handlebars
     variables:
-      - name: groupJson
-        description: Serialized triage group detail including reports.
-        required: true
-      - name: groupId
-        description: Triage group identifier.
-        required: false
-      - name: workspacePath
-        description: Effective workspace path for the group.
-        required: false
-      - name: reportCount
-        description: Number of reports currently in the group.
-        required: false
+    - name: groupJson
+      description: Serialized triage group detail including reports.
+      required: true
+    - name: groupId
+      description: Triage group identifier.
+      required: false
+    - name: workspacePath
+      description: Effective workspace path for the group.
+      required: false
+    - name: reportCount
+      description: Number of reports currently in the group.
+      required: false
     content: |
       You are the configured MCP Server bug triage agent.
 
@@ -103,23 +103,23 @@ templates:
     title: TODO Status Prompt
     category: system
     tags:
-      - todo
-      - prompt
-      - status
+    - todo
+    - prompt
+    - status
     description: 'Prompt template for generating TODO status reports. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-      - name: id
-        description: TODO item ID
-        required: true
-        example: MVP-MCP-004
-      - name: title
-        description: TODO item title
-        required: false
-      - name: baseUrl
-        description: Server base URL
-        required: false
-        default-value: http://localhost:7147
+    - name: id
+      description: TODO item ID
+      required: true
+      example: MVP-MCP-004
+    - name: title
+      description: TODO item title
+      required: false
+    - name: baseUrl
+      description: Server base URL
+      required: false
+      default-value: http://localhost:7147
     content: |
       Get the current status of TODO {id}. Report the following in structured markdown:
 
@@ -132,23 +132,23 @@ templates:
     title: TODO Implement Prompt
     category: system
     tags:
-      - todo
-      - prompt
-      - implement
+    - todo
+    - prompt
+    - implement
     description: 'Prompt template for driving Copilot to implement a TODO item. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-      - name: id
-        description: TODO item ID
-        required: true
-        example: MVP-MCP-004
-      - name: title
-        description: TODO item title
-        required: true
-      - name: baseUrl
-        description: Server base URL
-        required: true
-        default-value: http://localhost:7147
+    - name: id
+      description: TODO item ID
+      required: true
+      example: MVP-MCP-004
+    - name: title
+      description: TODO item title
+      required: true
+    - name: baseUrl
+      description: Server base URL
+      required: true
+      default-value: http://localhost:7147
     content: |
       Implement TODO {id}: {title}
 
@@ -178,23 +178,23 @@ templates:
     title: TODO Plan Prompt
     category: system
     tags:
-      - todo
-      - prompt
-      - plan
+    - todo
+    - prompt
+    - plan
     description: 'Prompt template for creating detailed implementation plans. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-      - name: id
-        description: TODO item ID
-        required: true
-        example: MVP-MCP-004
-      - name: title
-        description: TODO item title
-        required: false
-      - name: baseUrl
-        description: Server base URL
-        required: true
-        default-value: http://localhost:7147
+    - name: id
+      description: TODO item ID
+      required: true
+      example: MVP-MCP-004
+    - name: title
+      description: TODO item title
+      required: false
+    - name: baseUrl
+      description: Server base URL
+      required: true
+      default-value: http://localhost:7147
     content: |
       Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on.
 
@@ -215,16 +215,16 @@ templates:
     title: Pairing Login Page
     category: system
     tags:
-      - pairing
-      - html
-      - login
+    - pairing
+    - html
+    - login
     description: 'HTML template for the /pair login form. Placeholder: {errorBanner} (empty string or error div).'
     engine: none
     variables:
-      - name: errorBanner
-        description: HTML error banner string (empty for no error)
-        required: false
-        default-value: ""
+    - name: errorBanner
+      description: HTML error banner string (empty for no error)
+      required: false
+      default-value: ""
     content: |
       <!DOCTYPE html>
       <html lang="en">
@@ -264,19 +264,19 @@ templates:
     title: Pairing Key Page
     category: system
     tags:
-      - pairing
-      - html
-      - apikey
+    - pairing
+    - html
+    - apikey
     description: 'HTML template showing the API key after login. Placeholders: {apiKey}, {serverUrl}.'
     engine: none
     variables:
-      - name: apiKey
-        description: The server API key to display
-        required: true
-      - name: serverUrl
-        description: The server base URL
-        required: true
-        example: http://localhost:7147
+    - name: apiKey
+      description: The server API key to display
+      required: true
+    - name: serverUrl
+      description: The server base URL
+      required: true
+      example: http://localhost:7147
     content: |
       <!DOCTYPE html>
       <html lang="en">
@@ -337,9 +337,9 @@ templates:
     title: Pairing Not Configured Page
     category: system
     tags:
-      - pairing
-      - html
-      - error
+    - pairing
+    - html
+    - error
     description: HTML template shown when pairing is not configured. No placeholders.
     engine: none
     content: |
@@ -371,29 +371,29 @@ templates:
     title: Default Marker File Prompt
     category: system
     tags:
-      - marker
-      - agent-instructions
-      - system
+    - marker
+    - agent-instructions
+    - system
     description: The default AGENTS-README-FIRST.yaml prompt template. Rendered with baseUrl, apiKey, and workspace context variables.
     engine: handlebars
     variables:
-      - name: baseUrl
-        description: Server base URL
-        required: true
-        example: http://localhost:7147
-      - name: apiKey
-        description: Workspace API key
-        required: true
-      - name: version
-        description: Application version (informational version including git SHA)
-        required: false
-        defaultValue: unknown
-      - name: workspace
-        description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
-        required: true
-      - name: agentAdditions
-        description: Optional list of agent-specific marker instruction sections.
-        required: false
+    - name: baseUrl
+      description: Server base URL
+      required: true
+      example: http://localhost:7147
+    - name: apiKey
+      description: Workspace API key
+      required: true
+    - name: version
+      description: Application version (informational version including git SHA)
+      required: false
+      defaultValue: unknown
+    - name: workspace
+      description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
+      required: true
+    - name: agentAdditions
+      description: Optional list of agent-specific marker instruction sections.
+      required: false
     content: |
       You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
@@ -410,7 +410,7 @@ templates:
       - `agent_plugins.policy` is `required`. The plugin contract or deterministic digest is covered by marker signature verification. - Plugin acquisition is the bootstrap exception to the normal plugin-only rule: if the matching plugin is not already available locally, use the authenticated tool registry endpoints in this marker to locate/install the matching `mcpserver-*-plugin` tool definition from the `official` bucket and run its clone/update command. After acquisition, bootstrap and use the matching plugin for normal MCP work. - If your matching plugin cannot be acquired through the tool registry or remains unavailable after acquisition, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis. - Do not substitute raw REST, generic `mcpserver-repl`, helper modules, or another agent's plugin for normal session, TODO, requirements, import/export, or traceability operations. - Another agent's plugin may be inspected only for read-only diagnosis of plugin installation or contract drift. - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract. - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks/MCP server declarations must satisfy `agent_plugins.agents.Grok`. - For Grok, the Streamable HTTP MCP server exposes tool names such as `sessionlog_*`, `todo_*`, `requirements_*`, and memory tools when available; hosted-agent `mcp_*` names are not expected from that transport. `workflow.sessionlog.*`, `workflow.todo.*`, `workflow.memory.*`, and `workflow.requirements.*` are plugin shim/REPL method names used by the Grok skills and `repl-invoke` helpers; they are not expected to appear as literal `search_tool` results. - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source. - Claude Code agents must trigger the `claude-hook-validation` skill during marker/plugin bootstrap. That skill validates active Claude settings for MCP `UserPromptSubmit`, `Stop`, and `PostToolUse` hook commands from `hooks/hooks.json`; if any required hook is missing, it uses `install-claude-mcp-hooks.ps1` from the `claude-hook-wiring` skill to merge MCP hooks into active Claude settings without replacing existing hooks. Restart Claude Code after the skill reports installed hooks.
 
       ## MCP Requirements Visibility
-      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent's requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, or equivalent plugin tool). Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
+      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent's requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, `req_effective`, or equivalent plugin tool). Use the layer catalog surface (`workflow.requirements.listLayers/createLayer/updateLayer`, `client.Requirements.ListRequirementLayersAsync/CreateRequirementLayerAsync/UpdateRequirementLayerAsync`, `req_list_layers/req_create_layer/req_update_layer`, or equivalent plugin tools) when the user asks to inspect or manage requirement layers. Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
       ## YAML Mutation Rule
 
       - Never edit YAML files by appending, replacing, or removing text lines. This includes one-key configuration changes.

@@ -80,6 +80,45 @@ describe('requirements tool schemas', () => {
       expect(ac.items?.required).toEqual(['text']);
     }
   });
+
+  test('FR/TR/TEST create+update tools expose requirement scope layer fields', () => {
+    const toolNames = [
+      'req_create_fr',
+      'req_update_fr',
+      'req_create_tr',
+      'req_update_tr',
+      'req_create_test',
+      'req_update_test',
+    ];
+    for (const name of toolNames) {
+      const schema = tool(name).inputSchema as unknown as {
+        properties: Record<string, { type?: string }>;
+      };
+      expect(schema.properties.scopeStartLayerKey?.type).toBe('string');
+      expect(schema.properties.scopeEndLayerKey?.type).toBe('string');
+    }
+  });
+
+  test('layer catalog tools expose layer input schemas', () => {
+    const createSchema = tool('req_create_layer').inputSchema as unknown as {
+      properties: Record<string, { type?: string }>;
+      required: string[];
+    };
+    const updateSchema = tool('req_update_layer').inputSchema as unknown as {
+      properties: Record<string, { type?: string }>;
+      required: string[];
+    };
+    const effectiveSchema = tool('req_effective').inputSchema as unknown as {
+      properties: Record<string, { type?: string }>;
+    };
+
+    expect(tool('req_list_layers')).toBeDefined();
+    expect(createSchema.required).toEqual(['key', 'order', 'name']);
+    expect(createSchema.properties.scopeEndLayerKey?.type).toBe('string');
+    expect(updateSchema.required).toEqual(['key']);
+    expect(updateSchema.properties.scopeEndLayerKey?.type).toBe('string');
+    expect(effectiveSchema.properties.layerKey?.type).toBe('string');
+  });
 });
 
 describe('handleRequirementsTool', () => {
@@ -315,6 +354,94 @@ describe('handleRequirementsTool', () => {
     const typedParams = fake.calls[1].params as { id: string; request: { acceptanceCriteria: unknown } };
     expect(typedParams.id).toBe('FR-AC-201');
     expect(typedParams.request.acceptanceCriteria).toEqual(acceptanceCriteria);
+  });
+
+  test('threads requirement scope layer fields into typed update FR request', async () => {
+    const fake = new FakeBridge();
+    fake.responses = [
+      { type: 'result', payload: { result: {} } },
+      { type: 'result', payload: { result: { id: 'FR-LAYER-001' } } },
+    ];
+
+    await handleRequirementsTool(
+      'req_update_fr',
+      {
+        id: 'FR-LAYER-001',
+        scopeStartLayerKey: 'layer-2',
+        scopeEndLayerKey: 'layer-4',
+      },
+      asBridge(fake),
+    );
+
+    expect(fake.calls).toHaveLength(2);
+    expect(fake.calls[1].method).toBe('client.Requirements.UpdateFrAsync');
+    const typedParams = fake.calls[1].params as {
+      request: { scopeStartLayerKey?: string; scopeEndLayerKey?: string };
+    };
+    expect(typedParams.request.scopeStartLayerKey).toBe('layer-2');
+    expect(typedParams.request.scopeEndLayerKey).toBe('layer-4');
+  });
+
+  test('routes requirement layer create through workflow then typed fallback', async () => {
+    const fake = new FakeBridge();
+    fake.responses = [
+      { type: 'result', payload: { result: {} } },
+      { type: 'result', payload: { result: { key: 'layer-2' } } },
+    ];
+
+    await handleRequirementsTool(
+      'req_create_layer',
+      {
+        key: 'layer-2',
+        order: 2,
+        name: 'Layer 2',
+        description: 'Second layer',
+        scopeEndLayerKey: 'layer-4',
+      },
+      asBridge(fake),
+    );
+
+    expect(fake.calls).toEqual([
+      {
+        method: 'workflow.requirements.createLayer',
+        params: {
+          key: 'layer-2',
+          order: 2,
+          name: 'Layer 2',
+          description: 'Second layer',
+          scopeEndLayerKey: 'layer-4',
+        },
+      },
+      {
+        method: 'client.Requirements.CreateRequirementLayerAsync',
+        params: {
+          request: {
+            key: 'layer-2',
+            order: 2,
+            name: 'Layer 2',
+            description: 'Second layer',
+            scopeEndLayerKey: 'layer-4',
+          },
+        },
+      },
+    ]);
+  });
+
+  test('routes effective requirements query through workflow layer preview', async () => {
+    const fake = new FakeBridge();
+    fake.nextResponse = {
+      type: 'result',
+      payload: { result: { layerKey: 'layer-2', functionalRequirements: [] } },
+    };
+
+    await handleRequirementsTool('req_effective', { layerKey: 'layer-2' }, asBridge(fake));
+
+    expect(fake.calls).toEqual([
+      {
+        method: 'workflow.requirements.effective',
+        params: { layerKey: 'layer-2' },
+      },
+    ]);
   });
 
   test('fails when supplied acceptanceCriteria returns empty', async () => {

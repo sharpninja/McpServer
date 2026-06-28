@@ -125,6 +125,10 @@
   "allOf": [
     {
       "properties": {
+        "AgentPluginParent": {
+          "type": "string",
+          "description": "Directory containing mcpserver-*-plugin repositories; defaults to the repository parent directory"
+        },
         "ApiKey": {
           "type": "string",
           "description": "MCP server API key for smoke tests"

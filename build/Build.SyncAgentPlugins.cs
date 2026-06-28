@@ -8,6 +8,9 @@ using Serilog;
 
 partial class Build
 {
+    [Parameter("Directory containing mcpserver-*-plugin repositories; defaults to the repository parent directory")]
+    readonly string? AgentPluginParent;
+
     private static readonly JsonSerializerOptions s_pluginJsonOptions = new()
     {
         WriteIndented = true
@@ -29,13 +32,6 @@ partial class Build
     public Target SyncAgentPlugins => _ => _
         .Executes(() =>
         {
-            var pluginRoots = DiscoverAgentPluginRoots(RootDirectory);
-            if (pluginRoots.Count == 0)
-            {
-                Log.Warning("No known agent plugin repositories were found next to {RootDirectory}.", RootDirectory);
-                return;
-            }
-
             var syncScript = RootDirectory / "plugins" / "core" / "sync" / "sync-plugin-core.ps1";
             if (!File.Exists(syncScript.ToString()))
                 throw new FileNotFoundException("Plugin core sync script was not found.", syncScript.ToString());
@@ -44,46 +40,23 @@ partial class Build
             if (!File.Exists(wrapperScript.ToString()))
                 throw new FileNotFoundException("Plugin wrapper generator was not found.", wrapperScript.ToString());
 
+            var stagedRoot = RootDirectory / "plugins" / "core" / ".staged-plugin";
+            Directory.CreateDirectory(stagedRoot.ToString());
+            SyncPluginCorePackage(RootDirectory, stagedRoot, syncScript, wrapperScript, "claude-code");
+
+            var pluginRoots = DiscoverAgentPluginRoots(RootDirectory, AgentPluginParent);
+            if (pluginRoots.Count == 0)
+            {
+                Log.Warning("No known agent plugin repositories were found under {PluginParent}. Synced only the workspace staged plugin package.", ResolveAgentPluginParentDirectory(RootDirectory, AgentPluginParent));
+                return;
+            }
+
             foreach (var pluginRoot in pluginRoots)
             {
-                Log.Information("Syncing plugin core into {PluginRoot}", pluginRoot);
-                ProcessTasks.StartProcess(
-                        "pwsh.exe",
-                        $"-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{syncScript}\" -PluginRoot \"{pluginRoot}\"")
-                    .AssertZeroExitCode();
-
-                var hostName = ResolvePluginHostName(pluginRoot);
-                if (!string.IsNullOrWhiteSpace(hostName))
-                {
-                    Log.Information("Generating {HostName} PowerShell wrappers in {PluginRoot}", hostName, pluginRoot);
-                    ProcessTasks.StartProcess(
-                            "pwsh.exe",
-                            $"-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{wrapperScript}\" -HostName \"{hostName}\" -PluginRoot \"{pluginRoot}\"")
-                        .AssertZeroExitCode();
-                }
-                else
-                {
-                    Log.Information("No hook wrappers are generated for {PluginRoot}", pluginRoot);
-                }
-
-                RunPluginCoreIntegrityCheck(RootDirectory, pluginRoot);
-                ValidatePluginPowerShellOnlyPackage(pluginRoot);
+                SyncPluginCorePackage(RootDirectory, pluginRoot, syncScript, wrapperScript, ResolvePluginHostName(pluginRoot));
             }
 
             RefreshNodePluginCoreVendorPackages(RootDirectory, pluginRoots);
-
-            var stagedRoot = RootDirectory / "plugins" / "core" / ".staged-plugin";
-            var stagedHost = "claude-code";
-            ProcessTasks.StartProcess(
-                    "pwsh.exe",
-                    $"-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{syncScript}\" -PluginRoot \"{stagedRoot}\"")
-                .AssertZeroExitCode();
-            ProcessTasks.StartProcess(
-                    "pwsh.exe",
-                    $"-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{wrapperScript}\" -HostName \"{stagedHost}\" -PluginRoot \"{stagedRoot}\"")
-                    .AssertZeroExitCode();
-            RunPluginCoreIntegrityCheck(RootDirectory, stagedRoot);
-            ValidatePluginPowerShellOnlyPackage(stagedRoot);
 
             var nextVersion = ResolveNextMinorPluginVersion(pluginRoots);
             var updates = PlanPluginVersionUpdates(pluginRoots, nextVersion);
@@ -100,7 +73,7 @@ partial class Build
     public Target ValidatePluginPowerShellOnly => _ => _
         .Executes(() =>
         {
-            var roots = DiscoverAgentPluginRoots(RootDirectory)
+            var roots = DiscoverAgentPluginRoots(RootDirectory, AgentPluginParent)
                 .Concat([RootDirectory / "plugins" / "core" / ".staged-plugin"])
                 .Where(path => Directory.Exists(path.ToString()))
                 .ToArray();
@@ -166,17 +139,25 @@ partial class Build
     /// <summary>A planned plugin version file rewrite.</summary>
     internal sealed record PluginVersionUpdate(string Path, string OriginalContent, string UpdatedContent);
 
-    private static IReadOnlyList<AbsolutePath> DiscoverAgentPluginRoots(AbsolutePath rootDirectory)
+    internal static IReadOnlyList<AbsolutePath> DiscoverAgentPluginRoots(AbsolutePath rootDirectory, string? pluginParent = null)
     {
-        var parent = Directory.GetParent(rootDirectory.ToString());
-        if (parent is null)
+        var parentDirectory = ResolveAgentPluginParentDirectory(rootDirectory, pluginParent);
+        if (string.IsNullOrWhiteSpace(parentDirectory))
             return [];
 
         return s_knownAgentPluginRepositories
-            .Select(name => (AbsolutePath)Path.Combine(parent.FullName, name))
+            .Select(name => (AbsolutePath)Path.Combine(parentDirectory, name))
             .Where(path => Directory.Exists(path.ToString()))
             .OrderBy(path => path.ToString(), StringComparer.OrdinalIgnoreCase)
             .ToArray();
+    }
+
+    internal static string? ResolveAgentPluginParentDirectory(AbsolutePath rootDirectory, string? pluginParent = null)
+    {
+        if (!string.IsNullOrWhiteSpace(pluginParent))
+            return Path.GetFullPath(pluginParent);
+
+        return Directory.GetParent(rootDirectory.ToString())?.FullName;
     }
 
     private static string? ResolvePluginHostName(AbsolutePath pluginRoot)
@@ -191,6 +172,36 @@ partial class Build
             "mcpserver-grok-plugin" => "grok",
             _ => null
         };
+    }
+
+    private static void SyncPluginCorePackage(
+        AbsolutePath rootDirectory,
+        AbsolutePath pluginRoot,
+        AbsolutePath syncScript,
+        AbsolutePath wrapperScript,
+        string? hostName)
+    {
+        Log.Information("Syncing plugin core into {PluginRoot}", pluginRoot);
+        ProcessTasks.StartProcess(
+                "pwsh.exe",
+                $"-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{syncScript}\" -PluginRoot \"{pluginRoot}\"")
+            .AssertZeroExitCode();
+
+        if (!string.IsNullOrWhiteSpace(hostName))
+        {
+            Log.Information("Generating {HostName} PowerShell wrappers in {PluginRoot}", hostName, pluginRoot);
+            ProcessTasks.StartProcess(
+                    "pwsh.exe",
+                    $"-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{wrapperScript}\" -HostName \"{hostName}\" -PluginRoot \"{pluginRoot}\"")
+                .AssertZeroExitCode();
+        }
+        else
+        {
+            Log.Information("No hook wrappers are generated for {PluginRoot}", pluginRoot);
+        }
+
+        RunPluginCoreIntegrityCheck(rootDirectory, pluginRoot);
+        ValidatePluginPowerShellOnlyPackage(pluginRoot);
     }
 
     private static IEnumerable<string> EnumerateVersionedJsonFiles(IReadOnlyList<AbsolutePath> pluginRoots)

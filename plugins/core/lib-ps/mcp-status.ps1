@@ -21,11 +21,25 @@ $namespaces = @(
     'workflow.graphrag'
     'workflow.memory'
 )
+$requirementMethods = @(
+    'workflow.requirements.listLayers'
+    'workflow.requirements.createLayer'
+    'workflow.requirements.updateLayer'
+    'workflow.requirements.effective'
+)
+$requirementClientMethods = @(
+    'client.Requirements.ListRequirementLayersAsync'
+    'client.Requirements.CreateRequirementLayerAsync'
+    'client.Requirements.UpdateRequirementLayerAsync'
+    'client.Requirements.GetEffectiveRequirementsAsync'
+)
 
 $status = [ordered]@{
     status = if (Test-Path -LiteralPath $sessionFile) { 'available' } else { 'no-session' }
     agent = $env:MCP_AGENT_NAME
     namespaces = $namespaces
+    requirementMethods = $requirementMethods
+    requirementClientMethods = $requirementClientMethods
     cacheDir = $cacheDir
     hasSession = Test-Path -LiteralPath $sessionFile
     hasCurrentTurn = Test-Path -LiteralPath $turnFile
