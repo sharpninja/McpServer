@@ -103,3 +103,7 @@ McpServer; you interact with it only through the plugin API.
 - 401 from the server: the API key rotated on restart; re-read `AGENTS-README-FIRST.yaml` and retry.
 - Closing the turn with no `response` summary, or failing without an `errorMessage`, loses the audit trail and (for `failTurn`) is rejected by validation.
 - Editing the session-log YAML directly to "fix" something: forbidden; use `updateTurn` or the documented section edit endpoints through the plugin instead.
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`.

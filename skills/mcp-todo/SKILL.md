@@ -135,3 +135,7 @@ plugin) is `GET/POST/PUT/DELETE /mcpserver/todo[/{id}]` with the workspace
   clobber fields you did not mean to touch.
 - Confusing MCP TODOs with the harness task list, GitHub issues, or a markdown
   checklist.
+
+## YAML Mutation Rule
+
+When YAML must be changed, deserialize the complete document into an object, mutate the object, serialize the object, and save the result. Do not append YAML snippets, replace YAML lines, remove YAML lines, or build YAML payloads as strings. For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`.

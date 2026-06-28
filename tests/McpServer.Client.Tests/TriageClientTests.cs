@@ -124,7 +124,7 @@ public sealed class TriageClientTests
     {
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
-            """{"group":{"groupId":"triage-group-new","status":"collecting","reportCount":2,"quietDeadlineUtc":"2026-06-25T05:00:00Z"},"removedGroupIds":["triage-group-old"],"movedReportCount":2}""");
+            """{"group":{"groupId":"triage-group-new","status":"queued","reportCount":2,"quietDeadlineUtc":"2026-06-25T05:00:00Z"},"removedGroupIds":["triage-group-old"],"movedReportCount":2}""");
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
@@ -136,6 +136,7 @@ public sealed class TriageClientTests
         });
 
         Assert.Equal("triage-group-new", result.Group.GroupId);
+        Assert.Equal("queued", result.Group.Status);
         Assert.Equal(2, result.MovedReportCount);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/triage/groups/new", handler.LastRequest.RequestUri!.AbsolutePath);

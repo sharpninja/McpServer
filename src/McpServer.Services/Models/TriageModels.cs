@@ -242,6 +242,15 @@ public sealed record TriageResearchRunDetail
     /// <summary>Raw agent output.</summary>
     public string? RawOutput { get; init; }
 
+    /// <summary>Raw stdout stream captured from the launched triage agent process.</summary>
+    public string? AgentStdout { get; init; }
+
+    /// <summary>Raw stderr stream captured from the launched triage agent process.</summary>
+    public string? AgentStderr { get; init; }
+
+    /// <summary>Launched triage agent process exit code, when available.</summary>
+    public int? AgentExitCode { get; init; }
+
     /// <summary>Schema-valid agent JSON after validation.</summary>
     public string? ResponseJson { get; init; }
 
@@ -278,7 +287,7 @@ public sealed record TriageCreatedTodoDetail
     /// <summary>Canonical TODO identifier created by triage.</summary>
     public required string TodoId { get; init; }
 
-    /// <summary>Persisted UTC timestamp when the TODO anchor was created.</summary>
+    /// <summary>Persisted UTC timestamp for the triage run that created the TODO.</summary>
     public DateTimeOffset CreatedAtUtc { get; init; }
 
     /// <summary>Workspace path that owns the triage-created TODO.</summary>
@@ -368,16 +377,16 @@ public sealed class TriageOptions
     public string PromptTemplateId { get; set; } = "triage-research-bug-report";
 
     /// <summary>Direct triage agent name.</summary>
-    public string? AgentName { get; set; }
+    public string? AgentName { get; set; } = "triage";
 
     /// <summary>Direct triage agent executable path.</summary>
-    public string? AgentPath { get; set; }
+    public string? AgentPath { get; set; } = "codex";
 
     /// <summary>Direct triage agent model id.</summary>
-    public string AgentModel { get; set; } = "gpt-5.3-codex";
+    public string AgentModel { get; set; } = "auto";
 
     /// <summary>Direct triage agent execution strategy.</summary>
-    public string ExecutionStrategy { get; set; } = "copilot-cli";
+    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CodexCli;
 
     /// <summary>Additional environment variables passed to the direct agent.</summary>
     public Dictionary<string, string> AgentParameters { get; set; } = [];
@@ -395,7 +404,13 @@ public sealed record TriageResearchRequest(
 /// <summary>
 /// TR-MCP-TRIAGE-003: Raw direct-agent research result.
 /// </summary>
-public sealed record TriageResearchRunResult(bool Success, string? OutputJson, string? Error);
+public sealed record TriageResearchRunResult(
+    bool Success,
+    string? OutputJson,
+    string? Error,
+    string? AgentStdout = null,
+    string? AgentStderr = null,
+    int? AgentExitCode = null);
 
 /// <summary>
 /// TR-MCP-TRIAGE-003: Executes background research for a triage group.

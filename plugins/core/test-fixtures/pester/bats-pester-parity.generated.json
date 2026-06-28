@@ -1587,64 +1587,73 @@
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
     "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
     "batsLine": 1623,
-    "batsName": "workflow.requirements uses session-state workspace path and base URL for mcpserver-repl",
+    "batsName": "workflow.requirements layer commands fall back to typed client methods",
     "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
     "pesterId": "PSONLY-REPL-INVOKE-SHIM-064",
-    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 064 workflow-requirements-uses-session-state-workspace-path-and-base-url-for-mcpserv"
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 064 workflow-requirements-layer-commands-fall-back-to-typed-client-methods"
   },
   {
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
     "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
-    "batsLine": 1633,
-    "batsName": "pending import transformer emits session recovery and TODO YAML commands",
+    "batsLine": 1646,
+    "batsName": "workflow.requirements uses session-state workspace path and base URL for mcpserver-repl",
     "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
     "pesterId": "PSONLY-REPL-INVOKE-SHIM-065",
-    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 065 pending-import-transformer-emits-session-recovery-and-todo-yaml-commands"
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 065 workflow-requirements-uses-session-state-workspace-path-and-base-url-for-mcpserv"
   },
   {
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
     "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
-    "batsLine": 1679,
-    "batsName": "workflow.sessionlog.importRecovery uses marker-auth HTTP submit before REPL",
+    "batsLine": 1656,
+    "batsName": "pending import transformer emits session recovery and TODO YAML commands",
     "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
     "pesterId": "PSONLY-REPL-INVOKE-SHIM-066",
-    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 066 workflow-sessionlog-importrecovery-uses-marker-auth-http-submit-before-repl"
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 066 pending-import-transformer-emits-session-recovery-and-todo-yaml-commands"
   },
   {
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
     "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
-    "batsLine": 1695,
-    "batsName": "workflow.sessionlog.importRecovery accepts nested YAML sessionLog payloads",
+    "batsLine": 1702,
+    "batsName": "workflow.sessionlog.importRecovery uses marker-auth HTTP submit before REPL",
     "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
     "pesterId": "PSONLY-REPL-INVOKE-SHIM-067",
-    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 067 workflow-sessionlog-importrecovery-accepts-nested-yaml-sessionlog-payloads"
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 067 workflow-sessionlog-importrecovery-uses-marker-auth-http-submit-before-repl"
   },
   {
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
     "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
-    "batsLine": 1730,
-    "batsName": "failsafe write stores replayable generic operation under workspace .mcpServer",
+    "batsLine": 1718,
+    "batsName": "workflow.sessionlog.importRecovery accepts nested YAML sessionLog payloads",
     "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
     "pesterId": "PSONLY-REPL-INVOKE-SHIM-068",
-    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 068 failsafe-write-stores-replayable-generic-operation-under-workspace-mcpserver"
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 068 workflow-sessionlog-importrecovery-accepts-nested-yaml-sessionlog-payloads"
   },
   {
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
     "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
-    "batsLine": 1752,
-    "batsName": "failsafe clear removes acknowledged operation",
+    "batsLine": 1753,
+    "batsName": "failsafe write stores replayable generic operation under workspace .mcpServer",
     "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
     "pesterId": "PSONLY-REPL-INVOKE-SHIM-069",
-    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 069 failsafe-clear-removes-acknowledged-operation"
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 069 failsafe-write-stores-replayable-generic-operation-under-workspace-mcpserver"
   },
   {
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
     "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
-    "batsLine": 1764,
-    "batsName": "workflow.requirements prefers compatibility marker when direct marker auth would fail",
+    "batsLine": 1775,
+    "batsName": "failsafe clear removes acknowledged operation",
     "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
     "pesterId": "PSONLY-REPL-INVOKE-SHIM-070",
-    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 070 workflow-requirements-prefers-compatibility-marker-when-direct-marker-auth-would"
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 070 failsafe-clear-removes-acknowledged-operation"
+  },
+  {
+    "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",
+    "batsFile": "plugins/core/test-fixtures/legacy-bats/repl-invoke-shim.bats",
+    "batsLine": 1787,
+    "batsName": "workflow.requirements prefers compatibility marker when direct marker auth would fail",
+    "pesterFile": "plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1",
+    "pesterId": "PSONLY-REPL-INVOKE-SHIM-071",
+    "pesterName": "TEST-MCP-PLUGIN-PSONLY-001 repl-invoke-shim 071 workflow-requirements-prefers-compatibility-marker-when-direct-marker-auth-would"
   },
   {
     "testRequirement": "TEST-MCP-PLUGIN-PSONLY-001",

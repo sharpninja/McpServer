@@ -24,28 +24,28 @@ VectorIndex:
 Mcp:
   Database:
     Provider: sqlite
-    MigrationsAssembly: ''
+    MigrationsAssembly: ""
     Sqlite:
       DataSource: mcp.db
     PostgreSql:
-      ConnectionString: ''
+      ConnectionString: ""
     SqlServer:
-      ConnectionString: ''
+      ConnectionString: ""
     Encryption:
       Enabled: false
       Sqlite:
-        Key: ''
-        SeeToolPath: ''
+        Key: ""
+        SeeToolPath: ""
       PostgreSql:
-        KeyProvider: ''
-        PrincipalKey: ''
+        KeyProvider: ""
+        PrincipalKey: ""
       SqlServer:
-        CertificateName: ''
-        DatabaseEncryptionKeyName: ''
+        CertificateName: ""
+        DatabaseEncryptionKeyName: ""
   DatabaseProvider: sqlite
-  PostgresConnectionString: ''
-  SqlServerConnectionString: ''
-  DatabaseMigrationsAssembly: ''
+  PostgresConnectionString: ""
+  SqlServerConnectionString: ""
+  DatabaseMigrationsAssembly: ""
   Port: 7147
   DataSource: mcp.db
   DataDirectory: .
@@ -62,16 +62,16 @@ Mcp:
   WebsiteRequestMaxAttempts: 3
   WebsiteRequestRetryDelayMilliseconds: 1000
   WebsiteAllowedSchemes:
-  - http
-  - https
+    - http
+    - https
   WebsiteBlockedHosts:
-  - localhost
+    - localhost
   RepoAllowlist:
-  - src/McpServer.Cqrs/**/*.cs
-  - src/McpServer.Cqrs.Mvvm/**/*.cs
+    - src/McpServer.Cqrs/**/*.cs
+    - src/McpServer.Cqrs.Mvvm/**/*.cs
   DesktopLaunch:
     Enabled: false
-    AccessToken: ''
+    AccessToken: ""
     AllowedExecutables: []
   GraphRag:
     Enabled: true
@@ -114,35 +114,35 @@ Mcp:
         SqliteDataSource: mcp-alt.db
   ToolRegistry:
     DefaultBuckets:
-    - Name: official
-      Owner: sharpninja
-      Repo: McpServerTools
-      Branch: main
-      ManifestPath: /
+      - Name: official
+        Owner: sharpninja
+        Repo: McpServerTools
+        Branch: main
+        ManifestPath: /
   Tunnel:
-    Provider: ''
+    Provider: ""
     Port: 7147
     Ngrok:
       Enabled: false
-      Subdomain: ''
-      AuthToken: ''
+      Subdomain: ""
+      AuthToken: ""
       Region: us
     Cloudflare:
       Enabled: false
-      TunnelName: ''
-      Hostname: ''
+      TunnelName: ""
+      Hostname: ""
     Frp:
       ServerAddress: 127.0.0.1
       ServerPort: 7000
   Federation:
     Enabled: false
     Role: Standalone
-    HubBaseUrl: ''
-    HubAccessToken: ''
-    ProxyId: ''
-    EnrollmentToken: ''
+    HubBaseUrl: ""
+    HubAccessToken: ""
+    ProxyId: ""
+    EnrollmentToken: ""
     MaxHops: 3
-    DefaultTarget: ''
+    DefaultTarget: ""
     Targets: []
     WorkspaceRoutes: []
     Queue:
@@ -155,27 +155,27 @@ Mcp:
       FanoutIntervalSeconds: 15
     Signing:
       Enabled: true
-      SharedSecret: ''
+      SharedSecret: ""
       EnvelopeTtlSeconds: 300
     LocalExecution:
       Enabled: false
       AllowedMethods:
-      - desktop_launch
+        - desktop_launch
   InteractionLogging:
-    LoggingServiceUrl: ''
+    LoggingServiceUrl: ""
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
     Enabled: false
-    Url: ''
+    Url: ""
     StreamName: mcp
-    Username: ''
-    Password: ''
+    Username: ""
+    Password: ""
     FallbackLogPath: logs/mcp-.log
   IdentityServer:
     Enabled: false
-    IssuerUri: ''
-    ConnectionString: ''
+    IssuerUri: ""
+    ConnectionString: ""
     DatabaseName: McpIdentity
     SeedDefaults: true
     DefaultAdminUser: admin
@@ -184,30 +184,60 @@ Mcp:
     ApiResourceName: mcp-server-api
   PairingUsers: []
   Workspaces:
-  - WorkspacePath: F:\GitHub\McpServer\src\McpServer.Support.Mcp
-    Name: McpServer.Support.Mcp
-    TodoPath: docs/Project/TODO.yaml
-    IsPrimary: true
-    IsEnabled: true
-    DateTimeCreated: &o0
-      DateTime: 2026-06-22T17:41:12.7085129
-      UtcDateTime: 2026-06-22T17:41:12.7085129Z
-      LocalDateTime: 2026-06-22T12:41:12.7085129-05:00
-      Date: 2026-06-22T00:00:00.0000000
-      Day: 22
-      DayOfWeek: Monday
-      DayOfYear: 173
-      Hour: 17
-      Millisecond: 708
-      Microsecond: 512
-      Nanosecond: 900
-      Minute: 41
-      Month: 6
-      Offset: 00:00:00
-      TotalOffsetMinutes: 0
-      Second: 12
-      Ticks: 639177468727085129
-      UtcTicks: 639177468727085129
-      TimeOfDay: 17:41:12.7085129
-      Year: 2026
-    DateTimeModified: *o0
+    - WorkspacePath: F:\GitHub\McpServer\src\McpServer.Support.Mcp
+      Name: McpServer.Support.Mcp
+      TodoPath: docs/Project/TODO.yaml
+      IsPrimary: true
+      IsEnabled: true
+      DateTimeCreated:
+        DateTime: 2026-06-22T17:41:12.7085129
+        UtcDateTime: 2026-06-22T17:41:12.7085129Z
+        LocalDateTime: 2026-06-22T12:41:12.7085129-05:00
+        Date: 2026-06-22T00:00:00.0000000
+        Day: 22
+        DayOfWeek: Monday
+        DayOfYear: 173
+        Hour: 17
+        Millisecond: 708
+        Microsecond: 512
+        Nanosecond: 900
+        Minute: 41
+        Month: 6
+        Offset: 00:00:00
+        TotalOffsetMinutes: 0
+        Second: 12
+        Ticks: 639177468727085129
+        UtcTicks: 639177468727085129
+        TimeOfDay: 17:41:12.7085129
+        Year: 2026
+      DateTimeModified:
+        DateTime: 2026-06-22T17:41:12.7085129
+        UtcDateTime: 2026-06-22T17:41:12.7085129Z
+        LocalDateTime: 2026-06-22T12:41:12.7085129-05:00
+        Date: 2026-06-22T00:00:00.0000000
+        Day: 22
+        DayOfWeek: Monday
+        DayOfYear: 173
+        Hour: 17
+        Millisecond: 708
+        Microsecond: 512
+        Nanosecond: 900
+        Minute: 41
+        Month: 6
+        Offset: 00:00:00
+        TotalOffsetMinutes: 0
+        Second: 12
+        Ticks: 639177468727085129
+        UtcTicks: 639177468727085129
+        TimeOfDay: 17:41:12.7085129
+        Year: 2026
+Triage:
+  QuietPeriod: 00:15:00
+  SweepInterval: 00:01:00
+  MaxRunTime: 00:10:00
+  PromptTemplateId: triage-research-bug-report
+  AgentName: triage
+  AgentPath: codex
+  AgentModel: auto
+  ExecutionStrategy: codex-cli
+  AgentParameters: {}

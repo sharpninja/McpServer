@@ -2,16 +2,13 @@ Logging:
   LogLevel:
     Default: Information
     Microsoft.AspNetCore: Warning
-
 Serilog:
   MinimumLevel:
     Default: Information
     Override:
       Microsoft.AspNetCore: Warning
       McpServer.Support.Mcp.Logging: Verbose
-
-DataFolder: "."
-
+DataFolder: .
 Mcp:
   Database:
     Provider: sqlite
@@ -39,8 +36,8 @@ Mcp:
   DatabaseMigrationsAssembly: ""
   Port: 7147
   DataSource: mcp.db
-  DataDirectory: "."
-  RepoRoot: "."
+  DataDirectory: .
+  RepoRoot: .
   TodoFilePath: docs/Project/TODO.yaml
   TodoStorage:
     Provider: sqlite
@@ -49,8 +46,8 @@ Mcp:
     default:
       Port: 7147
       DataSource: mcp.db
-      DataDirectory: "."
-      RepoRoot: "."
+      DataDirectory: .
+      RepoRoot: .
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
         Provider: sqlite
@@ -58,7 +55,7 @@ Mcp:
     alt-local:
       Port: 7157
       DataSource: mcp-alt.db
-      DataDirectory: "."
+      DataDirectory: .
       RepoRoot: docs
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
@@ -71,12 +68,12 @@ Mcp:
   Federation:
     Enabled: false
     Role: Standalone
-    HubBaseUrl: ''
-    HubAccessToken: ''
-    ProxyId: ''
-    EnrollmentToken: ''
+    HubBaseUrl: ""
+    HubAccessToken: ""
+    ProxyId: ""
+    EnrollmentToken: ""
     MaxHops: 3
-    DefaultTarget: ''
+    DefaultTarget: ""
     Targets: []
     WorkspaceRoutes: []
     Queue:
@@ -89,13 +86,23 @@ Mcp:
       FanoutIntervalSeconds: 15
     Signing:
       Enabled: true
-      SharedSecret: ''
+      SharedSecret: ""
       EnvelopeTtlSeconds: 300
     LocalExecution:
       Enabled: false
       AllowedMethods:
-      - desktop_launch
+        - desktop_launch
   Parseable:
     Enabled: false
-    Url: ''
+    Url: ""
     StreamName: mcp
+Triage:
+  QuietPeriod: 00:15:00
+  SweepInterval: 00:01:00
+  MaxRunTime: 00:10:00
+  PromptTemplateId: triage-research-bug-report
+  AgentName: triage
+  AgentPath: codex
+  AgentModel: auto
+  ExecutionStrategy: codex-cli
+  AgentParameters: {}

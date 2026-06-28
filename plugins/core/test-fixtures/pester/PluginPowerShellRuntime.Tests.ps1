@@ -334,19 +334,98 @@ acceptanceCriteria:
         $status.namespaces | Should -Contain 'workflow.todo'
         $status.namespaces | Should -Contain 'workflow.requirements'
         $status.namespaces | Should -Contain 'workflow.triage'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.listLayers'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.createLayer'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.updateLayer'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.effective'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.ListRequirementLayersAsync'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.CreateRequirementLayerAsync'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.UpdateRequirementLayerAsync'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.GetEffectiveRequirementsAsync'
     }
 
-    It 'TEST-MCP-REQSCOPE-005 requirements skill tells agents to use current effective layer visibility' {
-        $skillPath = Join-Path $script:StagedRoot 'skills\requirements\SKILL.md'
-        Test-Path -LiteralPath $skillPath | Should -BeTrue
+    It 'TEST-MCP-REQSCOPE-005 requirements guidance tells agents to use current effective layer visibility' {
+        $guidancePath = Join-Path $script:RepoRoot 'templates\prompt-templates.yaml'
+        Test-Path -LiteralPath $guidancePath | Should -BeTrue
 
-        $content = [System.IO.File]::ReadAllText($skillPath)
+        $content = [System.IO.File]::ReadAllText($guidancePath)
 
         $content | Should -Match 'current effective requirements'
         $content | Should -Match 'workflow\.requirements\.effective'
         $content | Should -Match 'active workspace layer'
         $content | Should -Match 'future-layer requirements'
         $content | Should -Match 'currently enforceable'
+    }
+
+    It 'TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation' {
+        $skillFiles = Get-ChildItem -LiteralPath (Join-Path $script:StagedRoot 'skills') -Filter 'SKILL.md' -Recurse -File
+        $skillFiles.Count | Should -BeGreaterThan 0
+
+        foreach ($skillFile in $skillFiles) {
+            $content = [System.IO.File]::ReadAllText($skillFile.FullName)
+
+            $content | Should -Match 'YAML Mutation Rule'
+            $content | Should -Match 'deserialize the complete document into an object'
+            $content | Should -Match 'mutate the object'
+            $content | Should -Match 'serialize the object'
+            $content | Should -Match 'yaml-object-mutation\.ps1'
+            $content | Should -Match 'Set-McpYamlObjectValue'
+            $content | Should -Match 'Update-McpYamlObject'
+        }
+    }
+
+    It 'TEST-MCP-YAML-MUTATION-002 YAML helper mutates nested values through object serialization' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+
+        $yamlPath = Join-Path $script:SmokeCache 'yaml-object-mutation\appsettings.yaml'
+        if (Test-Path -LiteralPath $yamlPath) {
+            Remove-Item -LiteralPath $yamlPath -Force
+        }
+
+        Set-McpYamlObjectValue -Path $yamlPath -KeyPath Triage,AgentPath -Value 'codex' -Create | Out-Null
+        Set-McpYamlObjectValue -Path $yamlPath -KeyPath Triage,QuietPeriodMinutes -Value 15 | Out-Null
+
+        $document = ConvertFrom-Yaml -Yaml ([System.IO.File]::ReadAllText($yamlPath)) -Ordered
+        $document['Triage']['AgentPath'] | Should -Be 'codex'
+        $document['Triage']['QuietPeriodMinutes'] | Should -Be 15
+    }
+
+    It 'TEST-MCP-YAML-MUTATION-003 core sync manifest is built from a serialized object' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'plugins\core\sync\sync-plugin-core.ps1'))
+
+        $content | Should -Match 'ConvertFrom-Yaml'
+        $content | Should -Match 'ConvertTo-Yaml'
+        $content | Should -Match '\[ordered\]@'
+        $content | Should -Not -Match '\$lines\.Add'
+        $content | Should -Not -Match 'Get-Content -LiteralPath \$manifest'
+    }
+
+    It 'TEST-MCP-YAML-MUTATION-004 final response params are serialized from an object' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'final-response.ps1'))
+
+        $content | Should -Match 'ConvertTo-Yaml'
+        $content | Should -Match '\[ordered\]@\{ response = \$Response \}'
+        $content | Should -Not -Match 'response:\s*\|'
+        $content | Should -Not -Match '\$indented'
+    }
+
+    It 'TEST-MCP-REQSCOPE-005 shell requirements wrapper exposes layer commands' {
+        $shimPath = Join-Path $script:StagedRoot 'lib\repl-invoke.sh'
+        if (-not (Test-Path -LiteralPath $shimPath)) {
+            $shimPath = Join-Path $script:RepoRoot 'plugins\core\lib-sh\repl-invoke.sh'
+        }
+        Test-Path -LiteralPath $shimPath | Should -BeTrue
+
+        $content = [System.IO.File]::ReadAllText($shimPath)
+
+        $content | Should -Match 'workflow\.requirements\.listLayers'
+        $content | Should -Match 'workflow\.requirements\.createLayer'
+        $content | Should -Match 'workflow\.requirements\.updateLayer'
+        $content | Should -Match 'workflow\.requirements\.effective'
+        $content | Should -Match 'client\.Requirements\.ListRequirementLayersAsync'
+        $content | Should -Match 'client\.Requirements\.CreateRequirementLayerAsync'
+        $content | Should -Match 'client\.Requirements\.UpdateRequirementLayerAsync'
+        $content | Should -Match 'client\.Requirements\.GetEffectiveRequirementsAsync'
     }
 
     It 'TEST-MCP-PLUGIN-PSONLY-001 forces each PowerShell host identity over inherited agent environment' {

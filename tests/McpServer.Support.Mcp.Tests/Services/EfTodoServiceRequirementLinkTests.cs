@@ -55,12 +55,58 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGE-004: A fixed-workspace EF TODO service used outside HTTP
+    /// scopes stores created canonical TODO items in that workspace.
+    /// </summary>
+    [Fact]
+    public async Task CreateAsync_WithFixedWorkspaceOutsideHttp_StoresTodoItemInFixedWorkspace()
+    {
+        var workspacePath = Path.Combine(Path.GetTempPath(), $"todo-fixed-{Guid.NewGuid():N}");
+        await using var connection = new SqliteConnection("Data Source=:memory:");
+        await connection.OpenAsync().ConfigureAwait(true);
+        var services = new ServiceCollection();
+        services.AddScoped(_ => new WorkspaceContext());
+        services.AddDbContext<McpDbContext>(opts => opts.UseSqlite(connection));
+        await using var provider = services.BuildServiceProvider();
+        using (var scope = provider.CreateScope())
+        {
+            await scope.ServiceProvider.GetRequiredService<McpDbContext>().Database.EnsureCreatedAsync().ConfigureAwait(true);
+        }
+
+        using var sut = new EfTodoService(
+            provider.GetRequiredService<IServiceScopeFactory>(),
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions()),
+            Microsoft.Extensions.Options.Options.Create(new TodoStorageOptions { Provider = TodoStorageOptions.DatabaseProvider }),
+            Substitute.For<IWriteAuditLog>(),
+            NullLogger<EfTodoService>.Instance,
+            Substitute.For<IChangeEventBus>(),
+            fixedWorkspacePath: workspacePath);
+
+        var created = await sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "TODO-FIXED-001",
+            Title = "Fixed workspace todo",
+            Section = "Backlog",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        Assert.True(created.Success, created.Error);
+        using var verifyScope = provider.CreateScope();
+        var db = verifyScope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var record = await db.TodoItems
+            .IgnoreQueryFilters()
+            .SingleAsync(row => row.Id == "TODO-FIXED-001")
+            .ConfigureAwait(true);
+        Assert.Equal(workspacePath, record.WorkspaceId);
+    }
+
+    /// <summary>
     /// TEST-MCP-140: Creating a TODO with requirement JSON projection values
-    /// creates the durable TODO anchor, placeholder requirements, and normalized
+    /// creates the canonical TODO item, placeholder requirements, and normalized
     /// link rows.
     /// </summary>
     [Fact]
-    public async Task CreateAsync_WithRequirementProjection_CreatesTodoRecordRequirementsAndLinks()
+    public async Task CreateAsync_WithRequirementProjection_CreatesTodoItemRequirementsAndLinks()
     {
         var created = await _sut.CreateAsync(new TodoCreateRequest
         {
@@ -76,7 +122,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
 
         using var scope = _serviceProvider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        Assert.True(await db.TodoRecords.AnyAsync(row => row.TodoId == "TODO-LINK-001").ConfigureAwait(true));
+        Assert.True(await db.TodoItems.AnyAsync(row => row.Id == "TODO-LINK-001").ConfigureAwait(true));
         Assert.True(await db.Requirements.AnyAsync(row => row.Kind == "fr" && row.Id == "FR-LINK-001").ConfigureAwait(true));
         Assert.True(await db.Requirements.AnyAsync(row => row.Kind == "tr" && row.Id == "TR-LINK-001").ConfigureAwait(true));
 

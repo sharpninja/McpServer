@@ -3,140 +3,164 @@
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*
+Scope: layer-1+
 
 ## FR-MCP-001 Configurable workspace root and paths
 
 The server shall support configurable `RepoRoot`, `TodoFilePath`, `DataDirectory`, and index paths.
 
 **Covered by:** `IngestionOptions`, `IOptions`
+Scope: layer-1+
 
 ## FR-MCP-002 TODO management API
 
 The server shall provide CRUD/query operations for TODO items over REST and STDIO.
 
 **Covered by:** `TodoController`, `TodoService`, `SqliteTodoService`
+Scope: layer-1+
 
 ## FR-MCP-003 Session log ingestion and query
 
 The server shall ingest session logs and support searchable queries.
 
 **Covered by:** `SessionLogController`, `SessionLogService`
+Scope: layer-1+
 
 ## FR-MCP-004 Hybrid context search
 
 The server shall support FTS and vector search over indexed content.
 
 **Covered by:** `HybridSearchService`, `Fts5SearchService`, `VectorIndexService`, `EmbeddingService`
+Scope: layer-1+
 
 ## FR-MCP-005 GitHub issue sync
 
 The server shall support GitHub issue lifecycle integration and ISSUE-* TODO synchronization.
 
 **Covered by:** `GitHubController`, `GitHubCliService`, `IssueTodoSyncService`
+Scope: layer-1+
 
 ## FR-MCP-006 Multi-source ingestion
 
 The server shall ingest repository files, session logs, external docs, and issue content.
 
 **Covered by:** `IngestionCoordinator`, `RepoIngestor`, `SessionLogIngestor`, `ExternalDocsIngestor`, `GitHubIngestor`, `IssueIngestor`
+Scope: layer-1+
 
 ## FR-MCP-007 Dual transport
 
 The server shall support HTTP and STDIO MCP transports.
 
 **Covered by:** `Program.cs`, `McpServerMcpTools`, `McpStdioHost`
+Scope: layer-1+
 
 ## FR-MCP-008 Containerized deployment
 
 The server shall support containerized deployment and packaged distribution.
 
 **Covered by:** `Dockerfile`, `docker-compose.mcp.yml`
+Scope: layer-1+
 
 ## FR-MCP-009 Workspace Management
 
 The server shall support dynamic workspace registration, configuration, and lifecycle management - replacing static instance configuration - with directory scaffolding and Base64URL-encoded path keys. All workspaces are served on a single port via `X-Workspace-Path` header resolution (see FR-MCP-043).
 
 **Covered by:** `WorkspaceController`, `WorkspaceService`, `WorkspaceConfigEntry`
+Scope: layer-1+
 
 ## FR-MCP-011 Workspace Process Orchestration
 
 The server shall manage workspace lifecycle via marker files: write `AGENTS-README-FIRST.yaml` on start, remove on stop. All workspaces share the single host process and port. Automatic startup of all registered workspaces writes markers on service start.
 
 **Covered by:** `WorkspaceProcessManager`, `IWorkspaceProcessManager`, `MarkerFileService`
+Scope: layer-1+
 
 ## FR-MCP-012 Tool Registry
 
 Agents shall be able to discover tools by keyword search across global and workspace-scoped tool definitions, and install tool definitions from GitHub-backed bucket repositories.
 
 **Covered by:** `ToolRegistryController`, `ToolRegistryService`, `ToolBucketService`
+Scope: layer-1+
 
 ## FR-MCP-013 Per-Workspace Auth Tokens
 
 The server shall protect all `/mcpserver/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware`. Workspace resolution uses a three-tier chain: `X-Workspace-Path` header → API key reverse lookup → default workspace (see FR-MCP-043).
 
 **Covered by:** `WorkspaceAuthMiddleware`, `WorkspaceTokenService`, `WorkspaceResolutionMiddleware`, `MarkerFileService`
+Scope: layer-1+
 
 ## FR-MCP-014 Pairing Web UI
 
 *Moved to [Requirements-WebUI.md](Requirements-WebUI.md#fr-mcp-014-pairing-web-ui)*
+Scope: layer-1+
 
 ## FR-MCP-015 Tunnel Providers
 
 The server shall expose its HTTP interface to the internet via pluggable tunnel providers (ngrok, Cloudflare, FRP) configured through a strategy pattern and registered as hosted services.
 
 **Covered by:** `NgrokTunnelProvider`, `CloudflareTunnelProvider`, `FrpTunnelProvider`
+Scope: layer-1+
 
 ## FR-MCP-016 MCP Streamable HTTP Transport
 
 The server shall expose a native MCP protocol endpoint at `/mcp-transport` coexisting with the REST API on the same port, enabling standard MCP client connections via `ModelContextProtocol.AspNetCore`.
 
 **Covered by:** `Program.cs` (MapMcp), `ModelContextProtocol.AspNetCore`
+Scope: layer-1+
 
 ## FR-MCP-017 Windows Service
 
 The server shall run as a Windows service with automatic startup, failure recovery (restart on failure with 60 s delay), and PowerShell-based install/update/uninstall management.
 
 **Covered by:** `Program.cs` (UseWindowsService), `Manage-McpService.ps1`
+Scope: layer-1+
 
 ## FR-MCP-018 Marker File Agent Discovery
 
 When a workspace is started, the server shall write an `AGENTS-README-FIRST.yaml` marker file to the workspace root containing the shared host port, all endpoint paths, a machine-readable prompt, and PID. All markers point to the same port; workspace identity is resolved via the `X-Workspace-Path` header. The marker shall be removed when the workspace is stopped.
 
 **Covered by:** `MarkerFileService`, `WorkspaceProcessManager`
+Scope: layer-1+
 
 ## FR-MCP-019 Workspace Host Controller Isolation
 
 *Obsolete - replaced by single-app multi-tenant model (FR-MCP-043).* All controllers are available on the single host. Workspace lifecycle management endpoints on `WorkspaceController` remain admin-only.
+Scope: layer-1+
 
 ## FR-MCP-020 Workspace Auto-Start on Service Startup
 
 On service startup, the server shall automatically write marker files for all workspaces already registered, restoring agent discoverability without manual intervention. All workspaces share the single host port.
 
 **Covered by:** `WorkspaceProcessManager` (IHostedService.StartAsync)
+Scope: layer-1+
 
 ## FR-MCP-021 Workspace Auto-Init and Auto-Start on Creation
 
 When a new workspace is registered, the server shall automatically initialize the workspace directory scaffold (todo.yaml, mcp.db, docs structure) and write its marker file, so the workspace is immediately operational on the shared port.
 
 **Covered by:** `WorkspaceController` POST, `WorkspaceService.InitAsync`
+Scope: layer-1+
 
 ## FR-MCP-022 Tool Registry Default Bucket Seeding
 
 On first startup, the server shall seed default tool buckets from configuration (`Mcp:ToolRegistry:DefaultBuckets`) if they are not already registered, ensuring new installations have the primary tool repository available without manual setup.
 
 **Covered by:** `ToolRegistryOptions`, `Program.cs`
+Scope: layer-1+
 
 ## FR-MCP-023 AI-Assisted Requirements Analysis
 
 The server shall provide a requirements analysis capability that invokes the Copilot CLI to examine a TODO item's title, description, and technical details, identify matching existing FR/TR IDs from the project docs, create new FR/TR entries for unaddressed functionality, and persist the assigned IDs back to the TODO item.
 
 **Covered by:** `RequirementsService`, `IRequirementsService`, `ICopilotClient`
+Scope: layer-1+
 
 ## FR-MCP-024 Markdown Session Log Ingestion
 
 The ingestion pipeline shall parse legacy Markdown session log files (matching a `# Session Log - {title}` header pattern) into the unified session log schema alongside JSON session logs, enabling retroactive indexing of pre-existing agent session records.
 
 **Covered by:** `MarkdownSessionLogParser`, `SessionLogIngestor`
+Scope: layer-1+
 
 ## FR-MCP-025 Primary Workspace Detection and Deduplication
 
@@ -145,24 +169,28 @@ One workspace is designated as the **primary** workspace - served by the host pr
 **Status:** ✅ Complete
 
 **Covered by:** `WorkspaceProcessManager`, `WorkspaceConfigEntry`, `Program.cs` primary-workspace resolution block
+Scope: layer-1+
 
 ## FR-MCP-026 OIDC Authentication
 
 The server shall support standards-based OIDC JWT Bearer authentication for management endpoints using a configurable open-source .NET OIDC provider. Optional external identity federation (for example, GitHub) may be configured through that provider. Management endpoints (agent mutations) require JWT; read endpoints use existing API key auth.
 
 **Covered by:** `OidcAuthOptions`, `Program.cs`, `AgentController`, `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`
+Scope: layer-1+
 
 ## FR-MCP-027 Agent Definition Management
 
 The server shall provide CRUD operations for agent type definitions with built-in defaults for well-known AI coding agents (copilot, cline, cursor, windsurf, claude-code, aider, continue). Built-in definitions are seeded on first run and cannot be deleted.
 
 **Covered by:** `AgentController`, `AgentService`, `AgentDefaults`, `AgentDefinitionEntity`
+Scope: layer-1+
 
 ## FR-MCP-028 Per-Workspace Agent Configuration
 
 The server shall support per-workspace agent configuration with overrides for launch command, models, branch strategy, seed prompt, instruction files, isolation strategy, restart policy, and marker additions. Agents can be banned per-workspace or globally with optional PR-gated unbanning. All agent lifecycle events (add, launch, exit, ban, unban, delete, merge, init) are logged for audit.
 
 **Covered by:** `AgentController`, `AgentService`, `AgentWorkspaceEntity`, `AgentEventLogEntity`, `AgentHealthMonitorService`
+Scope: layer-1+
 
 ## FR-MCP-029 CQRS Framework
 
@@ -173,62 +201,74 @@ A standalone CQRS framework (`McpServer.Cqrs`) shall provide async command/query
 **Covered by:** `McpServer.Cqrs` project (`Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`), `McpServer.Cqrs.Mvvm` (IViewModelRegistry, ViewModelRegistryExtensions). Workspace and policy view-models moved to the separate `McpServerManager` repository (former `McpServer.UI.Core` / `WorkspaceListViewModel` / `WorkspacePolicyViewModel` / `AddUiCore` DI extension).
 
 **Implementation:** 37 unit tests passing. Provides `ICommand<T>`/`IQuery<T>` message types, `ICommandHandler<,>`/`IQueryHandler<,>` handlers, `Dispatcher` with pipeline behavior chain, `CallContext` with `CorrelationId` for structured logging, and `Result<T>` monad with success/error paths. MVVM layer adds `IViewModelRegistry` for CLI exec command support.
+Scope: layer-1+
 
 ## FR-MCP-030 Director CLI
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-030-director-cli)*
+Scope: layer-1+
 
 ## FR-MCP-031 McpServer Management Web UI
 
 *Moved to [Requirements-WebUI.md](Requirements-WebUI.md#fr-mcp-031-mcpserver-management-web-ui)*
+Scope: layer-1+
 
 ## FR-MCP-032 Enhanced GitHub Integration
 
 Enhanced GitHub integration capabilities including GitHub federation through the configured OIDC provider for user authentication, and GitHub OAuth for agent workspace management and PR workflows. *(Planned - tracked as high-priority TODO.)*
+Scope: layer-1+
 
 ## FR-MCP-033 Natural Language Policy Management
 
 A Copilot-integrated prompt tool that accepts natural language policy directives (e.g. "Ban chinese sources from all workspaces") and translates them into workspace configuration changes across all or targeted workspaces. Each policy change is session-logged per affected workspace with action type `policy_change`.
 
 **Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
+Scope: layer-1+
 
 ## FR-MCP-034 Workspace Compliance Configuration
 
 Per-workspace compliance configuration supporting four ban lists: `BannedLicenses` (SPDX identifiers), `BannedCountriesOfOrigin` (ISO 3166-1 alpha-2 codes), `BannedOrganizations`, and `BannedIndividuals`. Ban lists are conditionally rendered into the AGENTS-README-FIRST.yaml marker prompt via Handlebars templates. Agents must verify compliance before adding dependencies and log violations.
 
 **Covered by:** `WorkspaceDto`, `WorkspaceCreateRequest`, `WorkspaceUpdateRequest`, `MarkerFileService`
+Scope: layer-1+
 
 ## FR-MCP-035 Agent Values and Conduct Enforcement
 
 The marker prompt shall include mandatory sections for: absolute honesty, correctness above speed, complete decision documentation, professional representation and audit trail (commits, PRs, issues logged in full), and source attribution (web references logged). These are non-configurable and always present.
 
 **Covered by:** `templates/prompt-templates.yaml` (default-marker-prompt)
+Scope: layer-1+
 
 ## FR-MCP-036 Audited Copilot Interactions
 
 Every server-initiated Copilot interaction must be session-logged in every affected workspace. An `AuditedCopilotClient` decorator wraps `ICopilotClient` to create session log entries before and after each call, with action type `copilot_invocation`.
 
 **Covered by:** `AuditedCopilotClient`, `Program.cs` DI registration, `McpStdioHost` DI registration, `CopilotServiceCollectionExtensions`
+Scope: layer-1+
 
 ## FR-MCP-037 Director CLI Exec Command
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-037-director-cli-exec-command)*
+Scope: layer-1+
 
 ## FR-MCP-038 Session Continuity Protocol
 
 Agents must follow a session continuity protocol: at session start, read the marker file, query recent session logs (limit=5), query current TODOs, and read Requirements-Matrix.md. During long sessions, post updated session logs every ~10 interactions. Requirements and design decisions must be captured as they emerge, not deferred.
 
 **Covered by:** `templates/prompt-templates.yaml` (default-marker-prompt)
+Scope: layer-1+
 
 ## FR-MCP-039 MCP Context Indexing for New Projects
 
 Repo-local source files from McpServer.Cqrs and McpServer.Cqrs.Mvvm shall be indexed into the MCP context store for semantic search. McpServer.UI.Core and McpServer.Director have moved to the separate McpServerManager repository and must not be advertised as indexed capabilities in this repository marker.
+Scope: layer-1+
 
 ## FR-MCP-040 Requirements Document CRUD Management
 
 The server shall support CRUD operations for Functional Requirements (FR), Technical Requirements (TR), Testing Requirements (TEST), and FR-to-TR mapping rows backed by the canonical project requirements Markdown files.
 
 **Covered by:** `RequirementsController`, `RequirementsDocumentService`, `IRequirementsRepository`
+Scope: layer-1+
 
 ## FR-MCP-041 Requirements Document Generation
 
@@ -237,66 +277,77 @@ The server shall expose a requirements document generation endpoint that renders
 **Status:** ✅ Complete
 
 **Covered by:** `RequirementsController` (`POST /mcpserver/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
+Scope: layer-1+
 
 ## FR-MCP-042 Requirements Management MCP Tools
 
 The STDIO MCP tool surface shall expose requirements management tools for listing, generating, creating, updating, and deleting requirements entries so AI agents can manage requirements directly from a conversation.
 
 **Covered by:** `FwhMcpTools` (`requirements_list`, `requirements_generate`, `requirements_create`, `requirements_update`, `requirements_delete`), `RequirementsDocumentService`
+Scope: layer-1+
 
 ## FR-MCP-043 Multi-Tenant Workspace Resolution
 
 The server shall resolve the target workspace per-request using a three-tier resolution chain: (1) `X-Workspace-Path` header (highest priority), (2) API key reverse lookup via `WorkspaceTokenService`, (3) default/primary workspace from configuration. All workspaces are served on a single port; no per-workspace Kestrel hosts are spawned.
 
 **Covered by:** `WorkspaceResolutionMiddleware`, `WorkspaceContext`, `WorkspaceTokenService`, `WorkspaceAuthMiddleware`
+Scope: layer-1+
 
 ## FR-MCP-044 Shared Database Multi-Tenancy
 
 All workspace data shall be stored in a single shared SQLite database with a `WorkspaceId` discriminator column on every entity table. EF Core global query filters ensure workspace data isolation per-request. Cross-workspace queries use `IgnoreQueryFilters()` for admin operations.
 
 **Covered by:** `McpDbContext`, `WorkspaceContext`, all entity types (`WorkspaceId` property)
+Scope: layer-1+
 
 ## FR-MCP-045 Cross-Workspace TODO Move
 
 The server shall support moving a TODO item from one workspace to another via REST (`POST /mcpserver/todo/{id}/move`) and STDIO (`todo_move` MCP tool), preserving all item fields including implementation tasks, requirements, and metadata. The move is implemented as create-in-target then delete-from-source.
 
 **Covered by:** `TodoController.MoveAsync`, `FwhMcpTools.TodoMove`, `TodoMoveRequest`, `TodoServiceResolver`
+Scope: layer-1+
 
 ## FR-MCP-046 Voice Conversation Sessions
 
 The server shall provide voice-enabled agent interaction via Copilot CLI, supporting session creation with device binding, voice turn processing (synchronous and SSE streaming), transcript retrieval, session interruption, ESC-key injection for generation cancellation, and automatic idle session cleanup with configurable timeout. Voice connections can attach to running pooled agents, including agents currently processing one-shot work. One active session per device is enforced.
 
 **Covered by:** `VoiceController`, `VoiceConversationService`, `VoiceConversationOptions`, `CopilotInteractiveSession`
+Scope: layer-1+
 
 ## FR-MCP-047 Desktop Process Launch
 
 The server shall support launching interactive desktop processes from a Windows service (LocalSystem) context using `CreateProcessAsUser` with WTS session token negotiation, enabling Copilot CLI and other GUI/console tools to run on the interactive desktop with stdio pipe redirection or visible console windows.
 
 **Covered by:** `DesktopProcessLauncher`, `NativeMethods`
+Scope: layer-1+
 
 ## FR-MCP-048 YAML Configuration Support
 
 The server shall support `appsettings.yaml` as an optional configuration source loaded after `appsettings.json` with hot reload, enabling YAML-format configuration alongside JSON for local-only overrides.
 
 **Covered by:** `Program.cs` (`AddYamlFile`), `NetEscapades.Configuration.Yaml`
+Scope: layer-1+
 
 ## FR-MCP-049 Prompt Template Registry
 
 The server shall provide a global prompt template registry with REST API endpoints (`/mcpserver/templates`) and MCP tools for CRUD operations (list, get, create, update, delete) and test/render operations. Templates are stored as YAML files, support Handlebars rendering with declared variables, and are filterable by category, tag, and keyword. A Director TUI tab shall enable template browsing and preview.
 
 **Covered by:** `PromptTemplateController`, `PromptTemplateService`, `PromptTemplateRenderer`, `FwhMcpTools` (6 template tools), `TemplateClient`. The Director template-browsing TUI surface (`TemplatesScreen`) moved to the separate `McpServerManager` repository.
+Scope: layer-1+
 
 ## FR-MCP-050 Per-Agent Workspace Runtime Management
 
 The server shall provide runtime management for workspace-bound agents, including process launch/stop/status, configurable isolation modes (`none`, `worktree`, `clone`), branch strategy handling (`direct`, `feature-branch`, `worktree`), session-log linkage to known agent definitions, marker-file agent-specific instruction sections, and restart-policy-driven health monitoring.
 
 **Covered by:** `AgentService`, `AgentController`, `IAgentProcessManager`, `AgentProcessManager`, `IAgentIsolationStrategy`, `AgentIsolationStrategyResolver`, `IAgentBranchStrategy`, `AgentBranchStrategyResolver`, `WorkspaceProcessManager`, `SessionLogService`, `AgentHealthMonitorService`
+Scope: layer-1+
 
 ## FR-MCP-051 System-Wide Default Copilot Model
 
 The server SHALL allow configuration of a system-wide default Copilot model (e.g., `gpt-5.3-codex`) that is applied consistently across all Copilot session types - server-initiated CLI invocations (`CopilotClientOptions.Model`), voice conversation sessions (`VoiceConversationOptions.CopilotModel`), and built-in agent type defaults (`AgentDefaults`). The configured model SHALL be overridable per-workspace via agent configuration and per-invocation via explicit parameters.
 
 **Technical Implementation:** [TR-MCP-CFG-005](./Technical-Requirements.md#tr-mcp-cfg-005) | [Mapping](./TR-per-FR-Mapping.md)
+Scope: layer-1+
 
 ## FR-MCP-052 Agent Pool Runtime Orchestration
 
@@ -305,6 +356,7 @@ The server shall maintain a configured pool of long-lived agent processes and ro
 Agent pool definitions shall include: `AgentName`, `AgentPath`, `AgentModel`, `AgentSeed`, and `AgentParameters`.
 
 **Covered by:** `AgentPoolOptions` *(planned)*, `AgentPoolService` *(planned)*
+Scope: layer-1+
 
 ## FR-MCP-053 One-Shot Queueing and Deferred Attachment
 
@@ -313,6 +365,7 @@ One-shot requests shall execute through the agent pool queue. If no eligible poo
 One-shot requesters shall receive processing lifecycle notifications and may attach to the running agent via interactive voice session or read-only response stream.
 
 **Covered by:** `AgentPoolQueueService` *(planned)*, `AgentPoolController` *(planned)*
+Scope: layer-1+
 
 ## FR-MCP-054 Agent Pool Availability and Control Endpoints
 
@@ -321,6 +374,7 @@ The server shall expose endpoints to list pooled agents and real-time availabili
 The server shall expose a dedicated Agent Pool notification SSE stream with payload fields `AgentName`, `LastRequestPrompt`, and `SessionId`.
 
 **Covered by:** `AgentPoolController` *(planned)*, `AgentPoolNotificationService` *(planned)*
+Scope: layer-1+
 
 ## FR-MCP-055 Default Agent Selection by Request Intent
 
@@ -329,6 +383,7 @@ If a request omits `AgentName`, the server shall determine the request intent an
 One-shot endpoint context values shall support: `Plan`, `Status`, `Implement`, and `AdHoc`.
 
 **Covered by:** `AgentPoolIntentResolver` *(planned)*, `AgentPoolService` *(planned)*
+Scope: layer-1+
 
 ## FR-MCP-056 Template-Aware One-Shot Prompt Resolution
 
@@ -341,10 +396,12 @@ If context is provided without template ID, the server shall use current context
 One-shot endpoint template rendering shall support an `id` parameter used to populate `{id}` placeholders in templates. `id` is required only for template-resolved requests.
 
 **Covered by:** `PromptTemplateController` *(planned extension)*, `AgentPoolController` *(planned)*
+Scope: layer-1+
 
 ## FR-MCP-057 Director Agent Pool Management UI
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-057-director-agent-pool-management-ui)*
+Scope: layer-1+
 
 ## FR-MCP-058 Interactive Presence Signaling
 
@@ -355,16 +412,19 @@ When a user reestablishes an interactive response stream connection, the server 
 These presence messages do not apply to one-shot sessions.
 
 **Covered by:** `AgentPoolStreamService` *(planned)*, `VoiceConversationService` *(planned extension)*
+Scope: layer-1+
 
 ## FR-MCP-059 DI-Centered Single Source of Truth State Flow
 
 The system SHALL enforce a DI-centered Single Source of Truth architecture across `McpServer.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
 
 **Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Mapping](./TR-per-FR-Mapping.md)
+Scope: layer-1+
 
 ## FR-MCP-060 Director MVVM/CQRS Full Endpoint Coverage
 
 *Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-060-director-mvvmcqrs-full-endpoint-coverage)*
+Scope: layer-1+
 
 ## FR-MCP-061 Canonical TODO and Session Identifier Conventions
 
@@ -378,12 +438,14 @@ The server shall enforce canonical identifier conventions for newly created TODO
 Validation failures return client-visible errors without mutating persisted data.
 
 **Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `TodoCreationService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
+Scope: layer-1+
 
 ## FR-MCP-062 Workspace Change Notifications
 
 The server shall provide a real-time workspace change notification system that publishes create/update/delete domain events for workspace mutations (TODOs, session logs, repo files, context sync, tool registry, tool buckets, workspaces, GitHub operations, marker lifecycle, agents, and requirements) over Server-Sent Events at `GET /mcpserver/events`, with optional category filtering.
 
 **Covered by:** `IChangeEventBus`, `ChannelChangeEventBus`, `EventStreamController`, `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `WorkspaceController`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `GitHubController`, `WorkspaceProcessManager`
+Scope: layer-1+
 
 ## FR-MCP-063 Workspace GitHub OAuth Bootstrap, Token Lifecycle, and Actions Control
 
@@ -400,18 +462,21 @@ Functional behavior shall include:
 **Technical Implementation:** [TR-MCP-GH-001](./Technical-Requirements.md#tr-mcp-gh-001) | [TR-MCP-GH-002](./Technical-Requirements.md#tr-mcp-gh-002) | [TR-MCP-GH-003](./Technical-Requirements.md#tr-mcp-gh-003) | [TR-MCP-GH-004](./Technical-Requirements.md#tr-mcp-gh-004)
 
 **Covered by:** `GitHubIntegrationOptions`, `FileGitHubWorkspaceTokenStore`, `GitHubController`, `GitHubCliService`, `ProcessRunner`, `GitHubClient`
+Scope: layer-1+
 
 ## FR-MCP-064 Marketing and Adoption Documentation
 
 The system SHALL provide marketing-oriented documentation that clearly explains what McpServer is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
 
 **Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Mapping](./TR-per-FR-Mapping.md)
+Scope: layer-1+
 
 ## FR-MCP-065 Direct Website URL Ingestion
 
 The server shall ingest remote website content directly from one URL (with optional bounded same-host crawling) into the context store and GraphRAG pipeline without pre-downloading files into `docs/external`.
 
 **Covered by:** `ContextController` (`POST /mcpserver/context/ingest-website`), `WebsiteIngestor`, `IngestionCoordinator`, `FwhMcpTools` (`context_ingest_website`), `ContextClient.IngestWebsiteAsync`
+Scope: layer-1+
 
 ## FR-MCP-066 Hosted Microsoft Agent Framework Library
 
@@ -424,6 +489,7 @@ The hosted agent SHALL include a built-in workflow that treats MCP Server sessio
 **Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `McpServer.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
+Scope: layer-1+
 
 ## FR-MCP-067 Detailed Internal Server Error Responses
 
@@ -432,6 +498,7 @@ The system SHALL return a detailed client-visible error description for every en
 Detailed 500 responses SHALL describe the failed operation clearly enough for callers to diagnose the failure path and distinguish server faults from client mistakes, while remaining sanitized so secrets, tokens, and other sensitive internals are not exposed in the response body.
 
 **Technical Implementation:** [TR-MCP-HTTP-002](./Technical-Requirements.md#tr-mcp-http-002) | [Mapping](./TR-per-FR-Mapping.md)
+Scope: layer-1+
 
 ## FR-MCP-068 Administrative Configuration Management API
 
@@ -442,6 +509,7 @@ The configuration-management endpoints SHALL require standard JWT Bearer authent
 **Technical Implementation:** [TR-MCP-CFG-006](./Technical-Requirements.md#tr-mcp-cfg-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (`ConfigurationAdmin` policy), `WorkspaceController` (shared appsettings helper reuse)
+Scope: layer-1+
 
 ## FR-MCP-069 Immediate GitHub-Backed TODO Creation
 
@@ -452,6 +520,7 @@ This behavior shall be available through all server-side TODO creation entry poi
 **Technical Implementation:** [TR-MCP-TODO-003](./Technical-Requirements.md#tr-mcp-todo-003) | [TR-MCP-GH-005](./Technical-Requirements.md#tr-mcp-gh-005) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `TodoCreationService`, `GitHubCliService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
+Scope: layer-1+
 
 ## FR-MCP-070 Authoritative ISSUE-* Update Sync and Immutable Descriptions
 
@@ -462,6 +531,7 @@ Priority synchronization shall use canonical GitHub labels in the form `priority
 **Technical Implementation:** [TR-MCP-TODO-004](./Technical-Requirements.md#tr-mcp-todo-004) | [TR-MCP-GH-006](./Technical-Requirements.md#tr-mcp-gh-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `TodoUpdateService`, `IssueTodoSyncService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
+Scope: layer-1+
 
 ## FR-MCP-071 ISSUE Comment Round-Trip and GitHub-Driven Closure Reconciliation
 
@@ -472,6 +542,7 @@ When an `ISSUE-*` TODO is updated locally with new note text, the server shall p
 **Technical Implementation:** [TR-MCP-GH-007](./Technical-Requirements.md#tr-mcp-gh-007) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `IssueTodoSyncService`, `TodoUpdateService`, `GitHubController`, `TodoController`
+Scope: layer-1+
 
 ## FR-MCP-072 Database-Authoritative TODO Storage with YAML Projection and Audit History
 
@@ -482,6 +553,7 @@ The server shall preserve TODO document metadata such as `notes`, `completed`, a
 **Technical Implementation:** [TR-MCP-TODO-005](./Technical-Requirements.md#tr-mcp-todo-005) | [TR-MCP-TODO-006](./Technical-Requirements.md#tr-mcp-todo-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `TodoClient`, `McpServerMcpTools`, `TodoServiceFactory`
+Scope: layer-1+
 
 ## FR-MCP-073 Parseable Log Event Field Cap
 
@@ -492,6 +564,7 @@ When application log events contain more structured properties than the Parseabl
 **Technical Implementation:** [TR-MCP-LOG-003](./Technical-Requirements.md#tr-mcp-log-003) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
+Scope: layer-1+
 
 ## FR-MCP-074 Azure DevOps Repository Pipeline Migration
 
@@ -502,6 +575,7 @@ The Azure DevOps pipeline SHALL preserve the current repository automation inten
 **Technical Implementation:** [TR-MCP-CI-001](./Technical-Requirements.md#tr-mcp-ci-001) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`
+Scope: layer-1+
 
 ## FR-MCP-075 PowerShell Session Cache Discovery from `.mcpSession`
 
@@ -512,6 +586,7 @@ This cache-discovery behavior SHALL remain backward compatible with the existing
 **Technical Implementation:** [TR-MCP-AGENT-013](./Technical-Requirements.md#tr-mcp-agent-013) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `tools/powershell/McpSession.psm1`
+Scope: layer-1+
 
 ## FR-MCP-076 Marker File Trust Bootstrap and Session Authenticity Validation
 
@@ -522,6 +597,7 @@ When trust validation fails, the bootstrap flow shall stop using MCP services an
 **Technical Implementation:** [TR-MCP-SEC-003](./Technical-Requirements.md#tr-mcp-sec-003) | [TR-MCP-AGENT-014](./Technical-Requirements.md#tr-mcp-agent-014) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `src/McpServer.Services/Services/MarkerFileService.cs`, `templates/prompt-templates.yaml`, `src/McpServer.ServiceDefaults/Extensions.cs`, `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
+Scope: layer-1+
 
 ## FR-MCP-077 Server Federation and Request Proxying
 
@@ -532,6 +608,7 @@ The server shall support an opt-in federation mode that proxies incoming request
 **Technical Implementation:** `FederationOptions`, `FederationRegistry`, `FederationProxyService`, `FederationMiddleware`, `FederationController`
 
 **Configuration:** `Mcp:Federation:Enabled`, `Mcp:Federation:Targets`, `Mcp:Federation:DefaultTarget`, `Mcp:Federation:WorkspaceRoutes`, `Mcp:Federation:MaxHops`
+Scope: layer-1+
 
 ## FR-MCP-078 GraphRAG Ad-Hoc Document Ingestion
 
@@ -540,6 +617,7 @@ The server shall accept raw text or markdown content via a REST endpoint and MCP
 **Status:** ✅ Complete
 
 **Covered by:** `GraphRagController` (`POST /mcpserver/graphrag/documents/ingest`), `McpServer.GraphRag` (`GraphRagService` ad-hoc ingestion path), `FwhMcpTools` (graphrag ingest tool)
+Scope: layer-1+
 
 ## FR-MCP-079 GraphRAG Entity and Relationship CRUD
 
@@ -548,6 +626,7 @@ The server shall provide full CRUD operations for explicit graph entity nodes an
 **Status:** ✅ Complete
 
 **Covered by:** `GraphRagController` (entity + relationship endpoints), `McpServer.GraphRag` (`GraphRagService` entity / relationship CRUD), `GraphEntityEntity`, `GraphRelationshipEntity`, `FwhMcpTools` (graphrag entity/relationship tools), `McpServer.Repl.Core` (graphrag command shapes)
+Scope: layer-1+
 
 ## FR-MCP-080 GraphRAG Document Management
 
@@ -556,6 +635,7 @@ The server shall provide endpoints to list indexed documents with chunk counts a
 **Status:** ✅ Complete
 
 **Covered by:** `GraphRagController` (document list/get/delete endpoints), `McpServer.GraphRag` (`GraphRagService` document management), `ContextDocumentEntity`, `ContextChunkEntity`, `FwhMcpTools` (graphrag document tools)
+Scope: layer-1+
 
 ## FR-MCP-081 Byrd Iteration Phase and TODO Execution Persistence
 
@@ -564,6 +644,7 @@ The server shall persist Byrd iteration phases, decomposed execution TODOs, and 
 **Status:** ✅ Complete
 
 **Covered by:** `TodoExecutionController` (`/mcpserver/todo-execution/*`), `TodoExecutionService`, Byrd phase + checkpoint entities, `McpDbContext`
+Scope: layer-1+
 
 ## FR-MCP-082 Bounded Byrd Execution Context Hydration
 
@@ -572,6 +653,7 @@ The server shall return a bounded active TODO execution context and a checkpoint
 **Status:** ✅ Complete
 
 **Covered by:** `TodoExecutionController` (`active`, `next-ready`, `{todoId}`, `{todoId}/delta` endpoints), `TodoExecutionService`
+Scope: layer-1+
 
 ## FR-MCP-083 Structured Android Validation for Byrd TODOs
 
@@ -580,94 +662,111 @@ The server shall expose a structured `adb_step` surface for safe Android validat
 **Status:** ✅ Complete
 
 **Covered by:** `TodoExecutionController` (`POST /mcpserver/todo-execution/adb/step`), `TodoExecutionService.AdbStepAsync`, `AdbStepAction` / `AdbStepRequest` models, `FwhMcpTools` (`adb_step` tool)
+Scope: layer-1+
 
 ## FR-MCP-084 Requirements Wiki Workspace Export/Import
 
 The server, REPL, and agent plugins shall support requirements export and import in wiki format. Wiki export shall write both Azure DevOps Wiki and GitHub Wiki document folders directly under docs/Project/wiki. Wiki import shall detect wiki document folders, select the authoritative platform source using manifest and file modified timestamps, and create, update, delete, or ignore requirements and mappings to match the selected source.
-**Acceptance Criteria:**
-- [x] Wiki export writes both Azure DevOps Wiki and GitHub Wiki folders directly under docs/Project/wiki.
-- [x] Wiki export clears the read-only attribute on existing generated files only while replacing or deleting them, then restores read-only on written export files before returning or after failed replacement attempts.
-- [x] Wiki import detects wiki document folders, selects the authoritative platform source using manifest and file modified timestamps, and synchronizes requirements and mappings to match the selected source.
 
 **Status:** ✅ Complete
 
 **Covered by:** `RequirementsController` (wiki export + ingest endpoints), `RequirementsDocumentService` (wiki renderer + parser), `McpServer.Repl.Core` (requirements wiki workflow commands)
+Scope: layer-1+
 
 ## FR-MCP-085 QA Workspace Question CRUD
 
 Create / read / update / delete a Question (title, body, tags[], author).
+Scope: layer-1+
 
 ## FR-MCP-086 QA Workspace Answer CRUD
 
 Create / read / update / delete an Answer attached to a Question.
+Scope: layer-1+
 
 ## FR-MCP-087 QA Accepted Answer Invariant
 
 Accept exactly one Answer per Question (idempotent; re-accept clears prior accepted answer).
+Scope: layer-1+
 
 ## FR-MCP-088 QA Question Tag Filtering
 
 Tag filter on Question list with AND semantics (`?tag=foo&tag=bar`).
+Scope: layer-1+
 
 ## FR-MCP-089 QA Per User Voting
 
 Vote (+1 / -1) on Question and Answer with one-vote-per-user enforcement. A given actor may hold at most one active vote per entity (Question or Answer). Submitting the same vote a second time is idempotent (returns the current state, no counter change, no new audit row). Submitting the opposite vote replaces the prior vote (counter adjusts by +/- 2; an audit row is written for the change). An actor may explicitly revoke their vote (counter adjusts by -1 or +1; audit row recorded). Voter identity is the value resolved by `IQaAuthorResolver`. The Question/Answer rows still store a denormalized counter for fast reads; the authoritative per-voter state lives in a `QaVoteEntity` table with a unique constraint (TR-MCP-QA-032). Voter identity and every vote transition (apply, change, revoke) appear in the audit history (TR-MCP-QA-019), and a voter-history endpoint exposes them (TR-MCP-QA-031).
+Scope: layer-1+
 
 ## FR-MCP-090 QA Threaded Comments
 
 Threaded comments on Questions and Answers with depth cap (<= 3).
+Scope: layer-1+
 
 ## FR-MCP-091 QA FAQ Projection
 
 `GET /mcpserver/qa/faq` returns questions that have an accepted answer, projected as `{ questionId, title, tags[], voteCount, acceptedAnswer: { body, author, voteCount }, deeplink }` where `deeplink = "/mcpserver/qa/questions/{id}"`. Default sort: accepted-answer voteCount desc, then question voteCount desc.
+Scope: layer-1+
 
 ## FR-MCP-092 QA Author Resolution
 
 Author identity resolves via request-body `author` if provided, falling back to API-key -> workspace-identity (via `WorkspaceTokenService`), then JWT `sub` claim.
+Scope: layer-1+
 
 ## FR-MCP-093 QA Workspace Isolation
 
 All Q&A data is workspace-scoped via composite PK `(WorkspaceId, Id)` and EF global query filter (TR-MCP-MT-003 pattern).
+Scope: layer-1+
 
 ## FR-MCP-094 QA REST MCP STDIO and Client Parity
 
 Q&A is reachable from REST, MCP STDIO tools, and the typed C# client library with feature parity.
+Scope: layer-1+
 
 ## FR-MCP-095 QA REPL and PowerShell Parity
 
 Q&A is reachable from the REPL via a `workflow.qa.*` command namespace (interactive REPL + `--agent-stdio` YAML envelope protocol) and from a PowerShell module (`McpQa.psm1`) following the `Verb-Noun` pattern of `McpTodo.psm1`.
+Scope: layer-1+
 
 ## FR-MCP-096 QA User and Agent Documentation
 
 Documentation surfaces the Q&A subsystem for end users, integrators, and agents (USER-GUIDE, CLIENT-INTEGRATION, api-capabilities, AGENTS, FAQ, README, plus a new `qa-schema.md` context doc).
+Scope: layer-1+
 
 ## FR-MCP-097 QA Plugin Skill
 
 Each Claude Code plugin (sibling repos `mcpserver-claude-code-plugin`, `mcpserver-claude-cowork-plugin`, `mcpserver-codex-plugin`, `mcpserver-cline-plugin`, `mcpserver-cline-v2-plugin`, `mcpserver-copilot-plugin`) gets a `skills/qa/SKILL.md` skill that lets agents use Q&A as a knowledge source - ask, answer, accept, and read FAQ via the REPL workflow.
+Scope: layer-1+
 
 ## FR-MCP-098 QA Append Only Audit
 
 Full audit tracking: every Q&A mutation (question create/update/delete, answer create/update/delete, accept/un-accept, vote +1/-1, comment add/delete) writes an append-only audit row capturing actor, action, version, full pre-mutation snapshot, and timestamp. Audit history is queryable per entity (`GET /mcpserver/qa/questions/{id}/audit`, `/answers/{id}/audit`, `/comments/{id}/audit`) and at workspace scope (`GET /mcpserver/qa/audit`) with paging, matching the TODO audit endpoint contract.
+Scope: layer-1+
 
 ## FR-MCP-099 QA Web Research Capture
 
 Mandatory web-research-to-Q&A capture: whenever a plugin/agent performs an internet search (web fetch, web search, MCP web tool, browser MCP, or any external HTTP retrieval) in order to answer a workspace-scoped question, the agent MUST post a new Question to `/mcpserver/qa/questions` containing the original prompt, then post an Answer containing the synthesized response with every source URL cited inline (markdown links) and as a `sources[]` array in the answer body's JSON sidecar. If the agent verified the synthesized answer, it MUST also call accept-answer. This is enforced by the `qa/SKILL.md` in every sibling plugin repo (mandatory rule at top of body) and surfaced in `AGENTS.md` / `CLAUDE.md` so agents cannot opt out. Captured `web_reference` actions in the session log point at the resulting Q&A entry's deeplink.
+Scope: layer-1+
 
 ## FR-MCP-100 QA Close and Duplicate Flags
 
 Close / duplicate flags: a Question can be closed with a reason and reopened; a Question can be marked as a duplicate of another Question (canonical) with both directions navigable. Closed questions are excluded from FAQ by default and from the default Question list (opt-in via `?includeClosed=true`); duplicates redirect FAQ consumers to the canonical Question via the deeplink. Close and duplicate transitions are full audit events (TR-MCP-QA-018 family).
+Scope: layer-1+
 
 ## FR-MCP-101 QA Markdown Rendering and Sanitization
 
 HTML / Markdown sanitization and rendering: every Question.Body, Answer.Body, and Comment.Body is authored as Markdown, stored verbatim, and additionally rendered to sanitized HTML at write time. Both representations are returned in the DTOs (`body` raw Markdown, `bodyHtml` sanitized HTML). The sanitizer strips script, iframe, on-* attributes, javascript: URLs, and other XSS vectors per a whitelist (allow paragraph, headings <=3, lists, code/pre, bold/italic, links with `rel="nofollow noopener"`, inline code, blockquote, tables). Sanitization runs on every write and on every audit-snapshot read so historical bodies are also safe to render.
+Scope: layer-1+
 
 ## FR-MCP-102 QA Generated FAQ Wiki Page
 
 FAQ wiki page: the documentation wiki output (Azure DevOps wiki under `docs/Project/wiki/azure/` and GitHub wiki under `docs/Project/wiki/github/`) includes a generated `FAQ.md` page rendered from the live `/mcpserver/qa/faq` endpoint of a configured workspace at build time. The page lists every accepted Q&A with the question title (linked to its detail endpoint), tags, vote counts, the rendered HTML body of the accepted answer, and the `sources[]` array as a sources section. The wiki Home / Sidebar / .order files reference the new FAQ page. The page is regenerated by the Nuke build during the wiki publication target.
+Scope: layer-1+
 
 ## FR-MCP-103 Hub-and-Spoke Federation
 
 The server shall support hub-and-spoke federation where a Hub instance is authoritative for enrolled LocalProxy servers, global workspace inventory, operation intake, sync fanout, queue status, and conflicts. Existing point-to-point federation remains supported as DirectProxy; Standalone continues to serve only local workspaces. A LocalProxy shall forward MCP requests to the configured hub, queue mutating requests durably during hub outages, replay queued operations when connectivity returns, and expose role, hub URL, proxy id, queue depth, stale/queued status, and conflict status to agents and operators.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Adapter diagnostics enumerate every required mutable state domain and distinguish covered, local-only, and apply-supported domains.
 - [ ] LocalProxy live forwarding continues to route /mcpserver/* requests, including /mcpserver/memory, through existing proxy middleware when the hub is reachable.
@@ -678,38 +777,47 @@ The server shall support hub-and-spoke federation where a Hub instance is author
 ## FR-MCP-104 Decision-complete agent plans
 
 All generated plans must be detailed enough for a less expensive implementation model to execute successfully without resolving unstated product, architecture, interface, testing, or rollout decisions.
+Scope: layer-1+
 
 ## FR-MCP-105 Database integrity and durable audit enforcement
 
 The MCP Server must preserve database integrity across all supported providers by enforcing workspace, TODO, requirement, federation, soft-delete, and audit relationships as durable relational contracts.
+Scope: layer-1+
 
 ## FR-MCP-106 Reliable plugin requirement updates
 
 Agent plugins must reliably update existing FR, TR, and TEST requirement records through workflow.requirements.update* commands, including priority changes, without failing inside the wrapper path.
+Scope: layer-1+
 
 ## FR-MCP-107 Outstanding session work consolidation
 
 MCP Server must support an audited consolidation plan that inventories outstanding work from a long session, separates validated changes from unresolved dirty work, and sequences completion through Byrd gates before deploy or publish.
+Scope: layer-1+
 
 ## FR-MCP-108 TODO Markdown description preservation
 
 TODO create, update, read, audit, and projection paths shall preserve description Markdown formatting and whitespace instead of normalizing or stripping meaningful content.
+Scope: layer-1+
 
 ## FR-MCP-109 Batch requirements mutation
 
 The MCP Server shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
+Scope: layer-1+
 
 ## FR-MCP-110 Deterministic Nuke PowerShell execution
 
 Nuke build and deployment automation SHALL run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
+Scope: layer-1+
 
 ## FR-MCP-111 Package workflow closeout skills across McpServer plugins
 
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit and push interrupted work, and close out MCP-backed work consistently across plugin families.
+Scope: layer-1+
 
 ## FR-MCP-112 Requirements export description and AC formatting
 
 Requirements exports shall render requirement descriptions as readable Markdown text and shall display structured acceptance criteria as a bulleted list instead of hiding or flattening AC into dense table cells.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Wiki exports render TEST requirement descriptions outside dense table cells so long descriptions remain readable. (evidence: RequirementsDocumentServiceTests.GenerateWikiAsync_RendersTestingRequirementsAsGroupedSectionsWithAcceptanceCriteria asserts per-TEST headings and paragraphs.)
 - [x] Wiki exports render structured acceptance criteria under an Acceptance Criteria label as Markdown checklist bullets. (evidence: The same focused test asserts unchecked and checked AC bullets, including evidence text.)
@@ -718,12 +826,14 @@ Requirements exports shall render requirement descriptions as readable Markdown 
 ## FR-MCP-113 Plugin requirement batch payload parsing
 
 The system SHALL accept valid YAML and JSON records arrays for requirement batch operations while preserving nested acceptance criteria.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] workflow.requirements.updateFrBatch accepts unindented records YAML and preserves nested acceptance criteria.
 
 ## FR-MCP-114 Parent TODO completion isolation
 
 The system SHALL keep a TODO item's top-level done state independent from nested implementation task done state. Updating implementationTasks[].done SHALL NOT mark the parent TODO done unless the update request explicitly sets the parent done field or the TODO completion workflow deliberately satisfies the parent completion criteria.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Updating a nested implementation task done value does not include or change the top-level TODO done field when the caller did not explicitly set it. (evidence: Focused Bats test TODO HTTP body does not promote implementation task done to parent done passed in all five Bash plugin repos.)
 - [x] A live TODO update can mark one implementation task done while the parent TODO remains not done. (evidence: Temporary live TODO TEMP-ISSUE39-001 remained done=false after updating one implementation task to done=true, then was deleted.)
@@ -731,6 +841,7 @@ The system SHALL keep a TODO item's top-level done state independent from nested
 ## FR-MCP-115 Session and compaction hook output schema compliance
 
 MCP plugin session and compaction hooks SHALL emit schema-valid hook outputs for their event type. Status-only SessionStart, SessionEnd, PreCompact, and PostCompact outcomes SHALL emit an empty JSON object; hooks that emit hookSpecificOutput SHALL include the matching hookEventName and only fields supported by that event. PostCompact SHALL NOT emit additionalContext because that event cannot inject context.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] SessionStart, SessionEnd, PreCompact, and PostCompact status-only hook scripts emit {} instead of non-spec hookSpecificOutput status payloads. (evidence: Hook Bats suites assert exact {} output for the affected session and compact hooks.)
 - [x] PostCompact does not emit additionalContext. (evidence: Hook Bats suites assert post-compact output is {} and does not contain additionalContext.)
@@ -738,14 +849,17 @@ MCP plugin session and compaction hooks SHALL emit schema-valid hook outputs for
 ## FR-MCP-116 GitHub CLI service-account ownership resilience
 
 The system SHALL allow GitHub-backed TODO and issue operations to run under service accounts even when Git rejects the workspace repository as dubious ownership, without requiring an untracked global Git configuration mutation.
+Scope: layer-1+
 
 ## FR-MCP-117 Codex plugin wrapper bounded execution
 
 The Codex MCP plugin wrapper SHALL return successful workflow responses promptly or fail within a caller-controlled bounded timeout with actionable diagnostics instead of forcing raw REST fallback.
+Scope: layer-1+
 
 ## FR-MCP-118 Keyserver trust service
 
 McpServer SHALL provide keyserver trust services that register trusted parties, manage public key metadata, sign transaction manifests, verify signed manifests, reject invalid or replayed manifests, preserve historical signing descriptors for verification, and persist audit evidence without exposing private key material.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Publisher, subscriber, arbiter, and future model parties can be provisioned with party ID, role, active signing key ID, active encryption key ID, status, created/updated UTC, and audit metadata.
 - [x] Manifest signing binds transaction ID, turn ID, publisher party, subscriber party, key IDs, sequence, nonce, issued UTC, expiry UTC, algorithms, diffgram SHA-256, and encrypted body SHA-256.
@@ -756,6 +870,7 @@ McpServer SHALL provide keyserver trust services that register trusted parties, 
 ## FR-MCP-119 Subscriber diffgram commit service
 
 McpServer SHALL provide subscriber services that verify keyserver-signed manifests, decrypt intended diffgrams, validate encrypted and plaintext hashes, durably commit accepted diffgrams, expose abort/status flows, and reject invalid or conflicting commits.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Subscriber accepts a commit only when manifest verification succeeds against keyserver trust and the protected payload is addressed to the subscriber party/key ID.
 - [x] Subscriber validates encrypted body SHA-256 before decrypt and plaintext diffgram SHA-256 after decrypt.
@@ -767,6 +882,7 @@ McpServer SHALL provide subscriber services that verify keyserver-signed manifes
 ## FR-MCP-120 MCP Server transaction gating
 
 McpServer SHALL gate first-party mutating user-turn paths behind transaction manifest signing and subscriber commit confirmation before returning committed success, or fail closed before uncompensated side effects when a safe compensation boundary is not yet available.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Federation adapter apply, memory add/update/delete, TODO create/update/delete/move, repository write, prompt-template mutations, TODO execution state/plan mutations, requirements repository/export writes, session-log writes, tool registry mutations, voice/external interactive mutations, agent-pool lifecycle mutations, GraphRAG mutations, GitHub external side-effect mutations, context rebuild/website/sync mutations, and federation control-plane mutations either route through compensation-capable coordinator gates or fail closed while required transactions are active.
 - [x] Memory add rollback restores or preserves the created memory record, clears soft-delete metadata when exact EF restoration is available, and same-ID retry conflicts after rollback.
@@ -778,6 +894,7 @@ McpServer SHALL gate first-party mutating user-turn paths behind transaction man
 ## FR-MCP-121 Degraded mode and rollback
 
 McpServer SHALL enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads or explicitly fail-closed operations, and preserve audit records through rollback.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Coordinator status exposes enabled/degraded state, last reason, message, and transaction dependency health.
 - [x] Required transaction gates reject mutation before side effects when the coordinator is degraded or required transaction dependencies cannot sign or commit.
@@ -788,6 +905,7 @@ McpServer SHALL enter explicit degraded mode when transaction dependencies are u
 ## FR-MCP-122 Byrd v4 execution control
 
 The transactional diffgram implementation SHALL follow Byrd Development Process v4 with requirements-first, failing-test-first, mocks-first, refactor, explicit validation, and zero-failure zero-skip validation gates for each executed scope.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] The plan records FR/TR/TEST identifiers and mappings before implementation closeout.
 - [x] Each implementation slice names focused tests and validates zero failures and zero skips for the executed scope.
@@ -797,6 +915,7 @@ The transactional diffgram implementation SHALL follow Byrd Development Process 
 ## FR-MCP-123 Quad-model future scaffolding
 
 The transaction foundation SHALL preserve the imported quad-model architecture while keeping Curiosity execution, AoT reconciliation execution, quad-model orchestration, and weight-update execution disabled by default until later requirements authorize them.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Imported diagrams retain stable IDs and future branch annotations for Curiosity, AoT reconciliation, weight redistribution, and quad orchestration.
 - [x] Current production code implements transaction security and mutation gating only; direct model execution and weight-update execution remain disabled/deferred.
@@ -805,6 +924,7 @@ The transaction foundation SHALL preserve the imported quad-model architecture w
 ## FR-MCP-124 Imported document and diagram preservation
 
 The imported Quad-Model transactional diffgram document SHALL be preserved as local project-contract artifacts, including its diagrams, branch IDs, source references, and implementation-scope annotations.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] All six imported Mermaid diagram IDs are present in `docs/Project/Quad-Model-Transactional-Diffgram-Plan.md`.
 - [x] Each imported diagram section includes a Mermaid block, imported source-section reference, and repository annotations.
@@ -813,6 +933,7 @@ The imported Quad-Model transactional diffgram document SHALL be preserved as lo
 ## FR-MCP-125 Federation and compatibility preservation
 
 The transactional diffgram implementation SHALL remain additive to existing federation behavior and SHALL preserve existing HMAC federation envelope compatibility while adding transaction-specific trust boundaries.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Federation HMAC envelopes remain separate from transaction manifest signing and protected diffgram encryption.
 - [x] Global federation mutation-adapter apply paths are transaction-gated through the coordinator.
@@ -822,6 +943,7 @@ The transactional diffgram implementation SHALL remain additive to existing fede
 ## FR-MCP-126 aiUnit plan review
 
 The transaction plan SHALL include a test-only aiUnit plan review gate that fails on critical or high findings and records run-log evidence before closeout.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] `tests/McpServer.PlanReview.Tests` validates aiUnit plan-review run-log evidence for PLAN-TURNTRANSACTIONS-001.
 - [x] The gate fails when run-log findings contain critical or high severity findings.
@@ -831,6 +953,7 @@ The transaction plan SHALL include a test-only aiUnit plan review gate that fail
 ## FR-MCP-127 Diagram-derived implementation tests
 
 In-scope branches from imported activity and sequence diagrams SHALL have implementation-test coverage or an explicit deferred requirement before related code is written.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] SD-DIFFGRAM-001 valid, invalid, signing, verification, encryption, and hash branches are covered by keyserver/subscriber/client/integration tests.
 - [x] AD-TXN-001 commit, subscriber unavailable, degraded, rollback, timeout, and audit branches are covered by coordinator, pub-sub, federation, and mutation-gating tests.
@@ -840,6 +963,7 @@ In-scope branches from imported activity and sequence diagrams SHALL have implem
 ## FR-MCP-128 Two-round architecture and design review
 
 The implementation SHALL include two architecture/design rounds before closeout: a first architecture round defining boundaries, ownership, trust, storage, threat model, and gap analysis, and a second implementable design round defining DTOs, entities, options, interfaces, endpoint contracts, reason codes, audit payloads, XMLDoc obligations, and test mappings.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] `TurnTransactions-Architecture-Round1.md` captures component boundaries, trust model, storage boundaries, rollback/audit rules, threat model, and gap analysis.
 - [x] `TurnTransactions-Design-Round2.md` captures implementable DTOs, entities, options, interfaces, endpoint contracts, reason codes, canonicalization, audit payloads, XMLDoc obligations, and TEST-MCP-158 through TEST-MCP-173 mappings.
@@ -849,6 +973,7 @@ The implementation SHALL include two architecture/design rounds before closeout:
 ## FR-MCP-129 Durable external brain-slot registry and live invocation
 
 The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth, including CRUD, readiness status projection, and individually gated live model invocation.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Brain-slot definitions are durable CRUD records scoped by workspace and role.
 - [x] Exactly one enabled slot per workspace and role is allowed; enabling a replacement requires replaceExisting=true and writes an audit entry.
@@ -861,6 +986,7 @@ The MCP runtime SHALL provide durable workspace-scoped external brain-slot defin
 ## FR-MCP-130 Transaction-gated Curiosity external result admission
 
 The CuriosityEngine slot MAY request GraphRAG or context admission for external model output only after the related brain-slot invocation transaction commits successfully through the subscriber path.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] No model output is returned to the caller until the subscriber commit succeeds.
 - [x] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
@@ -871,6 +997,7 @@ The CuriosityEngine slot MAY request GraphRAG or context admission for external 
 ## FR-MCP-131 Quad containment and authorization boundary
 
 The MCP runtime SHALL keep Quad-Brain branches fail-closed unless explicit branch requirements authorize them. FR-MCP-134 and FR-MCP-135 now authorize AoT reconciliation execution, durable weight updates, and full Quad-Brain orchestration; unauthorized cache mutation and implicit fallback remain contained.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] AoT reconciliation execution is authorized only through the transaction-gated ArbiterOfTruth slot path.
 - [x] Weight update execution is authorized only through the safety-gated, transaction-coordinated weight update path.
@@ -880,6 +1007,7 @@ The MCP runtime SHALL keep Quad-Brain branches fail-closed unless explicit branc
 ## FR-MCP-132 Accurate HTTP semantics for /mcpserver/* credential failures
 
 All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API keys. 503 Service Unavailable is returned only when the per-workspace auth-token subsystem has not yet been initialized, and per-workspace tokens rotating on restart must surface as 401, never as a blanket 503.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missing API key
 - [x] 503 Service Unavailable returned only when per-workspace auth-token subsystem not initialized
@@ -889,28 +1017,27 @@ All /mcpserver/* endpoints return 401 Unauthorized for unknown, stale, or missin
 ## FR-MCP-133 Readiness reflects the workspace/token subsystem
 
 The readiness endpoint /ready reports Unhealthy when no enabled workspace is registered, primary workspace has no seeded auth token, or auth-token subsystem is uninitialized. Readiness never reports Healthy while /mcpserver/* would be rejected with 503.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] /ready endpoint checks workspace/token subsystem readiness
 - [x] /ready reports Unhealthy when no enabled workspace registered
 - [x] /ready reports Unhealthy when primary workspace has no seeded auth token
 - [x] /ready never reports Healthy while /mcpserver/* would return 503
 
-## FR-MCP-134 Full QuadBrain orchestration, AoT reconciliation, and escalation
+## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
 
-The MCP runtime SHALL execute the real-time QuadBrain decision loop by dispatching LeftHemisphere and RightHemisphere in parallel for the active work, gating ArbiterOfTruth until both hemisphere responses have completed, and returning only the committed Arbiter decision. ArbiterOfTruth MAY choose the left response, choose the right response, combine both responses, or reject both responses. CuriosityEngine SHALL NOT participate in the normal real-time response path; it is invoked only when both hemispheres fail to produce valid committed output, where it evaluates frustration/research context and may initiate deeper research/context admission without directly responding to the user. Arbiter rejection SHALL trigger the voting/reconciliation mechanism before the runtime fails closed.
+The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
-- [x] LeftHemisphere and RightHemisphere are invoked in parallel through existing transaction-gated slot invocation, and ArbiterOfTruth reconciliation does not run until both hemisphere responses have completed.
-- [x] Role prompts describe LeftHemisphere as creative, RightHemisphere as absolute-accuracy focused, CuriosityEngine as a curious researcher, and ArbiterOfTruth as arbiter of truth for code tasks plus enforcer of rules for all tasks; RightHemisphere invocations set provider temperature to 0.0 while LeftHemisphere invocations leave temperature unset.
-- [x] CuriosityEngine is not invoked when either hemisphere produces valid committed evidence for ArbiterOfTruth.
-- [x] When both hemispheres produce no valid committed evidence, CuriosityEngine may admit research/context evidence but its output is never returned directly to the caller.
-- [x] AoT reconciliation may choose Left, choose Right, combine both, or reject both; rejection triggers the voting/reconciliation mechanism before final fail-closed rejection.
+- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
 - [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
 - [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
 
 ## FR-MCP-135 Quad-Brain weight update controls
 
 The MCP runtime SHALL support durable, audited Quad-Brain role weight updates with AoT approval, admin approval, explicit safety-gate acknowledgement, version checks, before/after snapshots, and rollback metadata, while rejecting unsafe or stale updates without mutating slot state.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Weight updates require AoT approval, admin approval, safety gates passed, and a non-empty reason before slot weights change.
 - [x] Each accepted update increments slot weight versions and records previous and new values in DataAuditLogs.
@@ -920,6 +1047,7 @@ The MCP runtime SHALL support durable, audited Quad-Brain role weight updates wi
 ## FR-MCP-136 ACID-coupled Microsoft Agent Framework agent definition
 
 The system SHALL expose an explicit ACID-compliant, tightly coupled hosted-agent definition for Microsoft Agent Framework hosts, extending the existing ChatClientAgent integration while requiring authenticated workspace binding, serialized tool invocation, durable audit/session-log boundaries, and fail-closed tool exposure.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] The ACID profile has stable public metadata including id, name, source type, consistency model, coupling mode, and Microsoft Agent Framework extension type.
 - [x] The ACID profile requires authentication, workspace scoping, session-turn boundaries, durable audit, transaction-required mutation policy, and serialized model tool invocation.
@@ -929,6 +1057,7 @@ The system SHALL expose an explicit ACID-compliant, tightly coupled hosted-agent
 ## FR-MCP-137 Quad Brain coding agent execution
 
 Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes coding tasks through QuadBrain orchestration, never bypassing the Quad Brain transaction/admission contract. ACID profile includes Quad Brain coding tool while excluding generic passthrough and other uncontrolled tools.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
 - [x] Tool calls McpServerClient.BrainSlots.OrchestrateAsync with coding metadata
@@ -949,30 +1078,37 @@ AiCodeReview and AiProjectReview Nuke targets SHALL integrate directly with the 
 - The targets do not depend on or execute unit test filters for review triggering (review is distinct from `Test`).
 - Build tests cover client creation and markdown writing with mocks/stubs.
 - All prior tests + new remain green (Byrd gate).
+Scope: layer-1+
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+Scope: layer-1+
 
 ## FR-MCP-AGENT-PARITY-002 FR-MCP-AGENT-PARITY-002
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
+Scope: layer-1+
 
 ## FR-MCP-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+Scope: layer-1+
 
 ## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.
+Scope: layer-1+
 
 ## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.
+Scope: layer-1+
 
 ## FR-MCP-MEMORY-001 Global and workspace memory storage
 
 The MCP Server SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A memory record has a stable ID, scope, category, raw text, version, author metadata, and created/updated timestamps.
 - [x] Global memories are returned for every workspace and are not stamped with a workspace owner.
@@ -983,6 +1119,7 @@ The MCP Server SHALL store raw-text memories with a stable memory ID, explicit s
 ## FR-MCP-MEMORY-002 Memory CRUD tools
 
 The MCP Server SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Add creates a memory and returns ID, text, scope, category, version, and timestamps.
 - [x] List returns the effective memory set for the active workspace by default.
@@ -993,6 +1130,7 @@ The MCP Server SHALL expose add, list, update, and remove operations for raw-tex
 ## FR-MCP-MEMORY-003 Required memories injection format
 
 Supported agents SHALL receive active memories at each host-supported request boundary in a deterministic `REQUIRED MEMORIES` block. Memory text SHALL be raw text and SHALL NOT be summarized, decorated, or rewritten.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] The injected block header is exactly `REQUIRED MEMORIES`.
 - [x] Each memory renders as `- MEMORY-CATEGORY-001: Raw memory text`.
@@ -1003,6 +1141,7 @@ Supported agents SHALL receive active memories at each host-supported request bo
 ## FR-MCP-MEMORY-004 Marker template memory guidance
 
 Generated `AGENTS-README-FIRST.yaml` instructions SHALL explain MCP memories, the memory tools, the ID format, scope behavior, and the exact `REQUIRED MEMORIES` rendering contract.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] templates/prompt-templates.yaml contains an MCP Memories section in the default marker prompt. (evidence: templates/prompt-templates.yaml MCP Memories section.)
 - [x] The section names memory_add, memory_list, memory_update, and memory_remove. (evidence: templates/prompt-templates.yaml MCP Memories tool list.)
@@ -1014,6 +1153,7 @@ Generated `AGENTS-README-FIRST.yaml` instructions SHALL explain MCP memories, th
 ## FR-MCP-MEMORY-005 REPL memory namespace
 
 The REPL SHALL expose typed `workflow.memory.*` operations for memory add, list, update, and remove.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, and `workflow.memory.remove` dispatch through typed workflow code.
 - [x] Valid REPL memory commands return standard result envelopes.
@@ -1023,6 +1163,7 @@ The REPL SHALL expose typed `workflow.memory.*` operations for memory add, list,
 ## FR-MCP-MEMORY-006 Memory scope management and ordering
 
 The MCP Server SHALL allow memories to be marked Global or Workspace and SHALL return Global memories before Workspace memories, with each group sorted by ID ascending.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Add supports explicit `Scope` and defaults to Workspace only when omitted.
 - [x] Update can change a memory between Global and Workspace under validated rules.
@@ -1033,6 +1174,7 @@ The MCP Server SHALL allow memories to be marked Global or Workspace and SHALL r
 ## FR-MCP-MEMORY-007 Agent plugin memory integration
 
 Official McpServer agent plugins SHALL expose memory tools and SHALL inject the `REQUIRED MEMORIES` block at host-supported request boundaries, or SHALL document a host limitation and expose an explicit memory-list fallback.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline v1, Cline v2, and OpenCode plugin lanes validate memory tool availability. (evidence: Shell plugin Bats memory tests and TypeScript memory tests.)
 - [x] Plugins with request-boundary injection hooks render REQUIRED MEMORIES on every supported user prompt boundary. (evidence: Plugin validation and marker memory injection coverage.)
@@ -1043,6 +1185,7 @@ Official McpServer agent plugins SHALL expose memory tools and SHALL inject the 
 ## FR-MCP-MEMORY-008 Federated Memory State
 
 The MCP Server SHALL federate Memory as a first-class mutable federation domain. Memory federation uses the existing /mcpserver/memory REST surface and federation operation envelope pipeline, not new public memory endpoints. Adapter diagnostics, LocalProxy outage queueing, signed replay, hub conflict detection, and fanout apply semantics SHALL include the memory domain.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Federation adapter diagnostics list memory as covered, non-local-only, and apply-supported.
 - [ ] /mcpserver/memory maps to federation domain memory.
@@ -1055,26 +1198,32 @@ The MCP Server SHALL federate Memory as a first-class mutable federation domain.
 ## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+Scope: layer-1+
 
 ## FR-MCP-PLUGINCORE-001 Canonical plugin core with sync and checksum guard
 
 A single canonical plugin core SHALL be distributed into plugin repos by a sync tool that writes a per-file sha256 manifest, and a checksum guard SHALL fail CI when a synced file is edited locally.
+Scope: layer-1+
 
 ## FR-MCP-PLUGINCORE-002 No-duplication CI guard for plugin lib files
 
 Plugin CI SHALL fail when a lib file is neither covered by the core manifest nor declared as plugin residual.
+Scope: layer-1+
 
 ## FR-MCP-PLUGINCORE-003 Persistent REPL daemon
 
 A persistent REPL daemon SHALL serve many requests from one long-lived repl child over NDJSON framing, with auto-start, crash-restart, and spawn-per-call fallback.
+Scope: layer-1+
 
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
 
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
+Scope: layer-1+
 
 ## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
 
 QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On startup it SHALL read the marker file (AGENTS-README-FIRST.yaml) in its start directory and use that marker's apiKey and baseUrl to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A valid marker binds baseUrl and apiKey from the marker and applies the QBAgent profile.
 - [x] A marker missing apiKey or with a non-absolute baseUrl is rejected as invalid.
@@ -1084,6 +1233,7 @@ QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On 
 ## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
 
 QuadBrain SHALL execute MCP-internal tools (those exposed by McpServer itself - session, TODO, requirements, repo, graphrag, etc.) directly server-side during orchestration rather than emitting them to the agent, which improves performance and removes dependence on model behavior. Tools OUTSIDE McpServer SHALL be emitted as OpenAI tool_calls for QBAgent to execute. QuadBrain orchestration SHALL perform session logging. When role models elect MCP-internal mutating tools (TODO and Requirements add/update), the Arbiter-of-Truth SHALL intercept the call and gate it through the turn transaction coordinator; on commit it executes the tool in McpServer and strips that tool_call from the chat-completion response before returning to QBAgent.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Tools are classified MCP-internal (mcp_ prefix) versus external.
 - [x] The interceptor executes internal tools server-side and strips them; only external calls are emitted to the agent as tool commands.
@@ -1094,6 +1244,7 @@ QuadBrain SHALL execute MCP-internal tools (those exposed by McpServer itself - 
 ## FR-MCP-QBEXEC-002 Concrete QuadBrain internal-tool executor
 
 QuadBrain SHALL provide a concrete IQuadBrainInternalToolExecutor (replacing the default NoopInternalToolExecutor) that routes MCP-internal tool calls - mcp_todo_*, mcp_requirements_*, mcp_repo_write, mcp_repo_edit, and mutating mcp_git - through the existing transaction-gated services (TransactionGatedTodoMutationService, the transaction-gated requirements document service, and TransactionGatedRepoFileService) so each mutation commits through the turn transaction coordinator, and maps each result to InternalToolExecutionOutcome.Ok/Fail/Unhandled.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] mcp_todo_update / mcp_todo_create / mcp_todo_delete route through ITransactionGatedTodoMutationService and commit via the coordinator.
 - [ ] mcp_requirements_* mutations route through the transaction-gated requirements document service.
@@ -1103,6 +1254,7 @@ QuadBrain SHALL provide a concrete IQuadBrainInternalToolExecutor (replacing the
 ## FR-MCP-QBEXEC-003 Full-fidelity inter-brain session logging
 
 QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Each brain-slot invocation writes full prompt + full output text to the session log (not only SHA-256 hashes), under the correct TurnId.
 - [ ] AoT reconciliation input and output are logged in full to the session log.
@@ -1112,6 +1264,7 @@ QuadBrain SHALL log all interaction between the brains in full. Every brain-slot
 ## FR-MCP-QBOPENAI-001 QuadBrain OpenAI-compatible chat-completions endpoint
 
 QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (chat/completions shape) backed by QuadBrain orchestration, accepting standard OpenAI chat messages and tool/function definitions and returning OpenAI-shaped completions - including assistant tool_calls when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent (FR-MCP-QBAGENT-001) consumes this endpoint as its IChatClient and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message.
 - [x] Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.
@@ -1121,6 +1274,7 @@ QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (c
 ## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
 
 The server provisions the four GLOBAL Quad-Brain roles (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, as a single global set. The /v1 OpenAI-compatible endpoint resolves the caller workspace from its token to scope server-side internal-tool mutations, not brain-slot visibility (brains are global).
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] When Mcp:BrainSlots:ExecutionEnabled is true and Slots is populated, the startup seeder upserts and enables each configured slot as a single global set and the quad becomes ready in every workspace context.
 - [x] Provisioning is idempotent across restarts and does not abort host startup when a single slot definition is invalid.
@@ -1130,6 +1284,7 @@ The server provisions the four GLOBAL Quad-Brain roles (LeftHemisphere, RightHem
 ## FR-MCP-QBSKILLS-001 Agent Skills registry and progressive disclosure
 
 QBAgent provides an agentskills.io-compatible skill registry/loader. Discovery loads only each skill name+description; Activation loads the full SKILL.md on demand; Execution follows the instructions using the baseline tools. SKILL.md frontmatter requires name and description (optional license/version/allowed-tools).
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Discovery returns only name+description for every available skill; load returns the full SKILL.md body.
 - [ ] A SKILL.md missing name or description is rejected by the manifest parser.
@@ -1137,12 +1292,14 @@ QBAgent provides an agentskills.io-compatible skill registry/loader. Discovery l
 ## FR-MCP-QBSKILLS-002 Skill tool (list_skills / load_skill)
 
 QBAgent exposes external tools list_skills and load_skill(name) so the model can discover and activate skills at runtime under progressive disclosure.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] list_skills returns the discovery list; load_skill returns the named skill body.
 
 ## FR-MCP-QBSKILLS-003 Vendor dotnet/skills and author workspace skills
 
 The repo vendors dotnet/skills (agentskills.io) and authors workspace skills in SKILL.md format: byrd-tdd-process, mcp-session-logging, mcp-todo, mcp-requirements-traceability, and usage skills for the git/bash/edit tools. Discovery scans both vendored and workspace skill roots.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Discovery includes both vendored dotnet/skills and authored workspace skills.
 - [ ] Authored workspace SKILL.md files pass frontmatter validation.
@@ -1150,6 +1307,7 @@ The repo vendors dotnet/skills (agentskills.io) and authors workspace skills in 
 ## FR-MCP-QBTOOLS-001 QBAgent external file tools
 
 QBAgent exposes agent-side external tools read_file, write_file, edit_file, and list_files that operate on the workspace through the MCP client (server RepoFileService), so the server path-traversal/reparse/allowlist safety governs all file access from both planes.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] read_file/write_file/edit_file/list_files are registered as non-mcp_ external AITools and execute in the QBAgent loop.
 - [ ] All four route through the MCP client to the server RepoFileService; path traversal and out-of-root access are rejected server-side.
@@ -1157,12 +1315,14 @@ QBAgent exposes agent-side external tools read_file, write_file, edit_file, and 
 ## FR-MCP-QBTOOLS-002 QBAgent run_powershell tool
 
 QBAgent exposes a run_powershell external tool backed by the in-process HostedPowerShellSessionManager runspace, returning output/error/exit streams.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] run_powershell executes a command in a hosted runspace and returns captured output and error streams.
 
 ## FR-MCP-QBTOOLS-003 QBAgent run_bash tool (optional Git Bash)
 
 QBAgent exposes an optional run_bash external tool that resolves bash.exe (Git for Windows) from PATH via ProcessRunner; when bash is unavailable it returns a structured unavailable result rather than failing the agent. PowerShell remains primary.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] When bash.exe is present, run_bash executes a command and returns stdout/stderr/exit code.
 - [ ] When bash.exe is absent, run_bash returns available=false without throwing.
@@ -1170,6 +1330,7 @@ QBAgent exposes an optional run_bash external tool that resolves bash.exe (Git f
 ## FR-MCP-QBTOOLS-004 QBAgent git tool (full, push to origin)
 
 QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing Azure DevOps origin remote only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Read subcommands (status/diff/log/branch) run against the workspace repo and return output.
 - [ ] add/commit/checkout/reset/push are supported; push targets origin only and never a non-origin remote.
@@ -1178,6 +1339,7 @@ QBAgent exposes a git external tool supporting status, diff, log, branch, add, c
 ## FR-MCP-QBTOOLS-005 Server-side mcp_repo_edit, mcp_bash, mcp_git tools
 
 The MCP tool adapter exposes server-side mcp_repo_edit, mcp_bash, and mcp_git tools (mcp_ prefix) executed server-side by QuadBrain via the internal-tool executor; mutating variants are transaction-gated. One core implementation per capability is shared with the agent-side external tools.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] mcp_repo_edit/mcp_bash/mcp_git are present in the adapter tool surface with mcp_ prefix.
 - [ ] Mutating mcp_ tools are gated through the turn transaction coordinator and share the single core capability with the external plane.
@@ -1185,6 +1347,7 @@ The MCP tool adapter exposes server-side mcp_repo_edit, mcp_bash, and mcp_git to
 ## FR-MCP-QBTOOLS-006 RepoFileService targeted edit
 
 IRepoFileService gains EditAsync(relativePath, oldString, newString, expectedOccurrences?) performing a targeted string replacement with the same path-safety, audit, and change-event behavior as Write; ambiguous or missing matches fail; transactional compensation reuses the snapshot/restore path.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] A unique oldString is replaced; a missing oldString fails; an ambiguous match fails unless replaceAll/expectedOccurrences is set.
 - [ ] Transaction-gated EditAsync rolls back to the original content when the transaction is rejected.
@@ -1192,12 +1355,14 @@ IRepoFileService gains EditAsync(relativePath, oldString, newString, expectedOcc
 ## FR-MCP-QBTOOLS-007 QBAgent registers full tool and skill surface
 
 QBAgent registers the full external tool set (file/powershell/bash/git) plus the skill tools on every run via baseOptions.ChatOptions.Tools, and injects the skill discovery list into the system prompt.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Every QBAgent run exposes the external tool set and the skill tools to the Agent Framework loop.
 
 ## FR-MCP-QUAD-SESSION-001 Per-session QuadBrain instances over global brains
 
 QuadBrain brain definitions are global, but a running orchestration is an instance attached to a single session; multiple instances may run concurrently, each bound to its own session. A /v1/chat/completions request declares its session via the X-Session-Id header (optional X-Turn-Id), and the server threads that session and turn into the orchestration so inter-brain logging, internal-tool-failure logging, and turn transactions are correlated and concurrent instances stay isolated.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A /v1 request X-Session-Id (and optional X-Turn-Id) header is threaded into the orchestration request metadata (sessionId/turnId) and TurnId.
 - [x] Inter-brain logging and internal-tool-failure logging use the attached session/turn and are a no-op when absent.
@@ -1213,6 +1378,7 @@ The server shall provide a YAML-envelope STDIO REPL host that accepts structured
 **Technical Implementation:** [TR-MCP-REPL-001](./Technical-Requirements.md#tr-mcp-repl-001) | [TR-MCP-REPL-002](./Technical-Requirements.md#tr-mcp-repl-002) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `McpServer.Repl.Core` (`IReplProtocol`, `IYamlEnvelope`, `IYamlSerializer`, `IMarkerFileReader`, `ITrustBootstrapService`, `IAuthRotationHandler`, `IWorkspaceSelector`), `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`, `ServiceCollectionExtensions`)
+Scope: layer-1+
 
 ## FR-MCP-REPL-002 REPL Lifecycle Management
 
@@ -1223,6 +1389,7 @@ The REPL host shall support graceful startup, interactive command loop, structur
 **Technical Implementation:** [TR-MCP-REPL-003](./Technical-Requirements.md#tr-mcp-repl-003) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`), `McpServer.Repl.Core` (`SessionLogErrorEnvelope`)
+Scope: layer-1+
 
 ## FR-MCP-REPL-003 Command Namespace Parity
 
@@ -1233,6 +1400,7 @@ The REPL command surface shall provide namespace-organized commands with functio
 **Technical Implementation:** [TR-MCP-REPL-004](./Technical-Requirements.md#tr-mcp-repl-004) | [TR-MCP-REPL-005](./Technical-Requirements.md#tr-mcp-repl-005) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `McpServer.Repl.Core` (`ITodoWorkflow`, `TodoCommandShapes`, `ISessionLogWorkflow`, `SessionLogCommandShapes`, `SessionLogModels`, `IRequirementsWorkflow`, `RequirementsCommandShapes`, `RequirementsCommandModels`, `IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`TodoWorkflow`, `RequirementsWorkflow`, `SessionLogWorkflow`, `GenericClientPassthrough`)
+Scope: layer-1+
 
 ## FR-MCP-REPL-004 Trust Bootstrap and Auth Rotation
 
@@ -1243,6 +1411,7 @@ The REPL host shall implement marker-file trust bootstrap with signature verific
 **Technical Implementation:** [TR-MCP-REPL-006](./Technical-Requirements.md#tr-mcp-repl-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `McpServer.Repl.Core` (`ITrustBootstrapService`, `IMarkerFileReader`, `IAuthRotationHandler`), `McpServer.Repl.Host` (`AgentStdioHandler`)
+Scope: layer-1+
 
 ## FR-MCP-REPL-005 Orchestration State Visibility
 
@@ -1264,34 +1433,41 @@ All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are c
 
 
 ---
+Scope: layer-1+
 
 ## FR-MCP-REPL-006 Deprecate workflow.* REPL namespaces in favor of client.* passthrough
 
 The REPL SHALL mark every workflow.* response deprecated and route workflow.sessionlog lifecycle verbs with explicit identifiers statelessly through the SessionLog client.
+Scope: layer-1+
 
 ## FR-MCP-REPL-007 REPL Credential Discovery Diagnostics
 
 `mcpserver-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `McpServerClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
+Scope: layer-1+
 
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
 FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
+Scope: layer-1+
 
 ## FR-MCP-REQAC-002 Copy acceptance criteria from a TODO to a requirement
 
 A copy operation populates a requirement's acceptance criteria from a TODO's acceptance criteria verbatim (field-for-field).
+Scope: layer-1+
 
 ## FR-MCP-REQAC-PLUGIN-001 Plugin acceptanceCriteria rollout
 
 All Bash and TypeScript MCP plugin families expose structured acceptanceCriteria on FR/TR/TEST create and update flows, including copy-from-TODO support where applicable.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Bash and TypeScript plugin live gates preserve structured acceptanceCriteria through workflow and REST round-trip verification. (evidence: Live FR-CODEXBIND-001 workflow create/get plus REST GET returned AC-CODEXBIND-001 after service and REPL tool updates.)
 
 ## FR-MCP-REQACPLUGIN-001 Plugins expose AcceptanceCriteria on requirements surface
 
 Every MCP server plugin (bash and TypeScript families) lets its agent set and read structured acceptanceCriteria ({id,text,isSatisfied,evidence}) on FR/TR/TEST create/update via the plugin command surface, including hydration on partial updates.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Bash family typed-params builder emits acceptanceCriteria block on create+update for FR/TR/TEST
 - [ ] TypeScript family tool inputSchema declares acceptanceCriteria + typedParams forwards it
@@ -1300,14 +1476,36 @@ Every MCP server plugin (bash and TypeScript families) lets its agent set and re
 ## FR-MCP-REQACPLUGIN-002 Plugins fail on proven AcceptanceCriteria loss
 
 Every MCP server plugin that accepts caller-supplied requirement acceptanceCriteria must either preserve the supplied criteria or fail loudly when the mutation response proves the criteria were dropped.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Criteria-only requirement updates preserve the caller-supplied acceptanceCriteria block instead of replacing it with an empty or stale hydrated list. (evidence: Direct sourced shell assertions passed for Codex, Claude Code, Claude Cowork, Copilot, and Grok; Jest criteria-only update tests passed for Cline, Cline v2, and OpenCode.)
 - [x] If a caller supplies acceptanceCriteria and a successful mutation response explicitly returns acceptanceCriteria empty, the plugin reports requirements_acceptance_criteria_not_captured instead of success. (evidence: Direct sourced shell assertions and focused Jest tests exercise the explicit empty-response case.)
 - [x] Requirement create/update calls without acceptanceCriteria continue to work without injecting an empty criteria list. (evidence: Shell no-AC create assertions passed and existing TypeScript focused tests remain green.)
 
+## FR-MCP-REQSCOPE-001 FR-MCP-REQSCOPE-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-001.
+Scope: layer-1+
+
+## FR-MCP-REQSCOPE-002 FR-MCP-REQSCOPE-002
+
+Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-002.
+Scope: layer-1+
+
+## FR-MCP-REQSCOPE-003 FR-MCP-REQSCOPE-003
+
+Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-003.
+Scope: layer-1+
+
+## FR-MCP-REQSCOPE-004 FR-MCP-REQSCOPE-004
+
+Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-004.
+Scope: layer-1+
+
 ## FR-MCP-SUBLOG-001 Subscriber high-performance message logging
 
 The transaction subscriber SHALL log every received transaction message (commit and abort outcomes) to a high-performance log store (Parseable) when configured, capturing transaction id, event, reason, status, manifest and encrypted-body hashes, diffgram id, and party ids; logging is best-effort and SHALL never block or fail the commit path on sink errors.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A pluggable ISubscriberMessageLog seam exists with a no-op default and a Parseable HTTP sink.
 - [x] The Parseable sink POSTs a flat JSON batch to the ingest endpoint with the X-P-Stream header and basic auth.
@@ -1317,6 +1515,7 @@ The transaction subscriber SHALL log every received transaction message (commit 
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 
 Agents can submit workspace-scoped incidental bug reports without leaving their current task.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] REST, client, REPL, and plugin tool paths all accept the same report contract.
 - [ ] Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc.
@@ -1325,6 +1524,7 @@ Agents can submit workspace-scoped incidental bug reports without leaving their 
 ## FR-MCP-TRIAGE-002 Async triage grouping and research
 
 Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Groups are deterministic and workspace-isolated.
 - [ ] New matching reports reset the 15-minute quiet window.
@@ -1335,6 +1535,7 @@ Related reports are grouped, MCP Server and MCP Server plugin reports are routed
 ## FR-MCP-TRIAGE-003 REPL triage parity
 
 The REPL exposes the complete triage surface through client passthrough and typed workflow wrappers.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] client.triage.* works through generic passthrough after adding McpServerClient.Triage.
 - [ ] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.
@@ -1343,46 +1544,59 @@ The REPL exposes the complete triage surface through client passthrough and type
 ## FR-MCP-TRIAGE-004 Plugin triage skills
 
 All plugin distributions teach agents when and how to use triage.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Each plugin skill bundle includes triage guidance.
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
+
+## FR-MCP-WORKSPACE-LAYER-001 FR-MCP-WORKSPACE-LAYER-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-WORKSPACE-LAYER-001.
+Scope: layer-1+
 
 ## FR-SUPPORT-010 MCP Context Unification
 
 Local MCP server providing context retrieval, TODO management, repository access, session logging, and ingestion capabilities for AI agent integration.
 
 **Covered by:** `ContextController`, `TodoController`, `RepoController`, `SessionLogController`, `McpServerMcpTools`, `McpDbContext`, `HybridSearchService`, `EmbeddingService`, `VectorIndexService`, `Fts5SearchService`, `RepoFileService`, `IngestionCoordinator`
+Scope: layer-1+
 
 ## FR-SUPPORT-010A SessionLog Workspace Stamping
 
 Session log POST shall stamp the resolved workspace ID on every persisted row (parent SessionLog plus all child entities: turns, actions, tags, context items, processing dialog, commits, string-list items) so a POST followed by a GET under the same workspace context returns the same record. When no workspace context is resolved (ingestion / batch import paths), WorkspaceId defaults to empty string and the DbContext-level auto-stamp populates it from `_workspaceId` if available.
 
 **Covered by:** `SessionLogService.StampWorkspaceId`, `McpDbContext.StampWorkspaceId`, `SessionLogControllerTests.WhenPostingThenGetBySessionIdReturnsRecord`
+Scope: layer-1+
 
 ## FR-SUPPORT-010B SessionLog ProblemDetails Errors
 
 Session log POST shall return RFC 7807 ProblemDetails on body-binding or validation failure. Error responses cite the offending JSON path under `errors`, never the action-parameter name. Content-Type is `application/problem+json`. The accepted top-level shape is documented in the response `detail`.
 
 **Covered by:** `Program.cs` (`InvalidModelStateResponseFactory`), `SessionLogController.SubmitAsync` (`ValidationProblem` calls), `SessionLogControllerTests.WhenPostingMalformedWorkspaceFieldThenReturnsProblemDetailsWithoutDtoKey`
+Scope: layer-1+
 
 ## FR-SUPPORT-010C SessionLog REST Surface Completion
 
 Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
+Scope: layer-1+
 
 ## FR-SUPPORT-010E Stateless session lifecycle endpoints
 
 The session-log API SHALL expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
+Scope: layer-1+
 
 ## FR-SUPPORT-010F Additive partial session-log submits
 
 Whole-session submit SHALL merge additively: omitted session and turn fields never overwrite previously persisted values.
+Scope: layer-1+
 
 ## FR-SUPPORT-011 SessionLog Workspace Stamping
 
 Session log POST shall stamp the resolved workspace ID on every persisted row (parent SessionLog plus all child entities: turns, actions, tags, context items, processing dialog, commits, string-list items) so a POST followed by a GET under the same workspace context returns the same record. When no workspace context is resolved (ingestion / batch import paths), WorkspaceId defaults to empty string and the DbContext-level auto-stamp populates it from _workspaceId if available.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Session log POST stamps resolved workspace ID on parent and all child entities
 - [ ] POST followed by GET under same workspace returns same record with workspace ID preserved
@@ -1391,6 +1605,7 @@ Session log POST shall stamp the resolved workspace ID on every persisted row (p
 ## FR-SUPPORT-012 SessionLog ProblemDetails Errors
 
 Session log POST shall return RFC 7807 ProblemDetails on body-binding or validation failure. Error responses cite the offending JSON path under errors, never the action-parameter name. Content-Type is application/problem+json. The accepted top-level shape is documented in the response detail.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Session log POST returns RFC 7807 ProblemDetails on body-binding failure
 - [ ] Session log POST returns RFC 7807 ProblemDetails on validation failure
@@ -1400,6 +1615,7 @@ Session log POST shall return RFC 7807 ProblemDetails on body-binding or validat
 ## FR-SUPPORT-013 SessionLog REST Surface Completion
 
 Session log REST shall expose GET /mcpserver/sessionlog/{agent}/{sessionId} (single-record fetch under tenancy) and POST /mcpserver/sessionlog/{agent}/{sessionId}/turn (turn-append by RequestId). Unsupported verbs return 405 Method Not Allowed with Allow header. Terminal-turn audit-evidence gate enforced only for Quad-Brain ACID hosted-agent source type (QBAgent), not standard agents.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] GET /mcpserver/sessionlog/{agent}/{sessionId} returns single-record fetch under tenancy
 - [ ] POST /mcpserver/sessionlog/{agent}/{sessionId}/turn appends turn by RequestId
@@ -1409,6 +1625,7 @@ Session log REST shall expose GET /mcpserver/sessionlog/{agent}/{sessionId} (sin
 ## FR-SUPPORT-014 Stateless session lifecycle endpoints
 
 The session-log API shall expose stateless open/begin/complete/fail lifecycle operations keyed by (agent, sessionId, requestId) requiring no in-process active-session state.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Session-log API exposes stateless open/begin/complete/fail lifecycle operations
 - [ ] Lifecycle operations are keyed by (agent, sessionId, requestId) tuple
@@ -1417,6 +1634,7 @@ The session-log API shall expose stateless open/begin/complete/fail lifecycle op
 ## FR-SUPPORT-015 Additive partial session-log submits
 
 Whole-session submit shall merge additively: omitted session and turn fields never overwrite previously persisted values. This ensures partial updates preserve existing state.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Whole-session submit merges additively without overwriting omitted fields
 - [ ] Omitted session fields are never overwritten during additive merge
@@ -1425,10 +1643,12 @@ Whole-session submit shall merge additively: omitted session and turn fields nev
 ## FR-TEST-002 FR-TEST-002
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
+Scope: layer-1+
 
 ## FR-TRIAGE-001 Triage dashboard inspection
 
 Users can inspect triage queue contents, grouped report queues, and AI triage run history with result details and current status for Director and MCP Web UI dashboards.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] A read-only dashboard contract exposes triage queue, report group queue, and run history without inferring Agent Pool data.
 - [ ] Group details include status, title, summary, report count, quiet deadline, created TODO id, last error, linked report summaries, and latest AI run results when available.
@@ -1437,6 +1657,7 @@ Users can inspect triage queue contents, grouped report queues, and AI triage ru
 ## FR-TRIAGE-002 Triage-created TODO index
 
 Users can query TODO item IDs created by triage, including the datetime each TODO anchor was created, so Director and MCP Web can link triage outcomes to backlog items.
+Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)

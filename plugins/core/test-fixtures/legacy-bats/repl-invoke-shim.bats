@@ -264,7 +264,7 @@ case "$method" in
         fi
         printf 'type: result\npayload:\n  result:\n    ok: true\n'
         ;;
-    client.Requirements.DeleteFrAsync|client.Requirements.DeleteTrAsync|client.Requirements.DeleteTestAsync|client.Requirements.ListTrAsync|client.Requirements.ListTestAsync|client.Requirements.ListMappingsAsync|client.Requirements.UpdateTrAsync|client.Requirements.UpdateTestAsync|client.Requirements.UpsertMappingAsync|client.Requirements.DeleteMappingAsync|client.Requirements.IngestAsync)
+    client.Requirements.DeleteFrAsync|client.Requirements.DeleteTrAsync|client.Requirements.DeleteTestAsync|client.Requirements.ListTrAsync|client.Requirements.ListTestAsync|client.Requirements.ListMappingsAsync|client.Requirements.UpdateTrAsync|client.Requirements.UpdateTestAsync|client.Requirements.UpsertMappingAsync|client.Requirements.DeleteMappingAsync|client.Requirements.ListRequirementLayersAsync|client.Requirements.CreateRequirementLayerAsync|client.Requirements.UpdateRequirementLayerAsync|client.Requirements.GetEffectiveRequirementsAsync|client.Requirements.IngestAsync)
         printf 'type: result\npayload:\n  result:\n    ok: true\n'
         ;;
     *)
@@ -1618,6 +1618,29 @@ content: |
     ! grep -q "method=workflow.requirements.ingestDocument" "$STUB_LOG"
     grep -q "functionalMarkdown" "$STUB_LOG"
     grep -q "FR-MCP-INLINE-001" "$STUB_LOG"
+}
+
+@test "workflow.requirements layer commands fall back to typed client methods" {
+    write_requirements_state
+    source "$LIB"
+
+    run repl_invoke "workflow.requirements.createLayer" "key: layer-2
+order: 2
+name: Layer 2
+description: Second layer
+scopeEndLayerKey: layer-4"
+    [ "$status" -eq 0 ]
+    grep -q "method=workflow.requirements.createLayer" "$STUB_LOG"
+    grep -q "method=client.Requirements.CreateRequirementLayerAsync" "$STUB_LOG"
+    grep -q "input:     key: layer-2" "$STUB_LOG"
+    grep -q "input:     order: 2" "$STUB_LOG"
+    grep -q "input:     scopeEndLayerKey: layer-4" "$STUB_LOG"
+
+    run repl_invoke "workflow.requirements.effective" "layerKey: layer-2"
+    [ "$status" -eq 0 ]
+    grep -q "method=workflow.requirements.effective" "$STUB_LOG"
+    grep -q "method=client.Requirements.GetEffectiveRequirementsAsync" "$STUB_LOG"
+    grep -q "input:     layerKey: layer-2" "$STUB_LOG"
 }
 
 @test "workflow.requirements uses session-state workspace path and base URL for mcpserver-repl" {

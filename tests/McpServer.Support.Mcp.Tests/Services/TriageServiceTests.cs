@@ -248,6 +248,60 @@ public sealed class TriageServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGE-004: background worker scopes do not have an ambient HTTP workspace,
+    /// but due workspace triage groups must still run and create one backlog TODO.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_BackgroundScopeWithoutWorkspace_ProcessesDueWorkspaceGroup()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        TriageResearchRequest? researchRequest = null;
+        runner.RunAsync(Arg.Do<TriageResearchRequest>(request => researchRequest = request), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                {"title":"Fix background triage","summary":"The worker must see workspace groups.","severity":"medium","acceptanceCriteria":["Background worker processes due workspace groups"],"implementationNotes":[]}
+                """,
+                null));
+
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call => new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = ((TodoCreateRequest)call[0]!).Id,
+                    Title = ((TodoCreateRequest)call[0]!).Title,
+                    Section = ((TodoCreateRequest)call[0]!).Section,
+                    Priority = ((TodoCreateRequest)call[0]!).Priority,
+                    Done = false,
+                }));
+
+        var foreground = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await foreground.SubmitReportAsync(CreateReport("background-scope"));
+        var background = CreateService(string.Empty, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+
+        var processed = await background.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        Assert.NotNull(researchRequest);
+        Assert.Equal(PrimaryWorkspace, researchRequest.WorkspacePath);
+        await todo.Received(1).CreateAsync(
+            Arg.Is<TodoCreateRequest>(request =>
+                request != null &&
+                request.Id == "BUG-TRIAGE-001" &&
+                request.Title == "Fix background triage"),
+            Arg.Any<CancellationToken>());
+
+        var verifier = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var group = await verifier.GetGroupAsync(submit.GroupId);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-005: invalid research output creates no TODO and leaves an inspectable
     /// failure state on the group and research run.
     /// </summary>
@@ -338,7 +392,14 @@ public sealed class TriageServiceTests : IDisposable
         {
             db.TriageGroups.Add(SeedGroup("triage-group-primary", "completed", now));
             db.TriageResearchRuns.AddRange(
-                SeedRun("triage-run-primary", "triage-group-primary", "completed", now),
+                SeedRun(
+                    "triage-run-primary",
+                    "triage-group-primary",
+                    "completed",
+                    now,
+                    agentStdout: "codex stdout",
+                    agentStderr: "codex stderr",
+                    agentExitCode: 0),
                 SeedRun("triage-run-processing", "triage-group-primary", "processing", now.AddMinutes(1)));
             await db.SaveChangesAsync();
         }
@@ -363,6 +424,9 @@ public sealed class TriageServiceTests : IDisposable
         var run = Assert.Single(result.Items);
         Assert.Equal("triage-run-primary", run.RunId);
         Assert.Equal(PrimaryWorkspace, run.WorkspacePath);
+        Assert.Equal("codex stdout", run.AgentStdout);
+        Assert.Equal("codex stderr", run.AgentStderr);
+        Assert.Equal(0, run.AgentExitCode);
         Assert.Equal(1, result.TotalCount);
     }
 
@@ -393,7 +457,7 @@ public sealed class TriageServiceTests : IDisposable
                 now.AddMinutes(1),
                 completedUtc: now.AddMinutes(2),
                 createdTodoId: "BUG-TRIAGE-001"));
-            db.TodoRecords.Add(SeedTodoRecord("BUG-TRIAGE-001", now.AddMinutes(3)));
+            db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-001", "Created triage TODO"));
             await db.SaveChangesAsync();
         }
 
@@ -405,7 +469,7 @@ public sealed class TriageServiceTests : IDisposable
                 now,
                 createdTodoId: "BUG-TRIAGE-002",
                 workspacePath: AlternateWorkspace));
-            db.TodoRecords.Add(SeedTodoRecord("BUG-TRIAGE-002", now.AddMinutes(4), AlternateWorkspace));
+            db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-002", "Other workspace triage TODO", AlternateWorkspace));
             await db.SaveChangesAsync();
         }
 
@@ -413,7 +477,7 @@ public sealed class TriageServiceTests : IDisposable
 
         var item = Assert.Single(result.Items);
         Assert.Equal("BUG-TRIAGE-001", item.TodoId);
-        Assert.Equal(now.AddMinutes(3), item.CreatedAtUtc);
+        Assert.Equal(now.AddMinutes(2), item.CreatedAtUtc);
         Assert.Equal(PrimaryWorkspace, item.WorkspacePath);
         Assert.Equal("triage-group-completed", item.GroupId);
         Assert.Equal("triage-run-completed", item.RunId);
@@ -448,10 +512,17 @@ public sealed class TriageServiceTests : IDisposable
 
         Assert.Equal("Manual group", result.Group.Title);
         Assert.Equal("Grouped manually", result.Group.Summary);
+        Assert.Equal("queued", result.Group.Status);
+        Assert.Equal(now, result.Group.QuietDeadlineUtc);
         Assert.Equal(2, result.Group.ReportCount);
         Assert.Equal(2, result.MovedReportCount);
         Assert.Equal(["triage-group-source-a", "triage-group-source-b"], result.RemovedGroupIds.Order(StringComparer.Ordinal));
         Assert.All(result.Group.Reports, report => Assert.Equal(result.Group.GroupId, report.GroupId));
+
+        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace);
+        Assert.DoesNotContain(dashboard.TriageQueue, group => group.GroupId == result.Group.GroupId);
+        var queuedGroup = Assert.Single(dashboard.ReportGroupQueue, group => group.GroupId == result.Group.GroupId);
+        Assert.Equal("queued", queuedGroup.Status);
     }
 
     /// <summary>TEST-TRIAGE-003: selected groups can be merged into an existing editable target group.</summary>
@@ -475,6 +546,8 @@ public sealed class TriageServiceTests : IDisposable
             new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] });
 
         Assert.Equal("triage-group-target", result.Group.GroupId);
+        Assert.Equal("queued", result.Group.Status);
+        Assert.Equal(now, result.Group.QuietDeadlineUtc);
         Assert.Equal(2, result.Group.ReportCount);
         Assert.Equal(1, result.MovedReportCount);
         Assert.Equal(["triage-group-source"], result.RemovedGroupIds);
@@ -567,6 +640,9 @@ public sealed class TriageServiceTests : IDisposable
         DateTimeOffset? completedUtc = null,
         string? responseJson = null,
         string? rawOutput = null,
+        string? agentStdout = null,
+        string? agentStderr = null,
+        int? agentExitCode = null,
         string? createdTodoId = null,
         string workspacePath = PrimaryWorkspace)
         => new()
@@ -579,22 +655,26 @@ public sealed class TriageServiceTests : IDisposable
             Prompt = "rendered prompt",
             GroupJson = """{"groupId":"test"}""",
             RawOutput = rawOutput,
+            AgentStdout = agentStdout,
+            AgentStderr = agentStderr,
+            AgentExitCode = agentExitCode,
             ResponseJson = responseJson,
             StartedUtc = startedUtc,
             CompletedUtc = completedUtc,
             CreatedTodoId = createdTodoId,
         };
 
-    private static TodoRecordEntity SeedTodoRecord(
+    private static TodoItemEntity SeedTodoItem(
         string todoId,
-        DateTimeOffset createdAtUtc,
+        string title,
         string workspacePath = PrimaryWorkspace)
         => new()
         {
             WorkspaceId = workspacePath,
-            TodoId = todoId,
-            CreatedAtUtc = createdAtUtc,
-            UpdatedAtUtc = createdAtUtc,
+            Id = todoId,
+            Title = title,
+            Section = "Backlog",
+            Priority = "high",
         };
 
     private TriageService CreateService(
