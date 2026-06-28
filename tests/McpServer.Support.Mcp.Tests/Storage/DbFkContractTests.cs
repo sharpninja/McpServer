@@ -249,8 +249,8 @@ public sealed class DbFkContractTests
 
     private static bool IsTodoPrincipal(IEntityType entityType)
     {
-        return entityType.ClrType.Name is "TodoRecordEntity" or "TodoItemEntity"
-            || entityType.GetTableName() is "TodoRecords" or "TodoItems";
+        return entityType.ClrType.Name == "TodoItemEntity"
+            || entityType.GetTableName() == "TodoItems";
     }
 
     private static bool IsRequirementPrincipal(IEntityType entityType)

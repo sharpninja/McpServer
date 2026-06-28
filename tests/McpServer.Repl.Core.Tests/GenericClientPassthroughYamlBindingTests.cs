@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using McpServer.Client;
+using McpServer.Client.Models;
 
 namespace McpServer.Repl.Core.Tests;
 
@@ -149,6 +150,67 @@ public sealed class GenericClientPassthroughYamlBindingTests
         Assert.Equal(1, action.GetProperty("order").GetInt32());
         Assert.Equal("repro action", action.GetProperty("description").GetString());
         Assert.Equal("src/test.cs", action.GetProperty("filePath").GetString());
+    }
+
+    /// <summary>
+    /// TEST-MCP-REPL-011: Generic client passthrough emits results from real async
+    /// client methods whose runtime task type derives from <see cref="Task{TResult}"/>.
+    /// </summary>
+    [Fact]
+    public async Task ClientTriageQueryRunsAsync_AsyncTaskSubclass_EmitsResultPayload()
+    {
+        var handler = new CapturingHttpHandler(JsonSerializer.Serialize(new TriageRunQueryResult
+        {
+            Items =
+            [
+                new TriageResearchRunDetail
+                {
+                    RunId = "triage-run-stdout",
+                    GroupId = "triage-group-stdout",
+                    Status = "completed",
+                    AgentStdout = "agent stdout",
+                    AgentStderr = "agent stderr",
+                    AgentExitCode = 0,
+                },
+            ],
+            TotalCount = 1,
+        }));
+        using var http = new HttpClient(handler);
+        var client = new McpServerClient(http, new McpServerClientOptions
+        {
+            BaseUrl = new Uri("http://localhost:7147"),
+            ApiKey = "test-key",
+            WorkspacePath = @"F:\GitHub\McpServer"
+        });
+        var passthrough = new GenericClientPassthrough(client);
+        var dispatcher = new ReplCommandDispatcher(passthrough);
+        var protocol = new AgentStdioProtocol(new YamlSerializer(), dispatcher);
+        var input = JsonSerializer.Serialize(new
+        {
+            type = "request",
+            payload = new
+            {
+                requestId = "req-triage-runs-001",
+                method = "client.Triage.QueryRunsAsync",
+                @params = new
+                {
+                    groupId = "triage-group-stdout",
+                    workspacePath = @"F:\GitHub\McpServer",
+                },
+            },
+        });
+
+        using var reader = new StringReader(input);
+        using var writer = new StringWriter();
+
+        await protocol.RunAsync(reader, writer, CancellationToken.None);
+
+        var output = writer.ToString();
+        Assert.True(output.Contains("type: result", StringComparison.Ordinal), output);
+        Assert.Contains("triage-run-stdout", output, StringComparison.Ordinal);
+        Assert.Contains("agent stdout", output, StringComparison.Ordinal);
+        Assert.Contains("agent stderr", output, StringComparison.Ordinal);
+        Assert.Contains("agentExitCode: 0", output, StringComparison.Ordinal);
     }
 
     private sealed class CapturingHttpHandler : HttpMessageHandler

@@ -99,12 +99,13 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             {
                 await task.ConfigureAwait(false);
 
-                // Extract result from Task<T>
-                var resultType = task.GetType();
-                if (resultType.IsGenericType && resultType.GetGenericTypeDefinition() == typeof(Task<>))
+                // Extract result from Task<T>. Runtime async tasks are often derived
+                // task types, so check for the public Result property instead of an
+                // exact generic type definition match.
+                var resultProperty = task.GetType().GetProperty("Result", BindingFlags.Public | BindingFlags.Instance);
+                if (resultProperty is not null)
                 {
-                    var resultProperty = resultType.GetProperty("Result");
-                    return resultProperty?.GetValue(task);
+                    return resultProperty.GetValue(task);
                 }
 
                 return null;

@@ -340,8 +340,8 @@ public sealed class TriageService : ITriageService
         if (todoIds.Length == 0)
             return new TriageCreatedTodoQueryResult();
 
-        var todoRecords = await _db.TodoRecords
-            .Where(record => todoIds.Contains(record.TodoId))
+        var todoItems = await _db.TodoItems
+            .Where(todo => todoIds.Contains(todo.Id))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         var groupsById = groups.ToDictionary(group => group.GroupId, StringComparer.Ordinal);
@@ -362,13 +362,12 @@ public sealed class TriageService : ITriageService
                     .First(),
                 StringComparer.OrdinalIgnoreCase);
 
-        var items = todoRecords
-            .OrderByDescending(record => record.CreatedAtUtc)
-            .Select(record =>
+        var items = todoItems
+            .Select(todo =>
             {
-                runsByTodoId.TryGetValue(record.TodoId, out var run);
+                runsByTodoId.TryGetValue(todo.Id, out var run);
                 TriageGroupEntity? group = null;
-                if (!groupsByTodoId.TryGetValue(record.TodoId, out group)
+                if (!groupsByTodoId.TryGetValue(todo.Id, out group)
                     && run is not null)
                 {
                     groupsById.TryGetValue(run.GroupId, out group);
@@ -376,9 +375,9 @@ public sealed class TriageService : ITriageService
 
                 return new TriageCreatedTodoDetail
                 {
-                    TodoId = record.TodoId,
-                    CreatedAtUtc = record.CreatedAtUtc,
-                    WorkspacePath = group?.EffectiveWorkspacePath ?? record.WorkspaceId,
+                    TodoId = todo.Id,
+                    CreatedAtUtc = run?.CompletedUtc ?? run?.StartedUtc ?? group?.LastReportAtUtc ?? group?.FirstReportAtUtc ?? default,
+                    WorkspacePath = group?.EffectiveWorkspacePath ?? todo.WorkspaceId,
                     GroupId = group?.GroupId ?? run?.GroupId,
                     RunId = run?.RunId,
                     GroupStatus = group?.Status,
@@ -389,6 +388,7 @@ public sealed class TriageService : ITriageService
                     QuietDeadlineUtc = group?.QuietDeadlineUtc,
                 };
             })
+            .OrderByDescending(item => item.CreatedAtUtc)
             .ToList();
 
         return new TriageCreatedTodoQueryResult { Items = items, TotalCount = items.Count };
@@ -724,6 +724,7 @@ public sealed class TriageService : ITriageService
     {
         var now = _timeProvider.GetUtcNow();
         var candidates = await _db.TriageGroups
+            .IgnoreQueryFilters()
             .Where(g => g.Status == StatusCollecting || g.Status == StatusQueued)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -733,13 +734,40 @@ public sealed class TriageService : ITriageService
             .ToList();
 
         var processed = 0;
+        var originalWorkspaceId = _db.CurrentWorkspaceId;
+        var originalWorkspacePath = _workspaceContext.WorkspacePath;
+        var originalWorkspaceName = _workspaceContext.WorkspaceName;
         foreach (var group in due)
         {
-            await ProcessGroupAsync(group, cancellationToken).ConfigureAwait(false);
-            processed++;
+            try
+            {
+                ApplyGroupWorkspaceContext(group);
+                await ProcessGroupAsync(group, cancellationToken).ConfigureAwait(false);
+                processed++;
+            }
+            finally
+            {
+                _db.OverrideWorkspaceId(originalWorkspaceId);
+                _workspaceContext.WorkspacePath = originalWorkspacePath;
+                _workspaceContext.WorkspaceName = originalWorkspaceName;
+            }
         }
 
         return new TriageSweepResult(processed);
+    }
+
+    private void ApplyGroupWorkspaceContext(TriageGroupEntity group)
+    {
+        var workspaceId = string.IsNullOrWhiteSpace(group.WorkspaceId)
+            ? group.EffectiveWorkspacePath
+            : group.WorkspaceId;
+        _db.OverrideWorkspaceId(workspaceId);
+        _workspaceContext.WorkspacePath = string.IsNullOrWhiteSpace(group.EffectiveWorkspacePath)
+            ? workspaceId
+            : group.EffectiveWorkspacePath;
+        _workspaceContext.WorkspaceName = string.IsNullOrWhiteSpace(_workspaceContext.WorkspacePath)
+            ? null
+            : Path.GetFileName(_workspaceContext.WorkspacePath);
     }
 
     private async Task ProcessGroupAsync(TriageGroupEntity group, CancellationToken cancellationToken)
@@ -773,6 +801,9 @@ public sealed class TriageService : ITriageService
                 new TriageResearchRequest(detail, groupJson, prompt, group.EffectiveWorkspacePath),
                 cancellationToken).ConfigureAwait(false);
             run.RawOutput = rawResult.OutputJson;
+            run.AgentStdout = rawResult.AgentStdout;
+            run.AgentStderr = rawResult.AgentStderr;
+            run.AgentExitCode = rawResult.AgentExitCode;
 
             if (!rawResult.Success)
             {
@@ -959,6 +990,9 @@ public sealed class TriageService : ITriageService
                 Prompt = run.Prompt,
                 GroupJson = run.GroupJson,
                 RawOutput = run.RawOutput,
+                AgentStdout = run.AgentStdout,
+                AgentStderr = run.AgentStderr,
+                AgentExitCode = run.AgentExitCode,
                 ResponseJson = run.ResponseJson,
                 Error = run.Error,
                 CreatedTodoId = run.CreatedTodoId,

@@ -6,12 +6,14 @@ namespace McpServer.Support.Mcp.Services;
 internal static class AgentExecutionStrategyNames
 {
     public const string CopilotCli = "copilot-cli";
+    public const string CodexCli = "codex-cli";
     public const string HostedMcpAgent = "hosted-mcp-agent";
     public const string HostedAgentFrameworkLegacy = "hosted-agentframework";
 
     public static IReadOnlyList<string> SupportedNames { get; } =
     [
         CopilotCli,
+        CodexCli,
         HostedMcpAgent,
     ];
 
@@ -109,9 +111,9 @@ public static class AgentExecutionServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddSingleton<IAgentExecutionStrategy, CopilotCliAgentExecutionStrategy>();
+        services.AddSingleton<IAgentExecutionStrategy, CodexCliAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategy, HostedMcpAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategyResolver, AgentExecutionStrategyResolver>();
         return services;
     }
 }
-

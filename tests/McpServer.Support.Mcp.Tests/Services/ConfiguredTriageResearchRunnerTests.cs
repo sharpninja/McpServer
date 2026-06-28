@@ -50,6 +50,9 @@ public sealed class ConfiguredTriageResearchRunnerTests
 
         Assert.True(result.Success);
         Assert.Equal("""{"title":"triage result"}""", result.OutputJson);
+        Assert.Equal("triage stdout", result.AgentStdout);
+        Assert.Equal("triage stderr", result.AgentStderr);
+        Assert.Equal(0, result.AgentExitCode);
         Assert.Equal("fake-triage", resolver.LastStrategyName);
         Assert.NotNull(strategy.LastRequest);
         Assert.Equal("rendered prompt", strategy.LastRequest.InitialPrompt);
@@ -74,7 +77,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
     {
         var resolver = new CapturingAgentExecutionStrategyResolver(new CapturingAgentExecutionStrategy());
         var runner = new ConfiguredTriageResearchRunner(
-            Microsoft.Extensions.Options.Options.Create(new TriageOptions()),
+            Microsoft.Extensions.Options.Options.Create(new TriageOptions { AgentPath = string.Empty }),
             resolver);
 
         var result = await runner.RunAsync(new TriageResearchRequest(
@@ -95,6 +98,21 @@ public sealed class ConfiguredTriageResearchRunnerTests
         Assert.False(result.Success);
         Assert.Contains("not configured", result.Error, StringComparison.OrdinalIgnoreCase);
         Assert.Null(resolver.LastStrategyName);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-003: default triage options use Codex CLI and existing
+    /// Codex configuration instead of requiring a custom appsettings section.
+    /// </summary>
+    [Fact]
+    public void TriageOptions_DefaultsToCodexCliAgent()
+    {
+        var options = new TriageOptions();
+
+        Assert.Equal("triage", options.AgentName);
+        Assert.Equal("codex", options.AgentPath);
+        Assert.Equal("auto", options.AgentModel);
+        Assert.Equal(AgentExecutionStrategyNames.CodexCli, options.ExecutionStrategy);
     }
 
     private sealed class CapturingAgentExecutionStrategyResolver(IAgentExecutionStrategy strategy) : IAgentExecutionStrategyResolver
@@ -136,7 +154,14 @@ public sealed class ConfiguredTriageResearchRunnerTests
         public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 
         public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default)
-            => Task.FromResult(new CopilotResult { State = CopilotResultState.Success, Body = """{"title":"triage result"}""" });
+            => Task.FromResult(new CopilotResult
+            {
+                State = CopilotResultState.Success,
+                Body = """{"title":"triage result"}""",
+                Stdout = "triage stdout",
+                Stderr = "triage stderr",
+                ExitCode = 0,
+            });
 
         public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default)
             => EmptyAsyncEnumerable();

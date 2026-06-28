@@ -2212,45 +2212,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.ToTable("TodoItems");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRecordEntity", b =>
-                {
-                    b.Property<string>("WorkspaceId")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
-                    b.Property<string>("TodoId")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeleteReason")
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
-
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("WorkspaceId", "TodoId");
-
-                    b.HasIndex("UpdatedAtUtc");
-
-                    b.ToTable("TodoRecords");
-                });
-
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -2713,6 +2674,15 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("RunId")
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
+
+                    b.Property<int?>("AgentExitCode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AgentStderr")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AgentStdout")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("CompletedUtc")
                         .HasColumnType("timestamp with time zone");
@@ -3305,15 +3275,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRecordEntity", b =>
-                {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
-                        .WithMany()
-                        .HasForeignKey("WorkspaceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3322,7 +3283,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoRecordEntity", "TodoRecord")
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
                         .WithMany()
                         .HasForeignKey("WorkspaceId", "TodoId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -3336,7 +3297,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.Navigation("Requirement");
 
-                    b.Navigation("TodoRecord");
+                    b.Navigation("TodoItem");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity", b =>

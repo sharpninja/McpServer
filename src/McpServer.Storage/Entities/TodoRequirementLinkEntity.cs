@@ -32,8 +32,8 @@ public sealed class TodoRequirementLinkEntity
     /// <summary>UTC timestamp when the link was created.</summary>
     public DateTimeOffset CreatedAtUtc { get; set; }
 
-    /// <summary>TODO lifecycle anchor navigation.</summary>
-    public TodoRecordEntity? TodoRecord { get; set; }
+    /// <summary>Canonical TODO item navigation.</summary>
+    public TodoItemEntity? TodoItem { get; set; }
 
     /// <summary>Requirement navigation.</summary>
     public RequirementEntity? Requirement { get; set; }

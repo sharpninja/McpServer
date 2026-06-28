@@ -38,6 +38,9 @@ public sealed class CopilotResult
     /// <summary>Raw stdout text captured from the CLI process.</summary>
     public string Body { get; init; } = string.Empty;
 
+    /// <summary>Raw stdout stream captured from the CLI process when distinct from <see cref="Body"/>.</summary>
+    public string Stdout { get; init; } = string.Empty;
+
     /// <summary>Raw stderr text captured from the CLI process.</summary>
     public string Stderr { get; init; } = string.Empty;
 
@@ -63,6 +66,9 @@ public sealed class CopilotResult<T>
 
     /// <summary>Raw stdout text captured from the CLI process.</summary>
     public string Body { get; init; } = string.Empty;
+
+    /// <summary>Raw stdout stream captured from the CLI process when distinct from <see cref="Body"/>.</summary>
+    public string Stdout { get; init; } = string.Empty;
 
     /// <summary>Raw stderr text captured from the CLI process.</summary>
     public string Stderr { get; init; } = string.Empty;

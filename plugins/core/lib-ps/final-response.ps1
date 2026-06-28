@@ -18,7 +18,10 @@ if (-not $Response) {
     $Response = 'Turn completed.'
 }
 
-$indented = (($Response -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" | ForEach-Object { "    $_" }) -join "`n"
-$paramsYaml = "response: |`n$indented"
+if (-not (Get-Command ConvertTo-Yaml -ErrorAction SilentlyContinue)) {
+    Import-Module powershell-yaml -ErrorAction Stop
+}
+
+$paramsYaml = ConvertTo-Yaml -Data ([ordered]@{ response = $Response }) -Options WithIndentedSequences
 
 & (Join-Path $scriptDir 'repl-invoke.ps1') -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
