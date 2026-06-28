@@ -17,6 +17,17 @@ const ACCEPTANCE_CRITERION_SCHEMA = {
   required: ['text'],
 } as const;
 const ACCEPTANCE_CRITERIA_ARRAY = { type: 'array', items: ACCEPTANCE_CRITERION_SCHEMA } as const;
+const REQUIREMENT_SCOPE_FIELDS = {
+  scopeStartLayerKey: {
+    type: 'string',
+    description: 'First requirement layer where this requirement applies.',
+  },
+  scopeEndLayerKey: {
+    type: 'string',
+    description: 'Optional last requirement layer where this requirement applies.',
+  },
+} as const;
+
 function batchInputSchema(itemSchema: Record<string, unknown>) {
   return {
     type: 'object',
@@ -46,6 +57,7 @@ const FR_CREATE_ITEM = {
     status: { type: 'string', enum: [...STATUS_ENUM] },
     notes: { type: 'string' },
     acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+    ...REQUIREMENT_SCOPE_FIELDS,
   },
   required: ['id', 'title'],
   anyOf: [{ required: ['description'] }, { required: ['body'] }],
@@ -62,6 +74,7 @@ const FR_UPDATE_ITEM = {
     priority: { type: 'string', enum: [...PRIORITY_ENUM] },
     notes: { type: 'string' },
     acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+    ...REQUIREMENT_SCOPE_FIELDS,
   },
   required: ['id'],
 } as const;
@@ -77,6 +90,7 @@ const TR_CREATE_ITEM = {
     status: { type: 'string', enum: [...STATUS_ENUM] },
     notes: { type: 'string' },
     acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+    ...REQUIREMENT_SCOPE_FIELDS,
   },
   required: ['id', 'title'],
   anyOf: [{ required: ['description'] }, { required: ['body'] }],
@@ -93,6 +107,7 @@ const TR_UPDATE_ITEM = {
     priority: { type: 'string', enum: [...PRIORITY_ENUM] },
     notes: { type: 'string' },
     acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+    ...REQUIREMENT_SCOPE_FIELDS,
   },
   required: ['id'],
 } as const;
@@ -109,6 +124,7 @@ const TEST_CREATE_ITEM = {
     status: { type: 'string', enum: [...STATUS_ENUM] },
     notes: { type: 'string' },
     acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+    ...REQUIREMENT_SCOPE_FIELDS,
   },
   required: ['id', 'title'],
   anyOf: [{ required: ['description'] }, { required: ['condition'] }, { required: ['body'] }],
@@ -126,6 +142,7 @@ const TEST_UPDATE_ITEM = {
     priority: { type: 'string', enum: [...PRIORITY_ENUM] },
     notes: { type: 'string' },
     acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+    ...REQUIREMENT_SCOPE_FIELDS,
   },
   required: ['id'],
 } as const;
@@ -168,6 +185,7 @@ export const requirementsTools: Tool[] = [
         area: { type: 'string' },
         notes: { type: 'string' },
         acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+        ...REQUIREMENT_SCOPE_FIELDS,
       },
       required: ['id', 'title', 'description', 'priority', 'area'],
     },
@@ -185,6 +203,7 @@ export const requirementsTools: Tool[] = [
         priority: { type: 'string', enum: [...PRIORITY_ENUM] },
         notes: { type: 'string' },
         acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+        ...REQUIREMENT_SCOPE_FIELDS,
       },
       required: ['id'],
     },
@@ -225,6 +244,7 @@ export const requirementsTools: Tool[] = [
         subarea: { type: 'string' },
         notes: { type: 'string' },
         acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+        ...REQUIREMENT_SCOPE_FIELDS,
       },
       required: ['id', 'title', 'description', 'priority', 'area', 'subarea'],
     },
@@ -241,6 +261,7 @@ export const requirementsTools: Tool[] = [
         status: { type: 'string', enum: [...STATUS_ENUM] },
         notes: { type: 'string' },
         acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+        ...REQUIREMENT_SCOPE_FIELDS,
       },
       required: ['id'],
     },
@@ -279,6 +300,7 @@ export const requirementsTools: Tool[] = [
         area: { type: 'string' },
         notes: { type: 'string' },
         acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+        ...REQUIREMENT_SCOPE_FIELDS,
       },
       required: ['id', 'title', 'description', 'priority', 'area'],
     },
@@ -295,6 +317,7 @@ export const requirementsTools: Tool[] = [
         status: { type: 'string', enum: [...STATUS_ENUM] },
         notes: { type: 'string' },
         acceptanceCriteria: ACCEPTANCE_CRITERIA_ARRAY,
+        ...REQUIREMENT_SCOPE_FIELDS,
       },
       required: ['id'],
     },
@@ -410,6 +433,63 @@ export const requirementsTools: Tool[] = [
       required: ['frId', 'trId'],
     },
   },
+  // --- Scope Layers ---
+  {
+    name: 'req_list_layers',
+    description: 'List ordered requirement scope layers for the active workspace.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'req_create_layer',
+    description: 'Create a requirement scope layer for the active workspace.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        key: { type: 'string', description: 'Stable layer key, such as layer-2.' },
+        order: { type: 'integer', description: 'Layer ordering number.' },
+        name: { type: 'string' },
+        description: { type: 'string' },
+        scopeEndLayerKey: {
+          type: 'string',
+          description: 'Optional last layer where this layer remains applicable.',
+        },
+      },
+      required: ['key', 'order', 'name'],
+    },
+  },
+  {
+    name: 'req_update_layer',
+    description: 'Update mutable requirement scope layer metadata.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        key: { type: 'string', description: 'Layer key to update.' },
+        name: { type: 'string' },
+        description: { type: 'string' },
+        scopeEndLayerKey: {
+          type: 'string',
+          description: 'Optional last layer where this layer remains applicable.',
+        },
+      },
+      required: ['key'],
+    },
+  },
+  {
+    name: 'req_effective',
+    description: 'Query requirements effective at the active workspace layer or an explicit preview layer.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        layerKey: {
+          type: 'string',
+          description: 'Optional layer key to preview instead of the active workspace layer.',
+        },
+      },
+    },
+  },
   // --- Documents ---
   {
     name: 'req_generate_document',
@@ -492,6 +572,10 @@ const workflowMethodMap: Record<string, string> = {
   req_list_mappings: 'workflow.requirements.listMappings',
   req_create_mapping: 'workflow.requirements.createMapping',
   req_delete_mapping: 'workflow.requirements.deleteMapping',
+  req_list_layers: 'workflow.requirements.listLayers',
+  req_create_layer: 'workflow.requirements.createLayer',
+  req_update_layer: 'workflow.requirements.updateLayer',
+  req_effective: 'workflow.requirements.effective',
   req_generate_document: 'workflow.requirements.generateDocument',
   req_ingest_document: 'workflow.requirements.ingestDocument',
 };
@@ -521,6 +605,10 @@ const typedMethodMap: Record<string, string> = {
   req_list_mappings: 'client.Requirements.ListMappingsAsync',
   req_create_mapping: 'client.Requirements.UpsertMappingAsync',
   req_delete_mapping: 'client.Requirements.DeleteMappingAsync',
+  req_list_layers: 'client.Requirements.ListRequirementLayersAsync',
+  req_create_layer: 'client.Requirements.CreateRequirementLayerAsync',
+  req_update_layer: 'client.Requirements.UpdateRequirementLayerAsync',
+  req_effective: 'client.Requirements.GetEffectiveRequirementsAsync',
   req_generate_document: 'client.Requirements.GenerateAsync',
   req_ingest_document: 'client.Requirements.IngestAsync',
 };
@@ -559,6 +647,8 @@ const mutatingRequirementsTools = new Set([
   'req_copy_acceptance_criteria_from_todo',
   'req_create_mapping',
   'req_delete_mapping',
+  'req_create_layer',
+  'req_update_layer',
   'req_generate_document',
   'req_ingest_document',
 ]);
@@ -636,6 +726,15 @@ function requestParam(request: Record<string, unknown>): Record<string, unknown>
   return { request };
 }
 
+function optionalScopeParams(args: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...(typeof args.scopeStartLayerKey === 'string'
+      ? { scopeStartLayerKey: args.scopeStartLayerKey }
+      : {}),
+    ...(typeof args.scopeEndLayerKey === 'string' ? { scopeEndLayerKey: args.scopeEndLayerKey } : {}),
+  };
+}
+
 function parseRecordsValue(value: unknown): unknown {
   if (Array.isArray(value)) return value;
   if (typeof value !== 'string' || value.trim().length === 0) return value;
@@ -683,6 +782,7 @@ function typedParams(name: string, args: Record<string, unknown>): Record<string
     case 'req_list_tr':
     case 'req_list_test':
     case 'req_list_mappings':
+    case 'req_list_layers':
       return {};
 
     case 'req_get_fr':
@@ -710,6 +810,7 @@ function typedParams(name: string, args: Record<string, unknown>): Record<string
         title: stringArg(args, 'title'),
         body: stringArg(args, 'description', 'body'),
         acceptanceCriteria: args.acceptanceCriteria,
+        ...optionalScopeParams(args),
       });
 
     case 'req_update_fr':
@@ -720,6 +821,7 @@ function typedParams(name: string, args: Record<string, unknown>): Record<string
           title: stringArg(args, 'title'),
           body: stringArg(args, 'description', 'body'),
           acceptanceCriteria: args.acceptanceCriteria,
+          ...optionalScopeParams(args),
         },
       };
 
@@ -728,6 +830,7 @@ function typedParams(name: string, args: Record<string, unknown>): Record<string
         id: stringArg(args, 'id'),
         condition: stringArg(args, 'description', 'condition'),
         acceptanceCriteria: args.acceptanceCriteria,
+        ...optionalScopeParams(args),
       });
 
     case 'req_update_test':
@@ -736,6 +839,7 @@ function typedParams(name: string, args: Record<string, unknown>): Record<string
         request: {
           condition: stringArg(args, 'description', 'condition'),
           acceptanceCriteria: args.acceptanceCriteria,
+          ...optionalScopeParams(args),
         },
       };
 
@@ -757,6 +861,32 @@ function typedParams(name: string, args: Record<string, unknown>): Record<string
 
     case 'req_delete_mapping':
       return { frId: stringArg(args, 'frId') };
+
+    case 'req_create_layer':
+      return requestParam({
+        key: stringArg(args, 'key'),
+        order: args.order,
+        name: stringArg(args, 'name'),
+        description: stringArg(args, 'description'),
+        ...(typeof args.scopeEndLayerKey === 'string'
+          ? { scopeEndLayerKey: args.scopeEndLayerKey }
+          : {}),
+      });
+
+    case 'req_update_layer':
+      return {
+        key: stringArg(args, 'key'),
+        request: {
+          name: stringArg(args, 'name'),
+          description: stringArg(args, 'description'),
+          ...(typeof args.scopeEndLayerKey === 'string'
+            ? { scopeEndLayerKey: args.scopeEndLayerKey }
+            : {}),
+        },
+      };
+
+    case 'req_effective':
+      return typeof args.layerKey === 'string' ? { layerKey: args.layerKey } : {};
 
     case 'req_generate_document':
       return {

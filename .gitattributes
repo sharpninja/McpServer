@@ -2,3 +2,6 @@
 tools/bash/*.sh text eol=lf
 plugins/core/lib-sh/*.sh text eol=lf
 plugins/core/.staged-plugin/lib/*.sh text eol=lf
+.nuke/build.schema.json whitespace=-trailing-space
+plugins/core/test-fixtures/pester/BATS-PESTER-PARITY.md whitespace=-trailing-space
+plugins/core/test-fixtures/pester/bats-pester-parity.generated.json whitespace=-trailing-space

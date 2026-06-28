@@ -334,19 +334,46 @@ acceptanceCriteria:
         $status.namespaces | Should -Contain 'workflow.todo'
         $status.namespaces | Should -Contain 'workflow.requirements'
         $status.namespaces | Should -Contain 'workflow.triage'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.listLayers'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.createLayer'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.updateLayer'
+        $status.requirementMethods | Should -Contain 'workflow.requirements.effective'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.ListRequirementLayersAsync'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.CreateRequirementLayerAsync'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.UpdateRequirementLayerAsync'
+        $status.requirementClientMethods | Should -Contain 'client.Requirements.GetEffectiveRequirementsAsync'
     }
 
-    It 'TEST-MCP-REQSCOPE-005 requirements skill tells agents to use current effective layer visibility' {
-        $skillPath = Join-Path $script:StagedRoot 'skills\requirements\SKILL.md'
-        Test-Path -LiteralPath $skillPath | Should -BeTrue
+    It 'TEST-MCP-REQSCOPE-005 requirements guidance tells agents to use current effective layer visibility' {
+        $guidancePath = Join-Path $script:RepoRoot 'templates\prompt-templates.yaml'
+        Test-Path -LiteralPath $guidancePath | Should -BeTrue
 
-        $content = [System.IO.File]::ReadAllText($skillPath)
+        $content = [System.IO.File]::ReadAllText($guidancePath)
 
         $content | Should -Match 'current effective requirements'
         $content | Should -Match 'workflow\.requirements\.effective'
         $content | Should -Match 'active workspace layer'
         $content | Should -Match 'future-layer requirements'
         $content | Should -Match 'currently enforceable'
+    }
+
+    It 'TEST-MCP-REQSCOPE-005 shell requirements wrapper exposes layer commands' {
+        $shimPath = Join-Path $script:StagedRoot 'lib\repl-invoke.sh'
+        if (-not (Test-Path -LiteralPath $shimPath)) {
+            $shimPath = Join-Path $script:RepoRoot 'plugins\core\lib-sh\repl-invoke.sh'
+        }
+        Test-Path -LiteralPath $shimPath | Should -BeTrue
+
+        $content = [System.IO.File]::ReadAllText($shimPath)
+
+        $content | Should -Match 'workflow\.requirements\.listLayers'
+        $content | Should -Match 'workflow\.requirements\.createLayer'
+        $content | Should -Match 'workflow\.requirements\.updateLayer'
+        $content | Should -Match 'workflow\.requirements\.effective'
+        $content | Should -Match 'client\.Requirements\.ListRequirementLayersAsync'
+        $content | Should -Match 'client\.Requirements\.CreateRequirementLayerAsync'
+        $content | Should -Match 'client\.Requirements\.UpdateRequirementLayerAsync'
+        $content | Should -Match 'client\.Requirements\.GetEffectiveRequirementsAsync'
     }
 
     It 'TEST-MCP-PLUGIN-PSONLY-001 forces each PowerShell host identity over inherited agent environment' {

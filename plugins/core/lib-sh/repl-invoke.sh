@@ -410,6 +410,16 @@ _repl_schema_validate_method() {
         workflow.requirements.ingestDocument|client.Requirements.IngestAsync)
             _repl_schema_require_any_text "$method" "$params_yaml" "content" "documents" "functionalMarkdown" "technicalMarkdown" "testingMarkdown" "mappingMarkdown" || return 1
             ;;
+        workflow.requirements.listLayers|workflow.requirements.effective|client.Requirements.ListRequirementLayersAsync|client.Requirements.GetEffectiveRequirementsAsync)
+            ;;
+        workflow.requirements.createLayer|client.Requirements.CreateRequirementLayerAsync)
+            _repl_schema_require_text "$method" "$params_yaml" "key" || return 1
+            _repl_schema_require_text "$method" "$params_yaml" "order" || return 1
+            _repl_schema_require_text "$method" "$params_yaml" "name" || return 1
+            ;;
+        workflow.requirements.updateLayer|client.Requirements.UpdateRequirementLayerAsync)
+            _repl_schema_require_text "$method" "$params_yaml" "key" || return 1
+            ;;
         workflow.graphrag.status|workflow.graphrag.index|workflow.graphrag.documents.list|workflow.graphrag.entities.list|workflow.graphrag.relationships.list)
             ;;
         workflow.graphrag.query)
@@ -917,7 +927,7 @@ _repl_internal_todo_is_enabled() {
 
 _repl_workflow_requirements_is_mutation() {
     case "${1:-}" in
-        createFr|createFrBatch|updateFr|updateFrBatch|deleteFr|createTr|createTrBatch|updateTr|updateTrBatch|deleteTr|createTest|createTestBatch|updateTest|updateTestBatch|deleteTest|createBatch|updateBatch|createMapping|deleteMapping|generateDocument|ingestDocument|copyAcceptanceCriteriaFromTodo) return 0 ;;
+        createFr|createFrBatch|updateFr|updateFrBatch|deleteFr|createTr|createTrBatch|updateTr|updateTrBatch|deleteTr|createTest|createTestBatch|updateTest|updateTestBatch|deleteTest|createBatch|updateBatch|createMapping|deleteMapping|createLayer|updateLayer|generateDocument|ingestDocument|copyAcceptanceCriteriaFromTodo) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -1754,6 +1764,10 @@ _repl_requirements_typed_method() {
         listMappings) printf 'client.Requirements.ListMappingsAsync' ;;
         createMapping) printf 'client.Requirements.UpsertMappingAsync' ;;
         deleteMapping) printf 'client.Requirements.DeleteMappingAsync' ;;
+        listLayers) printf 'client.Requirements.ListRequirementLayersAsync' ;;
+        createLayer) printf 'client.Requirements.CreateRequirementLayerAsync' ;;
+        updateLayer) printf 'client.Requirements.UpdateRequirementLayerAsync' ;;
+        effective) printf 'client.Requirements.GetEffectiveRequirementsAsync' ;;
         generateDocument) printf 'client.Requirements.GenerateAsync' ;;
         ingestDocument) printf 'client.Requirements.IngestAsync' ;;
         *) return 1 ;;
@@ -2015,10 +2029,10 @@ _repl_requirements_typed_params() {
     local operation="$1"
     local params_yaml="${2:-}"
     local id title body fr_id doc_type format content documents_block records_block source_format preferred_wiki_format
-    local priority area subarea status notes test_type existing
+    local priority area subarea status notes test_type existing scope_start scope_end key order name description layer_key
 
     case "$operation" in
-        listFr|listTr|listTest|listMappings)
+        listFr|listTr|listTest|listMappings|listLayers)
             return 0
             ;;
         createFrBatch|updateFrBatch|createTrBatch|updateTrBatch|createTestBatch|updateTestBatch|createBatch|updateBatch)
@@ -2046,6 +2060,8 @@ _repl_requirements_typed_params() {
             priority="$(_repl_yaml_get "$params_yaml" "priority")"
             area="$(_repl_yaml_get "$params_yaml" "area")"
             notes="$(_repl_yaml_get "$params_yaml" "notes")"
+            scope_start="$(_repl_yaml_get "$params_yaml" "scopeStartLayerKey")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
             printf 'request:\n'
             _repl_yaml_field "  " "id" "$id"
             _repl_yaml_field "  " "title" "$title"
@@ -2053,6 +2069,8 @@ _repl_requirements_typed_params() {
             _repl_yaml_field "  " "priority" "$priority"
             _repl_yaml_field "  " "area" "$area"
             _repl_yaml_field "  " "notes" "$notes"
+            _repl_yaml_field "  " "scopeStartLayerKey" "$scope_start"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
             _repl_emit_acceptance_criteria_block "  " "$params_yaml"
             ;;
         updateFr)
@@ -2062,18 +2080,24 @@ _repl_requirements_typed_params() {
             priority="$(_repl_yaml_get "$params_yaml" "priority")"
             status="$(_repl_yaml_get "$params_yaml" "status")"
             notes="$(_repl_yaml_get "$params_yaml" "notes")"
+            scope_start="$(_repl_yaml_get "$params_yaml" "scopeStartLayerKey")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
             existing="$(_repl_requirements_existing_for_update "$operation" "$id" 2>/dev/null || true)"
             [ -z "$title" ] && title="$(_repl_yaml_get "$existing" "title")"
             [ -z "$body" ] && body="$(_repl_first_param_text "$existing" "description" "body")"
             [ -z "$priority" ] && priority="$(_repl_yaml_get "$existing" "priority")"
             [ -z "$status" ] && status="$(_repl_yaml_get "$existing" "status")"
             [ -z "$notes" ] && notes="$(_repl_yaml_get "$existing" "notes")"
+            [ -z "$scope_start" ] && scope_start="$(_repl_yaml_get "$existing" "scopeStartLayerKey")"
+            [ -z "$scope_end" ] && scope_end="$(_repl_yaml_get "$existing" "scopeEndLayerKey")"
             printf 'id: %s\nrequest:\n' "$id"
             _repl_yaml_field "  " "title" "$title"
             _repl_yaml_field "  " "body" "$body"
             _repl_yaml_field "  " "priority" "$priority"
             _repl_yaml_field "  " "status" "$status"
             _repl_yaml_field "  " "notes" "$notes"
+            _repl_yaml_field "  " "scopeStartLayerKey" "$scope_start"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
             _repl_emit_acceptance_criteria_hydrate "  " "$params_yaml" "$existing"
             ;;
         createTr)
@@ -2084,6 +2108,8 @@ _repl_requirements_typed_params() {
             area="$(_repl_yaml_get "$params_yaml" "area")"
             subarea="$(_repl_yaml_get "$params_yaml" "subarea")"
             notes="$(_repl_yaml_get "$params_yaml" "notes")"
+            scope_start="$(_repl_yaml_get "$params_yaml" "scopeStartLayerKey")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
             printf 'request:\n'
             _repl_yaml_field "  " "id" "$id"
             _repl_yaml_field "  " "title" "$title"
@@ -2092,6 +2118,8 @@ _repl_requirements_typed_params() {
             _repl_yaml_field "  " "area" "$area"
             _repl_yaml_field "  " "subarea" "$subarea"
             _repl_yaml_field "  " "notes" "$notes"
+            _repl_yaml_field "  " "scopeStartLayerKey" "$scope_start"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
             _repl_emit_acceptance_criteria_block "  " "$params_yaml"
             ;;
         updateTr)
@@ -2101,18 +2129,24 @@ _repl_requirements_typed_params() {
             priority="$(_repl_yaml_get "$params_yaml" "priority")"
             status="$(_repl_yaml_get "$params_yaml" "status")"
             notes="$(_repl_yaml_get "$params_yaml" "notes")"
+            scope_start="$(_repl_yaml_get "$params_yaml" "scopeStartLayerKey")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
             existing="$(_repl_requirements_existing_for_update "$operation" "$id" 2>/dev/null || true)"
             [ -z "$title" ] && title="$(_repl_yaml_get "$existing" "title")"
             [ -z "$body" ] && body="$(_repl_first_param_text "$existing" "description" "body")"
             [ -z "$priority" ] && priority="$(_repl_yaml_get "$existing" "priority")"
             [ -z "$status" ] && status="$(_repl_yaml_get "$existing" "status")"
             [ -z "$notes" ] && notes="$(_repl_yaml_get "$existing" "notes")"
+            [ -z "$scope_start" ] && scope_start="$(_repl_yaml_get "$existing" "scopeStartLayerKey")"
+            [ -z "$scope_end" ] && scope_end="$(_repl_yaml_get "$existing" "scopeEndLayerKey")"
             printf 'id: %s\nrequest:\n' "$id"
             _repl_yaml_field "  " "title" "$title"
             _repl_yaml_field "  " "body" "$body"
             _repl_yaml_field "  " "priority" "$priority"
             _repl_yaml_field "  " "status" "$status"
             _repl_yaml_field "  " "notes" "$notes"
+            _repl_yaml_field "  " "scopeStartLayerKey" "$scope_start"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
             _repl_emit_acceptance_criteria_hydrate "  " "$params_yaml" "$existing"
             ;;
         createTest)
@@ -2123,6 +2157,8 @@ _repl_requirements_typed_params() {
             area="$(_repl_yaml_get "$params_yaml" "area")"
             test_type="$(_repl_yaml_get "$params_yaml" "testType")"
             notes="$(_repl_yaml_get "$params_yaml" "notes")"
+            scope_start="$(_repl_yaml_get "$params_yaml" "scopeStartLayerKey")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
             printf 'request:\n'
             _repl_yaml_field "  " "id" "$id"
             _repl_yaml_field "  " "title" "$title"
@@ -2131,6 +2167,8 @@ _repl_requirements_typed_params() {
             _repl_yaml_field "  " "area" "$area"
             _repl_yaml_field "  " "testType" "$test_type"
             _repl_yaml_field "  " "notes" "$notes"
+            _repl_yaml_field "  " "scopeStartLayerKey" "$scope_start"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
             _repl_emit_acceptance_criteria_block "  " "$params_yaml"
             ;;
         updateTest)
@@ -2140,18 +2178,24 @@ _repl_requirements_typed_params() {
             priority="$(_repl_yaml_get "$params_yaml" "priority")"
             status="$(_repl_yaml_get "$params_yaml" "status")"
             notes="$(_repl_yaml_get "$params_yaml" "notes")"
+            scope_start="$(_repl_yaml_get "$params_yaml" "scopeStartLayerKey")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
             existing="$(_repl_requirements_existing_for_update "$operation" "$id" 2>/dev/null || true)"
             [ -z "$title" ] && title="$(_repl_yaml_get "$existing" "title")"
             [ -z "$body" ] && body="$(_repl_first_param_text "$existing" "description" "condition" "body")"
             [ -z "$priority" ] && priority="$(_repl_yaml_get "$existing" "priority")"
             [ -z "$status" ] && status="$(_repl_yaml_get "$existing" "status")"
             [ -z "$notes" ] && notes="$(_repl_yaml_get "$existing" "notes")"
+            [ -z "$scope_start" ] && scope_start="$(_repl_yaml_get "$existing" "scopeStartLayerKey")"
+            [ -z "$scope_end" ] && scope_end="$(_repl_yaml_get "$existing" "scopeEndLayerKey")"
             printf 'id: %s\nrequest:\n' "$id"
             _repl_yaml_field "  " "title" "$title"
             _repl_yaml_field "  " "condition" "$body"
             _repl_yaml_field "  " "priority" "$priority"
             _repl_yaml_field "  " "status" "$status"
             _repl_yaml_field "  " "notes" "$notes"
+            _repl_yaml_field "  " "scopeStartLayerKey" "$scope_start"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
             _repl_emit_acceptance_criteria_hydrate "  " "$params_yaml" "$existing"
             ;;
         createMapping)
@@ -2163,6 +2207,35 @@ _repl_requirements_typed_params() {
         deleteMapping)
             fr_id="$(_repl_yaml_get "$params_yaml" "frId")"
             printf 'frId: %s\n' "$fr_id"
+            ;;
+        createLayer)
+            key="$(_repl_yaml_get "$params_yaml" "key")"
+            order="$(_repl_yaml_get "$params_yaml" "order")"
+            name="$(_repl_yaml_get "$params_yaml" "name")"
+            description="$(_repl_yaml_get "$params_yaml" "description")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
+            printf 'request:\n'
+            _repl_yaml_field "  " "key" "$key"
+            _repl_yaml_field "  " "order" "$order"
+            _repl_yaml_field "  " "name" "$name"
+            _repl_yaml_field "  " "description" "$description"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
+            ;;
+        updateLayer)
+            key="$(_repl_yaml_get "$params_yaml" "key")"
+            name="$(_repl_yaml_get "$params_yaml" "name")"
+            description="$(_repl_yaml_get "$params_yaml" "description")"
+            scope_end="$(_repl_yaml_get "$params_yaml" "scopeEndLayerKey")"
+            printf 'key: %s\nrequest:\n' "$key"
+            _repl_yaml_field "  " "name" "$name"
+            _repl_yaml_field "  " "description" "$description"
+            _repl_yaml_field "  " "scopeEndLayerKey" "$scope_end"
+            ;;
+        effective)
+            layer_key="$(_repl_yaml_get "$params_yaml" "layerKey")"
+            if [ -n "$layer_key" ]; then
+                _repl_yaml_field "" "layerKey" "$layer_key"
+            fi
             ;;
         generateDocument)
             doc_type="$(_repl_requirements_typed_doc_type "$(_repl_yaml_get "$params_yaml" "docType")")"

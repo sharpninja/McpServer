@@ -87,6 +87,17 @@ public sealed class BuildTargetTests
         Assert.NotNull(prop);
     }
 
+    [Fact]
+    public void Build_HasAgentPluginParentParameter()
+    {
+        var field = BuildType.GetField(
+            "AgentPluginParent",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        Assert.NotNull(field);
+        Assert.Equal(typeof(string), field!.FieldType);
+    }
+
     /// <summary>TEST-MCP-PLUGIN-PSONLY-001: Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>
     [Fact]
     public void SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches()
@@ -101,6 +112,81 @@ public sealed class BuildTargetTests
         Assert.True(
             source.IndexOf(refreshCall, StringComparison.Ordinal) < source.IndexOf(cacheCall, StringComparison.Ordinal),
             "Node plugin core vendor packages must be refreshed before installed plugin caches are copied.");
+    }
+
+    /// <summary>MCP-PLUGIN-SYNC-001: Plugin sync refreshes the workspace staged package before optional sibling plugin repositories.</summary>
+    [Fact]
+    public void SyncAgentPlugins_RefreshesWorkspaceStagedPackageBeforeSiblingDiscovery()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.SyncAgentPlugins.cs"));
+        const string stagedSync = "SyncPluginCorePackage(RootDirectory, stagedRoot, syncScript, wrapperScript, \"claude-code\");";
+        const string discoverCall = "var pluginRoots = DiscoverAgentPluginRoots(RootDirectory, AgentPluginParent);";
+
+        Assert.Contains(stagedSync, source, StringComparison.Ordinal);
+        Assert.Contains(discoverCall, source, StringComparison.Ordinal);
+        Assert.True(
+            source.IndexOf(stagedSync, StringComparison.Ordinal) < source.IndexOf(discoverCall, StringComparison.Ordinal),
+            "The ignored workspace staged package must be refreshed before optional sibling plugin discovery can return early.");
+    }
+
+    /// <summary>MCP-PLUGIN-SYNC-001: Plugin sync can discover sibling plugin repos from the default repository parent.</summary>
+    [Fact]
+    public void DiscoverAgentPluginRoots_DefaultsToRepositoryParent()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcpserver-plugin-discovery-default-test-{Guid.NewGuid():N}");
+
+        try
+        {
+            var repoRoot = Path.Combine(root, "McpServer");
+            var pluginRoot = Path.Combine(root, "mcpserver-codex-plugin");
+            Directory.CreateDirectory(repoRoot);
+            Directory.CreateDirectory(pluginRoot);
+
+            var roots = Build.DiscoverAgentPluginRoots((AbsolutePath)repoRoot);
+
+            Assert.Single(roots);
+            Assert.Equal(
+                Path.GetFullPath(pluginRoot),
+                Path.GetFullPath(roots[0].ToString()),
+                StringComparer.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
+    }
+
+    /// <summary>MCP-PLUGIN-SYNC-001: Plugin sync accepts an explicit plugin parent for nested submodule layouts.</summary>
+    [Fact]
+    public void DiscoverAgentPluginRoots_UsesExplicitPluginParent()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcpserver-plugin-discovery-override-test-{Guid.NewGuid():N}");
+
+        try
+        {
+            var repoRoot = Path.Combine(root, "workspace", "lib", "McpServer");
+            var pluginParent = Path.Combine(root, "plugins");
+            var claudeRoot = Path.Combine(pluginParent, "mcpserver-claude-code-plugin");
+            var codexRoot = Path.Combine(pluginParent, "mcpserver-codex-plugin");
+            Directory.CreateDirectory(repoRoot);
+            Directory.CreateDirectory(claudeRoot);
+            Directory.CreateDirectory(codexRoot);
+
+            var roots = Build.DiscoverAgentPluginRoots((AbsolutePath)repoRoot, pluginParent)
+                .Select(path => Path.GetFullPath(path.ToString()))
+                .ToArray();
+
+            Assert.Equal(2, roots.Length);
+            Assert.Contains(Path.GetFullPath(claudeRoot), roots, StringComparer.OrdinalIgnoreCase);
+            Assert.Contains(Path.GetFullPath(codexRoot), roots, StringComparer.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
     }
 
     /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent has dedicated pack and deploy targets.</summary>

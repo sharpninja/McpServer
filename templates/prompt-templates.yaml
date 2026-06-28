@@ -355,7 +355,7 @@ templates:
 
       ## MCP Requirements Visibility
 
-      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent''s requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, or equivalent plugin tool). Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
+      - When implementing or enforcing requirements, query current effective requirements for the active workspace layer through the active agent''s requirements surface (`workflow.requirements.effective`, `client.Requirements.GetEffectiveRequirementsAsync`, `req_effective`, or equivalent plugin tool). Use the layer catalog surface (`workflow.requirements.listLayers/createLayer/updateLayer`, `client.Requirements.ListRequirementLayersAsync/CreateRequirementLayerAsync/UpdateRequirementLayerAsync`, `req_list_layers/req_create_layer/req_update_layer`, or equivalent plugin tools) when the user asks to inspect or manage requirement layers. Do not treat raw all-requirements lists, exported markdown, or future-layer requirements as currently enforceable unless the user explicitly asks to inspect or plan those layers.
 
 
       ## MCP and Plugin Failure Reporting

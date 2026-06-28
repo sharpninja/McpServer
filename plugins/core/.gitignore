@@ -1,4 +1,4 @@
-cache/
+/cache/
 .staged-plugin/
 node_modules/
 dist/
