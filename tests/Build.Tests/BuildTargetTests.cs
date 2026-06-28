@@ -130,6 +130,51 @@ public sealed class BuildTargetTests
             "The ignored workspace staged package must be refreshed before optional sibling plugin discovery can return early.");
     }
 
+    /// <summary>TEST-MCP-REQSCOPE-005: Plugin validation fails stale Requirements skills that omit layer method shapes.</summary>
+    [Fact]
+    public void ValidateRequirementsSkillLayerGuidance_RequiresLayerMethodDocs()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcpserver-plugin-skill-layer-test-{Guid.NewGuid():N}");
+
+        try
+        {
+            var skillPath = Path.Combine(root, "skills", "requirements", "SKILL.md");
+            Directory.CreateDirectory(Path.GetDirectoryName(skillPath)!);
+            File.WriteAllText(skillPath, """
+                ---
+                name: Requirements Management
+                description: Requirements
+                ---
+
+                # Requirements Management
+                """);
+
+            var ex = Assert.Throws<InvalidOperationException>(
+                () => Build.ValidateRequirementsSkillLayerGuidance(root));
+            Assert.Contains("requirements skill is missing requirement layer guidance", ex.Message, StringComparison.Ordinal);
+            Assert.Contains("workflow.requirements.createLayer", ex.Message, StringComparison.Ordinal);
+            Assert.Contains("scopeStartLayerKey", ex.Message, StringComparison.Ordinal);
+
+            File.WriteAllText(skillPath, """
+                ## Requirement Scope Layers
+
+                - `workflow.requirements.listLayers` / `req_list_layers` / `client.Requirements.ListRequirementLayersAsync`: omit params.
+                - `workflow.requirements.createLayer` / `req_create_layer` / `client.Requirements.CreateRequirementLayerAsync`: required params are `key`, `order`, and `name`; optional params are `description` and `scopeEndLayerKey`.
+                - `workflow.requirements.updateLayer` / `req_update_layer` / `client.Requirements.UpdateRequirementLayerAsync`: required param is `key`; optional params are `name`, `description`, and `scopeEndLayerKey`.
+                - `workflow.requirements.effective` / `req_effective` / `client.Requirements.GetEffectiveRequirementsAsync`: optional param is `layerKey`.
+
+                FR, TR, TEST, and batch commands accept `scopeStartLayerKey` and `scopeEndLayerKey`.
+                """);
+
+            Build.ValidateRequirementsSkillLayerGuidance(root);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
+    }
+
     /// <summary>MCP-PLUGIN-SYNC-001: Plugin sync can discover sibling plugin repos from the default repository parent.</summary>
     [Fact]
     public void DiscoverAgentPluginRoots_DefaultsToRepositoryParent()

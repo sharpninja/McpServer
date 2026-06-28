@@ -367,6 +367,50 @@ partial class Build
 
         if (forbidden.Length > 0)
             throw new InvalidOperationException($"Plugin package {pluginRoot} contains forbidden runtime files or references: {string.Join(", ", forbidden.Take(20))}");
+
+        ValidateRequirementsSkillLayerGuidance(pluginRoot.ToString());
+    }
+
+    internal static void ValidateRequirementsSkillLayerGuidance(string pluginRoot)
+    {
+        var skillPath = Path.Combine(pluginRoot, "skills", "requirements", "SKILL.md");
+        if (!File.Exists(skillPath))
+            return;
+
+        var content = File.ReadAllText(skillPath);
+        var requiredFragments = new[]
+        {
+            "## Requirement Scope Layers",
+            "workflow.requirements.listLayers",
+            "workflow.requirements.createLayer",
+            "workflow.requirements.updateLayer",
+            "workflow.requirements.effective",
+            "req_list_layers",
+            "req_create_layer",
+            "req_update_layer",
+            "req_effective",
+            "client.Requirements.ListRequirementLayersAsync",
+            "client.Requirements.CreateRequirementLayerAsync",
+            "client.Requirements.UpdateRequirementLayerAsync",
+            "client.Requirements.GetEffectiveRequirementsAsync",
+            "key",
+            "order",
+            "name",
+            "description",
+            "scopeStartLayerKey",
+            "scopeEndLayerKey",
+            "layerKey"
+        };
+
+        var missing = requiredFragments
+            .Where(fragment => !content.Contains(fragment, StringComparison.Ordinal))
+            .ToArray();
+
+        if (missing.Length > 0)
+        {
+            throw new InvalidOperationException(
+                $"Plugin package {pluginRoot} requirements skill is missing requirement layer guidance: {string.Join(", ", missing)}");
+        }
     }
 
     private static bool HasForbiddenPluginRuntimeReference(string relative, string fullPath)
