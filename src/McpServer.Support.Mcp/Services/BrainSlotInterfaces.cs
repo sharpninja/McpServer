@@ -53,7 +53,11 @@ public interface IBrainSlotCredentialResolver
 public interface IBrainSlotChatClient
 {
     /// <summary>Completes one slot prompt.</summary>
-    Task<string> CompleteAsync(BrainSlotDefinitionEntity slot, string input, CancellationToken cancellationToken = default);
+    Task<string> CompleteAsync(
+        BrainSlotDefinitionEntity slot,
+        string input,
+        double? temperature,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>

@@ -148,7 +148,9 @@
         "testType": { "type": "string" },
         "priority": { "$ref": "#/$defs/priority" },
         "status": { "$ref": "#/$defs/status" },
-        "notes": { "type": "string" }
+        "notes": { "type": "string" },
+        "scopeStartLayerKey": { "type": "string", "minLength": 1 },
+        "scopeEndLayerKey": { "type": "string", "minLength": 1 }
       },
       "additionalProperties": true
     },
@@ -777,6 +779,86 @@
                           ]
                         }
                       }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.listLayers" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "maxProperties": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createLayer" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["key", "order", "name"],
+                    "properties": {
+                      "key": { "type": "string", "minLength": 1 },
+                      "order": { "type": "integer" },
+                      "name": { "type": "string", "minLength": 1 },
+                      "description": { "type": "string" },
+                      "scopeEndLayerKey": { "type": "string", "minLength": 1 }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.updateLayer" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["key"],
+                    "properties": {
+                      "key": { "type": "string", "minLength": 1 },
+                      "name": { "type": "string" },
+                      "description": { "type": "string" },
+                      "scopeEndLayerKey": { "type": "string", "minLength": 1 }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.effective" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "layerKey": { "type": "string", "minLength": 1 }
                     },
                     "additionalProperties": true
                   }

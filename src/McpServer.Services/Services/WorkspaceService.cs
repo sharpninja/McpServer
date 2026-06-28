@@ -642,6 +642,7 @@ public sealed class WorkspaceService : IWorkspaceService
             BannedIndividuals = NormalizePolicyList(request.BannedIndividuals),
             IsPrimary = request.IsPrimary,
             IsEnabled = request.IsEnabled,
+            CurrentRequirementLayerKey = "layer-1",
             DateTimeCreated = now,
             DateTimeModified = now,
         };
@@ -672,6 +673,7 @@ public sealed class WorkspaceService : IWorkspaceService
             BannedOrganizationsJson = SerializePolicyList(entry.BannedOrganizations),
             BannedIndividualsJson = SerializePolicyList(entry.BannedIndividuals),
             AgentPath = string.IsNullOrWhiteSpace(entry.AgentPath) ? null : entry.AgentPath,
+            CurrentRequirementLayerKey = string.IsNullOrWhiteSpace(entry.CurrentRequirementLayerKey) ? "layer-1" : entry.CurrentRequirementLayerKey,
             DateTimeCreated = created,
             DateTimeModified = modified,
         };
@@ -698,6 +700,7 @@ public sealed class WorkspaceService : IWorkspaceService
             BannedOrganizations = DeserializePolicyList(entity.BannedOrganizationsJson),
             BannedIndividuals = DeserializePolicyList(entity.BannedIndividualsJson),
             AgentPath = entity.AgentPath,
+            CurrentRequirementLayerKey = string.IsNullOrWhiteSpace(entity.CurrentRequirementLayerKey) ? "layer-1" : entity.CurrentRequirementLayerKey,
             DateTimeCreated = entity.DateTimeCreated,
             DateTimeModified = entity.DateTimeModified,
         };
@@ -723,6 +726,7 @@ public sealed class WorkspaceService : IWorkspaceService
         entity.BannedOrganizationsJson = SerializePolicyList(entry.BannedOrganizations);
         entity.BannedIndividualsJson = SerializePolicyList(entry.BannedIndividuals);
         entity.AgentPath = entry.AgentPath;
+        entity.CurrentRequirementLayerKey = string.IsNullOrWhiteSpace(entry.CurrentRequirementLayerKey) ? "layer-1" : entry.CurrentRequirementLayerKey;
         entity.DateTimeCreated = entry.DateTimeCreated == default ? entity.DateTimeCreated : entry.DateTimeCreated;
         entity.DateTimeModified = DateTimeOffset.UtcNow;
     }
@@ -804,6 +808,7 @@ public sealed class WorkspaceService : IWorkspaceService
             BannedIndividuals = NormalizePolicyList(e.BannedIndividuals) ?? [],
             GitRemoteUrl = await GetGitRemoteUrlAsync(e.WorkspacePath, ct).ConfigureAwait(false),
             AgentPath = string.IsNullOrWhiteSpace(e.AgentPath) ? null : e.AgentPath,
+            CurrentRequirementLayerKey = string.IsNullOrWhiteSpace(e.CurrentRequirementLayerKey) ? "layer-1" : e.CurrentRequirementLayerKey,
         };
         return dto;
     }
@@ -929,6 +934,9 @@ public sealed class WorkspaceConfigEntry
     /// Null = use the default (<c>copilot</c>).
     /// </summary>
     public string? AgentPath { get; set; }
+
+    /// <summary>FR-MCP-WORKSPACE-LAYER-001: current requirement scope layer key.</summary>
+    public string CurrentRequirementLayerKey { get; set; } = "layer-1";
 
     /// <summary>When the workspace was registered.</summary>
     public DateTimeOffset DateTimeCreated { get; set; }

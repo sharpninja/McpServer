@@ -20,6 +20,7 @@ setup() {
     export REPL_TODO_REPL_TIMEOUT=2
     export STUB_LOG="$SANDBOX/repl-calls.log"
     export STUB_DB="$SANDBOX/requirements-fr.db"
+    export MCPSERVER_REPL_PERSISTENT=0
 
 # Stub mcpserver-repl: emulates the real dispatcher — success for valid
 # client.* methods, type:error for the workflow.* fictions so any future
@@ -432,6 +433,12 @@ EOF
 }
 
 teardown() {
+    if [ -n "${MCPSERVER_REPL_DAEMON_DIR:-}" ]; then
+        node -e "try{process.kill(JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')).pid)}catch{}" "${MCPSERVER_REPL_DAEMON_DIR}/mcpserver-repl-daemon.json" || true
+    fi
+    unset MCPSERVER_REPL_DAEMON_DIR
+    unset MCPSERVER_REPL_BIN
+    unset MCPSERVER_REPL_PERSISTENT
     rm -rf "$SANDBOX"
 }
 

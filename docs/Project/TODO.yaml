@@ -1457,7 +1457,8 @@ infrastructure:
   - id: PLAN-CLAUDEPLUGIN-001
     title: Create mcpserver Claude Code Plugin
     note: Audited 2026-04-06. 3 critical corrections (SessionStart invalid, shell field invalid, mcp.json format), 4 moderate (user_invoked field, homepage, allowed-tools, agent fields), 3 minor (gitignore, CLAUDE_PLUGIN_ROOT, hooks.json description).
-    done: false
+    done: true
+    completed: 2026-06-28
     description:
     - Create a Claude Code plugin at .claude/plugins/mcpserver/ that automates MCP server session bootstrapping and provides skills for common workflows.
     - Connects Claude Code to 45 MCP tools via Streamable HTTP at /mcp-transport (no API key needed).
@@ -2588,6 +2589,45 @@ Director:
   - id: ISS-DIRECTOR-001
     title: '[TRIAGE] Agent Pool Grid Not Populating'
     done: false
+plugins:
+  high-priority:
+  - id: PLAN-PSSHIMMODULE-001
+    title: Refactor PowerShell shim into module with DTO parameter objects
+    estimate: 1d
+    done: true
+    completed: 2026-06-28
+    description:
+    - Refactor the plugin PowerShell shim into an importable PowerShell module that owns reusable DTO contracts instead of leaving every entrypoint to assemble anonymous objects independently.
+    - DTO coverage must include wrapper invocation options, REPL request envelopes, REPL invocation results, session metadata, session-turn upsert/fallback payloads, failsafe records, and action records used by the shim.
+    - Every public constructor/factory and every DTO member must be discoverable through comment-based help or adjacent public documentation, with examples that agents can follow without reading private implementation details.
+    - Existing plugin behavior must remain compatible for Codex, Claude Code, Claude Cowork, Cline, Cline v2, Copilot, Grok, and OpenCode package sync.
+    technicalDetails:
+    - Source module will live under plugins/core/lib-ps so sync-plugin-core.ps1 copies it into each plugin lib folder and CORE-MANIFEST.yaml hashes it.
+    - The module will expose typed DTO classes and factory functions; scripts may still serialize to JSON/YAML using PowerShell-native ConvertTo-Json and existing PowerShell parsers.
+    - repl-invoke.ps1 will import the module idempotently and use the DTO layer for REPL request envelope construction, result envelopes, session metadata, turn upsert payloads, fallback session payloads, failsafe records, and audit action normalization.
+    - Invoke-McpPlugin.ps1 will import the module idempotently and use the invocation-options DTO so command, method, params, response, workspace, plugin root, cache root, and timeout contracts are centralized.
+    - Pester coverage must prove module import, DTO construction and serialization, help discoverability for all public DTO members, wrapper compatibility, and synced manifest inclusion.
+    - Backport/projection acceptance is docs/Project/TODO.yaml containing PLAN-PSSHIMMODULE-001 after workflow.todo.repairProjection or an explicitly documented projection failure.
+    - Validation evidence - Invoke-Pester plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 passed 17/0/0; Invoke-Pester plugins/core/test-fixtures/pester passed 347/0/0; build.ps1 --target ValidatePluginPowerShellOnly passed for 9 package roots; git diff --check passed; live Invoke-McpPlugin.ps1 workflow.todo.query succeeded.
+    - Sibling plugin distributions were synced with sync-plugin-core.ps1 and wrapper generation without version bumps; core integrity passed for Claude Code, Claude Cowork, Cline, Cline v2, Codex, Copilot, Grok, and OpenCode.
+    - Non-blocking residual - dotnet test tests/AgentPluginCore/AgentPluginCore.Tests.csproj currently fails in stale Bash-era parity assertions such as lib/cache-manager.sh and marker-resolver.sh, which conflict with the PowerShell-only runtime direction.
+    implementationTasks:
+    - task: Inventory current PowerShell shim commands, parameter shapes, emitted envelopes, failsafe records, and plugin wrapper entry points.
+      done: true
+    - task: Backport the detailed PLAN-PSSHIMMODULE-001 plan into the authoritative TODO projection.
+      done: true
+    - task: Add plugins/core/lib-ps/McpPluginShim.psm1 with typed DTO classes and exported factory/serialization functions.
+      done: true
+    - task: Document every DTO object and public member through comment-based help plus inline member documentation and examples.
+      done: true
+    - task: Migrate Invoke-McpPlugin.ps1 and repl-invoke.ps1 to import and use the module without changing external command behavior.
+      done: true
+    - task: Add Pester tests for module import, DTO JSON shape, help/member discoverability, source wrapper usage, and CORE-MANIFEST sync inclusion.
+      done: true
+    - task: Run plugin sync/static validation, targeted Pester tests, and projection/status verification with zero failures and zero skips in the executed scope.
+      done: true
+    remaining: None for PLAN-PSSHIMMODULE-001. Stale Bash-era AgentPluginCore parity failures remain separate from this PowerShell shim module implementation.
+    doneSummary: PowerShell shim module implemented with DTO factories, help/member documentation, script integration, YAML backport, sibling plugin sync, Pester coverage, and plugin static validation.
 mcpserver-ui:
   high-priority:
   - id: MCP-UI-CHAT-VM-ITEST-001

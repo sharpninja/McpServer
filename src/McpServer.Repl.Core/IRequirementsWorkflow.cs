@@ -65,6 +65,37 @@ namespace McpServer.Repl.Core;
 public interface IRequirementsWorkflow
 {
     /// <summary>
+    /// FR-MCP-REQSCOPE-001: Lists ordered requirement scope layers for the active workspace.
+    /// </summary>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>Layer catalog with deterministic order and total count.</returns>
+    Task<RequirementScopeLayerQueryResult> ListRequirementLayersAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-MCP-REQSCOPE-001: Creates a new requirement scope layer.
+    /// </summary>
+    /// <param name="request">Layer creation payload.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The created layer.</returns>
+    Task<RequirementScopeLayer> CreateRequirementLayerAsync(RequirementScopeLayerCreateRequestModel request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-MCP-REQSCOPE-001: Updates mutable requirement scope layer metadata.
+    /// </summary>
+    /// <param name="request">Layer update payload.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The updated layer.</returns>
+    Task<RequirementScopeLayer> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequestModel request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-MCP-REQSCOPE-003: Returns requirements effective at a specific layer or the workspace current layer.
+    /// </summary>
+    /// <param name="layerKey">Optional preview layer key.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The effective requirements and mappings for the resolved layer.</returns>
+    Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Lists all functional requirements with optional filtering.
     /// </summary>
     /// <param name="area">Optional area filter (e.g., "MCP", "AUTH", "API").</param>
@@ -551,6 +582,12 @@ public interface IFrItem
     /// </summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</summary>
+    string ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</summary>
+    string? ScopeEndLayerKey { get; }
+
     /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
@@ -600,6 +637,12 @@ public interface IFrCreateRequest
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -642,6 +685,12 @@ public interface IFrUpdateRequest
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: updated first requirement layer where this FR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: updated optional last requirement layer where this FR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -726,6 +775,12 @@ public interface ITrItem
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this requirement.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</summary>
+    string ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
+    string? ScopeEndLayerKey { get; }
+
     /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
@@ -780,6 +835,12 @@ public interface ITrCreateRequest
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -822,6 +883,12 @@ public interface ITrUpdateRequest
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: updated first requirement layer where this TR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: updated optional last requirement layer where this TR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -906,6 +973,12 @@ public interface ITestItem
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this requirement.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</summary>
+    string ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
+    string? ScopeEndLayerKey { get; }
+
     /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
@@ -961,6 +1034,12 @@ public interface ITestCreateRequest
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -1003,6 +1082,12 @@ public interface ITestUpdateRequest
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: updated first requirement layer where this TEST applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>FR-MCP-REQSCOPE-002: updated optional last requirement layer where this TEST applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>

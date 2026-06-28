@@ -6,7 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Configurations>Debug;Release;Staging</Configurations>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>qbagent</ToolCommandName>
+    <PackageId>SharpNinja.McpServer.QBAgent</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>QBAgent command-line agent backed by MCP Server QuadBrain and workspace-scoped tool execution.</Description>
+    <PackageTags>mcp;quadbrain;qbagent;model-context-protocol;agent;cli</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/SharpNinja/McpServer</PackageProjectUrl>
     <RootNamespace>McpServer.QBAgent</RootNamespace>
     <AssemblyName>McpServer.QBAgent</AssemblyName>
   </PropertyGroup>

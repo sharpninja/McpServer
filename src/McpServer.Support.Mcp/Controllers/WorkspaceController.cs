@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
+
+/// <summary>FR-MCP-WORKSPACE-LAYER-001: request payload to update the current requirement scope layer.</summary>
+public sealed record WorkspaceCurrentRequirementLayerUpdateRequest(string LayerKey);
 
 /// <summary>
 /// FR-MCP-009 / TR-MCP-WS-004: Workspace registration, initialization, and process lifecycle endpoints.
@@ -54,6 +58,37 @@ public sealed class WorkspaceController : ControllerBase
     {
         var result = await _workspaceService.ListAsync(ct).ConfigureAwait(false);
         return Ok(result);
+    }
+
+    /// <summary>Gets the current requirement scope layer for the active workspace.</summary>
+    [HttpGet("current-requirement-layer")]
+    public async Task<IActionResult> GetCurrentRequirementLayerAsync(
+        [FromServices] IRequirementsDocumentService requirements,
+        CancellationToken ct)
+    {
+        var layer = await requirements.GetWorkspaceCurrentRequirementLayerAsync(ct).ConfigureAwait(false);
+        return Ok(new { currentLayerKey = layer.Key, layer });
+    }
+
+    /// <summary>Sets the current requirement scope layer for the active workspace.</summary>
+    [HttpPut("current-requirement-layer")]
+    public async Task<IActionResult> SetCurrentRequirementLayerAsync(
+        [FromBody] WorkspaceCurrentRequirementLayerUpdateRequest? request,
+        [FromServices] IRequirementsDocumentService requirements,
+        CancellationToken ct)
+    {
+        if (request is null || string.IsNullOrWhiteSpace(request.LayerKey))
+            return BadRequest(new { error = "LayerKey is required." });
+
+        try
+        {
+            var layer = await requirements.SetWorkspaceCurrentRequirementLayerAsync(request.LayerKey, ct).ConfigureAwait(false);
+            return Ok(new { currentLayerKey = layer.Key, layer });
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        {
+            return BadRequest(new { error = "invalid_requirement_scope_layer", message = ex.Message });
+        }
     }
 
     /// <summary>Get a single workspace by Base64URL-encoded path key. This endpoint is publicly accessible.</summary>

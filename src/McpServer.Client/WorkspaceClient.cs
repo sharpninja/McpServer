@@ -92,4 +92,16 @@ public sealed class WorkspaceClient : McpClientBase
     {
         return await PutAsync<GlobalPromptResult>("mcpserver/workspace/prompt", request, cancellationToken);
     }
+
+    /// <summary>Gets the current requirement scope layer for the active workspace.</summary>
+    public async Task<WorkspaceCurrentRequirementLayer> GetCurrentRequirementLayerAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<WorkspaceCurrentRequirementLayer>("mcpserver/workspace/current-requirement-layer", cancellationToken);
+    }
+
+    /// <summary>Sets the current requirement scope layer for the active workspace.</summary>
+    public async Task<WorkspaceCurrentRequirementLayer> SetCurrentRequirementLayerAsync(WorkspaceCurrentRequirementLayerUpdate request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<WorkspaceCurrentRequirementLayer>("mcpserver/workspace/current-requirement-layer", request, cancellationToken);
+    }
 }

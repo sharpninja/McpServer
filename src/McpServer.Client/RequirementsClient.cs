@@ -24,6 +24,31 @@ public sealed class RequirementsClient : McpClientBase
     internal RequirementsClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
         : base(http, options, holder) { }
 
+    /// <summary>Lists requirement scope layers for the current workspace.</summary>
+    public async Task<IReadOnlyList<RequirementScopeLayer>> ListRequirementLayersAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<IReadOnlyList<RequirementScopeLayer>>("mcpserver/requirements/layers", cancellationToken);
+    }
+
+    /// <summary>Creates a requirement scope layer for the current workspace.</summary>
+    public async Task<RequirementScopeLayer> CreateRequirementLayerAsync(RequirementScopeLayerRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<RequirementScopeLayer>("mcpserver/requirements/layers", request, cancellationToken);
+    }
+
+    /// <summary>Updates mutable fields of a requirement scope layer.</summary>
+    public async Task<RequirementScopeLayer> UpdateRequirementLayerAsync(string key, RequirementScopeLayerUpdate request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<RequirementScopeLayer>($"mcpserver/requirements/layers/{Uri.EscapeDataString(key)}", request, cancellationToken);
+    }
+
+    /// <summary>Gets requirements effective at the workspace current layer or an explicit preview layer.</summary>
+    public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken cancellationToken = default)
+    {
+        var url = BuildQueryUrl("mcpserver/requirements/effective", ("layerKey", layerKey));
+        return await GetAsync<EffectiveRequirementsResult>(url, cancellationToken);
+    }
+
     /// <summary>Lists functional requirements, optionally filtered by area or status.</summary>
     public async Task<IReadOnlyList<FrEntry>> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
     {

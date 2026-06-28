@@ -13,6 +13,58 @@ using McpServer.Client.Models;
 
 namespace McpServer.Repl.Core;
 
+/// <summary>TEST-MCP-REQSCOPE-REPL-001: layer query result returned by workflow.requirements.listLayers.</summary>
+public sealed class RequirementScopeLayerQueryResult
+{
+    /// <summary>Ordered requirement scope layers for the active workspace.</summary>
+    public IReadOnlyList<RequirementScopeLayer> Items { get; set; } = [];
+
+    /// <summary>Total number of layers in the result.</summary>
+    public int TotalCount => Items.Count;
+}
+
+/// <summary>TEST-MCP-REQSCOPE-REPL-001: request model for creating a requirement scope layer.</summary>
+public sealed class RequirementScopeLayerCreateRequestModel
+{
+    /// <summary>Stable layer key.</summary>
+    public string Key { get; set; } = string.Empty;
+
+    /// <summary>Deterministic layer order.</summary>
+    public int Order { get; set; }
+
+    /// <summary>Human-readable layer name.</summary>
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>Optional layer description.</summary>
+    public string? Description { get; set; }
+
+    /// <summary>Optional last layer where requirements starting in this layer apply.</summary>
+    public string? ScopeEndLayerKey { get; set; }
+}
+
+/// <summary>TEST-MCP-REQSCOPE-REPL-001: request model for updating a requirement scope layer.</summary>
+public sealed class RequirementScopeLayerUpdateRequestModel
+{
+    /// <summary>Stable layer key to update.</summary>
+    public string Key { get; set; } = string.Empty;
+
+    /// <summary>Updated layer name. Null preserves existing value.</summary>
+    public string? Name { get; set; }
+
+    /// <summary>Updated layer description. Null preserves existing value.</summary>
+    public string? Description { get; set; }
+
+    /// <summary>Updated last layer where requirements starting in this layer apply. Null preserves existing value.</summary>
+    public string? ScopeEndLayerKey { get; set; }
+}
+
+/// <summary>TEST-MCP-REQSCOPE-REPL-001: parameters for effective requirements lookup.</summary>
+public sealed class EffectiveRequirementsParamsModel
+{
+    /// <summary>Optional preview layer key. Null uses the workspace current layer.</summary>
+    public string? LayerKey { get; set; }
+}
+
 /// <inheritdoc />
 public sealed class FrCreateRequestModel : IFrCreateRequest
 {
@@ -30,6 +82,10 @@ public sealed class FrCreateRequestModel : IFrCreateRequest
     public string? Notes { get; set; }
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -49,6 +105,10 @@ public sealed class FrUpdateRequestModel : IFrUpdateRequest
     public string? Notes { get; set; }
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -70,6 +130,10 @@ public sealed class TrCreateRequestModel : ITrCreateRequest
     public string? Notes { get; set; }
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -89,6 +153,10 @@ public sealed class TrUpdateRequestModel : ITrUpdateRequest
     public string? Notes { get; set; }
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -110,6 +178,10 @@ public sealed class TestCreateRequestModel : ITestCreateRequest
     public string? Notes { get; set; }
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -129,6 +201,10 @@ public sealed class TestUpdateRequestModel : ITestUpdateRequest
     public string? Notes { get; set; }
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />

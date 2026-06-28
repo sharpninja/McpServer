@@ -1,8 +1,10 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
@@ -131,6 +133,82 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
         Assert.Equal("sess-42", orchestration.LastRequest!.Metadata["sessionId"]);
     }
 
+    /// <summary>FR-MCP-QBOPENAI-001 (G-015): <c>stream:true</c> returns OpenAI-style SSE chunks and a terminal DONE event.</summary>
+    [Fact]
+    public async Task ChatCompletions_StreamTrue_ReturnsServerSentEvents()
+    {
+        var orchestration = new FakeOrchestration { Output = "streamed arbiter answer" };
+        using var factory = BuildFactory(orchestration, new FakeExecutor());
+        using var client = Authorized(factory);
+        var request = SimpleRequest();
+        request.Stream = true;
+
+        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), request).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("text/event-stream", response.Content.Headers.ContentType?.MediaType);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("data:", body, StringComparison.Ordinal);
+        Assert.Contains("chat.completion.chunk", body, StringComparison.Ordinal);
+        Assert.Contains("streamed arbiter answer", body, StringComparison.Ordinal);
+        Assert.Contains("data: [DONE]", body, StringComparison.Ordinal);
+    }
+
+    /// <summary>FR-MCP-QBOPENAI-001 (G-050): <c>/v1</c> requests resolve workspace context from the presented token and do not leak across workspaces.</summary>
+    [Fact]
+    public async Task ChatCompletions_TokenScopedWorkspaces_DoNotLeakWorkspaceContext()
+    {
+        var secondaryWorkspacePath = Path.Combine(
+            Path.GetTempPath(),
+            $"mcp-qb-openai-secondary-{Guid.NewGuid():N}",
+            "workspace");
+        var secondaryDataPath = Path.Combine(Path.GetTempPath(), $"mcp-qb-openai-secondary-data-{Guid.NewGuid():N}");
+        SeedMinimalWorkspaceFiles(secondaryWorkspacePath);
+        Directory.CreateDirectory(secondaryDataPath);
+
+        try
+        {
+            var capture = new WorkspaceCapture();
+            var overrides = new Dictionary<string, string?>
+            {
+                { "Mcp:Workspaces:1:WorkspacePath", secondaryWorkspacePath },
+                { "Mcp:Workspaces:1:Name", "qb-openai-secondary" },
+                { "Mcp:Workspaces:1:TodoPath", Path.Combine(secondaryWorkspacePath, "docs", "Project", "TODO.yaml") },
+                { "Mcp:Workspaces:1:DataDirectory", secondaryDataPath },
+                { "Mcp:Workspaces:1:IsPrimary", "false" },
+                { "Mcp:Workspaces:1:IsEnabled", "true" },
+            };
+            using var factory = new CustomWebApplicationFactory(
+                services =>
+                {
+                    services.RemoveAll<IQuadBrainOrchestrationService>();
+                    services.AddSingleton(capture);
+                    services.AddScoped<IQuadBrainOrchestrationService, WorkspaceCapturingOrchestration>();
+                    services.RemoveAll<IQuadBrainInternalToolExecutor>();
+                    services.AddSingleton<IQuadBrainInternalToolExecutor>(new FakeExecutor());
+                },
+                overrides);
+            using var primaryClient = factory.CreateClient();
+            using var secondaryClient = factory.CreateClient();
+            AddOpenAiBearer(primaryClient, factory.Services, factory.WorkspacePath);
+            AddOpenAiBearer(secondaryClient, factory.Services, secondaryWorkspacePath);
+
+            var primary = await PostAsync(primaryClient, SimpleRequest()).ConfigureAwait(true);
+            var secondary = await PostAsync(secondaryClient, SimpleRequest()).ConfigureAwait(true);
+
+            Assert.Equal("workspace:" + factory.WorkspacePath, Assert.Single(primary.Choices).Message.Content);
+            Assert.Equal("workspace:" + secondaryWorkspacePath, Assert.Single(secondary.Choices).Message.Content);
+            Assert.Contains(factory.WorkspacePath, capture.WorkspacePaths);
+            Assert.Contains(secondaryWorkspacePath, capture.WorkspacePaths);
+        }
+        finally
+        {
+            TryDeleteDirectory(secondaryWorkspacePath);
+            TryDeleteDirectory(secondaryDataPath);
+            TryDeleteDirectory(Path.GetDirectoryName(secondaryWorkspacePath));
+        }
+    }
+
     private static CustomWebApplicationFactory BuildFactory(
         IQuadBrainOrchestrationService orchestration,
         IQuadBrainInternalToolExecutor executor)
@@ -149,6 +227,16 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
         if (client.DefaultRequestHeaders.TryGetValues("X-Api-Key", out var keys))
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", keys.First());
         return client;
+    }
+
+    private static void AddOpenAiBearer(HttpClient client, IServiceProvider services, string workspacePath)
+    {
+        using var scope = services.CreateScope();
+        var tokenService = scope.ServiceProvider.GetRequiredService<WorkspaceTokenService>();
+        var token = tokenService.GetToken(workspacePath) ?? tokenService.GenerateToken(workspacePath);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        client.DefaultRequestHeaders.Remove("X-Api-Key");
+        client.DefaultRequestHeaders.Remove(WorkspaceResolutionMiddleware.WorkspacePathHeader);
     }
 
     private static OpenAiChatCompletionRequest SimpleRequest()
@@ -217,6 +305,44 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
             => throw new NotSupportedException();
     }
 
+    private sealed class WorkspaceCapture
+    {
+        private readonly object _gate = new();
+
+        public List<string> WorkspacePaths { get; } = [];
+
+        public void Add(string? workspacePath)
+        {
+            lock (_gate)
+                WorkspacePaths.Add(workspacePath ?? string.Empty);
+        }
+    }
+
+    private sealed class WorkspaceCapturingOrchestration(WorkspaceContext context, WorkspaceCapture capture) : IQuadBrainOrchestrationService
+    {
+        public Task<QuadBrainOrchestrationResponse> ExecuteFullOrchestrationAsync(
+            QuadBrainOrchestrationRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            capture.Add(context.WorkspacePath);
+            return Task.FromResult(new QuadBrainOrchestrationResponse
+            {
+                Status = "committed",
+                Output = "workspace:" + context.WorkspacePath,
+            });
+        }
+
+        public Task<AotReconciliationResponse> ExecuteAotReconciliationAsync(
+            AotReconciliationRequest request,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<QuadBrainWeightUpdateResponse> ExecuteWeightUpdateAsync(
+            QuadBrainWeightUpdateRequest request,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+    }
+
     private sealed class FakeExecutor(string? handled = null, string? failed = null) : IQuadBrainInternalToolExecutor
     {
         public Task<InternalToolExecutionOutcome> TryExecuteAsync(
@@ -227,6 +353,32 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
             if (handled is not null && toolCall.Function.Name == handled)
                 return Task.FromResult(InternalToolExecutionOutcome.Ok());
             return Task.FromResult(InternalToolExecutionOutcome.Unhandled);
+        }
+    }
+
+    private static void SeedMinimalWorkspaceFiles(string workspacePath)
+    {
+        var projectPath = Path.Combine(workspacePath, "docs", "Project");
+        Directory.CreateDirectory(projectPath);
+        File.WriteAllText(Path.Combine(projectPath, "TODO.yaml"), """
+            mvp-app:
+              high-priority: []
+            """);
+    }
+
+    private static void TryDeleteDirectory(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        try
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, recursive: true);
+        }
+        catch
+        {
+            // Best-effort cleanup only.
         }
     }
 }

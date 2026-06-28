@@ -1133,9 +1133,12 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-QUAD-006
 
-**AoT reconciliation decision loop** — Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram IDs preserved for every role.
+**AoT reconciliation decision loop** — Implement deterministic orchestration prompts, parallel Left/Right role-output aggregation, ArbiterOfTruth reconciliation execution gated on receiving both hemisphere responses, conditional CuriosityEngine escalation, voting/reconciliation on Arbiter rejection, and final decision response shaping with transaction IDs and diffgram IDs preserved for every invoked role.
 **Acceptance Criteria:**
-- [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
+- [x] Normal orchestration starts LeftHemisphere and RightHemisphere in parallel, gates ArbiterOfTruth until both responses complete, and returns final committed Arbiter output without invoking CuriosityEngine. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision; QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_StartsRightBeforeLeftCompletesAndGatesAotOnBoth)
+- [x] Quad role invocation requests set temperature through the provider option surface when available: RightHemisphere uses 0.0, while LeftHemisphere, CuriosityEngine, and ArbiterOfTruth leave temperature unset; prompts still carry role-specific descriptions without using temperature prompt text. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_BuildsRoleSpecificPromptInstructions; BrainSlotChatClientFactoryTests.BuildOpenAiCompatibleRequestJson_WhenTemperatureSupplied_IncludesTemperature)
+- [x] CuriosityEngine is invoked only when both hemispheres fail to produce valid committed output and does not directly produce the caller response. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenBothHemispheresProduceNoValidOutput_InvokesCuriosityWithoutReturningIt)
+- [x] Arbiter semantic rejection triggers a voting/reconciliation round before final failure. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenArbiterRejectsInitialEvidence_RunsVotingRound)
 - [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot)
 
 ## TR-MCP-QUAD-007
@@ -1227,7 +1230,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-REQ-004
 
-**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, `Requirements-Matrix.md`, and `.mcp-requirements-manifest.json` with generatedAtUtc. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
+**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, `Requirements-Matrix.md`, and `.mcp-requirements-manifest.json` with generatedAtUtc. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. The export writer SHALL temporarily clear read-only attributes on generated files during replacement/deletion and restore read-only on exported files before returning or after failed replacement attempts. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
 
 ## TR-MCP-REQ-005
 

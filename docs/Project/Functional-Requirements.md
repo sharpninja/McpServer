@@ -584,6 +584,10 @@ The server shall expose a structured `adb_step` surface for safe Android validat
 ## FR-MCP-084 Requirements Wiki Workspace Export/Import
 
 The server, REPL, and agent plugins shall support requirements export and import in wiki format. Wiki export shall write both Azure DevOps Wiki and GitHub Wiki document folders directly under docs/Project/wiki. Wiki import shall detect wiki document folders, select the authoritative platform source using manifest and file modified timestamps, and create, update, delete, or ignore requirements and mappings to match the selected source.
+**Acceptance Criteria:**
+- [x] Wiki export writes both Azure DevOps Wiki and GitHub Wiki folders directly under docs/Project/wiki.
+- [x] Wiki export clears the read-only attribute on existing generated files only while replacing or deleting them, then restores read-only on written export files before returning or after failed replacement attempts.
+- [x] Wiki import detects wiki document folders, selects the authoritative platform source using manifest and file modified timestamps, and synchronizes requirements and mappings to match the selected source.
 
 **Status:** ✅ Complete
 
@@ -891,12 +895,16 @@ The readiness endpoint /ready reports Unhealthy when no enabled workspace is reg
 - [x] /ready reports Unhealthy when primary workspace has no seeded auth token
 - [x] /ready never reports Healthy while /mcpserver/* would return 503
 
-## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
+## FR-MCP-134 Full QuadBrain orchestration, AoT reconciliation, and escalation
 
-The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+The MCP runtime SHALL execute the real-time QuadBrain decision loop by dispatching LeftHemisphere and RightHemisphere in parallel for the active work, gating ArbiterOfTruth until both hemisphere responses have completed, and returning only the committed Arbiter decision. ArbiterOfTruth MAY choose the left response, choose the right response, combine both responses, or reject both responses. CuriosityEngine SHALL NOT participate in the normal real-time response path; it is invoked only when both hemispheres fail to produce valid committed output, where it evaluates frustration/research context and may initiate deeper research/context admission without directly responding to the user. Arbiter rejection SHALL trigger the voting/reconciliation mechanism before the runtime fails closed.
 **Acceptance Criteria:**
 - [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
-- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
+- [x] LeftHemisphere and RightHemisphere are invoked in parallel through existing transaction-gated slot invocation, and ArbiterOfTruth reconciliation does not run until both hemisphere responses have completed.
+- [x] Role prompts describe LeftHemisphere as creative, RightHemisphere as absolute-accuracy focused, CuriosityEngine as a curious researcher, and ArbiterOfTruth as arbiter of truth for code tasks plus enforcer of rules for all tasks; RightHemisphere invocations set provider temperature to 0.0 while LeftHemisphere invocations leave temperature unset.
+- [x] CuriosityEngine is not invoked when either hemisphere produces valid committed evidence for ArbiterOfTruth.
+- [x] When both hemispheres produce no valid committed evidence, CuriosityEngine may admit research/context evidence but its output is never returned directly to the caller.
+- [x] AoT reconciliation may choose Left, choose Right, combine both, or reject both; rejection triggers the voting/reconciliation mechanism before final fail-closed rejection.
 - [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
 - [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
 
@@ -1072,6 +1080,11 @@ QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On 
 - [x] A marker missing apiKey or with a non-absolute baseUrl is rejected as invalid.
 - [x] With no marker present QBAgent exits gracefully with exit code 0 and contacts no endpoint.
 - [x] An interactive run loop routes each prompt through the bound runtime, handles blank lines and exit commands, stops at end of input, and reports runner failures without aborting.
+- [x] QBAgent executes external agent actions through its real registered tool surface against an isolated workspace; a coding prompt that elects a file-write action creates the requested file on disk with the requested content. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+- [x] QBAgent feeds external tool execution results back into QuadBrain and displays the continued final answer instead of claiming success from the initial tool-call request alone. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+- [x] QBAgent action transcripts and session evidence include the user prompt, emitted external tool call, executed action path/result, and final displayed output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-create-hello-world-cpp-*.jsonl)
+- [x] If the required external tool is unavailable or execution fails, QBAgent surfaces the failure and does not fabricate a completed action. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+- [x] QBAgent is packable and deployable as a .NET global tool using the `qbagent` command. (evidence: BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool; DeployQBAgentTool; `qbagent --version`)
 
 ## FR-MCP-QBEXEC-001 QuadBrain server-side MCP-tool execution with AoT transaction interception
 
@@ -1310,35 +1323,35 @@ The transaction subscriber SHALL log every received transaction message (commit 
 
 Agents can submit workspace-scoped incidental bug reports without leaving their current task.
 **Acceptance Criteria:**
-- [x] REST, client, REPL, and plugin tool paths all accept the same report contract. (evidence: TriageControllerTests, TriageClientTests, TriageWorkflowTests, TriageMcpToolTests.)
-- [x] Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc. (evidence: TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch.)
-- [x] Intake does not run research or create a TODO synchronously. (evidence: TriageServiceTests.SubmitReportAsync_ValidReport_PersistsAcceptedStateWithoutRunningResearch.)
+- [ ] REST, client, REPL, and plugin tool paths all accept the same report contract.
+- [ ] Intake persists the report and returns reportId, groupId, status, and quietDeadlineUtc.
+- [ ] Intake does not run research or create a TODO synchronously.
 
 ## FR-MCP-TRIAGE-002 Async triage grouping and research
 
 Related reports are grouped, MCP Server and MCP Server plugin reports are routed to the registered McpServer workspace when it exists, and groups are researched asynchronously and converted to TODOs.
 **Acceptance Criteria:**
-- [x] Groups are deterministic and workspace-isolated. (evidence: TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline and SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups.)
-- [x] New matching reports reset the 15-minute quiet window. (evidence: TriageServiceTests.SubmitReportAsync_MatchingDedupeKey_ReusesGroupAndResetsQuietDeadline.)
-- [x] A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo and TriagePromptTemplateTests.)
-- [x] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo and ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure.)
-- [x] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace. (evidence: TriageServiceTests.SubmitReportAsync_McpServerPluginBug_RoutesToRegisteredMcpServerWorkspace and SubmitReportAsync_McpServerPluginBugWithoutMcpServerWorkspace_StaysInSubmittingWorkspace.)
+- [ ] Groups are deterministic and workspace-isolated.
+- [ ] New matching reports reset the 15-minute quiet window.
+- [ ] A configured triage agent receives group JSON plus rendered prompt and must return schema-valid JSON.
+- [ ] Valid output creates one BUG-TRIAGE-### backlog TODO; invalid output creates no TODO and exposes failure status.
+- [ ] MCP Server core and MCP Server plugin bugs are grouped into the registered McpServer workspace when that workspace exists; otherwise they stay in the submitting workspace.
 
 ## FR-MCP-TRIAGE-003 REPL triage parity
 
 The REPL exposes the complete triage surface through client passthrough and typed workflow wrappers.
 **Acceptance Criteria:**
-- [x] client.triage.* works through generic passthrough after adding McpServerClient.Triage. (evidence: TriageClientTests and TriageWorkflowTests.)
-- [x] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces. (evidence: TriageWorkflowTests.)
-- [x] YAML validation, error envelopes, and request/response shapes are covered. (evidence: TriageWorkflowTests and plugin repl-yaml-message schema tests.)
+- [ ] client.triage.* works through generic passthrough after adding McpServerClient.Triage.
+- [ ] workflow.triage.* routes through typed workflow classes and returns deprecated metadata consistent with existing workflow namespaces.
+- [ ] YAML validation, error envelopes, and request/response shapes are covered.
 
 ## FR-MCP-TRIAGE-004 Plugin triage skills
 
 All plugin distributions teach agents when and how to use triage.
 **Acceptance Criteria:**
-- [x] Each plugin skill bundle includes triage guidance. (evidence: TriageSkillBundleTests and plugin local skill tests.)
-- [x] Skills say to use triage for incidental bugs, not for the user's active requested fix. (evidence: TriageSkillBundleTests and plugin local skill tests.)
-- [x] Skills explicitly say not to expect immediate resolution and to continue the current task after submission. (evidence: TriageSkillBundleTests and plugin local skill tests.)
+- [ ] Each plugin skill bundle includes triage guidance.
+- [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
+- [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
 
 ## FR-SUPPORT-010 MCP Context Unification
 
@@ -1418,23 +1431,110 @@ Whole-session submit shall merge additively: omitted session and turn fields nev
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
 
-## FR-WFL-001 Complete Workflow FR
-
-Functional requirement for complete workflow test
-
 ## FR-TRIAGE-001 Triage dashboard inspection
 
 Users can inspect triage queue contents, grouped report queues, and AI triage run history with result details and current status for Director and MCP Web UI dashboards.
 **Acceptance Criteria:**
-- [x] A read-only dashboard contract exposes triage queue, report group queue, and run history without inferring Agent Pool data. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`)
-- [x] Group details include status, title, summary, report count, quiet deadline, created TODO id, last error, linked report summaries, and latest AI run results when available. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`)
-- [x] The API supports workspace-scoped queries so Director and MCP Web can use the active workspace path. (evidence: `TriageServiceTests.QueryRunsAsync_WithFilters_ReturnsWorkspaceScopedRuns`)
+- [ ] A read-only dashboard contract exposes triage queue, report group queue, and run history without inferring Agent Pool data.
+- [ ] Group details include status, title, summary, report count, quiet deadline, created TODO id, last error, linked report summaries, and latest AI run results when available.
+- [ ] The API supports workspace-scoped queries so Director and MCP Web can use the active workspace path.
 
 ## FR-TRIAGE-002 Triage-created TODO index
 
 Users can query TODO item IDs created by triage, including the datetime each TODO anchor was created, so Director and MCP Web can link triage outcomes to backlog items.
 **Acceptance Criteria:**
-- [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
-- [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
-- [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
+- [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+- [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+
+## FR-WFL-001 Complete Workflow FR
+
+Functional requirement for complete workflow test
+
+## FR-MCP-PLUGIN-PSONLY-001 Plugin runtime uses PowerShell only
+
+All MCP plugin distributions shall use PowerShell Core (`pwsh`) through the `PowerShell.MCP` runtime for normal operation. Hook, REPL, cache, status, session, TODO, requirements, triage, and sync workflows shall not require Bash or Node helper runtimes.
+**Acceptance Criteria:**
+- [x] Generated plugin packages contain PowerShell runtime scripts for normal hook and workflow execution. (evidence: PluginPowerShellOnly.Tests.ps1, PluginPowerShellRuntime.Tests.ps1)
+- [x] Legacy Bats behaviors are inventoried and represented by Pester tests so parity is measured at scenario level. (evidence: PluginLegacyBatsBehavior.Tests.ps1, BATS-PESTER-PARITY.md)
+- [x] Package validation rejects Bash and Node runtime files or references in shipped plugin runtime surfaces. (evidence: ValidatePluginPowerShellOnly)
+
+## FR-MCP-PLUGIN-PSONLY-002 Bash is only allowed for PowerShell installation bootstrap
+
+Bash shall be permitted only in an isolated PowerShell installation bootstrap. Normal plugin execution, skills, hooks, and tests shall not instruct agents to use Bash.
+**Acceptance Criteria:**
+- [x] Static package validation allows only `bootstrap/install-powershell.sh` as the Bash bootstrap exception. (evidence: Build.SyncAgentPlugins.ValidatePluginPowerShellOnlyPackage)
+- [x] Plugin skill bundles no longer instruct agents to invoke Bash wrappers for normal operation. (evidence: TEST-MCP-PLUGIN-PSONLY-002)
+- [x] Pester coverage replaces the current Bats-tested behaviors before Bash/Bats runtime surfaces are removed. (evidence: TEST-MCP-PLUGIN-PSONLY-001)
+
+## FR-MCP-PLUGIN-PSONLY-003 Plugins fail closed without PowerShell.MCP
+
+When `pwsh` or the `PowerShell.MCP` module is unavailable, plugins shall fail closed, report `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and perform no MCP actions.
+**Acceptance Criteria:**
+- [x] PowerShell runtime checks for `pwsh` and `PowerShell.MCP` availability before normal MCP operations. (evidence: plugin-hook.ps1, PluginPowerShellRuntime.Tests.ps1)
+- [x] Fail-closed paths are covered by Pester tests and do not create MCP side effects. (evidence: PluginLegacyBatsBehavior.Tests.ps1, PluginPowerShellOnly.Tests.ps1)
+- [x] Untrusted or missing marker bootstrap state returns a safe empty hook response and records inspectable unavailable/untrusted state. (evidence: PluginLegacyBatsBehavior.Tests.ps1)
+
+## FR-MCP-MARKER-TRIAGE-001 Marker instructions route MCP/plugin failures to triage
+
+Generated marker instructions shall tell agents that MCP Server failures and required-plugin failures discovered while working are reported through the triage tool only, and that agents continue the user's active task after submission.
+**Acceptance Criteria:**
+- [x] The rendered marker prompt tells agents to report MCP Server failures and required-plugin failures through the triage tool only. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents not to wait for triage research, TODO creation, or resolution before continuing the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt forbids substitute TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user's active request is to fix that failure. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to write a normal failsafe YAML triage report for later replay when the failure prevents live triage submission. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to write detailed triage reports for separate code, docs, requirements, plugin, deployment, or configuration repair workflows, then continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+
+## FR-MCP-REQSCOPE-001 Requirement scope layer catalog
+
+MCP Server shall let each workspace define ordered requirement scope layers that describe when layers and the requirements that start in those layers become applicable for implementation and enforcement.
+
+**Acceptance Criteria:**
+- [ ] Each workspace has a seeded `layer-1` scope layer with order `1`, name, timestamps, and workspace isolation.
+- [ ] Layer records expose `key`, immutable numeric `order`, `name`, optional `description`, nullable `scopeEndLayerKey`, `createdAtUtc`, and `updatedAtUtc`.
+- [ ] Layer create/list/update APIs reject duplicate keys, duplicate orders, invalid keys, invalid orders, missing `scopeEndLayerKey` references, end-before-start layer sunsets, and cross-workspace access.
+- [ ] Layer updates can change only `name`, `description`, and `scopeEndLayerKey`; attempts to change `key` or `order` are rejected.
+- [ ] A layer `scopeEndLayerKey` sunsets requirements that start in that layer after the end layer; if a requirement also has an end layer, the earlier end boundary applies.
+
+## FR-MCP-WORKSPACE-LAYER-001 Workspace current requirement layer
+
+MCP Server shall track the current requirement scope layer for each workspace and expose it through workspace endpoints used by current-requirements visibility surfaces.
+
+**Acceptance Criteria:**
+- [ ] Workspace storage persists `CurrentRequirementLayerKey` and defaults existing and new workspaces to `layer-1`.
+- [ ] `GET /mcpserver/workspace/current-requirement-layer` returns the workspace current layer with resolved layer metadata.
+- [ ] `PUT /mcpserver/workspace/current-requirement-layer` changes the workspace current layer only when the target layer exists in that workspace.
+- [ ] All endpoints that need current requirements visibility use the workspace current layer by default.
+
+## FR-MCP-REQSCOPE-002 Requirement applicability windows
+
+MCP Server shall let FR, TR, and TEST requirements define the first layer where they apply and an optional last layer where they still apply.
+
+**Acceptance Criteria:**
+- [ ] FR, TR, and TEST records persist and return `scopeStartLayerKey` and nullable `scopeEndLayerKey`.
+- [ ] Requirements created or imported without scope metadata default to `scopeStartLayerKey: layer-1` and `scopeEndLayerKey: null`.
+- [ ] Create, update, batch, and import operations reject missing layer references and `scopeEndLayerKey` values whose order is before `scopeStartLayerKey`.
+- [ ] Authoring/list endpoints can still return all requirements without applying current-layer filtering.
+
+## FR-MCP-REQSCOPE-003 Effective current requirements
+
+MCP Server shall calculate effective requirements for a workspace by applying the workspace current layer to requirement applicability windows and layer sunset windows.
+
+**Acceptance Criteria:**
+- [ ] At current layer `N`, effective requirements include records whose start layer order is less than or equal to `N`.
+- [ ] Effective requirements exclude records whose requirement end layer order or start layer sunset order is less than `N`.
+- [ ] Effective requirements include records whose requirement end layer order or start layer sunset order equals `N`.
+- [ ] Effective mapping results include only relationships where the FR and linked TR/TEST records are effective at the resolved layer.
+
+## FR-MCP-REQSCOPE-004 REPL final acceptance workflow
+
+MCP Server shall prove requirement scope layers through a REPL-driven integration workflow that exercises layer creation, scoped requirements, layer sunset, requirement sunset, and before/after current requirement queries.
+
+**Acceptance Criteria:**
+- [ ] A REPL integration test creates a new requirement scope layer through workflow wrappers.
+- [ ] The REPL integration test adds a new requirement that starts in the new layer.
+- [ ] The REPL integration test sunsets a layer after the new layer.
+- [ ] The REPL integration test sunsets a requirement before the new layer.
+- [ ] The REPL integration test queries current requirements before the new layer and verifies future and expired requirements are excluded.
+- [ ] The REPL integration test queries current requirements after the new layer and verifies newly active and sunset requirements are included or excluded correctly.
 

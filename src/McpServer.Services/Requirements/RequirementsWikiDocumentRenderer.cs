@@ -220,8 +220,17 @@ internal static class RequirementsDocumentExportWriter
                 $".{Path.GetFileName(fullPath)}.{Guid.NewGuid():N}.tmp");
             await File.WriteAllTextAsync(tempPath, document.Content, RequirementsWikiDocumentRenderer.Utf8NoBom, ct).ConfigureAwait(false);
             File.SetLastWriteTimeUtc(tempPath, generatedAtUtc.UtcDateTime);
-            File.Move(tempPath, fullPath, overwrite: true);
-            File.SetLastWriteTimeUtc(fullPath, generatedAtUtc.UtcDateTime);
+            ClearReadOnly(fullPath);
+            try
+            {
+                File.Move(tempPath, fullPath, overwrite: true);
+                File.SetLastWriteTimeUtc(fullPath, generatedAtUtc.UtcDateTime);
+            }
+            finally
+            {
+                if (File.Exists(fullPath))
+                    SetReadOnly(fullPath);
+            }
 
             written.Add(new RequirementsDocumentExportFile
             {
@@ -266,7 +275,18 @@ internal static class RequirementsDocumentExportWriter
             {
                 ct.ThrowIfCancellationRequested();
                 if (!expected.Contains(Path.GetFullPath(file)))
-                    File.Delete(file);
+                {
+                    ClearReadOnly(file);
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    finally
+                    {
+                        if (File.Exists(file))
+                            SetReadOnly(file);
+                    }
+                }
             }
 
             foreach (var directory in Directory.EnumerateDirectories(fullDirectory, "*", SearchOption.AllDirectories)
@@ -293,6 +313,23 @@ internal static class RequirementsDocumentExportWriter
         }
 
         return fullPath;
+    }
+
+    private static void ClearReadOnly(string path)
+    {
+        if (!File.Exists(path))
+            return;
+
+        var attributes = File.GetAttributes(path);
+        if (attributes.HasFlag(FileAttributes.ReadOnly))
+            File.SetAttributes(path, attributes & ~FileAttributes.ReadOnly);
+    }
+
+    private static void SetReadOnly(string path)
+    {
+        var attributes = File.GetAttributes(path);
+        if (!attributes.HasFlag(FileAttributes.ReadOnly))
+            File.SetAttributes(path, attributes | FileAttributes.ReadOnly);
     }
 }
 

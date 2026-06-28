@@ -179,6 +179,10 @@ public sealed class BrainSlotInvokeRequest
     [JsonPropertyName("admitToGraphRag")]
     public bool AdmitToGraphRag { get; set; }
 
+    /// <summary>Optional provider temperature override for this invocation.</summary>
+    [JsonPropertyName("temperature")]
+    public double? Temperature { get; set; }
+
     /// <summary>Caller metadata preserved in transaction evidence.</summary>
     [JsonPropertyName("metadata")]
     public IReadOnlyDictionary<string, string> Metadata { get; set; } = new Dictionary<string, string>();

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +30,9 @@ public sealed class QuadBrainOpenAiController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>An OpenAI-compatible chat-completion response.</returns>
     [HttpPost("chat/completions")]
+    [Produces("application/json", "text/event-stream")]
     [ProducesResponseType(typeof(OpenAiChatCompletionResponse), StatusCodes.Status200OK)]
-    public async Task<ActionResult<OpenAiChatCompletionResponse>> ChatCompletionsAsync(
+    public async Task<IActionResult> ChatCompletionsAsync(
         [FromBody] OpenAiChatCompletionRequest? request,
         CancellationToken cancellationToken)
     {
@@ -48,7 +50,10 @@ public sealed class QuadBrainOpenAiController : ControllerBase
 
         try
         {
-            return Ok(await _chat.CompleteAsync(request, sessionId, turnId, cancellationToken).ConfigureAwait(false));
+            var completion = await _chat.CompleteAsync(request, sessionId, turnId, cancellationToken).ConfigureAwait(false);
+            return request.Stream
+                ? new OpenAiChatCompletionStreamResult(completion)
+                : Ok(completion);
         }
         catch (ArgumentException ex)
         {
@@ -67,6 +72,75 @@ public sealed class QuadBrainOpenAiController : ControllerBase
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { error = new { message = ex.Message, type = "server_error" } });
+        }
+    }
+
+    private sealed class OpenAiChatCompletionStreamResult(OpenAiChatCompletionResponse completion) : IActionResult
+    {
+        public async Task ExecuteResultAsync(ActionContext context)
+        {
+            var response = context.HttpContext.Response;
+            response.StatusCode = StatusCodes.Status200OK;
+            response.ContentType = "text/event-stream";
+
+            var choice = completion.Choices.FirstOrDefault() ?? new OpenAiChatChoice();
+            await WriteEventAsync(response, CreateDeltaChunk(choice), context.HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+            await WriteEventAsync(response, CreateTerminalChunk(choice), context.HttpContext.RequestAborted)
+                .ConfigureAwait(false);
+            await response.WriteAsync("data: [DONE]\n\n", context.HttpContext.RequestAborted).ConfigureAwait(false);
+            await response.Body.FlushAsync(context.HttpContext.RequestAborted).ConfigureAwait(false);
+        }
+
+        private object CreateDeltaChunk(OpenAiChatChoice choice)
+            => new
+            {
+                id = completion.Id,
+                @object = "chat.completion.chunk",
+                created = completion.Created,
+                model = completion.Model,
+                choices = new[]
+                {
+                    new
+                    {
+                        index = choice.Index,
+                        delta = new
+                        {
+                            role = "assistant",
+                            content = choice.Message.Content,
+                            tool_calls = choice.Message.ToolCalls,
+                        },
+                        finish_reason = (string?)null,
+                    },
+                },
+            };
+
+        private object CreateTerminalChunk(OpenAiChatChoice choice)
+            => new
+            {
+                id = completion.Id,
+                @object = "chat.completion.chunk",
+                created = completion.Created,
+                model = completion.Model,
+                choices = new[]
+                {
+                    new
+                    {
+                        index = choice.Index,
+                        delta = new { },
+                        finish_reason = choice.FinishReason,
+                    },
+                },
+            };
+
+        private static async Task WriteEventAsync(HttpResponse response, object payload, CancellationToken cancellationToken)
+        {
+            var json = JsonSerializer.Serialize(
+                payload,
+                new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            await response.WriteAsync("data: ", cancellationToken).ConfigureAwait(false);
+            await response.WriteAsync(json, cancellationToken).ConfigureAwait(false);
+            await response.WriteAsync("\n\n", cancellationToken).ConfigureAwait(false);
         }
     }
 }

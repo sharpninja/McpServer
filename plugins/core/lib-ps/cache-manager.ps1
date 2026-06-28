@@ -2,8 +2,8 @@
 .SYNOPSIS
     Local write cache for MCP operations when server is unavailable.
 .DESCRIPTION
-    PowerShell fallback for cache-manager.sh. Stores pending REPL commands
-    as YAML files and replays them when the server becomes available.
+    PowerShell cache manager for pending MCP operations. Stores pending
+    commands as YAML files and replays them when the server becomes available.
 #>
 param(
     [Parameter(Mandatory)][ValidateSet('write','status','flush')][string]$Action,
@@ -27,7 +27,7 @@ if (-not (Test-Path $pendingDir)) { New-Item -ItemType Directory -Path $pendingD
 
 switch ($Action) {
     'write' {
-        $count = (Get-ChildItem -Path $pendingDir -Filter '*.yaml' -ErrorAction SilentlyContinue).Count
+        $count = @(Get-ChildItem -Path $pendingDir -Filter '*.yaml' -ErrorAction SilentlyContinue).Count
         $seq = '{0:D3}' -f ($count + 1)
         $timestamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         $slug = $Method -replace '\.', '-'
@@ -45,7 +45,7 @@ retryCount: 0
         Write-Output $filepath
     }
     'status' {
-        $count = (Get-ChildItem -Path $pendingDir -Filter '*.yaml' -ErrorAction SilentlyContinue).Count
+        $count = @(Get-ChildItem -Path $pendingDir -Filter '*.yaml' -ErrorAction SilentlyContinue).Count
         Write-Output $count
     }
     'flush' {
@@ -72,7 +72,7 @@ retryCount: 0
                 $failed++
             }
         }
-        $pending = (Get-ChildItem -Path $pendingDir -Filter '*.yaml' -ErrorAction SilentlyContinue).Count
+        $pending = @(Get-ChildItem -Path $pendingDir -Filter '*.yaml' -ErrorAction SilentlyContinue).Count
         Write-Output "flushed=$flushed failed=$failed pending=$pending"
     }
 }

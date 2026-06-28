@@ -24,6 +24,7 @@ internal static class RequirementsDocumentRenderer
             sb.AppendLine();
             if (!string.IsNullOrWhiteSpace(entry.Body))
                 sb.AppendLine(entry.Body.Trim());
+            AppendScopeMetadata(sb, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey);
             AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria);
             sb.AppendLine();
         }
@@ -54,6 +55,7 @@ internal static class RequirementsDocumentRenderer
                 sb.AppendLine(entry.Body.Trim());
             }
 
+            AppendScopeMetadata(sb, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey);
             AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria);
 
             sb.AppendLine();
@@ -71,6 +73,7 @@ internal static class RequirementsDocumentRenderer
         foreach (var entry in entries)
         {
             sb.Append("- ").Append(entry.Id).Append(": ").AppendLine(entry.Condition.Trim());
+            AppendScopeMetadata(sb, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey, listItemIndent: "  ");
             AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria, listItemIndent: "  ");
         }
 
@@ -102,6 +105,14 @@ internal static class RequirementsDocumentRenderer
                 sb.Append(" (evidence: ").Append(criterion.Evidence.Trim()).Append(')');
             sb.AppendLine();
         }
+    }
+
+    /// <summary>Renders requirement scope metadata in a deterministic Markdown-friendly form.</summary>
+    internal static void AppendScopeMetadata(StringBuilder sb, string scopeStartLayerKey, string? scopeEndLayerKey, string listItemIndent = "")
+    {
+        var start = string.IsNullOrWhiteSpace(scopeStartLayerKey) ? RequirementScopeLayerDefaults.DefaultLayerKey : scopeStartLayerKey.Trim();
+        var end = string.IsNullOrWhiteSpace(scopeEndLayerKey) ? "+" : $"..{scopeEndLayerKey.Trim()}";
+        sb.Append(listItemIndent).Append("Scope: ").Append(start).AppendLine(end);
     }
 
     public static string RenderMapping(IEnumerable<FrTrMapping> mappings)

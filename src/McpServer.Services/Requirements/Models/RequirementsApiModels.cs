@@ -2,6 +2,20 @@ using McpServer.Support.Mcp.Models;
 
 namespace McpServer.Support.Mcp.Requirements.Models;
 
+/// <summary>Request payload for creating a requirement scope layer.</summary>
+public sealed record CreateRequirementScopeLayerRequest(
+    string Key,
+    int Order,
+    string Name,
+    string? Description = null,
+    string? ScopeEndLayerKey = null);
+
+/// <summary>Request payload for updating mutable requirement scope layer fields.</summary>
+public sealed record UpdateRequirementScopeLayerRequest(
+    string? Name = null,
+    string? Description = null,
+    string? ScopeEndLayerKey = null);
+
 /// <summary>Request payload for creating a Functional Requirement entry.</summary>
 /// <param name="Id">Requirement identifier (e.g. FR-MCP-040).</param>
 /// <param name="Title">Requirement title.</param>
@@ -10,7 +24,9 @@ namespace McpServer.Support.Mcp.Requirements.Models;
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria.</param>
-public sealed record CreateFrRequest(string Id, string Title, string Body, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</param>
+public sealed record CreateFrRequest(string Id, string Title, string Body, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null, string? ScopeStartLayerKey = null, string? ScopeEndLayerKey = null);
 
 /// <summary>Request payload for updating a Functional Requirement entry.</summary>
 /// <param name="Title">Requirement title.</param>
@@ -19,7 +35,9 @@ public sealed record CreateFrRequest(string Id, string Title, string Body, strin
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing.</param>
-public sealed record UpdateFrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</param>
+public sealed record UpdateFrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null, string? ScopeStartLayerKey = null, string? ScopeEndLayerKey = null);
 
 /// <summary>Request payload for creating a Technical Requirement entry.</summary>
 /// <param name="Id">Requirement identifier (e.g. TR-MCP-REQ-002).</param>
@@ -29,7 +47,9 @@ public sealed record UpdateFrRequest(string? Title = null, string? Body = null, 
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria.</param>
-public sealed record CreateTrRequest(string Id, string? Title, string Body, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</param>
+public sealed record CreateTrRequest(string Id, string? Title, string Body, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null, string? ScopeStartLayerKey = null, string? ScopeEndLayerKey = null);
 
 /// <summary>Request payload for updating a Technical Requirement entry.</summary>
 /// <param name="Title">Optional title rendered as bold text before the em dash.</param>
@@ -38,7 +58,9 @@ public sealed record CreateTrRequest(string Id, string? Title, string Body, stri
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing.</param>
-public sealed record UpdateTrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TR applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</param>
+public sealed record UpdateTrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null, string? ScopeStartLayerKey = null, string? ScopeEndLayerKey = null);
 
 /// <summary>Request payload for creating a Testing Requirement entry.</summary>
 /// <param name="Id">Requirement identifier (e.g. TEST-MCP-039).</param>
@@ -48,7 +70,9 @@ public sealed record UpdateTrRequest(string? Title = null, string? Body = null, 
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria.</param>
-public sealed record CreateTestRequest(string Id, string Condition, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</param>
+public sealed record CreateTestRequest(string Id, string Condition, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null, string? ScopeStartLayerKey = null, string? ScopeEndLayerKey = null);
 
 /// <summary>Request payload for updating a Testing Requirement entry.</summary>
 /// <param name="Condition">Test condition text.</param>
@@ -57,7 +81,9 @@ public sealed record CreateTestRequest(string Id, string Condition, string? Titl
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing.</param>
-public sealed record UpdateTestRequest(string? Condition = null, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
+/// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this TEST applies.</param>
+/// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</param>
+public sealed record UpdateTestRequest(string? Condition = null, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null, string? ScopeStartLayerKey = null, string? ScopeEndLayerKey = null);
 
 /// <summary>Request payload for creating multiple Functional Requirement entries atomically.</summary>
 public sealed class CreateFrBatchRequest
@@ -92,6 +118,12 @@ public sealed class CreateFrBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this FR applies.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this FR applies.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Request payload for updating multiple Functional Requirement entries atomically.</summary>
@@ -127,6 +159,12 @@ public sealed class UpdateFrBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this FR applies. Null preserves the current value.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this FR applies. Null preserves the current value.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Request payload for creating multiple Technical Requirement entries atomically.</summary>
@@ -162,6 +200,12 @@ public sealed class CreateTrBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this TR applies.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this TR applies.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Request payload for updating multiple Technical Requirement entries atomically.</summary>
@@ -197,6 +241,12 @@ public sealed class UpdateTrBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this TR applies. Null preserves the current value.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this TR applies. Null preserves the current value.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Request payload for creating multiple Testing Requirement entries atomically.</summary>
@@ -232,6 +282,12 @@ public sealed class CreateTestBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this TEST applies.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this TEST applies.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Request payload for updating multiple Testing Requirement entries atomically.</summary>
@@ -267,6 +323,12 @@ public sealed class UpdateTestBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this TEST applies. Null preserves the current value.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this TEST applies. Null preserves the current value.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Request payload for creating mixed FR/TR/TEST entries atomically.</summary>
@@ -308,6 +370,12 @@ public sealed class CreateRequirementBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this mixed requirement applies.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this mixed requirement applies.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Request payload for updating mixed FR/TR/TEST entries atomically.</summary>
@@ -349,6 +417,12 @@ public sealed class UpdateRequirementBatchRecord
 
     /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
+
+    /// <summary>First requirement layer where this mixed requirement applies. Null preserves the current value.</summary>
+    public string? ScopeStartLayerKey { get; init; }
+
+    /// <summary>Optional last requirement layer where this mixed requirement applies. Null preserves the current value.</summary>
+    public string? ScopeEndLayerKey { get; init; }
 }
 
 /// <summary>Structured response returned by requirements batch create and update endpoints.</summary>

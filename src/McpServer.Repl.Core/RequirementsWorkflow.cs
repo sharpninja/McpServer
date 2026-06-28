@@ -32,6 +32,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     private static readonly Regex FrIdPattern = new(@"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
     private static readonly Regex TrIdPattern = new(@"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\d{3}$", RegexOptions.Compiled);
     private static readonly Regex TestIdPattern = new(@"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex LayerKeyPattern = new(@"^[A-Za-z0-9][A-Za-z0-9._-]*$", RegexOptions.Compiled);
 
     /// <summary>
     /// Initializes a new instance of RequirementsWorkflow with the specified client.
@@ -41,6 +42,47 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
+
+    /// <inheritdoc />
+    public async Task<RequirementScopeLayerQueryResult> ListRequirementLayersAsync(CancellationToken cancellationToken = default)
+    {
+        var layers = await _client.ListRequirementLayersAsync(cancellationToken).ConfigureAwait(false);
+        return new RequirementScopeLayerQueryResult { Items = layers };
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementScopeLayer> CreateRequirementLayerAsync(RequirementScopeLayerCreateRequestModel request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        ValidateLayerKey(request.Key);
+
+        return await _client.CreateRequirementLayerAsync(new RequirementScopeLayerRequest
+        {
+            Key = request.Key,
+            Order = request.Order,
+            Name = request.Name,
+            Description = request.Description,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
+        }, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementScopeLayer> UpdateRequirementLayerAsync(RequirementScopeLayerUpdateRequestModel request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        ValidateLayerKey(request.Key);
+
+        return await _client.UpdateRequirementLayerAsync(request.Key, new RequirementScopeLayerUpdate
+        {
+            Name = request.Name,
+            Description = request.Description,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
+        }, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken cancellationToken = default) =>
+        _client.GetEffectiveRequirementsAsync(layerKey, cancellationToken);
 
     /// <inheritdoc />
     public async Task<IFrQueryResult> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
@@ -79,6 +121,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Priority = request.Priority,
             Notes = request.Notes,
             AcceptanceCriteria = request.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
         try
@@ -112,6 +156,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Status = request.Status,
             Notes = request.Notes,
             AcceptanceCriteria = request.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
         var entry = await _client.UpdateFrAsync(frId, clientRequest, cancellationToken);
@@ -155,6 +201,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Priority = request.Priority,
             Notes = request.Notes,
             AcceptanceCriteria = request.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
         try
@@ -188,6 +236,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Status = request.Status,
             Notes = request.Notes,
             AcceptanceCriteria = request.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
         var entry = await _client.UpdateTrAsync(trId, clientRequest, cancellationToken);
@@ -231,6 +281,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Priority = request.Priority,
             Notes = request.Notes,
             AcceptanceCriteria = request.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
         try
@@ -264,6 +316,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Status = request.Status,
             Notes = request.Notes,
             AcceptanceCriteria = request.AcceptanceCriteria,
+            ScopeStartLayerKey = request.ScopeStartLayerKey,
+            ScopeEndLayerKey = request.ScopeEndLayerKey,
         };
 
         var entry = await _client.UpdateTestAsync(testId, clientRequest, cancellationToken);
@@ -729,6 +783,19 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         }
     }
 
+    private static void ValidateLayerKey(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            throw new ArgumentException("Requirement layer key cannot be null or empty", nameof(key));
+        }
+
+        if (!LayerKeyPattern.IsMatch(key))
+        {
+            throw new ArgumentException($"Invalid requirement layer key: {key}");
+        }
+    }
+
     private static void ValidateFormat(string format)
     {
         if (format != "markdown" && format != "yaml" && format != "wiki")
@@ -823,6 +890,10 @@ internal sealed class FrItemAdapter : IFrItem
     public string? Notes => _entry.Notes;
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
+    /// <inheritdoc />
+    public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -877,6 +948,10 @@ internal sealed class TrItemAdapter : ITrItem
     public string? Notes => _entry.Notes;
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
+    /// <inheritdoc />
+    public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -937,6 +1012,10 @@ internal sealed class TestItemAdapter : ITestItem
     public string? Notes => _entry.Notes;
     /// <inheritdoc />
     public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
+    /// <inheritdoc />
+    public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 

@@ -50,6 +50,15 @@ public sealed class RequirementEntity
     /// </summary>
     public string? AcceptanceCriteriaJson { get; set; }
 
+    /// <summary>First requirement scope layer where this requirement applies.</summary>
+    [Required]
+    [MaxLength(128)]
+    public string ScopeStartLayerKey { get; set; } = "layer-1";
+
+    /// <summary>Optional last requirement scope layer where this requirement applies.</summary>
+    [MaxLength(128)]
+    public string? ScopeEndLayerKey { get; set; }
+
     /// <summary>UTC timestamp when the row was first created.</summary>
     [Required]
     [MaxLength(64)]

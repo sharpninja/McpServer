@@ -44,6 +44,33 @@ function newCore(fake = new FakeBridge(), overrides: Record<string, unknown> = {
   return { context, fake };
 }
 
+const identityEnvKeys = [
+  'PLUGIN_AGENT_NAME',
+  'PLUGIN_AGENT_DEFAULT',
+  'PLUGIN_TAG',
+  'MCP_AGENT_NAME',
+  'MCP_AGENT_ID',
+  'MCP_SESSION_AGENT',
+  'MCP_SESSION_MODEL',
+  'CT2R_SOURCE_TYPE',
+  'CT2R_MODEL',
+  'CT2R_TAGS',
+] as const;
+
+function snapshotIdentityEnv(): Record<string, string | undefined> {
+  return Object.fromEntries(identityEnvKeys.map((key) => [key, process.env[key]]));
+}
+
+function restoreIdentityEnv(snapshot: Record<string, string | undefined>): void {
+  for (const key of identityEnvKeys) {
+    if (snapshot[key] === undefined) {
+      delete process.env[key];
+    } else {
+      process.env[key] = snapshot[key];
+    }
+  }
+}
+
 beforeEach(() => {
   __resetSessionShimForTests();
 });
@@ -61,6 +88,32 @@ describe('createMcpServerPluginCore', () => {
     const { context } = newCore(new FakeBridge(), { agentName: 'OpenCode', pluginId: 'opencode' });
     expect(context.agentName).toBe('OpenCode');
     expect(context.pluginId).toBe('opencode');
+  });
+
+  test('TEST-MCP-PLUGIN-PSONLY-001 forces configured Node host identity over inherited environment', () => {
+    const snapshot = snapshotIdentityEnv();
+    try {
+      for (const key of identityEnvKeys) {
+        process.env[key] = 'WrongAgent';
+      }
+
+      const { context } = newCore(new FakeBridge(), { agentName: 'OpenCode', pluginId: 'opencode' });
+
+      expect(context.agentName).toBe('OpenCode');
+      expect(context.pluginId).toBe('opencode');
+      expect(process.env.PLUGIN_AGENT_NAME).toBe('OpenCode');
+      expect(process.env.PLUGIN_AGENT_DEFAULT).toBe('OpenCode');
+      expect(process.env.MCP_AGENT_NAME).toBe('OpenCode');
+      expect(process.env.MCP_AGENT_ID).toBe('OpenCode');
+      expect(process.env.MCP_SESSION_AGENT).toBe('OpenCode');
+      expect(process.env.CT2R_SOURCE_TYPE).toBe('OpenCode');
+      expect(process.env.PLUGIN_TAG).toBe('opencode');
+      expect(process.env.MCP_SESSION_MODEL).toBe('opencode');
+      expect(process.env.CT2R_MODEL).toBe('opencode');
+      expect(process.env.CT2R_TAGS).toBe('opencode');
+    } finally {
+      restoreIdentityEnv(snapshot);
+    }
   });
 
   test('exposes the full tool descriptor catalog spanning every family', () => {

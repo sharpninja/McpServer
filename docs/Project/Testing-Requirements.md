@@ -102,7 +102,7 @@
 - TEST-MCP-103: Given a Byrd execution TODO, when unit tests are not defined, then the service rejects transition to `Implementing`; when unit tests are defined through the test-plan API, then the TODO advances to `TestReady`.
 - TEST-MCP-104: Given a Byrd execution TODO linked to requirements, session turns, and modified files, when bounded execution context or checkpoint delta context is requested, then the server returns only concise snippets, recent turn summaries, relevant files, artifacts, commits, and updated next action for that TODO.
 - TEST-MCP-105: Given the Byrd execution REST controller, STDIO MCP tools, typed client, and `adb_step` surface, when representative phase creation, active TODO lookup, status progression, and screenshot validation calls are executed, then structured contracts remain stable and Android validation results are returned without arbitrary shell passthrough.
-- TEST-MCP-106: Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, and GitHub includes `_Sidebar.md` and `_Footer.md`.
+- TEST-MCP-106: Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, GitHub includes `_Sidebar.md` and `_Footer.md`, existing generated read-only files are made writable only for export replacement/deletion, and written export files are read-only after export.
 - TEST-MCP-107: Given wiki ingest with Azure and GitHub document folders, when manifest and file modified timestamps identify a newer source, then import selects that source; when the two checks disagree, import fails unless preferredWikiFormat is supplied.
 - TEST-MCP-108: Given the REPL requirements workflow, when wiki export or import is invoked, then export returns format, docType, generatedAtUtc, outputRoot, and written file metadata, and import accepts path-keyed documents with per-document timestamps.
 - TEST-MCP-109: Given Codex, Claude Code, Copilot, and Cline agent plugins, when requirements wiki workflows are used, then each plugin exposes the wiki requirements contract and routes generate/ingest envelopes without expecting archive bytes.
@@ -345,7 +345,7 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-PLUGINCORE-003: bats: daemon roundtrip with --- terminator; one child serves N sends; auto-restart after kill; concurrent sends; persistent wrapper threads JSON params and honors fallback.
 - TEST-MCP-PLUGIN-TRIAGE-001: Every plugin skill bundle documents when and how to submit triage reports and the async expectation.
   **Acceptance Criteria:**
-  - [x] Skill tests or repository checks verify every plugin bundle includes triage guidance. (evidence: TriageSkillBundleTests plus Codex manifest.bats, Claude skills.bats, Copilot skills.bats, Cline skills.test.ts, and Grok skills.bats.)
+  - [ ] Skill tests or repository checks verify every plugin bundle includes triage guidance.
 - TEST-MCP-QBAGENT-001: Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
   **Acceptance Criteria:**
   - [x] With a valid marker, QBAgent binds baseUrl/apiKey and applies the QBAgent profile. (evidence: QBAgentBootstrapperTests valid-marker cases.)
@@ -356,6 +356,19 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] QBAgent sends a prompt and receives a plain assistant response when no tool action is returned. (evidence: QBAgentSendingIntegrationTests.QBAgent_NoToolAction_ReturnsPlainResponse - real Agent Framework loop over OpenAI wire, 1 orchestration round, plain text returned.)
   - [x] When QuadBrain returns an external tool call, the Agent Framework loop executes the corresponding tool and continues the turn. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolCall_AgentExecutesAndContinues - external apply_patch executed by FunctionInvokingChatClient, 2 rounds, final answer returned.)
   - [x] Internal tools are not executed by the agent (they were executed server-side); only external tool calls reach the agent. (evidence: QBAgentSendingIntegrationTests.QBAgent_InternalTool_ExecutedServerSide_NeverReachesAgent - mcp_todo_update ran in the internal executor and was stripped; agent invoked no tool, single round.)
+  - [x] A QBAgent coding prompt executes the real QBAgent file-write tool against an isolated temp workspace and asserts the requested file exists on disk with the requested content. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+  - [x] The same test asserts QBAgent sends the real file-tool result back into QuadBrain and displays the continued final answer. (evidence: QBAgentSendingIntegrationTests.QBAgent_CreateHelloWorldCppPrompt_ExecutesWriteFileActionAndWritesTranscript)
+  - [x] The same test writes a JSONL transcript with prompt, tool call, executed action path/result, and final displayed output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-create-hello-world-cpp-*.jsonl)
+  - [x] Negative integration coverage proves QBAgent does not fake success when the required external tool is unavailable or the real tool fails. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+- TEST-MCP-QBAGENTINT-002: Negative integration coverage for QBAgent required external-tool failures.
+  **Acceptance Criteria:**
+  - [x] When the real write_file tool is rejected by the MCP server, QBAgent creates no file, does not consume the scripted success response, and displays an explicit failure that the requested action was not completed. (evidence: QBAgentSendingIntegrationTests.QBAgent_ExternalToolFailure_DoesNotFabricateCompletedAction)
+  - [x] The test writes a JSONL transcript with the prompt, emitted tool call, rejected tool result, and displayed failure output. (evidence: TestResults/QBAgentSendingIntegrationTests/qbagent-tool-failure-*.jsonl)
+- TEST-MCP-QBAGENTTOOL-001: Build tests and deployment smoke checks cover QBAgent .NET global-tool packaging.
+  **Acceptance Criteria:**
+  - [x] Build tests verify QBAgent has pack/deploy NUKE targets. (evidence: BuildTargetTests.Build_HasQBAgentToolTargets)
+  - [x] Build tests verify the QBAgent project is configured with PackAsTool, ToolCommandName `qbagent`, and PackageId `SharpNinja.McpServer.QBAgent`. (evidence: BuildTargetTests.QBAgentProject_IsConfiguredAsDotNetTool)
+  - [x] Deployment validation proves `qbagent --version` resolves to the freshly packed package version/build. (evidence: DeployQBAgentTool; `qbagent --version` -> `1.3.0+0228849741389a66e24c37a49577468333b78a44`)
 - TEST-MCP-QBEXEC-001: Classifier marks mcp_ tools internal; interceptor executes handled internal tools and strips them while keeping external and failed/unhandled internal; the OpenAI surface strips internal tool calls and emits only external ones (and emits none when all elected tools ran server-side).
   **Acceptance Criteria:**
   - [x] Tools are classified internal (mcp_ prefix) vs external. (evidence: QuadBrainToolInterceptionTests classifier cases.)
@@ -376,15 +389,27 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] An internal tool failure is surfaced as a note rather than a tool call.
 - TEST-MCP-QBLIVE-001: Service-composition coverage of the real four-role Quad-Brain loop (QuadBrainOrchestrationService + BrainSlotInvocationService + BrainSlotRegistryService + in-memory key server), faking only IBrainSlotChatClientFactory and the committing transaction coordinator.
   **Acceptance Criteria:**
-  - [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
+  - [x] Normal orchestration dispatches LeftHemisphere and RightHemisphere in parallel, waits for both responses, then invokes ArbiterOfTruth and returns the committed Arbiter decision.
+  - [x] Role prompt/option coverage verifies LeftHemisphere emphasizes creativity with no temperature override, RightHemisphere emphasizes absolute accuracy with provider temperature 0.0, CuriosityEngine is described as a curious researcher, and ArbiterOfTruth is described as arbiter of truth for code tasks plus enforcer of rules for all tasks.
+  - [x] CuriosityEngine is invoked only when both hemispheres fail to produce valid committed output and no Curiosity output is returned directly.
+  - [x] Arbiter semantic rejection triggers a voting/reconciliation round before the loop returns a final decision or fails closed.
   - [x] A tool_calls Arbiter output is returned verbatim as the orchestration output.
   - [x] With only three roles seeded the loop rejects QuadNotReady without calling any brain.
   - [x] With execution disabled no brain is called and the loop rejects ExecutionDisabled.
 - TEST-MCP-QBLIVEINT-001: Integration coverage that drives the real orchestration through POST /v1/chat/completions over four seeded slots, faking only the per-brain LLM call and the transaction coordinator.
   **Acceptance Criteria:**
-  - [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) with all four roles invoked.
+  - [x] A plain Arbiter decision is returned as the assistant message (finish_reason stop) after the normal Left, Right, Arbiter path.
   - [x] A tool_calls Arbiter output surfaces as an OpenAI assistant tool call (finish_reason tool_calls).
   - [x] With no slots seeded the endpoint returns an empty decision (loop rejects QuadNotReady).
+- TEST-MCP-QBOLLAMA-001: Local Ollama integration coverage that assigns the default local Ollama model to all four QuadBrain slots and drives POST /v1/chat/completions without faking per-brain LLM calls.
+  **Acceptance Criteria:**
+  - [x] The test resolves the local default Ollama model from the running Ollama server, unless MCP_QUADBRAIN_OLLAMA_MODEL is explicitly set.
+  - [x] All four slots are seeded as OpenAICompatible with http://localhost:11434/v1 and the same resolved model.
+  - [x] Sending "Hello" and "Create Hello World in C++" through the OpenAI-compatible endpoint returns a non-empty assistant response for each prompt.
+  - [x] The normal workflow invokes LeftHemisphere and RightHemisphere before ArbiterOfTruth, and does not invoke CuriosityEngine.
+  - [x] OpenAI-compatible `content`, `reasoning`, and `reasoning_content` assistant fields are extracted as brain output.
+  - [x] A real QBAgent session and turn are opened, passed to the endpoint via X-Session-Id and X-Turn-Id, and the persisted MCP session processing dialog captures each invoked role prompt and selected output.
+  - [x] Each integration run writes the generated sessionId, turnId, routes, selected outputs, fetched session-log snapshot, and a JSONL transcript to `TestResults/QuadBrainOllamaEndpointIntegrationTests`.
 - TEST-MCP-QBOPENAI-001: An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and returns an OpenAI-shaped response with the Arbiter output as the assistant message; later slices assert tool definitions flow through and assistant tool_calls are emitted, and that QBAgent executes them via the Agent Framework loop.
   **Acceptance Criteria:**
   - [x] An OpenAI ChatCompletion request maps to QuadBrain orchestration and returns the Arbiter output as the assistant message. (evidence: QuadBrainOpenAiChatServiceTests + QuadBrainOpenAiEndpointIntegrationTests.ChatCompletions_Authorized_ReturnsArbiterContent.)
@@ -479,7 +504,7 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Test validates cross-platform Environment.NewLine compatibility
 - TEST-MCP-REPL-TRIAGE-001: Full client.triage.* and workflow.triage.* REPL surface works with correct envelopes.
   **Acceptance Criteria:**
-  - [x] REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors. (evidence: TriageClientTests and TriageWorkflowTests.)
+  - [ ] REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors.
 - TEST-MCP-REQAC-001: Creating FR/TR/TEST with acceptanceCriteria and reading them back returns an identical AcceptanceCriterion list (id/text/isSatisfied/evidence), workspace-scoped.
 - TEST-MCP-REQAC-002: Null or empty acceptanceCriteria round-trips as an empty list with no null leakage.
 - TEST-MCP-REQAC-003: The requirements document renderer emits a deterministic Acceptance Criteria block and the parser tolerates it without throwing.
@@ -510,25 +535,25 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-TRACE-REPL-001: Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
 - TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
   **Acceptance Criteria:**
-  - [x] Unit and integration tests cover valid and invalid report submission through public surfaces. (evidence: TriageControllerTests, TriageClientTests, TriageWorkflowTests, and TriageMcpToolTests.)
+  - [ ] Unit and integration tests cover valid and invalid report submission through public surfaces.
 - TEST-MCP-TRIAGE-002: Deterministic grouping, McpServer workspace routing for core and plugin bugs, and 15-minute quiet-window behavior are verified.
   **Acceptance Criteria:**
-  - [x] Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior. (evidence: TriageServiceTests matching, workspace, and McpServer routing cases.)
+  - [ ] Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior.
 - TEST-MCP-TRIAGE-003: Research worker invokes configured direct agent with group JSON and prompt.
   **Acceptance Criteria:**
-- [x] Tests verify dispatch input, configured prompt rendering, and direct-agent options. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo, TriagePromptTemplateTests, and ConfiguredTriageResearchRunnerTests.)
+  - [ ] Tests verify dispatch input and configured prompt rendering.
 - TEST-MCP-TRIAGE-004: Schema-valid research output creates exactly one BUG-TRIAGE-### TODO.
   **Acceptance Criteria:**
-  - [x] Tests verify idempotent TODO creation from valid research output. (evidence: TriageServiceTests.ProcessDueGroupsAsync_ValidResearchOutput_CreatesExactlyOneBugTriageTodo.)
+  - [ ] Tests verify idempotent TODO creation from valid research output.
 - TEST-MCP-TRIAGE-005: Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state.
   **Acceptance Criteria:**
-  - [x] Tests verify failed runs preserve output or errors and do not create TODOs. (evidence: TriageServiceTests.ProcessDueGroupsAsync_InvalidResearchOutput_CreatesNoTodoAndPreservesFailure.)
+  - [ ] Tests verify failed runs preserve output or errors and do not create TODOs.
 - TEST-MCP-TRIAGE-006: Multi-workspace isolation prevents cross-workspace grouping and status leakage.
   **Acceptance Criteria:**
-  - [x] Tests verify query filters and grouping scope never cross workspace boundaries. (evidence: TriageServiceTests.SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups.)
+  - [ ] Tests verify query filters and grouping scope never cross workspace boundaries.
 - TEST-MCP-TRIAGE-REQAC-001: Every new FR/TR/TEST acceptance criterion is referenced by at least one test and passes ValidateTraceability.
   **Acceptance Criteria:**
-  - [x] Traceability validation covers all triage requirement IDs and acceptance criteria. (evidence: ValidateTraceability target.)
+  - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   **Acceptance Criteria:**
   - [ ] Criterion A
@@ -583,16 +608,67 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [x] PUT request returns 405 Method Not Allowed
   - [x] Response includes Allow: POST header
-- TEST-WFL-001: Test requirement for complete workflow
-
 - TEST-TRIAGE-001: Unit and contract tests cover triage dashboard bucketing data, group/report/result rendering inputs, empty/error states, workspace filtering, and typed client dispatch for Director and MCP Web consumers.
   **Acceptance Criteria:**
-  - [x] Service tests cover dashboard queue composition, run history/result mapping, workspace isolation, and empty data. (evidence: `TriageServiceTests.GetDashboardAsync_WithGroupsReportsAndRuns_ReturnsQueueBucketsAndRunHistory`, `TriageServiceTests.GetDashboardAsync_NoRows_ReturnsEmptyCollections`, `TriageServiceTests.QueryRunsAsync_WithFilters_ReturnsWorkspaceScopedRuns`)
-  - [x] Controller tests cover dashboard, run query, run detail, and not-found/error envelopes. (evidence: `TriageControllerTests.GetDashboardAsync_ReturnsDashboardState`, `TriageControllerTests.QueryRunsAsync_ReturnsRunHistory`, `TriageControllerTests.GetRunAsync_WhenMissing_ReturnsNotFound`)
-  - [x] Client tests cover new typed triage methods and query-string dispatch. (evidence: `TriageClientTests.GetDashboardAsync_SendsWorkspaceFilter`, `TriageClientTests.QueryRunsAsync_SendsFilters`, `TriageClientTests.GetRunAsync_SendsCorrectUrl`)
-
+  - [ ] Service tests cover dashboard queue composition, run history/result mapping, workspace isolation, and empty data.
+  - [ ] Controller tests cover dashboard, run query, run detail, and not-found/error envelopes.
+  - [ ] Client tests cover new typed triage methods and query-string dispatch.
 - TEST-TRIAGE-002: Unit and client tests cover triage-created TODO listing, workspace filtering, missing TODO anchors, group/run context mapping, and typed client dispatch.
   **Acceptance Criteria:**
-  - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: `TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext`)
-  - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: `TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex`)
-  - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: `TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter`)
+  - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
+  - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
+  - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+- TEST-UPD-001: Original description
+- TEST-WFL-001: Test requirement for complete workflow
+- TEST-MCP-PLUGIN-PSONLY-001: Bats-to-Pester parity covers every legacy Bats scenario for the plugin PowerShell-only migration.
+  **Acceptance Criteria:**
+  - [x] The parity inventory maps each legacy Bats scenario to a Pester requirement/test case. (evidence: BATS-PESTER-PARITY.md, bats-pester-parity.generated.json)
+  - [x] Pester discovery creates one executable test for each legacy Bats scenario plus focused PowerShell runtime/static tests. (evidence: Invoke-Pester plugins/core/test-fixtures/pester)
+  - [x] The parity suite passes with zero failures and zero skips. (evidence: 341 passed, 0 failed, 0 skipped)
+- TEST-MCP-PLUGIN-PSONLY-002: PowerShell-only package, runtime, fail-closed, and plugin skill validation blocks Bash and Node runtime regressions.
+  **Acceptance Criteria:**
+  - [x] Pester tests verify generated packages, wrappers, runtime paths, fail-closed paths, and skill guidance. (evidence: PluginPowerShellOnly.Tests.ps1, PluginPowerShellRuntime.Tests.ps1, PluginLegacyBatsBehavior.Tests.ps1)
+  - [x] `ValidatePluginPowerShellOnly` rejects forbidden runtime files and stale Bash/Node helper references across all plugin package roots. (evidence: build.ps1 ValidatePluginPowerShellOnly)
+  - [x] The staged plugin and all supported plugin repo copies are synchronized from the same PowerShell runtime source. (evidence: sync-plugin-core.ps1)
+- TEST-MCP-MARKER-TRIAGE-001: Production default marker template rendering covers MCP Server and plugin failure triage guidance.
+  **Acceptance Criteria:**
+  - [x] A render test verifies the production default marker prompt tells agents to report MCP Server and plugin failures through the triage tool only. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies agents are told not to wait for triage resolution and to continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies failed live triage submissions are written as normal failsafe YAML documents for later replay. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] A render test verifies separate code, docs, requirements, plugin, deployment, or configuration repair workflows are captured as detailed triage reports. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+
+- TEST-MCP-REQSCOPE-001: Layer catalog CRUD, immutability, defaults, duplicate rejection, and workspace isolation tests cover FR-MCP-REQSCOPE-001 and TR-MCP-REQSCOPE-001 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Layer catalog tests prove seeded `layer-1`, persisted metadata, immutable order, duplicate rejection, invalid key/order rejection, layer sunset validation, and workspace isolation.
+
+- TEST-MCP-WORKSPACE-LAYER-001: Workspace current layer get/set and validation tests cover FR-MCP-WORKSPACE-LAYER-001 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Workspace current layer tests prove default `layer-1`, get/set endpoints, same-workspace validation, and current-visibility consumers using workspace state.
+
+- TEST-MCP-REQSCOPE-002: Requirement scope create, update, batch, import, and defaulting tests cover FR-MCP-REQSCOPE-002 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Requirement scope mutation tests prove FR/TR/TEST scope persistence, `layer-1+` defaults, missing layer rejection, and end-before-start rejection.
+
+- TEST-MCP-REQSCOPE-003: Effective current requirement visibility tests cover FR-MCP-REQSCOPE-003 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Effective visibility tests prove inclusive start layers, inclusive requirement end layers, inclusive layer sunset boundaries, expired requirement exclusion, layer-sunset exclusion, and effective-only mappings.
+
+- TEST-MCP-REQSCOPE-004: Traceability and enforcement tests cover TR-MCP-REQSCOPE-004 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Enforcement tests prove current-layer traceability, all-record metadata integrity validation, test evidence requirements, and zero-skip phase gates.
+
+- TEST-MCP-REQSCOPE-005: REST, client, REPL, YAML, and plugin surface parity tests cover TR-MCP-REQSCOPE-002 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Surface parity tests prove typed REST/client/REPL coverage, layer sunset updates, YAML validation, scoped requirement DTOs, and deprecated metadata consistency.
+
+- TEST-MCP-REQSCOPE-006: Markdown/wiki import-export round-trip tests cover TR-MCP-REQSCOPE-003 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Import-export tests prove scope metadata rendering, parsing, backward-compatible defaults, and idempotent re-import.
+
+- TEST-MCP-REQSCOPE-REPL-001: REPL integration final acceptance covers FR-MCP-REQSCOPE-004 acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] REPL integration creates a new layer, adds a requirement starting in that layer, sunsets a layer after the new layer, sunsets a requirement before the new layer, and verifies current requirements before and after the new layer.
+
+- TEST-MCP-REQSCOPE-REQAC-001: Requirement acceptance-criterion traceability tests cover all new REQSCOPE FR/TR/TEST acceptance criteria.
+  **Acceptance Criteria:**
+  - [ ] Every new REQSCOPE acceptance criterion is referenced by at least one passing test and validated by the plan-wide traceability gate.

@@ -545,4 +545,81 @@ public sealed class RequirementsClientTests
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/fr/repair", handler.LastRequest.RequestUri!.AbsolutePath);
     }
+
+    /// <summary>
+    /// TEST-MCP-REQSCOPE-005: requirement layer catalog client methods use the typed
+    /// endpoints and preserve layer sunset DTO fields.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RequirementLayersAsync_UseTypedEndpointsAndScopeDtoFields()
+    {
+        var listHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """[{"key":"layer-1","order":1,"name":"Layer 1","scopeEndLayerKey":null},{"key":"layer-2","order":2,"name":"Layer 2","scopeEndLayerKey":"layer-3"}]""");
+        using var listHttp = new HttpClient(listHandler);
+        var listClient = new RequirementsClient(listHttp, DefaultOptions);
+
+        var layers = await listClient.ListRequirementLayersAsync();
+
+        Assert.Equal(HttpMethod.Get, listHandler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/layers", listHandler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("layer-3", layers[1].ScopeEndLayerKey);
+
+        var createHandler = new MockHttpHandler(
+            HttpStatusCode.Created,
+            """{"key":"layer-2","order":2,"name":"Layer 2","scopeEndLayerKey":"layer-3"}""");
+        using var createHttp = new HttpClient(createHandler);
+        var createClient = new RequirementsClient(createHttp, DefaultOptions);
+
+        var created = await createClient.CreateRequirementLayerAsync(new RequirementScopeLayerRequest
+        {
+            Key = "layer-2",
+            Order = 2,
+            Name = "Layer 2",
+            ScopeEndLayerKey = "layer-3"
+        });
+
+        Assert.Equal(HttpMethod.Post, createHandler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/layers", createHandler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"scopeEndLayerKey\":\"layer-3\"", createHandler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Equal("layer-2", created.Key);
+
+        var updateHandler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"key":"layer-2","order":2,"name":"Layer 2 updated","scopeEndLayerKey":"layer-3"}""");
+        using var updateHttp = new HttpClient(updateHandler);
+        var updateClient = new RequirementsClient(updateHttp, DefaultOptions);
+
+        await updateClient.UpdateRequirementLayerAsync("layer-2", new RequirementScopeLayerUpdate
+        {
+            Name = "Layer 2 updated",
+            ScopeEndLayerKey = "layer-3"
+        });
+
+        Assert.Equal(HttpMethod.Put, updateHandler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/layers/layer-2", updateHandler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"scopeEndLayerKey\":\"layer-3\"", updateHandler.LastRequestBody!, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQSCOPE-005: effective requirement client queries include the
+    /// preview layer key and deserialize scoped requirement metadata.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task GetEffectiveRequirementsAsync_UsesLayerPreviewAndDeserializesScopeFields()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"currentLayer":{"key":"layer-2","order":2,"name":"Layer 2"},"functional":[{"id":"FR-MCP-901","title":"Future","body":"Body","scopeStartLayerKey":"layer-2","scopeEndLayerKey":null}],"technical":[],"testing":[],"mappings":[]}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.GetEffectiveRequirementsAsync("layer-2");
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/effective", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("layerKey=layer-2", handler.LastRequest.RequestUri.Query);
+        Assert.Equal("layer-2", result.CurrentLayer.Key);
+        Assert.Equal("layer-2", Assert.Single(result.Functional).ScopeStartLayerKey);
+    }
 }

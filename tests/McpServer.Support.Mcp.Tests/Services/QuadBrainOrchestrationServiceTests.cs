@@ -17,7 +17,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 {
     private const string Workspace = @"F:\GitHub\McpServer";
 
-    /// <summary>Full orchestration invokes Left, Right, Curiosity, then Arbiter and returns the committed final output.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Left, Right, then Arbiter and returns the committed final output.</summary>
     [Fact]
     public async Task ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision()
     {
@@ -68,13 +68,310 @@ public sealed class QuadBrainOrchestrationServiceTests
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision", response.Output);
         Assert.Equal("txn-ArbiterOfTruth", response.TransactionId);
-        Assert.Equal(4, response.RoleResults.Count);
-        Assert.Equal([BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine, BrainSlotRoles.ArbiterOfTruth], response.RoleResults.Select(item => item.Role).ToArray());
+        Assert.Equal(3, response.RoleResults.Count);
+        Assert.Equal([BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth], response.RoleResults.Select(item => item.Role).ToArray());
         var calledSlotIds = invocation.ReceivedCalls()
             .Where(call => call.GetMethodInfo().Name == nameof(IBrainSlotInvocationService.InvokeAsync))
             .Select(call => (string)call.GetArguments()[0]!)
             .ToArray();
-        Assert.Equal(["lefthemisphere-main", "righthemisphere-main", "curiosityengine-main", "arbiteroftruth-main"], calledSlotIds);
+        Assert.Equal(["lefthemisphere-main", "righthemisphere-main", "arbiteroftruth-main"], calledSlotIds);
+    }
+
+    /// <summary>TEST-MCP-QBLIVE-001: Left and Right hemispheres run in parallel, and AoT waits for both responses.</summary>
+    [Fact]
+    public async Task ExecuteFullOrchestrationAsync_StartsRightBeforeLeftCompletesAndGatesAotOnBoth()
+    {
+        using var db = CreateDbContext();
+        var registry = Substitute.For<IBrainSlotRegistryService>();
+        var invocation = Substitute.For<IBrainSlotInvocationService>();
+        var slots = BrainSlotRoles.All.Select(role => Slot(role)).ToDictionary(slot => slot.Role, StringComparer.Ordinal);
+        registry.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new BrainSlotStatusResponse
+            {
+                QuadReady = true,
+                RoleReadiness = BrainSlotRoles.All.ToDictionary(role => role, _ => true, StringComparer.Ordinal),
+            });
+        foreach (var pair in slots)
+        {
+            registry.GetEnabledEntityForRoleAsync(pair.Key, Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<BrainSlotDefinitionEntity?>(pair.Value));
+        }
+
+        var leftStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var rightStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var arbiterStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var leftCompletion = new TaskCompletionSource<BrainSlotInvokeResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var rightCompletion = new TaskCompletionSource<BrainSlotInvokeResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
+        invocation.InvokeAsync(Arg.Any<string>(), Arg.Any<BrainSlotInvokeRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var slotId = (string)call[0]!;
+                var slot = slots.Values.Single(item => item.SlotId == slotId);
+                return slot.Role switch
+                {
+                    BrainSlotRoles.LeftHemisphere => StartAndWait(leftStarted, leftCompletion.Task),
+                    BrainSlotRoles.RightHemisphere => StartAndWait(rightStarted, rightCompletion.Task),
+                    BrainSlotRoles.ArbiterOfTruth => StartAndWait(
+                        arbiterStarted,
+                        Task.FromResult(Response(slot, "final decision"))),
+                    _ => Task.FromResult(Response(slot, slot.Role + " evidence")),
+                };
+            });
+        var service = CreateService(db, registry, invocation);
+
+        var orchestration = service.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = "decide this",
+            TurnId = "turn-parallel",
+        });
+
+        try
+        {
+            await leftStarted.Task.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
+            await rightStarted.Task.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
+            Assert.False(arbiterStarted.Task.IsCompleted);
+
+            leftCompletion.SetResult(Response(slots[BrainSlotRoles.LeftHemisphere], "left evidence"));
+            await Task.Delay(TimeSpan.FromMilliseconds(50)).ConfigureAwait(true);
+            Assert.False(arbiterStarted.Task.IsCompleted);
+
+            rightCompletion.SetResult(Response(slots[BrainSlotRoles.RightHemisphere], "right evidence"));
+            await arbiterStarted.Task.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
+            var response = await orchestration.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
+
+            Assert.Equal("committed", response.Status);
+            Assert.Equal("final decision", response.Output);
+            Assert.Equal(
+                [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+                response.RoleResults.Select(item => item.Role).ToArray());
+        }
+        finally
+        {
+            leftCompletion.TrySetResult(Response(slots[BrainSlotRoles.LeftHemisphere], "left evidence"));
+            rightCompletion.TrySetResult(Response(slots[BrainSlotRoles.RightHemisphere], "right evidence"));
+        }
+
+        static Task<BrainSlotInvokeResponse> StartAndWait(
+            TaskCompletionSource<bool> started,
+            Task<BrainSlotInvokeResponse> completion)
+        {
+            started.TrySetResult(true);
+            return completion;
+        }
+
+        static BrainSlotInvokeResponse Response(BrainSlotDefinitionEntity slot, string output)
+            => new()
+            {
+                Status = "committed",
+                Reason = BrainSlotReasonCodes.None,
+                SlotId = slot.SlotId,
+                Role = slot.Role,
+                ModelId = slot.ModelId,
+                TransactionId = "txn-" + slot.Role,
+                DiffgramId = "diff-" + slot.Role,
+                Output = output,
+                StartedAtUtc = DateTimeOffset.UtcNow,
+                CompletedAtUtc = DateTimeOffset.UtcNow,
+            };
+    }
+
+    /// <summary>TEST-MCP-QBLIVE-001: Quad roles carry role-specific descriptions and Right uses provider temperature.</summary>
+    [Fact]
+    public async Task ExecuteFullOrchestrationAsync_BuildsRoleSpecificPromptInstructions()
+    {
+        using var db = CreateDbContext();
+        var registry = Substitute.For<IBrainSlotRegistryService>();
+        var invocation = Substitute.For<IBrainSlotInvocationService>();
+        var slots = BrainSlotRoles.All.Select(role => Slot(role)).ToDictionary(slot => slot.Role, StringComparer.Ordinal);
+        var prompts = new Dictionary<string, string>(StringComparer.Ordinal);
+        var temperatures = new Dictionary<string, double?>(StringComparer.Ordinal);
+        registry.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new BrainSlotStatusResponse
+            {
+                QuadReady = true,
+                RoleReadiness = BrainSlotRoles.All.ToDictionary(role => role, _ => true, StringComparer.Ordinal),
+            });
+        foreach (var pair in slots)
+        {
+            registry.GetEnabledEntityForRoleAsync(pair.Key, Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<BrainSlotDefinitionEntity?>(pair.Value));
+        }
+
+        invocation.InvokeAsync(Arg.Any<string>(), Arg.Any<BrainSlotInvokeRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var slotId = (string)call[0]!;
+                var request = (BrainSlotInvokeRequest)call[1]!;
+                var slot = slots.Values.Single(item => item.SlotId == slotId);
+                lock (prompts)
+                {
+                    prompts[slot.Role] = request.Input;
+                    temperatures[slot.Role] = request.Temperature;
+                }
+                return Task.FromResult(new BrainSlotInvokeResponse
+                {
+                    Status = "committed",
+                    Reason = BrainSlotReasonCodes.None,
+                    SlotId = slot.SlotId,
+                    Role = slot.Role,
+                    ModelId = slot.ModelId,
+                    TransactionId = "txn-" + slot.Role,
+                    DiffgramId = "diff-" + slot.Role,
+                    Output = slot.Role == BrainSlotRoles.ArbiterOfTruth ? "final decision" : slot.Role + " evidence",
+                    StartedAtUtc = DateTimeOffset.UtcNow,
+                    CompletedAtUtc = DateTimeOffset.UtcNow,
+                });
+            });
+        var service = CreateService(db, registry, invocation);
+
+        await service.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = "decide this",
+            TurnId = "turn-prompt-contract",
+        }).ConfigureAwait(true);
+
+        Assert.Contains("creativity", prompts[BrainSlotRoles.LeftHemisphere], StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("temperature", prompts[BrainSlotRoles.LeftHemisphere], StringComparison.OrdinalIgnoreCase);
+        Assert.Null(temperatures[BrainSlotRoles.LeftHemisphere]);
+        Assert.Contains("absolute accuracy", prompts[BrainSlotRoles.RightHemisphere], StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0.0, temperatures[BrainSlotRoles.RightHemisphere]);
+        Assert.Contains("arbiter of truth for code tasks", prompts[BrainSlotRoles.ArbiterOfTruth], StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("enforcer of rules for all tasks", prompts[BrainSlotRoles.ArbiterOfTruth], StringComparison.OrdinalIgnoreCase);
+        Assert.Null(temperatures[BrainSlotRoles.ArbiterOfTruth]);
+    }
+
+    /// <summary>TEST-MCP-QBLIVE-001: Curiosity is invoked only when both hemispheres fail to produce valid committed output.</summary>
+    [Fact]
+    public async Task ExecuteFullOrchestrationAsync_WhenBothHemispheresProduceNoValidOutput_InvokesCuriosityWithoutReturningIt()
+    {
+        using var db = CreateDbContext();
+        var registry = Substitute.For<IBrainSlotRegistryService>();
+        var invocation = Substitute.For<IBrainSlotInvocationService>();
+        var slots = BrainSlotRoles.All.Select(role => Slot(role)).ToDictionary(slot => slot.Role, StringComparer.Ordinal);
+        var capturedRequests = new List<(string SlotId, BrainSlotInvokeRequest Request)>();
+        registry.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new BrainSlotStatusResponse
+            {
+                QuadReady = true,
+                RoleReadiness = BrainSlotRoles.All.ToDictionary(role => role, _ => true, StringComparer.Ordinal),
+            });
+        foreach (var pair in slots)
+        {
+            registry.GetEnabledEntityForRoleAsync(pair.Key, Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<BrainSlotDefinitionEntity?>(pair.Value));
+        }
+
+        invocation.InvokeAsync(Arg.Any<string>(), Arg.Any<BrainSlotInvokeRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var slotId = (string)call[0]!;
+                var request = (BrainSlotInvokeRequest)call[1]!;
+                capturedRequests.Add((slotId, request));
+                var slot = slots.Values.Single(item => item.SlotId == slotId);
+                return Task.FromResult(new BrainSlotInvokeResponse
+                {
+                    Status = "committed",
+                    Reason = BrainSlotReasonCodes.None,
+                    SlotId = slot.SlotId,
+                    Role = slot.Role,
+                    ModelId = slot.ModelId,
+                    TransactionId = "txn-" + slot.Role,
+                    DiffgramId = "diff-" + slot.Role,
+                    Output = slot.Role == BrainSlotRoles.CuriosityEngine ? "frustration and research context" : string.Empty,
+                    StartedAtUtc = DateTimeOffset.UtcNow,
+                    CompletedAtUtc = DateTimeOffset.UtcNow,
+                });
+            });
+        var service = CreateService(db, registry, invocation);
+
+        var response = await service.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = "decide this",
+            TurnId = "turn-curiosity",
+            AdmitCuriosityToGraphRag = true,
+        }).ConfigureAwait(true);
+
+        Assert.Equal("rejected", response.Status);
+        Assert.Null(response.Output);
+        Assert.Equal([BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine], response.RoleResults.Select(item => item.Role).ToArray());
+        Assert.Equal(["lefthemisphere-main", "righthemisphere-main", "curiosityengine-main"], capturedRequests.Select(item => item.SlotId).ToArray());
+        Assert.True(capturedRequests.Single(item => item.SlotId == "curiosityengine-main").Request.AdmitToGraphRag);
+        Assert.Contains(
+            "curious researcher",
+            capturedRequests.Single(item => item.SlotId == "curiosityengine-main").Request.Input,
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>TEST-MCP-QBLIVE-001: Arbiter semantic rejection triggers a bounded voting/reconciliation round.</summary>
+    [Fact]
+    public async Task ExecuteFullOrchestrationAsync_WhenArbiterRejectsInitialEvidence_RunsVotingRound()
+    {
+        using var db = CreateDbContext();
+        var registry = Substitute.For<IBrainSlotRegistryService>();
+        var invocation = Substitute.For<IBrainSlotInvocationService>();
+        var slots = BrainSlotRoles.All.Select(role => Slot(role)).ToDictionary(slot => slot.Role, StringComparer.Ordinal);
+        var invocationCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var votingPrompts = new List<(string Role, string Prompt, double? Temperature)>();
+        registry.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new BrainSlotStatusResponse
+            {
+                QuadReady = true,
+                RoleReadiness = BrainSlotRoles.All.ToDictionary(role => role, _ => true, StringComparer.Ordinal),
+            });
+        foreach (var pair in slots)
+        {
+            registry.GetEnabledEntityForRoleAsync(pair.Key, Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult<BrainSlotDefinitionEntity?>(pair.Value));
+        }
+
+        invocation.InvokeAsync(Arg.Any<string>(), Arg.Any<BrainSlotInvokeRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var slotId = (string)call[0]!;
+                var request = (BrainSlotInvokeRequest)call[1]!;
+                var slot = slots.Values.Single(item => item.SlotId == slotId);
+                invocationCounts.TryGetValue(slot.Role, out var count);
+                invocationCounts[slot.Role] = ++count;
+                if (count > 1)
+                    votingPrompts.Add((slot.Role, request.Input, request.Temperature));
+                var output = slot.Role switch
+                {
+                    BrainSlotRoles.ArbiterOfTruth when count == 1 => "REJECT: both hemisphere responses are not valid enough.",
+                    BrainSlotRoles.ArbiterOfTruth => "final decision after voting",
+                    _ when count > 1 => slot.Role + " vote",
+                    _ => slot.Role + " evidence",
+                };
+                return Task.FromResult(new BrainSlotInvokeResponse
+                {
+                    Status = "committed",
+                    Reason = BrainSlotReasonCodes.None,
+                    SlotId = slot.SlotId,
+                    Role = slot.Role,
+                    ModelId = slot.ModelId,
+                    TransactionId = "txn-" + slot.Role + "-" + count,
+                    DiffgramId = "diff-" + slot.Role + "-" + count,
+                    Output = output,
+                    StartedAtUtc = DateTimeOffset.UtcNow,
+                    CompletedAtUtc = DateTimeOffset.UtcNow,
+                });
+            });
+        var service = CreateService(db, registry, invocation);
+
+        var response = await service.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
+        {
+            Input = "decide this",
+            TurnId = "turn-vote",
+        }).ConfigureAwait(true);
+
+        Assert.Equal("committed", response.Status);
+        Assert.Equal("final decision after voting", response.Output);
+        Assert.Equal(
+            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth, BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+            response.RoleResults.Select(item => item.Role).ToArray());
+        Assert.False(invocationCounts.ContainsKey(BrainSlotRoles.CuriosityEngine));
+        Assert.DoesNotContain("temperature", votingPrompts.Single(item => item.Role == BrainSlotRoles.LeftHemisphere).Prompt, StringComparison.OrdinalIgnoreCase);
+        Assert.Null(votingPrompts.Single(item => item.Role == BrainSlotRoles.LeftHemisphere).Temperature);
+        Assert.Equal(0.0, votingPrompts.Single(item => item.Role == BrainSlotRoles.RightHemisphere).Temperature);
     }
 
     /// <summary>Full orchestration rejects before provider calls when the workspace is not quad-ready.</summary>

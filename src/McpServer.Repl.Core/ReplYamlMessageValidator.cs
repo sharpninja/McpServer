@@ -283,6 +283,8 @@ internal static class ReplYamlMessageValidator
                 RequireText(args, "priority", errors);
                 RequireText(args, "area", errors);
                 OptionalText(args, "notes", errors);
+                OptionalText(args, "scopeStartLayerKey", errors);
+                OptionalText(args, "scopeEndLayerKey", errors);
             },
             [RequirementsCommandShapes.UpdateFrMethod] = static (args, errors) => ValidateRequirementPatch(args, errors),
             [RequirementsCommandShapes.CreateFrBatchMethod] = static (args, errors) =>
@@ -317,6 +319,8 @@ internal static class ReplYamlMessageValidator
                 RequireText(args, "area", errors);
                 RequireText(args, "subarea", errors);
                 OptionalText(args, "notes", errors);
+                OptionalText(args, "scopeStartLayerKey", errors);
+                OptionalText(args, "scopeEndLayerKey", errors);
             },
             [RequirementsCommandShapes.UpdateTrMethod] = static (args, errors) => ValidateRequirementPatch(args, errors),
             [RequirementsCommandShapes.CreateTrBatchMethod] = static (args, errors) =>
@@ -349,6 +353,8 @@ internal static class ReplYamlMessageValidator
                 RequireText(args, "area", errors);
                 OptionalText(args, "testType", errors);
                 OptionalText(args, "notes", errors);
+                OptionalText(args, "scopeStartLayerKey", errors);
+                OptionalText(args, "scopeEndLayerKey", errors);
             },
             [RequirementsCommandShapes.UpdateTestMethod] = static (args, errors) => ValidateRequirementPatch(args, errors),
             [RequirementsCommandShapes.CreateTestBatchMethod] = static (args, errors) =>
@@ -442,6 +448,26 @@ internal static class ReplYamlMessageValidator
                     errors.Add("payload.params must include either content or documents.");
                 }
             },
+            [RequirementsCommandShapes.ListLayersMethod] = NoParameters,
+            [RequirementsCommandShapes.CreateLayerMethod] = static (args, errors) =>
+            {
+                RequireText(args, "key", errors);
+                RequireInteger(args, "order", errors);
+                RequireText(args, "name", errors);
+                OptionalText(args, "description", errors);
+                OptionalText(args, "scopeEndLayerKey", errors);
+            },
+            [RequirementsCommandShapes.UpdateLayerMethod] = static (args, errors) =>
+            {
+                RequireText(args, "key", errors);
+                OptionalText(args, "name", errors);
+                OptionalText(args, "description", errors);
+                OptionalText(args, "scopeEndLayerKey", errors);
+            },
+            [RequirementsCommandShapes.EffectiveMethod] = static (args, errors) =>
+            {
+                OptionalText(args, "layerKey", errors);
+            },
             [RequirementsCommandShapes.CurrentSelectionMethod] = NoParameters,
         };
 
@@ -508,6 +534,8 @@ internal static class ReplYamlMessageValidator
         OptionalEnum(args, "priority", errors, $"{prefix}priority", "critical", "high", "medium", "low");
         OptionalEnum(args, "status", errors, $"{prefix}status", "pending", "in_progress", "completed", "deferred");
         OptionalText(args, "notes", errors, $"{prefix}notes");
+        OptionalText(args, "scopeStartLayerKey", errors, $"{prefix}scopeStartLayerKey");
+        OptionalText(args, "scopeEndLayerKey", errors, $"{prefix}scopeEndLayerKey");
     }
 
     private static void OptionalTodoSubtasks(IReadOnlyDictionary<string, object?> args, string key, List<string> errors)
@@ -734,6 +762,21 @@ internal static class ReplYamlMessageValidator
         path ??= $"payload.params.{key}";
         if (!args.TryGetValue(key, out var value) || value is null)
         {
+            return;
+        }
+
+        if (!TryGetInteger(value, out _))
+        {
+            errors.Add($"{path} must be an integer.");
+        }
+    }
+
+    private static void RequireInteger(IReadOnlyDictionary<string, object?> args, string key, List<string> errors, string? path = null)
+    {
+        path ??= $"payload.params.{key}";
+        if (!args.TryGetValue(key, out var value) || value is null)
+        {
+            errors.Add($"{path} is required.");
             return;
         }
 

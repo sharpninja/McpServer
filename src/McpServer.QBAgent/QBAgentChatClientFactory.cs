@@ -15,7 +15,7 @@ namespace McpServer.QBAgent;
 public static class QBAgentChatClientFactory
 {
     /// <summary>The model id advertised to the endpoint (QuadBrain orchestration backs every model id).</summary>
-    public const string ModelId = "quadbrain";
+    public const string ModelId = "QuadBrain";
 
     /// <summary>Creates an <see cref="IChatClient"/> bound to the QuadBrain OpenAI-compatible endpoint.</summary>
     /// <param name="options">Agent options carrying the marker-bound <see cref="McpAgentOptions.BaseUrl"/> and API key.</param>

@@ -164,7 +164,11 @@ public sealed class BrainSlotInvocationTransactionTests
 
     private sealed class FakeBrainSlotChatClient(string output) : IBrainSlotChatClient
     {
-        public Task<string> CompleteAsync(BrainSlotDefinitionEntity slot, string input, CancellationToken cancellationToken = default)
+        public Task<string> CompleteAsync(
+            BrainSlotDefinitionEntity slot,
+            string input,
+            double? temperature,
+            CancellationToken cancellationToken = default)
             => Task.FromResult(output);
     }
 

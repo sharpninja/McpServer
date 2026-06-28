@@ -7,8 +7,18 @@
  * request-id shape. The cline-v2 plugin had no framing-level coverage; this
  * is new value the canonical core earns by owning the transport.
  */
+import { spawn, type ChildProcess } from 'child_process';
+import { EventEmitter } from 'events';
+import { dirname } from 'path';
+import { PassThrough } from 'stream';
 import * as yaml from 'js-yaml';
 import { ReplBridge, type ReplResponse } from '../src/transport/repl-bridge.js';
+
+jest.mock('child_process', () => ({
+  spawn: jest.fn(),
+}));
+
+const spawnMock = spawn as jest.MockedFunction<typeof spawn>;
 
 type PendingMap = Map<
   string,
@@ -39,6 +49,19 @@ function feedEnvelope(bridge: ReplBridge, envelope: Record<string, unknown>): vo
   feedLine(bridge, '---');
 }
 
+function createMockChildProcess(): ChildProcess {
+  const child = new EventEmitter() as ChildProcess;
+  Object.assign(child, {
+    stdin: new PassThrough(),
+    stdout: new PassThrough(),
+    stderr: new PassThrough(),
+    exitCode: null,
+    killed: false,
+    kill: jest.fn(),
+  });
+  return child;
+}
+
 describe('ReplBridge.generateRequestId', () => {
   test('matches the canonical req-<stamp>-<slug>-<rand> shape', () => {
     const id = ReplBridge.generateRequestId('beginTurn');
@@ -48,6 +71,46 @@ describe('ReplBridge.generateRequestId', () => {
   test('sanitizes slugs to lowercase alphanumerics and falls back to req', () => {
     expect(ReplBridge.generateRequestId('Complete.Turn!')).toMatch(/^req-\d{8}T\d{6}Z-completeturn-[0-9a-f]{4}$/);
     expect(ReplBridge.generateRequestId('***')).toMatch(/^req-\d{8}T\d{6}Z-req-[0-9a-f]{4}$/);
+  });
+});
+
+describe('ReplBridge process launch', () => {
+  const originalEnv = { ...process.env };
+  const originalCwd = process.cwd();
+
+  beforeEach(() => {
+    spawnMock.mockReset();
+    process.env = { ...originalEnv };
+    process.chdir(originalCwd);
+  });
+
+  afterAll(() => {
+    process.env = originalEnv;
+    process.chdir(originalCwd);
+  });
+
+  test('TEST-MCP-PLUGIN-PSONLY-001 starts mcpserver-repl with the MCP workspace cwd instead of the Node process cwd', async () => {
+    const workspace = originalCwd;
+    const wrongCurrentDirectory = dirname(originalCwd);
+    process.chdir(wrongCurrentDirectory);
+    process.env.MCP_WORKSPACE_PATH = workspace;
+    process.env.MCP_AGENT_NAME = 'Cline';
+    spawnMock.mockReturnValue(createMockChildProcess());
+
+    const bridge = new ReplBridge();
+    await bridge.ensure();
+
+    expect(spawnMock).toHaveBeenCalledWith(
+      'mcpserver-repl',
+      ['--agent-stdio', '--agent', 'Cline'],
+      expect.objectContaining({
+        cwd: workspace,
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: expect.objectContaining({
+          MCP_WORKSPACE_PATH: workspace,
+        }),
+      }),
+    );
   });
 });
 
@@ -199,7 +262,7 @@ describe('ReplBridge framing (NDJSON + --- terminator contract)', () => {
 });
 
 describe('ReplBridge.invoke envelope', () => {
-  test('writes a request envelope terminated by --- and resolves on the matching result', async () => {
+  test('writes a JSON request envelope and resolves on the matching result', async () => {
     const bridge = new ReplBridge();
     const writes: string[] = [];
     // Pretend the process is already alive so ensure() short-circuits.
@@ -216,10 +279,10 @@ describe('ReplBridge.invoke envelope', () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    // One write happened; it is a YAML request envelope ending with `---\n`.
+    // One write happened; it is a JSON request envelope ending with a newline.
     expect(writes).toHaveLength(1);
-    expect(writes[0].endsWith('---\n')).toBe(true);
-    const envelope = yaml.load(writes[0].replace(/---\n$/, '')) as {
+    expect(writes[0].endsWith('\n')).toBe(true);
+    const envelope = JSON.parse(writes[0]) as {
       type: string;
       payload: { requestId: string; method: string; params: Record<string, unknown> };
     };

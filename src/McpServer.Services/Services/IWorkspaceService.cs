@@ -202,6 +202,9 @@ public sealed record WorkspaceDto
 
     /// <summary>Path to the Copilot agent executable for this workspace.</summary>
     public string? AgentPath { get; init; }
+
+    /// <summary>FR-MCP-WORKSPACE-LAYER-001: current requirement scope layer key.</summary>
+    public string CurrentRequirementLayerKey { get; init; } = "layer-1";
 }
 
 /// <summary>Result of listing workspaces.</summary>

@@ -168,9 +168,9 @@ flowchart TD
 
 Repo annotations:
 
-- `AD-AOT-001-BR-REJECT`: implemented as a fail-closed rejected orchestration response when role evidence or Arbiter commit is unavailable.
-- `AD-AOT-001-BR-AGREE`: implemented through the full Quad-Brain orchestration prompt that combines Left, Right, and Curiosity evidence for ArbiterOfTruth.
-- `AD-AOT-001-BR-DISAGREE`: documented as a future policy branch for multi-round disagreement escalation; the current runtime fails closed instead of auto-escalating.
+- `AD-AOT-001-BR-REJECT`: implemented as a voting/reconciliation round when ArbiterOfTruth semantically rejects both hemisphere responses; transaction or commit failures still fail closed.
+- `AD-AOT-001-BR-AGREE`: implemented through the QuadBrain orchestration prompt that sends LeftHemisphere and RightHemisphere evidence to ArbiterOfTruth.
+- `AD-AOT-001-BR-DISAGREE`: implemented as a bounded second-round vote/reconciliation branch before final fail-closed rejection.
 - `AD-AOT-001-BR-ACCEPT`: implemented through ArbiterOfTruth reconciliation returning a committed final decision.
 
 ### AD-WEIGHT-001 Weight Redistribution Safety
