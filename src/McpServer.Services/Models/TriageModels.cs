@@ -380,13 +380,13 @@ public sealed class TriageOptions
     public string? AgentName { get; set; } = "triage";
 
     /// <summary>Direct triage agent executable path.</summary>
-    public string? AgentPath { get; set; } = "codex";
+    public string? AgentPath { get; set; } = "cline";
 
     /// <summary>Direct triage agent model id.</summary>
     public string AgentModel { get; set; } = "auto";
 
     /// <summary>Direct triage agent execution strategy.</summary>
-    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CodexCli;
+    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.OneShotCli;
 
     /// <summary>Additional environment variables passed to the direct agent.</summary>
     public Dictionary<string, string> AgentParameters { get; set; } = [];

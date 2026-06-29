@@ -1,35 +1,35 @@
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
-/// <summary>TR-CLI-001: Interface for invoking the Copilot CLI agent.</summary>
-public interface ICopilotClient
+/// <summary>TR-CLI-001: Interface for invoking the CLI agent agent.</summary>
+public interface IAgentCliClient
 {
     /// <summary>
-    /// Invoke the Copilot CLI agent with a prompt and return a structured result.
+    /// Invoke the CLI agent agent with a prompt and return a structured result.
     /// </summary>
     /// <param name="prompt">The prompt text to send to the agent.</param>
     /// <param name="options">Optional per-call configuration overrides.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>A structured <see cref="CopilotResult"/> with state, body, and optional parsed object.</returns>
-    Task<CopilotResult> InvokeAsync(
+    /// <returns>A structured <see cref="AgentCliResult"/> with state, body, and optional parsed object.</returns>
+    Task<AgentCliResult> InvokeAsync(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Invoke the Copilot CLI agent with a prompt and deserialize the result as <typeparamref name="T"/>.
+    /// Invoke the CLI agent agent with a prompt and deserialize the result as <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T">The expected deserialized type.</typeparam>
     /// <param name="prompt">The prompt text to send to the agent.</param>
     /// <param name="options">Optional per-call configuration overrides.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>A strongly-typed <see cref="CopilotResult{T}"/>.</returns>
-    Task<CopilotResult<T>> InvokeAsync<T>(
+    /// <returns>A strongly-typed <see cref="AgentCliResult{T}"/>.</returns>
+    Task<AgentCliResult<T>> InvokeAsync<T>(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Invoke the Copilot CLI agent and stream stdout lines as they are produced.
+    /// Invoke the CLI agent agent and stream stdout lines as they are produced.
     /// </summary>
     /// <param name="prompt">The prompt text to send to the agent.</param>
     /// <param name="options">Optional per-call configuration overrides.</param>
@@ -37,18 +37,18 @@ public interface ICopilotClient
     /// <returns>An async enumerable of stdout lines.</returns>
     IAsyncEnumerable<string> InvokeStreamingAsync(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Creates a persistent interactive Copilot CLI session using <c>-i</c>.
+    /// Creates a persistent interactive CLI agent session using <c>-i</c>.
     /// The <paramref name="initialPrompt"/> is passed as the <c>-i</c> argument value.
     /// Subsequent prompts are written to the process's stdin.
     /// </summary>
     /// <param name="initialPrompt">The seed prompt passed to <c>-i</c>.</param>
     /// <param name="options">Optional per-call configuration overrides.</param>
     /// <returns>An interactive session that must be disposed when no longer needed.</returns>
-    CopilotInteractiveSession CreateInteractiveSession(
+    AgentCliInteractiveSession CreateInteractiveSession(
         string initialPrompt,
-        CopilotClientOptions? options = null);
+        AgentCliClientOptions? options = null);
 }

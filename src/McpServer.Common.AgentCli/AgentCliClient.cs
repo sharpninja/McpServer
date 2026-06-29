@@ -4,20 +4,21 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
-/// <summary>TR-CLI-001: Invokes the Copilot CLI agent, captures output, and returns structured results.</summary>
-public sealed class CopilotClient(
-    IOptionsMonitor<CopilotClientOptions> defaultOptions,
+/// <summary>TR-CLI-001: Invokes the CLI agent agent, captures output, and returns structured results.</summary>
+public sealed class AgentCliClient(
+    IOptionsMonitor<AgentCliClientOptions> defaultOptions,
     IProcessEnvironmentService processEnvironment,
     IProcessSpawner processSpawner,
-    ILogger<CopilotClient> logger) : ICopilotClient
+    ILogger<AgentCliClient> logger) : IAgentCliClient
 {
+    private const string ClineHighestThinkingLevel = "xhigh";
 
     /// <inheritdoc />
-    public async Task<CopilotResult> InvokeAsync(
+    public async Task<AgentCliResult> InvokeAsync(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
@@ -26,9 +27,9 @@ public sealed class CopilotClient(
     }
 
     /// <inheritdoc />
-    public async Task<CopilotResult<T>> InvokeAsync<T>(
+    public async Task<AgentCliResult<T>> InvokeAsync<T>(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
@@ -38,7 +39,7 @@ public sealed class CopilotClient(
         // Attempt typed deserialization
         var (contentType, parsed) = ContentParser.DetectAndParse<T>(result.Body);
 
-        return new CopilotResult<T>
+        return new AgentCliResult<T>
         {
             State = result.State,
             Body = result.Body,
@@ -50,9 +51,9 @@ public sealed class CopilotClient(
     }
 
     /// <inheritdoc />
-    public CopilotInteractiveSession CreateInteractiveSession(
+    public AgentCliInteractiveSession CreateInteractiveSession(
         string initialPrompt,
-        CopilotClientOptions? options = null)
+        AgentCliClientOptions? options = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(initialPrompt);
         var opts = options ?? defaultOptions.CurrentValue;
@@ -64,13 +65,13 @@ public sealed class CopilotClient(
         var modelPromptLabel = string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase)
             ? null
             : opts.Model;
-        return new CopilotInteractiveSession(process, logger, modelPromptLabel);
+        return new AgentCliInteractiveSession(process, logger, modelPromptLabel);
     }
 
     /// <inheritdoc />
     public async IAsyncEnumerable<string> InvokeStreamingAsync(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
@@ -89,7 +90,7 @@ public sealed class CopilotClient(
         catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
         {
             logger.LogError(ex, "Failed to spawn streaming process: {Agent}", opts.AgentPath);
-            spawnError = $"error: Failed to spawn Copilot CLI — {ex.Message}";
+            spawnError = $"error: Failed to spawn CLI agent — {ex.Message}";
             proc = null;
         }
 
@@ -133,8 +134,8 @@ public sealed class CopilotClient(
             var timedOut = timeoutCts.IsCancellationRequested && !cancellationToken.IsCancellationRequested;
             if (timedOut)
             {
-                logger.LogWarning("Copilot CLI streaming timed out after {Timeout}", opts.Timeout);
-                yield return $"error: Copilot CLI timed out after {opts.Timeout}.";
+                logger.LogWarning("CLI agent streaming timed out after {Timeout}", opts.Timeout);
+                yield return $"error: CLI agent timed out after {opts.Timeout}.";
             }
 
             if (!proc.HasExited)
@@ -146,15 +147,15 @@ public sealed class CopilotClient(
             }
             catch (TimeoutException ex)
             {
-                logger.LogWarning(ex, "Copilot CLI process did not exit after kill within grace period.");
+                logger.LogWarning(ex, "CLI agent process did not exit after kill within grace period.");
             }
 
             // Log stderr if present (best-effort, don't block on timeout).
             var stderr = await ReadPartialAsync(stderrTask).ConfigureAwait(true);
             if (!string.IsNullOrWhiteSpace(stderr))
-                logger.LogWarning("Copilot CLI stderr: {Stderr}", stderr.Trim());
+                logger.LogWarning("CLI agent stderr: {Stderr}", stderr.Trim());
 
-            logger.LogInformation("Copilot CLI streaming finished: {LineCount} lines, exit code {ExitCode}", lineCount, proc.ExitCode);
+            logger.LogInformation("CLI agent streaming finished: {LineCount} lines, exit code {ExitCode}", lineCount, proc.ExitCode);
         }
         finally
         {
@@ -162,9 +163,9 @@ public sealed class CopilotClient(
         }
     }
 
-    private async Task<CopilotResult> RunProcessAsync(
+    private async Task<AgentCliResult> RunProcessAsync(
         string prompt,
-        CopilotClientOptions opts,
+        AgentCliClientOptions opts,
         CancellationToken cancellationToken)
     {
         var psi = BuildProcessStartInfo(opts, prompt);
@@ -179,18 +180,18 @@ public sealed class CopilotClient(
         catch (InvalidOperationException ex)
         {
             logger.LogError(ex, "Failed to spawn process: {Agent}", opts.AgentPath);
-            return new CopilotResult
+            return new AgentCliResult
             {
-                State = CopilotResultState.SpawnError,
+                State = AgentCliResultState.SpawnError,
                 Stderr = $"Failed to spawn process: {ex.Message}",
             };
         }
         catch (System.ComponentModel.Win32Exception ex)
         {
             logger.LogError(ex, "Failed to spawn process: {Agent}", opts.AgentPath);
-            return new CopilotResult
+            return new AgentCliResult
             {
-                State = CopilotResultState.SpawnError,
+                State = AgentCliResultState.SpawnError,
                 Stderr = $"Failed to spawn process: {ex.Message}",
             };
         }
@@ -216,13 +217,13 @@ public sealed class CopilotClient(
                 catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
                 {
                     // Timeout — kill process
-                    logger.LogWarning("Copilot CLI timed out after {Timeout}", timeout);
+                    logger.LogWarning("CLI agent timed out after {Timeout}", timeout);
                     TryKill(proc);
                     var partialStdout = await ReadPartialAsync(stdoutTask).ConfigureAwait(true);
                     var partialStderr = await ReadPartialAsync(stderrTask).ConfigureAwait(true);
-                    return new CopilotResult
+                    return new AgentCliResult
                     {
-                        State = CopilotResultState.Timeout,
+                        State = AgentCliResultState.Timeout,
                         Body = partialStdout.Trim(),
                         Stderr = partialStderr.Trim(),
                     };
@@ -238,11 +239,11 @@ public sealed class CopilotClient(
             var body = stdout.Trim();
             var (contentType, parsed) = ContentParser.DetectAndParse(body);
 
-            logger.LogDebug("Copilot CLI exited with code {ExitCode}, content type: {ContentType}", proc.ExitCode, contentType);
+            logger.LogDebug("CLI agent exited with code {ExitCode}, content type: {ContentType}", proc.ExitCode, contentType);
 
-            return new CopilotResult
+            return new AgentCliResult
             {
-                State = proc.ExitCode == 0 ? CopilotResultState.Success : CopilotResultState.Error,
+                State = proc.ExitCode == 0 ? AgentCliResultState.Success : AgentCliResultState.Error,
                 Body = body,
                 Stderr = stderr.Trim(),
                 ExitCode = proc.ExitCode,
@@ -261,7 +262,7 @@ public sealed class CopilotClient(
     /// (no shell wrapper), using <see cref="ProcessStartInfo.ArgumentList"/> for safe escaping.
     /// This avoids PowerShell/sh buffering so stdout streams in real time.
     /// </summary>
-    private ProcessStartInfo BuildProcessStartInfo(CopilotClientOptions opts, string prompt, bool interactive = false)
+    private ProcessStartInfo BuildProcessStartInfo(AgentCliClientOptions opts, string prompt, bool interactive = false)
     {
         var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
 
@@ -276,25 +277,39 @@ public sealed class CopilotClient(
             RedirectStandardInput = interactive,
         };
 
-        psi.ArgumentList.Add(interactive ? "-i" : "-p");
-        psi.ArgumentList.Add(prompt);
-
-        if (!string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase))
+        var agentName = NormalizeAgentName(opts.AgentPath);
+        if (string.Equals(agentName, "cline", StringComparison.OrdinalIgnoreCase))
         {
-            psi.ArgumentList.Add("--model");
-            psi.ArgumentList.Add(opts.Model);
+            if (!interactive)
+                psi.ArgumentList.Add("-p");
+            psi.ArgumentList.Add("-c");
+            psi.ArgumentList.Add(cwd);
+            psi.ArgumentList.Add("--thinking");
+            psi.ArgumentList.Add(ClineHighestThinkingLevel);
+            psi.ArgumentList.Add(prompt);
         }
+        else
+        {
+            psi.ArgumentList.Add(interactive ? "-i" : "-p");
+            psi.ArgumentList.Add(prompt);
 
-        // Don't suppress interactive prompts — the sentinel is needed for turn detection.
-        if (opts.Silent && !interactive)
-            psi.ArgumentList.Add("--silent");
+            if (!string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase))
+            {
+                psi.ArgumentList.Add("--model");
+                psi.ArgumentList.Add(opts.Model);
+            }
 
-        // Force streaming even when stdout is a pipe (not a TTY).
-        psi.ArgumentList.Add("--stream");
-        psi.ArgumentList.Add("on");
+            // Don't suppress interactive prompts — the sentinel is needed for turn detection.
+            if (opts.Silent && !interactive)
+                psi.ArgumentList.Add("--silent");
 
-        // Auto-confirm tool invocations without user prompts.
-        psi.ArgumentList.Add("--yolo");
+            // Force streaming even when stdout is a pipe (not a TTY).
+            psi.ArgumentList.Add("--stream");
+            psi.ArgumentList.Add("on");
+
+            // Auto-confirm tool invocations without user prompts.
+            psi.ArgumentList.Add("--yolo");
+        }
 
         processEnvironment.ApplyAll(psi, opts.RunAs, opts.GitHubToken);
         psi.FileName = processEnvironment.ResolveExecutable(psi, opts.AgentPath);
@@ -306,6 +321,14 @@ public sealed class CopilotClient(
         }
 
         return psi;
+    }
+
+    private static string NormalizeAgentName(string agentPath)
+    {
+        var fileName = Path.GetFileNameWithoutExtension(agentPath);
+        return string.IsNullOrWhiteSpace(fileName)
+            ? agentPath.Trim().ToLowerInvariant()
+            : fileName.Trim().ToLowerInvariant();
     }
 
     private async Task<string> ReadPartialAsync(Task<string> readTask)

@@ -488,6 +488,7 @@ templates:
       3. Re-verify trust before resuming: recompute the marker signature with the new key and call /health with a fresh nonce.
       4. Re-bootstrap and resume through your required agent plugin. Codex: run `Invoke-CodexMcpPlugin.ps1 -Command Status` to re-establish marker trust, health nonce, workspace, and the current session/turn, then continue with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>`. Other agents: re-run the plugin session-start hook/command, then continue via the plugin session tools.
       5. Recover the open turn instead of starting over: query session history through the plugin (workflow.sessionlog.queryHistory), find the in-progress turn, then keep updating and complete it via the plugin. Do not open a duplicate session for the same work.
+      5a. Treat `deprecated: true` on successful `workflow.*` results as metadata, not wrapper failure. Treat an empty `workflow.sessionlog.queryHistory` result as a valid no-match result. Re-check the workspace current directory, explicit `agent` or `sourceType`, and plugin cache/session state through the wrapper; do not use raw REST merely because history is empty or marked deprecated.
       6. If the plugin cannot re-establish trust after the restart, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` and continue with non-MCP local diagnosis only.
 
       ## Rules

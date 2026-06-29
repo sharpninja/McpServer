@@ -1,5 +1,5 @@
 using System.Text.Json;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Services;
 /// update the project docs and return the assigned IDs as JSON.
 /// </summary>
 internal sealed class RequirementsService(
-    ICopilotClient copilotClient,
+    IAgentCliClient copilotClient,
     WorkspaceServiceAccessor workspaceAccessor,
     IOptionsMonitor<TodoPromptOptions> promptOptions,
     ILogger<RequirementsService> logger) : IRequirementsService
@@ -33,7 +33,7 @@ internal sealed class RequirementsService(
         logger.LogInformation("Invoking Copilot to analyze requirements for TODO {Id}", todoId);
 
         var currentPromptOptions = promptOptions.CurrentValue;
-        var options = new CopilotClientOptions
+        var options = new AgentCliClientOptions
         {
             WorkingDirectory = workspaceAccessor.GetWorkspacePath(),
             RunAs = currentPromptOptions.RunAs,
@@ -53,7 +53,7 @@ internal sealed class RequirementsService(
             result = await InvokeWithStreamingFallbackAsync(prompt, options, cancellationToken).ConfigureAwait(false);
         }
 
-        if (result.State != CopilotResultState.Success)
+        if (result.State != AgentCliResultState.Success)
         {
             logger.LogWarning(
                 "Copilot invocation failed for TODO {Id}: {State} (exit={ExitCode})",
@@ -109,9 +109,9 @@ internal sealed class RequirementsService(
             CopilotResponse: result.Body);
     }
 
-    private async Task<CopilotResult> InvokeWithStreamingFallbackAsync(
+    private async Task<AgentCliResult> InvokeWithStreamingFallbackAsync(
         string prompt,
-        CopilotClientOptions options,
+        AgentCliClientOptions options,
         CancellationToken cancellationToken)
     {
         try
@@ -126,9 +126,9 @@ internal sealed class RequirementsService(
             var body = string.Join(Environment.NewLine, lines).Trim();
             if (string.IsNullOrWhiteSpace(body))
             {
-                return new CopilotResult
+                return new AgentCliResult
                 {
-                    State = CopilotResultState.Error,
+                    State = AgentCliResultState.Error,
                     Stderr = "Streaming fallback produced no output.",
                 };
             }
@@ -136,42 +136,42 @@ internal sealed class RequirementsService(
             // Best-effort failure detection because streaming API does not currently expose exit code/stderr.
             if (body.Contains("error: unknown option", StringComparison.OrdinalIgnoreCase))
             {
-                return new CopilotResult
+                return new AgentCliResult
                 {
-                    State = CopilotResultState.Error,
+                    State = AgentCliResultState.Error,
                     Body = body,
                     Stderr = body,
                 };
             }
 
-            return new CopilotResult
+            return new AgentCliResult
             {
-                State = CopilotResultState.Success,
+                State = AgentCliResultState.Success,
                 Body = body,
             };
         }
         catch (OperationCanceledException ex) when (!cancellationToken.IsCancellationRequested)
         {
             logger.LogWarning("{ExceptionDetail}", ex.ToString());
-            return new CopilotResult
+            return new AgentCliResult
             {
-                State = CopilotResultState.Timeout,
+                State = AgentCliResultState.Timeout,
                 Stderr = "Streaming fallback timed out.",
             };
         }
         catch (Exception ex)
         {
             logger.LogError("{ExceptionDetail}", ex.ToString());
-            return new CopilotResult
+            return new AgentCliResult
             {
-                State = CopilotResultState.Error,
+                State = AgentCliResultState.Error,
                 Stderr = ex.Message,
             };
         }
     }
 
-    private static bool ShouldRetryWithStreamingFallback(CopilotResult result)
-        => result.State != CopilotResultState.Success
+    private static bool ShouldRetryWithStreamingFallback(AgentCliResult result)
+        => result.State != AgentCliResultState.Success
            && (result.Stderr.Contains("unknown option '--no-warnings'", StringComparison.OrdinalIgnoreCase)
                || result.Body.Contains("unknown option '--no-warnings'", StringComparison.OrdinalIgnoreCase));
 

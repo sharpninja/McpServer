@@ -13,7 +13,7 @@ public sealed class AgentPoolDefinitionOptions
     public string AgentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Agent executable path used by Copilot CLI process launch.
+    /// Agent executable path used by CLI process launch.
     /// </summary>
     public string AgentPath { get; set; } = string.Empty;
 
@@ -33,9 +33,9 @@ public sealed class AgentPoolDefinitionOptions
     public Dictionary<string, string> AgentParameters { get; set; } = [];
 
     /// <summary>
-    /// Strategy name used to execute this agent. Defaults to the current Copilot CLI path.
+    /// Strategy name used to execute this agent. Defaults to the generic one-shot CLI path.
     /// </summary>
-    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CopilotCli;
+    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.OneShotCli;
 
     /// <summary>
     /// Indicates this agent is the fallback default for interactive requests.

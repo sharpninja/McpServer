@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;

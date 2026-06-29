@@ -2,14 +2,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>
-/// Manages a persistent interactive Copilot CLI process launched with <c>-i</c>.
+/// Manages a persistent interactive CLI agent process launched with <c>-i</c>.
 /// Subsequent prompts are written to stdin; responses are read from stdout
-/// until the "Esc to cancel" sentinel indicates Copilot is ready for input.
+/// until the "Esc to cancel" sentinel indicates the CLI agent is ready for input.
 /// </summary>
-public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
+public sealed class AgentCliInteractiveSession : IAsyncDisposable, IDisposable
 {
     private const string Sentinel = "Esc to cancel";
     private const int OutputTailLineLimit = 40;
@@ -28,7 +28,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
     private int _exitDiagnosticsLogged;
     private bool _disposed;
 
-    internal CopilotInteractiveSession(ISpawnedProcess process, ILogger logger, string? modelPromptLabel = null)
+    internal AgentCliInteractiveSession(ISpawnedProcess process, ILogger logger, string? modelPromptLabel = null)
     {
         _process = process;
         _logger = logger;
@@ -40,23 +40,23 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
     /// <summary>Returns <c>true</c> when the underlying process is still running.</summary>
     public bool IsAlive => !_disposed && !_process.HasExited;
 
-    /// <summary>Gets the OS process ID of the Copilot CLI process.</summary>
+    /// <summary>Gets the OS process ID of the CLI agent process.</summary>
     public int ProcessId => _process.Id;
 
-    /// <summary>Gets the reader connected to the Copilot CLI standard output stream.</summary>
+    /// <summary>Gets the reader connected to the CLI agent standard output stream.</summary>
     public StreamReader StandardOutput => _process.StandardOutput;
 
-    /// <summary>Gets the reader connected to the Copilot CLI standard error stream.</summary>
+    /// <summary>Gets the reader connected to the CLI agent standard error stream.</summary>
     public StreamReader StandardError => _process.StandardError;
 
-    /// <summary>Gets the writer connected to the Copilot CLI standard input stream.</summary>
+    /// <summary>Gets the writer connected to the CLI agent standard input stream.</summary>
     public StreamWriter? StandardInput => _process.StandardInput;
 
     /// <summary>
     /// Reads the initial response produced by the <c>-i</c> prompt.
     /// Call once immediately after creation.
     /// </summary>
-    public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken ct = default)
+    public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken ct = default)
         => ReadUntilSentinelAsync(ct);
 
     /// <summary>
@@ -107,7 +107,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
     }
 
     /// <summary>
-    /// Sends three ESC characters (<c>\x1B\x1B\x1B</c>) to the Copilot CLI process stdin
+    /// Sends three ESC characters (<c>\x1B\x1B\x1B</c>) to the CLI agent process stdin
     /// to immediately cancel the current generation without ending the session.
     /// </summary>
     public async Task SendEscapeAsync(CancellationToken ct = default)
@@ -124,16 +124,16 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
         catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
         {
             LogExitDiagnostics("stdin-escape-write-failed", ex);
-            _logger.LogWarning(ex, "Interactive session escape write failed; Copilot process is no longer writable.");
+            _logger.LogWarning(ex, "Interactive session escape write failed; CLI agent process is no longer writable.");
         }
     }
 
     /// <summary>Sends a prompt via stdin and reads the response until the sentinel.</summary>
-    public async Task<CopilotResult> SendAsync(string prompt, CancellationToken ct = default)
+    public async Task<AgentCliResult> SendAsync(string prompt, CancellationToken ct = default)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
         if (_process.HasExited)
-            return new CopilotResult { State = CopilotResultState.Error, Body = "Copilot process has exited." };
+            return new AgentCliResult { State = AgentCliResultState.Error, Body = "CLI agent process has exited." };
 
         await _gate.WaitAsync(ct).ConfigureAwait(true);
         try
@@ -147,11 +147,11 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
             {
                 await CaptureRemainingStdoutTailUnsafeAsync(ct).ConfigureAwait(true);
                 LogExitDiagnostics("stdin-write-failed", ex);
-                _logger.LogWarning(ex, "Interactive session stdin write failed; Copilot process is no longer writable.");
-                return new CopilotResult
+                _logger.LogWarning(ex, "Interactive session stdin write failed; CLI agent process is no longer writable.");
+                return new AgentCliResult
                 {
-                    State = CopilotResultState.Error,
-                    Body = "Copilot interactive session is no longer writable.",
+                    State = AgentCliResultState.Error,
+                    Body = "CLI agent interactive session is no longer writable.",
                 };
             }
 
@@ -193,12 +193,12 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
             {
                 await CaptureRemainingStdoutTailUnsafeAsync(ct).ConfigureAwait(true);
                 LogExitDiagnostics("stdin-streaming-write-failed", ex);
-                _logger.LogWarning(ex, "Interactive session streaming write failed; Copilot process is no longer writable.");
+                _logger.LogWarning(ex, "Interactive session streaming write failed; CLI agent process is no longer writable.");
                 var exitException = await TryCreateProcessExitExceptionAsync(
                     "stdin-streaming-write-failed",
                     ex,
                     ct).ConfigureAwait(false);
-                throw exitException ?? new InvalidOperationException("Copilot interactive session is no longer writable.", ex);
+                throw exitException ?? new InvalidOperationException("CLI agent interactive session is no longer writable.", ex);
             }
 
             while (!ct.IsCancellationRequested)
@@ -323,7 +323,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
 
     // ── Internals ──────────────────────────────────────────────────────
 
-    private async Task<CopilotResult> ReadUntilSentinelAsync(CancellationToken ct)
+    private async Task<AgentCliResult> ReadUntilSentinelAsync(CancellationToken ct)
     {
         var sb = new StringBuilder();
 
@@ -345,9 +345,9 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
                 if (_process.HasExited && _process.ExitCode != 0)
                 {
                     LogExitDiagnostics("stdout-closed-nonzero-exit", exception: null);
-                    return new CopilotResult
+                    return new AgentCliResult
                     {
-                        State = CopilotResultState.Error,
+                        State = AgentCliResultState.Error,
                         Body = sb.ToString().Trim(),
                         ExitCode = _process.ExitCode,
                     };
@@ -366,9 +366,9 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
         var body = sb.ToString().Trim();
         var (contentType, parsed) = ContentParser.DetectAndParse(body);
 
-        return new CopilotResult
+        return new AgentCliResult
         {
-            State = CopilotResultState.Success,
+            State = AgentCliResultState.Success,
             Body = body,
             Parsed = parsed,
             ContentType = contentType,
@@ -468,13 +468,13 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
     {
         var stderr = NormalizeTailForUser(stderrTail);
         if (!string.IsNullOrWhiteSpace(stderr))
-            return $"Copilot CLI exited with code {exitCode}: {stderr}";
+            return $"CLI agent exited with code {exitCode}: {stderr}";
 
         var stdout = NormalizeTailForUser(stdoutTail);
         if (!string.IsNullOrWhiteSpace(stdout))
-            return $"Copilot CLI exited with code {exitCode}. Stdout tail: {stdout}";
+            return $"CLI agent exited with code {exitCode}. Stdout tail: {stdout}";
 
-        return $"Copilot CLI exited with code {exitCode} before returning a response.";
+        return $"CLI agent exited with code {exitCode} before returning a response.";
     }
 
     private static string NormalizeTailForUser(string tail)
@@ -498,7 +498,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
                 if (!string.IsNullOrWhiteSpace(line))
                 {
                     AppendOutputTail(_stderrTail, line);
-                    _logger.LogWarning("Copilot stderr: {Line}", line);
+                    _logger.LogWarning("CLI agent stderr: {Line}", line);
                 }
             }
         }
@@ -526,7 +526,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed while monitoring interactive Copilot process exit.");
+            _logger.LogWarning(ex, "Failed while monitoring interactive CLI agent process exit.");
         }
     }
 
@@ -587,7 +587,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
         if (expectedShutdown)
         {
             _logger.LogInformation(
-                "Interactive Copilot process closed ({Reason}): PID={ProcessId}; ExitCode={ExitCode}; StdoutTail={StdoutTail}; StderrTail={StderrTail}",
+                "Interactive CLI agent process closed ({Reason}): PID={ProcessId}; ExitCode={ExitCode}; StdoutTail={StdoutTail}; StderrTail={StderrTail}",
                 reason,
                 ProcessId,
                 exitCode,
@@ -599,7 +599,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
         if (exception is null)
         {
             _logger.LogWarning(
-                "Interactive Copilot process closed unexpectedly ({Reason}): PID={ProcessId}; ExitCode={ExitCode}; StdoutTail={StdoutTail}; StderrTail={StderrTail}",
+                "Interactive CLI agent process closed unexpectedly ({Reason}): PID={ProcessId}; ExitCode={ExitCode}; StdoutTail={StdoutTail}; StderrTail={StderrTail}",
                 reason,
                 ProcessId,
                 exitCode,
@@ -610,7 +610,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
 
         _logger.LogWarning(
             exception,
-            "Interactive Copilot process closed unexpectedly ({Reason}): PID={ProcessId}; ExitCode={ExitCode}; StdoutTail={StdoutTail}; StderrTail={StderrTail}",
+            "Interactive CLI agent process closed unexpectedly ({Reason}): PID={ProcessId}; ExitCode={ExitCode}; StdoutTail={StdoutTail}; StderrTail={StderrTail}",
             reason,
             ProcessId,
             exitCode,
@@ -680,7 +680,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to kill interactive Copilot process.");
+            _logger.LogWarning(ex, "Failed to kill interactive CLI agent process.");
         }
     }
 }

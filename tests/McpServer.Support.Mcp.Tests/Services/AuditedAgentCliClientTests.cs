@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
@@ -14,9 +14,9 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// Unit tests for <see cref="AuditedCopilotClient"/>.
+/// Unit tests for <see cref="AuditedAgentCliClient"/>.
 /// </summary>
-public sealed class AuditedCopilotClientTests
+public sealed class AuditedAgentCliClientTests
 {
     [Fact]
     public async Task InvokeAsync_WritesCopilotInvocationAuditEntry()
@@ -28,20 +28,20 @@ public sealed class AuditedCopilotClientTests
 
         var services = BuildServices(workspacePath, sessionLogService);
 
-        var inner = Substitute.For<ICopilotClient>();
-        inner.InvokeAsync(Arg.Any<string>(), Arg.Any<CopilotClientOptions?>(), Arg.Any<CancellationToken>())
-            .Returns(new CopilotResult { State = CopilotResultState.Success, Body = "ok", ExitCode = 0 });
+        var inner = Substitute.For<IAgentCliClient>();
+        inner.InvokeAsync(Arg.Any<string>(), Arg.Any<AgentCliClientOptions?>(), Arg.Any<CancellationToken>())
+            .Returns(new AgentCliResult { State = AgentCliResultState.Success, Body = "ok", ExitCode = 0 });
 
-        var audited = new AuditedCopilotClient(
+        var audited = new AuditedAgentCliClient(
             inner,
             services.GetRequiredService<IServiceScopeFactory>(),
             services.GetRequiredService<IHttpContextAccessor>(),
             services.GetRequiredService<IOptions<IngestionOptions>>(),
-            NullLogger<AuditedCopilotClient>.Instance);
+            NullLogger<AuditedAgentCliClient>.Instance);
 
         await audited.InvokeAsync(
             "test prompt",
-            new CopilotClientOptions { WorkingDirectory = workspacePath },
+            new AgentCliClientOptions { WorkingDirectory = workspacePath },
             CancellationToken.None).ConfigureAwait(true);
 
         var submittedDtos = sessionLogService.ReceivedCalls()
@@ -65,21 +65,21 @@ public sealed class AuditedCopilotClientTests
 
         var services = BuildServices(workspacePath, sessionLogService);
 
-        var inner = Substitute.For<ICopilotClient>();
-        inner.InvokeStreamingAsync(Arg.Any<string>(), Arg.Any<CopilotClientOptions?>(), Arg.Any<CancellationToken>())
+        var inner = Substitute.For<IAgentCliClient>();
+        inner.InvokeStreamingAsync(Arg.Any<string>(), Arg.Any<AgentCliClientOptions?>(), Arg.Any<CancellationToken>())
             .Returns(StreamLines());
 
-        var audited = new AuditedCopilotClient(
+        var audited = new AuditedAgentCliClient(
             inner,
             services.GetRequiredService<IServiceScopeFactory>(),
             services.GetRequiredService<IHttpContextAccessor>(),
             services.GetRequiredService<IOptions<IngestionOptions>>(),
-            NullLogger<AuditedCopilotClient>.Instance);
+            NullLogger<AuditedAgentCliClient>.Instance);
 
         var lines = new List<string>();
         await foreach (var line in audited.InvokeStreamingAsync(
                            "test stream",
-                           new CopilotClientOptions { WorkingDirectory = workspacePath },
+                           new AgentCliClientOptions { WorkingDirectory = workspacePath },
                            CancellationToken.None))
         {
             lines.Add(line);

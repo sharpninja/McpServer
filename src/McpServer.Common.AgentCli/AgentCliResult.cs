@@ -1,7 +1,7 @@
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
-/// <summary>TR-CLI-001: Overall state of a Copilot CLI invocation.</summary>
-public enum CopilotResultState
+/// <summary>TR-CLI-001: Overall state of a CLI agent invocation.</summary>
+public enum AgentCliResultState
 {
     /// <summary>The CLI process exited with code 0.</summary>
     Success,
@@ -17,7 +17,7 @@ public enum CopilotResultState
 }
 
 /// <summary>TR-CLI-001: Detected content type of the CLI output.</summary>
-public enum CopilotContentType
+public enum AgentCliContentType
 {
     /// <summary>Plain text output.</summary>
     Text,
@@ -29,11 +29,11 @@ public enum CopilotContentType
     Yaml,
 }
 
-/// <summary>TR-CLI-001: Structured result from invoking the Copilot CLI.</summary>
-public sealed class CopilotResult
+/// <summary>TR-CLI-001: Structured result from invoking the CLI agent.</summary>
+public sealed class AgentCliResult
 {
     /// <summary>Overall state of the invocation.</summary>
-    public CopilotResultState State { get; init; }
+    public AgentCliResultState State { get; init; }
 
     /// <summary>Raw stdout text captured from the CLI process.</summary>
     public string Body { get; init; } = string.Empty;
@@ -54,15 +54,15 @@ public sealed class CopilotResult
     public object? Parsed { get; init; }
 
     /// <summary>Detected content type of the body.</summary>
-    public CopilotContentType ContentType { get; init; } = CopilotContentType.Text;
+    public AgentCliContentType ContentType { get; init; } = AgentCliContentType.Text;
 }
 
 /// <summary>TR-CLI-001: Strongly-typed result with deserialized output.</summary>
 /// <typeparam name="T">The expected deserialized type.</typeparam>
-public sealed class CopilotResult<T>
+public sealed class AgentCliResult<T>
 {
     /// <summary>Overall state of the invocation.</summary>
-    public CopilotResultState State { get; init; }
+    public AgentCliResultState State { get; init; }
 
     /// <summary>Raw stdout text captured from the CLI process.</summary>
     public string Body { get; init; } = string.Empty;
@@ -83,5 +83,5 @@ public sealed class CopilotResult<T>
     public T? Parsed { get; init; }
 
     /// <summary>Detected content type of the body.</summary>
-    public CopilotContentType ContentType { get; init; } = CopilotContentType.Text;
+    public AgentCliContentType ContentType { get; init; } = AgentCliContentType.Text;
 }

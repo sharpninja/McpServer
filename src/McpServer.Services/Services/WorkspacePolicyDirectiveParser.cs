@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Options;
 
@@ -37,7 +37,7 @@ public sealed class WorkspacePolicyDirectiveParser : IWorkspacePolicyDirectivePa
         ["belarusian"] = "BY",
     };
 
-    private readonly ICopilotClient _copilotClient;
+    private readonly IAgentCliClient _copilotClient;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly IOptionsMonitor<TodoPromptOptions> _promptOptions;
     private readonly ILogger<WorkspacePolicyDirectiveParser> _logger;
@@ -46,7 +46,7 @@ public sealed class WorkspacePolicyDirectiveParser : IWorkspacePolicyDirectivePa
     /// Initializes a new instance of the <see cref="WorkspacePolicyDirectiveParser"/> class.
     /// </summary>
     public WorkspacePolicyDirectiveParser(
-        ICopilotClient copilotClient,
+        IAgentCliClient copilotClient,
         WorkspaceServiceAccessor workspaceAccessor,
         IOptionsMonitor<TodoPromptOptions> promptOptions,
         ILogger<WorkspacePolicyDirectiveParser> logger)
@@ -89,7 +89,7 @@ public sealed class WorkspacePolicyDirectiveParser : IWorkspacePolicyDirectivePa
             var currentPromptOptions = _promptOptions.CurrentValue;
             var workingDirectory = ResolveWorkingDirectory(workspacePathHint);
 
-            var options = new CopilotClientOptions
+            var options = new AgentCliClientOptions
             {
                 WorkingDirectory = workingDirectory,
                 RunAs = currentPromptOptions.RunAs,
@@ -99,7 +99,7 @@ public sealed class WorkspacePolicyDirectiveParser : IWorkspacePolicyDirectivePa
                 options.AgentPath = currentPromptOptions.AgentPath;
 
             var result = await _copilotClient.InvokeAsync(BuildCopilotPrompt(directive, workspacePathHint), options, ct).ConfigureAwait(false);
-            if (result.State != CopilotResultState.Success)
+            if (result.State != AgentCliResultState.Success)
             {
                 return new WorkspacePolicyParseResult
                 {

@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>TR-CLI-001: Detects content type and attempts deserialization of CLI output.</summary>
 public static class ContentParser
@@ -123,25 +123,25 @@ public static class ContentParser
     }
 
     /// <summary>Detect content type and attempt deserialization.</summary>
-    public static (CopilotContentType ContentType, object? Parsed) DetectAndParse(string text)
+    public static (AgentCliContentType ContentType, object? Parsed) DetectAndParse(string text)
     {
         var jsonResult = TryParseJson(text);
         if (jsonResult is not null)
-            return (CopilotContentType.Json, jsonResult);
+            return (AgentCliContentType.Json, jsonResult);
 
         var yamlResult = TryParseYaml(text);
         if (yamlResult is not null)
-            return (CopilotContentType.Yaml, yamlResult);
+            return (AgentCliContentType.Yaml, yamlResult);
 
-        return (CopilotContentType.Text, null);
+        return (AgentCliContentType.Text, null);
     }
 
     /// <summary>Detect content type and deserialize as <typeparamref name="T"/>.</summary>
-    public static (CopilotContentType ContentType, T? Parsed) DetectAndParse<T>(string text)
+    public static (AgentCliContentType ContentType, T? Parsed) DetectAndParse<T>(string text)
     {
         var typed = TryParseJson<T>(text);
         if (typed is not null)
-            return (CopilotContentType.Json, typed);
+            return (AgentCliContentType.Json, typed);
 
         // YAML doesn't support generic deserialization in this minimal parser
         var yamlResult = TryParseYaml(text);
@@ -152,16 +152,16 @@ public static class ContentParser
             {
                 var json = JsonSerializer.Serialize(yamlResult, s_jsonOptions);
                 var result = JsonSerializer.Deserialize<T>(json, s_jsonOptions);
-                return (CopilotContentType.Yaml, result);
+                return (AgentCliContentType.Yaml, result);
             }
             catch (JsonException ex)
             {
                 System.Diagnostics.Trace.TraceWarning(ex.ToString());
-                return (CopilotContentType.Yaml, default);
+                return (AgentCliContentType.Yaml, default);
             }
         }
 
-        return (CopilotContentType.Text, default);
+        return (AgentCliContentType.Text, default);
     }
 
     private static object? ParseScalar(string s)

@@ -4,24 +4,29 @@ using System.Runtime.Versioning;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
+
 using McpServer.Common.AgentCli;
+
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-MCP-TRIAGE-003: Runs Codex CLI through reusable one-shot <c>codex exec</c>
-/// invocations for non-interactive direct-agent prompts such as background triage.
+/// TR-MCP-TRIAGE-003: Runs a configured CLI agent in one-shot mode for
+/// non-interactive prompts where the selected agent is part of the request.
 /// </summary>
-internal sealed class CodexCliAgentExecutionStrategy(
+internal sealed class OneShotCliAgentExecutionStrategy(
     IProcessEnvironmentService processEnvironment,
     IProcessSpawner processSpawner,
-    ILogger<CodexCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
+    ILogger<OneShotCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
 {
-    private const string HighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
+    private const string CodexHighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
+    private const string ClaudeHighestEffort = "max";
+    private const string ClineHighestThinkingLevel = "xhigh";
+    private const string GrokHighestEffort = "max";
 
     /// <inheritdoc />
-    public string Name => AgentExecutionStrategyNames.CodexCli;
+    public string Name => AgentExecutionStrategyNames.OneShotCli;
 
     /// <inheritdoc />
     public ValueTask<IAgentExecutionSession> CreateSessionAsync(
@@ -31,10 +36,10 @@ internal sealed class CodexCliAgentExecutionStrategy(
         ArgumentNullException.ThrowIfNull(request);
         cancellationToken.ThrowIfCancellationRequested();
         return ValueTask.FromResult<IAgentExecutionSession>(
-            new CodexCliAgentExecutionSession(request, processEnvironment, processSpawner, logger));
+            new OneShotCliAgentExecutionSession(request, processEnvironment, processSpawner, logger));
     }
 
-    private sealed class CodexCliAgentExecutionSession(
+    private sealed class OneShotCliAgentExecutionSession(
         AgentExecutionSessionRequest request,
         IProcessEnvironmentService processEnvironment,
         IProcessSpawner processSpawner,
@@ -95,24 +100,33 @@ internal sealed class CodexCliAgentExecutionStrategy(
         private async Task<AgentCliResult> RunPromptAsync(string prompt, CancellationToken cancellationToken)
         {
             var tempDirectory = ResolveSharedTempDirectory();
-            var outputPath = Path.Combine(tempDirectory, $"codex-output-{Guid.NewGuid():N}.txt");
+            var outputPath = Path.Combine(tempDirectory, $"oneshot-output-{Guid.NewGuid():N}.txt");
+            OneShotLaunch? launch = null;
 
-            var psi = BuildStartInfo(outputPath);
-            logger.LogInformation(
-                "Launching Codex CLI one-shot command: {CommandLine}",
-                BuildDisplayCommandLine(psi));
             try
             {
-                _process = processSpawner.Spawn(psi);
-                await WritePromptAsync(_process, prompt, CancellationToken.None).ConfigureAwait(false);
+                launch = await BuildLaunchAsync(
+                    prompt,
+                    tempDirectory,
+                    outputPath,
+                    cancellationToken).ConfigureAwait(false);
+                logger.LogInformation(
+                    "Launching one-shot CLI agent command: {CommandLine}",
+                    BuildDisplayCommandLine(launch.StartInfo));
+
+                _process = processSpawner.Spawn(launch.StartInfo);
+                if (launch.WritePromptToStandardInput)
+                    await WritePromptAsync(_process, prompt, cancellationToken).ConfigureAwait(false);
+                else
+                    _process.StandardInput?.Close();
             }
-            catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+            catch (Exception ex) when (ex is InvalidOperationException or NotSupportedException or System.ComponentModel.Win32Exception)
             {
-                logger.LogError(ex, "Failed to spawn Codex CLI: {Agent}", psi.FileName);
+                logger.LogError(ex, "Failed to spawn one-shot CLI agent: {Agent}", request.Options.AgentPath);
                 return new AgentCliResult
                 {
                     State = AgentCliResultState.Error,
-                    Stderr = $"error: Failed to spawn Codex CLI - {ex.Message}",
+                    Stderr = $"error: Failed to spawn one-shot CLI agent - {ex.Message}",
                 };
             }
 
@@ -127,13 +141,13 @@ internal sealed class CodexCliAgentExecutionStrategy(
                     "stdout",
                     stdoutBuilder,
                     request.Options.AgentOutputReceivedAsync,
-                    CancellationToken.None);
+                    cancellationToken);
                 stderrTask = CaptureStreamAsync(
                     _process.StandardError,
                     "stderr",
                     stderrBuilder,
                     request.Options.AgentOutputReceivedAsync,
-                    CancellationToken.None);
+                    cancellationToken);
                 await _process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
                 await WaitForCaptureAsync(stdoutTask).ConfigureAwait(false);
                 await WaitForCaptureAsync(stderrTask).ConfigureAwait(false);
@@ -175,7 +189,7 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 var stdout = stdoutBuilder.ToString();
                 var stderr = AppendProcessError(
                     stderrBuilder.ToString(),
-                    "error: Codex CLI triage run was cancelled or timed out.");
+                    "error: One-shot CLI agent run was cancelled or timed out.");
                 return new AgentCliResult
                 {
                     State = AgentCliResultState.Error,
@@ -187,19 +201,29 @@ internal sealed class CodexCliAgentExecutionStrategy(
             finally
             {
                 TryDelete(outputPath);
+                if (launch?.PromptFilePath is not null)
+                    TryDelete(launch.PromptFilePath);
             }
         }
 
-        private ProcessStartInfo BuildStartInfo(string outputPath)
+        private async Task<OneShotLaunch> BuildLaunchAsync(
+            string prompt,
+            string tempDirectory,
+            string outputPath,
+            CancellationToken cancellationToken)
         {
             var options = request.Options;
+            var agentPath = string.IsNullOrWhiteSpace(options.AgentPath)
+                ? "cline"
+                : options.AgentPath;
+            var agent = NormalizeAgentName(agentPath);
             var workingDirectory = !string.IsNullOrWhiteSpace(options.WorkingDirectory)
                 ? options.WorkingDirectory
                 : request.WorkspacePath;
 
             var psi = new ProcessStartInfo
             {
-                FileName = options.AgentPath,
+                FileName = agentPath,
                 WorkingDirectory = workingDirectory,
                 UseShellExecute = false,
                 CreateNoWindow = true,
@@ -208,15 +232,62 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 RedirectStandardError = true,
             };
 
+            string? promptFilePath = null;
+            var writePromptToStandardInput = true;
+
+            switch (agent)
+            {
+                case "codex":
+                    AddCodexArguments(psi, options, workingDirectory, outputPath);
+                    break;
+
+                case "claude":
+                    AddClaudeArguments(psi, options, workingDirectory);
+                    break;
+
+                case "grok":
+                    promptFilePath = Path.Combine(tempDirectory, $"oneshot-prompt-{Guid.NewGuid():N}.txt");
+                    await File.WriteAllTextAsync(promptFilePath, prompt, cancellationToken).ConfigureAwait(false);
+                    AddGrokArguments(psi, workingDirectory, promptFilePath);
+                    writePromptToStandardInput = false;
+                    break;
+
+                case "cline":
+                    AddClineArguments(psi, workingDirectory, prompt);
+                    writePromptToStandardInput = false;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Unsupported one-shot CLI agent '{agent}'.");
+            }
+
+            processEnvironment.ApplyAll(psi, options.RunAs, options.GitHubToken);
+            psi.FileName = processEnvironment.ResolveExecutable(psi, agentPath);
+            WrapWindowsCommandShim(psi);
+
+            foreach (var (key, value) in options.EnvironmentVariables)
+            {
+                psi.Environment[key] = value;
+            }
+
+            return new OneShotLaunch(psi, writePromptToStandardInput, promptFilePath);
+        }
+
+        private static void AddCodexArguments(
+            ProcessStartInfo psi,
+            AgentCliClientOptions options,
+            string workingDirectory,
+            string outputPath)
+        {
             psi.ArgumentList.Add("exec");
-            if (!string.Equals(options.Model, "auto", StringComparison.OrdinalIgnoreCase))
+            if (!IsAutoModel(options.Model))
             {
                 psi.ArgumentList.Add("--model");
                 psi.ArgumentList.Add(options.Model);
             }
 
             psi.ArgumentList.Add("-c");
-            psi.ArgumentList.Add(HighestReasoningEffortConfig);
+            psi.ArgumentList.Add(CodexHighestReasoningEffortConfig);
             psi.ArgumentList.Add("--sandbox");
             psi.ArgumentList.Add("read-only");
             psi.ArgumentList.Add("--color");
@@ -227,18 +298,67 @@ internal sealed class CodexCliAgentExecutionStrategy(
             psi.ArgumentList.Add("-o");
             psi.ArgumentList.Add(outputPath);
             psi.ArgumentList.Add("-");
-
-            processEnvironment.ApplyAll(psi, options.RunAs, options.GitHubToken);
-            psi.FileName = processEnvironment.ResolveExecutable(psi, options.AgentPath);
-            WrapWindowsCommandShim(psi);
-
-            foreach (var (key, value) in options.EnvironmentVariables)
-            {
-                psi.Environment[key] = value;
-            }
-
-            return psi;
         }
+
+        private static void AddClaudeArguments(
+            ProcessStartInfo psi,
+            AgentCliClientOptions options,
+            string workingDirectory)
+        {
+            psi.ArgumentList.Add("-p");
+            psi.ArgumentList.Add("--permission-mode");
+            psi.ArgumentList.Add("plan");
+            psi.ArgumentList.Add("--add-dir");
+            psi.ArgumentList.Add(workingDirectory);
+            psi.ArgumentList.Add("--model");
+            psi.ArgumentList.Add(IsAutoModel(options.Model) ? "opus" : options.Model);
+            psi.ArgumentList.Add("--effort");
+            psi.ArgumentList.Add(ClaudeHighestEffort);
+        }
+
+        private static void AddGrokArguments(
+            ProcessStartInfo psi,
+            string workingDirectory,
+            string promptFilePath)
+        {
+            psi.ArgumentList.Add("--prompt-file");
+            psi.ArgumentList.Add(promptFilePath);
+            psi.ArgumentList.Add("--cwd");
+            psi.ArgumentList.Add(workingDirectory);
+            psi.ArgumentList.Add("--permission-mode");
+            psi.ArgumentList.Add("plan");
+            psi.ArgumentList.Add("--output-format");
+            psi.ArgumentList.Add("plain");
+            psi.ArgumentList.Add("--effort");
+            psi.ArgumentList.Add(GrokHighestEffort);
+            psi.ArgumentList.Add("--reasoning-effort");
+            psi.ArgumentList.Add(GrokHighestEffort);
+        }
+
+        private static void AddClineArguments(
+            ProcessStartInfo psi,
+            string workingDirectory,
+            string prompt)
+        {
+            psi.ArgumentList.Add("-p");
+            psi.ArgumentList.Add("-c");
+            psi.ArgumentList.Add(workingDirectory);
+            psi.ArgumentList.Add("--thinking");
+            psi.ArgumentList.Add(ClineHighestThinkingLevel);
+            psi.ArgumentList.Add(prompt);
+        }
+
+        private static string NormalizeAgentName(string agentPath)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(agentPath);
+            return string.IsNullOrWhiteSpace(fileName)
+                ? agentPath.Trim().ToLowerInvariant()
+                : fileName.Trim().ToLowerInvariant();
+        }
+
+        private static bool IsAutoModel(string? model) =>
+            string.IsNullOrWhiteSpace(model) ||
+            string.Equals(model, "auto", StringComparison.OrdinalIgnoreCase);
 
         private static string BuildDisplayCommandLine(ProcessStartInfo psi) =>
             BuildCmdCommandLine(psi.FileName, psi.ArgumentList);
@@ -371,7 +491,8 @@ internal sealed class CodexCliAgentExecutionStrategy(
 
         private static string ResolveSharedTempDirectory()
         {
-            var configured = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP")
+            var configured = Environment.GetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP")
+                             ?? Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP")
                              ?? Environment.GetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP");
             var hasConfiguredDirectory = !string.IsNullOrWhiteSpace(configured);
             var preferredDirectory = hasConfiguredDirectory
@@ -386,7 +507,7 @@ internal sealed class CodexCliAgentExecutionStrategy(
             catch (Exception ex) when (!hasConfiguredDirectory && OperatingSystem.IsWindows() &&
                                        (ex is UnauthorizedAccessException or IOException or System.Security.SecurityException))
             {
-                var fallbackDirectory = Path.Combine(Path.GetTempPath(), "mcpserver-codex-oneshot");
+                var fallbackDirectory = Path.Combine(Path.GetTempPath(), "mcpserver-oneshot");
                 Directory.CreateDirectory(fallbackDirectory);
                 return fallbackDirectory;
             }
@@ -400,10 +521,10 @@ internal sealed class CodexCliAgentExecutionStrategy(
                     Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                     "McpServer",
                     "Temp",
-                    "codex-oneshot");
+                    "oneshot");
             }
 
-            return Path.Combine(Path.GetTempPath(), "mcpserver-codex-oneshot");
+            return Path.Combine(Path.GetTempPath(), "mcpserver-oneshot");
         }
 
         private static void EnsureSharedTempDirectory(string path)
@@ -426,5 +547,10 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 AccessControlType.Allow));
             directoryInfo.SetAccessControl(security);
         }
+
+        private sealed record OneShotLaunch(
+            ProcessStartInfo StartInfo,
+            bool WritePromptToStandardInput,
+            string? PromptFilePath);
     }
 }

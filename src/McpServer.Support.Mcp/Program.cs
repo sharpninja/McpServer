@@ -7,8 +7,8 @@ using System.Security.Cryptography;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json;
-using McpServer.Common.Copilot;
-using McpServer.Common.Copilot.Extensions;
+using McpServer.Common.AgentCli;
+using McpServer.Common.AgentCli.Extensions;
 using McpServer.GraphRag;
 using McpServer.Support.Mcp.DatabaseMaintenance;
 using McpServer.Support.Mcp.Ingestion;
@@ -413,15 +413,15 @@ builder.Services.AddOptions<TodoPromptOptions>()
         }
     });
 builder.Services.AddSingleton<IProcessSpawner, DesktopProcessSpawner>();
-builder.Services.AddCopilotClient();
-builder.Services.RemoveAll<ICopilotClient>();
-builder.Services.AddSingleton<ICopilotClient>(sp =>
-    new AuditedCopilotClient(
-        sp.GetRequiredService<CopilotClient>(),
+builder.Services.AddAgentCliClient();
+builder.Services.RemoveAll<IAgentCliClient>();
+builder.Services.AddSingleton<IAgentCliClient>(sp =>
+    new AuditedAgentCliClient(
+        sp.GetRequiredService<AgentCliClient>(),
         sp.GetRequiredService<IServiceScopeFactory>(),
         sp.GetRequiredService<IHttpContextAccessor>(),
         sp.GetRequiredService<IOptions<IngestionOptions>>(),
-        sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
+        sp.GetRequiredService<ILogger<AuditedAgentCliClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<IMemoryService, MemoryService>();
 builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();

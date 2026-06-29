@@ -1,6 +1,8 @@
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage.Database;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
 
@@ -12,6 +14,112 @@ namespace McpServer.Support.Mcp.Tests.Controllers;
 /// </summary>
 public sealed class TriageControllerTests
 {
+    /// <summary>
+    /// TEST-MCP-TRIAGE-001: every triage REST request logs the exact resolved database
+    /// connection string used by the triage service.
+    /// </summary>
+    [Fact]
+    public async Task AllTriageRequests_LogExactResolvedDatabaseConnectionString()
+    {
+        var service = Substitute.For<ITriageService>();
+        var group = new TriageGroupDetail
+        {
+            GroupId = "triage-group-001",
+            Status = "collecting",
+            ReportCount = 1,
+            QuietDeadlineUtc = DateTimeOffset.UtcNow,
+        };
+        var report = new TriageReportDetail
+        {
+            ReportId = "triage-report-001",
+            GroupId = group.GroupId,
+            Status = "grouped",
+            Title = "Plugin wrapper failure",
+            Summary = "Plugin wrapper failure",
+            WorkspacePath = "F:\\GitHub\\McpServer",
+        };
+        var run = new TriageResearchRunDetail
+        {
+            RunId = "triage-run-001",
+            GroupId = group.GroupId,
+            Status = "processing",
+            StartedUtc = DateTimeOffset.UtcNow,
+        };
+        var edit = new TriageGroupEditResult { Group = group, MovedReportCount = 1 };
+        var createdTodos = new TriageCreatedTodoQueryResult
+        {
+            Items =
+            [
+                new TriageCreatedTodoDetail
+                {
+                    TodoId = "BUG-TRIAGE-001",
+                    CreatedAtUtc = DateTimeOffset.UtcNow,
+                    WorkspacePath = "F:\\GitHub\\McpServer",
+                    GroupId = group.GroupId,
+                    RunId = run.RunId,
+                    GroupStatus = "completed",
+                    RunStatus = "completed",
+                },
+            ],
+            TotalCount = 1,
+        };
+
+        service.SubmitReportAsync(Arg.Any<TriageReportRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageReportSubmitResult
+            {
+                Success = true,
+                ReportId = report.ReportId,
+                GroupId = group.GroupId,
+                Status = "collecting",
+                QuietDeadlineUtc = group.QuietDeadlineUtc,
+            });
+        service.GetReportAsync(report.ReportId, Arg.Any<CancellationToken>()).Returns(report);
+        service.QueryGroupsAsync("failed", "F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+            .Returns(new TriageGroupQueryResult { Items = [group], TotalCount = 1 });
+        service.GetDashboardAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+            .Returns(new TriageDashboardResult { TriageQueue = [group], TotalGroupCount = 1 });
+        service.GetGroupAsync(group.GroupId, Arg.Any<CancellationToken>()).Returns(group);
+        service.QueryRunsAsync("processing", group.GroupId, "F:\\GitHub\\McpServer", Arg.Any<CancellationToken>())
+            .Returns(new TriageRunQueryResult { Items = [run], TotalCount = 1 });
+        service.GetRunAsync(run.RunId, Arg.Any<CancellationToken>()).Returns(run);
+        service.QueryCreatedTodosAsync("F:\\GitHub\\McpServer", Arg.Any<CancellationToken>()).Returns(createdTodos);
+        service.FlushGroupAsync(group.GroupId, Arg.Any<CancellationToken>()).Returns(group);
+        service.RetryGroupAsync(group.GroupId, true, Arg.Any<CancellationToken>()).Returns(group);
+        service.CreateGroupFromSelectionAsync(Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(edit);
+        service.ConsolidateIntoGroupAsync(group.GroupId, Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(edit);
+        service.MergeGroupsAsync(group.GroupId, Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(edit);
+
+        const string connectionString =
+            "Server=PAYTON-LEGION2;Database=McpServer;User Id=triage;Password=Exact Value With Spaces;Encrypt=True;TrustServerCertificate=True";
+        var logger = new CapturingLogger<TriageController>();
+        var controller = new TriageController(service, CreateRuntimeOptions(connectionString), logger);
+        var selection = new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"], ReportIds = [report.ReportId] };
+
+        await controller.SubmitReportAsync(new TriageReportRequest { Title = "Bug", Summary = "Summary" }, CancellationToken.None);
+        await controller.GetReportAsync(report.ReportId, CancellationToken.None);
+        await controller.QueryGroupsAsync("failed", "F:\\GitHub\\McpServer", CancellationToken.None);
+        await controller.GetDashboardAsync("F:\\GitHub\\McpServer", CancellationToken.None);
+        await controller.GetGroupAsync(group.GroupId, CancellationToken.None);
+        await controller.QueryRunsAsync("processing", group.GroupId, "F:\\GitHub\\McpServer", CancellationToken.None);
+        await controller.GetRunAsync(run.RunId, CancellationToken.None);
+        await controller.QueryCreatedTodosAsync("F:\\GitHub\\McpServer", CancellationToken.None);
+        await controller.FlushGroupAsync(group.GroupId, CancellationToken.None);
+        await controller.RetryGroupAsync(group.GroupId, force: true, CancellationToken.None);
+        await controller.CreateGroupFromSelectionAsync(selection, CancellationToken.None);
+        await controller.ConsolidateIntoGroupAsync(group.GroupId, selection, CancellationToken.None);
+        await controller.MergeGroupsAsync(group.GroupId, selection, CancellationToken.None);
+
+        Assert.Equal(13, logger.Messages.Count);
+        Assert.All(logger.Messages, message =>
+        {
+            Assert.Contains("sqlserver", message, StringComparison.Ordinal);
+            Assert.Contains(connectionString, message, StringComparison.Ordinal);
+        });
+    }
+
     /// <summary>
     /// TEST-MCP-TRIAGE-001: POST /mcpserver/triage/reports returns accepted queue state for
     /// valid intake and delegates the shared report contract to the service.
@@ -309,5 +417,45 @@ public sealed class TriageControllerTests
 
         var notFound = Assert.IsType<NotFoundObjectResult>(action.Result);
         Assert.Contains("missing run", notFound.Value!.ToString(), StringComparison.Ordinal);
+    }
+
+    private static McpDatabaseRuntimeOptions CreateRuntimeOptions(string connectionString)
+        => new(
+            new McpDatabaseProviderOptions(
+                McpDatabaseProviderKind.SqlServer,
+                "sqlserver",
+                connectionString,
+                "McpServer.SqlServer"),
+            new McpDatabaseEncryptionOptions(false, null, null, null, null, null, null));
+
+    private sealed class CapturingLogger<T> : ILogger<T>
+    {
+        public List<string> Messages { get; } = [];
+
+        public IDisposable? BeginScope<TState>(TState state)
+            where TState : notnull
+            => NullDisposable.Instance;
+
+        public bool IsEnabled(LogLevel logLevel) => true;
+
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception? exception,
+            Func<TState, Exception?, string> formatter)
+        {
+            if (logLevel == LogLevel.Information)
+                Messages.Add(formatter(state, exception));
+        }
+    }
+
+    private sealed class NullDisposable : IDisposable
+    {
+        public static readonly NullDisposable Instance = new();
+
+        public void Dispose()
+        {
+        }
     }
 }

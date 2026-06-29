@@ -1,21 +1,21 @@
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
-/// <summary>TR-CLI-001: Options for invoking the Copilot CLI.</summary>
-public sealed class CopilotClientOptions
+/// <summary>TR-CLI-001: Options for invoking a configured CLI agent.</summary>
+public sealed class AgentCliClientOptions
 {
     /// <summary>
-    /// Path to the CLI agent binary. Defaults to "copilot" (GitHub Copilot CLI, must be on PATH).
+    /// Path to the CLI agent binary. Defaults to "cline" (must be on PATH).
     /// </summary>
-    public string AgentPath { get; set; } = "copilot";
+    public string AgentPath { get; set; } = "cline";
 
     /// <summary>
-    /// Model to use for the agent via --model.
+    /// Model to use for agents that accept a model argument.
     /// Defaults to "gpt-5.3-codex".
     /// </summary>
     public string Model { get; set; } = "gpt-5.3-codex";
 
     /// <summary>
-    /// When <c>true</c>, passes <c>--silent</c> to the Copilot CLI so only the
+    /// When <c>true</c>, requests silent output from compatible CLI agents so only the
     /// agent response is emitted (no statistics or progress lines).
     /// Defaults to <c>true</c>.
     /// </summary>
@@ -23,7 +23,7 @@ public sealed class CopilotClientOptions
 
     /// <summary>
     /// Timeout for the CLI process. Defaults to <see cref="System.Threading.Timeout.InfiniteTimeSpan"/> (no timeout).
-    /// Copilot requests can take hours and results arrive all at once, so a wallclock
+    /// CLI agent requests can take hours and results arrive all at once, so a wallclock
     /// timeout is inappropriate. Callers may still cancel via <see cref="CancellationToken"/>.
     /// </summary>
     public TimeSpan Timeout { get; set; } = System.Threading.Timeout.InfiniteTimeSpan;
@@ -51,7 +51,7 @@ public sealed class CopilotClientOptions
 
     /// <summary>
     /// GitHub personal access token or OAuth token passed as <c>GH_TOKEN</c> to the
-    /// spawned Copilot CLI process. Required when running as a service account that
+    /// spawned CLI process. Required when running as a service account that
     /// cannot access the user's Windows Credential Manager (keyring).
     /// Null or empty = rely on the CLI's default auth discovery.
     /// </summary>

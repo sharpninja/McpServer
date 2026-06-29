@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>
 /// Applies user-profile environment variables and GitHub tokens to a

@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Text;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
@@ -16,7 +16,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class TodoPromptService(
     WorkspaceServiceAccessor workspaceAccessor,
-    ICopilotClient copilotClient,
+    IAgentCliClient copilotClient,
     IOptionsMonitor<TodoPromptOptions> promptOptions,
     ITodoPromptProvider todoPromptProvider,
     ILogger<TodoPromptService> logger) : ITodoPromptService
@@ -108,7 +108,7 @@ public sealed class TodoPromptService(
     private IAsyncEnumerable<string> InvokeCopilotStreaming(string prompt, CancellationToken cancellationToken)
     {
         var current = promptOptions.CurrentValue;
-        var options = new CopilotClientOptions
+        var options = new AgentCliClientOptions
         {
             WorkingDirectory = workspaceAccessor.GetWorkspacePath(),
             RunAs = current.RunAs,

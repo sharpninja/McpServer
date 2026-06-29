@@ -237,7 +237,7 @@ Triage:
   MaxRunTime: 00:30:00
   PromptTemplateId: triage-research-bug-report
   AgentName: triage
-  AgentPath: codex
+  AgentPath: cline
   AgentModel: auto
-  ExecutionStrategy: codex-cli
+  ExecutionStrategy: one-shot-cli
   AgentParameters: {}

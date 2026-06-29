@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>Sanitises text by replacing typographic characters with ASCII equivalents.</summary>
 public static class LineSanitizer

@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
@@ -12,6 +12,7 @@ internal sealed class ConfiguredTriageResearchRunner(
     : ITriageResearchRunner
 {
     private const string CodexTimeoutMessage = "Codex CLI triage run was cancelled or timed out.";
+    private const string OneShotTimeoutMessage = "One-shot CLI agent run was cancelled or timed out.";
 
     /// <inheritdoc />
     public async Task<TriageResearchRunResult> RunAsync(
@@ -28,10 +29,10 @@ internal sealed class ConfiguredTriageResearchRunner(
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(configured.MaxRunTime);
 
-        var clientOptions = new CopilotClientOptions
+        var clientOptions = new AgentCliClientOptions
         {
             AgentPath = configured.AgentPath.Trim(),
-            Model = string.IsNullOrWhiteSpace(configured.AgentModel) ? "gpt-5.3-codex" : configured.AgentModel.Trim(),
+            Model = string.IsNullOrWhiteSpace(configured.AgentModel) ? "auto" : configured.AgentModel.Trim(),
             Silent = true,
             Timeout = configured.MaxRunTime,
             WorkingDirectory = request.WorkspacePath,
@@ -58,21 +59,27 @@ internal sealed class ConfiguredTriageResearchRunner(
         var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(false);
         await session.EndAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
 
-        return result.State == CopilotResultState.Success
+        return result.State == AgentCliResultState.Success
             ? new TriageResearchRunResult(true, result.Body, null, result.Stdout, result.Stderr, result.ExitCode)
             : new TriageResearchRunResult(false, result.Body, BuildFailureError(result), result.Stdout, result.Stderr, result.ExitCode);
     }
 
-    private static string BuildFailureError(CopilotResult result)
+    private static string BuildFailureError(AgentCliResult result)
     {
-        if (result.State == CopilotResultState.Timeout ||
+        if (result.State == AgentCliResultState.Timeout ||
             ContainsFailureText(result.Stderr, CodexTimeoutMessage) ||
             ContainsFailureText(result.Body, CodexTimeoutMessage))
         {
             return CodexTimeoutMessage;
         }
 
-        if (result.State == CopilotResultState.SpawnError)
+        if (ContainsFailureText(result.Stderr, OneShotTimeoutMessage) ||
+            ContainsFailureText(result.Body, OneShotTimeoutMessage))
+        {
+            return OneShotTimeoutMessage;
+        }
+
+        if (result.State == AgentCliResultState.SpawnError)
             return "Triage agent could not be started. See captured agent output for details.";
 
         var exitCode = result.ExitCode is null

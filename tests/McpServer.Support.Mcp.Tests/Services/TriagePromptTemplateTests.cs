@@ -56,6 +56,41 @@ public sealed class TriagePromptTemplateTests
     }
 
     /// <summary>
+    /// TEST-MCP-PLUGIN-PSONLY-001: the production marker prompt tells agents that
+    /// deprecated workflow metadata and empty history are not reasons to bypass the plugin.
+    /// </summary>
+    [Fact]
+    public async Task DefaultMarkerPromptTemplate_RendersSessionLogWrapperRecoveryGuidance()
+    {
+        using var sut = new PromptTemplateService(
+            Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions
+            {
+                FilePath = Path.Combine(FindRepositoryRoot(), "templates", "prompt-templates.yaml"),
+            }),
+            new PromptTemplateRenderer(NullLogger<PromptTemplateRenderer>.Instance),
+            NullLogger<PromptTemplateService>.Instance);
+
+        var result = await sut.TestAsync(
+            "default-marker-prompt",
+            new PromptTemplateTestRequest
+            {
+                Variables = MarkerFileService.BuildTemplateContext(
+                    "http://localhost:7147",
+                    "test-token",
+                    workspace: null,
+                    workspacePath: @"F:\GitHub\McpServer",
+                    workspaceName: "McpServer"),
+            }).ConfigureAwait(true);
+
+        Assert.True(result.Success, result.Error);
+        Assert.Contains("deprecated: true", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("metadata, not wrapper failure", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("empty `workflow.sessionlog.queryHistory` result as a valid no-match result", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("workspace current directory", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("do not use raw REST merely because history is empty or marked deprecated", result.RenderedContent, StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-003: the triage research template exists in the repository
     /// template file and renders with the required group JSON variable.
     /// </summary>

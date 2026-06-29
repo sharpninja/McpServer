@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>
 /// Default <see cref="IProcessSpawner"/> that uses <see cref="Process.Start(ProcessStartInfo)"/>.

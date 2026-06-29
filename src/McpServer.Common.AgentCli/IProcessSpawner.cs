@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>
 /// Factory for spawning child processes. The default implementation uses

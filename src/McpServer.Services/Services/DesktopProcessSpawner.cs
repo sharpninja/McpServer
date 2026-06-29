@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Native;
 using Microsoft.Extensions.Logging;
 

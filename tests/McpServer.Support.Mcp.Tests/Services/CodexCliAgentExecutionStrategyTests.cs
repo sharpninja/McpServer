@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
@@ -15,8 +15,8 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class CodexCliAgentExecutionStrategyTests
 {
     /// <summary>
-    /// TEST-MCP-TRIAGE-003: Codex uses <c>exec</c> plus an output file and never
-    /// uses the Copilot interactive <c>-i</c>, <c>-p</c>, stream, or yolo flags.
+    /// TEST-MCP-TRIAGE-003: Codex uses reusable one-shot <c>exec -C ... -o ... -</c>
+    /// invocation and never uses Copilot interactive flags or prompt arguments.
     /// </summary>
     [Fact]
     public async Task ReadInitialResponseAsync_UsesCodexExecWithoutCopilotInteractiveFlags()
@@ -31,7 +31,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
         var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(CopilotResultState.Success, result.State);
+        Assert.Equal(AgentCliResultState.Success, result.State);
         Assert.Equal("""{"title":"triage result"}""", result.Body);
         Assert.NotNull(spawner.StartInfo);
         if (OperatingSystem.IsWindows())
@@ -49,10 +49,16 @@ public sealed class CodexCliAgentExecutionStrategyTests
         Assert.Equal("F:\\GitHub\\McpServer", spawner.StartInfo.WorkingDirectory);
         var serializedArguments = string.Join(" ", spawner.StartInfo.ArgumentList);
         Assert.Contains("exec", serializedArguments, StringComparison.Ordinal);
-        Assert.Contains("--output-schema", serializedArguments, StringComparison.Ordinal);
-        Assert.Contains("--output-last-message", serializedArguments, StringComparison.Ordinal);
+        Assert.Contains("-C", serializedArguments, StringComparison.Ordinal);
+        Assert.Contains("F:\\GitHub\\McpServer", serializedArguments, StringComparison.Ordinal);
+        Assert.Contains("-o", serializedArguments, StringComparison.Ordinal);
+        Assert.True(spawner.HasArgument("-"), "Codex must receive '-' so the prompt is read from stdin.");
+        Assert.DoesNotContain("--output-schema", serializedArguments, StringComparison.Ordinal);
+        Assert.DoesNotContain("--output-last-message", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("--model", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("model-triage", serializedArguments, StringComparison.Ordinal);
+        Assert.Contains("-c", serializedArguments, StringComparison.Ordinal);
+        Assert.Contains("model_reasoning_effort=\\\"xhigh\\\"", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("--sandbox", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("read-only", serializedArguments, StringComparison.Ordinal);
         Assert.Contains("--skip-git-repo-check", serializedArguments, StringComparison.Ordinal);
@@ -62,6 +68,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
         Assert.DoesNotContain("-p", spawner.StartInfo.ArgumentList);
         Assert.DoesNotContain("--stream", spawner.StartInfo.ArgumentList);
         Assert.DoesNotContain("--yolo", spawner.StartInfo.ArgumentList);
+        Assert.Equal("rendered prompt", spawner.CapturedStandardInput);
     }
 
     /// <summary>
@@ -81,7 +88,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
         var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(CopilotResultState.Error, result.State);
+        Assert.Equal(AgentCliResultState.Error, result.State);
         Assert.Contains("not authenticated", result.Stderr, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -107,7 +114,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
         var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(true);
 
-        Assert.Equal(CopilotResultState.Error, result.State);
+        Assert.Equal(AgentCliResultState.Error, result.State);
         Assert.Contains("analysis started", result.Stdout, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("loading context", result.Stderr, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("cancelled or timed out", result.Stderr, StringComparison.OrdinalIgnoreCase);
@@ -140,7 +147,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
         var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(CopilotResultState.Success, result.State);
+        Assert.Equal(AgentCliResultState.Success, result.State);
         Assert.Contains("stdout:analysis started", streamed);
         Assert.Contains("stdout:analysis done", streamed);
         Assert.Contains("stderr:loading context", streamed);
@@ -176,7 +183,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
             var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-            Assert.Equal(CopilotResultState.Success, result.State);
+            Assert.Equal(AgentCliResultState.Success, result.State);
             Assert.Equal("codex stdout", result.Stdout);
             Assert.Equal("codex stderr", result.Stderr);
             Assert.Equal(0, result.ExitCode);
@@ -185,9 +192,11 @@ public sealed class CodexCliAgentExecutionStrategyTests
             Assert.Contains("/c", spawner.StartInfo.ArgumentList);
             Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(cmdPath, StringComparison.OrdinalIgnoreCase));
             Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("--output-last-message", StringComparison.Ordinal));
+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("-o", StringComparison.Ordinal));
+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.EndsWith(" -", StringComparison.Ordinal));
             Assert.True(spawner.StartInfo.RedirectStandardInput);
             Assert.DoesNotContain(spawner.StartInfo.ArgumentList, argument => argument.Contains("rendered prompt", StringComparison.Ordinal));
+            Assert.Equal("rendered prompt", spawner.CapturedStandardInput);
         }
         finally
         {
@@ -196,17 +205,17 @@ public sealed class CodexCliAgentExecutionStrategyTests
     }
 
     /// <summary>
-    /// TEST-MCP-TRIAGE-003: The Codex CLI strategy writes schema and output
+    /// TEST-MCP-TRIAGE-003: The Codex CLI strategy writes one-shot output
     /// files under the configured shared temp root so a service-spawned
-    /// interactive-user codex process can read and write the files.
+    /// interactive-user codex process can write the final response file.
     /// </summary>
     [Fact]
-    public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedSchemaAndOutputPaths()
+    public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()
     {
-        var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-triage-shared-{Guid.NewGuid():N}");
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-oneshot-shared-{Guid.NewGuid():N}");
         Directory.CreateDirectory(tempRoot);
-        var previous = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP");
-        Environment.SetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP", tempRoot);
+        var previous = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP");
+        Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", tempRoot);
         try
         {
             var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
@@ -219,17 +228,15 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
             var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-            Assert.Equal(CopilotResultState.Success, result.State);
-            Assert.NotNull(spawner.OutputSchemaPath);
+            Assert.Equal(AgentCliResultState.Success, result.State);
             Assert.NotNull(spawner.OutputLastMessagePath);
-            Assert.StartsWith(tempRoot, spawner.OutputSchemaPath, StringComparison.OrdinalIgnoreCase);
             Assert.StartsWith(tempRoot, spawner.OutputLastMessagePath, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains("\"required\"", spawner.OutputSchemaJson, StringComparison.Ordinal);
-            Assert.Contains("acceptanceCriteria", spawner.OutputSchemaJson, StringComparison.Ordinal);
+            Assert.Null(spawner.OutputSchemaPath);
+            Assert.Null(spawner.OutputSchemaJson);
         }
         finally
         {
-            Environment.SetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP", previous);
+            Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", previous);
             Directory.Delete(tempRoot, recursive: true);
         }
     }
@@ -253,7 +260,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
             "F:\\GitHub\\McpServer",
             "triage",
             "codex-cli",
-            new CopilotClientOptions
+            new AgentCliClientOptions
             {
                 AgentPath = agentPath,
                 Model = "model-triage",
@@ -294,10 +301,14 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
         public string? OutputSchemaJson { get; private set; }
 
+        public string? CapturedStandardInput => LastProcess?.StandardInputText;
+
+        private FakeSpawnedProcess? LastProcess { get; set; }
+
         public ISpawnedProcess Spawn(ProcessStartInfo startInfo)
         {
             StartInfo = startInfo;
-            OutputLastMessagePath = GetArgumentValue(startInfo, "--output-last-message");
+            OutputLastMessagePath = GetArgumentValue(startInfo, "-o");
             OutputSchemaPath = GetArgumentValue(startInfo, "--output-schema");
             if (!string.IsNullOrWhiteSpace(OutputSchemaPath) && File.Exists(OutputSchemaPath))
             {
@@ -309,7 +320,21 @@ public sealed class CodexCliAgentExecutionStrategyTests
                 File.WriteAllText(OutputLastMessagePath, outputBody, Encoding.UTF8);
             }
 
-            return new FakeSpawnedProcess(exitCode, stdout, stderr, waitForCancellation);
+            LastProcess = new FakeSpawnedProcess(exitCode, stdout, stderr, waitForCancellation);
+            return LastProcess;
+        }
+
+        public bool HasArgument(string name)
+        {
+            if (StartInfo is null)
+                return false;
+
+            return StartInfo.ArgumentList.Any(argument => string.Equals(argument, name, StringComparison.Ordinal))
+                || StartInfo.ArgumentList.Any(argument => Regex.IsMatch(
+                    argument,
+                    "(^|\\s)" + Regex.Escape(name) + "(\\s|$)",
+                    RegexOptions.CultureInvariant,
+                    TimeSpan.FromMilliseconds(100)));
         }
 
         private static string? GetArgumentValue(ProcessStartInfo startInfo, string name)
@@ -332,24 +357,38 @@ public sealed class CodexCliAgentExecutionStrategyTests
         }
     }
 
-    private sealed class FakeSpawnedProcess(int exitCode, string stdout, string stderr, bool waitForCancellation) : ISpawnedProcess
+    private sealed class FakeSpawnedProcess : ISpawnedProcess
     {
+        private readonly MemoryStream _standardInput = new();
         private bool _killed;
 
-        public StreamReader StandardOutput { get; } = CreateReader(stdout);
+        public FakeSpawnedProcess(int exitCode, string stdout, string stderr, bool waitForCancellation)
+        {
+            ExitCode = exitCode;
+            StandardOutput = CreateReader(stdout);
+            StandardError = CreateReader(stderr);
+            WaitForCancellation = waitForCancellation;
+            StandardInput = new StreamWriter(_standardInput, Encoding.UTF8, leaveOpen: true);
+        }
 
-        public StreamReader StandardError { get; } = CreateReader(stderr);
+        public StreamReader StandardOutput { get; }
 
-        public StreamWriter? StandardInput => null;
+        public StreamReader StandardError { get; }
+
+        public StreamWriter? StandardInput { get; }
 
         public int Id => 1234;
 
-        public bool HasExited => !waitForCancellation || _killed;
+        public bool HasExited => !WaitForCancellation || _killed;
 
-        public int ExitCode { get; } = exitCode;
+        public int ExitCode { get; }
+
+        public string StandardInputText => Encoding.UTF8.GetString(_standardInput.ToArray()).TrimStart('\uFEFF');
+
+        private bool WaitForCancellation { get; }
 
         public Task WaitForExitAsync(CancellationToken cancellationToken = default) =>
-            waitForCancellation ? Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken) : Task.CompletedTask;
+            WaitForCancellation ? Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken) : Task.CompletedTask;
 
         public void Kill()
         {
@@ -358,8 +397,10 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
         public void Dispose()
         {
+            StandardInput?.Dispose();
             StandardOutput.Dispose();
             StandardError.Dispose();
+            _standardInput.Dispose();
         }
 
         private static StreamReader CreateReader(string value) =>

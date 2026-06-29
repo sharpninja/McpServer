@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using System.Data.Common;
 using System.Text.Json;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Storage;
@@ -10,25 +10,25 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// Decorates <see cref="ICopilotClient"/> and records copilot invocation audit entries in session logs.
+/// Decorates <see cref="IAgentCliClient"/> and records copilot invocation audit entries in session logs.
 /// </summary>
-public sealed class AuditedCopilotClient : ICopilotClient
+public sealed class AuditedAgentCliClient : IAgentCliClient
 {
-    private readonly ICopilotClient _inner;
+    private readonly IAgentCliClient _inner;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IOptions<IngestionOptions> _ingestionOptions;
-    private readonly ILogger<AuditedCopilotClient> _logger;
+    private readonly ILogger<AuditedAgentCliClient> _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AuditedCopilotClient"/> class.
+    /// Initializes a new instance of the <see cref="AuditedAgentCliClient"/> class.
     /// </summary>
-    public AuditedCopilotClient(
-        ICopilotClient inner,
+    public AuditedAgentCliClient(
+        IAgentCliClient inner,
         IServiceScopeFactory scopeFactory,
         IHttpContextAccessor httpContextAccessor,
         IOptions<IngestionOptions> ingestionOptions,
-        ILogger<AuditedCopilotClient> logger)
+        ILogger<AuditedAgentCliClient> logger)
     {
         _inner = inner;
         _scopeFactory = scopeFactory;
@@ -38,16 +38,16 @@ public sealed class AuditedCopilotClient : ICopilotClient
     }
 
     /// <inheritdoc />
-    public async Task<CopilotResult> InvokeAsync(
+    public async Task<AgentCliResult> InvokeAsync(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         var audit = await BeginAuditAsync("invoke", prompt, options, cancellationToken).ConfigureAwait(false);
         try
         {
             var result = await _inner.InvokeAsync(prompt, options, cancellationToken).ConfigureAwait(false);
-            var completed = result.State == CopilotResultState.Success;
+            var completed = result.State == AgentCliResultState.Success;
             await CompleteAuditAsync(
                     audit,
                     prompt,
@@ -75,16 +75,16 @@ public sealed class AuditedCopilotClient : ICopilotClient
     }
 
     /// <inheritdoc />
-    public async Task<CopilotResult<T>> InvokeAsync<T>(
+    public async Task<AgentCliResult<T>> InvokeAsync<T>(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         var audit = await BeginAuditAsync("invoke_typed", prompt, options, cancellationToken).ConfigureAwait(false);
         try
         {
             var result = await _inner.InvokeAsync<T>(prompt, options, cancellationToken).ConfigureAwait(false);
-            var completed = result.State == CopilotResultState.Success;
+            var completed = result.State == AgentCliResultState.Success;
             await CompleteAuditAsync(
                     audit,
                     prompt,
@@ -114,14 +114,14 @@ public sealed class AuditedCopilotClient : ICopilotClient
     /// <inheritdoc />
     public IAsyncEnumerable<string> InvokeStreamingAsync(
         string prompt,
-        CopilotClientOptions? options = null,
+        AgentCliClientOptions? options = null,
         CancellationToken cancellationToken = default)
         => InvokeStreamingWithAuditAsync(prompt, options, cancellationToken);
 
     /// <inheritdoc />
-    public CopilotInteractiveSession CreateInteractiveSession(
+    public AgentCliInteractiveSession CreateInteractiveSession(
         string initialPrompt,
-        CopilotClientOptions? options = null)
+        AgentCliClientOptions? options = null)
     {
         var audit = BeginAuditAsync("create_interactive_session", initialPrompt, options, CancellationToken.None)
             .GetAwaiter()
@@ -160,7 +160,7 @@ public sealed class AuditedCopilotClient : ICopilotClient
 
     private async IAsyncEnumerable<string> InvokeStreamingWithAuditAsync(
         string prompt,
-        CopilotClientOptions? options,
+        AgentCliClientOptions? options,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var audit = await BeginAuditAsync("invoke_streaming", prompt, options, cancellationToken).ConfigureAwait(false);
@@ -205,7 +205,7 @@ public sealed class AuditedCopilotClient : ICopilotClient
     private async Task<IReadOnlyList<AuditTarget>> BeginAuditAsync(
         string operation,
         string prompt,
-        CopilotClientOptions? options,
+        AgentCliClientOptions? options,
         CancellationToken cancellationToken)
     {
         var now = DateTimeOffset.UtcNow;
@@ -243,7 +243,7 @@ public sealed class AuditedCopilotClient : ICopilotClient
     private async Task CompleteAuditAsync(
         IReadOnlyList<AuditTarget> targets,
         string prompt,
-        CopilotClientOptions? options,
+        AgentCliClientOptions? options,
         string status,
         string response,
         string resultState,
@@ -268,7 +268,7 @@ public sealed class AuditedCopilotClient : ICopilotClient
         AuditTarget target,
         string operation,
         string prompt,
-        CopilotClientOptions? options,
+        AgentCliClientOptions? options,
         string status,
         string response,
         string resultState,
@@ -339,7 +339,7 @@ public sealed class AuditedCopilotClient : ICopilotClient
         }
     }
 
-    private IReadOnlyList<string> ResolveWorkspacePaths(CopilotClientOptions? options)
+    private IReadOnlyList<string> ResolveWorkspacePaths(AgentCliClientOptions? options)
     {
         var resolved = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>
 /// Abstraction over a spawned child process, providing access to redirected

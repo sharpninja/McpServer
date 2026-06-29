@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using Microsoft.Extensions.Logging;
 
-namespace McpServer.Common.Copilot;
+namespace McpServer.Common.AgentCli;
 
 /// <summary>
 /// Default implementation of <see cref="IProcessEnvironmentService"/>.

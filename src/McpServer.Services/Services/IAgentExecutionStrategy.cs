@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace McpServer.Support.Mcp.Services;
@@ -7,6 +7,7 @@ internal static class AgentExecutionStrategyNames
 {
     public const string CopilotCli = "copilot-cli";
     public const string CodexCli = "codex-cli";
+    public const string OneShotCli = "one-shot-cli";
     public const string HostedMcpAgent = "hosted-mcp-agent";
     public const string HostedAgentFrameworkLegacy = "hosted-agentframework";
 
@@ -14,6 +15,7 @@ internal static class AgentExecutionStrategyNames
     [
         CopilotCli,
         CodexCli,
+        OneShotCli,
         HostedMcpAgent,
     ];
 
@@ -25,7 +27,7 @@ internal static class AgentExecutionStrategyNames
 
     public static string NormalizeOrDefault(string? strategyName) =>
         string.IsNullOrWhiteSpace(strategyName)
-            ? CopilotCli
+            ? OneShotCli
             : NormalizeAlias(strategyName.Trim());
 
     private static string NormalizeAlias(string strategyName)
@@ -41,7 +43,7 @@ internal sealed record AgentExecutionSessionRequest(
     string WorkspacePath,
     string? AgentName,
     string ExecutionStrategy,
-    CopilotClientOptions Options);
+    AgentCliClientOptions Options);
 
 internal interface IAgentExecutionSession : IAsyncDisposable
 {
@@ -49,11 +51,11 @@ internal interface IAgentExecutionSession : IAsyncDisposable
 
     int? ProcessId { get; }
 
-    Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default);
+    Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default);
 
-    Task<CopilotResult> SendAsync(string prompt, CancellationToken cancellationToken = default);
+    Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default);
 
@@ -101,8 +103,8 @@ internal sealed class AgentExecutionStrategyResolver(IEnumerable<IAgentExecution
 public static class AgentExecutionServiceCollectionExtensions
 {
     /// <summary>
-    /// FR-MCP-052..058: Adds the default agent execution strategy set, including the legacy
-    /// Copilot CLI backend and the hosted MCP Agent backend.
+    /// FR-MCP-052..058: Adds the default agent execution strategy set, including the generic
+    /// one-shot CLI backend, legacy Copilot CLI backend, Codex CLI backend, and hosted MCP Agent backend.
     /// </summary>
     /// <param name="services">The service collection receiving the strategy registrations.</param>
     /// <returns>The same <paramref name="services"/> instance for chaining.</returns>
@@ -112,6 +114,7 @@ public static class AgentExecutionServiceCollectionExtensions
 
         services.AddSingleton<IAgentExecutionStrategy, CopilotCliAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategy, CodexCliAgentExecutionStrategy>();
+        services.AddSingleton<IAgentExecutionStrategy, OneShotCliAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategy, HostedMcpAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategyResolver, AgentExecutionStrategyResolver>();
         return services;
