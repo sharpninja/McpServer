@@ -40,6 +40,7 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
     private readonly IWorkspaceService? _workspaceService;
     private readonly ITurnTransactionCoordinator? _coordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
+    private readonly WorkspaceContext? _workspaceContext;
     private long _lastSequence = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
     /// <summary>Initializes a new instance of the <see cref="TransactionGatedTodoMutationService"/> class.</summary>
@@ -48,12 +49,14 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
     /// <param name="todoUpdateService">Shared TODO update orchestration service.</param>
     /// <param name="coordinator">Optional turn transaction coordinator.</param>
     /// <param name="transactionOptions">Optional turn transaction options.</param>
+    /// <param name="workspaceContext">Optional scoped workspace context used by background workers without HTTP context.</param>
     public TransactionGatedTodoMutationService(
         WorkspaceServiceAccessor workspaceAccessor,
         TodoCreationService todoCreationService,
         TodoUpdateService todoUpdateService,
         ITurnTransactionCoordinator? coordinator = null,
-        IOptions<TurnTransactionOptions>? transactionOptions = null)
+        IOptions<TurnTransactionOptions>? transactionOptions = null,
+        WorkspaceContext? workspaceContext = null)
         : this(
             workspaceAccessor,
             todoCreationService,
@@ -61,7 +64,8 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
             null,
             null,
             coordinator,
-            transactionOptions)
+            transactionOptions,
+            workspaceContext)
     {
     }
 
@@ -73,6 +77,7 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
     /// <param name="workspaceService">Workspace registry service used to resolve target workspaces.</param>
     /// <param name="coordinator">Optional turn transaction coordinator.</param>
     /// <param name="transactionOptions">Optional turn transaction options.</param>
+    /// <param name="workspaceContext">Optional scoped workspace context used by background workers without HTTP context.</param>
     [ActivatorUtilitiesConstructor]
     public TransactionGatedTodoMutationService(
         WorkspaceServiceAccessor workspaceAccessor,
@@ -81,7 +86,8 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
         TodoServiceResolver? todoServiceResolver,
         IWorkspaceService? workspaceService,
         ITurnTransactionCoordinator? coordinator = null,
-        IOptions<TurnTransactionOptions>? transactionOptions = null)
+        IOptions<TurnTransactionOptions>? transactionOptions = null,
+        WorkspaceContext? workspaceContext = null)
     {
         _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
         _todoCreationService = todoCreationService ?? throw new ArgumentNullException(nameof(todoCreationService));
@@ -90,6 +96,7 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
         _workspaceService = workspaceService;
         _coordinator = coordinator;
         _transactionOptions = transactionOptions;
+        _workspaceContext = workspaceContext;
     }
 
     /// <inheritdoc />
@@ -105,9 +112,11 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
             request.Id,
             async ct =>
             {
-                var todoService = _workspaceAccessor.GetTodoService();
+                var todoService = ResolveTodoService();
                 var compensation = GetUsableCompensation(todoService);
-                var result = await _todoCreationService.CreateAsync(request, ct).ConfigureAwait(false);
+                var result = TodoCreationService.IsNewGitHubIssueRequestId(request.Id)
+                    ? await _todoCreationService.CreateAsync(request, ct).ConfigureAwait(false)
+                    : await todoService.CreateAsync(request, ct).ConfigureAwait(false);
                 var createdId = result.Item?.Id ?? request.Id;
 
                 return new MutationExecution(
@@ -315,7 +324,7 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
     private static TurnMutationResult ToMutationResult(MutationExecution execution)
         => new()
         {
-            Success = execution.Result.Success,
+            Success = execution.Result.Success || IsProjectionWarning(execution.Result),
             ResultJson = JsonSerializer.Serialize(execution.Result, JsonOptions),
             Error = execution.Result.Error,
             RollbackAsync = execution.RollbackAsync is null
@@ -325,6 +334,14 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
 
     private bool RequiresMutationTransactions(TurnTransactionStatusResponse status)
         => status.Enabled && (_transactionOptions?.Value.RequiredForMutations ?? true);
+
+    private ITodoService ResolveTodoService()
+    {
+        if (_workspaceContext is { IsResolved: true } && _todoServiceResolver is not null)
+            return _todoServiceResolver.Resolve(_workspaceContext);
+
+        return _workspaceAccessor.GetTodoService();
+    }
 
     private static async Task<TodoMutationResult> RestoreOrThrowAsync(
         ITodoCompensationService compensation,
@@ -351,6 +368,9 @@ public sealed class TransactionGatedTodoMutationService : ITransactionGatedTodoM
     private static bool MayHaveAppliedMutation(TodoMutationResult result)
         => result.Success ||
            result is { Item: not null, FailureKind: TodoMutationFailureKind.ExternalSyncFailed or TodoMutationFailureKind.ProjectionFailed };
+
+    private static bool IsProjectionWarning(TodoMutationResult result)
+        => result is { Success: false, Item: not null, FailureKind: TodoMutationFailureKind.ProjectionFailed };
 
     private static bool IsIssueBackedTodoMutation(string id)
         => TodoCreationService.IsNewGitHubIssueRequestId(id) || TodoUpdateService.IsIssueTodoId(id);

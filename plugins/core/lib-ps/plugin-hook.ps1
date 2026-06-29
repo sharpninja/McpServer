@@ -8,7 +8,7 @@ param(
     [string]$HostName = $(if ($env:MCP_PLUGIN_HOST) { $env:MCP_PLUGIN_HOST } else { 'codex' }),
 
     [ValidateSet('flat', 'scoped')]
-    [string]$CacheMode = 'flat',
+    [string]$CacheMode = 'scoped',
 
     [string]$WorkspacePath
 )
@@ -21,6 +21,27 @@ $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'plugin-env.ps1')
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
+. (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
+Import-McpYamlSerializer
+
+function ConvertTo-PluginParamsYaml {
+    param([Parameter(Mandatory)]$Params)
+
+    return (ConvertTo-Yaml -Data $Params -Options WithIndentedSequences)
+}
+
+function New-PluginSessionId {
+    param([Parameter(Mandatory)][string]$AgentName)
+
+    if ($env:MCP_SESSION_ID) { return $env:MCP_SESSION_ID }
+
+    $timestamp = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
+    $suffix = if ($env:MCP_SESSION_SUFFIX) { $env:MCP_SESSION_SUFFIX } else { 'plugin-session' }
+    $suffix = ($suffix.ToLowerInvariant() -replace '[^a-z0-9]+', '-').Trim('-')
+    if (-not $suffix) { $suffix = 'plugin-session' }
+
+    return '{0}-{1}-{2}' -f $AgentName, $timestamp, $suffix
+}
 
 function Write-PluginJson {
     param([Parameter(Mandatory)]$Value)
@@ -151,20 +172,25 @@ function Start-PluginSession {
         $verified = $false
     }
     if (-not $verified) {
-        [System.IO.File]::WriteAllText($sessionFile, "status: MCP_UNTRUSTED`nlastUpdated: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))`n")
+        $untrustedState = [ordered]@{
+            status = 'MCP_UNTRUSTED'
+            lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        [System.IO.File]::WriteAllText($sessionFile, (ConvertTo-PluginParamsYaml $untrustedState))
         Write-PluginJson ([ordered]@{})
         return
     }
 
-    $sessionId = if ($env:MCP_SESSION_ID) { $env:MCP_SESSION_ID } else { '{0}-{1}' -f $env:MCP_AGENT_NAME, (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ') }
-    $content = @(
-        'status: verified'
-        "sessionId: $sessionId"
-        "agent: $($env:MCP_AGENT_NAME)"
-        "started: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-        "lastUpdated: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-    ) -join "`n"
-    [System.IO.File]::WriteAllText($sessionFile, $content + "`n")
+    $sessionId = New-PluginSessionId -AgentName $env:MCP_AGENT_NAME
+    $now = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    $sessionState = [ordered]@{
+        status = 'verified'
+        sessionId = $sessionId
+        agent = $env:MCP_AGENT_NAME
+        started = $now
+        lastUpdated = $now
+    }
+    [System.IO.File]::WriteAllText($sessionFile, (ConvertTo-PluginParamsYaml $sessionState))
     Write-PluginJson ([ordered]@{})
 }
 
@@ -198,26 +224,28 @@ function Open-PluginTurn {
     if ($title.Length -gt 60) { $title = $title.Substring(0, 60) }
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
-    $promptLines = (($prompt -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" | ForEach-Object { "    $_" }) -join "`n"
-    $paramsYaml = "requestId: $turnRequestId`nqueryTitle: $title`nqueryText: |`n$promptLines"
+    $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+        requestId = $turnRequestId
+        queryTitle = $title
+        queryText = $prompt
+    })
     Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml | Out-Null
 
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
-    $turnContent = @(
-        "turnRequestId: $turnRequestId"
-        "queryTitle: $title"
-        "openedAt: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-        'status: in_progress'
-        'codeEdits: 0'
-        'lastBuildStatus: unknown'
-        'auditActions: 0'
-        'auditFiles: 0'
-        'auditDialog: 0'
-        'auditDecisions: 0'
-        'queryText: |'
-        $promptLines
-    ) -join "`n"
-    [System.IO.File]::WriteAllText($turnFile, $turnContent + "`n")
+    $turnState = [ordered]@{
+        turnRequestId = $turnRequestId
+        queryTitle = $title
+        openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        status = 'in_progress'
+        codeEdits = 0
+        lastBuildStatus = 'unknown'
+        auditActions = 0
+        auditFiles = 0
+        auditDialog = 0
+        auditDecisions = 0
+        queryText = $prompt
+    }
+    [System.IO.File]::WriteAllText($turnFile, (ConvertTo-PluginParamsYaml $turnState))
 
     Write-PluginJson ([ordered]@{
         hookSpecificOutput = [ordered]@{
@@ -270,7 +298,9 @@ function Close-PluginTurnIfNeeded {
         }
 
         $response = 'Auto-closed by PowerShell stop gate.'
-        $paramsYaml = "response: |`n    $response"
+        $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+            response = $response
+        })
         Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml | Out-Null
         Set-YamlScalar -Path $turnFile -Key 'status' -Value 'completed'
     }

@@ -3,19 +3,19 @@ templates:
     title: Example Greeting Template
     category: custom
     tags:
-    - example
-    - getting-started
+      - example
+      - getting-started
     description: A simple greeting template demonstrating Handlebars syntax.
     engine: handlebars
     variables:
-    - name: name
-      description: Name of the person to greet
-      required: true
-      example: Alice
-    - name: role
-      description: Role or title of the person
-      required: false
-      defaultValue: developer
+      - name: name
+        description: Name of the person to greet
+        required: true
+        example: Alice
+      - name: role
+        description: Role or title of the person
+        required: false
+        defaultValue: developer
     content: |
       Hello, {{name}}!
       {{#if role}}You are a {{role}}.{{/if}}
@@ -24,23 +24,23 @@ templates:
     title: Agent Briefing Template
     category: agent
     tags:
-    - agent
-    - onboarding
-    - example
+      - agent
+      - onboarding
+      - example
     description: Template for briefing an AI agent about a workspace context.
     engine: handlebars
     variables:
-    - name: agentName
-      description: Name of the AI agent
-      required: true
-      example: Copilot
-    - name: workspaceName
-      description: Name of the current workspace
-      required: true
-      example: McpServer
-    - name: objectives
-      description: List of objectives for the agent
-      required: false
+      - name: agentName
+        description: Name of the AI agent
+        required: true
+        example: Copilot
+      - name: workspaceName
+        description: Name of the current workspace
+        required: true
+        example: McpServer
+      - name: objectives
+        description: List of objectives for the agent
+        required: false
     content: |
       ## Agent Briefing: {{agentName}}
 
@@ -60,26 +60,38 @@ templates:
     title: Triage Research Bug Report
     category: system
     tags:
-    - triage
-    - bug
-    - research
+      - triage
+      - bug
+      - research
     description: Prompt for the configured direct triage agent that researches grouped incidental bug reports and returns schema-valid JSON.
     engine: handlebars
     variables:
-    - name: groupJson
-      description: Serialized triage group detail including reports.
-      required: true
-    - name: groupId
-      description: Triage group identifier.
-      required: false
-    - name: workspacePath
-      description: Effective workspace path for the group.
-      required: false
-    - name: reportCount
-      description: Number of reports currently in the group.
-      required: false
-    content: |
+      - name: groupJson
+        description: Serialized triage group detail including reports.
+        required: true
+      - name: groupId
+        description: Triage group identifier.
+        required: false
+      - name: workspacePath
+        description: Effective workspace path for the group.
+        required: false
+      - name: reportCount
+        description: Number of reports currently in the group.
+        required: false
+    content: |-
       You are the configured MCP Server bug triage agent.
+
+      Background triage is not a normal workspace session. You are doing bounded read-only research for an already accepted triage group.
+
+      Use the supplied Group JSON as the primary source. Inspect repository files only when the report identifies a specific path, endpoint, method, or command that must be checked to make a defensible triage determination.
+
+      Do not read AGENTS-README-FIRST.yaml, AGENTS.md, plugin skills, session history, marker files, or workspace operating instructions unless the report itself says one of those files is the failing artifact.
+
+      Do not start or update MCP session logs, marker state, TODOs, requirements, GitHub issues, branches, commits, or MCP state. Do not create or update TODOs, requirements, GitHub issues, branches, commits, or MCP state.
+
+      Do not run broad recursive repository searches. If file inspection is required, prefer targeted reads of the named files or symbols and stop as soon as the acceptance criteria and implementation notes are supported.
+
+      Return only the JSON object as soon as you can make a defensible triage determination. Do not wait for perfect certainty and do not continue into remediation.
 
       Research the grouped incidental bug reports below. Return only schema-valid JSON with this shape:
 
@@ -103,23 +115,23 @@ templates:
     title: TODO Status Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - status
+      - todo
+      - prompt
+      - status
     description: 'Prompt template for generating TODO status reports. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: false
-    - name: baseUrl
-      description: Server base URL
-      required: false
-      default-value: http://localhost:7147
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: false
+      - name: baseUrl
+        description: Server base URL
+        required: false
+        default-value: http://localhost:7147
     content: |
       Get the current status of TODO {id}. Report the following in structured markdown:
 
@@ -132,23 +144,23 @@ templates:
     title: TODO Implement Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - implement
+      - todo
+      - prompt
+      - implement
     description: 'Prompt template for driving Copilot to implement a TODO item. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: true
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      default-value: http://localhost:7147
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: true
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        default-value: http://localhost:7147
     content: |
       Implement TODO {id}: {title}
 
@@ -178,23 +190,23 @@ templates:
     title: TODO Plan Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - plan
+      - todo
+      - prompt
+      - plan
     description: 'Prompt template for creating detailed implementation plans. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: false
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      default-value: http://localhost:7147
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: false
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        default-value: http://localhost:7147
     content: |
       Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on.
 
@@ -215,16 +227,16 @@ templates:
     title: Pairing Login Page
     category: system
     tags:
-    - pairing
-    - html
-    - login
+      - pairing
+      - html
+      - login
     description: 'HTML template for the /pair login form. Placeholder: {errorBanner} (empty string or error div).'
     engine: none
     variables:
-    - name: errorBanner
-      description: HTML error banner string (empty for no error)
-      required: false
-      default-value: ""
+      - name: errorBanner
+        description: HTML error banner string (empty for no error)
+        required: false
+        default-value: ""
     content: |
       <!DOCTYPE html>
       <html lang="en">
@@ -264,19 +276,19 @@ templates:
     title: Pairing Key Page
     category: system
     tags:
-    - pairing
-    - html
-    - apikey
+      - pairing
+      - html
+      - apikey
     description: 'HTML template showing the API key after login. Placeholders: {apiKey}, {serverUrl}.'
     engine: none
     variables:
-    - name: apiKey
-      description: The server API key to display
-      required: true
-    - name: serverUrl
-      description: The server base URL
-      required: true
-      example: http://localhost:7147
+      - name: apiKey
+        description: The server API key to display
+        required: true
+      - name: serverUrl
+        description: The server base URL
+        required: true
+        example: http://localhost:7147
     content: |
       <!DOCTYPE html>
       <html lang="en">
@@ -337,9 +349,9 @@ templates:
     title: Pairing Not Configured Page
     category: system
     tags:
-    - pairing
-    - html
-    - error
+      - pairing
+      - html
+      - error
     description: HTML template shown when pairing is not configured. No placeholders.
     engine: none
     content: |
@@ -371,29 +383,29 @@ templates:
     title: Default Marker File Prompt
     category: system
     tags:
-    - marker
-    - agent-instructions
-    - system
+      - marker
+      - agent-instructions
+      - system
     description: The default AGENTS-README-FIRST.yaml prompt template. Rendered with baseUrl, apiKey, and workspace context variables.
     engine: handlebars
     variables:
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      example: http://localhost:7147
-    - name: apiKey
-      description: Workspace API key
-      required: true
-    - name: version
-      description: Application version (informational version including git SHA)
-      required: false
-      defaultValue: unknown
-    - name: workspace
-      description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
-      required: true
-    - name: agentAdditions
-      description: Optional list of agent-specific marker instruction sections.
-      required: false
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        example: http://localhost:7147
+      - name: apiKey
+        description: Workspace API key
+        required: true
+      - name: version
+        description: Application version (informational version including git SHA)
+        required: false
+        defaultValue: unknown
+      - name: workspace
+        description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
+        required: true
+      - name: agentAdditions
+        description: Optional list of agent-specific marker instruction sections.
+        required: false
     content: |
       You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 

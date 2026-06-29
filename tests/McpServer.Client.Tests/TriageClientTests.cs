@@ -118,6 +118,22 @@ public sealed class TriageClientTests
         Assert.Contains("/mcpserver/triage/groups/triage-group-001/retry", handler.LastRequest.RequestUri!.AbsolutePath);
     }
 
+    /// <summary>TEST-MCP-TRIAGE-005: forced RetryGroupAsync passes the force query flag.</summary>
+    [Fact]
+    public async Task RetryGroupAsync_WhenForceTrue_PostsForceQueryFlag()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"groupId":"triage-group-001","status":"collecting","reportCount":1,"quietDeadlineUtc":"2026-06-25T05:00:00Z"}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.RetryGroupAsync("triage-group-001", force: true);
+
+        Assert.Equal("collecting", result.Status);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/groups/triage-group-001/retry", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("force=true", handler.LastRequest.RequestUri!.Query.TrimStart('?'));
+    }
+
     /// <summary>TEST-TRIAGE-003: CreateGroupFromSelectionAsync posts selected reports and groups.</summary>
     [Fact]
     public async Task CreateGroupFromSelectionAsync_PostsSelection()

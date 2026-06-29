@@ -851,12 +851,43 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         GetString(requestArgs, "status"),
                         GetString(requestArgs, "workspacePath"),
                         cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.GetDashboardMethod =>
+                    await workflow.GetDashboardAsync(
+                        GetString(requestArgs, "workspacePath"),
+                        cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.GetGroupMethod =>
                     await workflow.GetGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.QueryRunsMethod =>
+                    await workflow.QueryRunsAsync(
+                        GetString(requestArgs, "status"),
+                        GetString(requestArgs, "groupId"),
+                        GetString(requestArgs, "workspacePath"),
+                        cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.GetRunMethod =>
+                    await workflow.GetRunAsync(RequireString(args, requestArgs, "runId"), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.QueryCreatedTodosMethod =>
+                    await workflow.QueryCreatedTodosAsync(
+                        GetString(requestArgs, "workspacePath"),
+                        cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.FlushGroupMethod =>
                     await workflow.FlushGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.RetryGroupMethod =>
-                    await workflow.RetryGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
+                    await workflow.RetryGroupAsync(
+                        RequireString(args, requestArgs, "groupId"),
+                        GetBool(requestArgs, "force") ?? false,
+                        cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.CreateGroupMethod =>
+                    await workflow.CreateGroupFromSelectionAsync(BuildTriageGroupSelectionRequest(requestArgs), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.ConsolidateIntoGroupMethod =>
+                    await workflow.ConsolidateIntoGroupAsync(
+                        RequireString(args, requestArgs, "targetGroupId"),
+                        BuildTriageGroupSelectionRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.MergeGroupsMethod =>
+                    await workflow.MergeGroupsAsync(
+                        RequireString(args, requestArgs, "targetGroupId"),
+                        BuildTriageGroupSelectionRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false),
                 _ => null,
             };
 
@@ -1107,6 +1138,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Priority = RequireString(args, "priority"),
                         Area = RequireString(args, "area"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1121,6 +1153,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1142,6 +1175,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         Subarea = RequireString(args, "subarea"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1156,6 +1190,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1177,6 +1212,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         TestType = GetString(args, "testType") ?? "unit",
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1191,6 +1227,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1413,6 +1450,18 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         return JsonSerializer.Deserialize<T>(json, JsonOptions);
     }
 
+    private static IReadOnlyList<AcceptanceCriterion>? GetAcceptanceCriteria(
+        IReadOnlyDictionary<string, object?> args,
+        string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        return ConvertValue<IReadOnlyList<AcceptanceCriterion>>(value);
+    }
+
     private static T RequireParams<T>(IReadOnlyDictionary<string, object?> args)
         where T : class
     {
@@ -1524,6 +1573,14 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         CurrentTodoId = GetString(args, "currentTodoId"),
         WorkspacePath = GetString(args, "workspacePath"),
         IdempotencyKey = GetString(args, "idempotencyKey"),
+    };
+
+    private static TriageGroupSelectionRequest BuildTriageGroupSelectionRequest(IReadOnlyDictionary<string, object?> args) => new()
+    {
+        GroupIds = GetStringList(args, "groupIds"),
+        ReportIds = GetStringList(args, "reportIds"),
+        Title = GetString(args, "title"),
+        Summary = GetString(args, "summary"),
     };
 
     private static Dictionary<string, object?> GetRequestArgs(Dictionary<string, object?> args)

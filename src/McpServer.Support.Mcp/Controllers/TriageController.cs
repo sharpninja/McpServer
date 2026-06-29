@@ -131,11 +131,14 @@ public sealed class TriageController : ControllerBase
 
     /// <summary>FR-MCP-TRIAGE-002: Retry a failed triage group.</summary>
     [HttpPost("groups/{id}/retry")]
-    public async Task<ActionResult<TriageGroupDetail>> RetryGroupAsync(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<TriageGroupDetail>> RetryGroupAsync(
+        string id,
+        [FromQuery] bool force,
+        CancellationToken cancellationToken)
     {
         try
         {
-            return Ok(await _triageService.RetryGroupAsync(id, cancellationToken).ConfigureAwait(false));
+            return Ok(await _triageService.RetryGroupAsync(id, force, cancellationToken).ConfigureAwait(false));
         }
         catch (KeyNotFoundException ex)
         {

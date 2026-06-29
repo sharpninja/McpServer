@@ -263,9 +263,35 @@ internal static class ReplYamlMessageValidator
                 OptionalText(args, "status", errors);
                 OptionalText(args, "workspacePath", errors);
             },
+            [TriageCommandShapes.GetDashboardMethod] = static (args, errors) =>
+            {
+                OptionalText(args, "workspacePath", errors);
+            },
             [TriageCommandShapes.GetGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
+            [TriageCommandShapes.QueryRunsMethod] = static (args, errors) =>
+            {
+                OptionalText(args, "status", errors);
+                OptionalText(args, "groupId", errors);
+                OptionalText(args, "workspacePath", errors);
+            },
+            [TriageCommandShapes.GetRunMethod] = static (args, errors) => RequireText(args, "runId", errors),
+            [TriageCommandShapes.QueryCreatedTodosMethod] = static (args, errors) =>
+            {
+                OptionalText(args, "workspacePath", errors);
+            },
             [TriageCommandShapes.FlushGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
             [TriageCommandShapes.RetryGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
+            [TriageCommandShapes.CreateGroupMethod] = static (args, errors) => ValidateTriageGroupSelection(args, errors),
+            [TriageCommandShapes.ConsolidateIntoGroupMethod] = static (args, errors) =>
+            {
+                RequireText(args, "targetGroupId", errors);
+                ValidateTriageGroupSelection(args, errors);
+            },
+            [TriageCommandShapes.MergeGroupsMethod] = static (args, errors) =>
+            {
+                RequireText(args, "targetGroupId", errors);
+                ValidateTriageGroupSelection(args, errors);
+            },
 
             [RequirementsCommandShapes.ListFrMethod] = static (args, errors) =>
             {
@@ -283,6 +309,7 @@ internal static class ReplYamlMessageValidator
                 RequireText(args, "priority", errors);
                 RequireText(args, "area", errors);
                 OptionalText(args, "notes", errors);
+                OptionalAcceptanceCriteria(args, errors);
                 OptionalText(args, "scopeStartLayerKey", errors);
                 OptionalText(args, "scopeEndLayerKey", errors);
             },
@@ -319,6 +346,7 @@ internal static class ReplYamlMessageValidator
                 RequireText(args, "area", errors);
                 RequireText(args, "subarea", errors);
                 OptionalText(args, "notes", errors);
+                OptionalAcceptanceCriteria(args, errors);
                 OptionalText(args, "scopeStartLayerKey", errors);
                 OptionalText(args, "scopeEndLayerKey", errors);
             },
@@ -353,6 +381,7 @@ internal static class ReplYamlMessageValidator
                 RequireText(args, "area", errors);
                 OptionalText(args, "testType", errors);
                 OptionalText(args, "notes", errors);
+                OptionalAcceptanceCriteria(args, errors);
                 OptionalText(args, "scopeStartLayerKey", errors);
                 OptionalText(args, "scopeEndLayerKey", errors);
             },
@@ -520,6 +549,18 @@ internal static class ReplYamlMessageValidator
         OptionalTodoSubtasks(args, "implementationTasks", errors);
     }
 
+    private static void ValidateTriageGroupSelection(IReadOnlyDictionary<string, object?> args, List<string> errors)
+    {
+        OptionalStringList(args, "groupIds", errors);
+        OptionalStringList(args, "reportIds", errors);
+        OptionalText(args, "title", errors);
+        OptionalText(args, "summary", errors);
+        if (!HasNonEmptyStringList(args, "groupIds") && !HasNonEmptyStringList(args, "reportIds"))
+        {
+            errors.Add("payload.params must include groupIds or reportIds.");
+        }
+    }
+
     private static void ValidateRequirementPatch(IReadOnlyDictionary<string, object?> args, List<string> errors, string prefix = "")
     {
         OptionalText(args, "id", errors, $"{prefix}id");
@@ -534,8 +575,42 @@ internal static class ReplYamlMessageValidator
         OptionalEnum(args, "priority", errors, $"{prefix}priority", "critical", "high", "medium", "low");
         OptionalEnum(args, "status", errors, $"{prefix}status", "pending", "in_progress", "completed", "deferred");
         OptionalText(args, "notes", errors, $"{prefix}notes");
+        OptionalAcceptanceCriteria(args, errors, $"{prefix}acceptanceCriteria");
         OptionalText(args, "scopeStartLayerKey", errors, $"{prefix}scopeStartLayerKey");
         OptionalText(args, "scopeEndLayerKey", errors, $"{prefix}scopeEndLayerKey");
+    }
+
+    private static void OptionalAcceptanceCriteria(
+        IReadOnlyDictionary<string, object?> args,
+        List<string> errors,
+        string path = "payload.params.acceptanceCriteria")
+    {
+        if (!args.TryGetValue("acceptanceCriteria", out var value) || value is null)
+        {
+            return;
+        }
+
+        if (!TryGetArray(value, out var criteria))
+        {
+            errors.Add($"{path} must be an array.");
+            return;
+        }
+
+        for (var i = 0; i < criteria.Count; i++)
+        {
+            var itemPath = $"{path}[{i}]";
+            var item = ToDictionary(criteria[i]);
+            if (item is null)
+            {
+                errors.Add($"{itemPath} must be an object.");
+                continue;
+            }
+
+            OptionalText(item, "id", errors, $"{itemPath}.id");
+            RequireText(item, "text", errors, $"{itemPath}.text");
+            OptionalBoolean(item, "isSatisfied", errors, $"{itemPath}.isSatisfied");
+            OptionalText(item, "evidence", errors, $"{itemPath}.evidence");
+        }
     }
 
     private static void OptionalTodoSubtasks(IReadOnlyDictionary<string, object?> args, string key, List<string> errors)

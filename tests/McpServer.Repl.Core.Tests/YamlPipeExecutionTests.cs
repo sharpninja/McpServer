@@ -258,6 +258,230 @@ public class YamlPipeExecutionTests
     }
 
     /// <summary>
+    /// TEST-MCP-REQAC-001: single FR create dispatch preserves structured acceptance criteria.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_CreateFr_PreservesAcceptanceCriteria()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        var mutation = Substitute.For<IFrMutationResult>();
+        mutation.Success.Returns(true);
+        requirements
+            .CreateFrAsync(Arg.Any<IFrCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(mutation));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-create-fr-ac",
+                Method = RequirementsCommandShapes.CreateFrMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "FR-MCP-REQAC-999",
+                    ["title"] = "Preserve criteria",
+                    ["description"] = "Single FR create preserves structured acceptance criteria.",
+                    ["priority"] = "high",
+                    ["area"] = "MCP",
+                    ["acceptanceCriteria"] = new[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["id"] = "FR-MCP-REQAC-999-AC001",
+                            ["text"] = "Create forwards structured criteria to the workflow.",
+                            ["isSatisfied"] = false,
+                            ["evidence"] = "dispatcher regression",
+                        },
+                    },
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await requirements.Received(1).CreateFrAsync(
+            Arg.Is<IFrCreateRequest>(request => MatchesCreateCriteria(request)),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQAC-001: single FR update dispatch preserves structured acceptance criteria.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_UpdateFr_PreservesAcceptanceCriteria()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        var mutation = Substitute.For<IFrMutationResult>();
+        mutation.Success.Returns(true);
+        requirements
+            .UpdateFrAsync(Arg.Any<IFrUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(mutation));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-update-fr-ac",
+                Method = RequirementsCommandShapes.UpdateFrMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "FR-MCP-REQAC-999",
+                    ["acceptanceCriteria"] = new[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["id"] = "FR-MCP-REQAC-999-AC002",
+                            ["text"] = "Update forwards structured criteria to the workflow.",
+                            ["isSatisfied"] = true,
+                        },
+                    },
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await requirements.Received(1).UpdateFrAsync(
+            Arg.Is<IFrUpdateRequest>(request => MatchesUpdateCriteria(request)),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQAC-001: single TR and TEST create dispatch preserves structured acceptance criteria.
+    /// </summary>
+    [Theory]
+    [InlineData(RequirementsCommandShapes.CreateTrMethod, "TR-MCP-REQAC-999")]
+    [InlineData(RequirementsCommandShapes.CreateTestMethod, "TEST-MCP-REQAC-999")]
+    public async Task Dispatcher_CreateRequirement_PreservesAcceptanceCriteriaForTrAndTest(
+        string method,
+        string id)
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        var trMutation = Substitute.For<ITrMutationResult>();
+        var testMutation = Substitute.For<ITestMutationResult>();
+        trMutation.Success.Returns(true);
+        testMutation.Success.Returns(true);
+        requirements
+            .CreateTrAsync(Arg.Any<ITrCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(trMutation));
+        requirements
+            .CreateTestAsync(Arg.Any<ITestCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(testMutation));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var response = await sut.DispatchAsync(
+            BuildCreateRequirementEnvelope(method, id),
+            CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        if (method == RequirementsCommandShapes.CreateTrMethod)
+        {
+            await requirements.Received(1).CreateTrAsync(
+                Arg.Is<ITrCreateRequest>(request => MatchesCreateCriteria(request)),
+                Arg.Any<CancellationToken>());
+            return;
+        }
+
+        await requirements.Received(1).CreateTestAsync(
+            Arg.Is<ITestCreateRequest>(request => MatchesCreateCriteria(request)),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQAC-001: single TR and TEST update dispatch preserves structured acceptance criteria.
+    /// </summary>
+    [Theory]
+    [InlineData(RequirementsCommandShapes.UpdateTrMethod, "TR-MCP-REQAC-999")]
+    [InlineData(RequirementsCommandShapes.UpdateTestMethod, "TEST-MCP-REQAC-999")]
+    public async Task Dispatcher_UpdateRequirement_PreservesAcceptanceCriteriaForTrAndTest(
+        string method,
+        string id)
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        var trMutation = Substitute.For<ITrMutationResult>();
+        var testMutation = Substitute.For<ITestMutationResult>();
+        trMutation.Success.Returns(true);
+        testMutation.Success.Returns(true);
+        requirements
+            .UpdateTrAsync(Arg.Any<ITrUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(trMutation));
+        requirements
+            .UpdateTestAsync(Arg.Any<ITestUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(testMutation));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var response = await sut.DispatchAsync(
+            BuildUpdateRequirementEnvelope(method, id),
+            CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        if (method == RequirementsCommandShapes.UpdateTrMethod)
+        {
+            await requirements.Received(1).UpdateTrAsync(
+                Arg.Is<ITrUpdateRequest>(request => MatchesUpdateCriteria(request)),
+                Arg.Any<CancellationToken>());
+            return;
+        }
+
+        await requirements.Received(1).UpdateTestAsync(
+            Arg.Is<ITestUpdateRequest>(request => MatchesUpdateCriteria(request)),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQAC-001: malformed single requirement acceptance criteria fail validation.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_CreateFr_WithMalformedAcceptanceCriteria_ReturnsSchemaValidationFailed()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-create-fr-bad-ac",
+                Method = RequirementsCommandShapes.CreateFrMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "FR-MCP-REQAC-999",
+                    ["title"] = "Reject bad criteria",
+                    ["description"] = "Single FR create rejects malformed criteria.",
+                    ["priority"] = "high",
+                    ["area"] = "MCP",
+                    ["acceptanceCriteria"] = new[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["id"] = "FR-MCP-REQAC-999-AC003",
+                        },
+                    },
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("schema_validation_failed", err.Code);
+        await requirements.DidNotReceive().CreateFrAsync(Arg.Any<IFrCreateRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
     /// Verifies FR batch update dispatch preserves structured acceptance criteria.
     /// </summary>
     [Fact]
@@ -320,6 +544,70 @@ public class YamlPipeExecutionTests
                 request.Records[0].AcceptanceCriteria![0].Id == "FR-MCP-113-AC001" &&
                 request.Records[0].AcceptanceCriteria![0].Text == "Batch update preserves nested acceptance criteria." &&
                 request.Records[0].AcceptanceCriteria![0].IsSatisfied == false),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQAC-001: typed FR/TR/TEST batch create and update dispatch preserve structured acceptance criteria.
+    /// </summary>
+    [Theory]
+    [InlineData(RequirementsCommandShapes.CreateFrBatchMethod)]
+    [InlineData(RequirementsCommandShapes.UpdateFrBatchMethod)]
+    [InlineData(RequirementsCommandShapes.CreateTrBatchMethod)]
+    [InlineData(RequirementsCommandShapes.UpdateTrBatchMethod)]
+    [InlineData(RequirementsCommandShapes.CreateTestBatchMethod)]
+    [InlineData(RequirementsCommandShapes.UpdateTestBatchMethod)]
+    public async Task Dispatcher_TypedRequirementBatch_PreservesAcceptanceCriteriaForAllKinds(string method)
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        SetupBatchResults(requirements);
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var response = await sut.DispatchAsync(
+            BuildTypedBatchEnvelope(method),
+            CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await AssertTypedBatchReceivedAsync(requirements, method);
+    }
+
+    /// <summary>
+    /// TEST-MCP-REQAC-001: mixed requirement batch create and update dispatch preserve structured acceptance criteria.
+    /// </summary>
+    [Theory]
+    [InlineData(RequirementsCommandShapes.CreateBatchMethod, "fr")]
+    [InlineData(RequirementsCommandShapes.CreateBatchMethod, "tr")]
+    [InlineData(RequirementsCommandShapes.CreateBatchMethod, "test")]
+    [InlineData(RequirementsCommandShapes.UpdateBatchMethod, "fr")]
+    [InlineData(RequirementsCommandShapes.UpdateBatchMethod, "tr")]
+    [InlineData(RequirementsCommandShapes.UpdateBatchMethod, "test")]
+    public async Task Dispatcher_MixedRequirementBatch_PreservesAcceptanceCriteriaForAllKinds(
+        string method,
+        string kind)
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        SetupBatchResults(requirements);
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var response = await sut.DispatchAsync(
+            BuildMixedBatchEnvelope(method, kind),
+            CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        if (method == RequirementsCommandShapes.CreateBatchMethod)
+        {
+            await requirements.Received(1).CreateBatchAsync(
+                Arg.Is<CreateRequirementsBatchRequest>(request =>
+                    MatchesMixedBatchCriteria(request, kind, $"{kind.ToUpperInvariant()}-MCP-REQAC-999-AC001")),
+                Arg.Any<CancellationToken>());
+            return;
+        }
+
+        await requirements.Received(1).UpdateBatchAsync(
+            Arg.Is<UpdateRequirementsBatchRequest>(request =>
+                MatchesMixedBatchCriteria(request, kind, $"{kind.ToUpperInvariant()}-MCP-REQAC-999-AC002")),
             Arg.Any<CancellationToken>());
     }
 
@@ -1102,4 +1390,381 @@ public class YamlPipeExecutionTests
         Assert.Contains("type: error", output);
         Assert.Contains("req-after-error", output);
     }
+
+    private static bool MatchesCreateCriteria(IFrCreateRequest? request)
+        => MatchesCreateCriteria(request, "FR-MCP-REQAC-999");
+
+    private static bool MatchesCreateCriteria(IFrCreateRequest? request, string requirementId)
+    {
+        if (request?.AcceptanceCriteria is not { Count: 1 } criteria)
+            return false;
+
+        return criteria[0].Id == $"{requirementId}-AC001" &&
+               criteria[0].Text == "Create forwards structured criteria to the workflow." &&
+               criteria[0].IsSatisfied == false &&
+               criteria[0].Evidence == "dispatcher regression";
+    }
+
+    private static bool MatchesUpdateCriteria(IFrUpdateRequest? request)
+        => MatchesUpdateCriteria(request, "FR-MCP-REQAC-999");
+
+    private static bool MatchesUpdateCriteria(IFrUpdateRequest? request, string requirementId)
+    {
+        if (request?.AcceptanceCriteria is not { Count: 1 } criteria)
+            return false;
+
+        return criteria[0].Id == $"{requirementId}-AC002" &&
+               criteria[0].Text == "Update forwards structured criteria to the workflow." &&
+               criteria[0].IsSatisfied == true;
+    }
+
+    private static bool MatchesCreateCriteria(ITrCreateRequest? request)
+        => MatchesCreateCriteria(request, "TR-MCP-REQAC-999");
+
+    private static bool MatchesCreateCriteria(ITrCreateRequest? request, string requirementId)
+    {
+        if (request?.AcceptanceCriteria is not { Count: 1 } criteria)
+            return false;
+
+        return criteria[0].Id == $"{requirementId}-AC001" &&
+               criteria[0].Text == "Create forwards structured criteria to the workflow." &&
+               criteria[0].IsSatisfied == false &&
+               criteria[0].Evidence == "dispatcher regression";
+    }
+
+    private static bool MatchesUpdateCriteria(ITrUpdateRequest? request)
+        => MatchesUpdateCriteria(request, "TR-MCP-REQAC-999");
+
+    private static bool MatchesUpdateCriteria(ITrUpdateRequest? request, string requirementId)
+    {
+        if (request?.AcceptanceCriteria is not { Count: 1 } criteria)
+            return false;
+
+        return criteria[0].Id == $"{requirementId}-AC002" &&
+               criteria[0].Text == "Update forwards structured criteria to the workflow." &&
+               criteria[0].IsSatisfied == true;
+    }
+
+    private static bool MatchesCreateCriteria(ITestCreateRequest? request)
+        => MatchesCreateCriteria(request, "TEST-MCP-REQAC-999");
+
+    private static bool MatchesCreateCriteria(ITestCreateRequest? request, string requirementId)
+    {
+        if (request?.AcceptanceCriteria is not { Count: 1 } criteria)
+            return false;
+
+        return criteria[0].Id == $"{requirementId}-AC001" &&
+               criteria[0].Text == "Create forwards structured criteria to the workflow." &&
+               criteria[0].IsSatisfied == false &&
+               criteria[0].Evidence == "dispatcher regression";
+    }
+
+    private static bool MatchesUpdateCriteria(ITestUpdateRequest? request)
+        => MatchesUpdateCriteria(request, "TEST-MCP-REQAC-999");
+
+    private static bool MatchesUpdateCriteria(ITestUpdateRequest? request, string requirementId)
+    {
+        if (request?.AcceptanceCriteria is not { Count: 1 } criteria)
+            return false;
+
+        return criteria[0].Id == $"{requirementId}-AC002" &&
+               criteria[0].Text == "Update forwards structured criteria to the workflow." &&
+               criteria[0].IsSatisfied == true;
+    }
+
+    private static YamlEnvelope BuildCreateRequirementEnvelope(string method, string id)
+    {
+        var parameters = new Dictionary<string, object?>
+        {
+            ["id"] = id,
+            ["title"] = "Preserve criteria",
+            ["description"] = "Create preserves structured acceptance criteria.",
+            ["priority"] = "high",
+            ["area"] = "MCP",
+            ["acceptanceCriteria"] = CreateCriteria(id),
+        };
+
+        if (method == RequirementsCommandShapes.CreateTrMethod)
+        {
+            parameters["subarea"] = "REPL";
+        }
+        else
+        {
+            parameters["testType"] = "unit";
+        }
+
+        return BuildRequestEnvelope($"req-create-{id.ToLowerInvariant()}-ac", method, parameters);
+    }
+
+    private static YamlEnvelope BuildUpdateRequirementEnvelope(string method, string id)
+        => BuildRequestEnvelope(
+            $"req-update-{id.ToLowerInvariant()}-ac",
+            method,
+            new Dictionary<string, object?>
+            {
+                ["id"] = id,
+                ["acceptanceCriteria"] = UpdateCriteria(id),
+            });
+
+    private static YamlEnvelope BuildTypedBatchEnvelope(string method)
+    {
+        var id = RequirementIdForTypedBatchMethod(method);
+        return BuildRequestEnvelope(
+            $"req-{method.Split('.').Last().ToLowerInvariant()}-ac",
+            method,
+            new Dictionary<string, object?>
+            {
+                ["records"] = new[]
+                {
+                    BuildTypedBatchRecord(method, id),
+                },
+            });
+    }
+
+    private static YamlEnvelope BuildMixedBatchEnvelope(string method, string kind)
+    {
+        var id = $"{kind.ToUpperInvariant()}-MCP-REQAC-999";
+        return BuildRequestEnvelope(
+            $"req-{method.Split('.').Last().ToLowerInvariant()}-{kind}-ac",
+            method,
+            new Dictionary<string, object?>
+            {
+                ["records"] = new[]
+                {
+                    BuildMixedBatchRecord(method, kind, id),
+                },
+            });
+    }
+
+    private static YamlEnvelope BuildRequestEnvelope(
+        string requestId,
+        string method,
+        Dictionary<string, object?> parameters)
+        => new()
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = requestId,
+                Method = method,
+                Params = parameters,
+            },
+        };
+
+    private static Dictionary<string, object?> BuildTypedBatchRecord(string method, string id)
+    {
+        var record = new Dictionary<string, object?>
+        {
+            ["id"] = id,
+            ["acceptanceCriteria"] = method.Contains("create", StringComparison.OrdinalIgnoreCase)
+                ? CreateCriteria(id)
+                : UpdateCriteria(id),
+        };
+
+        if (!method.Contains("create", StringComparison.OrdinalIgnoreCase))
+        {
+            return record;
+        }
+
+        record["title"] = "Preserve criteria";
+        record["description"] = "Batch create preserves structured acceptance criteria.";
+        if (method == RequirementsCommandShapes.CreateTestBatchMethod)
+        {
+            record["condition"] = "Created TEST criteria survive dispatch.";
+        }
+        else
+        {
+            record["body"] = "Created requirement criteria survive dispatch.";
+        }
+
+        return record;
+    }
+
+    private static Dictionary<string, object?> BuildMixedBatchRecord(string method, string kind, string id)
+    {
+        var record = new Dictionary<string, object?>
+        {
+            ["kind"] = kind,
+            ["id"] = id,
+            ["acceptanceCriteria"] = method == RequirementsCommandShapes.CreateBatchMethod
+                ? CreateCriteria(id)
+                : UpdateCriteria(id),
+        };
+
+        if (method != RequirementsCommandShapes.CreateBatchMethod)
+        {
+            return record;
+        }
+
+        record["title"] = "Preserve criteria";
+        record["description"] = "Mixed batch create preserves structured acceptance criteria.";
+        if (kind == "test")
+        {
+            record["condition"] = "Created TEST criteria survive mixed dispatch.";
+        }
+        else
+        {
+            record["body"] = "Created requirement criteria survive mixed dispatch.";
+        }
+
+        return record;
+    }
+
+    private static object[] CreateCriteria(string requirementId)
+        =>
+        [
+            new Dictionary<string, object?>
+            {
+                ["id"] = $"{requirementId}-AC001",
+                ["text"] = "Create forwards structured criteria to the workflow.",
+                ["isSatisfied"] = false,
+                ["evidence"] = "dispatcher regression",
+            },
+        ];
+
+    private static object[] UpdateCriteria(string requirementId)
+        =>
+        [
+            new Dictionary<string, object?>
+            {
+                ["id"] = $"{requirementId}-AC002",
+                ["text"] = "Update forwards structured criteria to the workflow.",
+                ["isSatisfied"] = true,
+            },
+        ];
+
+    private static void SetupBatchResults(IRequirementsWorkflow requirements)
+    {
+        var result = Task.FromResult(new RequirementsBatchResult
+        {
+            Success = true,
+            Operation = "batch",
+            Kind = "mixed",
+            Total = 1,
+        });
+
+        requirements.CreateFrBatchAsync(Arg.Any<CreateFrBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+        requirements.UpdateFrBatchAsync(Arg.Any<UpdateFrBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+        requirements.CreateTrBatchAsync(Arg.Any<CreateTrBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+        requirements.UpdateTrBatchAsync(Arg.Any<UpdateTrBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+        requirements.CreateTestBatchAsync(Arg.Any<CreateTestBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+        requirements.UpdateTestBatchAsync(Arg.Any<UpdateTestBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+        requirements.CreateBatchAsync(Arg.Any<CreateRequirementsBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+        requirements.UpdateBatchAsync(Arg.Any<UpdateRequirementsBatchRequest>(), Arg.Any<CancellationToken>()).Returns(result);
+    }
+
+    private static async Task AssertTypedBatchReceivedAsync(IRequirementsWorkflow requirements, string method)
+    {
+        switch (method)
+        {
+            case RequirementsCommandShapes.CreateFrBatchMethod:
+                await requirements.Received(1).CreateFrBatchAsync(
+                    Arg.Is<CreateFrBatchRequest>(request =>
+                        MatchesTypedBatchCriteria(request, "FR-MCP-REQAC-999-AC001")),
+                    Arg.Any<CancellationToken>());
+                break;
+            case RequirementsCommandShapes.UpdateFrBatchMethod:
+                await requirements.Received(1).UpdateFrBatchAsync(
+                    Arg.Is<UpdateFrBatchRequest>(request =>
+                        MatchesTypedBatchCriteria(request, "FR-MCP-REQAC-999-AC002")),
+                    Arg.Any<CancellationToken>());
+                break;
+            case RequirementsCommandShapes.CreateTrBatchMethod:
+                await requirements.Received(1).CreateTrBatchAsync(
+                    Arg.Is<CreateTrBatchRequest>(request =>
+                        MatchesTypedBatchCriteria(request, "TR-MCP-REQAC-999-AC001")),
+                    Arg.Any<CancellationToken>());
+                break;
+            case RequirementsCommandShapes.UpdateTrBatchMethod:
+                await requirements.Received(1).UpdateTrBatchAsync(
+                    Arg.Is<UpdateTrBatchRequest>(request =>
+                        MatchesTypedBatchCriteria(request, "TR-MCP-REQAC-999-AC002")),
+                    Arg.Any<CancellationToken>());
+                break;
+            case RequirementsCommandShapes.CreateTestBatchMethod:
+                await requirements.Received(1).CreateTestBatchAsync(
+                    Arg.Is<CreateTestBatchRequest>(request =>
+                        MatchesTypedBatchCriteria(request, "TEST-MCP-REQAC-999-AC001")),
+                    Arg.Any<CancellationToken>());
+                break;
+            case RequirementsCommandShapes.UpdateTestBatchMethod:
+                await requirements.Received(1).UpdateTestBatchAsync(
+                    Arg.Is<UpdateTestBatchRequest>(request =>
+                        MatchesTypedBatchCriteria(request, "TEST-MCP-REQAC-999-AC002")),
+                    Arg.Any<CancellationToken>());
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(method), method, "Unsupported typed batch method.");
+        }
+    }
+
+    private static bool MatchesMixedBatchCriteria(
+        CreateRequirementsBatchRequest? request,
+        string expectedKind,
+        string expectedCriterionId)
+    {
+        if (request?.Records is not { Count: 1 })
+            return false;
+
+        var record = request.Records[0];
+        return record.Kind == expectedKind &&
+               MatchesCriteria(record.AcceptanceCriteria, expectedCriterionId);
+    }
+
+    private static bool MatchesMixedBatchCriteria(
+        UpdateRequirementsBatchRequest? request,
+        string expectedKind,
+        string expectedCriterionId)
+    {
+        if (request?.Records is not { Count: 1 })
+            return false;
+
+        var record = request.Records[0];
+        return record.Kind == expectedKind &&
+               MatchesCriteria(record.AcceptanceCriteria, expectedCriterionId);
+    }
+
+    private static bool MatchesTypedBatchCriteria(CreateFrBatchRequest? request, string expectedCriterionId)
+        => request?.Records is { Count: 1 } &&
+           MatchesCriteria(request.Records[0].AcceptanceCriteria, expectedCriterionId);
+
+    private static bool MatchesTypedBatchCriteria(UpdateFrBatchRequest? request, string expectedCriterionId)
+        => request?.Records is { Count: 1 } &&
+           MatchesCriteria(request.Records[0].AcceptanceCriteria, expectedCriterionId);
+
+    private static bool MatchesTypedBatchCriteria(CreateTrBatchRequest? request, string expectedCriterionId)
+        => request?.Records is { Count: 1 } &&
+           MatchesCriteria(request.Records[0].AcceptanceCriteria, expectedCriterionId);
+
+    private static bool MatchesTypedBatchCriteria(UpdateTrBatchRequest? request, string expectedCriterionId)
+        => request?.Records is { Count: 1 } &&
+           MatchesCriteria(request.Records[0].AcceptanceCriteria, expectedCriterionId);
+
+    private static bool MatchesTypedBatchCriteria(CreateTestBatchRequest? request, string expectedCriterionId)
+        => request?.Records is { Count: 1 } &&
+           MatchesCriteria(request.Records[0].AcceptanceCriteria, expectedCriterionId);
+
+    private static bool MatchesTypedBatchCriteria(UpdateTestBatchRequest? request, string expectedCriterionId)
+        => request?.Records is { Count: 1 } &&
+           MatchesCriteria(request.Records[0].AcceptanceCriteria, expectedCriterionId);
+
+    private static bool MatchesCriteria(
+        IReadOnlyList<AcceptanceCriterion>? criteria,
+        string expectedCriterionId)
+    {
+        return criteria is { Count: 1 } &&
+               criteria[0].Id == expectedCriterionId;
+    }
+
+    private static string RequirementIdForTypedBatchMethod(string method)
+        => method switch
+        {
+            RequirementsCommandShapes.CreateFrBatchMethod or RequirementsCommandShapes.UpdateFrBatchMethod
+                => "FR-MCP-REQAC-999",
+            RequirementsCommandShapes.CreateTrBatchMethod or RequirementsCommandShapes.UpdateTrBatchMethod
+                => "TR-MCP-REQAC-999",
+            RequirementsCommandShapes.CreateTestBatchMethod or RequirementsCommandShapes.UpdateTestBatchMethod
+                => "TEST-MCP-REQAC-999",
+            _ => throw new ArgumentOutOfRangeException(nameof(method), method, "Unsupported typed batch method."),
+        };
 }

@@ -25,6 +25,8 @@ public sealed class TriageService : ITriageService
     private const string StatusFailed = "failed";
     private const string ReportStatusGrouped = "grouped";
     private const string TodoPrefix = "BUG-TRIAGE-";
+    private const string TriageRuntimeInstructions =
+        "Runtime shell note. When shell inspection is necessary on Windows, invoke PowerShell as `pwsh.exe` from PATH. Do not hard-code `C:\\Program Files\\PowerShell\\7\\pwsh.exe`; WindowsApps installs use a different location. If shell inspection is unnecessary, return schema-valid JSON from the Group JSON without launching shell commands.";
     private static readonly string[] TriageQueueStatuses = ["new", "quieting", "pending", StatusCollecting];
     private static readonly string[] ReportGroupQueueStatuses = ["ready", StatusQueued, "in_progress", StatusProcessing, "retry_pending"];
 
@@ -38,6 +40,7 @@ public sealed class TriageService : ITriageService
     private readonly IWorkspaceService _workspaceService;
     private readonly ITriageResearchRunner _researchRunner;
     private readonly ITodoService _todoService;
+    private readonly ITriageTodoCreator _triageTodoCreator;
     private readonly IPromptTemplateService _promptTemplateService;
     private readonly TriageOptions _options;
     private readonly TimeProvider _timeProvider;
@@ -50,6 +53,7 @@ public sealed class TriageService : ITriageService
         IWorkspaceService workspaceService,
         ITriageResearchRunner researchRunner,
         ITodoService todoService,
+        ITriageTodoCreator triageTodoCreator,
         IPromptTemplateService promptTemplateService,
         IOptions<TriageOptions> options,
         TimeProvider timeProvider,
@@ -60,6 +64,7 @@ public sealed class TriageService : ITriageService
         _workspaceService = workspaceService ?? throw new ArgumentNullException(nameof(workspaceService));
         _researchRunner = researchRunner ?? throw new ArgumentNullException(nameof(researchRunner));
         _todoService = todoService ?? throw new ArgumentNullException(nameof(todoService));
+        _triageTodoCreator = triageTodoCreator ?? throw new ArgumentNullException(nameof(triageTodoCreator));
         _promptTemplateService = promptTemplateService ?? throw new ArgumentNullException(nameof(promptTemplateService));
         ArgumentNullException.ThrowIfNull(options);
         _options = options.Value;
@@ -398,7 +403,11 @@ public sealed class TriageService : ITriageService
     public async Task<TriageGroupDetail> FlushGroupAsync(string groupId, CancellationToken cancellationToken = default)
     {
         var group = await GetGroupEntityAsync(groupId, cancellationToken).ConfigureAwait(false);
-        group.QuietDeadlineUtc = _timeProvider.GetUtcNow();
+        var now = _timeProvider.GetUtcNow();
+        if (group.Status == StatusProcessing)
+            await FailStaleProcessingRunsAsync(now, group.GroupId, cancellationToken).ConfigureAwait(false);
+
+        group.QuietDeadlineUtc = now;
         if (group.Status == StatusFailed)
         {
             group.Status = StatusCollecting;
@@ -410,14 +419,58 @@ public sealed class TriageService : ITriageService
     }
 
     /// <inheritdoc />
-    public async Task<TriageGroupDetail> RetryGroupAsync(string groupId, CancellationToken cancellationToken = default)
+    public async Task<TriageGroupDetail> RetryGroupAsync(
+        string groupId,
+        bool force = false,
+        CancellationToken cancellationToken = default)
     {
         var group = await GetGroupEntityAsync(groupId, cancellationToken).ConfigureAwait(false);
+        var now = _timeProvider.GetUtcNow();
+        if (group.Status == StatusProcessing)
+        {
+            if (force)
+            {
+                await ForceFailProcessingRunsAsync(group, now, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                await FailStaleProcessingRunsAsync(now, group.GroupId, cancellationToken).ConfigureAwait(false);
+            }
+
+            if (group.Status == StatusProcessing)
+                throw new InvalidOperationException($"Triage group '{group.GroupId}' is still processing and cannot be retried yet.");
+        }
+
+        await ClearStaleCreatedTodoReferenceForRetryAsync(group, now, cancellationToken).ConfigureAwait(false);
+
         group.Status = StatusCollecting;
         group.LastError = null;
-        group.QuietDeadlineUtc = _timeProvider.GetUtcNow();
+        group.QuietDeadlineUtc = now;
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         return await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task ForceFailProcessingRunsAsync(
+        TriageGroupEntity group,
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
+    {
+        var runs = await _db.TriageResearchRuns
+            .Where(run => run.GroupId == group.GroupId && run.Status == StatusProcessing)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var error = "Triage research run was force retried before completion.";
+        foreach (var run in runs)
+        {
+            run.Status = StatusFailed;
+            run.Error = string.IsNullOrWhiteSpace(run.Error)
+                ? error
+                : $"{run.Error}{Environment.NewLine}{error}";
+            run.CompletedUtc = now;
+        }
+
+        group.Status = StatusFailed;
+        group.LastError = error;
     }
 
     /// <inheritdoc />
@@ -723,6 +776,8 @@ public sealed class TriageService : ITriageService
     public async Task<TriageSweepResult> ProcessDueGroupsAsync(CancellationToken cancellationToken = default)
     {
         var now = _timeProvider.GetUtcNow();
+        await FailStaleProcessingRunsAsync(now, groupId: null, cancellationToken).ConfigureAwait(false);
+
         var candidates = await _db.TriageGroups
             .IgnoreQueryFilters()
             .Where(g => g.Status == StatusCollecting || g.Status == StatusQueued)
@@ -789,6 +844,32 @@ public sealed class TriageService : ITriageService
         _db.TriageResearchRuns.Add(run);
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
+        using var outputLock = new SemaphoreSlim(1, 1);
+        async Task AppendAgentOutputAsync(TriageResearchOutputUpdate update)
+        {
+            if (string.IsNullOrEmpty(update.Text))
+                return;
+
+            await outputLock.WaitAsync(CancellationToken.None).ConfigureAwait(false);
+            try
+            {
+                if (string.Equals(update.StreamName, "stderr", StringComparison.OrdinalIgnoreCase))
+                {
+                    run.AgentStderr = AppendRunOutput(run.AgentStderr, update.Text);
+                }
+                else
+                {
+                    run.AgentStdout = AppendRunOutput(run.AgentStdout, update.Text);
+                }
+
+                await _db.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
+            }
+            finally
+            {
+                outputLock.Release();
+            }
+        }
+
         try
         {
             var detail = await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);
@@ -798,11 +879,11 @@ public sealed class TriageService : ITriageService
             run.Prompt = prompt;
 
             var rawResult = await _researchRunner.RunAsync(
-                new TriageResearchRequest(detail, groupJson, prompt, group.EffectiveWorkspacePath),
+                new TriageResearchRequest(detail, groupJson, prompt, group.EffectiveWorkspacePath, AppendAgentOutputAsync),
                 cancellationToken).ConfigureAwait(false);
             run.RawOutput = rawResult.OutputJson;
-            run.AgentStdout = rawResult.AgentStdout;
-            run.AgentStderr = rawResult.AgentStderr;
+            run.AgentStdout = MergeRunOutput(run.AgentStdout, rawResult.AgentStdout);
+            run.AgentStderr = MergeRunOutput(run.AgentStderr, rawResult.AgentStderr);
             run.AgentExitCode = rawResult.AgentExitCode;
 
             if (!rawResult.Success)
@@ -821,7 +902,7 @@ public sealed class TriageService : ITriageService
             }
 
             var todoId = await GenerateNextTodoIdAsync(cancellationToken).ConfigureAwait(false);
-            var createResult = await _todoService.CreateAsync(new TodoCreateRequest
+            var createResult = await _triageTodoCreator.CreateAsync(new TodoCreateRequest
             {
                 Id = todoId,
                 Title = schema.Output.Title.Trim(),
@@ -838,17 +919,22 @@ public sealed class TriageService : ITriageService
                 TechnicalRequirements = ["TR-MCP-TRIAGE-004"],
             }, cancellationToken).ConfigureAwait(false);
 
-            if (!createResult.Success)
+            var todoCreatedWithWarning = await ConfirmTodoCreatedWithWarningAsync(createResult, todoId, cancellationToken)
+                .ConfigureAwait(false);
+            if (!createResult.Success && !todoCreatedWithWarning)
             {
                 MarkResearchFailure(group, run, createResult.Error ?? "TODO creation failed.");
                 await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 return;
             }
 
-            group.CreatedTodoId = todoId;
+            var createdTodoId = createResult.Item?.Id ?? todoId;
+            group.CreatedTodoId = createdTodoId;
             group.Status = StatusCompleted;
-            run.CreatedTodoId = todoId;
+            group.LastError = todoCreatedWithWarning ? createResult.Error : null;
+            run.CreatedTodoId = createdTodoId;
             run.Status = StatusCompleted;
+            run.Error = todoCreatedWithWarning ? createResult.Error : null;
             run.ResponseJson = JsonSerializer.Serialize(schema.Output, JsonOptions);
             run.CompletedUtc = _timeProvider.GetUtcNow();
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -861,13 +947,164 @@ public sealed class TriageService : ITriageService
         }
     }
 
-    private static void MarkResearchFailure(TriageGroupEntity group, TriageResearchRunEntity run, string error)
+    private async Task<int> FailStaleProcessingRunsAsync(
+        DateTimeOffset now,
+        string? groupId,
+        CancellationToken cancellationToken)
+    {
+        var maxRunTime = GetEffectiveMaxRunTime();
+        var staleStartedBeforeUtc = now - maxRunTime;
+        var query = _db.TriageResearchRuns
+            .IgnoreQueryFilters()
+            .Where(run => run.Status == StatusProcessing);
+        if (!string.IsNullOrWhiteSpace(groupId))
+        {
+            var trimmedGroupId = groupId.Trim();
+            query = query.Where(run => run.GroupId == trimmedGroupId);
+        }
+
+        var staleRuns = (await query
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false))
+            .Where(run => run.StartedUtc <= staleStartedBeforeUtc)
+            .ToList();
+        if (staleRuns.Count == 0)
+            return 0;
+
+        var staleGroupIds = staleRuns
+            .Select(run => run.GroupId)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        var staleGroups = await _db.TriageGroups
+            .IgnoreQueryFilters()
+            .Where(group => staleGroupIds.Contains(group.GroupId))
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var error = $"Triage research run exceeded the configured maximum duration ({maxRunTime}) and was marked failed for retry.";
+
+        foreach (var run in staleRuns)
+        {
+            run.Status = StatusFailed;
+            run.Error = error;
+            run.CompletedUtc = now;
+
+            var group = staleGroups.FirstOrDefault(candidate =>
+                string.Equals(candidate.GroupId, run.GroupId, StringComparison.Ordinal) &&
+                string.Equals(candidate.WorkspaceId, run.WorkspaceId, StringComparison.Ordinal));
+            if (group is null ||
+                !string.Equals(group.Status, StatusProcessing, StringComparison.OrdinalIgnoreCase) ||
+                !string.IsNullOrWhiteSpace(group.CreatedTodoId))
+            {
+                continue;
+            }
+
+            group.Status = StatusFailed;
+            group.LastError = error;
+        }
+
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return staleRuns.Count;
+    }
+
+    private TimeSpan GetEffectiveMaxRunTime()
+        => _options.MaxRunTime <= TimeSpan.Zero ? TimeSpan.FromMinutes(30) : _options.MaxRunTime;
+
+    private void MarkResearchFailure(TriageGroupEntity group, TriageResearchRunEntity run, string error)
     {
         group.Status = StatusFailed;
         group.LastError = error;
         run.Status = StatusFailed;
         run.Error = error;
-        run.CompletedUtc = DateTimeOffset.UtcNow;
+        run.CompletedUtc = _timeProvider.GetUtcNow();
+    }
+
+    private async Task ClearStaleCreatedTodoReferenceForRetryAsync(
+        TriageGroupEntity group,
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(group.CreatedTodoId))
+            return;
+
+        var createdTodoId = group.CreatedTodoId.Trim();
+        var workspaceId = string.IsNullOrWhiteSpace(group.WorkspaceId)
+            ? group.EffectiveWorkspacePath
+            : group.WorkspaceId;
+        var todoExists = await _db.TodoItems
+            .IgnoreQueryFilters()
+            .AnyAsync(todo =>
+                    todo.Id == createdTodoId &&
+                    todo.WorkspaceId == workspaceId,
+                cancellationToken)
+            .ConfigureAwait(false);
+        if (todoExists)
+        {
+            throw new InvalidOperationException(
+                $"Triage group '{group.GroupId}' already created TODO '{createdTodoId}' and cannot be retried.");
+        }
+
+        var warning = $"Created TODO id '{createdTodoId}' is not readable; retry cleared the stale created TODO reference.";
+        group.CreatedTodoId = null;
+        var runs = await _db.TriageResearchRuns
+            .Where(run => run.GroupId == group.GroupId && run.CreatedTodoId == createdTodoId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        foreach (var run in runs)
+        {
+            run.CreatedTodoId = null;
+            if (string.Equals(run.Status, StatusCompleted, StringComparison.OrdinalIgnoreCase))
+                run.Status = StatusFailed;
+            run.Error = string.IsNullOrWhiteSpace(run.Error)
+                ? warning
+                : $"{run.Error}{Environment.NewLine}{warning}";
+            run.CompletedUtc ??= now;
+        }
+    }
+
+    private async Task<bool> ConfirmTodoCreatedWithWarningAsync(
+        TodoMutationResult result,
+        string requestedTodoId,
+        CancellationToken cancellationToken)
+    {
+        if (result.Success)
+            return false;
+        if (result.Item is null)
+            return false;
+        if (result.FailureKind is not (TodoMutationFailureKind.ProjectionFailed or TodoMutationFailureKind.ExternalSyncFailed))
+            return false;
+
+        var createdTodoId = string.IsNullOrWhiteSpace(result.Item.Id)
+            ? requestedTodoId
+            : result.Item.Id;
+        var workspaceId = string.IsNullOrWhiteSpace(_db.CurrentWorkspaceId)
+            ? _workspaceContext.WorkspacePath
+            : _db.CurrentWorkspaceId;
+        if (string.IsNullOrWhiteSpace(workspaceId))
+            return false;
+
+        return await _db.TodoItems
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .AnyAsync(todo =>
+                    todo.Id == createdTodoId &&
+                    todo.WorkspaceId == workspaceId,
+                cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    private static string AppendRunOutput(string? current, string chunk)
+    {
+        if (string.IsNullOrEmpty(current))
+            return chunk;
+        if (current.EndsWith(Environment.NewLine, StringComparison.Ordinal) ||
+            chunk.StartsWith(Environment.NewLine, StringComparison.Ordinal))
+            return string.Concat(current, chunk);
+        return string.Concat(current, Environment.NewLine, chunk);
+    }
+
+    private static string? MergeRunOutput(string? streamed, string? final)
+    {
+        return string.IsNullOrWhiteSpace(final) ? streamed : final;
     }
 
     private async Task<string> GenerateNextTodoIdAsync(CancellationToken cancellationToken)
@@ -1170,7 +1407,7 @@ public sealed class TriageService : ITriageService
                 cancellationToken).ConfigureAwait(false);
 
             if (rendered.Success && !string.IsNullOrWhiteSpace(rendered.RenderedContent))
-                return rendered.RenderedContent;
+                return AddRuntimeInstructions(rendered.RenderedContent);
 
             _logger.LogWarning(
                 "Triage prompt template {PromptTemplateId} could not be rendered: {Error}",
@@ -1178,7 +1415,7 @@ public sealed class TriageService : ITriageService
                 rendered.Error ?? "empty rendered content");
         }
 
-        return BuildFallbackPrompt(groupJson);
+        return AddRuntimeInstructions(BuildFallbackPrompt(groupJson));
     }
 
     private static string BuildFallbackPrompt(string groupJson)
@@ -1189,6 +1426,14 @@ public sealed class TriageService : ITriageService
 
            Group JSON:
            """ + Environment.NewLine + groupJson;
+
+    private static string AddRuntimeInstructions(string prompt)
+    {
+        if (prompt.Contains(TriageRuntimeInstructions, StringComparison.Ordinal))
+            return prompt;
+
+        return string.Concat(prompt.TrimEnd(), Environment.NewLine, Environment.NewLine, TriageRuntimeInstructions);
+    }
 
     private static (bool Valid, ResearchOutput? Output, string? Error) ValidateResearchOutput(string? outputJson)
     {

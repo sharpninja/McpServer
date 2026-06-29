@@ -371,7 +371,7 @@ public sealed class TriageOptions
     public TimeSpan SweepInterval { get; set; } = TimeSpan.FromMinutes(1);
 
     /// <summary>Maximum duration for a single research run.</summary>
-    public TimeSpan MaxRunTime { get; set; } = TimeSpan.FromMinutes(10);
+    public TimeSpan MaxRunTime { get; set; } = TimeSpan.FromMinutes(30);
 
     /// <summary>Prompt template id used to render research prompts.</summary>
     public string PromptTemplateId { get; set; } = "triage-research-bug-report";
@@ -393,13 +393,19 @@ public sealed class TriageOptions
 }
 
 /// <summary>
+/// TR-MCP-TRIAGE-003: Incremental output emitted by the configured direct triage agent.
+/// </summary>
+public sealed record TriageResearchOutputUpdate(string StreamName, string Text);
+
+/// <summary>
 /// TR-MCP-TRIAGE-003: Request passed to the configured direct triage agent.
 /// </summary>
 public sealed record TriageResearchRequest(
     TriageGroupDetail Group,
     string GroupJson,
     string Prompt,
-    string WorkspacePath);
+    string WorkspacePath,
+    Func<TriageResearchOutputUpdate, Task>? OutputReceivedAsync = null);
 
 /// <summary>
 /// TR-MCP-TRIAGE-003: Raw direct-agent research result.
@@ -460,7 +466,7 @@ public interface ITriageService
     Task<TriageGroupDetail> FlushGroupAsync(string groupId, CancellationToken cancellationToken = default);
 
     /// <summary>Retries a failed group by resetting it to collecting state.</summary>
-    Task<TriageGroupDetail> RetryGroupAsync(string groupId, CancellationToken cancellationToken = default);
+    Task<TriageGroupDetail> RetryGroupAsync(string groupId, bool force = false, CancellationToken cancellationToken = default);
 
     /// <summary>Creates a new group from selected triage reports and groups.</summary>
     Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(

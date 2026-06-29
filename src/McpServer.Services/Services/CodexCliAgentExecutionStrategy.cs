@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text;
 using McpServer.Common.Copilot;
 using Microsoft.Extensions.Logging;
 
@@ -134,14 +135,30 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 };
             }
 
+            var stdoutBuilder = new StringBuilder();
+            var stderrBuilder = new StringBuilder();
+            var stdoutTask = Task.CompletedTask;
+            var stderrTask = Task.CompletedTask;
             try
             {
-                var stdoutTask = _process.StandardOutput.ReadToEndAsync(cancellationToken);
-                var stderrTask = _process.StandardError.ReadToEndAsync(cancellationToken);
+                stdoutTask = CaptureStreamAsync(
+                    _process.StandardOutput,
+                    "stdout",
+                    stdoutBuilder,
+                    request.Options.AgentOutputReceivedAsync,
+                    cancellationToken);
+                stderrTask = CaptureStreamAsync(
+                    _process.StandardError,
+                    "stderr",
+                    stderrBuilder,
+                    request.Options.AgentOutputReceivedAsync,
+                    cancellationToken);
                 await _process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+                await WaitForCaptureAsync(stdoutTask).ConfigureAwait(false);
+                await WaitForCaptureAsync(stderrTask).ConfigureAwait(false);
 
-                var stdout = await stdoutTask.ConfigureAwait(false);
-                var stderr = await stderrTask.ConfigureAwait(false);
+                var stdout = stdoutBuilder.ToString();
+                var stderr = stderrBuilder.ToString();
                 var body = File.Exists(outputPath)
                     ? await File.ReadAllTextAsync(outputPath, cancellationToken).ConfigureAwait(false)
                     : stdout;
@@ -172,10 +189,18 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 if (_process is { HasExited: false })
                     _process.Kill();
 
+                await WaitForCaptureAsync(stdoutTask).ConfigureAwait(false);
+                await WaitForCaptureAsync(stderrTask).ConfigureAwait(false);
+                var stdout = stdoutBuilder.ToString();
+                var stderr = AppendProcessError(
+                    stderrBuilder.ToString(),
+                    "error: Codex CLI triage run was cancelled or timed out.");
                 return new CopilotResult
                 {
                     State = CopilotResultState.Error,
-                    Stderr = "error: Codex CLI triage run was cancelled or timed out.",
+                    Body = stdout,
+                    Stdout = stdout,
+                    Stderr = stderr,
                 };
             }
             finally
@@ -283,6 +308,66 @@ internal sealed class CodexCliAgentExecutionStrategy(
             await process.StandardInput.WriteAsync(prompt.AsMemory(), cancellationToken).ConfigureAwait(false);
             await process.StandardInput.FlushAsync(cancellationToken).ConfigureAwait(false);
             process.StandardInput.Close();
+        }
+
+        private static async Task CaptureStreamAsync(
+            StreamReader reader,
+            string streamName,
+            StringBuilder builder,
+            Func<string, string, Task>? outputReceivedAsync,
+            CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                string? line;
+                try
+                {
+                    line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                if (line is null)
+                    return;
+
+                if (builder.Length > 0)
+                    builder.AppendLine();
+                builder.Append(line);
+
+                if (outputReceivedAsync is not null)
+                    await outputReceivedAsync(streamName, line).ConfigureAwait(false);
+            }
+        }
+
+        private static async Task WaitForCaptureAsync(Task captureTask)
+        {
+            try
+            {
+                await captureTask.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Cancellation is expected when the agent run times out.
+            }
+            catch (ObjectDisposedException)
+            {
+                // The process streams can close while cancellation is killing the process.
+            }
+            catch (IOException)
+            {
+                // The process streams can close while cancellation is killing the process.
+            }
+        }
+
+        private static string AppendProcessError(string? current, string error)
+        {
+            if (string.IsNullOrWhiteSpace(current))
+                return error;
+            if (current.EndsWith(Environment.NewLine, StringComparison.Ordinal))
+                return string.Concat(current, error);
+            return string.Concat(current, Environment.NewLine, error);
         }
 
         private static void TryDelete(string path)

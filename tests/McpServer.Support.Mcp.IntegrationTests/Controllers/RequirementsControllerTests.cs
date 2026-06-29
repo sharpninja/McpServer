@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Text.Json;
 using McpServer.Support.Mcp;
 using McpServer.Support.Mcp.IntegrationTests;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
@@ -120,6 +121,155 @@ public sealed class RequirementsControllerTests : IDisposable
         Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-910").ConfigureAwait(true)).StatusCode);
         Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/tr/TR-MCP-BATCH-910").ConfigureAwait(true)).StatusCode);
         Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/test/TEST-MCP-910").ConfigureAwait(true)).StatusCode);
+    }
+
+    /// <summary>BUG-TRIAGE-010: single FR/TR/TEST create and update endpoints persist structured acceptance criteria after a fresh read.</summary>
+    [Fact]
+    public async Task SingleRequirementEndpoints_PersistAcceptanceCriteriaAfterFreshRead()
+    {
+        const string frId = "FR-MCP-AC-991";
+        const string trId = "TR-MCP-AC-991";
+        const string testId = "TEST-MCP-AC-991";
+
+        await AssertSuccessAsync(await _client.PostAsJsonAsync(
+            "/mcpserver/requirements/fr",
+            new
+            {
+                id = frId,
+                title = "AC FR",
+                body = "FR body",
+                notes = "keep-fr-notes",
+                acceptanceCriteria = Criteria($"{frId}-AC001", "FR create criteria", false, "fr-create")
+            }).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
+        await AssertSuccessAsync(await _client.PostAsJsonAsync(
+            "/mcpserver/requirements/tr",
+            new
+            {
+                id = trId,
+                title = "AC TR",
+                body = "TR body",
+                notes = "keep-tr-notes",
+                acceptanceCriteria = Criteria($"{trId}-AC001", "TR create criteria", false, "tr-create")
+            }).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
+        await AssertSuccessAsync(await _client.PostAsJsonAsync(
+            "/mcpserver/requirements/test",
+            new
+            {
+                id = testId,
+                condition = "TEST condition",
+                title = "AC TEST",
+                notes = "keep-test-notes",
+                acceptanceCriteria = Criteria($"{testId}-AC001", "TEST create criteria", false, "test-create")
+            }).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
+
+        var createdFr = await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true);
+        var createdTr = await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true);
+        var createdTest = await GetJsonAsync<TestEntry>($"/mcpserver/requirements/test/{testId}").ConfigureAwait(true);
+        AssertCriterion(createdFr.AcceptanceCriteria, $"{frId}-AC001", "FR create criteria", false, "fr-create");
+        AssertCriterion(createdTr.AcceptanceCriteria, $"{trId}-AC001", "TR create criteria", false, "tr-create");
+        AssertCriterion(createdTest.AcceptanceCriteria, $"{testId}-AC001", "TEST create criteria", false, "test-create");
+
+        await AssertSuccessAsync(await _client.PutAsJsonAsync(
+            $"/mcpserver/requirements/fr/{frId}",
+            new { acceptanceCriteria = Criteria($"{frId}-AC002", "FR update criteria", true, "fr-update") }).ConfigureAwait(true)).ConfigureAwait(true);
+        await AssertSuccessAsync(await _client.PutAsJsonAsync(
+            $"/mcpserver/requirements/tr/{trId}",
+            new { acceptanceCriteria = Criteria($"{trId}-AC002", "TR update criteria", true, "tr-update") }).ConfigureAwait(true)).ConfigureAwait(true);
+        await AssertSuccessAsync(await _client.PutAsJsonAsync(
+            $"/mcpserver/requirements/test/{testId}",
+            new { acceptanceCriteria = Criteria($"{testId}-AC002", "TEST update criteria", true, "test-update") }).ConfigureAwait(true)).ConfigureAwait(true);
+
+        var updatedFr = await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true);
+        var updatedTr = await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true);
+        var updatedTest = await GetJsonAsync<TestEntry>($"/mcpserver/requirements/test/{testId}").ConfigureAwait(true);
+        Assert.Equal("keep-fr-notes", updatedFr.Notes);
+        Assert.Equal("keep-tr-notes", updatedTr.Notes);
+        Assert.Equal("keep-test-notes", updatedTest.Notes);
+        AssertCriterion(updatedFr.AcceptanceCriteria, $"{frId}-AC002", "FR update criteria", true, "fr-update");
+        AssertCriterion(updatedTr.AcceptanceCriteria, $"{trId}-AC002", "TR update criteria", true, "tr-update");
+        AssertCriterion(updatedTest.AcceptanceCriteria, $"{testId}-AC002", "TEST update criteria", true, "test-update");
+    }
+
+    /// <summary>BUG-TRIAGE-010: FR/TR/TEST batch endpoints persist structured acceptance criteria after create and update.</summary>
+    [Fact]
+    public async Task BatchRequirementEndpoints_PersistAcceptanceCriteriaAfterFreshRead()
+    {
+        const string frId = "FR-MCP-ACB-991";
+        const string trId = "TR-MCP-ACB-991";
+        const string testId = "TEST-MCP-ACB-991";
+
+        await AssertBatchSuccessAsync(await _client.PostAsJsonAsync(
+            "/mcpserver/requirements/fr/batch",
+            new
+            {
+                records = new[]
+                {
+                    new
+                    {
+                        id = frId,
+                        title = "Batch AC FR",
+                        body = "Batch FR body",
+                        notes = "keep-fr-batch-notes",
+                        acceptanceCriteria = Criteria($"{frId}-AC001", "FR batch create criteria", false, "fr-batch-create")
+                    }
+                }
+            }).ConfigureAwait(true)).ConfigureAwait(true);
+        await AssertBatchSuccessAsync(await _client.PostAsJsonAsync(
+            "/mcpserver/requirements/tr/batch",
+            new
+            {
+                records = new[]
+                {
+                    new
+                    {
+                        id = trId,
+                        title = "Batch AC TR",
+                        body = "Batch TR body",
+                        notes = "keep-tr-batch-notes",
+                        acceptanceCriteria = Criteria($"{trId}-AC001", "TR batch create criteria", false, "tr-batch-create")
+                    }
+                }
+            }).ConfigureAwait(true)).ConfigureAwait(true);
+        await AssertBatchSuccessAsync(await _client.PostAsJsonAsync(
+            "/mcpserver/requirements/test/batch",
+            new
+            {
+                records = new[]
+                {
+                    new
+                    {
+                        id = testId,
+                        condition = "Batch TEST condition",
+                        title = "Batch AC TEST",
+                        notes = "keep-test-batch-notes",
+                        acceptanceCriteria = Criteria($"{testId}-AC001", "TEST batch create criteria", false, "test-batch-create")
+                    }
+                }
+            }).ConfigureAwait(true)).ConfigureAwait(true);
+
+        AssertCriterion((await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true)).AcceptanceCriteria, $"{frId}-AC001", "FR batch create criteria", false, "fr-batch-create");
+        AssertCriterion((await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true)).AcceptanceCriteria, $"{trId}-AC001", "TR batch create criteria", false, "tr-batch-create");
+        AssertCriterion((await GetJsonAsync<TestEntry>($"/mcpserver/requirements/test/{testId}").ConfigureAwait(true)).AcceptanceCriteria, $"{testId}-AC001", "TEST batch create criteria", false, "test-batch-create");
+
+        await AssertBatchSuccessAsync(await _client.PutAsJsonAsync(
+            "/mcpserver/requirements/fr/batch",
+            new { records = new[] { new { id = frId, acceptanceCriteria = Criteria($"{frId}-AC002", "FR batch update criteria", true, "fr-batch-update") } } }).ConfigureAwait(true)).ConfigureAwait(true);
+        await AssertBatchSuccessAsync(await _client.PutAsJsonAsync(
+            "/mcpserver/requirements/tr/batch",
+            new { records = new[] { new { id = trId, acceptanceCriteria = Criteria($"{trId}-AC002", "TR batch update criteria", true, "tr-batch-update") } } }).ConfigureAwait(true)).ConfigureAwait(true);
+        await AssertBatchSuccessAsync(await _client.PutAsJsonAsync(
+            "/mcpserver/requirements/test/batch",
+            new { records = new[] { new { id = testId, acceptanceCriteria = Criteria($"{testId}-AC002", "TEST batch update criteria", true, "test-batch-update") } } }).ConfigureAwait(true)).ConfigureAwait(true);
+
+        var updatedFr = await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true);
+        var updatedTr = await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true);
+        var updatedTest = await GetJsonAsync<TestEntry>($"/mcpserver/requirements/test/{testId}").ConfigureAwait(true);
+        Assert.Equal("keep-fr-batch-notes", updatedFr.Notes);
+        Assert.Equal("keep-tr-batch-notes", updatedTr.Notes);
+        Assert.Equal("keep-test-batch-notes", updatedTest.Notes);
+        AssertCriterion(updatedFr.AcceptanceCriteria, $"{frId}-AC002", "FR batch update criteria", true, "fr-batch-update");
+        AssertCriterion(updatedTr.AcceptanceCriteria, $"{trId}-AC002", "TR batch update criteria", true, "tr-batch-update");
+        AssertCriterion(updatedTest.AcceptanceCriteria, $"{testId}-AC002", "TEST batch update criteria", true, "test-batch-update");
     }
 
     /// <summary>Batch creation rejects duplicate incoming IDs before writing any record.</summary>
@@ -358,6 +508,54 @@ public sealed class RequirementsControllerTests : IDisposable
             content,
             lastModifiedUtc
         };
+
+    private async Task<T> GetJsonAsync<T>(string path)
+    {
+        var response = await _client.GetAsync(path).ConfigureAwait(true);
+        await AssertSuccessAsync(response).ConfigureAwait(true);
+        return await response.Content.ReadFromJsonAsync<T>().ConfigureAwait(true)
+               ?? throw new InvalidOperationException($"Endpoint '{path}' returned an empty JSON body.");
+    }
+
+    private static async Task AssertSuccessAsync(HttpResponseMessage response, HttpStatusCode expected = HttpStatusCode.OK)
+    {
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Equal(expected, response.StatusCode);
+        Assert.True(response.IsSuccessStatusCode, $"Request failed ({response.StatusCode}): {body}");
+    }
+
+    private static async Task AssertBatchSuccessAsync(HttpResponseMessage response)
+    {
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        using var result = JsonDocument.Parse(body);
+        Assert.True(result.RootElement.GetProperty("success").GetBoolean(), body);
+    }
+
+    private static object[] Criteria(string id, string text, bool isSatisfied, string evidence) =>
+    [
+        new
+        {
+            id,
+            text,
+            isSatisfied,
+            evidence
+        }
+    ];
+
+    private static void AssertCriterion(
+        IReadOnlyList<AcceptanceCriterion>? criteria,
+        string expectedId,
+        string expectedText,
+        bool expectedSatisfied,
+        string expectedEvidence)
+    {
+        var criterion = Assert.Single(criteria ?? []);
+        Assert.Equal(expectedId, criterion.Id);
+        Assert.Equal(expectedText, criterion.Text);
+        Assert.Equal(expectedSatisfied, criterion.IsSatisfied);
+        Assert.Equal(expectedEvidence, criterion.Evidence);
+    }
 
     /// <summary>WebApplicationFactory that seeds a temporary requirements docs workspace.</summary>
     public sealed class RequirementsWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable

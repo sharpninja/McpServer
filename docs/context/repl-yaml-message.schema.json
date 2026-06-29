@@ -69,6 +69,20 @@
       },
       "additionalProperties": true
     },
+    "triageGroupSelectionParams": {
+      "type": "object",
+      "properties": {
+        "groupIds": { "$ref": "#/$defs/stringArray" },
+        "reportIds": { "$ref": "#/$defs/stringArray" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" }
+      },
+      "anyOf": [
+        { "required": ["groupIds"] },
+        { "required": ["reportIds"] }
+      ],
+      "additionalProperties": true
+    },
     "todoSubtask": {
       "oneOf": [
         { "type": "string", "minLength": 1 },
@@ -920,6 +934,24 @@
           }
         },
         {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.dashboard" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "workspacePath": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
           "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.triage.getGroup", "workflow.triage.flushGroup", "workflow.triage.retryGroup"] } } } } },
           "then": {
             "properties": {
@@ -931,6 +963,98 @@
                     "required": ["groupId"],
                     "properties": { "groupId": { "type": "string", "minLength": 1 } },
                     "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.queryRuns" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "groupId": { "type": "string" },
+                      "workspacePath": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.getRun" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["runId"],
+                    "properties": { "runId": { "type": "string", "minLength": 1 } },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.queryCreatedTodos" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "workspacePath": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.triage.createGroup" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": { "$ref": "#/$defs/triageGroupSelectionParams" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.triage.consolidateIntoGroup", "workflow.triage.mergeGroups"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/triageGroupSelectionParams" },
+                      {
+                        "type": "object",
+                        "required": ["targetGroupId"],
+                        "properties": { "targetGroupId": { "type": "string", "minLength": 1 } },
+                        "additionalProperties": true
+                      }
+                    ]
                   }
                 }
               }

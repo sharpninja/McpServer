@@ -8,8 +8,8 @@
     Translation shim: workflow.sessionlog.* methods are not server routes
     — the dispatcher rejects them as method_not_found. They are plugin-
     local verbs that update cache/current-turn.yaml so the Stop hook can
-    verify completion, and (best-effort) persist a session-log turn via
-    the real client.SessionLog.SubmitAsync route.
+    verify completion, and persist a session-log turn via the real
+    client.SessionLog.SubmitAsync route.
 
     Two usage modes:
       1. Script entry: pwsh -File repl-invoke.ps1 -Method <m> [-ParamsYaml <y>]
@@ -27,6 +27,8 @@ $ErrorActionPreference = 'Stop'
 
 $shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
 Import-Module $shimModule -ErrorAction Stop
+. (Join-Path $PSScriptRoot 'yaml-object-mutation.ps1')
+Import-McpYamlSerializer
 
 $script:ReplInvokePluginRoot = if ($env:PLUGIN_ROOT_OVERRIDE) {
     $env:PLUGIN_ROOT_OVERRIDE
@@ -253,6 +255,20 @@ function Read-ReplYamlLiteralBlock {
     return ($items -join "`n").TrimEnd()
 }
 
+function ConvertTo-ReplCanonicalSessionId {
+    param([Parameter(Mandatory)][string]$SessionId)
+
+    if ($SessionId -match '^[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$') {
+        return $SessionId
+    }
+
+    if ($SessionId -match '^(?<agent>[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*)-(?<stamp>\d{8}T\d{6}Z)$') {
+        return '{0}-{1}-plugin-session' -f $Matches['agent'], $Matches['stamp']
+    }
+
+    return $SessionId
+}
+
 function Get-ReplSessionMeta {
     $f = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
     if (-not (Test-Path $f)) { return $null }
@@ -261,6 +277,16 @@ function Get-ReplSessionMeta {
     if (-not $line) { return $null }
     $sid = ($line.Line -replace '^sessionId:\s*', '').Trim()
     if (-not $sid) { return $null }
+    $canonicalSessionId = ConvertTo-ReplCanonicalSessionId -SessionId $sid
+    if ($canonicalSessionId -ne $sid) {
+        $state = Read-McpYamlObject -Path $f
+        $state['sessionId'] = $canonicalSessionId
+        if (-not $state.Contains('lastUpdated')) {
+            $state['lastUpdated'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        Write-McpYamlObject -Path $f -Document $state
+        $sid = $canonicalSessionId
+    }
     $prefix = ($sid -split '-', 2)[0]
     New-McpPluginSessionMeta -SourceType $prefix -SessionId $sid
 }
@@ -375,6 +401,14 @@ function Get-ReplCurrentTurnQueryText {
     # _repl_yaml_block_get for the one block the upsert path needs).
     $turnFile = Join-Path (Get-ReplInvokeCacheDir) 'current-turn.yaml'
     if (-not (Test-Path $turnFile)) { return '' }
+    try {
+        $turnState = Read-McpYamlObject -Path $turnFile
+        if ($turnState -and $turnState.Contains('queryText')) {
+            return [string]$turnState['queryText']
+        }
+    } catch {
+        # Fall through to the legacy literal-block parser.
+    }
     $text = Get-Content -Path $turnFile -Raw
     if ($text -match '(?ms)^queryText:\s*\|\s*\r?\n(.*?)(?=^\S|\z)') {
         $block = $Matches[1]
@@ -444,31 +478,23 @@ function Invoke-ReplTurnUpsertParams {
                  else { 'codex' }
     }
 
-    $filePaths = @()
-    if ($ActionsYaml) {
-        $filePaths = [regex]::Matches($ActionsYaml, '(?m)^\s*filePath:\s*(.+)$') |
-            ForEach-Object { $_.Groups[1].Value.Trim() } | Where-Object { $_ }
-    }
-
     $actions = @()
     if ($ActionsYaml) {
-        # Simple parse of the actions block into objects (for JSON serialization)
-        $lines = $ActionsYaml -split "`n"
-        $cur = $null
-        foreach ($l in $lines) {
-            $t = $l.Trim()
-            if ($t -match '^-') {
-                if ($cur) { $actions += (New-McpPluginActionRecord -Values $cur).ToMap() }
-                $cur = @{}
-                if ($t -match 'type:\s*(.+)$') { $cur.type = ($Matches[1] -replace '^["'']|["'']$','').Trim() }
-            } elseif ($cur -and $t -match '^(\w+):\s*(.+)$') {
-                $k = $Matches[1]
-                $v = ($Matches[2] -replace '^["'']|["'']$','').Trim()
-                $cur[$k] = $v
+        $actionParams = Convert-ReplParamsYamlToObject -ParamsYaml ("actions:`n$ActionsYaml")
+        if ($actionParams -and $actionParams.actions) {
+            foreach ($action in @($actionParams.actions)) {
+                $actions += (New-McpPluginActionRecord -Values $action).ToMap()
             }
         }
-        if ($cur) { $actions += (New-McpPluginActionRecord -Values $cur).ToMap() }
     }
+
+    $filePaths = @($actions | ForEach-Object {
+        if ($_ -is [hashtable] -and $_.ContainsKey('filePath') -and $_.filePath) {
+            $_.filePath
+        } elseif ($_.PSObject.Properties.Name -contains 'filePath' -and $_.filePath) {
+            $_.filePath
+        }
+    } | Where-Object { $_ })
 
     $request = New-McpPluginTurnUpsertRequest `
         -Agent $SourceType `
@@ -499,24 +525,29 @@ function Invoke-ReplSubmitSessionFallback {
         [string]$ActionsYaml = ''
     )
 
-    $respLines = ($ResponseText -split "`n" | ForEach-Object { "      $_" }) -join "`n"
-    $params = @"
-sessionLog:
-  sourceType: $($Meta.SourceType)
-  sessionId: $($Meta.SessionId)
-  title: $Title
-  status: in_progress
-  turns:
-    - requestId: $RequestId
-      queryTitle: $Title
-      status: $Status
-      response: |
-$respLines
-"@
-    if ($ActionsYaml) {
-        $actLines = ($ActionsYaml -split "`n" | ForEach-Object { "      $_" }) -join "`n"
-        $params += "`n      actions:`n$actLines"
+    $turn = [ordered]@{
+        requestId = $RequestId
+        queryTitle = $Title
+        status = $Status
+        response = $ResponseText
     }
+    if ($ActionsYaml) {
+        $actionParams = Convert-ReplParamsYamlToObject -ParamsYaml ("actions:`n$ActionsYaml")
+        if ($actionParams -and $actionParams.actions) {
+            $turn.actions = @($actionParams.actions)
+        }
+    }
+
+    $paramsObject = [ordered]@{
+        sessionLog = [ordered]@{
+            sourceType = $Meta.SourceType
+            sessionId = $Meta.SessionId
+            title = $Title
+            status = 'in_progress'
+            turns = @($turn)
+        }
+    }
+    $params = ConvertTo-Yaml -Data $paramsObject -Options WithIndentedSequences
 
     $r = Invoke-ReplRaw -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $params
     return $r.Success
@@ -534,7 +565,7 @@ function Invoke-ReplPersistTurn {
         [string]$ActionsYaml = ''
     )
     $meta = Get-ReplSessionMeta
-    if (-not $meta) { return $false }
+    if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
     $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType `
         -SessionId $meta.SessionId -RequestId $RequestId -Title $Title `
@@ -580,12 +611,17 @@ function Invoke-ReplPersistTurn {
             Clear-ReplFailsafe -Path $failsafe
             return $true
         }
-        if ($output -match 'method_not_found') {
+        if ($output -match 'method_not_found' -or $output -match 'Session not found') {
             Clear-ReplFailsafe -Path $failsafe
-            return (Invoke-ReplSubmitSessionFallback -Meta $meta -RequestId $RequestId `
-                -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml)
+            $fallbackOk = Invoke-ReplSubmitSessionFallback -Meta $meta -RequestId $RequestId `
+                -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml
+            if (-not $fallbackOk) {
+                throw "Session log fallback submit failed for request '$RequestId'."
+            }
+            return $true
         }
-        return $false
+        $message = "Session log persistence failed for request '$RequestId'. ExitCode=$($proc.ExitCode). Output=$output"
+        throw $message
     } finally {
         Remove-Item $tmp -ErrorAction SilentlyContinue
     }
@@ -731,7 +767,7 @@ function Invoke-WorkflowAppendActions {
         $title = Get-ReplTurnCacheField -Field 'queryTitle'
         Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText 'Actions appended.' `
-            -ActionsYaml $actionsBlock | Out-Null
+            -ActionsYaml $actionsBlock
     }
     return $true
 }
@@ -742,14 +778,11 @@ function Invoke-WorkflowCompleteTurn {
     if (-not (Test-Path $turnFile)) { return $true }
 
     $responseText = '(no response provided)'
-    if ($ParamsYaml -match '(?ms)^\s*response:\s*\|\s*\r?\n(.*)$') {
-        $block = $Matches[1]
-        $responseText = ($block -split "`n" | ForEach-Object {
-            $_ -replace '^\s{0,8}', ''
-        }) -join "`n"
-        $responseText = $responseText.TrimEnd()
-    } elseif ($ParamsYaml -match '(?m)^\s*response:\s*(.+)$') {
-        $responseText = $Matches[1].Trim()
+    if ($ParamsYaml) {
+        $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+        if ($params -and ($params.PSObject.Properties.Name -contains 'response')) {
+            $responseText = [string]$params.response
+        }
     }
 
     $actionsBlock = ''
@@ -762,7 +795,7 @@ function Invoke-WorkflowCompleteTurn {
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
     $title = Get-ReplTurnCacheField -Field 'queryTitle'
     Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-        -Status 'completed' -ResponseText $responseText -ActionsYaml $actionsBlock | Out-Null
+        -Status 'completed' -ResponseText $responseText -ActionsYaml $actionsBlock
     return $true
 }
 

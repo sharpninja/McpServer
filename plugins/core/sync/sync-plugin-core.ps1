@@ -123,6 +123,8 @@ $manifestObject = [ordered]@{
     files = $manifestFiles
 }
 $manifestYaml = ConvertTo-Yaml -Data $manifestObject -Options WithIndentedSequences
+$manifestYaml = (($manifestYaml -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" |
+    ForEach-Object { $_.TrimEnd() }) -join "`n"
 [System.IO.File]::WriteAllText($manifest, ($manifestYaml.TrimEnd() + "`n"), [System.Text.UTF8Encoding]::new($false))
 $count = $manifestFiles.Count
 Write-Output "synced $count core files into $PluginRoot/lib (core $coreVersion)"

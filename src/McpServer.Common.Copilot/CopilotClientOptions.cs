@@ -56,4 +56,10 @@ public sealed class CopilotClientOptions
     /// Null or empty = rely on the CLI's default auth discovery.
     /// </summary>
     public string? GitHubToken { get; set; }
+
+    /// <summary>
+    /// Optional callback invoked when a direct agent emits stdout or stderr text.
+    /// The first argument is the stream name, and the second is the emitted text.
+    /// </summary>
+    public Func<string, string, Task>? AgentOutputReceivedAsync { get; set; }
 }

@@ -87,6 +87,13 @@ public sealed class TriagePromptTemplateTests
         Assert.Contains("schema-valid JSON", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("triage-group-001", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains(@"""reports""", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Background triage is not a normal workspace session", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Do not read AGENTS-README-FIRST.yaml", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Do not start or update MCP session logs", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Do not create or update TODOs, requirements, GitHub issues, branches, commits, or MCP state", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Use the supplied Group JSON as the primary source", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Do not run broad recursive repository searches", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("Return only the JSON object as soon as you can make a defensible triage determination", result.RenderedContent, StringComparison.Ordinal);
     }
 
     private static string FindRepositoryRoot()

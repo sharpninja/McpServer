@@ -338,6 +338,7 @@ builder.Services.AddSingleton<IIssueTodoSyncService>(sp =>
         sp.GetService<IOptions<TurnTransactionOptions>>()));
 builder.Services.AddSingleton<TodoUpdateService>();
 builder.Services.AddScoped<ITransactionGatedTodoMutationService, TransactionGatedTodoMutationService>();
+builder.Services.AddScoped<ITriageTodoCreator, TransactionGatedTriageTodoCreator>();
 builder.Services.AddScoped<TodoExecutionService>();
 builder.Services.AddScoped<ITodoExecutionService>(sp =>
 {

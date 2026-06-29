@@ -99,7 +99,7 @@ Mcp:
 Triage:
   QuietPeriod: 00:15:00
   SweepInterval: 00:01:00
-  MaxRunTime: 00:10:00
+  MaxRunTime: 00:30:00
   PromptTemplateId: triage-research-bug-report
   AgentName: triage
   AgentPath: codex

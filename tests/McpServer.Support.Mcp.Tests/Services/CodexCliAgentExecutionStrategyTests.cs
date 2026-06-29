@@ -86,6 +86,67 @@ public sealed class CodexCliAgentExecutionStrategyTests
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGE-005: Timed-out Codex CLI triage runs preserve partial
+    /// stdout and stderr instead of returning only the timeout message.
+    /// </summary>
+    [Fact]
+    public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()
+    {
+        var spawner = new CapturingProcessSpawner(
+            exitCode: 0,
+            stdout: "analysis started",
+            stderr: "loading context",
+            waitForCancellation: true);
+        var strategy = new CodexCliAgentExecutionStrategy(
+            new CapturingProcessEnvironmentService(),
+            spawner,
+            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+
+        await using var session = await strategy.CreateSessionAsync(CreateRequest()).ConfigureAwait(true);
+        using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
+
+        var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(true);
+
+        Assert.Equal(CopilotResultState.Error, result.State);
+        Assert.Contains("analysis started", result.Stdout, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("loading context", result.Stderr, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("cancelled or timed out", result.Stderr, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: Codex CLI triage runs stream stdout and stderr
+    /// chunks to the configured output callback while the process is running.
+    /// </summary>
+    [Fact]
+    public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()
+    {
+        var streamed = new List<string>();
+        var spawner = new CapturingProcessSpawner(
+            exitCode: 0,
+            outputBody: """{"title":"triage result"}""",
+            stdout: "analysis started" + Environment.NewLine + "analysis done",
+            stderr: "loading context");
+        var strategy = new CodexCliAgentExecutionStrategy(
+            new CapturingProcessEnvironmentService(),
+            spawner,
+            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+        var request = CreateRequest(outputReceivedAsync: (streamName, text) =>
+        {
+            streamed.Add($"{streamName}:{text}");
+            return Task.CompletedTask;
+        });
+
+        await using var session = await strategy.CreateSessionAsync(request).ConfigureAwait(true);
+
+        var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(CopilotResultState.Success, result.State);
+        Assert.Contains("stdout:analysis started", streamed);
+        Assert.Contains("stdout:analysis done", streamed);
+        Assert.Contains("stderr:loading context", streamed);
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-003: Windows npm command shims are wrapped through
     /// <c>cmd.exe</c> so desktop spawning does not execute <c>.cmd</c> directly.
     /// </summary>
@@ -184,7 +245,9 @@ public sealed class CodexCliAgentExecutionStrategyTests
         Assert.Contains("codex-cli", AgentExecutionStrategyNames.SupportedNames);
     }
 
-    private static AgentExecutionSessionRequest CreateRequest(string agentPath = "codex.cmd") =>
+    private static AgentExecutionSessionRequest CreateRequest(
+        string agentPath = "codex.cmd",
+        Func<string, string, Task>? outputReceivedAsync = null) =>
         new(
             "rendered prompt",
             "F:\\GitHub\\McpServer",
@@ -196,6 +259,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
                 Model = "model-triage",
                 WorkingDirectory = "F:\\GitHub\\McpServer",
                 Timeout = TimeSpan.FromSeconds(30),
+                AgentOutputReceivedAsync = outputReceivedAsync,
             });
 
     private sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
@@ -219,7 +283,8 @@ public sealed class CodexCliAgentExecutionStrategyTests
         int exitCode,
         string outputBody = "",
         string stdout = "",
-        string stderr = "") : IProcessSpawner
+        string stderr = "",
+        bool waitForCancellation = false) : IProcessSpawner
     {
         public ProcessStartInfo? StartInfo { get; private set; }
 
@@ -244,7 +309,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
                 File.WriteAllText(OutputLastMessagePath, outputBody, Encoding.UTF8);
             }
 
-            return new FakeSpawnedProcess(exitCode, stdout, stderr);
+            return new FakeSpawnedProcess(exitCode, stdout, stderr, waitForCancellation);
         }
 
         private static string? GetArgumentValue(ProcessStartInfo startInfo, string name)
@@ -267,8 +332,10 @@ public sealed class CodexCliAgentExecutionStrategyTests
         }
     }
 
-    private sealed class FakeSpawnedProcess(int exitCode, string stdout, string stderr) : ISpawnedProcess
+    private sealed class FakeSpawnedProcess(int exitCode, string stdout, string stderr, bool waitForCancellation) : ISpawnedProcess
     {
+        private bool _killed;
+
         public StreamReader StandardOutput { get; } = CreateReader(stdout);
 
         public StreamReader StandardError { get; } = CreateReader(stderr);
@@ -277,14 +344,16 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
         public int Id => 1234;
 
-        public bool HasExited => true;
+        public bool HasExited => !waitForCancellation || _killed;
 
         public int ExitCode { get; } = exitCode;
 
-        public Task WaitForExitAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task WaitForExitAsync(CancellationToken cancellationToken = default) =>
+            waitForCancellation ? Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken) : Task.CompletedTask;
 
         public void Kill()
         {
+            _killed = true;
         }
 
         public void Dispose()

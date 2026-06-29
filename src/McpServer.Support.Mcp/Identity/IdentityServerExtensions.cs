@@ -19,12 +19,7 @@ internal static class IdentityServerExtensions
         if (!options.Enabled)
             return services;
 
-        var identityConnectionString = options.ConnectionString;
-        if (string.IsNullOrWhiteSpace(identityConnectionString))
-        {
-            // Default to SQL Server LocalDB
-            identityConnectionString = $"Server=(localdb)\\MSSQLLocalDB;Database={options.DatabaseName};Trusted_Connection=True;MultipleActiveResultSets=true";
-        }
+        var identityConnectionString = ResolveIdentityConnectionString(configuration, options);
 
         // ASP.NET Core Identity backed by SQL Server
         services.AddDbContext<McpIdentityDbContext>(opts =>
@@ -59,6 +54,28 @@ internal static class IdentityServerExtensions
         .AddInMemoryClients(IdentityServerConfig.GetClients(options));
 
         return services;
+    }
+
+    internal static string ResolveIdentityConnectionString(
+        IConfiguration configuration,
+        IdentityServerOptions options)
+    {
+        if (!string.IsNullOrWhiteSpace(options.ConnectionString))
+            return options.ConnectionString;
+
+        var provider = configuration["Mcp:Database:Provider"] ?? configuration["Mcp:DatabaseProvider"];
+        if (string.Equals(provider, "sqlserver", StringComparison.OrdinalIgnoreCase))
+        {
+            var mcpSqlServerConnectionString =
+                configuration["Mcp:Database:SqlServer:ConnectionString"]
+                ?? configuration["Mcp:SqlServerConnectionString"]
+                ?? configuration.GetConnectionString("McpSqlServer");
+
+            if (!string.IsNullOrWhiteSpace(mcpSqlServerConnectionString))
+                return mcpSqlServerConnectionString;
+        }
+
+        return $"Server=(localdb)\\MSSQLLocalDB;Database={options.DatabaseName};Trusted_Connection=True;MultipleActiveResultSets=true";
     }
 
     public static WebApplication UseMcpIdentityServer(this WebApplication app)

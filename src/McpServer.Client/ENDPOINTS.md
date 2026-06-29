@@ -1100,8 +1100,9 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
   - Request DTO/body: TriageGroupSelectionRequest
   - Response DTO/body: TriageGroupEditResult
   - Source: TriageClient.cs
-- RetryGroupAsync: POST /mcpserver/triage/groups/{id}/retry
+- RetryGroupAsync: POST /mcpserver/triage/groups/{id}/retry?force={force}
   - Request DTO/body: none
+  - Query parameters include force optional boolean to fail an active processing run before requeueing
   - Response DTO/body: TriageGroupDetail
   - Source: TriageClient.cs
 - SubmitReportAsync: POST /mcpserver/triage/reports

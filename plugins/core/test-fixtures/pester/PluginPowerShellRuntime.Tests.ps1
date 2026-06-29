@@ -396,6 +396,7 @@ acceptanceCriteria:
         $content | Should -Match 'ConvertFrom-Yaml'
         $content | Should -Match 'ConvertTo-Yaml'
         $content | Should -Match '\[ordered\]@'
+        $content | Should -Match '\.TrimEnd\(\)'
         $content | Should -Not -Match '\$lines\.Add'
         $content | Should -Not -Match 'Get-Content -LiteralPath \$manifest'
     }
@@ -407,6 +408,31 @@ acceptanceCriteria:
         $content | Should -Match '\[ordered\]@\{ response = \$Response \}'
         $content | Should -Not -Match 'response:\s*\|'
         $content | Should -Not -Match '\$indented'
+    }
+
+    It 'TEST-MCP-TRIAGE-003 PowerShell hooks generate canonical suffixed session ids' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $content | Should -Match 'New-PluginSessionId'
+        $content | Should -Match 'yyyyMMddTHHmmssZ'
+        $content | Should -Match 'plugin-session'
+        $content | Should -Not -Match '''\{0\}-\{1\}'' -f \$env:MCP_AGENT_NAME'
+    }
+
+    It 'TEST-MCP-TRIAGE-003 PowerShell hooks serialize workflow params from objects' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $content | Should -Match 'ConvertTo-Yaml'
+        $content | Should -Not -Match '\$paramsYaml\s*=\s*"requestId:'
+        $content | Should -Not -Match '\$paramsYaml\s*=\s*"response:\s*\|'
+    }
+
+    It 'TEST-MCP-TRIAGE-003 session log persistence failures are observable' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $content | Should -Not -Match 'best-effort'
+        $content | Should -Not -Match 'Invoke-ReplPersistTurn[^\r\n]*(?:\r?\n\s+-[^\r\n]*)*\s*\|\s*Out-Null'
+        $content | Should -Match 'throw'
     }
 
     It 'TEST-MCP-REQSCOPE-005 shell requirements wrapper exposes layer commands' {

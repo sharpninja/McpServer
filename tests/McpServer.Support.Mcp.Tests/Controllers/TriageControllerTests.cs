@@ -102,15 +102,38 @@ public sealed class TriageControllerTests
             QuietDeadlineUtc = DateTimeOffset.UtcNow,
         };
         service.FlushGroupAsync("triage-group-001", Arg.Any<CancellationToken>()).Returns(group);
-        service.RetryGroupAsync("triage-group-001", Arg.Any<CancellationToken>()).Returns(group);
+        service.RetryGroupAsync("triage-group-001", false, Arg.Any<CancellationToken>()).Returns(group);
 
         var controller = new TriageController(service);
         var action = operation == "flush"
             ? await controller.FlushGroupAsync("triage-group-001", CancellationToken.None)
-            : await controller.RetryGroupAsync("triage-group-001", CancellationToken.None);
+            : await controller.RetryGroupAsync("triage-group-001", force: false, CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(action.Result);
         Assert.Same(group, ok.Value);
+    }
+
+    /// <summary>TEST-MCP-TRIAGE-005: retry endpoint forwards the optional force flag.</summary>
+    [Fact]
+    public async Task RetryGroupAsync_WhenForceTrue_ForwardsForceFlag()
+    {
+        var service = Substitute.For<ITriageService>();
+        var group = new TriageGroupDetail
+        {
+            GroupId = "triage-group-001",
+            Status = "collecting",
+            ReportCount = 2,
+            WorkspacePath = "F:\\GitHub\\McpServer",
+            QuietDeadlineUtc = DateTimeOffset.UtcNow,
+        };
+        service.RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>()).Returns(group);
+        var controller = new TriageController(service);
+
+        var action = await controller.RetryGroupAsync("triage-group-001", force: true, CancellationToken.None);
+
+        var ok = Assert.IsType<OkObjectResult>(action.Result);
+        Assert.Same(group, ok.Value);
+        await service.Received(1).RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>());
     }
 
     /// <summary>TEST-TRIAGE-003: group edit endpoints route selection commands through the service.</summary>

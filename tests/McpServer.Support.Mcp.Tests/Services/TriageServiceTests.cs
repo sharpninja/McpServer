@@ -230,7 +230,10 @@ public sealed class TriageServiceTests : IDisposable
 
         Assert.Equal(1, processed.ProcessedGroups);
         Assert.NotNull(researchRequest);
-        Assert.Equal("rendered triage prompt", researchRequest.Prompt);
+        Assert.Contains("rendered triage prompt", researchRequest.Prompt, StringComparison.Ordinal);
+        Assert.Contains("Runtime shell note", researchRequest.Prompt, StringComparison.Ordinal);
+        Assert.Contains("pwsh.exe", researchRequest.Prompt, StringComparison.Ordinal);
+        Assert.Contains("Do not hard-code", researchRequest.Prompt, StringComparison.Ordinal);
         Assert.Contains(submit.GroupId, researchRequest.GroupJson, StringComparison.Ordinal);
         Assert.Equal(PrimaryWorkspace, researchRequest.WorkspacePath);
         await todo.Received(1).CreateAsync(
@@ -245,6 +248,168 @@ public sealed class TriageServiceTests : IDisposable
         var group = await sut.GetGroupAsync(submit.GroupId);
         Assert.Equal("completed", group.Status);
         Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: triage-created TODOs are routed through the host-selected
+    /// triage TODO creator instead of directly mutating the read/query TODO service.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_ValidResearchOutput_UsesTriageTodoCreatorForMutation()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                {"title":"Fix triage TODO routing","summary":"Triage TODO creation must use the transaction gate.","severity":"high","acceptanceCriteria":["Triage uses the host-selected TODO creator"],"implementationNotes":["Route creation through ITriageTodoCreator."]}
+                """,
+                null));
+
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        var todoCreator = Substitute.For<ITriageTodoCreator>();
+        todoCreator.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call => new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = ((TodoCreateRequest)call[0]!).Id,
+                    Title = ((TodoCreateRequest)call[0]!).Title,
+                    Section = ((TodoCreateRequest)call[0]!).Section,
+                    Priority = ((TodoCreateRequest)call[0]!).Priority,
+                    Done = false,
+                }));
+
+        var sut = CreateService(
+            PrimaryWorkspace,
+            runner: runner,
+            todo: todo,
+            todoCreator: todoCreator,
+            quietPeriod: TimeSpan.Zero);
+        var submit = await sut.SubmitReportAsync(CreateReport("creator-route"));
+
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        await todoCreator.Received(1).CreateAsync(
+            Arg.Is<TodoCreateRequest>(request =>
+                request != null &&
+                request.Id == "BUG-TRIAGE-001" &&
+                request.Title == "Fix triage TODO routing"),
+            Arg.Any<CancellationToken>());
+        await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, default);
+        var group = await sut.GetGroupAsync(submit.GroupId);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: when TODO creation returns an item with a projection failure but
+    /// the created item cannot be read back, triage records failure instead of a phantom TODO id.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_ProjectionFailureWithUnreadableCreatedItem_FailsWithoutCreatedTodoId()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                {"title":"Fix triage created TODO visibility","summary":"Created TODO ids disappear when projection fails.","severity":"high","acceptanceCriteria":["Created TODO id remains visible"],"implementationNotes":["Record item id returned by TODO service."]}
+                """,
+                null));
+
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call => new TodoMutationResult(
+                false,
+                "projection failed",
+                new TodoFlatItem
+                {
+                    Id = ((TodoCreateRequest)call[0]!).Id,
+                    Title = ((TodoCreateRequest)call[0]!).Title,
+                    Section = ((TodoCreateRequest)call[0]!).Section,
+                    Priority = ((TodoCreateRequest)call[0]!).Priority,
+                    Done = false,
+                },
+                TodoMutationFailureKind.ProjectionFailed));
+
+        var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await sut.SubmitReportAsync(CreateReport("projection-failure-created"));
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        var group = await sut.GetGroupAsync(submit.GroupId);
+        Assert.Equal("failed", group.Status);
+        Assert.Null(group.CreatedTodoId);
+        Assert.Equal("projection failed", group.LastError);
+
+        var runs = await sut.QueryRunsAsync(groupId: submit.GroupId);
+        var run = Assert.Single(runs.Items);
+        Assert.Equal("failed", run.Status);
+        Assert.Null(run.CreatedTodoId);
+        Assert.Equal("projection failed", run.Error);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: when TODO creation returns a projection warning and the
+    /// created item is readable, triage records the TODO id and preserves the warning.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_ProjectionFailureWithReadableCreatedItem_RecordsCreatedTodoWithWarning()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                {"title":"Fix triage created TODO visibility","summary":"Created TODO ids disappear when projection fails.","severity":"high","acceptanceCriteria":["Created TODO id remains visible"],"implementationNotes":["Record item id returned by TODO service."]}
+                """,
+                null));
+
+        var created = new TodoFlatItem
+        {
+            Id = "BUG-TRIAGE-001",
+            Title = "Fix triage created TODO visibility",
+            Section = "Backlog",
+            Priority = "high",
+            Done = false,
+        };
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(_ =>
+            {
+                using var db = CreateDb(PrimaryWorkspace);
+                db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-001", "Fix triage created TODO visibility"));
+                db.SaveChanges();
+                return new TodoMutationResult(
+                    false,
+                    "projection failed",
+                    created,
+                    TodoMutationFailureKind.ProjectionFailed);
+            });
+
+        var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await sut.SubmitReportAsync(CreateReport("projection-failure-readable-created"));
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        var group = await sut.GetGroupAsync(submit.GroupId);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
+        Assert.Equal("projection failed", group.LastError);
+
+        var runs = await sut.QueryRunsAsync(groupId: submit.GroupId);
+        var run = Assert.Single(runs.Items);
+        Assert.Equal("completed", run.Status);
+        Assert.Equal("BUG-TRIAGE-001", run.CreatedTodoId);
+        Assert.Equal("projection failed", run.Error);
     }
 
     /// <summary>
@@ -323,6 +488,183 @@ public sealed class TriageServiceTests : IDisposable
         var group = await sut.GetGroupAsync(submit.GroupId);
         Assert.Equal("failed", group.Status);
         Assert.Contains("schema", group.LastError, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: streamed triage-agent stdout and stderr are appended to
+    /// the durable research-run record before the final runner result is applied.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_WhenRunnerStreamsOutput_AppendsOutputToResearchRun()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(async call =>
+            {
+                var request = (TriageResearchRequest)call[0]!;
+                Assert.NotNull(request.OutputReceivedAsync);
+                await request.OutputReceivedAsync!(new TriageResearchOutputUpdate("stdout", "analysis started"));
+                await request.OutputReceivedAsync!(new TriageResearchOutputUpdate("stderr", "loading context"));
+                return new TriageResearchRunResult(false, null, "agent failed");
+            });
+
+        var todo = Substitute.For<ITodoService>();
+        var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        await sut.SubmitReportAsync(CreateReport("research-streamed-output"));
+
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        var run = Assert.Single((await sut.QueryRunsAsync(workspacePath: PrimaryWorkspace)).Items);
+        Assert.Equal("failed", run.Status);
+        Assert.Contains("analysis started", run.AgentStdout, StringComparison.Ordinal);
+        Assert.Contains("loading context", run.AgentStderr, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: stale processing runs are failed durably so the
+    /// group can be inspected and resubmitted instead of remaining wedged.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_WhenProcessingRunExceedsMaxRunTime_MarksRunAndGroupFailedForRetry()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup("triage-group-stale", "processing", now.AddMinutes(-31)));
+            db.TriageReports.Add(SeedReport("triage-report-stale", "triage-group-stale", "Stale processing report", now.AddMinutes(-31)));
+            db.TriageResearchRuns.Add(SeedRun("triage-run-stale", "triage-group-stale", "processing", now.AddMinutes(-31)));
+            await db.SaveChangesAsync();
+        }
+
+        var sut = CreateService(PrimaryWorkspace, runner: runner, maxRunTime: TimeSpan.FromMinutes(30));
+
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(0, processed.ProcessedGroups);
+        await runner.DidNotReceiveWithAnyArgs().RunAsync(default!, default);
+        var group = await sut.GetGroupAsync("triage-group-stale");
+        Assert.Equal("failed", group.Status);
+        Assert.Contains("maximum duration", group.LastError, StringComparison.OrdinalIgnoreCase);
+        var run = Assert.Single((await sut.QueryRunsAsync(
+            status: "failed",
+            groupId: "triage-group-stale",
+            workspacePath: PrimaryWorkspace)).Items);
+        Assert.Equal("triage-run-stale", run.RunId);
+        Assert.Contains("maximum duration", run.Error, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(now, run.CompletedUtc);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: retrying a stale processing group first closes the
+    /// abandoned run, then makes the group immediately due for a fresh run.
+    /// </summary>
+    [Fact]
+    public async Task RetryGroupAsync_WhenProcessingRunIsStale_FailsPreviousRunAndRequeuesGroup()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup("triage-group-stale-retry", "processing", now.AddMinutes(-31)));
+            db.TriageReports.Add(SeedReport("triage-report-stale-retry", "triage-group-stale-retry", "Stale retry report", now.AddMinutes(-31)));
+            db.TriageResearchRuns.Add(SeedRun("triage-run-stale-retry", "triage-group-stale-retry", "processing", now.AddMinutes(-31)));
+            await db.SaveChangesAsync();
+        }
+
+        var sut = CreateService(PrimaryWorkspace, maxRunTime: TimeSpan.FromMinutes(30));
+
+        var group = await sut.RetryGroupAsync("triage-group-stale-retry");
+
+        Assert.Equal("collecting", group.Status);
+        Assert.Null(group.LastError);
+        Assert.Equal(now, group.QuietDeadlineUtc);
+        var run = Assert.Single((await sut.QueryRunsAsync(
+            status: "failed",
+            groupId: "triage-group-stale-retry",
+            workspacePath: PrimaryWorkspace)).Items);
+        Assert.Equal("triage-run-stale-retry", run.RunId);
+        Assert.Contains("maximum duration", run.Error, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(now, run.CompletedUtc);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: forced retry fails the current processing run and
+    /// requeues the group immediately without waiting for max run time.
+    /// </summary>
+    [Fact]
+    public async Task RetryGroupAsync_WhenForceTrueAndRunIsProcessing_FailsRunAndRequeuesGroup()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup("triage-group-force-retry", "processing", now.AddMinutes(-1)));
+            db.TriageReports.Add(SeedReport("triage-report-force-retry", "triage-group-force-retry", "Force retry report", now.AddMinutes(-1)));
+            db.TriageResearchRuns.Add(SeedRun("triage-run-force-retry", "triage-group-force-retry", "processing", now.AddMinutes(-1)));
+            await db.SaveChangesAsync();
+        }
+
+        var sut = CreateService(PrimaryWorkspace, maxRunTime: TimeSpan.FromMinutes(30));
+
+        var group = await sut.RetryGroupAsync("triage-group-force-retry", force: true);
+
+        Assert.Equal("collecting", group.Status);
+        Assert.Null(group.LastError);
+        Assert.Equal(now, group.QuietDeadlineUtc);
+        var run = Assert.Single((await sut.QueryRunsAsync(
+            status: "failed",
+            groupId: "triage-group-force-retry",
+            workspacePath: PrimaryWorkspace)).Items);
+        Assert.Equal("triage-run-force-retry", run.RunId);
+        Assert.Contains("force retried", run.Error, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(now, run.CompletedUtc);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: retrying a group with a stale CreatedTodoId clears the
+    /// unreadable TODO reference so the next sweep can run instead of skipping it.
+    /// </summary>
+    [Fact]
+    public async Task RetryGroupAsync_WhenCreatedTodoIdIsUnreadable_ClearsReferenceAndRequeuesGroup()
+    {
+        var now = _time.GetUtcNow();
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TriageGroups.Add(SeedGroup(
+                "triage-group-stale-created-todo",
+                "completed",
+                now.AddMinutes(-10),
+                createdTodoId: "BUG-TRIAGE-006"));
+            db.TriageReports.Add(SeedReport(
+                "triage-report-stale-created-todo",
+                "triage-group-stale-created-todo",
+                "Stale created TODO report",
+                now.AddMinutes(-10)));
+            db.TriageResearchRuns.Add(SeedRun(
+                "triage-run-stale-created-todo",
+                "triage-group-stale-created-todo",
+                "completed",
+                now.AddMinutes(-11),
+                completedUtc: now.AddMinutes(-10),
+                createdTodoId: "BUG-TRIAGE-006"));
+            await db.SaveChangesAsync();
+        }
+
+        var sut = CreateService(PrimaryWorkspace);
+
+        var group = await sut.RetryGroupAsync("triage-group-stale-created-todo");
+
+        Assert.Equal("collecting", group.Status);
+        Assert.Null(group.CreatedTodoId);
+        Assert.Null(group.LastError);
+        Assert.Equal(now, group.QuietDeadlineUtc);
+        var run = Assert.Single((await sut.QueryRunsAsync(
+            status: "failed",
+            groupId: "triage-group-stale-created-todo",
+            workspacePath: PrimaryWorkspace)).Items);
+        Assert.Equal("triage-run-stale-created-todo", run.RunId);
+        Assert.Null(run.CreatedTodoId);
+        Assert.Contains("stale created TODO reference", run.Error, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -682,8 +1024,10 @@ public sealed class TriageServiceTests : IDisposable
         IReadOnlyList<WorkspaceDto>? workspaces = null,
         ITriageResearchRunner? runner = null,
         ITodoService? todo = null,
+        ITriageTodoCreator? todoCreator = null,
         IPromptTemplateService? promptTemplates = null,
-        TimeSpan? quietPeriod = null)
+        TimeSpan? quietPeriod = null,
+        TimeSpan? maxRunTime = null)
     {
         var workspaceContext = new WorkspaceContext { WorkspacePath = workspacePath, WorkspaceName = Path.GetFileName(workspacePath) };
         var workspaceService = Substitute.For<IWorkspaceService>();
@@ -697,16 +1041,36 @@ public sealed class TriageServiceTests : IDisposable
                 RenderedContent = "rendered triage prompt",
             });
 
+        var todoService = todo ?? Substitute.For<ITodoService>();
+
         return new TriageService(
             CreateDb(workspacePath),
             workspaceContext,
             workspaceService,
             runner ?? Substitute.For<ITriageResearchRunner>(),
-            todo ?? Substitute.For<ITodoService>(),
+            todoService,
+            todoCreator ?? new ForwardingTriageTodoCreator(todoService),
             promptTemplateService,
-            Microsoft.Extensions.Options.Options.Create(new TriageOptions { QuietPeriod = quietPeriod ?? TimeSpan.FromMinutes(15) }),
+            Microsoft.Extensions.Options.Options.Create(new TriageOptions
+            {
+                QuietPeriod = quietPeriod ?? TimeSpan.FromMinutes(15),
+                MaxRunTime = maxRunTime ?? TimeSpan.FromMinutes(30),
+            }),
             _time,
             NullLogger<TriageService>.Instance);
+    }
+
+    private sealed class ForwardingTriageTodoCreator : ITriageTodoCreator
+    {
+        private readonly ITodoService _todoService;
+
+        public ForwardingTriageTodoCreator(ITodoService todoService)
+        {
+            _todoService = todoService;
+        }
+
+        public Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
+            => _todoService.CreateAsync(request, cancellationToken);
     }
 
     private McpDbContext CreateDb(string workspacePath)
