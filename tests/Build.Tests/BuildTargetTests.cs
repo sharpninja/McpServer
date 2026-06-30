@@ -342,25 +342,67 @@ public sealed class BuildTargetTests
     }
 
     [Fact]
-    public void PackNuGet_PublicPackageProjects_DoNotPinDivergentVersionMetadata()
+    public void Build_SourceProjects_DoNotPinDivergentVersionMetadata()
     {
         var repoRoot = FindRepositoryRoot();
-        var packageProjects = new[]
-        {
-            "src/McpServer.Client/McpServer.Client.csproj",
-            "src/McpServer.Cqrs/McpServer.Cqrs.csproj",
-            "src/McpServer.Cqrs.Mvvm/McpServer.Cqrs.Mvvm.csproj",
-            "src/McpServer.Repl.Core/McpServer.Repl.Core.csproj",
-            "src/McpServer.McpAgent/McpServer.McpAgent.csproj",
-        };
+        var packageProjects = Directory.GetFiles(
+            Path.Combine(repoRoot, "src"),
+            "*.csproj",
+            SearchOption.AllDirectories);
+
+        Assert.NotEmpty(packageProjects);
 
         foreach (var project in packageProjects)
         {
-            var content = File.ReadAllText(Path.Combine(repoRoot, project.Replace('/', Path.DirectorySeparatorChar)));
+            var content = File.ReadAllText(project);
 
             Assert.DoesNotContain("<Version>", content, StringComparison.OrdinalIgnoreCase);
             Assert.DoesNotContain("<PackageVersion>", content, StringComparison.OrdinalIgnoreCase);
         }
+    }
+
+    [Fact]
+    public void BuildTargets_UseGitVersionForCompileAndReplTool()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var compileTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.Compile.cs"));
+        var packReplTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.PackReplTool.cs"));
+        var installReplTarget = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.InstallReplTool.cs"));
+
+        Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(SourceDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("EnumerateFiles(TestsDirectory.ToString(), \"*.csproj\", SearchOption.AllDirectories)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains("!path.EndsWith(Path.Combine(\"Build.Tests\", \"Build.Tests.csproj\"), StringComparison.OrdinalIgnoreCase)", compileTarget, StringComparison.Ordinal);
+        Assert.DoesNotContain(".SetProjectFile(Solution)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains(".SetProperty(\"PackageVersion\", buildVersion)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains(".SetProperty(\"Version\", buildVersion)", compileTarget, StringComparison.Ordinal);
+        Assert.Contains(".SetProperty(\"InformationalVersion\", buildVersion)", compileTarget, StringComparison.Ordinal);
+
+        Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", packReplTarget, StringComparison.Ordinal);
+        Assert.Contains(".SetProperty(\"PackageVersion\", packageVersion)", packReplTarget, StringComparison.Ordinal);
+        Assert.Contains(".SetProperty(\"Version\", packageVersion)", packReplTarget, StringComparison.Ordinal);
+        Assert.Contains(".SetProperty(\"InformationalVersion\", packageVersion)", packReplTarget, StringComparison.Ordinal);
+
+        Assert.Contains("ResolveNuGetPackageVersion(PackageVersion, RootDirectory / \"GitVersion.yml\")", installReplTarget, StringComparison.Ordinal);
+        Assert.Contains("GetInstalledGlobalToolVersion(installedTools, packageId)", installReplTarget, StringComparison.Ordinal);
+        Assert.Contains("tool uninstall --global {packageId}", installReplTarget, StringComparison.Ordinal);
+        Assert.Contains("--version {packageVersion}", installReplTarget, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void InstallReplTool_ParsesInstalledGlobalToolVersion()
+    {
+        const string output = """
+            Package Id                    Version      Commands
+            ---------------------------------------------------
+            sharpninja.mcpserver.repl     6.1.1        mcpserver-repl
+            other.tool                    1.0.0        other
+            """;
+
+        var version = Build.GetInstalledGlobalToolVersion(output, "SharpNinja.McpServer.Repl");
+
+        Assert.Equal("6.1.1", version);
+        Assert.Null(Build.GetInstalledGlobalToolVersion(output, "missing.tool"));
     }
 
     /// <summary>
@@ -376,7 +418,8 @@ public sealed class BuildTargetTests
             var pluginRoot = Path.Combine(root, "mcpserver-test-plugin");
             Directory.CreateDirectory(Path.Combine(pluginRoot, ".codex-plugin"));
             Directory.CreateDirectory(Path.Combine(pluginRoot, "node_modules", "ignored"));
-            File.WriteAllText(Path.Combine(pluginRoot, ".codex-plugin", "plugin.json"), """{"name":"mcpserver","version":"1.3.0"}""");
+            File.WriteAllText(Path.Combine(pluginRoot, ".version"), "1.3.5\n");
+            File.WriteAllText(Path.Combine(pluginRoot, ".codex-plugin", "plugin.json"), """{"name":"mcpserver","version":"1.2.0"}""");
             File.WriteAllText(Path.Combine(pluginRoot, "package.json"), """{"name":"mcpserver-test","version":"1.2.9"}""");
             File.WriteAllText(Path.Combine(pluginRoot, "package-lock.json"), """{"name":"mcpserver-test","version":"1.2.9","packages":{"":{"version":"1.2.9"}}}""");
             File.WriteAllText(Path.Combine(pluginRoot, "node_modules", "ignored", "package.json"), """{"version":"9.9.9"}""");
@@ -386,9 +429,12 @@ public sealed class BuildTargetTests
             var updates = Build.PlanPluginVersionUpdates(pluginRoots, nextVersion).ToArray();
 
             Assert.Equal("1.4.0", nextVersion);
+            Assert.Contains(updates, update => update.Path.EndsWith(".version", StringComparison.OrdinalIgnoreCase));
             Assert.Contains(updates, update => update.Path.EndsWith(".codex-plugin/plugin.json", StringComparison.OrdinalIgnoreCase));
             Assert.Contains(updates, update => update.Path.EndsWith("package.json", StringComparison.OrdinalIgnoreCase));
             Assert.Contains(updates, update => update.Path.EndsWith("package-lock.json", StringComparison.OrdinalIgnoreCase));
+            Assert.Contains(updates, update => update.Path.EndsWith(".version", StringComparison.OrdinalIgnoreCase)
+                && update.UpdatedContent == "1.4.0\n");
             Assert.DoesNotContain(updates, update => update.Path.Contains("node_modules", StringComparison.OrdinalIgnoreCase));
             Assert.All(updates, update => Assert.Contains("1.4.0", update.UpdatedContent, StringComparison.Ordinal));
             Assert.All(updates, update => Assert.DoesNotContain("\r", update.UpdatedContent, StringComparison.Ordinal));

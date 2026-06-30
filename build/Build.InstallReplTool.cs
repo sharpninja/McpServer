@@ -18,6 +18,7 @@ partial class Build
         .Executes(() =>
         {
             const string packageId = "SharpNinja.McpServer.Repl";
+            var packageVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
 
             if (UninstallTool)
             {
@@ -40,19 +41,57 @@ partial class Build
                 </configuration>
                 """);
 
-            var versionArgs = string.IsNullOrWhiteSpace(PackageVersion)
-                ? string.Empty
-                : $" --version {PackageVersion}";
+            var toolList = ProcessTasks.StartProcess("dotnet", "tool list --global", logOutput: false, logInvocation: false);
+            toolList.WaitForExit();
+            toolList.AssertZeroExitCode();
+            var installedTools = string.Join('\n', toolList.Output.Select(static output => output.Text));
+            var installedVersion = GetInstalledGlobalToolVersion(installedTools, packageId);
+            var shouldInstall = true;
 
-            var args = UpdateTool
-                ? $"tool update --global {packageId} --configfile \"{nugetConfig}\"{versionArgs}"
-                : $"tool install --global {packageId} --configfile \"{nugetConfig}\"{versionArgs}";
+            if (!string.IsNullOrWhiteSpace(installedVersion))
+            {
+                if (UpdateTool || !string.Equals(installedVersion, packageVersion, StringComparison.OrdinalIgnoreCase))
+                {
+                    Log.Information(
+                        "Uninstalling existing {Package} {InstalledVersion} before installing {PackageVersion}...",
+                        packageId,
+                        installedVersion,
+                        packageVersion);
+                    ProcessTasks.StartProcess("dotnet", $"tool uninstall --global {packageId}").AssertZeroExitCode();
+                }
+                else
+                {
+                    Log.Information("{Package} {Version} is already installed.", packageId, installedVersion);
+                    shouldInstall = false;
+                }
+            }
 
-            Log.Information("{Action} {Package}...", UpdateTool ? "Updating" : "Installing", packageId);
-            ProcessTasks.StartProcess("dotnet", args).AssertZeroExitCode();
+            if (shouldInstall)
+            {
+                Log.Information("Installing {Package} {Version}...", packageId, packageVersion);
+                ProcessTasks.StartProcess(
+                        "dotnet",
+                        $"tool install --global {packageId} --configfile \"{nugetConfig}\" --version {packageVersion}")
+                    .AssertZeroExitCode();
+            }
 
             // Verify installation
             Log.Information("Verifying installation...");
             ProcessTasks.StartProcess("mcpserver-repl", "--version").AssertZeroExitCode();
         });
+
+    internal static string? GetInstalledGlobalToolVersion(string toolListOutput, string packageId)
+    {
+        ArgumentNullException.ThrowIfNull(toolListOutput);
+        ArgumentException.ThrowIfNullOrWhiteSpace(packageId);
+
+        foreach (var line in toolListOutput.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries))
+        {
+            var columns = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (columns.Length >= 2 && columns[0].Equals(packageId, StringComparison.OrdinalIgnoreCase))
+                return columns[1];
+        }
+
+        return null;
+    }
 }

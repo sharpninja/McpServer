@@ -10,23 +10,15 @@ partial class Build
         .Executes(() =>
         {
             var project = SourceDirectory / "McpServer.Repl.Host" / "McpServer.Repl.Host.csproj";
+            var packageVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
 
             var settings = new DotNetPackSettings()
                 .SetProject(project)
                 .SetConfiguration(Configuration)
-                .SetOutputDirectory(LocalPackagesDirectory);
-
-            if (!string.IsNullOrWhiteSpace(PackageVersion))
-            {
-                settings = settings
-                    .SetProperty("PackageVersion", PackageVersion)
-                    .SetProperty("Version", PackageVersion)
-                    .SetProperty("InformationalVersion", PackageVersion);
-            }
-            else
-            {
-                settings = settings.EnableNoBuild();
-            }
+                .SetOutputDirectory(LocalPackagesDirectory)
+                .SetProperty("PackageVersion", packageVersion)
+                .SetProperty("Version", packageVersion)
+                .SetProperty("InformationalVersion", packageVersion);
 
             DotNetPack(_ => settings);
         });

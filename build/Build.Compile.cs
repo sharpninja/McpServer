@@ -9,9 +9,23 @@ partial class Build
         .DependsOn(Restore)
         .Executes(() =>
         {
-            DotNetBuild(_ => _
-                .SetProjectFile(Solution)
-                .SetConfiguration(Configuration)
-                .EnableNoRestore());
+            var buildVersion = ResolveNuGetPackageVersion(PackageVersion, RootDirectory / "GitVersion.yml");
+            var projectFiles = Directory
+                .EnumerateFiles(SourceDirectory.ToString(), "*.csproj", SearchOption.AllDirectories)
+                .Concat(Directory.EnumerateFiles(TestsDirectory.ToString(), "*.csproj", SearchOption.AllDirectories))
+                .Where(path => !path.EndsWith(Path.Combine("Build.Tests", "Build.Tests.csproj"), StringComparison.OrdinalIgnoreCase))
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            foreach (var projectFile in projectFiles)
+            {
+                DotNetBuild(_ => _
+                    .SetProjectFile(projectFile)
+                    .SetConfiguration(Configuration)
+                    .EnableNoRestore()
+                    .SetProperty("PackageVersion", buildVersion)
+                    .SetProperty("Version", buildVersion)
+                    .SetProperty("InformationalVersion", buildVersion));
+            }
         });
 }

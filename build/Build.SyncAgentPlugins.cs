@@ -90,7 +90,7 @@ partial class Build
         ArgumentNullException.ThrowIfNull(pluginRoots);
 
         PluginSemanticVersion? highest = null;
-        foreach (var path in EnumerateVersionedJsonFiles(pluginRoots))
+        foreach (var path in EnumerateVersionedFiles(pluginRoots))
         {
             foreach (var version in ReadVersionValues(path))
             {
@@ -118,10 +118,10 @@ partial class Build
             throw new ArgumentException("Plugin version is required.", nameof(version));
 
         var updates = new List<PluginVersionUpdate>();
-        foreach (var path in EnumerateVersionedJsonFiles(pluginRoots))
+        foreach (var path in EnumerateVersionedFiles(pluginRoots))
         {
             var originalContent = File.ReadAllText(path);
-            var updatedContent = RewriteVersionedJson(path, originalContent, version.Trim());
+            var updatedContent = RewriteVersionedFile(path, originalContent, version.Trim());
             if (!string.Equals(originalContent, updatedContent, StringComparison.Ordinal))
             {
                 updates.Add(new PluginVersionUpdate(
@@ -204,13 +204,17 @@ partial class Build
         ValidatePluginPowerShellOnlyPackage(pluginRoot);
     }
 
-    private static IEnumerable<string> EnumerateVersionedJsonFiles(IReadOnlyList<AbsolutePath> pluginRoots)
+    private static IEnumerable<string> EnumerateVersionedFiles(IReadOnlyList<AbsolutePath> pluginRoots)
     {
         foreach (var root in pluginRoots)
         {
             var rootPath = root.ToString();
             if (!Directory.Exists(rootPath))
                 continue;
+
+            var rootVersionFile = Path.Combine(rootPath, ".version");
+            if (File.Exists(rootVersionFile))
+                yield return rootVersionFile;
 
             foreach (var file in Directory.EnumerateFiles(rootPath, "plugin.json", SearchOption.AllDirectories)
                          .Concat(Directory.EnumerateFiles(rootPath, "package.json", SearchOption.AllDirectories))
@@ -247,6 +251,14 @@ partial class Build
 
     private static IEnumerable<string> ReadVersionValues(string path)
     {
+        if (Path.GetFileName(path).Equals(".version", StringComparison.OrdinalIgnoreCase))
+        {
+            var rootVersion = File.ReadAllText(path).Trim();
+            if (!string.IsNullOrWhiteSpace(rootVersion))
+                yield return rootVersion;
+            yield break;
+        }
+
         JsonNode? root;
         try
         {
@@ -271,6 +283,14 @@ partial class Build
             if (!string.IsNullOrWhiteSpace(packageVersion))
                 yield return packageVersion;
         }
+    }
+
+    private static string RewriteVersionedFile(string path, string originalContent, string version)
+    {
+        if (Path.GetFileName(path).Equals(".version", StringComparison.OrdinalIgnoreCase))
+            return version + "\n";
+
+        return RewriteVersionedJson(path, originalContent, version);
     }
 
     private static string RewriteVersionedJson(string path, string originalContent, string version)
