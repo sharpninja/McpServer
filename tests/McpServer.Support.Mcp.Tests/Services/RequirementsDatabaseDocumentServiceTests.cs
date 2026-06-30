@@ -217,6 +217,85 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.False(persistedCriteria.IsSatisfied);
     }
 
+    /// <summary>
+    /// BUG-TRIAGE-010 / TEST-MCP-REQAC-001: FR, TR, and TEST acceptance criteria
+    /// must persist through single create, single update, batch create, and batch
+    /// update operations and remain visible after a fresh service read.
+    /// </summary>
+    [Fact]
+    public async Task AcceptanceCriteria_RoundTripsAcrossSingleAndBatchFrTrTestWrites()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("acceptance-criteria-all-writes"));
+        var service = fixture.CreateService();
+
+        await service.AddFrAsync(new FrEntry(
+            "FR-MCP-AC-010",
+            "FR create",
+            "FR create body",
+            Notes: "preserve notes",
+            AcceptanceCriteria: [Criterion("FR-MCP-AC-010-AC1", "FR create criteria")])).ConfigureAwait(true);
+        await service.AddTrAsync(new TrEntry(
+            "TR-MCP-AC-010",
+            "TR create",
+            "TR create body",
+            Notes: "preserve notes",
+            AcceptanceCriteria: [Criterion("TR-MCP-AC-010-AC1", "TR create criteria")])).ConfigureAwait(true);
+        await service.AddTestAsync(new TestEntry(
+            "TEST-MCP-AC-010",
+            "TEST create condition",
+            Title: "TEST create",
+            Notes: "preserve notes",
+            AcceptanceCriteria: [Criterion("TEST-MCP-AC-010-AC1", "TEST create criteria")])).ConfigureAwait(true);
+
+        AssertCriterion(await service.GetFrAsync("FR-MCP-AC-010").ConfigureAwait(true), "FR-MCP-AC-010-AC1", "FR create criteria", "preserve notes");
+        AssertCriterion(await service.GetTrAsync("TR-MCP-AC-010").ConfigureAwait(true), "TR-MCP-AC-010-AC1", "TR create criteria", "preserve notes");
+        AssertCriterion(await service.GetTestAsync("TEST-MCP-AC-010").ConfigureAwait(true), "TEST-MCP-AC-010-AC1", "TEST create criteria", "preserve notes");
+
+        await service.UpdateFrAsync(new FrEntry(
+            "FR-MCP-AC-010",
+            "FR update",
+            "FR update body",
+            Notes: "updated notes",
+            AcceptanceCriteria: [Criterion("FR-MCP-AC-010-AC2", "FR update criteria", true, "single update")])).ConfigureAwait(true);
+        await service.UpdateTrAsync(new TrEntry(
+            "TR-MCP-AC-010",
+            "TR update",
+            "TR update body",
+            Notes: "updated notes",
+            AcceptanceCriteria: [Criterion("TR-MCP-AC-010-AC2", "TR update criteria", true, "single update")])).ConfigureAwait(true);
+        await service.UpdateTestAsync(new TestEntry(
+            "TEST-MCP-AC-010",
+            "TEST update condition",
+            Title: "TEST update",
+            Notes: "updated notes",
+            AcceptanceCriteria: [Criterion("TEST-MCP-AC-010-AC2", "TEST update criteria", true, "single update")])).ConfigureAwait(true);
+
+        AssertCriterion(await service.GetFrAsync("FR-MCP-AC-010").ConfigureAwait(true), "FR-MCP-AC-010-AC2", "FR update criteria", "updated notes", true, "single update");
+        AssertCriterion(await service.GetTrAsync("TR-MCP-AC-010").ConfigureAwait(true), "TR-MCP-AC-010-AC2", "TR update criteria", "updated notes", true, "single update");
+        AssertCriterion(await service.GetTestAsync("TEST-MCP-AC-010").ConfigureAwait(true), "TEST-MCP-AC-010-AC2", "TEST update criteria", "updated notes", true, "single update");
+
+        var batchCreate = await service.AddBatchAsync(new RequirementsBatchEntries(
+            [new FrEntry("FR-MCP-AC-011", "FR batch create", "FR batch body", Notes: "batch notes", AcceptanceCriteria: [Criterion("FR-MCP-AC-011-AC1", "FR batch create criteria")])],
+            [new TrEntry("TR-MCP-AC-011", "TR batch create", "TR batch body", Notes: "batch notes", AcceptanceCriteria: [Criterion("TR-MCP-AC-011-AC1", "TR batch create criteria")])],
+            [new TestEntry("TEST-MCP-AC-011", "TEST batch condition", Title: "TEST batch create", Notes: "batch notes", AcceptanceCriteria: [Criterion("TEST-MCP-AC-011-AC1", "TEST batch create criteria")])])).ConfigureAwait(true);
+
+        Assert.Equal(3, batchCreate.Count);
+        AssertCriterion(await service.GetFrAsync("FR-MCP-AC-011").ConfigureAwait(true), "FR-MCP-AC-011-AC1", "FR batch create criteria", "batch notes");
+        AssertCriterion(await service.GetTrAsync("TR-MCP-AC-011").ConfigureAwait(true), "TR-MCP-AC-011-AC1", "TR batch create criteria", "batch notes");
+        AssertCriterion(await service.GetTestAsync("TEST-MCP-AC-011").ConfigureAwait(true), "TEST-MCP-AC-011-AC1", "TEST batch create criteria", "batch notes");
+
+        var batchUpdate = await service.UpdateBatchAsync(new RequirementsBatchEntries(
+            [new FrEntry("FR-MCP-AC-011", "FR batch update", "FR batch body updated", Notes: "batch updated", AcceptanceCriteria: [Criterion("FR-MCP-AC-011-AC2", "FR batch update criteria", true, "batch update")])],
+            [new TrEntry("TR-MCP-AC-011", "TR batch update", "TR batch body updated", Notes: "batch updated", AcceptanceCriteria: [Criterion("TR-MCP-AC-011-AC2", "TR batch update criteria", true, "batch update")])],
+            [new TestEntry("TEST-MCP-AC-011", "TEST batch condition updated", Title: "TEST batch update", Notes: "batch updated", AcceptanceCriteria: [Criterion("TEST-MCP-AC-011-AC2", "TEST batch update criteria", true, "batch update")])])).ConfigureAwait(true);
+
+        Assert.Equal(3, batchUpdate.Count);
+        AssertCriterion(await service.GetFrAsync("FR-MCP-AC-011").ConfigureAwait(true), "FR-MCP-AC-011-AC2", "FR batch update criteria", "batch updated", true, "batch update");
+        AssertCriterion(await service.GetTrAsync("TR-MCP-AC-011").ConfigureAwait(true), "TR-MCP-AC-011-AC2", "TR batch update criteria", "batch updated", true, "batch update");
+        AssertCriterion(await service.GetTestAsync("TEST-MCP-AC-011").ConfigureAwait(true), "TEST-MCP-AC-011-AC2", "TEST batch update criteria", "batch updated", true, "batch update");
+    }
+
     /// <summary>Batch create is now idempotent: pre-existing records are skipped (no overwrite, no throw), other new records in the batch are created. This prevents client double-submit races from aborting successful prior creates.</summary>
     [Fact]
     public async Task AddBatchAsync_ExistingConflict_SkipsExistingAndCreatesOthers()
@@ -425,6 +504,48 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Equal("FR-1", link.FrId);
         Assert.Equal("tr", link.TargetKind);
         Assert.Equal("TR-1", link.TargetId);
+    }
+
+    private static AcceptanceCriterion Criterion(string id, string text, bool isSatisfied = false, string? evidence = null) =>
+        new()
+        {
+            Id = id,
+            Text = text,
+            IsSatisfied = isSatisfied,
+            Evidence = evidence
+        };
+
+    private static void AssertCriterion(FrEntry? entry, string id, string text, string notes, bool isSatisfied = false, string? evidence = null)
+    {
+        Assert.NotNull(entry);
+        Assert.Equal(notes, entry!.Notes);
+        var criterion = Assert.Single(entry.AcceptanceCriteria!);
+        Assert.Equal(id, criterion.Id);
+        Assert.Equal(text, criterion.Text);
+        Assert.Equal(isSatisfied, criterion.IsSatisfied);
+        Assert.Equal(evidence, criterion.Evidence);
+    }
+
+    private static void AssertCriterion(TrEntry? entry, string id, string text, string notes, bool isSatisfied = false, string? evidence = null)
+    {
+        Assert.NotNull(entry);
+        Assert.Equal(notes, entry!.Notes);
+        var criterion = Assert.Single(entry.AcceptanceCriteria!);
+        Assert.Equal(id, criterion.Id);
+        Assert.Equal(text, criterion.Text);
+        Assert.Equal(isSatisfied, criterion.IsSatisfied);
+        Assert.Equal(evidence, criterion.Evidence);
+    }
+
+    private static void AssertCriterion(TestEntry? entry, string id, string text, string notes, bool isSatisfied = false, string? evidence = null)
+    {
+        Assert.NotNull(entry);
+        Assert.Equal(notes, entry!.Notes);
+        var criterion = Assert.Single(entry.AcceptanceCriteria!);
+        Assert.Equal(id, criterion.Id);
+        Assert.Equal(text, criterion.Text);
+        Assert.Equal(isSatisfied, criterion.IsSatisfied);
+        Assert.Equal(evidence, criterion.Evidence);
     }
 
     private sealed class RequirementsDbFixture : IDisposable

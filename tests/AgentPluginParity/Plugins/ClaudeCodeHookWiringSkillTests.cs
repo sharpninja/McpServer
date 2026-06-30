@@ -178,6 +178,63 @@ public sealed class ClaudeCodeHookWiringSkillTests
     }
 
     /// <summary>
+    /// BUG-TRIAGE-014 / TEST-MCP-PLUGIN-PSONLY-001: the user-level sync-logs Stop
+    /// hook must be stateful, allow no-op and already-reconciled transcript states,
+    /// preserve the stop-hook recursion guard, and block once for fresh material tool
+    /// activity that needs reconciliation.
+    /// </summary>
+    [Fact]
+    public void ClaudeCode_SyncLogStopHook_BlocksOnlyUnreconciledMaterialTranscriptChanges()
+    {
+        var scriptPath = Path.Combine(
+            PluginRoot,
+            "skills",
+            "claude-hook-wiring",
+            "scripts",
+            "sync-log-stop.ps1");
+        Assert.True(File.Exists(scriptPath), $"Claude sync-log stop hook missing: {scriptPath}");
+
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"claude-sync-log-stop-{Guid.NewGuid():N}");
+        var stateRoot = Path.Combine(tempRoot, "state");
+        var transcriptPath = Path.Combine(tempRoot, "transcript.jsonl");
+        Directory.CreateDirectory(tempRoot);
+        try
+        {
+            File.WriteAllText(
+                transcriptPath,
+                """
+                {"type":"assistant","message":{"content":[{"type":"text","text":"No tool work happened."}]}}
+
+                """);
+
+            var noOpOutput = RunSyncLogStopHook(scriptPath, stateRoot, transcriptPath, stopHookActive: false);
+            Assert.True(string.IsNullOrWhiteSpace(noOpOutput), $"No-op transcript should not block. Output: {noOpOutput}");
+
+            File.AppendAllText(
+                transcriptPath,
+                """
+                {"type":"assistant","message":{"content":[{"type":"tool_use","name":"Edit","input":{"file_path":"src/App.cs"}}]}}
+
+                """);
+
+            var blockOutput = RunSyncLogStopHook(scriptPath, stateRoot, transcriptPath, stopHookActive: false);
+            Assert.Contains("\"decision\":\"block\"", blockOutput, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("sync-logs", blockOutput, StringComparison.OrdinalIgnoreCase);
+
+            var activeOutput = RunSyncLogStopHook(scriptPath, stateRoot, transcriptPath, stopHookActive: true);
+            Assert.True(string.IsNullOrWhiteSpace(activeOutput), $"stop_hook_active continuation should not block. Output: {activeOutput}");
+
+            var reconciledOutput = RunSyncLogStopHook(scriptPath, stateRoot, transcriptPath, stopHookActive: false);
+            Assert.True(string.IsNullOrWhiteSpace(reconciledOutput), $"Already-reconciled transcript should not block. Output: {reconciledOutput}");
+        }
+        finally
+        {
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// TEST-MCP-PLUGIN-PSONLY-001: the rendered marker template tells Claude Code
     /// to trigger the hook validation skill during plugin bootstrap.
     /// </summary>
@@ -222,6 +279,41 @@ public sealed class ClaudeCodeHookWiringSkillTests
         var stderr = process.StandardError.ReadToEnd();
         Assert.True(process.WaitForExit(30000), "Claude hook wiring installer timed out.");
         Assert.True(process.ExitCode == 0, $"Installer failed with exit code {process.ExitCode}.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}");
+        return stdout;
+    }
+
+    private static string RunSyncLogStopHook(string scriptPath, string stateRoot, string transcriptPath, bool stopHookActive)
+    {
+        var startInfo = new ProcessStartInfo("pwsh")
+        {
+            WorkingDirectory = PluginRoot,
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        startInfo.ArgumentList.Add("-NoLogo");
+        startInfo.ArgumentList.Add("-NoProfile");
+        startInfo.ArgumentList.Add("-NonInteractive");
+        startInfo.ArgumentList.Add("-File");
+        startInfo.ArgumentList.Add(scriptPath);
+        startInfo.ArgumentList.Add("-StateRoot");
+        startInfo.ArgumentList.Add(stateRoot);
+
+        using var process = Process.Start(startInfo)!;
+        var payload = new JsonObject
+        {
+            ["session_id"] = "ClaudeCode-test-session",
+            ["transcript_path"] = transcriptPath,
+            ["stop_hook_active"] = stopHookActive,
+        };
+        process.StandardInput.Write(payload.ToJsonString());
+        process.StandardInput.Close();
+
+        var stdout = process.StandardOutput.ReadToEnd();
+        var stderr = process.StandardError.ReadToEnd();
+        Assert.True(process.WaitForExit(30000), "Claude sync-log stop hook timed out.");
+        Assert.True(process.ExitCode == 0, $"Sync-log stop hook failed with exit code {process.ExitCode}.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}");
         return stdout;
     }
 
