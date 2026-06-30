@@ -1706,6 +1706,18 @@ Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream 
 - [x] One message-log entry is emitted per received message at the audit chokepoint, independent of the durable audit gate. (evidence: SubscriberMessageLogTests chokepoint case.)
 
 
+## TEST-MCP-TODO-CLOSE
+
+### TEST-MCP-TODO-CLOSE-001
+
+Unit tests cover REST and typed client close-by-id behavior, including timestamp creation and missing item failure.
+
+**Acceptance Criteria:**
+- [x] Controller tests prove close-by-id sets done true and a completion timestamp. (evidence: TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate.)
+- [x] Controller tests prove close-by-id preserves not-found failure behavior. (evidence: TodoControllerTests.CloseAsync_WhenItemMissing_ReturnsNotFound.)
+- [x] Client tests prove the close method calls the dedicated endpoint and deserializes TodoMutationResult. (evidence: TodoClientTests.CloseAsync_PostsCorrectUrl.)
+
+
 ## TEST-MCP-TRACE-LEGACY
 
 ### TEST-MCP-TRACE-LEGACY-001

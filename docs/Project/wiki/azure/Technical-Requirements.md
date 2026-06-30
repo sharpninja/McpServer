@@ -1672,6 +1672,15 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Root-level done serialization ignores nested implementationTasks[].done values. (evidence: Plugin tests/repl-invoke-shim.bats now asserts no top-level done is emitted when only implementation task done values are present.)
 
+## TR-MCP-TODO-CLOSE-001
+
+**TODO close operation surfaces** — Add a dedicated close-by-id operation on the TODO controller and typed client that delegates through the existing TODO mutation path with done true and a UTC completion timestamp.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] The route is ID-scoped under the existing mcpserver todo surface and returns TodoMutationResult. (evidence: TodoController.CloseAsync returns ActionResult<TodoMutationResult> for POST /mcpserver/todo/{id}/close.)
+- [x] The server owns the completion timestamp and formats it as a UTC ISO 8601 value. (evidence: TodoController.CloseAsync uses DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture) and tests parse zero offset.)
+- [x] The operation reuses existing TODO update validation, workspace scoping, transaction gate, and external sync behavior. (evidence: TodoController.CloseAsync delegates through TodoUpdateService or ITransactionGatedTodoMutationService.UpdateAsync; gated path covered by CloseAsync_WhenTransactionGateRegistered_UsesGatedUpdateService.)
+
 ## TR-MCP-TPL-001
 
 **Prompt Template YAML Storage** — `PromptTemplateService` persists templates in a single YAML file (default `templates/prompt-templates.yaml`) using YamlDotNet with `HyphenatedNamingConvention`. Root structure: `templates:` → map of template-id → entry object (title, category, tags, description, engine, variables, content). Read/write serialization uses `SemaphoreSlim(1,1)` for write safety. Templates are loaded on-demand and not cached (file is source of truth).

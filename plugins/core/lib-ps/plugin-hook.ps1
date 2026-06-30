@@ -83,6 +83,18 @@ function Get-PluginCacheDir {
     return $cacheDir
 }
 
+function Get-PluginStartPath {
+    param([string]$PreferredPath)
+
+    if ($PreferredPath) { return $PreferredPath }
+    if ($WorkspacePath) { return $WorkspacePath }
+    if ($env:MCP_WORKSPACE_PATH) { return $env:MCP_WORKSPACE_PATH }
+    if ($env:MCPSERVER_WORKSPACE_PATH) { return $env:MCPSERVER_WORKSPACE_PATH }
+    if ($env:MCP_WORKSPACE_START_DIR) { return $env:MCP_WORKSPACE_START_DIR }
+    if ($env:CLAUDE_PROJECT_DIR) { return $env:CLAUDE_PROJECT_DIR }
+    return (Get-Location).ProviderPath
+}
+
 function Get-YamlScalar {
     param(
         [Parameter(Mandatory)][string]$Path,
@@ -161,9 +173,15 @@ function Invoke-PluginRepl {
 function Start-PluginSession {
     param([string]$StartPath)
 
-    $start = if ($StartPath) { $StartPath } elseif ($WorkspacePath) { $WorkspacePath } elseif ($env:MCP_WORKSPACE_START_DIR) { $env:MCP_WORKSPACE_START_DIR } else { (Get-Location).ProviderPath }
+    $start = Get-PluginStartPath -PreferredPath $StartPath
     $cacheDir = Get-PluginCacheDir
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
+    $markerSnapshot = $null
+    try {
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $start
+    } catch {
+        $markerSnapshot = $null
+    }
 
     $verified = $false
     try {
@@ -176,9 +194,17 @@ function Start-PluginSession {
             status = 'MCP_UNTRUSTED'
             lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         }
-        [System.IO.File]::WriteAllText($sessionFile, (ConvertTo-PluginParamsYaml $untrustedState))
+        if ($markerSnapshot) {
+            $untrustedState['markerFilePath'] = $markerSnapshot.markerFilePath
+            $untrustedState['markerLastWriteUtc'] = $markerSnapshot.markerLastWriteUtc
+        }
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
         Write-PluginJson ([ordered]@{})
         return
+    }
+
+    if (-not $markerSnapshot) {
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $start
     }
 
     $sessionId = New-PluginSessionId -AgentName $env:MCP_AGENT_NAME
@@ -189,17 +215,65 @@ function Start-PluginSession {
         agent = $env:MCP_AGENT_NAME
         started = $now
         lastUpdated = $now
+        markerFilePath = $markerSnapshot.markerFilePath
+        markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
     }
-    [System.IO.File]::WriteAllText($sessionFile, (ConvertTo-PluginParamsYaml $sessionState))
+    Write-McpYamlObject -Path $sessionFile -Document $sessionState
     Write-PluginJson ([ordered]@{})
+}
+
+function Ensure-PluginMarkerFresh {
+    param([string]$StartPath)
+
+    $start = Get-PluginStartPath -PreferredPath $StartPath
+    $cacheDir = Get-PluginCacheDir
+    $sessionFile = Join-Path $cacheDir 'session-state.yaml'
+
+    try {
+        if (-not (Test-Path -LiteralPath $sessionFile)) {
+            Start-PluginSession -StartPath $start | Out-Null
+        }
+
+        if (-not (Test-Path -LiteralPath $sessionFile)) {
+            return $false
+        }
+
+        $state = Read-McpYamlObject -Path $sessionFile
+        if ([string]$state['status'] -ne 'verified') {
+            return $false
+        }
+
+        $snapshot = Get-MarkerFileSnapshot -StartDir $start
+        $cachedPath = [string]$state['markerFilePath']
+        $cachedWriteUtc = [string]$state['markerLastWriteUtc']
+
+        if ($cachedPath -ne $snapshot.markerFilePath -or $cachedWriteUtc -ne $snapshot.markerLastWriteUtc) {
+            Start-PluginSession -StartPath $start | Out-Null
+            $state = Read-McpYamlObject -Path $sessionFile
+        }
+
+        return ([string]$state['status'] -eq 'verified')
+    } catch {
+        $untrustedState = [ordered]@{
+            status = 'MCP_UNTRUSTED'
+            lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        try {
+            $snapshot = Get-MarkerFileSnapshot -StartDir $start
+            $untrustedState['markerFilePath'] = $snapshot.markerFilePath
+            $untrustedState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
+        } catch {
+        }
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
+        return $false
+    }
 }
 
 function Open-PluginTurn {
     $cacheDir = Get-PluginCacheDir
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
-    if (-not (Test-Path -LiteralPath $sessionFile)) {
-        Start-PluginSession -StartPath (Get-Location).ProviderPath | Out-Null
-    }
+    $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    Ensure-PluginMarkerFresh -StartPath $startPath | Out-Null
     if (Test-Path -LiteralPath $sessionFile) {
         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
         if (-not $timestampText) { $timestampText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated' }

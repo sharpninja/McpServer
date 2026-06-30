@@ -14,6 +14,34 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class MarkerFileServiceTests
 {
     private const string BaseUrl = "http://localhost:7147";
+    private static readonly string[] PluginVersionEnvironmentVariables =
+    [
+        "CODEX_PLUGIN_ROOT",
+        "CLAUDE_PLUGIN_ROOT",
+        "COPILOT_PLUGIN_ROOT",
+        "CLINE_PLUGIN_ROOT",
+        "GROK_PLUGIN_ROOT",
+    ];
+
+    private static void WithClearedPluginVersionEnvironment(Action action)
+    {
+        var saved = PluginVersionEnvironmentVariables.ToDictionary(
+            name => name,
+            name => Environment.GetEnvironmentVariable(name));
+
+        try
+        {
+            foreach (var name in PluginVersionEnvironmentVariables)
+                Environment.SetEnvironmentVariable(name, null);
+
+            action();
+        }
+        finally
+        {
+            foreach (var (name, value) in saved)
+                Environment.SetEnvironmentVariable(name, value);
+        }
+    }
 
     /// <summary>
     /// Builds a minimal template context for prompt-rendering tests.
@@ -466,6 +494,80 @@ public sealed class MarkerFileServiceTests
 
         Assert.Equal(payloadA, payloadB);
         Assert.Equal(signatureA, signatureB);
+    }
+
+    /// <summary>
+    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version.
+    /// </summary>
+    [Fact]
+    public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
+    {
+        var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
+
+        Assert.All(
+            plugins.Agents,
+            pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
+    }
+
+    /// <summary>
+    /// TEST-MCP-MARKER-REFRESH-001: installed sibling plugin versions override the synced fallback in marker contracts.
+    /// </summary>
+    [Fact]
+    public void BuildDefaultAgentPlugins_UsesInstalledSiblingPluginVersionWhenPresent()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-version-{Guid.NewGuid():N}");
+        var workspace = Path.Combine(root, "McpServer");
+        var claudePlugin = Path.Combine(root, "mcpserver-claude-code-plugin");
+        Directory.CreateDirectory(workspace);
+        Directory.CreateDirectory(claudePlugin);
+        File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+
+        try
+        {
+            WithClearedPluginVersionEnvironment(() =>
+            {
+                var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+
+                Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
+                Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
+            });
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-MARKER-REFRESH-001: resolved plugin versions affect the agent plugin contract digest.
+    /// </summary>
+    [Fact]
+    public void ComputeAgentPluginsDigest_ChangesWhenResolvedPluginVersionChanges()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-digest-{Guid.NewGuid():N}");
+        var workspace = Path.Combine(root, "McpServer");
+        var claudePlugin = Path.Combine(root, "mcpserver-claude-code-plugin");
+        Directory.CreateDirectory(workspace);
+        Directory.CreateDirectory(claudePlugin);
+
+        try
+        {
+            WithClearedPluginVersionEnvironment(() =>
+            {
+                var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+                var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
+
+                File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+                var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+                var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
+
+                Assert.NotEqual(baselineDigest, updatedDigest);
+            });
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
     }
 
     /// <summary>Verifies plugin contract data is part of the marker signature payload.</summary>

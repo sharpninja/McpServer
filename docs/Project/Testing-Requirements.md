@@ -632,10 +632,11 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] The staged plugin and all supported plugin repo copies are synchronized from the same PowerShell runtime source. (evidence: sync-plugin-core.ps1)
 - TEST-MCP-MARKER-TRIAGE-001: Production default marker template rendering covers MCP Server and plugin failure triage guidance.
   **Acceptance Criteria:**
-  - [x] A render test verifies the production default marker prompt tells agents to report MCP Server and plugin failures through the triage tool only. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-  - [x] A render test verifies agents are told not to wait for triage resolution and to continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-  - [x] A render test verifies failed live triage submissions are written as normal failsafe YAML documents for later replay. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-- [x] A render test verifies separate code, docs, requirements, plugin, deployment, or configuration repair workflows are captured as detailed triage reports. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies the production default marker prompt tells agents to always write MCP Server and plugin failures as normal failsafe YAML reports. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies agents are told to submit through the supported triage tool and continue the active task only after triage submission succeeds. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies agents are told not to wait for triage resolution after successful submission. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+  - [x] A render test verifies failed triage submissions stop work and notify the user while preserving the failsafe YAML for later replay. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] A render test verifies separate code, docs, requirements, plugin, deployment, or configuration repair workflows are captured as detailed triage reports and continue only after failsafe YAML is written and triage submission succeeds. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 
 - TEST-MCP-REQSCOPE-001: Layer catalog CRUD, immutability, defaults, duplicate rejection, and workspace isolation tests cover FR-MCP-REQSCOPE-001 and TR-MCP-REQSCOPE-001 acceptance criteria.
   **Acceptance Criteria:**
@@ -672,3 +673,15 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-REQSCOPE-REQAC-001: Requirement acceptance-criterion traceability tests cover all new REQSCOPE FR/TR/TEST acceptance criteria.
   **Acceptance Criteria:**
   - [ ] Every new REQSCOPE acceptance criterion is referenced by at least one passing test and validated by the plan-wide traceability gate.
+## TEST-MCP-MARKER-REFRESH-001 Marker regeneration and plugin freshness coverage
+
+Tests shall prove marker regeneration, dynamic plugin version resolution, and plugin timestamp reprocessing.
+
+**Acceptance Criteria:**
+- [ ] Controller tests verify the marker regeneration endpoint invokes marker regeneration and returns a typed result.
+- [ ] Client tests verify the marker regeneration method posts to the documented endpoint.
+- [ ] Marker service tests verify installed plugin versions override fallback versions and alter the contract digest.
+- [ ] Pester plugin runtime tests verify successful bootstrap records marker path and timestamp.
+- [ ] Pester plugin runtime tests verify a marker timestamp change before a prompt causes marker reprocessing.
+- [ ] Pester plugin runtime tests verify plugin REPL dispatch checks marker freshness before sending a request.
+- [ ] Negative tests verify failed marker reprocessing does not silently continue with stale marker state.

@@ -348,6 +348,18 @@ public sealed class GlobalPromptUpdateRequest
     public string? Template { get; set; }
 }
 
+/// <summary>Result of explicit marker-file regeneration for running workspaces.</summary>
+public sealed class MarkerRegenerationResult
+{
+    /// <summary>Whether marker regeneration completed.</summary>
+    [JsonPropertyName("regenerated")]
+    public bool Regenerated { get; set; }
+
+    /// <summary>Number of running workspace marker files regenerated.</summary>
+    [JsonPropertyName("workspaceCount")]
+    public int WorkspaceCount { get; set; }
+}
+
 /// <summary>Result of listing workspaces.</summary>
 public sealed class WorkspaceListResult
 {

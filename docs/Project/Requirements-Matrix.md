@@ -843,3 +843,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REQSCOPE-006 | Planned | Testing-Requirements.md |
 | TEST-MCP-REQSCOPE-REPL-001 | Planned | Testing-Requirements.md |
 | TEST-MCP-REQSCOPE-REQAC-001 | Planned | Testing-Requirements.md |
+| FR-MCP-MARKER-REFRESH-001 | Planned | Functional-Requirements.md |
+| TR-MCP-MARKER-REFRESH-001 | Planned | Technical-Requirements.md |
+| TEST-MCP-MARKER-REFRESH-001 | Planned | Testing-Requirements.md |

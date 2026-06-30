@@ -69,6 +69,22 @@ public sealed class WorkspaceClientTests
         Assert.Equal("Custom prompt", result.Template);
     }
 
+    /// <summary>TEST-MCP-MARKER-REFRESH-001: marker regeneration uses the typed workspace client endpoint.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RegenerateMarkersAsync_PostsToMarkerRegenerationEndpoint()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"regenerated":true,"workspaceCount":2}""");
+        using var http = new HttpClient(handler);
+        var client = new WorkspaceClient(http, DefaultOptions);
+
+        var result = await client.RegenerateMarkersAsync();
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/workspace/markers/regenerate", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.True(result.Regenerated);
+        Assert.Equal(2, result.WorkspaceCount);
+    }
+
     [Fact]
     public async System.Threading.Tasks.Task GetAsync_GetsWorkspaceByKey()
     {

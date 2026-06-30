@@ -1477,13 +1477,14 @@ When `pwsh` or the `PowerShell.MCP` module is unavailable, plugins shall fail cl
 
 ## FR-MCP-MARKER-TRIAGE-001 Marker instructions route MCP/plugin failures to triage
 
-Generated marker instructions shall tell agents that MCP Server failures and required-plugin failures discovered while working are reported through the triage tool only, and that agents continue the user's active task after submission.
+Generated marker instructions shall tell agents that MCP Server failures and required-plugin failures discovered while working are always written as failsafe YAML reports, submitted through the triage tool, and only followed by continued work when triage submission succeeds.
 **Acceptance Criteria:**
-- [x] The rendered marker prompt tells agents to report MCP Server failures and required-plugin failures through the triage tool only. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-- [x] The rendered marker prompt tells agents not to wait for triage research, TODO creation, or resolution before continuing the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to always write MCP Server failures and required-plugin failures as normal failsafe YAML reports. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to submit the failsafe-backed report through the supported triage tool. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents not to wait for triage research, TODO creation, or resolution before continuing the active task after triage submission succeeds. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 - [x] The rendered marker prompt forbids substitute TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user's active request is to fix that failure. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-- [x] The rendered marker prompt tells agents to write a normal failsafe YAML triage report for later replay when the failure prevents live triage submission. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-- [x] The rendered marker prompt tells agents to write detailed triage reports for separate code, docs, requirements, plugin, deployment, or configuration repair workflows, then continue the active task. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to stop work and notify the user when triage submission fails. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The rendered marker prompt tells agents to write detailed triage reports for separate code, docs, requirements, plugin, deployment, or configuration repair workflows, then continue the active task only after failsafe YAML is written and triage submission succeeds. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 
 ## FR-MCP-REQSCOPE-001 Requirement scope layer catalog
 
@@ -1538,3 +1539,15 @@ MCP Server shall prove requirement scope layers through a REPL-driven integratio
 - [ ] The REPL integration test queries current requirements before the new layer and verifies future and expired requirements are excluded.
 - [ ] The REPL integration test queries current requirements after the new layer and verifies newly active and sunset requirements are included or excluded correctly.
 
+## FR-MCP-MARKER-REFRESH-001 Marker regeneration and plugin freshness
+
+MCP Server shall expose a workspace marker regeneration endpoint and shall generate marker plugin contracts from the current installed plugin versions. Plugins shall detect marker file timestamp changes before making MCP requests and shall reprocess the marker when it changes.
+
+**Acceptance Criteria:**
+- [ ] REST and client paths can request marker regeneration for running workspaces without editing marker files by hand.
+- [ ] Regeneration rewrites marker files through the same trusted marker generation path used at workspace startup and prompt-template updates.
+- [ ] Marker plugin contracts populate each agent plugin version from the current plugin installation when available, with a stable fallback only when no installed version can be found.
+- [ ] The marker plugin contract digest changes when a resolved plugin version changes.
+- [ ] Plugin runtime state records the marker file path and last-write timestamp after successful bootstrap.
+- [ ] Before opening a turn or making a plugin REPL request, the plugin compares the current marker timestamp to cached state and reprocesses the marker if it changed.
+- [ ] If the marker cannot be reprocessed after a timestamp change, the plugin fails closed as `MCP_UNTRUSTED` or `MCP_PLUGIN_UNAVAILABLE:<Agent>` rather than continuing with stale marker data.

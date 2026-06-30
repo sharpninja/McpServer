@@ -175,6 +175,34 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         Assert.Contains("WORKSPACE SPECIFIC PROMPT for", updatedContent);
     }
 
+    /// <summary>
+    /// TEST-MCP-MARKER-REFRESH-001: the explicit marker regeneration endpoint rewrites running workspace markers.
+    /// </summary>
+    [Fact]
+    public async Task MarkerRegenerationEndpoint_RewritesMarkerFile()
+    {
+        var key = EncodeKey(Path.GetFullPath(_workspacePath));
+        await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
+        await StartWorkspaceAndWaitForMarkerAsync(key).ConfigureAwait(true);
+        var initialContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
+        var markerChanged = WatchForMarkerChange();
+
+        var response = await _client.PostAsync(
+            new Uri("/mcpserver/workspace/markers/regenerate", UriKind.Relative),
+            null).ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+
+        Assert.True(response.StatusCode == HttpStatusCode.OK,
+            $"Marker regeneration failed ({response.StatusCode}): {body}");
+        using var document = JsonDocument.Parse(body);
+        Assert.True(document.RootElement.GetProperty("regenerated").GetBoolean());
+        Assert.Equal(1, document.RootElement.GetProperty("workspaceCount").GetInt32());
+
+        await markerChanged.ConfigureAwait(true);
+        var regeneratedContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
+        Assert.NotEqual(initialContent, regeneratedContent);
+    }
+
     [Fact]
     public async Task GlobalAndWorkspacePrompts_CombineInMarkerFile()
     {

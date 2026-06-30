@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Core;
@@ -22,6 +23,7 @@ public static class MarkerFileService
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
     internal const string MarkerSignatureCanonicalization = "marker-v1";
     internal const string MarkerSignatureVerifier = "workspace_api_key";
+    internal const string SyncedAgentPluginVersion = "1.26.0";
     private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
@@ -347,6 +349,8 @@ public static class MarkerFileService
     {
         var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath)) ?? string.Empty;
         string Sibling(string name) => string.IsNullOrWhiteSpace(siblingRoot) ? name : Path.Combine(siblingRoot, name);
+        string Version(string pluginName, string environmentVariableName) =>
+            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
 
         return new MarkerAgentPlugins
         {
@@ -357,7 +361,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Codex",
                     PluginName = "mcpserver-codex-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-codex-plugin", "CODEX_PLUGIN_ROOT"),
                     Activation = "Codex hook lifecycle through .codex-plugin/plugin.json.",
                     StartupCommand = "lib/session-start.sh \"{workspacePath}\"",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Codex",
@@ -370,7 +374,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Claude",
                     PluginName = "mcpserver-claude-code-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-claude-code-plugin", "CLAUDE_PLUGIN_ROOT"),
                     Activation = "Claude Code plugin hooks and .mcp.json mcpserver entry.",
                     StartupCommand = "hooks/session-start.sh \"{workspacePath}\"",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Claude",
@@ -383,7 +387,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Copilot",
                     PluginName = "mcpserver-copilot-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-copilot-plugin", "COPILOT_PLUGIN_ROOT"),
                     Activation = "Copilot plugin hooks and .mcp.json mcpserver entry.",
                     StartupCommand = "hooks/session-start.sh \"{workspacePath}\"",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Copilot",
@@ -396,7 +400,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Cline",
                     PluginName = "mcpserver-cline-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-cline-plugin", "CLINE_PLUGIN_ROOT"),
                     Activation = "Cline MCP server configured from server.json.",
                     StartupCommand = "npm run build && node dist/index.js",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Cline",
@@ -409,7 +413,7 @@ public static class MarkerFileService
                 {
                     SourceType = "GrokCode",
                     PluginName = "mcpserver-grok-plugin",
-                    PluginVersion = "1.1.1",
+                    PluginVersion = Version("mcpserver-grok-plugin", "GROK_PLUGIN_ROOT"),
                     Activation = "Grok Build loads enabled plugin skills, hooks, and MCP servers from the Grok/Claude-compatible plugin manifests. Use sessionlog_*, todo_*, and requirements_* tool names when the Streamable HTTP MCP server is discoverable; mcp_* names are hosted-agent aliases, and workflow.* names are plugin shim/REPL method names invoked through the Grok plugin skills or repl-invoke helpers, not literal Grok search_tool results.",
                     StartupCommand = "",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:GrokCode",
@@ -420,6 +424,149 @@ public static class MarkerFileService
                 },
             },
         };
+    }
+
+    internal static string ResolveAgentPluginVersion(
+        string workspacePath,
+        string pluginName,
+        string environmentVariableName)
+    {
+        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName))
+        {
+            var version = TryReadAgentPluginVersion(root);
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+        }
+
+        return SyncedAgentPluginVersion;
+    }
+
+    private static IEnumerable<string> EnumerateAgentPluginVersionRoots(
+        string workspacePath,
+        string pluginName,
+        string environmentVariableName)
+    {
+        var environmentRoot = Environment.GetEnvironmentVariable(environmentVariableName);
+        if (!string.IsNullOrWhiteSpace(environmentRoot))
+            yield return environmentRoot;
+
+        if (!string.IsNullOrWhiteSpace(workspacePath))
+        {
+            var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
+            if (!string.IsNullOrWhiteSpace(siblingRoot))
+                yield return Path.Combine(siblingRoot, pluginName);
+        }
+
+        var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (!string.IsNullOrWhiteSpace(userProfile))
+        {
+            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName))
+                yield return candidate;
+        }
+    }
+
+    private static IEnumerable<string> EnumerateUserPluginCacheRoots(string userProfile, string pluginName)
+    {
+        var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
+        if (Directory.Exists(codexCache))
+        {
+            foreach (var candidate in OrderPluginVersionRoots(Directory.EnumerateDirectories(codexCache, "*", SearchOption.AllDirectories)))
+                yield return candidate;
+        }
+
+        var claudeCache = Path.Combine(userProfile, ".claude", "plugins", "cache");
+        if (Directory.Exists(claudeCache))
+        {
+            var candidates = Directory.EnumerateDirectories(claudeCache, "*", SearchOption.AllDirectories)
+                .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+                    || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
+            foreach (var candidate in OrderPluginVersionRoots(candidates))
+                yield return candidate;
+        }
+
+        var grokCache = Path.Combine(userProfile, ".grok", "installed-plugins");
+        if (Directory.Exists(grokCache))
+        {
+            var candidates = Directory.EnumerateDirectories(grokCache, "*", SearchOption.AllDirectories)
+                .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+                    || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
+            foreach (var candidate in OrderPluginVersionRoots(candidates))
+                yield return candidate;
+        }
+    }
+
+    private static IEnumerable<string> OrderPluginVersionRoots(IEnumerable<string> candidates)
+    {
+        return candidates
+            .Select(path => new { Path = path, Version = GetPluginVersionSortKey(path) })
+            .OrderByDescending(candidate => candidate.Version)
+            .ThenByDescending(candidate => candidate.Path, StringComparer.OrdinalIgnoreCase)
+            .Select(candidate => candidate.Path);
+    }
+
+    private static System.Version GetPluginVersionSortKey(string root)
+    {
+        var versionText = TryReadAgentPluginVersion(root);
+        if (string.IsNullOrWhiteSpace(versionText))
+            return new System.Version(0, 0);
+
+        var normalized = versionText.Split('+')[0].Split('-')[0];
+        return System.Version.TryParse(normalized, out var parsed)
+            ? parsed
+            : new System.Version(0, 0);
+    }
+
+    private static string? TryReadAgentPluginVersion(string root)
+    {
+        if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
+            return null;
+
+        var versionFile = Path.Combine(root, ".version");
+        if (File.Exists(versionFile))
+        {
+            var version = File.ReadAllText(versionFile).Trim();
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+        }
+
+        foreach (var manifest in new[]
+                 {
+                     "plugin.json",
+                     Path.Combine(".codex-plugin", "plugin.json"),
+                     Path.Combine(".claude-plugin", "plugin.json"),
+                     Path.Combine(".grok-plugin", "plugin.json"),
+                     "package.json",
+                 })
+        {
+            var path = Path.Combine(root, manifest);
+            if (!File.Exists(path))
+                continue;
+
+            var version = TryReadVersionFromJson(path);
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+        }
+
+        return null;
+    }
+
+    private static string? TryReadVersionFromJson(string path)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(File.ReadAllText(path));
+            if (document.RootElement.TryGetProperty("version", out var version)
+                && version.ValueKind == JsonValueKind.String)
+            {
+                return version.GetString();
+            }
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+
+        return null;
     }
 
     internal static string ComputeAgentPluginsDigest(MarkerAgentPlugins agentPlugins)

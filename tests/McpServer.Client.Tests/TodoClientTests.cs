@@ -91,6 +91,40 @@ public sealed class TodoClientTests
         Assert.Equal("Before", result.Entries[0].PreviousSnapshot?.Title);
     }
 
+    /// <summary>
+    /// TEST-MCP-TODO-CLOSE-001: Verifies that the typed TODO client calls the dedicated close-by-id endpoint.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task CloseAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {
+              "success": true,
+              "item": {
+                "id": "TODO-CLOSE-001",
+                "title": "Closed",
+                "section": "Backlog",
+                "priority": "high",
+                "done": true,
+                "completedDate": "2026-06-30T21:00:00.0000000+00:00"
+              }
+            }
+            """);
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.CloseAsync("TODO-CLOSE-001");
+
+        Assert.True(result.Success);
+        Assert.NotNull(result.Item);
+        Assert.True(result.Item.Done);
+        Assert.Equal("2026-06-30T21:00:00.0000000+00:00", result.Item.CompletedDate);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo/TODO-CLOSE-001/close", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
     [Fact]
     public async System.Threading.Tasks.Task GetProjectionStatusAsync_SendsCorrectUrl()
     {

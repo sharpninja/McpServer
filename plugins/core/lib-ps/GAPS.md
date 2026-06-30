@@ -30,6 +30,10 @@ Ported now:
    `CLAUDE_*` names. Hosts that need the legacy filename ship a copy or
    shim named `Invoke-<Host>McpPlugin.ps1` at sync time.
 5. `plugin-env.ps1` (new): ps1 twin of the plugin-env knob surface.
+6. Session-log append hardening: `appendActions`, `appendDialog`, and
+   `completeTurn` now reject calls without `current-turn.yaml` instead of
+   reporting success. `appendDialog` is handled locally and persists
+   `processingDialog` through the turn upsert path.
 
 Documented gaps (deferred by the report as Phase 2 scope decisions; do not
 silently treat as parity debt):
@@ -51,7 +55,6 @@ silently treat as parity debt):
   layout (no `cache_scope_v4_failsafe_root` twin yet).
 - No session-scoped pending dirs in `cache-manager.ps1` (depends on a ps1
   cache-scope).
-- No Gate 3 audit counters on the ps1 side.
 - Whether codex/copilot repos receive lib-ps at all is a packaging
   decision; their top-level `Invoke-{Codex,Copilot}McpPlugin.ps1` forks
   should be replaced by the merged `Invoke-McpPlugin.ps1` when that

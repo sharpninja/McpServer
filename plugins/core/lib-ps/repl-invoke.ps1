@@ -29,6 +29,9 @@ $shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
 Import-Module $shimModule -ErrorAction Stop
 . (Join-Path $PSScriptRoot 'yaml-object-mutation.ps1')
 Import-McpYamlSerializer
+if (-not (Get-Command Find-MarkerFile -ErrorAction SilentlyContinue)) {
+    . (Join-Path $PSScriptRoot 'marker-resolver.ps1')
+}
 
 $script:ReplInvokePluginRoot = if ($env:PLUGIN_ROOT_OVERRIDE) {
     $env:PLUGIN_ROOT_OVERRIDE
@@ -76,6 +79,57 @@ function Resolve-ReplWorkspaceDirectory {
     }
 
     return (Get-Location).ProviderPath
+}
+
+function Assert-ReplMarkerFresh {
+    $workspace = Resolve-ReplWorkspaceDirectory
+    $sessionFile = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
+
+    try {
+        $snapshot = Get-MarkerFileSnapshot -StartDir $workspace
+        $state = Read-McpYamlObject -Path $sessionFile -Create
+        if ($state -isnot [System.Collections.IDictionary]) {
+            $state = [ordered]@{}
+        }
+
+        $status = if ($state.Contains('status')) { [string]$state['status'] } else { '' }
+        $cachedPath = if ($state.Contains('markerFilePath')) { [string]$state['markerFilePath'] } else { '' }
+        $cachedWriteUtc = if ($state.Contains('markerLastWriteUtc')) { [string]$state['markerLastWriteUtc'] } else { '' }
+
+        if ($status -eq 'verified' -and
+            $cachedPath -eq $snapshot.markerFilePath -and
+            $cachedWriteUtc -eq $snapshot.markerLastWriteUtc) {
+            return $true
+        }
+
+        if (-not (Invoke-FullBootstrap -StartDir $workspace)) {
+            throw 'marker bootstrap failed'
+        }
+
+        $state['status'] = 'verified'
+        if (-not $state.Contains('agent')) {
+            $state['agent'] = $script:AgentName
+        }
+        $state['lastUpdated'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        $state['markerFilePath'] = $snapshot.markerFilePath
+        $state['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
+        Write-McpYamlObject -Path $sessionFile -Document $state
+        return $true
+    } catch {
+        $untrustedState = [ordered]@{
+            status = 'MCP_UNTRUSTED'
+            lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        try {
+            $snapshot = Get-MarkerFileSnapshot -StartDir $workspace
+            $untrustedState['markerFilePath'] = $snapshot.markerFilePath
+            $untrustedState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
+        } catch {
+        }
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
+        [Console]::Error.WriteLine("MCP_UNTRUSTED: marker refresh failed before REPL request: $_")
+        return $false
+    }
 }
 
 function Set-ReplProcessWorkspace {
@@ -296,6 +350,10 @@ function Invoke-ReplRaw {
         [Parameter(Mandatory)][string]$Method,
         [string]$ParamsYaml = ''
     )
+    if (-not (Assert-ReplMarkerFresh)) {
+        return (New-McpPluginReplResult -Success $false -Output '' -Error 'MCP_UNTRUSTED: marker refresh failed before REPL request')
+    }
+
     if (-not (Get-Command mcpserver-repl -ErrorAction SilentlyContinue)) {
         Write-Error 'mcpserver-repl not found on PATH'
         return (New-McpPluginReplResult -Success $false -Output '' -Error 'mcpserver-repl not found on PATH')
@@ -396,6 +454,18 @@ function Get-ReplCurrentTurnValue {
     return ($line.Line -replace "^${Key}:\s*", '').Trim()
 }
 
+function Get-ReplCurrentTurnFile {
+    return (Join-Path (Get-ReplInvokeCacheDir) 'current-turn.yaml')
+}
+
+function Deny-ReplMissingCurrentTurn {
+    param([Parameter(Mandatory)][string]$Method)
+
+    $cacheDir = Get-ReplInvokeCacheDir
+    [Console]::Error.WriteLine("$Method requires current-turn.yaml in '$cacheDir'. Run the active agent prompt hook in the workspace, or set MCP_CACHE_DIR_OVERRIDE to the cache that contains the active turn.")
+    return $false
+}
+
 function Get-ReplCurrentTurnQueryText {
     # Extract the queryText literal block from current-turn.yaml (twin of
     # _repl_yaml_block_get for the one block the upsert path needs).
@@ -464,7 +534,8 @@ function Invoke-ReplTurnUpsertParams {
         [Parameter(Mandatory)][string]$Title,
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
-        [string]$ActionsYaml = ''
+        [string]$ActionsYaml = '',
+        [object[]]$ProcessingDialog = @()
     )
 
     $queryText = Get-ReplCurrentTurnQueryText
@@ -507,7 +578,8 @@ function Invoke-ReplTurnUpsertParams {
         -ResponseText $ResponseText `
         -Model $model `
         -FilesModified $filePaths `
-        -Actions $actions
+        -Actions $actions `
+        -ProcessingDialog $ProcessingDialog
 
     return $request.ToParamsObject()
 }
@@ -522,7 +594,8 @@ function Invoke-ReplSubmitSessionFallback {
         [Parameter(Mandatory)][string]$Title,
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
-        [string]$ActionsYaml = ''
+        [string]$ActionsYaml = '',
+        [object[]]$ProcessingDialog = @()
     )
 
     $turn = [ordered]@{
@@ -536,6 +609,9 @@ function Invoke-ReplSubmitSessionFallback {
         if ($actionParams -and $actionParams.actions) {
             $turn.actions = @($actionParams.actions)
         }
+    }
+    if ($ProcessingDialog.Count -gt 0) {
+        $turn.processingDialog = @($ProcessingDialog)
     }
 
     $paramsObject = [ordered]@{
@@ -562,14 +638,16 @@ function Invoke-ReplPersistTurn {
         [Parameter(Mandatory)][string]$Title,
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
-        [string]$ActionsYaml = ''
+        [string]$ActionsYaml = '',
+        [object[]]$ProcessingDialog = @()
     )
     $meta = Get-ReplSessionMeta
     if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
     $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType `
         -SessionId $meta.SessionId -RequestId $RequestId -Title $Title `
-        -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml
+        -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml `
+        -ProcessingDialog $ProcessingDialog
 
     $envelope = New-McpPluginReplRequest `
         -RequestId "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$(Get-Random -Maximum 0xffff)" `
@@ -614,7 +692,8 @@ function Invoke-ReplPersistTurn {
         if ($output -match 'method_not_found' -or $output -match 'Session not found') {
             Clear-ReplFailsafe -Path $failsafe
             $fallbackOk = Invoke-ReplSubmitSessionFallback -Meta $meta -RequestId $RequestId `
-                -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml
+                -Title $Title -Status $Status -ResponseText $ResponseText `
+                -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog
             if (-not $fallbackOk) {
                 throw "Session log fallback submit failed for request '$RequestId'."
             }
@@ -738,8 +817,10 @@ function Update-ReplTurnAudit {
 
 function Invoke-WorkflowAppendActions {
     param([string]$ParamsYaml)
-    $turnFile = Join-Path (Get-ReplInvokeCacheDir) 'current-turn.yaml'
-    if (-not (Test-Path $turnFile)) { return $true }
+    $turnFile = Get-ReplCurrentTurnFile
+    if (-not (Test-Path $turnFile)) {
+        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendActions')
+    }
 
     $added = 0
     $actionsBlock = ''
@@ -772,10 +853,68 @@ function Invoke-WorkflowAppendActions {
     return $true
 }
 
+function Get-ReplDialogItemsFromParams {
+    param([string]$ParamsYaml)
+
+    if (-not $ParamsYaml) { return @() }
+    $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+    if (-not $params) { return @() }
+
+    $propertyNames = @($params.PSObject.Properties.Name)
+    $rawItems = @()
+    if ($propertyNames -contains 'dialogItems') {
+        $rawItems = @($params.dialogItems)
+    } elseif ($propertyNames -contains 'dialog') {
+        $rawItems = @($params.dialog)
+    }
+
+    $items = @()
+    foreach ($rawItem in $rawItems) {
+        if (-not $rawItem) { continue }
+        $item = [ordered]@{}
+        if ($rawItem -is [System.Collections.IDictionary]) {
+            foreach ($key in $rawItem.Keys) {
+                $item[[string]$key] = $rawItem[$key]
+            }
+        } else {
+            foreach ($property in $rawItem.PSObject.Properties) {
+                $item[$property.Name] = $property.Value
+            }
+        }
+        if ($item.Count -gt 0) {
+            $items += $item
+        }
+    }
+
+    return @($items)
+}
+
+function Invoke-WorkflowAppendDialog {
+    param([string]$ParamsYaml)
+    $turnFile = Get-ReplCurrentTurnFile
+    if (-not (Test-Path $turnFile)) {
+        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendDialog')
+    }
+
+    $dialogItems = @(Get-ReplDialogItemsFromParams -ParamsYaml $ParamsYaml)
+    if ($dialogItems.Count -gt 0) {
+        Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
+        $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
+        $title = Get-ReplTurnCacheField -Field 'queryTitle'
+        Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+            -Status 'in_progress' -ResponseText 'Dialog appended.' `
+            -ProcessingDialog $dialogItems
+    }
+
+    return $true
+}
+
 function Invoke-WorkflowCompleteTurn {
     param([string]$ParamsYaml)
-    $turnFile = Join-Path (Get-ReplInvokeCacheDir) 'current-turn.yaml'
-    if (-not (Test-Path $turnFile)) { return $true }
+    $turnFile = Get-ReplCurrentTurnFile
+    if (-not (Test-Path $turnFile)) {
+        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.completeTurn')
+    }
 
     $responseText = '(no response provided)'
     if ($ParamsYaml) {
@@ -810,6 +949,7 @@ function Invoke-ReplMethod {
         'workflow.sessionlog.beginTurn'       { return $true }
         'workflow.sessionlog.openSession'     { return $true }
         'workflow.sessionlog.appendActions'   { return Invoke-WorkflowAppendActions -ParamsYaml $ParamsYaml }
+        'workflow.sessionlog.appendDialog'    { return Invoke-WorkflowAppendDialog -ParamsYaml $ParamsYaml }
         'workflow.sessionlog.completeTurn'    { return Invoke-WorkflowCompleteTurn -ParamsYaml $ParamsYaml }
     }
 

@@ -113,7 +113,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     }
 
     /// <inheritdoc />
-    public async Task RegenerateAllMarkersAsync(CancellationToken ct = default, string? globalPromptOverride = null)
+    public async Task<int> RegenerateAllMarkersAsync(CancellationToken ct = default, string? globalPromptOverride = null)
     {
         using var scope = _serviceProvider.CreateScope();
         var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
@@ -126,6 +126,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             ?? _promptOptions.CurrentValue.MarkerPromptTemplate
             ?? fileTemplate;
 
+        var regenerated = 0;
         foreach (var ws in workspaces.Items)
         {
             if (!ws.IsEnabled) continue;
@@ -142,9 +143,11 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
                 globalTemplate, ws.PromptTemplate, upstreamApiKey ?? token, ws, agentAdditions,
                 _serverRuntimeInfo.StartedAtUtc, overrideBaseUrl).ConfigureAwait(false);
             await PublishMarkerChangeSafeAsync(ChangeEventActions.Updated, key, ct).ConfigureAwait(false);
+            regenerated++;
         }
 
-        _logger.LogInformation("Regenerated marker files for all registered workspaces");
+        _logger.LogInformation("Regenerated marker files for {Count} registered workspaces", regenerated);
+        return regenerated;
     }
 
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)

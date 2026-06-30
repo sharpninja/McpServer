@@ -1758,11 +1758,12 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-MCP-MARKER-TRIAGE-001
 
-**Marker Failure Triage Guidance** — The production `default-marker-prompt` template in `templates/prompt-templates.yaml` shall include explicit MCP Server and required-plugin failure reporting guidance. The guidance shall name the triage surfaces, require continuing the active task after submission, and forbid substitute reporting channels unless the user's active request is to fix that failure.
+**Marker Failure Triage Guidance** — The production `default-marker-prompt` template in `templates/prompt-templates.yaml` shall include explicit MCP Server and required-plugin failure reporting guidance. The guidance shall require a failsafe YAML report for every such failure, name the triage surfaces, require continuing the active task only after successful triage submission, require stopping and notifying the user when triage submission fails, and forbid substitute reporting channels unless the user's active request is to fix that failure.
 **Acceptance Criteria:**
 - [x] The marker template contains a dedicated MCP/plugin failure reporting section. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 - [x] The guidance renders through the production prompt template service, not only as source YAML text. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
-- [x] The marker template instructs agents to write failed triage submissions as normal failsafe YAML documents for later replay through the plugin/REPL failsafe or pending queue. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The marker template instructs agents to write every MCP Server or required-plugin failure as a normal failsafe YAML document through the plugin/REPL failsafe or pending queue regardless of triage submission outcome. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
+- [x] The marker template requires agents to stop work and notify the user when triage submission fails. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 - [x] The marker template requires detailed triage reports for separate repair workflows involving code, docs, requirements, plugin skills, package sync, deployment, or configuration changes. (evidence: DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance)
 
 ## TR-MCP-REQSCOPE-001
@@ -1805,3 +1806,16 @@ Current requirements enforcement and traceability validation shall use workspace
 - [ ] A requirement acceptance criterion cannot be treated as complete unless a passing test references it.
 - [ ] No BDPv4 phase exits with failing, skipped, or unmapped acceptance-criterion coverage.
 
+## TR-MCP-MARKER-REFRESH-001 Dynamic marker refresh implementation
+
+Marker generation and plugin runtime shall share a deterministic freshness model.
+
+**Acceptance Criteria:**
+- [ ] `WorkspaceController` exposes an authenticated marker regeneration endpoint that invokes `IWorkspaceProcessManager.RegenerateAllMarkersAsync`.
+- [ ] `WorkspaceClient` exposes a typed method for the marker regeneration endpoint and sends the expected HTTP verb and route.
+- [ ] Marker generation resolves plugin versions per agent from installed plugin roots, environment-root hints, or sibling plugin repositories and falls back to the synced baseline only when no installed version can be read.
+- [ ] Marker signatures and contract digests include the resolved per-agent plugin versions.
+- [ ] PowerShell plugin runtime stores `markerFilePath` and `markerLastWriteUtc` in `session-state.yaml` after successful marker bootstrap.
+- [ ] PowerShell plugin runtime checks marker freshness before `UserPromptSubmit` turn creation and before REPL request dispatch.
+- [ ] Marker freshness checks re-run trusted marker bootstrap on timestamp changes and replace stale session state before continuing.
+- [ ] Failed marker reprocessing produces an unavailable or untrusted state instead of silently using stale marker data.

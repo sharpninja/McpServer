@@ -1512,6 +1512,16 @@ Scope: layer-1+
 - [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
 - [x] Sink transport errors are swallowed and never break the transaction.
 
+## FR-MCP-TODO-CLOSE-001 Close TODO item by ID
+
+Users and agents can close a TODO item with a single ID-scoped operation that marks the item complete and records the completion timestamp.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] A REST endpoint accepts a TODO ID without requiring the caller to resubmit the full TODO update payload. (evidence: TodoController.CloseAsync POST /mcpserver/todo/{id}/close covered by TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate.)
+- [x] Closing an open TODO sets the item status to DONE by setting done true and records a non-empty completion timestamp. (evidence: TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate asserts done true and UTC completedDate.)
+- [x] Closing a missing TODO returns the existing not-found mutation failure behavior. (evidence: TodoControllerTests.CloseAsync_WhenItemMissing_ReturnsNotFound.)
+- [x] The typed client exposes the same close-by-id operation. (evidence: TodoClientTests.CloseAsync_PostsCorrectUrl.)
+
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 
 Agents can submit workspace-scoped incidental bug reports without leaving their current task.

@@ -14,7 +14,8 @@ public sealed class TriagePromptTemplateTests
 {
     /// <summary>
     /// TEST-MCP-MARKER-TRIAGE-001: the production marker prompt tells agents to
-    /// report MCP Server and plugin failures through triage only, then continue work.
+    /// write failsafe YAML for MCP Server and plugin failures, submit triage,
+    /// and stop when triage submission fails.
     /// </summary>
     [Fact]
     public async Task DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance()
@@ -42,16 +43,16 @@ public sealed class TriagePromptTemplateTests
         Assert.True(result.Success, result.Error);
         Assert.Contains("## MCP and Plugin Failure Reporting", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains(
-            "MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only.",
+            "MCP Server failures and required-plugin failures discovered while working must always be written as a normal failsafe YAML report.",
             result.RenderedContent,
             StringComparison.Ordinal);
-        Assert.Contains("continue the user's active task", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("After the failsafe YAML is written and triage submission succeeds, continue the user's active task", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("Do not wait for triage research, TODO creation, or resolution.", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("separate repair workflow", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("needed changes, acceptance criteria, and validation evidence", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports", result.RenderedContent, StringComparison.Ordinal);
-        Assert.Contains("normal failsafe YAML document", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("plugin/REPL failsafe or pending YAML queue", result.RenderedContent, StringComparison.Ordinal);
+        Assert.Contains("If triage submission fails, stop work and notify the user.", result.RenderedContent, StringComparison.Ordinal);
         Assert.Contains("workflow.triage.report", result.RenderedContent, StringComparison.Ordinal);
     }
 
