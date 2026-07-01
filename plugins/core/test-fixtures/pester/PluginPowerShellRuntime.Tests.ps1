@@ -207,6 +207,51 @@ acceptanceCriteria:
         $source.IndexOf('Assert-ReplMarkerFresh') | Should -BeLessThan $source.IndexOf('Invoke-ReplRaw -Method')
     }
 
+    It 'TEST-MCP-PLUGIN-PSONLY-001 emits raw REPL YAML on the success stream' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+        $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+        function Invoke-ReplRaw {
+            New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  ok: true" -ExitCode 0
+        }
+
+        try {
+            $output = Invoke-ReplMethod -Method 'client.Health.GetAsync'
+            $envelope = ConvertFrom-Yaml -Yaml ($output | Out-String) -Ordered
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+        }
+
+        $script:LastInvokeReplMethodSuccess | Should -BeTrue
+        $envelope['type'] | Should -Be 'result'
+        $envelope['payload']['ok'] | Should -BeTrue
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 emits generated-document YAML as success output for YAML object parsing' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+        $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+        function Invoke-ReplRaw {
+            New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  result:`n    contentBase64: QUJD" -ExitCode 0
+        }
+
+        try {
+            $output = Invoke-ReplMethod -Method 'workflow.requirements.generateDocument'
+            $envelope = ConvertFrom-Yaml -Yaml ($output | Out-String) -Ordered
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+        }
+
+        $script:LastInvokeReplMethodSuccess | Should -BeTrue
+        $envelope['payload']['result']['contentBase64'] | Should -Be 'QUJD'
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 imports shim module and serializes DTO contracts with PowerShell-native JSON' {
         Remove-Module McpPluginShim -Force -ErrorAction SilentlyContinue
         Import-Module (Join-Path $script:LibRoot 'McpPluginShim.psm1') -Force

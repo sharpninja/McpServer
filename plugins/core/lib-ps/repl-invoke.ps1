@@ -954,13 +954,20 @@ function Invoke-ReplMethod {
     }
 
     $r = Invoke-ReplRaw -Method $Method -ParamsYaml $ParamsYaml
-    if ($r.Output) { Write-Host $r.Output }
+    if ($r.Output) {
+        $script:LastInvokeReplMethodSuccess = [bool]$r.Success
+        $r.Output
+        return
+    }
+
+    $script:LastInvokeReplMethodSuccess = [bool]$r.Success
     return [bool]$r.Success
 }
 
 # Script-entry: only when invoked directly with -Method (not when dot-sourced).
 if ($Method -and $MyInvocation.InvocationName -ne '.') {
-    $ok = Invoke-ReplMethod -Method $Method -ParamsYaml $ParamsYaml
-    if (-not $ok) { exit 1 }
+    $script:LastInvokeReplMethodSuccess = $false
+    Invoke-ReplMethod -Method $Method -ParamsYaml $ParamsYaml
+    if (-not $script:LastInvokeReplMethodSuccess) { exit 1 }
     exit 0
 }
