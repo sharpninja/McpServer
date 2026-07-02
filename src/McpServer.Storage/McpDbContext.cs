@@ -114,6 +114,15 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-TODO-005 / TR-MCP-TODO-006 (provider-agnostic): Singleton TODO document metadata.</summary>
     public DbSet<TodoDocumentMetadataEntity> TodoDocumentMetadata => Set<TodoDocumentMetadataEntity>();
 
+    /// <summary>TR-MCP-TODO-005: 4NF top-level TODO document notes.</summary>
+    public DbSet<TodoDocumentNoteEntity> TodoDocumentNotes => Set<TodoDocumentNoteEntity>();
+
+    /// <summary>TR-MCP-TODO-005: 4NF completed-archive groups.</summary>
+    public DbSet<TodoCompletedGroupEntity> TodoCompletedGroups => Set<TodoCompletedGroupEntity>();
+
+    /// <summary>TR-MCP-TODO-005: 4NF completed-archive items.</summary>
+    public DbSet<TodoCompletedItemEntity> TodoCompletedItems => Set<TodoCompletedItemEntity>();
+
     /// <summary>Authoritative workspace-scoped FR/TR/TEST requirements.</summary>
     public DbSet<RequirementEntity> Requirements => Set<RequirementEntity>();
 
@@ -476,6 +485,33 @@ public sealed class McpDbContext : DbContext
             e.ToTable(t => t.HasCheckConstraint(
                 "CK_TodoDocumentMetadata_Singleton",
                 "\"SingletonId\" = 1"));
+        });
+
+        modelBuilder.Entity<TodoDocumentNoteEntity>(e =>
+        {
+            e.HasOne(x => x.DocumentMetadata)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.SingletonId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.SingletonId, x.Ordinal });
+        });
+
+        modelBuilder.Entity<TodoCompletedGroupEntity>(e =>
+        {
+            e.HasOne(x => x.DocumentMetadata)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.SingletonId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.SingletonId, x.Ordinal });
+        });
+
+        modelBuilder.Entity<TodoCompletedItemEntity>(e =>
+        {
+            e.HasOne(x => x.Group)
+                .WithMany(x => x.Items)
+                .HasForeignKey(x => x.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.GroupId, x.Ordinal });
         });
 
         modelBuilder.Entity<RequirementEntity>(e =>

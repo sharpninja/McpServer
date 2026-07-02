@@ -197,6 +197,8 @@ internal sealed class TodoBootstrapImporter : IHostedService
         foreach (var row in history)
             ctx.TodoAuditHistory.Add(row);
         ctx.TodoDocumentMetadata.Add(metadata);
+        ctx.TodoDocumentNotes.AddRange(metadata.Notes);
+        ctx.TodoCompletedGroups.AddRange(metadata.CompletedGroups);
 
         await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await WriteMarkerAsync(markerPath, $"imported items={items.Count}", cancellationToken).ConfigureAwait(false);
@@ -251,8 +253,25 @@ internal sealed class TodoBootstrapImporter : IHostedService
         var metadata = new TodoDocumentMetadataEntity
         {
             SingletonId = 1,
-            NotesJson = file.Notes is null ? null : JsonSerializer.Serialize(file.Notes, _json),
-            CompletedJson = file.Completed is null ? null : JsonSerializer.Serialize(file.Completed, _json),
+            Notes = file.Notes is null
+                ? []
+                : file.Notes.Select((note, i) => new TodoDocumentNoteEntity { Ordinal = i, Value = note }).ToList(),
+            CompletedGroups = file.Completed is null
+                ? []
+                : file.Completed.Select((group, gi) => new TodoCompletedGroupEntity
+                {
+                    Ordinal = gi,
+                    Date = group?.Date,
+                    Items = group?.Items is null
+                        ? []
+                        : group.Items.Select((item, ii) => new TodoCompletedItemEntity
+                        {
+                            Ordinal = ii,
+                            ItemId = item?.Id,
+                            Qualifier = item?.Qualifier,
+                            Summary = item?.Summary,
+                        }).ToList(),
+                }).ToList(),
             CodeReviewReference = file.CodeReviewRemediation?.Reference,
             LastImportedFromYamlUtc = importedAtUtc,
         };

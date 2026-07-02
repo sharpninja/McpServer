@@ -87,7 +87,14 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
         Assert.Equal("LEG-ONE-001", history[0].TodoId);
 
         var meta = await ctx.TodoDocumentMetadata.AsNoTracking().SingleAsync().ConfigureAwait(true);
-        Assert.Equal("[\"note\"]", meta.NotesJson);
+        var noteRows = await ctx.TodoDocumentNotes
+            .AsNoTracking()
+            .Where(n => n.WorkspaceId == meta.WorkspaceId && n.SingletonId == meta.SingletonId)
+            .OrderBy(n => n.Ordinal)
+            .Select(n => n.Value)
+            .ToListAsync()
+            .ConfigureAwait(true);
+        Assert.Equal(["note"], noteRows);
     }
 
     /// <summary>

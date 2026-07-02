@@ -198,8 +198,15 @@ public sealed class TodoBootstrapImporterTests : IDisposable
         Assert.Equal(1, rows[1].SectionOrder);
 
         var meta = await probe.Ctx.TodoDocumentMetadata.AsNoTracking().SingleAsync().ConfigureAwait(true);
-        Assert.Contains("Top-level note A", meta.NotesJson!);
-        Assert.Contains("Top-level note B", meta.NotesJson!);
+        var noteRows = await probe.Ctx.TodoDocumentNotes
+            .AsNoTracking()
+            .Where(n => n.WorkspaceId == meta.WorkspaceId && n.SingletonId == meta.SingletonId)
+            .OrderBy(n => n.Ordinal)
+            .Select(n => n.Value)
+            .ToListAsync()
+            .ConfigureAwait(true);
+        Assert.Contains("Top-level note A", noteRows);
+        Assert.Contains("Top-level note B", noteRows);
         Assert.Equal(ws, meta.WorkspaceId);
     }
 

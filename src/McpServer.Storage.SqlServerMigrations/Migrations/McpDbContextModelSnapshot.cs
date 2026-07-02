@@ -2164,6 +2164,107 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.ToTable("TodoAuditHistory");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Date")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SingletonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "SingletonId", "Ordinal");
+
+                    b.ToTable("TodoCompletedGroups");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Qualifier")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("GroupId", "Ordinal");
+
+                    b.ToTable("TodoCompletedItems");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -2176,9 +2277,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("CodeReviewReference")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
-
-                    b.Property<string>("CompletedJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
@@ -2211,15 +2309,58 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("NotesJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("WorkspaceId", "SingletonId");
 
                     b.ToTable("TodoDocumentMetadata", t =>
                         {
                             t.HasCheckConstraint("CK_TodoDocumentMetadata_Singleton", "\"SingletonId\" = 1");
                         });
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentNoteEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SingletonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "SingletonId", "Ordinal");
+
+                    b.ToTable("TodoDocumentNotes");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
@@ -3596,6 +3737,40 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", "DocumentMetadata")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "SingletonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMetadata");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", "Group")
+                        .WithMany("Items")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3603,6 +3778,23 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentNoteEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", "DocumentMetadata")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "SingletonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMetadata");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
@@ -3815,6 +4007,11 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Navigation("StringListItems");
 
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>

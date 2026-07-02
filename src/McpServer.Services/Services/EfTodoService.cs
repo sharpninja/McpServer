@@ -525,6 +525,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(row => row.WorkspaceId == workspaceId, cancellationToken)
             .ConfigureAwait(false);
+        if (metadata is not null)
+            await AttachMetadataChildrenAsync(ctx, metadata, cancellationToken).ConfigureAwait(false);
         var state = new EfTodoCompensationState(
             CloneTodoItem(item),
             ReadSoftDeleteState(ctx.Entry(item)),
@@ -763,9 +765,45 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             };
         }
 
-        file.Completed = DeserializeJson<List<CompletedGroup>>(metadata.CompletedJson);
-        file.Notes = DeserializeJson<List<string>>(metadata.NotesJson);
+        var completedGroups = metadata.CompletedGroups
+            .OrderBy(g => g.Ordinal)
+            .Select(g => new CompletedGroup
+            {
+                Date = g.Date,
+                Items = g.Items.Count == 0
+                    ? null
+                    : g.Items
+                        .OrderBy(i => i.Ordinal)
+                        .Select(i => new CompletedItem { Id = i.ItemId, Qualifier = i.Qualifier, Summary = i.Summary })
+                        .ToList(),
+            })
+            .ToList();
+        file.Completed = completedGroups.Count == 0 ? null : completedGroups;
+
+        var notes = metadata.Notes.OrderBy(n => n.Ordinal).Select(n => n.Value).ToList();
+        file.Notes = notes.Count == 0 ? null : notes;
         return file;
+    }
+
+    /// <summary>
+    /// Loads and attaches the 4NF note and completed-archive child rows onto the (non-mapped)
+    /// holders of a document-metadata singleton.
+    /// </summary>
+    private static async Task AttachMetadataChildrenAsync(McpDbContext ctx, TodoDocumentMetadataEntity metadata, CancellationToken cancellationToken)
+    {
+        metadata.Notes = await ctx.TodoDocumentNotes
+            .AsNoTracking()
+            .Where(n => n.WorkspaceId == metadata.WorkspaceId && n.SingletonId == metadata.SingletonId)
+            .OrderBy(n => n.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        metadata.CompletedGroups = await ctx.TodoCompletedGroups
+            .AsNoTracking()
+            .Include(g => g.Items)
+            .Where(g => g.WorkspaceId == metadata.WorkspaceId && g.SingletonId == metadata.SingletonId)
+            .OrderBy(g => g.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
     }
 
     private async Task<TodoProjectionStatusResult> GetProjectionStatusCoreAsync(CancellationToken cancellationToken)
@@ -856,8 +894,14 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     }
 
     private static async Task<TodoDocumentMetadataEntity> ReadDocumentMetadataAsync(McpDbContext ctx, CancellationToken cancellationToken)
-        => await ctx.TodoDocumentMetadata.AsNoTracking().FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false)
-            ?? new TodoDocumentMetadataEntity { SingletonId = 1 };
+    {
+        var metadata = await ctx.TodoDocumentMetadata.AsNoTracking().FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+        if (metadata is null)
+            return new TodoDocumentMetadataEntity { SingletonId = 1 };
+
+        await AttachMetadataChildrenAsync(ctx, metadata, cancellationToken).ConfigureAwait(false);
+        return metadata;
+    }
 
     private static async Task<TodoDocumentMetadataEntity> GetOrCreateDocumentMetadataAsync(McpDbContext ctx, CancellationToken cancellationToken)
     {
@@ -1140,6 +1184,25 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             CopyDocumentMetadata(state.Metadata, existing);
         }
 
+        // Restore the 4NF note/completed child rows dependent-side: replace whatever rows exist
+        // (including soft-deleted ones) with the captured snapshot's children.
+        var staleNotes = await ctx.TodoDocumentNotes
+            .IgnoreQueryFilters()
+            .Where(n => n.WorkspaceId == workspaceId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var staleGroups = await ctx.TodoCompletedGroups
+            .IgnoreQueryFilters()
+            .Include(g => g.Items)
+            .Where(g => g.WorkspaceId == workspaceId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        ctx.TodoCompletedItems.RemoveRange(staleGroups.SelectMany(g => g.Items));
+        ctx.TodoCompletedGroups.RemoveRange(staleGroups);
+        ctx.TodoDocumentNotes.RemoveRange(staleNotes);
+        ctx.TodoDocumentNotes.AddRange(existing.Notes);
+        ctx.TodoCompletedGroups.AddRange(existing.CompletedGroups);
+
         ApplySoftDeleteState(ctx.Entry(existing), state.SoftDelete);
     }
 
@@ -1213,8 +1276,34 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     {
         target.WorkspaceId = source.WorkspaceId;
         target.SingletonId = source.SingletonId;
-        target.NotesJson = source.NotesJson;
-        target.CompletedJson = source.CompletedJson;
+        target.Notes = source.Notes
+            .Select(n => new TodoDocumentNoteEntity
+            {
+                WorkspaceId = n.WorkspaceId,
+                SingletonId = n.SingletonId,
+                Ordinal = n.Ordinal,
+                Value = n.Value,
+            })
+            .ToList();
+        target.CompletedGroups = source.CompletedGroups
+            .Select(g => new TodoCompletedGroupEntity
+            {
+                WorkspaceId = g.WorkspaceId,
+                SingletonId = g.SingletonId,
+                Ordinal = g.Ordinal,
+                Date = g.Date,
+                Items = g.Items
+                    .Select(i => new TodoCompletedItemEntity
+                    {
+                        WorkspaceId = i.WorkspaceId,
+                        Ordinal = i.Ordinal,
+                        ItemId = i.ItemId,
+                        Qualifier = i.Qualifier,
+                        Summary = i.Summary,
+                    })
+                    .ToList(),
+            })
+            .ToList();
         target.CodeReviewReference = source.CodeReviewReference;
         target.LastImportedFromYamlUtc = source.LastImportedFromYamlUtc;
         target.LastProjectedToYamlUtc = source.LastProjectedToYamlUtc;

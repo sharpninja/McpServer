@@ -117,7 +117,11 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         foreach (var row in history)
             ctx.TodoAuditHistory.Add(row);
         if (metadata is not null)
+        {
             ctx.TodoDocumentMetadata.Add(metadata);
+            ctx.TodoDocumentNotes.AddRange(metadata.Notes);
+            ctx.TodoCompletedGroups.AddRange(metadata.CompletedGroups);
+        }
 
         await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await WriteMarkerAsync(markerPath, $"imported items={items.Count} history={history.Count} meta={(metadata is null ? 0 : 1)}", cancellationToken).ConfigureAwait(false);
@@ -287,6 +291,63 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         public bool Done { get; init; }
     }
 
+    private static List<TodoDocumentNoteEntity> ToNoteRows(string? json)
+    {
+        var notes = DeserializeStringList(json);
+        return notes is null
+            ? []
+            : notes.Select((value, i) => new TodoDocumentNoteEntity { SingletonId = 1, Ordinal = i, Value = value }).ToList();
+    }
+
+    private static List<TodoCompletedGroupEntity> ToCompletedGroupRows(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return [];
+        List<LegacyCompletedGroup>? groups;
+        try
+        {
+            groups = JsonSerializer.Deserialize<List<LegacyCompletedGroup>>(json, s_legacyJson);
+        }
+        catch (JsonException)
+        {
+            return [];
+        }
+
+        return groups is null
+            ? []
+            : groups.Select((group, gi) => new TodoCompletedGroupEntity
+            {
+                SingletonId = 1,
+                Ordinal = gi,
+                Date = group?.Date,
+                Items = group?.Items is null
+                    ? []
+                    : group.Items.Select((item, ii) => new TodoCompletedItemEntity
+                    {
+                        Ordinal = ii,
+                        ItemId = item?.Id,
+                        Qualifier = item?.Qualifier,
+                        Summary = item?.Summary,
+                    }).ToList(),
+            }).ToList();
+    }
+
+    private sealed record LegacyCompletedGroup
+    {
+        public string? Date { get; init; }
+
+        public List<LegacyCompletedItem>? Items { get; init; }
+    }
+
+    private sealed record LegacyCompletedItem
+    {
+        public string? Id { get; init; }
+
+        public string? Qualifier { get; init; }
+
+        public string? Summary { get; init; }
+    }
+
     private static async Task<List<TodoAuditHistoryEntity>> ReadHistoryAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
         var result = new List<TodoAuditHistoryEntity>();
@@ -329,8 +390,8 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         return new TodoDocumentMetadataEntity
         {
             SingletonId = 1,
-            NotesJson = reader.IsDBNull(0) ? null : reader.GetString(0),
-            CompletedJson = reader.IsDBNull(1) ? null : reader.GetString(1),
+            Notes = ToNoteRows(reader.IsDBNull(0) ? null : reader.GetString(0)),
+            CompletedGroups = ToCompletedGroupRows(reader.IsDBNull(1) ? null : reader.GetString(1)),
             CodeReviewReference = reader.IsDBNull(2) ? null : reader.GetString(2),
             LastImportedFromYamlUtc = reader.IsDBNull(3) ? null : reader.GetString(3),
             LastProjectedToYamlUtc = reader.IsDBNull(4) ? null : reader.GetString(4),

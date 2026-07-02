@@ -133,6 +133,41 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             Assert.Equal("second task", todoTasks[1].Task);
             Assert.False(todoTasks[1].Done);
 
+            // TodoDocumentMetadata Notes + Completed -> TodoDocumentNotes / TodoCompletedGroups / TodoCompletedItems
+            var notes = db.TodoDocumentNotes
+                .IgnoreQueryFilters()
+                .Where(n => n.WorkspaceId == WorkspacePath)
+                .OrderBy(n => n.Ordinal)
+                .Select(n => n.Value)
+                .ToList();
+            Assert.Equal(["first note", "second note"], notes);
+
+            var groups = db.TodoCompletedGroups
+                .IgnoreQueryFilters()
+                .Where(g => g.WorkspaceId == WorkspacePath)
+                .OrderBy(g => g.Ordinal)
+                .ToList();
+            Assert.Equal(2, groups.Count);
+            Assert.Equal("2026-06-01", groups[0].Date);
+            Assert.Equal("2026-06-15", groups[1].Date);
+            var g0Items = db.TodoCompletedItems
+                .IgnoreQueryFilters()
+                .Where(i => i.GroupId == groups[0].Id)
+                .OrderBy(i => i.Ordinal)
+                .ToList();
+            Assert.Equal(2, g0Items.Count);
+            Assert.Equal("DONE-001", g0Items[0].ItemId);
+            Assert.Equal("feature", g0Items[0].Qualifier);
+            Assert.Equal("shipped the thing", g0Items[0].Summary);
+            Assert.Equal("DONE-002", g0Items[1].ItemId);
+            var g1Items = db.TodoCompletedItems
+                .IgnoreQueryFilters()
+                .Where(i => i.GroupId == groups[1].Id)
+                .ToList();
+            Assert.Single(g1Items);
+            Assert.Equal("DONE-003", g1Items[0].ItemId);
+            Assert.Null(g1Items[0].Qualifier);
+
             // Source JSON columns are gone from the rebuilt tables.
             Assert.False(ColumnExists("SessionLogCommits", "FilesChangedJson"));
             Assert.False(ColumnExists("TriageReports", "AffectedPathsJson"));
@@ -140,6 +175,8 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             Assert.False(ColumnExists("Requirements", "AcceptanceCriteriaJson"));
             Assert.False(ColumnExists("TodoItems", "DescriptionJson"));
             Assert.False(ColumnExists("TodoItems", "ImplementationTasksJson"));
+            Assert.False(ColumnExists("TodoDocumentMetadata", "NotesJson"));
+            Assert.False(ColumnExists("TodoDocumentMetadata", "CompletedJson"));
         }
     }
 
@@ -280,6 +317,15 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             """["FR-MCP-4NF-001"]""",
             """["TR-MCP-4NF-001"]""",
             """[{"task":"first task","done":true},{"task":"second task","done":false}]""");
+
+        db.Database.ExecuteSqlRaw(
+            """
+            INSERT INTO "TodoDocumentMetadata" ("WorkspaceId", "SingletonId", "NotesJson", "CompletedJson", "IsDeleted")
+            VALUES ({0}, 1, {1}, {2}, 0);
+            """,
+            WorkspacePath,
+            """["first note","second note"]""",
+            """[{"date":"2026-06-01","items":[{"id":"DONE-001","qualifier":"feature","summary":"shipped the thing"},{"id":"DONE-002","qualifier":"fix","summary":"fixed the bug"}]},{"date":"2026-06-15","items":[{"id":"DONE-003","qualifier":null,"summary":"cleanup"}]}]""");
 
         db.Database.ExecuteSqlRaw(
             """
