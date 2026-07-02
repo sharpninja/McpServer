@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -266,8 +267,21 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
     /// <returns>An initialized LocalDB sandbox.</returns>
     public static async Task<SqlLocalDbSandbox> CreateAsync()
     {
-        // No version pin: use whichever LocalDB engine is installed (a pinned version that is
+        // Requires LocalDB 15.0 (SQL Server 2019) or newer; the instance itself is created
+        // without a version pin so the newest installed engine is used (a pinned version that is
         // absent makes SqlLocalDB.exe report failure on stdout while still exiting 0).
+        var versionsOutput = await RunSqlLocalDbAsync("versions").ConfigureAwait(false);
+        var installed = System.Text.RegularExpressions.Regex.Matches(versionsOutput, @"\((\d+)\.(\d+)")
+            .Select(m => new Version(int.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture), int.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture)))
+            .DefaultIfEmpty(new Version(0, 0))
+            .Max();
+        if (installed < new Version(15, 0))
+        {
+            throw new InvalidOperationException(
+                $"SQL Server LocalDB 15.0 or newer is required; newest installed engine is {installed}. " +
+                "Run the 'InstallTestDependencies' Nuke target.");
+        }
+
         var instanceName = $"mcp-provider-{Guid.NewGuid():N}";
         await RunSqlLocalDbAsync("create", instanceName).ConfigureAwait(false);
         await RunSqlLocalDbAsync("start", instanceName).ConfigureAwait(false);
@@ -301,7 +315,7 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
         }
     }
 
-    private static async Task RunSqlLocalDbAsync(params string[] arguments)
+    private static async Task<string> RunSqlLocalDbAsync(params string[] arguments)
     {
         var psi = new ProcessStartInfo("SqlLocalDB.exe")
         {
@@ -324,5 +338,7 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
             throw new InvalidOperationException(
                 $"SqlLocalDB.exe {string.Join(" ", arguments)} failed with exit code {process.ExitCode}.\nSTDOUT: {stdout}\nSTDERR: {stderr}");
         }
+
+        return stdout;
     }
 }

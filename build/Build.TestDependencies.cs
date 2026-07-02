@@ -16,6 +16,17 @@ partial class Build
     const string PostgresBinariesZipUrl =
         "https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip";
 
+    const string OllamaBinariesZipUrl =
+        "https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip";
+
+    const string OllamaTagsEndpoint = "http://localhost:11434/api/tags";
+
+    /// <summary>Model pulled for the QuadBrain Ollama tests; small but chat-capable.</summary>
+    static string RequiredOllamaModel =>
+        Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL") is { Length: > 0 } configured
+            ? configured.Trim()
+            : "llama3.2:1b";
+
     static AbsolutePath TestToolsDirectory =>
         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "McpServer" / "test-tools";
 
@@ -67,16 +78,129 @@ partial class Build
             }
         });
 
+    /// <summary>
+    /// Idempotent installer for the local Ollama service used by the QuadBrain Ollama integration
+    /// tests (TEST-MCP-QBOLLAMA-001): installs the portable Ollama binaries when absent (existing
+    /// installation preferred), starts the server on localhost:11434 when not running, and pulls
+    /// the required model (default llama3.2:1b, override with MCP_QUADBRAIN_OLLAMA_MODEL) when it
+    /// is not present. Re-running when everything is in place is a no-op.
+    /// </summary>
+    public Target InstallOllama => _ => _
+        .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent)")
+        .Executes(() =>
+        {
+            if (TryGetOllamaTags(out var tags) && tags.Contains($"\"{RequiredOllamaModel}\"", StringComparison.OrdinalIgnoreCase))
+            {
+                Log.Information("Ollama is running and model {Model} is installed.", RequiredOllamaModel);
+                return;
+            }
+
+            var ollamaExe = EnsureOllamaBinaries();
+            EnsureOllamaServerRunning(ollamaExe);
+
+            if (!TryGetOllamaTags(out tags))
+                throw new InvalidOperationException("Ollama server did not become reachable on localhost:11434.");
+
+            if (!tags.Contains($"\"{RequiredOllamaModel}\"", StringComparison.OrdinalIgnoreCase))
+            {
+                Log.Information("Pulling Ollama model {Model} (this can take a while) ...", RequiredOllamaModel);
+                RunTool(ollamaExe, $"pull {RequiredOllamaModel}");
+            }
+
+            Log.Information("Ollama ready with model {Model}.", RequiredOllamaModel);
+        });
+
+    static string EnsureOllamaBinaries()
+    {
+        var candidates = new[]
+        {
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Ollama", "ollama.exe"),
+            (string)(TestToolsDirectory / "ollama" / "ollama.exe"),
+        };
+        var existing = candidates.FirstOrDefault(File.Exists);
+        if (existing is not null)
+        {
+            Log.Information("Using existing Ollama binaries: {Path}", existing);
+            return existing;
+        }
+
+        Log.Information("Ollama missing; downloading portable binaries zip ...");
+        var zipPath = Path.Combine(Path.GetTempPath(), "ollama-windows-amd64.zip");
+        DownloadFile(OllamaBinariesZipUrl, zipPath);
+        var targetDirectory = TestToolsDirectory / "ollama";
+        targetDirectory.CreateDirectory();
+        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, targetDirectory, overwriteFiles: true);
+        var extracted = targetDirectory / "ollama.exe";
+        if (!File.Exists(extracted))
+            throw new InvalidOperationException($"ollama.exe not found under {targetDirectory} after extraction.");
+        Log.Information("Portable Ollama binaries ready: {Path}", extracted);
+        return extracted;
+    }
+
+    static void EnsureOllamaServerRunning(string ollamaExe)
+    {
+        if (TryGetOllamaTags(out _))
+            return;
+
+        Log.Information("Starting Ollama server (detached) ...");
+        // UseShellExecute detaches the child from this process's console pipes; with handle
+        // inheritance the long-lived server would keep the build's stdout pipe open and hang
+        // any caller that captures build output. The server intentionally outlives the build.
+        var started = Process.Start(new ProcessStartInfo
+        {
+            FileName = ollamaExe,
+            Arguments = "serve",
+            UseShellExecute = true,
+            WindowStyle = ProcessWindowStyle.Hidden,
+        }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
+        _ = started;
+
+        for (var attempt = 0; attempt < 30; attempt++)
+        {
+            Thread.Sleep(1000);
+            if (TryGetOllamaTags(out _))
+            {
+                Log.Information("Ollama server is up on localhost:11434.");
+                return;
+            }
+        }
+
+        throw new InvalidOperationException("Ollama server did not answer on localhost:11434 within 30 seconds.");
+    }
+
+    static bool TryGetOllamaTags(out string tags)
+    {
+        try
+        {
+            using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
+            tags = http.GetStringAsync(OllamaTagsEndpoint).GetAwaiter().GetResult();
+            return true;
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+            tags = string.Empty;
+            return false;
+        }
+    }
+
     static void EnsureSqlLocalDb()
     {
         var existing = FindSqlLocalDbExe();
         if (existing is not null)
         {
-            Log.Information("SQL Server LocalDB already installed: {Path}", existing);
-            return;
-        }
+            var newest = GetNewestLocalDbEngineVersion(existing);
+            if (newest >= new Version(15, 0))
+            {
+                Log.Information("SQL Server LocalDB {Version} already installed: {Path}", newest, existing);
+                return;
+            }
 
-        Log.Information("SQL Server LocalDB missing; downloading installer ...");
+            Log.Information("SQL Server LocalDB {Version} is older than the required 15.0; installing 2022 ...", newest);
+        }
+        else
+        {
+            Log.Information("SQL Server LocalDB missing; downloading installer ...");
+        }
         WindowsServiceHelper.AssertElevated(nameof(InstallTestDependencies));
         var msiPath = Path.Combine(Path.GetTempPath(), "SqlLocalDB.msi");
         DownloadFile(SqlLocalDbMsiUrl, msiPath);
@@ -95,6 +219,17 @@ partial class Build
         _ = FindSqlLocalDbExe()
             ?? throw new InvalidOperationException("SqlLocalDB.exe not found after installation.");
         Log.Information("SQL Server LocalDB installed.");
+    }
+
+    static Version GetNewestLocalDbEngineVersion(string sqlLocalDbExe)
+    {
+        var output = RunToolCapture(sqlLocalDbExe, "versions");
+        return System.Text.RegularExpressions.Regex.Matches(output, @"\((\d+)\.(\d+)")
+            .Select(m => new Version(
+                int.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture),
+                int.Parse(m.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture)))
+            .DefaultIfEmpty(new Version(0, 0))
+            .Max();
     }
 
     static string? FindSqlLocalDbExe()
@@ -149,6 +284,38 @@ partial class Build
             throw new InvalidOperationException($"initdb.exe not found under {toolsBin} after extracting PostgreSQL binaries.");
         Log.Information("Portable PostgreSQL binaries ready: {Bin}", toolsBin);
         return toolsBin;
+    }
+
+    static void RunTool(string fileName, string arguments)
+    {
+        var process = Process.Start(new ProcessStartInfo
+        {
+            FileName = fileName,
+            Arguments = arguments,
+            UseShellExecute = false,
+        }) ?? throw new InvalidOperationException($"Failed to start {fileName}.");
+        process.WaitForExit();
+        if (process.ExitCode != 0)
+            throw new InvalidOperationException($"{Path.GetFileName(fileName)} {arguments.Split(' ')[0]} failed with exit code {process.ExitCode}.");
+    }
+
+    static string RunToolCapture(string fileName, string arguments)
+    {
+        var process = Process.Start(new ProcessStartInfo
+        {
+            FileName = fileName,
+            Arguments = arguments,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true,
+        }) ?? throw new InvalidOperationException($"Failed to start {fileName}.");
+        var stdout = process.StandardOutput.ReadToEnd();
+        _ = process.StandardError.ReadToEnd();
+        process.WaitForExit();
+        if (process.ExitCode != 0)
+            throw new InvalidOperationException($"{Path.GetFileName(fileName)} {arguments} failed with exit code {process.ExitCode}.");
+        return stdout;
     }
 
     static void DownloadFile(string url, string destinationPath)
