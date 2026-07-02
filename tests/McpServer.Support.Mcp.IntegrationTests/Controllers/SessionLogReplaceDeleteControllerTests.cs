@@ -9,6 +9,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// FR-SUPPORT-010G: Integration coverage for the PATCH (additive) / PUT (replace)
 /// / DELETE (remove) verb split on the session log controller.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private const string Agent = "ReplaceDelete";

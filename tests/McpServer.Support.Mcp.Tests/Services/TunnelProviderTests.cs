@@ -9,6 +9,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for tunnel provider implementations.</summary>
+[Trait("Category", "Integration")]
 public sealed class TunnelProviderTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();

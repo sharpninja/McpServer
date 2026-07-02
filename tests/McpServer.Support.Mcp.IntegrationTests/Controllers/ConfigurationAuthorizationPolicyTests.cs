@@ -12,6 +12,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// The test uses the real HTTP pipeline so workspace auth and ASP.NET authorization behave exactly as they
 /// do in the running server.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class ConfigurationAuthorizationPolicyTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;

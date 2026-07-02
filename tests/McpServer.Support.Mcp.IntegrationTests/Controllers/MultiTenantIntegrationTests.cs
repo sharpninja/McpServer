@@ -10,6 +10,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// TR-MCP-MT-001, FR-MCP-043, FR-MCP-044: Integration tests for multi-tenant workspace resolution.
 /// Validates the full HTTP pipeline: WorkspaceResolutionMiddleware → WorkspaceAuthMiddleware → Controller.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;

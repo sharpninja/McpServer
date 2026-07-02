@@ -16,6 +16,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// exercising FR-MCP-QBOPENAI-001 and FR-MCP-QBEXEC-001 end to end through the real ASP.NET pipeline with the
 /// orchestration and internal-tool executor replaced by deterministic test doubles.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class QuadBrainOpenAiEndpointIntegrationTests
 {
     private const string Endpoint = "v1/chat/completions";

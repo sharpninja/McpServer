@@ -19,6 +19,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// then writes and edits a workspace file, with the file tools routed through the MCP client to the server's
 /// RepoFileService (FR-MCP-QBTOOLS-001/006/007, FR-MCP-QBSKILLS-002).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class QBAgentToolsIntegrationTests
 {
     /// <summary>The agent loads a skill, then write_file + edit_file land on the server workspace file.</summary>

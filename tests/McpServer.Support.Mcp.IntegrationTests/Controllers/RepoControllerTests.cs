@@ -6,6 +6,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>TR-PLANNED-CORE-013: Repo controller API tests (path allowlist, read/list/write).</summary>
+[Trait("Category", "Integration")]
 public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;

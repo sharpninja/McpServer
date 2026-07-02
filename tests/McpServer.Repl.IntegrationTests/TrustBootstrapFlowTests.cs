@@ -7,6 +7,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// Tests for the trust bootstrap flow: health check, signature validation, nonce challenge.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class TrustBootstrapFlowTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;

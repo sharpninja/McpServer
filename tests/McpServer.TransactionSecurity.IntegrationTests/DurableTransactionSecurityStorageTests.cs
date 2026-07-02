@@ -15,6 +15,7 @@ namespace McpServer.TransactionSecurity.IntegrationTests;
 /// <summary>
 /// TEST-MCP-158 and TEST-MCP-159: Durable transaction-security storage coverage derived from SD-KEYSERVER-001 and SD-DIFFGRAM-001.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class DurableTransactionSecurityStorageTests
 {
     private const string PublisherPartyId = "publisher-1";

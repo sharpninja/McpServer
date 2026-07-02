@@ -9,6 +9,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for <see cref="McpServer.Support.Mcp.Controllers.TunnelController"/> with <see cref="TunnelRegistry"/>.</summary>
+[Trait("Category", "Integration")]
 public sealed class TunnelControllerTests
 {
     /// <summary>Creates a factory that injects mock tunnel providers via DI.</summary>

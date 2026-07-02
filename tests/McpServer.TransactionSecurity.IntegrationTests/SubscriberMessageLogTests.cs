@@ -13,6 +13,7 @@ namespace McpServer.TransactionSecurity.IntegrationTests;
 /// TEST-MCP-SUBLOG-001: High-performance subscriber message logging (FR-MCP-SUBLOG-001). Verifies the Parseable
 /// sink request shape, error-swallowing, and that the subscriber emits one message-log entry per received message.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class SubscriberMessageLogTests
 {
     private const string PublisherPartyId = "publisher-1";

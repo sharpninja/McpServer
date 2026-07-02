@@ -20,6 +20,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// TEST-MCP-QBOLLAMA-001: Exercises the OpenAI-compatible QuadBrain endpoint against the local Ollama server,
 /// proving FR-MCP-134 and FR-MCP-QBOPENAI-001 execute the normal Left/Right/Arbiter workflow without faking the LLM calls.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class QuadBrainOllamaEndpointIntegrationTests
 {
     private const string Endpoint = "v1/chat/completions";

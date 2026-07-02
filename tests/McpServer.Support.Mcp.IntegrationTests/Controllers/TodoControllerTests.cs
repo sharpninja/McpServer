@@ -12,6 +12,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>TR-PLANNED-CORE-013: Integration tests for TODO CRUD endpoints.</summary>
+[Trait("Category", "Integration")]
 public sealed class TodoControllerTests : IDisposable
 {
     private readonly HttpClient _client;

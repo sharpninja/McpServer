@@ -25,6 +25,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// TODO description, verifies TODO-origin priority/comment changes flow back to GitHub, and finally verifies
 /// that an externally closed GitHub issue syncs back as a closed TODO. Validates FR-MCP-071 and TR-MCP-GH-007.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class IssueTodoGitHubRoundTripIntegrationTests
     : IClassFixture<IssueTodoGitHubRoundTripIntegrationTests.RoundTripWebFactory>, IDisposable
 {

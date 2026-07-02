@@ -7,6 +7,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests;
 
 /// <summary>TEST-MCP-HEALTH-003: agent-flow auth semantics and <c>/ready</c> readiness coverage.</summary>
+[Trait("Category", "Integration")]
 public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;

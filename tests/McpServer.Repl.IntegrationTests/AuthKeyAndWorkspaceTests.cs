@@ -7,6 +7,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// Tests for auth key acceptance and workspace selection via X-Workspace-Path header.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class AuthKeyAndWorkspaceTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;

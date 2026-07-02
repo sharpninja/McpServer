@@ -9,6 +9,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
+[Trait("Category", "Integration")]
 public sealed class AgentPoolControllerTests
 {
     private static WorkspaceContext CreateWorkspaceContext()

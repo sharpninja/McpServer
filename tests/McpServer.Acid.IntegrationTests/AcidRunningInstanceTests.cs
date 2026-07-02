@@ -7,6 +7,7 @@ namespace McpServer.Acid.IntegrationTests;
 /// hosts (WebApplicationFactory, torn down after the test) while the MCP Server coordinator drives the full
 /// transaction over the HTTP transports. Proves the same lifecycle commits against running instances.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class AcidRunningInstanceTests
 {
     /// <summary>Full happy-path commit with running key server and subscriber hosts.</summary>

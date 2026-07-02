@@ -21,6 +21,7 @@ namespace McpServer.TransactionSecurity.IntegrationTests;
 /// <summary>
 /// TEST-MCP-160: Real separate-host keyserver/subscriber integration tests derived from SD-DIFFGRAM-001.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class SeparateTransactionServiceIntegrationTests
 {
     private const string PublisherPartyId = "publisher-1";

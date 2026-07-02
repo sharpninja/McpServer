@@ -13,6 +13,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Services;
 /// Validates agent isolation (none, worktree, clone) and branch strategies (direct, feature) with real
 /// file system interactions and mocked process execution.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class AgentRuntimeScaffoldingTests
 {
     /// <summary>

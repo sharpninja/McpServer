@@ -22,6 +22,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for requirements management endpoints.</summary>
+[Trait("Category", "Integration")]
 public sealed class RequirementsControllerTests : IDisposable
 {
     private readonly HttpClient _client;

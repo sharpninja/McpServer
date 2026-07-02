@@ -6,6 +6,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for WorkspaceController endpoints.</summary>
+[Trait("Category", "Integration")]
 public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly HttpClient _client;

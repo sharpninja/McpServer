@@ -6,6 +6,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for ToolRegistryController endpoints.</summary>
+[Trait("Category", "Integration")]
 public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly HttpClient _client;

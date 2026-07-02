@@ -10,6 +10,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// TR-MCP-MT-002: MCP transport multi-tenant workspace resolution tests.
 /// Validates that X-Workspace-Path header is respected on /mcp-transport routes.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;

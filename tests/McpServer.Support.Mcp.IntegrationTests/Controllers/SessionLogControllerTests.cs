@@ -9,6 +9,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>TR-PLANNED-CORE-013: Integration tests for SessionLogController endpoints (MVP-SUPPORT-011).</summary>
+[Trait("Category", "Integration")]
 public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly HttpClient _client;

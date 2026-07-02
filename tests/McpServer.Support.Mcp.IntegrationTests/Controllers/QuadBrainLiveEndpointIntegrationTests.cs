@@ -20,6 +20,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// over four seeded slots with the real registry, invocation service, and key server. Only the per-brain LLM
 /// call and the transaction-commit machinery (independently covered by the ACID suite) are faked.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class QuadBrainLiveEndpointIntegrationTests
 {
     private const string Endpoint = "v1/chat/completions";

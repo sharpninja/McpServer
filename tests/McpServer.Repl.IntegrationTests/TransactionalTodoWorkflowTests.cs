@@ -16,6 +16,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// TEST-MCP-161 acceptance: REPL TODO create/update workflow mutations are transaction-gated.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class TransactionalTodoWorkflowTests
 {
     /// <summary>workflow.todo.create executes inside the transaction coordinator and returns only after commit.</summary>

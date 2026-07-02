@@ -8,6 +8,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>
 /// TEST-MCP-TRIAGE-003: Process spawning coverage for local triage agent execution.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class DesktopProcessSpawnerTests
 {
     /// <summary>

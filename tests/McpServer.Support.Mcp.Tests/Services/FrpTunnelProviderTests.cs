@@ -10,6 +10,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for FRP tunnel provider helper logic and failure paths.</summary>
+[Trait("Category", "Integration")]
 public sealed class FrpTunnelProviderTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();

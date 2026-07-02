@@ -6,6 +6,7 @@ namespace NukeBuild.Tests;
 /// TEST-MCP-YAML-MUTATION-001: Guards YAML updates so agents deserialize,
 /// mutate objects, serialize, and save instead of editing YAML as text.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class YamlObjectMutationTests
 {
     /// <summary>

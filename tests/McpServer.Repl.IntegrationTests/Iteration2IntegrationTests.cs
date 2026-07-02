@@ -4,6 +4,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace McpServer.Repl.IntegrationTests;
 
+[Trait("Category", "Integration")]
 public sealed class Iteration2IntegrationTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;

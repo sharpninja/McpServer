@@ -6,6 +6,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for the MCP Streamable HTTP transport endpoint.</summary>
+[Trait("Category", "Integration")]
 public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;

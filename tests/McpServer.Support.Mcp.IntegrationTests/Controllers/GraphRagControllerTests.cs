@@ -5,6 +5,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
+[Trait("Category", "Integration")]
 public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;

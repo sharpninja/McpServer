@@ -9,6 +9,7 @@ using System.Text;
 /// platform-specific wiki files and enriches the landing page with repository
 /// user-documentation links after ZIP extraction.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class RequirementsWikiPublishScriptTests
 {
     /// <summary>

@@ -6,6 +6,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests;
 
 /// <summary>TR-PLANNED-CORE-013: Health and default endpoint tests.</summary>
+[Trait("Category", "Integration")]
 public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;

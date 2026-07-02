@@ -36,22 +36,35 @@ partial class Build
         });
 
     /// <summary>
-    /// Runs all <c>Category=Integration</c> tests, including the provider migration tests
-    /// (SQLite in-memory, PostgreSQL, SQL Server LocalDB). The PostgreSQL tests boot their own
-    /// ephemeral cluster with generated credentials on a free port via their xUnit class fixture
-    /// (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server tests use an ad-hoc LocalDB
-    /// database (auto-started). Integration tests run only through this target: the default
-    /// <c>Test</c> target excludes the category.
+    /// Runs the <c>Category=Integration</c> tests living inside the unit-test projects, including
+    /// the provider migration tests (SQLite in-memory, PostgreSQL, SQL Server LocalDB). The
+    /// PostgreSQL tests boot their own ephemeral cluster with generated credentials on a free port
+    /// via their xUnit class fixture (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server
+    /// tests use an ad-hoc LocalDB database (auto-started). Integration tests run only through
+    /// this target: the default <c>Test</c> target excludes the category. The dedicated
+    /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
     /// </summary>
     public Target MigrationIntegrationTests => _ => _
-        .Description("Run provider migration integration tests against ephemeral PostgreSQL + LocalDB instances")
+        .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
         .DependsOn(InstallTestDependencies)
         .Executes(() =>
         {
-            DotNetTest(_ => _
-                .SetProjectFile(TestsDirectory / "McpServer.Support.Mcp.Tests" / "McpServer.Support.Mcp.Tests.csproj")
-                .SetFilter("Category=Integration")
-                .SetVerbosity(DotNetVerbosity.minimal));
+            // Only projects that contain Category=Integration tests: an empty filter match
+            // makes the test runner fail the target.
+            var projectsWithIntegrationTests = new[]
+            {
+                TestsDirectory / "McpServer.Support.Mcp.Tests" / "McpServer.Support.Mcp.Tests.csproj",
+                TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
+                TestsDirectory / "AgentPluginCore" / "AgentPluginCore.Tests.csproj",
+            };
+
+            foreach (var project in projectsWithIntegrationTests)
+            {
+                DotNetTest(_ => _
+                    .SetProjectFile(project)
+                    .SetFilter("Category=Integration")
+                    .SetVerbosity(DotNetVerbosity.minimal));
+            }
         });
 
     static void EnsureSqlLocalDb()

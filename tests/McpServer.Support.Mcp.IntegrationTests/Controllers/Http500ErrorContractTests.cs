@@ -19,6 +19,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
+[Trait("Category", "Integration")]
 public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContractTests.ErrorContractWebFactory>, IDisposable
 {
     private readonly ErrorContractWebFactory _factory;

@@ -10,6 +10,7 @@ namespace McpServer.TransactionSecurity.IntegrationTests;
 /// <summary>
 /// TEST-MCP-159 and TEST-MCP-167: Subscriber encryption/decryption tests derived from SD-DIFFGRAM-001.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class DiffgramEncryptionIntegrationTests
 {
     private const string PublisherPartyId = "publisher-1";

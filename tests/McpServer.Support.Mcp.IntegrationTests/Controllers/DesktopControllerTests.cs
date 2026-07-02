@@ -17,6 +17,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// request routing, and launcher-result normalization can be exercised without starting real
 /// desktop programs during integration test execution.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class DesktopControllerTests
 {
     private const string DesktopLaunchToken = "desktop-launch-test-token";

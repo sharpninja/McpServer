@@ -8,6 +8,7 @@ namespace McpServer.Acid.IntegrationTests;
 /// TEST-MCP-ACID-003: Key server <c>SignManifest</c> request outcomes - the success path and every
 /// deterministically reachable rejection (unknown party, unknown key, replay nonce, stale sequence).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class KeyServerSignMatrixTests
 {
     /// <summary>A registered publisher/subscriber pair signs successfully.</summary>
@@ -90,6 +91,7 @@ public sealed class KeyServerSignMatrixTests
 /// TEST-MCP-ACID-004: Key server <c>VerifyManifest</c> request outcomes - valid verification plus the
 /// rejections a relying party (subscriber) acts on: signature mismatch and wrong subscriber.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class KeyServerVerifyMatrixTests
 {
     /// <summary>A genuine signed manifest verifies as valid for its intended subscriber.</summary>
@@ -154,6 +156,7 @@ public sealed class KeyServerVerifyMatrixTests
 /// rejection (signature mismatch, encrypted-body mismatch, plaintext mismatch, stale sequence, wrong subscriber,
 /// decrypt-required failure).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class SubscriberCommitMatrixTests
 {
     /// <summary>A valid signed diffgram commits.</summary>
@@ -295,6 +298,7 @@ public sealed class SubscriberCommitMatrixTests
 /// bypassed (disabled / non-mutating), aborted (mutation failed), rejected when it validates a key-server sign
 /// failure, rejected when it validates a subscriber commit rejection, and degraded when the subscriber is down.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class CoordinatorOutcomeMatrixTests
 {
     /// <summary>A mutating turn with healthy collaborators commits.</summary>

@@ -13,6 +13,7 @@ namespace McpServer.Support.Mcp.IntegrationTests;
 /// <summary>
 /// TEST-MCP-REQSCOPE-REPL-001: REPL-driven integration coverage for requirement scope layers.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class RequirementScopeLayerReplIntegrationTests
 {
     private static readonly TimeSpan MarkerTimeout = TimeSpan.FromMinutes(1);

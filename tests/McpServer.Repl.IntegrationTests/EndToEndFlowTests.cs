@@ -7,6 +7,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// End-to-end integration tests for complete trust bootstrap and workspace selection flows.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class EndToEndFlowTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;

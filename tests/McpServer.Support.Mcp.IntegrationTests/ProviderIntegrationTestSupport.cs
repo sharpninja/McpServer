@@ -123,7 +123,7 @@ internal static class ProviderIntegrationTestSupport
             DisplayName = "Provider integration test agent",
             DefaultLaunchCommand = "dotnet",
             DefaultInstructionFile = "AGENTS.md",
-            DefaultModelsJson = "[\"gpt-5-codex\"]",
+            Models = { new AgentDefinitionModelEntity { Ordinal = 0, Model = "gpt-5-codex" } },
             DefaultBranchStrategy = "feature/{agent}/{task}",
             DefaultSeedPrompt = "Test seed prompt",
             IsBuiltIn = false,

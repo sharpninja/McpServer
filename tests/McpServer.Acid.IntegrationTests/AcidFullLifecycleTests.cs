@@ -8,6 +8,7 @@ namespace McpServer.Acid.IntegrationTests;
 /// (third-party key server, subscriber) are mocked in-process. Exercises every published message in the
 /// transaction and asserts the expected outcome for the happy path and each failure case.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class AcidFullLifecycleTests
 {
     /// <summary>Happy path: coordinator signs, applies the mutation, and the subscriber commits the diffgram.</summary>

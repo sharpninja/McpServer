@@ -17,6 +17,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// Each test creates its own items and cleans up afterwards via DELETE.
 /// Uses <see cref="LifecycleWebFactory"/> which seeds a minimal TODO.yaml.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class TodoLifecycleIntegrationTests
     : IClassFixture<TodoLifecycleIntegrationTests.LifecycleWebFactory>, IDisposable
 {

@@ -7,6 +7,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// clean SQLite and SQL Server LocalDB databases.
 /// These tests exercise the actual runtime DbContext wiring without editing production code.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class ProviderDatabaseIntegrationTests
 {
     /// <summary>

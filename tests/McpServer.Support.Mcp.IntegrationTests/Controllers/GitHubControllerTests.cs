@@ -7,6 +7,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>TR-PLANNED-CORE-013, TR-GH-013-006: GitHub controller API tests. Validates gh CLI integration and request validation.</summary>
+[Trait("Category", "Integration")]
 public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;

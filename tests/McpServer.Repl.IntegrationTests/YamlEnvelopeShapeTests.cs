@@ -6,6 +6,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// Tests to validate YAML envelope parsing and shape correctness.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class YamlEnvelopeShapeTests
 {
     private readonly ISerializer _yamlSerializer;

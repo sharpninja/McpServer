@@ -23,6 +23,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// Uses <see cref="FileSystemWatcher"/> latches to synchronize on disk writes
 /// rather than polling, ensuring deterministic test flow.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 {
     private readonly string _tempRoot;

@@ -10,6 +10,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// Integration tests for iteration 1: REPL child process launch, YAML handshake,
 /// trust bootstrap flow, auth key acceptance, and workspace selection.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class Iteration1IntegrationTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;

@@ -11,6 +11,7 @@ namespace McpServer.AgentPluginParity.Tests.Plugins;
 /// MCP enforcement hooks into the active Claude settings file without replacing
 /// existing user hooks.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class ClaudeCodeHookWiringSkillTests
 {
     private static readonly string PluginRoot = ResolvePluginRoot();

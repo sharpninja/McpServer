@@ -13,6 +13,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for the /pair web login flow.</summary>
+[Trait("Category", "Integration")]
 public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFactory>
 {
     private readonly HttpClient _client;
@@ -137,6 +138,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
 }
 
 /// <summary>Tests that /pair returns "not configured" when no PairingUsers are set.</summary>
+[Trait("Category", "Integration")]
 public sealed class PairingNotConfiguredTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
