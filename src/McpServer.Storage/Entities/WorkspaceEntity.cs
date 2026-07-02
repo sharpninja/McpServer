@@ -61,17 +61,9 @@ public sealed class WorkspaceEntity
     /// <summary>Optional Copilot plan prompt override.</summary>
     public string? PlanPrompt { get; set; }
 
-    /// <summary>Workspace banned license list serialized as JSON.</summary>
-    public string? BannedLicensesJson { get; set; }
-
-    /// <summary>Workspace banned country list serialized as JSON.</summary>
-    public string? BannedCountriesOfOriginJson { get; set; }
-
-    /// <summary>Workspace banned organization list serialized as JSON.</summary>
-    public string? BannedOrganizationsJson { get; set; }
-
-    /// <summary>Workspace banned individual list serialized as JSON.</summary>
-    public string? BannedIndividualsJson { get; set; }
+    /// <summary>FR-MCP-105: 4NF child rows for the banned license, country-of-origin, organization,
+    /// and individual policy lists (discriminated by <see cref="WorkspaceBannedItemEntity.Category"/>).</summary>
+    public List<WorkspaceBannedItemEntity> BannedItems { get; set; } = [];
 
     /// <summary>Optional absolute path to the agent executable.</summary>
     [MaxLength(2048)]

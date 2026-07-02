@@ -21,9 +21,9 @@ namespace McpServer.Support.Mcp.Services;
 /// <c>McpDatabaseProviderFactory</c> (TR-MCP-CFG-007).
 /// </summary>
 /// <remarks>
-/// Functional parity with <c>SqliteTodoService</c> covers CRUD, append-only
-/// audit history, deterministic YAML projection, projection-status checks,
-/// and operator-requested projection repair.
+/// Covers CRUD, append-only audit history, deterministic YAML projection,
+/// projection-status checks, and operator-requested projection repair. This is
+/// the sole live TODO store; the legacy provider-specific store has been retired.
 /// </remarks>
 internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensationService, IDisposable
 {
@@ -199,7 +199,32 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         ArgumentNullException.ThrowIfNull(request);
         await using var scope = CreateScope();
         var ctx = scope.Context;
-        var rows = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        // Push row-level filters to SQL so an id/section/priority/done query does not
+        // materialize the whole workspace. Keyword search, flattening, and priority-rank
+        // ordering remain client-side (ApplyFilters below) over the reduced set.
+        IQueryable<TodoItemEntity> query = ctx.TodoItems.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(request.Id))
+        {
+            var id = request.Id.ToUpperInvariant();
+            query = query.Where(t => t.Id.ToUpper() == id);
+        }
+        if (!string.IsNullOrWhiteSpace(request.Section))
+        {
+            var section = request.Section.ToUpperInvariant();
+            query = query.Where(t => t.Section.ToUpper() == section);
+        }
+        if (!string.IsNullOrWhiteSpace(request.Priority))
+        {
+            var priority = request.Priority.ToUpperInvariant();
+            query = query.Where(t => t.Priority.ToUpper() == priority);
+        }
+        if (request.Done.HasValue)
+        {
+            query = query.Where(t => t.Done == request.Done.Value);
+        }
+
+        var rows = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
         var flat = rows.Select(ToFlatItem).ToList();
         var ordered = flat
             .OrderBy(i => i.Section, StringComparer.OrdinalIgnoreCase)

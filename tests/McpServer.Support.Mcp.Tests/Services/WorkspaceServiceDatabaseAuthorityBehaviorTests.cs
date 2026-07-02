@@ -75,6 +75,53 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         Assert.Equal(nameof(WorkspaceService), stored.DeletedBy);
     }
 
+    /// <summary>
+    /// Strict 4NF (WorkspaceBannedItemEntity): banned policy lists persist as child rows and
+    /// round-trip per category in order; a partial update that supplies only one category replaces
+    /// that category's rows (orphan deletion) and leaves the other categories intact.
+    /// </summary>
+    [Fact]
+    public async Task WorkspaceService_BannedPolicyLists_RoundTripAndPartialUpdateReplacesOnlyThatCategory()
+    {
+        var options = CreateOptions($"workspace-banned-{Guid.NewGuid():N}");
+        await using var db = new McpDbContext(options);
+        var projectionWriter = new CommitObservingProjectionWriter(options);
+        var sut = CreateSut(db, projectionWriter);
+        var workspacePath = Path.Combine(Path.GetTempPath(), $"dbfk-banned-{Guid.NewGuid():N}");
+
+        var created = await sut.CreateAsync(new WorkspaceCreateRequest
+        {
+            WorkspacePath = workspacePath,
+            Name = "dbfk-banned",
+            BannedLicenses = ["GPL-3.0", "AGPL-3.0"],
+            BannedCountriesOfOrigin = ["CN", "RU"],
+            BannedOrganizations = ["EvilCorp"],
+            BannedIndividuals = ["mallory"],
+        }).ConfigureAwait(true);
+        Assert.True(created.Success, created.Error);
+
+        var afterCreate = (await sut.ListAsync().ConfigureAwait(true)).Items
+            .Single(i => i.WorkspacePath == workspacePath);
+        Assert.Equal(["GPL-3.0", "AGPL-3.0"], afterCreate.BannedLicenses);
+        Assert.Equal(["CN", "RU"], afterCreate.BannedCountriesOfOrigin);
+        Assert.Equal(["EvilCorp"], afterCreate.BannedOrganizations);
+        Assert.Equal(["mallory"], afterCreate.BannedIndividuals);
+
+        // Partial update: only BannedLicenses supplied -> replaces that category (the previous
+        // License rows are orphaned and removed), leaving the other three categories intact.
+        var updated = await sut.UpdateAsync(
+            workspacePath,
+            new WorkspaceUpdateRequest { BannedLicenses = ["MIT"] }).ConfigureAwait(true);
+        Assert.True(updated.Success, updated.Error);
+
+        var afterUpdate = (await sut.ListAsync().ConfigureAwait(true)).Items
+            .Single(i => i.WorkspacePath == workspacePath);
+        Assert.Equal(["MIT"], afterUpdate.BannedLicenses);
+        Assert.Equal(["CN", "RU"], afterUpdate.BannedCountriesOfOrigin);
+        Assert.Equal(["EvilCorp"], afterUpdate.BannedOrganizations);
+        Assert.Equal(["mallory"], afterUpdate.BannedIndividuals);
+    }
+
     private static DbContextOptions<McpDbContext> CreateOptions(string databaseName)
     {
         return new DbContextOptionsBuilder<McpDbContext>()

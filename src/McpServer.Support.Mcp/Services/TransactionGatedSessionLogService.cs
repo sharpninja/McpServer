@@ -728,7 +728,14 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
             Message = source.Message,
             Author = source.Author,
             CommitTimestamp = source.CommitTimestamp,
-            FilesChangedJson = source.FilesChangedJson,
+            Files = source.Files
+                .Select(f => new SessionLogCommitFileEntity
+                {
+                    WorkspaceId = f.WorkspaceId,
+                    Ordinal = f.Ordinal,
+                    Path = f.Path,
+                })
+                .ToList(),
         };
 
     private static SessionLogTurnStringListEntity CloneStringListItem(SessionLogTurnStringListEntity source)

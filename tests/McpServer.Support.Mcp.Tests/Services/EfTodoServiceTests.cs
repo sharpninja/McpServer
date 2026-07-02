@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
@@ -19,11 +20,10 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// configuration exercises the production relational code path.
 /// </summary>
 /// <remarks>
-/// Byrd Development Process: these tests define the contract EfTodoService must satisfy
-/// in phase 3. The service's method bodies start as <see cref="NotImplementedException"/>;
-/// each test flips to green once its corresponding method is ported from
-/// <see cref="SqliteTodoService"/>. The test list covers the acceptance criteria from
-/// <c>plan-todo-provider-agnostic-v1.0.md</c> phase 3.
+/// Byrd Development Process: these tests define the contract EfTodoService must satisfy.
+/// The test list covers the acceptance criteria from
+/// <c>plan-todo-provider-agnostic-v1.0.md</c> phase 3, plus the markdown-preservation,
+/// id-validation, and query cases retired from the legacy provider-specific store.
 /// </remarks>
 public sealed class EfTodoServiceTests : IDisposable
 {
@@ -411,6 +411,251 @@ public sealed class EfTodoServiceTests : IDisposable
         Assert.Contains("code-review-remediation", yaml);
         Assert.Contains("reference: docs/reviews/example.md", yaml);
         Assert.Contains("phase: pass-1", yaml);
+    }
+
+    /// <summary>
+    /// A Markdown description (canonical list-of-lines model) exercising every ISS-TODO-001
+    /// preservation concern: heading, blank separator lines, a trailing-whitespace line, nested
+    /// list indentation, a fenced code block with indented content, and a final line with no
+    /// trailing newline. Ported from TodoMarkdownPreservationTests to the EF store.
+    /// </summary>
+    private static readonly string[] MarkdownLines =
+    [
+        "# Heading",
+        "",
+        "Paragraph with **bold** and trailing spaces here:   ",
+        "",
+        "- list item 1",
+        "  - nested indented item",
+        "",
+        "```csharp",
+        "var x = 1;   // keep the indented line below intact",
+        "    int y = 2;",
+        "```",
+        "",
+        "Final line without trailing newline",
+    ];
+
+    /// <summary>
+    /// FR-MCP-108, TR-MCP-TODO-009, TEST-MCP-144: Creating a TODO and reading it back from the
+    /// authoritative EF store returns the Markdown description line-for-line, including blank lines,
+    /// indentation, and trailing whitespace. JSON storage of the description must not normalize it.
+    /// </summary>
+    [Fact]
+    public async Task CreateThenGetById_PreservesMarkdownDescriptionExactly()
+    {
+        var create = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "MD-PRESERVE-001",
+            Title = "Markdown create round-trip",
+            Section = "Backlog",
+            Priority = "low",
+            Description = MarkdownLines,
+        }).ConfigureAwait(true);
+        Assert.True(create.Success, create.Error);
+
+        var item = await _sut.GetByIdAsync("MD-PRESERVE-001").ConfigureAwait(true);
+        Assert.NotNull(item);
+        Assert.NotNull(item!.Description);
+        Assert.Equal(MarkdownLines, item.Description!);
+    }
+
+    /// <summary>
+    /// FR-MCP-108, TEST-MCP-144: The append-only audit snapshot captured on create preserves the
+    /// Markdown description exactly, so audit history remains a faithful record of formatted content.
+    /// </summary>
+    [Fact]
+    public async Task Audit_PreservesMarkdownDescriptionSnapshot()
+    {
+        await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "MD-PRESERVE-002",
+            Title = "Markdown audit snapshot",
+            Section = "Backlog",
+            Priority = "low",
+            Description = MarkdownLines,
+        }).ConfigureAwait(true);
+
+        var audit = await _sut.GetAuditAsync("MD-PRESERVE-002").ConfigureAwait(true);
+        Assert.Equal(1, audit.TotalCount);
+        var snapshot = audit.Entries[0].Snapshot;
+        Assert.NotNull(snapshot);
+        Assert.NotNull(snapshot!.Description);
+        Assert.Equal(MarkdownLines, snapshot.Description!);
+    }
+
+    /// <summary>
+    /// FR-MCP-108, TR-MCP-TODO-009, TEST-MCP-144: The Markdown description survives the EF store's
+    /// deterministic YAML projection. After a create, the projected TODO.yaml is re-read through
+    /// <see cref="TodoYamlFileSerializer"/> and the deserialized description must equal the original
+    /// line-for-line, proving projection + deserialization strip no blank lines, indentation, or
+    /// trailing content. (Import-from-YAML is TodoBootstrapImporter's responsibility, covered by its
+    /// own tests.)
+    /// </summary>
+    [Fact]
+    public async Task YamlProjection_PreservesMarkdownBlankLinesAndIndentation()
+    {
+        var create = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "MD-PRESERVE-003",
+            Title = "Markdown projection round-trip",
+            Section = "Backlog",
+            Priority = "low",
+            Description = MarkdownLines,
+        }).ConfigureAwait(true);
+        Assert.True(create.Success, create.Error);
+
+        var projected = await TodoYamlFileSerializer.ReadIfExistsAsync(_tempYamlPath, CancellationToken.None).ConfigureAwait(true);
+        Assert.NotNull(projected);
+        Assert.True(projected!.Sections.TryGetValue("Backlog", out var section));
+        var item = section!.LowPriority?.FirstOrDefault(i => i.Id == "MD-PRESERVE-003");
+        Assert.NotNull(item);
+        Assert.NotNull(item!.Description);
+        Assert.Equal(MarkdownLines, item.Description!);
+    }
+
+    /// <summary>
+    /// TEST-MCP-096: Section and done filters are applied against authoritative EF state. One open and
+    /// one completed item share a section so the done filter isolates only the completed row.
+    /// </summary>
+    [Fact]
+    public async Task Query_FiltersBySectionAndDone()
+    {
+        await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-QUERY-003",
+            Title = "Open item",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+        await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-QUERY-004",
+            Title = "Done item",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+        await _sut.UpdateAsync("EF-QUERY-004", new TodoUpdateRequest { Done = true }).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new TodoQueryRequest
+        {
+            Section = "mvp-app",
+            Done = true,
+        }).ConfigureAwait(true);
+
+        Assert.Single(result.Items);
+        Assert.Equal("EF-QUERY-004", result.Items[0].Id);
+    }
+
+    /// <summary>
+    /// TEST-MCP-096: A boolean keyword query matches across an item's searchable fields in the EF store.
+    /// </summary>
+    [Fact]
+    public async Task Query_WithBooleanKeyword_CanMatchAcrossFields()
+    {
+        await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EF-QUERY-001",
+            Title = "Alpha release",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new TodoQueryRequest
+        {
+            Keyword = "ef && query",
+        }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("EF-QUERY-001", item.Id);
+    }
+
+    /// <summary>
+    /// TEST-MCP-096: An invalid persisted TODO id is rejected before any authoritative DB or YAML
+    /// mutation occurs. The lowercase id violates the canonical TODO identifier convention.
+    /// </summary>
+    [Fact]
+    public async Task Create_InvalidTodoId_ReturnsValidationError()
+    {
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "ef-001",
+            Title = "Invalid TODO ID",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Equal(TodoMutationFailureKind.Validation, result.FailureKind);
+        Assert.Contains("Todo id must match", result.Error ?? string.Empty, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// TEST-MCP-096: Canonical `ISSUE-{number}` identifiers remain valid in the EF store.
+    /// </summary>
+    [Fact]
+    public async Task Create_ValidIssueNumberId_ReturnsSuccess()
+    {
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "ISSUE-28",
+            Title = "GitHub todo",
+            Section = "issues",
+            Priority = "medium",
+        }).ConfigureAwait(true);
+
+        Assert.True(result.Success, result.Error);
+        var stored = await _sut.GetByIdAsync("ISSUE-28").ConfigureAwait(true);
+        Assert.NotNull(stored);
+        Assert.Equal("GitHub todo", stored!.Title);
+    }
+
+    /// <summary>
+    /// TEST-MCP-096: The persisted TODO ID contract accepts uppercase/digit kebab identifiers with more
+    /// than two semantic segments before the numeric suffix.
+    /// </summary>
+    [Theory]
+    [InlineData("PHASE0-REMOTE-001")]
+    [InlineData("MCP-TODO-CREATE-001")]
+    public async Task Create_ValidUppercaseKebabIdWithDigitsAndExtraSegments_ReturnsSuccess(string id)
+    {
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = id,
+            Title = "Import-compatible TODO",
+            Section = "mvp-app",
+            Priority = "medium",
+        }).ConfigureAwait(true);
+
+        Assert.True(result.Success, result.Error);
+        var stored = await _sut.GetByIdAsync(id).ConfigureAwait(true);
+        Assert.NotNull(stored);
+        Assert.Equal(id, stored!.Id);
+    }
+
+    /// <summary>
+    /// TEST-MCP-096: Dependency validation runs in the EF-authoritative path before any authoritative
+    /// mutation commits. An invalid dependency id fails the update with a validation classification.
+    /// </summary>
+    [Fact]
+    public async Task Update_InvalidDependsOnId_ReturnsValidationError()
+    {
+        await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "MCP-EF-001",
+            Title = "Base",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        var result = await _sut.UpdateAsync("MCP-EF-001", new TodoUpdateRequest
+        {
+            DependsOn = ["not-valid"],
+        }).ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Equal(TodoMutationFailureKind.Validation, result.FailureKind);
+        Assert.Contains("dependsOn contains invalid TODO id", result.Error ?? string.Empty, StringComparison.Ordinal);
     }
 
 }

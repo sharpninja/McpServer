@@ -62,6 +62,7 @@ public sealed class WorkspaceService : IWorkspaceService
             await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
             var rows = await _db.Workspaces
                 .AsNoTracking()
+                .Include(w => w.BannedItems)
                 .OrderBy(w => w.Name)
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
@@ -309,6 +310,7 @@ public sealed class WorkspaceService : IWorkspaceService
             await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
             var existing = await _db!.Workspaces
                 .IgnoreQueryFilters()
+                .Include(w => w.BannedItems)
                 .SingleOrDefaultAsync(w => w.WorkspaceId == normalized || w.WorkspacePath == normalized, ct)
                 .ConfigureAwait(false);
 
@@ -446,6 +448,7 @@ public sealed class WorkspaceService : IWorkspaceService
     private async Task<WorkspaceEntity?> FindActiveWorkspaceAsync(string normalizedPath, CancellationToken ct)
     {
         return await _db!.Workspaces
+            .Include(w => w.BannedItems)
             .SingleOrDefaultAsync(w => w.WorkspaceId == normalizedPath || w.WorkspacePath == normalizedPath, ct)
             .ConfigureAwait(false);
     }
@@ -457,6 +460,7 @@ public sealed class WorkspaceService : IWorkspaceService
 
         var rows = await _db.Workspaces
             .AsNoTracking()
+            .Include(w => w.BannedItems)
             .Where(w => w.WorkspaceId != string.Empty)
             .OrderBy(w => w.Name)
             .ToListAsync(ct)
@@ -668,10 +672,12 @@ public sealed class WorkspaceService : IWorkspaceService
             StatusPrompt = string.IsNullOrWhiteSpace(entry.StatusPrompt) ? null : entry.StatusPrompt,
             ImplementPrompt = string.IsNullOrWhiteSpace(entry.ImplementPrompt) ? null : entry.ImplementPrompt,
             PlanPrompt = string.IsNullOrWhiteSpace(entry.PlanPrompt) ? null : entry.PlanPrompt,
-            BannedLicensesJson = SerializePolicyList(entry.BannedLicenses),
-            BannedCountriesOfOriginJson = SerializePolicyList(entry.BannedCountriesOfOrigin),
-            BannedOrganizationsJson = SerializePolicyList(entry.BannedOrganizations),
-            BannedIndividualsJson = SerializePolicyList(entry.BannedIndividuals),
+            BannedItems = BuildBannedItems(
+                normalized,
+                entry.BannedLicenses,
+                entry.BannedCountriesOfOrigin,
+                entry.BannedOrganizations,
+                entry.BannedIndividuals),
             AgentPath = string.IsNullOrWhiteSpace(entry.AgentPath) ? null : entry.AgentPath,
             CurrentRequirementLayerKey = string.IsNullOrWhiteSpace(entry.CurrentRequirementLayerKey) ? "layer-1" : entry.CurrentRequirementLayerKey,
             DateTimeCreated = created,
@@ -695,10 +701,10 @@ public sealed class WorkspaceService : IWorkspaceService
             StatusPrompt = entity.StatusPrompt,
             ImplementPrompt = entity.ImplementPrompt,
             PlanPrompt = entity.PlanPrompt,
-            BannedLicenses = DeserializePolicyList(entity.BannedLicensesJson),
-            BannedCountriesOfOrigin = DeserializePolicyList(entity.BannedCountriesOfOriginJson),
-            BannedOrganizations = DeserializePolicyList(entity.BannedOrganizationsJson),
-            BannedIndividuals = DeserializePolicyList(entity.BannedIndividualsJson),
+            BannedLicenses = GetBanned(entity, BannedLicenseCategory),
+            BannedCountriesOfOrigin = GetBanned(entity, BannedCountryCategory),
+            BannedOrganizations = GetBanned(entity, BannedOrganizationCategory),
+            BannedIndividuals = GetBanned(entity, BannedIndividualCategory),
             AgentPath = entity.AgentPath,
             CurrentRequirementLayerKey = string.IsNullOrWhiteSpace(entity.CurrentRequirementLayerKey) ? "layer-1" : entity.CurrentRequirementLayerKey,
             DateTimeCreated = entity.DateTimeCreated,
@@ -721,10 +727,10 @@ public sealed class WorkspaceService : IWorkspaceService
         entity.StatusPrompt = entry.StatusPrompt;
         entity.ImplementPrompt = entry.ImplementPrompt;
         entity.PlanPrompt = entry.PlanPrompt;
-        entity.BannedLicensesJson = SerializePolicyList(entry.BannedLicenses);
-        entity.BannedCountriesOfOriginJson = SerializePolicyList(entry.BannedCountriesOfOrigin);
-        entity.BannedOrganizationsJson = SerializePolicyList(entry.BannedOrganizations);
-        entity.BannedIndividualsJson = SerializePolicyList(entry.BannedIndividuals);
+        SetBanned(entity, BannedLicenseCategory, entry.BannedLicenses);
+        SetBanned(entity, BannedCountryCategory, entry.BannedCountriesOfOrigin);
+        SetBanned(entity, BannedOrganizationCategory, entry.BannedOrganizations);
+        SetBanned(entity, BannedIndividualCategory, entry.BannedIndividuals);
         entity.AgentPath = entry.AgentPath;
         entity.CurrentRequirementLayerKey = string.IsNullOrWhiteSpace(entry.CurrentRequirementLayerKey) ? "layer-1" : entry.CurrentRequirementLayerKey;
         entity.DateTimeCreated = entry.DateTimeCreated == default ? entity.DateTimeCreated : entry.DateTimeCreated;
@@ -756,27 +762,69 @@ public sealed class WorkspaceService : IWorkspaceService
         if (request.PlanPrompt is not null)
             entity.PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt);
         if (request.BannedLicenses is not null)
-            entity.BannedLicensesJson = SerializePolicyList(NormalizePolicyList(request.BannedLicenses));
+            SetBanned(entity, BannedLicenseCategory, NormalizePolicyList(request.BannedLicenses));
         if (request.BannedCountriesOfOrigin is not null)
-            entity.BannedCountriesOfOriginJson = SerializePolicyList(NormalizePolicyList(request.BannedCountriesOfOrigin, toUpperInvariant: true));
+            SetBanned(entity, BannedCountryCategory, NormalizePolicyList(request.BannedCountriesOfOrigin, toUpperInvariant: true));
         if (request.BannedOrganizations is not null)
-            entity.BannedOrganizationsJson = SerializePolicyList(NormalizePolicyList(request.BannedOrganizations));
+            SetBanned(entity, BannedOrganizationCategory, NormalizePolicyList(request.BannedOrganizations));
         if (request.BannedIndividuals is not null)
-            entity.BannedIndividualsJson = SerializePolicyList(NormalizePolicyList(request.BannedIndividuals));
+            SetBanned(entity, BannedIndividualCategory, NormalizePolicyList(request.BannedIndividuals));
 
         entity.DateTimeModified = DateTimeOffset.UtcNow;
     }
 
-    private static string? SerializePolicyList(List<string>? values)
+    private const string BannedLicenseCategory = "License";
+    private const string BannedCountryCategory = "Country";
+    private const string BannedOrganizationCategory = "Organization";
+    private const string BannedIndividualCategory = "Individual";
+
+    private static List<WorkspaceBannedItemEntity> BuildBannedItems(
+        string workspaceId,
+        List<string>? licenses,
+        List<string>? countries,
+        List<string>? organizations,
+        List<string>? individuals)
     {
-        return values is null || values.Count == 0 ? null : JsonSerializer.Serialize(values, s_jsonOptions);
+        var items = new List<WorkspaceBannedItemEntity>();
+        AddBanned(items, workspaceId, BannedLicenseCategory, licenses);
+        AddBanned(items, workspaceId, BannedCountryCategory, countries);
+        AddBanned(items, workspaceId, BannedOrganizationCategory, organizations);
+        AddBanned(items, workspaceId, BannedIndividualCategory, individuals);
+        return items;
     }
 
-    private static List<string>? DeserializePolicyList(string? json)
+    private static void AddBanned(List<WorkspaceBannedItemEntity> items, string workspaceId, string category, List<string>? values)
     {
-        return string.IsNullOrWhiteSpace(json)
-            ? null
-            : JsonSerializer.Deserialize<List<string>>(json);
+        if (values is null || values.Count == 0)
+            return;
+        for (var i = 0; i < values.Count; i++)
+        {
+            items.Add(new WorkspaceBannedItemEntity
+            {
+                WorkspaceId = workspaceId,
+                Category = category,
+                Ordinal = i,
+                Value = values[i],
+            });
+        }
+    }
+
+    private static List<string>? GetBanned(WorkspaceEntity entity, string category)
+    {
+        var values = entity.BannedItems
+            .Where(i => string.Equals(i.Category, category, StringComparison.Ordinal))
+            .OrderBy(i => i.Ordinal)
+            .Select(i => i.Value)
+            .ToList();
+        return values.Count > 0 ? values : null;
+    }
+
+    // Replaces the whole category: removes existing rows (EF deletes the orphans on a tracked,
+    // Include-loaded entity) and re-adds the new values with fresh ordinals.
+    private static void SetBanned(WorkspaceEntity entity, string category, List<string>? values)
+    {
+        entity.BannedItems.RemoveAll(i => string.Equals(i.Category, category, StringComparison.Ordinal));
+        AddBanned(entity.BannedItems, entity.WorkspaceId, category, values);
     }
 
     private async Task<WorkspaceDto> ToDtoAsync(WorkspaceEntity entity, CancellationToken ct)

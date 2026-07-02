@@ -166,11 +166,8 @@ public sealed class TriageService : ITriageService
             DedupeKey = TrimOrNull(request.DedupeKey),
             ErrorSignature = TrimOrNull(request.ErrorSignature),
             Fingerprint = fingerprint,
-            AffectedPathsJson = SerializeList(request.AffectedPaths),
-            AffectedSymbolsJson = SerializeList(request.AffectedSymbols),
             EvidenceJson = SerializeMap(request.Evidence),
-            ReproductionHintsJson = SerializeList(request.ReproductionHints),
-            TagsJson = SerializeList(request.Tags),
+            ListItems = BuildTriageListItems(request, effectiveWorkspacePath),
             ReporterAgent = TrimOrNull(request.ReporterAgent),
             SessionId = TrimOrNull(request.SessionId),
             TurnId = TrimOrNull(request.TurnId),
@@ -778,15 +775,16 @@ public sealed class TriageService : ITriageService
         var now = _timeProvider.GetUtcNow();
         await FailStaleProcessingRunsAsync(now, groupId: null, cancellationToken).ConfigureAwait(false);
 
-        var candidates = await _db.TriageGroups
+        // Cross-tenant sweep (IgnoreQueryFilters is intentional; each group's own
+        // workspace context is applied below). Deadline predicate + ordering now push
+        // to SQL thanks to the DateTimeOffset->UTC-DateTime converter.
+        var due = await _db.TriageGroups
             .IgnoreQueryFilters()
-            .Where(g => g.Status == StatusCollecting || g.Status == StatusQueued)
+            .Where(g => (g.Status == StatusCollecting || g.Status == StatusQueued)
+                && g.QuietDeadlineUtc <= now)
+            .OrderBy(g => g.QuietDeadlineUtc)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-        var due = candidates
-            .Where(g => g.QuietDeadlineUtc <= now)
-            .OrderBy(g => g.QuietDeadlineUtc)
-            .ToList();
 
         var processed = 0;
         var originalWorkspaceId = _db.CurrentWorkspaceId;
@@ -956,18 +954,16 @@ public sealed class TriageService : ITriageService
         var staleStartedBeforeUtc = now - maxRunTime;
         var query = _db.TriageResearchRuns
             .IgnoreQueryFilters()
-            .Where(run => run.Status == StatusProcessing);
+            .Where(run => run.Status == StatusProcessing && run.StartedUtc <= staleStartedBeforeUtc);
         if (!string.IsNullOrWhiteSpace(groupId))
         {
             var trimmedGroupId = groupId.Trim();
             query = query.Where(run => run.GroupId == trimmedGroupId);
         }
 
-        var staleRuns = (await query
+        var staleRuns = await query
             .ToListAsync(cancellationToken)
-            .ConfigureAwait(false))
-            .Where(run => run.StartedUtc <= staleStartedBeforeUtc)
-            .ToList();
+            .ConfigureAwait(false);
         if (staleRuns.Count == 0)
             return 0;
 
@@ -1367,13 +1363,34 @@ public sealed class TriageService : ITriageService
         return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 
-    private static string? SerializeList(IReadOnlyList<string>? values)
+    private static List<TriageReportListItemEntity> BuildTriageListItems(TriageReportRequest request, string workspaceId)
+    {
+        var items = new List<TriageReportListItemEntity>();
+        AddTriageListItems(items, "AffectedPath", request.AffectedPaths, workspaceId);
+        AddTriageListItems(items, "AffectedSymbol", request.AffectedSymbols, workspaceId);
+        AddTriageListItems(items, "ReproductionHint", request.ReproductionHints, workspaceId);
+        AddTriageListItems(items, "Tag", request.Tags, workspaceId);
+        return items;
+    }
+
+    private static void AddTriageListItems(List<TriageReportListItemEntity> items, string listType, IReadOnlyList<string>? values, string workspaceId)
     {
         var normalized = values?
             .Where(static value => !string.IsNullOrWhiteSpace(value))
             .Select(static value => value.Trim())
             .ToArray();
-        return normalized is { Length: > 0 } ? JsonSerializer.Serialize(normalized, JsonOptions) : null;
+        if (normalized is not { Length: > 0 })
+            return;
+        for (var i = 0; i < normalized.Length; i++)
+        {
+            items.Add(new TriageReportListItemEntity
+            {
+                WorkspaceId = workspaceId,
+                ListType = listType,
+                Ordinal = i,
+                Value = normalized[i],
+            });
+        }
     }
 
     private static string? SerializeMap(IReadOnlyDictionary<string, string>? values)

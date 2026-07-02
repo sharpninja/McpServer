@@ -203,6 +203,7 @@ public sealed class SessionLogService : ISessionLogService
                 .ThenInclude(e => e.ProcessingDialog)
             .Include(s => s.Turns)
                 .ThenInclude(e => e.Commits)
+                    .ThenInclude(c => c.Files)
             .Include(s => s.Turns)
                 .ThenInclude(e => e.StringListItems)
             .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken);
@@ -310,6 +311,13 @@ public sealed class SessionLogService : ISessionLogService
             query = query.Where(s => s.Model != null && EF.Functions.Like(s.Model, "%" + modelFilter + "%"));
         }
 
+        // Date range now pushes to SQL (DateTimeOffset->DateTime converter), so the session
+        // graph is only materialized for the matching window instead of the whole store.
+        if (request.From.HasValue)
+            query = query.Where(s => s.Started.HasValue && s.Started.Value >= request.From.Value);
+        if (request.To.HasValue)
+            query = query.Where(s => s.LastUpdated.HasValue && s.LastUpdated.Value <= request.To.Value);
+
         var allSessions = await query
             .Include(s => s.Turns.OrderBy(e => e.Id))
                 .ThenInclude(e => e.Actions.OrderBy(a => a.Order))
@@ -321,6 +329,7 @@ public sealed class SessionLogService : ISessionLogService
                 .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
             .Include(s => s.Turns)
                 .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
+                    .ThenInclude(c => c.Files.OrderBy(f => f.Ordinal))
             .Include(s => s.Turns)
                 .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
             .AsSplitQuery()
@@ -329,12 +338,6 @@ public sealed class SessionLogService : ISessionLogService
             .ConfigureAwait(false);
 
         IEnumerable<SessionLogEntity> filtered = allSessions;
-
-        if (request.From.HasValue)
-            filtered = filtered.Where(s => s.Started.HasValue && s.Started.Value >= request.From.Value);
-
-        if (request.To.HasValue)
-            filtered = filtered.Where(s => s.LastUpdated.HasValue && s.LastUpdated.Value <= request.To.Value);
 
         if (!string.IsNullOrWhiteSpace(request.Text))
         {
@@ -406,6 +409,7 @@ public sealed class SessionLogService : ISessionLogService
                 .ThenInclude(t => t.ProcessingDialog)
             .Include(s => s.Turns)
                 .ThenInclude(t => t.Commits)
+                    .ThenInclude(c => c.Files)
             .Include(s => s.Turns)
                 .ThenInclude(t => t.StringListItems)
             .AsSplitQuery()
@@ -469,6 +473,7 @@ public sealed class SessionLogService : ISessionLogService
                 .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
             .Include(s => s.Turns)
                 .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
+                    .ThenInclude(c => c.Files.OrderBy(f => f.Ordinal))
             .Include(s => s.Turns)
                 .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
             .AsSplitQuery()
@@ -1279,9 +1284,11 @@ public sealed class SessionLogService : ISessionLogService
             Message = c.Message,
             Author = c.Author,
             CommitTimestamp = ParseDateTimeOffset(c.Timestamp),
-            FilesChangedJson = c.FilesChanged is { Count: > 0 }
-                ? JsonSerializer.Serialize(c.FilesChanged)
-                : null
+            Files = c.FilesChanged is { Count: > 0 }
+                ? c.FilesChanged
+                    .Select((path, fi) => new SessionLogCommitFileEntity { Ordinal = fi, Path = path })
+                    .ToList()
+                : []
         }).ToList() ?? [];
     }
 
@@ -1313,7 +1320,16 @@ public sealed class SessionLogService : ISessionLogService
                && string.Equals(left.Message, right.Message, StringComparison.Ordinal)
                && string.Equals(left.Author, right.Author, StringComparison.Ordinal)
                && left.CommitTimestamp == right.CommitTimestamp
-               && string.Equals(left.FilesChangedJson, right.FilesChangedJson, StringComparison.Ordinal);
+               && SameFileList(left.Files, right.Files);
+    }
+
+    private static bool SameFileList(List<SessionLogCommitFileEntity> left, List<SessionLogCommitFileEntity> right)
+    {
+        if (left.Count != right.Count)
+            return false;
+        var leftOrdered = left.OrderBy(f => f.Ordinal).Select(f => f.Path).ToList();
+        var rightOrdered = right.OrderBy(f => f.Ordinal).Select(f => f.Path).ToList();
+        return leftOrdered.SequenceEqual(rightOrdered, StringComparer.Ordinal);
     }
 
     private static List<SessionLogTurnStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
@@ -1437,7 +1453,9 @@ public sealed class SessionLogService : ISessionLogService
                 Message = c.Message,
                 Author = c.Author,
                 Timestamp = c.CommitTimestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
-                FilesChanged = DeserializeStringList(c.FilesChangedJson)
+                FilesChanged = c.Files is { Count: > 0 }
+                    ? c.Files.OrderBy(f => f.Ordinal).Select(f => f.Path).ToList()
+                    : null
             }).ToList()
             : null,
         DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
@@ -1471,20 +1489,6 @@ public sealed class SessionLogService : ISessionLogService
     {
         var filtered = items.Where(i => i.ListType == listType).OrderBy(i => i.Ordinal).Select(i => i.Value).ToList();
         return filtered.Count > 0 ? filtered : null;
-    }
-
-    private static List<string>? DeserializeStringList(string? json)
-    {
-        if (string.IsNullOrEmpty(json))
-            return null;
-        try
-        {
-            return JsonSerializer.Deserialize<List<string>>(json);
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
     }
 
     private async Task PublishChangeSafeAsync(string action, string entityId, string resourceUri, CancellationToken cancellationToken)

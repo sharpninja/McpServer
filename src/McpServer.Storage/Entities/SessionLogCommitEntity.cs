@@ -39,8 +39,8 @@ public sealed class SessionLogCommitEntity
     /// <summary>Commit timestamp (UTC).</summary>
     public DateTimeOffset? CommitTimestamp { get; set; }
 
-    /// <summary>JSON-serialized list of file paths changed in this commit.</summary>
-    public string? FilesChangedJson { get; set; }
+    /// <summary>TR-PLANNED-CORE-013: 4NF child rows, one per changed file path.</summary>
+    public List<SessionLogCommitFileEntity> Files { get; set; } = [];
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent entry.</summary>
     public SessionLogTurnEntity? SessionLogTurn { get; set; }
