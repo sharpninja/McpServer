@@ -1,33 +1,33 @@
 using McpServer.Support.Mcp.Storage;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Storage;
 
 /// <summary>
-/// Strict-4NF decomposition data migrations: validates that the Decompose4nf* migrations
-/// backfill pre-existing JSON list column data into the new child tables (and that the
-/// DateTimeOffset-to-UTC migration normalizes legacy offset text) by seeding a database at the
-/// pre-slice schema and migrating to head with the real SQLite provider migration assembly.
+/// PostgreSQL twin of <see cref="Decompose4nfBackfillMigrationTests"/>: seeds every decomposed
+/// JSON list column at the pre-slice schema and migrates to head (and back down) through the real
+/// PostgreSQL provider migration assembly, proving the jsonb backfill and reconstruction SQL.
+/// Requires a reachable server: set <c>MCP_TEST_POSTGRES_CONNECTION</c> to a server-level
+/// connection string (a scratch database is created and dropped per test); the tests skip when
+/// the variable is absent.
 /// </summary>
-public sealed class Decompose4nfBackfillMigrationTests : IDisposable
+public sealed class PostgresDecompose4nfBackfillMigrationTests : IDisposable
 {
-    private const string PreSliceMigration = "20260628194717_RepairTriageCreatedTodoWorkspace";
+    private const string PreSliceMigration = "20260628194746_RepairTriageCreatedTodoWorkspace";
     private const string WorkspacePath = "F:\\GitHub\\McpServer";
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
+    private readonly string? _serverConnectionString;
+    private readonly string _databaseName = $"mcp_backfill_{Guid.NewGuid():N}";
+    private DbContextOptions<McpDbContext>? _options;
+    private string? _databaseConnectionString;
 
-    /// <summary>Creates an isolated SQLite database using the real provider migration assembly.</summary>
-    public Decompose4nfBackfillMigrationTests()
+    /// <summary>Resolves the gated server connection from the environment.</summary>
+    public PostgresDecompose4nfBackfillMigrationTests()
     {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection, sqlite => sqlite.MigrationsAssembly("McpServer.Storage.SqliteMigrations"))
-            .Options;
+        _serverConnectionString = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
     }
 
     /// <summary>
@@ -37,6 +37,8 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
     [Fact]
     public void Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables()
     {
+        EnsureScratchDatabase();
+
         using (var db = CreateContext())
         {
             db.GetService<IMigrator>().Migrate(PreSliceMigration);
@@ -47,7 +49,6 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
         {
             db.Database.Migrate();
 
-            // SessionLogCommit.FilesChangedJson -> SessionLogCommitFiles (ordered)
             var files = db.SessionLogCommitFiles
                 .IgnoreQueryFilters()
                 .OrderBy(f => f.Ordinal)
@@ -55,53 +56,6 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 .ToList();
             Assert.Equal(["src/A.cs", "docs/B.md"], files);
 
-            // TriageReport 4 lists -> TriageReportListItems (discriminated, ordered)
-            var listItems = db.TriageReportListItems
-                .IgnoreQueryFilters()
-                .Where(i => i.ReportId == "triage-report-backfill")
-                .ToList();
-            Assert.Equal(
-                ["src/One.cs", "src/Two.cs"],
-                listItems.Where(i => i.ListType == "AffectedPath").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
-            Assert.Equal(
-                ["Ns.Type.Method"],
-                listItems.Where(i => i.ListType == "AffectedSymbol").Select(i => i.Value).ToList());
-            Assert.Equal(
-                ["run the failing test"],
-                listItems.Where(i => i.ListType == "ReproductionHint").Select(i => i.Value).ToList());
-            Assert.Equal(
-                ["bug", "triage"],
-                listItems.Where(i => i.ListType == "Tag").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
-
-            // Workspace 4 Banned* lists -> WorkspaceBannedItems (categorized, ordered)
-            var banned = db.WorkspaceBannedItems
-                .IgnoreQueryFilters()
-                .Where(b => b.WorkspaceId == WorkspacePath)
-                .ToList();
-            Assert.Equal(
-                ["GPL-3.0", "AGPL-3.0"],
-                banned.Where(b => b.Category == "License").OrderBy(b => b.Ordinal).Select(b => b.Value).ToList());
-            Assert.Equal(["CN"], banned.Where(b => b.Category == "Country").Select(b => b.Value).ToList());
-            Assert.Equal(["EvilCorp"], banned.Where(b => b.Category == "Organization").Select(b => b.Value).ToList());
-            Assert.Equal(["mallory"], banned.Where(b => b.Category == "Individual").Select(b => b.Value).ToList());
-
-            // Requirement.AcceptanceCriteriaJson -> RequirementAcceptanceCriteria (all fields, ordered)
-            var criteria = db.RequirementAcceptanceCriteria
-                .IgnoreQueryFilters()
-                .Where(c => c.RequirementId == "FR-MCP-4NF-001")
-                .OrderBy(c => c.Ordinal)
-                .ToList();
-            Assert.Equal(2, criteria.Count);
-            Assert.Equal("ac-1", criteria[0].CriterionId);
-            Assert.Equal("line one\nline two", criteria[0].Text);
-            Assert.False(criteria[0].IsSatisfied);
-            Assert.Null(criteria[0].Evidence);
-            Assert.Equal("ac-2", criteria[1].CriterionId);
-            Assert.Equal("second criterion", criteria[1].Text);
-            Assert.True(criteria[1].IsSatisfied);
-            Assert.Equal("verified by test", criteria[1].Evidence);
-
-            // TodoItem 5 lists + implementation tasks -> TodoItemListItems / TodoItemTasks
             var todoLists = db.TodoItemListItems
                 .IgnoreQueryFilters()
                 .Where(i => i.TodoId == "MVP-4NF-001")
@@ -110,65 +64,59 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 ["desc line 1", "desc line 2"],
                 todoLists.Where(i => i.ListType == "Description").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
             Assert.Equal(
-                ["tech detail"],
-                todoLists.Where(i => i.ListType == "TechnicalDetail").Select(i => i.Value).ToList());
-            Assert.Equal(
-                ["MVP-4NF-000"],
-                todoLists.Where(i => i.ListType == "DependsOn").Select(i => i.Value).ToList());
-            Assert.Equal(
                 ["FR-MCP-4NF-001"],
                 todoLists.Where(i => i.ListType == "FunctionalRequirement").Select(i => i.Value).ToList());
-            Assert.Equal(
-                ["TR-MCP-4NF-001"],
-                todoLists.Where(i => i.ListType == "TechnicalRequirement").Select(i => i.Value).ToList());
-
             var todoTasks = db.TodoItemTasks
                 .IgnoreQueryFilters()
                 .Where(t => t.TodoId == "MVP-4NF-001")
                 .OrderBy(t => t.Ordinal)
                 .ToList();
             Assert.Equal(2, todoTasks.Count);
-            Assert.Equal("first task", todoTasks[0].Task);
             Assert.True(todoTasks[0].Done);
-            Assert.Equal("second task", todoTasks[1].Task);
             Assert.False(todoTasks[1].Done);
 
-            // TodoDocumentMetadata Notes + Completed -> TodoDocumentNotes / TodoCompletedGroups / TodoCompletedItems
+            var criteria = db.RequirementAcceptanceCriteria
+                .IgnoreQueryFilters()
+                .Where(c => c.RequirementId == "FR-MCP-4NF-001")
+                .OrderBy(c => c.Ordinal)
+                .ToList();
+            Assert.Equal(2, criteria.Count);
+            Assert.Equal("line one\nline two", criteria[0].Text);
+            Assert.True(criteria[1].IsSatisfied);
+            Assert.Equal("verified by test", criteria[1].Evidence);
+
             var notes = db.TodoDocumentNotes
                 .IgnoreQueryFilters()
-                .Where(n => n.WorkspaceId == WorkspacePath)
                 .OrderBy(n => n.Ordinal)
                 .Select(n => n.Value)
                 .ToList();
             Assert.Equal(["first note", "second note"], notes);
-
             var groups = db.TodoCompletedGroups
                 .IgnoreQueryFilters()
-                .Where(g => g.WorkspaceId == WorkspacePath)
+                .Include(g => g.Items)
                 .OrderBy(g => g.Ordinal)
                 .ToList();
             Assert.Equal(2, groups.Count);
             Assert.Equal("2026-06-01", groups[0].Date);
-            Assert.Equal("2026-06-15", groups[1].Date);
-            var g0Items = db.TodoCompletedItems
-                .IgnoreQueryFilters()
-                .Where(i => i.GroupId == groups[0].Id)
-                .OrderBy(i => i.Ordinal)
-                .ToList();
-            Assert.Equal(2, g0Items.Count);
-            Assert.Equal("DONE-001", g0Items[0].ItemId);
-            Assert.Equal("feature", g0Items[0].Qualifier);
-            Assert.Equal("shipped the thing", g0Items[0].Summary);
-            Assert.Equal("DONE-002", g0Items[1].ItemId);
-            var g1Items = db.TodoCompletedItems
-                .IgnoreQueryFilters()
-                .Where(i => i.GroupId == groups[1].Id)
-                .ToList();
-            Assert.Single(g1Items);
-            Assert.Equal("DONE-003", g1Items[0].ItemId);
-            Assert.Null(g1Items[0].Qualifier);
+            Assert.Equal(2, groups[0].Items.Count);
+            Assert.Equal("DONE-001", groups[0].Items.OrderBy(i => i.Ordinal).First().ItemId);
 
-            // AgentDefinition.DefaultModels + AgentWorkspace overrides -> AgentDefinitionModels / AgentWorkspaceListItems
+            var banned = db.WorkspaceBannedItems
+                .IgnoreQueryFilters()
+                .Where(b => b.Category == "License")
+                .OrderBy(b => b.Ordinal)
+                .Select(b => b.Value)
+                .ToList();
+            Assert.Equal(["GPL-3.0", "AGPL-3.0"], banned);
+
+            var triageTags = db.TriageReportListItems
+                .IgnoreQueryFilters()
+                .Where(i => i.ListType == "Tag")
+                .OrderBy(i => i.Ordinal)
+                .Select(i => i.Value)
+                .ToList();
+            Assert.Equal(["bug", "triage"], triageTags);
+
             var agentModels = db.AgentDefinitionModels
                 .IgnoreQueryFilters()
                 .Where(m => m.AgentDefinitionId == "test-agent")
@@ -176,64 +124,31 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 .Select(m => m.Model)
                 .ToList();
             Assert.Equal(["model-a", "model-b"], agentModels);
-
-            var overrideRows = db.AgentWorkspaceListItems
+            var overrides = db.AgentWorkspaceListItems
                 .IgnoreQueryFilters()
-                .Where(i => i.WorkspaceId == WorkspacePath)
+                .Where(i => i.ListType == "InstructionFileOverride")
+                .OrderBy(i => i.Ordinal)
+                .Select(i => i.Value)
                 .ToList();
-            Assert.Equal(
-                ["override-model"],
-                overrideRows.Where(i => i.ListType == "ModelOverride").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
-            Assert.Equal(
-                ["CLAUDE.md", "AGENTS.md"],
-                overrideRows.Where(i => i.ListType == "InstructionFileOverride").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
+            Assert.Equal(["CLAUDE.md", "AGENTS.md"], overrides);
 
-            // Source JSON columns are gone from the rebuilt tables.
             Assert.False(ColumnExists("SessionLogCommits", "FilesChangedJson"));
-            Assert.False(ColumnExists("TriageReports", "AffectedPathsJson"));
-            Assert.False(ColumnExists("Workspaces", "BannedLicensesJson"));
-            Assert.False(ColumnExists("Requirements", "AcceptanceCriteriaJson"));
             Assert.False(ColumnExists("TodoItems", "DescriptionJson"));
-            Assert.False(ColumnExists("TodoItems", "ImplementationTasksJson"));
             Assert.False(ColumnExists("TodoDocumentMetadata", "NotesJson"));
-            Assert.False(ColumnExists("TodoDocumentMetadata", "CompletedJson"));
             Assert.False(ColumnExists("AgentDefinitions", "DefaultModelsJson"));
-            Assert.False(ColumnExists("AgentWorkspaces", "ModelsOverrideJson"));
+            Assert.False(ColumnExists("Requirements", "AcceptanceCriteriaJson"));
         }
     }
 
     /// <summary>
-    /// TR-MCP-DB-DTO-001: legacy DateTimeOffset text (with offset suffix) is normalized in place
-    /// to offset-less UTC text by the StoreDateTimeOffsetAsUtcDateTime migration.
-    /// </summary>
-    [Fact]
-    public void Migrate_StoreDateTimeOffsetAsUtcDateTime_NormalizesLegacyOffsetText()
-    {
-        using (var db = CreateContext())
-        {
-            db.GetService<IMigrator>().Migrate(PreSliceMigration);
-            SeedPreSliceData(db);
-        }
-
-        using (var db = CreateContext())
-        {
-            db.Database.Migrate();
-
-            using var command = _connection.CreateCommand();
-            command.CommandText = "SELECT \"FirstReportAtUtc\" FROM \"TriageGroups\" WHERE \"GroupId\" = 'triage-group-backfill';";
-            var text = (string)command.ExecuteScalar()!;
-            Assert.DoesNotContain("+00:00", text);
-            Assert.StartsWith("2026-06-28 10:00:00", text); // seeded 12:00 +02:00 -> 10:00 UTC
-        }
-    }
-
-    /// <summary>
-    /// Down round-trip: after migrating to head (backfills applied), migrating back to the
-    /// pre-slice schema reconstructs every decomposed JSON column from the child rows.
+    /// Down round-trip: after migrating to head, migrating back to the pre-slice schema
+    /// reconstructs the decomposed JSON columns from the child rows.
     /// </summary>
     [Fact]
     public void Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows()
     {
+        EnsureScratchDatabase();
+
         using (var db = CreateContext())
         {
             db.GetService<IMigrator>().Migrate(PreSliceMigration);
@@ -258,24 +173,12 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             "SELECT \"NotesJson\" FROM \"TodoDocumentMetadata\" LIMIT 1;"));
         Assert.Equal(new[] { "model-a", "model-b" }, ReadJsonStringArray(
             "SELECT \"DefaultModelsJson\" FROM \"AgentDefinitions\" WHERE \"Id\" = 'test-agent';"));
-        Assert.Equal(new[] { "override-model" }, ReadJsonStringArray(
-            "SELECT \"ModelsOverrideJson\" FROM \"AgentWorkspaces\" LIMIT 1;"));
-
-        using var tasksDoc = System.Text.Json.JsonDocument.Parse(ReadScalarText(
-            "SELECT \"ImplementationTasksJson\" FROM \"TodoItems\" WHERE \"Id\" = 'MVP-4NF-001';"));
-        var tasks = tasksDoc.RootElement;
-        Assert.Equal(2, tasks.GetArrayLength());
-        Assert.Equal("first task", tasks[0].GetProperty("task").GetString());
-        Assert.True(tasks[0].GetProperty("done").GetBoolean());
-        Assert.False(tasks[1].GetProperty("done").GetBoolean());
 
         using var critDoc = System.Text.Json.JsonDocument.Parse(ReadScalarText(
             "SELECT \"AcceptanceCriteriaJson\" FROM \"Requirements\" WHERE \"Id\" = 'FR-MCP-4NF-001';"));
         var criteria = critDoc.RootElement;
         Assert.Equal(2, criteria.GetArrayLength());
         Assert.Equal("ac-1", criteria[0].GetProperty("id").GetString());
-        Assert.Equal("line one\nline two", criteria[0].GetProperty("text").GetString());
-        Assert.False(criteria[0].GetProperty("isSatisfied").GetBoolean());
         Assert.Equal("verified by test", criteria[1].GetProperty("evidence").GetString());
 
         using var completedDoc = System.Text.Json.JsonDocument.Parse(ReadScalarText(
@@ -284,38 +187,57 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
         Assert.Equal(2, completed.GetArrayLength());
         Assert.Equal("2026-06-01", completed[0].GetProperty("date").GetString());
         Assert.Equal(2, completed[0].GetProperty("items").GetArrayLength());
-        Assert.Equal("DONE-001", completed[0].GetProperty("items")[0].GetProperty("id").GetString());
         Assert.Equal("shipped the thing", completed[0].GetProperty("items")[0].GetProperty("summary").GetString());
-        Assert.Equal("2026-06-15", completed[1].GetProperty("date").GetString());
     }
 
-    private string ReadScalarText(string sql)
-    {
-        using var command = _connection.CreateCommand();
-        command.CommandText = sql;
-        var value = command.ExecuteScalar();
-        Assert.NotNull(value);
-        Assert.IsNotType<DBNull>(value);
-        return (string)value!;
-    }
-
-    private string[] ReadJsonStringArray(string sql)
-    {
-        using var doc = System.Text.Json.JsonDocument.Parse(ReadScalarText(sql));
-        return doc.RootElement.EnumerateArray().Select(e => e.GetString()!).ToArray();
-    }
-
-    /// <summary>Releases the in-memory database connection.</summary>
+    /// <summary>Drops the scratch database.</summary>
     public void Dispose()
     {
-        _connection.Dispose();
+        if (_serverConnectionString is null || _options is null)
+            return;
+        try
+        {
+            using var admin = new NpgsqlConnection(_serverConnectionString);
+            admin.Open();
+            using var terminate = admin.CreateCommand();
+            terminate.CommandText =
+                $"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{_databaseName}' AND pid <> pg_backend_pid();";
+            terminate.ExecuteNonQuery();
+            using var drop = admin.CreateCommand();
+            drop.CommandText = $"DROP DATABASE IF EXISTS \"{_databaseName}\";";
+            drop.ExecuteNonQuery();
+        }
+        catch (NpgsqlException)
+        {
+            // Best-effort cleanup; scratch databases are uniquely named.
+        }
     }
 
-    private McpDbContext CreateContext() => new(_options);
+    private void EnsureScratchDatabase()
+    {
+        Assert.SkipWhen(
+            string.IsNullOrWhiteSpace(_serverConnectionString),
+            "MCP_TEST_POSTGRES_CONNECTION is not set; skipping PostgreSQL migration tests.");
+
+        using (var admin = new NpgsqlConnection(_serverConnectionString))
+        {
+            admin.Open();
+            using var create = admin.CreateCommand();
+            create.CommandText = $"CREATE DATABASE \"{_databaseName}\";";
+            create.ExecuteNonQuery();
+        }
+
+        var builder = new NpgsqlConnectionStringBuilder(_serverConnectionString) { Database = _databaseName };
+        _databaseConnectionString = builder.ToString();
+        _options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseNpgsql(_databaseConnectionString, npgsql => npgsql.MigrationsAssembly("McpServer.Storage.PostgreSqlMigrations"))
+            .Options;
+    }
+
+    private McpDbContext CreateContext() => new(_options!);
 
     private static void SeedPreSliceData(McpDbContext db)
     {
-        // Seeded with an explicit +02:00 offset so the UTC normalization is observable.
         var now = new DateTimeOffset(2026, 6, 28, 12, 0, 0, TimeSpan.FromHours(2));
 
         db.Database.ExecuteSqlRaw(
@@ -326,7 +248,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 "BannedLicensesJson", "BannedCountriesOfOriginJson", "BannedOrganizationsJson", "BannedIndividualsJson",
                 "IsDeleted"
             )
-            VALUES ({0}, {0}, {1}, {2}, 1, 1, {3}, {3}, {4}, {5}, {6}, {7}, {8}, 0);
+            VALUES ({0}, {0}, {1}, {2}, true, true, {3}, {3}, {4}, {5}, {6}, {7}, {8}, false);
             """,
             WorkspacePath,
             "McpServer",
@@ -341,19 +263,19 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "SessionLogs" ("WorkspaceId", "SourceType", "SessionId", "EntryCount", "IsDeleted")
-            VALUES ({0}, 'Claude', 'Claude-20260628T120000Z-backfill', 1, 0);
+            VALUES ({0}, 'Claude', 'Claude-20260628T120000Z-backfill', 1, false);
             """,
             WorkspacePath);
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "SessionLogTurns" ("WorkspaceId", "SessionLogId", "IsDeleted")
-            VALUES ({0}, (SELECT "Id" FROM "SessionLogs" LIMIT 1), 0);
+            VALUES ({0}, (SELECT "Id" FROM "SessionLogs" LIMIT 1), false);
             """,
             WorkspacePath);
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "SessionLogCommits" ("WorkspaceId", "SessionLogTurnId", "Ordinal", "Sha", "FilesChangedJson", "IsDeleted")
-            VALUES ({0}, (SELECT "Id" FROM "SessionLogTurns" LIMIT 1), 0, 'abc123', {1}, 0);
+            VALUES ({0}, (SELECT "Id" FROM "SessionLogTurns" LIMIT 1), 0, 'abc123', {1}, false);
             """,
             WorkspacePath,
             """["src/A.cs","docs/B.md"]""");
@@ -365,7 +287,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 "Status", "ReportCount", "FirstReportAtUtc", "LastReportAtUtc", "QuietDeadlineUtc",
                 "IsMcpServerRelated", "IsDeleted"
             )
-            VALUES ({0}, {1}, {2}, {1}, {3}, {4}, {5}, 1, {6}, {6}, {6}, 1, 0);
+            VALUES ({0}, {1}, {2}, {1}, {3}, {4}, {5}, 1, {6}, {6}, {6}, true, false);
             """,
             "triage-group-backfill",
             WorkspacePath,
@@ -382,7 +304,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 "AffectedPathsJson", "AffectedSymbolsJson", "ReproductionHintsJson", "TagsJson",
                 "IsDeleted"
             )
-            VALUES ({0}, {1}, {2}, {1}, {1}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, 0);
+            VALUES ({0}, {1}, {2}, {1}, {1}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, false);
             """,
             "triage-report-backfill",
             WorkspacePath,
@@ -406,7 +328,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 "FunctionalRequirementsJson", "TechnicalRequirementsJson", "ImplementationTasksJson",
                 "IsDeleted"
             )
-            VALUES ({0}, {1}, {2}, 'Backlog', 'medium', 0, 'standard', 0, 0, {3}, {4}, {5}, {6}, {7}, {8}, 0);
+            VALUES ({0}, {1}, {2}, 'Backlog', 'medium', false, 'standard', 0, 0, {3}, {4}, {5}, {6}, {7}, {8}, false);
             """,
             WorkspacePath,
             "MVP-4NF-001",
@@ -421,7 +343,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
         db.Database.ExecuteSqlRaw(
             """
             INSERT INTO "TodoDocumentMetadata" ("WorkspaceId", "SingletonId", "NotesJson", "CompletedJson", "IsDeleted")
-            VALUES ({0}, 1, {1}, {2}, 0);
+            VALUES ({0}, 1, {1}, {2}, false);
             """,
             WorkspacePath,
             """["first note","second note"]""",
@@ -434,7 +356,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 "DefaultModelsJson", "DefaultBranchStrategy", "DefaultSeedPrompt", "IsBuiltIn",
                 "CreatedAt", "ModifiedAt", "IsDeleted"
             )
-            VALUES ('test-agent', '', 'Test Agent', 'run', 'CLAUDE.md', {0}, 'feature/{{agent}}', '', 0, {1}, {1}, 0);
+            VALUES ('test-agent', '', 'Test Agent', 'run', 'CLAUDE.md', {0}, 'feature/{{agent}}', '', false, {1}, {1}, false);
             """,
             """["model-a","model-b"]""",
             new DateTime(2026, 6, 28, 12, 0, 0, DateTimeKind.Utc));
@@ -445,7 +367,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 "AgentIsolation", "ModelsOverrideJson", "InstructionFilesOverrideJson",
                 "MarkerAdditions", "RestartPolicy", "AddedAt", "IsDeleted"
             )
-            VALUES ({0}, 'test-agent', {0}, 1, 0, 'worktree', {1}, {2}, '', 'never', {3}, 0);
+            VALUES ({0}, 'test-agent', {0}, true, false, 'worktree', {1}, {2}, '', 'never', {3}, false);
             """,
             WorkspacePath,
             """["override-model"]""",
@@ -458,7 +380,7 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
                 "WorkspaceId", "Kind", "Id", "Title", "Body", "Priority", "Status",
                 "AcceptanceCriteriaJson", "ScopeStartLayerKey", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted"
             )
-            VALUES ({0}, 'fr', {1}, {2}, {3}, 'medium', 'pending', {4}, 'layer-1', {5}, {5}, 0);
+            VALUES ({0}, 'fr', {1}, {2}, {3}, 'medium', 'pending', {4}, 'layer-1', {5}, {5}, false);
             """,
             WorkspacePath,
             "FR-MCP-4NF-001",
@@ -470,9 +392,31 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 
     private bool ColumnExists(string tableName, string columnName)
     {
-        using var command = _connection.CreateCommand();
-        command.CommandText = $"SELECT COUNT(*) FROM pragma_table_info('{tableName}') WHERE name = $col;";
-        command.Parameters.AddWithValue("$col", columnName);
-        return Convert.ToInt32(command.ExecuteScalar()) > 0;
+        using var connection = new NpgsqlConnection(_databaseConnectionString);
+        connection.Open();
+        using var command = connection.CreateCommand();
+        command.CommandText =
+            "SELECT COUNT(*) FROM information_schema.columns WHERE table_name = @t AND column_name = @c;";
+        command.Parameters.AddWithValue("@t", tableName);
+        command.Parameters.AddWithValue("@c", columnName);
+        return Convert.ToInt64(command.ExecuteScalar()) > 0;
+    }
+
+    private string ReadScalarText(string sql)
+    {
+        using var connection = new NpgsqlConnection(_databaseConnectionString);
+        connection.Open();
+        using var command = connection.CreateCommand();
+        command.CommandText = sql;
+        var value = command.ExecuteScalar();
+        Assert.NotNull(value);
+        Assert.IsNotType<DBNull>(value);
+        return (string)value!;
+    }
+
+    private string[] ReadJsonStringArray(string sql)
+    {
+        using var doc = System.Text.Json.JsonDocument.Parse(ReadScalarText(sql));
+        return doc.RootElement.EnumerateArray().Select(e => e.GetString()!).ToArray();
     }
 }
