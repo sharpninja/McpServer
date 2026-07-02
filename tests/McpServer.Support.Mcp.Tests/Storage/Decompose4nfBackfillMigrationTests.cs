@@ -168,6 +168,26 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             Assert.Equal("DONE-003", g1Items[0].ItemId);
             Assert.Null(g1Items[0].Qualifier);
 
+            // AgentDefinition.DefaultModels + AgentWorkspace overrides -> AgentDefinitionModels / AgentWorkspaceListItems
+            var agentModels = db.AgentDefinitionModels
+                .IgnoreQueryFilters()
+                .Where(m => m.AgentDefinitionId == "test-agent")
+                .OrderBy(m => m.Ordinal)
+                .Select(m => m.Model)
+                .ToList();
+            Assert.Equal(["model-a", "model-b"], agentModels);
+
+            var overrideRows = db.AgentWorkspaceListItems
+                .IgnoreQueryFilters()
+                .Where(i => i.WorkspaceId == WorkspacePath)
+                .ToList();
+            Assert.Equal(
+                ["override-model"],
+                overrideRows.Where(i => i.ListType == "ModelOverride").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
+            Assert.Equal(
+                ["CLAUDE.md", "AGENTS.md"],
+                overrideRows.Where(i => i.ListType == "InstructionFileOverride").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
+
             // Source JSON columns are gone from the rebuilt tables.
             Assert.False(ColumnExists("SessionLogCommits", "FilesChangedJson"));
             Assert.False(ColumnExists("TriageReports", "AffectedPathsJson"));
@@ -177,6 +197,8 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             Assert.False(ColumnExists("TodoItems", "ImplementationTasksJson"));
             Assert.False(ColumnExists("TodoDocumentMetadata", "NotesJson"));
             Assert.False(ColumnExists("TodoDocumentMetadata", "CompletedJson"));
+            Assert.False(ColumnExists("AgentDefinitions", "DefaultModelsJson"));
+            Assert.False(ColumnExists("AgentWorkspaces", "ModelsOverrideJson"));
         }
     }
 
@@ -326,6 +348,31 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             WorkspacePath,
             """["first note","second note"]""",
             """[{"date":"2026-06-01","items":[{"id":"DONE-001","qualifier":"feature","summary":"shipped the thing"},{"id":"DONE-002","qualifier":"fix","summary":"fixed the bug"}]},{"date":"2026-06-15","items":[{"id":"DONE-003","qualifier":null,"summary":"cleanup"}]}]""");
+
+        db.Database.ExecuteSqlRaw(
+            """
+            INSERT INTO "AgentDefinitions" (
+                "Id", "WorkspaceId", "DisplayName", "DefaultLaunchCommand", "DefaultInstructionFile",
+                "DefaultModelsJson", "DefaultBranchStrategy", "DefaultSeedPrompt", "IsBuiltIn",
+                "CreatedAt", "ModifiedAt", "IsDeleted"
+            )
+            VALUES ('test-agent', '', 'Test Agent', 'run', 'CLAUDE.md', {0}, 'feature/{{agent}}', '', 0, {1}, {1}, 0);
+            """,
+            """["model-a","model-b"]""",
+            new DateTime(2026, 6, 28, 12, 0, 0, DateTimeKind.Utc));
+        db.Database.ExecuteSqlRaw(
+            """
+            INSERT INTO "AgentWorkspaces" (
+                "WorkspaceId", "AgentDefinitionId", "WorkspacePath", "Enabled", "Banned",
+                "AgentIsolation", "ModelsOverrideJson", "InstructionFilesOverrideJson",
+                "MarkerAdditions", "RestartPolicy", "AddedAt", "IsDeleted"
+            )
+            VALUES ({0}, 'test-agent', {0}, 1, 0, 'worktree', {1}, {2}, '', 'never', {3}, 0);
+            """,
+            WorkspacePath,
+            """["override-model"]""",
+            """["CLAUDE.md","AGENTS.md"]""",
+            new DateTime(2026, 6, 28, 12, 0, 0, DateTimeKind.Utc));
 
         db.Database.ExecuteSqlRaw(
             """

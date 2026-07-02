@@ -84,8 +84,14 @@ public sealed class McpDbContext : DbContext
     /// <summary>Agent type definitions (built-in and custom).</summary>
     public DbSet<AgentDefinitionEntity> AgentDefinitions => Set<AgentDefinitionEntity>();
 
+    /// <summary>4NF default-model rows for agent definitions.</summary>
+    public DbSet<AgentDefinitionModelEntity> AgentDefinitionModels => Set<AgentDefinitionModelEntity>();
+
     /// <summary>Per-workspace agent configurations.</summary>
     public DbSet<AgentWorkspaceEntity> AgentWorkspaces => Set<AgentWorkspaceEntity>();
+
+    /// <summary>4NF override-list rows for per-workspace agent configurations.</summary>
+    public DbSet<AgentWorkspaceListItemEntity> AgentWorkspaceListItems => Set<AgentWorkspaceListItemEntity>();
 
     /// <summary>Agent lifecycle event audit log.</summary>
     public DbSet<AgentEventLogEntity> AgentEventLogs => Set<AgentEventLogEntity>();
@@ -381,6 +387,30 @@ public sealed class McpDbContext : DbContext
                 .HasForeignKey(x => x.AgentDefinitionId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        modelBuilder.Entity<AgentDefinitionModelEntity>(e =>
+        {
+            e.HasOne(x => x.AgentDefinition)
+                .WithMany(x => x.Models)
+                .HasForeignKey(x => x.AgentDefinitionId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.AgentDefinitionId, x.Ordinal });
+        });
+        modelBuilder.Entity<AgentDefinitionEntity>()
+            .Navigation(x => x.Models)
+            .AutoInclude();
+
+        modelBuilder.Entity<AgentWorkspaceListItemEntity>(e =>
+        {
+            e.HasOne(x => x.AgentWorkspace)
+                .WithMany(x => x.ListItems)
+                .HasForeignKey(x => x.AgentWorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.AgentWorkspaceId, x.ListType, x.Ordinal });
+        });
+        modelBuilder.Entity<AgentWorkspaceEntity>()
+            .Navigation(x => x.ListItems)
+            .AutoInclude();
 
         modelBuilder.Entity<AgentEventLogEntity>(e =>
         {
@@ -1188,6 +1218,10 @@ public sealed class McpDbContext : DbContext
             SessionLogProcessingDialogEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogCommitEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogCommitFileEntity child => FirstNonEmpty(child.SessionLogCommit?.WorkspaceId, child.SessionLogCommit?.SessionLogTurn?.WorkspaceId, child.SessionLogCommit?.SessionLogTurn?.SessionLog?.WorkspaceId),
+            // Agent child rows inherit the parent's workspace so global ("") built-in definitions
+            // never get stamped with the ambient workspace.
+            AgentDefinitionModelEntity child when child.AgentDefinition is not null => child.AgentDefinition.WorkspaceId,
+            AgentWorkspaceListItemEntity child when child.AgentWorkspace is not null => child.AgentWorkspace.WorkspaceId,
             SessionLogTurnStringListEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             _ when _workspaceId.Length > 0 => _workspaceId,
             _ => null,

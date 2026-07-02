@@ -74,7 +74,10 @@ public sealed class AgentService : IAgentService
             existing.DisplayName = request.DisplayName;
             existing.DefaultLaunchCommand = request.DefaultLaunchCommand;
             existing.DefaultInstructionFile = request.DefaultInstructionFile;
-            existing.DefaultModelsJson = JsonSerializer.Serialize(request.DefaultModels);
+            await _db.Entry(existing).Collection(x => x.Models).LoadAsync(ct).ConfigureAwait(false);
+            existing.Models.Clear();
+            foreach (var row in ToModelRows(request.DefaultModels))
+                existing.Models.Add(row);
             existing.DefaultBranchStrategy = request.DefaultBranchStrategy;
             existing.DefaultSeedPrompt = request.DefaultSeedPrompt;
             existing.ModifiedAt = now;
@@ -87,7 +90,7 @@ public sealed class AgentService : IAgentService
                 DisplayName = request.DisplayName,
                 DefaultLaunchCommand = request.DefaultLaunchCommand,
                 DefaultInstructionFile = request.DefaultInstructionFile,
-                DefaultModelsJson = JsonSerializer.Serialize(request.DefaultModels),
+                Models = ToModelRows(request.DefaultModels),
                 DefaultBranchStrategy = request.DefaultBranchStrategy,
                 DefaultSeedPrompt = request.DefaultSeedPrompt,
                 IsBuiltIn = false,
@@ -202,11 +205,12 @@ public sealed class AgentService : IAgentService
             existing.Enabled = request.Enabled;
             existing.AgentIsolation = request.AgentIsolation;
             existing.LaunchCommandOverride = request.LaunchCommandOverride;
-            existing.ModelsOverrideJson = request.ModelsOverride is not null ? JsonSerializer.Serialize(request.ModelsOverride) : null;
+            existing.ListItems.Clear();
+            foreach (var row in ToOverrideRows(request.ModelsOverride, request.InstructionFilesOverride))
+                existing.ListItems.Add(row);
             existing.BranchStrategyOverride = request.BranchStrategyOverride;
             existing.SeedPromptOverride = request.SeedPromptOverride;
             existing.MarkerAdditions = request.MarkerAdditions;
-            existing.InstructionFilesOverrideJson = request.InstructionFilesOverride is not null ? JsonSerializer.Serialize(request.InstructionFilesOverride) : null;
         }
         else
         {
@@ -217,11 +221,10 @@ public sealed class AgentService : IAgentService
                 Enabled = request.Enabled,
                 AgentIsolation = request.AgentIsolation,
                 LaunchCommandOverride = request.LaunchCommandOverride,
-                ModelsOverrideJson = request.ModelsOverride is not null ? JsonSerializer.Serialize(request.ModelsOverride) : null,
+                ListItems = ToOverrideRows(request.ModelsOverride, request.InstructionFilesOverride),
                 BranchStrategyOverride = request.BranchStrategyOverride,
                 SeedPromptOverride = request.SeedPromptOverride,
                 MarkerAdditions = request.MarkerAdditions,
-                InstructionFilesOverrideJson = request.InstructionFilesOverride is not null ? JsonSerializer.Serialize(request.InstructionFilesOverride) : null,
                 AddedAt = DateTime.UtcNow
             });
         }
@@ -530,7 +533,7 @@ public sealed class AgentService : IAgentService
         DisplayName = e.DisplayName,
         DefaultLaunchCommand = e.DefaultLaunchCommand,
         DefaultInstructionFile = e.DefaultInstructionFile,
-        DefaultModels = DeserializeStringList(e.DefaultModelsJson),
+        DefaultModels = e.Models.OrderBy(m => m.Ordinal).Select(m => m.Model).ToList(),
         DefaultBranchStrategy = e.DefaultBranchStrategy,
         DefaultSeedPrompt = e.DefaultSeedPrompt,
         IsBuiltIn = e.IsBuiltIn,
@@ -549,11 +552,11 @@ public sealed class AgentService : IAgentService
         BannedUntilPr = e.BannedUntilPr,
         AgentIsolation = e.AgentIsolation,
         LaunchCommandOverride = e.LaunchCommandOverride,
-        ModelsOverride = e.ModelsOverrideJson is not null ? DeserializeStringList(e.ModelsOverrideJson) : null,
+        ModelsOverride = OverrideValues(e, ModelOverrideListType),
         BranchStrategyOverride = e.BranchStrategyOverride,
         SeedPromptOverride = e.SeedPromptOverride,
         MarkerAdditions = e.MarkerAdditions,
-        InstructionFilesOverride = e.InstructionFilesOverrideJson is not null ? DeserializeStringList(e.InstructionFilesOverrideJson) : null,
+        InstructionFilesOverride = OverrideValues(e, InstructionFileOverrideListType),
         AddedAt = e.AddedAt,
         LastLaunchedAt = e.LastLaunchedAt
     };
@@ -569,10 +572,35 @@ public sealed class AgentService : IAgentService
         Timestamp = e.Timestamp
     };
 
-    private IReadOnlyList<string> DeserializeStringList(string json)
+    private const string ModelOverrideListType = "ModelOverride";
+    private const string InstructionFileOverrideListType = "InstructionFileOverride";
+
+    /// <summary>Builds ordered 4NF default-model rows; parent key flows from EF graph fixup.</summary>
+    private static List<AgentDefinitionModelEntity> ToModelRows(IEnumerable<string>? models)
+        => (models ?? []).Select((model, i) => new AgentDefinitionModelEntity { Ordinal = i, Model = model }).ToList();
+
+    /// <summary>Builds the 4NF override-list rows; row presence per list type is the override signal.</summary>
+    private static List<AgentWorkspaceListItemEntity> ToOverrideRows(IEnumerable<string>? modelsOverride, IEnumerable<string>? instructionFilesOverride)
     {
-        try { return JsonSerializer.Deserialize<List<string>>(json) ?? []; }
-        catch (JsonException ex) { _logger.LogError("{ExceptionDetail}", ex.ToString()); return []; }
+        var rows = new List<AgentWorkspaceListItemEntity>();
+        var ordinal = 0;
+        foreach (var value in modelsOverride ?? [])
+            rows.Add(new AgentWorkspaceListItemEntity { ListType = ModelOverrideListType, Ordinal = ordinal++, Value = value });
+        ordinal = 0;
+        foreach (var value in instructionFilesOverride ?? [])
+            rows.Add(new AgentWorkspaceListItemEntity { ListType = InstructionFileOverrideListType, Ordinal = ordinal++, Value = value });
+        return rows;
+    }
+
+    /// <summary>Reads an override list from the child rows; null when no rows carry the list type.</summary>
+    private static IReadOnlyList<string>? OverrideValues(AgentWorkspaceEntity e, string listType)
+    {
+        var values = e.ListItems
+            .Where(r => string.Equals(r.ListType, listType, StringComparison.Ordinal))
+            .OrderBy(r => r.Ordinal)
+            .Select(r => r.Value)
+            .ToList();
+        return values.Count > 0 ? values : null;
     }
 
     private static string NormalizePath(string path)

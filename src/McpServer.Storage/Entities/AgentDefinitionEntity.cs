@@ -28,8 +28,8 @@ public class AgentDefinitionEntity
     [MaxLength(256)]
     public string DefaultInstructionFile { get; set; } = "";
 
-    /// <summary>Default AI models (JSON array).</summary>
-    public string DefaultModelsJson { get; set; } = "[]";
+    /// <summary>4NF default-model rows (former <c>DefaultModelsJson</c>), ordered by ordinal.</summary>
+    public List<AgentDefinitionModelEntity> Models { get; set; } = [];
 
     /// <summary>Default git branch naming strategy.</summary>
     [MaxLength(256)]
