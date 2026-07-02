@@ -266,8 +266,10 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
     /// <returns>An initialized LocalDB sandbox.</returns>
     public static async Task<SqlLocalDbSandbox> CreateAsync()
     {
+        // No version pin: use whichever LocalDB engine is installed (a pinned version that is
+        // absent makes SqlLocalDB.exe report failure on stdout while still exiting 0).
         var instanceName = $"mcp-provider-{Guid.NewGuid():N}";
-        await RunSqlLocalDbAsync("create", instanceName, "15.0").ConfigureAwait(false);
+        await RunSqlLocalDbAsync("create", instanceName).ConfigureAwait(false);
         await RunSqlLocalDbAsync("start", instanceName).ConfigureAwait(false);
         return new SqlLocalDbSandbox(instanceName);
     }
@@ -316,7 +318,8 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
         var stderr = await process.StandardError.ReadToEndAsync().ConfigureAwait(false);
         await process.WaitForExitAsync().ConfigureAwait(false);
 
-        if (process.ExitCode != 0)
+        // SqlLocalDB.exe reports some failures (e.g. unknown version) on stdout with exit code 0.
+        if (process.ExitCode != 0 || stdout.Contains("failed because of the following error", StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
                 $"SqlLocalDB.exe {string.Join(" ", arguments)} failed with exit code {process.ExitCode}.\nSTDOUT: {stdout}\nSTDERR: {stderr}");
