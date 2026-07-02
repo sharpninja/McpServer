@@ -846,7 +846,7 @@ function Invoke-WorkflowAppendActions {
 
         $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
         $title = Get-ReplTurnCacheField -Field 'queryTitle'
-        Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+        $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText 'Actions appended.' `
             -ActionsYaml $actionsBlock
     }
@@ -901,7 +901,7 @@ function Invoke-WorkflowAppendDialog {
         Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
         $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
         $title = Get-ReplTurnCacheField -Field 'queryTitle'
-        Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+        $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText 'Dialog appended.' `
             -ProcessingDialog $dialogItems
     }
@@ -933,7 +933,7 @@ function Invoke-WorkflowCompleteTurn {
 
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
     $title = Get-ReplTurnCacheField -Field 'queryTitle'
-    Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+    $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
         -Status 'completed' -ResponseText $responseText -ActionsYaml $actionsBlock
     return $true
 }
@@ -945,12 +945,16 @@ function Invoke-ReplMethod {
         [string]$ParamsYaml = ''
     )
 
+    # Local plugin-shim verbs: record the boolean outcome on the script-scoped
+    # success flag (so the script-entry exit code is truthful) and return without
+    # emitting the boolean to stdout. Emitting it leaked "True" lines, and leaving
+    # the flag unset made the script-entry exit 1 even on a successful persist.
     switch -Wildcard ($Method) {
-        'workflow.sessionlog.beginTurn'       { return $true }
-        'workflow.sessionlog.openSession'     { return $true }
-        'workflow.sessionlog.appendActions'   { return Invoke-WorkflowAppendActions -ParamsYaml $ParamsYaml }
-        'workflow.sessionlog.appendDialog'    { return Invoke-WorkflowAppendDialog -ParamsYaml $ParamsYaml }
-        'workflow.sessionlog.completeTurn'    { return Invoke-WorkflowCompleteTurn -ParamsYaml $ParamsYaml }
+        'workflow.sessionlog.beginTurn'       { $script:LastInvokeReplMethodSuccess = $true; return }
+        'workflow.sessionlog.openSession'     { $script:LastInvokeReplMethodSuccess = $true; return }
+        'workflow.sessionlog.appendActions'   { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendActions -ParamsYaml $ParamsYaml); return }
+        'workflow.sessionlog.appendDialog'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendDialog -ParamsYaml $ParamsYaml); return }
+        'workflow.sessionlog.completeTurn'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowCompleteTurn -ParamsYaml $ParamsYaml); return }
     }
 
     $r = Invoke-ReplRaw -Method $Method -ParamsYaml $ParamsYaml

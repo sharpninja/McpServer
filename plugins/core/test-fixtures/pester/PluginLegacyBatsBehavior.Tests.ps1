@@ -390,7 +390,7 @@ endpoints:
                     [void][System.IO.Directory]::CreateDirectory((Join-Path $root 'cache'))
                     [System.IO.File]::WriteAllText((Join-Path $root 'cache\plan-todo-map.yaml'), "entries:`n  - planFile: /tmp/test-plans/my-plan.md`n    todoId: PLAN-FEAT-001`n")
                     Invoke-PluginChildProcess -ScriptPath (Join-Path $script:StagedRoot 'lib\plugin-hook.ps1') -Arguments @('-HookName', 'plan-modified') -Environment ($envBase + @{ TOOL_INPUT = '/tmp/test-plans/my-plan.md' }) | Out-Null
-                    [System.IO.File]::ReadAllText($envBase.MCP_PLUGIN_REPL_LOG) | Should -Match 'workflow.todo.update'
+                    [System.IO.File]::ReadAllText($envBase.MCP_PLUGIN_REPL_LOG) | Should -Match 'client\.Todo\.UpdateAsync'
                 }
                 'plan-modified*hookEventName*' {
                     $result = Invoke-PluginChildProcess -ScriptPath (Join-Path $script:StagedRoot 'lib\plugin-hook.ps1') -Arguments @('-HookName', 'plan-modified') -Environment $envBase
