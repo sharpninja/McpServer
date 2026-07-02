@@ -26,6 +26,12 @@ public static class MarkerFileService
     internal const string SyncedAgentPluginVersion = "1.26.0";
     private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
 
+    /// <summary>
+    /// Test seam: when set, plugin-version resolution scans this directory for user plugin caches
+    /// instead of the real user profile, so tests are hermetic against locally installed plugins.
+    /// </summary>
+    internal static string? AgentPluginUserProfileOverride { get; set; }
+
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
@@ -457,7 +463,8 @@ public static class MarkerFileService
                 yield return Path.Combine(siblingRoot, pluginName);
         }
 
-        var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        var userProfile = AgentPluginUserProfileOverride
+            ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         if (!string.IsNullOrWhiteSpace(userProfile))
         {
             foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName))

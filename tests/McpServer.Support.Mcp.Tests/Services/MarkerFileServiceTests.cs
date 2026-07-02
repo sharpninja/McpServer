@@ -44,6 +44,28 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
+    /// Runs <paramref name="action"/> with plugin-version env vars cleared and the user-profile
+    /// cache scan redirected to an empty temp directory, so resolution sees only the inputs the
+    /// test controls regardless of plugins installed on the machine.
+    /// </summary>
+    /// <param name="action">The assertion body to run hermetically.</param>
+    private static void WithHermeticPluginVersionResolution(Action action)
+    {
+        var emptyProfile = Path.Combine(Path.GetTempPath(), $"mcp-marker-profile-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(emptyProfile);
+        try
+        {
+            MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
+            WithClearedPluginVersionEnvironment(action);
+        }
+        finally
+        {
+            MarkerFileService.AgentPluginUserProfileOverride = null;
+            Directory.Delete(emptyProfile, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// Builds a minimal template context for prompt-rendering tests.
     /// </summary>
     /// <param name="baseUrl">The base URL inserted into template context values.</param>
@@ -502,11 +524,14 @@ public sealed class MarkerFileServiceTests
     [Fact]
     public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
     {
-        var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
+        WithHermeticPluginVersionResolution(() =>
+        {
+            var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
 
-        Assert.All(
-            plugins.Agents,
-            pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
+            Assert.All(
+                plugins.Agents,
+                pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
+        });
     }
 
     /// <summary>
@@ -524,7 +549,7 @@ public sealed class MarkerFileServiceTests
 
         try
         {
-            WithClearedPluginVersionEnvironment(() =>
+            WithHermeticPluginVersionResolution(() =>
             {
                 var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace);
 
