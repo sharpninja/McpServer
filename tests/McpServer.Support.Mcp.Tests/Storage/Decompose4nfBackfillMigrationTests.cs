@@ -101,11 +101,45 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             Assert.True(criteria[1].IsSatisfied);
             Assert.Equal("verified by test", criteria[1].Evidence);
 
+            // TodoItem 5 lists + implementation tasks -> TodoItemListItems / TodoItemTasks
+            var todoLists = db.TodoItemListItems
+                .IgnoreQueryFilters()
+                .Where(i => i.TodoId == "MVP-4NF-001")
+                .ToList();
+            Assert.Equal(
+                ["desc line 1", "desc line 2"],
+                todoLists.Where(i => i.ListType == "Description").OrderBy(i => i.Ordinal).Select(i => i.Value).ToList());
+            Assert.Equal(
+                ["tech detail"],
+                todoLists.Where(i => i.ListType == "TechnicalDetail").Select(i => i.Value).ToList());
+            Assert.Equal(
+                ["MVP-4NF-000"],
+                todoLists.Where(i => i.ListType == "DependsOn").Select(i => i.Value).ToList());
+            Assert.Equal(
+                ["FR-MCP-4NF-001"],
+                todoLists.Where(i => i.ListType == "FunctionalRequirement").Select(i => i.Value).ToList());
+            Assert.Equal(
+                ["TR-MCP-4NF-001"],
+                todoLists.Where(i => i.ListType == "TechnicalRequirement").Select(i => i.Value).ToList());
+
+            var todoTasks = db.TodoItemTasks
+                .IgnoreQueryFilters()
+                .Where(t => t.TodoId == "MVP-4NF-001")
+                .OrderBy(t => t.Ordinal)
+                .ToList();
+            Assert.Equal(2, todoTasks.Count);
+            Assert.Equal("first task", todoTasks[0].Task);
+            Assert.True(todoTasks[0].Done);
+            Assert.Equal("second task", todoTasks[1].Task);
+            Assert.False(todoTasks[1].Done);
+
             // Source JSON columns are gone from the rebuilt tables.
             Assert.False(ColumnExists("SessionLogCommits", "FilesChangedJson"));
             Assert.False(ColumnExists("TriageReports", "AffectedPathsJson"));
             Assert.False(ColumnExists("Workspaces", "BannedLicensesJson"));
             Assert.False(ColumnExists("Requirements", "AcceptanceCriteriaJson"));
+            Assert.False(ColumnExists("TodoItems", "DescriptionJson"));
+            Assert.False(ColumnExists("TodoItems", "ImplementationTasksJson"));
         }
     }
 
@@ -225,6 +259,27 @@ public sealed class Decompose4nfBackfillMigrationTests : IDisposable
             """["Ns.Type.Method"]""",
             """["run the failing test"]""",
             """["bug","triage"]""");
+
+        db.Database.ExecuteSqlRaw(
+            """
+            INSERT INTO "TodoItems" (
+                "WorkspaceId", "Id", "Title", "Section", "Priority", "Done", "ItemKind",
+                "SectionOrder", "ItemOrder",
+                "DescriptionJson", "TechnicalDetailsJson", "DependsOnJson",
+                "FunctionalRequirementsJson", "TechnicalRequirementsJson", "ImplementationTasksJson",
+                "IsDeleted"
+            )
+            VALUES ({0}, {1}, {2}, 'Backlog', 'medium', 0, 'standard', 0, 0, {3}, {4}, {5}, {6}, {7}, {8}, 0);
+            """,
+            WorkspacePath,
+            "MVP-4NF-001",
+            "Backfill todo",
+            """["desc line 1","desc line 2"]""",
+            """["tech detail"]""",
+            """["MVP-4NF-000"]""",
+            """["FR-MCP-4NF-001"]""",
+            """["TR-MCP-4NF-001"]""",
+            """[{"task":"first task","done":true},{"task":"second task","done":false}]""");
 
         db.Database.ExecuteSqlRaw(
             """

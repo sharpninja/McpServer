@@ -2247,12 +2247,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("DependsOnJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescriptionJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
 
@@ -2262,12 +2256,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("Estimate")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("FunctionalRequirementsJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImplementationTasksJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -2314,12 +2302,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<int>("SectionOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("TechnicalDetailsJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TechnicalRequirementsJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -2338,6 +2320,110 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.HasIndex("SectionOrder");
 
                     b.ToTable("TodoItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemListItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "ListType", "Ordinal");
+
+                    b.ToTable("TodoItemListItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemTaskEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Task")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "Ordinal");
+
+                    b.ToTable("TodoItemTasks");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
@@ -3526,6 +3612,40 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemListItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "TodoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TodoItem");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemTaskEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "TodoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TodoItem");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>

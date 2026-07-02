@@ -4,10 +4,13 @@ namespace McpServer.Support.Mcp.Storage.Entities;
 
 /// <summary>
 /// TR-MCP-TODO-005: 4NF generic string-list entity for a TODO item. One row per value across the
-/// description, technical-details, and depends-on lists (discriminated by <see cref="ListType"/>),
-/// replacing the item's <c>DescriptionJson</c>, <c>TechnicalDetailsJson</c>, and <c>DependsOnJson</c>
-/// columns. Written/read from the dependent side because the composite (WorkspaceId, TodoId) parent
-/// key includes the tenant column (see <c>RequirementAcceptanceCriterionEntity</c> for the rationale).
+/// description, technical-details, depends-on, functional-requirement, and technical-requirement
+/// lists (discriminated by <see cref="ListType"/>), replacing the item's <c>DescriptionJson</c>,
+/// <c>TechnicalDetailsJson</c>, <c>DependsOnJson</c>, <c>FunctionalRequirementsJson</c>, and
+/// <c>TechnicalRequirementsJson</c> columns. The requirement list types keep the raw user strings;
+/// <c>TodoRequirementLinks</c> remains the normalized requirement join. Written/read from the
+/// dependent side because the composite (WorkspaceId, TodoId) parent key includes the tenant
+/// column (see <c>RequirementAcceptanceCriterionEntity</c> for the rationale).
 /// </summary>
 public sealed class TodoItemListItemEntity
 {
@@ -23,7 +26,7 @@ public sealed class TodoItemListItemEntity
     [MaxLength(128)]
     public string TodoId { get; set; } = string.Empty;
 
-    /// <summary>Discriminator identifying which list this item belongs to (Description, TechnicalDetail, DependsOn).</summary>
+    /// <summary>Discriminator identifying which list this item belongs to (Description, TechnicalDetail, DependsOn, FunctionalRequirement, TechnicalRequirement).</summary>
     [Required]
     [MaxLength(32)]
     public required string ListType { get; set; }

@@ -188,7 +188,12 @@ internal sealed class TodoBootstrapImporter : IHostedService
         var (items, history, metadata) = ProjectEntities(file, importedAtUtc);
 
         foreach (var item in items)
+        {
             ctx.TodoItems.Add(item);
+            ctx.TodoItemListItems.AddRange(item.ListItems);
+            ctx.TodoItemTasks.AddRange(item.ImplementationTaskRows);
+        }
+
         foreach (var row in history)
             ctx.TodoAuditHistory.Add(row);
         ctx.TodoDocumentMetadata.Add(metadata);
@@ -232,7 +237,7 @@ internal sealed class TodoBootstrapImporter : IHostedService
                     Priority = "high",
                     Done = phase.Done,
                     Estimate = phase.Estimate,
-                    ImplementationTasksJson = SerializeImplementationTasks(phase.ImplementationTasks),
+                    ImplementationTaskRows = ToTaskRows(phase.Id, phase.ImplementationTasks),
                     ItemKind = CodeReviewPhaseItemKind,
                     SectionOrder = sectionOrder,
                     ItemOrder = index,
@@ -280,17 +285,13 @@ internal sealed class TodoBootstrapImporter : IHostedService
                 Done = item.Done,
                 Estimate = item.Estimate,
                 Note = item.Note,
-                DescriptionJson = SerializeStringList(item.Description),
-                TechnicalDetailsJson = SerializeStringList(item.TechnicalDetails),
-                ImplementationTasksJson = SerializeImplementationTasks(item.ImplementationTasks),
+                ListItems = ToListRows(item.Id, item),
+                ImplementationTaskRows = ToTaskRows(item.Id, item.ImplementationTasks),
                 CompletedDate = item.CompletedDate,
                 DoneSummary = item.DoneSummary,
                 Remaining = item.Remaining,
                 PriorityNote = item.PriorityNote,
                 Reference = item.Reference,
-                DependsOnJson = SerializeStringList(item.DependsOn),
-                FunctionalRequirementsJson = SerializeStringList(item.FunctionalRequirements),
-                TechnicalRequirementsJson = SerializeStringList(item.TechnicalRequirements),
                 ItemKind = StandardItemKind,
                 SectionOrder = sectionOrder,
                 ItemOrder = index,
@@ -312,18 +313,53 @@ internal sealed class TodoBootstrapImporter : IHostedService
             Source = YamlBootstrapSource,
         };
 
-    private string? SerializeStringList(List<string>? value)
-        => value is null ? null : JsonSerializer.Serialize(value, _json);
-
-    private string? SerializeImplementationTasks(List<ImplementationTask>? value)
+    /// <summary>Builds the 4NF string-list child rows for an imported TODO (WorkspaceId stamped at save).</summary>
+    private static List<TodoItemListItemEntity> ToListRows(string todoId, TodoItem item)
     {
+        var rows = new List<TodoItemListItemEntity>();
+        AddListRows(rows, todoId, "Description", item.Description);
+        AddListRows(rows, todoId, "TechnicalDetail", item.TechnicalDetails);
+        AddListRows(rows, todoId, "DependsOn", item.DependsOn);
+        AddListRows(rows, todoId, "FunctionalRequirement", item.FunctionalRequirements);
+        AddListRows(rows, todoId, "TechnicalRequirement", item.TechnicalRequirements);
+        return rows;
+    }
+
+    private static void AddListRows(List<TodoItemListItemEntity> rows, string todoId, string listType, List<string>? values)
+    {
+        if (values is null)
+            return;
+        for (var i = 0; i < values.Count; i++)
+        {
+            rows.Add(new TodoItemListItemEntity
+            {
+                TodoId = todoId,
+                ListType = listType,
+                Ordinal = i,
+                Value = values[i],
+            });
+        }
+    }
+
+    /// <summary>Builds the 4NF implementation sub-task child rows for an imported TODO.</summary>
+    private static List<TodoItemTaskEntity> ToTaskRows(string todoId, List<ImplementationTask>? value)
+    {
+        var rows = new List<TodoItemTaskEntity>();
         if (value is null)
-            return null;
-        var tasks = value
-            .Where(static t => t is not null)
-            .Select(static t => new { task = t.Task ?? string.Empty, done = t.Done })
-            .ToList();
-        return JsonSerializer.Serialize(tasks, _json);
+            return rows;
+        var ordinal = 0;
+        foreach (var task in value.Where(static t => t is not null))
+        {
+            rows.Add(new TodoItemTaskEntity
+            {
+                TodoId = todoId,
+                Ordinal = ordinal++,
+                Task = task.Task ?? string.Empty,
+                Done = task.Done,
+            });
+        }
+
+        return rows;
     }
 
     private static async Task WriteMarkerAsync(string markerPath, string reason, CancellationToken cancellationToken)

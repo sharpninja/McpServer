@@ -99,6 +99,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-TODO-005 (provider-agnostic): Authoritative TODO items.</summary>
     public DbSet<TodoItemEntity> TodoItems => Set<TodoItemEntity>();
 
+    /// <summary>TR-MCP-TODO-005: 4NF TODO string-list items (description, technical details, depends-on, FR/TR raw ids).</summary>
+    public DbSet<TodoItemListItemEntity> TodoItemListItems => Set<TodoItemListItemEntity>();
+
+    /// <summary>TR-MCP-TODO-005: 4NF TODO implementation sub-task rows.</summary>
+    public DbSet<TodoItemTaskEntity> TodoItemTasks => Set<TodoItemTaskEntity>();
+
     /// <summary>TR-MCP-DB-005: Normalized TODO-to-requirement link rows.</summary>
     public DbSet<TodoRequirementLinkEntity> TodoRequirementLinks => Set<TodoRequirementLinkEntity>();
 
@@ -413,6 +419,24 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Done);
             e.HasIndex(x => x.SectionOrder);
             e.HasIndex(x => x.ItemOrder);
+        });
+
+        modelBuilder.Entity<TodoItemListItemEntity>(e =>
+        {
+            e.HasOne(x => x.TodoItem)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.TodoId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.TodoId, x.ListType, x.Ordinal });
+        });
+
+        modelBuilder.Entity<TodoItemTaskEntity>(e =>
+        {
+            e.HasOne(x => x.TodoItem)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.TodoId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.TodoId, x.Ordinal });
         });
 
         modelBuilder.Entity<TodoRequirementLinkEntity>(e =>

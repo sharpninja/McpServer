@@ -33,6 +33,11 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     private const string CodeReviewPhaseItemKind = "code_review_phase";
     private const string CodeReviewSectionKey = "code-review-remediation";
     private const string ApiSource = "api";
+    private const string DescriptionListType = "Description";
+    private const string TechnicalDetailListType = "TechnicalDetail";
+    private const string DependsOnListType = "DependsOn";
+    private const string FunctionalRequirementListType = "FunctionalRequirement";
+    private const string TechnicalRequirementListType = "TechnicalRequirement";
 
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IOptions<IngestionOptions> _ingestionOptions;
@@ -125,6 +130,23 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
                 CopyTodoItem(state.Item, existing);
                 restored = existing;
             }
+
+            // Restore the 4NF child rows dependent-side: replace whatever rows exist (including
+            // soft-deleted ones) with the captured snapshot's children.
+            var staleListRows = await ctx.TodoItemListItems
+                .IgnoreQueryFilters()
+                .Where(r => r.WorkspaceId == workspaceId && r.TodoId == state.Item.Id)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            var staleTaskRows = await ctx.TodoItemTasks
+                .IgnoreQueryFilters()
+                .Where(r => r.WorkspaceId == workspaceId && r.TodoId == state.Item.Id)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            ctx.TodoItemListItems.RemoveRange(staleListRows);
+            ctx.TodoItemTasks.RemoveRange(staleTaskRows);
+            ctx.TodoItemListItems.AddRange(restored.ListItems);
+            ctx.TodoItemTasks.AddRange(restored.ImplementationTaskRows);
 
             ApplySoftDeleteState(ctx.Entry(restored), state.SoftDelete);
             await RestoreDocumentMetadataAsync(ctx, state.DocumentMetadata, cancellationToken).ConfigureAwait(false);
@@ -225,6 +247,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         }
 
         var rows = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
+        await AttachTodoChildrenAsync(ctx, rows, cancellationToken).ConfigureAwait(false);
         var flat = rows.Select(ToFlatItem).ToList();
         var ordered = flat
             .OrderBy(i => i.Section, StringComparer.OrdinalIgnoreCase)
@@ -244,7 +267,10 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id, cancellationToken)
             .ConfigureAwait(false);
-        return row is null ? null : ToFlatItem(row);
+        if (row is null)
+            return null;
+        await AttachTodoChildrenAsync(scope.Context, [row], cancellationToken).ConfigureAwait(false);
+        return ToFlatItem(row);
     }
 
     /// <inheritdoc />
@@ -272,6 +298,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
                 return new TodoMutationResult(false, $"Item with id '{request.Id}' already exists.", FailureKind: TodoMutationFailureKind.Conflict);
 
             var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
+            await AttachTodoChildrenAsync(ctx, allEntities, cancellationToken).ConfigureAwait(false);
             var all = allEntities.Select(ToFlatItem).ToList();
             var depIdError = TodoValidator.ValidateDependencyIds(request.DependsOn, all, "dependsOn");
             if (depIdError is not null)
@@ -284,8 +311,10 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             var sectionOrder = await ResolveSectionOrderAsync(ctx, normalizedSection, cancellationToken).ConfigureAwait(false);
             var itemOrder = await GetNextItemOrderAsync(ctx, normalizedSection, normalizedPriority, itemKind, cancellationToken).ConfigureAwait(false);
 
+            var workspaceId = ctx.CurrentWorkspaceId;
             var entity = new TodoItemEntity
             {
+                WorkspaceId = workspaceId,
                 Id = request.Id,
                 Title = request.Title,
                 Section = normalizedSection,
@@ -293,13 +322,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
                 Done = false,
                 Estimate = request.Estimate,
                 Note = request.Note,
-                DescriptionJson = SerializeList(request.Description),
-                TechnicalDetailsJson = SerializeList(request.TechnicalDetails),
-                ImplementationTasksJson = SerializeTasks(request.ImplementationTasks),
                 Remaining = request.Remaining,
-                DependsOnJson = SerializeList(request.DependsOn),
-                FunctionalRequirementsJson = SerializeList(request.FunctionalRequirements),
-                TechnicalRequirementsJson = SerializeList(request.TechnicalRequirements),
                 ItemKind = itemKind,
                 SectionOrder = sectionOrder,
                 ItemOrder = itemOrder,
@@ -307,6 +330,19 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             };
 
             ctx.TodoItems.Add(entity);
+            var listItems = BuildListItems(
+                workspaceId,
+                entity.Id,
+                request.Description,
+                request.TechnicalDetails,
+                request.DependsOn,
+                request.FunctionalRequirements,
+                request.TechnicalRequirements);
+            var taskRows = BuildTaskRows(workspaceId, entity.Id, request.ImplementationTasks);
+            ctx.TodoItemListItems.AddRange(listItems);
+            ctx.TodoItemTasks.AddRange(taskRows);
+            entity.ListItems = listItems;
+            entity.ImplementationTaskRows = taskRows;
             var flat = ToFlatItem(entity);
             await SyncTodoRequirementLinksAsync(ctx, entity, flat, cancellationToken).ConfigureAwait(false);
             await AppendAuditAsync(ctx, entity.Id, ChangeEventActions.Created, flat, null, ApiSource, cancellationToken).ConfigureAwait(false);
@@ -372,6 +408,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             var current = await ctx.TodoItems.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);
             if (current is null)
                 return new TodoAuditQueryResult([], 0);
+
+            await AttachTodoChildrenAsync(ctx, [current], cancellationToken).ConfigureAwait(false);
 
             return new TodoAuditQueryResult(
             [
@@ -466,6 +504,23 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         if (item is null)
             return null;
 
+        // Capture the live 4NF child rows bypassing filters (the item itself may be soft-deleted,
+        // in which case its children are too; the snapshot must still carry them for restore).
+        item.ListItems = await ctx.TodoItemListItems
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .Where(r => r.WorkspaceId == workspaceId && r.TodoId == id)
+            .OrderBy(r => r.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        item.ImplementationTaskRows = await ctx.TodoItemTasks
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .Where(r => r.WorkspaceId == workspaceId && r.TodoId == id)
+            .OrderBy(r => r.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
         var metadata = await ctx.TodoDocumentMetadata
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(row => row.WorkspaceId == workspaceId, cancellationToken)
@@ -496,6 +551,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         if (existing is null)
             return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
 
+        await AttachTodoChildrenAsync(ctx, [existing], cancellationToken).ConfigureAwait(false);
         var previousFlat = ToFlatItem(existing);
         var updatedSection = NormalizeSection(request.Section ?? existing.Section);
         var updatedPriority = NormalizePriority(updatedSection, request.Priority ?? existing.Priority);
@@ -514,16 +570,25 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         existing.Done = request.Done ?? existing.Done;
         existing.Estimate = request.Estimate ?? existing.Estimate;
         existing.Note = request.Note ?? existing.Note;
-        existing.DescriptionJson = request.Description is null ? existing.DescriptionJson : SerializeList(request.Description);
-        existing.TechnicalDetailsJson = request.TechnicalDetails is null ? existing.TechnicalDetailsJson : SerializeList(request.TechnicalDetails);
-        existing.ImplementationTasksJson = request.ImplementationTasks is null ? existing.ImplementationTasksJson : SerializeTasks(request.ImplementationTasks);
         existing.CompletedDate = request.CompletedDate ?? existing.CompletedDate;
         existing.DoneSummary = request.DoneSummary ?? existing.DoneSummary;
         existing.Remaining = request.Remaining ?? existing.Remaining;
         existing.Reference = request.Reference ?? existing.Reference;
-        existing.DependsOnJson = request.DependsOn is null ? existing.DependsOnJson : SerializeList(request.DependsOn);
-        existing.FunctionalRequirementsJson = request.FunctionalRequirements is null ? existing.FunctionalRequirementsJson : SerializeList(request.FunctionalRequirements);
-        existing.TechnicalRequirementsJson = request.TechnicalRequirements is null ? existing.TechnicalRequirementsJson : SerializeList(request.TechnicalRequirements);
+
+        // 4NF children: null request lists keep the previous values; supplied lists replace them.
+        var updatedListItems = BuildListItems(
+            existing.WorkspaceId,
+            existing.Id,
+            request.Description ?? previousFlat.Description,
+            request.TechnicalDetails ?? previousFlat.TechnicalDetails,
+            request.DependsOn ?? previousFlat.DependsOn,
+            request.FunctionalRequirements ?? previousFlat.FunctionalRequirements,
+            request.TechnicalRequirements ?? previousFlat.TechnicalRequirements);
+        var updatedTaskRows = BuildTaskRows(
+            existing.WorkspaceId,
+            existing.Id,
+            request.ImplementationTasks ?? previousFlat.ImplementationTasks);
+        await ReplaceTodoChildrenAsync(ctx, existing, updatedListItems, updatedTaskRows, cancellationToken).ConfigureAwait(false);
         existing.ItemKind = updatedKind;
         existing.PhaseLabel = updatedKind == CodeReviewPhaseItemKind
             ? request.Phase ?? existing.PhaseLabel ?? existing.Title
@@ -534,12 +599,14 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             metadata.CodeReviewReference = request.Reference;
         }
 
+        var updatedDependsOn = ListValues(existing, DependsOnListType);
         var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
+        await AttachTodoChildrenAsync(ctx, allEntities, cancellationToken).ConfigureAwait(false);
         var all = allEntities.Select(ToFlatItem).ToList();
-        var depIdError = TodoValidator.ValidateDependencyIds(DeserializeList(existing.DependsOnJson), all, "dependsOn");
+        var depIdError = TodoValidator.ValidateDependencyIds(updatedDependsOn, all, "dependsOn");
         if (depIdError is not null)
             return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);
-        var depError = TodoValidator.ValidateDependencies(id, DeserializeList(existing.DependsOnJson)?.ToList() ?? [], all);
+        var depError = TodoValidator.ValidateDependencies(id, updatedDependsOn?.ToList() ?? [], all);
         if (depError is not null)
             return new TodoMutationResult(false, depError, FailureKind: TodoMutationFailureKind.Validation);
 
@@ -568,8 +635,19 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         if (existing is null)
             return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
 
+        await AttachTodoChildrenAsync(ctx, [existing], cancellationToken).ConfigureAwait(false);
         var snapshot = ToFlatItem(existing);
         await SoftDeleteTodoRequirementLinksAsync(ctx, existing, cancellationToken).ConfigureAwait(false);
+        var childLists = await ctx.TodoItemListItems
+            .Where(r => r.WorkspaceId == existing.WorkspaceId && r.TodoId == existing.Id)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var childTasks = await ctx.TodoItemTasks
+            .Where(r => r.WorkspaceId == existing.WorkspaceId && r.TodoId == existing.Id)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        ctx.TodoItemListItems.RemoveRange(childLists);
+        ctx.TodoItemTasks.RemoveRange(childTasks);
         ctx.TodoItems.Remove(existing);
         await AppendAuditAsync(ctx, id, ChangeEventActions.Deleted, snapshot, snapshot, ApiSource, cancellationToken).ConfigureAwait(false);
         await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -635,6 +713,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             .ThenBy(static item => item.Id)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
+        await AttachTodoChildrenAsync(ctx, items, cancellationToken).ConfigureAwait(false);
         var metadata = await ReadDocumentMetadataAsync(ctx, cancellationToken).ConfigureAwait(false);
         return BuildProjectedTodoFile(items, metadata);
     }
@@ -669,7 +748,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
                 Estimate = item.Estimate,
                 Done = item.Done,
                 Title = item.Title,
-                ImplementationTasks = DeserializeTasks(item.ImplementationTasksJson)?
+                ImplementationTasks = TaskValues(item)?
                     .Select(static task => new ImplementationTask { Task = task.Task, Done = task.Done })
                     .ToList(),
             })
@@ -811,16 +890,16 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         Note = item.Note,
         Done = item.Done,
         CompletedDate = item.CompletedDate,
-        Description = DeserializeList(item.DescriptionJson)?.ToList(),
+        Description = ListValues(item, DescriptionListType),
         DoneSummary = item.DoneSummary,
         Remaining = item.Remaining,
-        TechnicalDetails = DeserializeList(item.TechnicalDetailsJson)?.ToList(),
+        TechnicalDetails = ListValues(item, TechnicalDetailListType),
         PriorityNote = item.PriorityNote,
         Reference = item.Reference,
-        DependsOn = DeserializeList(item.DependsOnJson)?.ToList(),
-        FunctionalRequirements = DeserializeList(item.FunctionalRequirementsJson)?.ToList(),
-        TechnicalRequirements = DeserializeList(item.TechnicalRequirementsJson)?.ToList(),
-        ImplementationTasks = DeserializeTasks(item.ImplementationTasksJson)?
+        DependsOn = ListValues(item, DependsOnListType),
+        FunctionalRequirements = ListValues(item, FunctionalRequirementListType),
+        TechnicalRequirements = ListValues(item, TechnicalRequirementListType),
+        ImplementationTasks = TaskValues(item)?
             .Select(static task => new ImplementationTask { Task = task.Task, Done = task.Done })
             .ToList(),
     };
@@ -1088,17 +1167,31 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         target.Done = source.Done;
         target.Estimate = source.Estimate;
         target.Note = source.Note;
-        target.DescriptionJson = source.DescriptionJson;
-        target.TechnicalDetailsJson = source.TechnicalDetailsJson;
-        target.ImplementationTasksJson = source.ImplementationTasksJson;
+        target.ListItems = source.ListItems
+            .Select(r => new TodoItemListItemEntity
+            {
+                WorkspaceId = r.WorkspaceId,
+                TodoId = r.TodoId,
+                ListType = r.ListType,
+                Ordinal = r.Ordinal,
+                Value = r.Value,
+            })
+            .ToList();
+        target.ImplementationTaskRows = source.ImplementationTaskRows
+            .Select(r => new TodoItemTaskEntity
+            {
+                WorkspaceId = r.WorkspaceId,
+                TodoId = r.TodoId,
+                Ordinal = r.Ordinal,
+                Task = r.Task,
+                Done = r.Done,
+            })
+            .ToList();
         target.CompletedDate = source.CompletedDate;
         target.DoneSummary = source.DoneSummary;
         target.Remaining = source.Remaining;
         target.PriorityNote = source.PriorityNote;
         target.Reference = source.Reference;
-        target.DependsOnJson = source.DependsOnJson;
-        target.FunctionalRequirementsJson = source.FunctionalRequirementsJson;
-        target.TechnicalRequirementsJson = source.TechnicalRequirementsJson;
         target.ItemKind = source.ItemKind;
         target.SectionOrder = source.SectionOrder;
         target.ItemOrder = source.ItemOrder;
@@ -1266,6 +1359,138 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             Phase = e.PhaseLabel,
         };
 
+    /// <summary>Builds the 4NF string-list child rows (explicit composite keys, fresh ordinals) for a TODO.</summary>
+    private static List<TodoItemListItemEntity> BuildListItems(
+        string workspaceId,
+        string todoId,
+        IReadOnlyList<string>? description,
+        IReadOnlyList<string>? technicalDetails,
+        IReadOnlyList<string>? dependsOn,
+        IReadOnlyList<string>? functionalRequirements,
+        IReadOnlyList<string>? technicalRequirements)
+    {
+        var rows = new List<TodoItemListItemEntity>();
+        AddListItems(rows, workspaceId, todoId, DescriptionListType, description);
+        AddListItems(rows, workspaceId, todoId, TechnicalDetailListType, technicalDetails);
+        AddListItems(rows, workspaceId, todoId, DependsOnListType, dependsOn);
+        AddListItems(rows, workspaceId, todoId, FunctionalRequirementListType, functionalRequirements);
+        AddListItems(rows, workspaceId, todoId, TechnicalRequirementListType, technicalRequirements);
+        return rows;
+    }
+
+    private static void AddListItems(List<TodoItemListItemEntity> rows, string workspaceId, string todoId, string listType, IReadOnlyList<string>? values)
+    {
+        if (values is null)
+            return;
+        for (var i = 0; i < values.Count; i++)
+        {
+            rows.Add(new TodoItemListItemEntity
+            {
+                WorkspaceId = workspaceId,
+                TodoId = todoId,
+                ListType = listType,
+                Ordinal = i,
+                Value = values[i],
+            });
+        }
+    }
+
+    /// <summary>Builds the 4NF implementation sub-task child rows (explicit composite keys, fresh ordinals).</summary>
+    private static List<TodoItemTaskEntity> BuildTaskRows(string workspaceId, string todoId, IReadOnlyList<TodoFlatTask>? tasks)
+    {
+        var rows = new List<TodoItemTaskEntity>();
+        if (tasks is null)
+            return rows;
+        for (var i = 0; i < tasks.Count; i++)
+        {
+            rows.Add(new TodoItemTaskEntity
+            {
+                WorkspaceId = workspaceId,
+                TodoId = todoId,
+                Ordinal = i,
+                Task = tasks[i].Task ?? string.Empty,
+                Done = tasks[i].Done,
+            });
+        }
+
+        return rows;
+    }
+
+    /// <summary>
+    /// Loads and attaches the 4NF child rows onto the (non-mapped) holders of each TODO so
+    /// <see cref="ToFlatItem"/>, projection, and clone paths can read them. Children are written
+    /// from the dependent side; see <see cref="TodoItemEntity.ListItems"/> for the rationale.
+    /// </summary>
+    private static async Task AttachTodoChildrenAsync(McpDbContext ctx, IReadOnlyCollection<TodoItemEntity> items, CancellationToken ct)
+    {
+        if (items.Count == 0)
+            return;
+        var ids = items.Select(i => i.Id).Distinct(StringComparer.Ordinal).ToList();
+        var listRows = await ctx.TodoItemListItems
+            .AsNoTracking()
+            .Where(r => ids.Contains(r.TodoId))
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        var taskRows = await ctx.TodoItemTasks
+            .AsNoTracking()
+            .Where(r => ids.Contains(r.TodoId))
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        var listLookup = listRows.ToLookup(r => (r.WorkspaceId, r.TodoId));
+        var taskLookup = taskRows.ToLookup(r => (r.WorkspaceId, r.TodoId));
+        foreach (var item in items)
+        {
+            item.ListItems = listLookup[(item.WorkspaceId, item.Id)].OrderBy(r => r.Ordinal).ToList();
+            item.ImplementationTaskRows = taskLookup[(item.WorkspaceId, item.Id)].OrderBy(r => r.Ordinal).ToList();
+        }
+    }
+
+    /// <summary>
+    /// Replaces a TODO's 4NF child rows (dependent-side write): removes the tracked existing rows
+    /// and re-adds the supplied sets, keeping the entity holders in sync for flat mapping.
+    /// </summary>
+    private static async Task ReplaceTodoChildrenAsync(
+        McpDbContext ctx,
+        TodoItemEntity entity,
+        List<TodoItemListItemEntity> listItems,
+        List<TodoItemTaskEntity> taskRows,
+        CancellationToken ct)
+    {
+        var existingLists = await ctx.TodoItemListItems
+            .Where(r => r.WorkspaceId == entity.WorkspaceId && r.TodoId == entity.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        var existingTasks = await ctx.TodoItemTasks
+            .Where(r => r.WorkspaceId == entity.WorkspaceId && r.TodoId == entity.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        ctx.TodoItemListItems.RemoveRange(existingLists);
+        ctx.TodoItemTasks.RemoveRange(existingTasks);
+        ctx.TodoItemListItems.AddRange(listItems);
+        ctx.TodoItemTasks.AddRange(taskRows);
+        entity.ListItems = listItems;
+        entity.ImplementationTaskRows = taskRows;
+    }
+
+    private static List<string>? ListValues(TodoItemEntity e, string listType)
+    {
+        var values = e.ListItems
+            .Where(r => string.Equals(r.ListType, listType, StringComparison.Ordinal))
+            .OrderBy(r => r.Ordinal)
+            .Select(r => r.Value)
+            .ToList();
+        return values.Count > 0 ? values : null;
+    }
+
+    private static List<TodoFlatTask>? TaskValues(TodoItemEntity e)
+    {
+        var values = e.ImplementationTaskRows
+            .OrderBy(r => r.Ordinal)
+            .Select(r => new TodoFlatTask(r.Task, r.Done))
+            .ToList();
+        return values.Count > 0 ? values : null;
+    }
+
     private TodoFlatItem ToFlatItem(TodoItemEntity e) => new()
     {
         Id = e.Id,
@@ -1275,18 +1500,18 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         Done = e.Done,
         Estimate = e.Estimate,
         Note = e.Note,
-        Description = DeserializeList(e.DescriptionJson),
-        TechnicalDetails = DeserializeList(e.TechnicalDetailsJson),
-        ImplementationTasks = DeserializeTasks(e.ImplementationTasksJson),
+        Description = ListValues(e, DescriptionListType),
+        TechnicalDetails = ListValues(e, TechnicalDetailListType),
+        ImplementationTasks = TaskValues(e),
         CompletedDate = e.CompletedDate,
         DoneSummary = e.DoneSummary,
         Remaining = e.Remaining,
         PriorityNote = e.PriorityNote,
         Reference = e.Reference,
         Phase = e.PhaseLabel,
-        DependsOn = DeserializeList(e.DependsOnJson),
-        FunctionalRequirements = DeserializeList(e.FunctionalRequirementsJson),
-        TechnicalRequirements = DeserializeList(e.TechnicalRequirementsJson),
+        DependsOn = ListValues(e, DependsOnListType),
+        FunctionalRequirements = ListValues(e, FunctionalRequirementListType),
+        TechnicalRequirements = ListValues(e, TechnicalRequirementListType),
     };
 
     private string? SerializeList(IReadOnlyList<string>? value) => value is null ? null : JsonSerializer.Serialize(value, _json);

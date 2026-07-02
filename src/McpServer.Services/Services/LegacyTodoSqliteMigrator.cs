@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -107,7 +108,12 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         var (items, history, metadata) = await ReadLegacyAsync(legacyPath, cancellationToken).ConfigureAwait(false);
 
         foreach (var item in items)
+        {
             ctx.TodoItems.Add(item);
+            ctx.TodoItemListItems.AddRange(item.ListItems);
+            ctx.TodoItemTasks.AddRange(item.ImplementationTaskRows);
+        }
+
         foreach (var row in history)
             ctx.TodoAuditHistory.Add(row);
         if (metadata is not null)
@@ -179,33 +185,106 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         await using var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
-            result.Add(new TodoItemEntity
+            var id = reader.GetString(0);
+            var entity = new TodoItemEntity
             {
-                Id = reader.GetString(0),
+                Id = id,
                 Title = reader.GetString(1),
                 Section = reader.GetString(2),
                 Priority = reader.GetString(3),
                 Done = reader.GetInt64(4) != 0,
                 Estimate = reader.IsDBNull(5) ? null : reader.GetString(5),
                 Note = reader.IsDBNull(6) ? null : reader.GetString(6),
-                DescriptionJson = reader.IsDBNull(7) ? null : reader.GetString(7),
-                TechnicalDetailsJson = reader.IsDBNull(8) ? null : reader.GetString(8),
-                ImplementationTasksJson = reader.IsDBNull(9) ? null : reader.GetString(9),
                 CompletedDate = reader.IsDBNull(10) ? null : reader.GetString(10),
                 DoneSummary = reader.IsDBNull(11) ? null : reader.GetString(11),
                 Remaining = reader.IsDBNull(12) ? null : reader.GetString(12),
                 PriorityNote = reader.IsDBNull(13) ? null : reader.GetString(13),
                 Reference = reader.IsDBNull(14) ? null : reader.GetString(14),
-                DependsOnJson = reader.IsDBNull(15) ? null : reader.GetString(15),
-                FunctionalRequirementsJson = reader.IsDBNull(16) ? null : reader.GetString(16),
-                TechnicalRequirementsJson = reader.IsDBNull(17) ? null : reader.GetString(17),
                 ItemKind = reader.GetString(18),
                 SectionOrder = (int)reader.GetInt64(19),
                 ItemOrder = (int)reader.GetInt64(20),
                 PhaseLabel = reader.IsDBNull(21) ? null : reader.GetString(21),
-            });
+            };
+
+            // TR-MCP-TODO-005: legacy JSON list columns land as 4NF child rows.
+            AddListRows(entity, id, "Description", reader.IsDBNull(7) ? null : reader.GetString(7));
+            AddListRows(entity, id, "TechnicalDetail", reader.IsDBNull(8) ? null : reader.GetString(8));
+            AddListRows(entity, id, "DependsOn", reader.IsDBNull(15) ? null : reader.GetString(15));
+            AddListRows(entity, id, "FunctionalRequirement", reader.IsDBNull(16) ? null : reader.GetString(16));
+            AddListRows(entity, id, "TechnicalRequirement", reader.IsDBNull(17) ? null : reader.GetString(17));
+            AddTaskRows(entity, id, reader.IsDBNull(9) ? null : reader.GetString(9));
+
+            result.Add(entity);
         }
         return result;
+    }
+
+    private static void AddListRows(TodoItemEntity entity, string todoId, string listType, string? json)
+    {
+        var values = DeserializeStringList(json);
+        if (values is null)
+            return;
+        for (var i = 0; i < values.Count; i++)
+        {
+            entity.ListItems.Add(new TodoItemListItemEntity
+            {
+                TodoId = todoId,
+                ListType = listType,
+                Ordinal = i,
+                Value = values[i],
+            });
+        }
+    }
+
+    private static void AddTaskRows(TodoItemEntity entity, string todoId, string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return;
+        List<LegacyTask>? tasks;
+        try
+        {
+            tasks = JsonSerializer.Deserialize<List<LegacyTask>>(json, s_legacyJson);
+        }
+        catch (JsonException)
+        {
+            return;
+        }
+
+        if (tasks is null)
+            return;
+        for (var i = 0; i < tasks.Count; i++)
+        {
+            entity.ImplementationTaskRows.Add(new TodoItemTaskEntity
+            {
+                TodoId = todoId,
+                Ordinal = i,
+                Task = tasks[i].Task ?? string.Empty,
+                Done = tasks[i].Done,
+            });
+        }
+    }
+
+    private static List<string>? DeserializeStringList(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return null;
+        try
+        {
+            return JsonSerializer.Deserialize<List<string>>(json);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
+    private static readonly JsonSerializerOptions s_legacyJson = new(JsonSerializerDefaults.Web);
+
+    private sealed record LegacyTask
+    {
+        public string? Task { get; init; }
+
+        public bool Done { get; init; }
     }
 
     private static async Task<List<TodoAuditHistoryEntity>> ReadHistoryAsync(SqliteConnection connection, CancellationToken cancellationToken)

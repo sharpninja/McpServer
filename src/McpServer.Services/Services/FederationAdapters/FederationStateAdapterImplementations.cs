@@ -346,39 +346,63 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
     /// <inheritdoc />
     protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
-        var item = await db.TodoItems
+        var row = await db.TodoItems
             .AsNoTracking()
             .Where(t => t.Id == resourceId)
-            .Select(t => new
-            {
-                t.Id,
-                t.Title,
-                t.Section,
-                t.Priority,
-                t.Done,
-                t.Estimate,
-                t.Note,
-                t.DescriptionJson,
-                t.TechnicalDetailsJson,
-                t.ImplementationTasksJson,
-                t.CompletedDate,
-                t.DoneSummary,
-                t.Remaining,
-                t.PriorityNote,
-                t.Reference,
-                t.DependsOnJson,
-                t.FunctionalRequirementsJson,
-                t.TechnicalRequirementsJson,
-                t.ItemKind,
-                t.SectionOrder,
-                t.ItemOrder,
-                t.PhaseLabel,
-            })
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        if (item is null)
+        if (row is null)
             return null;
+
+        // TR-MCP-TODO-005: lists live in 4NF child tables; the wire snapshot keeps its
+        // serialized-JSON field shape so federated peers are unaffected by the decomposition.
+        var listRows = await db.TodoItemListItems
+            .AsNoTracking()
+            .Where(r => r.WorkspaceId == row.WorkspaceId && r.TodoId == row.Id)
+            .OrderBy(r => r.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var taskRows = await db.TodoItemTasks
+            .AsNoTracking()
+            .Where(r => r.WorkspaceId == row.WorkspaceId && r.TodoId == row.Id)
+            .OrderBy(r => r.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        string? SerializeListType(string listType)
+        {
+            var values = listRows.Where(r => r.ListType == listType).Select(r => r.Value).ToList();
+            return values.Count == 0 ? null : JsonSerializer.Serialize(values, JsonOptions);
+        }
+
+        var item = new
+        {
+            row.Id,
+            row.Title,
+            row.Section,
+            row.Priority,
+            row.Done,
+            row.Estimate,
+            row.Note,
+            DescriptionJson = SerializeListType("Description"),
+            TechnicalDetailsJson = SerializeListType("TechnicalDetail"),
+            ImplementationTasksJson = taskRows.Count == 0
+                ? null
+                : JsonSerializer.Serialize(taskRows.Select(t => new { task = t.Task, done = t.Done }).ToList(), JsonOptions),
+            row.CompletedDate,
+            row.DoneSummary,
+            row.Remaining,
+            row.PriorityNote,
+            row.Reference,
+            DependsOnJson = SerializeListType("DependsOn"),
+            FunctionalRequirementsJson = SerializeListType("FunctionalRequirement"),
+            TechnicalRequirementsJson = SerializeListType("TechnicalRequirement"),
+            row.ItemKind,
+            row.SectionOrder,
+            row.ItemOrder,
+            row.PhaseLabel,
+        };
 
         var audit = await db.TodoAuditHistory
             .AsNoTracking()
