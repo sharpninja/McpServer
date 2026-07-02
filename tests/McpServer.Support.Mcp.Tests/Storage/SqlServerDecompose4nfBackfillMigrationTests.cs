@@ -16,6 +16,7 @@ namespace McpServer.Support.Mcp.Tests.Storage;
 /// <c>MCP_TEST_SQLSERVER_CONNECTION</c>); LocalDB is provisioned by the
 /// <c>InstallTestDependencies</c> Nuke target, and an unreachable server fails the gate directly.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194732_RepairTriageCreatedTodoWorkspace";

@@ -5,7 +5,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    /// <summary>Run all unit tests, excluding integration test projects.</summary>
+    /// <summary>Run all unit tests, excluding integration test projects and Category=Integration tests.</summary>
     public Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -22,7 +22,7 @@ partial class Build
                     .SetProjectFile(project)
                     .SetConfiguration(Configuration)
                     .EnableNoBuild()
-                    .SetFilter("Category!=AiReview")
+                    .SetFilter("Category!=AiReview&Category!=Integration")
                     .SetResultsDirectory(RootDirectory / "TestResults"));
             }
         });

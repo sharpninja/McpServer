@@ -15,6 +15,7 @@ namespace McpServer.Support.Mcp.Tests.Storage;
 /// <c>MCP_TEST_POSTGRES_CONNECTION</c> when set, otherwise a self-booted ephemeral cluster
 /// (a scratch database is created and dropped per test).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class PostgresDecompose4nfBackfillMigrationTests : IClassFixture<EphemeralPostgresFixture>, IDisposable
 {
     private const string PreSliceMigration = "20260628194746_RepairTriageCreatedTodoWorkspace";

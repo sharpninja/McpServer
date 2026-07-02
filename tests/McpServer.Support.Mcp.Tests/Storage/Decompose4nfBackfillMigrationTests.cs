@@ -13,6 +13,7 @@ namespace McpServer.Support.Mcp.Tests.Storage;
 /// DateTimeOffset-to-UTC migration normalizes legacy offset text) by seeding a database at the
 /// pre-slice schema and migrating to head with the real SQLite provider migration assembly.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class Decompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194717_RepairTriageCreatedTodoWorkspace";

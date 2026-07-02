@@ -36,11 +36,12 @@ partial class Build
         });
 
     /// <summary>
-    /// Runs the provider migration integration tests (SQLite in-memory, PostgreSQL, SQL Server
-    /// LocalDB). The PostgreSQL tests boot their own ephemeral cluster with generated credentials
-    /// on a free port via their xUnit class fixture (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>);
-    /// SQL Server tests use an ad-hoc LocalDB database (auto-started). This target only guarantees
-    /// the dependencies exist and runs the gate.
+    /// Runs all <c>Category=Integration</c> tests, including the provider migration tests
+    /// (SQLite in-memory, PostgreSQL, SQL Server LocalDB). The PostgreSQL tests boot their own
+    /// ephemeral cluster with generated credentials on a free port via their xUnit class fixture
+    /// (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server tests use an ad-hoc LocalDB
+    /// database (auto-started). Integration tests run only through this target: the default
+    /// <c>Test</c> target excludes the category.
     /// </summary>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run provider migration integration tests against ephemeral PostgreSQL + LocalDB instances")
@@ -49,10 +50,7 @@ partial class Build
         {
             DotNetTest(_ => _
                 .SetProjectFile(TestsDirectory / "McpServer.Support.Mcp.Tests" / "McpServer.Support.Mcp.Tests.csproj")
-                .SetFilter(
-                    "FullyQualifiedName~Decompose4nfBackfillMigrationTests" +
-                    "|FullyQualifiedName~PostgresDecompose4nfBackfillMigrationTests" +
-                    "|FullyQualifiedName~SqlServerDecompose4nfBackfillMigrationTests")
+                .SetFilter("Category=Integration")
                 .SetVerbosity(DotNetVerbosity.minimal));
         });
 
