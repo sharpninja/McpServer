@@ -12,10 +12,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "AcceptanceCriteriaJson",
-                table: "Requirements");
-
             migrationBuilder.CreateTable(
                 name: "RequirementAcceptanceCriteria",
                 columns: table => new
@@ -56,19 +52,54 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                 name: "IX_RequirementAcceptanceCriteria_WorkspaceId_RequirementKind_R~",
                 table: "RequirementAcceptanceCriteria",
                 columns: new[] { "WorkspaceId", "RequirementKind", "RequirementId", "Ordinal" });
+
+            // TR-MCP-REQAC-001 data migration: backfill AcceptanceCriteriaJson (array of
+            // {id, text, isSatisfied, evidence} objects) into ordered 4NF child rows before the
+            // source column is dropped.
+            migrationBuilder.Sql("""
+INSERT INTO "RequirementAcceptanceCriteria" ("WorkspaceId", "RequirementKind", "RequirementId", "Ordinal", "CriterionId", "Text", "IsSatisfied", "Evidence")
+SELECT r."WorkspaceId", r."Kind", r."Id", (j.ordinality - 1)::int,
+       COALESCE(j.value ->> 'id', ''), COALESCE(j.value ->> 'text', ''),
+       COALESCE((j.value ->> 'isSatisfied')::boolean, false), j.value ->> 'evidence'
+FROM "Requirements" r
+CROSS JOIN LATERAL jsonb_array_elements(r."AcceptanceCriteriaJson"::jsonb) WITH ORDINALITY AS j(value, ordinality)
+WHERE r."AcceptanceCriteriaJson" IS NOT NULL AND jsonb_typeof(r."AcceptanceCriteriaJson"::jsonb) = 'array';
+""");
+
+            migrationBuilder.DropColumn(
+                name: "AcceptanceCriteriaJson",
+                table: "Requirements");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "RequirementAcceptanceCriteria");
-
             migrationBuilder.AddColumn<string>(
                 name: "AcceptanceCriteriaJson",
                 table: "Requirements",
                 type: "text",
                 nullable: true);
+
+            // Reconstruct the JSON object array (camelCase keys, ordered) from the child rows.
+            migrationBuilder.Sql("""
+UPDATE "Requirements" r
+SET "AcceptanceCriteriaJson" = j.json
+FROM (
+    SELECT "WorkspaceId", "RequirementKind", "RequirementId",
+           jsonb_agg(jsonb_build_object(
+               'id', "CriterionId",
+               'text', "Text",
+               'isSatisfied', "IsSatisfied",
+               'evidence', "Evidence") ORDER BY "Ordinal")::text AS json
+    FROM "RequirementAcceptanceCriteria"
+    WHERE "IsDeleted" = false
+    GROUP BY "WorkspaceId", "RequirementKind", "RequirementId"
+) j
+WHERE j."WorkspaceId" = r."WorkspaceId" AND j."RequirementKind" = r."Kind" AND j."RequirementId" = r."Id";
+""");
+
+            migrationBuilder.DropTable(
+                name: "RequirementAcceptanceCriteria");
         }
     }
 }

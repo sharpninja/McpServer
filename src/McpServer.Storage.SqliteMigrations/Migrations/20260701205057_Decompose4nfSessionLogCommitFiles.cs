@@ -11,10 +11,6 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "FilesChangedJson",
-                table: "SessionLogCommits");
-
             migrationBuilder.CreateTable(
                 name: "SessionLogCommitFiles",
                 columns: table => new
@@ -56,19 +52,45 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 name: "IX_SessionLogCommitFiles_WorkspaceId",
                 table: "SessionLogCommitFiles",
                 column: "WorkspaceId");
+
+            // TR-PLANNED-CORE-013 data migration: backfill each commit's FilesChangedJson (JSON
+            // string array) into ordered 4NF child rows before the source column is dropped.
+            migrationBuilder.Sql("""
+INSERT INTO "SessionLogCommitFiles" ("WorkspaceId", "SessionLogCommitId", "Ordinal", "Path")
+SELECT c."WorkspaceId", c."Id", j."key", j."value"
+FROM "SessionLogCommits" c, json_each(c."FilesChangedJson") j
+WHERE c."FilesChangedJson" IS NOT NULL AND json_valid(c."FilesChangedJson");
+""");
+
+            migrationBuilder.DropColumn(
+                name: "FilesChangedJson",
+                table: "SessionLogCommits");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "SessionLogCommitFiles");
-
             migrationBuilder.AddColumn<string>(
                 name: "FilesChangedJson",
                 table: "SessionLogCommits",
                 type: "TEXT",
                 nullable: true);
+
+            // Reconstruct the JSON string array from the ordered child rows before dropping them.
+            migrationBuilder.Sql("""
+UPDATE "SessionLogCommits"
+SET "FilesChangedJson" = (
+    SELECT json_group_array(f."Path" ORDER BY f."Ordinal")
+    FROM "SessionLogCommitFiles" f
+    WHERE f."SessionLogCommitId" = "SessionLogCommits"."Id" AND f."IsDeleted" = 0
+)
+WHERE EXISTS (
+    SELECT 1 FROM "SessionLogCommitFiles" f
+    WHERE f."SessionLogCommitId" = "SessionLogCommits"."Id" AND f."IsDeleted" = 0);
+""");
+
+            migrationBuilder.DropTable(
+                name: "SessionLogCommitFiles");
         }
     }
 }

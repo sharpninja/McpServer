@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,22 +11,6 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "BannedCountriesOfOriginJson",
-                table: "Workspaces");
-
-            migrationBuilder.DropColumn(
-                name: "BannedIndividualsJson",
-                table: "Workspaces");
-
-            migrationBuilder.DropColumn(
-                name: "BannedLicensesJson",
-                table: "Workspaces");
-
-            migrationBuilder.DropColumn(
-                name: "BannedOrganizationsJson",
-                table: "Workspaces");
-
             migrationBuilder.CreateTable(
                 name: "WorkspaceBannedItems",
                 columns: table => new
@@ -57,37 +41,39 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 name: "IX_WorkspaceBannedItems_WorkspaceId_Category_Ordinal",
                 table: "WorkspaceBannedItems",
                 columns: new[] { "WorkspaceId", "Category", "Ordinal" });
+
+            // FR-MCP-105 data migration: backfill the four banned-policy JSON string arrays into
+            // ordered 4NF child rows (discriminated by Category) before the source columns are dropped.
+            migrationBuilder.Sql(BackfillSql("BannedLicensesJson", "License"));
+            migrationBuilder.Sql(BackfillSql("BannedCountriesOfOriginJson", "Country"));
+            migrationBuilder.Sql(BackfillSql("BannedOrganizationsJson", "Organization"));
+            migrationBuilder.Sql(BackfillSql("BannedIndividualsJson", "Individual"));
+
+            migrationBuilder.DropColumn(name: "BannedCountriesOfOriginJson", table: "Workspaces");
+            migrationBuilder.DropColumn(name: "BannedIndividualsJson", table: "Workspaces");
+            migrationBuilder.DropColumn(name: "BannedLicensesJson", table: "Workspaces");
+            migrationBuilder.DropColumn(name: "BannedOrganizationsJson", table: "Workspaces");
         }
+
+        private static string BackfillSql(string jsonColumn, string category) => $"""
+INSERT INTO "WorkspaceBannedItems" ("WorkspaceId", "Category", "Ordinal", "Value")
+SELECT w."WorkspaceId", '{category}', j."key", j."value"
+FROM "Workspaces" w, json_each(w."{jsonColumn}") j
+WHERE w."{jsonColumn}" IS NOT NULL AND json_valid(w."{jsonColumn}");
+""";
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "WorkspaceBannedItems");
+            migrationBuilder.AddColumn<string>(name: "BannedCountriesOfOriginJson", table: "Workspaces", type: "TEXT", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "BannedIndividualsJson", table: "Workspaces", type: "TEXT", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "BannedLicensesJson", table: "Workspaces", type: "TEXT", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "BannedOrganizationsJson", table: "Workspaces", type: "TEXT", nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "BannedCountriesOfOriginJson",
-                table: "Workspaces",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "BannedIndividualsJson",
-                table: "Workspaces",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "BannedLicensesJson",
-                table: "Workspaces",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "BannedOrganizationsJson",
-                table: "Workspaces",
-                type: "TEXT",
-                nullable: true);
+            migrationBuilder.Sql(RestoreSql("BannedLicensesJson", "License"));
+            migrationBuilder.Sql(RestoreSql("BannedCountriesOfOriginJson", "Country"));
+            migrationBuilder.Sql(RestoreSql("BannedOrganizationsJson", "Organization"));
+            migrationBuilder.Sql(RestoreSql("BannedIndividualsJson", "Individual"));
 
             migrationBuilder.UpdateData(
                 table: "Workspaces",
@@ -95,6 +81,21 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 keyValue: "",
                 columns: new[] { "BannedCountriesOfOriginJson", "BannedIndividualsJson", "BannedLicensesJson", "BannedOrganizationsJson" },
                 values: new object[] { null, null, null, null });
+
+            migrationBuilder.DropTable(
+                name: "WorkspaceBannedItems");
         }
+
+        private static string RestoreSql(string jsonColumn, string category) => $"""
+UPDATE "Workspaces"
+SET "{jsonColumn}" = (
+    SELECT json_group_array(i."Value" ORDER BY i."Ordinal")
+    FROM "WorkspaceBannedItems" i
+    WHERE i."WorkspaceId" = "Workspaces"."WorkspaceId" AND i."Category" = '{category}' AND i."IsDeleted" = 0
+)
+WHERE EXISTS (
+    SELECT 1 FROM "WorkspaceBannedItems" i
+    WHERE i."WorkspaceId" = "Workspaces"."WorkspaceId" AND i."Category" = '{category}' AND i."IsDeleted" = 0);
+""";
     }
 }

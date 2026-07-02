@@ -11,10 +11,6 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "AcceptanceCriteriaJson",
-                table: "Requirements");
-
             migrationBuilder.CreateTable(
                 name: "RequirementAcceptanceCriteria",
                 columns: table => new
@@ -55,19 +51,56 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 name: "IX_RequirementAcceptanceCriteria_WorkspaceId_RequirementKind_RequirementId_Ordinal",
                 table: "RequirementAcceptanceCriteria",
                 columns: new[] { "WorkspaceId", "RequirementKind", "RequirementId", "Ordinal" });
+
+            // TR-MCP-REQAC-001 data migration: backfill AcceptanceCriteriaJson (array of
+            // {id, text, isSatisfied, evidence} objects) into ordered 4NF child rows before the
+            // source column is dropped.
+            migrationBuilder.Sql("""
+INSERT INTO "RequirementAcceptanceCriteria" ("WorkspaceId", "RequirementKind", "RequirementId", "Ordinal", "CriterionId", "Text", "IsSatisfied", "Evidence")
+SELECT r."WorkspaceId", r."Kind", r."Id", j."key",
+       COALESCE(json_extract(j."value", '$.id'), ''),
+       COALESCE(json_extract(j."value", '$.text'), ''),
+       COALESCE(json_extract(j."value", '$.isSatisfied'), 0),
+       json_extract(j."value", '$.evidence')
+FROM "Requirements" r, json_each(r."AcceptanceCriteriaJson") j
+WHERE r."AcceptanceCriteriaJson" IS NOT NULL AND json_valid(r."AcceptanceCriteriaJson");
+""");
+
+            migrationBuilder.DropColumn(
+                name: "AcceptanceCriteriaJson",
+                table: "Requirements");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "RequirementAcceptanceCriteria");
-
             migrationBuilder.AddColumn<string>(
                 name: "AcceptanceCriteriaJson",
                 table: "Requirements",
                 type: "TEXT",
                 nullable: true);
+
+            // Reconstruct the JSON object array (camelCase keys, ordered) from the child rows.
+            migrationBuilder.Sql("""
+UPDATE "Requirements"
+SET "AcceptanceCriteriaJson" = (
+    SELECT json_group_array(json_object(
+        'id', c."CriterionId",
+        'text', c."Text",
+        'isSatisfied', json(CASE WHEN c."IsSatisfied" THEN 'true' ELSE 'false' END),
+        'evidence', c."Evidence") ORDER BY c."Ordinal")
+    FROM "RequirementAcceptanceCriteria" c
+    WHERE c."WorkspaceId" = "Requirements"."WorkspaceId" AND c."RequirementKind" = "Requirements"."Kind"
+      AND c."RequirementId" = "Requirements"."Id" AND c."IsDeleted" = 0
+)
+WHERE EXISTS (
+    SELECT 1 FROM "RequirementAcceptanceCriteria" c
+    WHERE c."WorkspaceId" = "Requirements"."WorkspaceId" AND c."RequirementKind" = "Requirements"."Kind"
+      AND c."RequirementId" = "Requirements"."Id" AND c."IsDeleted" = 0);
+""");
+
+            migrationBuilder.DropTable(
+                name: "RequirementAcceptanceCriteria");
         }
     }
 }

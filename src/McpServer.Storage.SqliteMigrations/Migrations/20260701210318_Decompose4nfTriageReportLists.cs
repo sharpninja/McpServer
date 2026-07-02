@@ -11,22 +11,6 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "AffectedPathsJson",
-                table: "TriageReports");
-
-            migrationBuilder.DropColumn(
-                name: "AffectedSymbolsJson",
-                table: "TriageReports");
-
-            migrationBuilder.DropColumn(
-                name: "ReproductionHintsJson",
-                table: "TriageReports");
-
-            migrationBuilder.DropColumn(
-                name: "TagsJson",
-                table: "TriageReports");
-
             migrationBuilder.CreateTable(
                 name: "TriageReportListItems",
                 columns: table => new
@@ -69,37 +53,54 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 name: "IX_TriageReportListItems_WorkspaceId",
                 table: "TriageReportListItems",
                 column: "WorkspaceId");
+
+            // TR-MCP-TRIAGE-001 data migration: backfill the four JSON string arrays into ordered
+            // 4NF child rows (discriminated by ListType) before the source columns are dropped.
+            migrationBuilder.Sql(BackfillListSql("AffectedPathsJson", "AffectedPath"));
+            migrationBuilder.Sql(BackfillListSql("AffectedSymbolsJson", "AffectedSymbol"));
+            migrationBuilder.Sql(BackfillListSql("ReproductionHintsJson", "ReproductionHint"));
+            migrationBuilder.Sql(BackfillListSql("TagsJson", "Tag"));
+
+            migrationBuilder.DropColumn(name: "AffectedPathsJson", table: "TriageReports");
+            migrationBuilder.DropColumn(name: "AffectedSymbolsJson", table: "TriageReports");
+            migrationBuilder.DropColumn(name: "ReproductionHintsJson", table: "TriageReports");
+            migrationBuilder.DropColumn(name: "TagsJson", table: "TriageReports");
         }
+
+        private static string BackfillListSql(string jsonColumn, string listType) => $"""
+INSERT INTO "TriageReportListItems" ("WorkspaceId", "ReportId", "ListType", "Ordinal", "Value")
+SELECT r."WorkspaceId", r."ReportId", '{listType}', j."key", j."value"
+FROM "TriageReports" r, json_each(r."{jsonColumn}") j
+WHERE r."{jsonColumn}" IS NOT NULL AND json_valid(r."{jsonColumn}");
+""";
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(name: "AffectedPathsJson", table: "TriageReports", type: "TEXT", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "AffectedSymbolsJson", table: "TriageReports", type: "TEXT", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "ReproductionHintsJson", table: "TriageReports", type: "TEXT", nullable: true);
+            migrationBuilder.AddColumn<string>(name: "TagsJson", table: "TriageReports", type: "TEXT", nullable: true);
+
+            migrationBuilder.Sql(RestoreListSql("AffectedPathsJson", "AffectedPath"));
+            migrationBuilder.Sql(RestoreListSql("AffectedSymbolsJson", "AffectedSymbol"));
+            migrationBuilder.Sql(RestoreListSql("ReproductionHintsJson", "ReproductionHint"));
+            migrationBuilder.Sql(RestoreListSql("TagsJson", "Tag"));
+
             migrationBuilder.DropTable(
                 name: "TriageReportListItems");
-
-            migrationBuilder.AddColumn<string>(
-                name: "AffectedPathsJson",
-                table: "TriageReports",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "AffectedSymbolsJson",
-                table: "TriageReports",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ReproductionHintsJson",
-                table: "TriageReports",
-                type: "TEXT",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "TagsJson",
-                table: "TriageReports",
-                type: "TEXT",
-                nullable: true);
         }
+
+        private static string RestoreListSql(string jsonColumn, string listType) => $"""
+UPDATE "TriageReports"
+SET "{jsonColumn}" = (
+    SELECT json_group_array(i."Value" ORDER BY i."Ordinal")
+    FROM "TriageReportListItems" i
+    WHERE i."ReportId" = "TriageReports"."ReportId" AND i."ListType" = '{listType}' AND i."IsDeleted" = 0
+)
+WHERE EXISTS (
+    SELECT 1 FROM "TriageReportListItems" i
+    WHERE i."ReportId" = "TriageReports"."ReportId" AND i."ListType" = '{listType}' AND i."IsDeleted" = 0);
+""";
     }
 }

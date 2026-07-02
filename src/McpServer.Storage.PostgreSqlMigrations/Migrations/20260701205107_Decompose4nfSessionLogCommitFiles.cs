@@ -12,10 +12,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "FilesChangedJson",
-                table: "SessionLogCommits");
-
             migrationBuilder.CreateTable(
                 name: "SessionLogCommitFiles",
                 columns: table => new
@@ -57,19 +53,46 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                 name: "IX_SessionLogCommitFiles_WorkspaceId",
                 table: "SessionLogCommitFiles",
                 column: "WorkspaceId");
+
+            // TR-PLANNED-CORE-013 data migration: backfill each commit's FilesChangedJson (JSON
+            // string array) into ordered 4NF child rows before the source column is dropped.
+            migrationBuilder.Sql("""
+INSERT INTO "SessionLogCommitFiles" ("WorkspaceId", "SessionLogCommitId", "Ordinal", "Path")
+SELECT c."WorkspaceId", c."Id", (j.ordinality - 1)::int, j.value
+FROM "SessionLogCommits" c
+CROSS JOIN LATERAL jsonb_array_elements_text(c."FilesChangedJson"::jsonb) WITH ORDINALITY AS j(value, ordinality)
+WHERE c."FilesChangedJson" IS NOT NULL AND jsonb_typeof(c."FilesChangedJson"::jsonb) = 'array';
+""");
+
+            migrationBuilder.DropColumn(
+                name: "FilesChangedJson",
+                table: "SessionLogCommits");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "SessionLogCommitFiles");
-
             migrationBuilder.AddColumn<string>(
                 name: "FilesChangedJson",
                 table: "SessionLogCommits",
                 type: "text",
                 nullable: true);
+
+            // Reconstruct the JSON string array from the ordered child rows before dropping them.
+            migrationBuilder.Sql("""
+UPDATE "SessionLogCommits" c
+SET "FilesChangedJson" = j.json
+FROM (
+    SELECT "SessionLogCommitId", jsonb_agg("Path" ORDER BY "Ordinal")::text AS json
+    FROM "SessionLogCommitFiles"
+    WHERE "IsDeleted" = false
+    GROUP BY "SessionLogCommitId"
+) j
+WHERE j."SessionLogCommitId" = c."Id";
+""");
+
+            migrationBuilder.DropTable(
+                name: "SessionLogCommitFiles");
         }
     }
 }
