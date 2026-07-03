@@ -21,11 +21,15 @@ partial class Build
 
     const string OllamaTagsEndpoint = "http://localhost:11434/api/tags";
 
-    /// <summary>Model pulled for the QuadBrain Ollama tests; small but chat-capable.</summary>
+    /// <summary>
+    /// Model pulled for the QuadBrain Ollama tests. The default must be strong enough that the
+    /// ArbiterOfTruth slot reliably accepts simple prompts; 1b-class models reject them as
+    /// ambiguous and fail the content assertions.
+    /// </summary>
     static string RequiredOllamaModel =>
         Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL") is { Length: > 0 } configured
             ? configured.Trim()
-            : "llama3.2:1b";
+            : "gemma4:e4b";
 
     static AbsolutePath TestToolsDirectory =>
         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "McpServer" / "test-tools";
