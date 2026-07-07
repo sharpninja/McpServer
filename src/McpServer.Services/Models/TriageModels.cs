@@ -427,6 +427,19 @@ public interface ITriageResearchRunner
     Task<TriageResearchRunResult> RunAsync(TriageResearchRequest request, CancellationToken cancellationToken = default);
 }
 
+/// <summary>Result of soft-deleting a triage group and its reports.</summary>
+public sealed class TriageGroupDeleteResult
+{
+    /// <summary>The soft-deleted group id.</summary>
+    public required string GroupId { get; init; }
+
+    /// <summary>Number of reports soft-deleted with the group.</summary>
+    public int DeletedReportCount { get; init; }
+
+    /// <summary>UTC timestamp when the group was soft-deleted.</summary>
+    public required DateTimeOffset DeletedAtUtc { get; init; }
+}
+
 /// <summary>
 /// FR-MCP-TRIAGE-001..003: Service contract shared by REST, MCP tools, worker, and tests.
 /// </summary>
@@ -467,6 +480,9 @@ public interface ITriageService
 
     /// <summary>Retries a failed group by resetting it to collecting state.</summary>
     Task<TriageGroupDetail> RetryGroupAsync(string groupId, bool force = false, CancellationToken cancellationToken = default);
+
+    /// <summary>Soft-deletes a triage group and its reports so they no longer appear in queries.</summary>
+    Task<TriageGroupDeleteResult> DeleteGroupAsync(string groupId, string? reason = null, CancellationToken cancellationToken = default);
 
     /// <summary>Creates a new group from selected triage reports and groups.</summary>
     Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(

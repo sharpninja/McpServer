@@ -87,6 +87,17 @@ public sealed class TriageWorkflow : ITriageWorkflow
     }
 
     /// <inheritdoc />
+    public Task<TriageGroupDeleteResult> DeleteGroupAsync(
+        string groupId,
+        string? reason = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(groupId))
+            throw new ArgumentException("Group id is required.", nameof(groupId));
+        return _client.DeleteGroupAsync(groupId, reason, cancellationToken);
+    }
+
+    /// <inheritdoc />
     public Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(
         TriageGroupSelectionRequest request,
         CancellationToken cancellationToken = default)

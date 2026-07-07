@@ -29,6 +29,7 @@ public sealed class TriageWorkflowTests
         yield return [TriageCommandShapes.QueryCreatedTodosMethod, new Dictionary<string, object?> { ["workspacePath"] = "F:\\GitHub\\McpServer" }];
         yield return [TriageCommandShapes.FlushGroupMethod, new Dictionary<string, object?> { ["groupId"] = "triage-group-001" }];
         yield return [TriageCommandShapes.RetryGroupMethod, new Dictionary<string, object?> { ["groupId"] = "triage-group-001", ["force"] = true }];
+        yield return [TriageCommandShapes.DeleteGroupMethod, new Dictionary<string, object?> { ["groupId"] = "triage-group-001", ["reason"] = "fixed upstream" }];
         yield return [TriageCommandShapes.CreateGroupMethod, new Dictionary<string, object?>
         {
             ["reportIds"] = new[] { "triage-report-001" },
@@ -50,7 +51,7 @@ public sealed class TriageWorkflowTests
     [Fact]
     public void TriageRouteCases_CoverAllCommandShapes()
     {
-        Assert.Equal(13, TriageRouteCases().Count());
+        Assert.Equal(14, TriageRouteCases().Count());
     }
 
     /// <summary>
@@ -183,6 +184,8 @@ public sealed class TriageWorkflowTests
             .Returns(new TriageGroupDetail { GroupId = "triage-group-001", Status = "queued", ReportCount = 1 });
         workflow.RetryGroupAsync(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(new TriageGroupDetail { GroupId = "triage-group-001", Status = "collecting", ReportCount = 1 });
+        workflow.DeleteGroupAsync(Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageGroupDeleteResult { GroupId = "triage-group-001", DeletedReportCount = 1, DeletedAtUtc = DateTimeOffset.UnixEpoch });
         workflow.CreateGroupFromSelectionAsync(Arg.Any<TriageGroupSelectionRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TriageGroupEditResult
             {
@@ -237,6 +240,9 @@ public sealed class TriageWorkflowTests
                 break;
             case TriageCommandShapes.RetryGroupMethod:
                 await workflow.Received(1).RetryGroupAsync("triage-group-001", true, Arg.Any<CancellationToken>());
+                break;
+            case TriageCommandShapes.DeleteGroupMethod:
+                await workflow.Received(1).DeleteGroupAsync("triage-group-001", "fixed upstream", Arg.Any<CancellationToken>());
                 break;
             case TriageCommandShapes.CreateGroupMethod:
                 await workflow.Received(1).CreateGroupFromSelectionAsync(

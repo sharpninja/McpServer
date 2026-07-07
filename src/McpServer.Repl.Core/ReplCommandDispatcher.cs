@@ -893,6 +893,11 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         RequireString(args, requestArgs, "groupId"),
                         GetBool(requestArgs, "force") ?? false,
                         cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.DeleteGroupMethod =>
+                    await workflow.DeleteGroupAsync(
+                        RequireString(args, requestArgs, "groupId"),
+                        GetString(requestArgs, "reason"),
+                        cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.CreateGroupMethod =>
                     await workflow.CreateGroupFromSelectionAsync(BuildTriageGroupSelectionRequest(requestArgs), cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.ConsolidateIntoGroupMethod =>

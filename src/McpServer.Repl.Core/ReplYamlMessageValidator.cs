@@ -281,6 +281,11 @@ internal static class ReplYamlMessageValidator
             },
             [TriageCommandShapes.FlushGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
             [TriageCommandShapes.RetryGroupMethod] = static (args, errors) => RequireText(args, "groupId", errors),
+            [TriageCommandShapes.DeleteGroupMethod] = static (args, errors) =>
+            {
+                RequireText(args, "groupId", errors);
+                OptionalText(args, "reason", errors);
+            },
             [TriageCommandShapes.CreateGroupMethod] = static (args, errors) => ValidateTriageGroupSelection(args, errors),
             [TriageCommandShapes.ConsolidateIntoGroupMethod] = static (args, errors) =>
             {

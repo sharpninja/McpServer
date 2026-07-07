@@ -447,6 +447,45 @@ public sealed class TriageService : ITriageService
         return await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
+    public async Task<TriageGroupDeleteResult> DeleteGroupAsync(
+        string groupId,
+        string? reason = null,
+        CancellationToken cancellationToken = default)
+    {
+        var group = await GetGroupEntityAsync(groupId, cancellationToken).ConfigureAwait(false);
+        var reports = await _db.TriageReports
+            .Include(r => r.ListItems)
+            .Where(r => r.GroupId == group.GroupId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        var now = _timeProvider.GetUtcNow();
+        var trimmedReason = string.IsNullOrWhiteSpace(reason) ? null : reason.Trim();
+        if (trimmedReason is not null)
+        {
+            _db.Entry(group).Property("DeleteReason").CurrentValue = trimmedReason;
+            foreach (var report in reports)
+                _db.Entry(report).Property("DeleteReason").CurrentValue = trimmedReason;
+        }
+
+        // Remove is intercepted by McpDbContext into a soft-delete (IsDeleted + DeletedAtUtc).
+        // Decomposed report list-items carry a required ReportId, so remove them explicitly to
+        // avoid a set-null on those dependent rows.
+        foreach (var report in reports)
+            _db.RemoveRange(report.ListItems);
+        _db.TriageReports.RemoveRange(reports);
+        _db.TriageGroups.Remove(group);
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        return new TriageGroupDeleteResult
+        {
+            GroupId = group.GroupId,
+            DeletedReportCount = reports.Count,
+            DeletedAtUtc = now,
+        };
+    }
+
     private async Task ForceFailProcessingRunsAsync(
         TriageGroupEntity group,
         DateTimeOffset now,

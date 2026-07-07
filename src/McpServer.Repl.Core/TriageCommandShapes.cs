@@ -38,6 +38,9 @@ public static class TriageCommandShapes
     /// <summary>Retry a failed triage group. Method: workflow.triage.retryGroup.</summary>
     public const string RetryGroupMethod = "workflow.triage.retryGroup";
 
+    /// <summary>Soft-delete a triage group and its reports. Method: workflow.triage.deleteGroup.</summary>
+    public const string DeleteGroupMethod = "workflow.triage.deleteGroup";
+
     /// <summary>Create a triage group from selected reports or groups. Method: workflow.triage.createGroup.</summary>
     public const string CreateGroupMethod = "workflow.triage.createGroup";
 

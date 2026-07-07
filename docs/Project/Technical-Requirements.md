@@ -1804,6 +1804,13 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Valid research output creates one backlog TODO and failed output creates none.
 
+## TR-MCP-TRIAGE-005
+
+**Triage group soft-delete**: `TriageService.DeleteGroupAsync` removes the group, its reports, and decomposed report list-items via the EF soft-delete interception (IsDeleted + DeletedAtUtc), records an optional DeleteReason, and is routed through REST (`DELETE groups/{id}`), `TriageClient`, `ITriageWorkflow`, and the `workflow.triage.deleteGroup` REPL command with `groupId` required and `reason` optional.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Soft-deleted groups and reports are excluded from queries but retained in storage marked deleted.
+
 ## TR-MCP-TUN-001
 
 **Tunnel Strategy Pattern** — DI registration in `Program.cs` reads `Mcp:Tunnel:Provider`, normalizes to uppercase, and uses `ActivatorUtilities.CreateInstance<T>` to instantiate the matching provider (`NgrokTunnelProvider`, `CloudflareTunnelProvider`, or `FrpTunnelProvider`). The provider is registered as both a singleton and an `IHostedService`, conditionally on the provider name being non-empty.

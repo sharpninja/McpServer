@@ -82,6 +82,13 @@ public sealed class TriageClient : McpClientBase
         return PostAsync<TriageGroupDetail>($"mcpserver/triage/groups/{Encode(id)}/retry{query}", null, cancellationToken);
     }
 
+    /// <summary>Soft-deletes a triage group and its reports so they no longer appear in queries.</summary>
+    public Task<TriageGroupDeleteResult> DeleteGroupAsync(string id, string? reason = null, CancellationToken cancellationToken = default)
+    {
+        var query = string.IsNullOrWhiteSpace(reason) ? string.Empty : $"?reason={Uri.EscapeDataString(reason)}";
+        return DeleteAsync<TriageGroupDeleteResult>($"mcpserver/triage/groups/{Encode(id)}{query}", cancellationToken);
+    }
+
     /// <summary>Creates a new triage group from selected reports and groups.</summary>
     public Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(
         TriageGroupSelectionRequest request,

@@ -1570,6 +1570,16 @@ Scope: layer-1+
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
 
+## FR-MCP-TRIAGE-005 Triage group soft-delete
+
+Operators can soft-delete a triage group and its reports so resolved or obsolete triage items no longer appear in queries, while the underlying rows are retained for audit.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Deleting a group soft-deletes the group and all of its reports and decomposed report list-items so they are excluded from group, report, and dashboard queries.
+- [x] The deleted rows remain in storage marked deleted (IsDeleted, DeletedAtUtc, optional DeleteReason).
+- [x] Delete is exposed over REST (DELETE /mcpserver/triage/groups/{id}), the typed client, and the REPL workflow surface (workflow.triage.deleteGroup).
+- [x] Deleting a missing group returns not-found.
+
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 
 Requirements wiki export must optionally discover docs/wiki.yaml in the active workspace and use it as the authoritative wiki document tree, navigation tree, optional home template, and flattened document list for GitHub and Azure wiki exports while preserving current output when the file is absent.

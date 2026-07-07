@@ -122,6 +122,42 @@ public sealed class TriageServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGE-007: DeleteGroupAsync soft-deletes the group and its reports so they no
+    /// longer appear in queries, while the underlying rows remain in storage marked deleted.
+    /// </summary>
+    [Fact]
+    public async Task DeleteGroupAsync_ExistingGroup_SoftDeletesGroupAndReports()
+    {
+        var sut = CreateService(PrimaryWorkspace);
+        var submit = await sut.SubmitReportAsync(CreateReport("delete-me"), cancellationToken: TestContext.Current.CancellationToken);
+
+        var result = await sut.DeleteGroupAsync(submit.GroupId, reason: "fixed upstream", cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(submit.GroupId, result.GroupId);
+        Assert.Equal(1, result.DeletedReportCount);
+
+        var groups = await sut.QueryGroupsAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Empty(groups.Items);
+        await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+            sut.GetGroupAsync(submit.GroupId, TestContext.Current.CancellationToken));
+
+        using var db = CreateDb(PrimaryWorkspace);
+        Assert.Equal(0, await db.TriageGroups.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(1, await db.TriageGroups.IgnoreQueryFilters().CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(0, await db.TriageReports.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(1, await db.TriageReports.IgnoreQueryFilters().CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+    }
+
+    /// <summary>TEST-MCP-TRIAGE-007: deleting a missing triage group throws KeyNotFoundException.</summary>
+    [Fact]
+    public async Task DeleteGroupAsync_MissingGroup_ThrowsKeyNotFound()
+    {
+        var sut = CreateService(PrimaryWorkspace);
+        await Assert.ThrowsAsync<KeyNotFoundException>(() =>
+            sut.DeleteGroupAsync("triage-group-does-not-exist", reason: null, cancellationToken: TestContext.Current.CancellationToken));
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-006: the same grouping signature in two workspaces creates isolated
     /// groups and does not leak status across workspace filters.
     /// </summary>

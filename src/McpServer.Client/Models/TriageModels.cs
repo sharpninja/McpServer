@@ -228,6 +228,22 @@ public sealed record TriageGroupSelectionRequest
     public string? Summary { get; init; }
 }
 
+/// <summary>Result of soft-deleting a triage group and its reports.</summary>
+public sealed record TriageGroupDeleteResult
+{
+    /// <summary>The soft-deleted group id.</summary>
+    [JsonPropertyName("groupId")]
+    public required string GroupId { get; init; }
+
+    /// <summary>Number of reports soft-deleted with the group.</summary>
+    [JsonPropertyName("deletedReportCount")]
+    public int DeletedReportCount { get; init; }
+
+    /// <summary>UTC timestamp when the group was soft-deleted.</summary>
+    [JsonPropertyName("deletedAtUtc")]
+    public required DateTimeOffset DeletedAtUtc { get; init; }
+}
+
 /// <summary>FR-TRIAGE-003: Result returned after moving or merging triage reports.</summary>
 public sealed record TriageGroupEditResult
 {

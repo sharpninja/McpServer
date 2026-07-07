@@ -822,6 +822,7 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] Tests verify failed runs preserve output or errors and do not create TODOs.
 - TEST-MCP-TRIAGE-006: Multi-workspace isolation prevents cross-workspace grouping and status leakage.
+- TEST-MCP-TRIAGE-007: Soft-deleting a triage group removes the group and its reports from queries while retaining the rows marked deleted; deleting a missing group throws not-found; the REPL workflow routes workflow.triage.deleteGroup with required groupId and optional reason.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Tests verify query filters and grouping scope never cross workspace boundaries.

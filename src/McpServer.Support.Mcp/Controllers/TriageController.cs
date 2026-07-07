@@ -165,6 +165,24 @@ public sealed class TriageController : ControllerBase
         }
     }
 
+    /// <summary>FR-MCP-TRIAGE-005: Soft-delete a triage group and its reports.</summary>
+    [HttpDelete("groups/{id}")]
+    public async Task<ActionResult<TriageGroupDeleteResult>> DeleteGroupAsync(
+        string id,
+        [FromQuery] string? reason,
+        CancellationToken cancellationToken)
+    {
+        LogDatabaseConnectionString(nameof(DeleteGroupAsync));
+        try
+        {
+            return Ok(await _triageService.DeleteGroupAsync(id, reason, cancellationToken).ConfigureAwait(false));
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
     /// <summary>FR-TRIAGE-003: Create a new triage group from selected reports and groups.</summary>
     [HttpPost("groups/new")]
     public async Task<ActionResult<TriageGroupEditResult>> CreateGroupFromSelectionAsync(

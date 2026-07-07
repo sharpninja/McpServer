@@ -41,6 +41,9 @@ public interface ITriageWorkflow
     /// <summary>Retries a triage group.</summary>
     Task<TriageGroupDetail> RetryGroupAsync(string groupId, bool force = false, CancellationToken cancellationToken = default);
 
+    /// <summary>Soft-deletes a triage group and its reports.</summary>
+    Task<TriageGroupDeleteResult> DeleteGroupAsync(string groupId, string? reason = null, CancellationToken cancellationToken = default);
+
     /// <summary>Creates a triage group from selected reports or groups.</summary>
     Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(
         TriageGroupSelectionRequest request,
