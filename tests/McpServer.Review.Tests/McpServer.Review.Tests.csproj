@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Configurations>Debug;Release;Staging</Configurations>
@@ -12,14 +12,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>McpServer.Review.Tests</RootNamespace>
+    <UseMicrosoftTestingPlatformRunner>false</UseMicrosoftTestingPlatformRunner>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" VersionOverride="17.8.0" />
-    <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio" VersionOverride="2.8.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="SharpNinja.aiUnit" />
+    <!-- Exclude v2 xunit packages pulled transitively to prevent CS0433 duplicate with v3 (following pattern in PlanReview.Tests and other v3 suites) -->
+    <PackageReference Include="xunit.extensibility.core" PrivateAssets="all" ExcludeAssets="compile;build;buildTransitive" />
+    <PackageReference Include="xunit.extensibility.execution" PrivateAssets="all" ExcludeAssets="compile;build;buildTransitive" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using SharpNinja.AiUnit.Review;
-using Abstractions = Xunit.Abstractions;
+using Abstractions = Xunit;
 
 namespace McpServer.Review.Tests;
 
