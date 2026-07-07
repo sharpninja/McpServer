@@ -1308,6 +1308,9 @@ Scope: layer-1+
 - [x] Brain-slot definitions and invocations persist per workspace with role validation, one-enabled-slot enforcement, soft delete, credentialReference-only storage, and readiness projection. (evidence: BrainSlotRegistryServiceTests; BrainSlotDefinitionEntity; BrainSlotInvocationEntity)
 - [x] REST, client, STDIO, and plugin DTOs round-trip slot CRUD without returning raw credential material. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
 
+**Status:** Complete for the FR-MCP-129 through FR-MCP-135 Quad orchestration slice.
+**Covered by:** `BrainSlotRegistryServiceTests`, `BrainSlotDefinitionEntity`, `BrainSlotInvocationEntity`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `brain-slots.test.ts`
+
 ## TR-MCP-QUAD-002
 
 **External model provider adapter, credentials, endpoint allowlist, timeout, and redaction** — Resolve credentials from env:, config:, or file: references without persisting raw secrets; create OpenAI/OpenAI-compatible chat clients; enforce custom endpoint host allowlists, explicit loopback allowance, per-slot timeout and cancellation, and redacted audit/log output.
@@ -1315,6 +1318,9 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Credential references resolve from env:, config:, and file: sources without persisting or logging raw secrets. (evidence: BrainSlotCredentialResolverTests)
 - [x] OpenAI-compatible endpoints enforce host allowlists, explicit loopback allowance, timeout, cancellation, and redaction gates. (evidence: BrainSlotProviderTests and invocation tests)
+
+**Status:** Complete for the FR-MCP-129 through FR-MCP-135 Quad orchestration slice.
+**Covered by:** `BrainSlotCredentialResolverTests`, `BrainSlotProviderTests`
 
 ## TR-MCP-QUAD-003
 
@@ -1324,6 +1330,9 @@ Scope: layer-1+
 - [x] Invocation rejects until execution, slot, endpoint, credential, party/key, and required transaction gates pass. (evidence: BrainSlotInvocationTransactionTests)
 - [x] brain-slot.invoke diffgrams include slot, role, provider, model, prompt hash, output hash, admission target, and timestamps before output is returned. (evidence: BrainSlotInvocationTransactionTests)
 
+**Status:** Complete for the FR-MCP-129 through FR-MCP-135 Quad orchestration slice.
+**Covered by:** `BrainSlotInvocationTransactionTests`
+
 ## TR-MCP-QUAD-004
 
 **Quad branch containment and authorization** — Provide explicit runtime gates proving AoT reconciliation execution, weight update execution, and full automatic quad orchestration execute only through FR-MCP-134/FR-MCP-135 paths, while non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed.
@@ -1331,6 +1340,9 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Authorized AoT reconciliation, full orchestration, and weight updates route through FR-MCP-134/135 services only. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Non-Curiosity GraphRAG mutation and implicit fallback model behavior remain fail-closed. (evidence: BrainSlotContainmentTests)
+
+**Status:** Complete for the FR-MCP-129 through FR-MCP-135 Quad orchestration slice.
+**Covered by:** `QuadBrainOrchestrationServiceTests`, `BrainSlotContainmentTests`
 
 ## TR-MCP-QUAD-005
 
@@ -1340,6 +1352,9 @@ Scope: layer-1+
 - [x] Quad orchestration DTOs, services, REST endpoints, typed client methods, STDIO tools, and Node plugin tools are present for orchestrate, AoT reconcile, and weight update operations. (evidence: BrainSlotContracts; BrainSlotsController; BrainSlotClient; FwhMcpTools; brain-slots.ts)
 - [x] Public contract tests prove route/tool parity and mutation failsafe classification. (evidence: BrainSlotsControllerTests; BrainSlotClientTests; BrainSlotContractArtifactTests; brain-slots.test.ts)
 
+**Status:** Complete for the FR-MCP-129 through FR-MCP-135 Quad orchestration slice.
+**Covered by:** `BrainSlotContracts`, `BrainSlotsController`, `BrainSlotClient`, `FwhMcpTools`, `brain-slots.ts`, `BrainSlotsControllerTests`, `BrainSlotClientTests`, `BrainSlotContractArtifactTests`, `brain-slots.test.ts`
+
 ## TR-MCP-QUAD-006
 
 **AoT reconciliation decision loop** — Implement deterministic orchestration prompts, role-output aggregation, ArbiterOfTruth reconciliation execution, and final decision response shaping with transaction IDs and diffgram IDs preserved for every role.
@@ -1348,6 +1363,9 @@ Scope: layer-1+
 - [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
 - [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot)
 
+**Status:** Complete for the FR-MCP-129 through FR-MCP-135 Quad orchestration slice.
+**Covered by:** `QuadBrainOrchestrationServiceTests`
+
 ## TR-MCP-QUAD-007
 
 **Durable weight versioning and safety gates** — Persist role weights and versions on brain-slot definitions, enforce dual-control and safety-gate validation, audit before/after snapshots, and expose explicit weight update APIs.
@@ -1355,6 +1373,9 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Weight updates require AoT approval, admin approval, safety gates, reason text, valid enabled roles, valid weights, and expected versions before mutation. (evidence: QuadBrainOrchestrationServiceTests)
 - [x] Approved updates persist weight/version/timestamp changes, audit before/after snapshots, and provide rollback metadata through the transaction coordinator. (evidence: QuadBrainOrchestrationService; AddBrainSlotWeights migrations; QuadBrainOrchestrationServiceTests)
+
+**Status:** Complete for the FR-MCP-129 through FR-MCP-135 Quad orchestration slice.
+**Covered by:** `QuadBrainOrchestrationService`, `AddBrainSlotWeights` migrations, `QuadBrainOrchestrationServiceTests`
 
 ## TR-MCP-QUAD-SESSION-001
 
