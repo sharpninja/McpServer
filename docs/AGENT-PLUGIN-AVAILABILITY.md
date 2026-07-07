@@ -40,6 +40,21 @@ Agents must verify marker signature and health nonce first. During bootstrap, ac
   - Runtime: Grok-compatible plugin manifests, enabled plugin skills, a Streamable HTTP MCP declaration, and PowerShell helpers from the plugin root.
   - Discovery check: `grok inspect`, `grok mcp doctor mcpserver`, or the `/mcps` TUI view should show the plugin MCP server when the plugin is loaded. The discoverable MCP tools are the server's native names, including `sessionlog_*`, `todo_*`, and `requirements_*`. `mcp_*` names are hosted-agent aliases, and `workflow.sessionlog.*`, `workflow.todo.*`, and `workflow.requirements.*` are plugin shim/REPL method names, not literal Grok `search_tool` results. When those workflow names are needed, invoke the plugin helper (`lib\repl-invoke.ps1` or `lib/repl-invoke.sh`) through the Grok plugin instructions instead of treating their absence from tool discovery as proof that the plugin is unavailable.
 
+- Claude Cowork uses `mcpserver-claude-cowork-plugin`.
+  - Repository: https://github.com/sharpninja/mcpserver-claude-cowork-plugin
+  - Typical local root: `F:\GitHub\mcpserver-claude-cowork-plugin`
+  - Runtime: `.claude-plugin` manifest (mcpServers + skills + userConfig.workspace_path) with a local stdio connector and failsafe handoff. Never bypasses marker trust.
+
+- Cline v2 uses `mcpserver-cline-v2-plugin`.
+  - Repository: https://github.com/sharpninja/mcpserver-cline-v2-plugin
+  - Typical local root: `F:\GitHub\mcpserver-cline-v2-plugin`
+  - Runtime: Cline V2 AgentPlugin (createTool + hooks capability), built with `npm run build`. Shares the ReplBridge + marker-resolver + cache core.
+
+- OpenCode uses `mcpserver-opencode-plugin`.
+  - Repository: https://github.com/sharpninja/mcpserver-opencode-plugin
+  - Typical local root: `F:\GitHub\mcpserver-opencode-plugin`
+  - Runtime: OpenCode plugin SDK (createMcpServerPlugin), built with `npm run build`. Shares the ReplBridge + marker-resolver + cache core.
+
 ## Codex Quick Check
 
 ```powershell
