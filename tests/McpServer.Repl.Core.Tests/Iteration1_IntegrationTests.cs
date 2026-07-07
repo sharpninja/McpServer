@@ -169,7 +169,7 @@ public class Iteration1_IntegrationTests
         {
             callbackInvoked = true;
             capturedData = data;
-            await authHandler.UpdateAuthStateAsync(data);
+            await authHandler.UpdateAuthStateAsync(data, TestContext.Current.CancellationToken);
         };
 
         await markerReader.WatchAsync(workspacePath, onChange, cancellationToken: TestContext.Current.CancellationToken);

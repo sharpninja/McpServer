@@ -142,7 +142,7 @@ public class OrchestrationRulesTests
         {
             rotationDetected = true;
             rotatedData = data;
-            await authHandler.UpdateAuthStateAsync(data);
+            await authHandler.UpdateAuthStateAsync(data, TestContext.Current.CancellationToken);
         };
 
         await markerReader.WatchAsync(workspacePath, watchCallback, cancellationToken: TestContext.Current.CancellationToken);
