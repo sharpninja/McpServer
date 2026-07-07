@@ -14,7 +14,10 @@ partial class Build
                 .Where(p => p.Name.EndsWith(".Tests") || p.Name.EndsWith(".Validation"))
                 .Where(p => !p.Name.Contains("IntegrationTests"))
                 .Where(p => !p.Name.EndsWith(".Validation"))
-                .Where(p => !p.Name.Contains("Review.Tests"));
+                .Where(p => !p.Name.Contains("Review.Tests"))
+                // Build.Tests references the Nuke _build project and is excluded from the Compile glob,
+                // so it has no built assembly to run with --no-build here. Keep Test consistent with Compile.
+                .Where(p => !p.Name.EndsWith("Build.Tests"));
 
             foreach (var project in testProjects)
             {
