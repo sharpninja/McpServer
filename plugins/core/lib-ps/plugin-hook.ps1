@@ -8,7 +8,7 @@ param(
     [string]$HostName = $(if ($env:MCP_PLUGIN_HOST) { $env:MCP_PLUGIN_HOST } else { 'codex' }),
 
     [ValidateSet('flat', 'scoped')]
-    [string]$CacheMode = 'flat',
+    [string]$CacheMode = 'scoped',
 
     [string]$WorkspacePath
 )
@@ -21,6 +21,27 @@ $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'plugin-env.ps1')
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
+. (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
+Import-McpYamlSerializer
+
+function ConvertTo-PluginParamsYaml {
+    param([Parameter(Mandatory)]$Params)
+
+    return (ConvertTo-Yaml -Data $Params -Options WithIndentedSequences)
+}
+
+function New-PluginSessionId {
+    param([Parameter(Mandatory)][string]$AgentName)
+
+    if ($env:MCP_SESSION_ID) { return $env:MCP_SESSION_ID }
+
+    $timestamp = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
+    $suffix = if ($env:MCP_SESSION_SUFFIX) { $env:MCP_SESSION_SUFFIX } else { 'plugin-session' }
+    $suffix = ($suffix.ToLowerInvariant() -replace '[^a-z0-9]+', '-').Trim('-')
+    if (-not $suffix) { $suffix = 'plugin-session' }
+
+    return '{0}-{1}-{2}' -f $AgentName, $timestamp, $suffix
+}
 
 function Write-PluginJson {
     param([Parameter(Mandatory)]$Value)
@@ -60,6 +81,18 @@ function Get-PluginCacheDir {
         [void][System.IO.Directory]::CreateDirectory($cacheDir)
     }
     return $cacheDir
+}
+
+function Get-PluginStartPath {
+    param([string]$PreferredPath)
+
+    if ($PreferredPath) { return $PreferredPath }
+    if ($WorkspacePath) { return $WorkspacePath }
+    if ($env:MCP_WORKSPACE_PATH) { return $env:MCP_WORKSPACE_PATH }
+    if ($env:MCPSERVER_WORKSPACE_PATH) { return $env:MCPSERVER_WORKSPACE_PATH }
+    if ($env:MCP_WORKSPACE_START_DIR) { return $env:MCP_WORKSPACE_START_DIR }
+    if ($env:CLAUDE_PROJECT_DIR) { return $env:CLAUDE_PROJECT_DIR }
+    return (Get-Location).ProviderPath
 }
 
 function Get-YamlScalar {
@@ -140,9 +173,15 @@ function Invoke-PluginRepl {
 function Start-PluginSession {
     param([string]$StartPath)
 
-    $start = if ($StartPath) { $StartPath } elseif ($WorkspacePath) { $WorkspacePath } elseif ($env:MCP_WORKSPACE_START_DIR) { $env:MCP_WORKSPACE_START_DIR } else { (Get-Location).ProviderPath }
+    $start = Get-PluginStartPath -PreferredPath $StartPath
     $cacheDir = Get-PluginCacheDir
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
+    $markerSnapshot = $null
+    try {
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $start
+    } catch {
+        $markerSnapshot = $null
+    }
 
     $verified = $false
     try {
@@ -151,29 +190,90 @@ function Start-PluginSession {
         $verified = $false
     }
     if (-not $verified) {
-        [System.IO.File]::WriteAllText($sessionFile, "status: MCP_UNTRUSTED`nlastUpdated: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))`n")
+        $untrustedState = [ordered]@{
+            status = 'MCP_UNTRUSTED'
+            lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        if ($markerSnapshot) {
+            $untrustedState['markerFilePath'] = $markerSnapshot.markerFilePath
+            $untrustedState['markerLastWriteUtc'] = $markerSnapshot.markerLastWriteUtc
+        }
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
         Write-PluginJson ([ordered]@{})
         return
     }
 
-    $sessionId = if ($env:MCP_SESSION_ID) { $env:MCP_SESSION_ID } else { '{0}-{1}' -f $env:MCP_AGENT_NAME, (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ') }
-    $content = @(
-        'status: verified'
-        "sessionId: $sessionId"
-        "agent: $($env:MCP_AGENT_NAME)"
-        "started: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-        "lastUpdated: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-    ) -join "`n"
-    [System.IO.File]::WriteAllText($sessionFile, $content + "`n")
+    if (-not $markerSnapshot) {
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $start
+    }
+
+    $sessionId = New-PluginSessionId -AgentName $env:MCP_AGENT_NAME
+    $now = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    $sessionState = [ordered]@{
+        status = 'verified'
+        sessionId = $sessionId
+        agent = $env:MCP_AGENT_NAME
+        started = $now
+        lastUpdated = $now
+        markerFilePath = $markerSnapshot.markerFilePath
+        markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
+    }
+    Write-McpYamlObject -Path $sessionFile -Document $sessionState
     Write-PluginJson ([ordered]@{})
+}
+
+function Ensure-PluginMarkerFresh {
+    param([string]$StartPath)
+
+    $start = Get-PluginStartPath -PreferredPath $StartPath
+    $cacheDir = Get-PluginCacheDir
+    $sessionFile = Join-Path $cacheDir 'session-state.yaml'
+
+    try {
+        if (-not (Test-Path -LiteralPath $sessionFile)) {
+            Start-PluginSession -StartPath $start | Out-Null
+        }
+
+        if (-not (Test-Path -LiteralPath $sessionFile)) {
+            return $false
+        }
+
+        $state = Read-McpYamlObject -Path $sessionFile
+        if ([string]$state['status'] -ne 'verified') {
+            return $false
+        }
+
+        $snapshot = Get-MarkerFileSnapshot -StartDir $start
+        $cachedPath = [string]$state['markerFilePath']
+        $cachedWriteUtc = [string]$state['markerLastWriteUtc']
+
+        if ($cachedPath -ne $snapshot.markerFilePath -or $cachedWriteUtc -ne $snapshot.markerLastWriteUtc) {
+            Start-PluginSession -StartPath $start | Out-Null
+            $state = Read-McpYamlObject -Path $sessionFile
+        }
+
+        return ([string]$state['status'] -eq 'verified')
+    } catch {
+        $untrustedState = [ordered]@{
+            status = 'MCP_UNTRUSTED'
+            lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        try {
+            $snapshot = Get-MarkerFileSnapshot -StartDir $start
+            $untrustedState['markerFilePath'] = $snapshot.markerFilePath
+            $untrustedState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
+        } catch {
+        }
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
+        return $false
+    }
 }
 
 function Open-PluginTurn {
     $cacheDir = Get-PluginCacheDir
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
-    if (-not (Test-Path -LiteralPath $sessionFile)) {
-        Start-PluginSession -StartPath (Get-Location).ProviderPath | Out-Null
-    }
+    $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    Ensure-PluginMarkerFresh -StartPath $startPath | Out-Null
     if (Test-Path -LiteralPath $sessionFile) {
         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
         if (-not $timestampText) { $timestampText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated' }
@@ -192,32 +292,48 @@ function Open-PluginTurn {
 
     $payload = Read-HookInput
     $prompt = Get-HookPayloadValue -Payload $payload -Name 'prompt'
-    if (-not $prompt) { $prompt = 'User prompt' }
+    if (-not $prompt) { $prompt = 'Continuation or hook-triggered turn.' }
     $title = (($prompt -split "`r?`n")[0]).Trim()
-    if (-not $title) { $title = 'User prompt' }
+    if (-not $title) { $title = 'Continuation turn' }
     if ($title.Length -gt 60) { $title = $title.Substring(0, 60) }
+    $markerSnapshot = $null
+    try {
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $startPath
+    } catch {
+    }
+    $sessionState = Read-McpYamlObject -Path $sessionFile -Create
+    $sessionId = if ($sessionState.Contains('sessionId')) { [string]$sessionState['sessionId'] } else { '' }
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
-    $promptLines = (($prompt -replace "`r`n", "`n" -replace "`r", "`n") -split "`n" | ForEach-Object { "    $_" }) -join "`n"
-    $paramsYaml = "requestId: $turnRequestId`nqueryTitle: $title`nqueryText: |`n$promptLines"
+    $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+        requestId = $turnRequestId
+        queryTitle = $title
+        queryText = $prompt
+    })
     Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml | Out-Null
 
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
-    $turnContent = @(
-        "turnRequestId: $turnRequestId"
-        "queryTitle: $title"
-        "openedAt: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))"
-        'status: in_progress'
-        'codeEdits: 0'
-        'lastBuildStatus: unknown'
-        'auditActions: 0'
-        'auditFiles: 0'
-        'auditDialog: 0'
-        'auditDecisions: 0'
-        'queryText: |'
-        $promptLines
-    ) -join "`n"
-    [System.IO.File]::WriteAllText($turnFile, $turnContent + "`n")
+    $turnState = [ordered]@{
+        turnRequestId = $turnRequestId
+        queryTitle = $title
+        openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        status = 'in_progress'
+        codeEdits = 0
+        lastBuildStatus = 'unknown'
+        auditActions = 0
+        auditFiles = 0
+        auditDialog = 0
+        auditDecisions = 0
+        queryText = $prompt
+    }
+    if ($sessionId) {
+        $turnState['sessionId'] = $sessionId
+    }
+    if ($markerSnapshot) {
+        $turnState['markerFilePath'] = $markerSnapshot.markerFilePath
+        $turnState['markerLastWriteUtc'] = $markerSnapshot.markerLastWriteUtc
+    }
+    Write-McpYamlObject -Path $turnFile -Document $turnState
 
     Write-PluginJson ([ordered]@{
         hookSpecificOutput = [ordered]@{
@@ -270,7 +386,9 @@ function Close-PluginTurnIfNeeded {
         }
 
         $response = 'Auto-closed by PowerShell stop gate.'
-        $paramsYaml = "response: |`n    $response"
+        $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+            response = $response
+        })
         Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml | Out-Null
         Set-YamlScalar -Path $turnFile -Key 'status' -Value 'completed'
     }
@@ -417,6 +535,15 @@ function Get-TodoIdFromReplOutput {
     return $null
 }
 
+function New-PlanTodoId {
+    param([Parameter(Mandatory)][string]$Title)
+
+    $slug = ($Title.ToUpperInvariant() -replace '[^A-Z0-9]', '')
+    if (-not $slug) { $slug = 'PLAN' }
+    if ($slug.Length -gt 40) { $slug = $slug.Substring(0, 40) }
+    return "PLAN-$slug-001"
+}
+
 function Invoke-PlanApprovedHook {
     $planFile = Get-PlanFilePathFromInput
     if (-not $planFile -or -not (Test-Path -LiteralPath $planFile -PathType Leaf)) {
@@ -425,8 +552,18 @@ function Invoke-PlanApprovedHook {
     }
 
     $title = Get-PlanTitle -PlanFile $planFile
-    $paramsYaml = "title: $title`ndescription: |`n  Plan approved from $planFile"
-    $output = @(Invoke-PluginRepl -Method 'workflow.todo.create' -ParamsYaml $paramsYaml)
+    # client.Todo.CreateAsync(TodoCreateRequest request): the server requires a
+    # non-empty params.id, so derive a canonical PLAN-<slug>-001 id from the title.
+    $paramsYaml = ConvertTo-PluginParamsYaml -Params ([ordered]@{
+        request = [ordered]@{
+            id          = New-PlanTodoId -Title $title
+            title       = $title
+            section     = 'Planning'
+            priority    = 'medium'
+            description = @("Plan approved from $planFile")
+        }
+    })
+    $output = @(Invoke-PluginRepl -Method 'client.Todo.CreateAsync' -ParamsYaml $paramsYaml)
     $todoId = Get-TodoIdFromReplOutput -Output $output
     if ($todoId) {
         $mapPath = Get-PlanTodoMapPath
@@ -473,8 +610,12 @@ function Invoke-PlanModifiedHook {
         return
     }
 
-    $paramsYaml = "id: $todoId`ndoneSummary: |`n  Plan modified: $planFile"
-    Invoke-PluginRepl -Method 'workflow.todo.update' -ParamsYaml $paramsYaml | Out-Null
+    # client.Todo.UpdateAsync(string id, TodoUpdateRequest request)
+    $paramsYaml = ConvertTo-PluginParamsYaml -Params ([ordered]@{
+        id      = $todoId
+        request = [ordered]@{ doneSummary = "Plan modified: $planFile" }
+    })
+    Invoke-PluginRepl -Method 'client.Todo.UpdateAsync' -ParamsYaml $paramsYaml | Out-Null
     Write-PostToolUseOutput -Status 'updated'
 }
 

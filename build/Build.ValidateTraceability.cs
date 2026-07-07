@@ -4,7 +4,7 @@ using Serilog;
 partial class Build
 {
     [Parameter("Fail on missing TR/TEST coverage (default false)")]
-    readonly bool StrictTrAndTestCoverage;
+    readonly bool StrictTrAndTestCoverage = false;
 
     /// <summary>Validate requirements traceability across FR/TR/TEST documents.</summary>
     public Target ValidateTraceability => _ => _

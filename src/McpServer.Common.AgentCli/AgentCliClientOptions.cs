@@ -1,0 +1,65 @@
+namespace McpServer.Common.AgentCli;
+
+/// <summary>TR-CLI-001: Options for invoking a configured CLI agent.</summary>
+public sealed class AgentCliClientOptions
+{
+    /// <summary>
+    /// Path to the CLI agent binary. Defaults to "cline" (must be on PATH).
+    /// </summary>
+    public string AgentPath { get; set; } = "cline";
+
+    /// <summary>
+    /// Model to use for agents that accept a model argument.
+    /// Defaults to "gpt-5.3-codex".
+    /// </summary>
+    public string Model { get; set; } = "gpt-5.3-codex";
+
+    /// <summary>
+    /// When <c>true</c>, requests silent output from compatible CLI agents so only the
+    /// agent response is emitted (no statistics or progress lines).
+    /// Defaults to <c>true</c>.
+    /// </summary>
+    public bool Silent { get; set; } = true;
+
+    /// <summary>
+    /// Timeout for the CLI process. Defaults to <see cref="System.Threading.Timeout.InfiniteTimeSpan"/> (no timeout).
+    /// CLI agent requests can take hours and results arrive all at once, so a wallclock
+    /// timeout is inappropriate. Callers may still cancel via <see cref="CancellationToken"/>.
+    /// </summary>
+    public TimeSpan Timeout { get; set; } = System.Threading.Timeout.InfiniteTimeSpan;
+
+    /// <summary>
+    /// Working directory for the spawned process.
+    /// Defaults to <see cref="Environment.CurrentDirectory"/>.
+    /// </summary>
+    public string? WorkingDirectory { get; set; }
+
+    /// <summary>
+    /// Additional environment variables to pass to the spawned process.
+    /// </summary>
+    public Dictionary<string, string> EnvironmentVariables { get; } = [];
+
+    /// <summary>
+    /// Windows user identity whose profile environment is loaded before spawning
+    /// the CLI process. When running as a Windows service (<c>LocalSystem</c>), this
+    /// ensures the spawned process inherits the user's <c>PATH</c> (so the CLI binary
+    /// is discoverable) and profile directories (<c>USERPROFILE</c>, <c>APPDATA</c>,
+    /// <c>LOCALAPPDATA</c>) so the CLI can access cached authentication tokens.
+    /// Null or empty = inherit the current process environment.
+    /// </summary>
+    public string? RunAs { get; set; }
+
+    /// <summary>
+    /// GitHub personal access token or OAuth token passed as <c>GH_TOKEN</c> to the
+    /// spawned CLI process. Required when running as a service account that
+    /// cannot access the user's Windows Credential Manager (keyring).
+    /// Null or empty = rely on the CLI's default auth discovery.
+    /// </summary>
+    public string? GitHubToken { get; set; }
+
+    /// <summary>
+    /// Optional callback invoked when a direct agent emits stdout or stderr text.
+    /// The first argument is the stream name, and the second is the emitted text.
+    /// </summary>
+    public Func<string, string, Task>? AgentOutputReceivedAsync { get; set; }
+}

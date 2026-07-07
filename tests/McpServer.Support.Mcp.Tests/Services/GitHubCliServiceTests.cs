@@ -29,7 +29,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, json, null));
 
-        var result = await _sut.ListIssuesAsync("open", 10).ConfigureAwait(true);
+        var result = await _sut.ListIssuesAsync("open", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Single(result.Issues);
@@ -43,7 +43,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not authenticated"));
 
-        var result = await _sut.ListIssuesAsync(null, 10).ConfigureAwait(true);
+        var result = await _sut.ListIssuesAsync(null, 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("not authenticated", result.Error);
@@ -57,7 +57,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, json, null));
 
-        var result = await _sut.ListPullsAsync("open", 10).ConfigureAwait(true);
+        var result = await _sut.ListPullsAsync("open", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Single(result.Pulls);
@@ -70,7 +70,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "https://github.com/test/issues/5\n", null));
 
-        var result = await _sut.CreateIssueAsync("New issue", "Body text").ConfigureAwait(true);
+        var result = await _sut.CreateIssueAsync("New issue", "Body text", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal(5, result.Number);
@@ -83,7 +83,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "auth required"));
 
-        var result = await _sut.CreateIssueAsync("New issue", null).ConfigureAwait(true);
+        var result = await _sut.CreateIssueAsync("New issue", null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("auth required", result.Error);
@@ -95,7 +95,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.CommentOnIssueAsync("1", "test comment").ConfigureAwait(true);
+        var result = await _sut.CommentOnIssueAsync("1", "test comment", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
     }
@@ -110,7 +110,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.CommentOnIssueAsync("--repo", "test comment").ConfigureAwait(true);
+        var result = await _sut.CommentOnIssueAsync("--repo", "test comment", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -124,7 +124,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.CommentOnPullAsync("42", "PR comment").ConfigureAwait(true);
+        var result = await _sut.CommentOnPullAsync("42", "PR comment", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -155,7 +155,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, json, null));
 
-        var result = await _sut.GetIssueAsync(42).ConfigureAwait(true);
+        var result = await _sut.GetIssueAsync(42, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Issue);
@@ -179,7 +179,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not found"));
 
-        var result = await _sut.GetIssueAsync(999).ConfigureAwait(true);
+        var result = await _sut.GetIssueAsync(999, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("not found", result.ErrorMessage);
@@ -197,7 +197,7 @@ public sealed class GitHubCliServiceTests
             AddLabels = new[] { "bug" },
             RemoveLabels = new[] { "wontfix" }
         };
-        var result = await _sut.UpdateIssueAsync(42, request).ConfigureAwait(true);
+        var result = await _sut.UpdateIssueAsync(42, request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -214,7 +214,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.CloseIssueAsync(42, "not_planned").ConfigureAwait(true);
+        var result = await _sut.CloseIssueAsync(42, "not_planned", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -230,11 +230,11 @@ public sealed class GitHubCliServiceTests
     [Fact]
     public async Task CloseIssueAsync_WithInvalidReason_DoesNotInvokeGh()
     {
-        var result = await _sut.CloseIssueAsync(42, "completed --repo other/repo").ConfigureAwait(true);
+        var result = await _sut.CloseIssueAsync(42, "completed --repo other/repo", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("Invalid close reason. Allowed values: completed, not_planned.", result.ErrorMessage);
-        await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, default).ConfigureAwait(true);
+        await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     [Fact]
@@ -243,7 +243,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.CloseIssueAsync(42).ConfigureAwait(true);
+        var result = await _sut.CloseIssueAsync(42, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -258,7 +258,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.ReopenIssueAsync(42).ConfigureAwait(true);
+        var result = await _sut.ReopenIssueAsync(42, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -273,11 +273,11 @@ public sealed class GitHubCliServiceTests
     [Fact]
     public async Task ListIssuesAsync_WithInvalidState_DoesNotInvokeGh()
     {
-        var result = await _sut.ListIssuesAsync("open --repo other/repo", 10).ConfigureAwait(true);
+        var result = await _sut.ListIssuesAsync("open --repo other/repo", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("Invalid state. Allowed values: open, closed, all.", result.Error);
-        await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, default).ConfigureAwait(true);
+        await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     [Fact]
@@ -287,7 +287,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, json, null));
 
-        var result = await _sut.ListIssueLabelsAsync().ConfigureAwait(true);
+        var result = await _sut.ListIssueLabelsAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Labels);
@@ -302,7 +302,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not authenticated"));
 
-        var result = await _sut.ListIssueLabelsAsync().ConfigureAwait(true);
+        var result = await _sut.ListIssueLabelsAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("not authenticated", result.ErrorMessage);
@@ -315,7 +315,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, json, null));
 
-        var result = await _sut.ListWorkflowRunsAsync(new GitHubWorkflowRunQuery { Limit = 10 }).ConfigureAwait(true);
+        var result = await _sut.ListWorkflowRunsAsync(new GitHubWorkflowRunQuery { Limit = 10 }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Single(result.Runs);
@@ -358,7 +358,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, json, null));
 
-        var result = await _sut.GetWorkflowRunAsync(202).ConfigureAwait(true);
+        var result = await _sut.GetWorkflowRunAsync(202, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Run);
@@ -374,7 +374,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.RerunWorkflowRunAsync(303).ConfigureAwait(true);
+        var result = await _sut.RerunWorkflowRunAsync(303, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -388,7 +388,7 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "", null));
 
-        var result = await _sut.CancelWorkflowRunAsync(404).ConfigureAwait(true);
+        var result = await _sut.CancelWorkflowRunAsync(404, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
@@ -422,7 +422,7 @@ public sealed class GitHubCliServiceTests
 
         var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\workspace");
         var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options, workspaceAccessor);
-        var result = await sut.ListIssuesAsync("open", 10).ConfigureAwait(true);
+        var result = await sut.ListIssuesAsync("open", 10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync(
@@ -442,7 +442,7 @@ public sealed class GitHubCliServiceTests
         var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
         var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
 
-        var result = await sut.ListIssuesAsync("open", 5).ConfigureAwait(true);
+        var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync(
@@ -470,7 +470,7 @@ public sealed class GitHubCliServiceTests
             var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: workspacePath);
             var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
 
-            var result = await sut.ListIssuesAsync("open", 5).ConfigureAwait(true);
+            var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.True(result.Success);
             await _processRunner.Received(1).RunAsync(
@@ -501,7 +501,7 @@ public sealed class GitHubCliServiceTests
         var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
         var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, githubOptions: options, workspaceAccessor: workspaceAccessor);
 
-        var result = await sut.CreateIssueAsync("New issue", "Body").ConfigureAwait(true);
+        var result = await sut.CreateIssueAsync("New issue", "Body", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal(123, result.Number);

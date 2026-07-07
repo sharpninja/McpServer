@@ -40,6 +40,6 @@
     <PackageReference Include="HnswIndex" />
     <PackageReference Include="Serilog.AspNetCore" />
     <ProjectReference Include="..\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />
+    <ProjectReference Include="..\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj" />
   </ItemGroup>
 </Project>

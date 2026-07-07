@@ -7,6 +7,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// Tests for auth key acceptance and workspace selection via X-Workspace-Path header.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class AuthKeyAndWorkspaceTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;
@@ -31,7 +32,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync("/health");
+            var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
             
             Assert.True(
                 response.StatusCode == HttpStatusCode.OK || 
@@ -54,7 +55,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync("/health");
+            var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
             
             Assert.True(
                 response.StatusCode == HttpStatusCode.OK || 
@@ -70,38 +71,38 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     [Fact]
     public async Task WorkspaceSelection_ViaYamlRequest_CompletesSuccessfully()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var selectRequest = YamlEnvelopeBuilder.CreateWorkspaceSelectRequest(
             "workspace-select-001",
             "/test/workspace/path");
 
         var yamlContent = _yamlSerializer.Serialize(selectRequest);
-        await _replProcess.WriteLineAsync(yamlContent);
+        await _replProcess.WriteLineAsync(yamlContent, cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse, "Should receive workspace selection response");
     }
 
     [Fact]
     public async Task WorkspaceSelection_MultipleSwitches_HandlesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var workspace1 = YamlEnvelopeBuilder.CreateWorkspaceSelectRequest(
             "ws-001",
             "/test/workspace1");
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace1));
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(3));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace1), cancellationToken: TestContext.Current.CancellationToken);
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(3), cancellationToken: TestContext.Current.CancellationToken);
 
         var workspace2 = YamlEnvelopeBuilder.CreateWorkspaceSelectRequest(
             "ws-002",
             "/test/workspace2");
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace2));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace2), cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponses = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(5));
+        var foundResponses = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(_replProcess.IsRunning, "Process should handle multiple workspace switches");
     }
 
@@ -118,7 +119,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync("/health");
+            var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
             
             Assert.True(
                 response.StatusCode == HttpStatusCode.OK || 
@@ -142,7 +143,7 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync("/mcpserver/workspace/list");
+            var response = await httpClient.GetAsync("/mcpserver/workspace/list", cancellationToken: TestContext.Current.CancellationToken);
             
             Assert.True(
                 response.StatusCode == HttpStatusCode.Unauthorized || 
@@ -157,15 +158,15 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
     [Fact]
     public async Task WorkspaceSelection_InvalidPath_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidRequest = YamlEnvelopeBuilder.CreateWorkspaceSelectRequest(
             "ws-invalid-001",
             "");
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(invalidRequest));
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(invalidRequest), cancellationToken: TestContext.Current.CancellationToken);
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         
         Assert.True(_replProcess.IsRunning, "Process should handle invalid workspace selection gracefully");
     }

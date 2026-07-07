@@ -12,13 +12,13 @@ public class RequestResponseCorrelationTests
         protocol.IsConnected.Returns(true);
 
         var resultData = new { status = "success" };
-        protocol.SendRequestAsync("workspace.select", null, default)
+        protocol.SendRequestAsync("workspace.select", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(resultData);
 
-        var result = await protocol.SendRequestAsync("workspace.select");
+        var result = await protocol.SendRequestAsync("workspace.select", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
-        await protocol.Received(1).SendRequestAsync("workspace.select", null, default);
+        await protocol.Received(1).SendRequestAsync("workspace.select", null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -32,13 +32,13 @@ public class RequestResponseCorrelationTests
             { "path", "/home/user/project" }
         };
 
-        protocol.SendRequestAsync("workspace.select", parameters, default)
+        protocol.SendRequestAsync("workspace.select", parameters, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(new { success = true });
 
-        var result = await protocol.SendRequestAsync("workspace.select", parameters);
+        var result = await protocol.SendRequestAsync("workspace.select", parameters, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
-        await protocol.Received(1).SendRequestAsync("workspace.select", parameters, default);
+        await protocol.Received(1).SendRequestAsync("workspace.select", parameters, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -47,11 +47,11 @@ public class RequestResponseCorrelationTests
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(false);
 
-        protocol.SendRequestAsync("workspace.select", null, default)
+        protocol.SendRequestAsync("workspace.select", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<object?>(x => throw new InvalidOperationException("Not connected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await protocol.SendRequestAsync("workspace.select")
+            async () => await protocol.SendRequestAsync("workspace.select", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -68,11 +68,11 @@ public class RequestResponseCorrelationTests
 
         var exception = new ReplProtocolException(errorPayload);
 
-        protocol.SendRequestAsync("workspace.select", null, default)
+        protocol.SendRequestAsync("workspace.select", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<object?>(x => throw exception);
 
         var ex = await Assert.ThrowsAsync<ReplProtocolException>(
-            async () => await protocol.SendRequestAsync("workspace.select")
+            async () => await protocol.SendRequestAsync("workspace.select", cancellationToken: TestContext.Current.CancellationToken)
         );
 
         Assert.Equal("invalid_workspace", ex.Code);
@@ -87,10 +87,10 @@ public class RequestResponseCorrelationTests
 
         var typedResult = new WorkspaceInfo { Path = "/home/user/project", Name = "MyProject" };
 
-        protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", null, default)
+        protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(typedResult);
 
-        var result = await protocol.SendRequestAsync<WorkspaceInfo>("workspace.info");
+        var result = await protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("/home/user/project", result.Path);
@@ -103,11 +103,11 @@ public class RequestResponseCorrelationTests
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
 
-        protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", null, default)
+        protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<WorkspaceInfo?>(x => throw new InvalidOperationException("Type conversion failed"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await protocol.SendRequestAsync<WorkspaceInfo>("workspace.info")
+            async () => await protocol.SendRequestAsync<WorkspaceInfo>("workspace.info", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -117,11 +117,11 @@ public class RequestResponseCorrelationTests
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
 
-        protocol.SendRequestAsync("method1", null, default).Returns(new { result = 1 });
-        protocol.SendRequestAsync("method2", null, default).Returns(new { result = 2 });
+        protocol.SendRequestAsync("method1", null, cancellationToken: TestContext.Current.CancellationToken).Returns(new { result = 1 });
+        protocol.SendRequestAsync("method2", null, cancellationToken: TestContext.Current.CancellationToken).Returns(new { result = 2 });
 
-        var result1 = await protocol.SendRequestAsync("method1");
-        var result2 = await protocol.SendRequestAsync("method2");
+        var result1 = await protocol.SendRequestAsync("method1", cancellationToken: TestContext.Current.CancellationToken);
+        var result2 = await protocol.SendRequestAsync("method2", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result1);
         Assert.NotNull(result2);
@@ -154,7 +154,7 @@ public class RequestResponseCorrelationTests
 
         protocol.RegisterEventHandler("workspace.changed", handler);
 
-        await Task.Delay(10);
+        await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(handlerInvoked);
     }

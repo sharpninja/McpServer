@@ -47,6 +47,20 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
+    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsOneShotCli()
+    {
+        var validator = new VoiceConversationOptionsValidator();
+        var options = new VoiceConversationOptions
+        {
+            DefaultExecutionStrategy = AgentExecutionStrategyNames.OneShotCli,
+        };
+
+        var result = validator.Validate(null, options);
+
+        Assert.True(result.Succeeded);
+    }
+
+    [Fact]
     public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyUsesLegacyHostedAgentFrameworkAlias()
     {
         var validator = new VoiceConversationOptionsValidator();
@@ -76,4 +90,3 @@ public sealed class VoiceConversationOptionsValidatorTests
         Assert.Contains("ModelApiKeyEnvironmentVariableName", result.FailureMessage, StringComparison.Ordinal);
     }
 }
-

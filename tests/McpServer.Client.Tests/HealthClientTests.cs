@@ -19,7 +19,7 @@ public sealed class HealthClientTests
         using var http = new HttpClient(handler);
         var client = new HealthClient(http, DefaultOptions);
 
-        var result = await client.GetAsync();
+        var result = await client.GetAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/health", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -34,7 +34,7 @@ public sealed class HealthClientTests
         using var aliveHttp = new HttpClient(aliveHandler);
         var aliveClient = new HealthClient(aliveHttp, DefaultOptions);
 
-        var alive = await aliveClient.GetAliveAsync();
+        var alive = await aliveClient.GetAliveAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("Healthy", alive.Status);
         Assert.Contains("/alive", aliveHandler.LastRequest!.RequestUri!.AbsolutePath);
@@ -43,7 +43,7 @@ public sealed class HealthClientTests
         using var readyHttp = new HttpClient(readyHandler);
         var readyClient = new HealthClient(readyHttp, DefaultOptions);
 
-        var ready = await readyClient.GetReadyAsync();
+        var ready = await readyClient.GetReadyAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("Healthy", ready.Status);
         Assert.Contains("/ready", readyHandler.LastRequest!.RequestUri!.AbsolutePath);
@@ -59,7 +59,7 @@ public sealed class HealthClientTests
         using var http = new HttpClient(handler);
         var client = new HealthClient(http, DefaultOptions);
 
-        var result = await client.GetServerStartupAsync();
+        var result = await client.GetServerStartupAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/server-startup-utc", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -76,7 +76,7 @@ public sealed class HealthClientTests
         using var http = new HttpClient(handler);
         var client = new HealthClient(http, DefaultOptions);
 
-        var result = await client.GetMarkerFileTimestampAsync(@"F:\GitHub\McpServer");
+        var result = await client.GetMarkerFileTimestampAsync(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/marker-file-timestamp", handler.LastRequest.RequestUri!.AbsolutePath);

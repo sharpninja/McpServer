@@ -23,6 +23,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// Uses <see cref="FileSystemWatcher"/> latches to synchronize on disk writes
 /// rather than polling, ensuring deterministic test flow.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 {
     private readonly string _tempRoot;
@@ -123,7 +124,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
         await StartWorkspaceAndWaitForMarkerAsync(key).ConfigureAwait(true);
-        var initialContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
+        var initialContent = await File.ReadAllTextAsync(_markerPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("prompt:", initialContent);
 
         // 2. Update the global prompt — latch on both appsettings.json write AND marker rewrite.
@@ -133,12 +134,12 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var customPrompt = "CUSTOM GLOBAL PROMPT for testing marker regeneration {baseUrl}";
         var updateResponse = await _client.PutAsJsonAsync(
             new Uri("/mcpserver/workspace/prompt", UriKind.Relative),
-            new { template = customPrompt }).ConfigureAwait(true);
-        var updateBody = await updateResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+            new { template = customPrompt }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var updateBody = await updateResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(updateResponse.StatusCode == HttpStatusCode.OK,
             $"Global prompt update failed ({updateResponse.StatusCode}): {updateBody}");
 
-        var promptResult = await updateResponse.Content.ReadFromJsonAsync<GlobalPromptResult>().ConfigureAwait(true);
+        var promptResult = await updateResponse.Content.ReadFromJsonAsync<GlobalPromptResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(promptResult);
         Assert.False(promptResult.IsDefault);
         Assert.Equal(customPrompt, promptResult.Template);
@@ -147,7 +148,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         await settingsChanged.ConfigureAwait(true);
         await markerChanged.ConfigureAwait(true);
 
-        var updatedContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
+        var updatedContent = await File.ReadAllTextAsync(_markerPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("CUSTOM GLOBAL PROMPT for testing marker regeneration", updatedContent);
         Assert.Contains(IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort), updatedContent);
     }
@@ -164,15 +165,43 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var workspacePrompt = "WORKSPACE SPECIFIC PROMPT for {{baseUrl}}";
         var updateResponse = await _client.PutAsJsonAsync(
             new Uri($"/mcpserver/workspace/{key}", UriKind.Relative),
-            new { promptTemplate = workspacePrompt }).ConfigureAwait(true);
-        var updateBody = await updateResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+            new { promptTemplate = workspacePrompt }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var updateBody = await updateResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(updateResponse.StatusCode == HttpStatusCode.OK,
             $"Workspace prompt update failed ({updateResponse.StatusCode}): {updateBody}");
 
         // 3. Wait for FSW latch then validate.
         await markerChanged.ConfigureAwait(true);
-        var updatedContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
+        var updatedContent = await File.ReadAllTextAsync(_markerPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("WORKSPACE SPECIFIC PROMPT for", updatedContent);
+    }
+
+    /// <summary>
+    /// TEST-MCP-MARKER-REFRESH-001: the explicit marker regeneration endpoint rewrites running workspace markers.
+    /// </summary>
+    [Fact]
+    public async Task MarkerRegenerationEndpoint_RewritesMarkerFile()
+    {
+        var key = EncodeKey(Path.GetFullPath(_workspacePath));
+        await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
+        await StartWorkspaceAndWaitForMarkerAsync(key).ConfigureAwait(true);
+        var initialContent = await File.ReadAllTextAsync(_markerPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var markerChanged = WatchForMarkerChange();
+
+        var response = await _client.PostAsync(
+            new Uri("/mcpserver/workspace/markers/regenerate", UriKind.Relative),
+            null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(response.StatusCode == HttpStatusCode.OK,
+            $"Marker regeneration failed ({response.StatusCode}): {body}");
+        using var document = JsonDocument.Parse(body);
+        Assert.True(document.RootElement.GetProperty("regenerated").GetBoolean());
+        Assert.Equal(1, document.RootElement.GetProperty("workspaceCount").GetInt32());
+
+        await markerChanged.ConfigureAwait(true);
+        var regeneratedContent = await File.ReadAllTextAsync(_markerPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotEqual(initialContent, regeneratedContent);
     }
 
     [Fact]
@@ -188,15 +217,15 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var globalPrompt = "GLOBAL SECTION {{baseUrl}}";
         var globalResponse = await _client.PutAsJsonAsync(
             new Uri("/mcpserver/workspace/prompt", UriKind.Relative),
-            new { template = globalPrompt }).ConfigureAwait(true);
-        var globalBody = await globalResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+            new { template = globalPrompt }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var globalBody = await globalResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(globalResponse.StatusCode == HttpStatusCode.OK,
             $"Global prompt update failed ({globalResponse.StatusCode}): {globalBody}");
         await settingsChanged.ConfigureAwait(true);
         await markerGlobal.ConfigureAwait(true);
 
         // Verify global prompt was persisted.
-        var settingsJson = await File.ReadAllTextAsync(_appsettingsPath).ConfigureAwait(true);
+        var settingsJson = await File.ReadAllTextAsync(_appsettingsPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("GLOBAL SECTION", settingsJson);
 
         // 3. Set a workspace prompt — latch on settings + marker writes.
@@ -205,19 +234,19 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var workspacePrompt = "WORKSPACE SECTION {{baseUrl}}";
         var wsResponse = await _client.PutAsJsonAsync(
             new Uri($"/mcpserver/workspace/{key}", UriKind.Relative),
-            new { promptTemplate = workspacePrompt }).ConfigureAwait(true);
-        var wsBody = await wsResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+            new { promptTemplate = workspacePrompt }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var wsBody = await wsResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(wsResponse.StatusCode == HttpStatusCode.OK,
             $"Workspace prompt update failed ({wsResponse.StatusCode}): {wsBody}");
         await settingsChanged2.ConfigureAwait(true);
         await markerWs.ConfigureAwait(true);
 
         // Verify workspace update preserved the global prompt.
-        var settingsAfter = await File.ReadAllTextAsync(_appsettingsPath).ConfigureAwait(true);
+        var settingsAfter = await File.ReadAllTextAsync(_appsettingsPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("GLOBAL SECTION", settingsAfter);
 
         // 4. Read the final marker — both prompts should be present.
-        var finalContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
+        var finalContent = await File.ReadAllTextAsync(_markerPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains($"GLOBAL SECTION {IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort)}", finalContent);
         Assert.Contains($"WORKSPACE SECTION {IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort)}", finalContent);
     }

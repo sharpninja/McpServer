@@ -5,6 +5,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// Verifies that the REPL host can bootstrap trusted marker-file client options without cached bearer state.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class MarkerFileClientOptionsResolverTests
 {
     [Fact]

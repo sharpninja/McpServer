@@ -166,20 +166,20 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.Same(before, todo.RestoredState);
     }
 
-    /// <summary>Partial local failures surface rollback failure details when compensation cannot restore.</summary>
+    /// <summary>Projection failures keep authoritative local state and do not rollback projection repair state.</summary>
     [Fact]
-    public async Task UpdateAsync_WhenLocalFailureRollbackFails_ReportsRollbackFailure()
+    public async Task UpdateAsync_WhenProjectionFailureHasItem_CommitsWithoutRollback()
     {
         var before = Item("TODO-TXN-006", "Before");
+        var after = Item("TODO-TXN-006", "After");
         var todo = new RecordingTodoService
         {
             Existing = before,
             UpdateResult = new TodoMutationResult(
                 false,
                 "Updated locally but projection failed.",
-                Item("TODO-TXN-006", "After"),
+                after,
                 TodoMutationFailureKind.ProjectionFailed),
-            RestoreResult = new TodoMutationResult(false, "restore failed", FailureKind: TodoMutationFailureKind.Conflict),
         };
         var coordinator = new CapturingCoordinator();
         var sut = CreateSut(todo, coordinator);
@@ -191,10 +191,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
             .ConfigureAwait(true);
 
         Assert.False(result.Success);
-        Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
-        Assert.Equal(1, todo.RestoreCalls);
-        Assert.Contains("Rollback failed", result.Error, StringComparison.Ordinal);
-        Assert.Contains("restore failed", result.Error, StringComparison.Ordinal);
+        Assert.Equal(TodoMutationFailureKind.ProjectionFailed, result.FailureKind);
+        Assert.Equal(0, todo.RestoreCalls);
+        Assert.Same(after, todo.Existing);
+        Assert.Equal("committed", coordinator.LastResult?.Status);
     }
 
     /// <summary>ISSUE-backed updates are rejected while transaction gating is required because GitHub side effects are not compensated yet.</summary>
@@ -315,6 +315,129 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
     }
 
+    /// <summary>TODO create projection failures keep the locally-created authoritative item for later projection repair.</summary>
+    [Fact]
+    public async Task CreateAsync_WhenProjectionFailureHasCreatedItem_CommitsWithoutDeletingCreatedItem()
+    {
+        var created = Item("TODO-TXN-CREATE-004", "Created");
+        var todo = new RecordingTodoService
+        {
+            CreateResult = new TodoMutationResult(
+                false,
+                "Created locally but projection failed.",
+                created,
+                TodoMutationFailureKind.ProjectionFailed),
+        };
+        var coordinator = new CapturingCoordinator();
+        var sut = CreateSut(todo, coordinator);
+
+        var result = await sut.CreateAsync(
+                new TodoCreateRequest
+                {
+                    Id = "TODO-TXN-CREATE-004",
+                    Title = "Created",
+                    Section = "Backlog",
+                    Priority = "high",
+                },
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Equal(TodoMutationFailureKind.ProjectionFailed, result.FailureKind);
+        Assert.Equal(1, todo.CreateCalls);
+        Assert.Equal(0, todo.DeleteCreatedCalls);
+        Assert.Same(created, todo.Existing);
+        Assert.Equal("committed", coordinator.LastResult?.Status);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: triage-created TODOs use the transaction-gated TODO mutation service.
+    /// </summary>
+    [Fact]
+    public async Task TransactionGatedTriageTodoCreator_CreateAsync_ForwardsToTransactionGatedTodoMutations()
+    {
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        var expected = new TodoMutationResult(
+            true,
+            Item: new TodoFlatItem
+            {
+                Id = "BUG-TRIAGE-009",
+                Title = "Persist triage TODOs",
+                Section = "Backlog",
+                Priority = "high",
+                Done = false,
+            });
+        gated.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(expected);
+        var sut = new TransactionGatedTriageTodoCreator(gated);
+        var request = new TodoCreateRequest
+        {
+            Id = "BUG-TRIAGE-009",
+            Title = "Persist triage TODOs",
+            Section = "Backlog",
+            Priority = "high",
+        };
+
+        var result = await sut.CreateAsync(request, CancellationToken.None);
+
+        Assert.Same(expected, result);
+        await gated.Received(1).CreateAsync(request, Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: background triage creates use the scoped workspace context instead of the default workspace.
+    /// </summary>
+    [Fact]
+    public async Task CreateAsync_WhenScopedWorkspaceContextIsResolved_CreatesInScopedWorkspaceService()
+    {
+        var primary = new RecordingTodoService();
+        var scoped = new RecordingTodoService
+        {
+            CreateResult = new TodoMutationResult(
+                true,
+                Item: Item("BUG-TRIAGE-010", "Scoped triage TODO")),
+        };
+        var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new McpServer.Support.Mcp.Ingestion.IngestionOptions
+        {
+            RepoRoot = @"C:\ProgramData\McpServer",
+        });
+        var factory = Substitute.For<ITodoServiceFactory>();
+        factory.CreateForWorkspace(Arg.Any<string>(), Arg.Any<WorkspaceContext>()).Returns(scoped);
+        var resolver = new TodoServiceResolver(primary, ingestionOptions, factory);
+        var httpContextAccessor = Substitute.For<Microsoft.AspNetCore.Http.IHttpContextAccessor>();
+        httpContextAccessor.HttpContext.Returns((Microsoft.AspNetCore.Http.HttpContext?)null);
+        var accessor = new WorkspaceServiceAccessor(resolver, httpContextAccessor, ingestionOptions);
+        var creation = new TodoCreationService(accessor, Substitute.For<IGitHubCliService>(), NullLogger<TodoCreationService>.Instance);
+        var update = new TodoUpdateService(accessor, null, NullLogger<TodoUpdateService>.Instance);
+        var workspaceContext = new WorkspaceContext { WorkspacePath = TargetWorkspacePath };
+        var sut = new TransactionGatedTodoMutationService(
+            accessor,
+            creation,
+            update,
+            resolver,
+            Substitute.For<IWorkspaceService>(),
+            new CapturingCoordinator(),
+            Microsoft.Extensions.Options.Options.Create(new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }),
+            workspaceContext);
+
+        var result = await sut.CreateAsync(
+                new TodoCreateRequest
+                {
+                    Id = "BUG-TRIAGE-010",
+                    Title = "Scoped triage TODO",
+                    Section = "Backlog",
+                    Priority = "high",
+                },
+                CancellationToken.None)
+            .ConfigureAwait(true);
+
+        Assert.True(result.Success, result.Error);
+        Assert.Equal(0, primary.CreateCalls);
+        Assert.Equal(1, scoped.CreateCalls);
+        Assert.NotNull(scoped.Existing);
+        Assert.Equal("BUG-TRIAGE-010", scoped.Existing.Id);
+    }
+
     /// <summary>ISSUE-backed creates are rejected while required transaction gating lacks GitHub side-effect compensation.</summary>
     [Fact]
     public async Task CreateAsync_WhenIssueBackedTodoAndGatingRequired_RejectsBeforeMutation()
@@ -368,7 +491,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
         Assert.Contains("active TODO provider does not support transaction rollback compensation", result.Error, StringComparison.Ordinal);
-        await inner.DidNotReceiveWithAnyArgs().CreateAsync(default!, default).ConfigureAwait(true);
+        await inner.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Null(coordinator.Request);
     }
 
@@ -597,7 +720,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
         Assert.Contains("target TODO provider does not support transaction rollback compensation", result.Error, StringComparison.Ordinal);
-        await target.DidNotReceiveWithAnyArgs().CreateAsync(default!, default).ConfigureAwait(true);
+        await target.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(0, source.DeleteCalls);
     }
 
@@ -917,6 +1040,8 @@ public sealed class TransactionGatedTodoMutationServiceTests
     {
         public TurnTransactionRequest? Request { get; private set; }
 
+        public TurnTransactionResult? LastResult { get; private set; }
+
         public bool RejectBeforeMutation { get; init; }
 
         public string Status { get; init; } = "committed";
@@ -934,13 +1059,13 @@ public sealed class TransactionGatedTodoMutationServiceTests
         {
             Request = request;
             if (RejectBeforeMutation)
-                return BuildResult(null, rollbackAttempted: false, rollbackSucceeded: false);
+                return LastResult = BuildResult(null, rollbackAttempted: false, rollbackSucceeded: false);
 
             var mutationResult = await mutation(cancellationToken).ConfigureAwait(false);
             if (!mutationResult.Success)
             {
                 var rollback = await RunRollbackAsync(mutationResult, cancellationToken).ConfigureAwait(false);
-                return new TurnTransactionResult
+                return LastResult = new TurnTransactionResult
                 {
                     TransactionId = "txn-test",
                     Status = "aborted",
@@ -955,10 +1080,10 @@ public sealed class TransactionGatedTodoMutationServiceTests
             }
 
             if (string.Equals(Status, "committed", StringComparison.OrdinalIgnoreCase))
-                return BuildResult(mutationResult, rollbackAttempted: false, rollbackSucceeded: false);
+                return LastResult = BuildResult(mutationResult, rollbackAttempted: false, rollbackSucceeded: false);
 
             var failedRollback = await RunRollbackAsync(mutationResult, cancellationToken).ConfigureAwait(false);
-            return BuildResult(mutationResult, failedRollback.Attempted, failedRollback.Succeeded, failedRollback.Error);
+            return LastResult = BuildResult(mutationResult, failedRollback.Attempted, failedRollback.Succeeded, failedRollback.Error);
         }
 
         public TurnTransactionStatusResponse GetStatus()

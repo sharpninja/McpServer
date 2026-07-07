@@ -33,9 +33,9 @@ public sealed class BucketTests
     [Fact]
     public async Task ListBuckets_Returns200WithValidStructure()
     {
-        var r = await _f.Client.GetAsync(ToolRegistryFixture.BucketRoute);
+        var r = await _f.Client.GetAsync(ToolRegistryFixture.BucketRoute, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-        var res = await r.Content.ReadFromJsonAsync<BucketListResult>();
+        var res = await r.Content.ReadFromJsonAsync<BucketListResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(res);
         Assert.NotNull(res.Buckets);
         Assert.True(res.TotalCount >= 0);
@@ -57,10 +57,10 @@ public sealed class BucketTests
         var name = ToolRegistryFixture.GenerateBucketName();
         var body = new { Name = name, Owner = "sharpninja", Repo = "McpServer", Branch = "main", ManifestPath = "/tools" };
 
-        var r = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+        var r = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, r.StatusCode);
 
-        var res = await r.Content.ReadFromJsonAsync<BucketMutationResult>();
+        var res = await r.Content.ReadFromJsonAsync<BucketMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(res);
         Assert.True(res.Success, $"Add bucket failed: {res.Error}");
         Assert.NotNull(res.Bucket);
@@ -69,7 +69,7 @@ public sealed class BucketTests
         Assert.Equal("McpServer", res.Bucket.Repo);
 
         // Cleanup
-        await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}");
+        await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>
@@ -85,17 +85,17 @@ public sealed class BucketTests
     {
         var name = ToolRegistryFixture.GenerateBucketName();
         var body = new { Name = name, Owner = "sharpninja", Repo = "McpServer" };
-        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, first.StatusCode);
 
         try
         {
-            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
         }
         finally
         {
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -114,11 +114,11 @@ public sealed class BucketTests
     {
         var name = ToolRegistryFixture.GenerateBucketName();
         var body = new { Name = name, Owner = "sharpninja", Repo = "McpServer" };
-        await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+        await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
 
-        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}");
+        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-        var res = await r.Content.ReadFromJsonAsync<BucketMutationResult>();
+        var res = await r.Content.ReadFromJsonAsync<BucketMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(res);
         Assert.True(res.Success);
     }
@@ -134,7 +134,7 @@ public sealed class BucketTests
     [Fact]
     public async Task RemoveBucket_NonExistent_Returns404()
     {
-        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}");
+        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -151,7 +151,7 @@ public sealed class BucketTests
     [Fact]
     public async Task BrowseBucket_NonExistent_Returns404()
     {
-        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/browse");
+        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/browse", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -168,11 +168,11 @@ public sealed class BucketTests
     {
         var name = ToolRegistryFixture.GenerateBucketName();
         var body = new { Name = name, Owner = "sharpninja", Repo = "McpServer", ManifestPath = "/tools" };
-        await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+        await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
 
         try
         {
-            var r = await _f.Client.GetAsync($"{ToolRegistryFixture.BucketRoute}/{name}/browse");
+            var r = await _f.Client.GetAsync($"{ToolRegistryFixture.BucketRoute}/{name}/browse", cancellationToken: TestContext.Current.CancellationToken);
             // May be 200 (found manifests) or 404 (no manifests in path).
             Assert.True(
                 r.StatusCode == HttpStatusCode.OK || r.StatusCode == HttpStatusCode.NotFound,
@@ -180,7 +180,7 @@ public sealed class BucketTests
         }
         finally
         {
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -198,7 +198,7 @@ public sealed class BucketTests
     public async Task InstallFromBucket_NonExistentBucket_Returns404()
     {
         var r = await _f.Client.PostAsync(
-            $"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/install?toolName=foo", null);
+            $"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/install?toolName=foo", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -216,7 +216,7 @@ public sealed class BucketTests
     public async Task SyncBucket_NonExistentBucket_Returns404()
     {
         var r = await _f.Client.PostAsync(
-            $"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/sync", null);
+            $"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/sync", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -233,11 +233,11 @@ public sealed class BucketTests
     {
         var name = ToolRegistryFixture.GenerateBucketName();
         var body = new { Name = name, Owner = "sharpninja", Repo = "McpServer", ManifestPath = "/tools" };
-        await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+        await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
 
         try
         {
-            var r = await _f.Client.PostAsync($"{ToolRegistryFixture.BucketRoute}/{name}/sync", null);
+            var r = await _f.Client.PostAsync($"{ToolRegistryFixture.BucketRoute}/{name}/sync", null, cancellationToken: TestContext.Current.CancellationToken);
             // 200 if manifests found, 404 if manifest path doesn't exist in repo
             Assert.True(
                 r.StatusCode == HttpStatusCode.OK || r.StatusCode == HttpStatusCode.NotFound,
@@ -245,7 +245,7 @@ public sealed class BucketTests
         }
         finally
         {
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 }

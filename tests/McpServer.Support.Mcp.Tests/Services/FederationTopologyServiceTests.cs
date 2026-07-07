@@ -241,7 +241,7 @@ public sealed class FederationTopologyServiceTests
     public async Task ListPendingOperationsAsync_WithSqliteProvider_ReturnsQueuedRows()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
-        await connection.OpenAsync().ConfigureAwait(true);
+        await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var provider = CreateSqliteProvider(connection);
         await using (var scope = provider.CreateAsyncScope())
         {

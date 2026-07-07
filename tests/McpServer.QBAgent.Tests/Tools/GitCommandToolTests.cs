@@ -21,7 +21,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner("clean");
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
 
-        var result = await tool.RunAsync("status", null).ConfigureAwait(true);
+        var result = await tool.RunAsync("status", null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal("git", runner.LastRequest!.FileName);
@@ -37,7 +37,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
 
-        await tool.RunAsync("log", "--oneline -5").ConfigureAwait(true);
+        await tool.RunAsync("log", "--oneline -5", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("log --oneline -5", runner.LastRequest!.Arguments);
     }
@@ -49,7 +49,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
 
-        var result = await tool.RunAsync("rm", "-rf .").ConfigureAwait(true);
+        var result = await tool.RunAsync("rm", "-rf .", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(0, runner.InvocationCount);
@@ -63,7 +63,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
 
-        var result = await tool.RunAsync("push", null).ConfigureAwait(true);
+        var result = await tool.RunAsync("push", null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(0, runner.InvocationCount);
@@ -77,7 +77,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
 
-        var result = await tool.RunAsync("push", "github main").ConfigureAwait(true);
+        var result = await tool.RunAsync("push", "github main", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(0, runner.InvocationCount);
@@ -91,7 +91,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
 
-        var result = await tool.RunAsync("push", null).ConfigureAwait(true);
+        var result = await tool.RunAsync("push", null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal("push origin", runner.LastRequest!.Arguments);
@@ -104,7 +104,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
 
-        await tool.RunAsync("push", "origin feature/x").ConfigureAwait(true);
+        await tool.RunAsync("push", "origin feature/x", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("push origin feature/x", runner.LastRequest!.Arguments);
         Assert.DoesNotContain("github", runner.LastRequest!.Arguments, StringComparison.Ordinal);
@@ -128,7 +128,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
 
-        await tool.RunAsync("push", "-u origin main").ConfigureAwait(true);
+        await tool.RunAsync("push", "-u origin main", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("push -u origin main", runner.LastRequest!.Arguments);
     }
@@ -140,7 +140,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
 
-        var result = await tool.RunAsync("push", "https://evil.example/repo.git main").ConfigureAwait(true);
+        var result = await tool.RunAsync("push", "https://evil.example/repo.git main", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(0, runner.InvocationCount);
@@ -154,7 +154,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: true);
 
-        var result = await tool.RunAsync("push", "git@github.com:org/repo.git main").ConfigureAwait(true);
+        var result = await tool.RunAsync("push", "git@github.com:org/repo.git main", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(0, runner.InvocationCount);
@@ -167,7 +167,7 @@ public sealed class GitCommandToolTests
         var runner = OkRunner();
         var tool = new GitCommandTool(runner, Workspace, allowPush: false);
 
-        await tool.RunAsync("commit", "-m message").ConfigureAwait(true);
+        await tool.RunAsync("commit", "-m message", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(Workspace, runner.LastRequest!.WorkingDirectory);
         Assert.Equal("commit -m message", runner.LastRequest!.Arguments);

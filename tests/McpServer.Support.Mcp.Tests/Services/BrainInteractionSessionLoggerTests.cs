@@ -27,7 +27,7 @@ public sealed class BrainInteractionSessionLoggerTests
             .Returns(2);
         var sut = CreateSut();
 
-        await sut.LogInteractionAsync("QBAgent", "S", "T", "LeftHemisphere", "the full prompt", "the full output").ConfigureAwait(true);
+        await sut.LogInteractionAsync("QBAgent", "S", "T", "LeftHemisphere", "the full prompt", "the full output", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await _sessionLog.Received(1).AppendProcessingDialogAsync(
             "QBAgent", "S", "T",
@@ -46,8 +46,8 @@ public sealed class BrainInteractionSessionLoggerTests
     {
         var sut = CreateSut();
 
-        await sut.LogInteractionAsync("QBAgent", sessionId: null, turnId: "T", "Left", "p", "o").ConfigureAwait(true);
-        await sut.LogInteractionAsync("QBAgent", "S", turnId: " ", "Left", "p", "o").ConfigureAwait(true);
+        await sut.LogInteractionAsync("QBAgent", sessionId: null, turnId: "T", "Left", "p", "o", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.LogInteractionAsync("QBAgent", "S", turnId: " ", "Left", "p", "o", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await _sessionLog.DidNotReceive().AppendProcessingDialogAsync(
             Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -62,7 +62,7 @@ public sealed class BrainInteractionSessionLoggerTests
             .Returns(2);
         var sut = CreateSut();
 
-        await sut.LogInteractionAsync("QBAgent", "S", "T", "Left", "auth Bearer abc123XYZ.def trailing", "x").ConfigureAwait(true);
+        await sut.LogInteractionAsync("QBAgent", "S", "T", "Left", "auth Bearer abc123XYZ.def trailing", "x", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await _sessionLog.Received(1).AppendProcessingDialogAsync(
             "QBAgent", "S", "T",
@@ -81,7 +81,7 @@ public sealed class BrainInteractionSessionLoggerTests
             .ThrowsAsync(new InvalidOperationException("turn not found"));
         var sut = CreateSut();
 
-        await sut.LogInteractionAsync("QBAgent", "S", "T", "Left", "p", "o").ConfigureAwait(true);
+        await sut.LogInteractionAsync("QBAgent", "S", "T", "Left", "p", "o", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         // No exception thrown = pass.
     }
 

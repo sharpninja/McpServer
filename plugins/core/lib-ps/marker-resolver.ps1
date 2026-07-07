@@ -46,6 +46,25 @@ function Get-MarkerField {
     return $null
 }
 
+function Get-MarkerFileSnapshot {
+    param(
+        [string]$StartDir = (Get-Location).Path,
+        [string]$MarkerFile
+    )
+
+    $path = $MarkerFile
+    if (-not $path) {
+        $path = Find-MarkerFile -StartDir $StartDir
+    }
+
+    $resolved = (Resolve-Path -LiteralPath $path).ProviderPath
+    $item = Get-Item -LiteralPath $resolved
+    return [ordered]@{
+        markerFilePath = $resolved
+        markerLastWriteUtc = $item.LastWriteTimeUtc.ToString('O')
+    }
+}
+
 function Get-MarkerEndpoint {
     param(
         [Parameter(Mandatory)][string]$MarkerFile,

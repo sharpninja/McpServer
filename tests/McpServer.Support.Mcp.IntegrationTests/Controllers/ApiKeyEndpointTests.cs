@@ -4,6 +4,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>TR-PLANNED-CORE-013: Integration tests for the default API-key issuance endpoint.</summary>
+[Trait("Category", "Integration")]
 public sealed class ApiKeyEndpointTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;
@@ -21,11 +22,11 @@ public sealed class ApiKeyEndpointTests : IClassFixture<CustomWebApplicationFact
 
         for (var i = 0; i < 30; i++)
         {
-            using var response = await client.GetAsync(new Uri("/api-key", UriKind.Relative)).ConfigureAwait(true);
+            using var response = await client.GetAsync(new Uri("/api-key", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        using var throttled = await client.GetAsync(new Uri("/api-key", UriKind.Relative)).ConfigureAwait(true);
+        using var throttled = await client.GetAsync(new Uri("/api-key", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.TooManyRequests, throttled.StatusCode);
         Assert.True(throttled.Headers.TryGetValues("Retry-After", out var values));
         Assert.NotEmpty(values);

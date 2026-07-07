@@ -75,19 +75,26 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
 
         using var scope = _serviceProvider.CreateScope();
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var items = await ctx.TodoItems.AsNoTracking().OrderBy(i => i.Id).ToListAsync().ConfigureAwait(true);
+        var items = await ctx.TodoItems.AsNoTracking().OrderBy(i => i.Id).ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, items.Count);
         Assert.Equal("LEG-ONE-001", items[0].Id);
         Assert.Equal("LEG-TWO-002", items[1].Id);
 
-        var history = await ctx.TodoAuditHistory.AsNoTracking().OrderBy(h => h.TodoId).ThenBy(h => h.Version).ToListAsync().ConfigureAwait(true);
+        var history = await ctx.TodoAuditHistory.AsNoTracking().OrderBy(h => h.TodoId).ThenBy(h => h.Version).ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(3, history.Count);
         Assert.Equal(1, history[0].Version);
         Assert.Equal(2, history[1].Version);
         Assert.Equal("LEG-ONE-001", history[0].TodoId);
 
-        var meta = await ctx.TodoDocumentMetadata.AsNoTracking().SingleAsync().ConfigureAwait(true);
-        Assert.Equal("[\"note\"]", meta.NotesJson);
+        var meta = await ctx.TodoDocumentMetadata.AsNoTracking().SingleAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var noteRows = await ctx.TodoDocumentNotes
+            .AsNoTracking()
+            .Where(n => n.WorkspaceId == meta.WorkspaceId && n.SingletonId == meta.SingletonId)
+            .OrderBy(n => n.Ordinal)
+            .Select(n => n.Value)
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.Equal(["note"], noteRows);
     }
 
     /// <summary>
@@ -108,7 +115,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
 
         using var scope = _serviceProvider.CreateScope();
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var items = await ctx.TodoItems.AsNoTracking().ToListAsync().ConfigureAwait(true);
+        var items = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(items);
         Assert.Equal("TGT-PREEX-001", items[0].Id);
     }
@@ -145,7 +152,7 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
 
         using var scope = _serviceProvider.CreateScope();
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        Assert.False(await ctx.TodoItems.AnyAsync().ConfigureAwait(true));
+        Assert.False(await ctx.TodoItems.AnyAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     /// <summary>

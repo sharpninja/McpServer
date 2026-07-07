@@ -35,7 +35,7 @@ public sealed class FileMarkerPromptProviderTests
 
         var provider = new FileMarkerPromptProvider(_templateService, _logger);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => provider.GetGlobalPromptTemplateAsync());
+        await Assert.ThrowsAsync<InvalidOperationException>(() => provider.GetGlobalPromptTemplateAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public sealed class FileMarkerPromptProviderTests
 
         var provider = new FileMarkerPromptProvider(_templateService, _logger);
 
-        var result = await provider.GetGlobalPromptTemplateAsync();
+        var result = await provider.GetGlobalPromptTemplateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Contains("Hello {{baseUrl}}", result);
@@ -100,8 +100,8 @@ public sealed class FileMarkerPromptProviderTests
 
         var provider = new FileMarkerPromptProvider(_templateService, _logger);
 
-        var first = await provider.GetGlobalPromptTemplateAsync();
-        var second = await provider.GetGlobalPromptTemplateAsync();
+        var first = await provider.GetGlobalPromptTemplateAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var second = await provider.GetGlobalPromptTemplateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("First Content", first);
         Assert.Equal("Updated Content", second);

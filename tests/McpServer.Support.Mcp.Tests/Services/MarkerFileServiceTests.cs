@@ -1,5 +1,9 @@
+using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using Xunit;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
@@ -14,6 +18,64 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class MarkerFileServiceTests
 {
     private const string BaseUrl = "http://localhost:7147";
+    private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
+        .WithNamingConvention(CamelCaseNamingConvention.Instance)
+        .Build();
+
+    private static readonly IDeserializer s_yamlDeserializer = new DeserializerBuilder()
+        .WithNamingConvention(CamelCaseNamingConvention.Instance)
+        .Build();
+
+    private static readonly string[] PluginVersionEnvironmentVariables =
+    [
+        "CODEX_PLUGIN_ROOT",
+        "CLAUDE_PLUGIN_ROOT",
+        "COPILOT_PLUGIN_ROOT",
+        "CLINE_PLUGIN_ROOT",
+        "GROK_PLUGIN_ROOT",
+    ];
+
+    private static void WithClearedPluginVersionEnvironment(Action action)
+    {
+        var saved = PluginVersionEnvironmentVariables.ToDictionary(
+            name => name,
+            name => Environment.GetEnvironmentVariable(name));
+
+        try
+        {
+            foreach (var name in PluginVersionEnvironmentVariables)
+                Environment.SetEnvironmentVariable(name, null);
+
+            action();
+        }
+        finally
+        {
+            foreach (var (name, value) in saved)
+                Environment.SetEnvironmentVariable(name, value);
+        }
+    }
+
+    /// <summary>
+    /// Runs <paramref name="action"/> with plugin-version env vars cleared and the user-profile
+    /// cache scan redirected to an empty temp directory, so resolution sees only the inputs the
+    /// test controls regardless of plugins installed on the machine.
+    /// </summary>
+    /// <param name="action">The assertion body to run hermetically.</param>
+    private static void WithHermeticPluginVersionResolution(Action action)
+    {
+        var emptyProfile = Path.Combine(Path.GetTempPath(), $"mcp-marker-profile-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(emptyProfile);
+        try
+        {
+            MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
+            WithClearedPluginVersionEnvironment(action);
+        }
+        finally
+        {
+            MarkerFileService.AgentPluginUserProfileOverride = null;
+            Directory.Delete(emptyProfile, recursive: true);
+        }
+    }
 
     /// <summary>
     /// Builds a minimal template context for prompt-rendering tests.
@@ -273,10 +335,10 @@ public sealed class MarkerFileServiceTests
                 port: 7147,
                 workspaceName: "test",
                 globalPromptTemplate: globalPrompt,
-                serverStartedAtUtc: serverStartedAtUtc);
+                serverStartedAtUtc: serverStartedAtUtc, ct: TestContext.Current.CancellationToken);
 
             var markerPath = Path.Combine(tempDir, MarkerFileService.MarkerFileName);
-            var yaml = await File.ReadAllTextAsync(markerPath);
+            var yaml = await File.ReadAllTextAsync(markerPath, cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.Contains(globalPrompt, yaml);
             Assert.Contains("markerWrittenAtUtc:", yaml);
@@ -314,8 +376,9 @@ public sealed class MarkerFileServiceTests
 
     /// <summary>
     /// Verifies marker-file writing ensures the workspace root <c>.gitignore</c>
-    /// contains both the marker file entry and the local <c>.mcpServer/</c>
-    /// state directory entry without duplicating either on repeated writes.
+    /// contains the marker file entry, local <c>.mcpServer/</c> state directory
+    /// entry, and workspace <c>cache/</c> directory entry without duplicating any
+    /// entry on repeated writes.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: FR-MCP-018.
@@ -325,7 +388,7 @@ public sealed class MarkerFileServiceTests
     /// marker writing during workspace startup.
     /// </remarks>
     [Fact]
-    public async Task WriteMarkerAsync_AddsMarkerAndMcpServerEntriesToGitIgnoreWithoutDuplicates()
+    public async Task WriteMarkerAsync_AddsMarkerMcpServerAndCacheEntriesToGitIgnoreWithoutDuplicates()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-gitignore-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -333,25 +396,140 @@ public sealed class MarkerFileServiceTests
         try
         {
             var gitignorePath = Path.Combine(tempDir, ".gitignore");
-            await File.WriteAllTextAsync(gitignorePath, "bin/" + Environment.NewLine);
+            await File.WriteAllTextAsync(gitignorePath, "bin/" + Environment.NewLine, cancellationToken: TestContext.Current.CancellationToken);
 
             await MarkerFileService.WriteMarkerAsync(
                 workspacePath: tempDir,
                 port: 7147,
                 workspaceName: "test",
-                globalPromptTemplate: "Prompt");
+                globalPromptTemplate: "Prompt", ct: TestContext.Current.CancellationToken);
 
             await MarkerFileService.WriteMarkerAsync(
                 workspacePath: tempDir,
                 port: 7147,
                 workspaceName: "test",
-                globalPromptTemplate: "Prompt");
+                globalPromptTemplate: "Prompt", ct: TestContext.Current.CancellationToken);
 
-            var gitignoreLines = await File.ReadAllLinesAsync(gitignorePath);
+            var gitignoreLines = await File.ReadAllLinesAsync(gitignorePath, cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.Equal(1, gitignoreLines.Count(line => line == "AGENTS-README-FIRST.yaml"));
             Assert.Equal(1, gitignoreLines.Count(line => line == ".mcpServer/"));
+            Assert.Equal(1, gitignoreLines.Count(line => line == "cache/"));
             Assert.Contains("bin/", gitignoreLines);
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(tempDir))
+                    Directory.Delete(tempDir, recursive: true);
+            }
+            catch
+            {
+                // Best-effort cleanup for temp test directory.
+            }
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-WIKIEXPORT-002: Verifies marker writing creates a default wiki export configuration when absent.
+    /// </summary>
+    [Fact]
+    public async Task WriteMarkerAsync_CreatesDefaultWikiYamlWhenMissing()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-wiki-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            await MarkerFileService.WriteMarkerAsync(
+                workspacePath: tempDir,
+                port: 7147,
+                workspaceName: "test",
+                globalPromptTemplate: "Prompt", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var markerPath = Path.Combine(tempDir, MarkerFileService.MarkerFileName);
+            var wikiPath = Path.Combine(tempDir, "docs", "wiki.yaml");
+
+            Assert.True(File.Exists(markerPath));
+            Assert.True(File.Exists(wikiPath));
+
+            var config = s_yamlDeserializer.Deserialize<MarkerDefaultWikiConfig>(await File.ReadAllTextAsync(wikiPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+            var loadedConfig = RequirementsWikiExportConfigLoader.Load(tempDir, new RequirementsOptions());
+
+            Assert.NotNull(loadedConfig);
+            Assert.Equal("mcp-wiki-export/v1", config.Schema);
+            Assert.Equal("home", config.Home.Document);
+            Assert.Equal(
+                ["home", "functional", "technical", "testing", "mapping", "matrix"],
+                config.Documents.Select(document => document.Id).ToArray());
+            Assert.All(config.Documents, document => Assert.Equal(["github", "azure"], document.Platforms));
+            Assert.Equal(
+                ["generated:home", "generated:functional", "generated:technical", "generated:testing", "generated:mapping", "generated:matrix"],
+                config.Documents.Select(document => document.Source).ToArray());
+            Assert.Equal(
+                ["Home.md", "Functional-Requirements.md", "Technical-Requirements.md", "Testing-Requirements.md", "TR-per-FR-Mapping.md", "Requirements-Matrix.md"],
+                config.Documents.Select(document => document.Target).ToArray());
+
+            var navigationDocumentIds = FlattenNavigationDocuments(config.Navigation).ToArray();
+            Assert.Equal(config.Documents.Select(document => document.Id).Order(StringComparer.Ordinal), navigationDocumentIds.Order(StringComparer.Ordinal));
+            Assert.Equal(navigationDocumentIds.Length, navigationDocumentIds.Distinct(StringComparer.Ordinal).Count());
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(tempDir))
+                    Directory.Delete(tempDir, recursive: true);
+            }
+            catch
+            {
+                // Best-effort cleanup for temp test directory.
+            }
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-WIKIEXPORT-002: Verifies marker writing preserves user-authored wiki export configuration.
+    /// </summary>
+    [Fact]
+    public async Task WriteMarkerAsync_PreservesExistingWikiYaml()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-wiki-preserve-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(Path.Combine(tempDir, "docs"));
+
+        try
+        {
+            var wikiPath = Path.Combine(tempDir, "docs", "wiki.yaml");
+            var existingConfig = new
+            {
+                schema = "custom/wiki",
+                documents = new[]
+                {
+                    new
+                    {
+                        id = "custom",
+                        title = "Custom",
+                        source = "generated:home",
+                        target = "Custom.md",
+                        platforms = new[] { "github" }
+                    }
+                },
+                navigation = new[]
+                {
+                    new { document = "custom" }
+                }
+            };
+            var existingYaml = s_yamlSerializer.Serialize(existingConfig);
+            await File.WriteAllTextAsync(wikiPath, existingYaml, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            await MarkerFileService.WriteMarkerAsync(
+                workspacePath: tempDir,
+                port: 7147,
+                workspaceName: "test",
+                globalPromptTemplate: "Prompt", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.Equal(existingYaml, await File.ReadAllTextAsync(wikiPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         }
         finally
         {
@@ -384,14 +562,14 @@ public sealed class MarkerFileServiceTests
         try
         {
             var markerPath = Path.Combine(tempDir, MarkerFileService.MarkerFileName);
-            await File.WriteAllTextAsync(markerPath, "sentinel marker content").ConfigureAwait(true);
+            await File.WriteAllTextAsync(markerPath, "sentinel marker content", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             MarkerFileService.RemoveMarker(tempDir);
 
             Assert.False(File.Exists(markerPath));
             var archived = Directory.GetFiles(tempDir, MarkerFileService.MarkerFileName + ".deleted-*");
             var archivePath = Assert.Single(archived);
-            Assert.Equal("sentinel marker content", await File.ReadAllTextAsync(archivePath).ConfigureAwait(true));
+            Assert.Equal("sentinel marker content", await File.ReadAllTextAsync(archivePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         }
         finally
         {
@@ -466,6 +644,135 @@ public sealed class MarkerFileServiceTests
 
         Assert.Equal(payloadA, payloadB);
         Assert.Equal(signatureA, signatureB);
+    }
+
+    private static IEnumerable<string> FlattenNavigationDocuments(IEnumerable<MarkerDefaultWikiNavigationItem> navigation)
+    {
+        foreach (var item in navigation)
+        {
+            if (!string.IsNullOrWhiteSpace(item.Document))
+                yield return item.Document;
+
+            foreach (var child in FlattenNavigationDocuments(item.Children))
+                yield return child;
+        }
+    }
+
+    private sealed class MarkerDefaultWikiConfig
+    {
+        public string Schema { get; set; } = string.Empty;
+
+        public MarkerDefaultWikiHome Home { get; set; } = new();
+
+        public List<MarkerDefaultWikiDocument> Documents { get; set; } = [];
+
+        public List<MarkerDefaultWikiNavigationItem> Navigation { get; set; } = [];
+    }
+
+    private sealed class MarkerDefaultWikiHome
+    {
+        public string Document { get; set; } = string.Empty;
+    }
+
+    private sealed class MarkerDefaultWikiDocument
+    {
+        public string Id { get; set; } = string.Empty;
+
+        public string Title { get; set; } = string.Empty;
+
+        public string Source { get; set; } = string.Empty;
+
+        public string Target { get; set; } = string.Empty;
+
+        public List<string> Platforms { get; set; } = [];
+    }
+
+    private sealed class MarkerDefaultWikiNavigationItem
+    {
+        public string? Document { get; set; }
+
+        public string? Title { get; set; }
+
+        public string? Path { get; set; }
+
+        public List<MarkerDefaultWikiNavigationItem> Children { get; set; } = [];
+    }
+
+    /// <summary>
+    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version.
+    /// </summary>
+    [Fact]
+    public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
+    {
+        WithHermeticPluginVersionResolution(() =>
+        {
+            var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
+
+            Assert.All(
+                plugins.Agents,
+                pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
+        });
+    }
+
+    /// <summary>
+    /// TEST-MCP-MARKER-REFRESH-001: installed sibling plugin versions override the synced fallback in marker contracts.
+    /// </summary>
+    [Fact]
+    public void BuildDefaultAgentPlugins_UsesInstalledSiblingPluginVersionWhenPresent()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-version-{Guid.NewGuid():N}");
+        var workspace = Path.Combine(root, "McpServer");
+        var claudePlugin = Path.Combine(root, "mcpserver-claude-code-plugin");
+        Directory.CreateDirectory(workspace);
+        Directory.CreateDirectory(claudePlugin);
+        File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+
+        try
+        {
+            WithHermeticPluginVersionResolution(() =>
+            {
+                var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+
+                Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
+                Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
+            });
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-MARKER-REFRESH-001: resolved plugin versions affect the agent plugin contract digest.
+    /// </summary>
+    [Fact]
+    public void ComputeAgentPluginsDigest_ChangesWhenResolvedPluginVersionChanges()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcp-marker-digest-{Guid.NewGuid():N}");
+        var workspace = Path.Combine(root, "McpServer");
+        var claudePlugin = Path.Combine(root, "mcpserver-claude-code-plugin");
+        Directory.CreateDirectory(workspace);
+        Directory.CreateDirectory(claudePlugin);
+
+        try
+        {
+            WithClearedPluginVersionEnvironment(() =>
+            {
+                var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+                var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
+
+                File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+                var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+                var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
+
+                Assert.NotEqual(baselineDigest, updatedDigest);
+            });
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
     }
 
     /// <summary>Verifies plugin contract data is part of the marker signature payload.</summary>

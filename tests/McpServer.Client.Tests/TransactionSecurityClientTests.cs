@@ -44,7 +44,7 @@ public sealed class TransactionSecurityClientTests
             SigningPublicKeyPem = "-----BEGIN PUBLIC KEY-----",
             SigningPrivateKeyPem = "-----BEGIN PRIVATE KEY-----",
             EncryptionPublicKeyPem = "-----BEGIN PUBLIC KEY-----"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/keyserver/parties", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -67,7 +67,7 @@ public sealed class TransactionSecurityClientTests
         using var http = new HttpClient(handler);
         var client = new KeyServerClient(http, DefaultOptions);
 
-        var result = await client.SignManifestAsync(CreateSignRequest());
+        var result = await client.SignManifestAsync(CreateSignRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/keyserver/manifests/sign", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -93,7 +93,7 @@ public sealed class TransactionSecurityClientTests
         {
             Manifest = CreateManifest(),
             ExpectedSubscriberPartyId = "subscriber-1"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/keyserver/manifests/verify", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -115,7 +115,7 @@ public sealed class TransactionSecurityClientTests
         using var http = new HttpClient(handler);
         var client = new KeyServerClient(http, DefaultOptions);
 
-        var result = await client.GetPartyKeyAsync("publisher A", "key/1");
+        var result = await client.GetPartyKeyAsync("publisher A", "key/1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/keyserver/parties/publisher%20A/keys/key%2F1", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -134,7 +134,7 @@ public sealed class TransactionSecurityClientTests
         using var http = new HttpClient(handler);
         var client = new KeyServerClient(http, DefaultOptions);
 
-        var result = await client.GetManifestAsync("txn/1");
+        var result = await client.GetManifestAsync("txn/1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/keyserver/manifests/txn%2F1", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -162,7 +162,7 @@ public sealed class TransactionSecurityClientTests
             SubscriberPartyId = "subscriber/1",
             Status = "signed",
             Limit = 25,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/keyserver/manifests/report", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -191,7 +191,7 @@ public sealed class TransactionSecurityClientTests
             EncryptedDiffgramBase64 = "encrypted-body",
             EncryptedBodySha256 = "encrypted-hash",
             DiffgramSha256 = "plain-hash"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/subscriber/diffgrams/commit", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -211,7 +211,7 @@ public sealed class TransactionSecurityClientTests
         using var http = new HttpClient(handler);
         var client = new SubscriberClient(http, DefaultOptions);
 
-        var result = await client.GetTransactionStatusAsync("txn/1");
+        var result = await client.GetTransactionStatusAsync("txn/1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/subscriber/transactions/txn%2F1/status", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -232,7 +232,7 @@ public sealed class TransactionSecurityClientTests
         {
             Reason = TransactionFailureReason.Aborted,
             Actor = "coordinator"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/subscriber/transactions/txn-1/abort", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -262,7 +262,7 @@ public sealed class TransactionSecurityClientTests
         client.ApiKey = "rotated-key";
         client.Port = 7155;
 
-        var result = await client.KeyServer.GetPartyKeyAsync("publisher-1", "sign-1");
+        var result = await client.KeyServer.GetPartyKeyAsync("publisher-1", "sign-1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.IsType<KeyServerClient>(client.KeyServer);
         Assert.IsType<SubscriberClient>(client.Subscriber);
@@ -283,7 +283,7 @@ public sealed class TransactionSecurityClientTests
         using var http = new HttpClient(handler);
         var client = new TurnTransactionsClient(http, DefaultOptions);
 
-        var result = await client.GetStatusAsync();
+        var result = await client.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/turntransactions/status", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -301,7 +301,7 @@ public sealed class TransactionSecurityClientTests
         using var http = new HttpClient(handler);
         var client = new TurnTransactionsClient(http, DefaultOptions);
 
-        var result = await client.GetPubSubStatusAsync(maxMessages: 7);
+        var result = await client.GetPubSubStatusAsync(maxMessages: 7, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/turntransactions/pubsub/status", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -321,7 +321,7 @@ public sealed class TransactionSecurityClientTests
         using var http = new HttpClient(handler);
         var client = new TurnTransactionsClient(http, DefaultOptions);
 
-        var result = await client.ReplayPubSubAsync(maxMessages: 3);
+        var result = await client.ReplayPubSubAsync(maxMessages: 3, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/turntransactions/pubsub/replay", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -341,7 +341,7 @@ public sealed class TransactionSecurityClientTests
 
         var result = await client.PurgePubSubRetentionAsync(
             DateTimeOffset.Parse("2026-06-11T12:00:00Z"),
-            maxMessages: 5);
+            maxMessages: 5, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/turntransactions/pubsub/retention/purge", handler.LastRequest.RequestUri!.AbsolutePath);

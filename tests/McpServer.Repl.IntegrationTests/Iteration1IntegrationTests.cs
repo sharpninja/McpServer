@@ -10,6 +10,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// Integration tests for iteration 1: REPL child process launch, YAML handshake,
 /// trust bootstrap flow, auth key acceptance, and workspace selection.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class Iteration1IntegrationTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;
@@ -33,11 +34,11 @@ public sealed class Iteration1IntegrationTests : IDisposable
     [Fact]
     public async Task ChildProcess_LaunchesSuccessfully()
     {
-        await _replProcess.StartAsync();
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         
         Assert.True(_replProcess.IsRunning, "Child process should be running");
         
-        await Task.Delay(500);
+        await Task.Delay(500, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(_replProcess.IsRunning, "Child process should remain running after initialization");
     }
 
@@ -47,8 +48,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
     [Fact]
     public async Task HelloHandshake_SendsAndReceivesYaml()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var helloEnvelope = new
         {
@@ -66,9 +67,9 @@ public sealed class Iteration1IntegrationTests : IDisposable
         };
 
         var yamlContent = _yamlSerializer.Serialize(helloEnvelope);
-        await _replProcess.WriteLineAsync(yamlContent);
+        await _replProcess.WriteLineAsync(yamlContent, cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse, "Should receive a response from hello handshake");
 
         var stdoutLines = _replProcess.StdoutLines;
@@ -81,8 +82,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
     [Fact]
     public async Task YamlEnvelope_ParsesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var helloEnvelope = new
         {
@@ -94,9 +95,9 @@ public sealed class Iteration1IntegrationTests : IDisposable
         };
 
         var yamlContent = _yamlSerializer.Serialize(helloEnvelope);
-        await _replProcess.WriteLineAsync(yamlContent);
+        await _replProcess.WriteLineAsync(yamlContent, cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse);
 
         var responseLine = _replProcess.StdoutLines.FirstOrDefault();
@@ -119,11 +120,11 @@ public sealed class Iteration1IntegrationTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync("/health?nonce=test-nonce-123");
+            var response = await httpClient.GetAsync("/health?nonce=test-nonce-123", cancellationToken: TestContext.Current.CancellationToken);
             
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
                 Assert.Contains("test-nonce-123", content);
             }
         }
@@ -149,7 +150,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync("/health");
+            var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
             
             Assert.True(
                 response.StatusCode == HttpStatusCode.OK || 
@@ -177,7 +178,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync("/health");
+            var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
             
             Assert.True(
                 response.StatusCode == HttpStatusCode.OK || 
@@ -196,8 +197,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
     [Fact]
     public async Task TrustBootstrap_SignatureValidation_ChallengeResponseFlow()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var trustEnvelope = new
         {
@@ -216,9 +217,9 @@ public sealed class Iteration1IntegrationTests : IDisposable
         };
 
         var yamlContent = _yamlSerializer.Serialize(trustEnvelope);
-        await _replProcess.WriteLineAsync(yamlContent);
+        await _replProcess.WriteLineAsync(yamlContent, cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse, "Should receive response to trust bootstrap request");
 
         var responseLine = _replProcess.StdoutLines.FirstOrDefault();
@@ -231,8 +232,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
     [Fact]
     public async Task TrustBootstrap_NonceChallengeFlow_ValidatesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nonceRequestEnvelope = new
         {
@@ -249,9 +250,9 @@ public sealed class Iteration1IntegrationTests : IDisposable
         };
 
         var yamlContent = _yamlSerializer.Serialize(nonceRequestEnvelope);
-        await _replProcess.WriteLineAsync(yamlContent);
+        await _replProcess.WriteLineAsync(yamlContent, cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse, "Should receive nonce challenge response");
     }
 
@@ -261,8 +262,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
     [Fact]
     public async Task WorkspaceSelection_MultipleWorkspaces_SwitchesContext()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var workspace1Envelope = new
         {
@@ -278,8 +279,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
             }
         };
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace1Envelope));
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(3));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace1Envelope), cancellationToken: TestContext.Current.CancellationToken);
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(3), cancellationToken: TestContext.Current.CancellationToken);
 
         var workspace2Envelope = new
         {
@@ -295,8 +296,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
             }
         };
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace2Envelope));
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(3));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(workspace2Envelope), cancellationToken: TestContext.Current.CancellationToken);
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(3), cancellationToken: TestContext.Current.CancellationToken);
         
         Assert.True(_replProcess.StdoutLines.Count >= 1, "Should receive responses for workspace selection");
     }
@@ -377,10 +378,10 @@ public sealed class Iteration1IntegrationTests : IDisposable
         
         try
         {
-            var healthResponse = await httpClient.GetAsync("/health?nonce=bootstrap-nonce");
+            var healthResponse = await httpClient.GetAsync("/health?nonce=bootstrap-nonce", cancellationToken: TestContext.Current.CancellationToken);
             if (healthResponse.StatusCode == HttpStatusCode.OK)
             {
-                var healthContent = await healthResponse.Content.ReadAsStringAsync();
+                var healthContent = await healthResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
                 Assert.Contains("bootstrap-nonce", healthContent);
             }
         }
@@ -389,8 +390,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
             // Server not running
         }
 
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var fullFlowEnvelope = new
         {
@@ -410,8 +411,8 @@ public sealed class Iteration1IntegrationTests : IDisposable
             }
         };
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(fullFlowEnvelope));
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(fullFlowEnvelope), cancellationToken: TestContext.Current.CancellationToken);
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         
         Assert.True(_replProcess.IsRunning, "Process should remain running after bootstrap flow");
     }

@@ -38,8 +38,8 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         var workspacePath = Path.Combine(_tempRoot, "workspace-a");
         var expiresAt = DateTimeOffset.UtcNow.AddHours(2);
 
-        await _sut.UpsertAsync(workspacePath, "gho_test_token", expiresAt).ConfigureAwait(true);
-        var record = await _sut.GetAsync(workspacePath).ConfigureAwait(true);
+        await _sut.UpsertAsync(workspacePath, "gho_test_token", expiresAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var record = await _sut.GetAsync(workspacePath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(record);
         Assert.Equal("gho_test_token", record.AccessToken);
@@ -52,9 +52,9 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-b");
 
-        await _sut.UpsertAsync(workspacePath, "gho_first").ConfigureAwait(true);
-        await _sut.UpsertAsync(workspacePath, "gho_second").ConfigureAwait(true);
-        var record = await _sut.GetAsync(workspacePath).ConfigureAwait(true);
+        await _sut.UpsertAsync(workspacePath, "gho_first", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.UpsertAsync(workspacePath, "gho_second", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var record = await _sut.GetAsync(workspacePath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(record);
         Assert.Equal("gho_second", record.AccessToken);
@@ -65,9 +65,9 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
     {
         var workspacePath = Path.Combine(_tempRoot, "workspace-c");
 
-        await _sut.UpsertAsync(workspacePath, "gho_delete_me").ConfigureAwait(true);
-        var removed = await _sut.DeleteAsync(workspacePath).ConfigureAwait(true);
-        var record = await _sut.GetAsync(workspacePath).ConfigureAwait(true);
+        await _sut.UpsertAsync(workspacePath, "gho_delete_me", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var removed = await _sut.DeleteAsync(workspacePath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var record = await _sut.GetAsync(workspacePath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(removed);
         Assert.Null(record);
@@ -80,15 +80,15 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         var lockPath = Path.Combine(_tempRoot, "github-token-store.json.lock");
         using var lockStream = new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
 
-        var upsertTask = _sut.UpsertAsync(workspacePath, "gho_wait_for_lock");
+        var upsertTask = _sut.UpsertAsync(workspacePath, "gho_wait_for_lock", ct: TestContext.Current.CancellationToken);
 
-        await Task.Delay(100).ConfigureAwait(true);
+        await Task.Delay(100, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(upsertTask.IsCompleted);
 
         lockStream.Dispose();
         await upsertTask.ConfigureAwait(true);
 
-        var record = await _sut.GetAsync(workspacePath).ConfigureAwait(true);
+        var record = await _sut.GetAsync(workspacePath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(record);
         Assert.Equal("gho_wait_for_lock", record.AccessToken);
     }
@@ -100,7 +100,7 @@ public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
         var storePath = Path.Combine(_tempRoot, "github-token-store.json");
         var lockPath = storePath + ".lock";
 
-        await _sut.UpsertAsync(workspacePath, "gho_permissions").ConfigureAwait(true);
+        await _sut.UpsertAsync(workspacePath, "gho_permissions", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(File.Exists(storePath));
         Assert.True(File.Exists(lockPath));

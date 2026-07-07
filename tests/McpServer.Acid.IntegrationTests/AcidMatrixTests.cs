@@ -8,6 +8,7 @@ namespace McpServer.Acid.IntegrationTests;
 /// TEST-MCP-ACID-003: Key server <c>SignManifest</c> request outcomes - the success path and every
 /// deterministically reachable rejection (unknown party, unknown key, replay nonce, stale sequence).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class KeyServerSignMatrixTests
 {
     /// <summary>A registered publisher/subscriber pair signs successfully.</summary>
@@ -18,7 +19,7 @@ public sealed class KeyServerSignMatrixTests
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
 
         var response = await harness.KeyServer.SignManifestAsync(
-            AcidTransactionHarness.CreateSignRequest("txn-sign-ok", sequence: 1, nonce: "n-sign-ok")).ConfigureAwait(true);
+            AcidTransactionHarness.CreateSignRequest("txn-sign-ok", sequence: 1, nonce: "n-sign-ok"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(response.Success);
         Assert.Equal(TransactionFailureReason.None, response.Reason);
@@ -34,7 +35,7 @@ public sealed class KeyServerSignMatrixTests
         var request = AcidTransactionHarness.CreateSignRequest("txn-sign-ghost", sequence: 1, nonce: "n-ghost");
         request.PublisherPartyId = "ghost-publisher";
 
-        var response = await harness.KeyServer.SignManifestAsync(request).ConfigureAwait(true);
+        var response = await harness.KeyServer.SignManifestAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(response.Success);
         Assert.Equal(TransactionFailureReason.UnknownParty, response.Reason);
@@ -49,7 +50,7 @@ public sealed class KeyServerSignMatrixTests
         var request = AcidTransactionHarness.CreateSignRequest("txn-sign-badkey", sequence: 1, nonce: "n-badkey");
         request.PublisherSigningKeyId = "no-such-key";
 
-        var response = await harness.KeyServer.SignManifestAsync(request).ConfigureAwait(true);
+        var response = await harness.KeyServer.SignManifestAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(response.Success);
         Assert.Equal(TransactionFailureReason.UnknownKey, response.Reason);
@@ -64,7 +65,7 @@ public sealed class KeyServerSignMatrixTests
         await harness.SignManifestAsync("txn-nonce-1", sequence: 5, nonce: "dup-nonce").ConfigureAwait(true);
 
         var response = await harness.KeyServer.SignManifestAsync(
-            AcidTransactionHarness.CreateSignRequest("txn-nonce-2", sequence: 6, nonce: "dup-nonce")).ConfigureAwait(true);
+            AcidTransactionHarness.CreateSignRequest("txn-nonce-2", sequence: 6, nonce: "dup-nonce"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(response.Success);
         Assert.Equal(TransactionFailureReason.ReplayNonce, response.Reason);
@@ -79,7 +80,7 @@ public sealed class KeyServerSignMatrixTests
         await harness.SignManifestAsync("txn-seq-hi", sequence: 50, nonce: "n-seq-hi").ConfigureAwait(true);
 
         var response = await harness.KeyServer.SignManifestAsync(
-            AcidTransactionHarness.CreateSignRequest("txn-seq-lo", sequence: 49, nonce: "n-seq-lo")).ConfigureAwait(true);
+            AcidTransactionHarness.CreateSignRequest("txn-seq-lo", sequence: 49, nonce: "n-seq-lo"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(response.Success);
         Assert.Equal(TransactionFailureReason.StaleSequence, response.Reason);
@@ -90,6 +91,7 @@ public sealed class KeyServerSignMatrixTests
 /// TEST-MCP-ACID-004: Key server <c>VerifyManifest</c> request outcomes - valid verification plus the
 /// rejections a relying party (subscriber) acts on: signature mismatch and wrong subscriber.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class KeyServerVerifyMatrixTests
 {
     /// <summary>A genuine signed manifest verifies as valid for its intended subscriber.</summary>
@@ -104,7 +106,7 @@ public sealed class KeyServerVerifyMatrixTests
         {
             Manifest = manifest,
             ExpectedSubscriberPartyId = AcidTransactionHarness.SubscriberPartyId,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(response.IsValid);
         Assert.Equal(TransactionFailureReason.None, response.Reason);
@@ -123,7 +125,7 @@ public sealed class KeyServerVerifyMatrixTests
         {
             Manifest = manifest,
             ExpectedSubscriberPartyId = AcidTransactionHarness.SubscriberPartyId,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(response.IsValid);
         Assert.Equal(TransactionFailureReason.ManifestSignatureMismatch, response.Reason);
@@ -141,7 +143,7 @@ public sealed class KeyServerVerifyMatrixTests
         {
             Manifest = manifest,
             ExpectedSubscriberPartyId = "someone-else",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(response.IsValid);
         Assert.Equal(TransactionFailureReason.WrongSubscriber, response.Reason);
@@ -154,6 +156,7 @@ public sealed class KeyServerVerifyMatrixTests
 /// rejection (signature mismatch, encrypted-body mismatch, plaintext mismatch, stale sequence, wrong subscriber,
 /// decrypt-required failure).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class SubscriberCommitMatrixTests
 {
     /// <summary>A valid signed diffgram commits.</summary>
@@ -164,7 +167,7 @@ public sealed class SubscriberCommitMatrixTests
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
         var manifest = await harness.SignManifestAsync("txn-c-ok", sequence: 1, nonce: "n-c-ok").ConfigureAwait(true);
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", commit.Status);
         Assert.Equal(TransactionFailureReason.None, commit.Reason);
@@ -177,9 +180,9 @@ public sealed class SubscriberCommitMatrixTests
         using var harness = AcidTransactionHarness.Create(AcidParticipants.AllMock);
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
         var manifest = await harness.SignManifestAsync("txn-c-dup", sequence: 1, nonce: "n-c-dup").ConfigureAwait(true);
-        await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
+        await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var second = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
+        var second = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", second.Status);
     }
@@ -193,7 +196,7 @@ public sealed class SubscriberCommitMatrixTests
         var manifest = await harness.SignManifestAsync("txn-c-tampered", sequence: 1, nonce: "n-c-tampered").ConfigureAwait(true);
         manifest.DiffgramSha256 = AcidTransactionHarness.Sha256Hex("tampered");
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.ManifestSignatureMismatch, commit.Reason);
@@ -209,7 +212,7 @@ public sealed class SubscriberCommitMatrixTests
         var request = AcidTransactionHarness.CreateCommitRequest(manifest);
         request.EncryptedBodySha256 = AcidTransactionHarness.Sha256Hex("other-encrypted");
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(request).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.EncryptedBodyHashMismatch, commit.Reason);
@@ -225,7 +228,7 @@ public sealed class SubscriberCommitMatrixTests
         var request = AcidTransactionHarness.CreateCommitRequest(manifest);
         request.DiffgramSha256 = AcidTransactionHarness.Sha256Hex("other-plaintext");
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(request).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.PlaintextDiffgramHashMismatch, commit.Reason);
@@ -239,9 +242,9 @@ public sealed class SubscriberCommitMatrixTests
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
         var low = await harness.SignManifestAsync("txn-c-seq-low", sequence: 10, nonce: "n-c-seq-low").ConfigureAwait(true);
         var high = await harness.SignManifestAsync("txn-c-seq-high", sequence: 11, nonce: "n-c-seq-high").ConfigureAwait(true);
-        await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(high)).ConfigureAwait(true);
+        await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(high), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(low)).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(low), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.StaleSequence, commit.Reason);
@@ -260,7 +263,7 @@ public sealed class SubscriberCommitMatrixTests
             new FixedOptionsMonitor<SubscriberOptions>(new SubscriberOptions { PartyId = "different-subscriber" }),
             new TransactionDiffgramProtector());
 
-        var commit = await misconfigured.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
+        var commit = await misconfigured.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.WrongSubscriber, commit.Reason);
@@ -283,7 +286,7 @@ public sealed class SubscriberCommitMatrixTests
             }),
             new TransactionDiffgramProtector());
 
-        var commit = await strict.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
+        var commit = await strict.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.DecryptFailed, commit.Reason);
@@ -295,6 +298,7 @@ public sealed class SubscriberCommitMatrixTests
 /// bypassed (disabled / non-mutating), aborted (mutation failed), rejected when it validates a key-server sign
 /// failure, rejected when it validates a subscriber commit rejection, and degraded when the subscriber is down.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class CoordinatorOutcomeMatrixTests
 {
     /// <summary>A mutating turn with healthy collaborators commits.</summary>

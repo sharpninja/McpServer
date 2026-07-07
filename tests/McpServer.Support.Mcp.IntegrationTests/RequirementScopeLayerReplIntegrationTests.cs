@@ -13,6 +13,7 @@ namespace McpServer.Support.Mcp.IntegrationTests;
 /// <summary>
 /// TEST-MCP-REQSCOPE-REPL-001: REPL-driven integration coverage for requirement scope layers.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class RequirementScopeLayerReplIntegrationTests
 {
     private static readonly TimeSpan MarkerTimeout = TimeSpan.FromMinutes(1);
@@ -79,7 +80,7 @@ public sealed class RequirementScopeLayerReplIntegrationTests
                 area: MCP
                 scopeStartLayerKey: layer-2
                 acceptanceCriteria:
-                  - TEST-MCP-REQSCOPE-REPL-001 verifies this requirement becomes visible at layer 2.
+                  - text: TEST-MCP-REQSCOPE-REPL-001 verifies this requirement becomes visible at layer 2.
 
             """).ConfigureAwait(true);
         await RunReplAsync(repl, "reqscope-int-create-old-fr", """
@@ -95,7 +96,7 @@ public sealed class RequirementScopeLayerReplIntegrationTests
                 area: MCP
                 scopeStartLayerKey: layer-1
                 acceptanceCriteria:
-                  - TEST-MCP-REQSCOPE-REPL-001 verifies this requirement is hidden after layer 1.
+                  - text: TEST-MCP-REQSCOPE-REPL-001 verifies this requirement is hidden after layer 1.
 
             """).ConfigureAwait(true);
         await RunReplAsync(repl, "reqscope-int-sunset-fr-before-layer", """
@@ -172,7 +173,9 @@ public sealed class RequirementScopeLayerReplIntegrationTests
 
         var document = repl.GetResponseDocument(requestId);
         Assert.False(string.IsNullOrWhiteSpace(document), $"Missing REPL document for '{requestId}'.{Environment.NewLine}{repl.Diagnostics}");
-        Assert.Contains("type: result", document, StringComparison.Ordinal);
+        Assert.True(
+            document.Contains("type: result", StringComparison.Ordinal),
+            $"Expected a result envelope for '{requestId}' but received:{Environment.NewLine}{document}");
         return document;
     }
 

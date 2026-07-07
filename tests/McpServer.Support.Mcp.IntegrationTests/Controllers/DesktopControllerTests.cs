@@ -17,6 +17,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// request routing, and launcher-result normalization can be exercised without starting real
 /// desktop programs during integration test execution.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class DesktopControllerTests
 {
     private const string DesktopLaunchToken = "desktop-launch-test-token";
@@ -71,9 +72,9 @@ public sealed class DesktopControllerTests
                 WindowStyle = "Hidden",
                 WaitForExit = true,
                 TimeoutMs = 5000
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await response.Content.ReadFromJsonAsync<DesktopLaunchResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<DesktopLaunchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(result);
@@ -103,7 +104,7 @@ public sealed class DesktopControllerTests
         var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsJsonAsync(new Uri("/mcpserver/desktop/launch", UriKind.Relative), value: (object?)null).ConfigureAwait(true);
+        var response = await client.PostAsJsonAsync(new Uri("/mcpserver/desktop/launch", UriKind.Relative), value: (object?)null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -140,7 +141,7 @@ public sealed class DesktopControllerTests
 
         var response = await client.PostAsJsonAsync(
             new Uri("/mcpserver/desktop/launch", UriKind.Relative),
-            new DesktopLaunchRequest { ExecutablePath = launcherPath }).ConfigureAwait(true);
+            new DesktopLaunchRequest { ExecutablePath = launcherPath }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         await processRunner.DidNotReceive().RunAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());

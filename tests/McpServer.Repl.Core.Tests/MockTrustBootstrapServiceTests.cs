@@ -13,7 +13,7 @@ public class MockTrustBootstrapServiceTests
 
         var markerData = CreateMarkerDataWithNonce(workspacePath, "valid-nonce-123");
 
-        trustService.PromptUserTrustAsync(workspacePath, markerData, default)
+        trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(callInfo =>
             {
                 var data = callInfo.Arg<IMarkerFileData>();
@@ -26,7 +26,7 @@ public class MockTrustBootstrapServiceTests
                 return Task.FromResult(false);
             });
 
-        var result = await trustService.PromptUserTrustAsync(workspacePath, markerData);
+        var result = await trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result);
     }
@@ -39,7 +39,7 @@ public class MockTrustBootstrapServiceTests
 
         var markerData = CreateMarkerDataWithNonce(workspacePath, "invalid-nonce");
 
-        trustService.PromptUserTrustAsync(workspacePath, markerData, default)
+        trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(callInfo =>
             {
                 var data = callInfo.Arg<IMarkerFileData>();
@@ -52,7 +52,7 @@ public class MockTrustBootstrapServiceTests
                 return Task.FromResult(false);
             });
 
-        var result = await trustService.PromptUserTrustAsync(workspacePath, markerData);
+        var result = await trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result);
     }
@@ -65,10 +65,10 @@ public class MockTrustBootstrapServiceTests
 
         var markerData = CreateMarkerData(workspacePath, null);
 
-        trustService.PromptUserTrustAsync(workspacePath, markerData, default)
+        trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(false);
 
-        var result = await trustService.PromptUserTrustAsync(workspacePath, markerData);
+        var result = await trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result);
     }
@@ -79,9 +79,9 @@ public class MockTrustBootstrapServiceTests
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
 
-        await trustService.RecordTrustDecisionAsync(workspacePath, true);
+        await trustService.RecordTrustDecisionAsync(workspacePath, true, cancellationToken: TestContext.Current.CancellationToken);
 
-        await trustService.Received(1).RecordTrustDecisionAsync(workspacePath, true, default);
+        await trustService.Received(1).RecordTrustDecisionAsync(workspacePath, true, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -90,9 +90,9 @@ public class MockTrustBootstrapServiceTests
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
 
-        await trustService.RecordTrustDecisionAsync(workspacePath, false);
+        await trustService.RecordTrustDecisionAsync(workspacePath, false, cancellationToken: TestContext.Current.CancellationToken);
 
-        await trustService.Received(1).RecordTrustDecisionAsync(workspacePath, false, default);
+        await trustService.Received(1).RecordTrustDecisionAsync(workspacePath, false, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -101,10 +101,10 @@ public class MockTrustBootstrapServiceTests
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((true, true));
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(hasDecision);
         Assert.True(isTrusted);
@@ -116,10 +116,10 @@ public class MockTrustBootstrapServiceTests
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/denied-project";
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((true, false));
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(hasDecision);
         Assert.False(isTrusted);
@@ -131,10 +131,10 @@ public class MockTrustBootstrapServiceTests
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/new-project";
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((false, false));
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(hasDecision);
         Assert.False(isTrusted);
@@ -146,14 +146,14 @@ public class MockTrustBootstrapServiceTests
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
 
-        await trustService.RevokeTrustAsync(workspacePath);
+        await trustService.RevokeTrustAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
 
-        await trustService.Received(1).RevokeTrustAsync(workspacePath, default);
+        await trustService.Received(1).RevokeTrustAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((false, false));
 
-        var (hasDecision, _) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, _) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(hasDecision);
     }
 
@@ -166,10 +166,10 @@ public class MockTrustBootstrapServiceTests
         var workspace2 = CreateTrustedWorkspace("/home/user/project2", "signature_verified");
         var workspace3 = CreateTrustedWorkspace("/home/user/project3", "user_confirmed");
 
-        trustService.ListTrustedWorkspacesAsync(default)
+        trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken)
             .Returns(new[] { workspace1, workspace2, workspace3 });
 
-        var result = await trustService.ListTrustedWorkspacesAsync();
+        var result = await trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(3, result.Count);
@@ -183,10 +183,10 @@ public class MockTrustBootstrapServiceTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
-        trustService.ListTrustedWorkspacesAsync(default)
+        trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Array.Empty<ITrustedWorkspace>());
 
-        var result = await trustService.ListTrustedWorkspacesAsync();
+        var result = await trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Empty(result);
@@ -197,14 +197,14 @@ public class MockTrustBootstrapServiceTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
-        await trustService.ClearAllTrustAsync();
+        await trustService.ClearAllTrustAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        await trustService.Received(1).ClearAllTrustAsync(default);
+        await trustService.Received(1).ClearAllTrustAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        trustService.ListTrustedWorkspacesAsync(default)
+        trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Array.Empty<ITrustedWorkspace>());
 
-        var result = await trustService.ListTrustedWorkspacesAsync();
+        var result = await trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Empty(result);
     }
 
@@ -216,7 +216,7 @@ public class MockTrustBootstrapServiceTests
 
         var validNonces = new HashSet<string> { "valid-nonce-123", "valid-nonce-456" };
 
-        trustService.PromptUserTrustAsync(Arg.Any<string>(), Arg.Any<IMarkerFileData>(), default)
+        trustService.PromptUserTrustAsync(Arg.Any<string>(), Arg.Any<IMarkerFileData>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(callInfo =>
             {
                 var data = callInfo.Arg<IMarkerFileData>();
@@ -230,19 +230,19 @@ public class MockTrustBootstrapServiceTests
             });
 
         var attempt1 = await trustService.PromptUserTrustAsync(workspacePath,
-            CreateMarkerDataWithNonce(workspacePath, "invalid-nonce-1"));
+            CreateMarkerDataWithNonce(workspacePath, "invalid-nonce-1"), cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(attempt1);
 
         var attempt2 = await trustService.PromptUserTrustAsync(workspacePath,
-            CreateMarkerDataWithNonce(workspacePath, "valid-nonce-123"));
+            CreateMarkerDataWithNonce(workspacePath, "valid-nonce-123"), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(attempt2);
 
         var attempt3 = await trustService.PromptUserTrustAsync(workspacePath,
-            CreateMarkerDataWithNonce(workspacePath, "invalid-nonce-2"));
+            CreateMarkerDataWithNonce(workspacePath, "invalid-nonce-2"), cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(attempt3);
 
         var attempt4 = await trustService.PromptUserTrustAsync(workspacePath,
-            CreateMarkerDataWithNonce(workspacePath, "valid-nonce-456"));
+            CreateMarkerDataWithNonce(workspacePath, "valid-nonce-456"), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(attempt4);
     }
 
@@ -253,24 +253,24 @@ public class MockTrustBootstrapServiceTests
         var workspacePath = "/home/user/project";
         var markerData = CreateMarkerDataWithNonce(workspacePath, "valid-nonce-123");
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((false, false));
 
-        trustService.PromptUserTrustAsync(workspacePath, markerData, default)
+        trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(true);
 
-        var (initialHasDecision, _) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (initialHasDecision, _) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(initialHasDecision);
 
-        var prompted = await trustService.PromptUserTrustAsync(workspacePath, markerData);
+        var prompted = await trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(prompted);
 
-        await trustService.RecordTrustDecisionAsync(workspacePath, true);
+        await trustService.RecordTrustDecisionAsync(workspacePath, true, cancellationToken: TestContext.Current.CancellationToken);
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((true, true));
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(hasDecision);
         Assert.True(isTrusted);
     }
@@ -288,10 +288,10 @@ public class MockTrustBootstrapServiceTests
                 ["timestamp"] = DateTimeOffset.UtcNow
             });
 
-        trustService.ListTrustedWorkspacesAsync(default)
+        trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken)
             .Returns(new[] { workspace });
 
-        var result = await trustService.ListTrustedWorkspacesAsync();
+        var result = await trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken);
         var retrieved = result.First();
 
         Assert.NotNull(retrieved.Metadata);

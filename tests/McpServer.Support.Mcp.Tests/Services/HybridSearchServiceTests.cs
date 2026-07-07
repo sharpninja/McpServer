@@ -83,7 +83,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
             .Returns(new List<(string ChunkId, float Distance)> { ("chunk1", 0.1f), ("chunk2", 0.5f) });
 
         var sut = new HybridSearchService(_fts5, _vectorIndex, _embedding, _db, NullLogger<HybridSearchService>.Instance);
-        var result = await sut.SearchAsync("hello", 10).ConfigureAwait(true);
+        var result = await sut.SearchAsync("hello", 10, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(result.Chunks);
         Assert.Equal("chunk1", result.Chunks[0].ChunkId);
@@ -102,7 +102,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
             .Returns(new List<(string ChunkId, float Distance)> { ("chunk1", 0.1f) });
 
         var sut = new HybridSearchService(_fts5, _vectorIndex, _embedding, _db, NullLogger<HybridSearchService>.Instance);
-        var result = await sut.SearchAsync("test", 10).ConfigureAwait(true);
+        var result = await sut.SearchAsync("test", 10, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(result.Chunks);
     }
@@ -119,7 +119,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
         _embedding.IsAvailable.Returns(false);
 
         var sut = new HybridSearchService(_fts5, _vectorIndex, _embedding, _db, NullLogger<HybridSearchService>.Instance);
-        var result = await sut.SearchAsync("hello", 10).ConfigureAwait(true);
+        var result = await sut.SearchAsync("hello", 10, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(result.Chunks);
         Assert.Equal("chunk1", result.Chunks[0].ChunkId);
@@ -134,7 +134,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
         _embedding.IsAvailable.Returns(false);
 
         var sut = new HybridSearchService(_fts5, _vectorIndex, _embedding, _db, NullLogger<HybridSearchService>.Instance);
-        var result = await sut.SearchAsync("hello", 10).ConfigureAwait(true);
+        var result = await sut.SearchAsync("hello", 10, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(result.Chunks);
     }
@@ -151,7 +151,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
         _embedding.IsAvailable.Returns(false);
 
         var sut = new HybridSearchService(_fts5, _vectorIndex, _embedding, _db, NullLogger<HybridSearchService>.Instance);
-        var result = await sut.SearchAsync("hello", 10).ConfigureAwait(true);
+        var result = await sut.SearchAsync("hello", 10, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("<b>hello</b> world", result.Chunks[0].Snippet);
     }
@@ -161,7 +161,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
     {
         var sut = new HybridSearchService(_fts5, _vectorIndex, _embedding, _db, NullLogger<HybridSearchService>.Instance);
 
-        await sut.RebuildAsync().ConfigureAwait(true);
+        await sut.RebuildAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await _fts5.Received(1).RebuildAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);
         await _vectorIndex.Received(1).RebuildAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);

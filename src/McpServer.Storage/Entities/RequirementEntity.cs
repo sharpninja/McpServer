@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace McpServer.Support.Mcp.Storage.Entities;
 
@@ -44,11 +45,18 @@ public sealed class RequirementEntity
     public string? Notes { get; set; }
 
     /// <summary>
-    /// TR-MCP-REQAC-001: acceptance criteria serialized as a JSON array of
-    /// {id, text, isSatisfied, evidence} objects (same shape as TODO acceptance criteria).
-    /// Null or empty when the requirement has no criteria.
+    /// TR-MCP-REQAC-001: 4NF acceptance-criteria child rows ({id, text, isSatisfied, evidence}),
+    /// replacing the former JSON array column. Empty when the requirement has no criteria.
     /// </summary>
-    public string? AcceptanceCriteriaJson { get; set; }
+    /// <remarks>
+    /// Not an EF navigation: it is loaded/attached explicitly by the service. A principal-side
+    /// collection navigation to <see cref="RequirementAcceptanceCriterionEntity"/> triggers EF
+    /// relationship fixup that nulls the composite (tenant-column) foreign key on multi-entity
+    /// inserts, so the child rows are written from the dependent side and read via an explicit
+    /// query, mirroring <c>RequirementTraceabilityLinkEntity</c>.
+    /// </remarks>
+    [NotMapped]
+    public List<RequirementAcceptanceCriterionEntity> AcceptanceCriteria { get; set; } = [];
 
     /// <summary>First requirement scope layer where this requirement applies.</summary>
     [Required]

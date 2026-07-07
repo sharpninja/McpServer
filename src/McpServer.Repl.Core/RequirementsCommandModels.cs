@@ -255,6 +255,12 @@ public sealed class CreateFrParamsModel : ICreateFrParams
     public string Area { get; set; } = string.Empty;
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -272,6 +278,12 @@ public sealed class UpdateFrParamsModel : IUpdateFrParams
     public string? Priority { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -325,6 +337,12 @@ public sealed class CreateTrParamsModel : ICreateTrParams
     public string Subarea { get; set; } = string.Empty;
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -342,6 +360,12 @@ public sealed class UpdateTrParamsModel : IUpdateTrParams
     public string? Priority { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -393,6 +417,12 @@ public sealed class CreateTestParamsModel : ICreateTestParams
     public string TestType { get; set; } = string.Empty;
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />
@@ -410,6 +440,12 @@ public sealed class UpdateTestParamsModel : IUpdateTestParams
     public string? Priority { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
+    /// <inheritdoc />
+    public string? ScopeStartLayerKey { get; set; }
+    /// <inheritdoc />
+    public string? ScopeEndLayerKey { get; set; }
 }
 
 /// <inheritdoc />

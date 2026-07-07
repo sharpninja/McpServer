@@ -23,15 +23,15 @@ public sealed class Fts5SearchServiceTests
     public async Task SearchAsync_ExcludesSoftDeletedDocumentsBeforeAndAfterRebuild()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
-        await connection.OpenAsync().ConfigureAwait(true);
+        await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await using var db = CreateDb(connection);
         await CreateFtsTableAsync(connection).ConfigureAwait(true);
         await SeedDocumentsAsync(db).ConfigureAwait(true);
 
         var sut = new Fts5SearchService(db, NullLogger<Fts5SearchService>.Instance);
-        await sut.RebuildAsync().ConfigureAwait(true);
+        await sut.RebuildAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Single((await sut.SearchAsync("needle").ConfigureAwait(true)).Chunks);
+        Assert.Single((await sut.SearchAsync("needle", ct: TestContext.Current.CancellationToken).ConfigureAwait(true)).Chunks);
 
         var deletedAtUtc = DateTimeOffset.UtcNow;
         await SoftDeleteAsync(db.Chunks.Where(chunk => chunk.DocumentId == "doc-deleted"), deletedAtUtc).ConfigureAwait(true);
@@ -39,20 +39,20 @@ public sealed class Fts5SearchServiceTests
 
         Assert.Equal(1, await CountFtsRowsAsync(connection, "chunk-deleted").ConfigureAwait(true));
 
-        var beforeRebuild = await sut.SearchAsync("needle").ConfigureAwait(true);
+        var beforeRebuild = await sut.SearchAsync("needle", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Empty(beforeRebuild.Chunks);
         Assert.Empty(beforeRebuild.SourceKeys);
 
-        await sut.RebuildAsync().ConfigureAwait(true);
+        await sut.RebuildAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(0, await CountFtsRowsAsync(connection, "chunk-deleted").ConfigureAwait(true));
 
-        var afterRebuild = await sut.SearchAsync("needle").ConfigureAwait(true);
+        var afterRebuild = await sut.SearchAsync("needle", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Empty(afterRebuild.Chunks);
         Assert.Empty(afterRebuild.SourceKeys);
 
         var retainedRows = await db.Documents
             .IgnoreQueryFilters()
-            .CountAsync(doc => doc.Id == "doc-deleted" && EF.Property<bool>(doc, "IsDeleted"))
+            .CountAsync(doc => doc.Id == "doc-deleted" && EF.Property<bool>(doc, "IsDeleted"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(1, retainedRows);
     }

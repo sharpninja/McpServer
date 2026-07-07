@@ -116,7 +116,7 @@ public sealed class TurnTransactionCoordinatorTests
         using var encryptionKey = EncryptionKeyPair.Create();
         var canonicalizer = new TransactionManifestCanonicalizer();
         using var keyServer = new InMemoryKeyServerService(Monitor(new KeyServerOptions()), canonicalizer);
-        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = "mcpserver", Role = "publisher" })
+        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = "mcpserver", Role = "publisher" }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         await keyServer.RegisterPartyAsync(new PartyRegistrationRequest
         {
@@ -124,7 +124,7 @@ public sealed class TurnTransactionCoordinatorTests
             Role = "subscriber",
             ActiveEncryptionKeyId = "subscriber-1:encryption:1",
             EncryptionPublicKeyPem = encryptionKey.PublicKeyPem,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var protector = new TransactionDiffgramProtector();
         var innerSubscriber = new InMemorySubscriberCommitService(
             keyServer,

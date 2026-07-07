@@ -230,12 +230,12 @@ public sealed class FederationTopologyService : IFederationTopologyService
                 o.ProxyId == proxyId &&
                 (o.Status == "queued" || o.Status == "replay_failed") &&
                 o.AttemptCount < maxAttempts)
+            .OrderBy(o => o.CreatedAtUtc)
+            .Take(limit)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
         return candidates
-            .OrderBy(o => o.CreatedAtUtc)
-            .Take(limit)
             .Select(o => new FederationOperationReplayItem
             {
                 OperationId = o.OperationId,

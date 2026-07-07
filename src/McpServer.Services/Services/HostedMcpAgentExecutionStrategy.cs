@@ -4,7 +4,7 @@ using System.Text.Json;
 using McpServer.McpAgent;
 using McpServer.McpAgent.Hosting;
 using McpServer.Client;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Repl.Core;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Agents.AI;
@@ -17,7 +17,7 @@ using ReplSessionLogImpl = McpServer.Repl.Core.SessionLogWorkflow;
 namespace McpServer.Support.Mcp.Services;
 
 internal sealed class HostedMcpAgentExecutionStrategy(
-    ICopilotClient copilotClient,
+    IAgentCliClient copilotClient,
     WorkspaceTokenService workspaceTokenService,
     IOptions<DesktopLaunchOptions> desktopLaunchOptions,
     ServerRuntimeInfo serverRuntimeInfo,
@@ -161,7 +161,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             AgentExecutionSessionRequest request,
             HttpClient httpClient,
             IMcpHostedAgent hostedAgent,
-            ICopilotClient copilotClient,
+            IAgentCliClient copilotClient,
             ILogger logger)
         {
             _request = request;
@@ -177,13 +177,13 @@ internal sealed class HostedMcpAgentExecutionStrategy(
 
         public int? ProcessId => _baseChatClient.ProcessId;
 
-        public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+        public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
             ExecuteAsync(_request.InitialPrompt, cancellationToken);
 
         public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default) =>
             StreamAsync(_request.InitialPrompt, cancellationToken);
 
-        public Task<CopilotResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+        public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
             ExecuteAsync(prompt, cancellationToken);
 
         public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default) =>
@@ -215,7 +215,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             _httpClient.Dispose();
         }
 
-        private async Task<CopilotResult> ExecuteAsync(string prompt, CancellationToken cancellationToken)
+        private async Task<AgentCliResult> ExecuteAsync(string prompt, CancellationToken cancellationToken)
         {
             try
             {
@@ -225,11 +225,11 @@ internal sealed class HostedMcpAgentExecutionStrategy(
                         cancellationToken)
                     .ConfigureAwait(false);
                 var body = ReadResponseText(response);
-                return new CopilotResult
+                return new AgentCliResult
                 {
                     Body = body,
-                    ContentType = CopilotContentType.Text,
-                    State = CopilotResultState.Success,
+                    ContentType = AgentCliContentType.Text,
+                    State = AgentCliResultState.Success,
                 };
             }
             catch (OperationCanceledException)
@@ -239,10 +239,10 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Hosted MCP Agent execution failed for workspace {WorkspacePath}", _request.WorkspacePath);
-                return new CopilotResult
+                return new AgentCliResult
                 {
                     Body = string.Empty,
-                    State = CopilotResultState.Error,
+                    State = AgentCliResultState.Error,
                     Stderr = ex.Message,
                 };
             }
@@ -307,8 +307,8 @@ internal sealed class HostedMcpAgentExecutionStrategy(
     }
 
     private sealed class HostedAgentStdioChatClient(
-        ICopilotClient copilotClient,
-        CopilotClientOptions options,
+        IAgentCliClient copilotClient,
+        AgentCliClientOptions options,
         ILogger logger)
         : IChatClient, IAsyncDisposable
     {
@@ -316,7 +316,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
         private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);
 
         private readonly SemaphoreSlim _gate = new(1, 1);
-        private CopilotInteractiveSession? _session;
+        private AgentCliInteractiveSession? _session;
         private bool _disposed;
 
         public int? ProcessId => _session?.ProcessId;
@@ -412,9 +412,9 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             }
         }
 
-        private static CopilotClientOptions CloneOptions(CopilotClientOptions source)
+        private static AgentCliClientOptions CloneOptions(AgentCliClientOptions source)
         {
-            var clone = new CopilotClientOptions
+            var clone = new AgentCliClientOptions
             {
                 AgentPath = source.AgentPath,
                 GitHubToken = source.GitHubToken,
@@ -731,4 +731,3 @@ internal sealed class HostedMcpAgentExecutionStrategy(
 
     }
 }
-

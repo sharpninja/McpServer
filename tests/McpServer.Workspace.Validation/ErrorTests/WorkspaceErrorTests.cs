@@ -36,7 +36,7 @@ public sealed class WorkspaceErrorTests
         if (string.IsNullOrEmpty(badKey)) return;
 
         var response = await _fixture.Client.GetAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{badKey}");
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{badKey}", cancellationToken: TestContext.Current.CancellationToken);
         _output.WriteLine($"GET with key='{badKey}' → {(int)response.StatusCode}");
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -49,7 +49,7 @@ public sealed class WorkspaceErrorTests
     {
         var body = new { Name = "Test" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{badKey}", body);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{badKey}", body, cancellationToken: TestContext.Current.CancellationToken);
         _output.WriteLine($"PUT with key='{badKey}' → {(int)response.StatusCode}");
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -61,7 +61,7 @@ public sealed class WorkspaceErrorTests
     public async Task Delete_InvalidKey_Returns400(string badKey)
     {
         var response = await _fixture.Client.DeleteAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{badKey}");
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{badKey}", cancellationToken: TestContext.Current.CancellationToken);
         _output.WriteLine($"DELETE with key='{badKey}' → {(int)response.StatusCode}");
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -74,7 +74,7 @@ public sealed class WorkspaceErrorTests
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var response = await _fixture.Client.GetAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}");
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -85,7 +85,7 @@ public sealed class WorkspaceErrorTests
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var body = new { Name = "Ghost" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}", body);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}", body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -95,7 +95,7 @@ public sealed class WorkspaceErrorTests
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var response = await _fixture.Client.DeleteAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}");
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -105,7 +105,7 @@ public sealed class WorkspaceErrorTests
     {
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\DoesNotExist_" + Guid.NewGuid().ToString("N"));
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}/start", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}/start", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -120,13 +120,13 @@ public sealed class WorkspaceErrorTests
         try
         {
             var body = new { WorkspacePath = testPath, Name = "DupeFirst" };
-            var first = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+            var first = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Created, first.StatusCode);
 
-            var second = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+            var second = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
 
-            var result = await second.Content.ReadFromJsonAsync<WorkspaceMutationResult>();
+            var result = await second.Content.ReadFromJsonAsync<WorkspaceMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.False(string.IsNullOrWhiteSpace(result.Error));
@@ -134,7 +134,7 @@ public sealed class WorkspaceErrorTests
         }
         finally
         {
-            await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{testKey}");
+            await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{testKey}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -146,7 +146,7 @@ public sealed class WorkspaceErrorTests
     {
         var response = await _fixture.Client.PostAsync(
             WorkspaceEndpointFixture.WorkspaceRoute,
-            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Missing required WorkspacePath → 400 or model validation error.
         Assert.True(
@@ -162,7 +162,7 @@ public sealed class WorkspaceErrorTests
         var key = WorkspaceEndpointFixture.EncodeKey(@"C:\SomePath");
         var response = await _fixture.Client.PutAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/{key}",
-            null);
+            null, cancellationToken: TestContext.Current.CancellationToken);
 
         // Null body → should fail gracefully.
         Assert.True(
@@ -183,7 +183,7 @@ public sealed class WorkspaceErrorTests
         {
             Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json")
         };
-        var response = await _fixture.Client.SendAsync(request);
+        var response = await _fixture.Client.SendAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         // PATCH is not defined on the controller.
         Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);

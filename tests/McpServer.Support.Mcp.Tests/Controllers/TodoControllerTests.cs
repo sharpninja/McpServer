@@ -236,6 +236,127 @@ public sealed class TodoControllerTests
     }
 
     /// <summary>
+    /// TEST-MCP-TODO-CLOSE-001: Verifies that close-by-id sets DONE state and a server UTC completion timestamp.
+    /// </summary>
+    [Fact]
+    public async Task CloseAsync_WhenItemExists_SetsDoneAndCompletedDate()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.GetByIdAsync("TODO-CLOSE-001", Arg.Any<CancellationToken>())
+            .Returns(new TodoFlatItem
+            {
+                Id = "TODO-CLOSE-001",
+                Title = "Close me",
+                Section = "Backlog",
+                Priority = "high",
+                Done = false,
+            });
+        todoService.UpdateAsync("TODO-CLOSE-001", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var request = call.ArgAt<TodoUpdateRequest>(1);
+                return new TodoMutationResult(
+                    true,
+                    null,
+                    new TodoFlatItem
+                    {
+                        Id = "TODO-CLOSE-001",
+                        Title = "Close me",
+                        Section = "Backlog",
+                        Priority = "high",
+                        Done = request.Done ?? false,
+                        CompletedDate = request.CompletedDate,
+                    });
+            });
+
+        var controller = CreateController(todoService);
+        var actionResult = await controller.CloseAsync("TODO-CLOSE-001", CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(ok.Value);
+        Assert.True(mutation.Success);
+        Assert.NotNull(mutation.Item);
+        Assert.True(mutation.Item!.Done);
+        Assert.False(string.IsNullOrWhiteSpace(mutation.Item.CompletedDate));
+        var completedAt = DateTimeOffset.Parse(
+            mutation.Item.CompletedDate!,
+            System.Globalization.CultureInfo.InvariantCulture,
+            System.Globalization.DateTimeStyles.RoundtripKind);
+        Assert.Equal(TimeSpan.Zero, completedAt.Offset);
+        await todoService.Received(1)
+            .UpdateAsync(
+                "TODO-CLOSE-001",
+                Arg.Is<TodoUpdateRequest>(request => request != null && request.Done == true && !string.IsNullOrWhiteSpace(request.CompletedDate)),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TODO-CLOSE-001: Verifies that close-by-id preserves existing not-found mutation behavior.
+    /// </summary>
+    [Fact]
+    public async Task CloseAsync_WhenItemMissing_ReturnsNotFound()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.GetByIdAsync("TODO-CLOSE-MISSING", Arg.Any<CancellationToken>())
+            .Returns((TodoFlatItem?)null);
+
+        var controller = CreateController(todoService);
+        var actionResult = await controller.CloseAsync("TODO-CLOSE-MISSING", CancellationToken.None).ConfigureAwait(true);
+
+        var notFound = Assert.IsType<NotFoundObjectResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(notFound.Value);
+        Assert.False(mutation.Success);
+        Assert.Equal(TodoMutationFailureKind.NotFound, mutation.FailureKind);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TODO-CLOSE-001: Verifies that close-by-id uses the transaction-gated update service when registered.
+    /// </summary>
+    [Fact]
+    public async Task CloseAsync_WhenTransactionGateRegistered_UsesGatedUpdateService()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var gated = Substitute.For<ITransactionGatedTodoMutationService>();
+        gated.UpdateAsync("TODO-CLOSE-GATED-001", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var request = call.ArgAt<TodoUpdateRequest>(1);
+                return new TodoMutationResult(
+                    true,
+                    null,
+                    new TodoFlatItem
+                    {
+                        Id = "TODO-CLOSE-GATED-001",
+                        Title = "Closed through gate",
+                        Section = "Backlog",
+                        Priority = "high",
+                        Done = request.Done ?? false,
+                        CompletedDate = request.CompletedDate,
+                    });
+            });
+
+        var controller = CreateController(todoService, todoMutations: gated);
+        var actionResult = await controller.CloseAsync("TODO-CLOSE-GATED-001", CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var mutation = Assert.IsType<TodoMutationResult>(ok.Value);
+        Assert.True(mutation.Success);
+        Assert.NotNull(mutation.Item);
+        Assert.True(mutation.Item!.Done);
+        Assert.False(string.IsNullOrWhiteSpace(mutation.Item.CompletedDate));
+        await gated.Received(1)
+            .UpdateAsync(
+                "TODO-CLOSE-GATED-001",
+                Arg.Is<TodoUpdateRequest>(request => request != null && request.Done == true && !string.IsNullOrWhiteSpace(request.CompletedDate)),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await todoService.DidNotReceive()
+            .UpdateAsync(Arg.Any<string>(), Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
     /// TEST-MCP-161: Verifies that HTTP TODO create uses the transaction-gated mutation service when registered.
     /// </summary>
     [Fact]

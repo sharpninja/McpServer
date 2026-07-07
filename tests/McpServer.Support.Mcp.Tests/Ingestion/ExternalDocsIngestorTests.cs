@@ -34,7 +34,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, ExternalDocsPath = "docs/external" });
         var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(results.Count >= 2);
         Assert.All(results, r =>
@@ -58,7 +58,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
         });
         var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.DoesNotContain(results, r => r.Doc.SourceKey.Contains("huge.txt"));
         Assert.Contains(results, r => r.Doc.SourceKey.Contains("normal.txt"));
@@ -73,7 +73,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, ExternalDocsPath = "empty_ext" });
         var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(results);
     }
@@ -84,7 +84,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, ExternalDocsPath = "nonexistent" });
         var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(results);
     }

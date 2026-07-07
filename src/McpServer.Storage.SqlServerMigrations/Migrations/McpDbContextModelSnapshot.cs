@@ -46,10 +46,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<string>("DefaultModelsJson")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("DefaultSeedPrompt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -58,8 +54,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -87,11 +83,61 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DisplayName");
+
                     b.HasIndex("IsBuiltIn");
 
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("AgentDefinitions");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionModelEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AgentDefinitionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("AgentDefinitionId", "Ordinal");
+
+                    b.ToTable("AgentDefinitionModels");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
@@ -111,8 +157,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -159,6 +205,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasIndex("WorkspacePath");
 
+                    b.HasIndex("WorkspacePath", "AgentId", "Timestamp");
+
                     b.ToTable("AgentEventLogs");
                 });
 
@@ -201,8 +249,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -210,9 +258,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
-
-                    b.Property<string>("InstructionFilesOverrideJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -228,9 +273,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.Property<string>("MarkerAdditions")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ModelsOverrideJson")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RestartPolicy")
@@ -262,6 +304,58 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.ToTable("AgentWorkspaces");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceListItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AgentWorkspaceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("AgentWorkspaceId", "ListType", "Ordinal");
+
+                    b.ToTable("AgentWorkspaceListItems");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.BrainSlotDefinitionEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -272,8 +366,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CredentialReference")
                         .IsRequired()
@@ -284,8 +378,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -339,11 +433,11 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<int>("TimeoutSeconds")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("WeightUpdatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("WeightUpdatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("WeightVersion")
                         .HasColumnType("int");
@@ -370,15 +464,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<bool>("AdmitToGraphRag")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("CompletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CompletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -429,8 +523,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTimeOffset>("StartedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("StartedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -478,8 +572,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -511,6 +605,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
+                    b.HasIndex("DocumentId", "ChunkIndex");
+
                     b.ToTable("Chunks");
                 });
 
@@ -529,8 +625,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -567,6 +663,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.HasIndex("SourceType");
 
                     b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SourceType", "SourceKey");
 
                     b.ToTable("Documents");
                 });
@@ -614,8 +712,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("MetadataJson")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("OccurredAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PreviousSnapshotJson")
                         .HasColumnType("nvarchar(max)");
@@ -655,15 +753,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -705,8 +803,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<DateTimeOffset?>("ResolvedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("ResolvedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ResourceId")
                         .HasMaxLength(1024)
@@ -729,8 +827,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTimeOffset?>("AcknowledgedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("AcknowledgedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("AttemptCount")
                         .HasColumnType("int");
@@ -742,15 +840,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("BodyBase64")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -810,8 +908,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("OperationId");
 
@@ -822,6 +920,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.HasIndex("Domain", "ResourceId");
 
                     b.HasIndex("ProxyId", "Status");
+
+                    b.HasIndex("ProxyId", "Status", "AttemptCount", "CreatedAtUtc");
 
                     b.ToTable("FederationOperations");
                 });
@@ -834,18 +934,18 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Sequence"));
 
-                    b.Property<DateTimeOffset?>("AcknowledgedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("AcknowledgedAtUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -870,6 +970,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasIndex("OperationId");
 
+                    b.HasIndex("ProxyId", "AcknowledgedAtUtc");
+
                     b.HasIndex("ProxyId", "Sequence");
 
                     b.ToTable("FederationOutbox");
@@ -885,15 +987,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -908,8 +1010,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTimeOffset?>("LastHeartbeatUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("LastHeartbeatUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("MetadataJson")
                         .HasColumnType("nvarchar(max)");
@@ -924,8 +1026,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ProxyId");
 
@@ -949,15 +1051,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -976,8 +1078,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset>("LastSeenUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("LastSeenUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("MetadataJson")
                         .HasColumnType("nvarchar(max)");
@@ -1028,8 +1130,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1067,6 +1169,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedAtUtc");
+
                     b.HasIndex("EntityType");
 
                     b.HasIndex("Name");
@@ -1089,8 +1193,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1136,6 +1240,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedAtUtc");
+
                     b.HasIndex("RelationshipType");
 
                     b.HasIndex("SourceEntityId");
@@ -1158,15 +1264,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1186,8 +1292,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
                         .HasMaxLength(256)
@@ -1213,6 +1319,70 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.ToTable("Memories");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementAcceptanceCriterionEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CriterionId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Evidence")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsSatisfied")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequirementId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("RequirementKind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "RequirementKind", "RequirementId", "Ordinal");
+
+                    b.ToTable("RequirementAcceptanceCriteria");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -1227,9 +1397,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("AcceptanceCriteriaJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1243,8 +1410,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1318,15 +1485,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1352,8 +1519,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("WorkspaceId", "Key");
 
@@ -1394,8 +1561,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1436,8 +1603,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1475,9 +1642,9 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionLogTurnId");
-
                     b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogTurnId", "Order");
 
                     b.ToTable("SessionLogActions");
                 });
@@ -1498,22 +1665,19 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTimeOffset?>("CommitTimestamp")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CommitTimestamp")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("FilesChangedJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -1544,6 +1708,53 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogCommits");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitFileEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("SessionLogCommitId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogCommitId", "Ordinal");
+
+                    b.ToTable("SessionLogCommitFiles");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -1589,8 +1800,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1601,8 +1812,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTimeOffset?>("LastUpdated")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("LastUpdated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Model")
                         .HasMaxLength(128)
@@ -1630,8 +1841,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<DateTimeOffset?>("Started")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("Started")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .HasMaxLength(64)
@@ -1694,8 +1905,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1717,8 +1928,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<long>("SessionLogTurnId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset>("Timestamp")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
@@ -1750,8 +1961,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1793,8 +2004,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1852,8 +2063,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<DateTimeOffset?>("Timestamp")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("TokenCount")
                         .HasColumnType("int");
@@ -1863,6 +2074,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasColumnType("nvarchar(1024)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Timestamp");
 
                     b.HasIndex("WorkspaceId");
 
@@ -1885,8 +2098,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1937,8 +2150,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -1987,8 +2200,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2041,6 +2254,107 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.ToTable("TodoAuditHistory");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Date")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SingletonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "SingletonId", "Ordinal");
+
+                    b.ToTable("TodoCompletedGroups");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Qualifier")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("GroupId", "Ordinal");
+
+                    b.ToTable("TodoCompletedItems");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -2054,15 +2368,12 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<string>("CompletedJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2088,15 +2399,58 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("NotesJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("WorkspaceId", "SingletonId");
 
                     b.ToTable("TodoDocumentMetadata", t =>
                         {
                             t.HasCheckConstraint("CK_TodoDocumentMetadata_Singleton", "\"SingletonId\" = 1");
                         });
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentNoteEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SingletonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "SingletonId", "Ordinal");
+
+                    b.ToTable("TodoDocumentNotes");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
@@ -2117,18 +2471,12 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("DependsOnJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescriptionJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
@@ -2139,12 +2487,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("Estimate")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("FunctionalRequirementsJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImplementationTasksJson")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -2191,12 +2533,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<int>("SectionOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("TechnicalDetailsJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TechnicalRequirementsJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -2206,11 +2542,119 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasIndex("Done");
 
+                    b.HasIndex("ItemOrder");
+
                     b.HasIndex("Priority");
 
                     b.HasIndex("Section");
 
+                    b.HasIndex("SectionOrder");
+
                     b.ToTable("TodoItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemListItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "ListType", "Ordinal");
+
+                    b.ToTable("TodoItemListItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemTaskEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Task")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "Ordinal");
+
+                    b.ToTable("TodoItemTasks");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
@@ -2231,15 +2675,15 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2270,18 +2714,18 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTimeOffset>("DateTimeCreated")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DateTimeCreated")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("DateTimeLastSynced")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DateTimeLastSynced")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2342,18 +2786,18 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<DateTimeOffset>("DateTimeCreated")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DateTimeCreated")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset>("DateTimeModified")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DateTimeModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2388,6 +2832,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BucketName");
+
                     b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspacePath");
@@ -2411,8 +2857,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2461,8 +2907,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2473,8 +2919,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset>("FirstReportAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("FirstReportAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("GroupKey")
                         .IsRequired()
@@ -2492,11 +2938,11 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("LastError")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("LastReportAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("LastReportAtUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset>("QuietDeadlineUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("QuietDeadlineUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ReportCount")
                         .HasColumnType("int");
@@ -2540,18 +2986,12 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("AffectedPathsJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AffectedSymbolsJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Component")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTimeOffset>("CreatedUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CurrentTodoId")
                         .HasMaxLength(128)
@@ -2565,8 +3005,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2617,9 +3057,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("ReproductionHintsJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SessionId")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -2635,9 +3072,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.Property<string>("Summary")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TagsJson")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -2658,6 +3092,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasIndex("CreatedUtc");
 
+                    b.HasIndex("GroupId");
+
                     b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspaceId", "Fingerprint");
@@ -2669,6 +3105,60 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasFilter("[IdempotencyKey] IS NOT NULL");
 
                     b.ToTable("TriageReports");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportListItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReportId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("ReportId", "ListType", "Ordinal");
+
+                    b.ToTable("TriageReportListItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageResearchRunEntity", b =>
@@ -2686,8 +3176,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("AgentStdout")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset?>("CompletedUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CompletedUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedTodoId")
                         .HasMaxLength(128)
@@ -2697,8 +3187,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2733,8 +3223,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("ResponseJson")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("StartedUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("StartedUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2748,6 +3238,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
                     b.HasKey("RunId");
 
+                    b.HasIndex("GroupId");
+
                     b.HasIndex("Status");
 
                     b.HasIndex("WorkspaceId");
@@ -2755,6 +3247,54 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.HasIndex("WorkspaceId", "GroupId", "StartedUtc");
 
                     b.ToTable("TriageResearchRuns");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceBannedItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "Category", "Ordinal");
+
+                    b.ToTable("WorkspaceBannedItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
@@ -2767,18 +3307,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<string>("BannedCountriesOfOriginJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BannedIndividualsJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BannedLicensesJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BannedOrganizationsJson")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CurrentRequirementLayerKey")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -2788,18 +3316,18 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<DateTimeOffset>("DateTimeCreated")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DateTimeCreated")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset>("DateTimeModified")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("DateTimeModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
@@ -2869,8 +3397,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         {
                             WorkspaceId = "",
                             CurrentRequirementLayerKey = "layer-1",
-                            DateTimeCreated = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateTimeModified = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateTimeCreated = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateTimeModified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             IsEnabled = true,
                             IsPrimary = false,
@@ -2889,8 +3417,31 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionModelEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", "AgentDefinition")
+                        .WithMany("Models")
+                        .HasForeignKey("AgentDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AgentDefinition");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
                 {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()
                         .HasForeignKey("WorkspaceId")
@@ -2913,6 +3464,23 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired();
 
                     b.Navigation("AgentDefinition");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceListItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", "AgentWorkspace")
+                        .WithMany("ListItems")
+                        .HasForeignKey("AgentWorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AgentWorkspace");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.BrainSlotDefinitionEntity", b =>
@@ -3072,6 +3640,23 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementAcceptanceCriterionEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", "Requirement")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "RequirementKind", "RequirementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Requirement");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3147,6 +3732,23 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired();
 
                     b.Navigation("SessionLogTurn");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitFileEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", "SessionLogCommit")
+                        .WithMany("Files")
+                        .HasForeignKey("SessionLogCommitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SessionLogCommit");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -3259,6 +3861,40 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", "DocumentMetadata")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "SingletonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMetadata");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", "Group")
+                        .WithMany("Items")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3268,6 +3904,23 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentNoteEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", "DocumentMetadata")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "SingletonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMetadata");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3275,6 +3928,40 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemListItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "TodoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TodoItem");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemTaskEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "TodoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TodoItem");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
@@ -3348,15 +4035,44 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", b =>
                 {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TriageGroupEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportListItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", "TriageReport")
+                        .WithMany("ListItems")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TriageReport");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageResearchRunEntity", b =>
                 {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TriageGroupEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()
                         .HasForeignKey("WorkspaceId")
@@ -3364,9 +4080,27 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceBannedItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", "Workspace")
+                        .WithMany("BannedItems")
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Workspace");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
                 {
+                    b.Navigation("Models");
+
                     b.Navigation("WorkspaceConfigs");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
+                {
+                    b.Navigation("ListItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
@@ -3379,6 +4113,11 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Navigation("SourceRelationships");
 
                     b.Navigation("TargetRelationships");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", b =>
+                {
+                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -3401,9 +4140,24 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Navigation("Tags");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
                 {
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", b =>
+                {
+                    b.Navigation("ListItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
+                {
+                    b.Navigation("BannedItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,6 +9,7 @@ using System.Text;
 /// platform-specific wiki files and enriches the landing page with repository
 /// user-documentation links after ZIP extraction.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class RequirementsWikiPublishScriptTests
 {
     /// <summary>
@@ -130,7 +131,7 @@ public sealed class RequirementsWikiPublishScriptTests
         using var process = Process.Start(psi) ?? throw new InvalidOperationException("Failed to start pwsh.exe.");
         var stdout = await process.StandardOutput.ReadToEndAsync().ConfigureAwait(true);
         var stderr = await process.StandardError.ReadToEndAsync().ConfigureAwait(true);
-        await process.WaitForExitAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         return new ProcessResult(process.ExitCode, stdout, stderr);
     }
 

@@ -30,7 +30,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.GetStatusAsync();
+        var result = await client.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(handler.LastRequest);
         Assert.Equal(HttpMethod.Get, handler.LastRequest.Method);
@@ -55,7 +55,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.EnableAsync();
+        var result = await client.EnableAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/enable", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -69,7 +69,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.DisableAsync();
+        var result = await client.DisableAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/disable", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -83,7 +83,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.ListTargetsAsync();
+        var result = await client.ListTargetsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/targets", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -104,7 +104,7 @@ public sealed class FederationClientTests
             Name = "new-target",
             BaseUrl = "http://r:7148",
             ApiKey = "secret"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/targets", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -120,7 +120,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var status = await client.RemoveTargetAsync("old-target");
+        var status = await client.RemoveTargetAsync("old-target", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/targets/old-target", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -134,7 +134,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.SetDefaultTargetAsync("primary");
+        var result = await client.SetDefaultTargetAsync("primary", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/targets/primary/set-default", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -148,7 +148,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.ClearDefaultTargetAsync();
+        var result = await client.ClearDefaultTargetAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/targets/default", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -165,7 +165,7 @@ public sealed class FederationClientTests
         {
             WorkspacePath = @"C:\proj",
             TargetName = "remote1"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/routes", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -184,7 +184,7 @@ public sealed class FederationClientTests
         {
             WorkspacePath = @"C:\proj",
             TargetName = "remote1"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/routes", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -198,7 +198,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.GetConnectionAsync("MyProject");
+        var result = await client.GetConnectionAsync("MyProject", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("workspaceName=MyProject", handler.LastRequest.RequestUri!.Query);
@@ -213,7 +213,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.DiscoverFromTunnelsAsync();
+        var result = await client.DiscoverFromTunnelsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/targets/discover-from-tunnels", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -230,7 +230,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.ListProxiesAsync();
+        var result = await client.ListProxiesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/proxies", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -263,7 +263,7 @@ public sealed class FederationClientTests
                     Version = "v1",
                 },
             ],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/proxies/enroll", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -294,7 +294,7 @@ public sealed class FederationClientTests
                     WorkspacePath = @"F:\GitHub\McpServer",
                 },
             ],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/proxies/PAYTON-LEGION2/heartbeat", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -319,7 +319,7 @@ public sealed class FederationClientTests
             WorkspacePath = @"F:\GitHub\McpServer",
             IsEnabled = true,
             Version = "v1",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/proxies/PAYTON-LEGION2/workspaces", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -337,7 +337,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.ListWorkspacesAsync("PAYTON-LEGION2");
+        var result = await client.ListWorkspacesAsync("PAYTON-LEGION2", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/workspaces", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -353,7 +353,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.GetQueueStatusAsync("PAYTON-LEGION2");
+        var result = await client.GetQueueStatusAsync("PAYTON-LEGION2", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/queue", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -372,7 +372,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.ListConflictsAsync("PAYTON-LEGION2", openOnly: true);
+        var result = await client.ListConflictsAsync("PAYTON-LEGION2", openOnly: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/conflicts", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -389,7 +389,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.GetAdapterCoverageAsync();
+        var result = await client.GetAdapterCoverageAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/adapters", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -405,7 +405,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.GetSyncItemsAsync("PAYTON-LEGION2", 6);
+        var result = await client.GetSyncItemsAsync("PAYTON-LEGION2", 6, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/sync", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -426,7 +426,7 @@ public sealed class FederationClientTests
         {
             ProxyId = "PAYTON-LEGION2",
             Status = "applied",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/sync/7/ack", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -446,7 +446,7 @@ public sealed class FederationClientTests
             OperationId = "op-1",
             ProxyId = "PAYTON-LEGION2",
             Domain = "todo",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/operations", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -465,7 +465,7 @@ public sealed class FederationClientTests
         {
             Status = "applied",
             HubVersion = "v2",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/operations/op-1/ack", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -491,7 +491,7 @@ public sealed class FederationClientTests
                 ProxyId = "PAYTON-LEGION2",
                 Domain = "todo",
             },
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/envelopes", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -509,7 +509,7 @@ public sealed class FederationClientTests
         var result = await client.ResolveConflictAsync("fedconf-1", new FederationConflictResolutionRequest
         {
             ResolutionStatus = "hub_wins",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/conflicts/fedconf-1/resolve", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -524,7 +524,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.PushAsync();
+        var result = await client.PushAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/federation/push", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -539,7 +539,7 @@ public sealed class FederationClientTests
         using var http = new HttpClient(handler);
         var client = new FederationClient(http, DefaultOptions);
 
-        var result = await client.PushAsync(["todos"]);
+        var result = await client.PushAsync(["todos"], cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("todos", handler.LastRequestBody);
         Assert.Equal(3, result.Succeeded);
@@ -556,7 +556,7 @@ public sealed class FederationClientTests
 
         Assert.NotNull(facade.Federation);
 
-        var result = await facade.Federation.GetStatusAsync();
+        var result = await facade.Federation.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(result.Enabled);
     }
 }

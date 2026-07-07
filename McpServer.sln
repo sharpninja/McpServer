@@ -1,11 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.2.11430.68
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ACFF16D9-C460-4DAF-8806-E9FD58069B7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Common.Copilot", "src\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj", "{63EC6997-5B85-4503-9678-8ECE52B65973}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Common.AgentCli", "src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj", "{63EC6997-5B85-4503-9678-8ECE52B65973}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.ServiceDefaults", "src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj", "{FFB8537F-C019-4A5E-9981-C8EC82224737}"
 EndProject

@@ -1080,6 +1080,16 @@ AiCodeReview and AiProjectReview Nuke targets SHALL integrate directly with the 
 - All prior tests + new remain green (Byrd gate).
 Scope: layer-1+
 
+## FR-MCP-139 Warning suppression governance
+
+The MCP Server workspace must maintain durable governance for warning suppression decisions, approved exceptions, required code fixes, validation evidence, and traceability across TODO and requirements artifacts.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Approved warning suppressions are recorded with diagnostic code, justification, owner, permanence, and review condition.
+- [ ] Unapproved diagnostics and broad warning bypasses remain remediation work until code, configuration, package metadata, or dependency changes remove the warning source.
+- [ ] PLAN-WARNREMEDIATION-001 stays current with approved suppressions separated from required fixes and marks only validated work as done.
+- [x] Requirements exports and traceability mappings include the suppression governance FR, TR, and aiUnit TEST records. (evidence: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md, docs/Project/Requirements-Matrix.md, docs/Project/requirements-wiki-documents.zip)
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
@@ -1093,6 +1103,11 @@ Scope: layer-1+
 ## FR-MCP-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
+Scope: layer-1+
+
+## FR-MCP-DOCFXWIKI-001 FR-MCP-DOCFXWIKI-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-DOCFXWIKI-001.
 Scope: layer-1+
 
 ## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
@@ -1512,6 +1527,16 @@ Scope: layer-1+
 - [x] The subscriber emits one message-log entry per received message at the audit chokepoint, independent of the durable audit gate.
 - [x] Sink transport errors are swallowed and never break the transaction.
 
+## FR-MCP-TODO-CLOSE-001 Close TODO item by ID
+
+Users and agents can close a TODO item with a single ID-scoped operation that marks the item complete and records the completion timestamp.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] A REST endpoint accepts a TODO ID without requiring the caller to resubmit the full TODO update payload. (evidence: TodoController.CloseAsync POST /mcpserver/todo/{id}/close covered by TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate.)
+- [x] Closing an open TODO sets the item status to DONE by setting done true and records a non-empty completion timestamp. (evidence: TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate asserts done true and UTC completedDate.)
+- [x] Closing a missing TODO returns the existing not-found mutation failure behavior. (evidence: TodoControllerTests.CloseAsync_WhenItemMissing_ReturnsNotFound.)
+- [x] The typed client exposes the same close-by-id operation. (evidence: TodoClientTests.CloseAsync_PostsCorrectUrl.)
+
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 
 Agents can submit workspace-scoped incidental bug reports without leaving their current task.
@@ -1549,6 +1574,30 @@ Scope: layer-1+
 - [ ] Each plugin skill bundle includes triage guidance.
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
+
+## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
+
+Requirements wiki export must optionally discover docs/wiki.yaml in the active workspace and use it as the authoritative wiki document tree, navigation tree, optional home template, and flattened document list for GitHub and Azure wiki exports while preserving current output when the file is absent.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] When docs/wiki.yaml is absent, GenerateWikiAsync produces the same canonical Home, requirements documents, manifests, GitHub _Sidebar.md and _Footer.md, and Azure .order output as before.
+- [x] When docs/wiki.yaml is present, the documents collection is the complete flattened export list and every navigation document reference must resolve to exactly one declared document.
+- [x] Declared documents can use generated requirement sources and workspace-relative Markdown source files, and their target paths are written under each eligible platform output folder.
+- [x] The optional home template renders generatedAtUtc, navigation, and documents tokens; absent home templates fall back to a generated home page derived from the navigation tree.
+- [x] Platform filters control whether declared documents appear in GitHub, Azure, or both, and generated manifests list only files exported for that platform.
+- [x] Invalid docs/wiki.yaml content fails with actionable validation errors before any export file is modified.
+- [x] GitHub sidebar and Azure order files are generated from the complete navigation tree, including nested folder navigation.
+
+## FR-MCP-WIKIEXPORT-002 Default wiki export configuration during marker generation
+
+When MCP Server writes a workspace marker file, it must also create a default docs/wiki.yaml if the workspace does not already provide one, so wiki export has an explicit document tree for future GitHub and Azure exports.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Marker generation creates docs/wiki.yaml under the workspace root when that file is absent.
+- [x] Marker generation leaves an existing docs/wiki.yaml byte-for-byte unchanged.
+- [x] The default wiki.yaml uses schema mcp-wiki-export/v1 and declares a complete flattened document list for generated home, functional, technical, testing, mapping, and matrix documents.
+- [x] The default navigation tree references every declared document exactly once and is valid for both GitHub and Azure wiki export.
+- [x] The generated default config is written through object serialization, not line-based YAML construction.
 
 ## FR-MCP-WORKSPACE-LAYER-001 FR-MCP-WORKSPACE-LAYER-001
 

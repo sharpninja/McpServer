@@ -8,6 +8,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>
 /// TEST-MCP-TRIAGE-003: Process spawning coverage for local triage agent execution.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class DesktopProcessSpawnerTests
 {
     /// <summary>
@@ -35,9 +36,9 @@ public sealed class DesktopProcessSpawnerTests
         startInfo.ArgumentList.Add("echo desktop-spawner-default");
 
         using var process = spawner.Spawn(startInfo);
-        var stdoutTask = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
-        var stderrTask = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
-        await process.WaitForExitAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stdout = await stdoutTask.ConfigureAwait(true);
         var stderr = await stderrTask.ConfigureAwait(true);

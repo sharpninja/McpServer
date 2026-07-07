@@ -51,7 +51,7 @@ public sealed class ToolBucketServiceTests : IDisposable
         using var scopedDb = CreateContext(@"E:\github\McpServer");
         var sut = CreateSut(scopedDb);
 
-        var result = await sut.AddBucketAsync(new BucketAddRequest("official", "sharpninja", "McpServerTools")).ConfigureAwait(true);
+        var result = await sut.AddBucketAsync(new BucketAddRequest("official", "sharpninja", "McpServerTools"), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("Bucket 'official' already exists.", result.Error);
@@ -93,7 +93,7 @@ public sealed class ToolBucketServiceTests : IDisposable
         using var scopedDb = CreateContext(@"E:\github\McpServer");
         var sut = CreateSut(scopedDb, processRunner);
 
-        var result = await sut.BrowseAsync("official").ConfigureAwait(true);
+        var result = await sut.BrowseAsync("official", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Tools);
@@ -123,7 +123,7 @@ public sealed class ToolBucketServiceTests : IDisposable
         using var scopedDb = CreateContext(@"E:\github\McpServer");
         var sut = CreateSut(scopedDb, processRunner, httpClient);
 
-        var result = await sut.BrowseAsync("official").ConfigureAwait(true);
+        var result = await sut.BrowseAsync("official", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Tools);
@@ -151,7 +151,7 @@ public sealed class ToolBucketServiceTests : IDisposable
         using var unscopedDb = CreateContext(null);
         var sut = CreateSut(unscopedDb);
 
-        var result = await sut.ListBucketsAsync().ConfigureAwait(true);
+        var result = await sut.ListBucketsAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result.Buckets);
         Assert.Equal("official", result.Buckets[0].Name);

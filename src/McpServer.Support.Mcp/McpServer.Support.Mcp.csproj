@@ -6,7 +6,7 @@
     <Configurations>Debug;Release;Staging</Configurations>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <UserSecretsId>funwashad-support-mcp</UserSecretsId>
-    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CA3003;CA1056;CA1054;CS0436</NoWarn>
+    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CA3003;CA1056;CA1054</NoWarn>
     <RootNamespace>McpServer.Support.Mcp</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Staging'">
@@ -54,7 +54,7 @@
     <PackageReference Include="QRCoder" />
     <ProjectReference Include="..\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj" />
     <ProjectReference Include="..\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
-    <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />
+    <ProjectReference Include="..\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj" />
     <ProjectReference Include="..\McpServer.Storage\McpServer.Storage.csproj" />
     <ProjectReference Include="..\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj" />
     <ProjectReference Include="..\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj" />

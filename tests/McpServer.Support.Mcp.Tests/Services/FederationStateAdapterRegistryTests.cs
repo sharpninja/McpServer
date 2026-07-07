@@ -355,8 +355,8 @@ public sealed class FederationStateAdapterRegistryTests
         Assert.True(result.Applied);
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        Assert.NotNull(await db.Requirements.FirstOrDefaultAsync(r => r.Id == "FR-MCP-999").ConfigureAwait(true));
-        Assert.NotNull(await db.RequirementTraceabilityLinks.FirstOrDefaultAsync(l => l.FrId == "FR-MCP-999").ConfigureAwait(true));
+        Assert.NotNull(await db.Requirements.FirstOrDefaultAsync(r => r.Id == "FR-MCP-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.NotNull(await db.RequirementTraceabilityLinks.FirstOrDefaultAsync(l => l.FrId == "FR-MCP-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     /// <summary>Tool and agent adapters snapshot persisted configuration without runtime process state.</summary>
@@ -452,7 +452,7 @@ public sealed class FederationStateAdapterRegistryTests
         Assert.True(result.Applied);
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var tool = await db.ToolDefinitions.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Name == "federation-status").ConfigureAwait(true);
+        var tool = await db.ToolDefinitions.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Name == "federation-status", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(tool);
         Assert.Contains(tool.Tags, tag => tag.Tag == "federation");
     }
@@ -508,8 +508,8 @@ public sealed class FederationStateAdapterRegistryTests
         Assert.True(result.Applied);
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        Assert.NotNull(await db.AgentDefinitions.FirstOrDefaultAsync(a => a.Id == "codex").ConfigureAwait(true));
-        Assert.NotNull(await db.AgentWorkspaces.FirstOrDefaultAsync(a => a.AgentDefinitionId == "codex").ConfigureAwait(true));
+        Assert.NotNull(await db.AgentDefinitions.FirstOrDefaultAsync(a => a.Id == "codex", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.NotNull(await db.AgentWorkspaces.FirstOrDefaultAsync(a => a.AgentDefinitionId == "codex", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     /// <summary>Session log adapter applies unified session log payloads through the canonical session log service.</summary>
@@ -605,7 +605,7 @@ public sealed class FederationStateAdapterRegistryTests
         Assert.True(result.Applied);
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        Assert.Empty(await db.SessionLogs.Where(session => session.SessionId == sessionId).ToListAsync().ConfigureAwait(true));
+        Assert.Empty(await db.SessionLogs.Where(session => session.SessionId == sessionId).ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var retained = await db.SessionLogs
             .IgnoreQueryFilters()
@@ -613,7 +613,7 @@ public sealed class FederationStateAdapterRegistryTests
                 .ThenInclude(turn => turn.Actions)
             .Include(session => session.Turns)
                 .ThenInclude(turn => turn.Tags)
-            .SingleAsync(session => session.SessionId == sessionId)
+            .SingleAsync(session => session.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         AssertSoftDeleted(db, retained);
         Assert.All(retained.Turns, turn => AssertSoftDeleted(db, turn));

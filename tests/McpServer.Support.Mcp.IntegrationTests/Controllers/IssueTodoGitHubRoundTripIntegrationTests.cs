@@ -25,6 +25,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// TODO description, verifies TODO-origin priority/comment changes flow back to GitHub, and finally verifies
 /// that an externally closed GitHub issue syncs back as a closed TODO. Validates FR-MCP-071 and TR-MCP-GH-007.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class IssueTodoGitHubRoundTripIntegrationTests
     : IClassFixture<IssueTodoGitHubRoundTripIntegrationTests.RoundTripWebFactory>, IDisposable
 {
@@ -71,10 +72,10 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
                 section = "issues",
                 priority = "low",
                 description = new[] { "Original description that must remain unchanged." }
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
-        var createResult = await createResponse.Content.ReadFromJsonAsync<TodoMutationResultDto>().ConfigureAwait(true);
+        var createResult = await createResponse.Content.ReadFromJsonAsync<TodoMutationResultDto>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(createResult);
         Assert.True(createResult.Success);
         Assert.NotNull(createResult.Item);
@@ -108,7 +109,7 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
             {
                 priority = "high",
                 note = updatedNote
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.OK, todoUpdateResponse.StatusCode);
 

@@ -24,13 +24,13 @@ partial class Build
     readonly int Port = DefaultPort;
 
     [Parameter("Skip build — use existing publish output from --publish-source")]
-    readonly bool SkipBuild;
+    readonly bool SkipBuild = false;
 
     [Parameter("Skip GitVersion.yml patch version bump")]
-    readonly bool SkipVersionBump;
+    readonly bool SkipVersionBump = false;
 
     [Parameter("Path to pre-built publish output (used with --skip-build)")]
-    readonly string PublishSource;
+    readonly string PublishSource = string.Empty;
 
     /// <summary>
     /// Deploy the MCP server as a Windows service: stop, backup, publish, restore config, register, start, and health check.

@@ -31,7 +31,7 @@ public sealed class GitHubIngestorTests
         _github.ListPullsAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubPullListResult(true, null, Array.Empty<GitHubPullItem>()));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, results.Count);
         Assert.All(results, r =>
@@ -54,7 +54,7 @@ public sealed class GitHubIngestorTests
         _github.ListPullsAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubPullListResult(true, null, pulls));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(results);
         Assert.Equal("github-pr", results[0].Doc.SourceType);
@@ -69,7 +69,7 @@ public sealed class GitHubIngestorTests
         _github.ListPullsAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubPullListResult(false, "not authenticated", Array.Empty<GitHubPullItem>()));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(results);
     }
@@ -83,7 +83,7 @@ public sealed class GitHubIngestorTests
         _github.ListPullsAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubPullListResult(true, null, Array.Empty<GitHubPullItem>()));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(results);
         var content = results[0].Chunks[0].Content;

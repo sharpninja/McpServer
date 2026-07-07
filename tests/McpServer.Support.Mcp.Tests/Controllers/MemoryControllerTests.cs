@@ -76,7 +76,7 @@ public sealed class MemoryControllerTests
         var action = await controller.ListAsync("1", null, null, CancellationToken.None).ConfigureAwait(true);
 
         Assert.IsType<BadRequestObjectResult>(action.Result);
-        await service.DidNotReceiveWithAnyArgs().ListAsync(default!, default);
+        await service.DidNotReceiveWithAnyArgs().ListAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>POST /mcpserver/memory returns Created with the canonical memory id location.</summary>
@@ -145,7 +145,7 @@ public sealed class MemoryControllerTests
         await gated.Received(1)
             .AddAsync(Arg.Any<MemoryAddRequest>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
-        await service.DidNotReceiveWithAnyArgs().AddAsync(default!, default).ConfigureAwait(true);
+        await service.DidNotReceiveWithAnyArgs().AddAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>PUT /mcpserver/memory/{id} maps validation failures to BadRequest.</summary>

@@ -32,4 +32,9 @@ public sealed class RequirementsOptions
     /// Path to <c>Requirements-Matrix.md</c>. Relative paths are resolved under <c>Mcp:RepoRoot</c>.
     /// </summary>
     public string MatrixPath { get; set; } = Path.Combine("docs", "Project", "Requirements-Matrix.md");
+
+    /// <summary>
+    /// Optional wiki export definition file. Relative paths are resolved under the active workspace root.
+    /// </summary>
+    public string WikiConfigPath { get; set; } = Path.Combine("docs", "wiki.yaml");
 }

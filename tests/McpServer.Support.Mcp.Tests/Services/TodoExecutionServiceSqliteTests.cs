@@ -131,9 +131,9 @@ public sealed class TodoExecutionServiceSqliteTests : IDisposable
             new LinkTodoToSessionTurnsRequest
             {
                 SessionTurnIds = ["req-sqlite-001", "req-sqlite-002"]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var context = await _sut.GetExecutionContextAsync(_workspacePath, todoId, 1, 2).ConfigureAwait(true);
+        var context = await _sut.GetExecutionContextAsync(_workspacePath, todoId, 1, 2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(context);
         Assert.Equal(todoId, context!.TodoId);

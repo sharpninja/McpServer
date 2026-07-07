@@ -3,8 +3,8 @@
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
-using McpServer.Common.Copilot;
-using McpServer.Common.Copilot.Extensions;
+using McpServer.Common.AgentCli;
+using McpServer.Common.AgentCli.Extensions;
 using McpServer.GraphRag;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
@@ -164,6 +164,7 @@ public static class McpStdioHost
                 sp.GetService<IOptions<TurnTransactionOptions>>()));
         builder.Services.AddSingleton<TodoUpdateService>();
         builder.Services.AddScoped<ITransactionGatedTodoMutationService, TransactionGatedTodoMutationService>();
+        builder.Services.AddScoped<ITriageTodoCreator, TransactionGatedTriageTodoCreator>();
         builder.Services.AddScoped<TodoExecutionService>();
         builder.Services.AddScoped<ITodoExecutionService>(sp =>
         {
@@ -199,15 +200,15 @@ public static class McpStdioHost
         });
         builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
         builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
-        builder.Services.AddCopilotClient();
-        builder.Services.RemoveAll<ICopilotClient>();
-        builder.Services.AddSingleton<ICopilotClient>(sp =>
-            new AuditedCopilotClient(
-                sp.GetRequiredService<CopilotClient>(),
+        builder.Services.AddAgentCliClient();
+        builder.Services.RemoveAll<IAgentCliClient>();
+        builder.Services.AddSingleton<IAgentCliClient>(sp =>
+            new AuditedAgentCliClient(
+                sp.GetRequiredService<AgentCliClient>(),
                 sp.GetRequiredService<IServiceScopeFactory>(),
                 sp.GetRequiredService<IHttpContextAccessor>(),
                 sp.GetRequiredService<IOptions<IngestionOptions>>(),
-                sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
+                sp.GetRequiredService<ILogger<AuditedAgentCliClient>>()));
         builder.Services.AddAgentExecutionStrategies();
         builder.Services.AddTriageServices();
         builder.Services.AddScoped<RepoIngestor>();

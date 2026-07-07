@@ -13,6 +13,7 @@ namespace McpServer.TransactionSecurity.IntegrationTests;
 /// TEST-MCP-SUBLOG-001: High-performance subscriber message logging (FR-MCP-SUBLOG-001). Verifies the Parseable
 /// sink request shape, error-swallowing, and that the subscriber emits one message-log entry per received message.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class SubscriberMessageLogTests
 {
     private const string PublisherPartyId = "publisher-1";
@@ -34,7 +35,7 @@ public sealed class SubscriberMessageLogTests
         });
 
         await sink.LogAsync(new SubscriberMessageLogEntry(
-            "subscriber.transaction.committed", "txn-1", "None", "diffgram-txn-1", DateTimeOffset.UnixEpoch)).ConfigureAwait(true);
+            "subscriber.transaction.committed", "txn-1", "None", "diffgram-txn-1", DateTimeOffset.UnixEpoch), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(handler.LastRequest);
         Assert.Equal("http://parseable.test/api/v1/ingest", handler.LastRequestUri);
@@ -58,7 +59,7 @@ public sealed class SubscriberMessageLogTests
         });
 
         var ex = await Record.ExceptionAsync(() => sink.LogAsync(new SubscriberMessageLogEntry(
-            "subscriber.transaction.rejected", "txn-2", "ManifestSignatureMismatch", null, DateTimeOffset.UnixEpoch))).ConfigureAwait(true);
+            "subscriber.transaction.rejected", "txn-2", "ManifestSignatureMismatch", null, DateTimeOffset.UnixEpoch), cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         Assert.Null(ex);
     }
@@ -70,8 +71,8 @@ public sealed class SubscriberMessageLogTests
         var canonicalizer = new TransactionManifestCanonicalizer();
         using var keyServer = new InMemoryKeyServerService(
             new FixedOptionsMonitor<KeyServerOptions>(new KeyServerOptions()), canonicalizer);
-        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = PublisherPartyId, Role = "publisher" }).ConfigureAwait(true);
-        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = SubscriberPartyId, Role = "subscriber" }).ConfigureAwait(true);
+        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = PublisherPartyId, Role = "publisher" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = SubscriberPartyId, Role = "subscriber" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var capturing = new CapturingMessageLog();
         using var subscriber = new InMemorySubscriberCommitService(
@@ -82,11 +83,11 @@ public sealed class SubscriberMessageLogTests
             capturing);
 
         var ok = await SignManifestAsync(keyServer, "txn-ok", sequence: 1, nonce: "n-ok").ConfigureAwait(true);
-        await subscriber.CommitDiffgramAsync(CreateCommitRequest(ok)).ConfigureAwait(true);
+        await subscriber.CommitDiffgramAsync(CreateCommitRequest(ok), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var tampered = await SignManifestAsync(keyServer, "txn-bad", sequence: 2, nonce: "n-bad").ConfigureAwait(true);
         tampered.DiffgramSha256 = Sha256Hex("tampered");
-        await subscriber.CommitDiffgramAsync(CreateCommitRequest(tampered)).ConfigureAwait(true);
+        await subscriber.CommitDiffgramAsync(CreateCommitRequest(tampered), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains(capturing.Entries, e => e.EventName == "subscriber.transaction.committed" && e.TransactionId == "txn-ok");
         Assert.Contains(capturing.Entries, e => e.EventName == "subscriber.transaction.rejected" && e.TransactionId == "txn-bad" && e.Reason == nameof(TransactionFailureReason.ManifestSignatureMismatch));

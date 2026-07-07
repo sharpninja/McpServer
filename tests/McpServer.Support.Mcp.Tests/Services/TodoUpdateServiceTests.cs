@@ -68,7 +68,7 @@ public sealed class TodoUpdateServiceTests
                 Title = "New title",
                 Priority = "high",
                 Note = "New note"
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal("New title", result.Item?.Title);
@@ -105,7 +105,7 @@ public sealed class TodoUpdateServiceTests
             new TodoUpdateRequest
             {
                 Description = ["Attempted replacement"]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal(existing, result.Item);
@@ -140,7 +140,7 @@ public sealed class TodoUpdateServiceTests
             new TodoUpdateRequest
             {
                 Done = true
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.True(result.Item?.Done);

@@ -60,7 +60,7 @@ public sealed class SessionLogFileWatcherTests : IDisposable
         using (var initScope = _serviceProvider.CreateScope())
         {
             var initDb = initScope.ServiceProvider.GetRequiredService<McpDbContext>();
-            await initDb.Database.EnsureCreatedAsync().ConfigureAwait(true);
+            await initDb.Database.EnsureCreatedAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var opts = _serviceProvider.GetRequiredService<IOptions<IngestionOptions>>();
@@ -87,10 +87,10 @@ public sealed class SessionLogFileWatcherTests : IDisposable
         SessionLogEntity? stored = null;
         for (var attempt = 0; attempt < 15 && stored is null; attempt++)
         {
-            await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
+            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             using var checkScope = _serviceProvider.CreateScope();
             var checkDb = checkScope.ServiceProvider.GetRequiredService<McpDbContext>();
-            stored = await checkDb.SessionLogs.FirstOrDefaultAsync(s => s.SessionId == "watcher-1").ConfigureAwait(true);
+            stored = await checkDb.SessionLogs.FirstOrDefaultAsync(s => s.SessionId == "watcher-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         await watcher.StopAsync(CancellationToken.None).ConfigureAwait(true);

@@ -1,8 +1,8 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 
 namespace McpServer.Support.Mcp.Services;
 
-internal sealed class CopilotCliAgentExecutionStrategy(ICopilotClient copilotClient) : IAgentExecutionStrategy
+internal sealed class CopilotCliAgentExecutionStrategy(IAgentCliClient copilotClient) : IAgentExecutionStrategy
 {
     public string Name => AgentExecutionStrategyNames.CopilotCli;
 
@@ -17,19 +17,19 @@ internal sealed class CopilotCliAgentExecutionStrategy(ICopilotClient copilotCli
         return ValueTask.FromResult<IAgentExecutionSession>(new CopilotCliAgentExecutionSession(session));
     }
 
-    private sealed class CopilotCliAgentExecutionSession(CopilotInteractiveSession session) : IAgentExecutionSession
+    private sealed class CopilotCliAgentExecutionSession(AgentCliInteractiveSession session) : IAgentExecutionSession
     {
         public bool IsAlive => session.IsAlive;
 
         public int? ProcessId => session.ProcessId;
 
-        public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+        public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
             session.ReadInitialResponseAsync(cancellationToken);
 
         public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default) =>
             session.ReadInitialResponseStreamingAsync(cancellationToken);
 
-        public Task<CopilotResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+        public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
             session.SendAsync(prompt, cancellationToken);
 
         public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default) =>

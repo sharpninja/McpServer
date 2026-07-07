@@ -22,7 +22,7 @@ public sealed class PairingHtmlRendererTests
             .Returns(new PromptTemplate { Id = PairingHtmlRenderer.LoginPageId, Title = "test", Category = "system", Content = template });
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderLoginPageAsync();
+        var result = await renderer.RenderLoginPageAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("<html><form></form></html>", result);
     }
@@ -35,7 +35,7 @@ public sealed class PairingHtmlRendererTests
             .Returns(new PromptTemplate { Id = PairingHtmlRenderer.LoginPageId, Title = "test", Category = "system", Content = template });
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderLoginPageAsync("Invalid username or password.");
+        var result = await renderer.RenderLoginPageAsync("Invalid username or password.", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("Invalid username or password", result);
     }
@@ -47,7 +47,7 @@ public sealed class PairingHtmlRendererTests
             .Returns((PromptTemplate?)null);
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderLoginPageAsync();
+        var result = await renderer.RenderLoginPageAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("MCP Server", result);
         Assert.Contains("<form", result);
@@ -61,7 +61,7 @@ public sealed class PairingHtmlRendererTests
             .Returns(new PromptTemplate { Id = PairingHtmlRenderer.KeyPageId, Title = "test", Category = "system", Content = template });
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderKeyPageAsync("my-secret-key", "http://localhost:7147");
+        var result = await renderer.RenderKeyPageAsync("my-secret-key", "http://localhost:7147", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("my-secret-key", result);
         Assert.Contains("http://localhost:7147/mcp", result);
@@ -74,7 +74,7 @@ public sealed class PairingHtmlRendererTests
             .Returns((PromptTemplate?)null);
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderKeyPageAsync("test-key", "http://localhost:7147");
+        var result = await renderer.RenderKeyPageAsync("test-key", "http://localhost:7147", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("test-key", result);
         Assert.Contains("http://localhost:7147", result);
@@ -88,7 +88,7 @@ public sealed class PairingHtmlRendererTests
             .Returns(new PromptTemplate { Id = PairingHtmlRenderer.NotConfiguredPageId, Title = "test", Category = "system", Content = template });
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderNotConfiguredPageAsync();
+        var result = await renderer.RenderNotConfiguredPageAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(template, result);
     }
@@ -100,7 +100,7 @@ public sealed class PairingHtmlRendererTests
             .Returns((PromptTemplate?)null);
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderNotConfiguredPageAsync();
+        var result = await renderer.RenderNotConfiguredPageAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("Pairing Not Configured", result);
     }
@@ -112,7 +112,7 @@ public sealed class PairingHtmlRendererTests
             .ThrowsAsync(new IOException("disk error"));
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderLoginPageAsync();
+        var result = await renderer.RenderLoginPageAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("MCP Server", result);
     }

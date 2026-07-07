@@ -7,7 +7,7 @@ using McpServer.Client.Models;
 namespace McpServer.Client;
 
 /// <summary>
-/// Client for TODO management endpoints (<c>/mcpserver/todo</c>). Provides full CRUD operations
+/// Client for TODO management endpoints (<c>/mcpserver/todo</c>). Provides full CRUD and close operations
 /// on TODO items and a Copilot-powered requirements analysis endpoint.
 ///
 /// <para>All methods read <see cref="McpClientBase.ApiKey"/> and <see cref="McpClientBase.Port"/>
@@ -74,6 +74,12 @@ public sealed class TodoClient : McpClientBase
     public async Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default)
     {
         return await PutAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}", request, cancellationToken);
+    }
+
+    /// <summary>Close a TODO item by ID with a server-owned completion timestamp.</summary>
+    public async Task<TodoMutationResult> CloseAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}/close", null, cancellationToken);
     }
 
     /// <summary>Delete a TODO item.</summary>

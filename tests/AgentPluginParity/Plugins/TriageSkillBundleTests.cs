@@ -77,12 +77,21 @@ public sealed class TriageSkillBundleTests
         Assert.Contains("workflow.triage.report", content, StringComparison.Ordinal);
         Assert.Contains("workflow.triage.getReport", content, StringComparison.Ordinal);
         Assert.Contains("workflow.triage.queryGroups", content, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.dashboard", content, StringComparison.Ordinal);
         Assert.Contains("workflow.triage.getGroup", content, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.queryRuns", content, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.getRun", content, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.queryCreatedTodos", content, StringComparison.Ordinal);
         Assert.Contains("workflow.triage.flushGroup", content, StringComparison.Ordinal);
         Assert.Contains("workflow.triage.retryGroup", content, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.createGroup", content, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.consolidateIntoGroup", content, StringComparison.Ordinal);
+        Assert.Contains("workflow.triage.mergeGroups", content, StringComparison.Ordinal);
         Assert.Contains("\"required\": [\"title\", \"summary\"]", content, StringComparison.Ordinal);
         Assert.Contains("\"required\": [\"reportId\"]", content, StringComparison.Ordinal);
         Assert.Contains("\"required\": [\"groupId\"]", content, StringComparison.Ordinal);
+        Assert.Contains("\"required\": [\"runId\"]", content, StringComparison.Ordinal);
+        Assert.Contains("\"required\": [\"targetGroupId\"]", content, StringComparison.Ordinal);
     }
 
     private static string ResolvePluginRoot(string directoryName, string environmentVariable)

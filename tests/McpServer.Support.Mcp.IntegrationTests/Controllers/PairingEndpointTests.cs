@@ -13,6 +13,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for the /pair web login flow.</summary>
+[Trait("Category", "Integration")]
 public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFactory>
 {
     private readonly HttpClient _client;
@@ -29,9 +30,9 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     [Fact]
     public async Task PairGet_WhenConfigured_ReturnsLoginPage()
     {
-        var response = await _client.GetAsync("/pair").ConfigureAwait(true);
+        var response = await _client.GetAsync("/pair", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("Sign In", body, StringComparison.Ordinal);
     }
 
@@ -44,9 +45,9 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
             new KeyValuePair<string, string>("password", "wrong"),
         ]);
 
-        var response = await _client.PostAsync("/pair", form).ConfigureAwait(true);
+        var response = await _client.PostAsync("/pair", form, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("Invalid username or password", body, StringComparison.Ordinal);
     }
 
@@ -67,7 +68,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
                 new KeyValuePair<string, string>("password", "wrong"),
             ]);
 
-            var failedResponse = await client.PostAsync("/pair", failedAttempt).ConfigureAwait(true);
+            var failedResponse = await client.PostAsync("/pair", failedAttempt, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal(HttpStatusCode.OK, failedResponse.StatusCode);
         }
 
@@ -77,12 +78,12 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
             new KeyValuePair<string, string>("password", "testpass"),
         ]);
 
-        var response = await client.PostAsync("/pair", lockedAttempt).ConfigureAwait(true);
+        var response = await client.PostAsync("/pair", lockedAttempt, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
         Assert.True(response.Headers.TryGetValues("Retry-After", out var retryAfterValues));
         Assert.NotEmpty(retryAfterValues);
 
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("Too many failed sign-in attempts", body, StringComparison.Ordinal);
         Assert.False(response.Headers.TryGetValues("Set-Cookie", out _));
     }
@@ -96,7 +97,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
             new KeyValuePair<string, string>("password", "testpass"),
         ]);
 
-        var response = await _client.PostAsync("/pair", form).ConfigureAwait(true);
+        var response = await _client.PostAsync("/pair", form, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Equal("/pair/key", response.Headers.Location?.OriginalString);
         Assert.True(response.Headers.TryGetValues("Set-Cookie", out var cookies));
@@ -106,7 +107,7 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     [Fact]
     public async Task PairKey_WithoutCookie_RedirectsToLogin()
     {
-        var response = await _client.GetAsync("/pair/key").ConfigureAwait(true);
+        var response = await _client.GetAsync("/pair/key", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Equal("/pair", response.Headers.Location?.OriginalString);
     }
@@ -121,22 +122,23 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
             new KeyValuePair<string, string>("password", "testpass"),
         ]);
 
-        var loginResponse = await _client.PostAsync("/pair", form).ConfigureAwait(true);
+        var loginResponse = await _client.PostAsync("/pair", form, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var setCookie = loginResponse.Headers.GetValues("Set-Cookie").First();
 
         // Extract cookie value and send with next request.
         using var request = new HttpRequestMessage(HttpMethod.Get, "/pair/key");
         request.Headers.Add("Cookie", setCookie.Split(';')[0]);
 
-        var response = await _client.SendAsync(request).ConfigureAwait(true);
+        var response = await _client.SendAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("test-api-key-12345", body, StringComparison.Ordinal);
         Assert.Contains("X-Api-Key", body, StringComparison.Ordinal);
     }
 }
 
 /// <summary>Tests that /pair returns "not configured" when no PairingUsers are set.</summary>
+[Trait("Category", "Integration")]
 public sealed class PairingNotConfiguredTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
@@ -150,9 +152,9 @@ public sealed class PairingNotConfiguredTests : IClassFixture<CustomWebApplicati
     [Fact]
     public async Task PairGet_WhenNotConfigured_ShowsNotConfiguredPage()
     {
-        var response = await _client.GetAsync("/pair").ConfigureAwait(true);
+        var response = await _client.GetAsync("/pair", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("Pairing Not Configured", body, StringComparison.Ordinal);
     }
 }

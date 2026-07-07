@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 

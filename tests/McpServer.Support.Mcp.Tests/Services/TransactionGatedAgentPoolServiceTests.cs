@@ -21,7 +21,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
         var inner = Substitute.For<IAgentPoolService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var result = await sut.StartAgentAsync("planner", @"F:\GitHub\McpServer").ConfigureAwait(true);
+        var result = await sut.StartAgentAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Contains("not transaction compensated", result.Error, StringComparison.OrdinalIgnoreCase);
@@ -37,7 +37,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
         var inner = Substitute.For<IAgentPoolService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
 
-        var result = await sut.EnqueueOneShotAsync(new AgentPoolOneShotRequest { PromptText = "plan" }).ConfigureAwait(true);
+        var result = await sut.EnqueueOneShotAsync(new AgentPoolOneShotRequest { PromptText = "plan" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Contains("txn degraded", result.Error, StringComparison.Ordinal);
@@ -53,7 +53,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
         var inner = Substitute.For<IAgentPoolService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var result = await sut.ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer").ConfigureAwait(true);
+        var result = await sut.ConnectInteractiveAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Contains("not transaction compensated", result.Error, StringComparison.OrdinalIgnoreCase);
@@ -71,7 +71,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
             .Returns(Task.FromResult<IReadOnlyList<AgentPoolAgentStatusDto>>([CreateAgentStatus()]));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var result = await sut.GetAgentsAsync(@"F:\GitHub\McpServer").ConfigureAwait(true);
+        var result = await sut.GetAgentsAsync(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result);
         await inner.Received(1)
@@ -86,7 +86,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
         var inner = Substitute.For<IAgentPoolService>();
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        await sut.SeedWorkspaceAgentsAsync(@"F:\GitHub\McpServer").ConfigureAwait(true);
+        await sut.SeedWorkspaceAgentsAsync(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await inner.Received(1)
             .SeedWorkspaceAgentsAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>())
@@ -105,7 +105,7 @@ public sealed class TransactionGatedAgentPoolServiceTests
             new CapturingCoordinator(enabled: true),
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
-        var result = await sut.StartAgentAsync("planner", @"F:\GitHub\McpServer").ConfigureAwait(true);
+        var result = await sut.StartAgentAsync("planner", @"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await inner.Received(1)

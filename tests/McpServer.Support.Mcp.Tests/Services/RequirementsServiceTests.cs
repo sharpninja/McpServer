@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -18,7 +18,7 @@ public sealed class RequirementsServiceTests
         var todoService = Substitute.For<ITodoService>();
         var accessor = TestWorkspaceAccessorHelper.Create(todoService);
         _sut = new RequirementsService(
-            Substitute.For<ICopilotClient>(),
+            Substitute.For<IAgentCliClient>(),
             accessor,
             Substitute.For<Microsoft.Extensions.Options.IOptionsMonitor<McpServer.Support.Mcp.Options.TodoPromptOptions>>(),
             NullLogger<RequirementsService>.Instance);
@@ -211,15 +211,15 @@ public sealed class RequirementsServiceTests
         var promptOptions = Substitute.For<IOptionsMonitor<TodoPromptOptions>>();
         promptOptions.CurrentValue.Returns(new TodoPromptOptions());
 
-        CopilotClientOptions? capturedOptions = null;
-        var copilotClient = Substitute.For<ICopilotClient>();
-        copilotClient.InvokeAsync(Arg.Any<string>(), Arg.Any<CopilotClientOptions?>(), Arg.Any<CancellationToken>())
+        AgentCliClientOptions? capturedOptions = null;
+        var copilotClient = Substitute.For<IAgentCliClient>();
+        copilotClient.InvokeAsync(Arg.Any<string>(), Arg.Any<AgentCliClientOptions?>(), Arg.Any<CancellationToken>())
             .Returns(callInfo =>
             {
-                capturedOptions = callInfo.ArgAt<CopilotClientOptions?>(1);
-                return new CopilotResult
+                capturedOptions = callInfo.ArgAt<AgentCliClientOptions?>(1);
+                return new AgentCliResult
                 {
-                    State = CopilotResultState.Success,
+                    State = AgentCliResultState.Success,
                     Body = """{"functionalRequirements":["FR-TODO-001"],"technicalRequirements":["TR-TODO-001"]}""",
                 };
             });
@@ -230,7 +230,7 @@ public sealed class RequirementsServiceTests
             promptOptions,
             NullLogger<RequirementsService>.Instance);
 
-        var result = await sut.AnalyzeAsync("TODO-1").ConfigureAwait(true);
+        var result = await sut.AnalyzeAsync("TODO-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(capturedOptions);

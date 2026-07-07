@@ -22,6 +22,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// the in-memory test server. Exercises FR-MCP-QBAGENT-001 (agent sends/receives), FR-MCP-QBOPENAI-001 (OpenAI wire),
 /// and FR-MCP-QBEXEC-001 (internal tools execute server-side and never reach the agent).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class QBAgentSendingIntegrationTests
 {
     private const string QBAgentVisibleModel = "QuadBrain";

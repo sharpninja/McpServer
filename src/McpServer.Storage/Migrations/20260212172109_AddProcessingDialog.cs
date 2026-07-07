@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace McpServer.Support.Mcp.Storage.Migrations
 {
     /// <inheritdoc />
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA1062:Validate arguments of public methods", Justification = "Auto-generated EF Core migration")]
     public partial class AddProcessingDialog : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.CreateTable(
                 name: "SessionLogProcessingDialogs",
                 columns: table => new
@@ -45,9 +46,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.DropTable(
                 name: "SessionLogProcessingDialogs");
         }
     }
 }
-

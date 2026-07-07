@@ -62,9 +62,14 @@ public static class AgentProcessCommandResolver
         if (string.IsNullOrWhiteSpace(template))
             throw new InvalidOperationException($"Agent '{definition.Id}' does not have a launch command configured.");
 
-        var models = DeserializeStringList(workspaceConfig.ModelsOverrideJson)
-            ?? DeserializeStringList(definition.DefaultModelsJson)
-            ?? [];
+        var overrideModels = workspaceConfig.ListItems
+            .Where(r => r.ListType == "ModelOverride")
+            .OrderBy(r => r.Ordinal)
+            .Select(r => r.Value)
+            .ToList();
+        var models = overrideModels.Count > 0
+            ? overrideModels
+            : definition.Models.OrderBy(m => m.Ordinal).Select(m => m.Model).ToList();
 
         var seedPrompt = !string.IsNullOrWhiteSpace(workspaceConfig.SeedPromptOverride)
             ? workspaceConfig.SeedPromptOverride
@@ -98,18 +103,4 @@ public static class AgentProcessCommandResolver
         return (parts[0], parts.Length > 1 ? parts[1] : string.Empty);
     }
 
-    private static IReadOnlyList<string>? DeserializeStringList(string? json)
-    {
-        if (string.IsNullOrWhiteSpace(json))
-            return null;
-
-        try
-        {
-            return System.Text.Json.JsonSerializer.Deserialize<List<string>>(json);
-        }
-        catch (System.Text.Json.JsonException)
-        {
-            return null;
-        }
-    }
 }

@@ -39,7 +39,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            await sut.ReplaceTurnAsync(Agent, sessionId, replacement).ConfigureAwait(true);
+            await sut.ReplaceTurnAsync(Agent, sessionId, replacement, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Equal("completed", turn.Status);
@@ -69,7 +69,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
                 Status = "completed",
                 Tags = ["kept-tag"],
                 Actions = [new UnifiedActionDto { Order = 0, Description = "a", Status = "completed" }],
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Every surviving child row carries the parent session's WorkspaceId.
         Assert.Equal(0, CountMismatchedChildStamps(connection, sessionId));
@@ -87,7 +87,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
             {
                 RequestId = RequestId,
                 Tags = ["alpha", "beta"],
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         // tags replaced...
@@ -110,7 +110,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
             {
                 RequestId = RequestId,
                 DesignDecisions = [],
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Null(turn.DesignDecisions);
@@ -125,7 +125,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.True(await sut.ClearTurnSectionAsync(Agent, sessionId, RequestId, "commits").ConfigureAwait(true));
+            Assert.True(await sut.ClearTurnSectionAsync(Agent, sessionId, RequestId, "commits", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Null(turn.Commits);
@@ -140,7 +140,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.True(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "tags", "seed-tag-b").ConfigureAwait(true));
+            Assert.True(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "tags", "seed-tag-b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Equal(new[] { "seed-tag-a" }, turn.Tags!.ToArray());
@@ -154,7 +154,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.True(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "commits", "sha-2").ConfigureAwait(true));
+            Assert.True(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "commits", "sha-2", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Single(turn.Commits!);
@@ -169,7 +169,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.True(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "actions", "1").ConfigureAwait(true));
+            Assert.True(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "actions", "1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Single(turn.Actions!);
@@ -184,7 +184,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.False(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "tags", "no-such-tag").ConfigureAwait(true));
+            Assert.False(await sut.DeleteTurnItemAsync(Agent, sessionId, RequestId, "tags", "no-such-tag", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -195,12 +195,12 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.True(await sut.DeleteTurnAsync(Agent, sessionId, RequestId).ConfigureAwait(true));
+            Assert.True(await sut.DeleteTurnAsync(Agent, sessionId, RequestId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var (sut2, db2) = BuildSut(connection);
         using (db2)
         {
-            var session = await sut2.GetAsync(Agent, sessionId).ConfigureAwait(true);
+            var session = await sut2.GetAsync(Agent, sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.NotNull(session);                 // session survives
             Assert.Equal(0, session!.TurnCount);     // turn gone
             Assert.True(session.Turns is null or { Count: 0 });
@@ -219,11 +219,11 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.True(await sut.DeleteSessionAsync(Agent, sessionId).ConfigureAwait(true));
+            Assert.True(await sut.DeleteSessionAsync(Agent, sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var (sut2, db2) = BuildSut(connection);
         using (db2)
-            Assert.Null(await sut2.GetAsync(Agent, sessionId).ConfigureAwait(true));
+            Assert.Null(await sut2.GetAsync(Agent, sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Equal(1, CountSessionRows(connection, sessionId));
         Assert.Equal(1, CountTurnRows(connection, sessionId));
@@ -241,7 +241,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var (sut, db) = BuildSut(connection);
         using (db)
-            Assert.False(await sut.DeleteSessionAsync(Agent, BuildSessionId("absent")).ConfigureAwait(true));
+            Assert.False(await sut.DeleteSessionAsync(Agent, BuildSessionId("absent"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -257,7 +257,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
             {
                 RequestId = RequestId,
                 Tags = ["seed-tag-c"], // additive: appended, existing kept
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Equal(new[] { "seed-tag-a", "seed-tag-b", "seed-tag-c" }, turn.Tags!.OrderBy(t => t).ToArray());
@@ -273,7 +273,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
         var (sut, db) = BuildSut(connection);
         using (db)
             await Assert.ThrowsAsync<ArgumentException>(() =>
-                sut.ReplaceTurnSectionAsync(Agent, sessionId, RequestId, "nonsense", new UnifiedRequestEntryDto { RequestId = RequestId })).ConfigureAwait(true);
+                sut.ReplaceTurnSectionAsync(Agent, sessionId, RequestId, "nonsense", new UnifiedRequestEntryDto { RequestId = RequestId }, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     // ---- harness ------------------------------------------------------------

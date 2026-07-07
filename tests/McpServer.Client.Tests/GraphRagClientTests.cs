@@ -76,7 +76,7 @@ public sealed class GraphRagClientTests
             maxEntities: 5,
             maxRelationships: 4,
             communityDepth: 2,
-            responseTokenBudget: 1024);
+            responseTokenBudget: 1024, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/graphrag/query", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -96,7 +96,7 @@ public sealed class GraphRagClientTests
         using var http = new HttpClient(handler);
         var client = new GraphRagClient(http, DefaultOptions);
 
-        var result = await client.ListRelationshipsAsync(skip: 3, take: 9, entityId: "entity/1", type: "uses");
+        var result = await client.ListRelationshipsAsync(skip: 3, take: 9, entityId: "entity/1", type: "uses", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/graphrag/relationships", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -122,7 +122,7 @@ public sealed class GraphRagClientTests
             Name = "Dispatcher",
             EntityType = "component",
             Description = "Routes GraphRAG commands.",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/graphrag/entities", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -141,7 +141,7 @@ public sealed class GraphRagClientTests
         using var http = new HttpClient(handler);
         var client = new GraphRagClient(http, DefaultOptions);
 
-        await client.DeleteEntityAsync("entity/1");
+        await client.DeleteEntityAsync("entity/1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/graphrag/entities/entity%2F1", handler.LastRequest.RequestUri!.AbsolutePath);

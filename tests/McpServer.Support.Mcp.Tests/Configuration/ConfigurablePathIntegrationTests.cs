@@ -19,11 +19,11 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
         var repoFolder = CreateTempDirectory();
         var relativeRepoRoot = Path.GetRelativePath(Directory.GetCurrentDirectory(), repoFolder);
         Directory.CreateDirectory(repoFolder);
-        await File.WriteAllTextAsync(Path.Combine(repoFolder, "readme.md"), "# relative root").ConfigureAwait(true);
+        await File.WriteAllTextAsync(Path.Combine(repoFolder, "readme.md"), "# relative root", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var sut = new RepoIngestor(new Chunker(), Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = relativeRepoRoot }), new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains(results, r => string.Equals(r.Doc.SourceKey, "readme.md", StringComparison.OrdinalIgnoreCase));
     }
@@ -43,7 +43,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
         var embedding = new float[384];
         embedding[0] = 1f;
         sut.AddVector("chunk-1", embedding);
-        await sut.SaveAsync(string.Empty).ConfigureAwait(true);
+        await sut.SaveAsync(string.Empty, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(File.Exists(expectedPath));
         Assert.True(File.Exists(expectedPath + ".map"));

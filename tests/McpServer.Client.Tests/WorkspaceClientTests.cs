@@ -21,7 +21,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.ListAsync();
+        var result = await client.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Equal(0, result.TotalCount);
@@ -34,7 +34,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.StartAsync("abc123");
+        var result = await client.StartAsync("abc123", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsRunning);
         Assert.Contains("/mcpserver/workspace/abc123/start", handler.LastRequest!.RequestUri!.AbsolutePath);
@@ -47,7 +47,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.GetGlobalPromptAsync();
+        var result = await client.GetGlobalPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -62,11 +62,27 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.UpdateGlobalPromptAsync(new Models.GlobalPromptUpdateRequest { Template = "Custom prompt" });
+        var result = await client.UpdateGlobalPromptAsync(new Models.GlobalPromptUpdateRequest { Template = "Custom prompt" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Equal("Custom prompt", result.Template);
+    }
+
+    /// <summary>TEST-MCP-MARKER-REFRESH-001: marker regeneration uses the typed workspace client endpoint.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task RegenerateMarkersAsync_PostsToMarkerRegenerationEndpoint()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"regenerated":true,"workspaceCount":2}""");
+        using var http = new HttpClient(handler);
+        var client = new WorkspaceClient(http, DefaultOptions);
+
+        var result = await client.RegenerateMarkersAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/workspace/markers/regenerate", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.True(result.Regenerated);
+        Assert.Equal(2, result.WorkspaceCount);
     }
 
     [Fact]
@@ -76,7 +92,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.GetAsync("abc123");
+        var result = await client.GetAsync("abc123", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -90,7 +106,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.CreateAsync(new Models.WorkspaceCreateRequest { WorkspacePath = "/tmp", Name = "new" });
+        var result = await client.CreateAsync(new Models.WorkspaceCreateRequest { WorkspacePath = "/tmp", Name = "new" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -104,7 +120,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.UpdateAsync("abc123", new Models.WorkspaceUpdateRequest { Name = "renamed" });
+        var result = await client.UpdateAsync("abc123", new Models.WorkspaceUpdateRequest { Name = "renamed" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -121,7 +137,7 @@ public sealed class WorkspaceClientTests
         var result = await client.ApplyPolicyAsync(new Models.WorkspacePolicyApplyRequest
         {
             Directive = "Ban GPL-3.0 in this workspace"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/policy", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -135,7 +151,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.DeleteAsync("abc123");
+        var result = await client.DeleteAsync("abc123", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -149,7 +165,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.InitAsync("abc123");
+        var result = await client.InitAsync("abc123", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/abc123/init", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -163,7 +179,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.StopAsync("abc123");
+        var result = await client.StopAsync("abc123", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/abc123/stop", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -177,7 +193,7 @@ public sealed class WorkspaceClientTests
         using var http = new HttpClient(handler);
         var client = new WorkspaceClient(http, DefaultOptions);
 
-        var result = await client.GetStatusAsync("abc123");
+        var result = await client.GetStatusAsync("abc123", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/abc123/status", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -198,7 +214,7 @@ public sealed class WorkspaceClientTests
         using var getHttp = new HttpClient(getHandler);
         var getClient = new WorkspaceClient(getHttp, DefaultOptions);
 
-        var current = await getClient.GetCurrentRequirementLayerAsync();
+        var current = await getClient.GetCurrentRequirementLayerAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, getHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/current-requirement-layer", getHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -214,7 +230,7 @@ public sealed class WorkspaceClientTests
         var updated = await setClient.SetCurrentRequirementLayerAsync(new WorkspaceCurrentRequirementLayerUpdate
         {
             LayerKey = "layer-3"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, setHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/workspace/current-requirement-layer", setHandler.LastRequest.RequestUri!.AbsolutePath);

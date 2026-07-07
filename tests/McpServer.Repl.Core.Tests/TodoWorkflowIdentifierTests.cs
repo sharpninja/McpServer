@@ -28,7 +28,7 @@ public sealed class TodoWorkflowIdentifierTests
         });
         var sut = new TodoWorkflow(client);
 
-        var item = await sut.GetAsync(id).ConfigureAwait(true);
+        var item = await sut.GetAsync(id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(id, item.Id);
         Assert.NotNull(handler.LastRequest);
@@ -51,7 +51,7 @@ public sealed class TodoWorkflowIdentifierTests
         var sut = new TodoWorkflow(client);
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await sut.GetAsync("MCP-001").ConfigureAwait(true)).ConfigureAwait(true);
+            async () => await sut.GetAsync("MCP-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
 
         Assert.Contains("Invalid TODO ID format", exception.Message, StringComparison.Ordinal);
         Assert.Null(handler.LastRequest);

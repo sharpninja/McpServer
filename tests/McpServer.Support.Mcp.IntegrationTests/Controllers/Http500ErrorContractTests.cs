@@ -19,6 +19,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
+[Trait("Category", "Integration")]
 public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContractTests.ErrorContractWebFactory>, IDisposable
 {
     private readonly ErrorContractWebFactory _factory;
@@ -39,10 +40,10 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
         var response = await _client.PostAsJsonAsync("/mcpserver/todo/TEST-001/move", new
         {
             targetWorkspacePath = _factory.TargetWorkspacePath
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        var payload = await response.Content.ReadFromJsonAsync<HttpErrorPayload>().ConfigureAwait(true);
+        var payload = await response.Content.ReadFromJsonAsync<HttpErrorPayload>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(payload);
         Assert.Equal(500, payload!.Status);
         Assert.Equal("internal_server_error", payload.Error);
@@ -55,10 +56,10 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
     [Fact]
     public async Task UnhandledException_ViaTodoQuery_ReturnsStandardized500WithSanitizedDetail()
     {
-        var response = await _client.GetAsync("/mcpserver/todo?keyword=trigger-500").ConfigureAwait(true);
+        var response = await _client.GetAsync("/mcpserver/todo?keyword=trigger-500", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        var payload = await response.Content.ReadFromJsonAsync<HttpErrorPayload>().ConfigureAwait(true);
+        var payload = await response.Content.ReadFromJsonAsync<HttpErrorPayload>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(payload);
         Assert.Equal(500, payload!.Status);
         Assert.Equal("internal_server_error", payload.Error);
@@ -75,21 +76,21 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
         var response = await _client.PostAsJsonAsync("/mcpserver/voice/session/session-1/turn/stream", new
         {
             userTranscriptText = "hello"
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("pre-stream validation failed", json, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
     public async Task TodoPromptStream_PostStreamFailure_EmitsStructuredErrorEvent()
     {
-        var response = await _client.GetAsync("/mcpserver/todo/TEST-001/prompt/plan", HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(true);
+        var response = await _client.GetAsync("/mcpserver/todo/TEST-001/prompt/plan", HttpCompletionOption.ResponseHeadersRead, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("text/event-stream", response.Content.Headers.ContentType?.MediaType);
 
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("event: error", body, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Stream failed", body, StringComparison.OrdinalIgnoreCase);
     }

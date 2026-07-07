@@ -12,6 +12,9 @@ namespace McpServer.Support.Mcp.Controllers;
 /// <summary>FR-MCP-WORKSPACE-LAYER-001: request payload to update the current requirement scope layer.</summary>
 public sealed record WorkspaceCurrentRequirementLayerUpdateRequest(string LayerKey);
 
+/// <summary>FR-MCP-MARKER-REFRESH-001: response for explicit marker regeneration.</summary>
+public sealed record MarkerRegenerationResult(bool Regenerated, int WorkspaceCount);
+
 /// <summary>
 /// FR-MCP-009 / TR-MCP-WS-004: Workspace registration, initialization, and process lifecycle endpoints.
 /// All <c>/mcpserver/*</c> endpoints are protected by per-workspace auth tokens via <see cref="Middleware.WorkspaceAuthMiddleware"/>.
@@ -190,6 +193,21 @@ public sealed class WorkspaceController : ControllerBase
         }
 
         return BadRequest(result);
+    }
+
+    /// <summary>Regenerates marker files for all currently running workspaces.</summary>
+    [HttpPost("markers/regenerate")]
+    public async Task<ActionResult<MarkerRegenerationResult>> RegenerateMarkersAsync(CancellationToken ct)
+    {
+        var count = await _processManager.RegenerateAllMarkersAsync(ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(
+            HttpContext.RequestServices.GetService<IChangeEventBus>(),
+            HttpContext.RequestServices.GetRequiredService<ILogger<WorkspaceController>>(),
+            ChangeEventActions.Updated,
+            "markers",
+            "mcp://workspace/markers",
+            ct).ConfigureAwait(false);
+        return Ok(new MarkerRegenerationResult(true, count));
     }
 
     /// <summary>Delete a workspace registration by Base64URL-encoded path key.</summary>

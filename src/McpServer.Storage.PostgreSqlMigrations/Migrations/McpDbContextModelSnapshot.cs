@@ -46,10 +46,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<string>("DefaultModelsJson")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("DefaultSeedPrompt")
                         .IsRequired()
                         .HasColumnType("text");
@@ -58,7 +54,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -87,11 +83,61 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DisplayName");
+
                     b.HasIndex("IsBuiltIn");
 
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("AgentDefinitions");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionModelEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AgentDefinitionId")
+                        .IsRequired()
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("AgentDefinitionId", "Ordinal");
+
+                    b.ToTable("AgentDefinitionModels");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
@@ -111,7 +157,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -159,6 +205,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasIndex("WorkspacePath");
 
+                    b.HasIndex("WorkspacePath", "AgentId", "Timestamp");
+
                     b.ToTable("AgentEventLogs");
                 });
 
@@ -201,7 +249,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -210,9 +258,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("InstructionFilesOverrideJson")
-                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -228,9 +273,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.Property<string>("MarkerAdditions")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ModelsOverrideJson")
                         .HasColumnType("text");
 
                     b.Property<string>("RestartPolicy")
@@ -262,6 +304,58 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.ToTable("AgentWorkspaces");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceListItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AgentWorkspaceId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("AgentWorkspaceId", "ListType", "Ordinal");
+
+                    b.ToTable("AgentWorkspaceListItems");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.BrainSlotDefinitionEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -272,7 +366,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CredentialReference")
@@ -284,7 +378,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -339,10 +433,10 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<int>("TimeoutSeconds")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                    b.Property<DateTime>("UpdatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("WeightUpdatedAtUtc")
+                    b.Property<DateTime?>("WeightUpdatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("WeightVersion")
@@ -370,14 +464,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<bool>("AdmitToGraphRag")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset?>("CompletedAtUtc")
+                    b.Property<DateTime?>("CompletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -429,7 +523,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<DateTimeOffset>("StartedAtUtc")
+                    b.Property<DateTime>("StartedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
@@ -478,7 +572,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -511,6 +605,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
+                    b.HasIndex("DocumentId", "ChunkIndex");
+
                     b.ToTable("Chunks");
                 });
 
@@ -529,7 +625,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -567,6 +663,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.HasIndex("SourceType");
 
                     b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SourceType", "SourceKey");
 
                     b.ToTable("Documents");
                 });
@@ -614,7 +712,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("MetadataJson")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("OccurredAtUtc")
+                    b.Property<DateTime>("OccurredAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PreviousSnapshotJson")
@@ -655,14 +753,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -705,7 +803,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<DateTimeOffset?>("ResolvedAtUtc")
+                    b.Property<DateTime?>("ResolvedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ResourceId")
@@ -729,7 +827,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTimeOffset?>("AcknowledgedAtUtc")
+                    b.Property<DateTime?>("AcknowledgedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("AttemptCount")
@@ -742,14 +840,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("BodyBase64")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -810,7 +908,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                    b.Property<DateTime>("UpdatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("OperationId");
@@ -823,6 +921,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasIndex("ProxyId", "Status");
 
+                    b.HasIndex("ProxyId", "Status", "AttemptCount", "CreatedAtUtc");
+
                     b.ToTable("FederationOperations");
                 });
 
@@ -834,17 +934,17 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Sequence"));
 
-                    b.Property<DateTimeOffset?>("AcknowledgedAtUtc")
+                    b.Property<DateTime?>("AcknowledgedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -870,6 +970,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasIndex("OperationId");
 
+                    b.HasIndex("ProxyId", "AcknowledgedAtUtc");
+
                     b.HasIndex("ProxyId", "Sequence");
 
                     b.ToTable("FederationOutbox");
@@ -885,14 +987,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -908,7 +1010,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTimeOffset?>("LastHeartbeatUtc")
+                    b.Property<DateTime?>("LastHeartbeatUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MetadataJson")
@@ -924,7 +1026,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                    b.Property<DateTime>("UpdatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ProxyId");
@@ -949,14 +1051,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -976,7 +1078,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset>("LastSeenUtc")
+                    b.Property<DateTime>("LastSeenUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MetadataJson")
@@ -1028,7 +1130,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1067,6 +1169,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedAtUtc");
+
                     b.HasIndex("EntityType");
 
                     b.HasIndex("Name");
@@ -1089,7 +1193,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1136,6 +1240,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedAtUtc");
+
                     b.HasIndex("RelationshipType");
 
                     b.HasIndex("SourceEntityId");
@@ -1158,14 +1264,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1186,7 +1292,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                    b.Property<DateTime>("UpdatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdatedBy")
@@ -1213,6 +1319,70 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.ToTable("Memories");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementAcceptanceCriterionEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CriterionId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Evidence")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsSatisfied")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RequirementId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("RequirementKind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "RequirementKind", "RequirementId", "Ordinal");
+
+                    b.ToTable("RequirementAcceptanceCriteria");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -1227,9 +1397,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<string>("AcceptanceCriteriaJson")
-                        .HasColumnType("text");
-
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1243,7 +1410,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1318,14 +1485,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1352,7 +1519,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                    b.Property<DateTime>("UpdatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("WorkspaceId", "Key");
@@ -1394,7 +1561,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1436,7 +1603,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1475,9 +1642,9 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionLogTurnId");
-
                     b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogTurnId", "Order");
 
                     b.ToTable("SessionLogActions");
                 });
@@ -1498,22 +1665,19 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTimeOffset?>("CommitTimestamp")
+                    b.Property<DateTime?>("CommitTimestamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
-
-                    b.Property<string>("FilesChangedJson")
-                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -1544,6 +1708,53 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogCommits");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitFileEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("SessionLogCommitId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogCommitId", "Ordinal");
+
+                    b.ToTable("SessionLogCommitFiles");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -1589,7 +1800,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1601,7 +1812,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTimeOffset?>("LastUpdated")
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Model")
@@ -1630,7 +1841,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<DateTimeOffset?>("Started")
+                    b.Property<DateTime?>("Started")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
@@ -1694,7 +1905,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1717,7 +1928,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<long>("SessionLogTurnId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset>("Timestamp")
+                    b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("WorkspaceId")
@@ -1750,7 +1961,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1793,7 +2004,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1852,7 +2063,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<DateTimeOffset?>("Timestamp")
+                    b.Property<DateTime?>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("TokenCount")
@@ -1863,6 +2074,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasColumnType("character varying(1024)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Timestamp");
 
                     b.HasIndex("WorkspaceId");
 
@@ -1884,7 +2097,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1936,7 +2149,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -1986,7 +2199,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2040,6 +2253,107 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.ToTable("TodoAuditHistory");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Date")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SingletonId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "SingletonId", "Ordinal");
+
+                    b.ToTable("TodoCompletedGroups");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Qualifier")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Summary")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("GroupId", "Ordinal");
+
+                    b.ToTable("TodoCompletedItems");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.Property<string>("WorkspaceId")
@@ -2053,14 +2367,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<string>("CompletedJson")
-                        .HasColumnType("text");
-
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2087,15 +2398,58 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<string>("NotesJson")
-                        .HasColumnType("text");
-
                     b.HasKey("WorkspaceId", "SingletonId");
 
                     b.ToTable("TodoDocumentMetadata", t =>
                         {
                             t.HasCheckConstraint("CK_TodoDocumentMetadata_Singleton", "\"SingletonId\" = 1");
                         });
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentNoteEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SingletonId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "SingletonId", "Ordinal");
+
+                    b.ToTable("TodoDocumentNotes");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
@@ -2116,18 +2470,12 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
-
-                    b.Property<string>("DependsOnJson")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DescriptionJson")
-                        .HasColumnType("text");
 
                     b.Property<bool>("Done")
                         .HasColumnType("boolean");
@@ -2138,12 +2486,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("Estimate")
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
-
-                    b.Property<string>("FunctionalRequirementsJson")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImplementationTasksJson")
-                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -2190,12 +2532,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<int>("SectionOrder")
                         .HasColumnType("integer");
 
-                    b.Property<string>("TechnicalDetailsJson")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TechnicalRequirementsJson")
-                        .HasColumnType("text");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -2205,11 +2541,119 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasIndex("Done");
 
+                    b.HasIndex("ItemOrder");
+
                     b.HasIndex("Priority");
 
                     b.HasIndex("Section");
 
+                    b.HasIndex("SectionOrder");
+
                     b.ToTable("TodoItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemListItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "ListType", "Ordinal");
+
+                    b.ToTable("TodoItemListItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemTaskEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Task")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "Ordinal");
+
+                    b.ToTable("TodoItemTasks");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
@@ -2230,14 +2674,14 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2269,17 +2713,17 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<DateTimeOffset>("DateTimeCreated")
+                    b.Property<DateTime>("DateTimeCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("DateTimeLastSynced")
+                    b.Property<DateTime?>("DateTimeLastSynced")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2341,17 +2785,17 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
-                    b.Property<DateTimeOffset>("DateTimeCreated")
+                    b.Property<DateTime>("DateTimeCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("DateTimeModified")
+                    b.Property<DateTime>("DateTimeModified")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2387,6 +2831,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BucketName");
+
                     b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspacePath");
@@ -2409,7 +2855,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2459,7 +2905,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2471,7 +2917,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset>("FirstReportAtUtc")
+                    b.Property<DateTime>("FirstReportAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("GroupKey")
@@ -2490,10 +2936,10 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("LastError")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("LastReportAtUtc")
+                    b.Property<DateTime>("LastReportAtUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("QuietDeadlineUtc")
+                    b.Property<DateTime>("QuietDeadlineUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ReportCount")
@@ -2538,17 +2984,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<string>("AffectedPathsJson")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AffectedSymbolsJson")
-                        .HasColumnType("text");
-
                     b.Property<string>("Component")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<DateTimeOffset>("CreatedUtc")
+                    b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CurrentTodoId")
@@ -2563,7 +3003,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2615,9 +3055,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<string>("ReproductionHintsJson")
-                        .HasColumnType("text");
-
                     b.Property<string>("SessionId")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -2633,9 +3070,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.Property<string>("Summary")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("TagsJson")
                         .HasColumnType("text");
 
                     b.Property<string>("Title")
@@ -2656,6 +3090,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasIndex("CreatedUtc");
 
+                    b.HasIndex("GroupId");
+
                     b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspaceId", "Fingerprint");
@@ -2667,6 +3103,60 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasFilter("\"IdempotencyKey\" IS NOT NULL");
 
                     b.ToTable("TriageReports");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportListItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ReportId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("ReportId", "ListType", "Ordinal");
+
+                    b.ToTable("TriageReportListItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageResearchRunEntity", b =>
@@ -2684,7 +3174,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("AgentStdout")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset?>("CompletedUtc")
+                    b.Property<DateTime?>("CompletedUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedTodoId")
@@ -2695,7 +3185,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2731,7 +3221,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("ResponseJson")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("StartedUtc")
+                    b.Property<DateTime>("StartedUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
@@ -2746,6 +3236,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasKey("RunId");
 
+                    b.HasIndex("GroupId");
+
                     b.HasIndex("Status");
 
                     b.HasIndex("WorkspaceId");
@@ -2753,6 +3245,54 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.HasIndex("WorkspaceId", "GroupId", "StartedUtc");
 
                     b.ToTable("TriageResearchRuns");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceBannedItemEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId", "Category", "Ordinal");
+
+                    b.ToTable("WorkspaceBannedItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
@@ -2765,18 +3305,6 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
-                    b.Property<string>("BannedCountriesOfOriginJson")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BannedIndividualsJson")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BannedLicensesJson")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BannedOrganizationsJson")
-                        .HasColumnType("text");
-
                     b.Property<string>("CurrentRequirementLayerKey")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -2786,17 +3314,17 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
-                    b.Property<DateTimeOffset>("DateTimeCreated")
+                    b.Property<DateTime>("DateTimeCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("DateTimeModified")
+                    b.Property<DateTime>("DateTimeModified")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteReason")
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.Property<DateTimeOffset?>("DeletedAtUtc")
+                    b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
@@ -2867,8 +3395,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         {
                             WorkspaceId = "",
                             CurrentRequirementLayerKey = "layer-1",
-                            DateTimeCreated = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateTimeModified = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            DateTimeCreated = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateTimeModified = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             IsEnabled = true,
                             IsPrimary = false,
@@ -2887,8 +3415,31 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionModelEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", "AgentDefinition")
+                        .WithMany("Models")
+                        .HasForeignKey("AgentDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AgentDefinition");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
                 {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()
                         .HasForeignKey("WorkspaceId")
@@ -2911,6 +3462,23 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
 
                     b.Navigation("AgentDefinition");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceListItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", "AgentWorkspace")
+                        .WithMany("ListItems")
+                        .HasForeignKey("AgentWorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AgentWorkspace");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.BrainSlotDefinitionEntity", b =>
@@ -3070,6 +3638,23 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementAcceptanceCriterionEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", "Requirement")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "RequirementKind", "RequirementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Requirement");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3145,6 +3730,23 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
 
                     b.Navigation("SessionLogTurn");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitFileEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", "SessionLogCommit")
+                        .WithMany("Files")
+                        .HasForeignKey("SessionLogCommitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SessionLogCommit");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -3257,6 +3859,40 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", "DocumentMetadata")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "SingletonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMetadata");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", "Group")
+                        .WithMany("Items")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3266,6 +3902,23 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentNoteEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", "DocumentMetadata")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "SingletonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMetadata");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
@@ -3273,6 +3926,40 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemListItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "TodoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TodoItem");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemTaskEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", "TodoItem")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "TodoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TodoItem");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoRequirementLinkEntity", b =>
@@ -3346,15 +4033,44 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", b =>
                 {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TriageGroupEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportListItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", "TriageReport")
+                        .WithMany("ListItems")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TriageReport");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageResearchRunEntity", b =>
                 {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.TriageGroupEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
                         .WithMany()
                         .HasForeignKey("WorkspaceId")
@@ -3362,9 +4078,27 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceBannedItemEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", "Workspace")
+                        .WithMany("BannedItems")
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Workspace");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
                 {
+                    b.Navigation("Models");
+
                     b.Navigation("WorkspaceConfigs");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
+                {
+                    b.Navigation("ListItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
@@ -3377,6 +4111,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Navigation("SourceRelationships");
 
                     b.Navigation("TargetRelationships");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", b =>
+                {
+                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -3399,9 +4138,24 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Navigation("Tags");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoCompletedGroupEntity", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
                 {
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TriageReportEntity", b =>
+                {
+                    b.Navigation("ListItems");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
+                {
+                    b.Navigation("BannedItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -26,7 +26,7 @@ public interface IWorkspaceProcessManager : IHostedService
     /// When non-null, use this value as the global prompt template instead of reading from options.
     /// Pass <see cref="string.Empty"/> to force the built-in default prompt.
     /// </param>
-    Task RegenerateAllMarkersAsync(CancellationToken ct = default, string? globalPromptOverride = null);
+    Task<int> RegenerateAllMarkersAsync(CancellationToken ct = default, string? globalPromptOverride = null);
 }
 
 /// <summary>Process status for a workspace instance.</summary>

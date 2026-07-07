@@ -9,6 +9,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for tunnel provider implementations.</summary>
+[Trait("Category", "Integration")]
 public sealed class TunnelProviderTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
@@ -38,7 +39,7 @@ public sealed class TunnelProviderTests
         var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, NullLogger<NgrokTunnelProvider>.Instance);
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.Contains("ngrok CLI not found", status.Error, StringComparison.Ordinal);
     }
@@ -47,7 +48,7 @@ public sealed class TunnelProviderTests
     public async Task NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
     {
         var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, NullLogger<NgrokTunnelProvider>.Instance);
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
     }
 
@@ -61,7 +62,7 @@ public sealed class TunnelProviderTests
         SetPrivateField(sut, "_lastStderrLine", "simulated ngrok failure");
         SetPrivateField(sut, "_startupCompleted", true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
@@ -80,7 +81,7 @@ public sealed class TunnelProviderTests
         SetPrivateField(sut, "_process", Process.GetCurrentProcess());
         SetPrivateField(sut, "_error", "ngrok startup timed out after 8s waiting for a public URL.");
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(status.IsRunning);
         Assert.NotNull(status.Error);
@@ -123,7 +124,7 @@ public sealed class TunnelProviderTests
         var sut = new CloudflareTunnelProvider(CreateOptions(), _processRunner, NullLogger<CloudflareTunnelProvider>.Instance);
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.Contains("cloudflared CLI not found", status.Error, StringComparison.Ordinal);
     }
@@ -132,7 +133,7 @@ public sealed class TunnelProviderTests
     public async Task CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
     {
         var sut = new CloudflareTunnelProvider(CreateOptions(), _processRunner, NullLogger<CloudflareTunnelProvider>.Instance);
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
     }
 
@@ -146,7 +147,7 @@ public sealed class TunnelProviderTests
         SetPrivateField(sut, "_lastStderrLine", "simulated cloudflared failure");
         SetPrivateField(sut, "_startupCompleted", true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
@@ -162,7 +163,7 @@ public sealed class TunnelProviderTests
         SetPrivateField(sut, "_process", Process.GetCurrentProcess());
         SetPrivateField(sut, "_error", "cloudflared startup timed out after 8s waiting for a public URL.");
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(status.IsRunning);
         Assert.NotNull(status.Error);
@@ -202,7 +203,7 @@ public sealed class TunnelProviderTests
         var sut = new FrpTunnelProvider(CreateOptions(), _processRunner, NullLogger<FrpTunnelProvider>.Instance);
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.Contains("frpc CLI not found", status.Error, StringComparison.Ordinal);
     }
@@ -211,7 +212,7 @@ public sealed class TunnelProviderTests
     public async Task FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
     {
         var sut = new FrpTunnelProvider(CreateOptions(), _processRunner, NullLogger<FrpTunnelProvider>.Instance);
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
     }
 

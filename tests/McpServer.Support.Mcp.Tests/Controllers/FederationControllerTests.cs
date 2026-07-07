@@ -244,7 +244,7 @@ public sealed class FederationControllerTests
             .ConfigureAwait(true);
 
         apply.Release();
-        var result = await resultTask.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(true);
+        var result = await resultTask.WaitAsync(TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var response = Assert.IsType<FederationOperationResponse>(ok.Value);

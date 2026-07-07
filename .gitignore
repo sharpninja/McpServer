@@ -528,5 +528,5 @@ todo-bootstrap.marker
 # Local Grok MCP config may contain workspace auth headers.
 .grok/
 
-# Local scratch / test cache
-/cache/
+# Workspace cache
+cache/

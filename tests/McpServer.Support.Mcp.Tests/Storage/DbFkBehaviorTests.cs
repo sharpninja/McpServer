@@ -28,18 +28,18 @@ public sealed class DbFkBehaviorTests
         };
 
         db.TodoItems.Add(todo);
-        await db.SaveChangesAsync().ConfigureAwait(true);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         todo.Title = "Audit me again";
-        await db.SaveChangesAsync().ConfigureAwait(true);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         db.TodoItems.Remove(todo);
-        await db.SaveChangesAsync().ConfigureAwait(true);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var actions = await db.DataAuditLogs
             .AsNoTracking()
             .Where(row => row.EntityKind == nameof(TodoItemEntity) && row.EntityKey.Contains("DBFK-AUDIT-001", StringComparison.Ordinal))
             .OrderBy(row => row.OccurredAtUtc)
             .Select(row => row.Action)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Contains("create", actions);
@@ -48,7 +48,7 @@ public sealed class DbFkBehaviorTests
 
         var stored = await db.TodoItems
             .IgnoreQueryFilters()
-            .SingleAsync(row => row.Id == "DBFK-AUDIT-001")
+            .SingleAsync(row => row.Id == "DBFK-AUDIT-001", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.True((bool)db.Entry(stored).Property("IsDeleted").CurrentValue!);
         Assert.NotNull(db.Entry(stored).Property("DeletedAtUtc").CurrentValue);
@@ -74,9 +74,9 @@ public sealed class DbFkBehaviorTests
             SourceType = "test",
             OccurredAtUtc = DateTimeOffset.UtcNow,
         });
-        await db.SaveChangesAsync().ConfigureAwait(true);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var count = await db.DataAuditLogs.CountAsync().ConfigureAwait(true);
+        var count = await db.DataAuditLogs.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(1, count);
     }
 
@@ -101,11 +101,11 @@ public sealed class DbFkBehaviorTests
             OccurredAtUtc = DateTimeOffset.UtcNow,
         };
         db.DataAuditLogs.Add(audit);
-        await db.SaveChangesAsync().ConfigureAwait(true);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         db.DataAuditLogs.Remove(audit);
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => db.SaveChangesAsync()).ConfigureAwait(true);
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
         Assert.Contains("Physical deletes are blocked", ex.Message, StringComparison.Ordinal);
         Assert.Contains(nameof(DataAuditLogEntity), ex.Message, StringComparison.Ordinal);
     }

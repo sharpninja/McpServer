@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace McpServer.Support.Mcp.Storage.Entities;
 
@@ -57,14 +58,23 @@ public sealed class TodoItemEntity
     [MaxLength(4096)]
     public string? Note { get; set; }
 
-    /// <summary>Description lines serialized as JSON array of strings.</summary>
-    public string? DescriptionJson { get; set; }
+    /// <summary>
+    /// TR-MCP-TODO-005: 4NF string-list child rows for the description, technical-details,
+    /// depends-on, functional-requirement, and technical-requirement lists.
+    /// </summary>
+    /// <remarks>
+    /// Not an EF navigation: loaded/attached explicitly by the service and written from the
+    /// dependent side, because the composite (WorkspaceId, TodoId) parent key includes the
+    /// tenant column and principal-side collection fixup nulls a key column on multi-entity
+    /// inserts (see <c>RequirementAcceptanceCriterionEntity</c>).
+    /// </remarks>
+    [NotMapped]
+    public List<TodoItemListItemEntity> ListItems { get; set; } = [];
 
-    /// <summary>Technical detail lines serialized as JSON array of strings.</summary>
-    public string? TechnicalDetailsJson { get; set; }
-
-    /// <summary>Implementation sub-tasks serialized as JSON array of <c>{task, done}</c> objects.</summary>
-    public string? ImplementationTasksJson { get; set; }
+    /// <summary>TR-MCP-TODO-005: 4NF implementation sub-task child rows ({task, done}).</summary>
+    /// <remarks>Not an EF navigation; same dependent-side handling as <see cref="ListItems"/>.</remarks>
+    [NotMapped]
+    public List<TodoItemTaskEntity> ImplementationTaskRows { get; set; } = [];
 
     /// <summary>Completion date (ISO-8601 or free text) when Done.</summary>
     [MaxLength(64)]
@@ -83,15 +93,6 @@ public sealed class TodoItemEntity
     /// <summary>Reference link or document path.</summary>
     [MaxLength(1024)]
     public string? Reference { get; set; }
-
-    /// <summary>Depends-on IDs serialized as JSON array of strings.</summary>
-    public string? DependsOnJson { get; set; }
-
-    /// <summary>Functional requirement IDs serialized as JSON array of strings.</summary>
-    public string? FunctionalRequirementsJson { get; set; }
-
-    /// <summary>Technical requirement IDs serialized as JSON array of strings.</summary>
-    public string? TechnicalRequirementsJson { get; set; }
 
     /// <summary>Item kind discriminator (default <c>standard</c>).</summary>
     [Required]

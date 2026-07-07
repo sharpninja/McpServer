@@ -18,11 +18,11 @@ public sealed class ListWorkspacesTests
     [Fact]
     public async Task List_Returns200_WithValidStructure()
     {
-        var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute);
+        var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<WorkspaceListResult>();
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceListResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
         Assert.True(result.TotalCount >= 0, "TotalCount should be non-negative.");
@@ -33,7 +33,7 @@ public sealed class ListWorkspacesTests
     [Fact]
     public async Task List_ResponseIsJson()
     {
-        var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute);
+        var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);

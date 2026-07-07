@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -123,7 +124,7 @@ internal static class ProviderIntegrationTestSupport
             DisplayName = "Provider integration test agent",
             DefaultLaunchCommand = "dotnet",
             DefaultInstructionFile = "AGENTS.md",
-            DefaultModelsJson = "[\"gpt-5-codex\"]",
+            Models = { new AgentDefinitionModelEntity { Ordinal = 0, Model = "gpt-5-codex" } },
             DefaultBranchStrategy = "feature/{agent}/{task}",
             DefaultSeedPrompt = "Test seed prompt",
             IsBuiltIn = false,
@@ -266,8 +267,23 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
     /// <returns>An initialized LocalDB sandbox.</returns>
     public static async Task<SqlLocalDbSandbox> CreateAsync()
     {
+        // Requires LocalDB 15.0 (SQL Server 2019) or newer; the instance itself is created
+        // without a version pin so the newest installed engine is used (a pinned version that is
+        // absent makes SqlLocalDB.exe report failure on stdout while still exiting 0).
+        var versionsOutput = await RunSqlLocalDbAsync("versions").ConfigureAwait(false);
+        var installed = System.Text.RegularExpressions.Regex.Matches(versionsOutput, @"\((\d+)\.(\d+)")
+            .Select(m => new Version(int.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture), int.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture)))
+            .DefaultIfEmpty(new Version(0, 0))
+            .Max();
+        if (installed < new Version(15, 0))
+        {
+            throw new InvalidOperationException(
+                $"SQL Server LocalDB 15.0 or newer is required; newest installed engine is {installed}. " +
+                "Run the 'InstallTestDependencies' Nuke target.");
+        }
+
         var instanceName = $"mcp-provider-{Guid.NewGuid():N}";
-        await RunSqlLocalDbAsync("create", instanceName, "15.0").ConfigureAwait(false);
+        await RunSqlLocalDbAsync("create", instanceName).ConfigureAwait(false);
         await RunSqlLocalDbAsync("start", instanceName).ConfigureAwait(false);
         return new SqlLocalDbSandbox(instanceName);
     }
@@ -299,7 +315,7 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
         }
     }
 
-    private static async Task RunSqlLocalDbAsync(params string[] arguments)
+    private static async Task<string> RunSqlLocalDbAsync(params string[] arguments)
     {
         var psi = new ProcessStartInfo("SqlLocalDB.exe")
         {
@@ -316,10 +332,13 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
         var stderr = await process.StandardError.ReadToEndAsync().ConfigureAwait(false);
         await process.WaitForExitAsync().ConfigureAwait(false);
 
-        if (process.ExitCode != 0)
+        // SqlLocalDB.exe reports some failures (e.g. unknown version) on stdout with exit code 0.
+        if (process.ExitCode != 0 || stdout.Contains("failed because of the following error", StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
                 $"SqlLocalDB.exe {string.Join(" ", arguments)} failed with exit code {process.ExitCode}.\nSTDOUT: {stdout}\nSTDERR: {stderr}");
         }
+
+        return stdout;
     }
 }

@@ -1,0 +1,67 @@
+schema: mcp-wiki-export/v1
+home:
+  document: home
+documents:
+- id: home
+  title: Home
+  source: generated:home
+  target: Home.md
+  platforms:
+  - github
+  - azure
+- id: functional
+  title: Functional Requirements
+  source: generated:functional
+  target: Functional-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: technical
+  title: Technical Requirements
+  source: generated:technical
+  target: Technical-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: testing
+  title: Testing Requirements
+  source: generated:testing
+  target: Testing-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: mapping
+  title: Traceability Mapping
+  source: generated:mapping
+  target: TR-per-FR-Mapping.md
+  platforms:
+  - github
+  - azure
+- id: matrix
+  title: Requirements Matrix
+  source: generated:matrix
+  target: Requirements-Matrix.md
+  platforms:
+  - github
+  - azure
+- id: triage-plugin-code-quality-case-study
+  title: Triage Plugin Code Quality Case Study
+  source: docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md
+  target: Case-Studies/Triage-Plugin-Code-Quality-Case-Study.md
+  platforms:
+  - github
+  - azure
+navigation:
+- document: home
+- title: Requirements
+  path: Requirements
+  children:
+  - document: functional
+  - document: technical
+  - document: testing
+  - document: mapping
+  - document: matrix
+- title: Case Studies
+  path: Case-Studies
+  children:
+  - document: triage-plugin-code-quality-case-study

@@ -15,19 +15,19 @@ public class OrchestrationRulesTests
         var workspacePath = "/home/user/project";
         var markerData = CreateMarkerData(workspacePath, "auth-key");
 
-        markerReader.ReadAsync(workspacePath, default).Returns(markerData);
+        markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken).Returns(markerData);
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((false, false));
 
         var trustResult = Substitute.For<ITrustVerificationResult>();
         trustResult.IsTrusted.Returns(false);
         trustResult.TrustMethod.Returns("not_trusted");
 
-        markerReader.VerifyTrustAsync(workspacePath, false, default)
+        markerReader.VerifyTrustAsync(workspacePath, false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
-        var verifyResult = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false);
+        var verifyResult = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
 
         if (!verifyResult.IsTrusted)
         {
@@ -47,7 +47,7 @@ public class OrchestrationRulesTests
         var markerWithValidNonce = CreateMarkerData(workspacePath, "key",
             new Dictionary<string, object?> { ["nonce"] = validNonce });
 
-        trustService.PromptUserTrustAsync(workspacePath, Arg.Any<IMarkerFileData>(), default)
+        trustService.PromptUserTrustAsync(workspacePath, Arg.Any<IMarkerFileData>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(callInfo =>
             {
                 var data = callInfo.Arg<IMarkerFileData>();
@@ -57,13 +57,13 @@ public class OrchestrationRulesTests
                 return Task.FromResult(isNonceValid);
             });
 
-        var resultValid = await trustService.PromptUserTrustAsync(workspacePath, markerWithValidNonce);
+        var resultValid = await trustService.PromptUserTrustAsync(workspacePath, markerWithValidNonce, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(resultValid);
 
         var markerWithInvalidNonce = CreateMarkerData(workspacePath, "key",
             new Dictionary<string, object?> { ["nonce"] = "wrong-nonce" });
 
-        var resultInvalid = await trustService.PromptUserTrustAsync(workspacePath, markerWithInvalidNonce);
+        var resultInvalid = await trustService.PromptUserTrustAsync(workspacePath, markerWithInvalidNonce, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(resultInvalid);
     }
 
@@ -74,21 +74,21 @@ public class OrchestrationRulesTests
         var markerReader = Substitute.For<IMarkerFileReader>();
         var workspacePath = "/home/user/trusted-project";
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((true, true));
 
         var trustResult = Substitute.For<ITrustVerificationResult>();
         trustResult.IsTrusted.Returns(true);
         trustResult.TrustMethod.Returns("registry_cached");
 
-        markerReader.VerifyTrustAsync(workspacePath, false, default)
+        markerReader.VerifyTrustAsync(workspacePath, false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(hasDecision);
         Assert.True(isTrusted);
 
-        var result = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false);
+        var result = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(result.IsTrusted);
         Assert.Equal("registry_cached", result.TrustMethod);
 
@@ -108,13 +108,13 @@ public class OrchestrationRulesTests
         var newState = CreateAuthState(workspacePath, "new-key", true);
 
         authHandler.CurrentAuthState.Returns(oldState);
-        authHandler.ValidateAuthStateAsync(default).Returns(false);
-        authHandler.RefreshAuthStateAsync(workspacePath, default).Returns(newState);
+        authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken).Returns(false);
+        authHandler.RefreshAuthStateAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken).Returns(newState);
 
-        var isValid = await authHandler.ValidateAuthStateAsync();
+        var isValid = await authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(isValid);
 
-        var refreshed = await authHandler.RefreshAuthStateAsync(workspacePath);
+        var refreshed = await authHandler.RefreshAuthStateAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(refreshed);
         Assert.Equal("new-key", refreshed.ApiKey);
     }
@@ -131,7 +131,7 @@ public class OrchestrationRulesTests
 
         var newMarkerData = CreateMarkerData(workspacePath, "rotated-key-xyz");
 
-        markerReader.WatchAsync(workspacePath, Arg.Any<Func<IMarkerFileData, Task>>(), default)
+        markerReader.WatchAsync(workspacePath, Arg.Any<Func<IMarkerFileData, Task>>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(callInfo =>
             {
                 var callback = callInfo.Arg<Func<IMarkerFileData, Task>>();
@@ -145,13 +145,13 @@ public class OrchestrationRulesTests
             await authHandler.UpdateAuthStateAsync(data);
         };
 
-        await markerReader.WatchAsync(workspacePath, watchCallback);
+        await markerReader.WatchAsync(workspacePath, watchCallback, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(rotationDetected);
         Assert.NotNull(rotatedData);
         Assert.Equal("rotated-key-xyz", rotatedData!.ApiKey);
 
-        await authHandler.Received(1).UpdateAuthStateAsync(newMarkerData, default);
+        await authHandler.Received(1).UpdateAuthStateAsync(newMarkerData, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -169,18 +169,18 @@ public class OrchestrationRulesTests
         var state2 = CreateAuthState(workspacePath, "key-v2", true);
         var state3 = CreateAuthState(workspacePath, "key-v3", true);
 
-        markerReader.ReadAsync(workspacePath, default).Returns(marker1, marker2, marker3);
+        markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken).Returns(marker1, marker2, marker3);
         authHandler.CurrentAuthState.Returns(state1, state2, state3);
 
-        var data1 = await markerReader.ReadAsync(workspacePath);
+        var data1 = await markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("key-v1", data1.ApiKey);
         Assert.Equal("key-v1", authHandler.CurrentAuthState.ApiKey);
 
-        var data2 = await markerReader.ReadAsync(workspacePath);
+        var data2 = await markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("key-v2", data2.ApiKey);
         Assert.Equal("key-v2", authHandler.CurrentAuthState.ApiKey);
 
-        var data3 = await markerReader.ReadAsync(workspacePath);
+        var data3 = await markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("key-v3", data3.ApiKey);
         Assert.Equal("key-v3", authHandler.CurrentAuthState.ApiKey);
     }
@@ -192,19 +192,19 @@ public class OrchestrationRulesTests
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var workspacePath = "/home/user/project";
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((true, true));
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(hasDecision);
         Assert.True(isTrusted);
 
-        await trustService.RevokeTrustAsync(workspacePath);
+        await trustService.RevokeTrustAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((false, false));
 
-        var (newHasDecision, newIsTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (newHasDecision, newIsTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(newHasDecision);
 
         authHandler.ClearAuthState();
@@ -228,10 +228,10 @@ public class OrchestrationRulesTests
             ["public_key"] = "rsa-public-key"
         });
 
-        markerReader.VerifyTrustAsync(workspacePath, false, default)
+        markerReader.VerifyTrustAsync(workspacePath, false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
-        var result = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false);
+        var result = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsTrusted);
         Assert.Equal("signature_verified", result.TrustMethod);
@@ -265,7 +265,7 @@ public class OrchestrationRulesTests
         authHandler.RegisterAuthChangeCallback(callback1);
         authHandler.RegisterAuthChangeCallback(callback2);
 
-        await Task.Delay(10);
+        await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(callback1Invoked);
         Assert.True(callback2Invoked);
@@ -281,49 +281,49 @@ public class OrchestrationRulesTests
 
         var workspacePath = "/home/user/new-project";
 
-        trustService.GetTrustDecisionAsync(workspacePath, default)
+        trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .Returns((false, false));
 
         var markerData = CreateMarkerData(workspacePath, "initial-key",
             new Dictionary<string, object?> { ["nonce"] = "challenge-nonce" });
 
-        markerReader.ReadAsync(workspacePath, default).Returns(markerData);
+        markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken).Returns(markerData);
 
-        trustService.PromptUserTrustAsync(workspacePath, markerData, default)
+        trustService.PromptUserTrustAsync(workspacePath, markerData, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(true);
 
         var trustResult = Substitute.For<ITrustVerificationResult>();
         trustResult.IsTrusted.Returns(true);
         trustResult.TrustMethod.Returns("user_confirmed");
 
-        markerReader.VerifyTrustAsync(workspacePath, true, default)
+        markerReader.VerifyTrustAsync(workspacePath, true, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
         var initialAuthState = CreateAuthState(workspacePath, "initial-key", true);
         authHandler.CurrentAuthState.Returns(initialAuthState);
 
-        var (hasDecision, _) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, _) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(hasDecision);
 
-        var data = await markerReader.ReadAsync(workspacePath);
+        var data = await markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("initial-key", data.ApiKey);
 
-        var userTrusted = await trustService.PromptUserTrustAsync(workspacePath, data);
+        var userTrusted = await trustService.PromptUserTrustAsync(workspacePath, data, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(userTrusted);
 
-        await trustService.RecordTrustDecisionAsync(workspacePath, true);
+        await trustService.RecordTrustDecisionAsync(workspacePath, true, cancellationToken: TestContext.Current.CancellationToken);
 
-        var verified = await markerReader.VerifyTrustAsync(workspacePath, true);
+        var verified = await markerReader.VerifyTrustAsync(workspacePath, true, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(verified.IsTrusted);
 
-        await authHandler.UpdateAuthStateAsync(data);
+        await authHandler.UpdateAuthStateAsync(data, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("initial-key", authHandler.CurrentAuthState.ApiKey);
 
         var rotatedMarker = CreateMarkerData(workspacePath, "rotated-key");
         var rotatedAuthState = CreateAuthState(workspacePath, "rotated-key", true);
         authHandler.CurrentAuthState.Returns(rotatedAuthState);
 
-        await authHandler.UpdateAuthStateAsync(rotatedMarker);
+        await authHandler.UpdateAuthStateAsync(rotatedMarker, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("rotated-key", authHandler.CurrentAuthState.ApiKey);
     }
 

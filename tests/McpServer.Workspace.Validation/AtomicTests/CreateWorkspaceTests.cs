@@ -37,11 +37,11 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
     {
         var body = new { WorkspacePath = _testPath, Name = "AuditCreateTest" };
 
-        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success, $"Expected success but got error: {result.Error}");
         Assert.NotNull(result.Workspace);
@@ -59,14 +59,14 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
     public async Task Create_DuplicatePath_Returns409()
     {
         var body = new { WorkspacePath = _testPath, Name = "First" };
-        var first = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+        var first = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, first.StatusCode);
 
         // Second create with same path should conflict.
-        var second = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+        var second = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
 
-        var result = await second.Content.ReadFromJsonAsync<WorkspaceMutationResult>();
+        var result = await second.Content.ReadFromJsonAsync<WorkspaceMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.False(result.Success);
     }
@@ -77,10 +77,10 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
     {
         var body = new { WorkspacePath = _testPath };
 
-        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.Workspace);
         // Name should be derived from the last segment of the path.
@@ -93,7 +93,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
     {
         var response = await _fixture.Client.PostAsync(
             WorkspaceEndpointFixture.WorkspaceRoute,
-            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Empty object missing required WorkspacePath → should be BadRequest or validation error
         Assert.True(

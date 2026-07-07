@@ -16,6 +16,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// TEST-MCP-161 acceptance: REPL TODO create/update workflow mutations are transaction-gated.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class TransactionalTodoWorkflowTests
 {
     /// <summary>workflow.todo.create executes inside the transaction coordinator and returns only after commit.</summary>
@@ -95,7 +96,7 @@ public sealed class TransactionalTodoWorkflowTests
 
         Assert.Contains("signing failed", exception.Message, StringComparison.Ordinal);
         Assert.Empty(handler.Requests);
-        await inner.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, default).ConfigureAwait(true);
+        await inner.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.update restores the full typed-client snapshot when commit fails after mutation.</summary>
@@ -185,7 +186,7 @@ public sealed class TransactionalTodoWorkflowTests
 
         Assert.Contains("signing failed", exception.Message, StringComparison.Ordinal);
         Assert.Empty(handler.Requests);
-        await inner.DidNotReceiveWithAnyArgs().DeleteAsync(default!, default).ConfigureAwait(true);
+        await inner.DidNotReceiveWithAnyArgs().DeleteAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>workflow.todo.delete recreates the typed-client snapshot when commit fails after deletion.</summary>

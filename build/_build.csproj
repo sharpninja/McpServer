@@ -8,6 +8,7 @@
     <NoWarn>CS1591</NoWarn>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <NukeTelemetryVersion>1</NukeTelemetryVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

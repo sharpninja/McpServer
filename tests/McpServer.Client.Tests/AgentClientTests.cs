@@ -21,7 +21,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.ListDefinitionsAsync();
+        var result = await client.ListDefinitionsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("cursor", result.Items[0].Id);
@@ -36,7 +36,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.GetDefinitionAsync("copilot/manager");
+        var result = await client.GetDefinitionAsync("copilot/manager", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("copilot/manager", result.Id);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -55,7 +55,7 @@ public sealed class AgentClientTests
             Id = "cursor",
             DisplayName = "Cursor",
             DefaultLaunchCommand = "cursor-agent"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -71,7 +71,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.DeleteDefinitionAsync("cursor");
+        var result = await client.DeleteDefinitionAsync("cursor", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
@@ -85,7 +85,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.SeedDefaultsAsync();
+        var result = await client.SeedDefaultsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(3, result.Seeded);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -99,7 +99,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        _ = await client.ListWorkspaceAgentsAsync("/repo path");
+        _ = await client.ListWorkspaceAgentsAsync("/repo path", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("workspace=%2Frepo%20path", handler.LastRequest.RequestUri!.Query, StringComparison.Ordinal);
@@ -113,7 +113,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.GetWorkspaceAgentAsync("cursor", "/repo");
+        var result = await client.GetWorkspaceAgentAsync("cursor", "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("cursor", result.AgentId);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -131,7 +131,7 @@ public sealed class AgentClientTests
         var result = await client.UpsertWorkspaceAgentAsync(
             "cursor",
             new AgentWorkspaceRequest { AgentId = "cursor", Enabled = true, AgentIsolation = "clone" },
-            "/repo");
+            "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -147,7 +147,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.DeleteWorkspaceAgentAsync("cursor", "/repo");
+        var result = await client.DeleteWorkspaceAgentAsync("cursor", "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
@@ -165,7 +165,7 @@ public sealed class AgentClientTests
         var result = await client.BanAgentAsync(
             "cursor",
             new AgentBanRequest { Reason = "policy", Global = false, BannedUntilPr = 17 },
-            "/repo");
+            "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -181,7 +181,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.UnbanAgentAsync("cursor", global: true);
+        var result = await client.UnbanAgentAsync("cursor", global: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -204,7 +204,7 @@ public sealed class AgentClientTests
                 EventType = 7,
                 Details = "init"
             },
-            "/repo");
+            "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -220,7 +220,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.GetEventsAsync("cursor", "/repo", 25);
+        var result = await client.GetEventsAsync("cursor", "/repo", 25, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal(7, result.Items[0].EventType);
@@ -237,7 +237,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.ValidateAsync("/repo");
+        var result = await client.ValidateAsync("/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Valid);
         Assert.Equal("/repo/agents.yaml", result.Path);
@@ -255,7 +255,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.LaunchAgentAsync("cursor", "/repo");
+        var result = await client.LaunchAgentAsync("cursor", "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/agents/cursor/launch", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);
@@ -271,7 +271,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.StopAgentAsync("cursor", "/repo");
+        var result = await client.StopAgentAsync("cursor", "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -288,7 +288,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.GetProcessStatusAsync("cursor", "/repo");
+        var result = await client.GetProcessStatusAsync("cursor", "/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/agents/cursor/process-status", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);
@@ -305,7 +305,7 @@ public sealed class AgentClientTests
         using var http = new HttpClient(handler);
         var client = new AgentClient(http, DefaultOptions);
 
-        var result = await client.ListRunningAgentsAsync("/repo");
+        var result = await client.ListRunningAgentsAsync("/repo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/agents/running", handler.LastRequest.RequestUri!.AbsolutePath, StringComparison.Ordinal);

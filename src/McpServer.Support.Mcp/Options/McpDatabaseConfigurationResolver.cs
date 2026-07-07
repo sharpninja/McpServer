@@ -119,13 +119,22 @@ internal static class McpDatabaseConfigurationResolver
         var configured = GetEffectiveDatabaseValue(configuration, instanceName, "PostgreSql:ConnectionString")
             ?? McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "PostgresConnectionString")
             ?? configuration.GetConnectionString("Mcp");
-#pragma warning disable CS0618
-        var resolved = PostgresConnectionStringResolver.ResolveConnectionString(
-            configured,
-            "DATABASE_URL",
-            "POSTGRES_CONNECTION_STRING",
-            "MCP_POSTGRES_CONNECTION_STRING");
-#pragma warning restore CS0618
+        var connectionConfiguration = new ConfigurationManager();
+        if (!string.IsNullOrWhiteSpace(configured))
+        {
+            connectionConfiguration.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["ConnectionStrings:Mcp"] = configured
+            });
+        }
+
+        var resolved = new RailwayConnectionStringBuilder(connectionConfiguration)
+            .WithConfigKey("Mcp")
+            .WithEnvironmentFallback(
+                "DATABASE_URL",
+                "POSTGRES_CONNECTION_STRING",
+                "MCP_POSTGRES_CONNECTION_STRING")
+            .Build();
 
         if (string.IsNullOrWhiteSpace(resolved))
         {

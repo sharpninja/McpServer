@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Xunit;
@@ -46,7 +46,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
             },
             "{\"groupId\":\"triage-group-001\"}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"));
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal("""{"title":"triage result"}""", result.OutputJson);
@@ -66,6 +66,142 @@ public sealed class ConfiguredTriageResearchRunnerTests
         Assert.Equal("F:\\GitHub\\McpServer", strategy.LastRequest.Options.WorkingDirectory);
         Assert.Equal("1", strategy.LastRequest.Options.EnvironmentVariables["TRIAGE_MODE"]);
         Assert.Equal(TimeSpan.FromSeconds(5), strategy.Session.EndTimeout);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: the configured runner passes the triage output
+    /// callback through to the selected direct execution strategy.
+    /// </summary>
+    [Fact]
+    public async Task RunAsync_WithOutputCallback_PassesCallbackToStrategyOptions()
+    {
+        var streamed = new List<string>();
+        var strategy = new CapturingAgentExecutionStrategy();
+        var resolver = new CapturingAgentExecutionStrategyResolver(strategy);
+        var runner = new ConfiguredTriageResearchRunner(
+            Microsoft.Extensions.Options.Options.Create(new TriageOptions
+            {
+                AgentPath = "triage-agent.exe",
+                ExecutionStrategy = "fake-triage",
+            }),
+            resolver);
+
+        await runner.RunAsync(new TriageResearchRequest(
+            new TriageGroupDetail
+            {
+                GroupId = "triage-group-001",
+                Status = "collecting",
+                ReportCount = 1,
+                WorkspacePath = "F:\\GitHub\\McpServer",
+                Title = "Plugin triage bug",
+                Summary = "Plugin wrapper failed",
+                QuietDeadlineUtc = DateTimeOffset.UtcNow,
+            },
+            "{}",
+            "rendered prompt",
+            "F:\\GitHub\\McpServer",
+            update =>
+            {
+                streamed.Add($"{update.StreamName}:{update.Text}");
+                return Task.CompletedTask;
+            }), cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.NotNull(strategy.LastRequest);
+        Assert.NotNull(strategy.LastRequest.Options.AgentOutputReceivedAsync);
+
+        await strategy.LastRequest.Options.AgentOutputReceivedAsync!("stdout", "partial output");
+
+        Assert.Contains("stdout:partial output", streamed);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-003: blank triage model configuration flows to the selected
+    /// strategy as <c>auto</c> rather than reintroducing a Codex-specific fallback.
+    /// </summary>
+    [Fact]
+    public async Task RunAsync_WhenAgentModelBlank_UsesAutoModel()
+    {
+        var strategy = new CapturingAgentExecutionStrategy();
+        var resolver = new CapturingAgentExecutionStrategyResolver(strategy);
+        var runner = new ConfiguredTriageResearchRunner(
+            Microsoft.Extensions.Options.Options.Create(new TriageOptions
+            {
+                AgentPath = "cline",
+                AgentModel = string.Empty,
+                ExecutionStrategy = AgentExecutionStrategyNames.OneShotCli,
+            }),
+            resolver);
+
+        var result = await runner.RunAsync(new TriageResearchRequest(
+            new TriageGroupDetail
+            {
+                GroupId = "triage-group-001",
+                Status = "collecting",
+                ReportCount = 1,
+                WorkspacePath = "F:\\GitHub\\McpServer",
+                Title = "Plugin triage bug",
+                Summary = "Plugin wrapper failed",
+                QuietDeadlineUtc = DateTimeOffset.UtcNow,
+            },
+            "{}",
+            "rendered prompt",
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(result.Success);
+        Assert.NotNull(strategy.LastRequest);
+        Assert.Equal("auto", strategy.LastRequest.Options.Model);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-005: failed direct-agent runs keep full stderr as captured
+    /// output but return a concise inspectable error summary.
+    /// </summary>
+    [Fact]
+    public async Task RunAsync_WhenAgentTimesOut_ReturnsConciseErrorAndPreservesCapturedStderr()
+    {
+        var largeStderr = string.Concat(
+            "normal Codex trace",
+            Environment.NewLine,
+            new string('x', 4096),
+            Environment.NewLine,
+            "error: Codex CLI triage run was cancelled or timed out.");
+        var strategy = new CapturingAgentExecutionStrategy();
+        strategy.Session.InitialResponse = new AgentCliResult
+        {
+            State = AgentCliResultState.Error,
+            Body = string.Empty,
+            Stdout = "partial stdout",
+            Stderr = largeStderr,
+        };
+        var resolver = new CapturingAgentExecutionStrategyResolver(strategy);
+        var runner = new ConfiguredTriageResearchRunner(
+            Microsoft.Extensions.Options.Options.Create(new TriageOptions
+            {
+                AgentPath = "triage-agent.exe",
+                ExecutionStrategy = "fake-triage",
+            }),
+            resolver);
+
+        var result = await runner.RunAsync(new TriageResearchRequest(
+            new TriageGroupDetail
+            {
+                GroupId = "triage-group-001",
+                Status = "collecting",
+                ReportCount = 1,
+                WorkspacePath = "F:\\GitHub\\McpServer",
+                Title = "Plugin triage bug",
+                Summary = "Plugin wrapper failed",
+                QuietDeadlineUtc = DateTimeOffset.UtcNow,
+            },
+            "{}",
+            "rendered prompt",
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.False(result.Success);
+        Assert.Equal("Codex CLI triage run was cancelled or timed out.", result.Error);
+        Assert.Equal("partial stdout", result.AgentStdout);
+        Assert.Equal(largeStderr, result.AgentStderr);
+        Assert.True(result.Error!.Length < 200);
     }
 
     /// <summary>
@@ -93,7 +229,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"));
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Contains("not configured", result.Error, StringComparison.OrdinalIgnoreCase);
@@ -101,18 +237,19 @@ public sealed class ConfiguredTriageResearchRunnerTests
     }
 
     /// <summary>
-    /// TEST-MCP-TRIAGE-003: default triage options use Codex CLI and existing
-    /// Codex configuration instead of requiring a custom appsettings section.
+    /// TEST-MCP-TRIAGE-003: default triage options use the generic one-shot CLI strategy
+    /// with Cline selected as the default agent command.
     /// </summary>
     [Fact]
-    public void TriageOptions_DefaultsToCodexCliAgent()
+    public void TriageOptions_DefaultsToOneShotClineAgent()
     {
         var options = new TriageOptions();
 
         Assert.Equal("triage", options.AgentName);
-        Assert.Equal("codex", options.AgentPath);
+        Assert.Equal("cline", options.AgentPath);
         Assert.Equal("auto", options.AgentModel);
-        Assert.Equal(AgentExecutionStrategyNames.CodexCli, options.ExecutionStrategy);
+        Assert.Equal(AgentExecutionStrategyNames.OneShotCli, options.ExecutionStrategy);
+        Assert.True(options.MaxRunTime > TimeSpan.FromMinutes(10));
     }
 
     private sealed class CapturingAgentExecutionStrategyResolver(IAgentExecutionStrategy strategy) : IAgentExecutionStrategyResolver
@@ -151,23 +288,25 @@ public sealed class ConfiguredTriageResearchRunnerTests
 
         public TimeSpan? EndTimeout { get; private set; }
 
+        public AgentCliResult InitialResponse { get; set; } = new()
+        {
+            State = AgentCliResultState.Success,
+            Body = """{"title":"triage result"}""",
+            Stdout = "triage stdout",
+            Stderr = "triage stderr",
+            ExitCode = 0,
+        };
+
         public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 
-        public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default)
-            => Task.FromResult(new CopilotResult
-            {
-                State = CopilotResultState.Success,
-                Body = """{"title":"triage result"}""",
-                Stdout = "triage stdout",
-                Stderr = "triage stderr",
-                ExitCode = 0,
-            });
+        public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult(InitialResponse);
 
         public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default)
             => EmptyAsyncEnumerable();
 
-        public Task<CopilotResult> SendAsync(string prompt, CancellationToken cancellationToken = default)
-            => Task.FromResult(new CopilotResult { State = CopilotResultState.Success, Body = string.Empty });
+        public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default)
+            => Task.FromResult(new AgentCliResult { State = AgentCliResultState.Success, Body = string.Empty });
 
         public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default)
             => EmptyAsyncEnumerable();

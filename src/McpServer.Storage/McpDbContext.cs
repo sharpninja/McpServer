@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using System.Data.Common;
 using System.Text.Json;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +33,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-DB-001: Canonical database-authoritative workspace registry.</summary>
     public DbSet<WorkspaceEntity> Workspaces => Set<WorkspaceEntity>();
 
+    /// <summary>FR-MCP-105: 4NF workspace banned-policy list items (licenses, countries, organizations, individuals).</summary>
+    public DbSet<WorkspaceBannedItemEntity> WorkspaceBannedItems => Set<WorkspaceBannedItemEntity>();
+
     /// <summary>TR-MCP-DB-004: Generic append-only mutable-entity audit ledger.</summary>
     public DbSet<DataAuditLogEntity> DataAuditLogs => Set<DataAuditLogEntity>();
 
@@ -63,6 +66,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-PLANNED-CORE-013: Session log turn commits.</summary>
     public DbSet<SessionLogCommitEntity> SessionLogCommits => Set<SessionLogCommitEntity>();
 
+    /// <summary>TR-PLANNED-CORE-013: 4NF changed-file rows for session log commits.</summary>
+    public DbSet<SessionLogCommitFileEntity> SessionLogCommitFiles => Set<SessionLogCommitFileEntity>();
+
     /// <summary>TR-PLANNED-CORE-013: Session log turn string-list items (design decisions, requirements, files modified, blockers).</summary>
     public DbSet<SessionLogTurnStringListEntity> SessionLogTurnStringLists => Set<SessionLogTurnStringListEntity>();
 
@@ -78,8 +84,14 @@ public sealed class McpDbContext : DbContext
     /// <summary>Agent type definitions (built-in and custom).</summary>
     public DbSet<AgentDefinitionEntity> AgentDefinitions => Set<AgentDefinitionEntity>();
 
+    /// <summary>4NF default-model rows for agent definitions.</summary>
+    public DbSet<AgentDefinitionModelEntity> AgentDefinitionModels => Set<AgentDefinitionModelEntity>();
+
     /// <summary>Per-workspace agent configurations.</summary>
     public DbSet<AgentWorkspaceEntity> AgentWorkspaces => Set<AgentWorkspaceEntity>();
+
+    /// <summary>4NF override-list rows for per-workspace agent configurations.</summary>
+    public DbSet<AgentWorkspaceListItemEntity> AgentWorkspaceListItems => Set<AgentWorkspaceListItemEntity>();
 
     /// <summary>Agent lifecycle event audit log.</summary>
     public DbSet<AgentEventLogEntity> AgentEventLogs => Set<AgentEventLogEntity>();
@@ -93,6 +105,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-TODO-005 (provider-agnostic): Authoritative TODO items.</summary>
     public DbSet<TodoItemEntity> TodoItems => Set<TodoItemEntity>();
 
+    /// <summary>TR-MCP-TODO-005: 4NF TODO string-list items (description, technical details, depends-on, FR/TR raw ids).</summary>
+    public DbSet<TodoItemListItemEntity> TodoItemListItems => Set<TodoItemListItemEntity>();
+
+    /// <summary>TR-MCP-TODO-005: 4NF TODO implementation sub-task rows.</summary>
+    public DbSet<TodoItemTaskEntity> TodoItemTasks => Set<TodoItemTaskEntity>();
+
     /// <summary>TR-MCP-DB-005: Normalized TODO-to-requirement link rows.</summary>
     public DbSet<TodoRequirementLinkEntity> TodoRequirementLinks => Set<TodoRequirementLinkEntity>();
 
@@ -102,8 +120,20 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-TODO-005 / TR-MCP-TODO-006 (provider-agnostic): Singleton TODO document metadata.</summary>
     public DbSet<TodoDocumentMetadataEntity> TodoDocumentMetadata => Set<TodoDocumentMetadataEntity>();
 
+    /// <summary>TR-MCP-TODO-005: 4NF top-level TODO document notes.</summary>
+    public DbSet<TodoDocumentNoteEntity> TodoDocumentNotes => Set<TodoDocumentNoteEntity>();
+
+    /// <summary>TR-MCP-TODO-005: 4NF completed-archive groups.</summary>
+    public DbSet<TodoCompletedGroupEntity> TodoCompletedGroups => Set<TodoCompletedGroupEntity>();
+
+    /// <summary>TR-MCP-TODO-005: 4NF completed-archive items.</summary>
+    public DbSet<TodoCompletedItemEntity> TodoCompletedItems => Set<TodoCompletedItemEntity>();
+
     /// <summary>Authoritative workspace-scoped FR/TR/TEST requirements.</summary>
     public DbSet<RequirementEntity> Requirements => Set<RequirementEntity>();
+
+    /// <summary>TR-MCP-REQAC-001: 4NF acceptance-criteria rows for requirements.</summary>
+    public DbSet<RequirementAcceptanceCriterionEntity> RequirementAcceptanceCriteria => Set<RequirementAcceptanceCriterionEntity>();
 
     /// <summary>FR-MCP-REQSCOPE-001: workspace-scoped requirement scope layers.</summary>
     public DbSet<RequirementScopeLayerEntity> RequirementScopeLayers => Set<RequirementScopeLayerEntity>();
@@ -122,6 +152,9 @@ public sealed class McpDbContext : DbContext
 
     /// <summary>TR-MCP-TRIAGE-001: Durable incidental bug triage reports.</summary>
     public DbSet<TriageReportEntity> TriageReports => Set<TriageReportEntity>();
+
+    /// <summary>TR-MCP-TRIAGE-001: 4NF triage report list items (affected paths/symbols, reproduction hints, tags).</summary>
+    public DbSet<TriageReportListItemEntity> TriageReportListItems => Set<TriageReportListItemEntity>();
 
     /// <summary>TR-MCP-TRIAGE-001: Durable deterministic triage report groups.</summary>
     public DbSet<TriageGroupEntity> TriageGroups => Set<TriageGroupEntity>();
@@ -160,6 +193,18 @@ public sealed class McpDbContext : DbContext
             warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
     }
 
+    /// <summary>
+    /// TR-MCP-DB-DTO-001: store every DateTimeOffset as a UTC DateTime so the SQLite provider
+    /// can translate timestamp predicates and ordering to SQL (it cannot translate
+    /// DateTimeOffset). All timestamps in this schema are UTC, so the conversion is lossless.
+    /// </summary>
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(configurationBuilder);
+        configurationBuilder.Properties<DateTimeOffset>()
+            .HaveConversion<DateTimeOffsetToUtcDateTimeConverter>();
+    }
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -185,6 +230,16 @@ public sealed class McpDbContext : DbContext
             });
         });
 
+        modelBuilder.Entity<WorkspaceBannedItemEntity>(e =>
+        {
+            e.HasOne(x => x.Workspace)
+                .WithMany(x => x.BannedItems)
+                .HasForeignKey(x => x.WorkspaceId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.Category, x.Ordinal });
+        });
+
         modelBuilder.Entity<DataAuditLogEntity>(e =>
         {
             e.HasKey(x => x.AuditId);
@@ -200,10 +255,12 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.SourceType);
             e.HasIndex(x => x.SourceKey);
             e.HasIndex(x => x.IngestedAt);
+            e.HasIndex(x => new { x.SourceType, x.SourceKey });
         });
         modelBuilder.Entity<ContextChunkEntity>(e =>
         {
             e.HasIndex(x => x.DocumentId);
+            e.HasIndex(x => new { x.DocumentId, x.ChunkIndex });
             e.HasOne(x => x.Document)
                 .WithMany(x => x.Chunks)
                 .HasForeignKey(x => x.DocumentId)
@@ -226,6 +283,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<SessionLogTurnEntity>(e =>
         {
             e.HasIndex(x => new { x.SessionLogId, x.RequestId }).IsUnique();
+            e.HasIndex(x => x.Timestamp);
             e.HasOne(x => x.SessionLog)
                 .WithMany(x => x.Turns)
                 .HasForeignKey(x => x.SessionLogId)
@@ -234,6 +292,7 @@ public sealed class McpDbContext : DbContext
 
         modelBuilder.Entity<SessionLogActionEntity>(e =>
         {
+            e.HasIndex(x => new { x.SessionLogTurnId, x.Order });
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Actions)
                 .HasForeignKey(x => x.SessionLogTurnId)
@@ -272,6 +331,15 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<SessionLogCommitFileEntity>(e =>
+        {
+            e.HasOne(x => x.SessionLogCommit)
+                .WithMany(x => x.Files)
+                .HasForeignKey(x => x.SessionLogCommitId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.SessionLogCommitId, x.Ordinal });
+        });
+
         modelBuilder.Entity<SessionLogTurnStringListEntity>(e =>
         {
             e.HasOne(x => x.SessionLogTurn)
@@ -285,6 +353,7 @@ public sealed class McpDbContext : DbContext
         {
             e.HasIndex(x => new { x.Name, x.WorkspacePath }).IsUnique();
             e.HasIndex(x => x.WorkspacePath);
+            e.HasIndex(x => x.BucketName);
         });
 
         modelBuilder.Entity<ToolDefinitionTagEntity>(e =>
@@ -306,6 +375,7 @@ public sealed class McpDbContext : DbContext
         {
             e.HasKey(x => x.Id);
             e.HasIndex(x => x.IsBuiltIn);
+            e.HasIndex(x => x.DisplayName);
         });
 
         modelBuilder.Entity<AgentWorkspaceEntity>(e =>
@@ -318,18 +388,48 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<AgentDefinitionModelEntity>(e =>
+        {
+            e.HasOne(x => x.AgentDefinition)
+                .WithMany(x => x.Models)
+                .HasForeignKey(x => x.AgentDefinitionId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.AgentDefinitionId, x.Ordinal });
+        });
+        modelBuilder.Entity<AgentDefinitionEntity>()
+            .Navigation(x => x.Models)
+            .AutoInclude();
+
+        modelBuilder.Entity<AgentWorkspaceListItemEntity>(e =>
+        {
+            e.HasOne(x => x.AgentWorkspace)
+                .WithMany(x => x.ListItems)
+                .HasForeignKey(x => x.AgentWorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.AgentWorkspaceId, x.ListType, x.Ordinal });
+        });
+        modelBuilder.Entity<AgentWorkspaceEntity>()
+            .Navigation(x => x.ListItems)
+            .AutoInclude();
+
         modelBuilder.Entity<AgentEventLogEntity>(e =>
         {
             e.HasIndex(x => x.AgentId);
             e.HasIndex(x => x.WorkspacePath);
             e.HasIndex(x => x.Timestamp);
             e.HasIndex(x => x.EventType);
+            e.HasIndex(x => new { x.WorkspacePath, x.AgentId, x.Timestamp });
+            e.HasOne<AgentDefinitionEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.AgentId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<GraphEntityEntity>(e =>
         {
             e.HasIndex(x => x.Name);
             e.HasIndex(x => x.EntityType);
+            e.HasIndex(x => x.CreatedAtUtc);
         });
 
         modelBuilder.Entity<GraphRelationshipEntity>(e =>
@@ -337,6 +437,7 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.SourceEntityId);
             e.HasIndex(x => x.TargetEntityId);
             e.HasIndex(x => x.RelationshipType);
+            e.HasIndex(x => x.CreatedAtUtc);
             e.HasOne(x => x.SourceEntity)
                 .WithMany(x => x.SourceRelationships)
                 .HasForeignKey(x => x.SourceEntityId)
@@ -355,6 +456,26 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Section);
             e.HasIndex(x => x.Priority);
             e.HasIndex(x => x.Done);
+            e.HasIndex(x => x.SectionOrder);
+            e.HasIndex(x => x.ItemOrder);
+        });
+
+        modelBuilder.Entity<TodoItemListItemEntity>(e =>
+        {
+            e.HasOne(x => x.TodoItem)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.TodoId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.TodoId, x.ListType, x.Ordinal });
+        });
+
+        modelBuilder.Entity<TodoItemTaskEntity>(e =>
+        {
+            e.HasOne(x => x.TodoItem)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.TodoId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.TodoId, x.Ordinal });
         });
 
         modelBuilder.Entity<TodoRequirementLinkEntity>(e =>
@@ -396,6 +517,33 @@ public sealed class McpDbContext : DbContext
                 "\"SingletonId\" = 1"));
         });
 
+        modelBuilder.Entity<TodoDocumentNoteEntity>(e =>
+        {
+            e.HasOne(x => x.DocumentMetadata)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.SingletonId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.SingletonId, x.Ordinal });
+        });
+
+        modelBuilder.Entity<TodoCompletedGroupEntity>(e =>
+        {
+            e.HasOne(x => x.DocumentMetadata)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.SingletonId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.SingletonId, x.Ordinal });
+        });
+
+        modelBuilder.Entity<TodoCompletedItemEntity>(e =>
+        {
+            e.HasOne(x => x.Group)
+                .WithMany(x => x.Items)
+                .HasForeignKey(x => x.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.GroupId, x.Ordinal });
+        });
+
         modelBuilder.Entity<RequirementEntity>(e =>
         {
             e.HasKey(x => new { x.WorkspaceId, x.Kind, x.Id });
@@ -406,6 +554,15 @@ public sealed class McpDbContext : DbContext
             e.Property(x => x.Priority).HasDefaultValue("medium");
             e.Property(x => x.Status).HasDefaultValue("pending");
             e.Property(x => x.ScopeStartLayerKey).HasDefaultValue("layer-1");
+        });
+
+        modelBuilder.Entity<RequirementAcceptanceCriterionEntity>(e =>
+        {
+            e.HasOne(x => x.Requirement)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.RequirementKind, x.RequirementId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.WorkspaceId, x.RequirementKind, x.RequirementId, x.Ordinal });
         });
 
         modelBuilder.Entity<RequirementScopeLayerEntity>(e =>
@@ -471,6 +628,19 @@ public sealed class McpDbContext : DbContext
                 .IsUnique()
                 .HasFilter(TriageNullableUniqueIndexFilter(nameof(TriageReportEntity.IdempotencyKey)));
             e.HasIndex(x => x.CreatedUtc);
+            e.HasOne<TriageGroupEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<TriageReportListItemEntity>(e =>
+        {
+            e.HasOne(x => x.TriageReport)
+                .WithMany(x => x.ListItems)
+                .HasForeignKey(x => x.ReportId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(x => new { x.ReportId, x.ListType, x.Ordinal });
         });
 
         modelBuilder.Entity<TriageGroupEntity>(e =>
@@ -484,6 +654,10 @@ public sealed class McpDbContext : DbContext
         {
             e.HasIndex(x => new { x.WorkspaceId, x.GroupId, x.StartedUtc });
             e.HasIndex(x => x.Status);
+            e.HasOne<TriageGroupEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<FederationProxyEntity>(e =>
@@ -511,6 +685,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<FederationOperationEntity>(e =>
         {
             e.HasIndex(x => new { x.ProxyId, x.Status });
+            e.HasIndex(x => new { x.ProxyId, x.Status, x.AttemptCount, x.CreatedAtUtc });
             e.HasIndex(x => x.SourceOperationId);
             e.HasIndex(x => new { x.Domain, x.ResourceId });
             e.HasIndex(x => x.CreatedAtUtc);
@@ -523,6 +698,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<FederationOutboxEntity>(e =>
         {
             e.HasIndex(x => new { x.ProxyId, x.Sequence });
+            e.HasIndex(x => new { x.ProxyId, x.AcknowledgedAtUtc });
             e.HasIndex(x => x.OperationId);
             e.HasOne<FederationProxyEntity>()
                 .WithMany()
@@ -675,6 +851,12 @@ public sealed class McpDbContext : DbContext
                 continue;
 
             if (entityType.ClrType == typeof(MemoryEntity))
+                continue;
+
+            // WorkspaceBannedItemEntity's WorkspaceId IS its parent foreign key; it is configured
+            // explicitly (with the WorkspaceEntity.BannedItems inverse navigation) so the generic
+            // convention must not add a second, navigation-less relationship on the same column.
+            if (entityType.ClrType == typeof(WorkspaceBannedItemEntity))
                 continue;
 
             if (entityType.FindProperty(nameof(WorkspaceEntity.WorkspaceId)) is null)
@@ -1035,6 +1217,11 @@ public sealed class McpDbContext : DbContext
             SessionLogTurnContextEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogProcessingDialogEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogCommitEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogCommitFileEntity child => FirstNonEmpty(child.SessionLogCommit?.WorkspaceId, child.SessionLogCommit?.SessionLogTurn?.WorkspaceId, child.SessionLogCommit?.SessionLogTurn?.SessionLog?.WorkspaceId),
+            // Agent child rows inherit the parent's workspace so global ("") built-in definitions
+            // never get stamped with the ambient workspace.
+            AgentDefinitionModelEntity child when child.AgentDefinition is not null => child.AgentDefinition.WorkspaceId,
+            AgentWorkspaceListItemEntity child when child.AgentWorkspace is not null => child.AgentWorkspace.WorkspaceId,
             SessionLogTurnStringListEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             _ when _workspaceId.Length > 0 => _workspaceId,
             _ => null,

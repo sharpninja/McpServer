@@ -46,8 +46,9 @@ public class AgentWorkspaceEntity
     [MaxLength(512)]
     public string? LaunchCommandOverride { get; set; }
 
-    /// <summary>Override models (JSON array, null = use definition default).</summary>
-    public string? ModelsOverrideJson { get; set; }
+    /// <summary>4NF override-list rows (former <c>ModelsOverrideJson</c> / <c>InstructionFilesOverrideJson</c>),
+    /// discriminated by list type; no rows for a type means "use the definition default".</summary>
+    public List<AgentWorkspaceListItemEntity> ListItems { get; set; } = [];
 
     /// <summary>Override branch strategy (null = use definition default).</summary>
     [MaxLength(256)]
@@ -58,9 +59,6 @@ public class AgentWorkspaceEntity
 
     /// <summary>Additional content appended to the marker file for this agent.</summary>
     public string MarkerAdditions { get; set; } = "";
-
-    /// <summary>Override instruction files (JSON array, null = use definition default).</summary>
-    public string? InstructionFilesOverrideJson { get; set; }
 
     /// <summary>Restart policy for the runtime process: never, on-failure, or always.</summary>
     [MaxLength(32)]

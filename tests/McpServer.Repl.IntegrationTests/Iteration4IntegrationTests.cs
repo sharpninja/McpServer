@@ -4,6 +4,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace McpServer.Repl.IntegrationTests;
 
+[Trait("Category", "Integration")]
 public sealed class Iteration4IntegrationTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;
@@ -24,8 +25,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_CreateFr_GetFr_DeleteFr_Succeeds()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId = "FR-TEST-001";
 
@@ -65,8 +66,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_CreateTr_GetTr_DeleteTr_Succeeds()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var trId = "TR-TEST-INTEG-001";
 
@@ -107,8 +108,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_CreateTest_GetTest_DeleteTest_Succeeds()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var testId = "TEST-INT-001";
 
@@ -149,8 +150,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_ListFr_ReturnsItems()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateRequirementsCreateFrRequest(
@@ -188,8 +189,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_ListTr_ReturnsItems()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateRequirementsCreateTrRequest(
@@ -230,8 +231,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_ListTest_ReturnsItems()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateRequirementsCreateTestRequest(
@@ -271,8 +272,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_UpdateFr_ModifiesRequirement()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId = "FR-UPD-001";
 
@@ -305,8 +306,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_UpdateTr_ModifiesRequirement()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var trId = "TR-UPD-TEST-001";
 
@@ -339,8 +340,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_UpdateTest_ModifiesRequirement()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var testId = "TEST-UPD-001";
 
@@ -373,8 +374,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_CreateMapping_ListMapping_DeleteMapping_Succeeds()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId = "FR-MAP-001";
         var trId = "TR-MAP-TEST-001";
@@ -452,8 +453,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_GenerateDocument_Markdown_ReturnsFormattedDocument()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId = "FR-GEN-001";
 
@@ -487,8 +488,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_GenerateDocument_Yaml_ReturnsYamlDocument()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var trId = "TR-GEN-YAML-001";
 
@@ -523,8 +524,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_GenerateDocument_Matrix_ReturnsTraceabilityMatrix()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var generateEnvelope = YamlEnvelopeBuilder.CreateRequirementsGenerateDocumentRequest(
             GenerateRequestId("generate-matrix"),
@@ -544,8 +545,8 @@ public sealed class Iteration4IntegrationTests : IDisposable
     [Fact]
     public async Task RequirementsWorkflow_IngestDocument_Markdown_ParsesAndCreatesRequirements()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var markdownContent = @"# Functional Requirements
 ## FR-ING-001: Ingest Test Requirement
@@ -576,8 +577,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_IngestDocument_Yaml_ParsesAndCreatesRequirements()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var yamlContent = @"requirements:
   - id: FR-INGY-001
@@ -609,8 +610,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_CurrentSelection_ReturnsSelectionState()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var currentSelectionEnvelope = YamlEnvelopeBuilder.CreateRequirementsCurrentSelectionRequest(
             GenerateRequestId("current-selection"));
@@ -628,8 +629,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_InvalidFrId_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidId = "invalid-fr-id";
 
@@ -653,8 +654,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_InvalidTrId_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidId = "TR-NO-SUBAREA";
 
@@ -679,8 +680,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_InvalidTestId_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidId = "TESTINVALID001";
 
@@ -705,8 +706,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_GetNonExistentFr_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nonExistentId = "FR-XXX-999";
 
@@ -726,8 +727,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_GetNonExistentTr_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nonExistentId = "TR-XXX-YYY-999";
 
@@ -747,8 +748,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_GetNonExistentTest_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nonExistentId = "TEST-XXX-999";
 
@@ -768,8 +769,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_CreateDuplicateFr_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId = "FR-DUP-001";
 
@@ -802,8 +803,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_CreateMappingWithNonExistentRequirements_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var createMappingEnvelope = YamlEnvelopeBuilder.CreateRequirementsCreateMappingRequest(
             GenerateRequestId("create-invalid-mapping"),
@@ -824,8 +825,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_DeleteNonExistentMapping_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var deleteMappingEnvelope = YamlEnvelopeBuilder.CreateRequirementsDeleteMappingRequest(
             GenerateRequestId("delete-nonexistent"),
@@ -845,8 +846,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_IngestInvalidMarkdown_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidMarkdown = "This is not a valid requirement document format";
 
@@ -868,8 +869,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_IngestInvalidYaml_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidYaml = "not: [valid: yaml: structure";
 
@@ -891,8 +892,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_CompleteWorkflow_FrTrTestMappingGenerate()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId = "FR-WFL-001";
         var trId = "TR-WFL-FULL-001";
@@ -980,8 +981,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_ListWithFilters_ReturnsFilteredResults()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateRequirementsCreateFrRequest(
@@ -1034,8 +1035,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_MappingListFilters_ReturnCorrectResults()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId1 = "FR-MFL-001";
         var frId2 = "FR-MFL-002";
@@ -1137,8 +1138,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_IngestMergeStrategy_OverwriteExisting()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var frId = "FR-MRG-001";
 
@@ -1187,8 +1188,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_GenerateAllDocTypes_ValidatesOutput()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var docTypes = new[] { "fr", "tr", "test", "matrix", "all" };
 
@@ -1212,8 +1213,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_GenerateBothFormats_ValidatesOutput()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var markdownEnvelope = YamlEnvelopeBuilder.CreateRequirementsGenerateDocumentRequest(
             GenerateRequestId("generate-md"),
@@ -1239,8 +1240,8 @@ Area: ING";
     [Fact]
     public async Task RequirementsWorkflow_SelectionStatePersistence_VerifyAcrossCommands()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateRequirementsCurrentSelectionRequest(
@@ -1249,7 +1250,7 @@ Area: ING";
         var initialSelection = _replProcess.StdoutLines.LastOrDefault();
         Assert.NotNull(initialSelection);
 
-        await Task.Delay(200);
+        await Task.Delay(200, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateRequirementsCurrentSelectionRequest(

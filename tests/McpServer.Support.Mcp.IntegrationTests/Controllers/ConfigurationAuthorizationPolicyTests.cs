@@ -12,6 +12,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// The test uses the real HTTP pipeline so workspace auth and ASP.NET authorization behave exactly as they
 /// do in the running server.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class ConfigurationAuthorizationPolicyTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;
@@ -37,7 +38,7 @@ public sealed class ConfigurationAuthorizationPolicyTests : IClassFixture<Custom
             JwtBearerDefaults.AuthenticationScheme,
             "fake-admin-token");
 
-        using var response = await client.GetAsync("/mcpserver/configuration")
+        using var response = await client.GetAsync("/mcpserver/configuration", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

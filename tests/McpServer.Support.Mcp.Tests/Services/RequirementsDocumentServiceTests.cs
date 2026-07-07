@@ -28,10 +28,10 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         SeedCanonicalDocs();
         var service = CreateService();
 
-        var fr = await service.GetAllFrAsync().ConfigureAwait(true);
-        var tr = await service.GetAllTrAsync().ConfigureAwait(true);
-        var test = await service.GetAllTestAsync().ConfigureAwait(true);
-        var mapping = await service.GetAllMappingsAsync().ConfigureAwait(true);
+        var fr = await service.GetAllFrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var tr = await service.GetAllTrAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var test = await service.GetAllTestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var mapping = await service.GetAllMappingsAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, fr.Count);
         Assert.Equal("FR-MCP-001", fr[0].Id);
@@ -48,16 +48,16 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Single(mapping[0].TestIds);
         Assert.Equal("TEST-MCP-001", mapping[0].TestIds[0]);
 
-        var functionalDoc = await service.GenerateDocumentAsync(RequirementsDocType.Functional).ConfigureAwait(true);
+        var functionalDoc = await service.GenerateDocumentAsync(RequirementsDocType.Functional, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("text/markdown", functionalDoc.MimeType);
         Assert.Contains("# Functional Requirements (MCP Server)", functionalDoc.Content);
         Assert.Contains("## FR-MCP-001 Configurable workspace root and paths", functionalDoc.Content);
 
-        var technicalDoc = await service.GenerateDocumentAsync(RequirementsDocType.Technical).ConfigureAwait(true);
+        var technicalDoc = await service.GenerateDocumentAsync(RequirementsDocType.Technical, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("## TR-MCP-WS-004", technicalDoc.Content);
         Assert.Contains("**Workspace Controller** — REST API", technicalDoc.Content);
 
-        var matrixDoc = await service.GenerateDocumentAsync(RequirementsDocType.Matrix).ConfigureAwait(true);
+        var matrixDoc = await service.GenerateDocumentAsync(RequirementsDocType.Matrix, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("# Requirements Matrix (MCP Server)", matrixDoc.Content);
         Assert.Contains("| FR-MCP-001 | Tracked | Functional-Requirements.md |", matrixDoc.Content);
         Assert.Contains("| TR-MCP-CFG-001 | Tracked | Technical-Requirements.md |", matrixDoc.Content);
@@ -72,7 +72,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var outputRoot = Path.Combine(_tempRoot, "export", "canonical");
         var generatedAt = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);
 
-        var result = await service.GenerateAllAsync(outputRoot, generatedAt).ConfigureAwait(true);
+        var result = await service.GenerateAllAsync(outputRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var names = result.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
 
         Assert.Equal(
@@ -104,7 +104,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var service = CreateService();
         var outputRoot = Path.Combine(_tempRoot, "export", "canonical-readonly");
 
-        var result = await service.GenerateAllAsync(outputRoot).ConfigureAwait(true);
+        var result = await service.GenerateAllAsync(outputRoot, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.All(result.Files, file =>
         {
@@ -126,14 +126,14 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             | Requirement | Status | Source Files |
             | --- | --- | --- |
             | FR-MCP-001 | Complete | ExistingSource |
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var service = CreateService();
         var outputRoot = Path.Combine(_tempRoot, "export", "canonical-with-matrix");
 
-        await service.GenerateAllAsync(outputRoot).ConfigureAwait(true);
+        await service.GenerateAllAsync(outputRoot, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var matrix = await File.ReadAllTextAsync(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName)).ConfigureAwait(true);
+        var matrix = await File.ReadAllTextAsync(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("| FR-MCP-001 | Complete | ExistingSource |", matrix);
         Assert.Contains("| FR-MCP-002 | Tracked | Functional-Requirements.md |", matrix);
         Assert.Contains("| TR-MCP-CFG-001 | Tracked | Technical-Requirements.md |", matrix);
@@ -150,7 +150,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         File.WriteAllText(Path.Combine(outputRoot, "azure", "Old.md"), "stale");
 
         var generatedAt = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);
-        var result = await service.GenerateWikiAsync(outputRoot, generatedAt).ConfigureAwait(true);
+        var result = await service.GenerateWikiAsync(outputRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var names = result.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
 
         Assert.Equal(
@@ -199,14 +199,14 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var staleExport = Path.Combine(outputRoot, "azure", "Old.md");
         Directory.CreateDirectory(Path.GetDirectoryName(existingExport)!);
         Directory.CreateDirectory(Path.GetDirectoryName(staleExport)!);
-        await File.WriteAllTextAsync(existingExport, "stale generated export").ConfigureAwait(true);
-        await File.WriteAllTextAsync(staleExport, "stale export").ConfigureAwait(true);
+        await File.WriteAllTextAsync(existingExport, "stale generated export", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await File.WriteAllTextAsync(staleExport, "stale export", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         File.SetAttributes(existingExport, File.GetAttributes(existingExport) | FileAttributes.ReadOnly);
         File.SetAttributes(staleExport, File.GetAttributes(staleExport) | FileAttributes.ReadOnly);
 
-        var result = await service.GenerateWikiAsync(outputRoot).ConfigureAwait(true);
+        var result = await service.GenerateWikiAsync(outputRoot, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var rewritten = await File.ReadAllTextAsync(existingExport).ConfigureAwait(true);
+        var rewritten = await File.ReadAllTextAsync(existingExport, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("FR-MCP-001", rewritten, StringComparison.Ordinal);
         Assert.False(File.Exists(staleExport));
         Assert.All(result.Files, file => Assert.True(
@@ -222,12 +222,12 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki");
         var generatedAt = new DateTimeOffset(2026, 5, 22, 16, 30, 0, TimeSpan.Zero);
 
-        await service.GenerateWikiAsync(outputRoot, generatedAt).ConfigureAwait(true);
+        await service.GenerateWikiAsync(outputRoot, generatedAt, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var githubTesting = await File.ReadAllTextAsync(
-            Path.Combine(outputRoot, "github", RequirementsDocumentRenderer.TestingFileName)).ConfigureAwait(true);
+            Path.Combine(outputRoot, "github", RequirementsDocumentRenderer.TestingFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var azureTesting = await File.ReadAllTextAsync(
-            Path.Combine(outputRoot, "azure", RequirementsDocumentRenderer.TestingFileName)).ConfigureAwait(true);
+            Path.Combine(outputRoot, "azure", RequirementsDocumentRenderer.TestingFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(githubTesting, azureTesting);
         Assert.Contains("## TEST-MCP", githubTesting);
@@ -259,7 +259,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         await Task.WhenAll(tasks).ConfigureAwait(true);
 
         var testingPath = Path.Combine(_tempRoot, "docs", "Project", "Testing-Requirements.md");
-        var content = await File.ReadAllTextAsync(testingPath).ConfigureAwait(true);
+        var content = await File.ReadAllTextAsync(testingPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var parsed = RequirementsDocumentParser.ParseTesting(content);
 
         Assert.Equal(20, parsed.Count);
@@ -272,8 +272,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         SeedCanonicalDocs();
         var service = CreateService();
 
-        await service.DeleteTrAsync("TR-MCP-CFG-002").ConfigureAwait(true);
-        var mapping = await service.GetMappingAsync("FR-MCP-001").ConfigureAwait(true);
+        await service.DeleteTrAsync("TR-MCP-CFG-002", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var mapping = await service.GetMappingAsync("FR-MCP-001", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(mapping);
         Assert.Single(mapping!.TrIds);

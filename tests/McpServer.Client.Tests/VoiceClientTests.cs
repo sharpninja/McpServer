@@ -26,7 +26,7 @@ public sealed class VoiceClientTests
         {
             DeviceId = "device-1",
             Language = "en-US"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/voice/session", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -45,7 +45,7 @@ public sealed class VoiceClientTests
         {
             DeviceId = "device-1",
             ExecutionStrategy = "hosted-mcp-agent",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("\"executionStrategy\":\"hosted-mcp-agent\"", handler.LastRequestBody!);
         Assert.Equal("hosted-mcp-agent", result.ExecutionStrategy);
@@ -58,7 +58,7 @@ public sealed class VoiceClientTests
         using var http = new HttpClient(handler);
         var client = new VoiceClient(http, DefaultOptions);
 
-        var result = await client.SubmitTurnAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "hello" });
+        var result = await client.SubmitTurnAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "hello" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/voice/session/voice-1/turn", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -72,7 +72,7 @@ public sealed class VoiceClientTests
         using var http = new HttpClient(handler);
         var client = new VoiceClient(http, DefaultOptions);
 
-        var result = await client.InterruptAsync("voice-1");
+        var result = await client.InterruptAsync("voice-1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Interrupted);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -86,7 +86,7 @@ public sealed class VoiceClientTests
         using var http = new HttpClient(handler);
         var client = new VoiceClient(http, DefaultOptions);
 
-        var result = await client.GetStatusAsync("voice-1");
+        var result = await client.GetStatusAsync("voice-1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("voice-1", result.SessionId);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -100,7 +100,7 @@ public sealed class VoiceClientTests
         using var http = new HttpClient(handler);
         var client = new VoiceClient(http, DefaultOptions);
 
-        var result = await client.GetTranscriptAsync("voice-1");
+        var result = await client.GetTranscriptAsync("voice-1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -114,7 +114,7 @@ public sealed class VoiceClientTests
         using var http = new HttpClient(handler);
         var client = new VoiceClient(http, DefaultOptions);
 
-        var deleted = await client.DeleteSessionAsync("voice-1");
+        var deleted = await client.DeleteSessionAsync("voice-1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(deleted);
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
@@ -128,7 +128,7 @@ public sealed class VoiceClientTests
         using var http = new HttpClient(handler);
         var client = new VoiceClient(http, DefaultOptions);
 
-        var deleted = await client.DeleteSessionAsync("missing");
+        var deleted = await client.DeleteSessionAsync("missing", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(deleted);
     }
@@ -148,7 +148,7 @@ public sealed class VoiceClientTests
         var client = new VoiceClient(http, DefaultOptions);
 
         var events = new List<VoiceTurnStreamEvent>();
-        await foreach (var evt in client.SubmitTurnStreamingAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "hello" }))
+        await foreach (var evt in client.SubmitTurnStreamingAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "hello" }, cancellationToken: TestContext.Current.CancellationToken))
             events.Add(evt);
 
         Assert.Equal(2, events.Count);

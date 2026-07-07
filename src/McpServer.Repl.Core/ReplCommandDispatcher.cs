@@ -297,6 +297,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 if (_sessionLogWorkflow is not null)
                 {
                     // Mirror completion to clear local active turn for any follow-on legacy commands.
+                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);
                     var resp = GetString(args, "response") ?? "completed";
                     await _sessionLogWorkflow.CompleteTurnAsync(resp, cancellationToken).ConfigureAwait(false);
                 }
@@ -321,6 +322,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 // This keeps the legacy append path working even after a begin that carried explicit ids.
                 if (_sessionLogWorkflow is not null)
                 {
+                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);
                     var acts = GetSessionActions(args, "actions");
                     if (acts.Count > 0)
                     {
@@ -400,7 +402,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         var payload = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
         foreach (var key in new[]
                  {
-                     "response", "interpretation", "tokenCount", "model", "tags", "contextList",
+                      "response", "interpretation", "tokenCount", "model", "queryTitle", "tags", "contextList",
                      "designDecisions", "commits", "actions", "filesModified", "blockers", "processingDialog",
                  })
         {
@@ -416,6 +418,18 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         return payload;
+    }
+
+    private static async Task ApplyQueryTitleOverrideAsync(
+        ISessionLogWorkflow workflow,
+        IReadOnlyDictionary<string, object?> args,
+        CancellationToken cancellationToken)
+    {
+        var queryTitle = GetString(args, "queryTitle");
+        if (!string.IsNullOrWhiteSpace(queryTitle))
+        {
+            await workflow.UpdateTurnTitleAsync(queryTitle, cancellationToken).ConfigureAwait(false);
+        }
     }
 
     private async Task<IYamlEnvelope> DispatchSessionLogRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
@@ -487,6 +501,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case SessionLogCommandShapes.UpdateTurnMethod:
+                    await ApplyQueryTitleOverrideAsync(workflow, args, cancellationToken).ConfigureAwait(false);
                     await workflow.UpdateTurnAsync(
                         GetString(args, "response"),
                         GetString(args, "interpretation"),
@@ -498,6 +513,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case SessionLogCommandShapes.CompleteTurnMethod:
+                    await ApplyQueryTitleOverrideAsync(workflow, args, cancellationToken).ConfigureAwait(false);
                     await workflow.CompleteTurnAsync(
                         RequireString(args, "response"),
                         cancellationToken).ConfigureAwait(false);
@@ -520,6 +536,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case SessionLogCommandShapes.AppendActionsMethod:
+                    await ApplyQueryTitleOverrideAsync(workflow, args, cancellationToken).ConfigureAwait(false);
                     await workflow.AppendActionsAsync(
                         GetSessionActions(args, "actions"),
                         cancellationToken).ConfigureAwait(false);
@@ -851,12 +868,43 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         GetString(requestArgs, "status"),
                         GetString(requestArgs, "workspacePath"),
                         cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.GetDashboardMethod =>
+                    await workflow.GetDashboardAsync(
+                        GetString(requestArgs, "workspacePath"),
+                        cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.GetGroupMethod =>
                     await workflow.GetGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.QueryRunsMethod =>
+                    await workflow.QueryRunsAsync(
+                        GetString(requestArgs, "status"),
+                        GetString(requestArgs, "groupId"),
+                        GetString(requestArgs, "workspacePath"),
+                        cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.GetRunMethod =>
+                    await workflow.GetRunAsync(RequireString(args, requestArgs, "runId"), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.QueryCreatedTodosMethod =>
+                    await workflow.QueryCreatedTodosAsync(
+                        GetString(requestArgs, "workspacePath"),
+                        cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.FlushGroupMethod =>
                     await workflow.FlushGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
                 TriageCommandShapes.RetryGroupMethod =>
-                    await workflow.RetryGroupAsync(RequireString(args, requestArgs, "groupId"), cancellationToken).ConfigureAwait(false),
+                    await workflow.RetryGroupAsync(
+                        RequireString(args, requestArgs, "groupId"),
+                        GetBool(requestArgs, "force") ?? false,
+                        cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.CreateGroupMethod =>
+                    await workflow.CreateGroupFromSelectionAsync(BuildTriageGroupSelectionRequest(requestArgs), cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.ConsolidateIntoGroupMethod =>
+                    await workflow.ConsolidateIntoGroupAsync(
+                        RequireString(args, requestArgs, "targetGroupId"),
+                        BuildTriageGroupSelectionRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false),
+                TriageCommandShapes.MergeGroupsMethod =>
+                    await workflow.MergeGroupsAsync(
+                        RequireString(args, requestArgs, "targetGroupId"),
+                        BuildTriageGroupSelectionRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false),
                 _ => null,
             };
 
@@ -1107,6 +1155,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Priority = RequireString(args, "priority"),
                         Area = RequireString(args, "area"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1121,6 +1170,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1142,6 +1192,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         Subarea = RequireString(args, "subarea"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1156,6 +1207,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1177,6 +1229,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         TestType = GetString(args, "testType") ?? "unit",
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1191,6 +1244,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Status = GetString(args, "status"),
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
+                        AcceptanceCriteria = GetAcceptanceCriteria(args, "acceptanceCriteria"),
                         ScopeStartLayerKey = GetString(args, "scopeStartLayerKey"),
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
@@ -1413,6 +1467,18 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         return JsonSerializer.Deserialize<T>(json, JsonOptions);
     }
 
+    private static IReadOnlyList<AcceptanceCriterion>? GetAcceptanceCriteria(
+        IReadOnlyDictionary<string, object?> args,
+        string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        return ConvertValue<IReadOnlyList<AcceptanceCriterion>>(value);
+    }
+
     private static T RequireParams<T>(IReadOnlyDictionary<string, object?> args)
         where T : class
     {
@@ -1467,16 +1533,16 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             Section = GetString(args, "section"),
             Done = GetBool(args, "done"),
             Estimate = GetString(args, "estimate"),
-            Description = GetStringList(args, "description"),
-            TechnicalDetails = GetStringList(args, "technicalDetails"),
-            ImplementationTasks = GetTodoSubtasks(args, "implementationTasks"),
+            Description = GetOptionalStringList(args, "description"),
+            TechnicalDetails = GetOptionalStringList(args, "technicalDetails"),
+            ImplementationTasks = GetOptionalTodoSubtasks(args, "implementationTasks"),
             Note = GetString(args, "note"),
             CompletedDate = GetString(args, "completedDate"),
             DoneSummary = GetString(args, "doneSummary"),
             Remaining = GetString(args, "remaining"),
-            DependsOn = GetStringList(args, "dependsOn"),
-            FunctionalRequirements = GetStringList(args, "functionalRequirements"),
-            TechnicalRequirements = GetStringList(args, "technicalRequirements"),
+            DependsOn = GetOptionalStringList(args, "dependsOn"),
+            FunctionalRequirements = GetOptionalStringList(args, "functionalRequirements"),
+            TechnicalRequirements = GetOptionalStringList(args, "technicalRequirements"),
         };
     }
 
@@ -1524,6 +1590,14 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         CurrentTodoId = GetString(args, "currentTodoId"),
         WorkspacePath = GetString(args, "workspacePath"),
         IdempotencyKey = GetString(args, "idempotencyKey"),
+    };
+
+    private static TriageGroupSelectionRequest BuildTriageGroupSelectionRequest(IReadOnlyDictionary<string, object?> args) => new()
+    {
+        GroupIds = GetStringList(args, "groupIds"),
+        ReportIds = GetStringList(args, "reportIds"),
+        Title = GetString(args, "title"),
+        Summary = GetString(args, "summary"),
     };
 
     private static Dictionary<string, object?> GetRequestArgs(Dictionary<string, object?> args)
@@ -2015,6 +2089,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             .ToArray();
     }
 
+    private static IReadOnlyList<string>? GetOptionalStringList(IReadOnlyDictionary<string, object?> args, string name)
+        => args.ContainsKey(name) ? GetStringList(args, name) : null;
+
     private static IReadOnlyDictionary<string, string>? GetStringMap(IReadOnlyDictionary<string, object?> args, string name)
     {
         if (!args.TryGetValue(name, out var value) || value is null)
@@ -2078,6 +2155,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         var task = ConvertTodoSubtask(value);
         return task is null ? Array.Empty<ITodoSubtask>() : new[] { task };
     }
+
+    private static IReadOnlyList<ITodoSubtask>? GetOptionalTodoSubtasks(IReadOnlyDictionary<string, object?> args, string name)
+        => args.ContainsKey(name) ? GetTodoSubtasks(args, name) : null;
 
     private static ITodoSubtask? ConvertTodoSubtask(object? value)
     {

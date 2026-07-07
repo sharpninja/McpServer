@@ -8,6 +8,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for SSE change event stream endpoint.</summary>
+[Trait("Category", "Integration")]
 public sealed class EventStreamIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly CustomWebApplicationFactory _factory;

@@ -346,39 +346,63 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
     /// <inheritdoc />
     protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
-        var item = await db.TodoItems
+        var row = await db.TodoItems
             .AsNoTracking()
             .Where(t => t.Id == resourceId)
-            .Select(t => new
-            {
-                t.Id,
-                t.Title,
-                t.Section,
-                t.Priority,
-                t.Done,
-                t.Estimate,
-                t.Note,
-                t.DescriptionJson,
-                t.TechnicalDetailsJson,
-                t.ImplementationTasksJson,
-                t.CompletedDate,
-                t.DoneSummary,
-                t.Remaining,
-                t.PriorityNote,
-                t.Reference,
-                t.DependsOnJson,
-                t.FunctionalRequirementsJson,
-                t.TechnicalRequirementsJson,
-                t.ItemKind,
-                t.SectionOrder,
-                t.ItemOrder,
-                t.PhaseLabel,
-            })
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        if (item is null)
+        if (row is null)
             return null;
+
+        // TR-MCP-TODO-005: lists live in 4NF child tables; the wire snapshot keeps its
+        // serialized-JSON field shape so federated peers are unaffected by the decomposition.
+        var listRows = await db.TodoItemListItems
+            .AsNoTracking()
+            .Where(r => r.WorkspaceId == row.WorkspaceId && r.TodoId == row.Id)
+            .OrderBy(r => r.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var taskRows = await db.TodoItemTasks
+            .AsNoTracking()
+            .Where(r => r.WorkspaceId == row.WorkspaceId && r.TodoId == row.Id)
+            .OrderBy(r => r.Ordinal)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        string? SerializeListType(string listType)
+        {
+            var values = listRows.Where(r => r.ListType == listType).Select(r => r.Value).ToList();
+            return values.Count == 0 ? null : JsonSerializer.Serialize(values, JsonOptions);
+        }
+
+        var item = new
+        {
+            row.Id,
+            row.Title,
+            row.Section,
+            row.Priority,
+            row.Done,
+            row.Estimate,
+            row.Note,
+            DescriptionJson = SerializeListType("Description"),
+            TechnicalDetailsJson = SerializeListType("TechnicalDetail"),
+            ImplementationTasksJson = taskRows.Count == 0
+                ? null
+                : JsonSerializer.Serialize(taskRows.Select(t => new { task = t.Task, done = t.Done }).ToList(), JsonOptions),
+            row.CompletedDate,
+            row.DoneSummary,
+            row.Remaining,
+            row.PriorityNote,
+            row.Reference,
+            DependsOnJson = SerializeListType("DependsOn"),
+            FunctionalRequirementsJson = SerializeListType("FunctionalRequirement"),
+            TechnicalRequirementsJson = SerializeListType("TechnicalRequirement"),
+            row.ItemKind,
+            row.SectionOrder,
+            row.ItemOrder,
+            row.PhaseLabel,
+        };
 
         var audit = await db.TodoAuditHistory
             .AsNoTracking()
@@ -1603,31 +1627,50 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
     /// <inheritdoc />
     protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
-        var definitions = await db.AgentDefinitions
+        // Lists live in 4NF child tables (auto-included); the wire snapshot keeps its
+        // serialized-JSON field shape so federated peers are unaffected by the decomposition.
+        var definitionRows = await db.AgentDefinitions
             .AsNoTracking()
             .Where(a => a.Id == resourceId || resourceId == "*")
             .OrderBy(a => a.Id)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var definitions = definitionRows
             .Select(a => new
             {
                 a.Id,
                 a.DisplayName,
                 a.DefaultLaunchCommand,
                 a.DefaultInstructionFile,
-                a.DefaultModelsJson,
+                DefaultModelsJson = JsonSerializer.Serialize(
+                    a.Models.OrderBy(m => m.Ordinal).Select(m => m.Model).ToList(), JsonOptions),
                 a.DefaultBranchStrategy,
                 a.DefaultSeedPrompt,
                 a.IsBuiltIn,
                 a.CreatedAt,
                 a.ModifiedAt,
             })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
+            .ToList();
 
-        var workspaceConfigs = await db.AgentWorkspaces
+        var workspaceRows = await db.AgentWorkspaces
             .AsNoTracking()
             .Where(a => a.AgentDefinitionId == resourceId || resourceId == "*")
             .OrderBy(a => a.AgentDefinitionId)
             .ThenBy(a => a.WorkspacePath)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        string? SerializeOverride(AgentWorkspaceEntity a, string listType)
+        {
+            var values = a.ListItems
+                .Where(r => r.ListType == listType)
+                .OrderBy(r => r.Ordinal)
+                .Select(r => r.Value)
+                .ToList();
+            return values.Count == 0 ? null : JsonSerializer.Serialize(values, JsonOptions);
+        }
+
+        var workspaceConfigs = workspaceRows
             .Select(a => new
             {
                 a.AgentDefinitionId,
@@ -1638,16 +1681,15 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
                 a.BannedUntilPr,
                 a.AgentIsolation,
                 a.LaunchCommandOverride,
-                a.ModelsOverrideJson,
+                ModelsOverrideJson = SerializeOverride(a, "ModelOverride"),
                 a.BranchStrategyOverride,
                 a.SeedPromptOverride,
                 a.MarkerAdditions,
-                a.InstructionFilesOverrideJson,
+                InstructionFilesOverrideJson = SerializeOverride(a, "InstructionFileOverride"),
                 a.RestartPolicy,
                 a.AddedAt,
             })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
+            .ToList();
 
         return definitions.Count == 0 && workspaceConfigs.Count == 0 ? null : new { definitions, workspaceConfigs };
     }
@@ -1674,11 +1716,32 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
         entity.DisplayName = definition.DisplayName ?? entity.DisplayName;
         entity.DefaultLaunchCommand = definition.DefaultLaunchCommand ?? entity.DefaultLaunchCommand;
         entity.DefaultInstructionFile = definition.DefaultInstructionFile ?? entity.DefaultInstructionFile;
-        entity.DefaultModelsJson = definition.DefaultModelsJson ?? entity.DefaultModelsJson;
+        if (definition.DefaultModelsJson is not null)
+        {
+            var models = ParseWireList(definition.DefaultModelsJson) ?? [];
+            entity.Models.Clear();
+            for (var i = 0; i < models.Count; i++)
+                entity.Models.Add(new AgentDefinitionModelEntity { WorkspaceId = entity.WorkspaceId, Ordinal = i, Model = models[i] });
+        }
+
         entity.DefaultBranchStrategy = definition.DefaultBranchStrategy ?? entity.DefaultBranchStrategy;
         entity.DefaultSeedPrompt = definition.DefaultSeedPrompt ?? entity.DefaultSeedPrompt;
         entity.IsBuiltIn = definition.IsBuiltIn;
         entity.ModifiedAt = definition.ModifiedAt ?? DateTime.UtcNow;
+    }
+
+    private static List<string>? ParseWireList(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return null;
+        try
+        {
+            return JsonSerializer.Deserialize<List<string>>(json, JsonOptions);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 
     private static async Task UpsertAgentWorkspaceAsync(
@@ -1708,11 +1771,16 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
         entity.BannedUntilPr = workspace.BannedUntilPr;
         entity.AgentIsolation = string.IsNullOrWhiteSpace(workspace.AgentIsolation) ? entity.AgentIsolation : workspace.AgentIsolation;
         entity.LaunchCommandOverride = workspace.LaunchCommandOverride;
-        entity.ModelsOverrideJson = workspace.ModelsOverrideJson;
+        entity.ListItems.Clear();
+        var modelOverride = ParseWireList(workspace.ModelsOverrideJson) ?? [];
+        for (var i = 0; i < modelOverride.Count; i++)
+            entity.ListItems.Add(new AgentWorkspaceListItemEntity { WorkspaceId = entity.WorkspaceId, ListType = "ModelOverride", Ordinal = i, Value = modelOverride[i] });
+        var fileOverride = ParseWireList(workspace.InstructionFilesOverrideJson) ?? [];
+        for (var i = 0; i < fileOverride.Count; i++)
+            entity.ListItems.Add(new AgentWorkspaceListItemEntity { WorkspaceId = entity.WorkspaceId, ListType = "InstructionFileOverride", Ordinal = i, Value = fileOverride[i] });
         entity.BranchStrategyOverride = workspace.BranchStrategyOverride;
         entity.SeedPromptOverride = workspace.SeedPromptOverride;
         entity.MarkerAdditions = workspace.MarkerAdditions ?? string.Empty;
-        entity.InstructionFilesOverrideJson = workspace.InstructionFilesOverrideJson;
         entity.RestartPolicy = string.IsNullOrWhiteSpace(workspace.RestartPolicy) ? entity.RestartPolicy : workspace.RestartPolicy;
     }
 

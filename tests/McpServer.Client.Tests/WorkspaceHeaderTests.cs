@@ -22,7 +22,7 @@ public sealed class WorkspaceHeaderTests
         };
         var client = new McpServerClient(http, options);
 
-        await client.Todo.QueryAsync();
+        await client.Todo.QueryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(handler.LastRequest);
         Assert.True(handler.LastRequest!.Headers.Contains("X-Workspace-Path"));
@@ -44,7 +44,7 @@ public sealed class WorkspaceHeaderTests
         };
         var client = new McpServerClient(http, options);
 
-        await client.Todo.QueryAsync();
+        await client.Todo.QueryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(handler.LastRequest);
         Assert.False(handler.LastRequest!.Headers.Contains("X-Workspace-Path"));
@@ -63,7 +63,7 @@ public sealed class WorkspaceHeaderTests
         };
         var client = new McpServerClient(http, options);
 
-        await client.Todo.QueryAsync();
+        await client.Todo.QueryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(handler.LastRequest);
         Assert.True(handler.LastRequest!.Headers.Contains("X-Api-Key"));

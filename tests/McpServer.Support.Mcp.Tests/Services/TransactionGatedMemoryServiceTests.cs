@@ -91,7 +91,7 @@ public sealed class TransactionGatedMemoryServiceTests
         Assert.False(result.Success);
         Assert.Equal(MemoryMutationFailureKind.Conflict, result.FailureKind);
         Assert.Contains("signing failed", result.Error, StringComparison.Ordinal);
-        await service.DidNotReceiveWithAnyArgs().AddAsync(default!, default).ConfigureAwait(true);
+        await service.DidNotReceiveWithAnyArgs().AddAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>memory.add rollback restores the created memory record when a subscriber rejects after mutation.</summary>
@@ -229,8 +229,8 @@ public sealed class TransactionGatedMemoryServiceTests
         Assert.False(result.Success);
         Assert.Equal(MemoryMutationFailureKind.Conflict, result.FailureKind);
         Assert.Contains("signing failed", result.Error, StringComparison.Ordinal);
-        await service.DidNotReceiveWithAnyArgs().GetAsync(default!, default).ConfigureAwait(true);
-        await service.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, default).ConfigureAwait(true);
+        await service.DidNotReceiveWithAnyArgs().GetAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await service.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>memory.update rollback restores the prior visible memory fields and version.</summary>

@@ -50,7 +50,7 @@ public sealed class FederationQueuedOperationReplayServiceTests
             Arg.Is<string>(message => message != null && message.Contains("non-terminal status 'accepted'", StringComparison.Ordinal)),
             3,
             Arg.Any<CancellationToken>());
-        _ = topology.DidNotReceiveWithAnyArgs().AcknowledgeOperationAsync(default!, default!, default);
+        _ = topology.DidNotReceiveWithAnyArgs().AcknowledgeOperationAsync(default!, default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>Terminal applied hub responses acknowledge the local queued operation.</summary>

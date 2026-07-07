@@ -17,7 +17,7 @@ public sealed class BrainSlotCredentialResolverTests
         {
             var resolver = new BrainSlotCredentialResolver(new ConfigurationBuilder().Build());
 
-            var value = await resolver.ResolveAsync("env:" + variableName).ConfigureAwait(true);
+            var value = await resolver.ResolveAsync("env:" + variableName, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("test-secret", value);
         }
@@ -39,7 +39,7 @@ public sealed class BrainSlotCredentialResolverTests
             .Build();
         var resolver = new BrainSlotCredentialResolver(configuration);
 
-        var value = await resolver.ResolveAsync("config:BrainSlots:LeftKey").ConfigureAwait(true);
+        var value = await resolver.ResolveAsync("config:BrainSlots:LeftKey", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("configured-secret", value);
     }

@@ -46,7 +46,7 @@ public sealed class VoiceControllerTests
 
         controller.Response.Body.Position = 0;
         using var reader = new StreamReader(controller.Response.Body, leaveOpen: true);
-        var payload = await reader.ReadToEndAsync().ConfigureAwait(true);
+        var payload = await reader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("text/event-stream", controller.Response.ContentType);
         Assert.Contains("Voice turn processing failed.", payload, StringComparison.Ordinal);
@@ -80,7 +80,7 @@ public sealed class VoiceControllerTests
 
         controller.Response.Body.Position = 0;
         using var reader = new StreamReader(controller.Response.Body, leaveOpen: true);
-        var payload = await reader.ReadToEndAsync().ConfigureAwait(true);
+        var payload = await reader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(StatusCodes.Status503ServiceUnavailable, controller.Response.StatusCode);
         Assert.NotEqual("text/event-stream", controller.Response.ContentType);

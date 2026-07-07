@@ -148,7 +148,7 @@ public sealed class RailwayConnectionStringBuilder
 
         // If configured value is a valid postgres URL, convert it.
         if (IsPostgresUrl(configured))
-            return ConvertUrl(configured!);
+            return ConvertPostgresConnectionString(configured!);
 
         // Already a key=value string or null — return as-is.
         return string.IsNullOrWhiteSpace(configured) ? null : configured;
@@ -161,7 +161,7 @@ public sealed class RailwayConnectionStringBuilder
             var value = Environment.GetEnvironmentVariable(name);
             if (string.IsNullOrWhiteSpace(value))
                 continue;
-            return IsPostgresUrl(value) ? ConvertUrl(value) : value;
+            return IsPostgresUrl(value) ? ConvertPostgresConnectionString(value) : value;
         }
 
         return null;
@@ -171,17 +171,14 @@ public sealed class RailwayConnectionStringBuilder
         string.Equals(_environment, "Development", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
-    /// Converts a <c>postgresql://</c> or <c>postgres://</c> URL to an Npgsql key=value connection string,
+    /// Converts a <c>postgresql://</c> or <c>postgres://</c> configured value to an Npgsql key=value connection string,
     /// honoring query string parameters (e.g. <c>?sslmode=disable</c>).
     /// </summary>
-    /// <param name="url">The PostgreSQL URI to convert.</param>
+    /// <param name="configuredValue">The PostgreSQL configured value to convert.</param>
     /// <returns>Npgsql connection string.</returns>
-#pragma warning disable CA1054 // URI parameters: connection string from config/env
-#pragma warning disable CA1055 // URI return: Npgsql expects key=value string
-    public string ConvertUrl(string url)
-#pragma warning restore CA1055
-#pragma warning restore CA1054
+    public string ConvertPostgresConnectionString(string configuredValue)
     {
+        var url = configuredValue;
         var uri = new Uri(url);
         var userInfo = uri.UserInfo?.Split(':', 2) ?? [];
         var username = userInfo.Length > 0 ? Uri.UnescapeDataString(userInfo[0]) : "postgres";

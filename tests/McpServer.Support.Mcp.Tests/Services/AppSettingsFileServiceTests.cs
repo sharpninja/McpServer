@@ -65,7 +65,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             """
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = BuildConfiguration(yamlPath);
         var service = CreateService(configuration);
@@ -78,7 +78,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             },
             CancellationToken.None).ConfigureAwait(true);
 
-        var yamlText = await File.ReadAllTextAsync(yamlPath).ConfigureAwait(true);
+        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("gpt-5.4", configuration["VoiceConversation:CopilotModel"]);
         Assert.Equal("AZURE_OPENAI_API_KEY", configuration["VoiceConversation:ModelApiKeyEnvironmentVariableName"]);
@@ -109,7 +109,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
               ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = BuildConfiguration(yamlPath);
         var service = CreateService(configuration);
@@ -118,7 +118,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             new Dictionary<string, string?> { ["VoiceConversation:ModelApiKeyEnvironmentVariableName"] = null },
             CancellationToken.None).ConfigureAwait(true);
 
-        var yamlText = await File.ReadAllTextAsync(yamlPath).ConfigureAwait(true);
+        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Null(configuration["VoiceConversation:ModelApiKeyEnvironmentVariableName"]);
         Assert.False(updated.ContainsKey("VoiceConversation:ModelApiKeyEnvironmentVariableName"));
@@ -149,13 +149,13 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             """
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await File.WriteAllTextAsync(
             contentRootYamlPath,
             """
             VoiceConversation:
               CopilotModel: should-not-change
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = BuildConfiguration(loadedYamlPath);
         var service = CreateService(configuration, contentRootDirectory);
@@ -168,8 +168,8 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             },
             CancellationToken.None).ConfigureAwait(true);
 
-        var loadedYamlText = await File.ReadAllTextAsync(loadedYamlPath).ConfigureAwait(true);
-        var contentRootYamlText = await File.ReadAllTextAsync(contentRootYamlPath).ConfigureAwait(true);
+        var loadedYamlText = await File.ReadAllTextAsync(loadedYamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var contentRootYamlText = await File.ReadAllTextAsync(contentRootYamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("hosted-mcp-agent", configuration["VoiceConversation:DefaultExecutionStrategy"]);
         Assert.Equal("OPENAI_API_KEY", configuration["VoiceConversation:ModelApiKeyEnvironmentVariableName"]);
@@ -194,7 +194,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             """
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = BuildConfiguration(yamlPath);
         var firstWriteEntered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -219,7 +219,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             new Dictionary<string, string?> { ["VoiceConversation:DefaultExecutionStrategy"] = "hosted-mcp-agent" },
             CancellationToken.None);
 
-        await firstWriteEntered.Task.WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
+        await firstWriteEntered.Task.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var secondPatch = service.PatchYamlConfigurationAsync(
             new Dictionary<string, string?> { ["VoiceConversation:ModelApiKeyEnvironmentVariableName"] = "OPENAI_API_KEY" },
@@ -228,7 +228,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         releaseFirstWrite.SetResult();
         await Task.WhenAll(firstPatch, secondPatch).ConfigureAwait(true);
 
-        var yamlText = await File.ReadAllTextAsync(yamlPath).ConfigureAwait(true);
+        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("DefaultExecutionStrategy: hosted-mcp-agent", yamlText, StringComparison.Ordinal);
         Assert.Contains("ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY", yamlText, StringComparison.Ordinal);
         Assert.Equal("hosted-mcp-agent", configuration["VoiceConversation:DefaultExecutionStrategy"]);
@@ -248,7 +248,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             """
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = BuildConfiguration(yamlPath);
         string? tempPath = null;
@@ -266,7 +266,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             new Dictionary<string, string?> { ["VoiceConversation:CopilotModel"] = "gpt-5.4" },
             CancellationToken.None)).ConfigureAwait(true);
 
-        var yamlText = await File.ReadAllTextAsync(yamlPath).ConfigureAwait(true);
+        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("CopilotModel: gpt-5.3-codex", yamlText, StringComparison.Ordinal);
         Assert.Equal("gpt-5.3-codex", configuration["VoiceConversation:CopilotModel"]);
         Assert.NotNull(tempPath);
@@ -289,14 +289,14 @@ public sealed class AppSettingsFileServiceTests : IDisposable
                 "MarkerPromptTemplate": "old-template"
               }
             }
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = BuildJsonConfiguration(jsonPath);
         var service = CreateService(configuration);
 
         await service.UpdateGlobalPromptTemplateAsync("new-template", CancellationToken.None).ConfigureAwait(true);
 
-        var jsonText = await File.ReadAllTextAsync(jsonPath).ConfigureAwait(true);
+        var jsonText = await File.ReadAllTextAsync(jsonPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("new-template", configuration["Mcp:MarkerPromptTemplate"]);
         Assert.Contains("\"MarkerPromptTemplate\": \"new-template\"", jsonText, StringComparison.Ordinal);
     }

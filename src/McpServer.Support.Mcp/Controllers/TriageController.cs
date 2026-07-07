@@ -1,5 +1,7 @@
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage.Database;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -12,11 +14,18 @@ namespace McpServer.Support.Mcp.Controllers;
 public sealed class TriageController : ControllerBase
 {
     private readonly ITriageService _triageService;
+    private readonly McpDatabaseRuntimeOptions? _databaseRuntimeOptions;
+    private readonly ILogger<TriageController> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="TriageController"/> class.</summary>
-    public TriageController(ITriageService triageService)
+    public TriageController(
+        ITriageService triageService,
+        McpDatabaseRuntimeOptions? databaseRuntimeOptions = null,
+        ILogger<TriageController>? logger = null)
     {
         _triageService = triageService ?? throw new ArgumentNullException(nameof(triageService));
+        _databaseRuntimeOptions = databaseRuntimeOptions;
+        _logger = logger ?? NullLogger<TriageController>.Instance;
     }
 
     /// <summary>FR-MCP-TRIAGE-001: Submit an incidental bug report and return accepted queue state.</summary>
@@ -25,6 +34,7 @@ public sealed class TriageController : ControllerBase
         [FromBody] TriageReportRequest? request,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(SubmitReportAsync));
         if (request is null)
             return BadRequest(new TriageReportSubmitResult { Success = false, Error = "Request body is required." });
 
@@ -38,6 +48,7 @@ public sealed class TriageController : ControllerBase
     [HttpGet("reports/{id}")]
     public async Task<ActionResult<TriageReportDetail>> GetReportAsync(string id, CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(GetReportAsync));
         try
         {
             return Ok(await _triageService.GetReportAsync(id, cancellationToken).ConfigureAwait(false));
@@ -55,6 +66,7 @@ public sealed class TriageController : ControllerBase
         [FromQuery] string? workspacePath,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(QueryGroupsAsync));
         return Ok(await _triageService.QueryGroupsAsync(status, workspacePath, cancellationToken).ConfigureAwait(false));
     }
 
@@ -64,6 +76,7 @@ public sealed class TriageController : ControllerBase
         [FromQuery] string? workspacePath,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(GetDashboardAsync));
         return Ok(await _triageService.GetDashboardAsync(workspacePath, cancellationToken).ConfigureAwait(false));
     }
 
@@ -71,6 +84,7 @@ public sealed class TriageController : ControllerBase
     [HttpGet("groups/{id}")]
     public async Task<ActionResult<TriageGroupDetail>> GetGroupAsync(string id, CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(GetGroupAsync));
         try
         {
             return Ok(await _triageService.GetGroupAsync(id, cancellationToken).ConfigureAwait(false));
@@ -89,6 +103,7 @@ public sealed class TriageController : ControllerBase
         [FromQuery] string? workspacePath,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(QueryRunsAsync));
         return Ok(await _triageService.QueryRunsAsync(status, groupId, workspacePath, cancellationToken).ConfigureAwait(false));
     }
 
@@ -96,6 +111,7 @@ public sealed class TriageController : ControllerBase
     [HttpGet("runs/{id}")]
     public async Task<ActionResult<TriageResearchRunDetail>> GetRunAsync(string id, CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(GetRunAsync));
         try
         {
             return Ok(await _triageService.GetRunAsync(id, cancellationToken).ConfigureAwait(false));
@@ -112,6 +128,7 @@ public sealed class TriageController : ControllerBase
         [FromQuery] string? workspacePath,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(QueryCreatedTodosAsync));
         return Ok(await _triageService.QueryCreatedTodosAsync(workspacePath, cancellationToken).ConfigureAwait(false));
     }
 
@@ -119,6 +136,7 @@ public sealed class TriageController : ControllerBase
     [HttpPost("groups/{id}/flush")]
     public async Task<ActionResult<TriageGroupDetail>> FlushGroupAsync(string id, CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(FlushGroupAsync));
         try
         {
             return Ok(await _triageService.FlushGroupAsync(id, cancellationToken).ConfigureAwait(false));
@@ -131,11 +149,15 @@ public sealed class TriageController : ControllerBase
 
     /// <summary>FR-MCP-TRIAGE-002: Retry a failed triage group.</summary>
     [HttpPost("groups/{id}/retry")]
-    public async Task<ActionResult<TriageGroupDetail>> RetryGroupAsync(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<TriageGroupDetail>> RetryGroupAsync(
+        string id,
+        [FromQuery] bool force,
+        CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(RetryGroupAsync));
         try
         {
-            return Ok(await _triageService.RetryGroupAsync(id, cancellationToken).ConfigureAwait(false));
+            return Ok(await _triageService.RetryGroupAsync(id, force, cancellationToken).ConfigureAwait(false));
         }
         catch (KeyNotFoundException ex)
         {
@@ -149,6 +171,7 @@ public sealed class TriageController : ControllerBase
         [FromBody] TriageGroupSelectionRequest? request,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(CreateGroupFromSelectionAsync));
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
@@ -177,6 +200,7 @@ public sealed class TriageController : ControllerBase
         [FromBody] TriageGroupSelectionRequest? request,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(ConsolidateIntoGroupAsync));
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
@@ -205,6 +229,7 @@ public sealed class TriageController : ControllerBase
         [FromBody] TriageGroupSelectionRequest? request,
         CancellationToken cancellationToken)
     {
+        LogDatabaseConnectionString(nameof(MergeGroupsAsync));
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
@@ -224,5 +249,18 @@ public sealed class TriageController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
+    }
+
+    private void LogDatabaseConnectionString(string operation)
+    {
+        if (_databaseRuntimeOptions is null)
+            return;
+
+        var providerOptions = _databaseRuntimeOptions.ProviderOptions;
+        _logger.LogInformation(
+            "Triage request {Operation} using database provider {ProviderName} with exact connection string {ConnectionString}",
+            operation,
+            providerOptions.ProviderName,
+            providerOptions.ConnectionString);
     }
 }

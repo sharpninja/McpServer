@@ -35,31 +35,115 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
 
-    // TR-MCP-REQAC-001: AcceptanceCriterion carries [JsonPropertyName] attributes, so default
-    // options already emit/read the canonical {id,text,isSatisfied,evidence} shape used by TODOs.
-    private static readonly JsonSerializerOptions s_criteriaJson = new(JsonSerializerDefaults.Web);
+    // TR-MCP-REQAC-001: acceptance criteria are stored as 4NF child rows
+    // (RequirementAcceptanceCriterionEntity); these map between the child rows and the public model.
 
-    /// <summary>Serializes acceptance criteria to the JSON column value (null when empty).</summary>
-    private static string? SerializeCriteria(IReadOnlyList<AcceptanceCriterion>? criteria) =>
-        criteria is null || criteria.Count == 0 ? null : JsonSerializer.Serialize(criteria, s_criteriaJson);
+    /// <summary>Maps acceptance-criterion child rows to the public model, ordered by position.</summary>
+    private static IReadOnlyList<AcceptanceCriterion> ToCriterionModels(IEnumerable<RequirementAcceptanceCriterionEntity> rows) =>
+        rows.OrderBy(r => r.Ordinal)
+            .Select(r => new AcceptanceCriterion
+            {
+                Id = r.CriterionId,
+                Text = r.Text,
+                IsSatisfied = r.IsSatisfied,
+                Evidence = r.Evidence,
+            })
+            .ToList();
 
-    /// <summary>Deserializes the JSON column value to acceptance criteria (empty list when null/blank).</summary>
-    private static IReadOnlyList<AcceptanceCriterion> DeserializeCriteria(string? json) =>
-        string.IsNullOrWhiteSpace(json)
-            ? []
-            : JsonSerializer.Deserialize<List<AcceptanceCriterion>>(json, s_criteriaJson) ?? [];
+    /// <summary>Builds acceptance-criterion child rows (with fresh ordinals) from the public model.
+    /// The composite parent-key columns are set explicitly (WorkspaceId is shared with the workspace
+    /// foreign key, so EF relationship fixup cannot be relied on to populate them).</summary>
+    private static List<RequirementAcceptanceCriterionEntity> ToCriterionEntities(
+        IReadOnlyList<AcceptanceCriterion>? criteria,
+        string workspaceId,
+        string requirementKind,
+        string requirementId)
+    {
+        var rows = new List<RequirementAcceptanceCriterionEntity>();
+        if (criteria is null)
+            return rows;
+        for (var i = 0; i < criteria.Count; i++)
+        {
+            var c = criteria[i];
+            rows.Add(new RequirementAcceptanceCriterionEntity
+            {
+                WorkspaceId = workspaceId,
+                RequirementKind = requirementKind,
+                RequirementId = requirementId,
+                Ordinal = i,
+                CriterionId = c.Id,
+                Text = c.Text,
+                IsSatisfied = c.IsSatisfied,
+                Evidence = c.Evidence,
+            });
+        }
+
+        return rows;
+    }
+
+    /// <summary>Replaces a requirement's acceptance-criteria child rows. Writes from the dependent
+    /// side (explicit foreign-key columns via the DbSet) rather than a principal navigation, because
+    /// the composite (WorkspaceId, RequirementKind, RequirementId) key shares the tenant column with
+    /// the workspace foreign key and principal-side collection fixup nulls a key column on insert.</summary>
+    private static async Task SetCriteriaAsync(McpDbContext ctx, RequirementEntity row, IReadOnlyList<AcceptanceCriterion>? criteria, CancellationToken ct)
+    {
+        var existing = await ctx.RequirementAcceptanceCriteria
+            .Where(c => c.WorkspaceId == row.WorkspaceId && c.RequirementKind == row.Kind && c.RequirementId == row.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        ctx.RequirementAcceptanceCriteria.RemoveRange(existing);
+        ctx.RequirementAcceptanceCriteria.AddRange(ToCriterionEntities(criteria, row.WorkspaceId, row.Kind, row.Id));
+    }
+
+    /// <summary>Loads and attaches acceptance-criterion child rows onto the (non-mapped) AcceptanceCriteria
+    /// holder of each requirement, so <c>MapFr/MapTr/MapTest</c> and clone paths can read them.</summary>
+    private static async Task AttachCriteriaAsync(McpDbContext ctx, IReadOnlyCollection<RequirementEntity> rows, CancellationToken ct)
+    {
+        if (rows.Count == 0)
+            return;
+        var ids = rows.Select(r => r.Id).Distinct(StringComparer.Ordinal).ToList();
+        var criteria = await ctx.RequirementAcceptanceCriteria
+            .AsNoTracking()
+            .Where(c => ids.Contains(c.RequirementId))
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        var lookup = criteria.ToLookup(c => (c.WorkspaceId, c.RequirementKind, c.RequirementId));
+        foreach (var row in rows)
+        {
+            row.AcceptanceCriteria = lookup[(row.WorkspaceId, row.Kind, row.Id)]
+                .OrderBy(c => c.Ordinal)
+                .ToList();
+        }
+    }
+
+    /// <summary>Deep-clones acceptance-criterion child rows (preserving their composite parent-key
+    /// columns) for a cloned/copied requirement that keeps the same identity.</summary>
+    private static List<RequirementAcceptanceCriterionEntity> CloneCriteria(IEnumerable<RequirementAcceptanceCriterionEntity> source) =>
+        source.OrderBy(r => r.Ordinal)
+            .Select(r => new RequirementAcceptanceCriterionEntity
+            {
+                WorkspaceId = r.WorkspaceId,
+                RequirementKind = r.RequirementKind,
+                RequirementId = r.RequirementId,
+                Ordinal = r.Ordinal,
+                CriterionId = r.CriterionId,
+                Text = r.Text,
+                IsSatisfied = r.IsSatisfied,
+                Evidence = r.Evidence,
+            })
+            .ToList();
 
     /// <summary>Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria.</summary>
     private static FrEntry MapFr(RequirementEntity x) =>
-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
 
     /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
     private static TrEntry MapTr(RequirementEntity x) =>
-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
 
     /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria.</summary>
     private static TestEntry MapTest(RequirementEntity x) =>
-        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
 
     /// <summary>Maps a stored requirement scope layer row to the public model.</summary>
     private static RequirementScopeLayerEntry MapLayer(RequirementScopeLayerEntity x) =>
@@ -240,6 +324,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .ThenBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        await AttachCriteriaAsync(ctx, rows, ct).ConfigureAwait(false);
 
         var effectiveRows = rows
             .Where(row => IsRequirementEffective(row, currentLayer.Order, layerOrders, layerEndOrders))
@@ -285,6 +370,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 .Where(row => row.WorkspaceId == workspaceId)
                 .ToListAsync(cancellationToken)
                 .ConfigureAwait(false);
+            await AttachCriteriaAsync(ctx, requirements, cancellationToken).ConfigureAwait(false);
             var links = await ctx.RequirementTraceabilityLinks
                 .IgnoreQueryFilters(SoftDeleteQueryFilter)
                 .Where(row => row.WorkspaceId == workspaceId)
@@ -350,6 +436,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .OrderBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
         return rows.Select(MapFr).ToArray();
     }
 
@@ -367,6 +454,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .OrderBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
         return rows.Select(MapFr).ToArray();
     }
 
@@ -475,6 +563,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .OrderBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
         return rows.Select(MapTr).ToArray();
     }
 
@@ -493,6 +582,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .OrderBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
         return rows.Select(MapTr).ToArray();
     }
 
@@ -538,6 +628,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .OrderBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
         return rows.Select(MapTest).ToArray();
     }
 
@@ -555,6 +646,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .OrderBy(x => x.Id)
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
         return rows.Select(MapTest).ToArray();
     }
 
@@ -621,7 +713,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             foreach (var value in toInsert)
             {
                 var requirementScope = await ValidateRequirementScopeAsync(ctx, value.ScopeStartLayerKey, value.ScopeEndLayerKey, ct).ConfigureAwait(false);
-                ctx.Requirements.Add(new RequirementEntity
+                var entity = new RequirementEntity
                 {
                     WorkspaceId = workspaceId,
                     Kind = value.Kind,
@@ -631,12 +723,14 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                     Priority = NormalizePriority(value.Priority),
                     Status = NormalizeStatus(value.Status),
                     Notes = value.Notes,
-                    AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria),
                     ScopeStartLayerKey = requirementScope.Start,
                     ScopeEndLayerKey = requirementScope.End,
                     CreatedAtUtc = now,
                     UpdatedAtUtc = now
-                });
+                };
+                ctx.Requirements.Add(entity);
+                ctx.RequirementAcceptanceCriteria.AddRange(
+                    ToCriterionEntities(value.AcceptanceCriteria, workspaceId, value.Kind, value.Id));
             }
 
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
@@ -685,7 +779,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 row.Priority = NormalizePriority(value.Priority);
                 row.Status = NormalizeStatus(value.Status);
                 row.Notes = value.Notes;
-                row.AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria);
+                await SetCriteriaAsync(ctx, row, value.AcceptanceCriteria, ct).ConfigureAwait(false);
                 row.ScopeStartLayerKey = requirementScope.Start;
                 row.ScopeEndLayerKey = requirementScope.End;
                 row.UpdatedAtUtc = now;
@@ -731,8 +825,28 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     public async Task<FrTrMapping?> GetMappingAsync(string frId, CancellationToken ct = default)
     {
         ValidateId(frId, nameof(frId));
-        var all = await GetAllMappingsAsync(ct).ConfigureAwait(false);
-        return all.FirstOrDefault(x => IdEquals(x.FrId, frId));
+        // Filter to the requested FR server-side instead of materializing every
+        // traceability link in the workspace and scanning in memory.
+        var target = frId.Trim().ToUpperInvariant();
+        await using var scope = CreateScope();
+        await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
+        var links = await scope.Context.RequirementTraceabilityLinks
+            .AsNoTracking()
+            .Where(x => x.FrId.ToUpper() == target)
+            .OrderBy(x => x.TargetKind)
+            .ThenBy(x => x.TargetId)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        if (links.Count == 0)
+        {
+            return null;
+        }
+
+        return new FrTrMapping(
+            links[0].FrId,
+            links.Where(x => x.TargetKind == TrKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+            links.Where(x => x.TargetKind == TestKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+            links[0].WorkspaceId);
     }
 
     /// <inheritdoc />
@@ -888,7 +1002,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var mapping = await GetAllMappingsAsync(ct).ConfigureAwait(false);
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(fr, tr, test, mapping, generated, ReadExistingMatrixForWikiExport(outputRootPath));
+        var config = RequirementsWikiExportConfigLoader.Load(TryGetRequestWorkspacePath(), _options);
+        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(fr, tr, test, mapping, generated, ReadExistingMatrixForWikiExport(outputRootPath), config);
         return await RequirementsDocumentExportWriter.WriteAsync(
             outputRootPath,
             "wiki",
@@ -939,12 +1054,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                     Priority = NormalizePriority(priority),
                     Status = NormalizeStatus(status),
                     Notes = notes,
-                    AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria),
                     ScopeStartLayerKey = requirementScope.Start,
                     ScopeEndLayerKey = requirementScope.End,
                     CreatedAtUtc = now,
                     UpdatedAtUtc = now
                 });
+                ctx.RequirementAcceptanceCriteria.AddRange(
+                    ToCriterionEntities(acceptanceCriteria, RequireWorkspaceId(ctx), kind, id));
             }
             else
             {
@@ -953,7 +1069,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 existing.Priority = NormalizePriority(priority);
                 existing.Status = NormalizeStatus(status);
                 existing.Notes = notes;
-                existing.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
+                await SetCriteriaAsync(ctx, existing, acceptanceCriteria, ct).ConfigureAwait(false);
                 existing.ScopeStartLayerKey = requirementScope.Start;
                 existing.ScopeEndLayerKey = requirementScope.End;
                 existing.CreatedAtUtc = now;
@@ -997,7 +1113,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             row.Priority = NormalizePriority(priority);
             row.Status = NormalizeStatus(status);
             row.Notes = notes;
-            row.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
+            await SetCriteriaAsync(ctx, row, acceptanceCriteria, ct).ConfigureAwait(false);
             row.ScopeStartLayerKey = requirementScope.Start;
             row.ScopeEndLayerKey = requirementScope.End;
             row.UpdatedAtUtc = Now();
@@ -1145,7 +1261,10 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private async Task<RequirementEntity?> FindRequirementAsync(McpDbContext ctx, string kind, string id, bool asTracking, CancellationToken ct)
     {
         var query = asTracking ? ctx.Requirements : ctx.Requirements.AsNoTracking();
-        return await query.FirstOrDefaultAsync(x => x.Kind == kind && x.Id == id, ct).ConfigureAwait(false);
+        var row = await query.FirstOrDefaultAsync(x => x.Kind == kind && x.Id == id, ct).ConfigureAwait(false);
+        if (row is not null)
+            await AttachCriteriaAsync(ctx, [row], ct).ConfigureAwait(false);
+        return row;
     }
 
     private async Task EnsureBootstrappedAsync(McpDbContext ctx, CancellationToken ct)
@@ -1627,6 +1746,15 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 CopyRequirement(source, current);
             }
 
+            // Restore acceptance criteria dependent-side (the [NotMapped] holder does not persist).
+            var existingCriteria = await ctx.RequirementAcceptanceCriteria
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .Where(c => c.WorkspaceId == source.WorkspaceId && c.RequirementKind == source.Kind && c.RequirementId == source.Id)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            ctx.RequirementAcceptanceCriteria.RemoveRange(existingCriteria);
+            ctx.RequirementAcceptanceCriteria.AddRange(CloneCriteria(source.AcceptanceCriteria));
+
             ApplySoftDeleteState(ctx.Entry(current), snapshot.SoftDelete);
         }
     }
@@ -1691,7 +1819,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             Priority = source.Priority,
             Status = source.Status,
             Notes = source.Notes,
-            AcceptanceCriteriaJson = source.AcceptanceCriteriaJson,
+            AcceptanceCriteria = CloneCriteria(source.AcceptanceCriteria),
             ScopeStartLayerKey = source.ScopeStartLayerKey,
             ScopeEndLayerKey = source.ScopeEndLayerKey,
             CreatedAtUtc = source.CreatedAtUtc,
@@ -1706,7 +1834,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         target.Priority = source.Priority;
         target.Status = source.Status;
         target.Notes = source.Notes;
-        target.AcceptanceCriteriaJson = source.AcceptanceCriteriaJson;
+        target.AcceptanceCriteria.Clear();
+        target.AcceptanceCriteria.AddRange(CloneCriteria(source.AcceptanceCriteria));
         target.ScopeStartLayerKey = source.ScopeStartLayerKey;
         target.ScopeEndLayerKey = source.ScopeEndLayerKey;
         target.CreatedAtUtc = source.CreatedAtUtc;

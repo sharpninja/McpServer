@@ -67,7 +67,7 @@ public sealed class ConfigurationControllerTests : IDisposable
             """
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = BuildConfiguration(yamlPath);
         var controller = new ConfigurationController(CreateService(configuration));
@@ -82,7 +82,7 @@ public sealed class ConfigurationControllerTests : IDisposable
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var values = Assert.IsAssignableFrom<IReadOnlyDictionary<string, string>>(ok.Value);
-        var yamlText = await File.ReadAllTextAsync(yamlPath).ConfigureAwait(true);
+        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("gpt-5.4", values["VoiceConversation:CopilotModel"]);
         Assert.Equal("OPENAI_API_KEY", values["VoiceConversation:ModelApiKeyEnvironmentVariableName"]);

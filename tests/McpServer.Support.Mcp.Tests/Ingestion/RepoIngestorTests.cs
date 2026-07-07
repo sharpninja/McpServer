@@ -32,7 +32,7 @@ public sealed class RepoIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
         var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(results.Count >= 2);
         Assert.All(results, r =>
@@ -56,7 +56,7 @@ public sealed class RepoIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
         var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.DoesNotContain(results, r => r.Doc.SourceKey.Contains("bin/"));
         Assert.DoesNotContain(results, r => r.Doc.SourceKey.Contains("obj/"));
@@ -72,7 +72,7 @@ public sealed class RepoIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = emptyDir });
         var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(results);
     }
@@ -85,8 +85,8 @@ public sealed class RepoIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
         var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
-        var results1 = await sut.IngestAsync().ConfigureAwait(true);
-        var results2 = await sut.IngestAsync().ConfigureAwait(true);
+        var results1 = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var results2 = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(
             results1.First(r => r.Doc.SourceKey.Contains("file.txt")).Doc.ContentHash,
@@ -103,7 +103,7 @@ public sealed class RepoIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, MaxFileSizeBytes = 1024 * 1024 });
         var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.DoesNotContain(results, r => r.Doc.SourceKey.Contains("large.txt"));
         Assert.Contains(results, r => r.Doc.SourceKey.Contains("small.txt"));
@@ -119,7 +119,7 @@ public sealed class RepoIngestorTests : IDisposable
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
         var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
-        var results = await sut.IngestAsync().ConfigureAwait(true);
+        var results = await sut.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains(results, r => r.Doc.SourceKey.Equals("binary-assets/keep.md", StringComparison.Ordinal));
     }

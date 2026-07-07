@@ -79,7 +79,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             _requirementsDocumentService,
             todoMutations);
 
-        var json = await tools.TodoProjectionRepair(WorkspacePath).ConfigureAwait(true);
+        var json = await tools.TodoProjectionRepair(WorkspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<TodoProjectionRepairResult>(json, JsonOptions);
 
         Assert.NotNull(result);
@@ -95,7 +95,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         _repoFileService.WriteAsync("docs/Project/txn.md", "content", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new RepoWriteResult(true, null)));
 
-        var json = await _tools.RepoWrite("docs/Project/txn.md", "content", WorkspacePath).ConfigureAwait(true);
+        var json = await _tools.RepoWrite("docs/Project/txn.md", "content", WorkspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
         Assert.True(document.RootElement.GetProperty("written").GetBoolean());
@@ -119,7 +119,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
                 "Hello {{name}}",
                 tags: "routing,stdio",
                 description: "Route through decorated service.",
-                engine: "handlebars")
+                engine: "handlebars", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<PromptTemplateMutationResult>(json, JsonOptions);
 
@@ -150,7 +150,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
                 "txn-stdio",
                 title: "Updated",
                 content: "Updated {{name}}",
-                tags: "routing")
+                tags: "routing", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<PromptTemplateMutationResult>(json, JsonOptions);
 
@@ -175,7 +175,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         _promptTemplateService.DeleteAsync("txn-stdio", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new PromptTemplateMutationResult(true, Item: CreateTemplate("txn-stdio"))));
 
-        var json = await _tools.PromptTemplateDelete(WorkspacePath, "txn-stdio").ConfigureAwait(true);
+        var json = await _tools.PromptTemplateDelete(WorkspacePath, "txn-stdio", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<PromptTemplateMutationResult>(json, JsonOptions);
 
         Assert.NotNull(result);
@@ -192,7 +192,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         _requirementsDocumentService.GenerateAllAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(CreateExport("markdown", "all")));
 
-        var json = await _tools.RequirementsGenerate(WorkspacePath, doc: "all", format: "markdown").ConfigureAwait(true);
+        var json = await _tools.RequirementsGenerate(WorkspacePath, doc: "all", format: "markdown", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<RequirementsDocumentExportResult>(json, JsonOptions);
 
         Assert.NotNull(result);
@@ -212,7 +212,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         _requirementsDocumentService.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(CreateExport("wiki", "all")));
 
-        var json = await _tools.RequirementsGenerate(WorkspacePath, doc: "all", format: "wiki").ConfigureAwait(true);
+        var json = await _tools.RequirementsGenerate(WorkspacePath, doc: "all", format: "wiki", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<RequirementsDocumentExportResult>(json, JsonOptions);
 
         Assert.NotNull(result);
@@ -237,7 +237,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
                 "FR-MCP-TXNSTDIO-001",
                 WorkspacePath,
                 title: "STDIO transaction route",
-                body: "Route FR creation through the decorated service.")
+                body: "Route FR creation through the decorated service.", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
@@ -266,7 +266,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
                 "FR-MCP-TXNSTDIO-001",
                 WorkspacePath,
                 title: "Updated",
-                body: "Updated body")
+                body: "Updated body", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
@@ -295,7 +295,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
                 "FR-MCP-TXNSTDIO-001",
                 WorkspacePath,
                 body: "TR-MCP-TXN-001,TR-MCP-TXN-002",
-                testIds: "TEST-MCP-161")
+                testIds: "TEST-MCP-161", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
@@ -317,7 +317,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         _requirementsDocumentService.DeleteFrAsync("FR-MCP-TXNSTDIO-001", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
 
-        var json = await _tools.RequirementsDelete("fr", "FR-MCP-TXNSTDIO-001", WorkspacePath).ConfigureAwait(true);
+        var json = await _tools.RequirementsDelete("fr", "FR-MCP-TXNSTDIO-001", WorkspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
         Assert.True(document.RootElement.GetProperty("success").GetBoolean());
@@ -352,7 +352,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
                 "Codex-20260614T120000Z-stdio",
                 "req-20260614T120000Z-sessionlog-stdio",
                 turnJson,
-                WorkspacePath)
+                WorkspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
@@ -381,7 +381,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
         var json = await _tools.SessionLogDeleteSession(
                 "Codex",
                 "Codex-20260614T120000Z-stdio",
-                WorkspacePath)
+                WorkspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
@@ -407,7 +407,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             _requirementsDocumentService,
             gitHubCliService: gitHubCliService);
 
-        var json = await tools.GitHubCreateIssue("txn issue", "blocked").ConfigureAwait(true);
+        var json = await tools.GitHubCreateIssue("txn issue", "blocked", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
         Assert.Contains("not transaction compensated", document.RootElement.GetProperty("error").GetString(), StringComparison.OrdinalIgnoreCase);
@@ -430,7 +430,7 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             websiteIngestor: websiteIngestor,
             transactionCoordinator: new CapturingCoordinator(enabled: true));
 
-        var json = await tools.ContextIngestWebsite("https://example.test/docs", WorkspacePath).ConfigureAwait(true);
+        var json = await tools.ContextIngestWebsite("https://example.test/docs", WorkspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
         Assert.Equal("turn_transaction_gate", document.RootElement.GetProperty("code").GetString());
@@ -452,12 +452,12 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             _requirementsDocumentService,
             transactionCoordinator: new CapturingCoordinator(enabled: true));
 
-        var json = await tools.SyncRun(WorkspacePath).ConfigureAwait(true);
+        var json = await tools.SyncRun(WorkspacePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var document = JsonDocument.Parse(json);
 
         Assert.Equal("turn_transaction_gate", document.RootElement.GetProperty("code").GetString());
         Assert.Contains("not transaction compensated", document.RootElement.GetProperty("error").GetString(), StringComparison.OrdinalIgnoreCase);
-        Assert.Empty(await _db.Documents.ToListAsync().ConfigureAwait(true));
+        Assert.Empty(await _db.Documents.ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     private static PromptTemplate CreateTemplate(string id)

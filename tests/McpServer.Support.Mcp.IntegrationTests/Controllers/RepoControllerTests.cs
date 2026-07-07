@@ -6,6 +6,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>TR-PLANNED-CORE-013: Repo controller API tests (path allowlist, read/list/write).</summary>
+[Trait("Category", "Integration")]
 public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client;
@@ -20,9 +21,9 @@ public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFact
     [Fact]
     public async Task List_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/repo/list", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/repo/list", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("\"path\"", json, StringComparison.Ordinal);
         Assert.Contains("\"entries\"", json, StringComparison.Ordinal);
     }
@@ -31,7 +32,7 @@ public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFact
     [Fact]
     public async Task ReadFile_WithoutPath_ReturnsBadRequest()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/repo/file", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/repo/file", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -39,7 +40,7 @@ public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFact
     [Fact]
     public async Task WriteFile_WithoutPath_ReturnsBadRequest()
     {
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/repo/file", UriKind.Relative), new { }).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/repo/file", UriKind.Relative), new { }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }

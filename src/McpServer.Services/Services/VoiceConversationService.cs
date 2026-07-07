@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Native;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +27,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     };
 
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
-    private readonly ICopilotClient _copilotClient;
+    private readonly IAgentCliClient _copilotClient;
     private readonly IAgentExecutionStrategyResolver _strategyResolver;
     private readonly DesktopProcessLauncher? _desktopLauncher;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
@@ -45,7 +45,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     /// Creates a new <see cref="VoiceConversationService"/>.
     /// </summary>
     public VoiceConversationService(
-        ICopilotClient copilotClient,
+        IAgentCliClient copilotClient,
         IServiceProvider serviceProvider,
         WorkspaceServiceAccessor workspaceAccessor,
         IConfiguration configuration,
@@ -358,7 +358,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         {
             var response = await session.SendAsync(message, cancellationToken).ConfigureAwait(false);
             state.LastUpdatedUtc = DateTimeOffset.UtcNow;
-            return response.State == CopilotResultState.Success;
+            return response.State == AgentCliResultState.Success;
         }
         catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
         {
@@ -705,7 +705,7 @@ public sealed partial class VoiceConversationService
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            CopilotResult copilotResult;
+            AgentCliResult copilotResult;
 
             if (state.InteractiveSession is { IsAlive: true })
             {
@@ -733,7 +733,7 @@ public sealed partial class VoiceConversationService
                 }
             }
 
-            if (copilotResult.State != CopilotResultState.Success)
+            if (copilotResult.State != AgentCliResultState.Success)
             {
                 var err = BuildCopilotFailureMessage(copilotResult);
                 _logger.LogWarning(
@@ -749,7 +749,7 @@ public sealed partial class VoiceConversationService
             if (!TryParseModelEnvelope(copilotResult.Body, out var envelope, out var parseError))
             {
                 // Try JSON repair first
-                CopilotResult repaired;
+                AgentCliResult repaired;
                 if (state.InteractiveSession is { IsAlive: true })
                 {
                     repaired = await state.InteractiveSession.SendAsync(
@@ -764,7 +764,7 @@ public sealed partial class VoiceConversationService
                         cancellationToken).ConfigureAwait(false);
                 }
 
-                if (repaired.State != CopilotResultState.Success ||
+                if (repaired.State != AgentCliResultState.Success ||
                     !TryParseModelEnvelope(repaired.Body, out envelope, out parseError))
                 {
                     // Fallback: treat raw text as a conversational final_response
@@ -1235,7 +1235,7 @@ public sealed partial class VoiceConversationService
     }
 
     /// <summary>
-    /// Resolves the Copilot agent path, trying workspace config, <see cref="TodoPromptOptions"/>,
+    /// Resolves the CLI agent path, trying workspace config, <see cref="TodoPromptOptions"/>,
     /// well-known install locations, and finally <see cref="DesktopProcessLauncher.ResolveCommandPathAsync"/>
     /// via desktop Get-Command.
     /// </summary>
@@ -1257,28 +1257,32 @@ public sealed partial class VoiceConversationService
         if (!string.IsNullOrWhiteSpace(promptOpts.AgentPath))
             return promptOpts.AgentPath;
 
+        var defaultAgentPath = new AgentCliClientOptions().AgentPath;
+
         // 3. Probe well-known WinGet install locations for all user profiles
-        var probePaths = ProbeWellKnownCopilotPaths();
+        var probePaths = ProbeWellKnownAgentPaths(defaultAgentPath);
         if (probePaths is not null)
             return probePaths;
 
         // 4. Resolve via Get-Command on the interactive desktop
         if (_desktopLauncher is not null)
         {
-            var resolved = await _desktopLauncher.ResolveCommandPathAsync("copilot", cancellationToken).ConfigureAwait(false);
+            var resolved = await _desktopLauncher.ResolveCommandPathAsync(defaultAgentPath, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(resolved))
                 return resolved;
         }
 
-        return "copilot";
+        return defaultAgentPath;
     }
 
     /// <summary>
-    /// Probes well-known install paths for the Copilot CLI executable.
+    /// Probes well-known install paths for the configured CLI agent executable.
     /// Checks WinGet Links and Packages directories for all user profiles.
     /// </summary>
-    private string? ProbeWellKnownCopilotPaths()
+    private string? ProbeWellKnownAgentPaths(string commandName)
     {
+        var executableName = Path.GetFileNameWithoutExtension(commandName) + ".exe";
+
         // Use the system drive Users directory — Environment.SpecialFolder.UserProfile
         // returns the SYSTEM profile for LocalSystem, not C:\Users.
         var systemDrive = Environment.GetEnvironmentVariable("SystemDrive") ?? @"C:";
@@ -1296,10 +1300,10 @@ public sealed partial class VoiceConversationService
                     string.Equals(dirName, "All Users", StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                var linksPath = Path.Combine(userDir, @"AppData\Local\Microsoft\WinGet\Links\copilot.exe");
+                var linksPath = Path.Combine(userDir, "AppData", "Local", "Microsoft", "WinGet", "Links", executableName);
                 if (File.Exists(linksPath))
                 {
-                    _logger.LogDebug("Found Copilot at well-known path: {Path}", linksPath);
+                    _logger.LogDebug("Found CLI agent at well-known path: {Path}", linksPath);
                     return linksPath;
                 }
             }
@@ -1312,7 +1316,7 @@ public sealed partial class VoiceConversationService
         return null;
     }
 
-    private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts, VoiceSessionState? sessionState = null)
+    private AgentCliClientOptions BuildCopilotOptions(VoiceConversationOptions opts, VoiceSessionState? sessionState = null)
     {
         var model = !string.IsNullOrWhiteSpace(sessionState?.AgentModel)
             ? sessionState.AgentModel!.Trim()
@@ -1331,10 +1335,10 @@ public sealed partial class VoiceConversationService
         var agentPath = !string.IsNullOrWhiteSpace(sessionState?.AgentPath)
             ? sessionState.AgentPath
             : string.IsNullOrWhiteSpace(promptOpts.AgentPath)
-                ? "copilot"
+                ? new AgentCliClientOptions().AgentPath
                 : promptOpts.AgentPath;
 
-        var options = new CopilotClientOptions
+        var options = new AgentCliClientOptions
         {
             AgentPath = agentPath,
             Model = model,
@@ -1363,7 +1367,7 @@ public sealed partial class VoiceConversationService
     private ValueTask<IAgentExecutionSession> CreateExecutionSessionAsync(
         VoiceSessionState state,
         string initialPrompt,
-        CopilotClientOptions options,
+        AgentCliClientOptions options,
         CancellationToken cancellationToken)
     {
         var workspacePath = !string.IsNullOrWhiteSpace(state.WorkspacePath)
@@ -1382,9 +1386,9 @@ public sealed partial class VoiceConversationService
 
     /// <summary>
     /// Invokes Copilot CLI via <see cref="DesktopProcessLauncher"/> when desktop launch is enabled
-    /// and the launcher is available; otherwise uses <see cref="ICopilotClient.InvokeAsync"/>.
+    /// and the launcher is available; otherwise uses <see cref="IAgentCliClient.InvokeAsync"/>.
     /// </summary>
-    private async Task<CopilotResult> InvokeCopilotWithDesktopFallbackAsync(
+    private async Task<AgentCliResult> InvokeCopilotWithDesktopFallbackAsync(
         string prompt,
         VoiceConversationOptions opts,
         CancellationToken cancellationToken)
@@ -1399,7 +1403,7 @@ public sealed partial class VoiceConversationService
     /// Launches Copilot CLI on the interactive desktop as a visible console window.
     /// Returns immediately after launch — the process runs independently.
     /// </summary>
-    private async Task<CopilotResult> InvokeCopilotViaDesktopAsync(
+    private async Task<AgentCliResult> InvokeCopilotViaDesktopAsync(
         string prompt,
         VoiceConversationOptions opts,
         CancellationToken cancellationToken)
@@ -1435,9 +1439,9 @@ public sealed partial class VoiceConversationService
 
         _logger.LogInformation("Copilot launched on desktop: PID={ProcessId}", pid);
 
-        return new CopilotResult
+        return new AgentCliResult
         {
-            State = CopilotResultState.Success,
+            State = AgentCliResultState.Success,
             Body = $"{{\"type\":\"final_response\",\"displayText\":\"Copilot launched on desktop (PID {pid}).\",\"speakText\":\"Copilot launched on desktop.\"}}",
             Stderr = string.Empty,
             ExitCode = 0,
@@ -1445,9 +1449,9 @@ public sealed partial class VoiceConversationService
     }
 
     /// <summary>
-    /// Builds the argument string for Copilot CLI, matching the format used by <see cref="CopilotClient"/>.
+    /// Builds the argument string for Copilot CLI, matching the format used by <see cref="AgentCliClient"/>.
     /// </summary>
-    private static string BuildCopilotArguments(string prompt, CopilotClientOptions copilotOpts, bool interactive = false)
+    private static string BuildCopilotArguments(string prompt, AgentCliClientOptions copilotOpts, bool interactive = false)
     {
         var args = new StringBuilder();
 
@@ -1656,13 +1660,13 @@ public sealed partial class VoiceConversationService
         return false;
     }
 
-    private static string BuildCopilotFailureMessage(CopilotResult result)
+    private static string BuildCopilotFailureMessage(AgentCliResult result)
     {
         return result.State switch
         {
-            CopilotResultState.Timeout => "Copilot CLI timed out while processing the voice request.",
-            CopilotResultState.SpawnError => "Copilot CLI could not be started on the MCP server host.",
-            CopilotResultState.Error => string.IsNullOrWhiteSpace(result.Stderr)
+            AgentCliResultState.Timeout => "Copilot CLI timed out while processing the voice request.",
+            AgentCliResultState.SpawnError => "Copilot CLI could not be started on the MCP server host.",
+            AgentCliResultState.Error => string.IsNullOrWhiteSpace(result.Stderr)
                 ? "Copilot CLI returned an error."
                 : $"Copilot CLI error: {TrimForUser(result.Stderr, 240)}",
             _ => "Copilot CLI failed."

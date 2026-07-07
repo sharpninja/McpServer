@@ -16,6 +16,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// exercising FR-MCP-QBOPENAI-001 and FR-MCP-QBEXEC-001 end to end through the real ASP.NET pipeline with the
 /// orchestration and internal-tool executor replaced by deterministic test doubles.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class QuadBrainOpenAiEndpointIntegrationTests
 {
     private const string Endpoint = "v1/chat/completions";
@@ -28,7 +29,7 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
         using var factory = BuildFactory(orchestration, new FakeExecutor());
         using var client = factory.CreateClient();
 
-        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), SimpleRequest()).ConfigureAwait(true);
+        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), SimpleRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -110,10 +111,10 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
         using var factory = BuildFactory(new ThrowingOrchestration(), new FakeExecutor());
         using var client = Authorized(factory);
 
-        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), SimpleRequest()).ConfigureAwait(true);
+        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), SimpleRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("server_error", json, StringComparison.Ordinal);
         Assert.Contains("boom", json, StringComparison.Ordinal);
     }
@@ -143,11 +144,11 @@ public sealed class QuadBrainOpenAiEndpointIntegrationTests
         var request = SimpleRequest();
         request.Stream = true;
 
-        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), request).ConfigureAwait(true);
+        var response = await client.PostAsJsonAsync(new Uri(Endpoint, UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("text/event-stream", response.Content.Headers.ContentType?.MediaType);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("data:", body, StringComparison.Ordinal);
         Assert.Contains("chat.completion.chunk", body, StringComparison.Ordinal);
         Assert.Contains("streamed arbiter answer", body, StringComparison.Ordinal);

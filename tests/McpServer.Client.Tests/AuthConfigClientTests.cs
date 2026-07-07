@@ -26,7 +26,7 @@ public sealed class AuthConfigClientTests
         {
             ClientId = "director",
             Scope = "openid offline_access"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/auth/device", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -51,7 +51,7 @@ public sealed class AuthConfigClientTests
             GrantType = "urn:ietf:params:oauth:grant-type:device_code",
             ClientId = "director",
             DeviceCode = "device-1"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/auth/token", handler.LastRequest.RequestUri!.AbsolutePath);

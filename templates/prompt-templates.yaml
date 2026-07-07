@@ -3,19 +3,19 @@ templates:
     title: Example Greeting Template
     category: custom
     tags:
-    - example
-    - getting-started
+      - example
+      - getting-started
     description: A simple greeting template demonstrating Handlebars syntax.
     engine: handlebars
     variables:
-    - name: name
-      description: Name of the person to greet
-      required: true
-      example: Alice
-    - name: role
-      description: Role or title of the person
-      required: false
-      defaultValue: developer
+      - name: name
+        description: Name of the person to greet
+        required: true
+        example: Alice
+      - name: role
+        description: Role or title of the person
+        required: false
+        defaultValue: developer
     content: |
       Hello, {{name}}!
       {{#if role}}You are a {{role}}.{{/if}}
@@ -24,23 +24,23 @@ templates:
     title: Agent Briefing Template
     category: agent
     tags:
-    - agent
-    - onboarding
-    - example
+      - agent
+      - onboarding
+      - example
     description: Template for briefing an AI agent about a workspace context.
     engine: handlebars
     variables:
-    - name: agentName
-      description: Name of the AI agent
-      required: true
-      example: Copilot
-    - name: workspaceName
-      description: Name of the current workspace
-      required: true
-      example: McpServer
-    - name: objectives
-      description: List of objectives for the agent
-      required: false
+      - name: agentName
+        description: Name of the AI agent
+        required: true
+        example: Copilot
+      - name: workspaceName
+        description: Name of the current workspace
+        required: true
+        example: McpServer
+      - name: objectives
+        description: List of objectives for the agent
+        required: false
     content: |
       ## Agent Briefing: {{agentName}}
 
@@ -60,26 +60,38 @@ templates:
     title: Triage Research Bug Report
     category: system
     tags:
-    - triage
-    - bug
-    - research
+      - triage
+      - bug
+      - research
     description: Prompt for the configured direct triage agent that researches grouped incidental bug reports and returns schema-valid JSON.
     engine: handlebars
     variables:
-    - name: groupJson
-      description: Serialized triage group detail including reports.
-      required: true
-    - name: groupId
-      description: Triage group identifier.
-      required: false
-    - name: workspacePath
-      description: Effective workspace path for the group.
-      required: false
-    - name: reportCount
-      description: Number of reports currently in the group.
-      required: false
-    content: |
+      - name: groupJson
+        description: Serialized triage group detail including reports.
+        required: true
+      - name: groupId
+        description: Triage group identifier.
+        required: false
+      - name: workspacePath
+        description: Effective workspace path for the group.
+        required: false
+      - name: reportCount
+        description: Number of reports currently in the group.
+        required: false
+    content: |-
       You are the configured MCP Server bug triage agent.
+
+      Background triage is not a normal workspace session. You are doing bounded read-only research for an already accepted triage group.
+
+      Use the supplied Group JSON as the primary source. Inspect repository files only when the report identifies a specific path, endpoint, method, or command that must be checked to make a defensible triage determination.
+
+      Do not read AGENTS-README-FIRST.yaml, AGENTS.md, plugin skills, session history, marker files, or workspace operating instructions unless the report itself says one of those files is the failing artifact.
+
+      Do not start or update MCP session logs, marker state, TODOs, requirements, GitHub issues, branches, commits, or MCP state. Do not create or update TODOs, requirements, GitHub issues, branches, commits, or MCP state.
+
+      Do not run broad recursive repository searches. If file inspection is required, prefer targeted reads of the named files or symbols and stop as soon as the acceptance criteria and implementation notes are supported.
+
+      Return only the JSON object as soon as you can make a defensible triage determination. Do not wait for perfect certainty and do not continue into remediation.
 
       Research the grouped incidental bug reports below. Return only schema-valid JSON with this shape:
 
@@ -103,23 +115,23 @@ templates:
     title: TODO Status Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - status
+      - todo
+      - prompt
+      - status
     description: 'Prompt template for generating TODO status reports. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: false
-    - name: baseUrl
-      description: Server base URL
-      required: false
-      default-value: http://localhost:7147
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: false
+      - name: baseUrl
+        description: Server base URL
+        required: false
+        default-value: http://localhost:7147
     content: |
       Get the current status of TODO {id}. Report the following in structured markdown:
 
@@ -132,23 +144,23 @@ templates:
     title: TODO Implement Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - implement
+      - todo
+      - prompt
+      - implement
     description: 'Prompt template for driving Copilot to implement a TODO item. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: true
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      default-value: http://localhost:7147
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: true
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        default-value: http://localhost:7147
     content: |
       Implement TODO {id}: {title}
 
@@ -178,23 +190,23 @@ templates:
     title: TODO Plan Prompt
     category: system
     tags:
-    - todo
-    - prompt
-    - plan
+      - todo
+      - prompt
+      - plan
     description: 'Prompt template for creating detailed implementation plans. Placeholders: {id}, {title}, {baseUrl}.'
     engine: none
     variables:
-    - name: id
-      description: TODO item ID
-      required: true
-      example: MVP-MCP-004
-    - name: title
-      description: TODO item title
-      required: false
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      default-value: http://localhost:7147
+      - name: id
+        description: TODO item ID
+        required: true
+        example: MVP-MCP-004
+      - name: title
+        description: TODO item title
+        required: false
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        default-value: http://localhost:7147
     content: |
       Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on.
 
@@ -215,16 +227,16 @@ templates:
     title: Pairing Login Page
     category: system
     tags:
-    - pairing
-    - html
-    - login
+      - pairing
+      - html
+      - login
     description: 'HTML template for the /pair login form. Placeholder: {errorBanner} (empty string or error div).'
     engine: none
     variables:
-    - name: errorBanner
-      description: HTML error banner string (empty for no error)
-      required: false
-      default-value: ""
+      - name: errorBanner
+        description: HTML error banner string (empty for no error)
+        required: false
+        default-value: ""
     content: |
       <!DOCTYPE html>
       <html lang="en">
@@ -264,19 +276,19 @@ templates:
     title: Pairing Key Page
     category: system
     tags:
-    - pairing
-    - html
-    - apikey
+      - pairing
+      - html
+      - apikey
     description: 'HTML template showing the API key after login. Placeholders: {apiKey}, {serverUrl}.'
     engine: none
     variables:
-    - name: apiKey
-      description: The server API key to display
-      required: true
-    - name: serverUrl
-      description: The server base URL
-      required: true
-      example: http://localhost:7147
+      - name: apiKey
+        description: The server API key to display
+        required: true
+      - name: serverUrl
+        description: The server base URL
+        required: true
+        example: http://localhost:7147
     content: |
       <!DOCTYPE html>
       <html lang="en">
@@ -337,9 +349,9 @@ templates:
     title: Pairing Not Configured Page
     category: system
     tags:
-    - pairing
-    - html
-    - error
+      - pairing
+      - html
+      - error
     description: HTML template shown when pairing is not configured. No placeholders.
     engine: none
     content: |
@@ -371,29 +383,29 @@ templates:
     title: Default Marker File Prompt
     category: system
     tags:
-    - marker
-    - agent-instructions
-    - system
+      - marker
+      - agent-instructions
+      - system
     description: The default AGENTS-README-FIRST.yaml prompt template. Rendered with baseUrl, apiKey, and workspace context variables.
     engine: handlebars
     variables:
-    - name: baseUrl
-      description: Server base URL
-      required: true
-      example: http://localhost:7147
-    - name: apiKey
-      description: Workspace API key
-      required: true
-    - name: version
-      description: Application version (informational version including git SHA)
-      required: false
-      defaultValue: unknown
-    - name: workspace
-      description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
-      required: true
-    - name: agentAdditions
-      description: Optional list of agent-specific marker instruction sections.
-      required: false
+      - name: baseUrl
+        description: Server base URL
+        required: true
+        example: http://localhost:7147
+      - name: apiKey
+        description: Workspace API key
+        required: true
+      - name: version
+        description: Application version (informational version including git SHA)
+        required: false
+        defaultValue: unknown
+      - name: workspace
+        description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
+        required: true
+      - name: agentAdditions
+        description: Optional list of agent-specific marker instruction sections.
+        required: false
     content: |
       You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
@@ -420,12 +432,11 @@ templates:
       - For PowerShell work, use `plugins/core/lib-ps/yaml-object-mutation.ps1` and call `Set-McpYamlObjectValue` or `Update-McpYamlObject`. Do not build YAML snippets as strings or use line-oriented edit helpers for YAML.
 
       ## MCP and Plugin Failure Reporting
-      - MCP Server failures and required-plugin failures discovered while working must be reported through the triage tool only. Use the active agent's triage surface (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) with the failing command or endpoint, observed error, workspace path, and relevant component.
-      - After submitting the triage report, continue the user's active task. Do not wait for triage research, TODO creation, or resolution.
-      - When the failure means code, docs, requirements, plugin skills, package sync, deployment, or configuration need a separate repair workflow, write a detailed triage report with the needed changes, acceptance criteria, and validation evidence, then move on with the active user task.
+      - MCP Server failures and required-plugin failures discovered while working must always be written as a normal failsafe YAML report. Use the plugin/REPL failsafe or pending YAML queue and preserve the triage method (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) plus title, summary, observed behavior, expected behavior, severity, component, workspace path, dedupe key or error signature, affected paths, evidence, reproduction hints, tags, reporter agent, session id, turn id, and current TODO id when known.
+      - After the failsafe YAML is written and triage submission succeeds, continue the user's active task. Do not wait for triage research, TODO creation, or resolution.
       - Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user's active request is to fix that failure.
-      - If the MCP Server or plugin failure prevents triage submission, write the report as a normal failsafe YAML document for later replay through the plugin/REPL failsafe or pending YAML queue. Preserve the triage method (`workflow.triage.report`, `triage_report`, or equivalent plugin triage tool) plus title, summary, observed behavior, expected behavior, severity, component, workspace path, dedupe key or error signature, affected paths, evidence, reproduction hints, tags, reporter agent, session id, turn id, and current TODO id when known. Then record the local unavailable state (`MCP_UNTRUSTED` or `MCP_PLUGIN_UNAVAILABLE:<Agent>`) and continue non-MCP work; do not use raw REST or another reporting channel as a substitute.
-
+      - If the MCP Server or required-plugin failure reveals that code, docs, requirements, plugin skills, package sync, deployment, configuration, or other artifacts need to be updated as a separate repair workflow, write a detailed triage report that includes the needed changes, acceptance criteria, and validation evidence, then continue the active task after the failsafe YAML is written and triage submission succeeds.
+      - If triage submission fails, stop work and notify the user. Keep the failsafe YAML report for later replay; do not use raw REST or another reporting channel as a substitute.
       ## MCP Memories
       MCP memories are durable operator guidance managed by the MCP Server. Global memories apply to every workspace; Workspace memories apply only to the active workspace. Memory IDs use `MEMORY-{CATEGORY}-{NNN}`.
       Agents that support request-boundary injection must render required memories exactly as:
@@ -476,6 +487,7 @@ templates:
       3. Re-verify trust before resuming: recompute the marker signature with the new key and call /health with a fresh nonce.
       4. Re-bootstrap and resume through your required agent plugin. Codex: run `Invoke-CodexMcpPlugin.ps1 -Command Status` to re-establish marker trust, health nonce, workspace, and the current session/turn, then continue with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>`. Other agents: re-run the plugin session-start hook/command, then continue via the plugin session tools.
       5. Recover the open turn instead of starting over: query session history through the plugin (workflow.sessionlog.queryHistory), find the in-progress turn, then keep updating and complete it via the plugin. Do not open a duplicate session for the same work.
+      5a. Treat `deprecated: true` on successful `workflow.*` results as metadata, not wrapper failure. Treat an empty `workflow.sessionlog.queryHistory` result as a valid no-match result. Re-check the workspace current directory, explicit `agent` or `sourceType`, and plugin cache/session state through the wrapper; do not use raw REST merely because history is empty or marked deprecated.
       6. If the plugin cannot re-establish trust after the restart, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` and continue with non-MCP local diagnosis only.
 
       ## Rules

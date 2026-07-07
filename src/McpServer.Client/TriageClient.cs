@@ -70,7 +70,17 @@ public sealed class TriageClient : McpClientBase
 
     /// <summary>Retries a failed triage group.</summary>
     public Task<TriageGroupDetail> RetryGroupAsync(string id, CancellationToken cancellationToken = default)
-        => PostAsync<TriageGroupDetail>($"mcpserver/triage/groups/{Encode(id)}/retry", null, cancellationToken);
+        => RetryGroupAsync(id, force: false, cancellationToken);
+
+    /// <summary>Retries a triage group with optional forced cancellation of the current processing run.</summary>
+    public Task<TriageGroupDetail> RetryGroupAsync(
+        string id,
+        bool force,
+        CancellationToken cancellationToken = default)
+    {
+        var query = force ? "?force=true" : string.Empty;
+        return PostAsync<TriageGroupDetail>($"mcpserver/triage/groups/{Encode(id)}/retry{query}", null, cancellationToken);
+    }
 
     /// <summary>Creates a new triage group from selected reports and groups.</summary>
     public Task<TriageGroupEditResult> CreateGroupFromSelectionAsync(

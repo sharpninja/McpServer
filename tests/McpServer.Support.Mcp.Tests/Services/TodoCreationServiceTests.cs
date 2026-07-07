@@ -70,7 +70,7 @@ public sealed class TodoCreationServiceTests
             Description = ["Capture the verified local indexing failure."],
             TechnicalDetails = ["Context and GraphRAG queries returned no hits for exact local snippets."],
             Note = "Preserve diagnosis-only framing."
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal("ISSUE-28", result.Item?.Id);
@@ -117,7 +117,7 @@ public sealed class TodoCreationServiceTests
             Title = "Persist canonical issue todo",
             Section = "issues",
             Priority = "low"
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Contains("ISSUE-91", result.Error ?? string.Empty, StringComparison.Ordinal);

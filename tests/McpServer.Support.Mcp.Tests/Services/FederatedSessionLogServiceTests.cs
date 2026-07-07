@@ -49,10 +49,10 @@ public sealed class FederatedSessionLogServiceTests
         _inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: false));
-        var result = await sut.QueryAsync(new SessionLogQueryRequest());
+        var result = await sut.QueryAsync(new SessionLogQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
-        await _client.DidNotReceiveWithAnyArgs().QuerySessionLogsAsync(default!, default!, default);
+        await _client.DidNotReceiveWithAnyArgs().QuerySessionLogsAsync(default!, default!, ct: TestContext.Current.CancellationToken);
     }
 
     /// <summary>When no federation target resolves, delegates to the inner service.</summary>
@@ -63,7 +63,7 @@ public sealed class FederatedSessionLogServiceTests
         _inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: true)); // no targets
-        var result = await sut.QueryAsync(new SessionLogQueryRequest());
+        var result = await sut.QueryAsync(new SessionLogQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
     }
@@ -82,7 +82,7 @@ public sealed class FederatedSessionLogServiceTests
             .Returns(new SessionLogQueryResult { TotalCount = 2, Limit = 100, Offset = 0, Items = [remoteLog1, remoteLog2] });
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new SessionLogQueryRequest());
+        var result = await sut.QueryAsync(new SessionLogQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Items.Count);
         Assert.Equal(2, result.TotalCount);
@@ -101,7 +101,7 @@ public sealed class FederatedSessionLogServiceTests
             .ThrowsAsync(new HttpRequestException("Timeout"));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new SessionLogQueryRequest());
+        var result = await sut.QueryAsync(new SessionLogQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("S-001", result.Items[0].SessionId);
@@ -117,7 +117,7 @@ public sealed class FederatedSessionLogServiceTests
             .Returns(new SessionLogQueryResult { TotalCount = 1, Limit = 100, Offset = 0, Items = [MakeLog("Cursor", "S-002")] });
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new SessionLogQueryRequest());
+        var result = await sut.QueryAsync(new SessionLogQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("S-002", result.Items[0].SessionId);
@@ -133,7 +133,7 @@ public sealed class FederatedSessionLogServiceTests
             .Returns(42L);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.SubmitAsync(MakeLog("ClaudeCode", "S-001"));
+        var result = await sut.SubmitAsync(MakeLog("ClaudeCode", "S-001"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(42L, result);
     }
@@ -145,7 +145,7 @@ public sealed class FederatedSessionLogServiceTests
         _inner.IsUnchangedAsync("ClaudeCode", "S-001", "hash123", Arg.Any<CancellationToken>()).Returns(true);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.IsUnchangedAsync("ClaudeCode", "S-001", "hash123");
+        var result = await sut.IsUnchangedAsync("ClaudeCode", "S-001", "hash123", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result);
     }
@@ -158,7 +158,7 @@ public sealed class FederatedSessionLogServiceTests
             .Returns(5);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.AppendProcessingDialogAsync("ClaudeCode", "S-001", "req-1", []);
+        var result = await sut.AppendProcessingDialogAsync("ClaudeCode", "S-001", "req-1", [], cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(5, result);
     }

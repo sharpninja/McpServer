@@ -57,7 +57,7 @@ public sealed class FederatedGraphRagServiceTests
             .Returns(new GraphEntityListResponse { Entities = [remoteEntity1, remoteEntity2], TotalCount = 2 });
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.ListEntitiesAsync(0, 50);
+        var result = await sut.ListEntitiesAsync(0, 50, ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Entities.Count);
         Assert.Equal(2, result.TotalCount);
@@ -75,7 +75,7 @@ public sealed class FederatedGraphRagServiceTests
             .ThrowsAsync(new HttpRequestException("Timeout"));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.ListEntitiesAsync(0, 50);
+        var result = await sut.ListEntitiesAsync(0, 50, ct: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Entities);
         Assert.Equal("E-001", result.Entities[0].Id);
@@ -89,10 +89,10 @@ public sealed class FederatedGraphRagServiceTests
         _inner.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: false));
-        var result = await sut.ListEntitiesAsync(0, 50);
+        var result = await sut.ListEntitiesAsync(0, 50, ct: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
-        await _client.DidNotReceiveWithAnyArgs().QueryEntitiesAsync(default!, default, default, default, default);
+        await _client.DidNotReceiveWithAnyArgs().QueryEntitiesAsync(default!, default, default, default, ct: TestContext.Current.CancellationToken);
     }
 
     // --- ListRelationshipsAsync ---
@@ -111,7 +111,7 @@ public sealed class FederatedGraphRagServiceTests
             .Returns(new GraphRelationshipListResponse { Relationships = [remoteRel1, remoteRel2], TotalCount = 2 });
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.ListRelationshipsAsync(0, 50);
+        var result = await sut.ListRelationshipsAsync(0, 50, ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Relationships.Count);
         Assert.Contains(result.Relationships, r => r.Id == "R-001" && r.Description == "Local Rel");
@@ -134,7 +134,7 @@ public sealed class FederatedGraphRagServiceTests
             .Returns(new GraphRagDocumentListResponse { Documents = [remoteDoc1, remoteDoc2], TotalCount = 2 });
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.ListDocumentsAsync(0, 50);
+        var result = await sut.ListDocumentsAsync(0, 50, ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Documents.Count);
         Assert.Contains(result.Documents, d => d.Id == "D-001" && d.SourceKey == "local-key");
@@ -155,7 +155,7 @@ public sealed class FederatedGraphRagServiceTests
             .Returns(remoteResponse);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new GraphRagQueryRequest { Query = "test" });
+        var result = await sut.QueryAsync(new GraphRagQueryRequest { Query = "test" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("Local answer", result.Answer);
     }
@@ -170,7 +170,7 @@ public sealed class FederatedGraphRagServiceTests
             .ThrowsAsync(new HttpRequestException("Timeout"));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new GraphRagQueryRequest { Query = "test" });
+        var result = await sut.QueryAsync(new GraphRagQueryRequest { Query = "test" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("Local answer", result.Answer);
     }
@@ -186,7 +186,7 @@ public sealed class FederatedGraphRagServiceTests
         _inner.CreateEntityAsync(request, Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.CreateEntityAsync(request);
+        var result = await sut.CreateEntityAsync(request, ct: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
     }
@@ -198,7 +198,7 @@ public sealed class FederatedGraphRagServiceTests
         _inner.DeleteEntityAsync("E-001", Arg.Any<CancellationToken>()).Returns(true);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.DeleteEntityAsync("E-001");
+        var result = await sut.DeleteEntityAsync("E-001", ct: TestContext.Current.CancellationToken);
 
         Assert.True(result);
     }
@@ -211,7 +211,7 @@ public sealed class FederatedGraphRagServiceTests
         _inner.GetStatusAsync(Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.GetStatusAsync();
+        var result = await sut.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
     }

@@ -6,6 +6,7 @@ namespace NukeBuild.Tests;
 /// TEST-MCP-YAML-MUTATION-001: Guards YAML updates so agents deserialize,
 /// mutate objects, serialize, and save instead of editing YAML as text.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class YamlObjectMutationTests
 {
     /// <summary>
@@ -71,7 +72,7 @@ public sealed class YamlObjectMutationTests
 
         Assert.Equal(0, result.ExitCode);
         Assert.True(File.Exists(yamlPath), "The helper did not create the YAML file.");
-        var yamlText = await File.ReadAllTextAsync(yamlPath, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("Triage:", yamlText, StringComparison.Ordinal);
         Assert.Contains("AgentPath: codex", yamlText, StringComparison.Ordinal);
     }
@@ -126,9 +127,9 @@ public sealed class YamlObjectMutationTests
         process.StartInfo.ArgumentList.Add(command);
 
         process.Start();
-        var stdoutTask = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
-        var stderrTask = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
-        await process.WaitForExitAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         return (process.ExitCode, await stdoutTask.ConfigureAwait(true), await stderrTask.ConfigureAwait(true));
     }
@@ -141,7 +142,7 @@ public sealed class YamlObjectMutationTests
     private static async Task<string> ReadRepositoryTextAsync(string relativePath)
     {
         var path = Path.Combine(FindRepositoryRoot(), relativePath);
-        return await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        return await File.ReadAllTextAsync(path, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     private static string FindRepositoryRoot()

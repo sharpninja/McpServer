@@ -172,10 +172,7 @@ public sealed class EmbeddingService : IEmbeddingService, IDisposable
 
     private float[] GenerateEmbeddingCore(string text)
     {
-    #pragma warning disable CA1308 // BERT models require lowercase input
-        var lowerText = (text ?? string.Empty).ToLowerInvariant();
-    #pragma warning restore CA1308
-        var (inputIds, attentionMask, tokenTypeIds) = _tokenizer!.Tokenize(lowerText);
+        var (inputIds, attentionMask, tokenTypeIds) = _tokenizer!.Tokenize(text ?? string.Empty);
         var seqLen = inputIds.Length;
 
         var inputIdsTensor = new DenseTensor<long>(inputIds.Select(x => (long)x).ToArray(), [1, seqLen]);
@@ -255,7 +252,7 @@ internal sealed class WordPieceTokenizer
     public WordPieceTokenizer(string vocabPath, int maxSeqLength)
     {
         _maxSeqLength = maxSeqLength;
-        _vocab = new Dictionary<string, int>(StringComparer.Ordinal);
+        _vocab = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var lines = File.ReadAllLines(vocabPath);
         for (var i = 0; i < lines.Length; i++)
             _vocab[lines[i]] = i;

@@ -51,15 +51,15 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     public async Task CreateRelationship_GeneratesIdWithPrefix()
     {
         var sut = CreateSut();
-        var entityA = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }).ConfigureAwait(true);
-        var entityB = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }).ConfigureAwait(true);
+        var entityA = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var entityB = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await sut.CreateRelationshipAsync(new GraphRelationshipRequest
         {
             SourceEntityId = entityA.Id,
             TargetEntityId = entityB.Id,
             RelationshipType = "depends_on"
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.StartsWith("gr-", result.Id, StringComparison.Ordinal);
         Assert.Equal(entityA.Id, result.SourceEntityId);
@@ -74,7 +74,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     public async Task CreateRelationship_ValidatesSourceEntityExists()
     {
         var sut = CreateSut();
-        var entityB = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }).ConfigureAwait(true);
+        var entityB = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             sut.CreateRelationshipAsync(new GraphRelationshipRequest
@@ -82,7 +82,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
                 SourceEntityId = "ge-nonexistent",
                 TargetEntityId = entityB.Id,
                 RelationshipType = "depends_on"
-            })).ConfigureAwait(true);
+            }, ct: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     public async Task CreateRelationship_ValidatesTargetEntityExists()
     {
         var sut = CreateSut();
-        var entityA = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }).ConfigureAwait(true);
+        var entityA = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             sut.CreateRelationshipAsync(new GraphRelationshipRequest
@@ -100,7 +100,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
                 SourceEntityId = entityA.Id,
                 TargetEntityId = "ge-nonexistent",
                 RelationshipType = "depends_on"
-            })).ConfigureAwait(true);
+            }, ct: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -110,15 +110,15 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     public async Task ListRelationships_FiltersByEntityId()
     {
         var sut = CreateSut();
-        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }).ConfigureAwait(true);
-        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }).ConfigureAwait(true);
-        var c = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "C", EntityType = "concept" }).ConfigureAwait(true);
+        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var c = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "C", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = a.Id, TargetEntityId = b.Id, RelationshipType = "uses" }).ConfigureAwait(true);
-        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = b.Id, TargetEntityId = c.Id, RelationshipType = "uses" }).ConfigureAwait(true);
-        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = a.Id, TargetEntityId = c.Id, RelationshipType = "depends_on" }).ConfigureAwait(true);
+        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = a.Id, TargetEntityId = b.Id, RelationshipType = "uses" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = b.Id, TargetEntityId = c.Id, RelationshipType = "uses" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = a.Id, TargetEntityId = c.Id, RelationshipType = "depends_on" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await sut.ListRelationshipsAsync(entityId: a.Id).ConfigureAwait(true);
+        var result = await sut.ListRelationshipsAsync(entityId: a.Id, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, result.Relationships.Count);
         Assert.Equal(2, result.TotalCount);
@@ -131,13 +131,13 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     public async Task ListRelationships_FiltersByRelationshipType()
     {
         var sut = CreateSut();
-        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }).ConfigureAwait(true);
-        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }).ConfigureAwait(true);
+        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = a.Id, TargetEntityId = b.Id, RelationshipType = "uses" }).ConfigureAwait(true);
-        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = b.Id, TargetEntityId = a.Id, RelationshipType = "depends_on" }).ConfigureAwait(true);
+        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = a.Id, TargetEntityId = b.Id, RelationshipType = "uses" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.CreateRelationshipAsync(new GraphRelationshipRequest { SourceEntityId = b.Id, TargetEntityId = a.Id, RelationshipType = "depends_on" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await sut.ListRelationshipsAsync(relationshipType: "uses").ConfigureAwait(true);
+        var result = await sut.ListRelationshipsAsync(relationshipType: "uses", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result.Relationships);
         Assert.Equal("uses", result.Relationships[0].RelationshipType);
@@ -150,8 +150,8 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     public async Task UpdateRelationship_ModifiesFields()
     {
         var sut = CreateSut();
-        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }).ConfigureAwait(true);
-        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }).ConfigureAwait(true);
+        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var created = await sut.CreateRelationshipAsync(new GraphRelationshipRequest
         {
@@ -159,7 +159,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
             TargetEntityId = b.Id,
             RelationshipType = "uses",
             Weight = 0.5
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var updated = await sut.UpdateRelationshipAsync(created.Id, new GraphRelationshipRequest
         {
@@ -169,7 +169,7 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
             Description = "Updated relationship",
             Weight = 0.9,
             Metadata = """{"updated":true}"""
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(updated);
         Assert.Equal("depends_on", updated!.RelationshipType);
@@ -185,18 +185,18 @@ public sealed class GraphRagRelationshipCrudTests : IDisposable
     public async Task DeleteRelationship_ReturnsTrueOrFalse()
     {
         var sut = CreateSut();
-        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }).ConfigureAwait(true);
-        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }).ConfigureAwait(true);
+        var a = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "A", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var b = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "B", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var created = await sut.CreateRelationshipAsync(new GraphRelationshipRequest
         {
             SourceEntityId = a.Id,
             TargetEntityId = b.Id,
             RelationshipType = "uses"
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var deletedExisting = await sut.DeleteRelationshipAsync(created.Id).ConfigureAwait(true);
-        var deletedNonexistent = await sut.DeleteRelationshipAsync("gr-nonexistent").ConfigureAwait(true);
+        var deletedExisting = await sut.DeleteRelationshipAsync(created.Id, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var deletedNonexistent = await sut.DeleteRelationshipAsync("gr-nonexistent", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(deletedExisting);
         Assert.False(deletedNonexistent);

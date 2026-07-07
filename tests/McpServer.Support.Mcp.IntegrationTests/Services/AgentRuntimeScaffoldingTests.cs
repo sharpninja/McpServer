@@ -13,6 +13,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Services;
 /// Validates agent isolation (none, worktree, clone) and branch strategies (direct, feature) with real
 /// file system interactions and mocked process execution.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class AgentRuntimeScaffoldingTests
 {
     /// <summary>
@@ -25,7 +26,7 @@ public sealed class AgentRuntimeScaffoldingTests
         var strategy = new NoneAgentIsolationStrategy();
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "mcp-agent-runtime-none"));
 
-        var result = await strategy.PrepareWorkDirectoryAsync(workspacePath, "planner").ConfigureAwait(true);
+        var result = await strategy.PrepareWorkDirectoryAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(workspacePath, result);
     }
@@ -43,7 +44,7 @@ public sealed class AgentRuntimeScaffoldingTests
 
         var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-worktree-{Guid.NewGuid():N}");
         Directory.CreateDirectory(workspacePath);
-        await File.WriteAllTextAsync(Path.Combine(workspacePath, MarkerFileService.MarkerFileName), "marker").ConfigureAwait(true);
+        await File.WriteAllTextAsync(Path.Combine(workspacePath, MarkerFileService.MarkerFileName), "marker", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var strategy = new WorktreeAgentIsolationStrategy(
             processRunner,
@@ -52,7 +53,7 @@ public sealed class AgentRuntimeScaffoldingTests
 
         try
         {
-            _ = await strategy.PrepareWorkDirectoryAsync(workspacePath, "planner").ConfigureAwait(true);
+            _ = await strategy.PrepareWorkDirectoryAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             await processRunner.Received(1).RunAsync(
                 Arg.Is<ProcessRunRequest>(request =>
@@ -82,7 +83,7 @@ public sealed class AgentRuntimeScaffoldingTests
 
         var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-clone-{Guid.NewGuid():N}");
         Directory.CreateDirectory(workspacePath);
-        await File.WriteAllTextAsync(Path.Combine(workspacePath, MarkerFileService.MarkerFileName), "marker").ConfigureAwait(true);
+        await File.WriteAllTextAsync(Path.Combine(workspacePath, MarkerFileService.MarkerFileName), "marker", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var strategy = new CloneAgentIsolationStrategy(
             processRunner,
@@ -91,7 +92,7 @@ public sealed class AgentRuntimeScaffoldingTests
 
         try
         {
-            _ = await strategy.PrepareWorkDirectoryAsync(workspacePath, "planner").ConfigureAwait(true);
+            _ = await strategy.PrepareWorkDirectoryAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             await processRunner.Received(1).RunAsync(
                 Arg.Is<ProcessRunRequest>(request =>
@@ -122,7 +123,7 @@ public sealed class AgentRuntimeScaffoldingTests
         Directory.CreateDirectory(gitPackPath);
 
         var packIndexPath = Path.Combine(gitPackPath, "pack-test.idx");
-        await File.WriteAllTextAsync(packIndexPath, "idx").ConfigureAwait(true);
+        await File.WriteAllTextAsync(packIndexPath, "idx", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         File.SetAttributes(packIndexPath, File.GetAttributes(packIndexPath) | FileAttributes.ReadOnly);
 
         var strategy = new CloneAgentIsolationStrategy(
@@ -132,7 +133,7 @@ public sealed class AgentRuntimeScaffoldingTests
 
         try
         {
-            await strategy.CleanupAsync(workspacePath, "planner").ConfigureAwait(true);
+            await strategy.CleanupAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.False(Directory.Exists(clonePath));
         }
@@ -156,7 +157,7 @@ public sealed class AgentRuntimeScaffoldingTests
         var workDirectory = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "mcp-branch-direct"));
         var strategy = new DirectAgentBranchStrategy(processRunner);
 
-        var branch = await strategy.PrepareBranchAsync(workDirectory, "planner").ConfigureAwait(true);
+        var branch = await strategy.PrepareBranchAsync(workDirectory, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("main", branch);
         await processRunner.Received(1).RunAsync(
@@ -192,10 +193,10 @@ public sealed class AgentRuntimeScaffoldingTests
         var workDirectory = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "mcp-branch-feature"));
         var strategy = new FeatureAgentBranchStrategy(processRunner, NullLogger<FeatureAgentBranchStrategy>.Instance);
 
-        var branch = await strategy.PrepareBranchAsync(workDirectory, "planner").ConfigureAwait(true);
+        var branch = await strategy.PrepareBranchAsync(workDirectory, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.StartsWith("agent/planner/", branch, StringComparison.Ordinal);
 
-        await strategy.FinalizeBranchAsync(workDirectory, "planner").ConfigureAwait(true);
+        await strategy.FinalizeBranchAsync(workDirectory, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await processRunner.Received().RunAsync(
             Arg.Is<ProcessRunRequest>(request => request != null && request.WorkingDirectory == workDirectory),

@@ -21,7 +21,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.SubmitTurnAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "Hello" }))
+                () => sut.SubmitTurnAsync("voice-1", new VoiceTurnRequest { UserTranscriptText = "Hello" }, cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("not transaction compensated", ex.Message, StringComparison.OrdinalIgnoreCase);
@@ -38,7 +38,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
 
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.SendSessionMessageAsync("voice-1", "User is here."))
+                () => sut.SendSessionMessageAsync("voice-1", "User is here.", cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("txn degraded", ex.Message, StringComparison.Ordinal);
@@ -57,7 +57,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
         var events = new List<VoiceTurnStreamEvent>();
         await foreach (var streamEvent in sut.SubmitTurnStreamingAsync(
                 "voice-1",
-                new VoiceTurnRequest { UserTranscriptText = "Hello" })
+                new VoiceTurnRequest { UserTranscriptText = "Hello" }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true))
         {
             events.Add(streamEvent);
@@ -79,7 +79,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
             .Returns(Task.FromResult<VoiceSessionStatusDto?>(CreateStatus()));
         var sut = CreateSut(inner, new CapturingCoordinator(enabled: true));
 
-        var result = await sut.GetStatusAsync("voice-1").ConfigureAwait(true);
+        var result = await sut.GetStatusAsync("voice-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(result);
         Assert.Equal("voice-1", result!.SessionId);
@@ -106,7 +106,7 @@ public sealed class TransactionGatedVoiceConversationServiceTests
             new CapturingCoordinator(enabled: true),
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
-        var result = await sut.CreateSessionAsync(new VoiceSessionCreateRequest()).ConfigureAwait(true);
+        var result = await sut.CreateSessionAsync(new VoiceSessionCreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("voice-1", result.SessionId);
         await inner.Received(1)

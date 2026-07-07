@@ -18,17 +18,17 @@ public sealed class VoiceConversationOptions
     public bool Enabled { get; set; } = true;
 
     /// <summary>
-    /// Copilot model identifier passed to Copilot CLI via <c>--model</c>.
+    /// Default model identifier passed to compatible CLI agents.
     /// </summary>
     public string CopilotModel { get; set; } = "gpt-5.3-codex";
 
     /// <summary>
     /// Default execution strategy used for voice sessions when callers do not explicitly choose one.
-    /// Supported values are <c>copilot-cli</c> and <c>hosted-mcp-agent</c>.
+    /// Supported values are <c>one-shot-cli</c>, <c>copilot-cli</c>, <c>codex-cli</c>, and <c>hosted-mcp-agent</c>.
     /// The legacy alias <c>hosted-agentframework</c> is also accepted and normalized
     /// to <c>hosted-mcp-agent</c> for backward compatibility.
     /// </summary>
-    public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CopilotCli;
+    public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.OneShotCli;
 
     /// <summary>
     /// Optional API key injected into the underlying agent/model process for voice sessions.
@@ -65,7 +65,7 @@ public sealed class VoiceConversationOptions
     public int MaxDeletesPerTurn { get; set; } = 1;
 
     /// <summary>
-    /// Working directory for Copilot CLI. Empty means use the host content root.
+    /// Working directory for the CLI agent. Empty means use the host content root.
     /// </summary>
     public string? WorkingDirectory { get; set; }
 
@@ -85,7 +85,7 @@ public sealed class VoiceConversationOptions
     public int TranscriptContextEntryLimit { get; set; } = 20;
 
     /// <summary>
-    /// When <see langword="true"/>, voice chat launches the Copilot CLI on the interactive desktop
+    /// When <see langword="true"/>, voice chat launches the CLI agent on the interactive desktop
     /// using <c>CreateProcessWithTokenW</c> instead of <see cref="System.Diagnostics.Process.Start(System.Diagnostics.ProcessStartInfo)"/>.
     /// This is required when the MCP server runs as a Windows service.
     /// </summary>
@@ -97,13 +97,13 @@ public sealed class VoiceConversationOptions
     public TimeSpan SessionIdleTimeoutMinutes { get; set; } = TimeSpan.FromMinutes(15);
 
     /// <summary>
-    /// Command sent to the Copilot subprocess before terminating an idle session.
+    /// Command sent to the CLI agent subprocess before terminating an idle session.
     /// The subprocess is expected to respond with the <see cref="IdleShutdownSentinel"/> text.
     /// </summary>
     public string IdleShutdownCommand { get; set; } = "Commit changes and update session log, then announce 'Ready to shut down'";
 
     /// <summary>
-    /// Sentinel text the server waits for in the Copilot response before terminating an idle session.
+    /// Sentinel text the server waits for in the CLI agent response before terminating an idle session.
     /// </summary>
     public string IdleShutdownSentinel { get; set; } = "Ready to shut down";
 }

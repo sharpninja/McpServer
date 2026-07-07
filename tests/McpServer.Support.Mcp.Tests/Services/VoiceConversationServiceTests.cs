@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
@@ -26,7 +26,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var second = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
@@ -34,7 +34,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(first.SessionId, second.SessionId);
     }
@@ -50,7 +50,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var second = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
@@ -58,7 +58,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-b",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEqual(first.SessionId, second.SessionId);
     }
@@ -71,9 +71,9 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             OneShotSession = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var sent = await service.SendSessionMessageAsync(created.SessionId, "User is here.").ConfigureAwait(true);
+        var sent = await service.SendSessionMessageAsync(created.SessionId, "User is here.", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(sent);
     }
@@ -86,7 +86,7 @@ public sealed class VoiceConversationServiceTests
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
             AgentName = "planner",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(AgentExecutionStrategyNames.HostedMcpAgent, created.ExecutionStrategy);
     }
@@ -100,7 +100,7 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             ExecutionStrategy = AgentExecutionStrategyNames.CopilotCli,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(AgentExecutionStrategyNames.CopilotCli, created.ExecutionStrategy);
     }
@@ -118,11 +118,11 @@ public sealed class VoiceConversationServiceTests
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
             AgentName = "planner",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var response = await service.SubmitTurnAsync(created.SessionId, new VoiceTurnRequest
         {
             UserTranscriptText = "hello",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(response);
         Assert.Equal("completed", response!.Status);
@@ -143,11 +143,11 @@ public sealed class VoiceConversationServiceTests
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
             AgentName = "planner",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var response = await service.SubmitTurnAsync(created.SessionId, new VoiceTurnRequest
         {
             UserTranscriptText = "hello",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(response);
         Assert.NotNull(hostedStrategy.LastRequest);
@@ -162,25 +162,25 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             WorkspacePath = @"E:\ws-a",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var events = await CollectAsync(service.SubmitTurnStreamingAsync(created.SessionId, new VoiceTurnRequest
         {
             UserTranscriptText = "Read the file .github/copilot-instructions.md and follow those instructions.",
-        })).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         var terminal = Assert.Single(events, static evt => evt.Type is "done" or "error");
         Assert.Equal("error", terminal.Type);
         Assert.Contains("No response returned from voice runtime", terminal.Message, StringComparison.Ordinal);
         Assert.DoesNotContain(events, static evt => evt.Type == "done" && evt.Status == "completed");
 
-        var status = await service.GetStatusAsync(created.SessionId).ConfigureAwait(true);
+        var status = await service.GetStatusAsync(created.SessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(status);
         Assert.Equal("error", status!.Status);
         Assert.Contains("No response returned from voice runtime", status.LastError, StringComparison.Ordinal);
         Assert.Equal(2, status.TranscriptCount);
 
-        var transcript = await service.GetTranscriptAsync(created.SessionId).ConfigureAwait(true);
+        var transcript = await service.GetTranscriptAsync(created.SessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(transcript);
         Assert.Equal(2, transcript!.Items.Count);
         Assert.Contains(transcript.Items, static item => item.Role == "user");
@@ -190,7 +190,7 @@ public sealed class VoiceConversationServiceTests
     }
 
     [Fact]
-    public async Task CopilotInteractiveSession_ReadInitialResponseStreamingAsync_StdoutClosesAfterNonzeroExit_ThrowsDiagnostic()
+    public async Task AgentCliInteractiveSession_ReadInitialResponseStreamingAsync_StdoutClosesAfterNonzeroExit_ThrowsDiagnostic()
     {
         const string stderr = "GitHub Copilot CLI requires Node.js v24 or higher.";
         var process = new FakeSpawnedProcess(stdout: string.Empty, stderr: stderr, exitCode: 1);
@@ -199,8 +199,8 @@ public sealed class VoiceConversationServiceTests
         processEnvironment
             .ResolveExecutable(Arg.Any<System.Diagnostics.ProcessStartInfo>(), Arg.Any<string>())
             .Returns(call => call.ArgAt<string>(1));
-        var client = new CopilotClient(
-            CreateOptionsMonitor(new CopilotClientOptions
+        var client = new AgentCliClient(
+            CreateOptionsMonitor(new AgentCliClientOptions
             {
                 AgentPath = "copilot",
                 Model = "auto",
@@ -209,27 +209,28 @@ public sealed class VoiceConversationServiceTests
             }),
             processEnvironment,
             spawner,
-            NullLogger<CopilotClient>.Instance);
+            NullLogger<AgentCliClient>.Instance);
 
         await using var session = client.CreateInteractiveSession("hello");
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
         {
-            await foreach (var _ in session.ReadInitialResponseStreamingAsync().ConfigureAwait(true))
+            await foreach (var _ in session.ReadInitialResponseStreamingAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))
             {
             }
         }).ConfigureAwait(true);
 
-        Assert.Contains("Copilot CLI exited with code 1", exception.Message, StringComparison.Ordinal);
+        Assert.Contains("CLI agent exited with code 1", exception.Message, StringComparison.Ordinal);
         Assert.Contains("Node.js v24", exception.Message, StringComparison.Ordinal);
     }
 
     private static VoiceConversationService CreateService(
-        string defaultExecutionStrategy = AgentExecutionStrategyNames.CopilotCli,
+        string defaultExecutionStrategy = AgentExecutionStrategyNames.OneShotCli,
         string? modelApiKey = null,
         string modelApiKeyEnvironmentVariableName = "OPENAI_API_KEY",
-        IAgentExecutionStrategy? hostedStrategy = null)
+        IAgentExecutionStrategy? hostedStrategy = null,
+        IAgentExecutionStrategy? oneShotStrategy = null)
     {
-        var copilotClient = Substitute.For<ICopilotClient>();
+        var copilotClient = Substitute.For<IAgentCliClient>();
         var workspaceAccessor = CreateWorkspaceAccessor();
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
         var hostEnvironment = Substitute.For<IHostEnvironment>();
@@ -239,6 +240,7 @@ public sealed class VoiceConversationServiceTests
         var strategyResolver = new AgentExecutionStrategyResolver(
         [
             new CopilotCliAgentExecutionStrategy(copilotClient),
+            oneShotStrategy ?? new FakeAgentExecutionStrategy(AgentExecutionStrategyNames.OneShotCli),
             hostedStrategy ?? new FakeAgentExecutionStrategy(AgentExecutionStrategyNames.HostedMcpAgent),
         ]);
         var gitHubCliService = Substitute.For<IGitHubCliService>();
@@ -340,16 +342,16 @@ public sealed class VoiceConversationServiceTests
 
         public Task EndAsync(TimeSpan timeout) => Task.CompletedTask;
 
-        public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult(new CopilotResult { Body = FinalResponseBody, State = CopilotResultState.Success });
+        public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+            Task.FromResult(new AgentCliResult { Body = FinalResponseBody, State = AgentCliResultState.Success });
 
         public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default) =>
             EmptyAsyncEnumerable();
 
         public Task SendEscapeAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
 
-        public Task<CopilotResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
-            Task.FromResult(new CopilotResult { Body = FinalResponseBody, State = CopilotResultState.Success });
+        public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+            Task.FromResult(new AgentCliResult { Body = FinalResponseBody, State = AgentCliResultState.Success });
 
         public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default) =>
             EmptyAsyncEnumerable();

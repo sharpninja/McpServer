@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -107,11 +108,20 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         var (items, history, metadata) = await ReadLegacyAsync(legacyPath, cancellationToken).ConfigureAwait(false);
 
         foreach (var item in items)
+        {
             ctx.TodoItems.Add(item);
+            ctx.TodoItemListItems.AddRange(item.ListItems);
+            ctx.TodoItemTasks.AddRange(item.ImplementationTaskRows);
+        }
+
         foreach (var row in history)
             ctx.TodoAuditHistory.Add(row);
         if (metadata is not null)
+        {
             ctx.TodoDocumentMetadata.Add(metadata);
+            ctx.TodoDocumentNotes.AddRange(metadata.Notes);
+            ctx.TodoCompletedGroups.AddRange(metadata.CompletedGroups);
+        }
 
         await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await WriteMarkerAsync(markerPath, $"imported items={items.Count} history={history.Count} meta={(metadata is null ? 0 : 1)}", cancellationToken).ConfigureAwait(false);
@@ -179,33 +189,163 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         await using var reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
         while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {
-            result.Add(new TodoItemEntity
+            var id = reader.GetString(0);
+            var entity = new TodoItemEntity
             {
-                Id = reader.GetString(0),
+                Id = id,
                 Title = reader.GetString(1),
                 Section = reader.GetString(2),
                 Priority = reader.GetString(3),
                 Done = reader.GetInt64(4) != 0,
                 Estimate = reader.IsDBNull(5) ? null : reader.GetString(5),
                 Note = reader.IsDBNull(6) ? null : reader.GetString(6),
-                DescriptionJson = reader.IsDBNull(7) ? null : reader.GetString(7),
-                TechnicalDetailsJson = reader.IsDBNull(8) ? null : reader.GetString(8),
-                ImplementationTasksJson = reader.IsDBNull(9) ? null : reader.GetString(9),
                 CompletedDate = reader.IsDBNull(10) ? null : reader.GetString(10),
                 DoneSummary = reader.IsDBNull(11) ? null : reader.GetString(11),
                 Remaining = reader.IsDBNull(12) ? null : reader.GetString(12),
                 PriorityNote = reader.IsDBNull(13) ? null : reader.GetString(13),
                 Reference = reader.IsDBNull(14) ? null : reader.GetString(14),
-                DependsOnJson = reader.IsDBNull(15) ? null : reader.GetString(15),
-                FunctionalRequirementsJson = reader.IsDBNull(16) ? null : reader.GetString(16),
-                TechnicalRequirementsJson = reader.IsDBNull(17) ? null : reader.GetString(17),
                 ItemKind = reader.GetString(18),
                 SectionOrder = (int)reader.GetInt64(19),
                 ItemOrder = (int)reader.GetInt64(20),
                 PhaseLabel = reader.IsDBNull(21) ? null : reader.GetString(21),
-            });
+            };
+
+            // TR-MCP-TODO-005: legacy JSON list columns land as 4NF child rows.
+            AddListRows(entity, id, "Description", reader.IsDBNull(7) ? null : reader.GetString(7));
+            AddListRows(entity, id, "TechnicalDetail", reader.IsDBNull(8) ? null : reader.GetString(8));
+            AddListRows(entity, id, "DependsOn", reader.IsDBNull(15) ? null : reader.GetString(15));
+            AddListRows(entity, id, "FunctionalRequirement", reader.IsDBNull(16) ? null : reader.GetString(16));
+            AddListRows(entity, id, "TechnicalRequirement", reader.IsDBNull(17) ? null : reader.GetString(17));
+            AddTaskRows(entity, id, reader.IsDBNull(9) ? null : reader.GetString(9));
+
+            result.Add(entity);
         }
         return result;
+    }
+
+    private static void AddListRows(TodoItemEntity entity, string todoId, string listType, string? json)
+    {
+        var values = DeserializeStringList(json);
+        if (values is null)
+            return;
+        for (var i = 0; i < values.Count; i++)
+        {
+            entity.ListItems.Add(new TodoItemListItemEntity
+            {
+                TodoId = todoId,
+                ListType = listType,
+                Ordinal = i,
+                Value = values[i],
+            });
+        }
+    }
+
+    private static void AddTaskRows(TodoItemEntity entity, string todoId, string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return;
+        List<LegacyTask>? tasks;
+        try
+        {
+            tasks = JsonSerializer.Deserialize<List<LegacyTask>>(json, s_legacyJson);
+        }
+        catch (JsonException)
+        {
+            return;
+        }
+
+        if (tasks is null)
+            return;
+        for (var i = 0; i < tasks.Count; i++)
+        {
+            entity.ImplementationTaskRows.Add(new TodoItemTaskEntity
+            {
+                TodoId = todoId,
+                Ordinal = i,
+                Task = tasks[i].Task ?? string.Empty,
+                Done = tasks[i].Done,
+            });
+        }
+    }
+
+    private static List<string>? DeserializeStringList(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return null;
+        try
+        {
+            return JsonSerializer.Deserialize<List<string>>(json);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
+    private static readonly JsonSerializerOptions s_legacyJson = new(JsonSerializerDefaults.Web);
+
+    private sealed record LegacyTask
+    {
+        public string? Task { get; init; }
+
+        public bool Done { get; init; }
+    }
+
+    private static List<TodoDocumentNoteEntity> ToNoteRows(string? json)
+    {
+        var notes = DeserializeStringList(json);
+        return notes is null
+            ? []
+            : notes.Select((value, i) => new TodoDocumentNoteEntity { SingletonId = 1, Ordinal = i, Value = value }).ToList();
+    }
+
+    private static List<TodoCompletedGroupEntity> ToCompletedGroupRows(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return [];
+        List<LegacyCompletedGroup>? groups;
+        try
+        {
+            groups = JsonSerializer.Deserialize<List<LegacyCompletedGroup>>(json, s_legacyJson);
+        }
+        catch (JsonException)
+        {
+            return [];
+        }
+
+        return groups is null
+            ? []
+            : groups.Select((group, gi) => new TodoCompletedGroupEntity
+            {
+                SingletonId = 1,
+                Ordinal = gi,
+                Date = group?.Date,
+                Items = group?.Items is null
+                    ? []
+                    : group.Items.Select((item, ii) => new TodoCompletedItemEntity
+                    {
+                        Ordinal = ii,
+                        ItemId = item?.Id,
+                        Qualifier = item?.Qualifier,
+                        Summary = item?.Summary,
+                    }).ToList(),
+            }).ToList();
+    }
+
+    private sealed record LegacyCompletedGroup
+    {
+        public string? Date { get; init; }
+
+        public List<LegacyCompletedItem>? Items { get; init; }
+    }
+
+    private sealed record LegacyCompletedItem
+    {
+        public string? Id { get; init; }
+
+        public string? Qualifier { get; init; }
+
+        public string? Summary { get; init; }
     }
 
     private static async Task<List<TodoAuditHistoryEntity>> ReadHistoryAsync(SqliteConnection connection, CancellationToken cancellationToken)
@@ -250,8 +390,8 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         return new TodoDocumentMetadataEntity
         {
             SingletonId = 1,
-            NotesJson = reader.IsDBNull(0) ? null : reader.GetString(0),
-            CompletedJson = reader.IsDBNull(1) ? null : reader.GetString(1),
+            Notes = ToNoteRows(reader.IsDBNull(0) ? null : reader.GetString(0)),
+            CompletedGroups = ToCompletedGroupRows(reader.IsDBNull(1) ? null : reader.GetString(1)),
             CodeReviewReference = reader.IsDBNull(2) ? null : reader.GetString(2),
             LastImportedFromYamlUtc = reader.IsDBNull(3) ? null : reader.GetString(3),
             LastProjectedToYamlUtc = reader.IsDBNull(4) ? null : reader.GetString(4),

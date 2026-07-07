@@ -63,14 +63,14 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     {
         var workspacePath = Path.Combine(Path.GetTempPath(), $"todo-fixed-{Guid.NewGuid():N}");
         await using var connection = new SqliteConnection("Data Source=:memory:");
-        await connection.OpenAsync().ConfigureAwait(true);
+        await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var services = new ServiceCollection();
         services.AddScoped(_ => new WorkspaceContext());
         services.AddDbContext<McpDbContext>(opts => opts.UseSqlite(connection));
         await using var provider = services.BuildServiceProvider();
         using (var scope = provider.CreateScope())
         {
-            await scope.ServiceProvider.GetRequiredService<McpDbContext>().Database.EnsureCreatedAsync().ConfigureAwait(true);
+            await scope.ServiceProvider.GetRequiredService<McpDbContext>().Database.EnsureCreatedAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         using var sut = new EfTodoService(
@@ -88,14 +88,14 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             Title = "Fixed workspace todo",
             Section = "Backlog",
             Priority = "high",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(created.Success, created.Error);
         using var verifyScope = provider.CreateScope();
         var db = verifyScope.ServiceProvider.GetRequiredService<McpDbContext>();
         var record = await db.TodoItems
             .IgnoreQueryFilters()
-            .SingleAsync(row => row.Id == "TODO-FIXED-001")
+            .SingleAsync(row => row.Id == "TODO-FIXED-001", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(workspacePath, record.WorkspaceId);
     }
@@ -116,20 +116,20 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             Priority = "high",
             FunctionalRequirements = ["FR-LINK-001"],
             TechnicalRequirements = ["TR-LINK-001"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(created.Success, created.Error);
 
         using var scope = _serviceProvider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        Assert.True(await db.TodoItems.AnyAsync(row => row.Id == "TODO-LINK-001").ConfigureAwait(true));
-        Assert.True(await db.Requirements.AnyAsync(row => row.Kind == "fr" && row.Id == "FR-LINK-001").ConfigureAwait(true));
-        Assert.True(await db.Requirements.AnyAsync(row => row.Kind == "tr" && row.Id == "TR-LINK-001").ConfigureAwait(true));
+        Assert.True(await db.TodoItems.AnyAsync(row => row.Id == "TODO-LINK-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.True(await db.Requirements.AnyAsync(row => row.Kind == "fr" && row.Id == "FR-LINK-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.True(await db.Requirements.AnyAsync(row => row.Kind == "tr" && row.Id == "TR-LINK-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         var links = await db.TodoRequirementLinks
             .OrderBy(row => row.RequirementKind)
             .Select(row => row.RequirementKind + ":" + row.RequirementId)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(["fr:FR-LINK-001", "tr:TR-LINK-001"], links);
     }
@@ -148,14 +148,14 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             Section = "Backlog",
             Priority = "high",
             FunctionalRequirements = ["FR-LINK-004"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(created.Success, created.Error);
 
         using var scope = _serviceProvider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var row = await db.Requirements
-            .SingleAsync(item => item.Kind == "fr" && item.Id == "FR-LINK-004")
+            .SingleAsync(item => item.Kind == "fr" && item.Id == "FR-LINK-004", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("Placeholder requirement backfilled for TODO link FR-LINK-004.", row.Body);
@@ -178,7 +178,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             Priority = "high",
             FunctionalRequirements = ["FR-REQ-006: Client must throw typed exceptions for HTTP error responses"],
             TechnicalRequirements = ["TR-MCP-002: RequirementsDocumentService parses all four files"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(created.Success, created.Error);
 
@@ -187,7 +187,7 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
         var links = await db.TodoRequirementLinks
             .OrderBy(row => row.RequirementKind)
             .Select(row => row.RequirementKind + ":" + row.RequirementId)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(["fr:FR-REQ-006", "tr:TR-MCP-002"], links);
@@ -209,14 +209,14 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
             Priority = "high",
             FunctionalRequirements = ["FR-LINK-OLD-001"],
             TechnicalRequirements = ["TR-OLD-001"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
 
         var updated = await _sut.UpdateAsync("TODO-LINK-002", new TodoUpdateRequest
         {
             FunctionalRequirements = ["FR-LINK-NEW-001"],
             TechnicalRequirements = ["TR-NEW-001"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(updated.Success, updated.Error);
         Assert.Equal(["FR-LINK-NEW-001"], updated.Item!.FunctionalRequirements);
@@ -227,14 +227,14 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
         var activeLinks = await db.TodoRequirementLinks
             .OrderBy(row => row.RequirementKind)
             .Select(row => row.RequirementKind + ":" + row.RequirementId)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(["fr:FR-LINK-NEW-001", "tr:TR-NEW-001"], activeLinks);
 
         var oldLinks = await db.TodoRequirementLinks
             .IgnoreQueryFilters()
             .Where(row => row.RequirementId == "FR-LINK-OLD-001" || row.RequirementId == "TR-OLD-001")
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(2, oldLinks.Count);
         Assert.All(oldLinks, row => Assert.True((bool)db.Entry(row).Property("IsDeleted").CurrentValue!));

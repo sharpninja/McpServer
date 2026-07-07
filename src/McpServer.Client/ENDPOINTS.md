@@ -906,6 +906,10 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
   - Request DTO/body: TodoCreateRequest
   - Response DTO/body: TodoMutationResult
   - Source: TodoClient.cs
+- CloseAsync: POST /mcpserver/todo/{id}/close
+  - Request DTO/body: none
+  - Response DTO/body: TodoMutationResult
+  - Source: TodoClient.cs
 - CreateIterationPhaseAsync: POST /mcpserver/todo-execution/phases
   - Request DTO/body: CreateIterationPhaseRequest
   - Response DTO/body: CreateIterationPhaseResult
@@ -1100,8 +1104,9 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
   - Request DTO/body: TriageGroupSelectionRequest
   - Response DTO/body: TriageGroupEditResult
   - Source: TriageClient.cs
-- RetryGroupAsync: POST /mcpserver/triage/groups/{id}/retry
+- RetryGroupAsync: POST /mcpserver/triage/groups/{id}/retry?force={force}
   - Request DTO/body: none
+  - Query parameters include force optional boolean to fail an active processing run before requeueing
   - Response DTO/body: TriageGroupDetail
   - Source: TriageClient.cs
 - SubmitReportAsync: POST /mcpserver/triage/reports
@@ -1223,6 +1228,10 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
 - ListAsync: GET /mcpserver/workspace
   - Request DTO/body: none
   - Response DTO/body: WorkspaceListResult
+  - Source: WorkspaceClient.cs
+- RegenerateMarkersAsync: POST /mcpserver/workspace/markers/regenerate
+  - Request DTO/body: none
+  - Response DTO/body: MarkerRegenerationResult
   - Source: WorkspaceClient.cs
 - StartAsync: POST /mcpserver/workspace/{key}/start
   - Request DTO/body: none
@@ -4190,6 +4199,11 @@ Field names below are the exact JSON property names declared with [JsonPropertyN
 #### GlobalPromptUpdateRequest (class)
 
 - template: string?
+
+#### MarkerRegenerationResult (class)
+
+- regenerated: bool
+- workspaceCount: int
 
 #### WorkspaceListResult (class)
 

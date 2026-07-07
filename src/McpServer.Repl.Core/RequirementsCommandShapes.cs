@@ -512,6 +512,17 @@ public interface ICreateFrParams
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>
+    /// Gets structured acceptance criteria attached to this FR.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>Gets the first requirement layer where this FR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>Gets the optional last requirement layer where this FR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -611,6 +622,17 @@ public interface IUpdateFrParams
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>
+    /// Gets structured acceptance criteria. Null preserves existing value.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>Gets the updated first requirement layer where this FR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>Gets the updated optional last requirement layer where this FR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -883,6 +905,17 @@ public interface ICreateTrParams
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>
+    /// Gets structured acceptance criteria attached to this TR.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>Gets the first requirement layer where this TR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>Gets the optional last requirement layer where this TR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -974,6 +1007,17 @@ public interface IUpdateTrParams
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>
+    /// Gets structured acceptance criteria. Null preserves existing value.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>Gets the updated first requirement layer where this TR applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>Gets the updated optional last requirement layer where this TR applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -1242,6 +1286,17 @@ public interface ICreateTestParams
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>
+    /// Gets structured acceptance criteria attached to this TEST.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>Gets the first requirement layer where this TEST applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>Gets the optional last requirement layer where this TEST applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>
@@ -1333,6 +1388,17 @@ public interface IUpdateTestParams
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>
+    /// Gets structured acceptance criteria. Null preserves existing value.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>Gets the updated first requirement layer where this TEST applies.</summary>
+    string? ScopeStartLayerKey { get; }
+
+    /// <summary>Gets the updated optional last requirement layer where this TEST applies.</summary>
+    string? ScopeEndLayerKey { get; }
 }
 
 /// <summary>

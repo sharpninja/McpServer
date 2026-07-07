@@ -46,7 +46,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         using (db)
         {
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.SubmitAsync(CreateSession(sessionId)))
+                    () => sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken))
                 .ConfigureAwait(true);
             Assert.Contains("signing failed", ex.Message, StringComparison.Ordinal);
         }
@@ -84,7 +84,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         using (db)
         {
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.SubmitAsync(CreateSession(sessionId)))
+                    () => sut.SubmitAsync(CreateSession(sessionId), cancellationToken: TestContext.Current.CancellationToken))
                 .ConfigureAwait(true);
             Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
         }
@@ -145,7 +145,7 @@ public sealed class TransactionGatedSessionLogServiceTests
                                     Status = "completed",
                                 },
                             ],
-                        }))
+                        }, cancellationToken: TestContext.Current.CancellationToken))
                 .ConfigureAwait(true);
             Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
         }
@@ -184,7 +184,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         using (db)
         {
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.DeleteSessionAsync(Agent, sessionId))
+                    () => sut.DeleteSessionAsync(Agent, sessionId, cancellationToken: TestContext.Current.CancellationToken))
                 .ConfigureAwait(true);
             Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
         }
@@ -232,7 +232,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         var (sut, db) = BuildGatedSut(connection, coordinator);
 
         using (db)
-            Assert.Equal(0, await sut.RepairWorkspaceStampsAsync(dryRun: true).ConfigureAwait(true));
+            Assert.Equal(0, await sut.RepairWorkspaceStampsAsync(dryRun: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Null(coordinator.Request);
     }
@@ -248,7 +248,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         using (db)
         {
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.RepairWorkspaceStampsAsync(dryRun: false))
+                    () => sut.RepairWorkspaceStampsAsync(dryRun: false, cancellationToken: TestContext.Current.CancellationToken))
                 .ConfigureAwait(true);
             Assert.Contains("not transaction compensated", ex.Message, StringComparison.Ordinal);
         }
@@ -267,7 +267,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         using (db)
         {
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                    () => sut.RepairWorkspaceStampsAsync(dryRun: false))
+                    () => sut.RepairWorkspaceStampsAsync(dryRun: false, cancellationToken: TestContext.Current.CancellationToken))
                 .ConfigureAwait(true);
             Assert.Contains("txn degraded", ex.Message, StringComparison.Ordinal);
         }
@@ -287,7 +287,7 @@ public sealed class TransactionGatedSessionLogServiceTests
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
         using (db)
-            Assert.Equal(0, await sut.RepairWorkspaceStampsAsync(dryRun: false).ConfigureAwait(true));
+            Assert.Equal(0, await sut.RepairWorkspaceStampsAsync(dryRun: false, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         Assert.Null(coordinator.Request);
     }

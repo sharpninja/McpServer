@@ -68,7 +68,7 @@ public sealed class AppendDialogTests
             }
         };
 
-        var submitResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var submitResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, submitResponse.StatusCode);
 
         // Now append dialog items
@@ -79,10 +79,10 @@ public sealed class AppendDialogTests
         };
 
         var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/DialogTest/{sessionId}/{requestId}/dialog";
-        var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, dialogItems);
+        var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, dialogItems, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("DialogTest", result!.Agent);
         Assert.Equal(sessionId, result.SessionId);
@@ -124,22 +124,22 @@ public sealed class AppendDialogTests
                 }
             }
         };
-        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
 
         var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/DialogAccumTest/{sessionId}/{requestId}/dialog";
 
         // First append
         var items1 = new[] { new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "model", content = "Step 1", category = "reasoning" } };
-        var r1 = await _fixture.Client.PostAsJsonAsync(dialogRoute, items1);
+        var r1 = await _fixture.Client.PostAsJsonAsync(dialogRoute, items1, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r1.StatusCode);
-        var res1 = await r1.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts);
+        var res1 = await r1.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(1, res1!.TotalDialogCount);
 
         // Second append
         var items2 = new[] { new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "tool", content = "Step 2", category = "tool_call" } };
-        var r2 = await _fixture.Client.PostAsJsonAsync(dialogRoute, items2);
+        var r2 = await _fixture.Client.PostAsJsonAsync(dialogRoute, items2, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r2.StatusCode);
-        var res2 = await r2.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts);
+        var res2 = await r2.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(2, res2!.TotalDialogCount);
     }
 
@@ -158,7 +158,7 @@ public sealed class AppendDialogTests
         var requestId = SessionLogEndpointFixture.GenerateRequestId("missing-request");
         var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/NoSuchAgent/{sessionId}/{requestId}/dialog";
         var items = new[] { new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "model", content = "test", category = "reasoning" } };
-        var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, items);
+        var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, items, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }

@@ -40,11 +40,11 @@ public sealed class StatusWorkspaceTests : IAsyncLifetime
     public async Task Status_AfterCreate_ReturnsProcessStatus()
     {
         var response = await _fixture.Client.GetAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/status");
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/status", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>();
+        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(status);
     }
 
@@ -53,7 +53,7 @@ public sealed class StatusWorkspaceTests : IAsyncLifetime
     public async Task Status_InvalidKey_Returns400()
     {
         var response = await _fixture.Client.GetAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/status");
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/status", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }

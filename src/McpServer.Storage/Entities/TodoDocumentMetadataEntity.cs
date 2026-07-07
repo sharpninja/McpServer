@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace McpServer.Support.Mcp.Storage.Entities;
 
@@ -28,11 +29,19 @@ public sealed class TodoDocumentMetadataEntity
     /// <summary>Fixed singleton key (always <c>1</c>). Composite-PK component.</summary>
     public int SingletonId { get; set; } = 1;
 
-    /// <summary>JSON-serialized top-level notes block.</summary>
-    public string? NotesJson { get; set; }
+    /// <summary>TR-MCP-TODO-005: 4NF top-level note rows (former <c>NotesJson</c>).</summary>
+    /// <remarks>
+    /// Not an EF navigation: loaded/attached explicitly and written from the dependent side
+    /// (the composite (WorkspaceId, SingletonId) parent key includes the tenant column; see
+    /// <c>RequirementAcceptanceCriterionEntity</c> for the rationale).
+    /// </remarks>
+    [NotMapped]
+    public List<TodoDocumentNoteEntity> Notes { get; set; } = [];
 
-    /// <summary>JSON-serialized archive of completed TODO items.</summary>
-    public string? CompletedJson { get; set; }
+    /// <summary>TR-MCP-TODO-005: 4NF completed-archive group rows (former <c>CompletedJson</c>).</summary>
+    /// <remarks>Not an EF navigation; same dependent-side handling as <see cref="Notes"/>.</remarks>
+    [NotMapped]
+    public List<TodoCompletedGroupEntity> CompletedGroups { get; set; } = [];
 
     /// <summary>Free-text reference to the code-review document anchor.</summary>
     [MaxLength(1024)]

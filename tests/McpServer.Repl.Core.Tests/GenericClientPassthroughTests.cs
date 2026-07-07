@@ -53,7 +53,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -79,7 +79,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("github", "ListIssuesAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("github", "ListIssuesAsync", args);
+        var result = await _passthrough.InvokeAsync("github", "ListIssuesAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("github", "ListIssuesAsync", args, Arg.Any<CancellationToken>());
@@ -102,7 +102,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("repo", "ReadFileAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("repo", "ReadFileAsync", args);
+        var result = await _passthrough.InvokeAsync("repo", "ReadFileAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("repo", "ReadFileAsync", args, Arg.Any<CancellationToken>());
@@ -129,7 +129,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("desktop", "LaunchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("desktop", "LaunchAsync", args);
+        var result = await _passthrough.InvokeAsync("desktop", "LaunchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("desktop", "LaunchAsync", args, Arg.Any<CancellationToken>());
@@ -156,7 +156,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("sessionlog", "QueryAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("sessionlog", "QueryAsync", args);
+        var result = await _passthrough.InvokeAsync("sessionlog", "QueryAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("sessionlog", "QueryAsync", args, Arg.Any<CancellationToken>());
@@ -175,7 +175,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("todo", "QueryAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new { Items = new List<object>(), TotalCount = 0 }));
 
-        var result = await _passthrough.InvokeAsync("todo", "QueryAsync", args);
+        var result = await _passthrough.InvokeAsync("todo", "QueryAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("todo", "QueryAsync", args, Arg.Any<CancellationToken>());
@@ -193,7 +193,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("requirements", "QueryAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new { Items = new List<object>(), TotalCount = 0 }));
 
-        var result = await _passthrough.InvokeAsync("requirements", "QueryAsync", args);
+        var result = await _passthrough.InvokeAsync("requirements", "QueryAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("requirements", "QueryAsync", args, Arg.Any<CancellationToken>());
@@ -210,7 +210,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("CoNtExT", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("CoNtExT", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("CoNtExT", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("CoNtExT", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -231,7 +231,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -245,7 +245,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "RebuildIndexAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new RebuildIndexResult { Status = "completed" }));
 
-        var result = await _passthrough.InvokeAsync("context", "RebuildIndexAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "RebuildIndexAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "RebuildIndexAsync", args, Arg.Any<CancellationToken>());
@@ -263,7 +263,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "PackAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextPack()));
 
-        var result = await _passthrough.InvokeAsync("context", "PackAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "PackAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "PackAsync", args, Arg.Any<CancellationToken>());
@@ -277,7 +277,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "ListSourcesAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSourcesResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "ListSourcesAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "ListSourcesAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "ListSourcesAsync", args, Arg.Any<CancellationToken>());
@@ -300,7 +300,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -318,7 +318,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -337,7 +337,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "IngestWebsiteAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new WebsiteIngestResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "IngestWebsiteAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "IngestWebsiteAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "IngestWebsiteAsync", args, Arg.Any<CancellationToken>());
@@ -356,7 +356,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -374,7 +374,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -396,7 +396,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("desktop", "LaunchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new DesktopLaunchResult()));
 
-        var result = await _passthrough.InvokeAsync("desktop", "LaunchAsync", args);
+        var result = await _passthrough.InvokeAsync("desktop", "LaunchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("desktop", "LaunchAsync", args, Arg.Any<CancellationToken>());
@@ -414,7 +414,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -433,7 +433,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new InvalidOperationException("Unknown client: unknownclient"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _passthrough.InvokeAsync("unknownclient", "SomeMethod", args));
+            async () => await _passthrough.InvokeAsync("unknownclient", "SomeMethod", args, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -445,7 +445,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new InvalidOperationException("Unknown method: NonExistentMethod on client: context"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _passthrough.InvokeAsync("context", "NonExistentMethod", args));
+            async () => await _passthrough.InvokeAsync("context", "NonExistentMethod", args, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -461,7 +461,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("Missing required parameter: query"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args));
+            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -477,7 +477,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("Type conversion error for parameter 'limit': cannot convert 'not-a-number' to System.Int32"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args));
+            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -492,7 +492,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("Null value provided for non-nullable parameter: query"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args));
+            async () => await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -507,7 +507,7 @@ public class GenericClientPassthroughTests
             .Returns<object?>(x => throw new ArgumentException("JSON deserialization error for parameter 'request'"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _passthrough.InvokeAsync("desktop", "LaunchAsync", args));
+            async () => await _passthrough.InvokeAsync("desktop", "LaunchAsync", args, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -535,7 +535,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var searchResult = result as ContextSearchResult;
@@ -563,7 +563,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("github", "ListIssuesAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("github", "ListIssuesAsync", args);
+        var result = await _passthrough.InvokeAsync("github", "ListIssuesAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var issueResult = result as GitHubIssueListResult;
@@ -590,7 +590,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("repo", "ReadFileAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("repo", "ReadFileAsync", args);
+        var result = await _passthrough.InvokeAsync("repo", "ReadFileAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var fileResult = result as RepoFileReadResult;
@@ -611,7 +611,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("repo", "WriteFileAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new RepoWriteResult { Written = true }));
 
-        var result = await _passthrough.InvokeAsync("repo", "WriteFileAsync", args);
+        var result = await _passthrough.InvokeAsync("repo", "WriteFileAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
     }
@@ -639,7 +639,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "PackAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("context", "PackAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "PackAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var packResult = result as ContextPack;
@@ -660,28 +660,28 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var searchResult = await _passthrough.InvokeAsync("context", "SearchAsync", new Dictionary<string, object?> { ["query"] = "test" });
+        var searchResult = await _passthrough.InvokeAsync("context", "SearchAsync", new Dictionary<string, object?> { ["query"] = "test" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(searchResult);
 
         // RebuildIndexAsync
         _passthrough.InvokeAsync("context", "RebuildIndexAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new RebuildIndexResult()));
 
-        var rebuildResult = await _passthrough.InvokeAsync("context", "RebuildIndexAsync", new Dictionary<string, object?>());
+        var rebuildResult = await _passthrough.InvokeAsync("context", "RebuildIndexAsync", new Dictionary<string, object?>(), cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(rebuildResult);
 
         // PackAsync
         _passthrough.InvokeAsync("context", "PackAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextPack()));
 
-        var packResult = await _passthrough.InvokeAsync("context", "PackAsync", new Dictionary<string, object?> { ["query"] = "test" });
+        var packResult = await _passthrough.InvokeAsync("context", "PackAsync", new Dictionary<string, object?> { ["query"] = "test" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(packResult);
 
         // ListSourcesAsync
         _passthrough.InvokeAsync("context", "ListSourcesAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSourcesResult()));
 
-        var sourcesResult = await _passthrough.InvokeAsync("context", "ListSourcesAsync", new Dictionary<string, object?>());
+        var sourcesResult = await _passthrough.InvokeAsync("context", "ListSourcesAsync", new Dictionary<string, object?>(), cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(sourcesResult);
     }
 
@@ -692,14 +692,14 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("github", "ListIssuesAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new GitHubIssueListResult()));
 
-        var listResult = await _passthrough.InvokeAsync("github", "ListIssuesAsync", new Dictionary<string, object?>());
+        var listResult = await _passthrough.InvokeAsync("github", "ListIssuesAsync", new Dictionary<string, object?>(), cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(listResult);
 
         // GetIssueAsync
         _passthrough.InvokeAsync("github", "GetIssueAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new GitHubIssueDetail()));
 
-        var getResult = await _passthrough.InvokeAsync("github", "GetIssueAsync", new Dictionary<string, object?> { ["number"] = 42 });
+        var getResult = await _passthrough.InvokeAsync("github", "GetIssueAsync", new Dictionary<string, object?> { ["number"] = 42 }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(getResult);
     }
 
@@ -710,7 +710,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("repo", "ReadFileAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new RepoFileReadResult()));
 
-        var readResult = await _passthrough.InvokeAsync("repo", "ReadFileAsync", new Dictionary<string, object?> { ["path"] = "test.txt" });
+        var readResult = await _passthrough.InvokeAsync("repo", "ReadFileAsync", new Dictionary<string, object?> { ["path"] = "test.txt" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(readResult);
 
         // WriteFileAsync
@@ -718,14 +718,14 @@ public class GenericClientPassthroughTests
             .Returns(Task.FromResult<object?>(new RepoWriteResult()));
 
         var writeResult = await _passthrough.InvokeAsync("repo", "WriteFileAsync", 
-            new Dictionary<string, object?> { ["path"] = "test.txt", ["content"] = "Hello" });
+            new Dictionary<string, object?> { ["path"] = "test.txt", ["content"] = "Hello" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(writeResult);
 
         // ListAsync
         _passthrough.InvokeAsync("repo", "ListAsync", Arg.Any<Dictionary<string, object?>>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new RepoListResult()));
 
-        var listResult = await _passthrough.InvokeAsync("repo", "ListAsync", new Dictionary<string, object?>());
+        var listResult = await _passthrough.InvokeAsync("repo", "ListAsync", new Dictionary<string, object?>(), cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(listResult);
     }
 
@@ -743,7 +743,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("desktop", "LaunchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new DesktopLaunchResult { Success = true }));
 
-        var result = await _passthrough.InvokeAsync("desktop", "LaunchAsync", args);
+        var result = await _passthrough.InvokeAsync("desktop", "LaunchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
     }
 
@@ -755,7 +755,7 @@ public class GenericClientPassthroughTests
             .Returns(Task.FromResult<object?>(new SessionLogQueryResult()));
 
         var queryResult = await _passthrough.InvokeAsync("sessionlog", "QueryAsync", 
-            new Dictionary<string, object?> { ["agent"] = "Copilot" });
+            new Dictionary<string, object?> { ["agent"] = "Copilot" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(queryResult);
 
         // SubmitAsync
@@ -763,7 +763,7 @@ public class GenericClientPassthroughTests
             .Returns(Task.FromResult<object?>(new SessionLogSubmitResult()));
 
         var submitResult = await _passthrough.InvokeAsync("sessionlog", "SubmitAsync", 
-            new Dictionary<string, object?> { ["sessionLog"] = new UnifiedSessionLogDto() });
+            new Dictionary<string, object?> { ["sessionLog"] = new UnifiedSessionLogDto() }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(submitResult);
     }
 
@@ -783,7 +783,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
     }
 
@@ -800,7 +800,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
     }
 
@@ -838,7 +838,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await _passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         await _passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
     }
@@ -862,7 +862,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("federation", "GetStatusAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("federation", "GetStatusAsync", args);
+        var result = await _passthrough.InvokeAsync("federation", "GetStatusAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var status = Assert.IsType<FederationStatusResponse>(result);
@@ -894,7 +894,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("federation", "AddTargetAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("federation", "AddTargetAsync", args);
+        var result = await _passthrough.InvokeAsync("federation", "AddTargetAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var target = Assert.IsType<FederationTargetInfo>(result);
@@ -933,7 +933,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("federation", "EnrollProxyAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("federation", "EnrollProxyAsync", args);
+        var result = await _passthrough.InvokeAsync("federation", "EnrollProxyAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var enrollment = Assert.IsType<FederationEnrollmentResponse>(result);
@@ -959,7 +959,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("federation", "PushAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("federation", "PushAsync", args);
+        var result = await _passthrough.InvokeAsync("federation", "PushAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var push = Assert.IsType<FederationPushResult>(result);
@@ -981,7 +981,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("federation", "ListTargetsAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("federation", "ListTargetsAsync", args);
+        var result = await _passthrough.InvokeAsync("federation", "ListTargetsAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var targets = Assert.IsType<List<FederationTargetInfo>>(result);
@@ -1007,7 +1007,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("federation", "DiscoverFromTunnelsAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("federation", "DiscoverFromTunnelsAsync", args);
+        var result = await _passthrough.InvokeAsync("federation", "DiscoverFromTunnelsAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var discovery = Assert.IsType<TunnelDiscoveryResult>(result);
@@ -1033,7 +1033,7 @@ public class GenericClientPassthroughTests
         _passthrough.InvokeAsync("federation", "GetConnectionAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await _passthrough.InvokeAsync("federation", "GetConnectionAsync", args);
+        var result = await _passthrough.InvokeAsync("federation", "GetConnectionAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var conn = Assert.IsType<FederationConnectionInfo>(result);

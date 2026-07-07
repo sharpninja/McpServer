@@ -133,7 +133,13 @@ public static class ServiceDefaultsExtensions
     public static WebApplication UseGlobalExceptionHandler(this WebApplication app)
     {
         ArgumentNullException.ThrowIfNull(app);
-        app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+        app.Use(next =>
+        {
+            var logger = app.Services.GetRequiredService<ILogger<GlobalExceptionHandlerMiddleware>>();
+            var middleware = new GlobalExceptionHandlerMiddleware(next, logger);
+            return middleware.InvokeAsync;
+        });
+
         return app;
     }
 

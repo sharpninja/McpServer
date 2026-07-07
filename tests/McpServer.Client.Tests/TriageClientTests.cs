@@ -33,7 +33,7 @@ public sealed class TriageClientTests
             Title = "Wrapper hides error",
             Summary = "client.triage should expose accepted queue state.",
             Component = "mcpserver-codex-plugin",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -49,7 +49,7 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.GetReportAsync("triage-report-001");
+        var result = await client.GetReportAsync("triage-report-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("triage-report-001", result.ReportId);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -64,7 +64,7 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.QueryGroupsAsync(status: "failed", workspacePath: "F:\\GitHub\\McpServer");
+        var result = await client.QueryGroupsAsync(status: "failed", workspacePath: "F:\\GitHub\\McpServer", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(0, result.TotalCount);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -81,7 +81,7 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.GetGroupAsync("triage-group-001");
+        var result = await client.GetGroupAsync("triage-group-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("triage-group-001", result.GroupId);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -96,7 +96,7 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.FlushGroupAsync("triage-group-001");
+        var result = await client.FlushGroupAsync("triage-group-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("queued", result.Status);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -111,11 +111,27 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.RetryGroupAsync("triage-group-001");
+        var result = await client.RetryGroupAsync("triage-group-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("collecting", result.Status);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/triage/groups/triage-group-001/retry", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    /// <summary>TEST-MCP-TRIAGE-005: forced RetryGroupAsync passes the force query flag.</summary>
+    [Fact]
+    public async Task RetryGroupAsync_WhenForceTrue_PostsForceQueryFlag()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"groupId":"triage-group-001","status":"collecting","reportCount":1,"quietDeadlineUtc":"2026-06-25T05:00:00Z"}""");
+        using var http = new HttpClient(handler);
+        var client = new TriageClient(http, DefaultOptions);
+
+        var result = await client.RetryGroupAsync("triage-group-001", force: true, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal("collecting", result.Status);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/triage/groups/triage-group-001/retry", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("force=true", handler.LastRequest.RequestUri!.Query.TrimStart('?'));
     }
 
     /// <summary>TEST-TRIAGE-003: CreateGroupFromSelectionAsync posts selected reports and groups.</summary>
@@ -133,7 +149,7 @@ public sealed class TriageClientTests
             GroupIds = ["triage-group-old"],
             ReportIds = ["triage-report-001"],
             Title = "Grouped reports",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("triage-group-new", result.Group.GroupId);
         Assert.Equal("queued", result.Group.Status);
@@ -156,7 +172,7 @@ public sealed class TriageClientTests
 
         var result = await client.ConsolidateIntoGroupAsync(
             "triage-group-target",
-            new TriageGroupSelectionRequest { ReportIds = ["triage-report-001"] });
+            new TriageGroupSelectionRequest { ReportIds = ["triage-report-001"] }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("triage-group-target", result.Group.GroupId);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -176,7 +192,7 @@ public sealed class TriageClientTests
 
         var result = await client.MergeGroupsAsync(
             "triage-group-target",
-            new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] });
+            new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(["triage-group-source"], result.RemovedGroupIds);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -194,7 +210,7 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.GetDashboardAsync("F:\\GitHub\\McpServer");
+        var result = await client.GetDashboardAsync("F:\\GitHub\\McpServer", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(0, result.TotalGroupCount);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -213,7 +229,7 @@ public sealed class TriageClientTests
         var result = await client.QueryRunsAsync(
             status: "failed",
             groupId: "triage-group-001",
-            workspacePath: "F:\\GitHub\\McpServer");
+            workspacePath: "F:\\GitHub\\McpServer", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(0, result.TotalCount);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -233,7 +249,7 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.GetRunAsync("triage-run-001");
+        var result = await client.GetRunAsync("triage-run-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("triage-run-001", result.RunId);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
@@ -251,7 +267,7 @@ public sealed class TriageClientTests
         using var http = new HttpClient(handler);
         var client = new TriageClient(http, DefaultOptions);
 
-        var result = await client.QueryCreatedTodosAsync("F:\\GitHub\\McpServer");
+        var result = await client.QueryCreatedTodosAsync("F:\\GitHub\\McpServer", cancellationToken: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result.Items);
         Assert.Equal("BUG-TRIAGE-001", item.TodoId);

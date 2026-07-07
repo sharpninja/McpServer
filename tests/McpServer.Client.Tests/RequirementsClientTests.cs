@@ -36,7 +36,7 @@ public sealed class RequirementsClientTests
         using var frHttp = new HttpClient(frHandler);
         var client = new RequirementsClient(frHttp, DefaultOptions);
 
-        await client.ListFrAsync("MCP QA", "in_progress");
+        await client.ListFrAsync("MCP QA", "in_progress", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("area=MCP%20QA", frHandler.LastRequest!.RequestUri!.Query);
         Assert.Contains("status=in_progress", frHandler.LastRequest.RequestUri.Query);
@@ -45,7 +45,7 @@ public sealed class RequirementsClientTests
         using var trHttp = new HttpClient(trHandler);
         var trClient = new RequirementsClient(trHttp, DefaultOptions);
 
-        await trClient.ListTrAsync("MCP", "REQ", "completed");
+        await trClient.ListTrAsync("MCP", "REQ", "completed", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("/mcpserver/requirements/tr", trHandler.LastRequest!.RequestUri!.AbsolutePath);
         Assert.Contains("area=MCP", trHandler.LastRequest.RequestUri.Query);
@@ -56,7 +56,7 @@ public sealed class RequirementsClientTests
         using var testHttp = new HttpClient(testHandler);
         var testClient = new RequirementsClient(testHttp, DefaultOptions);
 
-        await testClient.ListTestAsync("MCP", "completed");
+        await testClient.ListTestAsync("MCP", "completed", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("/mcpserver/requirements/test", testHandler.LastRequest!.RequestUri!.AbsolutePath);
         Assert.Contains("area=MCP", testHandler.LastRequest.RequestUri.Query);
@@ -70,7 +70,7 @@ public sealed class RequirementsClientTests
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var result = await client.GetFrAsync("FR/MCP/001");
+        var result = await client.GetFrAsync("FR/MCP/001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("FR/MCP/001", result.Id);
         Assert.Contains("/mcpserver/requirements/fr/FR%2FMCP%2F001", handler.LastRequest!.RequestUri!.AbsolutePath);
@@ -88,7 +88,7 @@ public sealed class RequirementsClientTests
             Id = "TR-MCP-001",
             Title = "TR",
             Body = "Body"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/tr", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -120,7 +120,7 @@ public sealed class RequirementsClientTests
                     Priority = "high"
                 }
             ]
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/fr/batch", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -153,7 +153,7 @@ public sealed class RequirementsClientTests
                     Description = "Updated"
                 }
             ]
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/batch", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -296,7 +296,7 @@ public sealed class RequirementsClientTests
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var result = await client.UpdateTestAsync("TEST-MCP-001", new UpdateTestRequest { Condition = "Updated condition" });
+        var result = await client.UpdateTestAsync("TEST-MCP-001", new UpdateTestRequest { Condition = "Updated condition" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/test/TEST-MCP-001", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -320,7 +320,7 @@ public sealed class RequirementsClientTests
             Priority = "high",
             Status = "in_progress",
             Notes = "Reviewed"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("\"priority\":\"high\"", handler.LastRequestBody!);
@@ -345,7 +345,7 @@ public sealed class RequirementsClientTests
             Priority = "high",
             Status = "completed",
             Notes = "TR notes"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("\"priority\":\"high\"", handler.LastRequestBody!);
         Assert.Contains("\"status\":\"completed\"", handler.LastRequestBody!);
@@ -364,7 +364,7 @@ public sealed class RequirementsClientTests
             Priority = "high",
             Status = "completed",
             Notes = "TEST notes"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("\"priority\":\"high\"", testHandler.LastRequestBody!);
         Assert.Contains("\"status\":\"completed\"", testHandler.LastRequestBody!);
@@ -381,7 +381,7 @@ public sealed class RequirementsClientTests
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var result = await client.DeleteTestAsync("TEST-MCP-007");
+        var result = await client.DeleteTestAsync("TEST-MCP-007", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
@@ -399,7 +399,7 @@ public sealed class RequirementsClientTests
 
         var result = await client.CopyFrAcceptanceCriteriaFromTodoAsync(
             "FR/MCP/001",
-            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" });
+            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/fr/FR%2FMCP%2F001/acceptance-criteria/copy-from-todo", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -418,7 +418,7 @@ public sealed class RequirementsClientTests
 
         await trClient.CopyTrAcceptanceCriteriaFromTodoAsync(
             "TR-MCP-001",
-            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" });
+            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, trHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/tr/TR-MCP-001/acceptance-criteria/copy-from-todo", trHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -431,7 +431,7 @@ public sealed class RequirementsClientTests
 
         await testClient.CopyTestAcceptanceCriteriaFromTodoAsync(
             "TEST-MCP-001",
-            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" });
+            new CopyAcceptanceCriteriaFromTodoRequest { TodoId = "TODO-001" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, testHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/test/TEST-MCP-001/acceptance-criteria/copy-from-todo", testHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -447,7 +447,7 @@ public sealed class RequirementsClientTests
         var result = await client.UpsertMappingAsync("FR-MCP-001", new UpsertFrTrMappingRequest
         {
             TrIds = ["TR-MCP-001", "TR-MCP-002"]
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/mapping/FR-MCP-001", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -466,7 +466,7 @@ public sealed class RequirementsClientTests
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var result = await client.GenerateAsync("all", "wiki");
+        var result = await client.GenerateAsync("all", "wiki", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("application/json", result.ContentType);
         Assert.NotNull(result.ExportResult);
@@ -490,7 +490,7 @@ public sealed class RequirementsClientTests
         var result = await client.IngestAsync(new RequirementsIngestRequest
         {
             FunctionalMarkdown = "# Functional Requirements (MCP Server)\n\n## FR-MCP-001 Sample\n\nBody."
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/ingest", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -520,7 +520,7 @@ public sealed class RequirementsClientTests
                     LastModifiedUtc = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero)
                 }
             }
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("\"sourceFormat\":\"wiki\"", handler.LastRequestBody!, StringComparison.Ordinal);
@@ -539,7 +539,7 @@ public sealed class RequirementsClientTests
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var purged = await client.RepairFrPlaceholdersAsync();
+        var purged = await client.RepairFrPlaceholdersAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(3, purged);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -559,7 +559,7 @@ public sealed class RequirementsClientTests
         using var listHttp = new HttpClient(listHandler);
         var listClient = new RequirementsClient(listHttp, DefaultOptions);
 
-        var layers = await listClient.ListRequirementLayersAsync();
+        var layers = await listClient.ListRequirementLayersAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, listHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/layers", listHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -577,7 +577,7 @@ public sealed class RequirementsClientTests
             Order = 2,
             Name = "Layer 2",
             ScopeEndLayerKey = "layer-3"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, createHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/layers", createHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -594,7 +594,7 @@ public sealed class RequirementsClientTests
         {
             Name = "Layer 2 updated",
             ScopeEndLayerKey = "layer-3"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, updateHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/layers/layer-2", updateHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -614,7 +614,7 @@ public sealed class RequirementsClientTests
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var result = await client.GetEffectiveRequirementsAsync("layer-2");
+        var result = await client.GetEffectiveRequirementsAsync("layer-2", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/effective", handler.LastRequest.RequestUri!.AbsolutePath);

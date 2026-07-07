@@ -54,7 +54,7 @@ public sealed class MemoryMcpToolTests : IDisposable
                 Arg.Any<CancellationToken>())
             .Returns(new MemoryQueryResult([CreateMemory("MEMORY-AGENT-001")], 1));
 
-        var json = await _tools.MemoryList(@"F:\GitHub\McpServer", "global", "agent", "remember").ConfigureAwait(true);
+        var json = await _tools.MemoryList(@"F:\GitHub\McpServer", "global", "agent", "remember", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryQueryResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -77,7 +77,7 @@ public sealed class MemoryMcpToolTests : IDisposable
                 Arg.Any<CancellationToken>())
             .Returns(new MemoryQueryResult([], 0));
 
-        var json = await _tools.MemoryList(@"F:\GitHub\McpServer", "Effective").ConfigureAwait(true);
+        var json = await _tools.MemoryList(@"F:\GitHub\McpServer", "Effective", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryQueryResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -94,7 +94,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         _memoryService.GetAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
             .Returns(CreateMemory("MEMORY-AGENT-001"));
 
-        var json = await _tools.MemoryGet(@"F:\GitHub\McpServer", "MEMORY-AGENT-001").ConfigureAwait(true);
+        var json = await _tools.MemoryGet(@"F:\GitHub\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryItem>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -117,7 +117,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             "Preserve exact PowerShell quoting.",
             "Global",
             "MEMORY-AGENT-001",
-            "Codex").ConfigureAwait(true);
+            "Codex", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -150,7 +150,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             "Preserve exact PowerShell quoting.",
             "Global",
             "MEMORY-AGENT-001",
-            "Codex").ConfigureAwait(true);
+            "Codex", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -163,7 +163,7 @@ public sealed class MemoryMcpToolTests : IDisposable
                 && request.Text == "Preserve exact PowerShell quoting."
                 && request.UpdatedBy == "Codex"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await _memoryService.DidNotReceiveWithAnyArgs().AddAsync(default!, default).ConfigureAwait(true);
+        await _memoryService.DidNotReceiveWithAnyArgs().AddAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>TEST-MCP-MEMORY-003: memory_update forwards only supplied replacement fields.</summary>
@@ -182,7 +182,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             "agent",
             "Use supported wrappers for MCP state.",
             "Workspace",
-            "Codex").ConfigureAwait(true);
+            "Codex", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -212,7 +212,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         var json = await tools.MemoryUpdate(
             @"F:\GitHub\McpServer",
             "MEMORY-AGENT-001",
-            text: "Use supported wrappers for MCP state.").ConfigureAwait(true);
+            text: "Use supported wrappers for MCP state.", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -222,7 +222,7 @@ public sealed class MemoryMcpToolTests : IDisposable
             Arg.Is<MemoryUpdateRequest>(request => request != null
                 && request.Text == "Use supported wrappers for MCP state."),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await _memoryService.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, default).ConfigureAwait(true);
+        await _memoryService.DidNotReceiveWithAnyArgs().UpdateAsync(default!, default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>TEST-MCP-MEMORY-003: memory_remove forwards the delete request and returns mutation state.</summary>
@@ -232,7 +232,7 @@ public sealed class MemoryMcpToolTests : IDisposable
         _memoryService.RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>())
             .Returns(new MemoryMutationResult(true));
 
-        var json = await _tools.MemoryRemove(@"F:\GitHub\McpServer", "MEMORY-AGENT-001").ConfigureAwait(true);
+        var json = await _tools.MemoryRemove(@"F:\GitHub\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
@@ -249,13 +249,13 @@ public sealed class MemoryMcpToolTests : IDisposable
             .Returns(new MemoryMutationResult(true));
         var tools = CreateTools(_db, _memoryService, memoryMutations);
 
-        var json = await tools.MemoryRemove(@"F:\GitHub\McpServer", "MEMORY-AGENT-001").ConfigureAwait(true);
+        var json = await tools.MemoryRemove(@"F:\GitHub\McpServer", "MEMORY-AGENT-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<MemoryMutationResult>(json, s_jsonOptions);
 
         Assert.NotNull(result);
         Assert.True(result!.Success);
         await memoryMutations.Received(1).RemoveAsync("MEMORY-AGENT-001", Arg.Any<CancellationToken>()).ConfigureAwait(true);
-        await _memoryService.DidNotReceiveWithAnyArgs().RemoveAsync(default!, default).ConfigureAwait(true);
+        await _memoryService.DidNotReceiveWithAnyArgs().RemoveAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>Creates a memory item fixture with deterministic timestamps.</summary>

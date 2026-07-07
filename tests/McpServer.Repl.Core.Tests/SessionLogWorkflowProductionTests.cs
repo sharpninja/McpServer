@@ -33,30 +33,30 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task BootstrapAsync_FirstCall_Succeeds()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
         // No exception means success
     }
 
     [Fact]
     public async Task BootstrapAsync_MultipleCall_IsIdempotent()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.BootstrapAsync();
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
         // No exception means success
     }
 
     [Fact]
     public async Task OpenSessionAsync_ValidParameters_CreatesSession()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         var agent = "Copilot";
         var sessionId = "Copilot-20260304T113901Z-feature-auth";
         var title = "Implementing JWT authentication";
         var model = "claude-sonnet-4-20250514";
 
-        await _workflow.OpenSessionAsync(agent, sessionId, title, model);
+        await _workflow.OpenSessionAsync(agent, sessionId, title, model, cancellationToken: TestContext.Current.CancellationToken);
 
         var session = _workflow.CurrentSession();
         Assert.NotNull(session);
@@ -71,34 +71,34 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task OpenSessionAsync_InvalidSessionId_ThrowsArgumentException()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await _workflow.OpenSessionAsync("Copilot", "copilot-20260304T113901Z-test", "Test", "model"));
+            await _workflow.OpenSessionAsync("Copilot", "copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304-test", "Test", "model"));
+            await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task OpenSessionAsync_AgentPrefixMismatch_ThrowsArgumentException()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await _workflow.OpenSessionAsync("Cline", "Copilot-20260304T113901Z-test", "Test", "model"));
+            await _workflow.OpenSessionAsync("Cline", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task OpenSessionAsync_DuplicateSessionId_ThrowsInvalidOperationException()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         var sessionId = "Copilot-20260304T113901Z-duplicate";
-        await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model");
+        await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model"));
+            await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -189,7 +189,7 @@ public class SessionLogWorkflowProductionTests
             }
         };
 
-        var result = await workflow.ImportRecoveryAsync(incoming);
+        var result = await workflow.ImportRecoveryAsync(incoming, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.ExistingSessionFound);
         Assert.Equal(1, result.ImportedTurns);
@@ -214,11 +214,11 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task BeginTurnAsync_ValidParameters_CreatesTurn()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
 
         var requestId = "req-20260304T113901Z-task-001";
-        await _workflow.BeginTurnAsync(requestId, "Task Title", "Task Description");
+        await _workflow.BeginTurnAsync(requestId, "Task Title", "Task Description", cancellationToken: TestContext.Current.CancellationToken);
 
         var session = _workflow.CurrentSession();
         Assert.Equal(requestId, session!.CurrentTurnRequestId);
@@ -228,52 +228,52 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task BeginTurnAsync_NoActiveSession_ThrowsInvalidOperationException()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await _workflow.BeginTurnAsync("req-20260304T113901Z-task", "Title", "Query"));
+            await _workflow.BeginTurnAsync("req-20260304T113901Z-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task BeginTurnAsync_InvalidRequestId_ThrowsArgumentException()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await _workflow.BeginTurnAsync("request-20260304T113901Z-task", "Title", "Query"));
+            await _workflow.BeginTurnAsync("request-20260304T113901Z-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken));
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await _workflow.BeginTurnAsync("req-20260304-task", "Title", "Query"));
+            await _workflow.BeginTurnAsync("req-20260304-task", "Title", "Query", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task BeginTurnAsync_DuplicateRequestId_ThrowsInvalidOperationException()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
 
         var requestId = "req-20260304T113901Z-duplicate";
-        await _workflow.BeginTurnAsync(requestId, "Task", "Query");
-        await _workflow.CompleteTurnAsync("Done");
+        await _workflow.BeginTurnAsync(requestId, "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.CompleteTurnAsync("Done", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await _workflow.BeginTurnAsync(requestId, "Task", "Query"));
+            await _workflow.BeginTurnAsync(requestId, "Task", "Query", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task UpdateTurnAsync_ActiveTurn_UpdatesFields()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
         await _workflow.UpdateTurnAsync(
             response: "Updated response",
             interpretation: "Updated interpretation",
             tokenCount: 1250,
             tags: new List<string> { "feature", "security" },
-            contextList: new List<string> { "src/File1.cs" });
+            contextList: new List<string> { "src/File1.cs" }, cancellationToken: TestContext.Current.CancellationToken);
 
         // No exception means success
         var session = _workflow.CurrentSession();
@@ -283,21 +283,21 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task UpdateTurnAsync_NoActiveTurn_ThrowsInvalidOperationException()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await _workflow.UpdateTurnAsync(response: "Response"));
+            await _workflow.UpdateTurnAsync(response: "Response", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task CompleteTurnAsync_ActiveTurn_MarksAsCompleted()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.CompleteTurnAsync("Task completed successfully");
+        await _workflow.CompleteTurnAsync("Task completed successfully", cancellationToken: TestContext.Current.CancellationToken);
 
         var session = _workflow.CurrentSession();
         Assert.Null(session!.CurrentTurnRequestId);
@@ -308,26 +308,26 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task CompleteTurnAsync_NullOrEmptyResponse_ThrowsArgumentException()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
         // ArgumentException.ThrowIfNullOrWhiteSpace throws ArgumentNullException for null
         await Assert.ThrowsAnyAsync<ArgumentException>(async () =>
-            await _workflow.CompleteTurnAsync(null!));
+            await _workflow.CompleteTurnAsync(null!, cancellationToken: TestContext.Current.CancellationToken));
 
         await Assert.ThrowsAnyAsync<ArgumentException>(async () =>
-            await _workflow.CompleteTurnAsync(""));
+            await _workflow.CompleteTurnAsync("", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task FailTurnAsync_ActiveTurn_MarksAsFailed()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.FailTurnAsync("Unable to complete task", "dependency_missing");
+        await _workflow.FailTurnAsync("Unable to complete task", "dependency_missing", cancellationToken: TestContext.Current.CancellationToken);
 
         var session = _workflow.CurrentSession();
         Assert.Null(session!.CurrentTurnRequestId);
@@ -338,25 +338,25 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task TurnImmutability_CompletedTurn_CannotModify()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
-        await _workflow.CompleteTurnAsync("Done");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.CompleteTurnAsync("Done", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await _workflow.UpdateTurnAsync(response: "Cannot update"));
+            await _workflow.UpdateTurnAsync(response: "Cannot update", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task TurnImmutability_FailedTurn_CannotModify()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
-        await _workflow.FailTurnAsync("Failed", "error");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.FailTurnAsync("Failed", "error", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await _workflow.UpdateTurnAsync(response: "Cannot update"));
+            await _workflow.UpdateTurnAsync(response: "Cannot update", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -366,9 +366,9 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task AppendDialogAsync_ValidDialogItems_AppendsToTurn()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
         var dialogItems = new List<IDialogItem>
         {
@@ -376,7 +376,7 @@ public class SessionLogWorkflowProductionTests
             new DialogItem(DateTimeOffset.UtcNow, "tool", "File created", "tool_result")
         };
 
-        await _workflow.AppendDialogAsync(dialogItems);
+        await _workflow.AppendDialogAsync(dialogItems, cancellationToken: TestContext.Current.CancellationToken);
 
         // No exception means success
     }
@@ -384,20 +384,20 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task AppendDialogAsync_EmptyList_ThrowsArgumentException()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await _workflow.AppendDialogAsync(new List<IDialogItem>()));
+            await _workflow.AppendDialogAsync(new List<IDialogItem>(), cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task AppendActionsAsync_ValidActions_AppendsToTurn()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
         var actions = new List<ISessionAction>
         {
@@ -405,7 +405,7 @@ public class SessionLogWorkflowProductionTests
             new SessionAction(2, "Edited File2.cs", "edit", "completed", "src/File2.cs")
         };
 
-        await _workflow.AppendActionsAsync(actions);
+        await _workflow.AppendActionsAsync(actions, cancellationToken: TestContext.Current.CancellationToken);
 
         // No exception means success
     }
@@ -413,12 +413,12 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task AppendActionsAsync_EmptyList_ThrowsArgumentException()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
-            await _workflow.AppendActionsAsync(new List<ISessionAction>()));
+            await _workflow.AppendActionsAsync(new List<ISessionAction>(), cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -428,12 +428,12 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task QueryHistoryAsync_NoFilter_ReturnsResults()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
-        await _workflow.CompleteTurnAsync("Done");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.CompleteTurnAsync("Done", cancellationToken: TestContext.Current.CancellationToken);
 
-        var history = await _workflow.QueryHistoryAsync();
+        var history = await _workflow.QueryHistoryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(history);
         Assert.NotEmpty(history);
@@ -442,10 +442,10 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task QueryHistoryAsync_FilterByAgent_ReturnsMatchingSessions()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
 
-        var history = await _workflow.QueryHistoryAsync(agent: "Copilot");
+        var history = await _workflow.QueryHistoryAsync(agent: "Copilot", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(history);
         Assert.All(history, s => Assert.Equal("Copilot", s.Agent));
@@ -454,9 +454,9 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task QueryHistoryAsync_Pagination_ReturnsCorrectSlice()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var history = await _workflow.QueryHistoryAsync(limit: 5, offset: 0);
+        var history = await _workflow.QueryHistoryAsync(limit: 5, offset: 0, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(history);
     }
@@ -464,19 +464,19 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task QueryHistoryAsync_NegativeLimit_ThrowsArgumentOutOfRangeException()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>
-            await _workflow.QueryHistoryAsync(limit: -1));
+            await _workflow.QueryHistoryAsync(limit: -1, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task QueryHistoryAsync_NegativeOffset_ThrowsArgumentOutOfRangeException()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>
-            await _workflow.QueryHistoryAsync(offset: -1));
+            await _workflow.QueryHistoryAsync(offset: -1, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -486,14 +486,14 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task CompleteWorkflow_OpenSessionBeginTurnComplete_Success()
     {
-        await _workflow.BootstrapAsync();
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         var agent = "Copilot";
         var sessionId = "Copilot-20260304T113901Z-complete-workflow";
         var title = "Complete Workflow Test";
         var model = "claude-sonnet-4";
 
-        await _workflow.OpenSessionAsync(agent, sessionId, title, model);
+        await _workflow.OpenSessionAsync(agent, sessionId, title, model, cancellationToken: TestContext.Current.CancellationToken);
 
         var session = _workflow.CurrentSession();
         Assert.NotNull(session);
@@ -501,14 +501,14 @@ public class SessionLogWorkflowProductionTests
         Assert.Equal("in_progress", session.Status);
 
         var requestId = "req-20260304T113901Z-task-001";
-        await _workflow.BeginTurnAsync(requestId, "Task Title", "Query text");
+        await _workflow.BeginTurnAsync(requestId, "Task Title", "Query text", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(requestId, session.CurrentTurnRequestId);
         Assert.Equal("in_progress", session.CurrentTurnStatus);
 
-        await _workflow.UpdateTurnAsync(response: "Working on it...");
+        await _workflow.UpdateTurnAsync(response: "Working on it...", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.CompleteTurnAsync("Task completed");
+        await _workflow.CompleteTurnAsync("Task completed", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Null(session.CurrentTurnRequestId);
         Assert.Equal(1, session.TurnCount);
@@ -517,24 +517,24 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task CompleteWorkflow_MultipleTurnsInSession_Success()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-multi-turn", "Multi-Turn", "model");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-multi-turn", "Multi-Turn", "model", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task 1", "Query 1");
-        await _workflow.UpdateTurnAsync(response: "Response 1");
-        await _workflow.CompleteTurnAsync("Task 1 completed");
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task 1", "Query 1", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.UpdateTurnAsync(response: "Response 1", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.CompleteTurnAsync("Task 1 completed", cancellationToken: TestContext.Current.CancellationToken);
 
         var session = _workflow.CurrentSession();
         Assert.Equal(1, session!.TurnCount);
 
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-002", "Task 2", "Query 2");
-        await _workflow.UpdateTurnAsync(response: "Response 2");
-        await _workflow.CompleteTurnAsync("Task 2 completed");
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-002", "Task 2", "Query 2", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.UpdateTurnAsync(response: "Response 2", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.CompleteTurnAsync("Task 2 completed", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, session.TurnCount);
 
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-003", "Task 3", "Query 3");
-        await _workflow.FailTurnAsync("Task 3 failed", "error_code");
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-003", "Task 3", "Query 3", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.FailTurnAsync("Task 3 failed", "error_code", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(3, session.TurnCount);
         Assert.Null(session.CurrentTurnRequestId);
@@ -543,24 +543,24 @@ public class SessionLogWorkflowProductionTests
     [Fact]
     public async Task CompleteWorkflow_WithDialogAndActions_Success()
     {
-        await _workflow.BootstrapAsync();
-        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-dialog", "Dialog Test", "model");
-        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query");
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-dialog", "Dialog Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync("req-20260304T113901Z-task-001", "Task", "Query", cancellationToken: TestContext.Current.CancellationToken);
 
         var dialogItems = new List<IDialogItem>
         {
             new DialogItem(DateTimeOffset.UtcNow, "model", "Analyzing...", "reasoning"),
             new DialogItem(DateTimeOffset.UtcNow, "tool", "File created", "tool_result")
         };
-        await _workflow.AppendDialogAsync(dialogItems);
+        await _workflow.AppendDialogAsync(dialogItems, cancellationToken: TestContext.Current.CancellationToken);
 
         var actions = new List<ISessionAction>
         {
             new SessionAction(1, "Created File1.cs", "create", "completed", "src/File1.cs")
         };
-        await _workflow.AppendActionsAsync(actions);
+        await _workflow.AppendActionsAsync(actions, cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.CompleteTurnAsync("Completed with dialog and actions");
+        await _workflow.CompleteTurnAsync("Completed with dialog and actions", cancellationToken: TestContext.Current.CancellationToken);
 
         var session = _workflow.CurrentSession();
         Assert.Equal(1, session!.TurnCount);

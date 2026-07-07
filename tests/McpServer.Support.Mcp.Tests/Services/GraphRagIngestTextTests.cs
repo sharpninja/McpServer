@@ -62,15 +62,15 @@ public sealed class GraphRagIngestTextTests : IDisposable
         var sut = CreateSut();
         var request = new GraphRagIngestTextRequest { Content = "Hello world. This is a test document with enough content." };
 
-        var result = await sut.IngestTextAsync(request).ConfigureAwait(true);
+        var result = await sut.IngestTextAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(result.DocumentId);
         Assert.True(result.ChunkCount > 0);
         Assert.True(result.TokenCount > 0);
 
-        var doc = await _db.Documents.FirstOrDefaultAsync(d => d.Id == result.DocumentId).ConfigureAwait(true);
+        var doc = await _db.Documents.FirstOrDefaultAsync(d => d.Id == result.DocumentId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(doc);
-        var chunks = await _db.Chunks.Where(c => c.DocumentId == result.DocumentId).ToListAsync().ConfigureAwait(true);
+        var chunks = await _db.Chunks.Where(c => c.DocumentId == result.DocumentId).ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(result.ChunkCount, chunks.Count);
     }
 
@@ -83,7 +83,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
         var sut = CreateSut();
         var request = new GraphRagIngestTextRequest { Content = "" };
 
-        await Assert.ThrowsAsync<ArgumentException>(() => sut.IngestTextAsync(request)).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() => sut.IngestTextAsync(request, ct: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
         var sut = CreateSut();
         var request = new GraphRagIngestTextRequest { Content = "Some ad-hoc content for testing defaults." };
 
-        var result = await sut.IngestTextAsync(request).ConfigureAwait(true);
+        var result = await sut.IngestTextAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("adhoc-text", result.SourceType);
     }
@@ -110,12 +110,12 @@ public sealed class GraphRagIngestTextTests : IDisposable
 
         // With title
         var withTitle = new GraphRagIngestTextRequest { Content = "Content A.", Title = "My Title" };
-        var resultWithTitle = await sut.IngestTextAsync(withTitle).ConfigureAwait(true);
+        var resultWithTitle = await sut.IngestTextAsync(withTitle, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("My Title", resultWithTitle.SourceKey);
 
         // Without title
         var withoutTitle = new GraphRagIngestTextRequest { Content = "Content B." };
-        var resultWithoutTitle = await sut.IngestTextAsync(withoutTitle).ConfigureAwait(true);
+        var resultWithoutTitle = await sut.IngestTextAsync(withoutTitle, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(resultWithoutTitle.DocumentId, resultWithoutTitle.SourceKey);
     }
 
@@ -129,7 +129,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
         var content = new string('A', 4096); // Should produce multiple chunks at 512 tokens * 4 chars = 2048 chars per chunk
         var request = new GraphRagIngestTextRequest { Content = content };
 
-        var result = await sut.IngestTextAsync(request).ConfigureAwait(true);
+        var result = await sut.IngestTextAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var chunker = new Chunker();
         var expectedChunks = chunker.Chunk("test-doc", content);
@@ -150,7 +150,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
             TriggerReindex = true
         };
 
-        var result = await sut.IngestTextAsync(request).ConfigureAwait(true);
+        var result = await sut.IngestTextAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.ReindexTriggered);
     }
@@ -168,7 +168,7 @@ public sealed class GraphRagIngestTextTests : IDisposable
             TriggerReindex = false
         };
 
-        var result = await sut.IngestTextAsync(request).ConfigureAwait(true);
+        var result = await sut.IngestTextAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.ReindexTriggered);
     }

@@ -20,7 +20,7 @@ public sealed class ErrorHandlingTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var ex = await Assert.ThrowsAsync<McpValidationException>(() => client.QueryAsync());
+        var ex = await Assert.ThrowsAsync<McpValidationException>(() => client.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
         Assert.Equal(400, ex.StatusCode);
         Assert.Contains("Invalid request", ex.Message);
     }
@@ -32,7 +32,7 @@ public sealed class ErrorHandlingTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var ex = await Assert.ThrowsAsync<McpUnauthorizedException>(() => client.QueryAsync());
+        var ex = await Assert.ThrowsAsync<McpUnauthorizedException>(() => client.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
         Assert.Equal(401, ex.StatusCode);
     }
 
@@ -43,7 +43,7 @@ public sealed class ErrorHandlingTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var ex = await Assert.ThrowsAsync<McpNotFoundException>(() => client.GetAsync("NOPE"));
+        var ex = await Assert.ThrowsAsync<McpNotFoundException>(() => client.GetAsync("NOPE", cancellationToken: TestContext.Current.CancellationToken));
         Assert.Equal(404, ex.StatusCode);
     }
 
@@ -55,7 +55,7 @@ public sealed class ErrorHandlingTests
         var client = new TodoClient(http, DefaultOptions);
 
         var ex = await Assert.ThrowsAsync<McpConflictException>(() =>
-            client.CreateAsync(new Models.TodoCreateRequest { Id = "X", Title = "T", Section = "s", Priority = "high" }));
+            client.CreateAsync(new Models.TodoCreateRequest { Id = "X", Title = "T", Section = "s", Priority = "high" }, cancellationToken: TestContext.Current.CancellationToken));
         Assert.Equal(409, ex.StatusCode);
     }
 
@@ -66,7 +66,7 @@ public sealed class ErrorHandlingTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var ex = await Assert.ThrowsAsync<McpServerException>(() => client.QueryAsync());
+        var ex = await Assert.ThrowsAsync<McpServerException>(() => client.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
         Assert.Equal(500, ex.StatusCode);
     }
 }

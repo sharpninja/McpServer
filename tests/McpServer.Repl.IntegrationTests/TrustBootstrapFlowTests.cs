@@ -7,6 +7,7 @@ namespace McpServer.Repl.IntegrationTests;
 /// <summary>
 /// Tests for the trust bootstrap flow: health check, signature validation, nonce challenge.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class TrustBootstrapFlowTests : IDisposable
 {
     private readonly ReplChildProcessHelper _replProcess;
@@ -34,11 +35,11 @@ public sealed class TrustBootstrapFlowTests : IDisposable
         
         try
         {
-            var response = await httpClient.GetAsync($"/health?nonce={testNonce}");
+            var response = await httpClient.GetAsync($"/health?nonce={testNonce}", cancellationToken: TestContext.Current.CancellationToken);
             
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
                 Assert.Contains(testNonce, content);
             }
         }
@@ -50,25 +51,25 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     [Fact]
     public async Task TrustBootstrap_SendsNonceRequest_ReceivesResponse()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nonceRequest = YamlEnvelopeBuilder.CreateNonceRequest(
             "nonce-req-001",
             "/test/workspace");
 
         var yamlContent = _yamlSerializer.Serialize(nonceRequest);
-        await _replProcess.WriteLineAsync(yamlContent);
+        await _replProcess.WriteLineAsync(yamlContent, cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse, "Should receive nonce challenge response");
     }
 
     [Fact]
     public async Task TrustBootstrap_SubmitsSignature_ValidatesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var bootstrapRequest = YamlEnvelopeBuilder.CreateTrustBootstrapRequest(
             "bootstrap-001",
@@ -77,40 +78,40 @@ public sealed class TrustBootstrapFlowTests : IDisposable
             signature: "test-signature-abc");
 
         var yamlContent = _yamlSerializer.Serialize(bootstrapRequest);
-        await _replProcess.WriteLineAsync(yamlContent);
+        await _replProcess.WriteLineAsync(yamlContent, cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse, "Should receive trust bootstrap response");
     }
 
     [Fact]
     public async Task TrustBootstrap_FullFlow_CompletesSuccessfully()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nonceRequest = YamlEnvelopeBuilder.CreateNonceRequest(
             "nonce-001",
             "/test/workspace");
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(nonceRequest));
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(3));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(nonceRequest), cancellationToken: TestContext.Current.CancellationToken);
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(3), cancellationToken: TestContext.Current.CancellationToken);
 
         var bootstrapRequest = YamlEnvelopeBuilder.CreateTrustBootstrapRequest(
             "bootstrap-001",
             "/test/workspace",
             nonce: "received-nonce",
             signature: "computed-signature");
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(bootstrapRequest));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(bootstrapRequest), cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundFinalResponse = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(5));
+        var foundFinalResponse = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(_replProcess.IsRunning, "Process should still be running after bootstrap");
     }
 
     [Fact]
     public async Task SignatureValidation_InvalidSignature_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidRequest = YamlEnvelopeBuilder.CreateTrustBootstrapRequest(
             "bootstrap-002",
@@ -118,8 +119,8 @@ public sealed class TrustBootstrapFlowTests : IDisposable
             nonce: "valid-nonce",
             signature: "invalid-signature-xyz");
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(invalidRequest));
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(invalidRequest), cancellationToken: TestContext.Current.CancellationToken);
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         
         if (foundResponse && _replProcess.StdoutLines.Count > 0)
         {
@@ -135,17 +136,17 @@ public sealed class TrustBootstrapFlowTests : IDisposable
     [Fact]
     public async Task NonceChallengeFlow_GeneratesUniqueChallenges()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var request1 = YamlEnvelopeBuilder.CreateNonceRequest("nonce-req-1", "/workspace1");
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(request1));
-        await Task.Delay(500);
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(request1), cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(500, cancellationToken: TestContext.Current.CancellationToken);
 
         var request2 = YamlEnvelopeBuilder.CreateNonceRequest("nonce-req-2", "/workspace2");
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(request2));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(request2), cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundResponses = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(5));
+        var foundResponses = await _replProcess.WaitForStdoutLineCountAsync(2, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(_replProcess.StdoutLines.Count >= 1, "Should receive nonce responses");
     }
 

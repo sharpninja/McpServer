@@ -47,7 +47,7 @@ public sealed class QBAgentChatClientFactoryTests
             new McpAgentOptions { BaseUrl = new Uri("http://offline-host:7147"), ApiKey = "marker-key" },
             httpClient);
 
-        var ex = await Record.ExceptionAsync(() => client.GetResponseAsync([new ChatMessage(ChatRole.User, "hello")]))
+        var ex = await Record.ExceptionAsync(() => client.GetResponseAsync([new ChatMessage(ChatRole.User, "hello")], cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
         Assert.NotNull(ex);
         Assert.Contains("QuadBrain endpoint unreachable", ex!.ToString(), StringComparison.Ordinal);

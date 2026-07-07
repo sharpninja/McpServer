@@ -1,4 +1,4 @@
-using McpServer.Common.Copilot;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -34,12 +34,12 @@ public sealed class TodoPromptServiceTests
         var promptProvider = Substitute.For<ITodoPromptProvider>();
         promptProvider.GetImplementPromptAsync(Arg.Any<CancellationToken>()).Returns("Implement {id}");
 
-        CopilotClientOptions? capturedOptions = null;
-        var copilotClient = Substitute.For<ICopilotClient>();
-        copilotClient.InvokeStreamingAsync(Arg.Any<string>(), Arg.Any<CopilotClientOptions?>(), Arg.Any<CancellationToken>())
+        AgentCliClientOptions? capturedOptions = null;
+        var copilotClient = Substitute.For<IAgentCliClient>();
+        copilotClient.InvokeStreamingAsync(Arg.Any<string>(), Arg.Any<AgentCliClientOptions?>(), Arg.Any<CancellationToken>())
             .Returns(callInfo =>
             {
-                capturedOptions = callInfo.ArgAt<CopilotClientOptions?>(1);
+                capturedOptions = callInfo.ArgAt<AgentCliClientOptions?>(1);
                 return StreamLines();
             });
 
@@ -51,7 +51,7 @@ public sealed class TodoPromptServiceTests
             NullLogger<TodoPromptService>.Instance);
 
         var lines = new List<string>();
-        await foreach (var line in sut.StreamImplementAsync("TODO-1").ConfigureAwait(true))
+        await foreach (var line in sut.StreamImplementAsync("TODO-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true))
             lines.Add(line);
 
         Assert.NotEmpty(lines);

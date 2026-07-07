@@ -13,6 +13,7 @@ public static class TriageServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         services.TryAddSingleton(TimeProvider.System);
+        services.TryAddScoped<ITriageTodoCreator, DirectTriageTodoCreator>();
         services.AddScoped<ITriageResearchRunner, ConfiguredTriageResearchRunner>();
         services.AddScoped<ITriageService, TriageService>();
         return services;

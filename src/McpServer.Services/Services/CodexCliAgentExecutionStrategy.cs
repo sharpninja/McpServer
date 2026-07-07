@@ -3,41 +3,22 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using McpServer.Common.Copilot;
+using System.Text;
+using McpServer.Common.AgentCli;
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-MCP-TRIAGE-003: Runs Codex CLI through <c>codex exec</c> for non-interactive
-/// direct-agent research jobs such as background triage.
+/// TR-MCP-TRIAGE-003: Runs Codex CLI through reusable one-shot <c>codex exec</c>
+/// invocations for non-interactive direct-agent prompts such as background triage.
 /// </summary>
 internal sealed class CodexCliAgentExecutionStrategy(
     IProcessEnvironmentService processEnvironment,
     IProcessSpawner processSpawner,
     ILogger<CodexCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
 {
-    private const string TriageResearchOutputSchemaJson = """
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["title", "summary", "severity", "acceptanceCriteria", "implementationNotes"],
-          "properties": {
-            "title": { "type": "string", "minLength": 1 },
-            "summary": { "type": "string", "minLength": 1 },
-            "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
-            "acceptanceCriteria": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "type": "string", "minLength": 1 }
-            },
-            "implementationNotes": {
-              "type": "array",
-              "items": { "type": "string" }
-            }
-          }
-        }
-        """;
+    private const string HighestReasoningEffortConfig = "model_reasoning_effort=\"xhigh\"";
 
     /// <inheritdoc />
     public string Name => AgentExecutionStrategyNames.CodexCli;
@@ -65,7 +46,7 @@ internal sealed class CodexCliAgentExecutionStrategy(
 
         public int? ProcessId => _process?.Id;
 
-        public async Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+        public async Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
             await RunPromptAsync(request.InitialPrompt, cancellationToken).ConfigureAwait(false);
 
         public async IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(
@@ -76,7 +57,7 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 yield return result.Body;
         }
 
-        public async Task<CopilotResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+        public async Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
             await RunPromptAsync(prompt, cancellationToken).ConfigureAwait(false);
 
         public async IAsyncEnumerable<string> SendStreamingAsync(
@@ -111,46 +92,63 @@ internal sealed class CodexCliAgentExecutionStrategy(
             return ValueTask.CompletedTask;
         }
 
-        private async Task<CopilotResult> RunPromptAsync(string prompt, CancellationToken cancellationToken)
+        private async Task<AgentCliResult> RunPromptAsync(string prompt, CancellationToken cancellationToken)
         {
             var tempDirectory = ResolveSharedTempDirectory();
             var outputPath = Path.Combine(tempDirectory, $"codex-output-{Guid.NewGuid():N}.txt");
-            var schemaPath = Path.Combine(tempDirectory, $"codex-output-schema-{Guid.NewGuid():N}.json");
-            await File.WriteAllTextAsync(schemaPath, TriageResearchOutputSchemaJson, cancellationToken).ConfigureAwait(false);
 
-            var psi = BuildStartInfo(prompt, outputPath, schemaPath);
+            var psi = BuildStartInfo(outputPath);
+            logger.LogInformation(
+                "Launching Codex CLI one-shot command: {CommandLine}",
+                BuildDisplayCommandLine(psi));
             try
             {
                 _process = processSpawner.Spawn(psi);
-                await WritePromptAsync(_process, prompt, cancellationToken).ConfigureAwait(false);
+                await WritePromptAsync(_process, prompt, CancellationToken.None).ConfigureAwait(false);
             }
             catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
             {
                 logger.LogError(ex, "Failed to spawn Codex CLI: {Agent}", psi.FileName);
-                return new CopilotResult
+                return new AgentCliResult
                 {
-                    State = CopilotResultState.Error,
+                    State = AgentCliResultState.Error,
                     Stderr = $"error: Failed to spawn Codex CLI - {ex.Message}",
                 };
             }
 
+            var stdoutBuilder = new StringBuilder();
+            var stderrBuilder = new StringBuilder();
+            var stdoutTask = Task.CompletedTask;
+            var stderrTask = Task.CompletedTask;
             try
             {
-                var stdoutTask = _process.StandardOutput.ReadToEndAsync(cancellationToken);
-                var stderrTask = _process.StandardError.ReadToEndAsync(cancellationToken);
+                stdoutTask = CaptureStreamAsync(
+                    _process.StandardOutput,
+                    "stdout",
+                    stdoutBuilder,
+                    request.Options.AgentOutputReceivedAsync,
+                    CancellationToken.None);
+                stderrTask = CaptureStreamAsync(
+                    _process.StandardError,
+                    "stderr",
+                    stderrBuilder,
+                    request.Options.AgentOutputReceivedAsync,
+                    CancellationToken.None);
                 await _process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+                await WaitForCaptureAsync(stdoutTask).ConfigureAwait(false);
+                await WaitForCaptureAsync(stderrTask).ConfigureAwait(false);
 
-                var stdout = await stdoutTask.ConfigureAwait(false);
-                var stderr = await stderrTask.ConfigureAwait(false);
+                var stdout = stdoutBuilder.ToString();
+                var stderr = stderrBuilder.ToString();
                 var body = File.Exists(outputPath)
                     ? await File.ReadAllTextAsync(outputPath, cancellationToken).ConfigureAwait(false)
                     : stdout;
 
                 if (_process.ExitCode == 0)
                 {
-                    return new CopilotResult
+                    return new AgentCliResult
                     {
-                        State = CopilotResultState.Success,
+                        State = AgentCliResultState.Success,
                         Body = string.IsNullOrWhiteSpace(body) ? stdout : body.Trim(),
                         Stdout = stdout,
                         Stderr = stderr,
@@ -158,9 +156,9 @@ internal sealed class CodexCliAgentExecutionStrategy(
                     };
                 }
 
-                return new CopilotResult
+                return new AgentCliResult
                 {
-                    State = CopilotResultState.Error,
+                    State = AgentCliResultState.Error,
                     Body = string.IsNullOrWhiteSpace(body) ? stdout : body.Trim(),
                     Stdout = stdout,
                     Stderr = string.IsNullOrWhiteSpace(stderr) ? stdout : stderr,
@@ -172,20 +170,27 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 if (_process is { HasExited: false })
                     _process.Kill();
 
-                return new CopilotResult
+                await WaitForCaptureAsync(stdoutTask).ConfigureAwait(false);
+                await WaitForCaptureAsync(stderrTask).ConfigureAwait(false);
+                var stdout = stdoutBuilder.ToString();
+                var stderr = AppendProcessError(
+                    stderrBuilder.ToString(),
+                    "error: Codex CLI triage run was cancelled or timed out.");
+                return new AgentCliResult
                 {
-                    State = CopilotResultState.Error,
-                    Stderr = "error: Codex CLI triage run was cancelled or timed out.",
+                    State = AgentCliResultState.Error,
+                    Body = stdout,
+                    Stdout = stdout,
+                    Stderr = stderr,
                 };
             }
             finally
             {
                 TryDelete(outputPath);
-                TryDelete(schemaPath);
             }
         }
 
-        private ProcessStartInfo BuildStartInfo(string prompt, string outputPath, string schemaPath)
+        private ProcessStartInfo BuildStartInfo(string outputPath)
         {
             var options = request.Options;
             var workingDirectory = !string.IsNullOrWhiteSpace(options.WorkingDirectory)
@@ -210,15 +215,18 @@ internal sealed class CodexCliAgentExecutionStrategy(
                 psi.ArgumentList.Add(options.Model);
             }
 
+            psi.ArgumentList.Add("-c");
+            psi.ArgumentList.Add(HighestReasoningEffortConfig);
             psi.ArgumentList.Add("--sandbox");
             psi.ArgumentList.Add("read-only");
-            psi.ArgumentList.Add("--skip-git-repo-check");
             psi.ArgumentList.Add("--color");
             psi.ArgumentList.Add("never");
-            psi.ArgumentList.Add("--output-schema");
-            psi.ArgumentList.Add(schemaPath);
-            psi.ArgumentList.Add("--output-last-message");
+            psi.ArgumentList.Add("--skip-git-repo-check");
+            psi.ArgumentList.Add("-C");
+            psi.ArgumentList.Add(workingDirectory);
+            psi.ArgumentList.Add("-o");
             psi.ArgumentList.Add(outputPath);
+            psi.ArgumentList.Add("-");
 
             processEnvironment.ApplyAll(psi, options.RunAs, options.GitHubToken);
             psi.FileName = processEnvironment.ResolveExecutable(psi, options.AgentPath);
@@ -231,6 +239,9 @@ internal sealed class CodexCliAgentExecutionStrategy(
 
             return psi;
         }
+
+        private static string BuildDisplayCommandLine(ProcessStartInfo psi) =>
+            BuildCmdCommandLine(psi.FileName, psi.ArgumentList);
 
         private static void WrapWindowsCommandShim(ProcessStartInfo psi)
         {
@@ -285,6 +296,66 @@ internal sealed class CodexCliAgentExecutionStrategy(
             process.StandardInput.Close();
         }
 
+        private static async Task CaptureStreamAsync(
+            StreamReader reader,
+            string streamName,
+            StringBuilder builder,
+            Func<string, string, Task>? outputReceivedAsync,
+            CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                string? line;
+                try
+                {
+                    line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                if (line is null)
+                    return;
+
+                if (builder.Length > 0)
+                    builder.AppendLine();
+                builder.Append(line);
+
+                if (outputReceivedAsync is not null)
+                    await outputReceivedAsync(streamName, line).ConfigureAwait(false);
+            }
+        }
+
+        private static async Task WaitForCaptureAsync(Task captureTask)
+        {
+            try
+            {
+                await captureTask.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Cancellation is expected when the agent run times out.
+            }
+            catch (ObjectDisposedException)
+            {
+                // The process streams can close while cancellation is killing the process.
+            }
+            catch (IOException)
+            {
+                // The process streams can close while cancellation is killing the process.
+            }
+        }
+
+        private static string AppendProcessError(string? current, string error)
+        {
+            if (string.IsNullOrWhiteSpace(current))
+                return error;
+            if (current.EndsWith(Environment.NewLine, StringComparison.Ordinal))
+                return string.Concat(current, error);
+            return string.Concat(current, Environment.NewLine, error);
+        }
+
         private static void TryDelete(string path)
         {
             try
@@ -300,7 +371,8 @@ internal sealed class CodexCliAgentExecutionStrategy(
 
         private static string ResolveSharedTempDirectory()
         {
-            var configured = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP");
+            var configured = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP")
+                             ?? Environment.GetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP");
             var hasConfiguredDirectory = !string.IsNullOrWhiteSpace(configured);
             var preferredDirectory = hasConfiguredDirectory
                 ? configured!
@@ -314,7 +386,7 @@ internal sealed class CodexCliAgentExecutionStrategy(
             catch (Exception ex) when (!hasConfiguredDirectory && OperatingSystem.IsWindows() &&
                                        (ex is UnauthorizedAccessException or IOException or System.Security.SecurityException))
             {
-                var fallbackDirectory = Path.Combine(Path.GetTempPath(), "mcpserver-triage-codex");
+                var fallbackDirectory = Path.Combine(Path.GetTempPath(), "mcpserver-codex-oneshot");
                 Directory.CreateDirectory(fallbackDirectory);
                 return fallbackDirectory;
             }
@@ -328,10 +400,10 @@ internal sealed class CodexCliAgentExecutionStrategy(
                     Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                     "McpServer",
                     "Temp",
-                    "triage-codex");
+                    "codex-oneshot");
             }
 
-            return Path.Combine(Path.GetTempPath(), "mcpserver-triage-codex");
+            return Path.Combine(Path.GetTempPath(), "mcpserver-codex-oneshot");
         }
 
         private static void EnsureSharedTempDirectory(string path)

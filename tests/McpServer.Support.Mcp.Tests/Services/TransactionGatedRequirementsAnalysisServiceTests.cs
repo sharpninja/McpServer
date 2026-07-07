@@ -40,7 +40,7 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
 
         Assert.False(result.Success);
         Assert.Contains("not transaction compensated", result.Error, StringComparison.OrdinalIgnoreCase);
-        await inner.DidNotReceiveWithAnyArgs().AnalyzeAsync(default!, default).ConfigureAwait(true);
+        await inner.DidNotReceiveWithAnyArgs().AnalyzeAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ public sealed class TransactionGatedRequirementsAnalysisServiceTests
 
         Assert.False(result.Success);
         Assert.Contains("subscriber unavailable", result.Error, StringComparison.Ordinal);
-        await inner.DidNotReceiveWithAnyArgs().AnalyzeAsync(default!, default).ConfigureAwait(true);
+        await inner.DidNotReceiveWithAnyArgs().AnalyzeAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>

@@ -437,6 +437,11 @@ public interface IBeginTurnResult
 public interface IUpdateTurnParams
 {
     /// <summary>
+    /// Gets an optional replacement title for the active turn. Null preserves the existing title.
+    /// </summary>
+    string? QueryTitle { get; }
+
+    /// <summary>
     /// Gets the agent's response text. Null preserves existing value.
     /// </summary>
     string? Response { get; }
@@ -505,6 +510,11 @@ public interface IUpdateTurnResult
 /// </remarks>
 public interface ICompleteTurnParams
 {
+    /// <summary>
+    /// Gets an optional replacement title for the active turn. Null preserves the existing title.
+    /// </summary>
+    string? QueryTitle { get; }
+
     /// <summary>
     /// Gets the final response text.
     /// </summary>
@@ -695,6 +705,11 @@ public interface IAppendDialogResult
 /// </remarks>
 public interface IAppendActionsParams
 {
+    /// <summary>
+    /// Gets an optional replacement title for the active turn. Null preserves the existing title.
+    /// </summary>
+    string? QueryTitle { get; }
+
     /// <summary>
     /// Gets the actions to append to the active turn.
     /// </summary>

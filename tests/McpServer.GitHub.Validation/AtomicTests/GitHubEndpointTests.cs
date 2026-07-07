@@ -35,9 +35,9 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task ListIssues_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues");
+        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(json.TryGetProperty("issues", out var issues));
         Assert.Equal(JsonValueKind.Array, issues.ValueKind);
     }
@@ -53,7 +53,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task ListIssues_WithState_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues?state=open&limit=5");
+        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues?state=open&limit=5", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -70,7 +70,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task GetIssue_ExistingNumber_Returns200Or404()
     {
-        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues/1");
+        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/issues/1", cancellationToken: TestContext.Current.CancellationToken);
         // May be 200 (found) or 404 (not found) depending on repo state
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NotFound,
             $"Expected 200 or 404, got {(int)response.StatusCode}");
@@ -90,7 +90,7 @@ public sealed class GitHubEndpointTests
     public async Task CreateIssue_MissingTitle_Returns400()
     {
         var payload = new { body = "no title" };
-        var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues", payload);
+        var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues", payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -107,7 +107,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task UpdateIssue_NullBody_Returns400()
     {
-        var response = await _fixture.Client.PutAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999", (object?)null);
+        var response = await _fixture.Client.PutAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999", (object?)null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -125,7 +125,7 @@ public sealed class GitHubEndpointTests
     public async Task CommentOnIssue_MissingBody_Returns400()
     {
         var payload = new { body = "" };
-        var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues/1/comments", payload);
+        var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/issues/1/comments", payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -142,9 +142,9 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task ListLabels_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/labels");
+        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/labels", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(json.TryGetProperty("labels", out _));
     }
 
@@ -161,9 +161,9 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task ListPulls_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/pulls");
+        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/pulls", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(json.TryGetProperty("pulls", out var pulls));
         Assert.Equal(JsonValueKind.Array, pulls.ValueKind);
     }
@@ -179,7 +179,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task ListPulls_WithState_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/pulls?state=closed&limit=5");
+        var response = await _fixture.Client.GetAsync($"{GitHubEndpointFixture.GhRoute}/pulls?state=closed&limit=5", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -197,7 +197,7 @@ public sealed class GitHubEndpointTests
     public async Task CommentOnPull_MissingBody_Returns400()
     {
         var payload = new { body = "" };
-        var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/pulls/1/comments", payload);
+        var response = await _fixture.Client.PostAsJsonAsync($"{GitHubEndpointFixture.GhRoute}/pulls/1/comments", payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -214,7 +214,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task CloseIssue_NonExistent_ReturnsBadRequestOr200()
     {
-        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999/close", null);
+        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999/close", null, cancellationToken: TestContext.Current.CancellationToken);
         // May be 200 (gh cli succeeds) or 400 (fails) depending on issue existence
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 200 or 400, got {(int)response.StatusCode}");
@@ -233,7 +233,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task ReopenIssue_NonExistent_ReturnsBadRequestOr200()
     {
-        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999/reopen", null);
+        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/99999/reopen", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
@@ -251,7 +251,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task SyncFromGitHub_Returns200Or400()
     {
-        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/sync/from-github", null);
+        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/sync/from-github", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
@@ -269,7 +269,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task SyncToGitHub_Returns200Or400()
     {
-        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/sync/to-github", null);
+        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/sync/to-github", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
@@ -287,7 +287,7 @@ public sealed class GitHubEndpointTests
     [Fact]
     public async Task SyncSingleIssue_Returns200Or400Or404()
     {
-        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/1/sync", null);
+        var response = await _fixture.Client.PostAsync($"{GitHubEndpointFixture.GhRoute}/issues/1/sync", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(
             response.StatusCode == HttpStatusCode.OK ||
             response.StatusCode == HttpStatusCode.BadRequest ||

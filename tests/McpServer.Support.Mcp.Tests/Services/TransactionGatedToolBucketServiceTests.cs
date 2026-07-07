@@ -24,10 +24,10 @@ public sealed class TransactionGatedToolBucketServiceTests
         var coordinator = new CapturingCoordinator();
         var sut = CreateSut(inner, coordinator);
 
-        var add = await sut.AddBucketAsync(new BucketAddRequest("official", "owner", "repo")).ConfigureAwait(true);
-        var remove = await sut.RemoveBucketAsync("official", uninstallTools: true).ConfigureAwait(true);
-        var install = await sut.InstallAsync("official", "tool-alpha").ConfigureAwait(true);
-        var sync = await sut.SyncAsync("official").ConfigureAwait(true);
+        var add = await sut.AddBucketAsync(new BucketAddRequest("official", "owner", "repo"), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var remove = await sut.RemoveBucketAsync("official", uninstallTools: true, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var install = await sut.InstallAsync("official", "tool-alpha", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var sync = await sut.SyncAsync("official", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(add.Success);
         Assert.False(remove.Success);
@@ -59,8 +59,8 @@ public sealed class TransactionGatedToolBucketServiceTests
         var coordinator = new CapturingCoordinator();
         var sut = CreateSut(inner, coordinator);
 
-        var list = await sut.ListBucketsAsync().ConfigureAwait(true);
-        var browse = await sut.BrowseAsync("official").ConfigureAwait(true);
+        var list = await sut.ListBucketsAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var browse = await sut.BrowseAsync("official", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(list.Buckets);
         Assert.True(browse.Success);
@@ -87,7 +87,7 @@ public sealed class TransactionGatedToolBucketServiceTests
             coordinator,
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
-        var result = await sut.AddBucketAsync(new BucketAddRequest("official", "owner", "repo")).ConfigureAwait(true);
+        var result = await sut.AddBucketAsync(new BucketAddRequest("official", "owner", "repo"), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Bucket);

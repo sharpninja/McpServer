@@ -58,7 +58,7 @@ public sealed class SessionLogIngestorChunkingTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "copilot-SESSION-LOG-2026-02-16.md"), md);
 
         var ingestor = CreateIngestor();
-        var results = await ingestor.IngestAsync().ConfigureAwait(true);
+        var results = await ingestor.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(results);
         var (doc, chunks) = results[0];
@@ -95,7 +95,7 @@ public sealed class SessionLogIngestorChunkingTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "cursor-SESSION-LOG-2026-02-16.md"), md);
 
         var ingestor = CreateIngestor();
-        var results = await ingestor.IngestAsync().ConfigureAwait(true);
+        var results = await ingestor.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(results);
         var fullText = string.Join("\n", results[0].Chunks.Select(c => c.Content));
@@ -119,7 +119,7 @@ public sealed class SessionLogIngestorChunkingTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "copilot-SESSION-LOG-2026-02-16-diff.md"), md);
 
         var ingestor = CreateIngestor();
-        var results = await ingestor.IngestAsync().ConfigureAwait(true);
+        var results = await ingestor.IngestAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(results);
         var fullText = string.Join("\n", results[0].Chunks.Select(c => c.Content));

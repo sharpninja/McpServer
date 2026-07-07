@@ -128,13 +128,13 @@ public sealed class WorkspacePolicyServiceTests : IDisposable
         {
             Directive = "Ban GPL-3.0 in this workspace",
             WorkspacePath = workspacePath,
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Single(result.WorkspaceResults);
         Assert.Contains("GPL-3.0", result.WorkspaceResults[0].AfterValues);
 
-        var action = await _db.SessionLogActions.FirstOrDefaultAsync().ConfigureAwait(true);
+        var action = await _db.SessionLogActions.FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(action);
         Assert.Equal("policy_change", action!.Type);
     }

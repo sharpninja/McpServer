@@ -93,6 +93,12 @@ public sealed class WorkspaceClient : McpClientBase
         return await PutAsync<GlobalPromptResult>("mcpserver/workspace/prompt", request, cancellationToken);
     }
 
+    /// <summary>Regenerates marker files for all currently running workspaces.</summary>
+    public async Task<MarkerRegenerationResult> RegenerateMarkersAsync(CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<MarkerRegenerationResult>("mcpserver/workspace/markers/regenerate", null, cancellationToken);
+    }
+
     /// <summary>Gets the current requirement scope layer for the active workspace.</summary>
     public async Task<WorkspaceCurrentRequirementLayer> GetCurrentRequirementLayerAsync(CancellationToken cancellationToken = default)
     {

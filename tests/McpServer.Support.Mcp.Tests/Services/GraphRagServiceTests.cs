@@ -28,7 +28,7 @@ public sealed class GraphRagServiceTests : IDisposable
     {
         var sut = CreateSut(enabled: true);
 
-        var status = await sut.InitializeAsync().ConfigureAwait(true);
+        var status = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(status.IsInitialized);
         Assert.True(Directory.Exists(Path.Combine(status.GraphRoot, "input")));
@@ -42,9 +42,9 @@ public sealed class GraphRagServiceTests : IDisposable
     public async Task IndexAsync_WritesReadyArtifactAndMarksIndexed()
     {
         var sut = CreateSut(enabled: true);
-        await sut.InitializeAsync().ConfigureAwait(true);
+        await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var status = await sut.IndexAsync(new GraphRagIndexRequest { Force = true }).ConfigureAwait(true);
+        var status = await sut.IndexAsync(new GraphRagIndexRequest { Force = true }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(status.IsIndexed);
         Assert.NotNull(status.LastIndexedAtUtc);
@@ -62,7 +62,7 @@ public sealed class GraphRagServiceTests : IDisposable
         {
             Query = "auth",
             IncludeContextChunks = true
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(response.FallbackUsed);
         Assert.Equal("graphrag_disabled", response.FallbackReason);
@@ -73,12 +73,12 @@ public sealed class GraphRagServiceTests : IDisposable
     public async Task Status_InternalFallback_ReportsCorpusAndInputDiagnostics()
     {
         var sut = CreateSut(enabled: true);
-        var initialized = await sut.InitializeAsync().ConfigureAwait(true);
+        var initialized = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var localDocPath = Path.Combine(initialized.GraphRoot, "input", "docs", "prg", "Commodore_64_Programmers_Reference_Guide.txt");
         Directory.CreateDirectory(Path.GetDirectoryName(localDocPath)!);
-        await File.WriteAllTextAsync(localDocPath, "Video Bank Selection").ConfigureAwait(true);
+        await File.WriteAllTextAsync(localDocPath, "Video Bank Selection", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("graphrag-input", status.IndexCorpus);
         Assert.Equal("context-search", status.QueryCorpus);
@@ -100,7 +100,7 @@ public sealed class GraphRagServiceTests : IDisposable
             backendCommand: "fake-graphrag.exe",
             processRunner: processRunner);
 
-        var status = await sut.IndexAsync(new GraphRagIndexRequest { Force = false }).ConfigureAwait(true);
+        var status = await sut.IndexAsync(new GraphRagIndexRequest { Force = false }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(status.IsIndexed);
         Assert.Equal("degraded", status.State);
@@ -122,8 +122,8 @@ public sealed class GraphRagServiceTests : IDisposable
         var sutA = CreateSut(enabled: true, workspacePath: workspaceA, rootPath: sharedRoot);
         var sutB = CreateSut(enabled: true, workspacePath: workspaceB, rootPath: sharedRoot);
 
-        var statusA = await sutA.InitializeAsync().ConfigureAwait(true);
-        var statusB = await sutB.InitializeAsync().ConfigureAwait(true);
+        var statusA = await sutA.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var statusB = await sutB.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEqual(statusA.GraphRoot, statusB.GraphRoot);
         Assert.StartsWith(sharedRoot, statusA.GraphRoot, StringComparison.OrdinalIgnoreCase);
@@ -134,13 +134,13 @@ public sealed class GraphRagServiceTests : IDisposable
     public async Task InitializeAsync_RemovesStaleTemporaryArtifacts()
     {
         var sut = CreateSut(enabled: true);
-        var status = await sut.InitializeAsync().ConfigureAwait(true);
+        var status = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stale = Path.Combine(status.GraphRoot, "cache", "old.tmp");
-        await File.WriteAllTextAsync(stale, "stale").ConfigureAwait(true);
+        await File.WriteAllTextAsync(stale, "stale", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         File.SetLastWriteTimeUtc(stale, DateTime.UtcNow.AddHours(-3));
 
-        _ = await sut.InitializeAsync().ConfigureAwait(true);
+        _ = await sut.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(File.Exists(stale));
     }

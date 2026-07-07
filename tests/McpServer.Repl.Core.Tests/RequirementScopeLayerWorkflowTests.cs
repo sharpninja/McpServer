@@ -33,7 +33,7 @@ public sealed class RequirementScopeLayerWorkflowTests
             """[{"key":"layer-1","order":1,"name":"Layer 1"},{"key":"layer-2","order":2,"name":"Layer 2","scopeEndLayerKey":"layer-3"}]""");
         var listWorkflow = CreateWorkflow(listHandler);
 
-        var layers = await listWorkflow.ListRequirementLayersAsync();
+        var layers = await listWorkflow.ListRequirementLayersAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, listHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/layers", listHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -50,7 +50,7 @@ public sealed class RequirementScopeLayerWorkflowTests
             Order = 2,
             Name = "Layer 2",
             ScopeEndLayerKey = "layer-3"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, createHandler.LastRequest!.Method);
         Assert.Contains("\"scopeEndLayerKey\":\"layer-3\"", createHandler.LastRequestBody!, StringComparison.Ordinal);
@@ -65,7 +65,7 @@ public sealed class RequirementScopeLayerWorkflowTests
         {
             Key = "layer-2",
             ScopeEndLayerKey = "layer-2"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, updateHandler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/layers/layer-2", updateHandler.LastRequest.RequestUri!.AbsolutePath);
@@ -84,7 +84,7 @@ public sealed class RequirementScopeLayerWorkflowTests
             """{"currentLayer":{"key":"layer-2","order":2,"name":"Layer 2"},"functional":[{"id":"FR-MCP-901","title":"Future","body":"Body","scopeStartLayerKey":"layer-2"}],"technical":[],"testing":[],"mappings":[]}""");
         var workflow = CreateWorkflow(handler);
 
-        var effective = await workflow.GetEffectiveRequirementsAsync("layer-2");
+        var effective = await workflow.GetEffectiveRequirementsAsync("layer-2", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/requirements/effective", handler.LastRequest.RequestUri!.AbsolutePath);

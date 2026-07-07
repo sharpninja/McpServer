@@ -34,7 +34,7 @@ public sealed class QuadBrainToolInterceptionTests
             Call("do_local_thing"),      // external -> remains as a command
         };
 
-        var result = await interceptor.InterceptAsync(calls, turnId: null).ConfigureAwait(true);
+        var result = await interceptor.InterceptAsync(calls, turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("mcp_todo_update", Assert.Single(result.Executed).ToolCall.Function.Name);
         Assert.Equal("do_local_thing", Assert.Single(result.RemainingToolCalls).Function.Name);
@@ -51,7 +51,7 @@ public sealed class QuadBrainToolInterceptionTests
             new QuadBrainToolClassifier(),
             new FakeExecutor(failed: "mcp_todo_update"));
 
-        var result = await interceptor.InterceptAsync([Call("mcp_todo_update")], turnId: null).ConfigureAwait(true);
+        var result = await interceptor.InterceptAsync([Call("mcp_todo_update")], turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(result.Executed);
         Assert.Empty(result.RemainingToolCalls);

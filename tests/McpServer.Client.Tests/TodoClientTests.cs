@@ -20,7 +20,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.QueryAsync(keyword: "auth", priority: "high");
+        var result = await client.QueryAsync(keyword: "auth", priority: "high", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(handler.LastRequest);
         Assert.Equal(HttpMethod.Get, handler.LastRequest.Method);
@@ -36,7 +36,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.GetAsync("MVP-001");
+        var result = await client.GetAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("MVP-001", result.Id);
         Assert.Contains("/mcpserver/todo/MVP-001", handler.LastRequest!.RequestUri!.AbsolutePath);
@@ -79,7 +79,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.GetAuditAsync("MVP-001", limit: 25, offset: 5);
+        var result = await client.GetAuditAsync("MVP-001", limit: 25, offset: 5, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(1, result.TotalCount);
         Assert.Contains("/mcpserver/todo/MVP-001/audit", handler.LastRequest!.RequestUri!.AbsolutePath);
@@ -89,6 +89,40 @@ public sealed class TodoClientTests
         Assert.Equal(7, result.Entries[0].AuditId);
         Assert.Equal("After", result.Entries[0].Snapshot?.Title);
         Assert.Equal("Before", result.Entries[0].PreviousSnapshot?.Title);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TODO-CLOSE-001: Verifies that the typed TODO client calls the dedicated close-by-id endpoint.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task CloseAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {
+              "success": true,
+              "item": {
+                "id": "TODO-CLOSE-001",
+                "title": "Closed",
+                "section": "Backlog",
+                "priority": "high",
+                "done": true,
+                "completedDate": "2026-06-30T21:00:00.0000000+00:00"
+              }
+            }
+            """);
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.CloseAsync("TODO-CLOSE-001", cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(result.Success);
+        Assert.NotNull(result.Item);
+        Assert.True(result.Item.Done);
+        Assert.Equal("2026-06-30T21:00:00.0000000+00:00", result.Item.CompletedDate);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo/TODO-CLOSE-001/close", handler.LastRequest.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -112,7 +146,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.GetProjectionStatusAsync();
+        var result = await client.GetProjectionStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("sqlite", result.AuthoritativeStore);
         Assert.True(result.ProjectionConsistent);
@@ -145,7 +179,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.RepairProjectionAsync();
+        var result = await client.RepairProjectionAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Status);
@@ -169,7 +203,7 @@ public sealed class TodoClientTests
             Priority = "high",
             Note = "client note",
             Remaining = "client remaining"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -185,7 +219,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.UpdateAsync("MVP-001", new Models.TodoUpdateRequest { Done = true });
+        var result = await client.UpdateAsync("MVP-001", new Models.TodoUpdateRequest { Done = true }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
@@ -198,7 +232,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.DeleteAsync("MVP-001");
+        var result = await client.DeleteAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
@@ -211,7 +245,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        await client.QueryAsync();
+        await client.QueryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(handler.LastRequest);
         Assert.True(handler.LastRequest.Headers.TryGetValues("X-Api-Key", out var values));
@@ -225,7 +259,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.AnalyzeRequirementsAsync("MVP-001");
+        var result = await client.AnalyzeRequirementsAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -243,7 +277,7 @@ public sealed class TodoClientTests
         {
             Name = "Execution phase",
             Summary = "Bounded Byrd execution"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("PHASE-001", result.PhaseId);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -274,7 +308,7 @@ public sealed class TodoClientTests
                         Summary = "Use active TODO only."
                     }
                 ]
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("PHASE-001", result.PhaseId);
         Assert.Equal(2, result.TodoIds.Count);
@@ -291,7 +325,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.GetActiveTodoAsync();
+        var result = await client.GetActiveTodoAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TODO-201", result.TodoId);
         Assert.Equal(Models.TodoExecutionStatus.TestDesign, result.Status);
@@ -308,7 +342,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.GetNextReadyTodoAsync();
+        var result = await client.GetNextReadyTodoAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TODO-202", result.TodoId);
         Assert.Equal(Models.TodoExecutionStatus.Validating, result.Status);
@@ -346,7 +380,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.GetExecutionContextAsync("TODO-201", 3, 2);
+        var result = await client.GetExecutionContextAsync("TODO-201", 3, 2, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TODO-201", result.TodoId);
         Assert.Contains("/mcpserver/todo-execution/todos/TODO-201", handler.LastRequest!.RequestUri!.AbsolutePath);
@@ -373,7 +407,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.GetDeltaContextAsync("TODO-201", "CHK-001");
+        var result = await client.GetDeltaContextAsync("TODO-201", "CHK-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TODO-201", result.TodoId);
         Assert.Equal("CHK-001", result.SinceCheckpointId);
@@ -398,7 +432,7 @@ public sealed class TodoClientTests
                 UnitTestsDefined = true,
                 TestFilePaths = ["tests/TodoExecutionServiceTests.cs"],
                 TestCommands = ["dotnet test tests/McpServer.Support.Mcp.Tests"]
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TODO-201", result.TodoId);
         Assert.Equal(Models.TodoExecutionStatus.TestReady, result.Status);
@@ -421,7 +455,7 @@ public sealed class TodoClientTests
             {
                 TargetStatus = Models.TodoExecutionStatus.Implementing,
                 Reason = "Unit tests are defined"
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(Models.TodoExecutionStatus.Implementing, result.CurrentStatus);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -444,7 +478,7 @@ public sealed class TodoClientTests
                 Kind = Models.TodoCheckpointKind.ImplementationProgress,
                 Summary = "Implemented execution gating.",
                 NextAction = "Run validation"
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("CHK-001", result.CheckpointId);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -467,7 +501,7 @@ public sealed class TodoClientTests
                 Result = "pass",
                 Summary = "Validation succeeded.",
                 UnitTestsPassing = true
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TODO-201", result.TodoId);
         Assert.Equal("Validation succeeded.", result.ValidationState.Summary);
@@ -489,7 +523,7 @@ public sealed class TodoClientTests
             new Models.LinkTodoToSessionTurnsRequest
             {
                 SessionTurnIds = ["req-001", "req-002"]
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TODO-201", result.TodoId);
         Assert.Equal(2, result.SessionTurnIds.Count);
@@ -511,7 +545,7 @@ public sealed class TodoClientTests
             Action = Models.AdbStepAction.Screenshot,
             CaptureScreenshot = true,
             Instruction = "Capture the current UI state."
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -527,7 +561,7 @@ public sealed class TodoClientTests
         var client = new TodoClient(http, DefaultOptions);
 
         var lines = new System.Collections.Generic.List<string>();
-        await foreach (var line in client.StreamStatusAsync("MVP-001"))
+        await foreach (var line in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken))
             lines.Add(line);
 
         Assert.Equal(2, lines.Count);
@@ -545,7 +579,7 @@ public sealed class TodoClientTests
         var client = new TodoClient(http, DefaultOptions);
 
         var lines = new System.Collections.Generic.List<string>();
-        await foreach (var line in client.StreamImplementAsync("MVP-001"))
+        await foreach (var line in client.StreamImplementAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken))
             lines.Add(line);
 
         Assert.Single(lines);
@@ -562,7 +596,7 @@ public sealed class TodoClientTests
         var client = new TodoClient(http, DefaultOptions);
 
         var lines = new System.Collections.Generic.List<string>();
-        await foreach (var line in client.StreamPlanAsync("MVP-001"))
+        await foreach (var line in client.StreamPlanAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken))
             lines.Add(line);
 
         Assert.Equal(3, lines.Count);
@@ -579,7 +613,7 @@ public sealed class TodoClientTests
 
         var result = await client.QueueStatusPromptAsync(
             "MVP-001",
-            new Models.AgentPoolOneShotRequest { AgentName = "triage", Context = Models.AgentPoolOneShotContext.Status });
+            new Models.AgentPoolOneShotRequest { AgentName = "triage", Context = Models.AgentPoolOneShotContext.Status }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal("job-status", result.JobId);
@@ -595,7 +629,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.QueueImplementPromptAsync("MVP-001");
+        var result = await client.QueueImplementPromptAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal("job-implement", result.JobId);
@@ -610,7 +644,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        var result = await client.QueuePlanPromptAsync("MVP-001");
+        var result = await client.QueuePlanPromptAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal("job-plan", result.JobId);
@@ -627,7 +661,7 @@ public sealed class TodoClientTests
 
         await Assert.ThrowsAsync<System.InvalidOperationException>(async () =>
         {
-            await foreach (var _ in client.StreamStatusAsync("MVP-001")) { }
+            await foreach (var _ in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken)) { }
         });
     }
 
@@ -640,7 +674,7 @@ public sealed class TodoClientTests
 
         await Assert.ThrowsAsync<McpServerException>(async () =>
         {
-            await foreach (var _ in client.StreamStatusAsync("MVP-001")) { }
+            await foreach (var _ in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken)) { }
         });
     }
 
@@ -652,7 +686,7 @@ public sealed class TodoClientTests
         using var http = new HttpClient(handler);
         var client = new TodoClient(http, DefaultOptions);
 
-        await foreach (var _ in client.StreamStatusAsync("MVP-001")) { }
+        await foreach (var _ in client.StreamStatusAsync("MVP-001", cancellationToken: TestContext.Current.CancellationToken)) { }
 
         Assert.True(handler.LastRequest!.Headers.TryGetValues("X-Api-Key", out var values));
         Assert.Contains("test-key", values!);

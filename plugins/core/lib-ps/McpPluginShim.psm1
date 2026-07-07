@@ -360,8 +360,9 @@ function New-McpPluginTurnUpsertRequest {
         Agent - Source type or agent name.
         SessionId - Target session identifier.
         Turn - Ordered turn payload with requestId, timestamp, queryText,
-        queryTitle, response, status, model, tokenCount, filesModified, and
-        actions when those optional collections are present.
+        queryTitle, response, status, model, tokenCount, filesModified,
+        actions, and processingDialog when those optional collections are
+        present.
     .EXAMPLE
         New-McpPluginTurnUpsertRequest -Agent Codex -SessionId Codex-1 -RequestId req-1 -Timestamp 2026-06-28T01:00:00Z -QueryText Hello -Title Hello -Status completed -Model codex
     #>
@@ -377,7 +378,8 @@ function New-McpPluginTurnUpsertRequest {
         [string]$ResponseText = '',
         [Parameter(Mandatory)][string]$Model,
         [string[]]$FilesModified = @(),
-        [object[]]$Actions = @()
+        [object[]]$Actions = @(),
+        [object[]]$ProcessingDialog = @()
     )
 
     $turn = [ordered]@{
@@ -397,6 +399,10 @@ function New-McpPluginTurnUpsertRequest {
 
     if ($Actions.Count -gt 0) {
         $turn.actions = @($Actions)
+    }
+
+    if ($ProcessingDialog.Count -gt 0) {
+        $turn.processingDialog = @($ProcessingDialog)
     }
 
     return [McpPluginTurnUpsertRequest]::new($Agent, $SessionId, $turn)

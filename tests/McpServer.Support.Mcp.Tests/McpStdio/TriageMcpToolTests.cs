@@ -68,7 +68,7 @@ public sealed class TriageMcpToolTests : IDisposable
             dedupeKey: "plugin-triage-wrapper",
             errorSignature: "method_not_found",
             affectedPaths: @"F:\GitHub\mcpserver-codex-plugin\lib\repl-invoke.sh,F:\GitHub\mcpserver-codex-plugin\skills\triage\SKILL.md",
-            reporterAgent: "Codex").ConfigureAwait(true);
+            reporterAgent: "Codex", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = JsonSerializer.Deserialize<TriageReportSubmitResult>(json, JsonOptions);
         Assert.NotNull(result);
@@ -99,7 +99,7 @@ public sealed class TriageMcpToolTests : IDisposable
                 Summary = "details",
             });
 
-        var json = await _tools.TriageStatus(@"F:\GitHub\McpServer", reportId: "triage-report-001").ConfigureAwait(true);
+        var json = await _tools.TriageStatus(@"F:\GitHub\McpServer", reportId: "triage-report-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<TriageReportDetail>(json, JsonOptions);
 
         Assert.NotNull(result);
@@ -126,7 +126,7 @@ public sealed class TriageMcpToolTests : IDisposable
                 ],
             });
 
-        var json = await _tools.TriageStatus(@"F:\GitHub\McpServer").ConfigureAwait(true);
+        var json = await _tools.TriageStatus(@"F:\GitHub\McpServer", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var result = JsonSerializer.Deserialize<TriageGroupQueryResult>(json, JsonOptions);
 
         Assert.NotNull(result);

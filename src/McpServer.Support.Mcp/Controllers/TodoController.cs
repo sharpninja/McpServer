@@ -1,3 +1,4 @@
+using System.Globalization;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
@@ -165,6 +166,25 @@ public sealed class TodoController : ControllerBase
     {
         if (request is null)
             return BadRequest(new TodoMutationResult(false, "Request body is required."));
+
+        var result = _todoMutations is null
+            ? await _todoUpdateService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false)
+            : await _todoMutations.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
+        if (!result.Success)
+            return ToMutationFailureResult(result);
+
+        return Ok(result);
+    }
+
+    /// <summary>TR-MCP-TODO-CLOSE-001: Close a TODO item by id with a server-owned UTC completion timestamp.</summary>
+    [HttpPost("{id}/close")]
+    public async Task<ActionResult<TodoMutationResult>> CloseAsync(string id, CancellationToken cancellationToken)
+    {
+        var request = new TodoUpdateRequest
+        {
+            Done = true,
+            CompletedDate = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture),
+        };
 
         var result = _todoMutations is null
             ? await _todoUpdateService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false)

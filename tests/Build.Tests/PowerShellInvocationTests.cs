@@ -99,7 +99,7 @@ public sealed class PowerShellInvocationTests
     private static async Task<string> ReadRepositoryTextAsync(string relativePath)
     {
         var path = Path.Combine(FindRepositoryRoot(), relativePath);
-        return await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        return await File.ReadAllTextAsync(path, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     private static string FindRepositoryRoot()

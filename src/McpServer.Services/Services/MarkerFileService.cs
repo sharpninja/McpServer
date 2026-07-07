@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Core;
@@ -22,7 +23,15 @@ public static class MarkerFileService
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
     internal const string MarkerSignatureCanonicalization = "marker-v1";
     internal const string MarkerSignatureVerifier = "workspace_api_key";
+    internal const string SyncedAgentPluginVersion = "1.26.0";
     private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
+    private const string WorkspaceCacheDirectoryGitIgnoreEntry = "cache/";
+
+    /// <summary>
+    /// Test seam: when set, plugin-version resolution scans this directory for user plugin caches
+    /// instead of the real user profile, so tests are hermetic against locally installed plugins.
+    /// </summary>
+    internal static string? AgentPluginUserProfileOverride { get; set; }
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -135,6 +144,7 @@ public static class MarkerFileService
         try
         {
             EnsureGitIgnored(workspacePath, logger);
+            await EnsureDefaultWikiConfigAsync(workspacePath, logger, ct).ConfigureAwait(false);
             var yaml = s_yamlSerializer.Serialize(marker);
             await File.WriteAllTextAsync(markerPath, yaml, ct).ConfigureAwait(false);
             logger?.LogInformation("Wrote MCP marker file: {Path}", markerPath);
@@ -142,6 +152,74 @@ public static class MarkerFileService
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
         {
             logger?.LogWarning(ex, "Failed to write MCP marker file: {Path}", markerPath);
+        }
+    }
+
+    private static async Task EnsureDefaultWikiConfigAsync(string workspacePath, ILogger? logger, CancellationToken ct)
+    {
+        var docsPath = Path.Combine(workspacePath, "docs");
+        var wikiConfigPath = Path.Combine(docsPath, "wiki.yaml");
+        if (File.Exists(wikiConfigPath))
+            return;
+
+        var tempPath = Path.Combine(docsPath, "wiki.yaml." + Guid.NewGuid().ToString("N")[..8] + ".tmp");
+        try
+        {
+            Directory.CreateDirectory(docsPath);
+            if (File.Exists(wikiConfigPath))
+                return;
+
+            var yaml = s_yamlSerializer.Serialize(BuildDefaultWikiConfig());
+            await File.WriteAllTextAsync(tempPath, yaml, ct).ConfigureAwait(false);
+            File.Move(tempPath, wikiConfigPath);
+            logger?.LogInformation("Wrote default MCP wiki export config: {Path}", wikiConfigPath);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
+        {
+            TryDeleteTempFile(tempPath, logger);
+            logger?.LogWarning(ex, "Failed to write default MCP wiki export config: {Path}", wikiConfigPath);
+        }
+    }
+
+    private static object BuildDefaultWikiConfig()
+    {
+        var documents = new[]
+        {
+            new MarkerDefaultWikiDocument("home", "Home", "generated:home", "Home.md"),
+            new MarkerDefaultWikiDocument("functional", "Functional Requirements", "generated:functional", "Functional-Requirements.md"),
+            new MarkerDefaultWikiDocument("technical", "Technical Requirements", "generated:technical", "Technical-Requirements.md"),
+            new MarkerDefaultWikiDocument("testing", "Testing Requirements", "generated:testing", "Testing-Requirements.md"),
+            new MarkerDefaultWikiDocument("mapping", "TR per FR Mapping", "generated:mapping", "TR-per-FR-Mapping.md"),
+            new MarkerDefaultWikiDocument("matrix", "Requirements Matrix", "generated:matrix", "Requirements-Matrix.md"),
+        };
+
+        return new MarkerDefaultWikiConfig
+        {
+            Schema = "mcp-wiki-export/v1",
+            Home = new MarkerDefaultWikiHome("home"),
+            Documents = documents,
+            Navigation =
+            [
+                new() { Document = "home" },
+                new() { Document = "functional" },
+                new() { Document = "technical" },
+                new() { Document = "testing" },
+                new() { Document = "mapping" },
+                new() { Document = "matrix" },
+            ],
+        };
+    }
+
+    private static void TryDeleteTempFile(string tempPath, ILogger? logger)
+    {
+        try
+        {
+            if (File.Exists(tempPath))
+                File.Delete(tempPath);
+        }
+        catch (Exception cleanupEx)
+        {
+            logger?.LogDebug(cleanupEx, "Failed to delete default MCP wiki export config temp file: {Path}", tempPath);
         }
     }
 
@@ -162,7 +240,7 @@ public static class MarkerFileService
         {
             var gitignorePath = Path.Combine(workspacePath, ".gitignore");
             var lines = File.Exists(gitignorePath) ? File.ReadAllLines(gitignorePath) : [];
-            var missingEntries = new[] { MarkerFileName, WorkspaceStateDirectoryGitIgnoreEntry }
+            var missingEntries = new[] { MarkerFileName, WorkspaceStateDirectoryGitIgnoreEntry, WorkspaceCacheDirectoryGitIgnoreEntry }
                 .Where(entry => !lines.Any(line => line.Trim().Equals(entry, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
@@ -347,6 +425,8 @@ public static class MarkerFileService
     {
         var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath)) ?? string.Empty;
         string Sibling(string name) => string.IsNullOrWhiteSpace(siblingRoot) ? name : Path.Combine(siblingRoot, name);
+        string Version(string pluginName, string environmentVariableName) =>
+            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
 
         return new MarkerAgentPlugins
         {
@@ -357,7 +437,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Codex",
                     PluginName = "mcpserver-codex-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-codex-plugin", "CODEX_PLUGIN_ROOT"),
                     Activation = "Codex hook lifecycle through .codex-plugin/plugin.json.",
                     StartupCommand = "lib/session-start.sh \"{workspacePath}\"",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Codex",
@@ -370,7 +450,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Claude",
                     PluginName = "mcpserver-claude-code-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-claude-code-plugin", "CLAUDE_PLUGIN_ROOT"),
                     Activation = "Claude Code plugin hooks and .mcp.json mcpserver entry.",
                     StartupCommand = "hooks/session-start.sh \"{workspacePath}\"",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Claude",
@@ -383,7 +463,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Copilot",
                     PluginName = "mcpserver-copilot-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-copilot-plugin", "COPILOT_PLUGIN_ROOT"),
                     Activation = "Copilot plugin hooks and .mcp.json mcpserver entry.",
                     StartupCommand = "hooks/session-start.sh \"{workspacePath}\"",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Copilot",
@@ -396,7 +476,7 @@ public static class MarkerFileService
                 {
                     SourceType = "Cline",
                     PluginName = "mcpserver-cline-plugin",
-                    PluginVersion = "1.1.0",
+                    PluginVersion = Version("mcpserver-cline-plugin", "CLINE_PLUGIN_ROOT"),
                     Activation = "Cline MCP server configured from server.json.",
                     StartupCommand = "npm run build && node dist/index.js",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Cline",
@@ -409,7 +489,7 @@ public static class MarkerFileService
                 {
                     SourceType = "GrokCode",
                     PluginName = "mcpserver-grok-plugin",
-                    PluginVersion = "1.1.1",
+                    PluginVersion = Version("mcpserver-grok-plugin", "GROK_PLUGIN_ROOT"),
                     Activation = "Grok Build loads enabled plugin skills, hooks, and MCP servers from the Grok/Claude-compatible plugin manifests. Use sessionlog_*, todo_*, and requirements_* tool names when the Streamable HTTP MCP server is discoverable; mcp_* names are hosted-agent aliases, and workflow.* names are plugin shim/REPL method names invoked through the Grok plugin skills or repl-invoke helpers, not literal Grok search_tool results.",
                     StartupCommand = "",
                     UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:GrokCode",
@@ -420,6 +500,150 @@ public static class MarkerFileService
                 },
             },
         };
+    }
+
+    internal static string ResolveAgentPluginVersion(
+        string workspacePath,
+        string pluginName,
+        string environmentVariableName)
+    {
+        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName))
+        {
+            var version = TryReadAgentPluginVersion(root);
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+        }
+
+        return SyncedAgentPluginVersion;
+    }
+
+    private static IEnumerable<string> EnumerateAgentPluginVersionRoots(
+        string workspacePath,
+        string pluginName,
+        string environmentVariableName)
+    {
+        var environmentRoot = Environment.GetEnvironmentVariable(environmentVariableName);
+        if (!string.IsNullOrWhiteSpace(environmentRoot))
+            yield return environmentRoot;
+
+        if (!string.IsNullOrWhiteSpace(workspacePath))
+        {
+            var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
+            if (!string.IsNullOrWhiteSpace(siblingRoot))
+                yield return Path.Combine(siblingRoot, pluginName);
+        }
+
+        var userProfile = AgentPluginUserProfileOverride
+            ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (!string.IsNullOrWhiteSpace(userProfile))
+        {
+            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName))
+                yield return candidate;
+        }
+    }
+
+    private static IEnumerable<string> EnumerateUserPluginCacheRoots(string userProfile, string pluginName)
+    {
+        var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
+        if (Directory.Exists(codexCache))
+        {
+            foreach (var candidate in OrderPluginVersionRoots(Directory.EnumerateDirectories(codexCache, "*", SearchOption.AllDirectories)))
+                yield return candidate;
+        }
+
+        var claudeCache = Path.Combine(userProfile, ".claude", "plugins", "cache");
+        if (Directory.Exists(claudeCache))
+        {
+            var candidates = Directory.EnumerateDirectories(claudeCache, "*", SearchOption.AllDirectories)
+                .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+                    || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
+            foreach (var candidate in OrderPluginVersionRoots(candidates))
+                yield return candidate;
+        }
+
+        var grokCache = Path.Combine(userProfile, ".grok", "installed-plugins");
+        if (Directory.Exists(grokCache))
+        {
+            var candidates = Directory.EnumerateDirectories(grokCache, "*", SearchOption.AllDirectories)
+                .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+                    || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
+            foreach (var candidate in OrderPluginVersionRoots(candidates))
+                yield return candidate;
+        }
+    }
+
+    private static IEnumerable<string> OrderPluginVersionRoots(IEnumerable<string> candidates)
+    {
+        return candidates
+            .Select(path => new { Path = path, Version = GetPluginVersionSortKey(path) })
+            .OrderByDescending(candidate => candidate.Version)
+            .ThenByDescending(candidate => candidate.Path, StringComparer.OrdinalIgnoreCase)
+            .Select(candidate => candidate.Path);
+    }
+
+    private static System.Version GetPluginVersionSortKey(string root)
+    {
+        var versionText = TryReadAgentPluginVersion(root);
+        if (string.IsNullOrWhiteSpace(versionText))
+            return new System.Version(0, 0);
+
+        var normalized = versionText.Split('+')[0].Split('-')[0];
+        return System.Version.TryParse(normalized, out var parsed)
+            ? parsed
+            : new System.Version(0, 0);
+    }
+
+    private static string? TryReadAgentPluginVersion(string root)
+    {
+        if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
+            return null;
+
+        var versionFile = Path.Combine(root, ".version");
+        if (File.Exists(versionFile))
+        {
+            var version = File.ReadAllText(versionFile).Trim();
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+        }
+
+        foreach (var manifest in new[]
+                 {
+                     "plugin.json",
+                     Path.Combine(".codex-plugin", "plugin.json"),
+                     Path.Combine(".claude-plugin", "plugin.json"),
+                     Path.Combine(".grok-plugin", "plugin.json"),
+                     "package.json",
+                 })
+        {
+            var path = Path.Combine(root, manifest);
+            if (!File.Exists(path))
+                continue;
+
+            var version = TryReadVersionFromJson(path);
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+        }
+
+        return null;
+    }
+
+    private static string? TryReadVersionFromJson(string path)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(File.ReadAllText(path));
+            if (document.RootElement.TryGetProperty("version", out var version)
+                && version.ValueKind == JsonValueKind.String)
+            {
+                return version.GetString();
+            }
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+
+        return null;
     }
 
     internal static string ComputeAgentPluginsDigest(MarkerAgentPlugins agentPlugins)
@@ -479,6 +703,67 @@ internal sealed class MarkerFile
     public MarkerAgentPlugins? AgentPlugins { get; set; }
     [YamlMember(ScalarStyle = ScalarStyle.Literal)]
     public string Prompt { get; set; } = string.Empty;
+}
+
+internal sealed class MarkerDefaultWikiConfig
+{
+    public string Schema { get; set; } = string.Empty;
+
+    public MarkerDefaultWikiHome Home { get; set; } = new();
+
+    public IReadOnlyList<MarkerDefaultWikiDocument> Documents { get; set; } = [];
+
+    public IReadOnlyList<MarkerDefaultWikiNavigationItem> Navigation { get; set; } = [];
+}
+
+internal sealed class MarkerDefaultWikiHome
+{
+    public MarkerDefaultWikiHome()
+    {
+    }
+
+    public MarkerDefaultWikiHome(string document)
+    {
+        Document = document;
+    }
+
+    public string Document { get; set; } = string.Empty;
+}
+
+internal sealed class MarkerDefaultWikiDocument
+{
+    public MarkerDefaultWikiDocument()
+    {
+    }
+
+    public MarkerDefaultWikiDocument(string id, string title, string source, string target)
+    {
+        Id = id;
+        Title = title;
+        Source = source;
+        Target = target;
+    }
+
+    public string Id { get; set; } = string.Empty;
+
+    public string Title { get; set; } = string.Empty;
+
+    public string Source { get; set; } = string.Empty;
+
+    public string Target { get; set; } = string.Empty;
+
+    public string[] Platforms { get; set; } = ["github", "azure"];
+}
+
+internal sealed class MarkerDefaultWikiNavigationItem
+{
+    public string? Document { get; set; }
+
+    public string? Title { get; set; }
+
+    public string? Path { get; set; }
+
+    public IReadOnlyList<MarkerDefaultWikiNavigationItem> Children { get; set; } = [];
 }
 
 internal sealed class MarkerAgentPlugins

@@ -14,7 +14,7 @@
     <ProjectReference Include="..\McpServer.Services\McpServer.Services.csproj" />
     <ProjectReference Include="..\McpServer.Storage\McpServer.Storage.csproj" />
     <ProjectReference Include="..\McpServer.Cqrs\McpServer.Cqrs.csproj" />
-    <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />
+    <ProjectReference Include="..\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

@@ -30,7 +30,7 @@ public sealed class RequirementsWorkflowMetadataTests
         request.Status.Returns("in_progress");
         request.Notes.Returns("metadata");
 
-        var result = await workflow.UpdateFrAsync(request);
+        var result = await workflow.UpdateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("\"priority\":\"high\"", handler.LastRequestBody);
         Assert.Contains("\"status\":\"in_progress\"", handler.LastRequestBody);
@@ -54,7 +54,7 @@ public sealed class RequirementsWorkflowMetadataTests
         trRequest.Status.Returns("completed");
         trRequest.Notes.Returns("tr metadata");
 
-        var trResult = await workflow.UpdateTrAsync(trRequest);
+        var trResult = await workflow.UpdateTrAsync(trRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("\"priority\":\"high\"", trHandler.LastRequestBody);
         Assert.Contains("\"status\":\"completed\"", trHandler.LastRequestBody);
@@ -74,7 +74,7 @@ public sealed class RequirementsWorkflowMetadataTests
         testRequest.Status.Returns("completed");
         testRequest.Notes.Returns("test metadata");
 
-        var testResult = await testWorkflow.UpdateTestAsync(testRequest);
+        var testResult = await testWorkflow.UpdateTestAsync(testRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("\"priority\":\"high\"", testHandler.LastRequestBody);
         Assert.Contains("\"status\":\"completed\"", testHandler.LastRequestBody);
@@ -97,7 +97,7 @@ public sealed class RequirementsWorkflowMetadataTests
         frRequest.Priority.Returns("high");
         frRequest.Status.Returns("completed");
 
-        var frResult = await frWorkflow.UpdateFrAsync(frRequest);
+        var frResult = await frWorkflow.UpdateFrAsync(frRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("FR-MCP-MEMORY-001", frResult.Item.Id);
         Assert.Contains("\"status\":\"completed\"", frHandler.LastRequestBody);
@@ -112,7 +112,7 @@ public sealed class RequirementsWorkflowMetadataTests
         trRequest.Priority.Returns("high");
         trRequest.Status.Returns("completed");
 
-        var trResult = await trWorkflow.UpdateTrAsync(trRequest);
+        var trResult = await trWorkflow.UpdateTrAsync(trRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TR-MCP-MEMORY-001", trResult.Item.Id);
         Assert.Contains("\"status\":\"completed\"", trHandler.LastRequestBody);
@@ -127,7 +127,7 @@ public sealed class RequirementsWorkflowMetadataTests
         testRequest.Priority.Returns("high");
         testRequest.Status.Returns("completed");
 
-        var testResult = await testWorkflow.UpdateTestAsync(testRequest);
+        var testResult = await testWorkflow.UpdateTestAsync(testRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("TEST-MCP-MEMORY-001", testResult.Item.Id);
         Assert.Contains("\"status\":\"completed\"", testHandler.LastRequestBody);

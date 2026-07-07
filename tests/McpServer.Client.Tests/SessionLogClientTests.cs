@@ -27,7 +27,7 @@ public sealed class SessionLogClientTests
             SourceType = "Copilot",
             SessionId = "s1",
             Title = "Test"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Equal("Copilot", result.SourceType);
@@ -40,7 +40,7 @@ public sealed class SessionLogClientTests
         using var http = new HttpClient(handler);
         var client = new SessionLogClient(http, DefaultOptions);
 
-        await client.QueryAsync(agent: "Copilot", limit: 10);
+        await client.QueryAsync(agent: "Copilot", limit: 10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("agent=Copilot", handler.LastRequest!.RequestUri!.Query);
         Assert.Contains("limit=10", handler.LastRequest.RequestUri.Query);
@@ -59,7 +59,7 @@ public sealed class SessionLogClientTests
             AgentDefinitionId = "mcpserver-triage",
             Limit = 25,
             Offset = 5,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("agent=Codex", handler.LastRequest!.RequestUri!.Query);
         Assert.Contains("agentDefinitionId=mcpserver-triage", handler.LastRequest.RequestUri.Query);
@@ -74,7 +74,7 @@ public sealed class SessionLogClientTests
         using var http = new HttpClient(handler);
         var client = new SessionLogClient(http, DefaultOptions);
 
-        var result = await client.RepairWorkspaceStampsAsync(dryRun: true);
+        var result = await client.RepairWorkspaceStampsAsync(dryRun: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/sessionlog/repair-workspace-stamps", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -93,7 +93,7 @@ public sealed class SessionLogClientTests
         var result = await client.AppendDialogAsync("Copilot", "s1", "r1", new List<ProcessingDialogItemDto>
         {
             new() { Role = "model", Content = "Thinking...", Category = "reasoning" }
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("/Copilot/s1/r1/dialog", handler.LastRequest!.RequestUri!.AbsolutePath);
         Assert.Equal(2, result.TotalDialogCount);
@@ -124,7 +124,7 @@ public sealed class SessionLogClientTests
                     FilePath = "src/McpServer.Client/SessionLogClient.cs"
                 }
             ]
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/sessionlog/Copilot/s1/turn", handler.LastRequest.RequestUri!.AbsolutePath);

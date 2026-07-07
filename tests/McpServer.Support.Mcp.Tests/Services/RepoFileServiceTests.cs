@@ -40,7 +40,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task ReadAsync_AllowedPath_ReturnsContent()
     {
-        var result = await _sut.ReadAsync("readme.md").ConfigureAwait(true);
+        var result = await _sut.ReadAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(result);
         Assert.True(result.Exists);
@@ -50,7 +50,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task ReadAsync_PathTraversal_ReturnsNull()
     {
-        var result = await _sut.ReadAsync("../../etc/passwd").ConfigureAwait(true);
+        var result = await _sut.ReadAsync("../../etc/passwd", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Null(result);
     }
@@ -65,7 +65,7 @@ public sealed class RepoFileServiceTests : IDisposable
         });
         var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
-        var result = await sut.ReadAsync("src/code.cs").ConfigureAwait(true);
+        var result = await sut.ReadAsync("src/code.cs", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Null(result);
     }
@@ -73,7 +73,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task ListAsync_ValidDirectory_ReturnsEntries()
     {
-        var result = await _sut.ListAsync(".").ConfigureAwait(true);
+        var result = await _sut.ListAsync(".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEmpty(result.Entries);
         Assert.Contains(result.Entries, e => e.Name == "readme.md");
@@ -83,7 +83,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task ListAsync_NonexistentPath_ReturnsEmpty()
     {
-        var result = await _sut.ListAsync("nonexistent_dir").ConfigureAwait(true);
+        var result = await _sut.ListAsync("nonexistent_dir", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(result.Entries);
     }
@@ -91,7 +91,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task WriteAsync_AllowedPath_WritesAndAudits()
     {
-        var result = await _sut.WriteAsync("test_output.txt", "test content").ConfigureAwait(true);
+        var result = await _sut.WriteAsync("test_output.txt", "test content", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Written);
         Assert.True(File.Exists(Path.Combine(_tempDir, "test_output.txt")));
@@ -114,7 +114,7 @@ public sealed class RepoFileServiceTests : IDisposable
         });
         var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
-        var result = await sut.WriteAsync("secret.txt", "data").ConfigureAwait(true);
+        var result = await sut.WriteAsync("secret.txt", "data", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
     }
@@ -122,7 +122,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task CaptureForWriteAsync_ExistingPath_ReturnsSnapshot()
     {
-        var result = await _sut.CaptureForWriteAsync("readme.md").ConfigureAwait(true);
+        var result = await _sut.CaptureForWriteAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(result);
         Assert.True(result.Exists);
@@ -134,12 +134,12 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task RestoreWriteAsync_ExistingSnapshot_RestoresPriorContent()
     {
-        var snapshot = await _sut.CaptureForWriteAsync("readme.md").ConfigureAwait(true);
+        var snapshot = await _sut.CaptureForWriteAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
-        var write = await _sut.WriteAsync("readme.md", "changed").ConfigureAwait(true);
+        var write = await _sut.WriteAsync("readme.md", "changed", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(write.Written);
 
-        await _sut.RestoreWriteAsync(snapshot!, "changed").ConfigureAwait(true);
+        await _sut.RestoreWriteAsync(snapshot!, "changed", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("# Hello", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
     }
@@ -147,12 +147,12 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task RestoreWriteAsync_NewFileSnapshot_DeletesCreatedFile()
     {
-        var snapshot = await _sut.CaptureForWriteAsync("created.md").ConfigureAwait(true);
+        var snapshot = await _sut.CaptureForWriteAsync("created.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
-        var write = await _sut.WriteAsync("created.md", "created").ConfigureAwait(true);
+        var write = await _sut.WriteAsync("created.md", "created", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(write.Written);
 
-        await _sut.RestoreWriteAsync(snapshot!, "created").ConfigureAwait(true);
+        await _sut.RestoreWriteAsync(snapshot!, "created", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(File.Exists(Path.Combine(_tempDir, "created.md")));
     }
@@ -160,14 +160,14 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task RestoreWriteAsync_WhenFileChangedAfterWrite_RefusesOverwrite()
     {
-        var snapshot = await _sut.CaptureForWriteAsync("readme.md").ConfigureAwait(true);
+        var snapshot = await _sut.CaptureForWriteAsync("readme.md", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
-        var write = await _sut.WriteAsync("readme.md", "transaction").ConfigureAwait(true);
+        var write = await _sut.WriteAsync("readme.md", "transaction", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(write.Written);
         File.WriteAllText(Path.Combine(_tempDir, "readme.md"), "human edit");
 
         var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => _sut.RestoreWriteAsync(snapshot!, "transaction"))
+                () => _sut.RestoreWriteAsync(snapshot!, "transaction", cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("changed after transactional write", ex.Message, StringComparison.Ordinal);
@@ -178,7 +178,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_UniqueOccurrence_Replaces()
     {
-        var result = await _sut.EditAsync("readme.md", "Hello", "World").ConfigureAwait(true);
+        var result = await _sut.EditAsync("readme.md", "Hello", "World", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Written);
         Assert.Equal(1, result.Replacements);
@@ -189,7 +189,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_MissingOldString_Fails()
     {
-        var result = await _sut.EditAsync("readme.md", "absent", "x").ConfigureAwait(true);
+        var result = await _sut.EditAsync("readme.md", "absent", "x", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
         Assert.Contains("not found", result.Error!, StringComparison.Ordinal);
@@ -200,9 +200,9 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_Ambiguous_FailsWithoutReplaceAll()
     {
-        await _sut.WriteAsync("multi.txt", "a a a").ConfigureAwait(true);
+        await _sut.WriteAsync("multi.txt", "a a a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.EditAsync("multi.txt", "a", "b").ConfigureAwait(true);
+        var result = await _sut.EditAsync("multi.txt", "a", "b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
         Assert.Contains("ambiguous", result.Error!, StringComparison.Ordinal);
@@ -213,9 +213,9 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_ReplaceAll_ReplacesEvery()
     {
-        await _sut.WriteAsync("multi.txt", "a a a").ConfigureAwait(true);
+        await _sut.WriteAsync("multi.txt", "a a a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.EditAsync("multi.txt", "a", "b", replaceAll: true).ConfigureAwait(true);
+        var result = await _sut.EditAsync("multi.txt", "a", "b", replaceAll: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Written);
         Assert.Equal(3, result.Replacements);
@@ -226,9 +226,9 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_ExpectedOccurrencesMismatch_Fails()
     {
-        await _sut.WriteAsync("multi.txt", "a a a").ConfigureAwait(true);
+        await _sut.WriteAsync("multi.txt", "a a a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.EditAsync("multi.txt", "a", "b", replaceAll: true, expectedOccurrences: 2).ConfigureAwait(true);
+        var result = await _sut.EditAsync("multi.txt", "a", "b", replaceAll: true, expectedOccurrences: 2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
         Assert.Contains("expected 2", result.Error!, StringComparison.Ordinal);
@@ -238,7 +238,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_EmptyOldString_Fails()
     {
-        var result = await _sut.EditAsync("readme.md", string.Empty, "x").ConfigureAwait(true);
+        var result = await _sut.EditAsync("readme.md", string.Empty, "x", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
         Assert.Contains("must not be empty", result.Error!, StringComparison.Ordinal);
@@ -248,7 +248,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_SameOldAndNew_Fails()
     {
-        var result = await _sut.EditAsync("readme.md", "Hello", "Hello").ConfigureAwait(true);
+        var result = await _sut.EditAsync("readme.md", "Hello", "Hello", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
         Assert.Contains("must differ", result.Error!, StringComparison.Ordinal);
@@ -258,7 +258,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_NonexistentFile_Fails()
     {
-        var result = await _sut.EditAsync("does-not-exist.txt", "a", "b").ConfigureAwait(true);
+        var result = await _sut.EditAsync("does-not-exist.txt", "a", "b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
         Assert.Contains("file not found", result.Error!, StringComparison.Ordinal);
@@ -268,7 +268,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_PathTraversal_Rejected()
     {
-        var result = await _sut.EditAsync("../../etc/passwd", "a", "b").ConfigureAwait(true);
+        var result = await _sut.EditAsync("../../etc/passwd", "a", "b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
         Assert.Contains("not allowed", result.Error!, StringComparison.Ordinal);
@@ -285,7 +285,7 @@ public sealed class RepoFileServiceTests : IDisposable
         });
         var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
-        var result = await sut.EditAsync("src/code.cs", "Foo", "Bar").ConfigureAwait(true);
+        var result = await sut.EditAsync("src/code.cs", "Foo", "Bar", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Written);
     }
@@ -294,7 +294,7 @@ public sealed class RepoFileServiceTests : IDisposable
     [Fact]
     public async Task EditAsync_Success_AuditsAndPublishesUpdated()
     {
-        var result = await _sut.EditAsync("readme.md", "Hello", "World").ConfigureAwait(true);
+        var result = await _sut.EditAsync("readme.md", "Hello", "World", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Written);
         _auditLog.Received(1).RecordWrite("readme.md", Arg.Any<DateTime>());
@@ -324,8 +324,8 @@ public sealed class RepoFileServiceTests : IDisposable
         });
         var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
-        var allowed = await sut.ReadAsync("src/McpServer.Cqrs/inside.cs").ConfigureAwait(true);
-        var disallowed = await sut.ReadAsync("src/McpServer.Cqrs.Bad/escape.cs").ConfigureAwait(true);
+        var allowed = await sut.ReadAsync("src/McpServer.Cqrs/inside.cs", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var disallowed = await sut.ReadAsync("src/McpServer.Cqrs.Bad/escape.cs", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(allowed);
         Assert.Null(disallowed);
@@ -341,8 +341,8 @@ public sealed class RepoFileServiceTests : IDisposable
         });
         var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
-        var allowed = await sut.ReadAsync("src/nested/deep.cs").ConfigureAwait(true);
-        var disallowed = await sut.ReadAsync("src/notes.txt").ConfigureAwait(true);
+        var allowed = await sut.ReadAsync("src/nested/deep.cs", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var disallowed = await sut.ReadAsync("src/notes.txt", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(allowed);
         Assert.Null(disallowed);
@@ -358,8 +358,8 @@ public sealed class RepoFileServiceTests : IDisposable
         });
         var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
-        var root = await sut.ListAsync(".").ConfigureAwait(true);
-        var src = await sut.ListAsync("src").ConfigureAwait(true);
+        var root = await sut.ListAsync(".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var src = await sut.ListAsync("src", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains(root.Entries, entry => entry.Name == "src" && entry.IsDirectory);
         Assert.DoesNotContain(root.Entries, entry => entry.Name == "readme.md");
@@ -388,7 +388,7 @@ public sealed class RepoFileServiceTests : IDisposable
             });
             var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
-            var result = await sut.ReadAsync("linked-outside/outside.cs").ConfigureAwait(true);
+            var result = await sut.ReadAsync("linked-outside/outside.cs", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Null(result);
         }

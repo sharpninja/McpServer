@@ -67,20 +67,12 @@ public sealed class TriageReportEntity
     [MaxLength(128)]
     public required string Fingerprint { get; set; }
 
-    /// <summary>Affected paths serialized as JSON.</summary>
-    public string? AffectedPathsJson { get; set; }
-
-    /// <summary>Affected symbols serialized as JSON.</summary>
-    public string? AffectedSymbolsJson { get; set; }
-
-    /// <summary>Evidence map serialized as JSON.</summary>
+    /// <summary>Evidence map serialized as JSON (single-valued map; not a 4NF list).</summary>
     public string? EvidenceJson { get; set; }
 
-    /// <summary>Reproduction hints serialized as JSON.</summary>
-    public string? ReproductionHintsJson { get; set; }
-
-    /// <summary>Tags serialized as JSON.</summary>
-    public string? TagsJson { get; set; }
+    /// <summary>TR-MCP-TRIAGE-001: 4NF child rows for the affected-paths, affected-symbols,
+    /// reproduction-hints, and tags lists (discriminated by <see cref="TriageReportListItemEntity.ListType"/>).</summary>
+    public List<TriageReportListItemEntity> ListItems { get; set; } = [];
 
     /// <summary>Reporting agent identity.</summary>
     [MaxLength(128)]

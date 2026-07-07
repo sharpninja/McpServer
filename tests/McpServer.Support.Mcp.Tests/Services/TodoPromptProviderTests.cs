@@ -21,7 +21,7 @@ public sealed class TodoPromptProviderTests
             .Returns(new PromptTemplate { Id = TodoPromptProvider.StatusPromptId, Title = "test", Category = "system", Content = customContent });
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetStatusPromptAsync();
+        var result = await provider.GetStatusPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(customContent, result);
     }
@@ -33,7 +33,7 @@ public sealed class TodoPromptProviderTests
             .Returns((PromptTemplate?)null);
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetStatusPromptAsync();
+        var result = await provider.GetStatusPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(TodoPromptDefaults.StatusPrompt, result);
     }
@@ -46,7 +46,7 @@ public sealed class TodoPromptProviderTests
             .Returns(new PromptTemplate { Id = TodoPromptProvider.ImplementPromptId, Title = "test", Category = "system", Content = customContent });
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetImplementPromptAsync();
+        var result = await provider.GetImplementPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(customContent, result);
     }
@@ -58,7 +58,7 @@ public sealed class TodoPromptProviderTests
             .Returns((PromptTemplate?)null);
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetImplementPromptAsync();
+        var result = await provider.GetImplementPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(TodoPromptDefaults.ImplementPrompt, result);
     }
@@ -71,7 +71,7 @@ public sealed class TodoPromptProviderTests
             .Returns(new PromptTemplate { Id = TodoPromptProvider.PlanPromptId, Title = "test", Category = "system", Content = customContent });
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetPlanPromptAsync();
+        var result = await provider.GetPlanPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(customContent, result);
     }
@@ -83,7 +83,7 @@ public sealed class TodoPromptProviderTests
             .Returns((PromptTemplate?)null);
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetPlanPromptAsync();
+        var result = await provider.GetPlanPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(TodoPromptDefaults.PlanPrompt, result);
     }
@@ -95,7 +95,7 @@ public sealed class TodoPromptProviderTests
             .Returns(new PromptTemplate { Id = TodoPromptProvider.StatusPromptId, Title = "test", Category = "system", Content = "   " });
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetStatusPromptAsync();
+        var result = await provider.GetStatusPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(TodoPromptDefaults.StatusPrompt, result);
     }
@@ -107,7 +107,7 @@ public sealed class TodoPromptProviderTests
             .ThrowsAsync(new IOException("disk error"));
 
         var provider = new TodoPromptProvider(_templateService, _logger);
-        var result = await provider.GetStatusPromptAsync();
+        var result = await provider.GetStatusPromptAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(TodoPromptDefaults.StatusPrompt, result);
     }

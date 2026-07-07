@@ -82,6 +82,219 @@ acceptanceCriteria:
         $parsed.response | Should -Be "line one`nline two`n"
     }
 
+    It 'TEST-MCP-PLUGIN-PSONLY-001 rejects append and complete calls when no active turn cache exists' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($pluginRoot)
+        $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+
+        try {
+            $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $actionsPayload = [ordered]@{
+                actions = @(
+                    [ordered]@{
+                        type = 'edit'
+                        filePath = 'src/Example.cs'
+                        status = 'succeeded'
+                    }
+                )
+            } | ConvertTo-Json -Depth 10 -Compress
+            $completePayload = [ordered]@{
+                response = 'Done'
+            } | ConvertTo-Json -Depth 10 -Compress
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml $actionsPayload | Should -BeFalse
+            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $completePayload | Should -BeFalse
+        } finally {
+            if ($null -ne $previousPluginRoot) {
+                $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
+            } else {
+                Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 handles appendDialog locally instead of dispatching it as a raw server method' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($pluginRoot)
+        $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+
+        try {
+            $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Invoke-ReplRaw {
+                throw 'raw dispatch should not be used for workflow.sessionlog.appendDialog'
+            }
+
+            $dialogPayload = [ordered]@{
+                dialogItems = @(
+                    [ordered]@{
+                        role = 'assistant'
+                        content = 'diagnostic'
+                        category = 'decision'
+                    }
+                )
+            } | ConvertTo-Json -Depth 10 -Compress
+
+            { $script:appendDialogResult = Invoke-ReplMethod -Method 'workflow.sessionlog.appendDialog' -ParamsYaml $dialogPayload } | Should -Not -Throw
+            $script:appendDialogResult | Should -BeFalse
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousPluginRoot) {
+                $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
+            } else {
+                Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+            Remove-Variable -Name appendDialogResult -Scope Script -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 exits nonzero when appendActions has no active turn cache' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($pluginRoot)
+        $actionsPayload = [ordered]@{
+            actions = @(
+                [ordered]@{
+                    type = 'edit'
+                    filePath = 'src/Example.cs'
+                    status = 'succeeded'
+                }
+            )
+        } | ConvertTo-Json -Depth 10 -Compress
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'repl-invoke.ps1') `
+                -Arguments @('-Method', 'workflow.sessionlog.appendActions', '-ParamsYaml', $actionsPayload) `
+                -Environment @{ PLUGIN_ROOT_OVERRIDE = $pluginRoot }
+
+            $result.ExitCode | Should -Be 1
+            ($result.Stdout + $result.Stderr) | Should -Match 'current-turn\.yaml'
+        } finally {
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-MARKER-REFRESH-001 plugin hooks cache marker path and timestamp in session state' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $source | Should -Match 'markerFilePath'
+        $source | Should -Match 'markerLastWriteUtc'
+        $source | Should -Match 'Get-MarkerFileSnapshot'
+    }
+
+    It 'TEST-MCP-MARKER-REFRESH-001 plugin hooks check marker freshness before opening turns' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $source | Should -Match 'function Ensure-PluginMarkerFresh'
+        $source | Should -Match 'Ensure-PluginMarkerFresh -StartPath'
+        $source | Should -Match 'Start-PluginSession -StartPath'
+    }
+
+    It 'TEST-MCP-MARKER-REFRESH-001 plugin REPL dispatch checks marker freshness before requests' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match 'function Assert-ReplMarkerFresh'
+        $source | Should -Match 'Assert-ReplMarkerFresh'
+        $source.IndexOf('Assert-ReplMarkerFresh') | Should -BeLessThan $source.IndexOf('Invoke-ReplRaw -Method')
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-017 repl-invoke force reloads stale McpPluginShim modules' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match 'Import-Module \$shimModule -Force'
+        $source | Should -Match 'Remove-Module McpPluginShim -Force'
+        $source | Should -Match 'New-McpPluginTurnUpsertRequest'
+        $source | Should -Match 'ProcessingDialog'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-019 plugin hooks create meaningful continuation titles and object-written turn cache' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $source | Should -Match 'Continuation or hook-triggered turn'
+        $source | Should -Match 'Continuation turn'
+        $source | Should -Not -Match ([regex]::Escape('if (-not $prompt) { $prompt = ''User prompt'' }'))
+        $source | Should -Match 'Write-McpYamlObject -Path \$turnFile -Document \$turnState'
+        $source | Should -Match 'markerFilePath'
+        $source | Should -Match 'markerLastWriteUtc'
+        $source | Should -Match 'sessionId'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-019 repl-invoke supports queryTitle overrides through append and complete paths' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match 'function Update-ReplTurnTitleFromParams'
+        $source | Should -Match "Name 'queryTitle'"
+        $source | Should -Match 'Set-ReplTurnCacheField -Field ''queryTitle'''
+        $source | Should -Match 'Update-ReplTurnTitleFromParams -ParamsYaml \$ParamsYaml'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-020 repl-invoke rejects stale current-turn cache with actionable diagnostics' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match 'function Assert-ReplCurrentTurnFresh'
+        $source | Should -Match 'staleSessionId'
+        $source | Should -Match 'activeSessionId'
+        $source | Should -Match 'markerFilePath'
+        $source | Should -Match 'markerLastWriteUtc'
+        $source | Should -Match 'Run the active agent prompt hook again'
+        $source | Should -Match 'Assert-ReplCurrentTurnFresh -Method ''workflow.sessionlog.appendActions'''
+        $source | Should -Match 'Assert-ReplCurrentTurnFresh -Method ''workflow.sessionlog.completeTurn'''
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 emits raw REPL YAML on the success stream' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+        $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+        function Invoke-ReplRaw {
+            New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  ok: true" -ExitCode 0
+        }
+
+        try {
+            $output = Invoke-ReplMethod -Method 'client.Health.GetAsync'
+            $envelope = ConvertFrom-Yaml -Yaml ($output | Out-String) -Ordered
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+        }
+
+        $script:LastInvokeReplMethodSuccess | Should -BeTrue
+        $envelope['type'] | Should -Be 'result'
+        $envelope['payload']['ok'] | Should -BeTrue
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 emits generated-document YAML as success output for YAML object parsing' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+        $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+        function Invoke-ReplRaw {
+            New-McpPluginReplResult -Success $true -Output "type: result`npayload:`n  result:`n    contentBase64: QUJD" -ExitCode 0
+        }
+
+        try {
+            $output = Invoke-ReplMethod -Method 'workflow.requirements.generateDocument'
+            $envelope = ConvertFrom-Yaml -Yaml ($output | Out-String) -Ordered
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+        }
+
+        $script:LastInvokeReplMethodSuccess | Should -BeTrue
+        $envelope['payload']['result']['contentBase64'] | Should -Be 'QUJD'
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 imports shim module and serializes DTO contracts with PowerShell-native JSON' {
         Remove-Module McpPluginShim -Force -ErrorAction SilentlyContinue
         Import-Module (Join-Path $script:LibRoot 'McpPluginShim.psm1') -Force
@@ -110,7 +323,12 @@ acceptanceCriteria:
             -ResponseText 'Done' `
             -Model 'codex' `
             -FilesModified @('src/Example.cs') `
-            -Actions @($action.ToMap())
+            -Actions @($action.ToMap()) `
+            -ProcessingDialog @([ordered]@{
+                role = 'assistant'
+                content = 'diagnostic'
+                category = 'decision'
+            })
 
         $turn.GetType().Name | Should -Be 'McpPluginTurnUpsertRequest'
         $params = $turn.ToParamsObject()
@@ -118,6 +336,7 @@ acceptanceCriteria:
         $params.sessionId | Should -Be 'Codex-20260628T030000Z-pester'
         $params.turn.filesModified | Should -Be @('src/Example.cs')
         $params.turn.actions[0].filePath | Should -Be 'src/Example.cs'
+        $params.turn.processingDialog[0].category | Should -Be 'decision'
 
         $failsafe = New-McpPluginFailsafeRecord `
             -Method 'client.SessionLog.UpsertTurnAsync' `
@@ -187,7 +406,8 @@ acceptanceCriteria:
                 'model',
                 'tokenCount',
                 'filesModified',
-                'actions'
+                'actions',
+                'processingDialog'
             )
             'New-McpPluginFailsafeRecord' = @(
                 'McpPluginFailsafeRecord',
@@ -396,6 +616,7 @@ acceptanceCriteria:
         $content | Should -Match 'ConvertFrom-Yaml'
         $content | Should -Match 'ConvertTo-Yaml'
         $content | Should -Match '\[ordered\]@'
+        $content | Should -Match '\.TrimEnd\(\)'
         $content | Should -Not -Match '\$lines\.Add'
         $content | Should -Not -Match 'Get-Content -LiteralPath \$manifest'
     }
@@ -407,6 +628,31 @@ acceptanceCriteria:
         $content | Should -Match '\[ordered\]@\{ response = \$Response \}'
         $content | Should -Not -Match 'response:\s*\|'
         $content | Should -Not -Match '\$indented'
+    }
+
+    It 'TEST-MCP-TRIAGE-003 PowerShell hooks generate canonical suffixed session ids' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $content | Should -Match 'New-PluginSessionId'
+        $content | Should -Match 'yyyyMMddTHHmmssZ'
+        $content | Should -Match 'plugin-session'
+        $content | Should -Not -Match '''\{0\}-\{1\}'' -f \$env:MCP_AGENT_NAME'
+    }
+
+    It 'TEST-MCP-TRIAGE-003 PowerShell hooks serialize workflow params from objects' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $content | Should -Match 'ConvertTo-Yaml'
+        $content | Should -Not -Match '\$paramsYaml\s*=\s*"requestId:'
+        $content | Should -Not -Match '\$paramsYaml\s*=\s*"response:\s*\|'
+    }
+
+    It 'TEST-MCP-TRIAGE-003 session log persistence failures are observable' {
+        $content = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $content | Should -Not -Match 'best-effort'
+        $content | Should -Not -Match 'Invoke-ReplPersistTurn[^\r\n]*(?:\r?\n\s+-[^\r\n]*)*\s*\|\s*Out-Null'
+        $content | Should -Match 'throw'
     }
 
     It 'TEST-MCP-REQSCOPE-005 shell requirements wrapper exposes layer commands' {

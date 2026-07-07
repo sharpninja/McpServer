@@ -51,9 +51,9 @@ public sealed class GraphRagEntityStorageTests : IDisposable
         };
 
         _db.GraphEntities.Add(entity);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.GraphEntities.FirstAsync(e => e.Id == entity.Id).ConfigureAwait(true);
+        var stored = await _db.GraphEntities.FirstAsync(e => e.Id == entity.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Alice", stored.Name);
         Assert.Equal("person", stored.EntityType);
         Assert.Equal("Test person entity", stored.Description);
@@ -79,9 +79,9 @@ public sealed class GraphRagEntityStorageTests : IDisposable
         };
 
         _db.GraphEntities.Add(entity);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.GraphEntities.FirstAsync(e => e.Id == entity.Id).ConfigureAwait(true);
+        var stored = await _db.GraphEntities.FirstAsync(e => e.Id == entity.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspaceA, stored.WorkspaceId);
     }
 
@@ -102,14 +102,14 @@ public sealed class GraphRagEntityStorageTests : IDisposable
         };
 
         _db.GraphEntities.Add(entity);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Switch to workspace B — the entity should not be visible.
         _db.OverrideWorkspaceId(WorkspaceB);
 
         var visible = await _db.GraphEntities
             .Where(e => e.Id == entity.Id)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Empty(visible);
@@ -150,22 +150,22 @@ public sealed class GraphRagEntityStorageTests : IDisposable
 
         _db.GraphEntities.AddRange(entityA, entityB);
         _db.GraphRelationships.Add(relationship);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Verify the relationship exists.
-        Assert.Single(await _db.GraphRelationships.ToListAsync().ConfigureAwait(true));
+        Assert.Single(await _db.GraphRelationships.ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         // Delete the source entity - DB-FK-001 soft-deletes related relationships
         // instead of physically cascading durable graph state.
         _db.GraphEntities.Remove(entityA);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var remaining = await _db.GraphRelationships.ToListAsync().ConfigureAwait(true);
+        var remaining = await _db.GraphRelationships.ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Empty(remaining);
 
         var retained = await _db.GraphRelationships
             .IgnoreQueryFilters()
-            .SingleAsync(r => r.Id == relationship.Id)
+            .SingleAsync(r => r.Id == relationship.Id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.True((bool)_db.Entry(retained).Property("IsDeleted").CurrentValue!);
     }
@@ -195,11 +195,11 @@ public sealed class GraphRagEntityStorageTests : IDisposable
         };
 
         _db.GraphEntities.AddRange(entity1, entity2);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var count = await _db.GraphEntities
             .Where(e => e.Name == "DuplicateName")
-            .CountAsync()
+            .CountAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(2, count);

@@ -7,6 +7,7 @@ using Xunit;
 namespace McpServer.Support.Mcp.IntegrationTests;
 
 /// <summary>TEST-MCP-HEALTH-003: agent-flow auth semantics and <c>/ready</c> readiness coverage.</summary>
+[Trait("Category", "Integration")]
 public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;
@@ -29,7 +30,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Api-Key", token);
 
-        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -41,7 +42,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Api-Key", "stale-or-wrong-key");
 
-        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -52,7 +53,7 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
     {
         var client = _factory.CreateClient();
 
-        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -63,11 +64,11 @@ public sealed class ReadinessAndAuthIntegrationTests : IClassFixture<CustomWebAp
     {
         var client = _factory.CreateClient();
 
-        var response = await client.GetAsync(new Uri("/ready", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/ready", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        await using var stream = await response.Content.ReadAsStreamAsync();
-        using var payload = await JsonDocument.ParseAsync(stream);
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken);
+        using var payload = await JsonDocument.ParseAsync(stream, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("Healthy", payload.RootElement.GetProperty("status").GetString());
 
         var workspaceReady = payload.RootElement.GetProperty("checks")
