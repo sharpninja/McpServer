@@ -13,7 +13,8 @@ partial class Build
             var projectFiles = Directory
                 .EnumerateFiles(SourceDirectory.ToString(), "*.csproj", SearchOption.AllDirectories)
                 .Concat(Directory.EnumerateFiles(TestsDirectory.ToString(), "*.csproj", SearchOption.AllDirectories))
-                .Where(path => !path.EndsWith(Path.Combine("Build.Tests", "Build.Tests.csproj"), StringComparison.OrdinalIgnoreCase))
+                .Where(path => !path.EndsWith(Path.Combine("Build.Tests", "Build.Tests.csproj"), StringComparison.OrdinalIgnoreCase)
+                    && !path.EndsWith(Path.Combine("AgentPluginCore", "AgentPluginCore.Tests.csproj"), StringComparison.OrdinalIgnoreCase))
                 .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
                 .ToArray();
 
