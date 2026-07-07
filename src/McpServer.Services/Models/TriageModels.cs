@@ -385,10 +385,56 @@ public sealed class TriageOptions
     /// <summary>Direct triage agent model id.</summary>
     public string AgentModel { get; set; } = "auto";
 
-    /// <summary>Direct triage agent execution strategy.</summary>
+    /// <summary>Primary triage agent execution strategy.</summary>
     public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.OneShotCli;
 
-    /// <summary>Additional environment variables passed to the direct agent.</summary>
+    /// <summary>Additional environment variables passed to the primary agent.</summary>
+    public Dictionary<string, string> AgentParameters { get; set; } = [];
+
+    /// <summary>
+    /// TR-MCP-TRIAGE-006: Secondary triage strategy tried when the primary agent fails with a
+    /// retryable API error (4xx/rate-limit/unavailable) or times out. Default: grok.
+    /// </summary>
+    public TriageFallbackAgent? Secondary { get; set; } = new() { AgentName = "triage-grok", AgentPath = "grok" };
+
+    /// <summary>
+    /// TR-MCP-TRIAGE-006: Tertiary triage strategy tried when the secondary agent also fails with a
+    /// retryable API error or times out. Default: claude.
+    /// </summary>
+    public TriageFallbackAgent? Tertiary { get; set; } = new() { AgentName = "triage-claude", AgentPath = "claude" };
+
+    /// <summary>
+    /// TR-MCP-TRIAGE-006: Case-insensitive substrings in agent stderr/body that mark a retryable API
+    /// failure and advance the primary -&gt; secondary -&gt; tertiary chain.
+    /// </summary>
+    public List<string> FallbackTriggerSignals { get; set; } =
+    [
+        "429", "rate limit", "rate-limit", "too many requests", "quota", "insufficient_quota",
+        "overloaded", "unavailable", "503", "529", "capacity", "401", "403",
+    ];
+
+    /// <summary>TR-MCP-TRIAGE-006: When true, a run that times out also advances to the next strategy.</summary>
+    public bool FallbackOnTimeout { get; set; } = true;
+}
+
+/// <summary>
+/// TR-MCP-TRIAGE-006: A single fallback triage strategy tier (secondary or tertiary) in the retry chain.
+/// </summary>
+public sealed class TriageFallbackAgent
+{
+    /// <summary>Execution strategy name. Default one-shot CLI, which natively supports grok and claude.</summary>
+    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.OneShotCli;
+
+    /// <summary>Fallback agent executable path (for example grok or claude). Blank disables this tier.</summary>
+    public string? AgentPath { get; set; }
+
+    /// <summary>Fallback agent model id.</summary>
+    public string AgentModel { get; set; } = "auto";
+
+    /// <summary>Optional fallback agent identity name.</summary>
+    public string? AgentName { get; set; }
+
+    /// <summary>Additional environment variables passed to the fallback agent.</summary>
     public Dictionary<string, string> AgentParameters { get; set; } = [];
 }
 

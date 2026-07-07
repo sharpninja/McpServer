@@ -101,8 +101,39 @@ Triage:
   SweepInterval: 00:01:00
   MaxRunTime: 00:30:00
   PromptTemplateId: triage-research-bug-report
+  # Primary strategy
   AgentName: triage
   AgentPath: cline
   AgentModel: auto
   ExecutionStrategy: one-shot-cli
   AgentParameters: {}
+  # Fallback: advance to Secondary then Tertiary when a tier fails with a retryable API error
+  # (4xx / rate-limit / unavailable) or times out.
+  FallbackOnTimeout: true
+  FallbackTriggerSignals:
+    - "429"
+    - "rate limit"
+    - "too many requests"
+    - "quota"
+    - "insufficient_quota"
+    - "overloaded"
+    - "unavailable"
+    - "503"
+    - "529"
+    - "capacity"
+    - "401"
+    - "403"
+  # Secondary strategy
+  Secondary:
+    AgentName: triage-grok
+    AgentPath: grok
+    AgentModel: auto
+    ExecutionStrategy: one-shot-cli
+    AgentParameters: {}
+  # Tertiary strategy
+  Tertiary:
+    AgentName: triage-claude
+    AgentPath: claude
+    AgentModel: auto
+    ExecutionStrategy: one-shot-cli
+    AgentParameters: {}

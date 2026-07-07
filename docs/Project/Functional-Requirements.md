@@ -1580,6 +1580,16 @@ Scope: layer-1+
 - [x] Delete is exposed over REST (DELETE /mcpserver/triage/groups/{id}), the typed client, and the REPL workflow surface (workflow.triage.deleteGroup).
 - [x] Deleting a missing group returns not-found.
 
+## FR-MCP-TRIAGE-006 Triage research agent fallback chain
+
+When the triage research agent fails with a retryable API error (4xx, rate-limit, or unavailable) or times out, the runner retries the same prompt against a configured secondary strategy and then a tertiary strategy before returning failure, so a rate-limited or unavailable primary agent does not strand a triage group.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] A primary run that returns a configured retryable signal (4xx/rate-limit/unavailable) or times out advances to the secondary strategy, then the tertiary strategy.
+- [x] A non-retryable primary failure returns immediately without invoking the fallback tiers.
+- [x] A successful tier short-circuits the chain and no later tier runs.
+- [x] Primary, secondary, and tertiary strategies are configured in appsettings.yaml (default secondary grok, tertiary claude).
+
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 
 Requirements wiki export must optionally discover docs/wiki.yaml in the active workspace and use it as the authoritative wiki document tree, navigation tree, optional home template, and flattened document list for GitHub and Azure wiki exports while preserving current output when the file is absent.

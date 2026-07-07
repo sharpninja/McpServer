@@ -1811,6 +1811,13 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Soft-deleted groups and reports are excluded from queries but retained in storage marked deleted.
 
+## TR-MCP-TRIAGE-006
+
+**Triage research agent fallback chain**: `ConfiguredTriageResearchRunner` runs the primary triage strategy and, on a `TriageFallbackClassifier`-classified retryable failure (configured 4xx/rate-limit/unavailable signals or a run timeout when `FallbackOnTimeout`), advances through `TriageOptions.Secondary` then `TriageOptions.Tertiary` (default grok then claude via the one-shot-cli strategy, which natively supports both), returning the first success or the last tier failure.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Retryable failures and timeouts advance the primary, then secondary, then tertiary strategies; non-retryable failures and successes do not.
+
 ## TR-MCP-TUN-001
 
 **Tunnel Strategy Pattern** — DI registration in `Program.cs` reads `Mcp:Tunnel:Provider`, normalizes to uppercase, and uses `ActivatorUtilities.CreateInstance<T>` to instantiate the matching provider (`NgrokTunnelProvider`, `CloudflareTunnelProvider`, or `FrpTunnelProvider`). The provider is registered as both a singleton and an `IHostedService`, conditionally on the provider name being non-empty.

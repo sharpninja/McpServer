@@ -804,8 +804,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-TRIAGE-005 | Complete | Testing-Requirements.md |
 | TEST-MCP-TRIAGE-006 | Complete | Testing-Requirements.md |
 | FR-MCP-TRIAGE-005 | Complete | Functional-Requirements.md |
+| FR-MCP-TRIAGE-006 | Complete | Functional-Requirements.md |
 | TR-MCP-TRIAGE-005 | Complete | Technical-Requirements.md |
+| TR-MCP-TRIAGE-006 | Complete | Technical-Requirements.md |
 | TEST-MCP-TRIAGE-007 | Complete | Testing-Requirements.md |
+| TEST-MCP-TRIAGE-008 | Complete | Testing-Requirements.md |
 | TEST-MCP-REPL-TRIAGE-001 | Complete | Testing-Requirements.md |
 | TEST-MCP-PLUGIN-TRIAGE-001 | Complete | Testing-Requirements.md |
 | TEST-MCP-TRIAGE-REQAC-001 | Complete | Testing-Requirements.md |
