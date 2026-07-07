@@ -25,10 +25,10 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
         var sut = CreateSut(inner, new CapturingCoordinator());
 
         var upsert = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.UpsertAsync(@"F:\GitHub\McpServer", "token"))
+                () => sut.UpsertAsync(@"F:\GitHub\McpServer", "token", ct: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
         var delete = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.DeleteAsync(@"F:\GitHub\McpServer"))
+                () => sut.DeleteAsync(@"F:\GitHub\McpServer", ct: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("not transaction compensated", upsert.Message, StringComparison.OrdinalIgnoreCase);
@@ -49,7 +49,7 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
         var coordinator = new CapturingCoordinator();
         var sut = CreateSut(inner, coordinator);
 
-        var record = await sut.GetAsync(@"F:\GitHub\McpServer").ConfigureAwait(true);
+        var record = await sut.GetAsync(@"F:\GitHub\McpServer", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(record);
         Assert.Null(coordinator.Request);
@@ -67,7 +67,7 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
         var sut = CreateSut(inner, new CapturingCoordinator(degraded: true, message: "txn degraded"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.UpsertAsync(@"F:\GitHub\McpServer", "token"))
+                () => sut.UpsertAsync(@"F:\GitHub\McpServer", "token", ct: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Equal("txn degraded", exception.Message);
@@ -88,7 +88,7 @@ public sealed class TransactionGatedGitHubWorkspaceTokenStoreTests
             new CapturingCoordinator(),
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
-        var removed = await sut.DeleteAsync(@"F:\GitHub\McpServer").ConfigureAwait(true);
+        var removed = await sut.DeleteAsync(@"F:\GitHub\McpServer", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(removed);
         await inner.Received(1).DeleteAsync(@"F:\GitHub\McpServer", Arg.Any<CancellationToken>()).ConfigureAwait(true);

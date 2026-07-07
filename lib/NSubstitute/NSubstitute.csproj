@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <Configurations>Debug;Release;Staging</Configurations>

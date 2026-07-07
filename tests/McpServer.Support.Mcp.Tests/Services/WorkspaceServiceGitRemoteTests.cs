@@ -78,7 +78,7 @@ public sealed class WorkspaceServiceGitRemoteTests : IDisposable
         {
             WorkspacePath = workspacePath,
             Name = "workspace-with-git",
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Workspace);
@@ -113,7 +113,7 @@ public sealed class WorkspaceServiceGitRemoteTests : IDisposable
         {
             WorkspacePath = workspacePath,
             Name = "workspace-git-fails",
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Workspace);
@@ -136,7 +136,7 @@ public sealed class WorkspaceServiceGitRemoteTests : IDisposable
         {
             WorkspacePath = workspacePath,
             Name = "workspace-missing",
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Workspace);

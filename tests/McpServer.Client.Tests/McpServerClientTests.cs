@@ -83,7 +83,7 @@ public sealed class McpServerClientTests
         var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => client.Todo.QueryAsync());
+        await Assert.ThrowsAsync<InvalidOperationException>(() => client.Todo.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -125,7 +125,7 @@ public sealed class McpServerClientTests
         var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
-        var key = await client.InitializeAsync();
+        var key = await client.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("default-anon-key", key);
         Assert.Equal("default-anon-key", client.ApiKey);
@@ -156,7 +156,7 @@ public sealed class McpServerClientTests
         using var http = new HttpClient(handler);
         var client = new McpServerClient(http, TestOptions);
 
-        var key = await client.InitializeAsync();
+        var key = await client.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("test-key", key);
         Assert.Null(handler.LastRequest); // No HTTP call made
@@ -170,7 +170,7 @@ public sealed class McpServerClientTests
         var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
-        await Assert.ThrowsAsync<McpServerException>(() => client.InitializeAsync());
+        await Assert.ThrowsAsync<McpServerException>(() => client.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -181,7 +181,7 @@ public sealed class McpServerClientTests
         var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => client.InitializeAsync());
+        await Assert.ThrowsAsync<InvalidOperationException>(() => client.InitializeAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -197,7 +197,7 @@ public sealed class McpServerClientTests
         var client = new McpServerClient(http, options);
 
         client.ApiKey = "marker-key";
-        await client.Todo.QueryAsync();
+        await client.Todo.QueryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(handler.LastRequest!.Headers.TryGetValues("X-Api-Key", out var apiKeyValues));
         Assert.Contains("marker-key", apiKeyValues!);
@@ -218,7 +218,7 @@ public sealed class McpServerClientTests
 
         client.BearerToken = string.Empty;
         client.ApiKey = "marker-key";
-        await client.Todo.QueryAsync();
+        await client.Todo.QueryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(handler.LastRequest!.Headers.TryGetValues("X-Api-Key", out var apiKeyValues));
         Assert.Contains("marker-key", apiKeyValues!);

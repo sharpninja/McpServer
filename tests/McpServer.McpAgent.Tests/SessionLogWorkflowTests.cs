@@ -37,7 +37,7 @@ public sealed class SessionLogWorkflowTests
                 Project = "McpServer",
                 Branch = "feature/session-log",
             },
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("Codex", context.SourceType);
         Assert.Equal("Codex-20260309T150105Z-gpt-5-4", context.SessionId);
@@ -72,7 +72,7 @@ public sealed class SessionLogWorkflowTests
         {
             Title = "Implement MCP-AGENTFRAMEWORK-001",
             Model = "gpt-5.4",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         var turn = await workflow.BeginTurnAsync(new SessionLogTurnCreateRequest
         {
@@ -80,7 +80,7 @@ public sealed class SessionLogWorkflowTests
             QueryText = "Implement the built-in session-log workflow end-to-end.",
             Tags = ["session-log"],
             ContextList = ["plan.md"],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         await workflow.AppendDialogAsync(new SessionLogDialogAppendRequest
         {
@@ -95,7 +95,7 @@ public sealed class SessionLogWorkflowTests
                     Category = "reasoning",
                 },
             ],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         await workflow.AppendActionsAsync(new SessionLogActionAppendRequest
         {
@@ -117,7 +117,7 @@ public sealed class SessionLogWorkflowTests
                     FilePath = @"tests\McpServer.McpAgent.Tests\SessionLogWorkflowTests.cs",
                 },
             ],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         var completedTurn = await workflow.CompleteTurnAsync(new SessionLogTurnCompleteRequest
         {
@@ -135,9 +135,9 @@ public sealed class SessionLogWorkflowTests
                 "Mirror appended dialog items locally so later full-session submits preserve in-host continuation state.",
             ],
             RequirementsDiscovered = ["FR-MCP-066", "TR-MCP-AGENT-007"],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
-        var persisted = await workflow.PersistAsync();
+        var persisted = await workflow.PersistAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("req-20260309T150105Z-implement-mcp-agent-session-log-workflow", turn.RequestId);
         Assert.Equal("completed", completedTurn.Status);
@@ -189,13 +189,13 @@ public sealed class SessionLogWorkflowTests
         {
             Title = "Investigate build break",
             Model = "gpt-5.4",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         var turn = await workflow.BeginTurnAsync(new SessionLogTurnCreateRequest
         {
             QueryTitle = "Investigate build break",
             QueryText = "Find the failing build step.",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         var failedTurn = await workflow.FailTurnAsync(new SessionLogTurnFailureRequest
         {
@@ -203,7 +203,7 @@ public sealed class SessionLogWorkflowTests
             Response = "The build still fails.",
             FailureNote = "Compilation error in SessionLogWorkflow.cs.",
             Blockers = ["dotnet build reports CS1591 in a new public API surface."],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("failed", failedTurn.Status);
         Assert.Equal("Compilation error in SessionLogWorkflow.cs.", failedTurn.FailureNote);

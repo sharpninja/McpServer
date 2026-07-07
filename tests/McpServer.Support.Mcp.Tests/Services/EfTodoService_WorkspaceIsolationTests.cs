@@ -109,7 +109,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
         await CreateRequiredAsync("TODO-B-001", "workspace B only").ConfigureAwait(true);
 
         UseWorkspaceA();
-        var result = await _sut.QueryAsync(new TodoQueryRequest()).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, result.TotalCount);
         Assert.Contains(result.Items, item => item.Id == SharedId && item.Title == "workspace A shared");
@@ -131,12 +131,12 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
         await CreateRequiredAsync(SharedId, "workspace B shared").ConfigureAwait(true);
 
         UseWorkspaceA();
-        var deleted = await _sut.DeleteAsync(SharedId).ConfigureAwait(true);
+        var deleted = await _sut.DeleteAsync(SharedId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(deleted.Success, deleted.Error);
-        Assert.Null(await _sut.GetByIdAsync(SharedId).ConfigureAwait(true));
+        Assert.Null(await _sut.GetByIdAsync(SharedId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         UseWorkspaceB();
-        var remaining = await _sut.GetByIdAsync(SharedId).ConfigureAwait(true);
+        var remaining = await _sut.GetByIdAsync(SharedId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(remaining);
         Assert.Equal("workspace B shared", remaining!.Title);
     }
@@ -149,11 +149,11 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     public async Task CreateAsync_SameIdInTwoWorkspaces_BothSucceed_PlanBitNetIntegrationCase()
     {
         UseWorkspaceA();
-        var first = await _sut.CreateAsync(CreateRequest(SharedId, "bitnet plan")).ConfigureAwait(true);
+        var first = await _sut.CreateAsync(CreateRequest(SharedId, "bitnet plan"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(first.Success, first.Error);
 
         UseWorkspaceB();
-        var second = await _sut.CreateAsync(CreateRequest(SharedId, "truckmate plan")).ConfigureAwait(true);
+        var second = await _sut.CreateAsync(CreateRequest(SharedId, "truckmate plan"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(second.Success, second.Error);
 
         using var scope = _serviceProvider.CreateScope();
@@ -162,7 +162,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
             .IgnoreQueryFilters()
             .Where(item => item.Id == SharedId)
             .OrderBy(item => item.WorkspaceId)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(2, rows.Count);
@@ -180,14 +180,14 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
     {
         UseWorkspaceA();
         await CreateRequiredAsync(SharedId, "workspace A initial").ConfigureAwait(true);
-        var updateA = await _sut.UpdateAsync(SharedId, new TodoUpdateRequest { Title = "workspace A updated" }).ConfigureAwait(true);
+        var updateA = await _sut.UpdateAsync(SharedId, new TodoUpdateRequest { Title = "workspace A updated" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(updateA.Success, updateA.Error);
 
         UseWorkspaceB();
         await CreateRequiredAsync(SharedId, "workspace B initial").ConfigureAwait(true);
 
         UseWorkspaceA();
-        var auditA = await _sut.GetAuditAsync(SharedId).ConfigureAwait(true);
+        var auditA = await _sut.GetAuditAsync(SharedId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, auditA.TotalCount);
         Assert.All(auditA.Entries, entry => Assert.DoesNotContain("workspace B", entry.Snapshot?.Title, StringComparison.OrdinalIgnoreCase));
@@ -195,7 +195,7 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
         Assert.Contains(auditA.Entries, entry => entry.Version == 2 && entry.Action == "updated");
 
         UseWorkspaceB();
-        var auditB = await _sut.GetAuditAsync(SharedId).ConfigureAwait(true);
+        var auditB = await _sut.GetAuditAsync(SharedId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(auditB.Entries);
         Assert.Equal(1, auditB.Entries[0].Version);
         Assert.Equal("workspace B initial", auditB.Entries[0].Snapshot?.Title);
@@ -217,19 +217,19 @@ public sealed class EfTodoService_WorkspaceIsolationTests : IDisposable
         Assert.Equal(LegacyTodoSqliteMigrator.MigrationOutcome.Migrated, outcome);
 
         UseWorkspaceA();
-        var imported = await _sut.QueryAsync(new TodoQueryRequest()).ConfigureAwait(true);
+        var imported = await _sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(imported.Items);
         Assert.Equal("LEGACY-001", imported.Items[0].Id);
 
         UseWorkspaceB();
-        var otherWorkspace = await _sut.QueryAsync(new TodoQueryRequest()).ConfigureAwait(true);
+        var otherWorkspace = await _sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Empty(otherWorkspace.Items);
 
         using var scope = _serviceProvider.CreateScope();
         var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var item = await ctx.TodoItems.IgnoreQueryFilters().SingleAsync(i => i.Id == "LEGACY-001").ConfigureAwait(true);
-        var audit = await ctx.TodoAuditHistory.IgnoreQueryFilters().SingleAsync(i => i.TodoId == "LEGACY-001").ConfigureAwait(true);
-        var metadata = await ctx.TodoDocumentMetadata.IgnoreQueryFilters().SingleAsync().ConfigureAwait(true);
+        var item = await ctx.TodoItems.IgnoreQueryFilters().SingleAsync(i => i.Id == "LEGACY-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var audit = await ctx.TodoAuditHistory.IgnoreQueryFilters().SingleAsync(i => i.TodoId == "LEGACY-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var metadata = await ctx.TodoDocumentMetadata.IgnoreQueryFilters().SingleAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(_workspaceA, item.WorkspaceId);
         Assert.Equal(_workspaceA, audit.WorkspaceId);

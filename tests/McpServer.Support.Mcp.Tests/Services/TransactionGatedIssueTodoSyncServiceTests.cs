@@ -27,11 +27,11 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
         var previous = CreateTodo("ISSUE-42", "Before");
         var current = CreateTodo("ISSUE-42", "After");
 
-        var issueToTodo = await sut.SyncIssueToTodoAsync(CreateIssue(42)).ConfigureAwait(true);
-        var allIssues = await sut.SyncAllIssuesToTodosAsync("open", 30).ConfigureAwait(true);
-        var todoToIssue = await sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
-        var comment = await sut.CommentOnTodoUpdateAsync(previous, current).ConfigureAwait(true);
-        var allTodos = await sut.SyncAllTodosToIssuesAsync().ConfigureAwait(true);
+        var issueToTodo = await sut.SyncIssueToTodoAsync(CreateIssue(42), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var allIssues = await sut.SyncAllIssuesToTodosAsync("open", 30, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var todoToIssue = await sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var comment = await sut.CommentOnTodoUpdateAsync(previous, current, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var allTodos = await sut.SyncAllTodosToIssuesAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(issueToTodo.Success);
         Assert.Equal(TodoMutationFailureKind.ExternalSyncFailed, issueToTodo.FailureKind);
@@ -61,7 +61,7 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
         var inner = Substitute.For<IIssueTodoSyncService>();
         var sut = CreateSut(inner, new CapturingCoordinator(degraded: true, message: "txn degraded"));
 
-        var result = await sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
+        var result = await sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("txn degraded", result.ErrorMessage);
@@ -83,7 +83,7 @@ public sealed class TransactionGatedIssueTodoSyncServiceTests
             new CapturingCoordinator(),
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
-        var result = await sut.SyncAllTodosToIssuesAsync().ConfigureAwait(true);
+        var result = await sut.SyncAllTodosToIssuesAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.Synced);
         await inner.Received(1).SyncAllTodosToIssuesAsync(Arg.Any<CancellationToken>()).ConfigureAwait(true);

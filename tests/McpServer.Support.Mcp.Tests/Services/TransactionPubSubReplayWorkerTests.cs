@@ -23,8 +23,8 @@ public sealed class TransactionPubSubReplayWorkerTests
 
         await worker.ReplayOnceAsync(CancellationToken.None).ConfigureAwait(true);
 
-        await replay.DidNotReceiveWithAnyArgs().ReplayPendingAsync(default, default).ConfigureAwait(true);
-        await replay.DidNotReceiveWithAnyArgs().PurgeCompletedAsync(default, default, default).ConfigureAwait(true);
+        await replay.DidNotReceiveWithAnyArgs().ReplayPendingAsync(default, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await replay.DidNotReceiveWithAnyArgs().PurgeCompletedAsync(default, default, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>Replay worker calls replay and retention services with configured batch sizes when enabled.</summary>

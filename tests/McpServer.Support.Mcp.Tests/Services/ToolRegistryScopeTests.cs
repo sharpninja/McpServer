@@ -84,7 +84,7 @@ public sealed class ToolRegistryScopeTests : IDisposable
             var registry = CreateRegistry(installDb);
             var bucketService = CreateBucketService(installDb, registry, processRunner);
 
-            var installResult = await bucketService.InstallAsync("official", "mcp-session-module").ConfigureAwait(true);
+            var installResult = await bucketService.InstallAsync("official", "mcp-session-module", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.True(installResult.Success);
             Assert.NotNull(installResult.Tool);
@@ -105,7 +105,7 @@ public sealed class ToolRegistryScopeTests : IDisposable
         using (var otherWorkspaceDb = CreateContext(@"E:\github\RequestTracker"))
         {
             var registry = CreateRegistry(otherWorkspaceDb);
-            var searchResult = await registry.SearchAsync("mcp-session-module").ConfigureAwait(true);
+            var searchResult = await registry.SearchAsync("mcp-session-module", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Single(searchResult.Tools);
             Assert.Equal("mcp-session-module", searchResult.Tools[0].Name);
@@ -146,7 +146,7 @@ public sealed class ToolRegistryScopeTests : IDisposable
         using var unscopedDb = CreateContext(null);
         var registry = CreateRegistry(unscopedDb);
 
-        var result = await registry.ListAsync().ConfigureAwait(true);
+        var result = await registry.ListAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result.Tools);
         Assert.Equal("global-tool", result.Tools[0].Name);

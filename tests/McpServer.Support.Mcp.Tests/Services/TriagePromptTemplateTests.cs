@@ -38,7 +38,7 @@ public sealed class TriagePromptTemplateTests
                     workspace: null,
                     workspacePath: @"F:\GitHub\McpServer",
                     workspaceName: "McpServer"),
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success, result.Error);
         Assert.Contains("## MCP and Plugin Failure Reporting", result.RenderedContent, StringComparison.Ordinal);
@@ -81,7 +81,7 @@ public sealed class TriagePromptTemplateTests
                     workspace: null,
                     workspacePath: @"F:\GitHub\McpServer",
                     workspaceName: "McpServer"),
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success, result.Error);
         Assert.Contains("deprecated: true", result.RenderedContent, StringComparison.Ordinal);
@@ -117,7 +117,7 @@ public sealed class TriagePromptTemplateTests
                     ["workspacePath"] = @"F:\GitHub\McpServer",
                     ["reportCount"] = 1,
                 },
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success, result.Error);
         Assert.Contains("schema-valid JSON", result.RenderedContent, StringComparison.Ordinal);

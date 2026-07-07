@@ -117,7 +117,7 @@ public sealed class TodoWorkflowTests
         using var httpClient = new HttpClient(handler);
         var workflow = CreateWorkflow(httpClient);
 
-        var item = await workflow.GetAsync("do-not-speak-tables");
+        var item = await workflow.GetAsync("do-not-speak-tables", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("do-not-speak-tables", item.Id);
         Assert.NotNull(handler.LastRequest);
@@ -195,7 +195,7 @@ public sealed class TodoWorkflowTests
         using var httpClient = new HttpClient(handler);
         var workflow = CreateWorkflow(httpClient);
 
-        var result = await workflow.AnalyzeRequirementsAsync("MCP-AGENT-001");
+        var result = await workflow.AnalyzeRequirementsAsync("MCP-AGENT-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(["FR-MCP-066"], result.FunctionalRequirements);
@@ -228,7 +228,7 @@ public sealed class TodoWorkflowTests
         using var cancellationSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
 
         var workflowTask = workflow.GetPlanAsync("MCP-AGENT-001", cancellationSource.Token);
-        var completedTask = await Task.WhenAny(workflowTask, Task.Delay(TimeSpan.FromSeconds(1)));
+        var completedTask = await Task.WhenAny(workflowTask, Task.Delay(TimeSpan.FromSeconds(1), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Same(workflowTask, completedTask);
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await workflowTask);

@@ -129,6 +129,14 @@ public interface ISessionLogWorkflow
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Updates the title of the active turn while preserving its request identifier and query text.
+    /// </summary>
+    /// <param name="queryTitle">Replacement title for the active turn.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A task that completes when the active turn title has been updated.</returns>
+    Task UpdateTurnTitleAsync(string queryTitle, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Marks the current active turn as completed with a final response.
     /// Transitions the turn from "in_progress" to "completed" status.
     /// Once completed, the turn becomes immutable.

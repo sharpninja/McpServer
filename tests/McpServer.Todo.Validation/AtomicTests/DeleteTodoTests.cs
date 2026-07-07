@@ -34,21 +34,21 @@ public sealed class DeleteTodoTests
     {
         var testId = TodoEndpointFixture.GenerateTestId();
         var createBody = new { Id = testId, Title = "AuditDeleteTest", Section = "mvp-support", Priority = "low" };
-        var createResponse = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, createBody);
+        var createResponse = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, createBody, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
         var deleteResponse = await _fixture.Client.DeleteAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(testId)}");
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(testId)}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
-        var result = await deleteResponse.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await deleteResponse.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success, $"Expected success but got error: {result.Error}");
 
         // Verify it's gone.
         var getResponse = await _fixture.Client.GetAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(testId)}");
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(testId)}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
@@ -65,11 +65,11 @@ public sealed class DeleteTodoTests
     {
         var fakeId = TodoEndpointFixture.GenerateMissingId();
         var response = await _fixture.Client.DeleteAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.False(result.Success);
     }

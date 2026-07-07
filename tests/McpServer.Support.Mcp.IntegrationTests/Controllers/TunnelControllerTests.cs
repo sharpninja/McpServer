@@ -43,10 +43,10 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.GetAsync("/mcpserver/tunnel/list");
+        var response = await client.GetAsync("/mcpserver/tunnel/list", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("[]", body);
     }
 
@@ -57,7 +57,7 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.GetAsync("/mcpserver/tunnel/unknown/status");
+        var response = await client.GetAsync("/mcpserver/tunnel/unknown/status", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -68,7 +68,7 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcpserver/tunnel/unknown/enable", null);
+        var response = await client.PostAsync("/mcpserver/tunnel/unknown/enable", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -84,10 +84,10 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.GetAsync("/mcpserver/tunnel/list");
+        var response = await client.GetAsync("/mcpserver/tunnel/list", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("ngrok", body, StringComparison.Ordinal);
         Assert.Contains("\"enabled\":true", body, StringComparison.Ordinal);
     }
@@ -104,10 +104,10 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.GetAsync("/mcpserver/tunnel/ngrok/status");
+        var response = await client.GetAsync("/mcpserver/tunnel/ngrok/status", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("abc.ngrok.io", body, StringComparison.Ordinal);
     }
 
@@ -125,20 +125,20 @@ public sealed class TunnelControllerTests
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         // Verify initially disabled
-        var statusResp = await client.GetAsync("/mcpserver/tunnel/cloudflare/status");
-        var statusBody = await statusResp.Content.ReadAsStringAsync();
+        var statusResp = await client.GetAsync("/mcpserver/tunnel/cloudflare/status", cancellationToken: TestContext.Current.CancellationToken);
+        var statusBody = await statusResp.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("\"enabled\":false", statusBody, StringComparison.Ordinal);
 
         // Enable
-        var enableResp = await client.PostAsync("/mcpserver/tunnel/cloudflare/enable", null);
+        var enableResp = await client.PostAsync("/mcpserver/tunnel/cloudflare/enable", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, enableResp.StatusCode);
-        var enableBody = await enableResp.Content.ReadAsStringAsync();
+        var enableBody = await enableResp.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("\"enabled\":true", enableBody, StringComparison.Ordinal);
 
         // Disable
-        var disableResp = await client.PostAsync("/mcpserver/tunnel/cloudflare/disable", null);
+        var disableResp = await client.PostAsync("/mcpserver/tunnel/cloudflare/disable", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, disableResp.StatusCode);
-        var disableBody = await disableResp.Content.ReadAsStringAsync();
+        var disableBody = await disableResp.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("\"enabled\":false", disableBody, StringComparison.Ordinal);
     }
 
@@ -155,10 +155,10 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/start", null);
+        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/start", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("disabled", body, StringComparison.OrdinalIgnoreCase);
         await mockProvider.DidNotReceive().StartAsync(Arg.Any<CancellationToken>());
     }
@@ -177,7 +177,7 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/start", null);
+        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/start", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         await mockProvider.Received(1).StartAsync(Arg.Any<CancellationToken>());
@@ -195,7 +195,7 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/stop", null);
+        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/stop", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         await mockProvider.Received(1).StopAsync(Arg.Any<CancellationToken>());
@@ -213,7 +213,7 @@ public sealed class TunnelControllerTests
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/restart", null);
+        var response = await client.PostAsync("/mcpserver/tunnel/ngrok/restart", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         Received.InOrder(() =>

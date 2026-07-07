@@ -25,8 +25,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_ContextQuery_ReturnsResults()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var contextQueryEnvelope = YamlEnvelopeBuilder.CreateContextQueryRequest(
             GenerateRequestId("context-query"),
@@ -46,8 +46,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_RepoGetBranches_ReturnsResults()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var getBranchesEnvelope = YamlEnvelopeBuilder.CreateRepoGetBranchesRequest(
             GenerateRequestId("get-branches"));
@@ -65,8 +65,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_DesktopOpenFolder_ValidatesArguments()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var openFolderEnvelope = YamlEnvelopeBuilder.CreateDesktopOpenFolderRequest(
             GenerateRequestId("open-folder"),
@@ -85,8 +85,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_NestedObjectArgument_CoercesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nestedArgs = new Dictionary<string, object?>
         {
@@ -116,8 +116,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_ArrayArgument_CoercesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var arrayArgs = new Dictionary<string, object?>
         {
@@ -140,8 +140,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_ComplexNestedStructure_CoercesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var complexArgs = new Dictionary<string, object?>
         {
@@ -176,8 +176,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_YamlResponseShape_ValidStructure()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var contextQueryEnvelope = YamlEnvelopeBuilder.CreateContextQueryRequest(
             GenerateRequestId("yaml-shape-test"),
@@ -202,8 +202,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_UnknownClient_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidEnvelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("unknown-client"),
@@ -226,8 +226,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_UnknownMethod_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidEnvelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("unknown-method"),
@@ -250,8 +250,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_MissingRequiredParameter_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidEnvelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("missing-param"),
@@ -274,8 +274,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_InvalidArgumentType_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidEnvelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("invalid-type"),
@@ -302,8 +302,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_NullForNonNullableParameter_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidEnvelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("null-param"),
@@ -329,8 +329,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_MultipleClients_Sequential()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var contextEnvelope = YamlEnvelopeBuilder.CreateContextQueryRequest(
             GenerateRequestId("multi-context"),
@@ -356,8 +356,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_OptionalParameters_UsesDefaults()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var minimalArgs = new Dictionary<string, object?>
         {
@@ -382,8 +382,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_BooleanArguments_CoercesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var boolArgs = new Dictionary<string, object?>
         {
@@ -407,8 +407,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_NumericArguments_CoercesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var numericArgs = new Dictionary<string, object?>
         {
@@ -433,8 +433,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_EmptyArrayArgument_HandlesCorrectly()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var emptyArrayArgs = new Dictionary<string, object?>
         {
@@ -457,8 +457,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_MixedTypeArray_CoercesElements()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var mixedArgs = new Dictionary<string, object?>
         {
@@ -480,8 +480,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_CaseInsensitiveClientName_Resolves()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var envelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("case-insensitive-client"),
@@ -501,8 +501,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_CaseInsensitiveParameterName_Matches()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var envelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("case-insensitive-param"),
@@ -522,8 +522,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_MultipleValidRequests_AllSucceed()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         for (int i = 0; i < 5; i++)
         {
@@ -541,8 +541,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_ResponseContainsRequestId_Correlation()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var requestId = GenerateRequestId("correlation-test");
         var envelope = YamlEnvelopeBuilder.CreateContextQueryRequest(requestId, "correlation test");
@@ -560,8 +560,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_SuccessResultShape_HasCorrectFields()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var envelope = YamlEnvelopeBuilder.CreateContextQueryRequest(
             GenerateRequestId("result-shape"),
@@ -591,8 +591,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_ErrorResultShape_HasCorrectFields()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var envelope = YamlEnvelopeBuilder.CreateGenericClientRequest(
             GenerateRequestId("error-shape"),
@@ -628,8 +628,8 @@ public sealed class Iteration5IntegrationTests : IDisposable
     [Fact]
     public async Task GenericClientPassthrough_CompleteWorkflow_VariousClientTypes()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var contextEnvelope = YamlEnvelopeBuilder.CreateContextQueryRequest(
             GenerateRequestId("workflow-context"),

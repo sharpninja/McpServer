@@ -57,6 +57,26 @@ public sealed class EmbeddingServiceTests : IDisposable
         Assert.All(embedding, v => Assert.Equal(0f, v));
     }
 
+    [Fact]
+    public void WordPieceTokenizer_UsesCaseInsensitiveVocabularyLookup()
+    {
+        var vocabPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.vocab.txt");
+        File.WriteAllLines(vocabPath, ["[PAD]", "[UNK]", "[CLS]", "[SEP]", "hello", "world"]);
+
+        try
+        {
+            var tokenizer = new WordPieceTokenizer(vocabPath, maxSeqLength: 8);
+
+            var result = tokenizer.Tokenize("HELLO World");
+
+            Assert.Equal([2, 4, 5, 3], result.InputIds);
+        }
+        finally
+        {
+            File.Delete(vocabPath);
+        }
+    }
+
     [Trait("Category", "Integration")]
     [Fact]
     public void GenerateEmbedding_WithModel_ReturnsNonZeroVector()

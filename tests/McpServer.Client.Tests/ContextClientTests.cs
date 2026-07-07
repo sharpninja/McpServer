@@ -20,7 +20,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.SearchAsync("auth", limit: 5);
+        var result = await client.SearchAsync("auth", limit: 5, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/context/search", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -35,7 +35,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.PackAsync("auth", queryId: "q1");
+        var result = await client.PackAsync("auth", queryId: "q1", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("q1", result.QueryId);
         Assert.Contains("q1", handler.LastRequestBody!);
@@ -48,7 +48,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.ListSourcesAsync();
+        var result = await client.ListSourcesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Sources);
         Assert.Equal("repo", result.Sources[0].SourceType);
@@ -61,7 +61,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.RebuildIndexAsync();
+        var result = await client.RebuildIndexAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/context/rebuild-index", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -75,7 +75,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.GraphRagStatusAsync();
+        var result = await client.GraphRagStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/graphrag/status", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -92,7 +92,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.GraphRagIndexAsync(force: true);
+        var result = await client.GraphRagIndexAsync(force: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/graphrag/index", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -107,7 +107,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.GraphRagQueryAsync("auth", mode: "local", maxChunks: 10, maxEntities: 5, maxRelationships: 5, communityDepth: 2, responseTokenBudget: 1024);
+        var result = await client.GraphRagQueryAsync("auth", mode: "local", maxChunks: 10, maxEntities: 5, maxRelationships: 5, communityDepth: 2, responseTokenBudget: 1024, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/graphrag/query", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -129,7 +129,7 @@ public sealed class ContextClientTests
         using var http = new HttpClient(handler);
         var client = new ContextClient(http, DefaultOptions);
 
-        var result = await client.IngestWebsiteAsync("https://example.com", includeSubpages: true, maxPages: 5);
+        var result = await client.IngestWebsiteAsync("https://example.com", includeSubpages: true, maxPages: 5, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/context/ingest-website", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -153,7 +153,7 @@ public sealed class ContextClientTests
             Url = "https://example.com",
             IncludeSubpages = true,
             MaxPages = 2
-        }))
+        }, cancellationToken: TestContext.Current.CancellationToken))
         {
             lines.Add(line);
         }

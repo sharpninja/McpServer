@@ -233,7 +233,7 @@ partial class Build
                 int.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture),
                 int.Parse(m.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture)))
             .DefaultIfEmpty(new Version(0, 0))
-            .Max();
+            .Max() ?? new Version(0, 0);
     }
 
     static string? FindSqlLocalDbExe()

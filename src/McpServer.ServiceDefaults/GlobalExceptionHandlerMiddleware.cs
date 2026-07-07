@@ -13,7 +13,6 @@ namespace Microsoft.Extensions.Hosting;
 /// Register this as the first middleware in the pipeline so it wraps every other middleware and
 /// controller action.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by ASP.NET Core via UseMiddleware<T>()")]
 internal sealed partial class GlobalExceptionHandlerMiddleware
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);

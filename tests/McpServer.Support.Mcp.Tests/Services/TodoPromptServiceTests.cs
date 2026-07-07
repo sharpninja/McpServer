@@ -51,7 +51,7 @@ public sealed class TodoPromptServiceTests
             NullLogger<TodoPromptService>.Instance);
 
         var lines = new List<string>();
-        await foreach (var line in sut.StreamImplementAsync("TODO-1").ConfigureAwait(true))
+        await foreach (var line in sut.StreamImplementAsync("TODO-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true))
             lines.Add(line);
 
         Assert.NotEmpty(lines);

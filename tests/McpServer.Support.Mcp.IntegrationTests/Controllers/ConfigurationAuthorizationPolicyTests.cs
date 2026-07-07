@@ -38,7 +38,7 @@ public sealed class ConfigurationAuthorizationPolicyTests : IClassFixture<Custom
             JwtBearerDefaults.AuthenticationScheme,
             "fake-admin-token");
 
-        using var response = await client.GetAsync("/mcpserver/configuration")
+        using var response = await client.GetAsync("/mcpserver/configuration", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

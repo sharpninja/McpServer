@@ -10,7 +10,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var result = await stub.ReadAsync("/home/user/trusted-workspace");
+        var result = await stub.ReadAsync("/home/user/trusted-workspace", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("/home/user/trusted-workspace", result.WorkspacePath);
@@ -27,7 +27,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var result = await stub.ReadAsync("/home/user/untrusted-workspace");
+        var result = await stub.ReadAsync("/home/user/untrusted-workspace", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("/home/user/untrusted-workspace", result.WorkspacePath);
@@ -41,7 +41,7 @@ public class StubMarkerFileReaderTests
         var stub = new StubMarkerFileReader();
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await stub.ReadAsync("/nonexistent/path")
+            async () => await stub.ReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -50,7 +50,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var (success, data) = await stub.TryReadAsync("/home/user/trusted-workspace");
+        var (success, data) = await stub.TryReadAsync("/home/user/trusted-workspace", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(success);
         Assert.NotNull(data);
@@ -62,7 +62,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var (success, data) = await stub.TryReadAsync("/nonexistent/path");
+        var (success, data) = await stub.TryReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(success);
         Assert.Null(data);
@@ -73,7 +73,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var result = await stub.VerifyTrustAsync("/home/user/trusted-workspace", requireUserConfirmation: false);
+        var result = await stub.VerifyTrustAsync("/home/user/trusted-workspace", requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
@@ -85,7 +85,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var result = await stub.VerifyTrustAsync("/home/user/trusted-workspace", requireUserConfirmation: true);
+        var result = await stub.VerifyTrustAsync("/home/user/trusted-workspace", requireUserConfirmation: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
@@ -97,7 +97,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var result = await stub.VerifyTrustAsync("/home/user/untrusted-workspace", requireUserConfirmation: false);
+        var result = await stub.VerifyTrustAsync("/home/user/untrusted-workspace", requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.False(result.IsTrusted);
@@ -110,7 +110,7 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var result = await stub.VerifyTrustAsync("/home/user/signature-verified", requireUserConfirmation: false);
+        var result = await stub.VerifyTrustAsync("/home/user/signature-verified", requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
@@ -136,7 +136,7 @@ public class StubMarkerFileReaderTests
 
         var watchTask = stub.WatchAsync("/home/user/trusted-workspace", onChange, cts.Token);
 
-        var capturedData = await callback.Task.WaitAsync(TimeSpan.FromSeconds(1));
+        var capturedData = await callback.Task.WaitAsync(TimeSpan.FromSeconds(1), cancellationToken: TestContext.Current.CancellationToken);
 
         await cts.CancelAsync();
 
@@ -151,14 +151,14 @@ public class StubMarkerFileReaderTests
     {
         var stub = new StubMarkerFileReader();
 
-        var trustedData = await stub.ReadAsync("/home/user/trusted-workspace");
+        var trustedData = await stub.ReadAsync("/home/user/trusted-workspace", cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(trustedData.Metadata);
         Assert.True(trustedData.Metadata.ContainsKey("nonce"));
 
-        var untrustedData = await stub.ReadAsync("/home/user/untrusted-workspace");
+        var untrustedData = await stub.ReadAsync("/home/user/untrusted-workspace", cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(untrustedData.Metadata == null || !untrustedData.Metadata.ContainsKey("nonce"));
 
-        var signatureData = await stub.ReadAsync("/home/user/signature-verified");
+        var signatureData = await stub.ReadAsync("/home/user/signature-verified", cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(signatureData.Metadata);
         Assert.True(signatureData.Metadata.ContainsKey("signature"));
     }

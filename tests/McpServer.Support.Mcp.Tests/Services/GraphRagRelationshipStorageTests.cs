@@ -55,12 +55,12 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
             UpdatedAtUtc = now,
         };
         _db.GraphRelationships.Add(rel);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await _db.GraphRelationships
             .Include(r => r.SourceEntity)
             .Include(r => r.TargetEntity)
-            .FirstAsync(r => r.Id == rel.Id)
+            .FirstAsync(r => r.Id == rel.Id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(source.Id, stored.SourceEntityId);
@@ -97,12 +97,12 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
             UpdatedAtUtc = DateTime.UtcNow,
         };
         _db.GraphRelationships.Add(rel);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await _db.GraphRelationships
             .Include(r => r.SourceEntity)
             .Include(r => r.TargetEntity)
-            .FirstAsync(r => r.Id == rel.Id)
+            .FirstAsync(r => r.Id == rel.Id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.NotNull(stored.SourceEntity);
@@ -132,17 +132,17 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
             UpdatedAtUtc = DateTime.UtcNow,
         };
         _db.GraphRelationships.Add(rel);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         _db.GraphEntities.Remove(source);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var remaining = await _db.GraphRelationships.ToListAsync().ConfigureAwait(true);
+        var remaining = await _db.GraphRelationships.ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Empty(remaining);
 
         var retained = await _db.GraphRelationships
             .IgnoreQueryFilters()
-            .SingleAsync(r => r.Id == rel.Id)
+            .SingleAsync(r => r.Id == rel.Id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.True((bool)_db.Entry(retained).Property("IsDeleted").CurrentValue!);
     }
@@ -169,10 +169,10 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
             // Weight not set — should default to 1.0
         };
         _db.GraphRelationships.Add(rel);
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await _db.GraphRelationships
-            .FirstAsync(r => r.Id == rel.Id)
+            .FirstAsync(r => r.Id == rel.Id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(1.0, stored.Weight);

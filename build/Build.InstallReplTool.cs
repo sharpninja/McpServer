@@ -7,10 +7,10 @@ using System.Security;
 partial class Build
 {
     [Parameter("Update existing tool installation instead of fresh install")]
-    readonly bool UpdateTool;
+    readonly bool UpdateTool = false;
 
     [Parameter("Uninstall the global tool")]
-    readonly bool UninstallTool;
+    readonly bool UninstallTool = false;
 
     /// <summary>Install, update, or uninstall the mcpserver-repl global tool.</summary>
     public Target InstallReplTool => _ => _

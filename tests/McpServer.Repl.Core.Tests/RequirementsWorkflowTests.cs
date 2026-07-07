@@ -43,15 +43,15 @@ public class RequirementsWorkflowTests
             CreateFrEntry("FR-MCP-002", "Session Management", "Session handling requirements", "high", "MCP")
         });
 
-        _workflow.ListFrAsync(null, null, default)
+        _workflow.ListFrAsync(null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<IFrQueryResult>(expectedResult));
 
-        var result = await _workflow.ListFrAsync();
+        var result = await _workflow.ListFrAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
         Assert.Equal(2, result.Items.Count);
-        await _workflow.Received(1).ListFrAsync(null, null, default);
+        await _workflow.Received(1).ListFrAsync(null, null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -62,14 +62,14 @@ public class RequirementsWorkflowTests
             CreateFrEntry("FR-AUTH-001", "OAuth2 Support", "OAuth2 authentication", "high", "AUTH")
         });
 
-        _workflow.ListFrAsync("AUTH", null, default)
+        _workflow.ListFrAsync("AUTH", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<IFrQueryResult>(expectedResult));
 
-        var result = await _workflow.ListFrAsync(area: "AUTH");
+        var result = await _workflow.ListFrAsync(area: "AUTH", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("AUTH", result.Items[0].Area);
-        await _workflow.Received(1).ListFrAsync("AUTH", null, default);
+        await _workflow.Received(1).ListFrAsync("AUTH", null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -80,14 +80,14 @@ public class RequirementsWorkflowTests
             CreateFrEntry("FR-MCP-001", "Completed Feature", "Feature description", "high", "MCP", "completed")
         }, "completed");
 
-        _workflow.ListFrAsync(null, "completed", default)
+        _workflow.ListFrAsync(null, "completed", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<IFrQueryResult>(expectedResult));
 
-        var result = await _workflow.ListFrAsync(status: "completed");
+        var result = await _workflow.ListFrAsync(status: "completed", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("completed", result.Items[0].Status);
-        await _workflow.Received(1).ListFrAsync(null, "completed", default);
+        await _workflow.Received(1).ListFrAsync(null, "completed", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     #endregion
@@ -99,35 +99,35 @@ public class RequirementsWorkflowTests
     {
         var expectedItem = CreateFrItem("FR-MCP-001", "API Authentication", "API auth design");
 
-        _workflow.GetFrAsync("FR-MCP-001", default)
+        _workflow.GetFrAsync("FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedItem));
 
-        var result = await _workflow.GetFrAsync("FR-MCP-001");
+        var result = await _workflow.GetFrAsync("FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("FR-MCP-001", result.Id);
         Assert.Equal("API Authentication", result.Title);
-        await _workflow.Received(1).GetFrAsync("FR-MCP-001", default);
+        await _workflow.Received(1).GetFrAsync("FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task GetFrAsync_InvalidId_ThrowsArgumentException()
     {
-        _workflow.GetFrAsync("invalid-id", default)
+        _workflow.GetFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid FR ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetFrAsync("invalid-id"));
+            async () => await _workflow.GetFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task GetFrAsync_FrNotFound_ThrowsInvalidOperationException()
     {
-        _workflow.GetFrAsync("FR-NONEXISTENT-999", default)
+        _workflow.GetFrAsync("FR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("FR item not found: FR-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.GetFrAsync("FR-NONEXISTENT-999"));
+            async () => await _workflow.GetFrAsync("FR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -137,16 +137,16 @@ public class RequirementsWorkflowTests
         var createdItem = CreateFrItem("FR-MCP-001", "New FR", "New FR description");
         var mutationResult = CreateFrMutationResult(true, createdItem);
 
-        _workflow.CreateFrAsync(Arg.Any<IFrCreateRequest>(), default)
+        _workflow.CreateFrAsync(Arg.Any<IFrCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await _workflow.CreateFrAsync(request);
+        var result = await _workflow.CreateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Item);
         Assert.Equal("FR-MCP-001", result.Item.Id);
-        await _workflow.Received(1).CreateFrAsync(Arg.Any<IFrCreateRequest>(), default);
+        await _workflow.Received(1).CreateFrAsync(Arg.Any<IFrCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -154,11 +154,11 @@ public class RequirementsWorkflowTests
     {
         var request = CreateFrCreateRequest();
 
-        _workflow.CreateFrAsync(Arg.Any<IFrCreateRequest>(), default)
+        _workflow.CreateFrAsync(Arg.Any<IFrCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("FR item with ID FR-MCP-001 already exists"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateFrAsync(request));
+            async () => await _workflow.CreateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -170,15 +170,15 @@ public class RequirementsWorkflowTests
         var mockSelectionState = CreateMockSelectionState("FR-MCP-001", null, null);
 
         _workflow.CurrentSelection().Returns(mockSelectionState);
-        _workflow.UpdateFrAsync(Arg.Any<IFrUpdateRequest>(), default)
+        _workflow.UpdateFrAsync(Arg.Any<IFrUpdateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await _workflow.UpdateFrAsync(request);
+        var result = await _workflow.UpdateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("Updated FR", result.Item.Title);
-        await _workflow.Received(1).UpdateFrAsync(Arg.Any<IFrUpdateRequest>(), default);
+        await _workflow.Received(1).UpdateFrAsync(Arg.Any<IFrUpdateRequest>(), cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -187,32 +187,32 @@ public class RequirementsWorkflowTests
         var request = CreateFrUpdateRequest();
 
         _workflow.CurrentSelection().Returns((IRequirementsSelectionState?)null);
-        _workflow.UpdateFrAsync(Arg.Any<IFrUpdateRequest>(), default)
+        _workflow.UpdateFrAsync(Arg.Any<IFrUpdateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("No FR is currently selected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.UpdateFrAsync(request));
+            async () => await _workflow.UpdateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task DeleteFrAsync_ValidId_DeletesFrItem()
     {
-        _workflow.DeleteFrAsync("FR-MCP-001", default)
+        _workflow.DeleteFrAsync("FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
 
-        await _workflow.DeleteFrAsync("FR-MCP-001");
+        await _workflow.DeleteFrAsync("FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.Received(1).DeleteFrAsync("FR-MCP-001", default);
+        await _workflow.Received(1).DeleteFrAsync("FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task DeleteFrAsync_InvalidId_ThrowsArgumentException()
     {
-        _workflow.DeleteFrAsync("invalid-id", default)
+        _workflow.DeleteFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid FR ID format: invalid-id"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.DeleteFrAsync("invalid-id"));
+            async () => await _workflow.DeleteFrAsync("invalid-id", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -228,15 +228,15 @@ public class RequirementsWorkflowTests
             CreateTrEntry("TR-MCP-PERF-001", "Performance Requirements", "Performance specs")
         });
 
-        _workflow.ListTrAsync(null, null, null, default)
+        _workflow.ListTrAsync(null, null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<ITrQueryResult>(expectedResult));
 
-        var result = await _workflow.ListTrAsync();
+        var result = await _workflow.ListTrAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
         Assert.Equal(2, result.Items.Count);
-        await _workflow.Received(1).ListTrAsync(null, null, null, default);
+        await _workflow.Received(1).ListTrAsync(null, null, null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -247,14 +247,14 @@ public class RequirementsWorkflowTests
             CreateTrEntry("TR-MCP-ARCH-001", "Architecture Design", "Design spec")
         });
 
-        _workflow.ListTrAsync("MCP", "ARCH", null, default)
+        _workflow.ListTrAsync("MCP", "ARCH", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<ITrQueryResult>(expectedResult));
 
-        var result = await _workflow.ListTrAsync(area: "MCP", subarea: "ARCH");
+        var result = await _workflow.ListTrAsync(area: "MCP", subarea: "ARCH", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("TR-MCP-ARCH-001", result.Items[0].Id);
-        await _workflow.Received(1).ListTrAsync("MCP", "ARCH", null, default);
+        await _workflow.Received(1).ListTrAsync("MCP", "ARCH", null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     #endregion
@@ -266,25 +266,25 @@ public class RequirementsWorkflowTests
     {
         var expectedItem = CreateTrItem("TR-MCP-ARCH-001", "Architecture", "Architecture design");
 
-        _workflow.GetTrAsync("TR-MCP-ARCH-001", default)
+        _workflow.GetTrAsync("TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedItem));
 
-        var result = await _workflow.GetTrAsync("TR-MCP-ARCH-001");
+        var result = await _workflow.GetTrAsync("TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("TR-MCP-ARCH-001", result.Id);
         Assert.Equal("Architecture", result.Title);
-        await _workflow.Received(1).GetTrAsync("TR-MCP-ARCH-001", default);
+        await _workflow.Received(1).GetTrAsync("TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task GetTrAsync_InvalidId_ThrowsArgumentException()
     {
-        _workflow.GetTrAsync("TR-MCP-001", default)
+        _workflow.GetTrAsync("TR-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TR ID format: TR-MCP-001"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTrAsync("TR-MCP-001"));
+            async () => await _workflow.GetTrAsync("TR-MCP-001", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -294,16 +294,16 @@ public class RequirementsWorkflowTests
         var createdItem = CreateTrItem("TR-MCP-ARCH-001", "New TR", "New TR description");
         var mutationResult = CreateTrMutationResult(true, createdItem);
 
-        _workflow.CreateTrAsync(Arg.Any<ITrCreateRequest>(), default)
+        _workflow.CreateTrAsync(Arg.Any<ITrCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await _workflow.CreateTrAsync(request);
+        var result = await _workflow.CreateTrAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Item);
         Assert.Equal("TR-MCP-ARCH-001", result.Item.Id);
-        await _workflow.Received(1).CreateTrAsync(Arg.Any<ITrCreateRequest>(), default);
+        await _workflow.Received(1).CreateTrAsync(Arg.Any<ITrCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -315,26 +315,26 @@ public class RequirementsWorkflowTests
         var mockSelectionState = CreateMockSelectionState(null, "TR-MCP-ARCH-001", null);
 
         _workflow.CurrentSelection().Returns(mockSelectionState);
-        _workflow.UpdateTrAsync(Arg.Any<ITrUpdateRequest>(), default)
+        _workflow.UpdateTrAsync(Arg.Any<ITrUpdateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await _workflow.UpdateTrAsync(request);
+        var result = await _workflow.UpdateTrAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("Updated TR", result.Item.Title);
-        await _workflow.Received(1).UpdateTrAsync(Arg.Any<ITrUpdateRequest>(), default);
+        await _workflow.Received(1).UpdateTrAsync(Arg.Any<ITrUpdateRequest>(), cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task DeleteTrAsync_ValidId_DeletesTrItem()
     {
-        _workflow.DeleteTrAsync("TR-MCP-ARCH-001", default)
+        _workflow.DeleteTrAsync("TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
 
-        await _workflow.DeleteTrAsync("TR-MCP-ARCH-001");
+        await _workflow.DeleteTrAsync("TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.Received(1).DeleteTrAsync("TR-MCP-ARCH-001", default);
+        await _workflow.Received(1).DeleteTrAsync("TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     #endregion
@@ -350,15 +350,15 @@ public class RequirementsWorkflowTests
             CreateTestEntry("TEST-MCP-002", "Integration test for API")
         });
 
-        _workflow.ListTestAsync(null, null, default)
+        _workflow.ListTestAsync(null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<ITestQueryResult>(expectedResult));
 
-        var result = await _workflow.ListTestAsync();
+        var result = await _workflow.ListTestAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
         Assert.Equal(2, result.Items.Count);
-        await _workflow.Received(1).ListTestAsync(null, null, default);
+        await _workflow.Received(1).ListTestAsync(null, null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -369,14 +369,14 @@ public class RequirementsWorkflowTests
             CreateTestEntry("TEST-AUTH-001", "OAuth test condition")
         });
 
-        _workflow.ListTestAsync("AUTH", null, default)
+        _workflow.ListTestAsync("AUTH", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<ITestQueryResult>(expectedResult));
 
-        var result = await _workflow.ListTestAsync(area: "AUTH");
+        var result = await _workflow.ListTestAsync(area: "AUTH", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("TEST-AUTH-001", result.Items[0].Id);
-        await _workflow.Received(1).ListTestAsync("AUTH", null, default);
+        await _workflow.Received(1).ListTestAsync("AUTH", null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     #endregion
@@ -388,24 +388,24 @@ public class RequirementsWorkflowTests
     {
         var expectedItem = CreateTestItem("TEST-MCP-001", "Test condition");
 
-        _workflow.GetTestAsync("TEST-MCP-001", default)
+        _workflow.GetTestAsync("TEST-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedItem));
 
-        var result = await _workflow.GetTestAsync("TEST-MCP-001");
+        var result = await _workflow.GetTestAsync("TEST-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("TEST-MCP-001", result.Id);
-        await _workflow.Received(1).GetTestAsync("TEST-MCP-001", default);
+        await _workflow.Received(1).GetTestAsync("TEST-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task GetTestAsync_InvalidId_ThrowsArgumentException()
     {
-        _workflow.GetTestAsync("TEST-001", default)
+        _workflow.GetTestAsync("TEST-001", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TEST ID format: TEST-001"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTestAsync("TEST-001"));
+            async () => await _workflow.GetTestAsync("TEST-001", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -415,16 +415,16 @@ public class RequirementsWorkflowTests
         var createdItem = CreateTestItem("TEST-MCP-001", "New test condition");
         var mutationResult = CreateTestMutationResult(true, createdItem);
 
-        _workflow.CreateTestAsync(Arg.Any<ITestCreateRequest>(), default)
+        _workflow.CreateTestAsync(Arg.Any<ITestCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await _workflow.CreateTestAsync(request);
+        var result = await _workflow.CreateTestAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Item);
         Assert.Equal("TEST-MCP-001", result.Item.Id);
-        await _workflow.Received(1).CreateTestAsync(Arg.Any<ITestCreateRequest>(), default);
+        await _workflow.Received(1).CreateTestAsync(Arg.Any<ITestCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -436,26 +436,26 @@ public class RequirementsWorkflowTests
         var mockSelectionState = CreateMockSelectionState(null, null, "TEST-MCP-001");
 
         _workflow.CurrentSelection().Returns(mockSelectionState);
-        _workflow.UpdateTestAsync(Arg.Any<ITestUpdateRequest>(), default)
+        _workflow.UpdateTestAsync(Arg.Any<ITestUpdateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await _workflow.UpdateTestAsync(request);
+        var result = await _workflow.UpdateTestAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("Updated test condition", result.Item.Description);
-        await _workflow.Received(1).UpdateTestAsync(Arg.Any<ITestUpdateRequest>(), default);
+        await _workflow.Received(1).UpdateTestAsync(Arg.Any<ITestUpdateRequest>(), cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task DeleteTestAsync_ValidId_DeletesTestItem()
     {
-        _workflow.DeleteTestAsync("TEST-MCP-001", default)
+        _workflow.DeleteTestAsync("TEST-MCP-001", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
 
-        await _workflow.DeleteTestAsync("TEST-MCP-001");
+        await _workflow.DeleteTestAsync("TEST-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.Received(1).DeleteTestAsync("TEST-MCP-001", default);
+        await _workflow.Received(1).DeleteTestAsync("TEST-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     #endregion
@@ -471,15 +471,15 @@ public class RequirementsWorkflowTests
             CreateMappingItem("FR-MCP-002", "TR-MCP-PERF-001", "TEST-MCP-001")
         });
 
-        _workflow.ListMappingsAsync(null, null, null, default)
+        _workflow.ListMappingsAsync(null, null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<IMappingQueryResult>(expectedResult));
 
-        var result = await _workflow.ListMappingsAsync();
+        var result = await _workflow.ListMappingsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
         Assert.Equal(2, result.Items.Count);
-        await _workflow.Received(1).ListMappingsAsync(null, null, null, default);
+        await _workflow.Received(1).ListMappingsAsync(null, null, null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -490,14 +490,14 @@ public class RequirementsWorkflowTests
             CreateMappingItem("FR-MCP-001", "TR-MCP-ARCH-001", null)
         });
 
-        _workflow.ListMappingsAsync("FR-MCP-001", null, null, default)
+        _workflow.ListMappingsAsync("FR-MCP-001", null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult<IMappingQueryResult>(expectedResult));
 
-        var result = await _workflow.ListMappingsAsync(frId: "FR-MCP-001");
+        var result = await _workflow.ListMappingsAsync(frId: "FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("FR-MCP-001", result.Items[0].FrId);
-        await _workflow.Received(1).ListMappingsAsync("FR-MCP-001", null, null, default);
+        await _workflow.Received(1).ListMappingsAsync("FR-MCP-001", null, null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -507,17 +507,17 @@ public class RequirementsWorkflowTests
         var createdMapping = CreateMappingItem("FR-MCP-001", "TR-MCP-ARCH-001", null);
         var mutationResult = CreateMappingMutationResult(true, createdMapping);
 
-        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), default)
+        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await _workflow.CreateMappingAsync(request);
+        var result = await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Item);
         Assert.Equal("FR-MCP-001", result.Item.FrId);
         Assert.Equal("TR-MCP-ARCH-001", result.Item.TrId);
-        await _workflow.Received(1).CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), default);
+        await _workflow.Received(1).CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -525,11 +525,11 @@ public class RequirementsWorkflowTests
     {
         var request = CreateMappingCreateRequest("FR-NONEXISTENT-999", "TR-MCP-ARCH-001", null);
 
-        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), default)
+        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Referenced FR does not exist: FR-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateMappingAsync(request));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -537,11 +537,11 @@ public class RequirementsWorkflowTests
     {
         var request = CreateMappingCreateRequest("FR-MCP-001", "TR-NONEXISTENT-999", null);
 
-        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), default)
+        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Referenced TR does not exist: TR-NONEXISTENT-999"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateMappingAsync(request));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -549,42 +549,42 @@ public class RequirementsWorkflowTests
     {
         var request = CreateMappingCreateRequest(null, null, null);
 
-        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), default)
+        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("At least one requirement ID must be provided"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.CreateMappingAsync(request));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task DeleteMappingAsync_ValidIds_DeletesMapping()
     {
-        _workflow.DeleteMappingAsync("FR-MCP-001", "TR-MCP-ARCH-001", null, default)
+        _workflow.DeleteMappingAsync("FR-MCP-001", "TR-MCP-ARCH-001", null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.CompletedTask);
 
-        await _workflow.DeleteMappingAsync(frId: "FR-MCP-001", trId: "TR-MCP-ARCH-001");
+        await _workflow.DeleteMappingAsync(frId: "FR-MCP-001", trId: "TR-MCP-ARCH-001", cancellationToken: TestContext.Current.CancellationToken);
 
-        await _workflow.Received(1).DeleteMappingAsync("FR-MCP-001", "TR-MCP-ARCH-001", null, default);
+        await _workflow.Received(1).DeleteMappingAsync("FR-MCP-001", "TR-MCP-ARCH-001", null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task DeleteMappingAsync_NoIds_ThrowsArgumentException()
     {
-        _workflow.DeleteMappingAsync(null, null, null, default)
+        _workflow.DeleteMappingAsync(null, null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("At least one requirement ID must be provided"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.DeleteMappingAsync());
+            async () => await _workflow.DeleteMappingAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task DeleteMappingAsync_MappingNotFound_ThrowsInvalidOperationException()
     {
-        _workflow.DeleteMappingAsync("FR-MCP-001", "TR-NONEXISTENT-999", null, default)
+        _workflow.DeleteMappingAsync("FR-MCP-001", "TR-NONEXISTENT-999", null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Mapping not found"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.DeleteMappingAsync(frId: "FR-MCP-001", trId: "TR-NONEXISTENT-999"));
+            async () => await _workflow.DeleteMappingAsync(frId: "FR-MCP-001", trId: "TR-NONEXISTENT-999", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -596,17 +596,17 @@ public class RequirementsWorkflowTests
     {
         var expectedResult = CreateDocumentGenerationResult("markdown", "fr", "# Functional Requirements\n\n## FR-MCP-001...");
 
-        _workflow.GenerateDocumentAsync("markdown", "fr", default)
+        _workflow.GenerateDocumentAsync("markdown", "fr", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.GenerateDocumentAsync("markdown", "fr");
+        var result = await _workflow.GenerateDocumentAsync("markdown", "fr", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("markdown", result.Format);
         Assert.Equal("fr", result.DocType);
         Assert.Contains("# Functional Requirements", result.Content);
-        await _workflow.Received(1).GenerateDocumentAsync("markdown", "fr", default);
+        await _workflow.Received(1).GenerateDocumentAsync("markdown", "fr", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -614,17 +614,17 @@ public class RequirementsWorkflowTests
     {
         var expectedResult = CreateDocumentGenerationResult("yaml", "tr", "---\nrequirements:\n  - id: TR-MCP-ARCH-001");
 
-        _workflow.GenerateDocumentAsync("yaml", "tr", default)
+        _workflow.GenerateDocumentAsync("yaml", "tr", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.GenerateDocumentAsync("yaml", "tr");
+        var result = await _workflow.GenerateDocumentAsync("yaml", "tr", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal("yaml", result.Format);
         Assert.Equal("tr", result.DocType);
         Assert.Contains("requirements:", result.Content);
-        await _workflow.Received(1).GenerateDocumentAsync("yaml", "tr", default);
+        await _workflow.Received(1).GenerateDocumentAsync("yaml", "tr", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -632,15 +632,15 @@ public class RequirementsWorkflowTests
     {
         var expectedResult = CreateDocumentGenerationResult("markdown", "matrix", "# Requirements Traceability Matrix");
 
-        _workflow.GenerateDocumentAsync("markdown", "matrix", default)
+        _workflow.GenerateDocumentAsync("markdown", "matrix", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.GenerateDocumentAsync("markdown", "matrix");
+        var result = await _workflow.GenerateDocumentAsync("markdown", "matrix", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("matrix", result.DocType);
         Assert.Contains("Matrix", result.Content);
-        await _workflow.Received(1).GenerateDocumentAsync("markdown", "matrix", default);
+        await _workflow.Received(1).GenerateDocumentAsync("markdown", "matrix", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -648,34 +648,34 @@ public class RequirementsWorkflowTests
     {
         var expectedResult = CreateDocumentGenerationResult("markdown", "all", "# Complete Requirements Package");
 
-        _workflow.GenerateDocumentAsync("markdown", "all", default)
+        _workflow.GenerateDocumentAsync("markdown", "all", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.GenerateDocumentAsync("markdown", "all");
+        var result = await _workflow.GenerateDocumentAsync("markdown", "all", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("all", result.DocType);
-        await _workflow.Received(1).GenerateDocumentAsync("markdown", "all", default);
+        await _workflow.Received(1).GenerateDocumentAsync("markdown", "all", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task GenerateDocumentAsync_InvalidFormat_ThrowsArgumentException()
     {
-        _workflow.GenerateDocumentAsync("invalid", "fr", default)
+        _workflow.GenerateDocumentAsync("invalid", "fr", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid format: invalid. Valid values: markdown, yaml"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GenerateDocumentAsync("invalid", "fr"));
+            async () => await _workflow.GenerateDocumentAsync("invalid", "fr", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task GenerateDocumentAsync_InvalidDocType_ThrowsArgumentException()
     {
-        _workflow.GenerateDocumentAsync("markdown", "invalid", default)
+        _workflow.GenerateDocumentAsync("markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid docType: invalid. Valid values: fr, tr, test, matrix, all"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GenerateDocumentAsync("markdown", "invalid"));
+            async () => await _workflow.GenerateDocumentAsync("markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     #endregion
@@ -688,16 +688,16 @@ public class RequirementsWorkflowTests
         var content = "# Functional Requirements\n\n## FR-MCP-001 API Auth\n\nDescription...";
         var expectedResult = CreateDocumentIngestionResult(1, 0, 0, 0, 0, 0, 0);
 
-        _workflow.IngestDocumentAsync(content, "markdown", "overwrite", default)
+        _workflow.IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.IngestDocumentAsync(content, "markdown", "overwrite");
+        var result = await _workflow.IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal(1, result.FrCreated);
         Assert.Empty(result.Conflicts);
-        await _workflow.Received(1).IngestDocumentAsync(content, "markdown", "overwrite", default);
+        await _workflow.Received(1).IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -706,15 +706,15 @@ public class RequirementsWorkflowTests
         var content = "---\nrequirements:\n  - id: TR-MCP-ARCH-001\n    title: Architecture";
         var expectedResult = CreateDocumentIngestionResult(0, 0, 1, 0, 0, 0, 0);
 
-        _workflow.IngestDocumentAsync(content, "yaml", "merge", default)
+        _workflow.IngestDocumentAsync(content, "yaml", "merge", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.IngestDocumentAsync(content, "yaml", "merge");
+        var result = await _workflow.IngestDocumentAsync(content, "yaml", "merge", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.Equal(1, result.TrCreated);
-        await _workflow.Received(1).IngestDocumentAsync(content, "yaml", "merge", default);
+        await _workflow.Received(1).IngestDocumentAsync(content, "yaml", "merge", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -723,13 +723,13 @@ public class RequirementsWorkflowTests
         var content = "# FR-MCP-001 Updated";
         var expectedResult = CreateDocumentIngestionResult(0, 1, 0, 0, 0, 0, 0);
 
-        _workflow.IngestDocumentAsync(content, "markdown", "overwrite", default)
+        _workflow.IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.IngestDocumentAsync(content, "markdown", "overwrite");
+        var result = await _workflow.IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(1, result.FrUpdated);
-        await _workflow.Received(1).IngestDocumentAsync(content, "markdown", "overwrite", default);
+        await _workflow.Received(1).IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -742,45 +742,45 @@ public class RequirementsWorkflowTests
         };
         var expectedResult = CreateDocumentIngestionResult(0, 0, 0, 0, 0, 0, 0, conflicts);
 
-        _workflow.IngestDocumentAsync(content, "markdown", "skip", default)
+        _workflow.IngestDocumentAsync(content, "markdown", "skip", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.IngestDocumentAsync(content, "markdown", "skip");
+        var result = await _workflow.IngestDocumentAsync(content, "markdown", "skip", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Single(result.Conflicts);
         Assert.Equal("skipped", result.Conflicts[0].Resolution);
-        await _workflow.Received(1).IngestDocumentAsync(content, "markdown", "skip", default);
+        await _workflow.Received(1).IngestDocumentAsync(content, "markdown", "skip", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
     public async Task IngestDocumentAsync_InvalidFormat_ThrowsArgumentException()
     {
-        _workflow.IngestDocumentAsync("content", "invalid", "overwrite", default)
+        _workflow.IngestDocumentAsync("content", "invalid", "overwrite", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid format: invalid. Valid values: markdown, yaml"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.IngestDocumentAsync("content", "invalid", "overwrite"));
+            async () => await _workflow.IngestDocumentAsync("content", "invalid", "overwrite", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task IngestDocumentAsync_InvalidMergeStrategy_ThrowsArgumentException()
     {
-        _workflow.IngestDocumentAsync("content", "markdown", "invalid", default)
+        _workflow.IngestDocumentAsync("content", "markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid mergeStrategy: invalid. Valid values: overwrite, merge, skip"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.IngestDocumentAsync("content", "markdown", "invalid"));
+            async () => await _workflow.IngestDocumentAsync("content", "markdown", "invalid", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
     public async Task IngestDocumentAsync_EmptyContent_ThrowsArgumentException()
     {
-        _workflow.IngestDocumentAsync("", "markdown", "overwrite", default)
+        _workflow.IngestDocumentAsync("", "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Content cannot be null or empty"));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.IngestDocumentAsync("", "markdown", "overwrite"));
+            async () => await _workflow.IngestDocumentAsync("", "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -793,10 +793,10 @@ public class RequirementsWorkflowTests
         };
         var expectedResult = CreateDocumentIngestionResult(0, 0, 0, 0, 0, 0, 0, conflicts);
 
-        _workflow.IngestDocumentAsync(content, "markdown", "overwrite", default)
+        _workflow.IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(expectedResult));
 
-        var result = await _workflow.IngestDocumentAsync(content, "markdown", "overwrite");
+        var result = await _workflow.IngestDocumentAsync(content, "markdown", "overwrite", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Single(result.Conflicts);
@@ -973,11 +973,11 @@ public class RequirementsWorkflowTests
     {
         var request = CreateFrCreateRequest();
 
-        _workflow.CreateFrAsync(Arg.Any<IFrCreateRequest>(), default)
+        _workflow.CreateFrAsync(Arg.Any<IFrCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("FR item with ID FR-MCP-001 already exists"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateFrAsync(request));
+            async () => await _workflow.CreateFrAsync(request, cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Contains("already exists", exception.Message);
         Assert.Contains("FR-MCP-001", exception.Message);
@@ -986,11 +986,11 @@ public class RequirementsWorkflowTests
     [Fact]
     public async Task ValidationError_InvalidTrIdFormat_ReturnsStructuredError()
     {
-        _workflow.GetTrAsync("TR-INVALID", default)
+        _workflow.GetTrAsync("TR-INVALID", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TR ID format: TR-INVALID. Expected format: TR-<AREA>-<SUBAREA>-###"));
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTrAsync("TR-INVALID"));
+            async () => await _workflow.GetTrAsync("TR-INVALID", cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Contains("Invalid TR ID format", exception.Message);
     }
@@ -998,11 +998,11 @@ public class RequirementsWorkflowTests
     [Fact]
     public async Task ValidationError_InvalidTestIdFormat_ReturnsStructuredError()
     {
-        _workflow.GetTestAsync("test-001", default)
+        _workflow.GetTestAsync("test-001", cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new ArgumentException("Invalid TEST ID format: test-001. Expected format: TEST-<AREA>-###"));
 
         var exception = await Assert.ThrowsAsync<ArgumentException>(
-            async () => await _workflow.GetTestAsync("test-001"));
+            async () => await _workflow.GetTestAsync("test-001", cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Contains("Invalid TEST ID format", exception.Message);
     }
@@ -1012,11 +1012,11 @@ public class RequirementsWorkflowTests
     {
         var request = CreateMappingCreateRequest("FR-MCP-001", "TR-NONEXISTENT-999", null);
 
-        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), default)
+        _workflow.CreateMappingAsync(Arg.Any<IMappingCreateRequest>(), cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Referenced TR does not exist: TR-NONEXISTENT-999"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.CreateMappingAsync(request));
+            async () => await _workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Contains("does not exist", exception.Message);
         Assert.Contains("TR-NONEXISTENT-999", exception.Message);
@@ -1025,11 +1025,11 @@ public class RequirementsWorkflowTests
     [Fact]
     public async Task ValidationError_StorageError_ReturnsStructuredError()
     {
-        _workflow.ListFrAsync(null, null, default)
+        _workflow.ListFrAsync(null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Throws(new InvalidOperationException("Storage connection failed"));
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _workflow.ListFrAsync());
+            async () => await _workflow.ListFrAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Contains("Storage", exception.Message);
     }

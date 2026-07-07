@@ -33,9 +33,9 @@ public sealed class ToolCrudTests
     [Fact]
     public async Task List_Returns200WithValidStructure()
     {
-        var r = await _f.Client.GetAsync(ToolRegistryFixture.ToolRoute);
+        var r = await _f.Client.GetAsync(ToolRegistryFixture.ToolRoute, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-        var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>();
+        var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(res);
         Assert.NotNull(res.Tools);
         Assert.True(res.TotalCount >= 0);
@@ -52,7 +52,7 @@ public sealed class ToolCrudTests
     [Fact]
     public async Task List_ResponseIsJson()
     {
-        var r = await _f.Client.GetAsync(ToolRegistryFixture.ToolRoute);
+        var r = await _f.Client.GetAsync(ToolRegistryFixture.ToolRoute, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("application/json", r.Content.Headers.ContentType?.MediaType);
     }
 
@@ -69,9 +69,9 @@ public sealed class ToolCrudTests
     [Fact]
     public async Task Search_WithKeyword_Returns200()
     {
-        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/search?keyword=test");
+        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/search?keyword=test", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-        var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>();
+        var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(res);
     }
 
@@ -87,9 +87,9 @@ public sealed class ToolCrudTests
     public async Task Search_NonMatchingKeyword_ReturnsEmpty()
     {
         var r = await _f.Client.GetAsync(
-            $"{ToolRegistryFixture.ToolRoute}/search?keyword=zzz_nonexistent_{Guid.NewGuid():N}");
+            $"{ToolRegistryFixture.ToolRoute}/search?keyword=zzz_nonexistent_{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-        var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>();
+        var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(res);
         Assert.Equal(0, res.TotalCount);
     }
@@ -117,10 +117,10 @@ public sealed class ToolCrudTests
                 Tags = new[] { "audit", "test" },
                 CommandTemplate = "echo hello"
             };
-            var r = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
+            var r = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Created, r.StatusCode);
 
-            var res = await r.Content.ReadFromJsonAsync<ToolMutationResult>();
+            var res = await r.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(res);
             Assert.True(res.Success, $"Create failed: {res.Error}");
             Assert.NotNull(res.Tool);
@@ -131,7 +131,7 @@ public sealed class ToolCrudTests
             Assert.NotNull(r.Headers.Location);
 
             // Cleanup
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{res.Tool.Id}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{res.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         }
         catch { /* best effort */ }
     }
@@ -149,19 +149,19 @@ public sealed class ToolCrudTests
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "First", Tags = new[] { "dup" } };
-        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
+        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, first.StatusCode);
-        var firstRes = await first.Content.ReadFromJsonAsync<ToolMutationResult>();
+        var firstRes = await first.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
 
         try
         {
-            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
+            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
         }
         finally
         {
             if (firstRes?.Tool != null)
-                await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{firstRes.Tool.Id}");
+                await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{firstRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -178,21 +178,21 @@ public sealed class ToolCrudTests
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "GetTest", Tags = new[] { "get" } };
-        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
-        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>();
+        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
+        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(createRes?.Tool);
 
         try
         {
-            var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}");
+            var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-            var dto = await r.Content.ReadFromJsonAsync<ToolDto>();
+            var dto = await r.Content.ReadFromJsonAsync<ToolDto>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(dto);
             Assert.Equal(name, dto.Name);
         }
         finally
         {
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -207,7 +207,7 @@ public sealed class ToolCrudTests
     [Fact]
     public async Task Get_NonExistentId_Returns404()
     {
-        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/999999");
+        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -224,8 +224,8 @@ public sealed class ToolCrudTests
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "UpdateTest", Tags = new[] { "upd" } };
-        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
-        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>();
+        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
+        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(createRes?.Tool);
 
         try
@@ -233,16 +233,16 @@ public sealed class ToolCrudTests
             var newName = ToolRegistryFixture.GenerateToolName();
             var update = new { Name = newName };
             var r = await _f.Client.PutAsJsonAsync(
-                $"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", update);
+                $"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", update, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-            var res = await r.Content.ReadFromJsonAsync<ToolMutationResult>();
+            var res = await r.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(res);
             Assert.True(res.Success);
             Assert.Equal(newName, res.Tool!.Name);
         }
         finally
         {
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -258,7 +258,7 @@ public sealed class ToolCrudTests
     public async Task Update_NonExistentId_Returns404()
     {
         var update = new { Name = "ghost" };
-        var r = await _f.Client.PutAsJsonAsync($"{ToolRegistryFixture.ToolRoute}/999999", update);
+        var r = await _f.Client.PutAsJsonAsync($"{ToolRegistryFixture.ToolRoute}/999999", update, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -275,18 +275,18 @@ public sealed class ToolCrudTests
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "DeleteTest", Tags = new[] { "del" } };
-        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
-        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>();
+        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
+        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(createRes?.Tool);
 
-        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}");
+        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-        var res = await r.Content.ReadFromJsonAsync<ToolMutationResult>();
+        var res = await r.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(res);
         Assert.True(res.Success);
 
         // Verify gone
-        var get = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}");
+        var get = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, get.StatusCode);
     }
 
@@ -301,7 +301,7 @@ public sealed class ToolCrudTests
     [Fact]
     public async Task Delete_NonExistentId_Returns404()
     {
-        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/999999");
+        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -321,23 +321,23 @@ public sealed class ToolCrudTests
         var name = ToolRegistryFixture.GenerateToolName();
         var uniqueTag = $"audittag{Guid.NewGuid().ToString("N")[..6]}";
         var body = new { Name = name, Description = "SearchTagTest", Tags = new[] { uniqueTag } };
-        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
-        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>();
+        var create = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
+        var createRes = await create.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(createRes?.Tool);
 
         try
         {
             var r = await _f.Client.GetAsync(
-                $"{ToolRegistryFixture.ToolRoute}/search?keyword={uniqueTag}");
+                $"{ToolRegistryFixture.ToolRoute}/search?keyword={uniqueTag}", cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.OK, r.StatusCode);
-            var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>();
+            var res = await r.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(res);
             Assert.True(res.TotalCount >= 1);
             Assert.Contains(res.Tools, t => t.Name == name);
         }
         finally
         {
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{createRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 }

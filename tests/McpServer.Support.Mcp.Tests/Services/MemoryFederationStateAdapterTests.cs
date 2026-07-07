@@ -74,7 +74,7 @@ public sealed class MemoryFederationStateAdapterTests
 
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var workspace = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-001").ConfigureAwait(true);
+        var workspace = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("OPERATOR", workspace.Category);
         Assert.Equal(MemoryEntity.WorkspaceScope, workspace.Scope);
         Assert.Equal(WorkspaceA, workspace.WorkspaceId);
@@ -84,7 +84,7 @@ public sealed class MemoryFederationStateAdapterTests
         Assert.NotEqual(default, workspace.CreatedAtUtc);
         Assert.NotEqual(default, workspace.UpdatedAtUtc);
 
-        var global = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-GLOBAL-001").ConfigureAwait(true);
+        var global = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-GLOBAL-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("GLOBAL", global.Category);
         Assert.Equal(MemoryEntity.GlobalScope, global.Scope);
         Assert.Null(global.WorkspaceId);
@@ -119,7 +119,7 @@ public sealed class MemoryFederationStateAdapterTests
 
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-002").ConfigureAwait(true);
+        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("After", row.Text);
         Assert.Equal(2, row.Version);
         Assert.Equal(WorkspaceA, row.WorkspaceId);
@@ -158,7 +158,7 @@ public sealed class MemoryFederationStateAdapterTests
 
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-003").ConfigureAwait(true);
+        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-003", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(db.Entry(row).Property<bool>("IsDeleted").CurrentValue);
     }
 
@@ -187,7 +187,7 @@ public sealed class MemoryFederationStateAdapterTests
 
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-004").ConfigureAwait(true);
+        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-004", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Original", row.Text);
         Assert.Equal(7, row.Version);
     }
@@ -229,7 +229,7 @@ public sealed class MemoryFederationStateAdapterTests
 
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        Assert.Empty(await db.Memories.IgnoreQueryFilters().ToListAsync().ConfigureAwait(true));
+        Assert.Empty(await db.Memories.IgnoreQueryFilters().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     /// <summary>Signed memory envelopes apply through the federation controller and create a hub memory row.</summary>
@@ -252,7 +252,7 @@ public sealed class MemoryFederationStateAdapterTests
 
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-006").ConfigureAwait(true);
+        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-006", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Signed apply", row.Text);
     }
 
@@ -295,7 +295,7 @@ public sealed class MemoryFederationStateAdapterTests
 
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-007").ConfigureAwait(true);
+        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-007", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Hub wins", row.Text);
         Assert.Equal(2, row.Version);
     }
@@ -333,7 +333,7 @@ public sealed class MemoryFederationStateAdapterTests
         Assert.True(recipientResult.Applied);
         await using var scope = recipient.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-008").ConfigureAwait(true);
+        var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-008", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Fanout apply", row.Text);
         Assert.Equal(WorkspaceA, row.WorkspaceId);
     }

@@ -123,7 +123,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests
         using var input = new StringReader(prompt + Environment.NewLine + "exit" + Environment.NewLine);
         using var output = new StringWriter();
 
-        var processed = await QBAgentRunLoop.RunAsync(runner, input, output).ConfigureAwait(true);
+        var processed = await QBAgentRunLoop.RunAsync(runner, input, output, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var displayed = output.ToString();
         Assert.Equal(1, processed);

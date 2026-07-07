@@ -42,11 +42,11 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
     public async Task Start_RegisteredWorkspace_ReturnsProcessStatus()
     {
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/start", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/start", null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>();
+        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(status);
         // It may or may not successfully start depending on environment, but should return the DTO.
     }
@@ -58,7 +58,7 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
         var fakeKey = WorkspaceEndpointFixture.EncodeKey(@"C:\NonExistent\Path_" + Guid.NewGuid().ToString("N"));
 
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{fakeKey}/start", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{fakeKey}/start", null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -68,7 +68,7 @@ public sealed class StartWorkspaceTests : IAsyncLifetime
     public async Task Start_InvalidKey_Returns400()
     {
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/start", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/start", null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }

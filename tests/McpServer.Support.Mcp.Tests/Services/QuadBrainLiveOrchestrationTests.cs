@@ -33,7 +33,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         {
             Input = "decide this",
             TurnId = "turn-1",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision", response.Output);
@@ -57,7 +57,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         {
             Input = "do the task",
             TurnId = "turn-2",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", response.Status);
         Assert.Equal(toolCalls, response.Output);
@@ -76,7 +76,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         {
             Input = "decide this",
             TurnId = "turn-partial",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Null(response.Output);
@@ -98,7 +98,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         {
             Input = "decide this",
             TurnId = "turn-vote",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision after voting", response.Output);
@@ -121,7 +121,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         {
             Input = "decide this",
             TurnId = "turn-3",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Equal(BrainSlotReasonCodes.QuadNotReady, response.Reason);
@@ -138,7 +138,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         {
             Input = "decide this",
             TurnId = "turn-4",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Equal(BrainSlotReasonCodes.ExecutionDisabled, response.Reason);

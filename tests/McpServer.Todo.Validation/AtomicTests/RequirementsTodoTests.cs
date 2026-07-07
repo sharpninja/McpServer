@@ -88,7 +88,7 @@ public sealed class RequirementsTodoTests : IAsyncLifetime
             response.StatusCode == HttpStatusCode.UnprocessableEntity,
             $"Expected 200 or 422 but got {(int)response.StatusCode}.");
 
-        var result = await response.Content.ReadFromJsonAsync<RequirementsAnalysisResult>();
+        var result = await response.Content.ReadFromJsonAsync<RequirementsAnalysisResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
 
         if (response.StatusCode == HttpStatusCode.OK)
@@ -115,7 +115,7 @@ public sealed class RequirementsTodoTests : IAsyncLifetime
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var response = await _fixture.Client.PostAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}/requirements", null);
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}/requirements", null, cancellationToken: TestContext.Current.CancellationToken);
 
         // Should fail gracefully — either 404 or 422 depending on whether
         // the service checks existence first or the Copilot call fails.

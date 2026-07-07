@@ -612,13 +612,15 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         ct.ThrowIfCancellationRequested();
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
+        var config = RequirementsWikiExportConfigLoader.Load(TryInferWorkspacePathFromOptions(), _options);
         var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(
             _frEntries,
             _trEntries,
             _testEntries,
             _mappings,
             generated,
-            ReadExistingMatrixForWikiExport(outputRootPath));
+            ReadExistingMatrixForWikiExport(outputRootPath),
+            config);
 
         return await RequirementsDocumentExportWriter.WriteAsync(
             outputRootPath,
@@ -655,6 +657,17 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             ? null
             : Path.Combine(projectRoot, RequirementsDocumentRenderer.MatrixFileName);
         return ReadFileIfExists(projectMatrix) ?? ReadFileIfExists(_options.MatrixPath);
+    }
+
+    private string? TryInferWorkspacePathFromOptions()
+    {
+        var functional = _options.FunctionalRequirementsPath;
+        if (string.IsNullOrWhiteSpace(functional))
+            return null;
+
+        var projectDir = Path.GetDirectoryName(Path.GetFullPath(functional));
+        var docsDir = projectDir is null ? null : Directory.GetParent(projectDir)?.FullName;
+        return docsDir is null ? null : Directory.GetParent(docsDir)?.FullName;
     }
 
     private async Task AtomicWriteAsync(string path, string content, CancellationToken ct)

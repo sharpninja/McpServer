@@ -39,7 +39,7 @@ public sealed class DesktopLaunchServiceTests
 
         var result = await service.LaunchAsync(
             Path.GetDirectoryName(executablePath)!,
-            new DesktopLaunchRequest { ExecutablePath = executablePath });
+            new DesktopLaunchRequest { ExecutablePath = executablePath }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Contains("disabled", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
@@ -67,7 +67,7 @@ public sealed class DesktopLaunchServiceTests
 
         var result = await service.LaunchAsync(
             Path.GetDirectoryName(executablePath)!,
-            new DesktopLaunchRequest { ExecutablePath = executablePath });
+            new DesktopLaunchRequest { ExecutablePath = executablePath }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Contains("allowlist", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
@@ -104,7 +104,7 @@ public sealed class DesktopLaunchServiceTests
                 ExecutablePath = executablePath,
                 CreateNoWindow = true,
                 WaitForExit = true
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(4242, result.ProcessId);

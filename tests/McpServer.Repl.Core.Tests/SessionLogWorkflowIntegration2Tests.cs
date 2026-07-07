@@ -43,7 +43,7 @@ public class SessionLogWorkflowIntegration2Tests
             Model = model
         };
 
-        var submitResult = await _stubClient.SubmitAsync(sessionLog);
+        var submitResult = await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(submitResult);
         Assert.Equal(sessionId, submitResult.SessionId);
 
@@ -80,7 +80,7 @@ public class SessionLogWorkflowIntegration2Tests
             Model = model
         };
 
-        await _stubClient.SubmitAsync(sessionLog);
+        await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
 
         _fakeState.OpenSession(agent, sessionId, title, model);
 
@@ -109,7 +109,7 @@ public class SessionLogWorkflowIntegration2Tests
             Model = model
         };
 
-        await _stubClient.SubmitAsync(sessionLog);
+        await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
         _fakeState.OpenSession(agent, sessionId, title, model);
 
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
@@ -144,7 +144,7 @@ public class SessionLogWorkflowIntegration2Tests
             Model = "claude-sonnet-4"
         };
 
-        await _stubClient.SubmitAsync(sessionLog);
+        await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
         _fakeState.OpenSession(agent, sessionId, "Dialog Test", "claude-sonnet-4");
         _fakeState.BeginTurn(requestId);
 
@@ -154,7 +154,7 @@ public class SessionLogWorkflowIntegration2Tests
             new() { Role = "tool", Content = "File created", Category = "tool_result" }
         };
 
-        var result = await _stubClient.AppendDialogAsync(agent, sessionId, requestId, dialogItems);
+        var result = await _stubClient.AppendDialogAsync(agent, sessionId, requestId, dialogItems, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal(agent, result.Agent);
         Assert.Equal(sessionId, result.SessionId);
@@ -179,13 +179,13 @@ public class SessionLogWorkflowIntegration2Tests
             Model = "claude-sonnet-4"
         };
 
-        await _stubClient.SubmitAsync(sessionLog);
+        await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
         _fakeState.OpenSession(agent, sessionId, "History Test", "claude-sonnet-4");
 
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
         _fakeState.CompleteTurn();
 
-        var queryResult = await _stubClient.QueryAsync(agent: agent);
+        var queryResult = await _stubClient.QueryAsync(agent: agent, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(queryResult);
         Assert.NotEmpty(queryResult.Items);
         Assert.Contains(queryResult.Items, item => item.SessionId == sessionId);
@@ -387,7 +387,7 @@ public class SessionLogWorkflowIntegration2Tests
             Model = "claude-sonnet-4"
         };
 
-        var result = await _stubClient.SubmitAsync(sessionLog);
+        var result = await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Id > 0);
@@ -398,7 +398,7 @@ public class SessionLogWorkflowIntegration2Tests
     [Fact]
     public async Task ClientResponse_QueryAsync_ReturnsCorrectStructure()
     {
-        var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 15, offset: 5);
+        var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 15, offset: 5, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
@@ -415,7 +415,7 @@ public class SessionLogWorkflowIntegration2Tests
             new() { Role = "model", Content = "Test", Category = "reasoning" }
         };
 
-        var result = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items);
+        var result = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Copilot", result.Agent);

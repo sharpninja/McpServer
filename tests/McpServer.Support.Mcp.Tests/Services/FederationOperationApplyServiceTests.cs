@@ -99,7 +99,7 @@ public sealed class FederationOperationApplyServiceTests
         Assert.False(applyTask.IsCompleted);
 
         coordinator.ReleaseCoordinator();
-        var result = await applyTask.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(true);
+        var result = await applyTask.WaitAsync(TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Applied);
     }

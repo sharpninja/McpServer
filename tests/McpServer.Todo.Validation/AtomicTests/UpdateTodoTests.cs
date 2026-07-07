@@ -67,11 +67,11 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     {
         var body = new { Title = "AuditUpdateRenamed" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", body);
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success, $"Expected success but got error: {result.Error}");
         Assert.NotNull(result.Item);
@@ -91,11 +91,11 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     {
         var body = new { Done = true, CompletedDate = "2026-02-21", DoneSummary = "Completed by audit" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", body);
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Item);
@@ -115,11 +115,11 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     {
         var body = new { Priority = "high" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", body);
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Item);
@@ -140,7 +140,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var body = new { Title = "Ghost" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", body);
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -158,7 +158,7 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     {
         var response = await _fixture.Client.PutAsync(
             $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}",
-            null);
+            null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(
             response.StatusCode == HttpStatusCode.BadRequest ||

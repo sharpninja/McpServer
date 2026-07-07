@@ -26,7 +26,7 @@ public sealed class DiffgramEncryptionIntegrationTests
         using var keyServer = CreateKeyServer();
         var protector = new TransactionDiffgramProtector();
         await RegisterStandardPartiesAsync(keyServer, keyPair).ConfigureAwait(true);
-        var encryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId)
+        var encryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(encryptionKey);
         var protectedDiffgram = protector.Protect(CreatePlaintextDiffgram("txn-encrypted-valid"), encryptionKey);
@@ -39,7 +39,7 @@ public sealed class DiffgramEncryptionIntegrationTests
             protectedDiffgram.EncryptedBodySha256).ConfigureAwait(true);
         using var subscriber = CreateSubscriber(keyServer, keyPair.PrivateKeyPem, protector);
 
-        var commit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest, protectedDiffgram))
+        var commit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest, protectedDiffgram), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("committed", commit.Status);
@@ -55,7 +55,7 @@ public sealed class DiffgramEncryptionIntegrationTests
         using var keyServer = CreateKeyServer();
         var protector = new TransactionDiffgramProtector();
         await RegisterStandardPartiesAsync(keyServer, keyPair).ConfigureAwait(true);
-        var encryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId)
+        var encryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(encryptionKey);
         var protectedDiffgram = protector.Protect(CreatePlaintextDiffgram("txn-encrypted-plaintext-mismatch"), encryptionKey);
@@ -75,7 +75,7 @@ public sealed class DiffgramEncryptionIntegrationTests
             EncryptedDiffgramBase64 = protectedDiffgram.EncryptedDiffgramBase64,
             EncryptedBodySha256 = protectedDiffgram.EncryptedBodySha256,
             DiffgramSha256 = signedPlaintextHash,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.PlaintextDiffgramHashMismatch, commit.Reason);
@@ -109,7 +109,7 @@ public sealed class DiffgramEncryptionIntegrationTests
             protectedDiffgram.EncryptedBodySha256).ConfigureAwait(true);
         using var subscriber = CreateSubscriber(keyServer, keyPair.PrivateKeyPem, protector);
 
-        var commit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest, protectedDiffgram))
+        var commit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest, protectedDiffgram), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
@@ -125,7 +125,7 @@ public sealed class DiffgramEncryptionIntegrationTests
         using var keyServer = CreateKeyServer();
         var protector = new TransactionDiffgramProtector();
         await RegisterStandardPartiesAsync(keyServer, firstKeyPair).ConfigureAwait(true);
-        var firstEncryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId)
+        var firstEncryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(firstEncryptionKey);
         var firstProtectedDiffgram = protector.Protect(CreatePlaintextDiffgram("txn-key-ring-first"), firstEncryptionKey);
@@ -139,7 +139,7 @@ public sealed class DiffgramEncryptionIntegrationTests
             SubscriberEncryptionKeyId).ConfigureAwait(true);
 
         await RegisterSubscriberAsync(keyServer, rotatedKeyPair, RotatedSubscriberEncryptionKeyId).ConfigureAwait(true);
-        var rotatedEncryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, RotatedSubscriberEncryptionKeyId)
+        var rotatedEncryptionKey = await keyServer.GetPartyKeyAsync(SubscriberPartyId, RotatedSubscriberEncryptionKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(rotatedEncryptionKey);
         var rotatedProtectedDiffgram = protector.Protect(CreatePlaintextDiffgram("txn-key-ring-rotated"), rotatedEncryptionKey);
@@ -168,9 +168,9 @@ public sealed class DiffgramEncryptionIntegrationTests
             },
             protector);
 
-        var firstCommit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(firstManifest, firstProtectedDiffgram))
+        var firstCommit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(firstManifest, firstProtectedDiffgram), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        var rotatedCommit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(rotatedManifest, rotatedProtectedDiffgram))
+        var rotatedCommit = await subscriber.CommitDiffgramAsync(CreateCommitRequest(rotatedManifest, rotatedProtectedDiffgram), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("committed", firstCommit.Status);

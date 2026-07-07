@@ -127,7 +127,7 @@ public sealed class ClientMutationPolicyTests
         Assert.Equal("req-policy-analyze", error.RequestId);
         Assert.Equal("mutation_not_transactional", error.Code);
         Assert.Contains("analyzeRequirements", error.Message, StringComparison.Ordinal);
-        await todo.DidNotReceiveWithAnyArgs().AnalyzeRequirementsAsync(default!, default).ConfigureAwait(true);
+        await todo.DidNotReceiveWithAnyArgs().AnalyzeRequirementsAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>

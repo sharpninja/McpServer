@@ -40,11 +40,11 @@ public sealed class StopWorkspaceTests : IAsyncLifetime
     public async Task Stop_NotRunning_ReturnsStatus()
     {
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/stop", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/stop", null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>();
+        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(status);
         // Stopping a non-running workspace should succeed (idempotent) with IsRunning=false.
         Assert.False(status.IsRunning);
@@ -55,7 +55,7 @@ public sealed class StopWorkspaceTests : IAsyncLifetime
     public async Task Stop_InvalidKey_Returns400()
     {
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/stop", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/stop", null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }

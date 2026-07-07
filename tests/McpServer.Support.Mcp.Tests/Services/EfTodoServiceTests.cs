@@ -108,10 +108,10 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "EF TODO",
             Section = "mvp-support",
             Priority = "high",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
-        var item = await _sut.GetByIdAsync("EF-TODO-001").ConfigureAwait(true);
+        var item = await _sut.GetByIdAsync("EF-TODO-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(item);
         Assert.Equal("EF TODO", item!.Title);
     }
@@ -130,10 +130,10 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Initial",
             Section = "mvp-support",
             Priority = "low",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        await _sut.UpdateAsync("EF-TODO-002", new TodoUpdateRequest { Title = "Second" }).ConfigureAwait(true);
-        var audit = await _sut.GetAuditAsync("EF-TODO-002").ConfigureAwait(true);
+        await _sut.UpdateAsync("EF-TODO-002", new TodoUpdateRequest { Title = "Second" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var audit = await _sut.GetAuditAsync("EF-TODO-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(audit.TotalCount >= 2);
         Assert.Contains(audit.Entries, e => e.Action == "updated");
     }
@@ -152,10 +152,10 @@ public sealed class EfTodoServiceTests : IDisposable
             Section = "Backlog",
             Priority = "high",
             FunctionalRequirements = ["FR-BEFORE-001"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(create.Success, create.Error);
 
-        var snapshot = await _sut.CaptureForRestoreAsync("EF-TXN-001").ConfigureAwait(true);
+        var snapshot = await _sut.CaptureForRestoreAsync("EF-TXN-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
 
         var update = await _sut.UpdateAsync("EF-TXN-001", new TodoUpdateRequest
@@ -164,13 +164,13 @@ public sealed class EfTodoServiceTests : IDisposable
             Note = "note after",
             Remaining = "remaining after",
             FunctionalRequirements = ["FR-AFTER-001"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(update.Success, update.Error);
 
-        var restore = await _sut.RestoreAsync(snapshot!).ConfigureAwait(true);
+        var restore = await _sut.RestoreAsync(snapshot!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(restore.Success, restore.Error);
 
-        var restored = await _sut.GetByIdAsync("EF-TXN-001").ConfigureAwait(true);
+        var restored = await _sut.GetByIdAsync("EF-TXN-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(restored);
         Assert.Equal("Before", restored!.Title);
         Assert.Null(restored.Note);
@@ -182,7 +182,7 @@ public sealed class EfTodoServiceTests : IDisposable
         var links = await db.TodoRequirementLinks
             .OrderBy(row => row.RequirementId)
             .Select(row => row.RequirementId)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(["FR-BEFORE-001"], links);
     }
@@ -200,20 +200,20 @@ public sealed class EfTodoServiceTests : IDisposable
             Section = "Backlog",
             Priority = "medium",
             FunctionalRequirements = ["FR-DELETE-BEFORE-001"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(create.Success, create.Error);
 
-        var snapshot = await _sut.CaptureForRestoreAsync("EF-TXN-002").ConfigureAwait(true);
+        var snapshot = await _sut.CaptureForRestoreAsync("EF-TXN-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(snapshot);
 
-        var delete = await _sut.DeleteAsync("EF-TXN-002").ConfigureAwait(true);
+        var delete = await _sut.DeleteAsync("EF-TXN-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(delete.Success, delete.Error);
-        Assert.Null(await _sut.GetByIdAsync("EF-TXN-002").ConfigureAwait(true));
+        Assert.Null(await _sut.GetByIdAsync("EF-TXN-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
-        var restore = await _sut.RestoreAsync(snapshot!).ConfigureAwait(true);
+        var restore = await _sut.RestoreAsync(snapshot!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(restore.Success, restore.Error);
 
-        var restored = await _sut.GetByIdAsync("EF-TXN-002").ConfigureAwait(true);
+        var restored = await _sut.GetByIdAsync("EF-TXN-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(restored);
         Assert.Equal("Delete rollback", restored!.Title);
         Assert.Equal(["FR-DELETE-BEFORE-001"], restored.FunctionalRequirements);
@@ -226,16 +226,16 @@ public sealed class EfTodoServiceTests : IDisposable
     [Fact]
     public async Task QueryAsync_FiltersByPriorityAndKeyword()
     {
-        var createA = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-ALPHA-001", Title = "alpha widget", Section = "s", Priority = "high" }).ConfigureAwait(true);
+        var createA = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-ALPHA-001", Title = "alpha widget", Section = "s", Priority = "high" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(createA.Success, createA.Error);
-        var createB = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-BETA-002", Title = "beta widget", Section = "s", Priority = "low" }).ConfigureAwait(true);
+        var createB = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-BETA-002", Title = "beta widget", Section = "s", Priority = "low" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(createB.Success, createB.Error);
 
-        var highs = await _sut.QueryAsync(new TodoQueryRequest { Priority = "high" }).ConfigureAwait(true);
+        var highs = await _sut.QueryAsync(new TodoQueryRequest { Priority = "high" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(highs.Items);
         Assert.Equal("EF-ALPHA-001", highs.Items[0].Id);
 
-        var betas = await _sut.QueryAsync(new TodoQueryRequest { Keyword = "beta" }).ConfigureAwait(true);
+        var betas = await _sut.QueryAsync(new TodoQueryRequest { Keyword = "beta" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(betas.Items);
         Assert.Equal("EF-BETA-002", betas.Items[0].Id);
     }
@@ -247,13 +247,13 @@ public sealed class EfTodoServiceTests : IDisposable
     [Fact]
     public async Task DeleteAsync_RemovesAndAppendsAudit()
     {
-        var created = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-DEL-001", Title = "doomed", Section = "s", Priority = "low" }).ConfigureAwait(true);
+        var created = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-DEL-001", Title = "doomed", Section = "s", Priority = "low" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
-        var result = await _sut.DeleteAsync("EF-DEL-001").ConfigureAwait(true);
+        var result = await _sut.DeleteAsync("EF-DEL-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result.Success, result.Error);
-        Assert.Null(await _sut.GetByIdAsync("EF-DEL-001").ConfigureAwait(true));
+        Assert.Null(await _sut.GetByIdAsync("EF-DEL-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
-        var audit = await _sut.GetAuditAsync("EF-DEL-001").ConfigureAwait(true);
+        var audit = await _sut.GetAuditAsync("EF-DEL-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains(audit.Entries, e => e.Action == "deleted");
     }
 
@@ -272,29 +272,29 @@ public sealed class EfTodoServiceTests : IDisposable
             Priority = "high",
             Description = ["Preserve this line"],
             ImplementationTasks = [new TodoFlatTask("write projection", false)],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(created.Success, created.Error);
         Assert.True(File.Exists(_tempYamlPath));
         Assert.Contains("EF-PROJ-001", File.ReadAllText(_tempYamlPath));
 
-        var createdStatus = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        var createdStatus = await _sut.GetProjectionStatusAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(createdStatus.ProjectionConsistent, createdStatus.Message);
         Assert.False(createdStatus.RepairRequired);
 
         var updated = await _sut.UpdateAsync("EF-PROJ-001", new TodoUpdateRequest
         {
             Title = "After projection",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(updated.Success, updated.Error);
         Assert.Contains("After projection", File.ReadAllText(_tempYamlPath));
 
-        var deleted = await _sut.DeleteAsync("EF-PROJ-001").ConfigureAwait(true);
+        var deleted = await _sut.DeleteAsync("EF-PROJ-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(deleted.Success, deleted.Error);
         Assert.DoesNotContain("EF-PROJ-001", File.ReadAllText(_tempYamlPath));
 
-        var finalStatus = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        var finalStatus = await _sut.GetProjectionStatusAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(finalStatus.ProjectionConsistent, finalStatus.Message);
         Assert.False(finalStatus.RepairRequired);
     }
@@ -311,11 +311,11 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Missing projection",
             Section = "mvp-support",
             Priority = "medium",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
         File.Delete(_tempYamlPath);
 
-        var status = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        var status = await _sut.GetProjectionStatusAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(status.ProjectionTargetExists);
         Assert.False(status.ProjectionConsistent);
@@ -335,15 +335,15 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Repair target",
             Section = "mvp-support",
             Priority = "low",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
 
         File.WriteAllText(_tempYamlPath, "mvp-support:\n  high-priority: []\n");
-        var drifted = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        var drifted = await _sut.GetProjectionStatusAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(drifted.ProjectionConsistent);
         Assert.True(drifted.RepairRequired);
 
-        var repair = await _sut.RepairProjectionAsync().ConfigureAwait(true);
+        var repair = await _sut.RepairProjectionAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(repair.Success, repair.Error);
         Assert.True(repair.Status.ProjectionConsistent, repair.Status.Message);
@@ -366,18 +366,18 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Projection failure",
             Section = "mvp-support",
             Priority = "high",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.ProjectionFailed, result.FailureKind);
-        Assert.NotNull(await _sut.GetByIdAsync("EF-FAIL-001").ConfigureAwait(true));
+        Assert.NotNull(await _sut.GetByIdAsync("EF-FAIL-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
-        var failedStatus = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+        var failedStatus = await _sut.GetProjectionStatusAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(failedStatus.RepairRequired);
         Assert.NotNull(failedStatus.LastProjectionFailure);
 
         Directory.Delete(_tempYamlPath);
-        var repair = await _sut.RepairProjectionAsync().ConfigureAwait(true);
+        var repair = await _sut.RepairProjectionAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(repair.Success, repair.Error);
         Assert.True(repair.Status.ProjectionConsistent, repair.Status.Message);
@@ -398,13 +398,13 @@ public sealed class EfTodoServiceTests : IDisposable
             Section = "code-review-remediation",
             Priority = "high",
             Phase = "pass-1",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
 
         var updated = await _sut.UpdateAsync("EF-REVIEW-001", new TodoUpdateRequest
         {
             Reference = "docs/reviews/example.md",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(updated.Success, updated.Error);
         var yaml = File.ReadAllText(_tempYamlPath);
@@ -451,10 +451,10 @@ public sealed class EfTodoServiceTests : IDisposable
             Section = "Backlog",
             Priority = "low",
             Description = MarkdownLines,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(create.Success, create.Error);
 
-        var item = await _sut.GetByIdAsync("MD-PRESERVE-001").ConfigureAwait(true);
+        var item = await _sut.GetByIdAsync("MD-PRESERVE-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(item);
         Assert.NotNull(item!.Description);
         Assert.Equal(MarkdownLines, item.Description!);
@@ -474,9 +474,9 @@ public sealed class EfTodoServiceTests : IDisposable
             Section = "Backlog",
             Priority = "low",
             Description = MarkdownLines,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var audit = await _sut.GetAuditAsync("MD-PRESERVE-002").ConfigureAwait(true);
+        var audit = await _sut.GetAuditAsync("MD-PRESERVE-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(1, audit.TotalCount);
         var snapshot = audit.Entries[0].Snapshot;
         Assert.NotNull(snapshot);
@@ -502,7 +502,7 @@ public sealed class EfTodoServiceTests : IDisposable
             Section = "Backlog",
             Priority = "low",
             Description = MarkdownLines,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(create.Success, create.Error);
 
         var projected = await TodoYamlFileSerializer.ReadIfExistsAsync(_tempYamlPath, CancellationToken.None).ConfigureAwait(true);
@@ -527,21 +527,21 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Open item",
             Section = "mvp-app",
             Priority = "high",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await _sut.CreateAsync(new TodoCreateRequest
         {
             Id = "EF-QUERY-004",
             Title = "Done item",
             Section = "mvp-app",
             Priority = "high",
-        }).ConfigureAwait(true);
-        await _sut.UpdateAsync("EF-QUERY-004", new TodoUpdateRequest { Done = true }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.UpdateAsync("EF-QUERY-004", new TodoUpdateRequest { Done = true }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new TodoQueryRequest
         {
             Section = "mvp-app",
             Done = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result.Items);
         Assert.Equal("EF-QUERY-004", result.Items[0].Id);
@@ -559,12 +559,12 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Alpha release",
             Section = "mvp-app",
             Priority = "high",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new TodoQueryRequest
         {
             Keyword = "ef && query",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(result.Items);
         Assert.Equal("EF-QUERY-001", item.Id);
@@ -583,7 +583,7 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Invalid TODO ID",
             Section = "mvp-app",
             Priority = "high",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.Validation, result.FailureKind);
@@ -602,10 +602,10 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "GitHub todo",
             Section = "issues",
             Priority = "medium",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success, result.Error);
-        var stored = await _sut.GetByIdAsync("ISSUE-28").ConfigureAwait(true);
+        var stored = await _sut.GetByIdAsync("ISSUE-28", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(stored);
         Assert.Equal("GitHub todo", stored!.Title);
     }
@@ -625,10 +625,10 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Import-compatible TODO",
             Section = "mvp-app",
             Priority = "medium",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success, result.Error);
-        var stored = await _sut.GetByIdAsync(id).ConfigureAwait(true);
+        var stored = await _sut.GetByIdAsync(id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(stored);
         Assert.Equal(id, stored!.Id);
     }
@@ -646,12 +646,12 @@ public sealed class EfTodoServiceTests : IDisposable
             Title = "Base",
             Section = "mvp-app",
             Priority = "high",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.UpdateAsync("MCP-EF-001", new TodoUpdateRequest
         {
             DependsOn = ["not-valid"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.Validation, result.FailureKind);

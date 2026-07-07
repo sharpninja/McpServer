@@ -48,7 +48,7 @@ public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplic
         // Unregistered workspace header on /mcp-transport → resolution middleware returns 400
         request.Headers.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, @"C:\nonexistent");
 
-        var response = await _client.SendAsync(request);
+        var response = await _client.SendAsync(request, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -77,9 +77,9 @@ public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplic
         request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
 
         // No workspace header → falls through to default/primary workspace
-        var response = await _client.SendAsync(request);
+        var response = await _client.SendAsync(request, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync();
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("serverInfo", body, StringComparison.Ordinal);
     }
 
@@ -108,7 +108,7 @@ public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplic
         request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
         request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "synthetic-jwt");
 
-        var response = await _client.SendAsync(request);
+        var response = await _client.SendAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }

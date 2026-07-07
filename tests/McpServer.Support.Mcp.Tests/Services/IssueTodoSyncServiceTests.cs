@@ -27,7 +27,7 @@ public sealed class IssueTodoSyncServiceTests
         _todoService.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
 
-        var result = await _sut.SyncIssueToTodoAsync(issue).ConfigureAwait(true);
+        var result = await _sut.SyncIssueToTodoAsync(issue, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _todoService.Received(1).CreateAsync(
@@ -44,7 +44,7 @@ public sealed class IssueTodoSyncServiceTests
         _todoService.UpdateAsync("ISSUE-42", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
 
-        var result = await _sut.SyncIssueToTodoAsync(issue).ConfigureAwait(true);
+        var result = await _sut.SyncIssueToTodoAsync(issue, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _todoService.Received(1).UpdateAsync("ISSUE-42",
@@ -84,7 +84,7 @@ public sealed class IssueTodoSyncServiceTests
         _todoService.UpdateAsync("ISSUE-42", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
 
-        var result = await _sut.SyncIssueToTodoAsync(issue).ConfigureAwait(true);
+        var result = await _sut.SyncIssueToTodoAsync(issue, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _todoService.Received(1).UpdateAsync(
@@ -147,7 +147,7 @@ public sealed class IssueTodoSyncServiceTests
         _todoService.UpdateAsync("ISSUE-42", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
 
-        var result = await _sut.SyncIssueToTodoAsync(issue).ConfigureAwait(true);
+        var result = await _sut.SyncIssueToTodoAsync(issue, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _todoService.Received(1).UpdateAsync(
@@ -165,7 +165,7 @@ public sealed class IssueTodoSyncServiceTests
         _todoService.UpdateAsync("ISSUE-42", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
 
-        var result = await _sut.SyncIssueToTodoAsync(issue).ConfigureAwait(true);
+        var result = await _sut.SyncIssueToTodoAsync(issue, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _todoService.Received(1).UpdateAsync("ISSUE-42",
@@ -183,7 +183,7 @@ public sealed class IssueTodoSyncServiceTests
         _github.CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "https://github.com/test/issues/42", null));
 
-        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
+        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _github.Received(1).CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -199,7 +199,7 @@ public sealed class IssueTodoSyncServiceTests
         _github.ReopenIssueAsync(42, Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "https://github.com/test/issues/42", null));
 
-        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
+        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _github.Received(1).ReopenIssueAsync(42, Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -215,7 +215,7 @@ public sealed class IssueTodoSyncServiceTests
         _github.UpdateIssueAsync(42, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "https://github.com/test/issues/42", null));
 
-        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
+        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _github.Received(1).UpdateIssueAsync(42,
@@ -249,7 +249,7 @@ public sealed class IssueTodoSyncServiceTests
         _github.UpdateIssueAsync(42, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "https://github.com/test/issues/42", null));
 
-        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
+        var result = await _sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _github.Received(1).UpdateIssueAsync(
@@ -261,7 +261,7 @@ public sealed class IssueTodoSyncServiceTests
     [Fact]
     public async Task SyncTodoToIssue_NonIssueId_ReturnsError()
     {
-        var result = await _sut.SyncTodoToIssueAsync("MVP-APP-001").ConfigureAwait(true);
+        var result = await _sut.SyncTodoToIssueAsync("MVP-APP-001", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(result.Success);
         Assert.Contains("not an ISSUE-* id", result.ErrorMessage, StringComparison.Ordinal);
     }
@@ -320,7 +320,7 @@ public sealed class IssueTodoSyncServiceTests
         _github.CommentOnIssueAsync("42", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubCommentResult(true, null));
 
-        var result = await _sut.CommentOnTodoUpdateAsync(previous, current).ConfigureAwait(true);
+        var result = await _sut.CommentOnTodoUpdateAsync(previous, current, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _github.Received(1).CommentOnIssueAsync(
@@ -367,7 +367,7 @@ public sealed class IssueTodoSyncServiceTests
         _github.CommentOnIssueAsync("42", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubCommentResult(true, null));
 
-        var result = await _sut.CommentOnTodoUpdateAsync(previous, current).ConfigureAwait(true);
+        var result = await _sut.CommentOnTodoUpdateAsync(previous, current, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _github.Received(1).CommentOnIssueAsync(

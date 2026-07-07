@@ -23,11 +23,11 @@ public sealed class BrainSlotRegistryServiceTests
         await fixture.Service.UpsertAsync("left-a", SlotRequest(
                 BrainSlotRoles.LeftHemisphere,
                 enabled: true,
-                partyId: "brain-slot:left-hemisphere-a"))
+                partyId: "brain-slot:left-hemisphere-a"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var ex = await Assert.ThrowsAsync<BrainSlotConflictException>(() =>
-            fixture.Service.UpsertAsync("left-b", SlotRequest(BrainSlotRoles.LeftHemisphere, enabled: true)))
+            fixture.Service.UpsertAsync("left-b", SlotRequest(BrainSlotRoles.LeftHemisphere, enabled: true), cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("replaceExisting=true", ex.Message, StringComparison.Ordinal);
@@ -42,21 +42,21 @@ public sealed class BrainSlotRegistryServiceTests
         await fixture.Service.UpsertAsync("left-a", SlotRequest(
                 BrainSlotRoles.LeftHemisphere,
                 enabled: true,
-                partyId: "brain-slot:left-hemisphere-a"))
+                partyId: "brain-slot:left-hemisphere-a"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         await fixture.Service.UpsertAsync("left-b", SlotRequest(
                 BrainSlotRoles.LeftHemisphere,
                 enabled: true,
                 replaceExisting: true,
-                partyId: "brain-slot:left-hemisphere-b"))
+                partyId: "brain-slot:left-hemisphere-b"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var rows = await fixture.Db.BrainSlotDefinitions
             .IgnoreQueryFilters()
             .Where(slot => slot.Role == BrainSlotRoles.LeftHemisphere)
             .OrderBy(slot => slot.SlotId)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(2, rows.Count);
         Assert.False(rows[0].Enabled);
@@ -65,7 +65,7 @@ public sealed class BrainSlotRegistryServiceTests
 
         var disabledKey = await fixture.KeyServer.GetPartyKeyAsync(
             "brain-slot:left-hemisphere-a",
-            "brain-slot:left-hemisphere-a:signing:1")
+            "brain-slot:left-hemisphere-a:signing:1", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(disabledKey);
         Assert.Equal("disabled", disabledKey!.Status);
@@ -76,21 +76,21 @@ public sealed class BrainSlotRegistryServiceTests
     public async Task UpsertAsync_AfterSoftDelete_RestoresExistingRow()
     {
         using var fixture = RegistryFixture.Create();
-        await fixture.Service.UpsertAsync("curiosity-main", SlotRequest(BrainSlotRoles.CuriosityEngine, enabled: false, modelId: "old-model"))
+        await fixture.Service.UpsertAsync("curiosity-main", SlotRequest(BrainSlotRoles.CuriosityEngine, enabled: false, modelId: "old-model"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        await fixture.Service.DeleteAsync("curiosity-main").ConfigureAwait(true);
+        await fixture.Service.DeleteAsync("curiosity-main", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var restored = await fixture.Service.UpsertAsync(
             "curiosity-main",
-            SlotRequest(BrainSlotRoles.CuriosityEngine, enabled: true, modelId: "new-model"))
+            SlotRequest(BrainSlotRoles.CuriosityEngine, enabled: true, modelId: "new-model"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("new-model", restored.ModelId);
-        Assert.NotNull(await fixture.Service.GetAsync("curiosity-main").ConfigureAwait(true));
+        Assert.NotNull(await fixture.Service.GetAsync("curiosity-main", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         var allRows = await fixture.Db.BrainSlotDefinitions
             .IgnoreQueryFilters()
             .Where(slot => slot.SlotId == "curiosity-main")
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Single(allRows);
         Assert.False((bool)fixture.Db.Entry(allRows[0]).Property("IsDeleted").CurrentValue!);
@@ -103,11 +103,11 @@ public sealed class BrainSlotRegistryServiceTests
         using var fixture = RegistryFixture.Create();
         foreach (var role in BrainSlotRoles.All)
         {
-            await fixture.Service.UpsertAsync(role.ToLowerInvariant(), SlotRequest(role, enabled: true))
+            await fixture.Service.UpsertAsync(role.ToLowerInvariant(), SlotRequest(role, enabled: true), cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
         }
 
-        var status = await fixture.Service.GetStatusAsync().ConfigureAwait(true);
+        var status = await fixture.Service.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(status.QuadReady);
         Assert.Empty(status.MissingRoles);
@@ -125,7 +125,7 @@ public sealed class BrainSlotRegistryServiceTests
         request.Endpoint = "https://models.example.test/v1";
 
         var ex = await Assert.ThrowsAsync<BrainSlotValidationException>(() =>
-            fixture.Service.UpsertAsync("right-custom", request)).ConfigureAwait(true);
+            fixture.Service.UpsertAsync("right-custom", request, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         Assert.Equal(BrainSlotReasonCodes.EndpointNotAllowed, ex.Reason);
     }

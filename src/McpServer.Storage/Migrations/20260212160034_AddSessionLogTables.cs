@@ -6,13 +6,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace McpServer.Support.Mcp.Storage.Migrations
 {
     /// <inheritdoc />
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA1062:Validate arguments of public methods", Justification = "Auto-generated EF Core migration")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments", Justification = "Auto-generated EF Core migration")]
     public partial class AddSessionLogTables : Migration
     {
+        private static readonly string[] SessionLogTurnRequestIndexColumns = { "SessionLogId", "RequestId" };
+        private static readonly string[] SessionSourceSessionIndexColumns = { "SourceType", "SessionId" };
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.CreateTable(
                 name: "SessionLogs",
                 columns: table => new
@@ -151,7 +154,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SessionLogTurns_SessionLogId_RequestId",
                 table: "SessionLogTurns",
-                columns: new[] { "SessionLogId", "RequestId" },
+                columns: SessionLogTurnRequestIndexColumns,
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -177,7 +180,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SessionLogs_SourceType_SessionId",
                 table: "SessionLogs",
-                columns: new[] { "SourceType", "SessionId" },
+                columns: SessionSourceSessionIndexColumns,
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -189,6 +192,8 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.DropTable(
                 name: "SessionLogActions");
 
@@ -206,4 +211,3 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         }
     }
 }
-

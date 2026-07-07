@@ -56,7 +56,7 @@ public sealed class AgentHealthMonitorServiceTests
 
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
         await Record.ExceptionAsync(() => sut.StartAsync(cts.Token)).ConfigureAwait(true);
-        await launchCalled.Task.WaitAsync(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
+        await launchCalled.Task.WaitAsync(TimeSpan.FromSeconds(1), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await sut.StopAsync(CancellationToken.None).ConfigureAwait(true);
 
         await agentService.Received().LaunchAgentAsync("C:/ws-a", "planner", Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -102,7 +102,7 @@ public sealed class AgentHealthMonitorServiceTests
 
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
         await Record.ExceptionAsync(() => sut.StartAsync(cts.Token)).ConfigureAwait(true);
-        await lookupCalled.Task.WaitAsync(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
+        await lookupCalled.Task.WaitAsync(TimeSpan.FromSeconds(1), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await sut.StopAsync(CancellationToken.None).ConfigureAwait(true);
 
         await agentService.DidNotReceive().LaunchAgentAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);

@@ -58,7 +58,7 @@ public class GraphRagWorkflowTests
         _workflow.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.GetStatusAsync();
+        var result = await _workflow.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Enabled);
@@ -85,7 +85,7 @@ public class GraphRagWorkflowTests
         _workflow.IndexAsync(true, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.IndexAsync(force: true);
+        var result = await _workflow.IndexAsync(force: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("indexing", result.State);
@@ -114,7 +114,7 @@ public class GraphRagWorkflowTests
         _workflow.QueryAsync("What is authentication?", "local", null, true, null, null, null, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.QueryAsync("What is authentication?", mode: "local");
+        var result = await _workflow.QueryAsync("What is authentication?", mode: "local", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("What is authentication?", result.Query);
@@ -155,7 +155,7 @@ public class GraphRagWorkflowTests
         _workflow.IngestTextAsync(request, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.IngestTextAsync(request);
+        var result = await _workflow.IngestTextAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("doc-001", result.DocumentId);
@@ -188,7 +188,7 @@ public class GraphRagWorkflowTests
         _workflow.ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListDocumentsAsync();
+        var result = await _workflow.ListDocumentsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
@@ -215,7 +215,7 @@ public class GraphRagWorkflowTests
         _workflow.ListDocumentsAsync(0, 50, "adhoc-text", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListDocumentsAsync(sourceType: "adhoc-text");
+        var result = await _workflow.ListDocumentsAsync(sourceType: "adhoc-text", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Documents);
         Assert.Equal("adhoc-text", result.Documents[0].SourceType);
@@ -243,7 +243,7 @@ public class GraphRagWorkflowTests
         _workflow.GetDocumentChunksAsync("doc-001", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.GetDocumentChunksAsync("doc-001");
+        var result = await _workflow.GetDocumentChunksAsync("doc-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("doc-001", result.DocumentId);
@@ -269,7 +269,7 @@ public class GraphRagWorkflowTests
         _workflow.DeleteDocumentAsync("doc-001", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.DeleteDocumentAsync("doc-001");
+        var result = await _workflow.DeleteDocumentAsync("doc-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -307,7 +307,7 @@ public class GraphRagWorkflowTests
         _workflow.CreateEntityAsync(request, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.CreateEntityAsync(request);
+        var result = await _workflow.CreateEntityAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("entity-001", result.Id);
@@ -336,7 +336,7 @@ public class GraphRagWorkflowTests
         _workflow.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListEntitiesAsync();
+        var result = await _workflow.ListEntitiesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
@@ -363,7 +363,7 @@ public class GraphRagWorkflowTests
         _workflow.ListEntitiesAsync(0, 50, "service", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListEntitiesAsync(entityType: "service");
+        var result = await _workflow.ListEntitiesAsync(entityType: "service", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Entities);
         Assert.Equal("service", result.Entities[0].EntityType);
@@ -388,7 +388,7 @@ public class GraphRagWorkflowTests
         _workflow.GetEntityAsync("entity-001", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.GetEntityAsync("entity-001");
+        var result = await _workflow.GetEntityAsync("entity-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("entity-001", result.Id);
@@ -421,7 +421,7 @@ public class GraphRagWorkflowTests
         _workflow.UpdateEntityAsync("entity-001", request, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.UpdateEntityAsync("entity-001", request);
+        var result = await _workflow.UpdateEntityAsync("entity-001", request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Auth Module v2", result.Name);
@@ -439,7 +439,7 @@ public class GraphRagWorkflowTests
         _workflow.DeleteEntityAsync("entity-001", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
 
-        await _workflow.DeleteEntityAsync("entity-001");
+        await _workflow.DeleteEntityAsync("entity-001", cancellationToken: TestContext.Current.CancellationToken);
 
         await _workflow.Received(1).DeleteEntityAsync("entity-001", Arg.Any<CancellationToken>());
     }
@@ -475,7 +475,7 @@ public class GraphRagWorkflowTests
         _workflow.CreateRelationshipAsync(request, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.CreateRelationshipAsync(request);
+        var result = await _workflow.CreateRelationshipAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("rel-001", result.Id);
@@ -504,7 +504,7 @@ public class GraphRagWorkflowTests
         _workflow.ListRelationshipsAsync(0, 50, null, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListRelationshipsAsync();
+        var result = await _workflow.ListRelationshipsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
@@ -531,7 +531,7 @@ public class GraphRagWorkflowTests
         _workflow.ListRelationshipsAsync(0, 50, "entity-001", null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListRelationshipsAsync(entityId: "entity-001");
+        var result = await _workflow.ListRelationshipsAsync(entityId: "entity-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Relationships);
         await _workflow.Received(1).ListRelationshipsAsync(0, 50, "entity-001", null, Arg.Any<CancellationToken>());
@@ -556,7 +556,7 @@ public class GraphRagWorkflowTests
         _workflow.GetRelationshipAsync("rel-001", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.GetRelationshipAsync("rel-001");
+        var result = await _workflow.GetRelationshipAsync("rel-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("rel-001", result.Id);
@@ -591,7 +591,7 @@ public class GraphRagWorkflowTests
         _workflow.UpdateRelationshipAsync("rel-001", request, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.UpdateRelationshipAsync("rel-001", request);
+        var result = await _workflow.UpdateRelationshipAsync("rel-001", request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("strongly_depends_on", result.RelationshipType);
@@ -609,7 +609,7 @@ public class GraphRagWorkflowTests
         _workflow.DeleteRelationshipAsync("rel-001", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
 
-        await _workflow.DeleteRelationshipAsync("rel-001");
+        await _workflow.DeleteRelationshipAsync("rel-001", cancellationToken: TestContext.Current.CancellationToken);
 
         await _workflow.Received(1).DeleteRelationshipAsync("rel-001", Arg.Any<CancellationToken>());
     }
@@ -692,7 +692,7 @@ public class GraphRagWorkflowTests
         _workflow.ListDocumentsAsync(20, 10, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListDocumentsAsync(skip: 20, take: 10);
+        var result = await _workflow.ListDocumentsAsync(skip: 20, take: 10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(100, result.TotalCount);
         await _workflow.Received(1).ListDocumentsAsync(20, 10, null, Arg.Any<CancellationToken>());
@@ -714,7 +714,7 @@ public class GraphRagWorkflowTests
         _workflow.ListEntitiesAsync(50, 25, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListEntitiesAsync(skip: 50, take: 25);
+        var result = await _workflow.ListEntitiesAsync(skip: 50, take: 25, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(200, result.TotalCount);
         await _workflow.Received(1).ListEntitiesAsync(50, 25, null, Arg.Any<CancellationToken>());
@@ -736,7 +736,7 @@ public class GraphRagWorkflowTests
         _workflow.ListRelationshipsAsync(10, 5, null, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(expected));
 
-        var result = await _workflow.ListRelationshipsAsync(skip: 10, take: 5);
+        var result = await _workflow.ListRelationshipsAsync(skip: 10, take: 5, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(150, result.TotalCount);
         await _workflow.Received(1).ListRelationshipsAsync(10, 5, null, null, Arg.Any<CancellationToken>());

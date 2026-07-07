@@ -25,14 +25,14 @@ public sealed class TransactionGatedGitHubCliServiceTests
         var inner = Substitute.For<IGitHubCliService>();
         var sut = CreateSut(inner, new CapturingCoordinator());
 
-        var create = await sut.CreateIssueAsync("title", "body").ConfigureAwait(true);
-        var issueComment = await sut.CommentOnIssueAsync("42", "comment").ConfigureAwait(true);
-        var pullComment = await sut.CommentOnPullAsync("43", "comment").ConfigureAwait(true);
-        var update = await sut.UpdateIssueAsync(42, new GitHubIssueUpdateRequest { Title = "updated" }).ConfigureAwait(true);
-        var close = await sut.CloseIssueAsync(42, "completed").ConfigureAwait(true);
-        var reopen = await sut.ReopenIssueAsync(42).ConfigureAwait(true);
-        var rerun = await sut.RerunWorkflowRunAsync(1001).ConfigureAwait(true);
-        var cancel = await sut.CancelWorkflowRunAsync(1001).ConfigureAwait(true);
+        var create = await sut.CreateIssueAsync("title", "body", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var issueComment = await sut.CommentOnIssueAsync("42", "comment", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var pullComment = await sut.CommentOnPullAsync("43", "comment", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var update = await sut.UpdateIssueAsync(42, new GitHubIssueUpdateRequest { Title = "updated" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var close = await sut.CloseIssueAsync(42, "completed", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var reopen = await sut.ReopenIssueAsync(42, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var rerun = await sut.RerunWorkflowRunAsync(1001, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var cancel = await sut.CancelWorkflowRunAsync(1001, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(create.Success);
         Assert.False(issueComment.Success);
@@ -83,12 +83,12 @@ public sealed class TransactionGatedGitHubCliServiceTests
         var coordinator = new CapturingCoordinator();
         var sut = CreateSut(inner, coordinator);
 
-        var issues = await sut.ListIssuesAsync("open", 30).ConfigureAwait(true);
-        var pulls = await sut.ListPullsAsync("open", 30).ConfigureAwait(true);
-        var issue = await sut.GetIssueAsync(42).ConfigureAwait(true);
-        var labels = await sut.ListIssueLabelsAsync().ConfigureAwait(true);
-        var runs = await sut.ListWorkflowRunsAsync(new GitHubWorkflowRunQuery()).ConfigureAwait(true);
-        var run = await sut.GetWorkflowRunAsync(1001).ConfigureAwait(true);
+        var issues = await sut.ListIssuesAsync("open", 30, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var pulls = await sut.ListPullsAsync("open", 30, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var issue = await sut.GetIssueAsync(42, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var labels = await sut.ListIssueLabelsAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var runs = await sut.ListWorkflowRunsAsync(new GitHubWorkflowRunQuery(), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var run = await sut.GetWorkflowRunAsync(1001, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(issues.Success);
         Assert.True(pulls.Success);
@@ -115,7 +115,7 @@ public sealed class TransactionGatedGitHubCliServiceTests
         var inner = Substitute.For<IGitHubCliService>();
         var sut = CreateSut(inner, new CapturingCoordinator(degraded: true, message: "txn degraded"));
 
-        var result = await sut.CloseIssueAsync(42, "completed").ConfigureAwait(true);
+        var result = await sut.CloseIssueAsync(42, "completed", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal("txn degraded", result.ErrorMessage);
@@ -137,7 +137,7 @@ public sealed class TransactionGatedGitHubCliServiceTests
             new CapturingCoordinator(),
             new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
 
-        var result = await sut.CreateIssueAsync("title", "body").ConfigureAwait(true);
+        var result = await sut.CreateIssueAsync("title", "body", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal(42, result.Number);

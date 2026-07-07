@@ -21,7 +21,10 @@ public sealed class WorkspacePolicyDirectiveParserTests
             .Returns(new AgentCliResult { State = AgentCliResultState.Error, Stderr = "spawn failed" });
 
         var parser = CreateParser(copilot);
-        var result = await parser.ParseAsync("Ban chinese sources from all workspaces", workspacePathHint: null).ConfigureAwait(true);
+        var result = await parser.ParseAsync(
+            "Ban chinese sources from all workspaces",
+            workspacePathHint: null,
+            ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(result.Directive);
@@ -40,7 +43,10 @@ public sealed class WorkspacePolicyDirectiveParserTests
             .Returns(new AgentCliResult { State = AgentCliResultState.Error, Stderr = "spawn failed" });
 
         var parser = CreateParser(copilot);
-        var result = await parser.ParseAsync("please make this better", workspacePathHint: null).ConfigureAwait(true);
+        var result = await parser.ParseAsync(
+            "please make this better",
+            workspacePathHint: null,
+            ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.NotNull(result.Error);
@@ -63,7 +69,10 @@ public sealed class WorkspacePolicyDirectiveParserTests
             });
 
         var parser = CreateParser(copilot);
-        var result = await parser.ParseAsync("Ban chinese sources from all workspaces", workspacePathHint: null).ConfigureAwait(true);
+        var result = await parser.ParseAsync(
+            "Ban chinese sources from all workspaces",
+            workspacePathHint: null,
+            ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(capturedOptions);

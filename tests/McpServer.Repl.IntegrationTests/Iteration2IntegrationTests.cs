@@ -25,15 +25,15 @@ public sealed class Iteration2IntegrationTests : IDisposable
     [Fact]
     public async Task SessionLog_Bootstrap_CompletesSuccessfully()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var requestId = GenerateRequestId("bootstrap");
         var bootstrapEnvelope = YamlEnvelopeBuilder.CreateSessionLogBootstrapRequest(requestId);
         
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(bootstrapEnvelope));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(bootstrapEnvelope), cancellationToken: TestContext.Current.CancellationToken);
         
-        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        var foundResponse = await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(foundResponse, "Should receive bootstrap response");
 
         var responseLine = _replProcess.StdoutLines.FirstOrDefault();
@@ -47,8 +47,8 @@ public sealed class Iteration2IntegrationTests : IDisposable
     [Fact]
     public async Task SessionLog_OpenSession_CreatesNewSession()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var bootstrapRequestId = GenerateRequestId("bootstrap");
         await SendCommandAndWaitAsync(
@@ -75,8 +75,8 @@ public sealed class Iteration2IntegrationTests : IDisposable
     [Fact]
     public async Task SessionLog_CurrentSession_ReturnsActiveSession()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateSessionLogBootstrapRequest(GenerateRequestId("bootstrap")));
@@ -248,8 +248,8 @@ public sealed class Iteration2IntegrationTests : IDisposable
     [Fact]
     public async Task SessionLog_FullWorkflow_BootstrapToComplete()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateSessionLogBootstrapRequest(GenerateRequestId("bootstrap")));
@@ -347,7 +347,7 @@ public sealed class Iteration2IntegrationTests : IDisposable
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateSessionLogCurrentSessionRequest(GenerateRequestId("current-before")));
 
-        await Task.Delay(500);
+        await Task.Delay(500, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateSessionLogCurrentSessionRequest(GenerateRequestId("current-after")));
@@ -358,8 +358,8 @@ public sealed class Iteration2IntegrationTests : IDisposable
     [Fact]
     public async Task SessionLog_InvalidSessionId_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateSessionLogBootstrapRequest(GenerateRequestId("bootstrap")));
@@ -399,8 +399,8 @@ public sealed class Iteration2IntegrationTests : IDisposable
     [Fact]
     public async Task SessionLog_NoActiveSession_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateSessionLogBootstrapRequest(GenerateRequestId("bootstrap")));

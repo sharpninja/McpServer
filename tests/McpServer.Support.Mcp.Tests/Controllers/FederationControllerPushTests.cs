@@ -78,9 +78,9 @@ public sealed class FederationControllerPushTests
         var result = await controller.Push(new FederationPushRequest(), CancellationToken.None);
 
         Assert.IsType<ConflictObjectResult>(result.Result);
-        await _pushService.DidNotReceiveWithAnyArgs().PushAllAsync(default);
-        await _pushService.DidNotReceiveWithAnyArgs().PushTodosAsync(default);
-        await _pushService.DidNotReceiveWithAnyArgs().PushSessionLogsAsync(default);
+        await _pushService.DidNotReceiveWithAnyArgs().PushAllAsync(ct: TestContext.Current.CancellationToken);
+        await _pushService.DidNotReceiveWithAnyArgs().PushTodosAsync(ct: TestContext.Current.CancellationToken);
+        await _pushService.DidNotReceiveWithAnyArgs().PushSessionLogsAsync(ct: TestContext.Current.CancellationToken);
     }
 
     /// <summary>When federation is disabled, push returns 409 Conflict.</summary>
@@ -116,7 +116,7 @@ public sealed class FederationControllerPushTests
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var pushResult = Assert.IsType<FederationPushResult>(ok.Value);
         Assert.Equal(1, pushResult.Succeeded);
-        await _pushService.DidNotReceiveWithAnyArgs().PushSessionLogsAsync(default);
+        await _pushService.DidNotReceiveWithAnyArgs().PushSessionLogsAsync(ct: TestContext.Current.CancellationToken);
     }
 
     private sealed class CapturingCoordinator : ITurnTransactionCoordinator

@@ -6,7 +6,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 partial class Build
 {
     [Parameter("Package version for NuGet pack (defaults to GitVersion output)")]
-    readonly string PackageVersion;
+    readonly string PackageVersion = string.Empty;
 
     /// <summary>Pack public McpServer libraries as NuGet packages.</summary>
     public Target PackNuGet => _ => _

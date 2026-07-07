@@ -35,9 +35,9 @@ public sealed class RepoEndpointTests
     [Fact]
     public async Task List_RootPath_Returns200WithEntries()
     {
-        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/list");
+        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/list", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(json.TryGetProperty("entries", out var entries));
         Assert.Equal(JsonValueKind.Array, entries.ValueKind);
     }
@@ -53,9 +53,9 @@ public sealed class RepoEndpointTests
     [Fact]
     public async Task List_WithPath_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/list?path=docs");
+        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/list?path=docs", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(json.TryGetProperty("path", out _));
         Assert.True(json.TryGetProperty("entries", out _));
     }
@@ -73,9 +73,9 @@ public sealed class RepoEndpointTests
     [Fact]
     public async Task ReadFile_MissingPath_Returns400()
     {
-        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/file");
+        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/file", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("path is required", json.GetProperty("error").GetString());
     }
 
@@ -90,7 +90,7 @@ public sealed class RepoEndpointTests
     [Fact]
     public async Task ReadFile_ExistingFile_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/file?path=index.md");
+        var response = await _fixture.Client.GetAsync($"{RepoEndpointFixture.RepoRoute}/file?path=index.md", cancellationToken: TestContext.Current.CancellationToken);
         // 200 if allowed and exists, 400 if path not allowed
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 200 or 400, got {(int)response.StatusCode}");
@@ -108,7 +108,7 @@ public sealed class RepoEndpointTests
     public async Task ReadFile_NonExistentFile_Returns200Or400()
     {
         var response = await _fixture.Client.GetAsync(
-            $"{RepoEndpointFixture.RepoRoute}/file?path=nonexistent-{Guid.NewGuid():N}.txt");
+            $"{RepoEndpointFixture.RepoRoute}/file?path=nonexistent-{Guid.NewGuid():N}.txt", cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
@@ -127,7 +127,7 @@ public sealed class RepoEndpointTests
     public async Task WriteFile_MissingPath_Returns400()
     {
         var payload = new { content = "test" };
-        var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", payload);
+        var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -142,7 +142,7 @@ public sealed class RepoEndpointTests
     [Fact]
     public async Task WriteFile_NullBody_Returns400()
     {
-        var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", (object?)null);
+        var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", (object?)null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -158,7 +158,7 @@ public sealed class RepoEndpointTests
     public async Task WriteFile_ValidPath_Returns200Or400()
     {
         var payload = new { path = "_tmp_audit_test.txt", content = "audit test" };
-        var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", payload);
+        var response = await _fixture.Client.PostAsJsonAsync($"{RepoEndpointFixture.RepoRoute}/file", payload, cancellationToken: TestContext.Current.CancellationToken);
         // 200 if path is allowed, 400 if path not in allowlist
         Assert.True(response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 200 or 400, got {(int)response.StatusCode}");

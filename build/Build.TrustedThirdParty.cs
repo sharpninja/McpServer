@@ -25,7 +25,7 @@ partial class Build
     readonly int TrustedThirdPartyPort = TrustedThirdPartyDefaultPort;
 
     [Parameter("Path to pre-built trusted third-party publish output (used with --skip-build)")]
-    readonly string TrustedThirdPartyPublishSource;
+    readonly string TrustedThirdPartyPublishSource = string.Empty;
 
     /// <summary>Builds the trusted third-party transaction keyserver host.</summary>
     public Target BuildTrustedThirdParty => _ => _

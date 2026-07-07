@@ -52,7 +52,7 @@ public class Iteration2_AllTestsValidation
             Model = "model"
         };
 
-        var result = await stubClient.SubmitAsync(sessionLog);
+        var result = await stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Id > 0);
@@ -65,7 +65,7 @@ public class Iteration2_AllTestsValidation
     {
         var stubClient = new StubSessionLogClient();
 
-        var result = await stubClient.QueryAsync(agent: "Copilot");
+        var result = await stubClient.QueryAsync(agent: "Copilot", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
@@ -83,7 +83,7 @@ public class Iteration2_AllTestsValidation
             new() { Role = "model", Content = "Test", Category = "reasoning" }
         };
 
-        var result = await stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items);
+        var result = await stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Copilot", result.Agent);
@@ -236,7 +236,7 @@ public class Iteration2_AllTestsValidation
             Title = "Validation Test",
             Model = "claude-sonnet-4"
         };
-        await stubClient.SubmitAsync(sessionLog);
+        await stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
 
         fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-validation", "Validation Test", "claude-sonnet-4");
         Assert.Equal("in_progress", fakeState.Status);
@@ -248,7 +248,7 @@ public class Iteration2_AllTestsValidation
         {
             new() { Role = "model", Content = "Validating...", Category = "reasoning" }
         };
-        await stubClient.AppendDialogAsync("Copilot", "Copilot-20260304T113901Z-validation", "req-20260304T113901Z-task-001", dialogItems);
+        await stubClient.AppendDialogAsync("Copilot", "Copilot-20260304T113901Z-validation", "req-20260304T113901Z-task-001", dialogItems, cancellationToken: TestContext.Current.CancellationToken);
 
         fakeState.UpdateTurn();
         Assert.Equal("in_progress", fakeState.CurrentTurnStatus);
@@ -257,7 +257,7 @@ public class Iteration2_AllTestsValidation
         Assert.Null(fakeState.CurrentTurnStatus);
         Assert.Equal(1, fakeState.TurnCount);
 
-        var queryResult = await stubClient.QueryAsync(agent: "Copilot");
+        var queryResult = await stubClient.QueryAsync(agent: "Copilot", cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(queryResult);
         Assert.NotEmpty(queryResult.Items);
     }

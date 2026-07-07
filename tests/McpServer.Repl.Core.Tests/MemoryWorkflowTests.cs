@@ -25,7 +25,7 @@ public sealed class MemoryWorkflowTests
         using var http = new HttpClient(handler);
         var sut = new MemoryWorkflow(new MemoryClient(http, Options));
 
-        var result = await sut.ListAsync(MemoryScope.Global, "AGENT", "PowerShell").ConfigureAwait(true);
+        var result = await sut.ListAsync(MemoryScope.Global, "AGENT", "PowerShell", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(0, result.TotalCount);
         Assert.NotNull(handler.LastRequest);
@@ -50,7 +50,7 @@ public sealed class MemoryWorkflowTests
             Scope = MemoryScope.Workspace,
             Text = "Use wrappers.",
             UpdatedBy = "Codex",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(handler.LastRequest);

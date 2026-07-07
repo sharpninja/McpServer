@@ -47,7 +47,7 @@ public sealed class DesktopClientTests
                 WindowStyle = "Hidden",
                 WaitForExit = true,
                 TimeoutMs = 5000
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal(4242, result.ProcessId);
@@ -81,7 +81,7 @@ public sealed class DesktopClientTests
                 DesktopLaunchToken = "desktop-secret"
             });
 
-        await client.LaunchAsync(new DesktopLaunchRequest { ExecutablePath = @"C:\Windows\System32\cmd.exe" });
+        await client.LaunchAsync(new DesktopLaunchRequest { ExecutablePath = @"C:\Windows\System32\cmd.exe" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(handler.LastRequest!.Headers.TryGetValues("X-Desktop-Launch-Token", out var values));
         Assert.Equal("desktop-secret", Assert.Single(values));

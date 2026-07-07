@@ -485,6 +485,14 @@
 
 These tests must pass with mocks before the real client construction logic is filled (BDP).
   Scope: layer-1+
+- TEST-MCP-AIUNIT-002: aiUnit must independently review warning suppression governance decisions, requirements traceability, TODO state, generated artifacts, and source suppression inventory.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [x] The aiUnit prompt names FR-MCP-139, TR-MCP-QUALITY-001, TEST-MCP-AIUNIT-002, and PLAN-WARNREMEDIATION-001. (evidence: tests/McpServer.Review.Tests/AiReviewTests.cs)
+  - [x] The aiUnit prompt instructs review of requirements exports, TODO state, source suppression inventory, and the dedicated NUKE target. (evidence: tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs)
+  - [x] The aiUnit prompt requires structured findings for missing approvals, unapproved suppressions, unmatched acceptance criteria, TODO drift, and missing validation evidence. (evidence: tests/McpServer.Review.Tests/AiReviewTests.cs)
+  - [x] The aiUnit review can be invoked directly through the AiWarningSuppressionReview NUKE target. (evidence: build/Build.AiWarningSuppressionReview.cs)
+  - [ ] A completed warning remediation closeout must include the aiUnit review result or documented blocker before PLAN-WARNREMEDIATION-001 is marked done.
 - TEST-MCP-AUTH-010: Given the auth-token subsystem is initialized, when a request hits a workspace-independent /mcpserver/* route with an unknown or missing API key and no X-Workspace-Path, then WorkspaceAuthMiddleware returns 401. This is a regression test (previously returned 503).
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -821,6 +829,23 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
+- TEST-MCP-WIKIEXPORT-001: Tests must cover docs/wiki.yaml loading, validation, renderer output, service integration, unchanged default behavior, and BDPv4 traceability for configured GitHub and Azure wiki exports.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [x] Loader tests cover valid schema, absent optional home template, invalid schema, duplicate ids, duplicate targets, bad platforms, missing source files, invalid generated sources, path traversal, and navigation references to unknown or duplicated documents.
+  - [x] Service tests prove no docs/wiki.yaml preserves current GitHub and Azure wiki output.
+  - [x] Export tests prove configured workspace Markdown and generated sources are emitted to eligible GitHub and Azure folders with correct platform filtering.
+  - [x] Navigation tests prove GitHub _Sidebar.md and Azure .order files follow the configured tree including nested sections.
+  - [x] Home tests prove template token replacement and default navigation-derived home rendering.
+  - [x] Invalid configuration tests prove no existing export files are modified on validation failure.
+  - [x] Build guidance or traceability tests prove generated manifests include configured documents and preserve required requirements documents when declared.
+- TEST-MCP-WIKIEXPORT-002: Tests must prove marker generation creates a valid default docs/wiki.yaml, preserves existing configs, and keeps marker generation behavior intact.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [x] A marker write in a workspace without docs/wiki.yaml creates docs/wiki.yaml and the marker file.
+  - [x] The generated docs/wiki.yaml deserializes to an object with schema mcp-wiki-export/v1, six declared generated documents, and navigation references covering every document once.
+  - [x] A marker write in a workspace with an existing docs/wiki.yaml preserves the exact existing content.
+  - [x] Focused marker and wiki export tests pass with zero failures and zero skips.
 - TEST-REQAC-LIVE-001: Live criteria round-trip works
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -907,5 +932,3 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
   - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
   - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
-- TEST-WFL-001: Test requirement for complete workflow
-  Scope: layer-1+

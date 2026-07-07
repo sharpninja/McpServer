@@ -15,7 +15,7 @@ public class StubAuthRotationHandlerTests
 
         var newMarkerData = CreateMarkerData("/home/user/project", "updated-key");
 
-        await stub.UpdateAuthStateAsync(newMarkerData);
+        await stub.UpdateAuthStateAsync(newMarkerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("updated-key", stub.CurrentAuthState.ApiKey);
         Assert.True(stub.CurrentAuthState.IsValid);
@@ -28,7 +28,7 @@ public class StubAuthRotationHandlerTests
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await stub.UpdateAuthStateAsync(null!)
+            async () => await stub.UpdateAuthStateAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -50,7 +50,7 @@ public class StubAuthRotationHandlerTests
         stub.RegisterAuthChangeCallback(callback);
 
         var newMarkerData = CreateMarkerData("/home/user/project", "callback-key");
-        await stub.UpdateAuthStateAsync(newMarkerData);
+        await stub.UpdateAuthStateAsync(newMarkerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(callbackInvoked);
         Assert.NotNull(capturedState);
@@ -71,7 +71,7 @@ public class StubAuthRotationHandlerTests
         stub.RegisterAuthChangeCallback(async _ => { callback3Invoked = true; await Task.CompletedTask; });
 
         var newMarkerData = CreateMarkerData("/home/user/project", "multi-callback-key");
-        await stub.UpdateAuthStateAsync(newMarkerData);
+        await stub.UpdateAuthStateAsync(newMarkerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(callback1Invoked);
         Assert.True(callback2Invoked);
@@ -95,7 +95,7 @@ public class StubAuthRotationHandlerTests
         stub.UnregisterAuthChangeCallback(callback1);
 
         var newMarkerData = CreateMarkerData("/home/user/project", "unregister-test-key");
-        await stub.UpdateAuthStateAsync(newMarkerData);
+        await stub.UpdateAuthStateAsync(newMarkerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(callback1Invoked);
         Assert.True(callback2Invoked);
@@ -106,7 +106,7 @@ public class StubAuthRotationHandlerTests
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
-        var refreshedState = await stub.RefreshAuthStateAsync("/home/user/project");
+        var refreshedState = await stub.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(refreshedState);
         Assert.Contains("refreshed", refreshedState.ApiKey);
@@ -120,7 +120,7 @@ public class StubAuthRotationHandlerTests
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await stub.RefreshAuthStateAsync("/nonexistent/workspace")
+            async () => await stub.RefreshAuthStateAsync("/nonexistent/workspace", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -129,7 +129,7 @@ public class StubAuthRotationHandlerTests
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "valid-key");
 
-        var isValid = await stub.ValidateAuthStateAsync();
+        var isValid = await stub.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(isValid);
         Assert.NotNull(stub.CurrentAuthState.LastValidated);
@@ -140,7 +140,7 @@ public class StubAuthRotationHandlerTests
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "expired-key");
 
-        var isValid = await stub.ValidateAuthStateAsync();
+        var isValid = await stub.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(isValid);
     }
@@ -167,13 +167,13 @@ public class StubAuthRotationHandlerTests
         Assert.Equal("key-v1", stub.CurrentAuthState.ApiKey);
 
         var markerV2 = CreateMarkerData("/home/user/project", "key-v2");
-        await stub.UpdateAuthStateAsync(markerV2);
+        await stub.UpdateAuthStateAsync(markerV2, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(stub.CurrentAuthState.IsValid);
         Assert.Equal("key-v2", stub.CurrentAuthState.ApiKey);
 
         var markerV3 = CreateMarkerData("/home/user/project", "key-v3");
-        await stub.UpdateAuthStateAsync(markerV3);
+        await stub.UpdateAuthStateAsync(markerV3, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(stub.CurrentAuthState.IsValid);
         Assert.Equal("key-v3", stub.CurrentAuthState.ApiKey);
@@ -181,7 +181,7 @@ public class StubAuthRotationHandlerTests
         stub.ClearAuthState();
         Assert.False(stub.CurrentAuthState.IsValid);
 
-        var refreshed = await stub.RefreshAuthStateAsync("/home/user/project");
+        var refreshed = await stub.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(refreshed.IsValid);
         Assert.Contains("refreshed", refreshed.ApiKey);
     }
@@ -191,11 +191,11 @@ public class StubAuthRotationHandlerTests
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "pre-restart-key");
 
-        var isValid = await stub.ValidateAuthStateAsync();
+        var isValid = await stub.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(isValid);
 
         var markerAfterRestart = CreateMarkerData("/home/user/project", "post-restart-key");
-        await stub.UpdateAuthStateAsync(markerAfterRestart);
+        await stub.UpdateAuthStateAsync(markerAfterRestart, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("post-restart-key", stub.CurrentAuthState.ApiKey);
         Assert.True(stub.CurrentAuthState.IsValid);

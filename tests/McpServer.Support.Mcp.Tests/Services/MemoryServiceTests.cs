@@ -54,28 +54,28 @@ public sealed class MemoryServiceTests : IDisposable
                 Category = "zeta",
                 Scope = MemoryScope.Global,
                 Text = "later global memory",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var global = await svc.AddAsync(new MemoryAddRequest
             {
                 Id = "MEMORY-ALPHA-001",
                 Category = "operator",
                 Scope = MemoryScope.Global,
                 Text = "global memory",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var laterWorkspace = await svc.AddAsync(new MemoryAddRequest
             {
                 Id = "MEMORY-ZETA-011",
                 Category = "zeta",
                 Scope = MemoryScope.Workspace,
                 Text = "later workspace A memory",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var workspace = await svc.AddAsync(new MemoryAddRequest
             {
                 Id = "MEMORY-ALPHA-002",
                 Category = "operator",
                 Scope = MemoryScope.Workspace,
                 Text = "workspace A memory",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.True(laterGlobal.Success, laterGlobal.Error);
             Assert.True(global.Success, global.Error);
@@ -91,13 +91,13 @@ public sealed class MemoryServiceTests : IDisposable
                 Category = "operator",
                 Scope = MemoryScope.Workspace,
                 Text = "workspace B memory",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.True(other.Success, other.Error);
         }
 
         await using (var db = CreateContext(_workspaceA))
         {
-            var result = await CreateService(db).ListAsync(new MemoryListRequest()).ConfigureAwait(true);
+            var result = await CreateService(db).ListAsync(new MemoryListRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(4, result.TotalCount);
             Assert.Equal(MemoryScope.Global, result.Items[0].Scope);
@@ -129,13 +129,13 @@ public sealed class MemoryServiceTests : IDisposable
             Category = "operator notes",
             Scope = MemoryScope.Global,
             Text = "first",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var second = await svc.AddAsync(new MemoryAddRequest
         {
             Category = "operator notes",
             Scope = MemoryScope.Workspace,
             Text = "second",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(first.Success, first.Error);
         Assert.True(second.Success, second.Error);
@@ -156,13 +156,13 @@ public sealed class MemoryServiceTests : IDisposable
             Category = "operator",
             Scope = MemoryScope.Workspace,
             Text = "before",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
 
         var updated = await svc.UpdateAsync(created.Memory!.Id, new MemoryUpdateRequest
         {
             Text = "after",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(updated.Success, updated.Error);
         Assert.Equal(created.Memory.Id, updated.Memory!.Id);
@@ -185,7 +185,7 @@ public sealed class MemoryServiceTests : IDisposable
                 Category = "custom",
                 Scope = MemoryScope.Workspace,
                 Text = "first",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.True(first.Success, first.Error);
         }
 
@@ -197,7 +197,7 @@ public sealed class MemoryServiceTests : IDisposable
                 Category = "custom",
                 Scope = MemoryScope.Workspace,
                 Text = "duplicate",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.False(duplicate.Success);
             Assert.Equal(MemoryMutationFailureKind.Conflict, duplicate.FailureKind);
@@ -220,9 +220,9 @@ public sealed class MemoryServiceTests : IDisposable
             Category = "operator",
             Scope = MemoryScope.Workspace,
             Text = "invalid",
-        }).ConfigureAwait(true);
-        var update = await svc.UpdateAsync("not-a-memory-id", new MemoryUpdateRequest { Text = "after" }).ConfigureAwait(true);
-        var remove = await svc.RemoveAsync("not-a-memory-id").ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var update = await svc.UpdateAsync("not-a-memory-id", new MemoryUpdateRequest { Text = "after" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var remove = await svc.RemoveAsync("not-a-memory-id", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(add.Success);
         Assert.Equal(MemoryMutationFailureKind.Validation, add.FailureKind);
@@ -247,20 +247,20 @@ public sealed class MemoryServiceTests : IDisposable
                 Category = "operator",
                 Scope = MemoryScope.Workspace,
                 Text = "temporary",
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.True(created.Success, created.Error);
             id = created.Memory!.Id;
 
-            var removed = await CreateService(db).RemoveAsync(id).ConfigureAwait(true);
+            var removed = await CreateService(db).RemoveAsync(id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.True(removed.Success, removed.Error);
         }
 
         await using (var db = CreateContext(_workspaceA))
         {
-            var list = await CreateService(db).ListAsync(new MemoryListRequest()).ConfigureAwait(true);
+            var list = await CreateService(db).ListAsync(new MemoryListRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Empty(list.Items);
 
-            var row = await db.Memories.IgnoreQueryFilters().SingleAsync(memory => memory.Id == id).ConfigureAwait(true);
+            var row = await db.Memories.IgnoreQueryFilters().SingleAsync(memory => memory.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.True(db.Entry(row).Property<bool>("IsDeleted").CurrentValue);
         }
     }

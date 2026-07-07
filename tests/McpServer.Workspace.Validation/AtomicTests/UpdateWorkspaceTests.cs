@@ -41,11 +41,11 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
     {
         var body = new { Name = "AuditUpdateRenamed" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}", body);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}", body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success, $"Expected success but got error: {result.Error}");
         Assert.NotNull(result.Workspace);
@@ -58,11 +58,11 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
     {
         var body = new { TodoPath = "custom/todo.yaml" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}", body);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}", body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Workspace);
@@ -76,7 +76,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
         var fakeKey = WorkspaceEndpointFixture.EncodeKey(@"C:\NonExistent\Path_" + Guid.NewGuid().ToString("N"));
         var body = new { Name = "Ghost" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{fakeKey}", body);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{fakeKey}", body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }

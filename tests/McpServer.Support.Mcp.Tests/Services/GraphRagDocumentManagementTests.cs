@@ -59,7 +59,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     {
         var sut = CreateSut();
 
-        var result = await sut.ListDocumentsAsync(skip: 0, take: 2).ConfigureAwait(true);
+        var result = await sut.ListDocumentsAsync(skip: 0, take: 2, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, result.Documents.Count);
         Assert.Equal(3, result.TotalCount);
@@ -73,7 +73,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     {
         var sut = CreateSut();
 
-        var result = await sut.ListDocumentsAsync(sourceType: "repo").ConfigureAwait(true);
+        var result = await sut.ListDocumentsAsync(sourceType: "repo", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result.Documents);
         Assert.All(result.Documents, d => Assert.Equal("repo", d.SourceType));
@@ -87,7 +87,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     {
         var sut = CreateSut();
 
-        var result = await sut.GetDocumentChunksAsync("doc-1").ConfigureAwait(true);
+        var result = await sut.GetDocumentChunksAsync("doc-1", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(result);
         Assert.Equal("doc-1", result!.DocumentId);
@@ -104,7 +104,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     {
         var sut = CreateSut();
 
-        var result = await sut.GetDocumentChunksAsync("nonexistent-doc").ConfigureAwait(true);
+        var result = await sut.GetDocumentChunksAsync("nonexistent-doc", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Null(result);
     }
@@ -117,15 +117,15 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     {
         var sut = CreateSut();
 
-        var result = await sut.DeleteDocumentAsync("doc-1").ConfigureAwait(true);
+        var result = await sut.DeleteDocumentAsync("doc-1", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal("doc-1", result.DocumentId);
         Assert.Equal(2, result.ChunksRemoved);
 
-        var doc = await _db.Documents.FirstOrDefaultAsync(d => d.Id == "doc-1").ConfigureAwait(true);
+        var doc = await _db.Documents.FirstOrDefaultAsync(d => d.Id == "doc-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Null(doc);
-        var chunks = await _db.Chunks.Where(c => c.DocumentId == "doc-1").ToListAsync().ConfigureAwait(true);
+        var chunks = await _db.Chunks.Where(c => c.DocumentId == "doc-1").ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Empty(chunks);
     }
 
@@ -137,7 +137,7 @@ public sealed class GraphRagDocumentManagementTests : IDisposable
     {
         var sut = CreateSut();
 
-        await sut.DeleteDocumentAsync("doc-1").ConfigureAwait(true);
+        await sut.DeleteDocumentAsync("doc-1", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         _vectorIndexService.Received(1).RemoveVector("doc-1-chunk-0");
         _vectorIndexService.Received(1).RemoveVector("doc-1-chunk-1");

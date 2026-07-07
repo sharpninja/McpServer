@@ -1002,7 +1002,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var mapping = await GetAllMappingsAsync(ct).ConfigureAwait(false);
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(fr, tr, test, mapping, generated, ReadExistingMatrixForWikiExport(outputRootPath));
+        var config = RequirementsWikiExportConfigLoader.Load(TryGetRequestWorkspacePath(), _options);
+        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(fr, tr, test, mapping, generated, ReadExistingMatrixForWikiExport(outputRootPath), config);
         return await RequirementsDocumentExportWriter.WriteAsync(
             outputRootPath,
             "wiki",

@@ -26,7 +26,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var second = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
@@ -34,7 +34,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(first.SessionId, second.SessionId);
     }
@@ -50,7 +50,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var second = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
@@ -58,7 +58,7 @@ public sealed class VoiceConversationServiceTests
             AgentModel = "gpt-5.3-codex",
             WorkspacePath = @"E:\ws-b",
             OneShotSession = false,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotEqual(first.SessionId, second.SessionId);
     }
@@ -71,9 +71,9 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             OneShotSession = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var sent = await service.SendSessionMessageAsync(created.SessionId, "User is here.").ConfigureAwait(true);
+        var sent = await service.SendSessionMessageAsync(created.SessionId, "User is here.", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(sent);
     }
@@ -86,7 +86,7 @@ public sealed class VoiceConversationServiceTests
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
             AgentName = "planner",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(AgentExecutionStrategyNames.HostedMcpAgent, created.ExecutionStrategy);
     }
@@ -100,7 +100,7 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             ExecutionStrategy = AgentExecutionStrategyNames.CopilotCli,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(AgentExecutionStrategyNames.CopilotCli, created.ExecutionStrategy);
     }
@@ -118,11 +118,11 @@ public sealed class VoiceConversationServiceTests
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
             AgentName = "planner",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var response = await service.SubmitTurnAsync(created.SessionId, new VoiceTurnRequest
         {
             UserTranscriptText = "hello",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(response);
         Assert.Equal("completed", response!.Status);
@@ -143,11 +143,11 @@ public sealed class VoiceConversationServiceTests
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
             AgentName = "planner",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var response = await service.SubmitTurnAsync(created.SessionId, new VoiceTurnRequest
         {
             UserTranscriptText = "hello",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(response);
         Assert.NotNull(hostedStrategy.LastRequest);
@@ -162,25 +162,25 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             WorkspacePath = @"E:\ws-a",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var events = await CollectAsync(service.SubmitTurnStreamingAsync(created.SessionId, new VoiceTurnRequest
         {
             UserTranscriptText = "Read the file .github/copilot-instructions.md and follow those instructions.",
-        })).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         var terminal = Assert.Single(events, static evt => evt.Type is "done" or "error");
         Assert.Equal("error", terminal.Type);
         Assert.Contains("No response returned from voice runtime", terminal.Message, StringComparison.Ordinal);
         Assert.DoesNotContain(events, static evt => evt.Type == "done" && evt.Status == "completed");
 
-        var status = await service.GetStatusAsync(created.SessionId).ConfigureAwait(true);
+        var status = await service.GetStatusAsync(created.SessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(status);
         Assert.Equal("error", status!.Status);
         Assert.Contains("No response returned from voice runtime", status.LastError, StringComparison.Ordinal);
         Assert.Equal(2, status.TranscriptCount);
 
-        var transcript = await service.GetTranscriptAsync(created.SessionId).ConfigureAwait(true);
+        var transcript = await service.GetTranscriptAsync(created.SessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(transcript);
         Assert.Equal(2, transcript!.Items.Count);
         Assert.Contains(transcript.Items, static item => item.Role == "user");
@@ -214,7 +214,7 @@ public sealed class VoiceConversationServiceTests
         await using var session = client.CreateInteractiveSession("hello");
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
         {
-            await foreach (var _ in session.ReadInitialResponseStreamingAsync().ConfigureAwait(true))
+            await foreach (var _ in session.ReadInitialResponseStreamingAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true))
             {
             }
         }).ConfigureAwait(true);

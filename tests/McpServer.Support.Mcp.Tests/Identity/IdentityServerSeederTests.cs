@@ -12,12 +12,12 @@ public sealed class IdentityServerSeederTests
     public async Task SeedAsync_CreatesIdentityTablesWhenDatabaseAlreadyContainsOtherTables()
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
-        await connection.OpenAsync().ConfigureAwait(true);
+        await connection.OpenAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await using (var command = connection.CreateCommand())
         {
             command.CommandText = "CREATE TABLE ExistingData (Id INTEGER PRIMARY KEY);";
-            await command.ExecuteNonQueryAsync().ConfigureAwait(true);
+            await command.ExecuteNonQueryAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var services = new ServiceCollection();
@@ -48,8 +48,8 @@ public sealed class IdentityServerSeederTests
         await using var scope = provider.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpIdentityDbContext>();
 
-        Assert.True(await db.Roles.AnyAsync(role => role.Name == "admin").ConfigureAwait(true));
-        Assert.True(await db.Roles.AnyAsync(role => role.Name == "agent-manager").ConfigureAwait(true));
-        Assert.True(await db.Users.AnyAsync(user => user.UserName == "admin").ConfigureAwait(true));
+        Assert.True(await db.Roles.AnyAsync(role => role.Name == "admin", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.True(await db.Roles.AnyAsync(role => role.Name == "agent-manager", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.True(await db.Users.AnyAsync(user => user.UserName == "admin", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 }

@@ -121,7 +121,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             {
                 Name = "Execution phase",
                 Summary = "Bounded execution tests"
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.CreateTodosFromPlanAsync(
             _workspacePath,
@@ -144,7 +144,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
                         Summary = "Create second canonical execution TODO."
                     }
                 ]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("EXEC-TODO-001", result.TodoIds[0]);
         Assert.Equal("EXEC-TODO-002", result.TodoIds[1]);
@@ -163,7 +163,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             {
                 Name = "Execution phase",
                 Summary = "Bounded execution tests"
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var createCalls = 0;
         _todoService.CreateAsync(Arg.Any<McpServer.Support.Mcp.Services.TodoCreateRequest>(), Arg.Any<CancellationToken>())
             .Returns(call =>
@@ -210,9 +210,9 @@ public sealed class TodoExecutionServiceTests : IDisposable
                                 Summary = "Create second canonical execution TODO."
                             }
                         ]
-                    }))
+                    }, cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
-        var executionTodo = await _sut.GetTodoAsync(_workspacePath, "EXEC-TODO-001").ConfigureAwait(true);
+        var executionTodo = await _sut.GetTodoAsync(_workspacePath, "EXEC-TODO-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("second create failed", ex.Message, StringComparison.Ordinal);
         Assert.Null(executionTodo);
@@ -235,7 +235,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             {
                 Name = "Execution phase",
                 Summary = "Bounded execution tests"
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var createCalls = 0;
         _todoService.CreateAsync(Arg.Any<McpServer.Support.Mcp.Services.TodoCreateRequest>(), Arg.Any<CancellationToken>())
             .Returns(call =>
@@ -281,7 +281,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
                                 Summary = "Create second canonical execution TODO."
                             }
                         ]
-                    }))
+                    }, cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("projection failed", ex.Message, StringComparison.Ordinal);
@@ -312,7 +312,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
                 UnitTestsDefined = true,
                 TestFilePaths = ["tests/TodoExecutionServiceTests.cs"],
                 TestCommands = ["dotnet test tests/McpServer.Support.Mcp.Tests"]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(todoId, result.TodoId);
         Assert.Equal(TodoExecutionStatus.TestReady, result.Status);
@@ -333,7 +333,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             new UpdateTodoStatusRequest
             {
                 TargetStatus = TodoExecutionStatus.Implementing
-            })).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -356,9 +356,9 @@ public sealed class TodoExecutionServiceTests : IDisposable
             new LinkTodoToSessionTurnsRequest
             {
                 SessionTurnIds = ["req-001"]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var context = await _sut.GetExecutionContextAsync(_workspacePath, todoId, 1, 1).ConfigureAwait(true);
+        var context = await _sut.GetExecutionContextAsync(_workspacePath, todoId, 1, 1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(context);
         Assert.Equal(todoId, context!.TodoId);
@@ -388,7 +388,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
                 SessionTurnIds = ["req-001"],
                 ArtifactIds = ["artifacts/test-plan.md"],
                 CommitShas = ["1111111"]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await _sut.AppendCheckpointAsync(
             _workspacePath,
@@ -401,10 +401,10 @@ public sealed class TodoExecutionServiceTests : IDisposable
                 ArtifactIds = ["artifacts/diff.patch"],
                 CommitShas = ["2222222"],
                 NextAction = "Validate the updated execution rules."
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await SeedSessionTurnAsync("req-002", "Implemented the first execution slice.", "src/McpServer.Services/Services/TodoExecutionService.cs").ConfigureAwait(true);
 
-        var delta = await _sut.GetDeltaContextAsync(_workspacePath, todoId, first.CheckpointId).ConfigureAwait(true);
+        var delta = await _sut.GetDeltaContextAsync(_workspacePath, todoId, first.CheckpointId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(delta);
         Assert.Equal(todoId, delta!.TodoId);
@@ -435,7 +435,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
                 UnitTestsPassing = true,
                 TestFilePaths = ["tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs"],
                 TestCommands = ["dotnet test tests/McpServer.Support.Mcp.Tests --filter TodoExecutionServiceTests"]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await _sut.UpdateStatusAsync(
             _workspacePath,
             todoId,
@@ -443,7 +443,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             {
                 TargetStatus = TodoExecutionStatus.Implementing,
                 Reason = "Unit tests are defined and reviewed."
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await _sut.AppendCheckpointAsync(
             _workspacePath,
             todoId,
@@ -451,7 +451,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             {
                 Kind = TodoCheckpointKind.ImplementationProgress,
                 Summary = "Implemented the bounded execution flow."
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await _sut.UpdateStatusAsync(
             _workspacePath,
             todoId,
@@ -459,7 +459,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             {
                 TargetStatus = TodoExecutionStatus.Validating,
                 Reason = "Implementation evidence is available."
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await _sut.RecordValidationResultAsync(
             _workspacePath,
             todoId,
@@ -469,7 +469,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
                 Summary = "Unit tests pass and acceptance criteria are satisfied.",
                 ArtifactIds = ["artifacts/validation.json"],
                 UnitTestsPassing = true
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.UpdateStatusAsync(
             _workspacePath,
@@ -478,7 +478,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
             {
                 TargetStatus = TodoExecutionStatus.Complete,
                 Reason = "Validation passed."
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(TodoExecutionStatus.Complete, result.CurrentStatus);
     }
@@ -512,7 +512,7 @@ public sealed class TodoExecutionServiceTests : IDisposable
                 Action = AdbStepAction.Screenshot,
                 CaptureScreenshot = true,
                 Instruction = "Capture the current UI."
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal(AdbStepAction.Screenshot, result.Action);

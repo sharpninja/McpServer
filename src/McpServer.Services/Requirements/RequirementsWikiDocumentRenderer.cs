@@ -46,7 +46,8 @@ internal static class RequirementsWikiDocumentRenderer
         IEnumerable<TestEntry> testing,
         IEnumerable<FrTrMapping> mappings,
         DateTimeOffset generatedAtUtc,
-        string? existingMatrixMarkdown = null)
+        string? existingMatrixMarkdown = null,
+        RequirementsWikiExportConfig? config = null)
     {
         var documents = new Dictionary<string, string>(StringComparer.Ordinal)
         {
@@ -58,10 +59,63 @@ internal static class RequirementsWikiDocumentRenderer
             [RequirementsDocumentRenderer.MatrixFileName] = RequirementsDocumentRenderer.RenderMatrix(functional, technical, testing, existingMatrixMarkdown)
         };
 
+        if (config is not null)
+            return RenderConfiguredWikiFiles(config, generatedAtUtc, documents);
+
         var files = new List<RequirementsRenderedDocument>();
         AddPlatform(files, AzureFolder, generatedAtUtc, documents);
         AddPlatform(files, GitHubFolder, generatedAtUtc, documents);
         return files;
+    }
+
+    private static IReadOnlyList<RequirementsRenderedDocument> RenderConfiguredWikiFiles(
+        RequirementsWikiExportConfig config,
+        DateTimeOffset generatedAtUtc,
+        IReadOnlyDictionary<string, string> generatedDocuments)
+    {
+        var files = new List<RequirementsRenderedDocument>();
+        AddConfiguredPlatform(files, config, AzureFolder, generatedAtUtc, generatedDocuments);
+        AddConfiguredPlatform(files, config, GitHubFolder, generatedAtUtc, generatedDocuments);
+        return files;
+    }
+
+    private static void AddConfiguredPlatform(
+        ICollection<RequirementsRenderedDocument> files,
+        RequirementsWikiExportConfig config,
+        string platform,
+        DateTimeOffset generatedAtUtc,
+        IReadOnlyDictionary<string, string> generatedDocuments)
+    {
+        var platformDocuments = config.Documents
+            .Where(document => document.AppliesTo(platform))
+            .ToList();
+        var platformDocumentIds = platformDocuments
+            .Select(static document => document.Id)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        files.Add(new(
+            $"{platform}/{ManifestFileName}",
+            RenderManifest(platform, generatedAtUtc, platformDocuments.Select(static document => document.Target)),
+            "application/json"));
+
+        foreach (var document in platformDocuments)
+        {
+            files.Add(new(
+                $"{platform}/{document.Target}",
+                ResolveConfiguredDocumentContent(document, config, generatedAtUtc, generatedDocuments),
+                "text/markdown"));
+        }
+
+        if (platform.Equals(AzureFolder, StringComparison.Ordinal))
+        {
+            foreach (var orderFile in RenderAzureOrderFiles(config.Navigation, config, platformDocumentIds))
+                files.Add(new($"{platform}/{orderFile.RelativePath}", orderFile.Content, "text/plain"));
+        }
+        else
+        {
+            files.Add(new($"{platform}/_Sidebar.md", RenderGitHubSidebar(config.Navigation, config, platformDocumentIds), "text/markdown"));
+            files.Add(new($"{platform}/_Footer.md", "Generated from MCP requirements wiki export.\n", "text/markdown"));
+        }
     }
 
     private static void AddPlatform(
@@ -86,14 +140,14 @@ internal static class RequirementsWikiDocumentRenderer
         }
     }
 
-    private static string RenderManifest(string platform, DateTimeOffset generatedAtUtc)
+    private static string RenderManifest(string platform, DateTimeOffset generatedAtUtc, IEnumerable<string>? documents = null)
     {
         var manifest = new
         {
             schema = "mcp-requirements-wiki/v1",
             platform,
             generatedAtUtc,
-            documents = s_documentFiles
+            documents = documents?.ToArray() ?? s_documentFiles
         };
 
         return JsonSerializer.Serialize(manifest, s_manifestOptions) + "\n";
@@ -185,6 +239,172 @@ internal static class RequirementsWikiDocumentRenderer
         - [Traceability Mapping](TR-per-FR-Mapping)
         - [Requirements Matrix](Requirements-Matrix)
         """;
+
+    private static string ResolveConfiguredDocumentContent(
+        RequirementsWikiExportDocument document,
+        RequirementsWikiExportConfig config,
+        DateTimeOffset generatedAtUtc,
+        IReadOnlyDictionary<string, string> generatedDocuments)
+    {
+        if (document.Source.Equals("generated:home", StringComparison.OrdinalIgnoreCase))
+            return RenderConfiguredHome(config, generatedAtUtc);
+
+        if (document.Source.StartsWith("generated:", StringComparison.OrdinalIgnoreCase))
+            return document.Source.ToLowerInvariant() switch
+            {
+                "generated:functional" => generatedDocuments[RequirementsDocumentRenderer.FunctionalFileName],
+                "generated:technical" => generatedDocuments[RequirementsDocumentRenderer.TechnicalFileName],
+                "generated:testing" => generatedDocuments[RequirementsDocumentRenderer.TestingFileName],
+                "generated:mapping" => generatedDocuments[RequirementsDocumentRenderer.MappingFileName],
+                "generated:matrix" => generatedDocuments[RequirementsDocumentRenderer.MatrixFileName],
+                _ => throw new InvalidOperationException($"Unsupported generated wiki source '{document.Source}'.")
+            };
+
+        return File.ReadAllText(document.SourcePath!);
+    }
+
+    private static string RenderConfiguredHome(RequirementsWikiExportConfig config, DateTimeOffset generatedAtUtc)
+    {
+        var navigation = RenderMarkdownNavigation(config.Navigation, config, null);
+        var documents = RenderDocumentList(config.Documents);
+        if (!string.IsNullOrWhiteSpace(config.HomeTemplatePath))
+        {
+            return File.ReadAllText(config.HomeTemplatePath)
+                .Replace("{{generatedAtUtc}}", generatedAtUtc.ToString("O"), StringComparison.Ordinal)
+                .Replace("{{navigation}}", navigation.TrimEnd(), StringComparison.Ordinal)
+                .Replace("{{documents}}", documents.TrimEnd(), StringComparison.Ordinal);
+        }
+
+        return "# Requirements\n\n" + navigation;
+    }
+
+    private static string RenderDocumentList(IEnumerable<RequirementsWikiExportDocument> documents)
+    {
+        var sb = new StringBuilder();
+        foreach (var document in documents)
+            sb.Append("- [").Append(document.Title).Append("](").Append(ToWikiLink(document.Target)).AppendLine(")");
+        return sb.ToString();
+    }
+
+    private static string RenderGitHubSidebar(
+        IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
+        RequirementsWikiExportConfig config,
+        ISet<string> platformDocumentIds)
+        => RenderMarkdownNavigation(navigation, config, platformDocumentIds);
+
+    private static string RenderMarkdownNavigation(
+        IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
+        RequirementsWikiExportConfig config,
+        ISet<string>? platformDocumentIds)
+    {
+        var sb = new StringBuilder();
+        AppendMarkdownNavigation(sb, navigation, config, platformDocumentIds, depth: 0);
+        return sb.ToString();
+    }
+
+    private static void AppendMarkdownNavigation(
+        StringBuilder sb,
+        IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
+        RequirementsWikiExportConfig config,
+        ISet<string>? platformDocumentIds,
+        int depth)
+    {
+        var indent = new string(' ', depth * 2);
+        foreach (var item in navigation)
+        {
+            if (!string.IsNullOrWhiteSpace(item.Document))
+            {
+                if (platformDocumentIds is not null && !platformDocumentIds.Contains(item.Document))
+                    continue;
+
+                var document = config.DocumentsById[item.Document];
+                sb.Append(indent)
+                    .Append("- [")
+                    .Append(document.Title)
+                    .Append("](")
+                    .Append(ToWikiLink(document.Target))
+                    .AppendLine(")");
+                continue;
+            }
+
+            var visibleChildren = FilterVisibleNavigation(item.Children, platformDocumentIds).ToList();
+            if (visibleChildren.Count == 0)
+                continue;
+
+            sb.Append(indent).Append("- ").AppendLine(item.Title);
+            AppendMarkdownNavigation(sb, visibleChildren, config, platformDocumentIds, depth + 1);
+        }
+    }
+
+    private static IEnumerable<RequirementsWikiExportNavigationItem> FilterVisibleNavigation(
+        IEnumerable<RequirementsWikiExportNavigationItem> navigation,
+        ISet<string>? platformDocumentIds)
+    {
+        foreach (var item in navigation)
+        {
+            if (!string.IsNullOrWhiteSpace(item.Document))
+            {
+                if (platformDocumentIds is null || platformDocumentIds.Contains(item.Document))
+                    yield return item;
+
+                continue;
+            }
+
+            if (FilterVisibleNavigation(item.Children, platformDocumentIds).Any())
+                yield return item;
+        }
+    }
+
+    private static IReadOnlyList<RequirementsRenderedDocument> RenderAzureOrderFiles(
+        IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
+        RequirementsWikiExportConfig config,
+        ISet<string> platformDocumentIds)
+    {
+        var files = new List<RequirementsRenderedDocument>();
+        AddAzureOrderFile(files, string.Empty, navigation, config, platformDocumentIds);
+        return files;
+    }
+
+    private static void AddAzureOrderFile(
+        ICollection<RequirementsRenderedDocument> files,
+        string sectionPath,
+        IReadOnlyList<RequirementsWikiExportNavigationItem> navigation,
+        RequirementsWikiExportConfig config,
+        ISet<string> platformDocumentIds)
+    {
+        var lines = new List<string>();
+        foreach (var item in navigation)
+        {
+            if (!string.IsNullOrWhiteSpace(item.Document))
+            {
+                if (!platformDocumentIds.Contains(item.Document))
+                    continue;
+
+                lines.Add(Path.GetFileNameWithoutExtension(config.DocumentsById[item.Document].Target));
+                continue;
+            }
+
+            var visibleChildren = FilterVisibleNavigation(item.Children, platformDocumentIds).ToList();
+            if (visibleChildren.Count == 0 || string.IsNullOrWhiteSpace(item.Path))
+                continue;
+
+            lines.Add(Path.GetFileName(item.Path));
+            AddAzureOrderFile(files, item.Path, visibleChildren, config, platformDocumentIds);
+        }
+
+        var relativePath = string.IsNullOrWhiteSpace(sectionPath)
+            ? ".order"
+            : sectionPath.TrimEnd('/', '\\').Replace('\\', '/') + "/.order";
+        files.Add(new(relativePath, string.Join('\n', lines) + "\n", "text/plain"));
+    }
+
+    private static string ToWikiLink(string target)
+    {
+        var normalized = target.Replace('\\', '/');
+        return normalized.EndsWith(".md", StringComparison.OrdinalIgnoreCase)
+            ? normalized[..^3]
+            : normalized;
+    }
 
     internal static UTF8Encoding Utf8NoBom => s_utf8NoBom;
 }

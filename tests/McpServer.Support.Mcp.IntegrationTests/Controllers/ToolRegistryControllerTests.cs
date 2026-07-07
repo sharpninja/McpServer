@@ -22,10 +22,10 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     [Fact]
     public async Task ListTools_Returns200()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/tools", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/tools", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(result);
         Assert.True(result.TotalCount >= 0);
     }
@@ -41,10 +41,10 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             commandTemplate = "powershell -File Take-Screenshot.ps1 -Path {path}"
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Tool);
@@ -59,8 +59,8 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
         var name = $"duptool_{Guid.NewGuid():N}";
         var request = new { name, description = "Test", tags = new[] { "test" } };
 
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
@@ -74,12 +74,12 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             description = "A clipboard utility",
             tags = new[] { $"clip_{unique}", "paste" }
         };
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=clip_{unique}", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=clip_{unique}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(result);
         Assert.True(result.TotalCount >= 1);
         Assert.Contains(result.Tools, t => t.Name == $"tool_{unique}");
@@ -95,10 +95,10 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             description = "Some tool",
             tags = new[] { "tag1" }
         };
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=findme_{unique}", UriKind.Relative)).ConfigureAwait(true);
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=findme_{unique}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result!.TotalCount >= 1);
     }
 
@@ -112,20 +112,20 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             description = $"A unique_{unique} tool for testing",
             tags = new[] { "other" }
         };
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=unique_{unique}", UriKind.Relative)).ConfigureAwait(true);
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=unique_{unique}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result!.TotalCount >= 1);
     }
 
     [Fact]
     public async Task SearchByKeyword_NoMatch_ReturnsEmptyList()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/tools/search?keyword=zzz_nonexistent_zzz", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/tools/search?keyword=zzz_nonexistent_zzz", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(0, result!.TotalCount);
     }
 
@@ -134,17 +134,17 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     {
         var name = $"gettool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative),
-            new { name, description = "Test", tags = new[] { "test" } }).ConfigureAwait(true);
-        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
+            new { name, description = "Test", tags = new[] { "test" } }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
     public async Task GetTool_NotFound_Returns404()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/tools/99999", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/tools/99999", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -153,14 +153,14 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     {
         var name = $"uptool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative),
-            new { name, description = "Old desc", tags = new[] { "tag1" } }).ConfigureAwait(true);
-        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
+            new { name, description = "Old desc", tags = new[] { "tag1" } }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var updateReq = new { description = "New desc" };
-        var response = await _client.PutAsJsonAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative), updateReq).ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative), updateReq, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("New desc", result!.Tool!.Description);
     }
 
@@ -169,14 +169,14 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     {
         var name = $"tagtool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative),
-            new { name, description = "Test", tags = new[] { "old1", "old2" } }).ConfigureAwait(true);
-        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
+            new { name, description = "Test", tags = new[] { "old1", "old2" } }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var updateReq = new { tags = new[] { "new1", "new2", "new3" } };
-        var response = await _client.PutAsJsonAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative), updateReq).ConfigureAwait(true);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative), updateReq, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(response.StatusCode == HttpStatusCode.OK, $"Update failed ({response.StatusCode}): {body}");
-        var result = await response.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(3, result!.Tool!.Tags.Count);
         Assert.Contains("new1", result.Tool.Tags);
@@ -188,18 +188,18 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     {
         var name = $"deltool_{Guid.NewGuid():N}";
         var createResp = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative),
-            new { name, description = "Test", tags = new[] { "test" } }).ConfigureAwait(true);
-        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>().ConfigureAwait(true);
+            new { name, description = "Test", tags = new[] { "test" } }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var created = await createResp.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var response = await _client.DeleteAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative)).ConfigureAwait(true);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var response = await _client.DeleteAsync(new Uri($"/mcpserver/tools/{created!.Tool!.Id}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(response.StatusCode == HttpStatusCode.OK, $"Delete failed ({response.StatusCode}): {body}");
     }
 
     [Fact]
     public async Task DeleteTool_NotFound_Returns404()
     {
-        var response = await _client.DeleteAsync(new Uri("/mcpserver/tools/99999", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.DeleteAsync(new Uri("/mcpserver/tools/99999", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -214,11 +214,11 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             tags = new[] { $"scope_{unique}" },
             workspacePath = Path.Combine(Path.GetTempPath(), $"ws_{unique}")
         };
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Global search (no workspace param) should NOT see it.
-        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=scope_{unique}", UriKind.Relative)).ConfigureAwait(true);
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=scope_{unique}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(0, result!.TotalCount);
     }
 
@@ -234,12 +234,12 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             tags = new[] { $"scope2_{unique}" },
             workspacePath = wsPath
         };
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Search with workspace param should see it.
         var encodedWs = Uri.EscapeDataString(wsPath);
-        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=scope2_{unique}&workspace={encodedWs}", UriKind.Relative)).ConfigureAwait(true);
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=scope2_{unique}&workspace={encodedWs}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result!.TotalCount >= 1);
     }
 
@@ -254,12 +254,12 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             description = "Global tool",
             tags = new[] { $"glob_{unique}" }
         };
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Search with a workspace param should still see global tools.
         var wsPath = Uri.EscapeDataString(Path.Combine(Path.GetTempPath(), "any_workspace"));
-        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=glob_{unique}&workspace={wsPath}", UriKind.Relative)).ConfigureAwait(true);
-        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>().ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri($"/mcpserver/tools/search?keyword=glob_{unique}&workspace={wsPath}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<ToolSearchResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result!.TotalCount >= 1);
     }
 
@@ -268,10 +268,10 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     [Fact]
     public async Task ListBuckets_Returns200()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<BucketListResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<BucketListResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(result);
         Assert.True(result.TotalCount >= 0);
     }
@@ -286,10 +286,10 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
             repo = "mcp-tool-bucket"
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<BucketMutationResult>().ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<BucketMutationResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result!.Success);
         Assert.Equal("main", result.Bucket!.Branch);
     }
@@ -300,8 +300,8 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
         var name = $"dup_bucket_{Guid.NewGuid():N}";
         var request = new { name, owner = "test", repo = "repo" };
 
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative), request).ConfigureAwait(true);
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative), request).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
@@ -310,16 +310,16 @@ public sealed class ToolRegistryControllerTests : IClassFixture<CustomWebApplica
     {
         var name = $"rmbucket_{Guid.NewGuid():N}";
         await _client.PostAsJsonAsync(new Uri("/mcpserver/tools/buckets", UriKind.Relative),
-            new { name, owner = "test", repo = "repo" }).ConfigureAwait(true);
+            new { name, owner = "test", repo = "repo" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var response = await _client.DeleteAsync(new Uri($"/mcpserver/tools/buckets/{name}", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.DeleteAsync(new Uri($"/mcpserver/tools/buckets/{name}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Fact]
     public async Task RemoveBucket_NotFound_Returns404()
     {
-        var response = await _client.DeleteAsync(new Uri("/mcpserver/tools/buckets/nonexistent_bucket", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.DeleteAsync(new Uri("/mcpserver/tools/buckets/nonexistent_bucket", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }

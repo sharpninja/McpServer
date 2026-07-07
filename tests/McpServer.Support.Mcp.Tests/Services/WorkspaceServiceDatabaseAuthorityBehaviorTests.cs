@@ -32,7 +32,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         {
             WorkspacePath = workspacePath,
             Name = "dbfk-create",
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success, result.Error);
         Assert.True(projectionWriter.SawCommittedWorkspace);
@@ -56,19 +56,19 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         {
             WorkspacePath = workspacePath,
             Name = "dbfk-delete",
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
 
-        var deleted = await sut.DeleteAsync(workspacePath).ConfigureAwait(true);
+        var deleted = await sut.DeleteAsync(workspacePath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(deleted.Success, deleted.Error);
-        var list = await sut.ListAsync().ConfigureAwait(true);
+        var list = await sut.ListAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.DoesNotContain(list.Items, item => item.WorkspacePath == workspacePath);
         Assert.DoesNotContain(projectionWriter.LastProjection, item => item.WorkspacePath == workspacePath);
 
         var stored = await db.Workspaces
             .IgnoreQueryFilters()
-            .SingleAsync(row => row.WorkspacePath == workspacePath)
+            .SingleAsync(row => row.WorkspacePath == workspacePath, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.True(stored.IsDeleted);
         Assert.NotNull(stored.DeletedAtUtc);
@@ -97,10 +97,10 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
             BannedCountriesOfOrigin = ["CN", "RU"],
             BannedOrganizations = ["EvilCorp"],
             BannedIndividuals = ["mallory"],
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(created.Success, created.Error);
 
-        var afterCreate = (await sut.ListAsync().ConfigureAwait(true)).Items
+        var afterCreate = (await sut.ListAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true)).Items
             .Single(i => i.WorkspacePath == workspacePath);
         Assert.Equal(["GPL-3.0", "AGPL-3.0"], afterCreate.BannedLicenses);
         Assert.Equal(["CN", "RU"], afterCreate.BannedCountriesOfOrigin);
@@ -111,10 +111,10 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         // License rows are orphaned and removed), leaving the other three categories intact.
         var updated = await sut.UpdateAsync(
             workspacePath,
-            new WorkspaceUpdateRequest { BannedLicenses = ["MIT"] }).ConfigureAwait(true);
+            new WorkspaceUpdateRequest { BannedLicenses = ["MIT"] }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(updated.Success, updated.Error);
 
-        var afterUpdate = (await sut.ListAsync().ConfigureAwait(true)).Items
+        var afterUpdate = (await sut.ListAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true)).Items
             .Single(i => i.WorkspacePath == workspacePath);
         Assert.Equal(["MIT"], afterUpdate.BannedLicenses);
         Assert.Equal(["CN", "RU"], afterUpdate.BannedCountriesOfOrigin);

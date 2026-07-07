@@ -20,7 +20,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        await client.SearchAsync("lint");
+        await client.SearchAsync("lint", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("keyword=lint", handler.LastRequest!.RequestUri!.Query);
     }
@@ -32,7 +32,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        await client.InstallFromBucketAsync("default", "my-tool", workspace: "/path");
+        await client.InstallFromBucketAsync("default", "my-tool", workspace: "/path", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("toolName=my-tool", handler.LastRequest!.RequestUri!.Query);
         Assert.Contains("workspace=", handler.LastRequest.RequestUri.Query);
@@ -46,7 +46,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.SyncBucketAsync("default");
+        var result = await client.SyncBucketAsync("default", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Equal(2, result.Updated);
@@ -60,7 +60,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.ListAsync();
+        var result = await client.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Equal(0, result.TotalCount);
@@ -73,7 +73,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        await client.ListAsync(workspace: "/proj");
+        await client.ListAsync(workspace: "/proj", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("workspace=", handler.LastRequest!.RequestUri!.Query);
     }
@@ -85,7 +85,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.GetAsync(5);
+        var result = await client.GetAsync(5, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("/mcpserver/tools/5", handler.LastRequest!.RequestUri!.AbsolutePath);
         Assert.Equal("lint", result.Name);
@@ -98,7 +98,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.CreateAsync(new Models.ToolCreateRequest { Name = "new-tool", Description = "d" });
+        var result = await client.CreateAsync(new Models.ToolCreateRequest { Name = "new-tool", Description = "d" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/tools", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -112,7 +112,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.UpdateAsync(3, new Models.ToolUpdateRequest { Description = "updated" });
+        var result = await client.UpdateAsync(3, new Models.ToolUpdateRequest { Description = "updated" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/tools/3", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -126,7 +126,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.DeleteAsync(3);
+        var result = await client.DeleteAsync(3, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/tools/3", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -140,7 +140,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.ListBucketsAsync();
+        var result = await client.ListBucketsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/tools/buckets", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -154,7 +154,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.AddBucketAsync(new Models.BucketAddRequest { Name = "b", Owner = "o", Repo = "r", Branch = "main", ManifestPath = "m" });
+        var result = await client.AddBucketAsync(new Models.BucketAddRequest { Name = "b", Owner = "o", Repo = "r", Branch = "main", ManifestPath = "m" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.True(result.Success);
@@ -167,7 +167,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.DeleteBucketAsync("default", uninstallTools: true);
+        var result = await client.DeleteBucketAsync("default", uninstallTools: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/tools/buckets/default", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -182,7 +182,7 @@ public sealed class ToolRegistryClientTests
         using var http = new HttpClient(handler);
         var client = new ToolRegistryClient(http, DefaultOptions);
 
-        var result = await client.BrowseBucketAsync("default");
+        var result = await client.BrowseBucketAsync("default", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/tools/buckets/default/browse", handler.LastRequest.RequestUri!.AbsolutePath);

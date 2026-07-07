@@ -230,7 +230,7 @@ public sealed class RequirementsServiceTests
             promptOptions,
             NullLogger<RequirementsService>.Instance);
 
-        var result = await sut.AnalyzeAsync("TODO-1").ConfigureAwait(true);
+        var result = await sut.AnalyzeAsync("TODO-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.NotNull(capturedOptions);

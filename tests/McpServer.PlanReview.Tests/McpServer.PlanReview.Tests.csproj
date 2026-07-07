@@ -11,8 +11,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>McpServer.PlanReview.Tests</RootNamespace>
     <UseMicrosoftTestingPlatformRunner>false</UseMicrosoftTestingPlatformRunner>
-    <!-- Suppress xUnit analyzer false positive for ITestOutputHelper ctor injection after v3 migration -->
-    <NoWarn>$(NoWarn);xUnit1041</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />

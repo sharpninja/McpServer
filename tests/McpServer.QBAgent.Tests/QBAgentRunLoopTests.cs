@@ -23,7 +23,7 @@ public sealed class QBAgentRunLoopTests
         using var input = new StringReader("implement the thing\nexit\n");
         using var output = new StringWriter();
 
-        var processed = await QBAgentRunLoop.RunAsync(runner, input, output).ConfigureAwait(true);
+        var processed = await QBAgentRunLoop.RunAsync(runner, input, output, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, processed);
         Assert.Equal("implement the thing", Assert.Single(prompts));
@@ -39,7 +39,7 @@ public sealed class QBAgentRunLoopTests
         using var input = new StringReader("\n   \nexit\n");
         using var output = new StringWriter();
 
-        var processed = await QBAgentRunLoop.RunAsync(runner, input, output).ConfigureAwait(true);
+        var processed = await QBAgentRunLoop.RunAsync(runner, input, output, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(0, processed);
         Assert.Equal(0, calls);
@@ -53,7 +53,7 @@ public sealed class QBAgentRunLoopTests
         using var input = new StringReader("only prompt\n");
         using var output = new StringWriter();
 
-        var processed = await QBAgentRunLoop.RunAsync(runner, input, output).ConfigureAwait(true);
+        var processed = await QBAgentRunLoop.RunAsync(runner, input, output, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, processed);
     }
@@ -69,7 +69,7 @@ public sealed class QBAgentRunLoopTests
         using var input = new StringReader("boom\nok\nexit\n");
         using var output = new StringWriter();
 
-        var processed = await QBAgentRunLoop.RunAsync(runner, input, output).ConfigureAwait(true);
+        var processed = await QBAgentRunLoop.RunAsync(runner, input, output, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, processed);
         var text = output.ToString();

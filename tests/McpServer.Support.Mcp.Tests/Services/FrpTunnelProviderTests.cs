@@ -22,11 +22,11 @@ public sealed class FrpTunnelProviderTests
 
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
         Assert.Contains("ProxyType 'udp' is not supported yet", status.Error, StringComparison.Ordinal);
-        _ = _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, default);
+        _ = _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, ct: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class FrpTunnelProviderTests
 
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
         Assert.Contains("either Subdomain or CustomDomain", status.Error, StringComparison.Ordinal);
@@ -57,7 +57,7 @@ public sealed class FrpTunnelProviderTests
 
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
         Assert.Contains("frpc CLI not found", status.Error, StringComparison.Ordinal);
@@ -189,7 +189,7 @@ public sealed class FrpTunnelProviderTests
         SetPrivateField(sut, "_process", exitedProcess);
         SetPrivateField(sut, "_lastStderrLine", "simulated frpc startup failure");
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
@@ -208,7 +208,7 @@ public sealed class FrpTunnelProviderTests
 
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
         Assert.Contains("TcpPortRangeStart and TcpPortRangeEnd must be set together", status.Error, StringComparison.Ordinal);
@@ -227,7 +227,7 @@ public sealed class FrpTunnelProviderTests
 
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
-        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        var status = await sut.GetStatusAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
         Assert.Contains("either RemotePort or TcpPortRangeStart/End", status.Error, StringComparison.Ordinal);

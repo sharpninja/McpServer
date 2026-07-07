@@ -66,11 +66,11 @@ public sealed class GetTodoTests : IAsyncLifetime
     public async Task Get_ValidId_Returns200WithItem()
     {
         var response = await _fixture.Client.GetAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}");
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var item = await response.Content.ReadFromJsonAsync<TodoFlatItem>();
+        var item = await response.Content.ReadFromJsonAsync<TodoFlatItem>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(item);
         Assert.Equal(_testId, item.Id);
         Assert.Equal("AuditGetTest", item.Title);
@@ -92,7 +92,7 @@ public sealed class GetTodoTests : IAsyncLifetime
     {
         var fakeId = TodoEndpointFixture.GenerateMissingId();
         var response = await _fixture.Client.GetAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }

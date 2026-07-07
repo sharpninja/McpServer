@@ -72,7 +72,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
                 WorkDirectory = workspacePath,
             }));
 
-        var result = await _sut.LaunchAgentAsync(workspacePath, "planner").ConfigureAwait(true);
+        var result = await _sut.LaunchAgentAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("planner", result.AgentId);
         await _processManager.Received(1).LaunchAsync(
@@ -90,7 +90,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
         _db.OverrideWorkspaceId(workspacePath);
         SeedDefinitionAndWorkspace(workspacePath, enabled: true, banned: true, launchCommand: "agent");
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.LaunchAgentAsync(workspacePath, "planner")).ConfigureAwait(true);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.LaunchAgentAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken)).ConfigureAwait(true);
         await _processManager.DidNotReceive().LaunchAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -110,9 +110,9 @@ public sealed class AgentServiceRuntimeTests : IDisposable
             CreatedAt = DateTime.UtcNow,
             ModifiedAt = DateTime.UtcNow,
         });
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.LaunchAgentAsync("C:/missing-ws", "planner")).ConfigureAwait(true);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.LaunchAgentAsync("C:/missing-ws", "planner", ct: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
@@ -133,7 +133,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
                 ExitCode = 0,
             }));
 
-        var result = await _sut.StopAgentAsync(workspacePath, "planner").ConfigureAwait(true);
+        var result = await _sut.StopAgentAsync(workspacePath, "planner", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result);
         await _processManager.Received(1).StopAsync(workspacePath, "planner", Arg.Any<CancellationToken>()).ConfigureAwait(true);

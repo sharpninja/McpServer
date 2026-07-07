@@ -107,7 +107,7 @@ public sealed class TemplateStorageOptionsPostConfigureTests : IDisposable
                 tags:
                 - marker
                 content: "Hello {{baseUrl}}"
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
@@ -126,7 +126,7 @@ public sealed class TemplateStorageOptionsPostConfigureTests : IDisposable
             renderer,
             NullLogger<PromptTemplateService>.Instance);
 
-        var result = await sut.QueryAsync().ConfigureAwait(true);
+        var result = await sut.QueryAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var template = Assert.Single(result.Items);
         Assert.Equal(1, result.TotalCount);

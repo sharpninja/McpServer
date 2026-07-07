@@ -45,7 +45,7 @@ public sealed class EventPublishingServiceTests : IDisposable
         var result = await sut.CreateAsync(new ToolCreateRequest(
             Name: "test-tool",
             Description: "test description",
-            Tags: ["test"])).ConfigureAwait(true);
+            Tags: ["test"]), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await eventBus.Received(1).PublishAsync(
@@ -67,7 +67,7 @@ public sealed class EventPublishingServiceTests : IDisposable
                 "Workspaces": []
               }
             }
-            """).ConfigureAwait(true);
+            """, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var config = new ConfigurationBuilder()
             .SetBasePath(_tempRoot)
@@ -84,7 +84,7 @@ public sealed class EventPublishingServiceTests : IDisposable
         {
             WorkspacePath = workspacePath,
             Name = "workspace-one",
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await eventBus.Received(1).PublishAsync(
@@ -113,11 +113,11 @@ public sealed class EventPublishingServiceTests : IDisposable
             DefaultBranchStrategy = "feature/test",
             DefaultSeedPrompt = "seed",
         };
-        var createResult = await sut.UpsertDefinitionAsync(create).ConfigureAwait(true);
+        var createResult = await sut.UpsertDefinitionAsync(create, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(createResult.Success);
 
         var update = create with { DisplayName = "Test Agent Updated" };
-        var updateResult = await sut.UpsertDefinitionAsync(update).ConfigureAwait(true);
+        var updateResult = await sut.UpsertDefinitionAsync(update, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(updateResult.Success);
 
         await eventBus.Received().PublishAsync(

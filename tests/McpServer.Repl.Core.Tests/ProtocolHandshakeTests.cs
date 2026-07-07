@@ -22,7 +22,7 @@ public class ProtocolHandshakeTests
         var result = await protocol.ConnectAsync(
             new[] { "auth" },
             new Dictionary<string, string> { { "client", "test" } }
-        );
+        , cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("1.0", result.ProtocolVersion);
@@ -44,12 +44,12 @@ public class ProtocolHandshakeTests
 
         var capabilities = new[] { "auth", "workspace-multi", "streaming" };
 
-        protocol.ConnectAsync(capabilities, null, default).Returns(serverHello);
+        protocol.ConnectAsync(capabilities, null, cancellationToken: TestContext.Current.CancellationToken).Returns(serverHello);
 
-        var result = await protocol.ConnectAsync(capabilities);
+        var result = await protocol.ConnectAsync(capabilities, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
-        await protocol.Received(1).ConnectAsync(capabilities, null, default);
+        await protocol.Received(1).ConnectAsync(capabilities, null, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -65,12 +65,12 @@ public class ProtocolHandshakeTests
             { "version", "1.0.0" }
         };
 
-        protocol.ConnectAsync(null, metadata, default).Returns(serverHello);
+        protocol.ConnectAsync(null, metadata, cancellationToken: TestContext.Current.CancellationToken).Returns(serverHello);
 
-        var result = await protocol.ConnectAsync(null, metadata);
+        var result = await protocol.ConnectAsync(null, metadata, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
-        await protocol.Received(1).ConnectAsync(null, metadata, default);
+        await protocol.Received(1).ConnectAsync(null, metadata, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -79,11 +79,11 @@ public class ProtocolHandshakeTests
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
 
-        protocol.ConnectAsync(null, null, default)
+        protocol.ConnectAsync(null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IHelloPayload>(x => throw new InvalidOperationException("Already connected"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await protocol.ConnectAsync()
+            async () => await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -95,9 +95,9 @@ public class ProtocolHandshakeTests
         serverHello.ProtocolVersion.Returns("2.0");
 
         protocol.ProtocolVersion.Returns("1.0");
-        protocol.ConnectAsync(null, null, default).Returns(serverHello);
+        protocol.ConnectAsync(null, null, cancellationToken: TestContext.Current.CancellationToken).Returns(serverHello);
 
-        var result = await protocol.ConnectAsync();
+        var result = await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("2.0", result.ProtocolVersion);
@@ -119,10 +119,10 @@ public class ProtocolHandshakeTests
         var serverHello = Substitute.For<IHelloPayload>();
         serverHello.ProtocolVersion.Returns("1.0");
 
-        protocol.ConnectAsync(null, null, default).Returns(Task.FromResult(serverHello));
+        protocol.ConnectAsync(null, null, cancellationToken: TestContext.Current.CancellationToken).Returns(Task.FromResult(serverHello));
         protocol.IsConnected.Returns(true);
 
-        await protocol.ConnectAsync();
+        await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(protocol.IsConnected);
     }
@@ -133,7 +133,7 @@ public class ProtocolHandshakeTests
         var protocol = Substitute.For<IReplProtocol>();
         protocol.IsConnected.Returns(true);
 
-        await protocol.DisconnectAsync();
+        await protocol.DisconnectAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         await protocol.Received(1).DisconnectAsync(Arg.Any<CancellationToken>());
     }
@@ -143,10 +143,10 @@ public class ProtocolHandshakeTests
     {
         var protocol = Substitute.For<IReplProtocol>();
 
-        protocol.DisconnectAsync(default).Returns(Task.CompletedTask);
+        protocol.DisconnectAsync(cancellationToken: TestContext.Current.CancellationToken).Returns(Task.CompletedTask);
         protocol.IsConnected.Returns(false);
 
-        await protocol.DisconnectAsync();
+        await protocol.DisconnectAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(protocol.IsConnected);
     }
@@ -182,11 +182,11 @@ public class ProtocolHandshakeTests
     {
         var protocol = Substitute.For<IReplProtocol>();
 
-        protocol.ConnectAsync(null, null, default)
+        protocol.ConnectAsync(null, null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IHelloPayload>(x => throw new HttpRequestException("Connection refused"));
 
         await Assert.ThrowsAsync<HttpRequestException>(
-            async () => await protocol.ConnectAsync()
+            async () => await protocol.ConnectAsync(cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 }

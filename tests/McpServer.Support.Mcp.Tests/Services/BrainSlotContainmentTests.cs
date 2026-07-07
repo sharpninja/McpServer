@@ -32,7 +32,7 @@ public sealed class BrainSlotContainmentTests
             {
                 SlotId = "left-main",
                 Role = BrainSlotRoles.LeftHemisphere,
-            }, "output", "txn-1")).ConfigureAwait(true);
+            }, "output", "txn-1", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         Assert.Equal(BrainSlotReasonCodes.DeferredFeatureDisabled, ex.Reason);
     }

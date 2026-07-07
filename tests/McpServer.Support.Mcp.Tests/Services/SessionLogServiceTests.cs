@@ -46,10 +46,10 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-1"));
 
-        var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(id > 0);
-        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id).ConfigureAwait(true);
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Cursor", stored.SourceType);
         Assert.Equal(BuildSessionId("Cursor", "session-1"), stored.SessionId);
         Assert.Equal("Test Session", stored.Title);
@@ -66,13 +66,13 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenSubmittingSameSessionTwiceThenSessionIsUpdated()
     {
         var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-dup"), title: "Original");
-        await _sut.SubmitAsync(dto1).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-dup"), title: "Updated");
         dto2.Turns![0].QueryText = "Updated query";
-        var id = await _sut.SubmitAsync(dto2).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id).ConfigureAwait(true);
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Updated", stored.Title);
         Assert.Single(stored.Turns);
         Assert.Equal("Updated query", stored.Turns.First().QueryText);
@@ -103,7 +103,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "initial bootstrap", "bootstrap"),
                 CreateRelationalTurn("req-20260610T151236Z-plan-bbcrawler-workspace", "initial plan", "plan")
             ];
-            await sut.SubmitAsync(initial).ConfigureAwait(true);
+            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var restored = CreateTestDto("ClaudeCode", sessionId, title: "Restored");
             restored.Turns =
@@ -112,7 +112,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 CreateRelationalTurn("req-20260610T151236Z-plan-bbcrawler-workspace", "restored plan", "restore")
             ];
 
-            await sut.SubmitAsync(restored).ConfigureAwait(true);
+            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var stored = await db.SessionLogs
                 .IgnoreQueryFilters()
@@ -120,7 +120,7 @@ public sealed class SessionLogServiceTests : IDisposable
                     .ThenInclude(t => t.Tags)
                 .Include(s => s.Turns)
                     .ThenInclude(t => t.Actions)
-                .SingleAsync(s => s.SessionId == sessionId)
+                .SingleAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
             Assert.Equal("Restored", stored.Title);
             Assert.Equal(2, stored.Turns.Count);
@@ -128,7 +128,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 2,
                 await db.SessionLogTurns
                     .IgnoreQueryFilters()
-                    .CountAsync(t => t.SessionLogId == stored.Id)
+                    .CountAsync(t => t.SessionLogId == stored.Id, cancellationToken: TestContext.Current.CancellationToken)
                     .ConfigureAwait(true));
             Assert.All(stored.Turns, turn => Assert.Contains(turn.Tags, tag => tag.Tag == "restore"));
         }
@@ -153,7 +153,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "kept turn", "keep"),
                 CreateRelationalTurn("req-20260610T151236Z-stale-bbcrawler-workspace", "stale turn", "stale")
             ];
-            await sut.SubmitAsync(initial).ConfigureAwait(true);
+            await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var restored = CreateTestDto("ClaudeCode", sessionId, title: "Restored");
             restored.Turns =
@@ -161,13 +161,13 @@ public sealed class SessionLogServiceTests : IDisposable
                 CreateRelationalTurn("req-20260610T151235Z-bootstrap-bbcrawler-workspace", "restored kept turn", "restore")
             ];
 
-            await sut.SubmitAsync(restored).ConfigureAwait(true);
+            await sut.SubmitAsync(restored, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var stored = await db.SessionLogs
                 .IgnoreQueryFilters()
                 .Include(s => s.Turns)
                     .ThenInclude(t => t.Tags)
-                .SingleAsync(s => s.SessionId == sessionId)
+                .SingleAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
             Assert.Equal(2, stored.Turns.Count);
             var kept = Assert.Single(stored.Turns, turn => turn.RequestId == "req-20260610T151235Z-bootstrap-bbcrawler-workspace");
@@ -192,9 +192,9 @@ public sealed class SessionLogServiceTests : IDisposable
             InProgressCount = 2
         };
 
-        var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id).ConfigureAwait(true);
+        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(0.85, stored.CopilotAvgSuccessScore);
         Assert.Equal(5000, stored.CopilotTotalNetTokens);
         Assert.Equal(3, stored.CopilotTotalNetPremiumRequests);
@@ -214,9 +214,9 @@ public sealed class SessionLogServiceTests : IDisposable
             Branch = "develop"
         };
 
-        var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id).ConfigureAwait(true);
+        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("FunWasHad", stored.Project);
         Assert.Equal(".NET 9", stored.TargetFramework);
         Assert.Equal("sharpninja/FunWasHad", stored.Repository);
@@ -230,12 +230,12 @@ public sealed class SessionLogServiceTests : IDisposable
         dto.Turns![0].Tags = ["csharp", "ef-core"];
         dto.Turns[0].ContextList = ["src/Program.cs", "docs/README.md"];
 
-        var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var entry = await _db.SessionLogTurns
             .Include(e => e.Tags)
             .Include(e => e.ContextItems)
-            .FirstAsync(e => e.SessionLogId == id)
+            .FirstAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(2, entry.Tags.Count);
         Assert.Contains(entry.Tags, t => t.Tag == "csharp");
@@ -245,10 +245,10 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenQueryingWithNoFiltersThenAllSessionsAreReturned()
     {
-        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "q1"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "q2"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "q1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "q2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest()).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, result.TotalCount);
         Assert.Equal(2, result.Items.Count);
@@ -263,9 +263,9 @@ public sealed class SessionLogServiceTests : IDisposable
         dto.TurnCount = 0;
         dto.Turns![0].Timestamp = "2026-06-10T15:40:39Z";
 
-        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode" }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(result.Items);
         Assert.Equal(1, item.TurnCount);
@@ -276,10 +276,10 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenQueryingByAgentThenOnlyMatchingSessionsAreReturned()
     {
-        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-1"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "agent-2"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "agent-2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.TotalCount);
         Assert.All(result.Items, item => Assert.Equal("Cursor", item.SourceType));
@@ -292,12 +292,12 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task QueryAsync_WithoutAgent_ReturnsMixedSourceSessionsForWorkspace()
     {
-        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "mixed-codex"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "mixed-cursor"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("Cline", BuildSessionId("Cline", "mixed-cline"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "mixed-mcpagent"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "mixed-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "mixed-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cline", BuildSessionId("Cline", "mixed-cline")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "mixed-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(4, result.TotalCount);
         Assert.Contains(result.Items, item => item.SourceType == "Codex");
@@ -313,11 +313,11 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task QueryAsync_WithAgent_ReturnsOnlyMatchingSourceType()
     {
-        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "agent-codex"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-cursor"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "agent-mcpagent"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "agent-codex")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-cursor")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "agent-mcpagent")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "McpAgent" }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "McpAgent" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(result.Items);
         Assert.Equal("McpAgent", item.SourceType);
@@ -331,14 +331,14 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task QueryAsync_DoesNotReturnSessionsFromOtherWorkspaces()
     {
         var primary = BuildSutWithWorkspaceContext(WorkspacePath);
-        await primary.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "primary-workspace"))).ConfigureAwait(true);
+        await primary.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "primary-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var otherWorkspacePath = @"E:\tests\sessionlog-service-other";
         var other = BuildSutWithWorkspaceContext(otherWorkspacePath);
-        await other.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "other-workspace"))).ConfigureAwait(true);
+        await other.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "other-workspace")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var querySut = BuildSutWithWorkspaceContext(WorkspacePath);
-        var result = await querySut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+        var result = await querySut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(result.Items);
         Assert.Equal("Codex", item.SourceType);
@@ -355,14 +355,14 @@ public sealed class SessionLogServiceTests : IDisposable
         var olderStartedRecent = CreateTestDto("Cursor", BuildSessionId("Cursor", "older-start-recent-update"));
         olderStartedRecent.Started = "2026-03-01T00:00:00Z";
         olderStartedRecent.LastUpdated = "2026-05-24T23:16:08Z";
-        await _sut.SubmitAsync(olderStartedRecent).ConfigureAwait(true);
+        await _sut.SubmitAsync(olderStartedRecent, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var newerStartedStale = CreateTestDto("Codex", BuildSessionId("Codex", "newer-start-stale-update"));
         newerStartedStale.Started = "2026-05-01T00:00:00Z";
         newerStartedStale.LastUpdated = "2026-05-01T00:10:00Z";
-        await _sut.SubmitAsync(newerStartedStale).ConfigureAwait(true);
+        await _sut.SubmitAsync(newerStartedStale, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 1 }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(result.Items);
         Assert.Equal(BuildSessionId("Cursor", "older-start-recent-update"), item.SessionId);
@@ -374,17 +374,17 @@ public sealed class SessionLogServiceTests : IDisposable
         var early = CreateTestDto("Cursor", BuildSessionId("Cursor", "early"));
         early.Started = "2026-01-01T00:00:00Z";
         early.LastUpdated = "2026-01-01T12:00:00Z";
-        await _sut.SubmitAsync(early).ConfigureAwait(true);
+        await _sut.SubmitAsync(early, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var late = CreateTestDto("Cursor", BuildSessionId("Cursor", "late"));
         late.Started = "2026-02-01T00:00:00Z";
         late.LastUpdated = "2026-02-01T12:00:00Z";
-        await _sut.SubmitAsync(late).ConfigureAwait(true);
+        await _sut.SubmitAsync(late, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new SessionLogQueryRequest
         {
             From = new DateTimeOffset(2026, 1, 15, 0, 0, 0, TimeSpan.Zero)
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.TotalCount);
         Assert.Equal(BuildSessionId("Cursor", "late"), result.Items[0].SessionId);
@@ -397,10 +397,10 @@ public sealed class SessionLogServiceTests : IDisposable
         {
             var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", $"page-{i}"));
             dto.Started = $"2026-01-{(i + 1):D2}T00:00:00Z";
-            await _sut.SubmitAsync(dto).ConfigureAwait(true);
+            await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 2, Offset = 1 }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 2, Offset = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(5, result.TotalCount);
         Assert.Equal(2, result.Items.Count);
@@ -411,9 +411,9 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenQueryingWithLimitExceedingMaxThenLimitIsClamped()
     {
-        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "clamp"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "clamp")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 9999 }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 9999 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1000, result.Limit);
     }
@@ -424,17 +424,17 @@ public sealed class SessionLogServiceTests : IDisposable
         var match = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-match"));
         match.Turns![0].QueryTitle = "Alpha kickoff";
         match.Turns[0].Response = "Completed beta rollout";
-        await _sut.SubmitAsync(match).ConfigureAwait(true);
+        await _sut.SubmitAsync(match, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var miss = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-miss"));
         miss.Turns![0].QueryTitle = "Alpha kickoff";
         miss.Turns[0].Response = "Completed gamma rollout";
-        await _sut.SubmitAsync(miss).ConfigureAwait(true);
+        await _sut.SubmitAsync(miss, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new SessionLogQueryRequest
         {
             Text = "alpha && beta",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(result.Items);
         Assert.Equal(BuildSessionId("Cursor", "bool-match"), item.SessionId);
@@ -445,7 +445,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var dto = new UnifiedSessionLogDto { SourceType = null, SessionId = "test" };
 
-        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto)).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
@@ -453,7 +453,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var dto = new UnifiedSessionLogDto { SourceType = "Cursor", SessionId = null };
 
-        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto)).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
@@ -461,7 +461,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var dto = CreateTestDto("Cursor", "cursor-invalid");
 
-        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto)).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
@@ -469,7 +469,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "bad-request-id"));
         dto.Turns![0].RequestId = "bad";
-        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto)).ConfigureAwait(true);
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
@@ -479,9 +479,9 @@ public sealed class SessionLogServiceTests : IDisposable
         dto.Workspace = new WorkspaceInfoDto { Project = "TestProject", Branch = "main" };
         dto.CopilotStatistics = new CopilotStatisticsDto { CompletedCount = 5 };
         dto.TotalTokens = 1234;
-        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Copilot" }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Copilot" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(result.Items);
         Assert.NotNull(item.Workspace);
@@ -499,19 +499,19 @@ public sealed class SessionLogServiceTests : IDisposable
         dto.Started = "2026-03-03T12:49:58.717102-06:00";
         dto.LastUpdated = "2026-03-03T12:50:58.717102-06:00";
         dto.Turns![0].Timestamp = "2026-03-03T12:50:12.717102-06:00";
-        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var queried = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }).ConfigureAwait(true);
+        var queried = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var session = queried.Items.Single(i => i.SessionId == sessionId);
 
         // Regression coverage: previously, pushing a queried session containing
         // offset timestamps could fail with a server-side 500.
-        var ex = await Record.ExceptionAsync(() => _sut.SubmitAsync(session)).ConfigureAwait(true);
+        var ex = await Record.ExceptionAsync(() => _sut.SubmitAsync(session, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
         Assert.Null(ex);
 
         var stored = await _db.SessionLogs
             .Include(s => s.Turns)
-            .SingleAsync(s => s.SessionId == sessionId)
+            .SingleAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(TimeSpan.Zero, stored.Started?.Offset);
         Assert.Equal(TimeSpan.Zero, stored.LastUpdated?.Offset);
@@ -522,7 +522,7 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenUpsertingWithNewEntryThenEntryIsAddedWithoutRemovingExisting()
     {
         var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-add"));
-        await _sut.SubmitAsync(dto1).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Submit again with original entry plus a new one
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-add"));
@@ -533,9 +533,9 @@ public sealed class SessionLogServiceTests : IDisposable
             Status = "completed"
         });
         dto2.TurnCount = 2;
-        var id = await _sut.SubmitAsync(dto2).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id).ConfigureAwait(true);
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, stored.Turns.Count);
     }
 
@@ -543,17 +543,17 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenUpsertingExistingEntryThenEntryIsUpdatedInPlace()
     {
         var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
-        var id = await _sut.SubmitAsync(dto1).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var originalEntryId = (await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true)).Id;
+        var originalEntryId = (await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).Id;
 
         // Submit with same RequestId but different content
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
         dto2.Turns![0].QueryText = "Updated query text";
         dto2.Turns[0].Response = "Updated response";
-        await _sut.SubmitAsync(dto2).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var updatedEntry = await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true);
+        var updatedEntry = await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(originalEntryId, updatedEntry.Id); // Same row, updated in place
         Assert.Equal("Updated query text", updatedEntry.QueryText);
         Assert.Equal("Updated response", updatedEntry.Response);
@@ -570,18 +570,18 @@ public sealed class SessionLogServiceTests : IDisposable
             Status = "completed"
         });
         dto1.TurnCount = 2;
-        var id = await _sut.SubmitAsync(dto1).ConfigureAwait(true);
-        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
+        var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
 
         // TR-MCP-DB-003: Submit with only the first entry must not hard-delete
         // the absent durable turn.
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
         dto2.TurnCount = 1;
-        await _sut.SubmitAsync(dto2).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
+        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         Assert.Contains(
-            await _db.SessionLogTurns.Where(e => e.SessionLogId == id).ToListAsync().ConfigureAwait(true),
+            await _db.SessionLogTurns.Where(e => e.SessionLogId == id).ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true),
             turn => turn.RequestId == "req-20260211T100200Z-entry-002");
     }
 
@@ -589,7 +589,7 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenAppendingDialogItemsThenItemsAreAdded()
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-append"));
-        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var items = new List<ProcessingDialogItemDto>
         {
@@ -597,12 +597,12 @@ public sealed class SessionLogServiceTests : IDisposable
             new() { Timestamp = "2026-02-12T10:00:01Z", Role = "tool", Content = "get_file(Program.cs)", Category = "tool_call" }
         };
 
-        var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-append"), "req-20260211T100100Z-entry-001", items).ConfigureAwait(true);
+        var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-append"), "req-20260211T100100Z-entry-001", items, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, count);
         var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
-            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001")
+            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(2, entry.ProcessingDialog.Count);
         var first = entry.ProcessingDialog.OrderBy(p => p.Ordinal).First();
@@ -621,18 +621,18 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenAppendingDialogMultipleTimesThenOrdinalsAreContinuous()
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-multi"));
-        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-multi"), "req-20260211T100100Z-entry-001",
-            [new ProcessingDialogItemDto { Role = "model", Content = "First batch" }]).ConfigureAwait(true);
+            [new ProcessingDialogItemDto { Role = "model", Content = "First batch" }], cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-multi"), "req-20260211T100100Z-entry-001",
-            [new ProcessingDialogItemDto { Role = "model", Content = "Second batch" }]).ConfigureAwait(true);
+            [new ProcessingDialogItemDto { Role = "model", Content = "Second batch" }], cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, count);
         var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
-            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001")
+            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         var ordinals = entry.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => p.Ordinal).ToList();
         Assert.Equal([0, 1], ordinals);
@@ -643,7 +643,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         await Assert.ThrowsAsync<InvalidOperationException>(
             () => _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "nonexistent"), "req-20260211T100100Z-entry-001",
-                [new ProcessingDialogItemDto { Role = "model", Content = "test" }])).ConfigureAwait(true);
+                [new ProcessingDialogItemDto { Role = "model", Content = "test" }], cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     [Fact]
@@ -654,9 +654,9 @@ public sealed class SessionLogServiceTests : IDisposable
         [
             new ProcessingDialogItemDto { Timestamp = "2026-02-12T10:00:00Z", Role = "model", Content = "Thinking...", Category = "reasoning" }
         ];
-        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Copilot" }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Copilot" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var entry = result.Items.First(i => i.SessionId == BuildSessionId("Copilot", "dialog-query")).Turns!.First();
         Assert.NotNull(entry.ProcessingDialog);
@@ -676,11 +676,11 @@ public sealed class SessionLogServiceTests : IDisposable
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
 
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-stamp"));
-        var id = await sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await _db.SessionLogs
             .IgnoreQueryFilters()
-            .FirstAsync(s => s.Id == id)
+            .FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(WorkspacePath, stored.WorkspaceId);
     }
@@ -712,27 +712,27 @@ public sealed class SessionLogServiceTests : IDisposable
         ];
         dto.Turns[0].FilesModified = ["a.cs"];
 
-        var id = await sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var turn = await _db.SessionLogTurns.IgnoreQueryFilters().FirstAsync(t => t.SessionLogId == id).ConfigureAwait(true);
+        var turn = await _db.SessionLogTurns.IgnoreQueryFilters().FirstAsync(t => t.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspacePath, turn.WorkspaceId);
 
-        var action = await _db.SessionLogActions.IgnoreQueryFilters().FirstAsync(a => a.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        var action = await _db.SessionLogActions.IgnoreQueryFilters().FirstAsync(a => a.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspacePath, action.WorkspaceId);
 
-        var tag = await _db.SessionLogTurnTags.IgnoreQueryFilters().FirstAsync(t => t.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        var tag = await _db.SessionLogTurnTags.IgnoreQueryFilters().FirstAsync(t => t.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspacePath, tag.WorkspaceId);
 
-        var context = await _db.SessionLogTurnContexts.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        var context = await _db.SessionLogTurnContexts.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspacePath, context.WorkspaceId);
 
-        var dialog = await _db.SessionLogProcessingDialogs.IgnoreQueryFilters().FirstAsync(d => d.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        var dialog = await _db.SessionLogProcessingDialogs.IgnoreQueryFilters().FirstAsync(d => d.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspacePath, dialog.WorkspaceId);
 
-        var commit = await _db.SessionLogCommits.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        var commit = await _db.SessionLogCommits.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspacePath, commit.WorkspaceId);
 
-        var stringList = await _db.SessionLogTurnStringLists.IgnoreQueryFilters().FirstAsync(s => s.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        var stringList = await _db.SessionLogTurnStringLists.IgnoreQueryFilters().FirstAsync(s => s.SessionLogTurnId == turn.Id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(WorkspacePath, stringList.WorkspaceId);
     }
 
@@ -755,11 +755,11 @@ public sealed class SessionLogServiceTests : IDisposable
         var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext: null);
 
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "no-ws"));
-        var id = await sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await db.SessionLogs
             .IgnoreQueryFilters()
-            .FirstAsync(s => s.Id == id)
+            .FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(string.Empty, stored.WorkspaceId);
     }
@@ -782,24 +782,24 @@ public sealed class SessionLogServiceTests : IDisposable
 
         workspaceContext.WorkspacePath = WorkspacePath;
         var sessionId = BuildSessionId("Codex", "stale-query");
-        await sut.SubmitAsync(CreateTestDto("Codex", sessionId), contentHash: "hash-stale-query").ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("Codex", sessionId), contentHash: "hash-stale-query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         db.OverrideWorkspaceId(string.Empty);
-        var query = await sut.QueryAsync(new SessionLogQueryRequest { Agent = "Codex" }).ConfigureAwait(true);
+        var query = await sut.QueryAsync(new SessionLogQueryRequest { Agent = "Codex" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var item = Assert.Single(query.Items);
         Assert.Equal(sessionId, item.SessionId);
         Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
 
         db.OverrideWorkspaceId(string.Empty);
-        var fetched = await sut.GetAsync("Codex", sessionId).ConfigureAwait(true);
+        var fetched = await sut.GetAsync("Codex", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(fetched);
         Assert.Equal(sessionId, fetched!.SessionId);
         Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
 
         db.OverrideWorkspaceId(string.Empty);
-        var unchanged = await sut.IsUnchangedAsync("Codex", sessionId, "hash-stale-query").ConfigureAwait(true);
+        var unchanged = await sut.IsUnchangedAsync("Codex", sessionId, "hash-stale-query", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(unchanged);
         Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
@@ -822,7 +822,7 @@ public sealed class SessionLogServiceTests : IDisposable
 
         workspaceContext.WorkspacePath = WorkspacePath;
         var sessionId = BuildSessionId("Cursor", "stale-turn");
-        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         db.OverrideWorkspaceId(string.Empty);
         var turn = new UnifiedRequestEntryDto
@@ -843,7 +843,7 @@ public sealed class SessionLogServiceTests : IDisposable
             ]
         };
 
-        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, turn).ConfigureAwait(true);
+        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, turn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(turnId > 0);
         Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
@@ -853,7 +853,7 @@ public sealed class SessionLogServiceTests : IDisposable
             "Cursor",
             sessionId,
             "req-20260527T014000Z-stale-turn",
-            [new ProcessingDialogItemDto { Role = "model", Content = "visible after workspace sync", Category = "reasoning" }])
+            [new ProcessingDialogItemDto { Role = "model", Content = "visible after workspace sync", Category = "reasoning" }], cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal(1, dialogCount);
@@ -878,22 +878,22 @@ public sealed class SessionLogServiceTests : IDisposable
 
         var primarySessionId = BuildSessionId("Codex", "primary-visible");
         workspaceContext.WorkspacePath = WorkspacePath;
-        await sut.SubmitAsync(CreateTestDto("Codex", primarySessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("Codex", primarySessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var otherWorkspacePath = @"E:\tests\sessionlog-service-other";
         var otherSessionId = BuildSessionId("Cursor", "other-visible");
         workspaceContext.WorkspacePath = otherWorkspacePath;
-        await sut.SubmitAsync(CreateTestDto("Cursor", otherSessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("Cursor", otherSessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         workspaceContext.WorkspacePath = WorkspacePath;
-        var primaryResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+        var primaryResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var primaryItem = Assert.Single(primaryResult.Items);
         Assert.Equal(primarySessionId, primaryItem.SessionId);
         Assert.DoesNotContain(primaryResult.Items, item => item.SessionId == otherSessionId);
 
         workspaceContext.WorkspacePath = otherWorkspacePath;
-        var otherResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+        var otherResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var otherItem = Assert.Single(otherResult.Items);
         Assert.Equal(otherSessionId, otherItem.SessionId);
@@ -911,7 +911,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "turn-append");
         var initial = CreateTestDto("Cursor", sessionId);
-        await sut.SubmitAsync(initial).ConfigureAwait(true);
+        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var newTurn = new UnifiedRequestEntryDto
         {
@@ -931,13 +931,13 @@ public sealed class SessionLogServiceTests : IDisposable
             ]
         };
 
-        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, newTurn).ConfigureAwait(true);
+        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, newTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(turnId > 0);
         var turns = await _db.SessionLogTurns
             .IgnoreQueryFilters()
             .Where(t => t.SessionLog!.SessionId == sessionId)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(2, turns.Count);
         Assert.Contains(turns, t => t.RequestId == "req-20260211T100100Z-entry-001");
@@ -953,7 +953,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("ClaudeCode", "structured-turn-append");
-        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var newTurn = new UnifiedRequestEntryDto
         {
@@ -980,9 +980,9 @@ public sealed class SessionLogServiceTests : IDisposable
             ]
         };
 
-        await sut.UpsertTurnAsync("ClaudeCode", sessionId, newTurn).ConfigureAwait(true);
+        await sut.UpsertTurnAsync("ClaudeCode", sessionId, newTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var fetched = await sut.GetAsync("ClaudeCode", sessionId).ConfigureAwait(true);
+        var fetched = await sut.GetAsync("ClaudeCode", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(fetched);
         var appended = Assert.Single(fetched!.Turns!, turn => turn.RequestId == "req-20260610T154039Z-structured-turn");
@@ -1006,7 +1006,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "turn-update");
         var initial = CreateTestDto("Cursor", sessionId);
-        await sut.SubmitAsync(initial).ConfigureAwait(true);
+        await sut.SubmitAsync(initial, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var updatedTurn = new UnifiedRequestEntryDto
         {
@@ -1021,11 +1021,11 @@ public sealed class SessionLogServiceTests : IDisposable
             ]
         };
 
-        await sut.UpsertTurnAsync("Cursor", sessionId, updatedTurn).ConfigureAwait(true);
+        await sut.UpsertTurnAsync("Cursor", sessionId, updatedTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = await _db.SessionLogTurns
             .IgnoreQueryFilters()
-            .SingleAsync(t => t.RequestId == "req-20260211T100100Z-entry-001")
+            .SingleAsync(t => t.RequestId == "req-20260211T100100Z-entry-001", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal("updated query", turn.QueryText);
         Assert.Equal("updated response", turn.Response);
@@ -1040,7 +1040,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("ClaudeCode", "turn-merge-structured");
-        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await sut.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
         {
@@ -1064,7 +1064,7 @@ public sealed class SessionLogServiceTests : IDisposable
             ],
             FilesModified = ["src/file.cs"],
             Blockers = ["initial blocker"]
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await sut.UpsertTurnAsync("ClaudeCode", sessionId, new UnifiedRequestEntryDto
         {
@@ -1072,9 +1072,9 @@ public sealed class SessionLogServiceTests : IDisposable
             Response = "final response",
             Status = "completed",
             DesignDecisions = ["Per-turn updates are merged so omitted structured collections are preserved."]
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var fetched = await sut.GetAsync("ClaudeCode", sessionId).ConfigureAwait(true);
+        var fetched = await sut.GetAsync("ClaudeCode", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(fetched);
         var turn = Assert.Single(fetched!.Turns!, item => item.RequestId == "req-20260211T100100Z-entry-001");
@@ -1100,7 +1100,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         const string qbAgentSourceType = "QBAgent";
         var sessionId = BuildSessionId(qbAgentSourceType, "turn-close-validation");
-        await sut.SubmitAsync(CreateTestDto(qbAgentSourceType, sessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto(qbAgentSourceType, sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = new UnifiedRequestEntryDto
         {
@@ -1111,7 +1111,7 @@ public sealed class SessionLogServiceTests : IDisposable
         };
 
         var ex = await Assert.ThrowsAsync<ArgumentException>(
-            () => sut.UpsertTurnAsync(qbAgentSourceType, sessionId, turn))
+            () => sut.UpsertTurnAsync(qbAgentSourceType, sessionId, turn, cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("no decision, action, or commit items", ex.Message, StringComparison.Ordinal);
@@ -1128,7 +1128,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "turn-close-standard");
-        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var turn = new UnifiedRequestEntryDto
         {
@@ -1138,7 +1138,7 @@ public sealed class SessionLogServiceTests : IDisposable
             Status = "completed"
         };
 
-        var id = await sut.UpsertTurnAsync("Cursor", sessionId, turn).ConfigureAwait(true);
+        var id = await sut.UpsertTurnAsync("Cursor", sessionId, turn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(id > 0);
     }
@@ -1159,7 +1159,7 @@ public sealed class SessionLogServiceTests : IDisposable
         };
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            () => sut.UpsertTurnAsync("Cursor", BuildSessionId("Cursor", "missing"), turn))
+            () => sut.UpsertTurnAsync("Cursor", BuildSessionId("Cursor", "missing"), turn, cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
     }
 
@@ -1172,9 +1172,9 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
         var sessionId = BuildSessionId("Cursor", "get-by-id");
-        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var fetched = await sut.GetAsync("Cursor", sessionId).ConfigureAwait(true);
+        var fetched = await sut.GetAsync("Cursor", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(fetched);
         Assert.Equal(sessionId, fetched!.SessionId);
@@ -1190,7 +1190,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
 
-        var fetched = await sut.GetAsync("Cursor", BuildSessionId("Cursor", "absent")).ConfigureAwait(true);
+        var fetched = await sut.GetAsync("Cursor", BuildSessionId("Cursor", "absent"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Null(fetched);
     }
@@ -1215,7 +1215,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var (sut1, db1) = BuildSqliteSut(connection);
         using (db1)
         {
-            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         DriftTurnRows(connection, sessionId);
@@ -1232,7 +1232,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 Status = "in_progress"
             };
 
-            var turnId = await sut2.UpsertTurnAsync("ClaudeCode", sessionId, update).ConfigureAwait(true);
+            var turnId = await sut2.UpsertTurnAsync("ClaudeCode", sessionId, update, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.True(turnId > 0);
             Assert.Equal(1, CountTurnRows(connection, "req-20260211T100100Z-entry-001"));
@@ -1261,7 +1261,7 @@ public sealed class SessionLogServiceTests : IDisposable
             dto.Turns[0].Tags = ["phase0"];
             dto.Turns[0].Commits = [new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "m" }];
             dto.Turns[0].DesignDecisions = ["Decision: stamp children from parent."];
-            await sut.SubmitAsync(dto).ConfigureAwait(true);
+            await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var richTurn = new UnifiedRequestEntryDto
             {
@@ -1272,14 +1272,14 @@ public sealed class SessionLogServiceTests : IDisposable
                 DesignDecisions = ["Decision: second turn keeps invariant."],
                 Commits = [new SessionLogCommitDto { Sha = "def456", Branch = "main", Message = "m2" }]
             };
-            await sut.UpsertTurnAsync("ClaudeCode", sessionId, richTurn).ConfigureAwait(true);
+            await sut.UpsertTurnAsync("ClaudeCode", sessionId, richTurn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var session = await db.SessionLogs.IgnoreQueryFilters()
                 .Include(s => s.Turns).ThenInclude(t => t.Actions)
                 .Include(s => s.Turns).ThenInclude(t => t.Tags)
                 .Include(s => s.Turns).ThenInclude(t => t.Commits)
                 .Include(s => s.Turns).ThenInclude(t => t.StringListItems)
-                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.False(string.IsNullOrEmpty(session.WorkspaceId));
             foreach (var turn in session.Turns)
@@ -1311,7 +1311,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var (sut1, db1) = BuildSqliteSut(connection);
         using (db1)
         {
-            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Before close")).ConfigureAwait(true);
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Before close"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var turnWithCommit = new UnifiedRequestEntryDto
             {
                 RequestId = "req-20260211T120000Z-entry-002",
@@ -1321,7 +1321,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 DesignDecisions = ["Decision: ship it."],
                 Commits = [new SessionLogCommitDto { Sha = "554ab3d", Branch = "main", Message = "fix(plugin): drop .mcp.json" }]
             };
-            await sut1.UpsertTurnAsync("ClaudeCode", sessionId, turnWithCommit).ConfigureAwait(true);
+            await sut1.UpsertTurnAsync("ClaudeCode", sessionId, turnWithCommit, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         if (driftChildStamps)
@@ -1338,7 +1338,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 Status = "completed"
             };
 
-            await sut2.SubmitAsync(bareClose).ConfigureAwait(true);
+            await sut2.SubmitAsync(bareClose, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var (_, verifyDb) = BuildSqliteSut(connection);
@@ -1346,7 +1346,7 @@ public sealed class SessionLogServiceTests : IDisposable
         {
             var session = await verifyDb.SessionLogs.IgnoreQueryFilters()
                 .Include(s => s.Turns).ThenInclude(t => t.Commits)
-                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("completed", session.Status);
             Assert.Equal(2, session.Turns.Count);
@@ -1370,7 +1370,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var (sut1, db1) = BuildSqliteSut(connection);
         using (db1)
         {
-            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+            await sut1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         DriftTurnRows(connection, sessionId);
@@ -1378,11 +1378,11 @@ public sealed class SessionLogServiceTests : IDisposable
         var (sut2, db2) = BuildSqliteSut(connection);
         using (db2)
         {
-            var page = await sut2.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode", Limit = 50 }).ConfigureAwait(true);
+            var page = await sut2.QueryAsync(new SessionLogQueryRequest { Agent = "ClaudeCode", Limit = 50 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var listed = Assert.Single(page.Items, s => s.SessionId == sessionId);
             Assert.Equal(1, listed.TurnCount);
 
-            var fetched = await sut2.GetAsync("ClaudeCode", sessionId).ConfigureAwait(true);
+            var fetched = await sut2.GetAsync("ClaudeCode", sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.NotNull(fetched);
             Assert.Single(fetched!.Turns!);
         }
@@ -1404,13 +1404,13 @@ public sealed class SessionLogServiceTests : IDisposable
         var (sutW1, dbW1) = BuildSqliteSut(connection, workspacePath: WorkspacePath);
         using (dbW1)
         {
-            await sutW1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+            await sutW1.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var (sutW2, dbW2) = BuildSqliteSut(connection, workspacePath: DriftedWorkspacePath);
         using (dbW2)
         {
-            await sutW2.SubmitAsync(CreateTestDto("ClaudeCode", sessionId)).ConfigureAwait(true);
+            await sutW2.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var (sutW1b, dbW1b) = BuildSqliteSut(connection, workspacePath: WorkspacePath);
@@ -1420,7 +1420,7 @@ public sealed class SessionLogServiceTests : IDisposable
                 "ClaudeCode",
                 sessionId,
                 "req-20260211T100100Z-entry-001",
-                [new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:02:00Z", Role = "model", Content = "w1 only", Category = "reasoning" }])
+                [new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:02:00Z", Role = "model", Content = "w1 only", Category = "reasoning" }], cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
             Assert.Equal(1, added);
         }
@@ -1431,7 +1431,7 @@ public sealed class SessionLogServiceTests : IDisposable
             var dialogOwners = await verifyDb.SessionLogProcessingDialogs.IgnoreQueryFilters()
                 .Where(d => d.Content == "w1 only")
                 .Select(d => d.SessionLogTurn!.SessionLog!.WorkspaceId)
-                .ToListAsync().ConfigureAwait(true);
+                .ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var owner = Assert.Single(dialogOwners);
             Assert.Equal(WorkspacePath, owner);
         }
@@ -1454,7 +1454,7 @@ public sealed class SessionLogServiceTests : IDisposable
             var dto = CreateTestDto("ClaudeCode", sessionId);
             dto.Turns![0].Commits = [new SessionLogCommitDto { Sha = "abc", Branch = "main", Message = "m" }];
             dto.Turns[0].DesignDecisions = ["Decision: repair."];
-            await sut1.SubmitAsync(dto).ConfigureAwait(true);
+            await sut1.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         DriftTurnRows(connection, sessionId, driftGrandchildren: true);
@@ -1462,20 +1462,20 @@ public sealed class SessionLogServiceTests : IDisposable
         var (sut2, db2) = BuildSqliteSut(connection);
         using (db2)
         {
-            var dryRunCount = await sut2.RepairWorkspaceStampsAsync(dryRun: true).ConfigureAwait(true);
+            var dryRunCount = await sut2.RepairWorkspaceStampsAsync(dryRun: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.True(dryRunCount > 0);
-            var dryRunRepeat = await sut2.RepairWorkspaceStampsAsync(dryRun: true).ConfigureAwait(true);
+            var dryRunRepeat = await sut2.RepairWorkspaceStampsAsync(dryRun: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal(dryRunCount, dryRunRepeat);
 
-            var firstPass = await sut2.RepairWorkspaceStampsAsync().ConfigureAwait(true);
+            var firstPass = await sut2.RepairWorkspaceStampsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal(dryRunCount, firstPass);
-            var secondPass = await sut2.RepairWorkspaceStampsAsync().ConfigureAwait(true);
+            var secondPass = await sut2.RepairWorkspaceStampsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal(0, secondPass);
 
             var session = await db2.SessionLogs.IgnoreQueryFilters()
                 .Include(s => s.Turns).ThenInclude(t => t.Commits)
                 .Include(s => s.Turns).ThenInclude(t => t.StringListItems)
-                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             foreach (var turn in session.Turns)
             {
                 Assert.Equal(session.WorkspaceId, turn.WorkspaceId);
@@ -1501,7 +1501,7 @@ public sealed class SessionLogServiceTests : IDisposable
         {
             var full = CreateTestDto("ClaudeCode", sessionId, title: "Original title");
             full.Model = "claude-fable-5";
-            await sut1.SubmitAsync(full).ConfigureAwait(true);
+            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var (sut2, db2) = BuildSqliteSut(connection);
@@ -1512,10 +1512,10 @@ public sealed class SessionLogServiceTests : IDisposable
                 SourceType = "ClaudeCode",
                 SessionId = sessionId,
                 Status = "completed"
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var stored = await db2.SessionLogs.IgnoreQueryFilters()
-                .FirstAsync(s => s.SessionId == sessionId).ConfigureAwait(true);
+                .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal("completed", stored.Status);
             Assert.Equal("Original title", stored.Title);
             Assert.Equal("claude-fable-5", stored.Model);
@@ -1542,7 +1542,7 @@ public sealed class SessionLogServiceTests : IDisposable
             full.Turns![0].Response = "Original response";
             full.Turns[0].Interpretation = "Original interpretation";
             full.Turns[0].DesignDecisions = ["Decision: keep data."];
-            await sut1.SubmitAsync(full).ConfigureAwait(true);
+            await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var (sut2, db2) = BuildSqliteSut(connection);
@@ -1561,12 +1561,12 @@ public sealed class SessionLogServiceTests : IDisposable
                         Tags = ["wrap-up"]
                     }
                 ]
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var turn = await db2.SessionLogTurns.IgnoreQueryFilters()
                 .Include(t => t.Tags)
                 .Include(t => t.StringListItems)
-                .FirstAsync(t => t.RequestId == requestId).ConfigureAwait(true);
+                .FirstAsync(t => t.RequestId == requestId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal("completed", turn.Status);
             Assert.Equal("Original response", turn.Response);
             Assert.Equal("Original interpretation", turn.Interpretation);

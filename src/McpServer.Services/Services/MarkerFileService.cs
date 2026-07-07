@@ -25,6 +25,7 @@ public static class MarkerFileService
     internal const string MarkerSignatureVerifier = "workspace_api_key";
     internal const string SyncedAgentPluginVersion = "1.26.0";
     private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
+    private const string WorkspaceCacheDirectoryGitIgnoreEntry = "cache/";
 
     /// <summary>
     /// Test seam: when set, plugin-version resolution scans this directory for user plugin caches
@@ -143,6 +144,7 @@ public static class MarkerFileService
         try
         {
             EnsureGitIgnored(workspacePath, logger);
+            await EnsureDefaultWikiConfigAsync(workspacePath, logger, ct).ConfigureAwait(false);
             var yaml = s_yamlSerializer.Serialize(marker);
             await File.WriteAllTextAsync(markerPath, yaml, ct).ConfigureAwait(false);
             logger?.LogInformation("Wrote MCP marker file: {Path}", markerPath);
@@ -150,6 +152,74 @@ public static class MarkerFileService
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
         {
             logger?.LogWarning(ex, "Failed to write MCP marker file: {Path}", markerPath);
+        }
+    }
+
+    private static async Task EnsureDefaultWikiConfigAsync(string workspacePath, ILogger? logger, CancellationToken ct)
+    {
+        var docsPath = Path.Combine(workspacePath, "docs");
+        var wikiConfigPath = Path.Combine(docsPath, "wiki.yaml");
+        if (File.Exists(wikiConfigPath))
+            return;
+
+        var tempPath = Path.Combine(docsPath, "wiki.yaml." + Guid.NewGuid().ToString("N")[..8] + ".tmp");
+        try
+        {
+            Directory.CreateDirectory(docsPath);
+            if (File.Exists(wikiConfigPath))
+                return;
+
+            var yaml = s_yamlSerializer.Serialize(BuildDefaultWikiConfig());
+            await File.WriteAllTextAsync(tempPath, yaml, ct).ConfigureAwait(false);
+            File.Move(tempPath, wikiConfigPath);
+            logger?.LogInformation("Wrote default MCP wiki export config: {Path}", wikiConfigPath);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
+        {
+            TryDeleteTempFile(tempPath, logger);
+            logger?.LogWarning(ex, "Failed to write default MCP wiki export config: {Path}", wikiConfigPath);
+        }
+    }
+
+    private static object BuildDefaultWikiConfig()
+    {
+        var documents = new[]
+        {
+            new MarkerDefaultWikiDocument("home", "Home", "generated:home", "Home.md"),
+            new MarkerDefaultWikiDocument("functional", "Functional Requirements", "generated:functional", "Functional-Requirements.md"),
+            new MarkerDefaultWikiDocument("technical", "Technical Requirements", "generated:technical", "Technical-Requirements.md"),
+            new MarkerDefaultWikiDocument("testing", "Testing Requirements", "generated:testing", "Testing-Requirements.md"),
+            new MarkerDefaultWikiDocument("mapping", "TR per FR Mapping", "generated:mapping", "TR-per-FR-Mapping.md"),
+            new MarkerDefaultWikiDocument("matrix", "Requirements Matrix", "generated:matrix", "Requirements-Matrix.md"),
+        };
+
+        return new MarkerDefaultWikiConfig
+        {
+            Schema = "mcp-wiki-export/v1",
+            Home = new MarkerDefaultWikiHome("home"),
+            Documents = documents,
+            Navigation =
+            [
+                new() { Document = "home" },
+                new() { Document = "functional" },
+                new() { Document = "technical" },
+                new() { Document = "testing" },
+                new() { Document = "mapping" },
+                new() { Document = "matrix" },
+            ],
+        };
+    }
+
+    private static void TryDeleteTempFile(string tempPath, ILogger? logger)
+    {
+        try
+        {
+            if (File.Exists(tempPath))
+                File.Delete(tempPath);
+        }
+        catch (Exception cleanupEx)
+        {
+            logger?.LogDebug(cleanupEx, "Failed to delete default MCP wiki export config temp file: {Path}", tempPath);
         }
     }
 
@@ -170,7 +240,7 @@ public static class MarkerFileService
         {
             var gitignorePath = Path.Combine(workspacePath, ".gitignore");
             var lines = File.Exists(gitignorePath) ? File.ReadAllLines(gitignorePath) : [];
-            var missingEntries = new[] { MarkerFileName, WorkspaceStateDirectoryGitIgnoreEntry }
+            var missingEntries = new[] { MarkerFileName, WorkspaceStateDirectoryGitIgnoreEntry, WorkspaceCacheDirectoryGitIgnoreEntry }
                 .Where(entry => !lines.Any(line => line.Trim().Equals(entry, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
@@ -633,6 +703,67 @@ internal sealed class MarkerFile
     public MarkerAgentPlugins? AgentPlugins { get; set; }
     [YamlMember(ScalarStyle = ScalarStyle.Literal)]
     public string Prompt { get; set; } = string.Empty;
+}
+
+internal sealed class MarkerDefaultWikiConfig
+{
+    public string Schema { get; set; } = string.Empty;
+
+    public MarkerDefaultWikiHome Home { get; set; } = new();
+
+    public IReadOnlyList<MarkerDefaultWikiDocument> Documents { get; set; } = [];
+
+    public IReadOnlyList<MarkerDefaultWikiNavigationItem> Navigation { get; set; } = [];
+}
+
+internal sealed class MarkerDefaultWikiHome
+{
+    public MarkerDefaultWikiHome()
+    {
+    }
+
+    public MarkerDefaultWikiHome(string document)
+    {
+        Document = document;
+    }
+
+    public string Document { get; set; } = string.Empty;
+}
+
+internal sealed class MarkerDefaultWikiDocument
+{
+    public MarkerDefaultWikiDocument()
+    {
+    }
+
+    public MarkerDefaultWikiDocument(string id, string title, string source, string target)
+    {
+        Id = id;
+        Title = title;
+        Source = source;
+        Target = target;
+    }
+
+    public string Id { get; set; } = string.Empty;
+
+    public string Title { get; set; } = string.Empty;
+
+    public string Source { get; set; } = string.Empty;
+
+    public string Target { get; set; } = string.Empty;
+
+    public string[] Platforms { get; set; } = ["github", "azure"];
+}
+
+internal sealed class MarkerDefaultWikiNavigationItem
+{
+    public string? Document { get; set; }
+
+    public string? Title { get; set; }
+
+    public string? Path { get; set; }
+
+    public IReadOnlyList<MarkerDefaultWikiNavigationItem> Children { get; set; } = [];
 }
 
 internal sealed class MarkerAgentPlugins

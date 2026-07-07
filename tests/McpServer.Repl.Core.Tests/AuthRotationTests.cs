@@ -19,9 +19,9 @@ public class AuthRotationTests
 
         authHandler.CurrentAuthState.Returns(newAuthState);
 
-        await authHandler.UpdateAuthStateAsync(markerData);
+        await authHandler.UpdateAuthStateAsync(markerData, cancellationToken: TestContext.Current.CancellationToken);
 
-        await authHandler.Received(1).UpdateAuthStateAsync(markerData, default);
+        await authHandler.Received(1).UpdateAuthStateAsync(markerData, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("new-rotated-key", authHandler.CurrentAuthState.ApiKey);
     }
 
@@ -30,11 +30,11 @@ public class AuthRotationTests
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
-        authHandler.UpdateAuthStateAsync(null!, default)
+        authHandler.UpdateAuthStateAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<Task>(x => throw new ArgumentNullException("newMarkerData"));
 
         await Assert.ThrowsAsync<ArgumentNullException>(
-            async () => await authHandler.UpdateAuthStateAsync(null!)
+            async () => await authHandler.UpdateAuthStateAsync(null!, cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -99,7 +99,7 @@ public class AuthRotationTests
         authHandler.RegisterAuthChangeCallback(callback1);
         authHandler.RegisterAuthChangeCallback(callback2);
 
-        await Task.Delay(10);
+        await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(callback1Invoked);
         Assert.True(callback2Invoked);
@@ -113,10 +113,10 @@ public class AuthRotationTests
         refreshedState.ApiKey.Returns("refreshed-key");
         refreshedState.LastUpdated.Returns(DateTimeOffset.UtcNow);
 
-        authHandler.RefreshAuthStateAsync("/home/user/project", default)
+        authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(refreshedState);
 
-        var result = await authHandler.RefreshAuthStateAsync("/home/user/project");
+        var result = await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("refreshed-key", result.ApiKey);
@@ -127,11 +127,11 @@ public class AuthRotationTests
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
-        authHandler.RefreshAuthStateAsync("/home/user/project", default)
+        authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IAuthState>(x => throw new FileNotFoundException("Marker file not found"));
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await authHandler.RefreshAuthStateAsync("/home/user/project")
+            async () => await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -140,11 +140,11 @@ public class AuthRotationTests
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
-        authHandler.RefreshAuthStateAsync("/home/user/project", default)
+        authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IAuthState>(x => throw new FormatException("Invalid marker file format"));
 
         await Assert.ThrowsAsync<FormatException>(
-            async () => await authHandler.RefreshAuthStateAsync("/home/user/project")
+            async () => await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -153,9 +153,9 @@ public class AuthRotationTests
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
-        authHandler.ValidateAuthStateAsync(default).Returns(true);
+        authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken).Returns(true);
 
-        var result = await authHandler.ValidateAuthStateAsync();
+        var result = await authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result);
     }
@@ -165,9 +165,9 @@ public class AuthRotationTests
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
-        authHandler.ValidateAuthStateAsync(default).Returns(false);
+        authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken).Returns(false);
 
-        var result = await authHandler.ValidateAuthStateAsync();
+        var result = await authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result);
     }
@@ -177,9 +177,9 @@ public class AuthRotationTests
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
 
-        authHandler.ValidateAuthStateAsync(default).Returns(false);
+        authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken).Returns(false);
 
-        var result = await authHandler.ValidateAuthStateAsync();
+        var result = await authHandler.ValidateAuthStateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result);
     }
@@ -232,10 +232,10 @@ public class AuthRotationTests
         var refreshedState = Substitute.For<IAuthState>();
         refreshedState.ApiKey.Returns("refreshed-after-401");
 
-        authHandler.RefreshAuthStateAsync("/home/user/project", default)
+        authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(refreshedState);
 
-        var result = await authHandler.RefreshAuthStateAsync("/home/user/project");
+        var result = await authHandler.RefreshAuthStateAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("refreshed-after-401", result.ApiKey);
@@ -282,10 +282,10 @@ public class AuthRotationTests
 
         authHandler.CurrentAuthState.Returns(state1, state2);
 
-        await authHandler.UpdateAuthStateAsync(markerData1);
+        await authHandler.UpdateAuthStateAsync(markerData1, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("key-rotation-1", authHandler.CurrentAuthState.ApiKey);
 
-        await authHandler.UpdateAuthStateAsync(markerData2);
+        await authHandler.UpdateAuthStateAsync(markerData2, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("key-rotation-2", authHandler.CurrentAuthState.ApiKey);
     }
 }

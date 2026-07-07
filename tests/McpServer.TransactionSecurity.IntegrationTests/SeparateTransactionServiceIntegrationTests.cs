@@ -39,8 +39,8 @@ public sealed class SeparateTransactionServiceIntegrationTests
         var manifest = await harness.SignManifestAsync("txn-separate-valid", sequence: 10, nonce: "nonce-separate-valid")
             .ConfigureAwait(true);
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest)).ConfigureAwait(true);
-        var status = await harness.Subscriber.GetTransactionStatusAsync("txn-separate-valid").ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var status = await harness.Subscriber.GetTransactionStatusAsync("txn-separate-valid", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", commit.Status);
         Assert.Equal(TransactionFailureReason.None, commit.Reason);
@@ -60,8 +60,8 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
         var response = await harness.SubscriberHttp.PostAsJsonAsync(
             "mcpserver/subscriber/diffgrams/commit",
-            CreateCommitRequest(manifest)).ConfigureAwait(true);
-        var body = await response.Content.ReadFromJsonAsync<DiffgramCommitResponse>().ConfigureAwait(true);
+            CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var body = await response.Content.ReadFromJsonAsync<DiffgramCommitResponse>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull(body);
@@ -79,12 +79,12 @@ public sealed class SeparateTransactionServiceIntegrationTests
             .ConfigureAwait(true);
         var first = await harness.SignManifestAsync("txn-separate-sequence-2", sequence: 13, nonce: "nonce-separate-sequence-2")
             .ConfigureAwait(true);
-        await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(first)).ConfigureAwait(true);
+        await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(first), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var response = await harness.SubscriberHttp.PostAsJsonAsync(
             "mcpserver/subscriber/diffgrams/commit",
-            CreateCommitRequest(stale)).ConfigureAwait(true);
-        var body = await response.Content.ReadFromJsonAsync<DiffgramCommitResponse>().ConfigureAwait(true);
+            CreateCommitRequest(stale), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var body = await response.Content.ReadFromJsonAsync<DiffgramCommitResponse>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull(body);
@@ -103,9 +103,9 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
         var response = await harness.KeyServerHttp.PostAsJsonAsync(
             "mcpserver/keyserver/manifests/sign",
-            CreateSignRequest("txn-separate-sign-replay-2", sequence: 21, nonce: "nonce-separate-sign-replay"))
+            CreateSignRequest("txn-separate-sign-replay-2", sequence: 21, nonce: "nonce-separate-sign-replay"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        var body = await response.Content.ReadFromJsonAsync<TransactionManifestSignResponse>().ConfigureAwait(true);
+        var body = await response.Content.ReadFromJsonAsync<TransactionManifestSignResponse>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull(body);
@@ -124,9 +124,9 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
         var response = await harness.KeyServerHttp.PostAsJsonAsync(
             "mcpserver/keyserver/manifests/sign",
-            CreateSignRequest("txn-separate-sign-stale-2", sequence: 29, nonce: "nonce-separate-sign-stale-2"))
+            CreateSignRequest("txn-separate-sign-stale-2", sequence: 29, nonce: "nonce-separate-sign-stale-2"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        var body = await response.Content.ReadFromJsonAsync<TransactionManifestSignResponse>().ConfigureAwait(true);
+        var body = await response.Content.ReadFromJsonAsync<TransactionManifestSignResponse>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull(body);
@@ -146,7 +146,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             .ConfigureAwait(true);
 
         var report = await harness.KeyServerHttp.GetFromJsonAsync<TransactionManifestTraceReport>(
-            "mcpserver/keyserver/manifests/report?publisherPartyId=publisher-1&subscriberPartyId=subscriber-1&status=signed&limit=1")
+            "mcpserver/keyserver/manifests/report?publisherPartyId=publisher-1&subscriberPartyId=subscriber-1&status=signed&limit=1", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.NotNull(report);
@@ -174,8 +174,8 @@ public sealed class SeparateTransactionServiceIntegrationTests
 
         var response = await harness.SubscriberHttp.PostAsJsonAsync(
             "mcpserver/subscriber/diffgrams/commit",
-            request).ConfigureAwait(true);
-        var body = await response.Content.ReadFromJsonAsync<DiffgramCommitResponse>().ConfigureAwait(true);
+            request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var body = await response.Content.ReadFromJsonAsync<DiffgramCommitResponse>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull(body);
@@ -200,7 +200,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
         });
         var protector = new TransactionDiffgramProtector();
         await harness.RegisterStandardPartiesAsync(firstKeyPair, SubscriberEncryptionKeyId).ConfigureAwait(true);
-        var firstEncryptionKey = await harness.KeyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId)
+        var firstEncryptionKey = await harness.KeyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(firstEncryptionKey);
         var firstProtectedDiffgram = protector.Protect(
@@ -215,7 +215,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             SubscriberEncryptionKeyId).ConfigureAwait(true);
 
         await harness.RegisterSubscriberAsync(rotatedKeyPair, RotatedSubscriberEncryptionKeyId).ConfigureAwait(true);
-        var rotatedEncryptionKey = await harness.KeyServer.GetPartyKeyAsync(SubscriberPartyId, RotatedSubscriberEncryptionKeyId)
+        var rotatedEncryptionKey = await harness.KeyServer.GetPartyKeyAsync(SubscriberPartyId, RotatedSubscriberEncryptionKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(rotatedEncryptionKey);
         var rotatedProtectedDiffgram = protector.Protect(
@@ -229,9 +229,9 @@ public sealed class SeparateTransactionServiceIntegrationTests
             rotatedProtectedDiffgram.EncryptedBodySha256,
             RotatedSubscriberEncryptionKeyId).ConfigureAwait(true);
 
-        var firstCommit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(firstManifest, firstProtectedDiffgram))
+        var firstCommit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(firstManifest, firstProtectedDiffgram), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
-        var rotatedCommit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(rotatedManifest, rotatedProtectedDiffgram))
+        var rotatedCommit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(rotatedManifest, rotatedProtectedDiffgram), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("committed", firstCommit.Status);
@@ -250,9 +250,9 @@ public sealed class SeparateTransactionServiceIntegrationTests
         var publisherSigningPrivatePath = workspace.GetPath("publisher-signing-private.pem");
         var subscriberEncryptionPublicPath = workspace.GetPath("subscriber-encryption-public.pem");
         var subscriberEncryptionPrivatePath = workspace.GetPath("subscriber-encryption-private.pem");
-        await File.WriteAllTextAsync(publisherSigningPrivatePath, publisherSigningKey.PrivateKeyPem).ConfigureAwait(true);
-        await File.WriteAllTextAsync(subscriberEncryptionPublicPath, subscriberEncryptionKey.PublicKeyPem).ConfigureAwait(true);
-        await File.WriteAllTextAsync(subscriberEncryptionPrivatePath, subscriberEncryptionKey.PrivateKeyPem).ConfigureAwait(true);
+        await File.WriteAllTextAsync(publisherSigningPrivatePath, publisherSigningKey.PrivateKeyPem, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await File.WriteAllTextAsync(subscriberEncryptionPublicPath, subscriberEncryptionKey.PublicKeyPem, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await File.WriteAllTextAsync(subscriberEncryptionPrivatePath, subscriberEncryptionKey.PrivateKeyPem, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         using var harness = CreateHarness(
             keyServerConfiguration: new Dictionary<string, string?>
@@ -274,7 +274,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
                 ["Mcp:Subscriber:EncryptionKeys:0:PrivateKeyPemFile"] = subscriberEncryptionPrivatePath,
             });
         var protector = new TransactionDiffgramProtector();
-        var configuredEncryptionKey = await harness.KeyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId)
+        var configuredEncryptionKey = await harness.KeyServer.GetPartyKeyAsync(SubscriberPartyId, SubscriberEncryptionKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(configuredEncryptionKey);
         var protectedDiffgram = protector.Protect(
@@ -289,7 +289,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             SubscriberEncryptionKeyId,
             ExternalPublisherSigningKeyId).ConfigureAwait(true);
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest, protectedDiffgram))
+        var commit = await harness.Subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest, protectedDiffgram), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("committed", commit.Status);
@@ -310,12 +310,12 @@ public sealed class SeparateTransactionServiceIntegrationTests
         {
             PartyId = PublisherPartyId,
             Role = "publisher",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await keyServer.RegisterPartyAsync(new McpServer.TransactionSecurity.Models.PartyRegistrationRequest
         {
             PartyId = SubscriberPartyId,
             Role = "subscriber",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
             .WithWebHostBuilder(builder =>
             {
@@ -361,7 +361,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             CancellationToken.None).ConfigureAwait(true);
         var status = await subscriberHttp
             .GetFromJsonAsync<McpServer.TransactionSecurity.Models.TransactionStatusResponse>(
-                "mcpserver/subscriber/transactions/txn-http-pubsub-host/status")
+                "mcpserver/subscriber/transactions/txn-http-pubsub-host/status", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("committed", result.Status);
@@ -382,12 +382,12 @@ public sealed class SeparateTransactionServiceIntegrationTests
         {
             PartyId = PublisherPartyId,
             Role = "publisher",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await keyServer.RegisterPartyAsync(new McpServer.TransactionSecurity.Models.PartyRegistrationRequest
         {
             PartyId = SubscriberPartyId,
             Role = "subscriber",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var blockingSubscriber = new BlockingSubscriberCommitService();
         using var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
             .WithWebHostBuilder(builder =>
@@ -451,7 +451,7 @@ public sealed class SeparateTransactionServiceIntegrationTests
             DiffgramId = $"diffgram-{commitRequest.Manifest.TransactionId}",
             CommittedAtUtc = DateTimeOffset.UtcNow,
         });
-        var result = await execution.WaitAsync(TimeSpan.FromSeconds(10)).ConfigureAwait(true);
+        var result = await execution.WaitAsync(TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", result.Status);
         Assert.False(result.Degraded);
@@ -470,12 +470,12 @@ public sealed class SeparateTransactionServiceIntegrationTests
         {
             PartyId = PublisherPartyId,
             Role = "publisher",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         await keyServer.RegisterPartyAsync(new McpServer.TransactionSecurity.Models.PartyRegistrationRequest
         {
             PartyId = SubscriberPartyId,
             Role = "subscriber",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var subscriberFactory = new WebApplicationFactory<SubscriberEntryPoint>()
             .WithWebHostBuilder(builder =>
             {

@@ -289,7 +289,7 @@ public sealed class InteractionLoggingMiddlewareTests
         // Verify the response was copied to the original stream
         originalBody.Position = 0;
         using var reader = new StreamReader(originalBody);
-        var writtenContent = await reader.ReadToEndAsync().ConfigureAwait(true);
+        var writtenContent = await reader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(responseJson, writtenContent);
     }
 

@@ -38,7 +38,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
 
         using (db)
         {
-            var result = await sut.CreateAsync(CreateRequest()).ConfigureAwait(true);
+            var result = await sut.CreateAsync(CreateRequest(), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.False(result.Success);
             Assert.Contains("signing failed", result.Error, StringComparison.Ordinal);
@@ -74,7 +74,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
 
         using (db)
         {
-            var result = await sut.CreateAsync(CreateRequest()).ConfigureAwait(true);
+            var result = await sut.CreateAsync(CreateRequest(), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.False(result.Success);
             Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
@@ -123,7 +123,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
                         Tags: ["beta", "gamma"],
                         ParameterSchema: """{"type":"string"}""",
                         CommandTemplate: "pwsh -File updated.ps1",
-                        WorkspacePath: @"E:\tests\other-workspace"))
+                        WorkspacePath: @"E:\tests\other-workspace"), ct: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
 
             Assert.False(result.Success);
@@ -162,7 +162,7 @@ public sealed class TransactionGatedToolRegistryServiceTests
 
         using (db)
         {
-            var result = await sut.DeleteAsync(toolId).ConfigureAwait(true);
+            var result = await sut.DeleteAsync(toolId, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.False(result.Success);
             Assert.Contains("Rollback completed", result.Error, StringComparison.Ordinal);
@@ -192,9 +192,9 @@ public sealed class TransactionGatedToolRegistryServiceTests
 
         using (db)
         {
-            var search = await sut.SearchAsync("alpha").ConfigureAwait(true);
-            var list = await sut.ListAsync().ConfigureAwait(true);
-            var tool = await sut.GetAsync(toolId).ConfigureAwait(true);
+            var search = await sut.SearchAsync("alpha", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var list = await sut.ListAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var tool = await sut.GetAsync(toolId, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Single(search.Tools);
             Assert.Single(list.Tools);

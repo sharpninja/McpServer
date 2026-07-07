@@ -15,9 +15,9 @@ public class MarkerFileTrustTests
         markerData.ApiKey.Returns("test-api-key-123");
         markerData.WorkspaceId.Returns("/home/user/project");
 
-        reader.ReadAsync("/home/user/project", default).Returns(markerData);
+        reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken).Returns(markerData);
 
-        var result = await reader.ReadAsync("/home/user/project");
+        var result = await reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("/home/user/project", result.WorkspacePath);
@@ -30,11 +30,11 @@ public class MarkerFileTrustTests
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
-        reader.ReadAsync("/nonexistent/path", default)
+        reader.ReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IMarkerFileData>(x => throw new FileNotFoundException("Marker file not found"));
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await reader.ReadAsync("/nonexistent/path")
+            async () => await reader.ReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -43,11 +43,11 @@ public class MarkerFileTrustTests
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
-        reader.ReadAsync("/home/user/project", default)
+        reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IMarkerFileData>(x => throw new FormatException("Invalid YAML format"));
 
         await Assert.ThrowsAsync<FormatException>(
-            async () => await reader.ReadAsync("/home/user/project")
+            async () => await reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -56,11 +56,11 @@ public class MarkerFileTrustTests
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
-        reader.ReadAsync("/home/user/project", default)
+        reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IMarkerFileData>(x => throw new FormatException("Missing required field: serverUrl"));
 
         await Assert.ThrowsAsync<FormatException>(
-            async () => await reader.ReadAsync("/home/user/project")
+            async () => await reader.ReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -71,10 +71,10 @@ public class MarkerFileTrustTests
         var markerData = Substitute.For<IMarkerFileData>();
         markerData.WorkspacePath.Returns("/home/user/project");
 
-        reader.TryReadAsync("/home/user/project", default)
+        reader.TryReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns((true, markerData));
 
-        var (success, data) = await reader.TryReadAsync("/home/user/project");
+        var (success, data) = await reader.TryReadAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(success);
         Assert.NotNull(data);
@@ -86,10 +86,10 @@ public class MarkerFileTrustTests
     {
         var reader = Substitute.For<IMarkerFileReader>();
 
-        reader.TryReadAsync("/nonexistent/path", default)
+        reader.TryReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken)
             .Returns((false, (IMarkerFileData?)null));
 
-        var (success, data) = await reader.TryReadAsync("/nonexistent/path");
+        var (success, data) = await reader.TryReadAsync("/nonexistent/path", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(success);
         Assert.Null(data);
@@ -103,10 +103,10 @@ public class MarkerFileTrustTests
         trustResult.IsTrusted.Returns(true);
         trustResult.TrustMethod.Returns("registry_cached");
 
-        reader.VerifyTrustAsync("/home/user/project", true, default)
+        reader.VerifyTrustAsync("/home/user/project", true, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
-        var result = await reader.VerifyTrustAsync("/home/user/project");
+        var result = await reader.VerifyTrustAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
@@ -122,10 +122,10 @@ public class MarkerFileTrustTests
         trustResult.TrustMethod.Returns("not_trusted");
         trustResult.DenialReason.Returns("User declined trust prompt");
 
-        reader.VerifyTrustAsync("/home/user/project", true, default)
+        reader.VerifyTrustAsync("/home/user/project", true, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
-        var result = await reader.VerifyTrustAsync("/home/user/project", requireUserConfirmation: true);
+        var result = await reader.VerifyTrustAsync("/home/user/project", requireUserConfirmation: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.False(result.IsTrusted);
@@ -140,10 +140,10 @@ public class MarkerFileTrustTests
         trustResult.IsTrusted.Returns(true);
         trustResult.TrustMethod.Returns("signature_verified");
 
-        reader.VerifyTrustAsync("/home/user/project", false, default)
+        reader.VerifyTrustAsync("/home/user/project", false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
-        var result = await reader.VerifyTrustAsync("/home/user/project", requireUserConfirmation: false);
+        var result = await reader.VerifyTrustAsync("/home/user/project", requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
@@ -158,10 +158,10 @@ public class MarkerFileTrustTests
         trustResult.IsTrusted.Returns(false);
         trustResult.TrustMethod.Returns("not_trusted");
 
-        reader.VerifyTrustAsync("/home/user/project", false, default)
+        reader.VerifyTrustAsync("/home/user/project", false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(trustResult);
 
-        var result = await reader.VerifyTrustAsync("/home/user/project", requireUserConfirmation: false);
+        var result = await reader.VerifyTrustAsync("/home/user/project", requireUserConfirmation: false, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.False(result.IsTrusted);
@@ -183,7 +183,7 @@ public class MarkerFileTrustTests
             await Task.CompletedTask;
         };
 
-        reader.WatchAsync("/home/user/project", callback, default)
+        reader.WatchAsync("/home/user/project", callback, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(callInfo =>
             {
 #pragma warning disable CS8602
@@ -192,7 +192,7 @@ public class MarkerFileTrustTests
 #pragma warning restore CS8602
             });
 
-        await reader.WatchAsync("/home/user/project", callback);
+        await reader.WatchAsync("/home/user/project", callback, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(callbackInvoked);
     }
@@ -238,10 +238,10 @@ public class MarkerFileTrustTests
         var trustService = Substitute.For<ITrustBootstrapService>();
         var markerData = Substitute.For<IMarkerFileData>();
 
-        trustService.PromptUserTrustAsync("/home/user/project", markerData, default)
+        trustService.PromptUserTrustAsync("/home/user/project", markerData, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(true);
 
-        var result = await trustService.PromptUserTrustAsync("/home/user/project", markerData);
+        var result = await trustService.PromptUserTrustAsync("/home/user/project", markerData, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result);
     }
@@ -251,9 +251,9 @@ public class MarkerFileTrustTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
-        await trustService.RecordTrustDecisionAsync("/home/user/project", true);
+        await trustService.RecordTrustDecisionAsync("/home/user/project", true, cancellationToken: TestContext.Current.CancellationToken);
 
-        await trustService.Received(1).RecordTrustDecisionAsync("/home/user/project", true, default);
+        await trustService.Received(1).RecordTrustDecisionAsync("/home/user/project", true, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -261,10 +261,10 @@ public class MarkerFileTrustTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
-        trustService.GetTrustDecisionAsync("/home/user/project", default)
+        trustService.GetTrustDecisionAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns((true, true));
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync("/home/user/project");
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(hasDecision);
         Assert.True(isTrusted);
@@ -275,9 +275,9 @@ public class MarkerFileTrustTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
-        await trustService.RevokeTrustAsync("/home/user/project");
+        await trustService.RevokeTrustAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
-        await trustService.Received(1).RevokeTrustAsync("/home/user/project", default);
+        await trustService.Received(1).RevokeTrustAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -291,10 +291,10 @@ public class MarkerFileTrustTests
         var workspace2 = Substitute.For<ITrustedWorkspace>();
         workspace2.WorkspacePath.Returns("/home/user/project2");
 
-        trustService.ListTrustedWorkspacesAsync(default)
+        trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken)
             .Returns(new[] { workspace1, workspace2 });
 
-        var result = await trustService.ListTrustedWorkspacesAsync();
+        var result = await trustService.ListTrustedWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.Count);

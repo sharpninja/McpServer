@@ -25,7 +25,7 @@ public sealed class BrainSlotInvocationTransactionTests
         {
             Input = "find gaps",
             TurnId = "turn-1",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Equal(BrainSlotReasonCodes.ExecutionDisabled, response.Reason);
@@ -44,7 +44,7 @@ public sealed class BrainSlotInvocationTransactionTests
             Input = "analyze",
             TurnId = "turn-1",
             AdmitToGraphRag = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Equal(BrainSlotReasonCodes.DeferredFeatureDisabled, response.Reason);
@@ -76,13 +76,13 @@ public sealed class BrainSlotInvocationTransactionTests
             Input = "find gaps",
             TurnId = "turn-1",
             AdmitToGraphRag = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Equal(BrainSlotReasonCodes.CommitFailed, response.Reason);
         Assert.Equal("txn-fail", response.TransactionId);
         Assert.Null(response.Output);
-        await fixture.ContextAdmission.DidNotReceiveWithAnyArgs().AdmitAsync(default!, default!, default!, default)
+        await fixture.ContextAdmission.DidNotReceiveWithAnyArgs().AdmitAsync(default!, default!, default!, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
     }
 
@@ -111,7 +111,7 @@ public sealed class BrainSlotInvocationTransactionTests
             TurnId = "turn-1",
             AdmitToGraphRag = true,
             Metadata = new Dictionary<string, string> { ["source"] = "test" },
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", response.Status);
         Assert.Equal("txn-commit", response.TransactionId);

@@ -33,7 +33,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
             RequestId = SeedRequestId,
             Status = "completed",
             Actions = [new UnifiedActionDto { Order = 0, Description = "kept", Status = "completed" }],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, put.StatusCode);
 
         var turn = await GetTurnAsync(sessionId).ConfigureAwait(true);
@@ -51,7 +51,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
         {
             RequestId = SeedRequestId,
             Tags = ["added"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, patch.StatusCode);
 
         var turn = await GetTurnAsync(sessionId).ConfigureAwait(true);
@@ -69,7 +69,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
         {
             RequestId = SeedRequestId,
             Tags = ["only"],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, put.StatusCode);
 
         var turn = await GetTurnAsync(sessionId).ConfigureAwait(true);
@@ -82,7 +82,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
-        var put = await _client.PutAsJsonAsync(SectionUri(sessionId, "bogus"), new UnifiedRequestEntryDto { RequestId = SeedRequestId }).ConfigureAwait(true);
+        var put = await _client.PutAsJsonAsync(SectionUri(sessionId, "bogus"), new UnifiedRequestEntryDto { RequestId = SeedRequestId }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, put.StatusCode);
     }
 
@@ -91,7 +91,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
-        var del = await _client.DeleteAsync(SectionUri(sessionId, "commits")).ConfigureAwait(true);
+        var del = await _client.DeleteAsync(SectionUri(sessionId, "commits"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, del.StatusCode);
 
         var turn = await GetTurnAsync(sessionId).ConfigureAwait(true);
@@ -103,7 +103,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
-        var del = await _client.DeleteAsync(new Uri($"{SectionUri(sessionId, "tags")}/items/{Uri.EscapeDataString("t-b")}", UriKind.Relative)).ConfigureAwait(true);
+        var del = await _client.DeleteAsync(new Uri($"{SectionUri(sessionId, "tags")}/items/{Uri.EscapeDataString("t-b")}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, del.StatusCode);
 
         var turn = await GetTurnAsync(sessionId).ConfigureAwait(true);
@@ -115,7 +115,7 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
-        var del = await _client.DeleteAsync(TurnUri(sessionId)).ConfigureAwait(true);
+        var del = await _client.DeleteAsync(TurnUri(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, del.StatusCode);
 
         var session = await GetSessionAsync(sessionId).ConfigureAwait(true);
@@ -128,17 +128,17 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
     {
         var sessionId = await SeedAsync().ConfigureAwait(true);
 
-        var del = await _client.DeleteAsync(SessionUri(sessionId)).ConfigureAwait(true);
+        var del = await _client.DeleteAsync(SessionUri(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, del.StatusCode);
 
-        var get = await _client.GetAsync(SessionUri(sessionId)).ConfigureAwait(true);
+        var get = await _client.GetAsync(SessionUri(sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, get.StatusCode);
     }
 
     [Fact]
     public async Task DeleteSession_Missing_Returns404()
     {
-        var del = await _client.DeleteAsync(SessionUri(BuildSessionId($"absent-{Guid.NewGuid():N}"))).ConfigureAwait(true);
+        var del = await _client.DeleteAsync(SessionUri(BuildSessionId($"absent-{Guid.NewGuid():N}")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, del.StatusCode);
     }
 

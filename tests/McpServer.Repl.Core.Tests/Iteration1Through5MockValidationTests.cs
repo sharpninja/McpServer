@@ -37,11 +37,11 @@ public class Iteration1Through5MockValidationTests
         trustService.GetTrustDecisionAsync(workspacePath, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult((true, true)));
 
-        var result = await markerReader.ReadAsync(workspacePath);
+        var result = await markerReader.ReadAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal(workspacePath, result.WorkspacePath);
 
-        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
+        var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(hasDecision);
         Assert.True(isTrusted);
     }
@@ -60,7 +60,7 @@ public class Iteration1Through5MockValidationTests
         authHandler.UpdateAuthStateAsync(markerData, Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
 
-        await authHandler.UpdateAuthStateAsync(markerData);
+        await authHandler.UpdateAuthStateAsync(markerData, cancellationToken: TestContext.Current.CancellationToken);
 
         await authHandler.Received(1).UpdateAuthStateAsync(markerData, Arg.Any<CancellationToken>());
     }
@@ -80,7 +80,7 @@ public class Iteration1Through5MockValidationTests
         workflow.OpenSessionAsync("Copilot", "Copilot-20260304T120000Z-test", "Test Session", "gpt-4", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
 
-        await workflow.OpenSessionAsync("Copilot", "Copilot-20260304T120000Z-test", "Test Session", "gpt-4");
+        await workflow.OpenSessionAsync("Copilot", "Copilot-20260304T120000Z-test", "Test Session", "gpt-4", cancellationToken: TestContext.Current.CancellationToken);
 
         await workflow.Received(1).OpenSessionAsync("Copilot", "Copilot-20260304T120000Z-test", "Test Session", "gpt-4", Arg.Any<CancellationToken>());
     }
@@ -96,7 +96,7 @@ public class Iteration1Through5MockValidationTests
         workflow.BeginTurnAsync("req-20260304T120000Z-test-001", "Test query", "Full query text", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
 
-        await workflow.BeginTurnAsync("req-20260304T120000Z-test-001", "Test query", "Full query text");
+        await workflow.BeginTurnAsync("req-20260304T120000Z-test-001", "Test query", "Full query text", cancellationToken: TestContext.Current.CancellationToken);
 
         await workflow.Received(1).BeginTurnAsync("req-20260304T120000Z-test-001", "Test query", "Full query text", Arg.Any<CancellationToken>());
     }
@@ -112,7 +112,7 @@ public class Iteration1Through5MockValidationTests
         workflow.CompleteTurnAsync("Response text", Arg.Any<CancellationToken>())
             .Returns(Task.CompletedTask);
 
-        await workflow.CompleteTurnAsync("Response text");
+        await workflow.CompleteTurnAsync("Response text", cancellationToken: TestContext.Current.CancellationToken);
 
         await workflow.Received(1).CompleteTurnAsync("Response text", Arg.Any<CancellationToken>());
     }
@@ -135,7 +135,7 @@ public class Iteration1Through5MockValidationTests
         workflow.CreateAsync(createRequest, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await workflow.CreateAsync(createRequest);
+        var result = await workflow.CreateAsync(createRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -154,7 +154,7 @@ public class Iteration1Through5MockValidationTests
         workflow.QueryAsync(null, null, null, null, null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(queryResult));
 
-        var result = await workflow.QueryAsync();
+        var result = await workflow.QueryAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
@@ -174,7 +174,7 @@ public class Iteration1Through5MockValidationTests
         workflow.UpdateAsync("TODO-TEST-001", updateRequest, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(mutationResult));
 
-        var result = await workflow.UpdateAsync("TODO-TEST-001", updateRequest);
+        var result = await workflow.UpdateAsync("TODO-TEST-001", updateRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -198,7 +198,7 @@ public class Iteration1Through5MockValidationTests
         workflow.CreateFrAsync(createRequest, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(createResult));
 
-        var result = await workflow.CreateFrAsync(createRequest);
+        var result = await workflow.CreateFrAsync(createRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -217,7 +217,7 @@ public class Iteration1Through5MockValidationTests
         workflow.ListFrAsync("MCP", null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(queryResult));
 
-        var result = await workflow.ListFrAsync("MCP");
+        var result = await workflow.ListFrAsync("MCP", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.TotalCount);
@@ -237,7 +237,7 @@ public class Iteration1Through5MockValidationTests
         workflow.UpdateFrAsync(updateRequest, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(updateResult));
 
-        var result = await workflow.UpdateFrAsync(updateRequest);
+        var result = await workflow.UpdateFrAsync(updateRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -273,7 +273,7 @@ public class Iteration1Through5MockValidationTests
         passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var searchResult = result as ContextSearchResult;
@@ -306,7 +306,7 @@ public class Iteration1Through5MockValidationTests
         passthrough.InvokeAsync("github", "ListIssuesAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await passthrough.InvokeAsync("github", "ListIssuesAsync", args);
+        var result = await passthrough.InvokeAsync("github", "ListIssuesAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var issueResult = result as GitHubIssueListResult;
@@ -337,7 +337,7 @@ public class Iteration1Through5MockValidationTests
         passthrough.InvokeAsync("repo", "ReadFileAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await passthrough.InvokeAsync("repo", "ReadFileAsync", args);
+        var result = await passthrough.InvokeAsync("repo", "ReadFileAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var fileResult = result as RepoFileReadResult;
@@ -370,7 +370,7 @@ public class Iteration1Through5MockValidationTests
         passthrough.InvokeAsync("desktop", "LaunchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(expectedResult));
 
-        var result = await passthrough.InvokeAsync("desktop", "LaunchAsync", args);
+        var result = await passthrough.InvokeAsync("desktop", "LaunchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         var launchResult = result as DesktopLaunchResult;
@@ -395,7 +395,7 @@ public class Iteration1Through5MockValidationTests
         passthrough.InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await passthrough.InvokeAsync("context", "SearchAsync", args);
+        var result = await passthrough.InvokeAsync("context", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await passthrough.Received(1).InvokeAsync("context", "SearchAsync", args, Arg.Any<CancellationToken>());
@@ -415,7 +415,7 @@ public class Iteration1Through5MockValidationTests
             .Returns<object?>(x => throw new System.InvalidOperationException("Unknown client: unknownclient"));
 
         await Assert.ThrowsAsync<System.InvalidOperationException>(
-            async () => await passthrough.InvokeAsync("unknownclient", "SomeMethod", args));
+            async () => await passthrough.InvokeAsync("unknownclient", "SomeMethod", args, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     /// <summary>
@@ -435,7 +435,7 @@ public class Iteration1Through5MockValidationTests
         passthrough.InvokeAsync("CoNtExT", "SearchAsync", args, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<object?>(new ContextSearchResult()));
 
-        var result = await passthrough.InvokeAsync("CoNtExT", "SearchAsync", args);
+        var result = await passthrough.InvokeAsync("CoNtExT", "SearchAsync", args, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         await passthrough.Received(1).InvokeAsync("CoNtExT", "SearchAsync", args, Arg.Any<CancellationToken>());

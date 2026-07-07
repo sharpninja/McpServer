@@ -44,9 +44,9 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     [Fact]
     public async Task GetSources_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/context/sources", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/context/sources", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("sources", out var sources));
         Assert.Equal(JsonValueKind.Array, sources.ValueKind);
@@ -58,9 +58,9 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     {
         // Use a query that cannot match any chunk (avoids dependence on DB state / test order).
         var request = new { queryId = "test-1", query = "xyznonexistentquery123", limit = 10 };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response.EnsureSuccessStatusCode();
-        var pack = await response.Content.ReadFromJsonAsync<ContextPack>().ConfigureAwait(true);
+        var pack = await response.Content.ReadFromJsonAsync<ContextPack>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(pack);
         Assert.Equal("test-1", pack.QueryId);
         Assert.NotNull(pack.Chunks);
@@ -74,7 +74,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     public async Task Search_ReturnsOk()
     {
         var request = new { query = "test", limit = 5 };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/search", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/search", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -95,10 +95,10 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsJsonAsync(new Uri("/mcpserver/context/search", UriKind.Relative), new { query = "test", limit = 5 }).ConfigureAwait(true);
+        var response = await client.PostAsJsonAsync(new Uri("/mcpserver/context/search", UriKind.Relative), new { query = "test", limit = 5 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response.EnsureSuccessStatusCode();
 
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("graphRag", out var graphRag));
         Assert.True(graphRag.TryGetProperty("backend", out _));
@@ -123,10 +123,10 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
         var response = await client.PostAsJsonAsync(
             new Uri("/mcpserver/context/search", UriKind.Relative),
-            new { query = string.Empty, limit = 5 }).ConfigureAwait(true);
+            new { query = string.Empty, limit = 5 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response.EnsureSuccessStatusCode();
 
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("graphRag", out var graphRag));
         Assert.True(graphRag.TryGetProperty("backend", out var backend));
@@ -154,10 +154,10 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
         var response = await client.PostAsJsonAsync(
             new Uri("/mcpserver/context/search", UriKind.Relative),
-            new { query = "test", limit = 5, sourceType = "repo" }).ConfigureAwait(true);
+            new { query = "test", limit = 5, sourceType = "repo" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response.EnsureSuccessStatusCode();
 
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("graphRag", out var graphRag));
         Assert.True(graphRag.TryGetProperty("reason", out var reason));
@@ -198,17 +198,17 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
                 TokenCount = 4,
                 ChunkIndex = 1
             });
-            await db.SaveChangesAsync().ConfigureAwait(true);
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         var request = new { queryId = "det-query-1", query = "content", limit = 10 };
-        var response1 = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request).ConfigureAwait(true);
-        var response2 = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request).ConfigureAwait(true);
+        var response1 = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var response2 = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response1.EnsureSuccessStatusCode();
         response2.EnsureSuccessStatusCode();
 
-        var pack1 = await response1.Content.ReadFromJsonAsync<ContextPack>().ConfigureAwait(true);
-        var pack2 = await response2.Content.ReadFromJsonAsync<ContextPack>().ConfigureAwait(true);
+        var pack1 = await response1.Content.ReadFromJsonAsync<ContextPack>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var pack2 = await response2.Content.ReadFromJsonAsync<ContextPack>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(pack1);
         Assert.NotNull(pack2);
         Assert.Equal(pack1.QueryId, pack2.QueryId);
@@ -220,7 +220,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     [Fact]
     public async Task IngestWebsite_MissingUrl_ReturnsBadRequest()
     {
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/ingest-website", UriKind.Relative), new { includeSubpages = true }).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/ingest-website", UriKind.Relative), new { includeSubpages = true }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -241,23 +241,23 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var request = new { url = "https://example.com/docs", maxPages = 1, maxDepth = 0, maxBytesPerPage = 12000 };
-        var response1 = await client.PostAsJsonAsync(new Uri("/mcpserver/context/ingest-website", UriKind.Relative), request).ConfigureAwait(true);
+        var response1 = await client.PostAsJsonAsync(new Uri("/mcpserver/context/ingest-website", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response1.EnsureSuccessStatusCode();
 
-        var response2 = await client.PostAsJsonAsync(new Uri("/mcpserver/context/ingest-website", UriKind.Relative), request).ConfigureAwait(true);
+        var response2 = await client.PostAsJsonAsync(new Uri("/mcpserver/context/ingest-website", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response2.EnsureSuccessStatusCode();
 
         using (var scope = factory.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            var docs = await db.Documents.IgnoreQueryFilters().Where(d => d.SourceType == "external-web" && d.SourceKey == "https://example.com/docs").ToListAsync().ConfigureAwait(true);
+            var docs = await db.Documents.IgnoreQueryFilters().Where(d => d.SourceType == "external-web" && d.SourceKey == "https://example.com/docs").ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Single(docs);
             Assert.Equal("HASH-2", docs[0].ContentHash);
         }
 
-        var sourcesResponse = await client.GetAsync(new Uri("/mcpserver/context/sources", UriKind.Relative)).ConfigureAwait(true);
+        var sourcesResponse = await client.GetAsync(new Uri("/mcpserver/context/sources", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         sourcesResponse.EnsureSuccessStatusCode();
-        var sourcesJson = await sourcesResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var sourcesJson = await sourcesResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("https://example.com/docs", sourcesJson, StringComparison.Ordinal);
     }
 
@@ -279,10 +279,10 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
         var response = await client.PostAsJsonAsync(
             new Uri("/mcpserver/context/ingest-website", UriKind.Relative),
-            new { url = "https://example.com/error", maxPages = 1 }).ConfigureAwait(true);
+            new { url = "https://example.com/error", maxPages = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         response.EnsureSuccessStatusCode();
 
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("partial-failure", json, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("error", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -305,11 +305,11 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
 
         var response = await client.PostAsJsonAsync(
             new Uri("/mcpserver/context/ingest-website/stream", UriKind.Relative),
-            new { url = "https://example.com/docs", maxPages = 1 }).ConfigureAwait(true);
+            new { url = "https://example.com/docs", maxPages = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         response.EnsureSuccessStatusCode();
         Assert.Equal("text/event-stream", response.Content.Headers.ContentType?.MediaType);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("event: started", body, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("event: result", body, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("\"documentsIngested\":1", body, StringComparison.OrdinalIgnoreCase);

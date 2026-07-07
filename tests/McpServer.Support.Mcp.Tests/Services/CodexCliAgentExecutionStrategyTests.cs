@@ -27,9 +27,9 @@ public sealed class CodexCliAgentExecutionStrategyTests
             spawner,
             NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-        await using var session = await strategy.CreateSessionAsync(CreateRequest()).ConfigureAwait(true);
+        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(AgentCliResultState.Success, result.State);
         Assert.Equal("""{"title":"triage result"}""", result.Body);
@@ -84,9 +84,9 @@ public sealed class CodexCliAgentExecutionStrategyTests
             spawner,
             NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-        await using var session = await strategy.CreateSessionAsync(CreateRequest()).ConfigureAwait(true);
+        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(AgentCliResultState.Error, result.State);
         Assert.Contains("not authenticated", result.Stderr, StringComparison.OrdinalIgnoreCase);
@@ -109,7 +109,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
             spawner,
             NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-        await using var session = await strategy.CreateSessionAsync(CreateRequest()).ConfigureAwait(true);
+        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
 
         var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(true);
@@ -143,9 +143,9 @@ public sealed class CodexCliAgentExecutionStrategyTests
             return Task.CompletedTask;
         });
 
-        await using var session = await strategy.CreateSessionAsync(request).ConfigureAwait(true);
+        await using var session = await strategy.CreateSessionAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(AgentCliResultState.Success, result.State);
         Assert.Contains("stdout:analysis started", streamed);
@@ -179,9 +179,9 @@ public sealed class CodexCliAgentExecutionStrategyTests
                 spawner,
                 NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-            await using var session = await strategy.CreateSessionAsync(CreateRequest(cmdPath)).ConfigureAwait(true);
+            await using var session = await strategy.CreateSessionAsync(CreateRequest(cmdPath), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-            var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(AgentCliResultState.Success, result.State);
             Assert.Equal("codex stdout", result.Stdout);
@@ -224,9 +224,9 @@ public sealed class CodexCliAgentExecutionStrategyTests
                 spawner,
                 NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-            await using var session = await strategy.CreateSessionAsync(CreateRequest()).ConfigureAwait(true);
+            await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-            var result = await session.ReadInitialResponseAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(AgentCliResultState.Success, result.State);
             Assert.NotNull(spawner.OutputLastMessagePath);

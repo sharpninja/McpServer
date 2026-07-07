@@ -33,7 +33,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             ],
         };
 
-        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+        var response = await service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("chat.completion", response.Object);
         Assert.Equal("qbagent", response.Model);
@@ -67,7 +67,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             ],
         };
 
-        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+        var response = await service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
         Assert.Equal("tool_calls", choice.FinishReason);
@@ -92,7 +92,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         var service = new QuadBrainOpenAiChatService(orchestration);
 
         var response = await service.CompleteAsync(
-            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "do both" }] })
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "do both" }] }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
@@ -120,7 +120,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             ToolChoice = ToolChoice("\"none\""),
         };
 
-        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+        var response = await service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
         Assert.Equal("stop", choice.FinishReason);
@@ -140,7 +140,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             ToolChoice = ToolChoice("\"required\""),
         };
 
-        var ex = await Assert.ThrowsAsync<ArgumentException>(() => service.CompleteAsync(request)).ConfigureAwait(true);
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
         Assert.Contains("requires at least one tool", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -161,7 +161,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             ToolChoice = ToolChoice("{\"type\":\"function\",\"function\":{\"name\":\"edit_local_file\"}}"),
         };
 
-        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+        var response = await service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
         Assert.Equal("tool_calls", choice.FinishReason);
@@ -181,7 +181,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             ToolChoice = ToolChoice("{\"type\":\"function\",\"function\":{\"name\":\"run_tests\"}}"),
         };
 
-        var ex = await Assert.ThrowsAsync<ArgumentException>(() => service.CompleteAsync(request)).ConfigureAwait(true);
+        var ex = await Assert.ThrowsAsync<ArgumentException>(() => service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
         Assert.Contains("run_tests", ex.Message, StringComparison.Ordinal);
     }
 
@@ -200,7 +200,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             Messages = [new OpenAiChatMessage { Role = "user", Content = "plan it" }],
         };
 
-        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+        var response = await service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
         Assert.Equal("stop", choice.FinishReason);
@@ -227,7 +227,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             ],
         };
 
-        var response = await service.CompleteAsync(request).ConfigureAwait(true);
+        var response = await service.CompleteAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Null(orchestration.LastRequest);
         var choice = Assert.Single(response.Choices);
@@ -250,7 +250,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         var service = new QuadBrainOpenAiChatService(orchestration, classifier: null, internalToolExecutor: new HandlingExecutor("mcp_todo_update"));
 
         var response = await service.CompleteAsync(
-            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
@@ -271,7 +271,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         var service = new QuadBrainOpenAiChatService(orchestration, classifier: null, internalToolExecutor: new HandlingExecutor("mcp_todo_update"));
 
         var response = await service.CompleteAsync(
-            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
@@ -291,7 +291,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         var service = new QuadBrainOpenAiChatService(orchestration, classifier: null, internalToolExecutor: new FailingExecutor("mcp_todo_update"));
 
         var response = await service.CompleteAsync(
-            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var choice = Assert.Single(response.Choices);
@@ -315,7 +315,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             orchestration, classifier: null, internalToolExecutor: new FailingExecutor("mcp_todo_update"), interactionLogger: logger);
 
         await service.CompleteAsync(
-            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var (tool, error) = Assert.Single(logger.FailedTools);
@@ -337,7 +337,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             orchestration, classifier: null, internalToolExecutor: new HandlingExecutor("mcp_todo_update"), interactionLogger: logger);
 
         await service.CompleteAsync(
-            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Empty(logger.FailedTools);
@@ -357,7 +357,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         var response = await service.CompleteAsync(new OpenAiChatCompletionRequest
         {
             Messages = [new OpenAiChatMessage { Role = "user", Content = "please plan the work in detail" }],
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(response.Usage.PromptTokens > 0);
         Assert.True(response.Usage.CompletionTokens > 0);
@@ -378,7 +378,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         await service.CompleteAsync(
             new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] },
             sessionId: "sess-1",
-            turnId: "turn-1").ConfigureAwait(true);
+            turnId: "turn-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("sess-1", orchestration.LastRequest!.Metadata["sessionId"]);
         Assert.Equal("turn-1", orchestration.LastRequest.Metadata["turnId"]);
@@ -397,7 +397,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         var service = new QuadBrainOpenAiChatService(orchestration);
 
         await service.CompleteAsync(
-            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] })
+            new OpenAiChatCompletionRequest { Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.False(orchestration.LastRequest!.Metadata.ContainsKey("sessionId"));
@@ -420,7 +420,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
         var response = await service.CompleteAsync(
                 new OpenAiChatCompletionRequest { Model = "qbagent", Messages = [new OpenAiChatMessage { Role = "user", Content = "go" }] },
                 sessionId: "session-1",
-                turnId: "turn-1")
+                turnId: "turn-1", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         Assert.Equal("the final answer", Assert.Single(response.Choices).Message.Content);
@@ -444,7 +444,7 @@ public sealed class QuadBrainOpenAiChatServiceTests
             new CapturingOrchestrationService(new QuadBrainOrchestrationResponse { Status = "committed" }));
 
         await Assert.ThrowsAsync<ArgumentException>(
-            () => service.CompleteAsync(new OpenAiChatCompletionRequest())).ConfigureAwait(true);
+            () => service.CompleteAsync(new OpenAiChatCompletionRequest(), cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
     private sealed class HandlingExecutor(string handledToolName) : IQuadBrainInternalToolExecutor

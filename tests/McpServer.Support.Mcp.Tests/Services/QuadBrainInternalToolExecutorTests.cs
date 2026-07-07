@@ -33,7 +33,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
         var outcome = await sut.TryExecuteAsync(
             Call("mcp_todo_create", "{\"id\":\"PLAN-X-001\",\"title\":\"t\",\"section\":\"mvp-app\",\"priority\":\"high\"}"),
-            turnId: null).ConfigureAwait(true);
+            turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Handled);
         Assert.True(outcome.Success);
@@ -51,7 +51,7 @@ public sealed class QuadBrainInternalToolExecutorTests
         var sut = CreateSut();
 
         var outcome = await sut.TryExecuteAsync(
-            Call("mcp_todo_update", "{\"id\":\"X\",\"done\":true}"), turnId: null).ConfigureAwait(true);
+            Call("mcp_todo_update", "{\"id\":\"X\",\"done\":true}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Success);
         await _todo.Received(1).UpdateAsync("X", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -63,7 +63,7 @@ public sealed class QuadBrainInternalToolExecutorTests
     {
         var sut = CreateSut();
 
-        var outcome = await sut.TryExecuteAsync(Call("mcp_todo_update", "{\"done\":true}"), turnId: null).ConfigureAwait(true);
+        var outcome = await sut.TryExecuteAsync(Call("mcp_todo_update", "{\"done\":true}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Handled);
         Assert.False(outcome.Success);
@@ -80,7 +80,7 @@ public sealed class QuadBrainInternalToolExecutorTests
         var sut = CreateSut();
 
         var outcome = await sut.TryExecuteAsync(
-            Call("mcp_repo_edit", "{\"path\":\"a.cs\",\"oldString\":\"x\",\"newString\":\"y\"}"), turnId: null).ConfigureAwait(true);
+            Call("mcp_repo_edit", "{\"path\":\"a.cs\",\"oldString\":\"x\",\"newString\":\"y\"}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Success);
         await _repo.Received(1).EditAsync("a.cs", "x", "y", false, null, Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -95,7 +95,7 @@ public sealed class QuadBrainInternalToolExecutorTests
         var sut = CreateSut();
 
         var outcome = await sut.TryExecuteAsync(
-            Call("mcp_repo_write", "{\"path\":\"a.txt\",\"content\":\"hello\"}"), turnId: null).ConfigureAwait(true);
+            Call("mcp_repo_write", "{\"path\":\"a.txt\",\"content\":\"hello\"}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Success);
         await _repo.Received(1).WriteAsync("a.txt", "hello", Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -110,7 +110,7 @@ public sealed class QuadBrainInternalToolExecutorTests
         var sut = CreateSut();
 
         var outcome = await sut.TryExecuteAsync(
-            Call("mcp_repo_write", "{\"path\":\"a.txt\",\"content\":\"x\"}"), turnId: null).ConfigureAwait(true);
+            Call("mcp_repo_write", "{\"path\":\"a.txt\",\"content\":\"x\"}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Handled);
         Assert.False(outcome.Success);
@@ -125,7 +125,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
         var outcome = await sut.TryExecuteAsync(
             Call("mcp_requirements_create_fr", "{\"id\":\"FR-MCP-X-001\",\"title\":\"t\",\"body\":\"b\"}"),
-            turnId: null).ConfigureAwait(true);
+            turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Success);
         await _requirements.Received(1).AddFrAsync(
@@ -141,7 +141,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
         var outcome = await sut.TryExecuteAsync(
             Call("mcp_requirements_update_tr", "{\"id\":\"TR-MCP-X-001\",\"title\":\"t\",\"body\":\"b\"}"),
-            turnId: null).ConfigureAwait(true);
+            turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Success);
         await _requirements.Received(1).UpdateTrAsync(
@@ -156,7 +156,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
         var outcome = await sut.TryExecuteAsync(
             Call("mcp_requirements_create_test", "{\"id\":\"TEST-MCP-X-001\",\"condition\":\"does X\"}"),
-            turnId: null).ConfigureAwait(true);
+            turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Success);
         await _requirements.Received(1).AddTestAsync(
@@ -171,7 +171,7 @@ public sealed class QuadBrainInternalToolExecutorTests
         var sut = CreateSut();
 
         var outcome = await sut.TryExecuteAsync(
-            Call("mcp_requirements_create_fr", "{\"title\":\"t\",\"body\":\"b\"}"), turnId: null).ConfigureAwait(true);
+            Call("mcp_requirements_create_fr", "{\"title\":\"t\",\"body\":\"b\"}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Handled);
         Assert.False(outcome.Success);
@@ -189,7 +189,7 @@ public sealed class QuadBrainInternalToolExecutorTests
 
         var outcome = await sut.TryExecuteAsync(
             Call("mcp_requirements_create_fr", "{\"id\":\"FR-MCP-X-001\",\"title\":\"t\",\"body\":\"b\"}"),
-            turnId: null).ConfigureAwait(true);
+            turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Handled);
         Assert.False(outcome.Success);
@@ -202,7 +202,7 @@ public sealed class QuadBrainInternalToolExecutorTests
     {
         var sut = CreateSut();
 
-        var outcome = await sut.TryExecuteAsync(Call("mcp_requirements_list_fr", "{}"), turnId: null).ConfigureAwait(true);
+        var outcome = await sut.TryExecuteAsync(Call("mcp_requirements_list_fr", "{}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(outcome.Handled);
         Assert.Same(InternalToolExecutionOutcome.Unhandled, outcome);
@@ -214,7 +214,7 @@ public sealed class QuadBrainInternalToolExecutorTests
     {
         var sut = CreateSut();
 
-        var outcome = await sut.TryExecuteAsync(Call("mcp_todo_query", "{}"), turnId: null).ConfigureAwait(true);
+        var outcome = await sut.TryExecuteAsync(Call("mcp_todo_query", "{}"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(outcome.Handled);
         Assert.Same(InternalToolExecutionOutcome.Unhandled, outcome);
@@ -226,7 +226,7 @@ public sealed class QuadBrainInternalToolExecutorTests
     {
         var sut = CreateSut();
 
-        var outcome = await sut.TryExecuteAsync(Call("mcp_repo_write", "{not json"), turnId: null).ConfigureAwait(true);
+        var outcome = await sut.TryExecuteAsync(Call("mcp_repo_write", "{not json"), turnId: null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(outcome.Handled);
         Assert.False(outcome.Success);

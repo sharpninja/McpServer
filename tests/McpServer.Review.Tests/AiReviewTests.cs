@@ -72,6 +72,59 @@ Provide structured findings with severity etc.
         AggregateReviewToMarkdown("project", prompt, responseJson);
     }
 
+    /// <summary>
+    /// Runs an aiUnit governance review for warning suppression decisions and traceability.
+    /// </summary>
+    [Theory]
+    [Trait("Category", "AiReview")]
+    [AiProjectReview(@"
+Review warning suppression governance for PLAN-WARNREMEDIATION-001.
+
+Scope
+- docs/Project requirement exports and live MCP requirements for FR-MCP-139, TR-MCP-QUALITY-001, TEST-MCP-AIUNIT-002
+- PLAN-WARNREMEDIATION-001 TODO current decisions and implementation task state
+- Directory.Build.props, project NoWarn entries, pragma warning directives, SuppressMessage attributes, editorconfig analyzer severity, and any broad warning bypasses
+- tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs
+
+Approved decisions
+- CA1416 may remain suppressed only for Windows only code paths with justification and review condition
+- CA1819 may remain suppressed where array returning API is intentional and justified
+- Current CA2227 suppressions may remain only for non observable JSON or YAML or options binding DTOs and EF navigation collections
+- Observable collections must be repopulated in place rather than suppressed
+- CA1308 is not approved and code must use invariant case insensitive comparison or explicit mapping rather than lowercase normalization
+- CS8632 is not approved and every project must enable nullable annotations and remove CS8632 NoWarn entries
+- TreatWarningsAsErrors false and stale ASP0019 suppressions are not approved and must remain removed
+
+Completed remediation decisions to audit
+- xUnit1051 is not approved and test projects must pass TestContext cancellation tokens to cancellable async APIs instead of suppressing the analyzer
+- xUnit1041 is not approved and xUnit v3 tests must use supported fixture or ITestOutputHelper patterns instead of suppressing constructor injection diagnostics
+- CA1812 is not approved and middleware or DI-only types must be made visible to analyzers through real construction or removed
+- CA1848 is not approved and no editorconfig or project-level disable may remain for LoggerMessage guidance
+- CA2000 is not approved and disposal warnings must be fixed or proven stale by removing the pragma and building clean
+- CA1861 is not approved and constant array arguments must be hoisted rather than suppressed
+- CA1062 is not approved and public migration methods must validate arguments rather than suppressing the rule
+- CS0436 is not approved and stale type-conflict NoWarn entries must be removed
+- CS0618 is not approved and obsolete APIs must be replaced with current APIs plus focused regression tests
+- CA1055 is not approved and string return APIs must not advertise URI semantics
+- NU5104 is not approved and stable packages must not depend on prerelease packages
+- NU1901 and NU1903 are not approved and vulnerable package advisories must be resolved by package updates and a clean vulnerability scan
+
+Acceptance criteria to audit
+- Every suppression decision above is captured in TR-MCP-QUALITY-001 structured acceptance criteria
+- TEST-MCP-AIUNIT-002 maps to TR-MCP-QUALITY-001 and has aiUnit prompt coverage
+- PLAN-WARNREMEDIATION-001 lists approved suppressions separately from required code fixes and marks only validated work done
+- No unapproved warning suppression or broad warning bypass is introduced or marked complete without build or test evidence
+- Generated requirements documents and traceability mappings include the FR, TR, and TEST records
+
+Return structured findings in the aiUnit review format with severity, title, detail, recommendation, filePath, and line.
+Report no findings only if every item above is satisfied by durable artifacts.
+")]
+    public void WarningSuppressionGovernanceReview(string prompt, string responseJson)
+    {
+        // AiProjectReviewAttribute supplies the governance prompt and review result JSON.
+        AggregateReviewToMarkdown("warning-suppression", prompt, responseJson);
+    }
+
     private void AggregateReviewToMarkdown(string reviewType, string? suppliedPrompt = null, string? suppliedResponseJson = null)
     {
         var root = FindRepositoryRoot();

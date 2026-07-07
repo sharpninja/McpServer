@@ -163,17 +163,25 @@ internal sealed partial class MarkdownSessionLogParser
         return sb.ToString();
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase", Justification = "Agent names must be lowercase per convention")]
     private static (string SourceType, string SessionId) DeriveIdentity(string fileName)
     {
         // Pattern: agent-SESSION-LOG-YYYY-MM-DD or agent-session-log-YYYY-MM-DD
         var parts = fileName.Split('-', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length >= 2)
         {
-            var agent = parts[0].ToLowerInvariant();
-            return (agent, fileName.ToLowerInvariant());
+            var agent = CanonicalizeLowercaseInvariant(parts[0]);
+            return (agent, CanonicalizeLowercaseInvariant(fileName));
         }
-        return ("unknown", fileName.ToLowerInvariant());
+        return ("unknown", CanonicalizeLowercaseInvariant(fileName));
+    }
+
+    private static string CanonicalizeLowercaseInvariant(string value)
+    {
+        return string.Create(value.Length, value, static (chars, source) =>
+        {
+            for (var i = 0; i < source.Length; i++)
+                chars[i] = char.ToLowerInvariant(source[i]);
+        });
     }
 
     private static string BuildSummaryResponse(string content, string? duration)

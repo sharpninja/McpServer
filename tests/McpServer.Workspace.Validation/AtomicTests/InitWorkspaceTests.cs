@@ -40,7 +40,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
     public async Task Init_RegisteredWorkspace_ReturnsResult()
     {
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/init", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/init", null, cancellationToken: TestContext.Current.CancellationToken);
 
         // Init may succeed (200) or fail if the directory doesn't physically exist (422).
         Assert.True(
@@ -48,7 +48,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
             response.StatusCode == HttpStatusCode.UnprocessableEntity,
             $"Expected 200 or 422 but got {(int)response.StatusCode}.");
 
-        var result = await response.Content.ReadFromJsonAsync<WorkspaceInitResult>();
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceInitResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
 
         if (response.StatusCode == HttpStatusCode.OK)
@@ -67,7 +67,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
     public async Task Init_InvalidKey_Returns400()
     {
         var response = await _fixture.Client.PostAsync(
-            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/init", null);
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/init", null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }

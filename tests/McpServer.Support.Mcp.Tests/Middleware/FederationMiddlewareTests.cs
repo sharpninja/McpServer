@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-#pragma warning disable CA2000 // Dispose objects before losing scope — test objects are short-lived
 
 namespace McpServer.Support.Mcp.Tests.Middleware;
 

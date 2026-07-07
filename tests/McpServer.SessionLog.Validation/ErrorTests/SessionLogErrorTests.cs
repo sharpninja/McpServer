@@ -51,9 +51,9 @@ public sealed class SessionLogErrorTests
             turnCount = 0
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var err = await response.Content.ReadFromJsonAsync<ErrorResult>(JsonOpts);
+        var err = await response.Content.ReadFromJsonAsync<ErrorResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("SourceType", err!.Error!, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -77,9 +77,9 @@ public sealed class SessionLogErrorTests
             turnCount = 0
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var err = await response.Content.ReadFromJsonAsync<ErrorResult>(JsonOpts);
+        var err = await response.Content.ReadFromJsonAsync<ErrorResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("SessionId", err!.Error!, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -102,7 +102,7 @@ public sealed class SessionLogErrorTests
             turnCount = 0
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -125,7 +125,7 @@ public sealed class SessionLogErrorTests
             turnCount = 0
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -142,7 +142,7 @@ public sealed class SessionLogErrorTests
     {
         var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/AuditTest/some-session/some-request/dialog";
         var emptyItems = Array.Empty<object>();
-        var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, emptyItems);
+        var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, emptyItems, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -158,7 +158,7 @@ public sealed class SessionLogErrorTests
     public async Task Submit_InvalidJsonBody_Returns400()
     {
         var content = new StringContent("not valid json", Encoding.UTF8, "application/json");
-        var response = await _fixture.Client.PostAsync(SessionLogEndpointFixture.SessionLogRoute, content);
+        var response = await _fixture.Client.PostAsync(SessionLogEndpointFixture.SessionLogRoute, content, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }

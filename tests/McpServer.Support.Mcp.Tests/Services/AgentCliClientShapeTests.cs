@@ -24,7 +24,7 @@ public sealed class AgentCliClientShapeTests
             spawner,
             NullLogger<AgentCliClient>.Instance);
 
-        AgentCliResult result = await client.InvokeAsync("rendered prompt");
+        AgentCliResult result = await client.InvokeAsync("rendered prompt", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(AgentCliResultState.Success, result.State);
         Assert.Equal("cline response", result.Body);

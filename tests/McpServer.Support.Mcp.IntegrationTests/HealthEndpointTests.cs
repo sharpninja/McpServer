@@ -21,7 +21,7 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
     public async Task Health_ReturnsOk()
     {
         var client = _factory.CreateClient();
-        var response = await client.GetAsync(new Uri("/health", UriKind.Relative)).ConfigureAwait(true);
+        var response = await client.GetAsync(new Uri("/health", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -31,7 +31,7 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
     {
         var options = new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions { AllowAutoRedirect = false };
         var client = _factory.CreateClient(options);
-        var response = await client.GetAsync(new Uri("/", UriKind.Relative)).ConfigureAwait(true);
+        var response = await client.GetAsync(new Uri("/", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Contains("swagger", response.Headers.Location?.ToString() ?? string.Empty, StringComparison.OrdinalIgnoreCase);
     }
@@ -43,10 +43,10 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
         var client = _factory.CreateClient();
         const string nonce = "test-nonce-123";
 
-        var response = await client.GetAsync(new Uri($"/health?nonce={nonce}", UriKind.Relative)).ConfigureAwait(true);
+        var response = await client.GetAsync(new Uri($"/health?nonce={nonce}", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var payload = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync().ConfigureAwait(true)).ConfigureAwait(true);
+        var payload = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(nonce, payload.RootElement.GetProperty("nonce").GetString());
     }
 }

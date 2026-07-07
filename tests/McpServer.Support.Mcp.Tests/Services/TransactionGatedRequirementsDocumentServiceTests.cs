@@ -170,8 +170,8 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         var functionalPath = Path.Combine(temp.Path, "azure", "Functional-Requirements.md");
         var stalePath = Path.Combine(temp.Path, "azure", "Stale.md");
         Directory.CreateDirectory(Path.GetDirectoryName(functionalPath)!);
-        await File.WriteAllTextAsync(functionalPath, "old functional").ConfigureAwait(true);
-        await File.WriteAllTextAsync(stalePath, "stale content").ConfigureAwait(true);
+        await File.WriteAllTextAsync(functionalPath, "old functional", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await File.WriteAllTextAsync(stalePath, "stale content", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var inner = new FileWritingRequirementsDocumentService();
         var coordinator = new CapturingCoordinator
         {
@@ -185,8 +185,8 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         var ex = await Assert.ThrowsAsync<RequirementsConflictException>(() =>
             sut.GenerateWikiAsync(temp.Path, ct: CancellationToken.None)).ConfigureAwait(true);
 
-        Assert.Equal("old functional", await File.ReadAllTextAsync(functionalPath).ConfigureAwait(true));
-        Assert.Equal("stale content", await File.ReadAllTextAsync(stalePath).ConfigureAwait(true));
+        Assert.Equal("old functional", await File.ReadAllTextAsync(functionalPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.Equal("stale content", await File.ReadAllTextAsync(stalePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         Assert.False(File.Exists(Path.Combine(temp.Path, "azure", "Requirements-Matrix.md")));
         Assert.Contains("Rollback completed", ex.Message, StringComparison.Ordinal);
     }
@@ -197,7 +197,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
     {
         using var temp = new TempDirectory();
         var functionalPath = Path.Combine(temp.Path, "Functional-Requirements.md");
-        await File.WriteAllTextAsync(functionalPath, "old functional").ConfigureAwait(true);
+        await File.WriteAllTextAsync(functionalPath, "old functional", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var inner = new FileWritingRequirementsDocumentService();
         var coordinator = new CapturingCoordinator
         {
@@ -212,7 +212,7 @@ public sealed class TransactionGatedRequirementsDocumentServiceTests
         var ex = await Assert.ThrowsAsync<RequirementsConflictException>(() =>
             sut.GenerateAllAsync(temp.Path, ct: CancellationToken.None)).ConfigureAwait(true);
 
-        Assert.Equal("human edit", await File.ReadAllTextAsync(functionalPath).ConfigureAwait(true));
+        Assert.Equal("human edit", await File.ReadAllTextAsync(functionalPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         Assert.Contains("Rollback failed", ex.Message, StringComparison.Ordinal);
         Assert.Contains("changed after transactional export", ex.Message, StringComparison.Ordinal);
     }

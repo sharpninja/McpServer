@@ -63,7 +63,7 @@ public sealed class QuadBrainOrchestrationServiceTests
             Input = "decide this",
             TurnId = "turn-1",
             AdmitCuriosityToGraphRag = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision", response.Output);
@@ -123,21 +123,21 @@ public sealed class QuadBrainOrchestrationServiceTests
         {
             Input = "decide this",
             TurnId = "turn-parallel",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         try
         {
-            await leftStarted.Task.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
-            await rightStarted.Task.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
+            await leftStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await rightStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.False(arbiterStarted.Task.IsCompleted);
 
             leftCompletion.SetResult(Response(slots[BrainSlotRoles.LeftHemisphere], "left evidence"));
-            await Task.Delay(TimeSpan.FromMilliseconds(50)).ConfigureAwait(true);
+            await Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.False(arbiterStarted.Task.IsCompleted);
 
             rightCompletion.SetResult(Response(slots[BrainSlotRoles.RightHemisphere], "right evidence"));
-            await arbiterStarted.Task.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
-            var response = await orchestration.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
+            await arbiterStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var response = await orchestration.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("committed", response.Status);
             Assert.Equal("final decision", response.Output);
@@ -228,7 +228,7 @@ public sealed class QuadBrainOrchestrationServiceTests
         {
             Input = "decide this",
             TurnId = "turn-prompt-contract",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("creativity", prompts[BrainSlotRoles.LeftHemisphere], StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("temperature", prompts[BrainSlotRoles.LeftHemisphere], StringComparison.OrdinalIgnoreCase);
@@ -289,7 +289,7 @@ public sealed class QuadBrainOrchestrationServiceTests
             Input = "decide this",
             TurnId = "turn-curiosity",
             AdmitCuriosityToGraphRag = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Null(response.Output);
@@ -361,7 +361,7 @@ public sealed class QuadBrainOrchestrationServiceTests
         {
             Input = "decide this",
             TurnId = "turn-vote",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision after voting", response.Output);
@@ -393,12 +393,12 @@ public sealed class QuadBrainOrchestrationServiceTests
         {
             Input = "decide this",
             TurnId = "turn-1",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", response.Status);
         Assert.Equal(BrainSlotReasonCodes.QuadNotReady, response.Reason);
         Assert.Empty(response.RoleResults);
-        await invocation.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default).ConfigureAwait(true);
+        await invocation.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>Approved weight updates persist role weights, increment versions, and write audit rows.</summary>
@@ -410,7 +410,7 @@ public sealed class QuadBrainOrchestrationServiceTests
         slot.OrchestrationWeight = 1.0;
         slot.WeightVersion = 7;
         db.BrainSlotDefinitions.Add(slot);
-        await db.SaveChangesAsync().ConfigureAwait(true);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var coordinator = new FakeTurnTransactionCoordinator();
         var service = CreateService(db, Substitute.For<IBrainSlotRegistryService>(), Substitute.For<IBrainSlotInvocationService>(), coordinator);
 
@@ -424,9 +424,9 @@ public sealed class QuadBrainOrchestrationServiceTests
             AdminApproved = true,
             SafetyGatesPassed = true,
             TurnId = "turn-weight",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var persisted = await db.BrainSlotDefinitions.SingleAsync(item => item.SlotId == slot.SlotId).ConfigureAwait(true);
+        var persisted = await db.BrainSlotDefinitions.SingleAsync(item => item.SlotId == slot.SlotId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("committed", response.Status);
         Assert.Equal("brain-slot.weight-update", coordinator.LastRequest!.OperationName);
         Assert.Equal(1.5, persisted.OrchestrationWeight);
@@ -442,7 +442,7 @@ public sealed class QuadBrainOrchestrationServiceTests
         using var db = CreateDbContext();
         var slot = Slot(BrainSlotRoles.LeftHemisphere);
         db.BrainSlotDefinitions.Add(slot);
-        await db.SaveChangesAsync().ConfigureAwait(true);
+        await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var service = CreateService(db, Substitute.For<IBrainSlotRegistryService>(), Substitute.For<IBrainSlotInvocationService>());
 
         var response = await service.ExecuteWeightUpdateAsync(new QuadBrainWeightUpdateRequest
@@ -452,9 +452,9 @@ public sealed class QuadBrainOrchestrationServiceTests
             AotApproved = true,
             AdminApproved = false,
             SafetyGatesPassed = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var persisted = await db.BrainSlotDefinitions.SingleAsync(item => item.SlotId == slot.SlotId).ConfigureAwait(true);
+        var persisted = await db.BrainSlotDefinitions.SingleAsync(item => item.SlotId == slot.SlotId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("rejected", response.Status);
         Assert.Equal(BrainSlotReasonCodes.WeightUpdateRejected, response.Reason);
         Assert.Equal(1.0, persisted.OrchestrationWeight);

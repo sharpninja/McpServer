@@ -114,7 +114,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRagIngestTextResponse { DocumentId = "doc-1", SourceType = "adhoc-text", SourceKey = "test" };
         _graphRagService.IngestTextAsync(Arg.Any<GraphRagIngestTextRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagIngestText("hello", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagIngestText("hello", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(json);
         Assert.Contains("doc-1", json, StringComparison.Ordinal);
@@ -125,7 +125,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     [Fact]
     public async Task GraphRagIngestText_EmptyContent_ReturnsError()
     {
-        var json = await _tools.GraphRagIngestText("", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagIngestText("", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("error", json, StringComparison.Ordinal);
     }
@@ -139,7 +139,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRagDocumentListResponse { Documents = [], TotalCount = 0 };
         _graphRagService.ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagListDocuments(".").ConfigureAwait(true);
+        var json = await _tools.GraphRagListDocuments(".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(json);
         await _graphRagService.Received(1).ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -154,7 +154,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRagDocumentChunksResponse { DocumentId = "doc-1", Chunks = [], TotalChunks = 0 };
         _graphRagService.GetDocumentChunksAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagGetDocumentChunks("doc-1", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagGetDocumentChunks("doc-1", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("doc-1", json, StringComparison.Ordinal);
     }
@@ -165,7 +165,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     {
         _graphRagService.GetDocumentChunksAsync("doc-99", Arg.Any<CancellationToken>()).Returns((GraphRagDocumentChunksResponse?)null);
 
-        var json = await _tools.GraphRagGetDocumentChunks("doc-99", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagGetDocumentChunks("doc-99", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("not found", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -179,7 +179,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRagDocumentDeleteResponse { DocumentId = "doc-1", ChunksRemoved = 2, Success = true };
         _graphRagService.DeleteDocumentAsync("doc-1", Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagDeleteDocument("doc-1", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagDeleteDocument("doc-1", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(json);
         await _graphRagService.Received(1).DeleteDocumentAsync("doc-1", Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -194,7 +194,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
         _graphRagService.CreateEntityAsync(Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagCreateEntity("Alice", "person", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagCreateEntity("Alice", "person", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("ge-1", json, StringComparison.Ordinal);
     }
@@ -208,7 +208,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphEntityListResponse { Entities = [], TotalCount = 0 };
         _graphRagService.ListEntitiesAsync(0, 50, null, Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagListEntities(".").ConfigureAwait(true);
+        var json = await _tools.GraphRagListEntities(".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(json);
     }
@@ -222,7 +222,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Alice", EntityType = "person" };
         _graphRagService.GetEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagGetEntity("ge-1", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagGetEntity("ge-1", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("ge-1", json, StringComparison.Ordinal);
     }
@@ -233,7 +233,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     {
         _graphRagService.GetEntityAsync("ge-99", Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
 
-        var json = await _tools.GraphRagGetEntity("ge-99", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagGetEntity("ge-99", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("not found", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -247,7 +247,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphEntityResponse { Id = "ge-1", Name = "Bob", EntityType = "person" };
         _graphRagService.UpdateEntityAsync("ge-1", Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagUpdateEntity("ge-1", "Bob", "person", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagUpdateEntity("ge-1", "Bob", "person", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("Bob", json, StringComparison.Ordinal);
     }
@@ -258,7 +258,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     {
         _graphRagService.UpdateEntityAsync("ge-99", Arg.Any<GraphEntityRequest>(), Arg.Any<CancellationToken>()).Returns((GraphEntityResponse?)null);
 
-        var json = await _tools.GraphRagUpdateEntity("ge-99", "Bob", "person", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagUpdateEntity("ge-99", "Bob", "person", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("not found", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -271,7 +271,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     {
         _graphRagService.DeleteEntityAsync("ge-1", Arg.Any<CancellationToken>()).Returns(true);
 
-        var json = await _tools.GraphRagDeleteEntity("ge-1", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagDeleteEntity("ge-1", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("true", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -285,7 +285,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         _graphRagService.CreateRelationshipAsync(Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagCreateRelationship("ge-1", "ge-2", "knows", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagCreateRelationship("ge-1", "ge-2", "knows", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("gr-1", json, StringComparison.Ordinal);
     }
@@ -299,7 +299,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRelationshipListResponse { Relationships = [], TotalCount = 0 };
         _graphRagService.ListRelationshipsAsync(0, 50, null, null, Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagListRelationships(".").ConfigureAwait(true);
+        var json = await _tools.GraphRagListRelationships(".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(json);
     }
@@ -313,7 +313,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "knows" };
         _graphRagService.GetRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagGetRelationship("gr-1", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagGetRelationship("gr-1", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("gr-1", json, StringComparison.Ordinal);
     }
@@ -324,7 +324,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     {
         _graphRagService.GetRelationshipAsync("gr-99", Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
 
-        var json = await _tools.GraphRagGetRelationship("gr-99", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagGetRelationship("gr-99", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("not found", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -338,7 +338,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
         var expected = new GraphRelationshipResponse { Id = "gr-1", SourceEntityId = "ge-1", TargetEntityId = "ge-2", RelationshipType = "works-with" };
         _graphRagService.UpdateRelationshipAsync("gr-1", Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
-        var json = await _tools.GraphRagUpdateRelationship("gr-1", "ge-1", "ge-2", "works-with", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagUpdateRelationship("gr-1", "ge-1", "ge-2", "works-with", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("works-with", json, StringComparison.Ordinal);
     }
@@ -349,7 +349,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     {
         _graphRagService.UpdateRelationshipAsync("gr-99", Arg.Any<GraphRelationshipRequest>(), Arg.Any<CancellationToken>()).Returns((GraphRelationshipResponse?)null);
 
-        var json = await _tools.GraphRagUpdateRelationship("gr-99", "ge-1", "ge-2", "works-with", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagUpdateRelationship("gr-99", "ge-1", "ge-2", "works-with", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("not found", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -362,7 +362,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
     {
         _graphRagService.DeleteRelationshipAsync("gr-1", Arg.Any<CancellationToken>()).Returns(true);
 
-        var json = await _tools.GraphRagDeleteRelationship("gr-1", ".").ConfigureAwait(true);
+        var json = await _tools.GraphRagDeleteRelationship("gr-1", ".", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Contains("true", json, StringComparison.OrdinalIgnoreCase);
     }

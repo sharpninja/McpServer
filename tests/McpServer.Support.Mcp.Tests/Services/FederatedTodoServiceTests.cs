@@ -48,10 +48,10 @@ public sealed class FederatedTodoServiceTests
         _inner.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: false));
-        var result = await sut.QueryAsync(new TodoQueryRequest());
+        var result = await sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
-        await _client.DidNotReceiveWithAnyArgs().QueryTodosAsync(default!, default!, default);
+        await _client.DidNotReceiveWithAnyArgs().QueryTodosAsync(default!, default!, ct: TestContext.Current.CancellationToken);
     }
 
     /// <summary>When no federation target resolves, delegates directly to the inner service.</summary>
@@ -64,10 +64,10 @@ public sealed class FederatedTodoServiceTests
         // Enabled but no targets configured
         var registry = CreateRegistry(enabled: true);
         var sut = CreateSut(registry);
-        var result = await sut.QueryAsync(new TodoQueryRequest());
+        var result = await sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
-        await _client.DidNotReceiveWithAnyArgs().QueryTodosAsync(default!, default!, default);
+        await _client.DidNotReceiveWithAnyArgs().QueryTodosAsync(default!, default!, ct: TestContext.Current.CancellationToken);
     }
 
     /// <summary>When both local and remote return results, merges with local winning on ID collision.</summary>
@@ -84,7 +84,7 @@ public sealed class FederatedTodoServiceTests
             .Returns(new TodoQueryResult([remoteItem1, remoteItem2], 2));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new TodoQueryRequest());
+        var result = await sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Items.Count);
         Assert.Equal(2, result.TotalCount);
@@ -103,7 +103,7 @@ public sealed class FederatedTodoServiceTests
             .ThrowsAsync(new HttpRequestException("Remote unreachable"));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new TodoQueryRequest());
+        var result = await sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("A-001", result.Items[0].Id);
@@ -120,7 +120,7 @@ public sealed class FederatedTodoServiceTests
             .Returns((TodoQueryResult?)null);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.QueryAsync(new TodoQueryRequest());
+        var result = await sut.QueryAsync(new TodoQueryRequest(), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Single(result.Items);
         Assert.Equal("A-001", result.Items[0].Id);
@@ -136,11 +136,11 @@ public sealed class FederatedTodoServiceTests
         _inner.GetByIdAsync("A-001", Arg.Any<CancellationToken>()).Returns(localItem);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.GetByIdAsync("A-001");
+        var result = await sut.GetByIdAsync("A-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Local", result.Title);
-        await _client.DidNotReceiveWithAnyArgs().GetTodoByIdAsync(default!, default!, default);
+        await _client.DidNotReceiveWithAnyArgs().GetTodoByIdAsync(default!, default!, ct: TestContext.Current.CancellationToken);
     }
 
     /// <summary>When not found locally, falls back to remote.</summary>
@@ -153,7 +153,7 @@ public sealed class FederatedTodoServiceTests
             .Returns(remoteItem);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.GetByIdAsync("B-002");
+        var result = await sut.GetByIdAsync("B-002", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Remote", result.Title);
@@ -168,7 +168,7 @@ public sealed class FederatedTodoServiceTests
             .Returns((TodoFlatItem?)null);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.GetByIdAsync("X-999");
+        var result = await sut.GetByIdAsync("X-999", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Null(result);
     }
@@ -184,7 +184,7 @@ public sealed class FederatedTodoServiceTests
         _inner.CreateAsync(request, Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.CreateAsync(request);
+        var result = await sut.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
     }
@@ -197,7 +197,7 @@ public sealed class FederatedTodoServiceTests
         _inner.DeleteAsync("A-001", Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.DeleteAsync("A-001");
+        var result = await sut.DeleteAsync("A-001", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Same(expected, result);
     }

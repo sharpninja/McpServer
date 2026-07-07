@@ -17,7 +17,7 @@ partial class Build : NukeBuild
     public readonly string Configuration = IsLocalBuild ? "Debug" : "Release";
 
     [Solution(SuppressBuildProjectCheck = true)]
-    readonly Solution Solution;
+    readonly Solution Solution = null!;
 
     /// <summary>Root directory of the repository.</summary>
     public AbsolutePath SourceDirectory => RootDirectory / "src";

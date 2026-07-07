@@ -98,7 +98,7 @@ public sealed class TriageWorkflowTests
         Assert.Equal("error", response.Type);
         var payload = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
         Assert.Equal("schema_validation_failed", payload.Code);
-        await workflow.DidNotReceiveWithAnyArgs().ReportAsync(default!, default);
+        await workflow.DidNotReceiveWithAnyArgs().ReportAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>

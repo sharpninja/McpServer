@@ -14,10 +14,10 @@ partial class Build
     readonly string Publisher = "CN=FunWasHad";
 
     [Parameter("Code signing certificate path")]
-    readonly string CertificatePath;
+    readonly string CertificatePath = string.Empty;
 
     [Parameter("Code signing certificate password")]
-    readonly string CertificatePassword;
+    readonly string CertificatePassword = string.Empty;
 
     /// <summary>Package McpServer.Support.Mcp as a Windows MSIX installer.</summary>
     public Target PackageMsix => _ => _

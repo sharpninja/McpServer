@@ -59,7 +59,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
         await sut.RunAsync(CancellationToken.None).ConfigureAwait(true);
 
         using var probe = NewReadScope();
-        var all = await probe.Ctx.TodoItems.IgnoreQueryFilters().AsNoTracking().ToListAsync().ConfigureAwait(true);
+        var all = await probe.Ctx.TodoItems.IgnoreQueryFilters().AsNoTracking().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, all.Count);
         var wsIds = string.Join("|", all.Select(r => $"[{r.WorkspaceId}]"));
         Assert.All(all, r => Assert.True(r.WorkspaceId == ws, $"expected [{ws}] got {wsIds}"));
@@ -99,7 +99,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
 
         using var probe = NewReadScope();
         probe.Ctx.OverrideWorkspaceId(ws);
-        var rows = await probe.Ctx.TodoItems.AsNoTracking().ToListAsync().ConfigureAwait(true);
+        var rows = await probe.Ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(rows);
         Assert.Equal("BETA-001", rows[0].Id);
     }
@@ -120,7 +120,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
 
         using var probe = NewReadScope();
         probe.Ctx.OverrideWorkspaceId(ws);
-        Assert.False(await probe.Ctx.TodoItems.AnyAsync().ConfigureAwait(true));
+        Assert.False(await probe.Ctx.TodoItems.AnyAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
         await sut.RunAsync(CancellationToken.None).ConfigureAwait(true);
 
         using var probe = NewReadScope();
-        var all = await probe.Ctx.TodoItems.IgnoreQueryFilters().AsNoTracking().ToListAsync().ConfigureAwait(true);
+        var all = await probe.Ctx.TodoItems.IgnoreQueryFilters().AsNoTracking().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, all.Count);
         Assert.Contains(all, r => r.WorkspaceId == bitnetWs && r.Id == sharedId && r.Title == "BitNet-side integration");
         Assert.Contains(all, r => r.WorkspaceId == truckMateWs && r.Id == sharedId && r.Title == "TruckMate-side integration");
@@ -189,7 +189,7 @@ public sealed class TodoBootstrapImporterTests : IDisposable
             .AsNoTracking()
             .OrderBy(r => r.SectionOrder)
             .ThenBy(r => r.ItemOrder)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Equal(2, rows.Count);
         Assert.Equal("first-section", rows[0].Section);
@@ -197,13 +197,13 @@ public sealed class TodoBootstrapImporterTests : IDisposable
         Assert.Equal("second-section", rows[1].Section);
         Assert.Equal(1, rows[1].SectionOrder);
 
-        var meta = await probe.Ctx.TodoDocumentMetadata.AsNoTracking().SingleAsync().ConfigureAwait(true);
+        var meta = await probe.Ctx.TodoDocumentMetadata.AsNoTracking().SingleAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var noteRows = await probe.Ctx.TodoDocumentNotes
             .AsNoTracking()
             .Where(n => n.WorkspaceId == meta.WorkspaceId && n.SingletonId == meta.SingletonId)
             .OrderBy(n => n.Ordinal)
             .Select(n => n.Value)
-            .ToListAsync()
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.Contains("Top-level note A", noteRows);
         Assert.Contains("Top-level note B", noteRows);

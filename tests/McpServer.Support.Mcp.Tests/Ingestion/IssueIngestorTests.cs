@@ -28,7 +28,7 @@ public sealed class IssueIngestorTests
         _github.GetIssueAsync(1, Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueDetailResult(true, CreateDetailedIssue(1, "Bug"), null));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(results);
         Assert.Equal("issue", results[0].Doc.SourceType);
@@ -52,7 +52,7 @@ public sealed class IssueIngestorTests
         _github.GetIssueAsync(42, Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueDetailResult(true, issue, null));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(results);
         var content = results[0].Chunks[0].Content;
@@ -68,7 +68,7 @@ public sealed class IssueIngestorTests
         _github.ListIssuesAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueListResult(false, "not authenticated", Array.Empty<GitHubIssueItem>()));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(results);
     }
@@ -88,7 +88,7 @@ public sealed class IssueIngestorTests
         _github.GetIssueAsync(2, Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueDetailResult(true, CreateDetailedIssue(2, "Bug2"), null));
 
-        var results = await _sut.IngestAsync().ConfigureAwait(true);
+        var results = await _sut.IngestAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(results);
         Assert.Equal("issue:2", results[0].Doc.SourceKey);

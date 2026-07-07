@@ -41,10 +41,10 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
         request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
 
-        var response = await _client.SendAsync(request).ConfigureAwait(true);
+        var response = await _client.SendAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("\"result\"", body, StringComparison.Ordinal);
         Assert.Contains("serverInfo", body, StringComparison.Ordinal);
     }
@@ -55,7 +55,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
         var initRequest = new { jsonrpc = "2.0", id = 1, method = "initialize", @params = new { protocolVersion = "2025-03-26", capabilities = new { }, clientInfo = new { name = "t", version = "1" } } };
         var content = new StringContent(JsonSerializer.Serialize(initRequest), Encoding.UTF8, "application/json");
 
-        var response = await _client.PostAsync("/mcp-transport", content).ConfigureAwait(true);
+        var response = await _client.PostAsync("/mcp-transport", content, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Without proper Accept header, MCP Streamable HTTP returns 406 Not Acceptable.
         Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
@@ -64,7 +64,7 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
     [Fact]
     public async Task McpTransport_ExistingRestEndpoints_StillWork()
     {
-        var response = await _client.GetAsync("/health").ConfigureAwait(true);
+        var response = await _client.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 

@@ -52,7 +52,7 @@ public sealed class FederationPushServiceTests
             .Returns(new FederationPushResult(2, 0, []));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.PushTodosAsync();
+        var result = await sut.PushTodosAsync(ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Succeeded);
         Assert.Equal(0, result.Failed);
@@ -68,7 +68,7 @@ public sealed class FederationPushServiceTests
             .ThrowsAsync(new HttpRequestException("Connection refused"));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.PushTodosAsync();
+        var result = await sut.PushTodosAsync(ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(0, result.Succeeded);
         Assert.True(result.Failed > 0);
@@ -86,7 +86,7 @@ public sealed class FederationPushServiceTests
             .Returns(new FederationPushResult(1, 0, []));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.PushSessionLogsAsync();
+        var result = await sut.PushSessionLogsAsync(ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(1, result.Succeeded);
         Assert.Equal(0, result.Failed);
@@ -106,7 +106,7 @@ public sealed class FederationPushServiceTests
             .Returns(new FederationPushResult(1, 0, []));
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
-        var result = await sut.PushAllAsync();
+        var result = await sut.PushAllAsync(ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, result.Succeeded);
         Assert.Equal(0, result.Failed);
@@ -117,7 +117,7 @@ public sealed class FederationPushServiceTests
     public async Task PushAllAsync_FederationDisabled_ReturnsError()
     {
         var sut = CreateSut(CreateRegistry(enabled: false));
-        var result = await sut.PushAllAsync();
+        var result = await sut.PushAllAsync(ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(0, result.Succeeded);
         Assert.True(result.Failed > 0);
@@ -129,7 +129,7 @@ public sealed class FederationPushServiceTests
     public async Task PushAllAsync_NoTarget_ReturnsError()
     {
         var sut = CreateSut(CreateRegistry(enabled: true)); // no targets
-        var result = await sut.PushAllAsync();
+        var result = await sut.PushAllAsync(ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(0, result.Succeeded);
         Assert.True(result.Failed > 0);

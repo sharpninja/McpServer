@@ -31,7 +31,7 @@ public sealed class ToolRegistryErrorTests
     [Fact]
     public async Task Get_NonExistentTool_Returns404()
     {
-        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/999999");
+        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -46,7 +46,7 @@ public sealed class ToolRegistryErrorTests
     [Fact]
     public async Task Update_NonExistentTool_Returns404()
     {
-        var r = await _f.Client.PutAsJsonAsync($"{ToolRegistryFixture.ToolRoute}/999999", new { Name = "ghost" });
+        var r = await _f.Client.PutAsJsonAsync($"{ToolRegistryFixture.ToolRoute}/999999", new { Name = "ghost" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -61,7 +61,7 @@ public sealed class ToolRegistryErrorTests
     [Fact]
     public async Task Delete_NonExistentTool_Returns404()
     {
-        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/999999");
+        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/999999", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -76,7 +76,7 @@ public sealed class ToolRegistryErrorTests
     [Fact]
     public async Task RemoveBucket_NonExistent_Returns404()
     {
-        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}");
+        var r = await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -91,7 +91,7 @@ public sealed class ToolRegistryErrorTests
     [Fact]
     public async Task BrowseBucket_NonExistent_Returns404()
     {
-        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/browse");
+        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/browse", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -106,7 +106,7 @@ public sealed class ToolRegistryErrorTests
     [Fact]
     public async Task SyncBucket_NonExistent_Returns404()
     {
-        var r = await _f.Client.PostAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/sync", null);
+        var r = await _f.Client.PostAsync($"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/sync", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -122,7 +122,7 @@ public sealed class ToolRegistryErrorTests
     public async Task InstallFromBucket_NonExistent_Returns404()
     {
         var r = await _f.Client.PostAsync(
-            $"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/install?toolName=foo", null);
+            $"{ToolRegistryFixture.BucketRoute}/nonexistent-{Guid.NewGuid():N}/install?toolName=foo", null, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
@@ -141,7 +141,7 @@ public sealed class ToolRegistryErrorTests
         {
             Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json")
         };
-        var r = await _f.Client.SendAsync(req);
+        var r = await _f.Client.SendAsync(req, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.MethodNotAllowed, r.StatusCode);
     }
 
@@ -157,7 +157,7 @@ public sealed class ToolRegistryErrorTests
     public async Task Get_InvalidIdFormat_Returns404Or400()
     {
         // {id:int} constraint should reject non-numeric — returns 404 (no matching route).
-        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/not-a-number");
+        var r = await _f.Client.GetAsync($"{ToolRegistryFixture.ToolRoute}/not-a-number", cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(
             r.StatusCode == HttpStatusCode.NotFound || r.StatusCode == HttpStatusCode.BadRequest,
             $"Expected 404/400 but got {(int)r.StatusCode}.");
@@ -176,22 +176,22 @@ public sealed class ToolRegistryErrorTests
     {
         var name = ToolRegistryFixture.GenerateToolName();
         var body = new { Name = name, Description = "Dup", Tags = new[] { "dup" } };
-        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
+        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, first.StatusCode);
-        var firstRes = await first.Content.ReadFromJsonAsync<ToolMutationResult>();
+        var firstRes = await first.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
 
         try
         {
-            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body);
+            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.ToolRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
-            var res = await second.Content.ReadFromJsonAsync<ToolMutationResult>();
+            var res = await second.Content.ReadFromJsonAsync<ToolMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(res);
             Assert.False(res.Success);
         }
         finally
         {
             if (firstRes?.Tool != null)
-                await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{firstRes.Tool.Id}");
+                await _f.Client.DeleteAsync($"{ToolRegistryFixture.ToolRoute}/{firstRes.Tool.Id}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -208,17 +208,17 @@ public sealed class ToolRegistryErrorTests
     {
         var name = ToolRegistryFixture.GenerateBucketName();
         var body = new { Name = name, Owner = "sharpninja", Repo = "McpServer" };
-        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+        var first = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, first.StatusCode);
 
         try
         {
-            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body);
+            var second = await _f.Client.PostAsJsonAsync(ToolRegistryFixture.BucketRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
         }
         finally
         {
-            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}");
+            await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -234,7 +234,7 @@ public sealed class ToolRegistryErrorTests
     public async Task Search_WithWorkspace_Returns200()
     {
         var r = await _f.Client.GetAsync(
-            $"{ToolRegistryFixture.ToolRoute}/search?keyword=test&workspace=E%3A%5Cgithub%5CMcpServer");
+            $"{ToolRegistryFixture.ToolRoute}/search?keyword=test&workspace=E%3A%5Cgithub%5CMcpServer", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
     }
 
@@ -250,7 +250,7 @@ public sealed class ToolRegistryErrorTests
     public async Task List_WithWorkspace_Returns200()
     {
         var r = await _f.Client.GetAsync(
-            $"{ToolRegistryFixture.ToolRoute}?workspace=E%3A%5Cgithub%5CMcpServer");
+            $"{ToolRegistryFixture.ToolRoute}?workspace=E%3A%5Cgithub%5CMcpServer", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
     }
 }

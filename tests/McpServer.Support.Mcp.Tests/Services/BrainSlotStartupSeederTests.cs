@@ -51,7 +51,7 @@ public sealed class BrainSlotStartupSeederTests
         // Every persisted row carries the global workspace id ("").
         using var scope = provider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        var rows = await db.BrainSlotDefinitions.IgnoreQueryFilters().AsNoTracking().ToListAsync().ConfigureAwait(true);
+        var rows = await db.BrainSlotDefinitions.IgnoreQueryFilters().AsNoTracking().ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(4, rows.Count);
         Assert.All(rows, r => Assert.Equal(string.Empty, r.WorkspaceId));
     }

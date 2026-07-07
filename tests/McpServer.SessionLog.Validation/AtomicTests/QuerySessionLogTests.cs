@@ -41,10 +41,10 @@ public sealed class QuerySessionLogTests
     [Fact]
     public async Task Query_NoFilters_Returns200WithResults()
     {
-        var response = await _fixture.Client.GetAsync(SessionLogEndpointFixture.SessionLogRoute);
+        var response = await _fixture.Client.GetAsync(SessionLogEndpointFixture.SessionLogRoute, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result!.TotalCount >= 0);
         Assert.NotNull(result.Items);
@@ -74,12 +74,12 @@ public sealed class QuerySessionLogTests
             status = "completed",
             turnCount = 0
         };
-        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
 
         // Query by agent
-        var response = await _fixture.Client.GetAsync($"{SessionLogEndpointFixture.SessionLogRoute}?agent=QueryAgentTest");
+        var response = await _fixture.Client.GetAsync($"{SessionLogEndpointFixture.SessionLogRoute}?agent=QueryAgentTest", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result!.TotalCount >= 1);
         Assert.All(result.Items!, s => Assert.Equal("QueryAgentTest", s.SourceType));
@@ -109,11 +109,11 @@ public sealed class QuerySessionLogTests
             status = "completed",
             turnCount = 0
         };
-        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
 
-        var response = await _fixture.Client.GetAsync($"{SessionLogEndpointFixture.SessionLogRoute}?model={uniqueModel}");
+        var response = await _fixture.Client.GetAsync($"{SessionLogEndpointFixture.SessionLogRoute}?model={uniqueModel}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result!.TotalCount >= 1);
     }
@@ -132,10 +132,10 @@ public sealed class QuerySessionLogTests
         var from = DateTimeOffset.UtcNow.AddDays(-1).ToString("o");
         var to = DateTimeOffset.UtcNow.AddDays(1).ToString("o");
         var response = await _fixture.Client.GetAsync(
-            $"{SessionLogEndpointFixture.SessionLogRoute}?from={Uri.EscapeDataString(from)}&to={Uri.EscapeDataString(to)}");
+            $"{SessionLogEndpointFixture.SessionLogRoute}?from={Uri.EscapeDataString(from)}&to={Uri.EscapeDataString(to)}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
     }
 
@@ -150,10 +150,10 @@ public sealed class QuerySessionLogTests
     [Fact]
     public async Task Query_WithPagination_Returns200()
     {
-        var response = await _fixture.Client.GetAsync($"{SessionLogEndpointFixture.SessionLogRoute}?limit=2&offset=0");
+        var response = await _fixture.Client.GetAsync($"{SessionLogEndpointFixture.SessionLogRoute}?limit=2&offset=0", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result!.Items);
         Assert.True(result.Items!.Count <= 2);
@@ -171,10 +171,10 @@ public sealed class QuerySessionLogTests
     public async Task Query_NonMatchingAgent_ReturnsEmptyResults()
     {
         var response = await _fixture.Client.GetAsync(
-            $"{SessionLogEndpointFixture.SessionLogRoute}?agent=NonExistentAgent_{Guid.NewGuid():N}");
+            $"{SessionLogEndpointFixture.SessionLogRoute}?agent=NonExistentAgent_{Guid.NewGuid():N}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal(0, result!.TotalCount);
     }
@@ -204,12 +204,12 @@ public sealed class QuerySessionLogTests
             status = "completed",
             turnCount = 0
         };
-        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
 
         var response = await _fixture.Client.GetAsync(
-            $"{SessionLogEndpointFixture.SessionLogRoute}?text={Uri.EscapeDataString(uniqueText)}");
+            $"{SessionLogEndpointFixture.SessionLogRoute}?text={Uri.EscapeDataString(uniqueText)}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         // Text search may use FTS5 — at least verify 200 OK
     }

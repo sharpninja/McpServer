@@ -292,10 +292,17 @@ function Open-PluginTurn {
 
     $payload = Read-HookInput
     $prompt = Get-HookPayloadValue -Payload $payload -Name 'prompt'
-    if (-not $prompt) { $prompt = 'User prompt' }
+    if (-not $prompt) { $prompt = 'Continuation or hook-triggered turn.' }
     $title = (($prompt -split "`r?`n")[0]).Trim()
-    if (-not $title) { $title = 'User prompt' }
+    if (-not $title) { $title = 'Continuation turn' }
     if ($title.Length -gt 60) { $title = $title.Substring(0, 60) }
+    $markerSnapshot = $null
+    try {
+        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $startPath
+    } catch {
+    }
+    $sessionState = Read-McpYamlObject -Path $sessionFile -Create
+    $sessionId = if ($sessionState.Contains('sessionId')) { [string]$sessionState['sessionId'] } else { '' }
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
     $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
@@ -319,7 +326,14 @@ function Open-PluginTurn {
         auditDecisions = 0
         queryText = $prompt
     }
-    [System.IO.File]::WriteAllText($turnFile, (ConvertTo-PluginParamsYaml $turnState))
+    if ($sessionId) {
+        $turnState['sessionId'] = $sessionId
+    }
+    if ($markerSnapshot) {
+        $turnState['markerFilePath'] = $markerSnapshot.markerFilePath
+        $turnState['markerLastWriteUtc'] = $markerSnapshot.markerLastWriteUtc
+    }
+    Write-McpYamlObject -Path $turnFile -Document $turnState
 
     Write-PluginJson ([ordered]@{
         hookSpecificOutput = [ordered]@{

@@ -49,12 +49,12 @@ public sealed class SessionLogServiceAgentLinkTests : IDisposable
             CreatedAt = DateTime.UtcNow,
             ModifiedAt = DateTime.UtcNow,
         });
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var dto = CreateDto("Codex", BuildSessionId("Codex", "agent-link"));
-        var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.SessionLogs.FirstAsync(x => x.Id == id).ConfigureAwait(true);
+        var stored = await _db.SessionLogs.FirstAsync(x => x.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Codex", stored.AgentDefinitionId);
         Assert.Equal("Codex", dto.AgentDefinitionId);
     }
@@ -87,12 +87,12 @@ public sealed class SessionLogServiceAgentLinkTests : IDisposable
                 CreatedAt = DateTime.UtcNow,
                 ModifiedAt = DateTime.UtcNow,
             });
-        await _db.SaveChangesAsync().ConfigureAwait(true);
+        await _db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        await _sut.SubmitAsync(CreateDto("Codex", BuildSessionId("Codex", "query-1"))).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateDto("Copilot", BuildSessionId("Copilot", "query-2"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateDto("Codex", BuildSessionId("Codex", "query-1")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateDto("Copilot", BuildSessionId("Copilot", "query-2")), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { AgentDefinitionId = "Codex" }).ConfigureAwait(true);
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { AgentDefinitionId = "Codex" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.TotalCount);
         var item = Assert.Single(result.Items);

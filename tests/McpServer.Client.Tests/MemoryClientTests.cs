@@ -29,7 +29,7 @@ public sealed class MemoryClientTests
         using var http = new HttpClient(handler);
         var client = new MemoryClient(http, DefaultOptions);
 
-        var result = await client.ListAsync(MemoryScope.Global, "operator notes", "global").ConfigureAwait(true);
+        var result = await client.ListAsync(MemoryScope.Global, "operator notes", "global", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result.Items);
         Assert.Equal(MemoryScope.Global, result.Items[0].Scope);
@@ -65,7 +65,7 @@ public sealed class MemoryClientTests
             Category = "operator",
             Scope = MemoryScope.Workspace,
             Text = "workspace memory",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -81,11 +81,11 @@ public sealed class MemoryClientTests
         using var http = new HttpClient(handler);
         var client = new MemoryClient(http, DefaultOptions);
 
-        await client.UpdateAsync("MEMORY-OPERATOR-001", new MemoryUpdateRequest { Text = "updated" }).ConfigureAwait(true);
+        await client.UpdateAsync("MEMORY-OPERATOR-001", new MemoryUpdateRequest { Text = "updated" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Equal("http://localhost:7147/mcpserver/memory/MEMORY-OPERATOR-001", handler.LastRequest.RequestUri!.ToString());
 
-        await client.RemoveAsync("MEMORY-OPERATOR-001").ConfigureAwait(true);
+        await client.RemoveAsync("MEMORY-OPERATOR-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
         Assert.Equal("http://localhost:7147/mcpserver/memory/MEMORY-OPERATOR-001", handler.LastRequest.RequestUri!.ToString());
     }

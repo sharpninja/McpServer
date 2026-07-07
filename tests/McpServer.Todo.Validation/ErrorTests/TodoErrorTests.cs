@@ -44,7 +44,7 @@ public sealed class TodoErrorTests
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var response = await _fixture.Client.GetAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -62,7 +62,7 @@ public sealed class TodoErrorTests
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var body = new { Title = "Ghost" };
         var response = await _fixture.Client.PutAsJsonAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", body);
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -79,7 +79,7 @@ public sealed class TodoErrorTests
     {
         var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
         var response = await _fixture.Client.DeleteAsync(
-            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -100,13 +100,13 @@ public sealed class TodoErrorTests
         try
         {
             var body = new { Id = testId, Title = "DupeFirst", Section = "mvp-support", Priority = "low" };
-            var first = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+            var first = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Created, first.StatusCode);
 
-            var second = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+            var second = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body, cancellationToken: TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
 
-            var result = await second.Content.ReadFromJsonAsync<TodoMutationResult>();
+            var result = await second.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.False(string.IsNullOrWhiteSpace(result.Error));
@@ -114,7 +114,7 @@ public sealed class TodoErrorTests
         }
         finally
         {
-            await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(testId)}");
+            await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(testId)}", cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -133,7 +133,7 @@ public sealed class TodoErrorTests
     {
         var response = await _fixture.Client.PostAsync(
             TodoEndpointFixture.TodoRoute,
-            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(
             response.StatusCode == HttpStatusCode.BadRequest ||
@@ -155,7 +155,7 @@ public sealed class TodoErrorTests
         var fakeId = $"FAKE-{Guid.NewGuid():N}";
         var response = await _fixture.Client.PutAsync(
             $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}",
-            null);
+            null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(
             response.StatusCode == HttpStatusCode.BadRequest ||
@@ -181,7 +181,7 @@ public sealed class TodoErrorTests
         {
             Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json")
         };
-        var response = await _fixture.Client.SendAsync(request);
+        var response = await _fixture.Client.SendAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
     }
@@ -200,11 +200,11 @@ public sealed class TodoErrorTests
     public async Task Query_InvalidPriority_Returns200EmptyOrAll()
     {
         var response = await _fixture.Client.GetAsync(
-            $"{TodoEndpointFixture.TodoRoute}?priority=nonexistent_priority");
+            $"{TodoEndpointFixture.TodoRoute}?priority=nonexistent_priority", cancellationToken: TestContext.Current.CancellationToken);
 
         // The service should handle gracefully — either return empty or all items.
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<TodoQueryResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoQueryResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
     }
 
@@ -220,10 +220,10 @@ public sealed class TodoErrorTests
     public async Task Query_MultipleFilters_Returns200()
     {
         var response = await _fixture.Client.GetAsync(
-            $"{TodoEndpointFixture.TodoRoute}?priority=high&done=false&section=audit");
+            $"{TodoEndpointFixture.TodoRoute}?priority=high&done=false&section=audit", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<TodoQueryResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoQueryResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
     }

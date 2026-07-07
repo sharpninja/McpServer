@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json.Nodes;
@@ -87,6 +88,7 @@ public sealed class ClaudeCodeHookWiringSkillTests
             AssertHookCommandCount(hooks, "UserPromptSubmit", "user-prompt-submit.ps1", 1);
             AssertHookCommandCount(hooks, "Stop", "stop-gate.ps1", 1);
             AssertHookCommandCount(hooks, "PostToolUse", "code-verify.ps1", 1);
+            AssertInstalledHooksUseStableBridge(hooks);
         }
         finally
         {
@@ -166,6 +168,7 @@ public sealed class ClaudeCodeHookWiringSkillTests
             AssertHookCommandCount(hooks, "UserPromptSubmit", "user-prompt-submit.ps1", 1);
             AssertHookCommandCount(hooks, "Stop", "stop-gate.ps1", 1);
             AssertHookCommandCount(hooks, "PostToolUse", "code-verify.ps1", 1);
+            AssertInstalledHooksUseStableBridge(hooks);
 
             var secondOutput = RunInstaller(scriptPath, settingsPath);
             Assert.Contains("\"status\":\"valid\"", secondOutput, StringComparison.OrdinalIgnoreCase);
@@ -236,6 +239,62 @@ public sealed class ClaudeCodeHookWiringSkillTests
     }
 
     /// <summary>
+    /// BUG-TRIAGE-021 / TEST-MCP-PLUGIN-PSONLY-001: active Claude settings must
+    /// route through a stable bridge that can resolve the current plugin root even
+    /// when an old cache root hint has been deleted.
+    /// </summary>
+    [Fact]
+    public void ClaudeCode_HookBridge_UsesCurrentPluginRootWhenHintWasDeleted()
+    {
+        var bridgeSourcePath = Path.Combine(
+            PluginRoot,
+            "skills",
+            "claude-hook-wiring",
+            "scripts",
+            "claude-mcp-hook-bridge.ps1");
+        Assert.True(File.Exists(bridgeSourcePath), $"Claude hook bridge missing: {bridgeSourcePath}");
+
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"claude-hook-bridge-{Guid.NewGuid():N}");
+        var stableHookRoot = Path.Combine(tempRoot, "stable-hooks");
+        var currentPluginRoot = Path.Combine(tempRoot, "current-plugin");
+        var stalePluginRoot = Path.Combine(tempRoot, "deleted-plugin");
+        var fakeHookDirectory = Path.Combine(currentPluginRoot, "hooks", "scripts");
+        Directory.CreateDirectory(stableHookRoot);
+        Directory.CreateDirectory(fakeHookDirectory);
+        Directory.CreateDirectory(stalePluginRoot);
+        try
+        {
+            var bridgePath = Path.Combine(stableHookRoot, "claude-mcp-hook-bridge.ps1");
+            File.Copy(bridgeSourcePath, bridgePath);
+            File.WriteAllText(Path.Combine(stableHookRoot, "current-plugin-root.txt"), currentPluginRoot);
+            File.WriteAllText(
+                Path.Combine(fakeHookDirectory, "echo-hook.ps1"),
+                """
+                #Requires -Version 7.0
+                [CmdletBinding()]
+                param(
+                    [Parameter(ValueFromRemainingArguments = $true)]
+                    [string[]]$RemainingArguments
+                )
+
+                Write-Output 'bridge-ok'
+                exit 0
+                """);
+
+            Directory.Delete(stalePluginRoot, recursive: true);
+
+            var output = RunBridge(bridgePath, "echo-hook.ps1", stalePluginRoot);
+
+            Assert.Contains("bridge-ok", output, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// TEST-MCP-PLUGIN-PSONLY-001: the rendered marker template tells Claude Code
     /// to trigger the hook validation skill during plugin bootstrap.
     /// </summary>
@@ -280,6 +339,33 @@ public sealed class ClaudeCodeHookWiringSkillTests
         var stderr = process.StandardError.ReadToEnd();
         Assert.True(process.WaitForExit(30000), "Claude hook wiring installer timed out.");
         Assert.True(process.ExitCode == 0, $"Installer failed with exit code {process.ExitCode}.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}");
+        return stdout;
+    }
+
+    private static string RunBridge(string bridgePath, string scriptName, string pluginRootHint)
+    {
+        var startInfo = new ProcessStartInfo("pwsh")
+        {
+            WorkingDirectory = Path.GetDirectoryName(bridgePath)!,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        startInfo.ArgumentList.Add("-NoLogo");
+        startInfo.ArgumentList.Add("-NoProfile");
+        startInfo.ArgumentList.Add("-NonInteractive");
+        startInfo.ArgumentList.Add("-File");
+        startInfo.ArgumentList.Add(bridgePath);
+        startInfo.ArgumentList.Add("-ScriptName");
+        startInfo.ArgumentList.Add(scriptName);
+        startInfo.ArgumentList.Add("-PluginRootHint");
+        startInfo.ArgumentList.Add(pluginRootHint);
+
+        using var process = Process.Start(startInfo)!;
+        var stdout = process.StandardOutput.ReadToEnd();
+        var stderr = process.StandardError.ReadToEnd();
+        Assert.True(process.WaitForExit(30000), "Claude hook bridge timed out.");
+        Assert.True(process.ExitCode == 0, $"Bridge failed with exit code {process.ExitCode}.\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}");
         return stdout;
     }
 
@@ -337,6 +423,72 @@ public sealed class ClaudeCodeHookWiringSkillTests
         }
 
         Assert.Equal(expectedCount, count);
+    }
+
+    private static void AssertInstalledHooksUseStableBridge(JsonObject hooks)
+    {
+        foreach (var commandText in EnumerateHookCommands(hooks))
+        {
+            Assert.DoesNotContain("${CLAUDE_PLUGIN_ROOT}", commandText, StringComparison.OrdinalIgnoreCase);
+        }
+
+        AssertHookCommandWithFragments(hooks, "UserPromptSubmit", "claude-mcp-hook-bridge.ps1", "user-prompt-submit.ps1");
+        AssertHookCommandWithFragments(hooks, "Stop", "claude-mcp-hook-bridge.ps1", "stop-gate.ps1");
+        AssertHookCommandWithFragments(hooks, "PostToolUse", "claude-mcp-hook-bridge.ps1", "code-verify.ps1");
+    }
+
+    private static void AssertHookCommandWithFragments(JsonObject hooks, string eventName, params string[] fragments)
+    {
+        Assert.True(hooks.TryGetPropertyValue(eventName, out var eventNode), $"{eventName} hook missing.");
+        foreach (var hookGroup in eventNode!.AsArray())
+        {
+            var commands = hookGroup?["hooks"]?.AsArray();
+            if (commands is null)
+                continue;
+
+            foreach (var command in commands)
+            {
+                var commandText = command?["command"]?.GetValue<string>() ?? string.Empty;
+                var containsAll = true;
+                foreach (var fragment in fragments)
+                {
+                    if (!commandText.Contains(fragment, StringComparison.OrdinalIgnoreCase))
+                    {
+                        containsAll = false;
+                        break;
+                    }
+                }
+
+                if (containsAll)
+                    return;
+            }
+        }
+
+        Assert.Fail($"{eventName} hook command did not contain all fragments: {string.Join(", ", fragments)}");
+    }
+
+    private static IEnumerable<string> EnumerateHookCommands(JsonObject hooks)
+    {
+        foreach (var hookEvent in hooks)
+        {
+            var hookGroups = hookEvent.Value?.AsArray();
+            if (hookGroups is null)
+                continue;
+
+            foreach (var hookGroup in hookGroups)
+            {
+                var commands = hookGroup?["hooks"]?.AsArray();
+                if (commands is null)
+                    continue;
+
+                foreach (var command in commands)
+                {
+                    var commandText = command?["command"]?.GetValue<string>();
+                    if (!string.IsNullOrWhiteSpace(commandText))
+                        yield return commandText;
+                }
+            }
+        }
     }
 
     private static string ResolvePluginRoot()

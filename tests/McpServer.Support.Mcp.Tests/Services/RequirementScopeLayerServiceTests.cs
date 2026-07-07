@@ -35,7 +35,7 @@ public sealed class RequirementScopeLayerServiceTests
         var service = fixture.CreateService();
 
         fixture.SetWorkspace(workspaceA);
-        var initial = await service.GetRequirementLayersAsync();
+        var initial = await service.GetRequirementLayersAsync(ct: TestContext.Current.CancellationToken);
 
         var layer1 = Assert.Single(initial);
         Assert.Equal("layer-1", layer1.Key);
@@ -46,13 +46,13 @@ public sealed class RequirementScopeLayerServiceTests
             Key: "layer-2",
             Order: 2,
             Name: "Layer 2",
-            Description: "Second implementation layer"));
+            Description: "Second implementation layer"), ct: TestContext.Current.CancellationToken);
 
-        var workspaceALayers = await service.GetRequirementLayersAsync();
+        var workspaceALayers = await service.GetRequirementLayersAsync(ct: TestContext.Current.CancellationToken);
         Assert.Contains(workspaceALayers, x => x.Key == "layer-2");
 
         fixture.SetWorkspace(workspaceB);
-        var workspaceBLayers = await service.GetRequirementLayersAsync();
+        var workspaceBLayers = await service.GetRequirementLayersAsync(ct: TestContext.Current.CancellationToken);
 
         Assert.Single(workspaceBLayers);
         Assert.DoesNotContain(workspaceBLayers, x => x.Key == "layer-2");
@@ -69,27 +69,27 @@ public sealed class RequirementScopeLayerServiceTests
         fixture.SetWorkspace(fixture.CreateWorkspace("validation"));
         var service = fixture.CreateService();
 
-        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 2, "Layer 2"));
+        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 2, "Layer 2"), ct: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 3, "Duplicate key")));
+            service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 3, "Duplicate key"), ct: TestContext.Current.CancellationToken));
         await Assert.ThrowsAsync<RequirementsConflictException>(() =>
-            service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-3", 2, "Duplicate order")));
+            service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-3", 2, "Duplicate order"), ct: TestContext.Current.CancellationToken));
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             service.UpdateRequirementLayerAsync(new RequirementScopeLayerUpdateRequest("layer-2")
             {
                 ScopeEndLayerKey = "layer-1"
-            }));
+            }, ct: TestContext.Current.CancellationToken));
         await Assert.ThrowsAsync<RequirementsNotFoundException>(() =>
             service.UpdateRequirementLayerAsync(new RequirementScopeLayerUpdateRequest("changed")
             {
                 Order = 99
-            }));
+            }, ct: TestContext.Current.CancellationToken));
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             service.UpdateRequirementLayerAsync(new RequirementScopeLayerUpdateRequest("layer-2")
             {
                 Order = 99
-            }));
+            }, ct: TestContext.Current.CancellationToken));
     }
 
     /// <summary>
@@ -104,44 +104,44 @@ public sealed class RequirementScopeLayerServiceTests
         fixture.SetWorkspace(fixture.CreateWorkspace("effective"));
         var service = fixture.CreateService();
 
-        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 2, "Layer 2"));
-        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-3", 3, "Layer 3"));
+        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 2, "Layer 2"), ct: TestContext.Current.CancellationToken);
+        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-3", 3, "Layer 3"), ct: TestContext.Current.CancellationToken);
 
         await service.AddFrAsync(new FrEntry(
             "FR-MCP-901",
             "Future FR",
             "Applies only from layer 2.",
             Priority: "high",
-            ScopeStartLayerKey: "layer-2"));
+            ScopeStartLayerKey: "layer-2"), ct: TestContext.Current.CancellationToken);
         await service.AddFrAsync(new FrEntry(
             "FR-MCP-902",
             "Expired FR",
             "Applies only at layer 1.",
             Priority: "high",
-            ScopeEndLayerKey: "layer-1"));
+            ScopeEndLayerKey: "layer-1"), ct: TestContext.Current.CancellationToken);
         await service.AddTrAsync(new TrEntry(
             "TR-MCP-REQSCOPE-901",
             "Future TR",
             "TR applies from layer 2.",
             Priority: "high",
-            ScopeStartLayerKey: "layer-2"));
+            ScopeStartLayerKey: "layer-2"), ct: TestContext.Current.CancellationToken);
         await service.AddTestAsync(new TestEntry(
             "TEST-MCP-901",
             "TEST applies from layer 2.",
             Priority: "high",
-            ScopeStartLayerKey: "layer-2"));
+            ScopeStartLayerKey: "layer-2"), ct: TestContext.Current.CancellationToken);
         await service.UpsertMappingAsync(new FrTrMapping(
             "FR-MCP-901",
             ["TR-MCP-REQSCOPE-901"],
-            ["TEST-MCP-901"]));
+            ["TEST-MCP-901"]), ct: TestContext.Current.CancellationToken);
 
-        var before = await service.GetEffectiveRequirementsAsync();
+        var before = await service.GetEffectiveRequirementsAsync(ct: TestContext.Current.CancellationToken);
         Assert.Equal("layer-1", before.CurrentLayer.Key);
         Assert.DoesNotContain(before.Functional, x => x.Id == "FR-MCP-901");
         Assert.Contains(before.Functional, x => x.Id == "FR-MCP-902");
 
-        await service.SetWorkspaceCurrentRequirementLayerAsync("layer-2");
-        var layer2 = await service.GetEffectiveRequirementsAsync();
+        await service.SetWorkspaceCurrentRequirementLayerAsync("layer-2", ct: TestContext.Current.CancellationToken);
+        var layer2 = await service.GetEffectiveRequirementsAsync(ct: TestContext.Current.CancellationToken);
         Assert.Equal("layer-2", layer2.CurrentLayer.Key);
         Assert.Contains(layer2.Functional, x => x.Id == "FR-MCP-901");
         Assert.DoesNotContain(layer2.Functional, x => x.Id == "FR-MCP-902");
@@ -150,10 +150,10 @@ public sealed class RequirementScopeLayerServiceTests
         await service.UpdateRequirementLayerAsync(new RequirementScopeLayerUpdateRequest("layer-2")
         {
             ScopeEndLayerKey = "layer-2"
-        });
-        await service.SetWorkspaceCurrentRequirementLayerAsync("layer-3");
+        }, ct: TestContext.Current.CancellationToken);
+        await service.SetWorkspaceCurrentRequirementLayerAsync("layer-3", ct: TestContext.Current.CancellationToken);
 
-        var layer3 = await service.GetEffectiveRequirementsAsync();
+        var layer3 = await service.GetEffectiveRequirementsAsync(ct: TestContext.Current.CancellationToken);
         Assert.DoesNotContain(layer3.Functional, x => x.Id == "FR-MCP-901");
         Assert.Empty(layer3.Mappings);
     }
@@ -168,14 +168,14 @@ public sealed class RequirementScopeLayerServiceTests
         using var fixture = new RequirementsScopeFixture();
         fixture.SetWorkspace(fixture.CreateWorkspace("mutations"));
         var service = fixture.CreateService();
-        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 2, "Layer 2"));
+        await service.CreateRequirementLayerAsync(new RequirementScopeLayerEntry("layer-2", 2, "Layer 2"), ct: TestContext.Current.CancellationToken);
 
         await Assert.ThrowsAsync<RequirementsNotFoundException>(() =>
             service.AddFrAsync(new FrEntry(
                 "FR-MCP-903",
                 "Missing start",
                 "Invalid start layer.",
-                ScopeStartLayerKey: "missing-layer")));
+                ScopeStartLayerKey: "missing-layer"), ct: TestContext.Current.CancellationToken));
 
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
             service.AddFrAsync(new FrEntry(
@@ -183,7 +183,7 @@ public sealed class RequirementScopeLayerServiceTests
                 "End before start",
                 "Invalid layer window.",
                 ScopeStartLayerKey: "layer-2",
-                ScopeEndLayerKey: "layer-1")));
+                ScopeEndLayerKey: "layer-1"), ct: TestContext.Current.CancellationToken));
     }
 
     private sealed class RequirementsScopeFixture : IDisposable

@@ -78,7 +78,7 @@ public sealed class FederationFanoutSyncServiceTests
 
         await sut.SyncOnceAsync(CancellationToken.None).ConfigureAwait(true);
 
-        _ = apply.DidNotReceiveWithAnyArgs().ApplyAsync(default!, default);
+        _ = apply.DidNotReceiveWithAnyArgs().ApplyAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("/mcpserver/federation/sync/8/ack", handler.AckUris.Single(), StringComparison.Ordinal);
         Assert.Contains("\"status\":\"rejected\"", handler.AckBodies.Single(), StringComparison.Ordinal);
     }
@@ -103,7 +103,7 @@ public sealed class FederationFanoutSyncServiceTests
 
         await sut.SyncOnceAsync(CancellationToken.None).ConfigureAwait(true);
 
-        _ = apply.DidNotReceiveWithAnyArgs().ApplyAsync(default!, default);
+        _ = apply.DidNotReceiveWithAnyArgs().ApplyAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("/mcpserver/federation/sync/11/ack", handler.AckUris.Single(), StringComparison.Ordinal);
         Assert.Contains("\"status\":\"rejected\"", handler.AckBodies.Single(), StringComparison.Ordinal);
         Assert.Contains("Signed federation envelope is required", handler.AckBodies.Single(), StringComparison.Ordinal);
@@ -145,7 +145,7 @@ public sealed class FederationFanoutSyncServiceTests
 
         await sut.SyncOnceAsync(CancellationToken.None).ConfigureAwait(true);
 
-        _ = apply.DidNotReceiveWithAnyArgs().ApplyAsync(default!, default);
+        _ = apply.DidNotReceiveWithAnyArgs().ApplyAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
         _ = localExecution.Received(1).ExecuteAsync(
             Arg.Is<FederationLocalExecutionRequest>(r =>
                 r != null &&
@@ -185,7 +185,7 @@ public sealed class FederationFanoutSyncServiceTests
 
         await sut.SyncOnceAsync(CancellationToken.None).ConfigureAwait(true);
 
-        _ = localExecution.DidNotReceiveWithAnyArgs().ExecuteAsync(default!, default);
+        _ = localExecution.DidNotReceiveWithAnyArgs().ExecuteAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Contains("\"status\":\"conflict\"", handler.AckBodies.Single(), StringComparison.Ordinal);
         Assert.Contains("local execution is disabled", handler.AckBodies.Single(), StringComparison.Ordinal);
     }

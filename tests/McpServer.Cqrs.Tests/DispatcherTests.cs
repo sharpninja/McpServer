@@ -101,7 +101,7 @@ public class DispatcherTests
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
 
-        var result = await dispatcher.SendAsync(new EchoCommand("hello"));
+        var result = await dispatcher.SendAsync(new EchoCommand("hello"), ct: TestContext.Current.CancellationToken);
         Assert.True(result.IsSuccess);
         Assert.Equal("Echo: hello", result.Value);
     }
@@ -112,7 +112,7 @@ public class DispatcherTests
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
 
-        var result = await dispatcher.QueryAsync(new SumQuery(3, 7));
+        var result = await dispatcher.QueryAsync(new SumQuery(3, 7), ct: TestContext.Current.CancellationToken);
         Assert.True(result.IsSuccess);
         Assert.Equal(10, result.Value);
     }
@@ -123,7 +123,7 @@ public class DispatcherTests
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
 
-        var result = await dispatcher.SendAsync(new FailCommand());
+        var result = await dispatcher.SendAsync(new FailCommand(), ct: TestContext.Current.CancellationToken);
         Assert.True(result.IsFailure);
         Assert.Equal("intentional failure", result.Error);
     }
@@ -134,7 +134,7 @@ public class DispatcherTests
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
 
-        var result = await dispatcher.SendAsync(new SlowCommand());
+        var result = await dispatcher.SendAsync(new SlowCommand(), ct: TestContext.Current.CancellationToken);
         Assert.True(result.IsFailure);
         Assert.Contains("timed out", result.Error, StringComparison.OrdinalIgnoreCase);
     }
@@ -145,7 +145,7 @@ public class DispatcherTests
         using var sp = BuildProvider(s => s.AddCqrsBehavior<PrefixBehavior>());
         var dispatcher = sp.GetRequiredService<Dispatcher>();
 
-        var result = await dispatcher.SendAsync(new EchoCommand("test"));
+        var result = await dispatcher.SendAsync(new EchoCommand("test"), ct: TestContext.Current.CancellationToken);
         Assert.True(result.IsSuccess);
         // The behavior ran — we can't easily check context.Properties from here,
         // but the fact that the handler still returned success proves the pipeline worked.
@@ -174,7 +174,7 @@ public class DispatcherTests
         var dispatcher = sp.GetRequiredService<Dispatcher>();
 
         Assert.Empty(dispatcher.RecentDispatches);
-        var result = await dispatcher.SendAsync(new EchoCommand("hello"));
+        var result = await dispatcher.SendAsync(new EchoCommand("hello"), ct: TestContext.Current.CancellationToken);
         Assert.True(result.IsSuccess);
         Assert.Single(dispatcher.RecentDispatches);
         var entry = dispatcher.RecentDispatches[0];
@@ -188,7 +188,7 @@ public class DispatcherTests
         using var sp = BuildProvider();
         var dispatcher = sp.GetRequiredService<Dispatcher>();
 
-        var result = await dispatcher.SendAsync(new LoggingCommand("test-log"));
+        var result = await dispatcher.SendAsync(new LoggingCommand("test-log"), ct: TestContext.Current.CancellationToken);
         Assert.True(result.IsSuccess);
         Assert.Single(dispatcher.RecentDispatches);
         var record = dispatcher.RecentDispatches[0];

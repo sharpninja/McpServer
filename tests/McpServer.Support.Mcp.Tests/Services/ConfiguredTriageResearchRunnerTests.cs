@@ -46,7 +46,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
             },
             "{\"groupId\":\"triage-group-001\"}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"));
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.Equal("""{"title":"triage result"}""", result.OutputJson);
@@ -104,7 +104,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
             {
                 streamed.Add($"{update.StreamName}:{update.Text}");
                 return Task.CompletedTask;
-            }));
+            }), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(strategy.LastRequest);
         Assert.NotNull(strategy.LastRequest.Options.AgentOutputReceivedAsync);
@@ -145,7 +145,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"));
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success);
         Assert.NotNull(strategy.LastRequest);
@@ -195,7 +195,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"));
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Equal("Codex CLI triage run was cancelled or timed out.", result.Error);
@@ -229,7 +229,7 @@ public sealed class ConfiguredTriageResearchRunnerTests
             },
             "{}",
             "rendered prompt",
-            "F:\\GitHub\\McpServer"));
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.Success);
         Assert.Contains("not configured", result.Error, StringComparison.OrdinalIgnoreCase);

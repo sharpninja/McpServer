@@ -30,7 +30,7 @@ public sealed class BrainSlotClientTests
         using var http = new HttpClient(handler);
         var client = new BrainSlotClient(http, DefaultOptions);
 
-        var result = await client.ListAsync().ConfigureAwait(true);
+        var result = await client.ListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result);
         Assert.Equal("LeftHemisphere", result[0].Role);
@@ -72,7 +72,7 @@ public sealed class BrainSlotClientTests
             PartyId = "brain-slot:curiosity-engine",
             Enabled = true,
             ReplaceExisting = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Equal("http://localhost:7147/mcpserver/brain-slots/curiosity%20main", handler.LastRequest.RequestUri!.OriginalString);
@@ -98,7 +98,7 @@ public sealed class BrainSlotClientTests
             TurnId = "turn-1",
             AdmitToGraphRag = true,
             Metadata = new Dictionary<string, string> { ["source"] = "test" },
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", result.Status);
         Assert.Equal("committed output", result.Output);
@@ -124,7 +124,7 @@ public sealed class BrainSlotClientTests
             Input = "decide",
             TurnId = "turn-quad",
             AdmitCuriosityToGraphRag = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("final", result.Output);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -150,7 +150,7 @@ public sealed class BrainSlotClientTests
             LeftOutput = "left",
             RightOutput = "right",
             CuriosityOutput = "curiosity",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("approved", result.Output);
         Assert.Equal("http://localhost:7147/mcpserver/brain-slots/aot/reconcile", handler.LastRequest!.RequestUri!.ToString());
@@ -177,7 +177,7 @@ public sealed class BrainSlotClientTests
             AotApproved = true,
             AdminApproved = true,
             SafetyGatesPassed = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", result.Status);
         Assert.Equal("http://localhost:7147/mcpserver/brain-slots/weights/update", handler.LastRequest!.RequestUri!.ToString());

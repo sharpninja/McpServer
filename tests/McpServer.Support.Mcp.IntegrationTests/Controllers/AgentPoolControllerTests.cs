@@ -71,7 +71,7 @@ public sealed class AgentPoolControllerTests
 
         context.Response.Body.Position = 0;
         using var reader = new StreamReader(context.Response.Body, Encoding.UTF8);
-        var payload = await reader.ReadToEndAsync().ConfigureAwait(true);
+        var payload = await reader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("data: ", payload, StringComparison.Ordinal);
         Assert.Contains("\"eventType\":\"queued\"", payload, StringComparison.Ordinal);
         Assert.Contains("\"eventType\":\"completed\"", payload, StringComparison.Ordinal);
@@ -93,7 +93,7 @@ public sealed class AgentPoolControllerTests
 
         context.Response.Body.Position = 0;
         using var reader = new StreamReader(context.Response.Body, Encoding.UTF8);
-        var payload = await reader.ReadToEndAsync().ConfigureAwait(true);
+        var payload = await reader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("data: ", payload, StringComparison.Ordinal);
         Assert.Contains("\"eventType\":\"snapshot\"", payload, StringComparison.Ordinal);
         Assert.Contains("\"eventType\":\"completed\"", payload, StringComparison.Ordinal);

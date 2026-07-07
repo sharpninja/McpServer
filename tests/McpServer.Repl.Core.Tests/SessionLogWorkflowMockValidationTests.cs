@@ -43,7 +43,7 @@ public class SessionLogWorkflowMockValidationTests
             Model = "claude-sonnet-4"
         };
 
-        var result = await _stubClient.SubmitAsync(sessionLog);
+        var result = await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Copilot", result.SourceType);
@@ -53,7 +53,7 @@ public class SessionLogWorkflowMockValidationTests
     [Fact]
     public async Task StubClient_QueryAsync_ReturnsSessionLogQueryResult()
     {
-        var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 10);
+        var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.NotNull(result.Items);
@@ -69,7 +69,7 @@ public class SessionLogWorkflowMockValidationTests
             new() { Role = "model", Content = "Thinking...", Category = "reasoning" }
         };
 
-        var result = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items);
+        var result = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Copilot", result.Agent);
@@ -92,7 +92,7 @@ public class SessionLogWorkflowMockValidationTests
             Model = "claude-sonnet-4"
         };
 
-        var result = await _stubClient.SubmitAsync(sessionLog);
+        var result = await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(sessionLog.SessionId, result.SessionId);
@@ -156,7 +156,7 @@ public class SessionLogWorkflowMockValidationTests
             new() { Role = "tool", Content = "Success", Category = "tool_result" }
         };
 
-        var result = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items);
+        var result = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.TotalDialogCount >= items.Count);
@@ -165,7 +165,7 @@ public class SessionLogWorkflowMockValidationTests
     [Fact]
     public async Task WorkflowRouting_QueryHistory_CallsQueryAsync()
     {
-        var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 5, offset: 0);
+        var result = await _stubClient.QueryAsync(agent: "Copilot", limit: 5, offset: 0, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(5, result.Limit);
@@ -410,8 +410,8 @@ public class SessionLogWorkflowMockValidationTests
             Model = "claude-sonnet-4"
         };
 
-        var result1 = await _stubClient.SubmitAsync(sessionLog);
-        var result2 = await _stubClient.SubmitAsync(sessionLog);
+        var result1 = await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
+        var result2 = await _stubClient.SubmitAsync(sessionLog, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(result1.SessionId, result2.SessionId);
         Assert.Equal(result1.SourceType, result2.SourceType);
@@ -424,7 +424,7 @@ public class SessionLogWorkflowMockValidationTests
             agent: "Copilot",
             model: "claude-sonnet-4",
             limit: 20,
-            offset: 10);
+            offset: 10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(20, result.Limit);
@@ -439,14 +439,14 @@ public class SessionLogWorkflowMockValidationTests
             new() { Role = "model", Content = "First", Category = "reasoning" }
         };
 
-        var result1 = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items1);
+        var result1 = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items1, cancellationToken: TestContext.Current.CancellationToken);
 
         var items2 = new List<ProcessingDialogItemDto>
         {
             new() { Role = "model", Content = "Second", Category = "reasoning" }
         };
 
-        var result2 = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items2);
+        var result2 = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items2, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result2.TotalDialogCount >= result1.TotalDialogCount);
     }

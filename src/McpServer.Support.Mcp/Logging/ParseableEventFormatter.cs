@@ -38,9 +38,7 @@ public sealed class ParseableEventFormatter : ITextFormatter
         var obj = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             ["timestamp"] = logEvent.Timestamp.UtcDateTime.ToString(TimestampFormat, CultureInfo.InvariantCulture),
-#pragma warning disable CA1308 // Parseable doc: level = logEvent.Level.ToString().ToLower()
-            ["level"] = logEvent.Level.ToString().ToLowerInvariant(),
-#pragma warning restore CA1308
+            ["level"] = FormatParseableLevel(logEvent.Level),
             ["message"] = logEvent.RenderMessage(CultureInfo.InvariantCulture)
         };
         if (logEvent.Exception != null)
@@ -64,6 +62,17 @@ public sealed class ParseableEventFormatter : ITextFormatter
 
         return obj;
     }
+
+    private static string FormatParseableLevel(LogEventLevel level) => level switch
+    {
+        LogEventLevel.Verbose => "verbose",
+        LogEventLevel.Debug => "debug",
+        LogEventLevel.Information => "information",
+        LogEventLevel.Warning => "warning",
+        LogEventLevel.Error => "error",
+        LogEventLevel.Fatal => "fatal",
+        _ => "unknown"
+    };
 
     private static string? ToStringValue(LogEventPropertyValue value)
     {

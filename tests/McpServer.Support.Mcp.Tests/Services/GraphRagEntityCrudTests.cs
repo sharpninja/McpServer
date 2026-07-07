@@ -53,7 +53,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
         var sut = CreateSut();
         var request = new GraphEntityRequest { Name = "Alice", EntityType = "person" };
 
-        var result = await sut.CreateEntityAsync(request).ConfigureAwait(true);
+        var result = await sut.CreateEntityAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.StartsWith("ge-", result.Id, StringComparison.Ordinal);
         Assert.Equal("Alice", result.Name);
@@ -70,7 +70,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
         var before = DateTime.UtcNow.AddSeconds(-1);
         var request = new GraphEntityRequest { Name = "Bob", EntityType = "person" };
 
-        var result = await sut.CreateEntityAsync(request).ConfigureAwait(true);
+        var result = await sut.CreateEntityAsync(request, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var after = DateTime.UtcNow.AddSeconds(1);
 
         Assert.InRange(result.CreatedAtUtc, before, after);
@@ -86,7 +86,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     {
         var sut = CreateSut();
 
-        var result = await sut.GetEntityAsync("ge-nonexistent").ConfigureAwait(true);
+        var result = await sut.GetEntityAsync("ge-nonexistent", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Null(result);
     }
@@ -98,10 +98,10 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     public async Task UpdateEntity_ModifiesFieldsAndBumpsTimestamp()
     {
         var sut = CreateSut();
-        var created = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Original", EntityType = "concept" }).ConfigureAwait(true);
+        var created = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Original", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Small delay to ensure timestamp difference
-        await Task.Delay(10).ConfigureAwait(true);
+        await Task.Delay(10, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var updated = await sut.UpdateEntityAsync(created.Id, new GraphEntityRequest
         {
@@ -109,7 +109,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
             EntityType = "organization",
             Description = "Updated description",
             Metadata = """{"key":"value"}"""
-        }).ConfigureAwait(true);
+        }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(updated);
         Assert.Equal("Updated", updated!.Name);
@@ -128,11 +128,11 @@ public sealed class GraphRagEntityCrudTests : IDisposable
         var sut = CreateSut();
         for (var i = 0; i < 5; i++)
         {
-            await sut.CreateEntityAsync(new GraphEntityRequest { Name = $"Entity{i}", EntityType = "concept" }).ConfigureAwait(true);
+            await sut.CreateEntityAsync(new GraphEntityRequest { Name = $"Entity{i}", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
-        var page1 = await sut.ListEntitiesAsync(skip: 0, take: 3).ConfigureAwait(true);
-        var page2 = await sut.ListEntitiesAsync(skip: 3, take: 3).ConfigureAwait(true);
+        var page1 = await sut.ListEntitiesAsync(skip: 0, take: 3, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var page2 = await sut.ListEntitiesAsync(skip: 3, take: 3, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(3, page1.Entities.Count);
         Assert.Equal(5, page1.TotalCount);
@@ -147,11 +147,11 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     public async Task ListEntities_FiltersByEntityType()
     {
         var sut = CreateSut();
-        await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Person1", EntityType = "person" }).ConfigureAwait(true);
-        await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Org1", EntityType = "organization" }).ConfigureAwait(true);
-        await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Person2", EntityType = "person" }).ConfigureAwait(true);
+        await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Person1", EntityType = "person" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Org1", EntityType = "organization" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.CreateEntityAsync(new GraphEntityRequest { Name = "Person2", EntityType = "person" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await sut.ListEntitiesAsync(entityType: "person").ConfigureAwait(true);
+        var result = await sut.ListEntitiesAsync(entityType: "person", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, result.Entities.Count);
         Assert.Equal(2, result.TotalCount);
@@ -165,12 +165,12 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     public async Task DeleteEntity_ReturnsTrueAndRemoves()
     {
         var sut = CreateSut();
-        var created = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "ToDelete", EntityType = "concept" }).ConfigureAwait(true);
+        var created = await sut.CreateEntityAsync(new GraphEntityRequest { Name = "ToDelete", EntityType = "concept" }, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var deleted = await sut.DeleteEntityAsync(created.Id).ConfigureAwait(true);
+        var deleted = await sut.DeleteEntityAsync(created.Id, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(deleted);
-        var check = await sut.GetEntityAsync(created.Id).ConfigureAwait(true);
+        var check = await sut.GetEntityAsync(created.Id, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Null(check);
     }
 
@@ -182,7 +182,7 @@ public sealed class GraphRagEntityCrudTests : IDisposable
     {
         var sut = CreateSut();
 
-        var deleted = await sut.DeleteEntityAsync("ge-nonexistent").ConfigureAwait(true);
+        var deleted = await sut.DeleteEntityAsync("ge-nonexistent", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(deleted);
     }

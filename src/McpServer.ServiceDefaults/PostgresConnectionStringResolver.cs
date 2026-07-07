@@ -12,16 +12,13 @@ namespace Microsoft.Extensions.Hosting;
 public static class PostgresConnectionStringResolver
 {
     /// <summary>
-    /// Converts a postgresql:// or postgres:// URL to Npgsql key=value connection string (e.g. for Railway DATABASE_URL).
+    /// Converts a postgresql:// or postgres:// configured value to Npgsql key=value connection string (e.g. for Railway DATABASE_URL).
     /// </summary>
-    /// <param name="url">The URL to convert.</param>
+    /// <param name="configuredValue">The configured value to convert.</param>
     /// <returns>Npgsql connection string, or the original string if not a postgres URL.</returns>
-#pragma warning disable CA1054 // URI parameters: connection string from config/env
-#pragma warning disable CA1055 // URI return: Npgsql expects key=value string
-    public static string ConvertPostgresUrlToNpgsqlConnectionString(string url)
-#pragma warning restore CA1055
-#pragma warning restore CA1054
+    public static string ConvertPostgresConnectionString(string configuredValue)
     {
+        var url = configuredValue;
         if (string.IsNullOrWhiteSpace(url))
             return url;
         url = url.Trim();
@@ -91,7 +88,7 @@ public static class PostgresConnectionStringResolver
                 || configured.TrimStart().StartsWith("postgres://", StringComparison.OrdinalIgnoreCase));
 
         if (isPostgresUrl)
-            return ConvertPostgresUrlToNpgsqlConnectionString(configured!);
+            return ConvertPostgresConnectionString(configured!);
 
         if (isInvalidTemplate && envVarNames.Length > 0)
         {
@@ -102,7 +99,7 @@ public static class PostgresConnectionStringResolver
                     continue;
                 if (fromEnv.TrimStart().StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase)
                     || fromEnv.TrimStart().StartsWith("postgres://", StringComparison.OrdinalIgnoreCase))
-                    return ConvertPostgresUrlToNpgsqlConnectionString(fromEnv);
+                    return ConvertPostgresConnectionString(fromEnv);
                 return fromEnv;
             }
         }

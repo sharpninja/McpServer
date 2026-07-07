@@ -93,8 +93,8 @@ public sealed class AcidFullLifecycleTests
         await harness.RegisterPartiesAsync().ConfigureAwait(true);
         var manifest = await harness.SignManifestAsync("txn-commit", sequence: 10, nonce: "nonce-commit").ConfigureAwait(true);
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
-        var status = await harness.Subscriber.GetTransactionStatusAsync("txn-commit").ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var status = await harness.Subscriber.GetTransactionStatusAsync("txn-commit", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", commit.Status);
         Assert.Equal(TransactionFailureReason.None, commit.Reason);
@@ -111,7 +111,7 @@ public sealed class AcidFullLifecycleTests
         var manifest = await harness.SignManifestAsync("txn-tampered", sequence: 11, nonce: "nonce-tampered").ConfigureAwait(true);
         manifest.DiffgramSha256 = AcidTransactionHarness.Sha256Hex("tampered");
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest)).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.ManifestSignatureMismatch, commit.Reason);
@@ -127,7 +127,7 @@ public sealed class AcidFullLifecycleTests
         var request = AcidTransactionHarness.CreateCommitRequest(manifest);
         request.EncryptedBodySha256 = AcidTransactionHarness.Sha256Hex("different-encrypted-body");
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(request).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.EncryptedBodyHashMismatch, commit.Reason);
@@ -143,7 +143,7 @@ public sealed class AcidFullLifecycleTests
         var request = AcidTransactionHarness.CreateCommitRequest(manifest);
         request.DiffgramSha256 = AcidTransactionHarness.Sha256Hex("different-plaintext");
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(request).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.PlaintextDiffgramHashMismatch, commit.Reason);
@@ -159,9 +159,9 @@ public sealed class AcidFullLifecycleTests
         // then commit in reverse order so the lower sequence trips the subscriber's stale guard.
         var lower = await harness.SignManifestAsync("txn-seq-low", sequence: 20, nonce: "nonce-seq-low").ConfigureAwait(true);
         var higher = await harness.SignManifestAsync("txn-seq-high", sequence: 21, nonce: "nonce-seq-high").ConfigureAwait(true);
-        await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(higher)).ConfigureAwait(true);
+        await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(higher), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(lower)).ConfigureAwait(true);
+        var commit = await harness.Subscriber.CommitDiffgramAsync(AcidTransactionHarness.CreateCommitRequest(lower), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("rejected", commit.Status);
         Assert.Equal(TransactionFailureReason.StaleSequence, commit.Reason);
@@ -176,7 +176,7 @@ public sealed class AcidFullLifecycleTests
         await harness.SignManifestAsync("txn-replay-1", sequence: 30, nonce: "nonce-replay").ConfigureAwait(true);
 
         var response = await harness.KeyServer.SignManifestAsync(
-            AcidTransactionHarness.CreateSignRequest("txn-replay-2", sequence: 31, nonce: "nonce-replay")).ConfigureAwait(true);
+            AcidTransactionHarness.CreateSignRequest("txn-replay-2", sequence: 31, nonce: "nonce-replay"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(response.Success);
         Assert.Equal(TransactionFailureReason.ReplayNonce, response.Reason);
@@ -191,7 +191,7 @@ public sealed class AcidFullLifecycleTests
 
         var abort = await harness.Subscriber.AbortTransactionAsync(
             "txn-abort",
-            new TransactionAbortRequest { Reason = TransactionFailureReason.Aborted, Actor = "test" }).ConfigureAwait(true);
+            new TransactionAbortRequest { Reason = TransactionFailureReason.Aborted, Actor = "test" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("aborted", abort.Status);
         Assert.Equal(TransactionFailureReason.Aborted, abort.Reason);

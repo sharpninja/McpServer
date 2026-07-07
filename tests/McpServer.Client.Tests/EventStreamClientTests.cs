@@ -30,7 +30,7 @@ public sealed class EventStreamClientTests
         var client = new EventStreamClient(http, DefaultOptions);
 
         var events = new List<McpServer.Client.Models.ChangeEvent>();
-        await foreach (var evt in client.SubscribeAsync())
+        await foreach (var evt in client.SubscribeAsync(cancellationToken: TestContext.Current.CancellationToken))
             events.Add(evt);
 
         Assert.Single(events);
@@ -54,7 +54,7 @@ public sealed class EventStreamClientTests
         var client = new EventStreamClient(http, DefaultOptions);
 
         var events = new List<McpServer.Client.Models.ChangeEvent>();
-        await foreach (var evt in client.SubscribeAsync("repo"))
+        await foreach (var evt in client.SubscribeAsync("repo", cancellationToken: TestContext.Current.CancellationToken))
             events.Add(evt);
 
         Assert.Single(events);

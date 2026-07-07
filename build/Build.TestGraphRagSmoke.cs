@@ -8,10 +8,10 @@ partial class Build
     readonly string BaseUrl = "http://localhost:7147";
 
     [Parameter("MCP server API key for smoke tests")]
-    readonly string ApiKey;
+    readonly string ApiKey = string.Empty;
 
     [Parameter("Workspace path for GraphRAG smoke test")]
-    readonly string WorkspacePath;
+    readonly string WorkspacePath = string.Empty;
 
     [Parameter("GraphRAG query for smoke test")]
     readonly string GraphRagQuery = "authentication flow";

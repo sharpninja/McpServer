@@ -73,7 +73,7 @@ public sealed class VectorIndexServiceTests : IDisposable
         _sut.AddVector("chunk1", v);
         Assert.Equal(1, _sut.Count);
 
-        await _sut.RebuildAsync().ConfigureAwait(true);
+        await _sut.RebuildAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(0, _sut.Count);
     }
@@ -92,10 +92,10 @@ public sealed class VectorIndexServiceTests : IDisposable
             _sut.AddVector("chunk1", v1);
             _sut.AddVector("chunk2", v2);
 
-            await _sut.SaveAsync(indexPath).ConfigureAwait(true);
+            await _sut.SaveAsync(indexPath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var sut2 = new VectorIndexService(new VectorIndexOptions { MaxElements = 1000 }, NullLogger<VectorIndexService>.Instance);
-            await sut2.LoadAsync(indexPath).ConfigureAwait(true);
+            await sut2.LoadAsync(indexPath, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(2, sut2.Count);
             var query = new float[384]; query[0] = 1f;

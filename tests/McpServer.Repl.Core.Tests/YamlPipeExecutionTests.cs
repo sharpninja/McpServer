@@ -725,7 +725,82 @@ public class YamlPipeExecutionTests
                 dto.Turns.Count == 1 &&
                 dto.Turns[0].RequestId == "req-20260514T000100Z-imported"),
             Arg.Any<CancellationToken>());
-        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, cancellationToken: TestContext.Current.CancellationToken);
+    }
+
+    /// <summary>
+    /// TEST-MCP-BUGTRIAGE-019: session-log commands route queryTitle overrides before mutation.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_SessionLogCommands_RouteQueryTitleOverrides()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var sessionLog = Substitute.For<ISessionLogWorkflow>();
+        sessionLog.UpdateTurnTitleAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
+        sessionLog.UpdateTurnAsync(Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<int?>(), Arg.Any<IReadOnlyList<string>?>(), Arg.Any<IReadOnlyList<string>?>(), Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
+        sessionLog.CompleteTurnAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
+        sessionLog.AppendActionsAsync(Arg.Any<IReadOnlyList<ISessionAction>>(), Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
+        var sut = new ReplCommandDispatcher(passthrough, sessionLogWorkflow: sessionLog);
+
+        await sut.DispatchAsync(new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-sessionlog-title-update",
+                Method = SessionLogCommandShapes.UpdateTurnMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["queryTitle"] = "Updated title",
+                    ["response"] = "Working",
+                },
+            },
+        }, CancellationToken.None);
+
+        await sut.DispatchAsync(new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-sessionlog-title-append",
+                Method = SessionLogCommandShapes.AppendActionsMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["queryTitle"] = "Append title",
+                    ["actions"] = new object[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["type"] = "edit",
+                            ["description"] = "Changed file",
+                            ["status"] = "succeeded",
+                        },
+                    },
+                },
+            },
+        }, CancellationToken.None);
+
+        await sut.DispatchAsync(new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-sessionlog-title-complete",
+                Method = SessionLogCommandShapes.CompleteTurnMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["queryTitle"] = "Complete title",
+                    ["response"] = "Done",
+                },
+            },
+        }, CancellationToken.None);
+
+        await sessionLog.Received(1).UpdateTurnTitleAsync("Updated title", Arg.Any<CancellationToken>());
+        await sessionLog.Received(1).UpdateTurnTitleAsync("Append title", Arg.Any<CancellationToken>());
+        await sessionLog.Received(1).UpdateTurnTitleAsync("Complete title", Arg.Any<CancellationToken>());
+        await sessionLog.Received(1).UpdateTurnAsync("Working", null, null, Arg.Any<IReadOnlyList<string>>(), Arg.Any<IReadOnlyList<string>>(), Arg.Any<CancellationToken>());
+        await sessionLog.Received(1).AppendActionsAsync(Arg.Is<IReadOnlyList<ISessionAction>>(actions => actions != null && actions.Count == 1), Arg.Any<CancellationToken>());
+        await sessionLog.Received(1).CompleteTurnAsync("Done", Arg.Any<CancellationToken>());
     }
 
     /// <summary>
@@ -768,7 +843,7 @@ public class YamlPipeExecutionTests
 
         Assert.Equal("result", response.Type);
         await todo.Received(1).QueryAsync("auth", "high", "Backlog", "MCP-TODO-001", false, Arg.Any<CancellationToken>());
-        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>
@@ -805,7 +880,7 @@ public class YamlPipeExecutionTests
 
         Assert.Equal("result", response.Type);
         await memory.Received(1).ListAsync(MemoryScope.Global, "agent", "PowerShell", Arg.Any<CancellationToken>());
-        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>
@@ -913,7 +988,7 @@ public class YamlPipeExecutionTests
         Assert.Equal("error", response.Type);
         var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
         Assert.Equal("schema_validation_failed", err.Code);
-        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, default);
+        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>
@@ -949,7 +1024,7 @@ public class YamlPipeExecutionTests
         Assert.Equal("schema_validation_failed", err.Code);
         var errors = Assert.IsAssignableFrom<IReadOnlyList<string>>(err.Details!["errors"]);
         Assert.Contains(errors, error => error.Contains("MEMORY-{CATEGORY}-{NNN}", StringComparison.Ordinal));
-        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, default);
+        await memory.DidNotReceiveWithAnyArgs().AddAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>
@@ -1063,6 +1138,110 @@ public class YamlPipeExecutionTests
                 request.ImplementationTasks![0].Task == "Verify YAML contract" &&
                 request.ImplementationTasks![0].Done),
             Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// TEST-MCP-BUGTRIAGE-015: sparse TODO updates must preserve omitted collection fields.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_TodoUpdateRequest_PreservesOmittedCollectionFields()
+    {
+        var todo = Substitute.For<ITodoWorkflow>();
+        var mutation = CreateMutationResult();
+        ITodoUpdateRequest? capturedRequest = null;
+        todo.UpdateAsync(
+                "BUG-TRIAGE-015",
+                Arg.Do<ITodoUpdateRequest>(request => capturedRequest = request),
+                Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(mutation));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), todoWorkflow: todo);
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-bug-triage-015",
+                Method = TodoCommandShapes.UpdateMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "BUG-TRIAGE-015",
+                    ["done"] = true,
+                    ["doneSummary"] = "Fixed sparse update preservation.",
+                    ["remaining"] = "No remaining work.",
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await todo.Received(1).UpdateAsync("BUG-TRIAGE-015", Arg.Any<ITodoUpdateRequest>(), Arg.Any<CancellationToken>());
+        Assert.NotNull(capturedRequest);
+        Assert.True(capturedRequest.Done);
+        Assert.Equal("Fixed sparse update preservation.", capturedRequest.DoneSummary);
+        Assert.Equal("No remaining work.", capturedRequest.Remaining);
+        Assert.Null(capturedRequest.Description);
+        Assert.Null(capturedRequest.TechnicalDetails);
+        Assert.Null(capturedRequest.ImplementationTasks);
+        Assert.Null(capturedRequest.DependsOn);
+        Assert.Null(capturedRequest.FunctionalRequirements);
+        Assert.Null(capturedRequest.TechnicalRequirements);
+    }
+
+    /// <summary>
+    /// TEST-MCP-BUGTRIAGE-015: explicit empty TODO update collections must clear fields.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_TodoUpdateRequest_PreservesExplicitEmptyCollectionFields()
+    {
+        var todo = Substitute.For<ITodoWorkflow>();
+        var mutation = CreateMutationResult();
+        ITodoUpdateRequest? capturedRequest = null;
+        todo.UpdateAsync(
+                "BUG-TRIAGE-015",
+                Arg.Do<ITodoUpdateRequest>(request => capturedRequest = request),
+                Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(mutation));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), todoWorkflow: todo);
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-bug-triage-015-empty",
+                Method = TodoCommandShapes.UpdateMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "BUG-TRIAGE-015",
+                    ["description"] = Array.Empty<object?>(),
+                    ["technicalDetails"] = Array.Empty<object?>(),
+                    ["implementationTasks"] = Array.Empty<object?>(),
+                    ["dependsOn"] = Array.Empty<object?>(),
+                    ["functionalRequirements"] = Array.Empty<object?>(),
+                    ["technicalRequirements"] = Array.Empty<object?>(),
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await todo.Received(1).UpdateAsync("BUG-TRIAGE-015", Arg.Any<ITodoUpdateRequest>(), Arg.Any<CancellationToken>());
+        Assert.NotNull(capturedRequest);
+        Assert.NotNull(capturedRequest.Description);
+        Assert.Empty(capturedRequest.Description);
+        Assert.NotNull(capturedRequest.TechnicalDetails);
+        Assert.Empty(capturedRequest.TechnicalDetails);
+        Assert.NotNull(capturedRequest.ImplementationTasks);
+        Assert.Empty(capturedRequest.ImplementationTasks);
+        Assert.NotNull(capturedRequest.DependsOn);
+        Assert.Empty(capturedRequest.DependsOn);
+        Assert.NotNull(capturedRequest.FunctionalRequirements);
+        Assert.Empty(capturedRequest.FunctionalRequirements);
+        Assert.NotNull(capturedRequest.TechnicalRequirements);
+        Assert.Empty(capturedRequest.TechnicalRequirements);
     }
 
     /// <summary>

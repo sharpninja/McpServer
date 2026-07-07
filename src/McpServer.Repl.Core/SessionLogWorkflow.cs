@@ -185,6 +185,25 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
     }
 
     /// <inheritdoc />
+    public async Task UpdateTurnTitleAsync(string queryTitle, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(queryTitle, nameof(queryTitle));
+
+        await _lock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var state = EnsureSessionActive();
+            state.UpdateTurnTitle(queryTitle, _timeProvider.GetUtcNow());
+
+            await SubmitCurrentStateAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _lock.Release();
+        }
+    }
+
+    /// <inheritdoc />
     public async Task CompleteTurnAsync(string response, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(response, nameof(response));
@@ -850,6 +869,14 @@ internal sealed class SessionLogState : ISessionLogState
         LastUpdated = timestamp;
     }
 
+    public void UpdateTurnTitle(string queryTitle, DateTimeOffset timestamp)
+    {
+        EnsureTurnMutable();
+
+        _activeTurn!.QueryTitle = queryTitle;
+        LastUpdated = timestamp;
+    }
+
     public void CompleteTurn(string response, DateTimeOffset timestamp)
     {
         EnsureTurnMutable();
@@ -955,7 +982,7 @@ internal sealed class TurnState
     }
 
     public string RequestId { get; }
-    public string QueryTitle { get; }
+    public string QueryTitle { get; set; }
     public string QueryText { get; }
     public DateTimeOffset Timestamp { get; }
     public string Status { get; set; }

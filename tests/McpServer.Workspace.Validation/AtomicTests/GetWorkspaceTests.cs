@@ -39,11 +39,11 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
     [Fact]
     public async Task Get_ValidKey_Returns200WithWorkspace()
     {
-        var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
+        var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var dto = await response.Content.ReadFromJsonAsync<WorkspaceDto>();
+        var dto = await response.Content.ReadFromJsonAsync<WorkspaceDto>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(dto);
         Assert.Equal(_testPath, dto.WorkspacePath);
         Assert.Equal("AuditGetTest", dto.Name);
@@ -54,7 +54,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
     public async Task Get_NonExistentKey_Returns404()
     {
         var fakeKey = WorkspaceEndpointFixture.EncodeKey(@"C:\NonExistent\Path_" + Guid.NewGuid().ToString("N"));
-        var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{fakeKey}");
+        var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{fakeKey}", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -63,7 +63,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
     [Fact]
     public async Task Get_InvalidBase64Key_Returns400()
     {
-        var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!");
+        var response = await _fixture.Client.GetAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }

@@ -207,6 +207,49 @@ acceptanceCriteria:
         $source.IndexOf('Assert-ReplMarkerFresh') | Should -BeLessThan $source.IndexOf('Invoke-ReplRaw -Method')
     }
 
+    It 'TEST-MCP-BUGTRIAGE-017 repl-invoke force reloads stale McpPluginShim modules' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match 'Import-Module \$shimModule -Force'
+        $source | Should -Match 'Remove-Module McpPluginShim -Force'
+        $source | Should -Match 'New-McpPluginTurnUpsertRequest'
+        $source | Should -Match 'ProcessingDialog'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-019 plugin hooks create meaningful continuation titles and object-written turn cache' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $source | Should -Match 'Continuation or hook-triggered turn'
+        $source | Should -Match 'Continuation turn'
+        $source | Should -Not -Match ([regex]::Escape('if (-not $prompt) { $prompt = ''User prompt'' }'))
+        $source | Should -Match 'Write-McpYamlObject -Path \$turnFile -Document \$turnState'
+        $source | Should -Match 'markerFilePath'
+        $source | Should -Match 'markerLastWriteUtc'
+        $source | Should -Match 'sessionId'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-019 repl-invoke supports queryTitle overrides through append and complete paths' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match 'function Update-ReplTurnTitleFromParams'
+        $source | Should -Match "Name 'queryTitle'"
+        $source | Should -Match 'Set-ReplTurnCacheField -Field ''queryTitle'''
+        $source | Should -Match 'Update-ReplTurnTitleFromParams -ParamsYaml \$ParamsYaml'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-020 repl-invoke rejects stale current-turn cache with actionable diagnostics' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match 'function Assert-ReplCurrentTurnFresh'
+        $source | Should -Match 'staleSessionId'
+        $source | Should -Match 'activeSessionId'
+        $source | Should -Match 'markerFilePath'
+        $source | Should -Match 'markerLastWriteUtc'
+        $source | Should -Match 'Run the active agent prompt hook again'
+        $source | Should -Match 'Assert-ReplCurrentTurnFresh -Method ''workflow.sessionlog.appendActions'''
+        $source | Should -Match 'Assert-ReplCurrentTurnFresh -Method ''workflow.sessionlog.completeTurn'''
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 emits raw REPL YAML on the success stream' {
         . (Join-Path $script:LibRoot 'repl-invoke.ps1')
         $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue

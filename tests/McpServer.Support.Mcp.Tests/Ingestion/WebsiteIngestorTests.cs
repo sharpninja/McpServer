@@ -23,7 +23,7 @@ public sealed class WebsiteIngestorTests
             Content = new StringContent(html, Encoding.UTF8, "text/html")
         }));
 
-        var results = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://example.com/docs", MaxPages = 1 }).ConfigureAwait(true);
+        var results = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://example.com/docs", MaxPages = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var page = Assert.Single(results);
         Assert.Equal("ingested", page.Outcome.Status);
@@ -51,7 +51,7 @@ public sealed class WebsiteIngestorTests
             IncludeSubpages = true,
             MaxPages = 1,
             MaxDepth = 2
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(results);
     }
@@ -75,7 +75,7 @@ public sealed class WebsiteIngestorTests
             IncludeSubpages = true,
             MaxPages = 5000,
             MaxDepth = 2
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(3, results.Count);
     }
@@ -117,7 +117,7 @@ public sealed class WebsiteIngestorTests
             IncludeSubpages = true,
             MaxPages = 2,
             MaxDepth = 2
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, results.Count);
         Assert.Collection(results,
@@ -134,7 +134,7 @@ public sealed class WebsiteIngestorTests
     {
         var sut = CreateSut(new StubHandler(_ => throw new InvalidOperationException("request should not execute")));
 
-        var results = await sut.IngestAsync(new WebsiteIngestRequest { Url = url, MaxPages = 1 }).ConfigureAwait(true);
+        var results = await sut.IngestAsync(new WebsiteIngestRequest { Url = url, MaxPages = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var page = Assert.Single(results);
         Assert.Equal("error", page.Outcome.Status);
@@ -152,7 +152,7 @@ public sealed class WebsiteIngestorTests
         });
         var sut = CreateSut(handler);
 
-        var results = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://example.com/", MaxPages = 1 }).ConfigureAwait(true);
+        var results = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://example.com/", MaxPages = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var page = Assert.Single(results);
         Assert.Equal("error", page.Outcome.Status);
@@ -168,8 +168,8 @@ public sealed class WebsiteIngestorTests
         });
         var sut = CreateSut(handler);
 
-        var first = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://EXAMPLE.com:443/docs/#top", MaxPages = 1 }).ConfigureAwait(true);
-        var second = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://example.com/docs", MaxPages = 1 }).ConfigureAwait(true);
+        var first = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://EXAMPLE.com:443/docs/#top", MaxPages = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var second = await sut.IngestAsync(new WebsiteIngestRequest { Url = "https://example.com/docs", MaxPages = 1 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(first[0].Document!.SourceKey, second[0].Document!.SourceKey);
     }
@@ -188,7 +188,7 @@ public sealed class WebsiteIngestorTests
             Url = "https://example.com/large",
             MaxPages = 1,
             MaxBytesPerPage = 4096
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var page = Assert.Single(results);
         Assert.Equal("error", page.Outcome.Status);

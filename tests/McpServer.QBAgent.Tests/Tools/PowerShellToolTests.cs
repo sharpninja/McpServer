@@ -16,7 +16,7 @@ public sealed class PowerShellToolTests
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult { Success = true, Output = "PONG" });
         var tool = new PowerShellTool(manager, "F:/work/repo");
 
-        var result = await tool.RunAsync("Write-Output PONG").ConfigureAwait(true);
+        var result = await tool.RunAsync("Write-Output PONG", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         Assert.Equal("PONG", result.Output);
@@ -31,8 +31,8 @@ public sealed class PowerShellToolTests
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult { Success = true, Output = "x" });
         var tool = new PowerShellTool(manager, "F:/work/repo");
 
-        await tool.RunAsync("one").ConfigureAwait(true);
-        await tool.RunAsync("two").ConfigureAwait(true);
+        await tool.RunAsync("one", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await tool.RunAsync("two", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, manager.CreatedSessions);
         Assert.Equal("two", manager.LastCommand);
@@ -45,7 +45,7 @@ public sealed class PowerShellToolTests
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult());
         var tool = new PowerShellTool(manager, "F:/work/repo");
 
-        var result = await tool.RunAsync("   ").ConfigureAwait(true);
+        var result = await tool.RunAsync("   ", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.Equal(0, manager.CreatedSessions);
@@ -58,7 +58,7 @@ public sealed class PowerShellToolTests
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult(), createSucceeds: false);
         var tool = new PowerShellTool(manager, "F:/work/repo");
 
-        var result = await tool.RunAsync("Write-Output x").ConfigureAwait(true);
+        var result = await tool.RunAsync("Write-Output x", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Success);
         Assert.True(result.HadErrors);
@@ -72,7 +72,7 @@ public sealed class PowerShellToolTests
         var manager = new FakePowerShellSessionManager(new PowerShellSessionCommandResult { Success = true, Output = "x" });
         var tool = new PowerShellTool(manager, "F:/work/repo");
 
-        await tool.RunAsync("one").ConfigureAwait(true);
+        await tool.RunAsync("one", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         tool.Dispose();
 
         Assert.Equal(1, manager.ClosedSessions);

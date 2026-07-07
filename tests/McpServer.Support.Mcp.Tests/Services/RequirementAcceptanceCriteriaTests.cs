@@ -64,7 +64,7 @@ public sealed class RequirementAcceptanceCriteriaTests
             write.RequirementAcceptanceCriteria.AddRange(
                 new RequirementAcceptanceCriterionEntity { WorkspaceId = "ws://test", RequirementKind = "test", RequirementId = "TEST-REQAC-RT-001", Ordinal = 0, CriterionId = "ac-1", Text = "Multi-line\ncriterion text", IsSatisfied = false, Evidence = null },
                 new RequirementAcceptanceCriterionEntity { WorkspaceId = "ws://test", RequirementKind = "test", RequirementId = "TEST-REQAC-RT-001", Ordinal = 1, CriterionId = "ac-2", Text = "Second criterion", IsSatisfied = true, Evidence = "validated by integration test" });
-            await write.SaveChangesAsync().ConfigureAwait(true);
+            await write.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         await using var read = new McpDbContext(options);
@@ -72,7 +72,7 @@ public sealed class RequirementAcceptanceCriteriaTests
         var loaded = await read.RequirementAcceptanceCriteria
             .Where(c => c.RequirementId == "TEST-REQAC-RT-001")
             .OrderBy(c => c.Ordinal)
-            .ToListAsync().ConfigureAwait(true);
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, loaded.Count);
         Assert.Equal("ac-1", loaded[0].CriterionId);
         Assert.Equal("Multi-line\ncriterion text", loaded[0].Text);
@@ -111,14 +111,14 @@ public sealed class RequirementAcceptanceCriteriaTests
                 CreatedAtUtc = DateTimeOffset.UtcNow.ToString("O"),
                 UpdatedAtUtc = DateTimeOffset.UtcNow.ToString("O"),
             });
-            await write.SaveChangesAsync().ConfigureAwait(true);
+            await write.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
         await using var read = new McpDbContext(options);
         read.OverrideWorkspaceId("ws://test");
         var loaded = await read.RequirementAcceptanceCriteria
             .Where(c => c.RequirementId == "FR-REQAC-EMPTY-001")
-            .ToListAsync().ConfigureAwait(true);
+            .ToListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Empty(loaded);
     }
 }

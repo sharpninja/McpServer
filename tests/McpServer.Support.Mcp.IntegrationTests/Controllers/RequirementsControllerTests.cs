@@ -51,28 +51,28 @@ public sealed class RequirementsControllerTests : IDisposable
             body = "The server shall support end-to-end requirements CRUD integration tests."
         };
 
-        var createResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/fr", createBody).ConfigureAwait(true);
+        var createResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/fr", createBody, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
+        var getResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
-        var generated = await _client.GetAsync("/mcpserver/requirements/generate?doc=functional").ConfigureAwait(true);
+        var generated = await _client.GetAsync("/mcpserver/requirements/generate?doc=functional", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, generated.StatusCode);
         Assert.Equal("text/markdown", generated.Content.Headers.ContentType?.MediaType);
-        var generatedMarkdown = await generated.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var generatedMarkdown = await generated.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("FR-MCP-999 Requirements test entry", generatedMarkdown);
 
-        var generatedMatrix = await _client.GetAsync("/mcpserver/requirements/generate?doc=matrix").ConfigureAwait(true);
+        var generatedMatrix = await _client.GetAsync("/mcpserver/requirements/generate?doc=matrix", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, generatedMatrix.StatusCode);
         Assert.Equal("text/markdown", generatedMatrix.Content.Headers.ContentType?.MediaType);
-        var matrixMarkdown = await generatedMatrix.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var matrixMarkdown = await generatedMatrix.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("| FR-MCP-999 | Tracked | Functional-Requirements.md |", matrixMarkdown);
 
-        var deleteResponse = await _client.DeleteAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
+        var deleteResponse = await _client.DeleteAsync("/mcpserver/requirements/fr/FR-MCP-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
-        var getDeletedResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
+        var getDeletedResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-999", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, getDeletedResponse.StatusCode);
     }
 
@@ -111,17 +111,17 @@ public sealed class RequirementsControllerTests : IDisposable
             }
         };
 
-        var response = await _client.PostAsJsonAsync("/mcpserver/requirements/batch", payload).ConfigureAwait(true);
-        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync("/mcpserver/requirements/batch", payload, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(response.StatusCode == HttpStatusCode.OK, $"Batch create failed ({response.StatusCode}): {body}");
         using var result = JsonDocument.Parse(body);
         Assert.True(result.RootElement.GetProperty("success").GetBoolean());
         Assert.Equal(3, result.RootElement.GetProperty("total").GetInt32());
 
-        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-910").ConfigureAwait(true)).StatusCode);
-        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/tr/TR-MCP-BATCH-910").ConfigureAwait(true)).StatusCode);
-        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/test/TEST-MCP-910").ConfigureAwait(true)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-910", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/tr/TR-MCP-BATCH-910", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/test/TEST-MCP-910", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).StatusCode);
     }
 
     /// <summary>BUG-TRIAGE-010: single FR/TR/TEST create and update endpoints persist structured acceptance criteria after a fresh read.</summary>
@@ -141,7 +141,7 @@ public sealed class RequirementsControllerTests : IDisposable
                 body = "FR body",
                 notes = "keep-fr-notes",
                 acceptanceCriteria = Criteria($"{frId}-AC001", "FR create criteria", false, "fr-create")
-            }).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
         await AssertSuccessAsync(await _client.PostAsJsonAsync(
             "/mcpserver/requirements/tr",
             new
@@ -151,7 +151,7 @@ public sealed class RequirementsControllerTests : IDisposable
                 body = "TR body",
                 notes = "keep-tr-notes",
                 acceptanceCriteria = Criteria($"{trId}-AC001", "TR create criteria", false, "tr-create")
-            }).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
         await AssertSuccessAsync(await _client.PostAsJsonAsync(
             "/mcpserver/requirements/test",
             new
@@ -161,7 +161,7 @@ public sealed class RequirementsControllerTests : IDisposable
                 title = "AC TEST",
                 notes = "keep-test-notes",
                 acceptanceCriteria = Criteria($"{testId}-AC001", "TEST create criteria", false, "test-create")
-            }).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true), HttpStatusCode.Created).ConfigureAwait(true);
 
         var createdFr = await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true);
         var createdTr = await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true);
@@ -172,13 +172,13 @@ public sealed class RequirementsControllerTests : IDisposable
 
         await AssertSuccessAsync(await _client.PutAsJsonAsync(
             $"/mcpserver/requirements/fr/{frId}",
-            new { acceptanceCriteria = Criteria($"{frId}-AC002", "FR update criteria", true, "fr-update") }).ConfigureAwait(true)).ConfigureAwait(true);
+            new { acceptanceCriteria = Criteria($"{frId}-AC002", "FR update criteria", true, "fr-update") }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
         await AssertSuccessAsync(await _client.PutAsJsonAsync(
             $"/mcpserver/requirements/tr/{trId}",
-            new { acceptanceCriteria = Criteria($"{trId}-AC002", "TR update criteria", true, "tr-update") }).ConfigureAwait(true)).ConfigureAwait(true);
+            new { acceptanceCriteria = Criteria($"{trId}-AC002", "TR update criteria", true, "tr-update") }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
         await AssertSuccessAsync(await _client.PutAsJsonAsync(
             $"/mcpserver/requirements/test/{testId}",
-            new { acceptanceCriteria = Criteria($"{testId}-AC002", "TEST update criteria", true, "test-update") }).ConfigureAwait(true)).ConfigureAwait(true);
+            new { acceptanceCriteria = Criteria($"{testId}-AC002", "TEST update criteria", true, "test-update") }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
 
         var updatedFr = await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true);
         var updatedTr = await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true);
@@ -214,7 +214,7 @@ public sealed class RequirementsControllerTests : IDisposable
                         acceptanceCriteria = Criteria($"{frId}-AC001", "FR batch create criteria", false, "fr-batch-create")
                     }
                 }
-            }).ConfigureAwait(true)).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
         await AssertBatchSuccessAsync(await _client.PostAsJsonAsync(
             "/mcpserver/requirements/tr/batch",
             new
@@ -230,7 +230,7 @@ public sealed class RequirementsControllerTests : IDisposable
                         acceptanceCriteria = Criteria($"{trId}-AC001", "TR batch create criteria", false, "tr-batch-create")
                     }
                 }
-            }).ConfigureAwait(true)).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
         await AssertBatchSuccessAsync(await _client.PostAsJsonAsync(
             "/mcpserver/requirements/test/batch",
             new
@@ -246,7 +246,7 @@ public sealed class RequirementsControllerTests : IDisposable
                         acceptanceCriteria = Criteria($"{testId}-AC001", "TEST batch create criteria", false, "test-batch-create")
                     }
                 }
-            }).ConfigureAwait(true)).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
 
         AssertCriterion((await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true)).AcceptanceCriteria, $"{frId}-AC001", "FR batch create criteria", false, "fr-batch-create");
         AssertCriterion((await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true)).AcceptanceCriteria, $"{trId}-AC001", "TR batch create criteria", false, "tr-batch-create");
@@ -254,13 +254,13 @@ public sealed class RequirementsControllerTests : IDisposable
 
         await AssertBatchSuccessAsync(await _client.PutAsJsonAsync(
             "/mcpserver/requirements/fr/batch",
-            new { records = new[] { new { id = frId, acceptanceCriteria = Criteria($"{frId}-AC002", "FR batch update criteria", true, "fr-batch-update") } } }).ConfigureAwait(true)).ConfigureAwait(true);
+            new { records = new[] { new { id = frId, acceptanceCriteria = Criteria($"{frId}-AC002", "FR batch update criteria", true, "fr-batch-update") } } }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
         await AssertBatchSuccessAsync(await _client.PutAsJsonAsync(
             "/mcpserver/requirements/tr/batch",
-            new { records = new[] { new { id = trId, acceptanceCriteria = Criteria($"{trId}-AC002", "TR batch update criteria", true, "tr-batch-update") } } }).ConfigureAwait(true)).ConfigureAwait(true);
+            new { records = new[] { new { id = trId, acceptanceCriteria = Criteria($"{trId}-AC002", "TR batch update criteria", true, "tr-batch-update") } } }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
         await AssertBatchSuccessAsync(await _client.PutAsJsonAsync(
             "/mcpserver/requirements/test/batch",
-            new { records = new[] { new { id = testId, acceptanceCriteria = Criteria($"{testId}-AC002", "TEST batch update criteria", true, "test-batch-update") } } }).ConfigureAwait(true)).ConfigureAwait(true);
+            new { records = new[] { new { id = testId, acceptanceCriteria = Criteria($"{testId}-AC002", "TEST batch update criteria", true, "test-batch-update") } } }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
 
         var updatedFr = await GetJsonAsync<FrEntry>($"/mcpserver/requirements/fr/{frId}").ConfigureAwait(true);
         var updatedTr = await GetJsonAsync<TrEntry>($"/mcpserver/requirements/tr/{trId}").ConfigureAwait(true);
@@ -298,25 +298,25 @@ public sealed class RequirementsControllerTests : IDisposable
             }
         };
 
-        var response = await _client.PostAsJsonAsync("/mcpserver/requirements/fr/batch", payload).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync("/mcpserver/requirements/fr/batch", payload, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        using var result = JsonDocument.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(true));
+        using var result = JsonDocument.Parse(await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         Assert.False(result.RootElement.GetProperty("success").GetBoolean());
         Assert.Contains("Duplicate FR ID", result.RootElement.GetProperty("errors")[0].GetProperty("error").GetString(), StringComparison.Ordinal);
 
-        var getResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-911").ConfigureAwait(true);
+        var getResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-911", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
     [Fact]
     public async Task GenerateAll_WritesCanonicalDocumentsToWorkspace()
     {
-        var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all").ConfigureAwait(true);
+        var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        var export = await response.Content.ReadFromJsonAsync<RequirementsDocumentExportResult>().ConfigureAwait(true);
+        var export = await response.Content.ReadFromJsonAsync<RequirementsDocumentExportResult>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(export);
         var names = export!.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
         Assert.Equal(
@@ -335,11 +335,11 @@ public sealed class RequirementsControllerTests : IDisposable
     [Fact]
     public async Task GenerateWiki_WritesAzureAndGitHubWikiFiles()
     {
-        var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all&format=wiki").ConfigureAwait(true);
+        var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all&format=wiki", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
 
-        await using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(true);
+        await using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var archive = new ZipArchive(responseStream, ZipArchiveMode.Read, leaveOpen: false);
         var names = archive.Entries.Select(e => e.FullName).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
 
@@ -354,7 +354,7 @@ public sealed class RequirementsControllerTests : IDisposable
         var testingEntry = archive.GetEntry("github/Testing-Requirements.md");
         Assert.NotNull(testingEntry);
         using var testingReader = new StreamReader(testingEntry!.Open());
-        var testingMarkdown = await testingReader.ReadToEndAsync().ConfigureAwait(true);
+        var testingMarkdown = await testingReader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains("## TEST-MCP", testingMarkdown, StringComparison.Ordinal);
         Assert.Contains("### TEST-MCP-", testingMarkdown, StringComparison.Ordinal);
         Assert.DoesNotContain("| ID | Requirement |", testingMarkdown, StringComparison.Ordinal);
@@ -404,21 +404,21 @@ public sealed class RequirementsControllerTests : IDisposable
                 """
         };
 
-        var ingestResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/ingest", payload).ConfigureAwait(true);
-        var ingestBody = await ingestResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var ingestResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/ingest", payload, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var ingestBody = await ingestResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(ingestResponse.StatusCode == HttpStatusCode.OK,
             $"Requirements ingest failed ({ingestResponse.StatusCode}): {ingestBody}");
 
-        var fr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-777").ConfigureAwait(true);
+        var fr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-777", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, fr.StatusCode);
 
-        var tr = await _client.GetAsync("/mcpserver/requirements/tr/TR-MCP-777").ConfigureAwait(true);
+        var tr = await _client.GetAsync("/mcpserver/requirements/tr/TR-MCP-777", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, tr.StatusCode);
 
-        var test = await _client.GetAsync("/mcpserver/requirements/test/TEST-MCP-777").ConfigureAwait(true);
+        var test = await _client.GetAsync("/mcpserver/requirements/test/TEST-MCP-777", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, test.StatusCode);
 
-        var mapping = await _client.GetAsync("/mcpserver/requirements/mapping/FR-MCP-777").ConfigureAwait(true);
+        var mapping = await _client.GetAsync("/mcpserver/requirements/mapping/FR-MCP-777", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, mapping.StatusCode);
     }
 
@@ -489,17 +489,17 @@ public sealed class RequirementsControllerTests : IDisposable
             }
         };
 
-        var ingestResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/ingest", payload).ConfigureAwait(true);
+        var ingestResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/ingest", payload, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, ingestResponse.StatusCode);
 
-        using var body = JsonDocument.Parse(await ingestResponse.Content.ReadAsStringAsync().ConfigureAwait(true));
+        using var body = JsonDocument.Parse(await ingestResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
         Assert.Equal("github", body.RootElement.GetProperty("selectedWikiFormat").GetString());
         Assert.True(body.RootElement.GetProperty("functionalDeleted").GetInt32() >= 1);
 
-        var selectedFr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-888").ConfigureAwait(true);
+        var selectedFr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-888", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, selectedFr.StatusCode);
 
-        var deletedSeedFr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-001").ConfigureAwait(true);
+        var deletedSeedFr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, deletedSeedFr.StatusCode);
     }
 

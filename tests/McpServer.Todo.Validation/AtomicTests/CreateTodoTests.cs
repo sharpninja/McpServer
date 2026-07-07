@@ -71,11 +71,11 @@ public sealed class CreateTodoTests : IAsyncLifetime
             TechnicalDetails = new[] { "Created by validation suite" }
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+        var response = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success, $"Expected success but got error: {result.Error}");
         Assert.NotNull(result.Item);
@@ -102,13 +102,13 @@ public sealed class CreateTodoTests : IAsyncLifetime
     public async Task Create_DuplicateId_Returns409()
     {
         var body = new { Id = _testId, Title = "First", Section = "mvp-support", Priority = "low" };
-        var first = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+        var first = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, first.StatusCode);
 
-        var second = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+        var second = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
 
-        var result = await second.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await second.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.False(result.Success);
     }
@@ -126,7 +126,7 @@ public sealed class CreateTodoTests : IAsyncLifetime
     {
         var response = await _fixture.Client.PostAsync(
             TodoEndpointFixture.TodoRoute,
-            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Empty object missing required fields → 400.
         Assert.True(
@@ -159,10 +159,10 @@ public sealed class CreateTodoTests : IAsyncLifetime
             }
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+        var response = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>();
+        var result = await response.Content.ReadFromJsonAsync<TodoMutationResult>(cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result.Success);
         Assert.NotNull(result.Item);

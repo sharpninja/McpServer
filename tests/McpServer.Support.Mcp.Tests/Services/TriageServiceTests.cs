@@ -60,7 +60,7 @@ public sealed class TriageServiceTests : IDisposable
             Component = "repl",
             AffectedPaths = ["src/McpServer.Repl.Core/ReplYamlMessageValidator.cs"],
             ReporterAgent = "Codex",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success, result.Error);
         Assert.StartsWith("triage-report-", result.ReportId, StringComparison.Ordinal);
@@ -69,10 +69,10 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal(_time.GetUtcNow().AddMinutes(15), result.QuietDeadlineUtc);
 
         using var db = CreateDb(PrimaryWorkspace);
-        Assert.Equal(1, await db.TriageReports.CountAsync());
-        Assert.Equal(1, await db.TriageGroups.CountAsync());
-        await runner.DidNotReceiveWithAnyArgs().RunAsync(default!, default);
-        await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, default);
+        Assert.Equal(1, await db.TriageReports.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(1, await db.TriageGroups.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+        await runner.DidNotReceiveWithAnyArgs().RunAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
+        await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     /// <summary>
@@ -84,15 +84,15 @@ public sealed class TriageServiceTests : IDisposable
     {
         var sut = CreateService(PrimaryWorkspace);
 
-        var first = await sut.SubmitReportAsync(CreateReport("same-wrapper-bug"));
+        var first = await sut.SubmitReportAsync(CreateReport("same-wrapper-bug"), cancellationToken: TestContext.Current.CancellationToken);
         _time.Advance(TimeSpan.FromMinutes(5));
-        var second = await sut.SubmitReportAsync(CreateReport("same-wrapper-bug"));
+        var second = await sut.SubmitReportAsync(CreateReport("same-wrapper-bug"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(first.GroupId, second.GroupId);
         Assert.Equal(_time.GetUtcNow().AddMinutes(15), second.QuietDeadlineUtc);
 
         using var db = CreateDb(PrimaryWorkspace);
-        var group = await db.TriageGroups.SingleAsync(g => g.GroupId == first.GroupId);
+        var group = await db.TriageGroups.SingleAsync(g => g.GroupId == first.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(2, group.ReportCount);
         Assert.Equal(second.QuietDeadlineUtc, group.QuietDeadlineUtc);
     }
@@ -107,17 +107,17 @@ public sealed class TriageServiceTests : IDisposable
         var sut = CreateService(PrimaryWorkspace);
         var request = CreateReport("idempotent-wrapper-bug") with { IdempotencyKey = "triage-idempotency-001" };
 
-        var first = await sut.SubmitReportAsync(request);
+        var first = await sut.SubmitReportAsync(request, cancellationToken: TestContext.Current.CancellationToken);
         _time.Advance(TimeSpan.FromMinutes(5));
-        var second = await sut.SubmitReportAsync(request);
+        var second = await sut.SubmitReportAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(first.ReportId, second.ReportId);
         Assert.Equal(first.GroupId, second.GroupId);
         Assert.Equal(first.QuietDeadlineUtc, second.QuietDeadlineUtc);
 
         using var db = CreateDb(PrimaryWorkspace);
-        Assert.Equal(1, await db.TriageReports.CountAsync());
-        var group = await db.TriageGroups.SingleAsync();
+        Assert.Equal(1, await db.TriageReports.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+        var group = await db.TriageGroups.SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(1, group.ReportCount);
     }
 
@@ -128,15 +128,15 @@ public sealed class TriageServiceTests : IDisposable
     [Fact]
     public async Task SubmitReportAsync_SameSignatureAcrossWorkspaces_CreatesIsolatedGroups()
     {
-        var first = await CreateService(PrimaryWorkspace).SubmitReportAsync(CreateReport("shared-bug"));
-        var second = await CreateService(AlternateWorkspace).SubmitReportAsync(CreateReport("shared-bug"));
+        var first = await CreateService(PrimaryWorkspace).SubmitReportAsync(CreateReport("shared-bug"), cancellationToken: TestContext.Current.CancellationToken);
+        var second = await CreateService(AlternateWorkspace).SubmitReportAsync(CreateReport("shared-bug"), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotEqual(first.GroupId, second.GroupId);
 
         using var primaryDb = CreateDb(PrimaryWorkspace);
         using var alternateDb = CreateDb(AlternateWorkspace);
-        Assert.Equal(1, await primaryDb.TriageGroups.CountAsync());
-        Assert.Equal(1, await alternateDb.TriageGroups.CountAsync());
+        Assert.Equal(1, await primaryDb.TriageGroups.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(1, await alternateDb.TriageGroups.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     /// <summary>
@@ -160,11 +160,11 @@ public sealed class TriageServiceTests : IDisposable
             Summary = "The MCP Server Codex plugin reports success after a workflow.triage call fails.",
             Component = "mcpserver-codex-plugin",
             AffectedPaths = ["F:\\GitHub\\mcpserver-codex-plugin\\lib\\repl-invoke.sh"],
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(McpServerWorkspace, result.WorkspacePath);
         using var db = CreateDb(McpServerWorkspace);
-        var report = await db.TriageReports.SingleAsync();
+        var report = await db.TriageReports.SingleAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(McpServerWorkspace, report.WorkspaceId);
         Assert.Equal(PrimaryWorkspace, report.OriginalWorkspacePath);
     }
@@ -185,11 +185,11 @@ public sealed class TriageServiceTests : IDisposable
             Title = "mcpserver-grok-plugin rejects triage_status",
             Summary = "The MCP Server Grok plugin does not expose triage status.",
             Component = "mcpserver-grok-plugin",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(PrimaryWorkspace, result.WorkspacePath);
         using var db = CreateDb(PrimaryWorkspace);
-        Assert.Equal(1, await db.TriageReports.CountAsync());
+        Assert.Equal(1, await db.TriageReports.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     /// <summary>
@@ -225,7 +225,7 @@ public sealed class TriageServiceTests : IDisposable
                 }));
 
         var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
-        var submit = await sut.SubmitReportAsync(CreateReport("research-valid"));
+        var submit = await sut.SubmitReportAsync(CreateReport("research-valid"), cancellationToken: TestContext.Current.CancellationToken);
         var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
 
         Assert.Equal(1, processed.ProcessedGroups);
@@ -245,7 +245,7 @@ public sealed class TriageServiceTests : IDisposable
                 request.FunctionalRequirements.Contains("FR-MCP-TRIAGE-002")),
             Arg.Any<CancellationToken>());
 
-        var group = await sut.GetGroupAsync(submit.GroupId);
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("completed", group.Status);
         Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
     }
@@ -288,7 +288,7 @@ public sealed class TriageServiceTests : IDisposable
             todo: todo,
             todoCreator: todoCreator,
             quietPeriod: TimeSpan.Zero);
-        var submit = await sut.SubmitReportAsync(CreateReport("creator-route"));
+        var submit = await sut.SubmitReportAsync(CreateReport("creator-route"), cancellationToken: TestContext.Current.CancellationToken);
 
         var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
 
@@ -299,8 +299,8 @@ public sealed class TriageServiceTests : IDisposable
                 request.Id == "BUG-TRIAGE-001" &&
                 request.Title == "Fix triage TODO routing"),
             Arg.Any<CancellationToken>());
-        await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, default);
-        var group = await sut.GetGroupAsync(submit.GroupId);
+        await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("completed", group.Status);
         Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
     }
@@ -339,16 +339,16 @@ public sealed class TriageServiceTests : IDisposable
                 TodoMutationFailureKind.ProjectionFailed));
 
         var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
-        var submit = await sut.SubmitReportAsync(CreateReport("projection-failure-created"));
+        var submit = await sut.SubmitReportAsync(CreateReport("projection-failure-created"), cancellationToken: TestContext.Current.CancellationToken);
         var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
 
         Assert.Equal(1, processed.ProcessedGroups);
-        var group = await sut.GetGroupAsync(submit.GroupId);
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("failed", group.Status);
         Assert.Null(group.CreatedTodoId);
         Assert.Equal("projection failed", group.LastError);
 
-        var runs = await sut.QueryRunsAsync(groupId: submit.GroupId);
+        var runs = await sut.QueryRunsAsync(groupId: submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         var run = Assert.Single(runs.Items);
         Assert.Equal("failed", run.Status);
         Assert.Null(run.CreatedTodoId);
@@ -396,16 +396,16 @@ public sealed class TriageServiceTests : IDisposable
             });
 
         var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
-        var submit = await sut.SubmitReportAsync(CreateReport("projection-failure-readable-created"));
+        var submit = await sut.SubmitReportAsync(CreateReport("projection-failure-readable-created"), cancellationToken: TestContext.Current.CancellationToken);
         var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
 
         Assert.Equal(1, processed.ProcessedGroups);
-        var group = await sut.GetGroupAsync(submit.GroupId);
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("completed", group.Status);
         Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
         Assert.Equal("projection failed", group.LastError);
 
-        var runs = await sut.QueryRunsAsync(groupId: submit.GroupId);
+        var runs = await sut.QueryRunsAsync(groupId: submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         var run = Assert.Single(runs.Items);
         Assert.Equal("completed", run.Status);
         Assert.Equal("BUG-TRIAGE-001", run.CreatedTodoId);
@@ -445,7 +445,7 @@ public sealed class TriageServiceTests : IDisposable
                 }));
 
         var foreground = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
-        var submit = await foreground.SubmitReportAsync(CreateReport("background-scope"));
+        var submit = await foreground.SubmitReportAsync(CreateReport("background-scope"), cancellationToken: TestContext.Current.CancellationToken);
         var background = CreateService(string.Empty, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
 
         var processed = await background.ProcessDueGroupsAsync(CancellationToken.None);
@@ -461,7 +461,7 @@ public sealed class TriageServiceTests : IDisposable
             Arg.Any<CancellationToken>());
 
         var verifier = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
-        var group = await verifier.GetGroupAsync(submit.GroupId);
+        var group = await verifier.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("completed", group.Status);
         Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
     }
@@ -479,13 +479,13 @@ public sealed class TriageServiceTests : IDisposable
 
         var todo = Substitute.For<ITodoService>();
         var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
-        var submit = await sut.SubmitReportAsync(CreateReport("research-invalid"));
+        var submit = await sut.SubmitReportAsync(CreateReport("research-invalid"), cancellationToken: TestContext.Current.CancellationToken);
 
         var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
 
         Assert.Equal(1, processed.ProcessedGroups);
-        await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, default);
-        var group = await sut.GetGroupAsync(submit.GroupId);
+        await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("failed", group.Status);
         Assert.Contains("schema", group.LastError, StringComparison.OrdinalIgnoreCase);
     }
@@ -510,12 +510,12 @@ public sealed class TriageServiceTests : IDisposable
 
         var todo = Substitute.For<ITodoService>();
         var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
-        await sut.SubmitReportAsync(CreateReport("research-streamed-output"));
+        await sut.SubmitReportAsync(CreateReport("research-streamed-output"), cancellationToken: TestContext.Current.CancellationToken);
 
         var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
 
         Assert.Equal(1, processed.ProcessedGroups);
-        var run = Assert.Single((await sut.QueryRunsAsync(workspacePath: PrimaryWorkspace)).Items);
+        var run = Assert.Single((await sut.QueryRunsAsync(workspacePath: PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken)).Items);
         Assert.Equal("failed", run.Status);
         Assert.Contains("analysis started", run.AgentStdout, StringComparison.Ordinal);
         Assert.Contains("loading context", run.AgentStderr, StringComparison.Ordinal);
@@ -535,7 +535,7 @@ public sealed class TriageServiceTests : IDisposable
             db.TriageGroups.Add(SeedGroup("triage-group-stale", "processing", now.AddMinutes(-31)));
             db.TriageReports.Add(SeedReport("triage-report-stale", "triage-group-stale", "Stale processing report", now.AddMinutes(-31)));
             db.TriageResearchRuns.Add(SeedRun("triage-run-stale", "triage-group-stale", "processing", now.AddMinutes(-31)));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var sut = CreateService(PrimaryWorkspace, runner: runner, maxRunTime: TimeSpan.FromMinutes(30));
@@ -543,14 +543,14 @@ public sealed class TriageServiceTests : IDisposable
         var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
 
         Assert.Equal(0, processed.ProcessedGroups);
-        await runner.DidNotReceiveWithAnyArgs().RunAsync(default!, default);
-        var group = await sut.GetGroupAsync("triage-group-stale");
+        await runner.DidNotReceiveWithAnyArgs().RunAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
+        var group = await sut.GetGroupAsync("triage-group-stale", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal("failed", group.Status);
         Assert.Contains("maximum duration", group.LastError, StringComparison.OrdinalIgnoreCase);
         var run = Assert.Single((await sut.QueryRunsAsync(
             status: "failed",
             groupId: "triage-group-stale",
-            workspacePath: PrimaryWorkspace)).Items);
+            workspacePath: PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken)).Items);
         Assert.Equal("triage-run-stale", run.RunId);
         Assert.Contains("maximum duration", run.Error, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(now, run.CompletedUtc);
@@ -569,12 +569,12 @@ public sealed class TriageServiceTests : IDisposable
             db.TriageGroups.Add(SeedGroup("triage-group-stale-retry", "processing", now.AddMinutes(-31)));
             db.TriageReports.Add(SeedReport("triage-report-stale-retry", "triage-group-stale-retry", "Stale retry report", now.AddMinutes(-31)));
             db.TriageResearchRuns.Add(SeedRun("triage-run-stale-retry", "triage-group-stale-retry", "processing", now.AddMinutes(-31)));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var sut = CreateService(PrimaryWorkspace, maxRunTime: TimeSpan.FromMinutes(30));
 
-        var group = await sut.RetryGroupAsync("triage-group-stale-retry");
+        var group = await sut.RetryGroupAsync("triage-group-stale-retry", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("collecting", group.Status);
         Assert.Null(group.LastError);
@@ -582,7 +582,7 @@ public sealed class TriageServiceTests : IDisposable
         var run = Assert.Single((await sut.QueryRunsAsync(
             status: "failed",
             groupId: "triage-group-stale-retry",
-            workspacePath: PrimaryWorkspace)).Items);
+            workspacePath: PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken)).Items);
         Assert.Equal("triage-run-stale-retry", run.RunId);
         Assert.Contains("maximum duration", run.Error, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(now, run.CompletedUtc);
@@ -601,12 +601,12 @@ public sealed class TriageServiceTests : IDisposable
             db.TriageGroups.Add(SeedGroup("triage-group-force-retry", "processing", now.AddMinutes(-1)));
             db.TriageReports.Add(SeedReport("triage-report-force-retry", "triage-group-force-retry", "Force retry report", now.AddMinutes(-1)));
             db.TriageResearchRuns.Add(SeedRun("triage-run-force-retry", "triage-group-force-retry", "processing", now.AddMinutes(-1)));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var sut = CreateService(PrimaryWorkspace, maxRunTime: TimeSpan.FromMinutes(30));
 
-        var group = await sut.RetryGroupAsync("triage-group-force-retry", force: true);
+        var group = await sut.RetryGroupAsync("triage-group-force-retry", force: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("collecting", group.Status);
         Assert.Null(group.LastError);
@@ -614,7 +614,7 @@ public sealed class TriageServiceTests : IDisposable
         var run = Assert.Single((await sut.QueryRunsAsync(
             status: "failed",
             groupId: "triage-group-force-retry",
-            workspacePath: PrimaryWorkspace)).Items);
+            workspacePath: PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken)).Items);
         Assert.Equal("triage-run-force-retry", run.RunId);
         Assert.Contains("force retried", run.Error, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(now, run.CompletedUtc);
@@ -647,12 +647,12 @@ public sealed class TriageServiceTests : IDisposable
                 now.AddMinutes(-11),
                 completedUtc: now.AddMinutes(-10),
                 createdTodoId: "BUG-TRIAGE-006"));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var sut = CreateService(PrimaryWorkspace);
 
-        var group = await sut.RetryGroupAsync("triage-group-stale-created-todo");
+        var group = await sut.RetryGroupAsync("triage-group-stale-created-todo", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("collecting", group.Status);
         Assert.Null(group.CreatedTodoId);
@@ -661,7 +661,7 @@ public sealed class TriageServiceTests : IDisposable
         var run = Assert.Single((await sut.QueryRunsAsync(
             status: "failed",
             groupId: "triage-group-stale-created-todo",
-            workspacePath: PrimaryWorkspace)).Items);
+            workspacePath: PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken)).Items);
         Assert.Equal("triage-run-stale-created-todo", run.RunId);
         Assert.Null(run.CreatedTodoId);
         Assert.Contains("stale created TODO reference", run.Error, StringComparison.OrdinalIgnoreCase);
@@ -694,10 +694,10 @@ public sealed class TriageServiceTests : IDisposable
                 responseJson: """{"title":"Fix dashboard","summary":"Expose run status."}""",
                 rawOutput: """{"title":"Fix dashboard"}""",
                 createdTodoId: "BUG-TRIAGE-001"));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
-        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace);
+        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken);
 
         var triageQueueGroup = Assert.Single(dashboard.TriageQueue);
         Assert.Equal("triage-group-new", triageQueueGroup.GroupId);
@@ -716,7 +716,7 @@ public sealed class TriageServiceTests : IDisposable
     [Fact]
     public async Task GetDashboardAsync_NoRows_ReturnsEmptyCollections()
     {
-        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace);
+        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Empty(dashboard.TriageQueue);
         Assert.Empty(dashboard.ReportGroupQueue);
@@ -743,7 +743,7 @@ public sealed class TriageServiceTests : IDisposable
                     agentStderr: "codex stderr",
                     agentExitCode: 0),
                 SeedRun("triage-run-processing", "triage-group-primary", "processing", now.AddMinutes(1)));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         using (var db = CreateDb(AlternateWorkspace))
@@ -755,13 +755,13 @@ public sealed class TriageServiceTests : IDisposable
                 "completed",
                 now,
                 workspacePath: AlternateWorkspace));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var result = await CreateService(PrimaryWorkspace).QueryRunsAsync(
             status: "completed",
             groupId: "triage-group-primary",
-            workspacePath: PrimaryWorkspace);
+            workspacePath: PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken);
 
         var run = Assert.Single(result.Items);
         Assert.Equal("triage-run-primary", run.RunId);
@@ -800,7 +800,7 @@ public sealed class TriageServiceTests : IDisposable
                 completedUtc: now.AddMinutes(2),
                 createdTodoId: "BUG-TRIAGE-001"));
             db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-001", "Created triage TODO"));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         using (var db = CreateDb(AlternateWorkspace))
@@ -812,10 +812,10 @@ public sealed class TriageServiceTests : IDisposable
                 createdTodoId: "BUG-TRIAGE-002",
                 workspacePath: AlternateWorkspace));
             db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-002", "Other workspace triage TODO", AlternateWorkspace));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
-        var result = await CreateService(PrimaryWorkspace).QueryCreatedTodosAsync(PrimaryWorkspace);
+        var result = await CreateService(PrimaryWorkspace).QueryCreatedTodosAsync(PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken);
 
         var item = Assert.Single(result.Items);
         Assert.Equal("BUG-TRIAGE-001", item.TodoId);
@@ -841,7 +841,7 @@ public sealed class TriageServiceTests : IDisposable
             db.TriageReports.AddRange(
                 SeedReport("triage-report-a", "triage-group-source-a", "First report", now.AddMinutes(-2)),
                 SeedReport("triage-report-b", "triage-group-source-b", "Second report", now.AddMinutes(-1)));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var result = await CreateService(PrimaryWorkspace).CreateGroupFromSelectionAsync(new TriageGroupSelectionRequest
@@ -850,7 +850,7 @@ public sealed class TriageServiceTests : IDisposable
             GroupIds = ["triage-group-source-b"],
             Title = "Manual group",
             Summary = "Grouped manually",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("Manual group", result.Group.Title);
         Assert.Equal("Grouped manually", result.Group.Summary);
@@ -861,7 +861,7 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal(["triage-group-source-a", "triage-group-source-b"], result.RemovedGroupIds.Order(StringComparer.Ordinal));
         Assert.All(result.Group.Reports, report => Assert.Equal(result.Group.GroupId, report.GroupId));
 
-        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace);
+        var dashboard = await CreateService(PrimaryWorkspace).GetDashboardAsync(PrimaryWorkspace, cancellationToken: TestContext.Current.CancellationToken);
         Assert.DoesNotContain(dashboard.TriageQueue, group => group.GroupId == result.Group.GroupId);
         var queuedGroup = Assert.Single(dashboard.ReportGroupQueue, group => group.GroupId == result.Group.GroupId);
         Assert.Equal("queued", queuedGroup.Status);
@@ -880,12 +880,12 @@ public sealed class TriageServiceTests : IDisposable
             db.TriageReports.AddRange(
                 SeedReport("triage-report-target", "triage-group-target", "Target report", now.AddMinutes(-3)),
                 SeedReport("triage-report-source", "triage-group-source", "Source report", now.AddMinutes(-2)));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var result = await CreateService(PrimaryWorkspace).MergeGroupsAsync(
             "triage-group-target",
-            new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] });
+            new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("triage-group-target", result.Group.GroupId);
         Assert.Equal("queued", result.Group.Status);
@@ -896,8 +896,8 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Contains(result.Group.Reports, report => report.ReportId == "triage-report-source");
 
         using var verifyDb = CreateDb(PrimaryWorkspace);
-        Assert.Null(await verifyDb.TriageGroups.FindAsync("triage-group-source"));
-        Assert.Equal("triage-group-target", (await verifyDb.TriageReports.FindAsync("triage-report-source"))!.GroupId);
+        Assert.Null(await verifyDb.TriageGroups.FindAsync(["triage-group-source"], cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal("triage-group-target", (await verifyDb.TriageReports.FindAsync(["triage-report-source"], cancellationToken: TestContext.Current.CancellationToken))!.GroupId);
     }
 
     /// <summary>TEST-TRIAGE-003: groups with run history cannot be regrouped.</summary>
@@ -912,13 +912,13 @@ public sealed class TriageServiceTests : IDisposable
                 SeedGroup("triage-group-source", "collecting", now.AddMinutes(-1)));
             db.TriageReports.Add(SeedReport("triage-report-source", "triage-group-source", "Source report", now.AddMinutes(-1)));
             db.TriageResearchRuns.Add(SeedRun("triage-run-source", "triage-group-source", "completed", now));
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
 
         var error = await Assert.ThrowsAsync<InvalidOperationException>(() =>
             CreateService(PrimaryWorkspace).MergeGroupsAsync(
                 "triage-group-target",
-                new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] }));
+                new TriageGroupSelectionRequest { GroupIds = ["triage-group-source"] }, cancellationToken: TestContext.Current.CancellationToken));
         Assert.Contains("run history", error.Message, StringComparison.OrdinalIgnoreCase);
     }
 

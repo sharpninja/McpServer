@@ -25,8 +25,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_Query_ReturnsItems()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var requestId = GenerateRequestId("todo-query");
         var queryEnvelope = YamlEnvelopeBuilder.CreateTodoQueryRequest(
@@ -50,8 +50,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_Create_Get_Delete_Succeeds()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-001";
 
@@ -92,8 +92,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_Update_ModifiesTodo()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-002";
 
@@ -127,8 +127,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_Select_CurrentSelection_Persists()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-003";
 
@@ -158,7 +158,7 @@ public sealed class Iteration3IntegrationTests : IDisposable
         var selectionResponse1 = _replProcess.StdoutLines.LastOrDefault();
         Assert.NotNull(selectionResponse1);
 
-        await Task.Delay(500);
+        await Task.Delay(500, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoCurrentSelectionRequest(
@@ -174,8 +174,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_UpdateSelected_UsesSelection()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-004";
 
@@ -211,8 +211,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_DeleteSelected_RemovesSelectedTodo()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-005";
 
@@ -248,8 +248,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_AnalyzeRequirements_ReturnsAnalysis()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-006";
 
@@ -279,8 +279,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_StreamStatus_EmitsEvents()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-007";
 
@@ -299,9 +299,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
             streamRequestId,
             todoId);
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope), cancellationToken: TestContext.Current.CancellationToken);
 
-        var foundEvents = await _replProcess.WaitForStdoutLineCountAsync(3, TimeSpan.FromSeconds(10));
+        var foundEvents = await _replProcess.WaitForStdoutLineCountAsync(3, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(_replProcess.StdoutLines.Count > 0, "Should receive streaming events");
 
@@ -328,8 +328,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_StreamPlan_EmitsEvents()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-008";
 
@@ -348,9 +348,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
             streamRequestId,
             todoId);
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope), cancellationToken: TestContext.Current.CancellationToken);
 
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(_replProcess.StdoutLines.Count > 0, "Should receive plan streaming events");
 
@@ -363,8 +363,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_StreamImplement_EmitsEvents()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-009";
 
@@ -383,9 +383,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
             streamRequestId,
             todoId);
 
-        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope));
+        await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(streamEnvelope), cancellationToken: TestContext.Current.CancellationToken);
 
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(_replProcess.StdoutLines.Count > 0, "Should receive implement streaming events");
 
@@ -398,8 +398,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_GetProjectionStatus_ReturnsStatus()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-010";
 
@@ -427,8 +427,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_RepairProjection_Succeeds()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-011";
 
@@ -456,8 +456,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_SelectionState_PersistsAcrossCommands()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-012";
 
@@ -501,8 +501,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_FullCrudWorkflow_CompletesSuccessfully()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-013";
 
@@ -561,8 +561,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_MultipleStreams_EmitSeparateEvents()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-014";
 
@@ -580,9 +580,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamStatusRequest(
                 statusRequestId,
-                todoId)));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
 
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         var statusEventCount = _replProcess.StdoutLines.Count;
         await WaitForResponseAsync(statusRequestId, TimeSpan.FromSeconds(30));
 
@@ -592,9 +592,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamPlanRequest(
                 planRequestId,
-                todoId)));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
 
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         var planEventCount = _replProcess.StdoutLines.Count;
         await WaitForResponseAsync(planRequestId, TimeSpan.FromSeconds(30));
 
@@ -604,9 +604,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamImplementRequest(
                 implementRequestId,
-                todoId)));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
 
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5));
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(5), cancellationToken: TestContext.Current.CancellationToken);
         var implementEventCount = _replProcess.StdoutLines.Count;
         await WaitForResponseAsync(implementRequestId, TimeSpan.FromSeconds(30));
 
@@ -621,8 +621,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_ProjectionStatusAndRepair_WorkTogether()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-INT-015";
 
@@ -665,8 +665,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_QueryFiltering_ReturnsFilteredResults()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoCreateRequest(
@@ -710,8 +710,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_InvalidTodoId_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var invalidId = "invalid-todo-id";
 
@@ -731,8 +731,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_GetNonExistentTodo_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var nonExistentId = "TEST-XXX-999";
 
@@ -749,8 +749,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_NoSelection_UpdateSelected_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var updateSelectedEnvelope = YamlEnvelopeBuilder.CreateTodoUpdateSelectedRequest(
             GenerateRequestId("update-no-selection"),
@@ -765,8 +765,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_NoSelection_DeleteSelected_ReturnsError()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var deleteSelectedEnvelope = YamlEnvelopeBuilder.CreateTodoDeleteSelectedRequest(
             GenerateRequestId("delete-no-selection"));
@@ -780,8 +780,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_CurrentSelection_NoSelection_ReturnsNull()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var currentSelectionEnvelope = YamlEnvelopeBuilder.CreateTodoCurrentSelectionRequest(
             GenerateRequestId("current-no-selection"));
@@ -795,8 +795,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_StreamingEvents_AreSeparateYamlEnvelopes()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-ENV-001";
 
@@ -814,9 +814,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamStatusRequest(
                 streamRequestId,
-                todoId)));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
 
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
 
         var eventLines = _replProcess.StdoutLines.ToList();
 
@@ -841,8 +841,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_StreamEvents_ContainSequenceNumbers()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-SEQ-001";
 
@@ -860,9 +860,9 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamPlanRequest(
                 streamRequestId,
-                todoId)));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
 
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
 
         var eventLines = _replProcess.StdoutLines.ToList();
 
@@ -887,8 +887,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_SelectionStatePersistsAcrossMultipleOperations()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId1 = "TEST-PST-001";
         var todoId2 = "TEST-PST-002";
@@ -942,8 +942,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_ComplexQuery_WithMultipleFilters()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         await SendCommandAndWaitAsync(
             YamlEnvelopeBuilder.CreateTodoCreateRequest(
@@ -981,8 +981,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_UpdateWithComplexFields()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-CPX-001";
 
@@ -1019,8 +1019,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_ProjectionWorkflow_StatusPlanImplement()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-PRJ-001";
 
@@ -1042,8 +1042,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamStatusRequest(
                 statusRequestId,
-                todoId)));
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
         await WaitForResponseAsync(statusRequestId, TimeSpan.FromSeconds(30));
 
         _replProcess.ClearStdout();
@@ -1051,8 +1051,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamPlanRequest(
                 planRequestId,
-                todoId)));
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
         await WaitForResponseAsync(planRequestId, TimeSpan.FromSeconds(30));
 
         _replProcess.ClearStdout();
@@ -1060,8 +1060,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
         await _replProcess.WriteLineAsync(_yamlSerializer.Serialize(
             YamlEnvelopeBuilder.CreateTodoStreamImplementRequest(
                 implementRequestId,
-                todoId)));
-        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10));
+                todoId)), cancellationToken: TestContext.Current.CancellationToken);
+        await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken);
         await WaitForResponseAsync(implementRequestId, TimeSpan.FromSeconds(30));
 
         await SendCommandAndWaitAsync(
@@ -1079,8 +1079,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_DeleteClearsSelection()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-DEL-001";
 
@@ -1120,8 +1120,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_MultipleQueryExecutions()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         for (int i = 0; i < 3; i++)
         {
@@ -1138,8 +1138,8 @@ public sealed class Iteration3IntegrationTests : IDisposable
     [Fact]
     public async Task TodoWorkflow_CreateWithAllOptionalFields()
     {
-        await _replProcess.StartAsync();
-        await Task.Delay(1000);
+        await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
 
         var todoId = "TEST-OPT-001";
 

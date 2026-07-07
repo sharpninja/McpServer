@@ -22,7 +22,7 @@ public sealed class AgentPoolServiceTests
             Context = AgentPoolOneShotContext.AdHoc,
             PromptText = "Summarize this TODO.",
             UseWorkspaceContext = true,
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(enqueue.Success);
         Assert.False(string.IsNullOrWhiteSpace(enqueue.JobId));
@@ -57,7 +57,7 @@ public sealed class AgentPoolServiceTests
         {
             Context = AgentPoolOneShotContext.AdHoc,
             PromptText = "First work item",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(first.Success);
         _ = await WaitForJobStatusAsync(service, first.JobId!, "processing").ConfigureAwait(true);
 
@@ -65,11 +65,11 @@ public sealed class AgentPoolServiceTests
         {
             Context = AgentPoolOneShotContext.AdHoc,
             PromptText = "Second work item",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(second.Success);
         _ = await WaitForJobStatusAsync(service, second.JobId!, "queued").ConfigureAwait(true);
 
-        var cancel = await service.CancelQueueItemAsync(second.JobId!).ConfigureAwait(true);
+        var cancel = await service.CancelQueueItemAsync(second.JobId!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(cancel.Success);
 
         var canceled = await WaitForJobStatusAsync(service, second.JobId!, "canceled").ConfigureAwait(true);
@@ -100,7 +100,7 @@ public sealed class AgentPoolServiceTests
         {
             Context = AgentPoolOneShotContext.AdHoc,
             PromptText = "First",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(first.Success);
         _ = await WaitForJobStatusAsync(service, first.JobId!, "processing").ConfigureAwait(true);
 
@@ -108,23 +108,23 @@ public sealed class AgentPoolServiceTests
         {
             Context = AgentPoolOneShotContext.AdHoc,
             PromptText = "Second",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(second.Success);
 
         var third = await service.EnqueueOneShotAsync(new AgentPoolOneShotRequest
         {
             Context = AgentPoolOneShotContext.AdHoc,
             PromptText = "Third",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(third.Success);
 
         _ = await WaitForJobStatusAsync(service, second.JobId!, "queued").ConfigureAwait(true);
         _ = await WaitForJobStatusAsync(service, third.JobId!, "queued").ConfigureAwait(true);
 
-        var moved = await service.MoveQueueItemUpAsync(third.JobId!).ConfigureAwait(true);
+        var moved = await service.MoveQueueItemUpAsync(third.JobId!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(moved.Success);
 
-        var queue = await service.GetQueueItemsAsync().ConfigureAwait(true);
+        var queue = await service.GetQueueItemsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var secondIndex = queue.ToList().FindIndex(x => string.Equals(x.JobId, second.JobId, StringComparison.OrdinalIgnoreCase));
         var thirdIndex = queue.ToList().FindIndex(x => string.Equals(x.JobId, third.JobId, StringComparison.OrdinalIgnoreCase));
         Assert.True(secondIndex >= 0);
@@ -140,10 +140,10 @@ public sealed class AgentPoolServiceTests
     {
         using var service = CreateService(out _);
 
-        var result = await service.StartAgentAsync("planner", @"C:\workspace-a").ConfigureAwait(true);
+        var result = await service.StartAgentAsync("planner", @"C:\workspace-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result.Success);
 
-        var agents = await service.GetAgentsAsync(@"C:\workspace-a").ConfigureAwait(true);
+        var agents = await service.GetAgentsAsync(@"C:\workspace-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(agents);
         Assert.Equal("planner", agents[0].AgentName);
         Assert.Equal(@"C:\workspace-a", agents[0].WorkspacePath);
@@ -154,17 +154,17 @@ public sealed class AgentPoolServiceTests
     {
         using var service = CreateService(out _);
 
-        await service.StartAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
-        await service.StartAgentAsync("planner", @"C:\ws-b").ConfigureAwait(true);
+        await service.StartAgentAsync("planner", @"C:\ws-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await service.StartAgentAsync("planner", @"C:\ws-b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var all = await service.GetAgentsAsync().ConfigureAwait(true);
+        var all = await service.GetAgentsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, all.Count);
 
-        var wsA = await service.GetAgentsAsync(@"C:\ws-a").ConfigureAwait(true);
+        var wsA = await service.GetAgentsAsync(@"C:\ws-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(wsA);
         Assert.Equal(@"C:\ws-a", wsA[0].WorkspacePath);
 
-        var wsB = await service.GetAgentsAsync(@"C:\ws-b").ConfigureAwait(true);
+        var wsB = await service.GetAgentsAsync(@"C:\ws-b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(wsB);
         Assert.Equal(@"C:\ws-b", wsB[0].WorkspacePath);
     }
@@ -174,17 +174,17 @@ public sealed class AgentPoolServiceTests
     {
         using var service = CreateService(out _);
 
-        await service.StartAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
-        await service.StartAgentAsync("planner", @"C:\ws-b").ConfigureAwait(true);
+        await service.StartAgentAsync("planner", @"C:\ws-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await service.StartAgentAsync("planner", @"C:\ws-b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stop = await service.StopAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
+        var stop = await service.StopAgentAsync("planner", @"C:\ws-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(stop.Success);
 
-        var wsA = await service.GetAgentsAsync(@"C:\ws-a").ConfigureAwait(true);
+        var wsA = await service.GetAgentsAsync(@"C:\ws-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(wsA);
         Assert.Equal("offline", wsA[0].Lifecycle);
 
-        var wsB = await service.GetAgentsAsync(@"C:\ws-b").ConfigureAwait(true);
+        var wsB = await service.GetAgentsAsync(@"C:\ws-b", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(wsB);
         Assert.Equal("idle", wsB[0].Lifecycle);
     }
@@ -194,9 +194,9 @@ public sealed class AgentPoolServiceTests
     {
         using var service = CreateService(out _);
 
-        await service.SeedWorkspaceAgentsAsync(@"C:\my-workspace").ConfigureAwait(true);
+        await service.SeedWorkspaceAgentsAsync(@"C:\my-workspace", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var agents = await service.GetAgentsAsync(@"C:\my-workspace").ConfigureAwait(true);
+        var agents = await service.GetAgentsAsync(@"C:\my-workspace", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(agents);
         Assert.Equal("planner", agents[0].AgentName);
         Assert.Equal(@"C:\my-workspace", agents[0].WorkspacePath);
@@ -208,12 +208,12 @@ public sealed class AgentPoolServiceTests
     {
         using var service = CreateService(out _);
 
-        await service.StartAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
+        await service.StartAgentAsync("planner", @"C:\ws-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await service.ConnectInteractiveAsync("planner", @"C:\ws-nonexistent").ConfigureAwait(true);
+        var result = await service.ConnectInteractiveAsync("planner", @"C:\ws-nonexistent", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(result.Success);
 
-        var agents = await service.GetAgentsAsync(@"C:\ws-nonexistent").ConfigureAwait(true);
+        var agents = await service.GetAgentsAsync(@"C:\ws-nonexistent", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Single(agents);
     }
 
@@ -227,7 +227,7 @@ public sealed class AgentPoolServiceTests
             Context = AgentPoolOneShotContext.AdHoc,
             PromptText = "Test prompt",
             WorkspacePath = @"C:\ws-test",
-        }).ConfigureAwait(true);
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(enqueue.Success);
 
@@ -240,7 +240,7 @@ public sealed class AgentPoolServiceTests
     {
         using var service = CreateService(out var voiceService, AgentExecutionStrategyNames.HostedMcpAgent);
 
-        var result = await service.StartAgentAsync("planner", @"C:\workspace-a").ConfigureAwait(true);
+        var result = await service.StartAgentAsync("planner", @"C:\workspace-a", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await voiceService.Received(1)

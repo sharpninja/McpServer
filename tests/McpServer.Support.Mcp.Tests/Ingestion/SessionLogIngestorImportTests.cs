@@ -61,10 +61,10 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         });
 
         var ingestor = CreateIngestor();
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.Imported);
-        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstOrDefaultAsync(s => s.SessionId == "import-1").ConfigureAwait(true);
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstOrDefaultAsync(s => s.SessionId == "import-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(stored);
         Assert.Equal("Copilot", stored!.SourceType);
         Assert.Equal("Imported Session", stored.Title);
@@ -90,10 +90,10 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "cursor-ws.json"), json);
 
         var ingestor = CreateIngestor();
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.Imported);
-        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "ws-string").ConfigureAwait(true);
+        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "ws-string", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(@"E:\github\FunWasHad", stored.Repository);
     }
 
@@ -117,9 +117,9 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "copilot-ws.json"), json);
 
         var ingestor = CreateIngestor();
-        await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "ws-object").ConfigureAwait(true);
+        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "ws-object", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("FunWasHad", stored.Project);
         Assert.Equal(".NET 9", stored.TargetFramework);
         Assert.Equal("sharpninja/FunWasHad", stored.Repository);
@@ -133,7 +133,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "bad.json"), json);
 
         var ingestor = CreateIngestor();
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(0, result.Imported);
         Assert.Equal(1, result.Failed);
@@ -154,11 +154,11 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         }
 
         var ingestor = CreateIngestor();
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(3, result.Imported);
         Assert.Equal(3, result.FilesScanned);
-        Assert.Equal(3, await _db.SessionLogs.CountAsync().ConfigureAwait(true));
+        Assert.Equal(3, await _db.SessionLogs.CountAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
     }
 
     [Fact]
@@ -173,7 +173,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         });
 
         var ingestor = CreateIngestor();
-        await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Overwrite with updated title
         WriteSessionFile("upsert.json", new UnifiedSessionLogDto
@@ -184,11 +184,11 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             TurnCount = 0
         });
 
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.Imported);
-        Assert.Equal(1, await _db.SessionLogs.CountAsync(s => s.SessionId == "upsert-1").ConfigureAwait(true));
-        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "upsert-1").ConfigureAwait(true);
+        Assert.Equal(1, await _db.SessionLogs.CountAsync(s => s.SessionId == "upsert-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "upsert-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Updated", stored.Title);
     }
 
@@ -206,11 +206,11 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         var ingestor = CreateIngestor();
 
         // First import
-        var first = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var first = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(1, first.Imported);
 
         // Second import — file has not changed, should be skipped
-        var second = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var second = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(0, second.Imported);
         Assert.Equal(1, second.Skipped);
     }
@@ -227,7 +227,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         });
 
         var ingestor = CreateIngestor();
-        await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Change file content
         WriteSessionFile("changing.json", new UnifiedSessionLogDto
@@ -238,10 +238,10 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             TurnCount = 0
         });
 
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(1, result.Imported);
 
-        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "changing-1").ConfigureAwait(true);
+        var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "changing-1", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("V2", stored.Title);
     }
 
@@ -264,7 +264,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         });
 
         var ingestor = CreateIngestor();
-        var first = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var first = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(2, first.Imported);
 
         // Only change one file
@@ -276,7 +276,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             TurnCount = 0
         });
 
-        var second = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var second = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(1, second.Imported);
         Assert.Equal(1, second.Skipped);
     }
@@ -324,12 +324,12 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         WriteMdSessionFile("copilot-SESSION-LOG-2026-02-16.md", md);
 
         var ingestor = CreateIngestor();
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Imported >= 1);
         var stored = await _db.SessionLogs
             .Include(s => s.Turns)
-            .FirstOrDefaultAsync(s => s.SourceType == "copilot")
+            .FirstOrDefaultAsync(s => s.SourceType == "copilot", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(stored);
         Assert.Contains("MD Import Test", stored!.Title, StringComparison.Ordinal);
@@ -342,7 +342,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         WriteMdSessionFile("not-a-session-log.md", "# Regular Document\n\nThis is not a session log.");
 
         var ingestor = CreateIngestor();
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(0, result.Imported);
     }
@@ -362,7 +362,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         WriteMdSessionFile("copilot-SESSION-LOG-2026-02-16-upsert.md", md1);
 
         var ingestor = CreateIngestor();
-        await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var md2 = """
             # Session Log - Upsert MD V2
@@ -375,12 +375,12 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             """;
         WriteMdSessionFile("copilot-SESSION-LOG-2026-02-16-upsert.md", md2);
 
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Imported >= 1);
         var stored = await _db.SessionLogs
             .FirstOrDefaultAsync(s => s.SourceType == "copilot" &&
-                s.SessionId == "copilot-session-log-2026-02-16-upsert")
+                s.SessionId == "copilot-session-log-2026-02-16-upsert", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(stored);
         Assert.Contains("V2", stored!.Title, StringComparison.Ordinal);
@@ -409,7 +409,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         WriteMdSessionFile("copilot-SESSION-LOG-2026-02-16-coexist.md", md);
 
         var ingestor = CreateIngestor();
-        var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Imported >= 2);
         Assert.True(result.FilesScanned >= 2);

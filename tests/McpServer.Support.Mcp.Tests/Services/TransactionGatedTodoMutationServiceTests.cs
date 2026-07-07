@@ -491,7 +491,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
         Assert.Contains("active TODO provider does not support transaction rollback compensation", result.Error, StringComparison.Ordinal);
-        await inner.DidNotReceiveWithAnyArgs().CreateAsync(default!, default).ConfigureAwait(true);
+        await inner.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Null(coordinator.Request);
     }
 
@@ -720,7 +720,7 @@ public sealed class TransactionGatedTodoMutationServiceTests
         Assert.False(result.Success);
         Assert.Equal(TodoMutationFailureKind.Conflict, result.FailureKind);
         Assert.Contains("target TODO provider does not support transaction rollback compensation", result.Error, StringComparison.Ordinal);
-        await target.DidNotReceiveWithAnyArgs().CreateAsync(default!, default).ConfigureAwait(true);
+        await target.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(0, source.DeleteCalls);
     }
 

@@ -82,18 +82,18 @@ public sealed class SessionLogLifecycleTests
             }
         };
 
-        var submitResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, submitPayload);
+        var submitResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, submitPayload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, submitResponse.StatusCode);
-        var submitResult = await submitResponse.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        var submitResult = await submitResponse.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(submitResult);
         var sessionDbId = submitResult!.Id;
         Assert.True(sessionDbId > 0);
 
         // Step 2: Query by agent to find our session
         var queryResponse = await _fixture.Client.GetAsync(
-            $"{SessionLogEndpointFixture.SessionLogRoute}?agent={sourceType}");
+            $"{SessionLogEndpointFixture.SessionLogRoute}?agent={sourceType}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, queryResponse.StatusCode);
-        var queryResult = await queryResponse.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var queryResult = await queryResponse.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(queryResult);
         Assert.True(queryResult!.TotalCount >= 1);
         var ourSession = queryResult.Items!.FirstOrDefault(s => s.SessionId == sessionId);
@@ -110,9 +110,9 @@ public sealed class SessionLogLifecycleTests
         };
 
         var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/{sourceType}/{sessionId}/{requestId}/dialog";
-        var dialogResponse = await _fixture.Client.PostAsJsonAsync(dialogRoute, dialogItems);
+        var dialogResponse = await _fixture.Client.PostAsJsonAsync(dialogRoute, dialogItems, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, dialogResponse.StatusCode);
-        var dialogResult = await dialogResponse.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts);
+        var dialogResult = await dialogResponse.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(dialogResult);
         Assert.Equal(3, dialogResult!.TotalDialogCount);
 
@@ -147,16 +147,16 @@ public sealed class SessionLogLifecycleTests
             }
         };
 
-        var updateResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, updatePayload);
+        var updateResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, updatePayload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, updateResponse.StatusCode);
-        var updateResult = await updateResponse.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        var updateResult = await updateResponse.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(sessionDbId, updateResult!.Id); // Same ID = upsert
 
         // Step 5: Re-query to verify final state
         var finalQuery = await _fixture.Client.GetAsync(
-            $"{SessionLogEndpointFixture.SessionLogRoute}?agent={sourceType}");
+            $"{SessionLogEndpointFixture.SessionLogRoute}?agent={sourceType}", cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, finalQuery.StatusCode);
-        var finalResult = await finalQuery.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        var finalResult = await finalQuery.Content.ReadFromJsonAsync<QueryResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(finalResult);
         var finalSession = finalResult!.Items!.FirstOrDefault(s => s.SessionId == sessionId);
         Assert.NotNull(finalSession);

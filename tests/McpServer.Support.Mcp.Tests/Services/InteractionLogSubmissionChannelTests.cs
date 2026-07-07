@@ -30,7 +30,7 @@ public sealed class InteractionLogSubmissionChannelTests
         var enqueued = channel.TryEnqueue(entry);
         Assert.True(enqueued);
 
-        var (success, dequeued) = await channel.TryDequeueAsync().ConfigureAwait(true);
+        var (success, dequeued) = await channel.TryDequeueAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(success);
         Assert.NotNull(dequeued);
         Assert.Equal("GET", dequeued.Method);
@@ -81,7 +81,7 @@ public sealed class InteractionLogSubmissionChannelTests
         Assert.True(channel.TryEnqueue(first));
         Assert.False(channel.TryEnqueue(second));
 
-        var (success, dequeued) = await channel.TryDequeueAsync().ConfigureAwait(true);
+        var (success, dequeued) = await channel.TryDequeueAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(success);
         Assert.NotNull(dequeued);
         Assert.Equal("req-1", dequeued.RequestId);

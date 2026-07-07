@@ -57,16 +57,16 @@ public sealed class QBAgentToolsIntegrationTests
                 new McpAgentOptions { BaseUrl = new Uri("http://localhost"), ApiKey = token }, modelHttp);
             var chatAgent = agent.CreateChatClientAgent(chatClient);
             var runOptions = agent.CreateRunOptions(new ChatClientAgentRunOptions { ChatOptions = new ChatOptions { Tools = tools } });
-            var session = await chatAgent.CreateSessionAsync().ConfigureAwait(true);
+            var session = await chatAgent.CreateSessionAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var response = await chatAgent.RunAsync(
-                [new ChatMessage(ChatRole.User, "do the task")], session, runOptions).ConfigureAwait(true);
+                [new ChatMessage(ChatRole.User, "do the task")], session, runOptions, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(4, orchestration.Calls); // load_skill, write_file, edit_file, final
             Assert.Contains("done", response.Text, StringComparison.Ordinal);
 
             var written = await File.ReadAllTextAsync(
-                Path.Combine(factory.WorkspacePath, "src", "McpServer.Cqrs", "E2e.cs")).ConfigureAwait(true);
+                Path.Combine(factory.WorkspacePath, "src", "McpServer.Cqrs", "E2e.cs"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal("class There {}", written);
         }
         finally

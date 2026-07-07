@@ -9,7 +9,7 @@ using Serilog;
 partial class Build
 {
     [Parameter("Directory containing mcpserver-*-plugin repositories; defaults to the repository parent directory")]
-    readonly string? AgentPluginParent;
+    readonly string? AgentPluginParent = null;
 
     private static readonly JsonSerializerOptions s_pluginJsonOptions = new()
     {

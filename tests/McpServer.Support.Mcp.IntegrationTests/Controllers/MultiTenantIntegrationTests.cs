@@ -27,7 +27,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, @"C:\nonexistent\workspace");
 
-        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -38,7 +38,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, _factory.WorkspacePath);
         client.DefaultRequestHeaders.Add("X-Api-Key", "invalid-token-value");
 
-        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
@@ -48,7 +48,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
         var client = _factory.CreateClient();
 
         // Health endpoint should work without any auth or workspace headers
-        var response = await client.GetAsync(new Uri("/health", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/health", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -67,7 +67,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, @"C:\not\registered");
         client.DefaultRequestHeaders.Add("X-Api-Key", token);
 
-        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -77,7 +77,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, _factory.WorkspacePath);
 
-        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
@@ -87,7 +87,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "synthetic-jwt");
 
-        var response = await client.GetAsync(new Uri("/mcpserver/sessionlog/query", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/mcpserver/sessionlog/query", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -100,7 +100,7 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
         client.DefaultRequestHeaders.Add(WorkspaceResolutionMiddleware.WorkspacePathHeader, @"C:\nonexistent");
 
         // Non-mcp route should not trigger workspace validation
-        var response = await client.GetAsync(new Uri("/health", UriKind.Relative));
+        var response = await client.GetAsync(new Uri("/health", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 }

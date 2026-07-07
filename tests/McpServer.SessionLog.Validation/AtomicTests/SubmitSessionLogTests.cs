@@ -54,10 +54,10 @@ public sealed class SubmitSessionLogTests
             turnCount = 0
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result!.Id > 0);
         Assert.Equal("AuditTest", result.SourceType);
@@ -114,10 +114,10 @@ public sealed class SubmitSessionLogTests
             }
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var result = await response.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        var result = await response.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.True(result!.Id > 0);
     }
@@ -146,9 +146,9 @@ public sealed class SubmitSessionLogTests
             turnCount = 0
         };
 
-        var response1 = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload1);
+        var response1 = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload1, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, response1.StatusCode);
-        var result1 = await response1.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        var result1 = await response1.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
 
         // Upsert with same SourceType + SessionId
         var payload2 = new
@@ -163,9 +163,9 @@ public sealed class SubmitSessionLogTests
             turnCount = 1
         };
 
-        var response2 = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload2);
+        var response2 = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload2, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, response2.StatusCode);
-        var result2 = await response2.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        var result2 = await response2.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(result2);
         // Should reuse same ID (upsert)
         Assert.Equal(result1!.Id, result2!.Id);
@@ -212,7 +212,7 @@ public sealed class SubmitSessionLogTests
             }
         };
 
-        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
+        var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 }

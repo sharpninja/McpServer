@@ -18,10 +18,10 @@ public class WorkspaceSelectionTests
         candidate2.WorkspacePath.Returns("/home/user/project2");
         candidate2.IsTrusted.Returns(false);
 
-        selector.DiscoverWorkspacesAsync(null, default)
+        selector.DiscoverWorkspacesAsync(null, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(new[] { candidate1, candidate2 });
 
-        var result = await selector.DiscoverWorkspacesAsync();
+        var result = await selector.DiscoverWorkspacesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.Count);
@@ -37,10 +37,10 @@ public class WorkspaceSelectionTests
         var candidate = Substitute.For<IWorkspaceCandidate>();
         candidate.WorkspacePath.Returns("/custom/path1/workspace");
 
-        selector.DiscoverWorkspacesAsync(searchPaths, default)
+        selector.DiscoverWorkspacesAsync(searchPaths, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(new[] { candidate });
 
-        var result = await selector.DiscoverWorkspacesAsync(searchPaths);
+        var result = await selector.DiscoverWorkspacesAsync(searchPaths, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Single(result);
@@ -64,10 +64,10 @@ public class WorkspaceSelectionTests
         authState.IsValid.Returns(true);
         selectionResult.AuthState.Returns(authState);
 
-        selector.SelectWorkspaceAsync("/home/user/project", false, default)
+        selector.SelectWorkspaceAsync("/home/user/project", false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(selectionResult);
 
-        var result = await selector.SelectWorkspaceAsync("/home/user/project");
+        var result = await selector.SelectWorkspaceAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -80,11 +80,11 @@ public class WorkspaceSelectionTests
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
-        selector.SelectWorkspaceAsync("/untrusted/workspace", false, default)
+        selector.SelectWorkspaceAsync("/untrusted/workspace", false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IWorkspaceSelectionResult>(x => throw new UnauthorizedAccessException("Workspace not trusted"));
 
         await Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await selector.SelectWorkspaceAsync("/untrusted/workspace")
+            async () => await selector.SelectWorkspaceAsync("/untrusted/workspace", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -93,11 +93,11 @@ public class WorkspaceSelectionTests
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
-        selector.SelectWorkspaceAsync("/nonexistent/workspace", false, default)
+        selector.SelectWorkspaceAsync("/nonexistent/workspace", false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IWorkspaceSelectionResult>(x => throw new FileNotFoundException("Workspace not found"));
 
         await Assert.ThrowsAsync<FileNotFoundException>(
-            async () => await selector.SelectWorkspaceAsync("/nonexistent/workspace")
+            async () => await selector.SelectWorkspaceAsync("/nonexistent/workspace", cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -107,11 +107,11 @@ public class WorkspaceSelectionTests
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns("/home/user/project");
 
-        selector.SelectWorkspaceAsync("/home/user/project", false, default)
+        selector.SelectWorkspaceAsync("/home/user/project", false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns<IWorkspaceSelectionResult>(x => throw new InvalidOperationException("Workspace already active"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await selector.SelectWorkspaceAsync("/home/user/project", forceReselect: false)
+            async () => await selector.SelectWorkspaceAsync("/home/user/project", forceReselect: false, cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -125,10 +125,10 @@ public class WorkspaceSelectionTests
         selectionResult.WorkspacePath.Returns("/home/user/project");
         selectionResult.Success.Returns(true);
 
-        selector.SelectWorkspaceAsync("/home/user/project", true, default)
+        selector.SelectWorkspaceAsync("/home/user/project", true, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(selectionResult);
 
-        var result = await selector.SelectWorkspaceAsync("/home/user/project", forceReselect: true);
+        var result = await selector.SelectWorkspaceAsync("/home/user/project", forceReselect: true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.True(result.Success);
@@ -144,10 +144,10 @@ public class WorkspaceSelectionTests
         selectionResult.WorkspacePath.Returns("/home/user/new-project");
         selectionResult.Success.Returns(true);
 
-        selector.SwitchWorkspaceAsync("/home/user/new-project", default)
+        selector.SwitchWorkspaceAsync("/home/user/new-project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(selectionResult);
 
-        var result = await selector.SwitchWorkspaceAsync("/home/user/new-project");
+        var result = await selector.SwitchWorkspaceAsync("/home/user/new-project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("/home/user/new-project", result.WorkspacePath);
@@ -159,9 +159,9 @@ public class WorkspaceSelectionTests
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns("/home/user/project");
 
-        await selector.DeselectWorkspaceAsync();
+        await selector.DeselectWorkspaceAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        await selector.Received(1).DeselectWorkspaceAsync(default);
+        await selector.Received(1).DeselectWorkspaceAsync(cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -170,11 +170,11 @@ public class WorkspaceSelectionTests
         var selector = Substitute.For<IWorkspaceSelector>();
         selector.ActiveWorkspace.Returns((string?)null);
 
-        selector.DeselectWorkspaceAsync(default)
+        selector.DeselectWorkspaceAsync(cancellationToken: TestContext.Current.CancellationToken)
             .Returns<Task>(x => throw new InvalidOperationException("No workspace is currently active"));
 
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await selector.DeselectWorkspaceAsync()
+            async () => await selector.DeselectWorkspaceAsync(cancellationToken: TestContext.Current.CancellationToken)
         );
     }
 
@@ -212,10 +212,10 @@ public class WorkspaceSelectionTests
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
-        selector.ValidateWorkspacePathAsync("/home/user/project", default)
+        selector.ValidateWorkspacePathAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(true);
 
-        var result = await selector.ValidateWorkspacePathAsync("/home/user/project");
+        var result = await selector.ValidateWorkspacePathAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result);
     }
@@ -225,10 +225,10 @@ public class WorkspaceSelectionTests
     {
         var selector = Substitute.For<IWorkspaceSelector>();
 
-        selector.ValidateWorkspacePathAsync("/invalid/path", default)
+        selector.ValidateWorkspacePathAsync("/invalid/path", cancellationToken: TestContext.Current.CancellationToken)
             .Returns(false);
 
-        var result = await selector.ValidateWorkspacePathAsync("/invalid/path");
+        var result = await selector.ValidateWorkspacePathAsync("/invalid/path", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result);
     }
@@ -251,12 +251,12 @@ public class WorkspaceSelectionTests
         selectionResult.WorkspacePath.Returns("/home/user/project");
         selectionResult.Success.Returns(true);
 
-        selector.SelectWorkspaceAsync("/home/user/project", false, default)
+        selector.SelectWorkspaceAsync("/home/user/project", false, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(selectionResult);
 
         selector.ActiveWorkspace.Returns("/home/user/project");
 
-        await selector.SelectWorkspaceAsync("/home/user/project");
+        await selector.SelectWorkspaceAsync("/home/user/project", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("/home/user/project", selector.ActiveWorkspace);
     }

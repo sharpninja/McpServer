@@ -22,9 +22,9 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task ListIssues_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/gh/issues?limit=5", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/gh/issues?limit=5", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("issues", out var issues));
         Assert.Equal(JsonValueKind.Array, issues.ValueKind);
@@ -34,9 +34,9 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task ListPulls_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/gh/pulls?limit=5", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/gh/pulls?limit=5", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("pulls", out var pulls));
         Assert.Equal(JsonValueKind.Array, pulls.ValueKind);
@@ -47,7 +47,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     public async Task CreateIssue_WithoutTitle_ReturnsBadRequest()
     {
         var request = new { title = "", body = (string?)null };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -55,7 +55,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task CreateIssue_NullBody_ReturnsBadRequest()
     {
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues", UriKind.Relative), (object?)null).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues", UriKind.Relative), (object?)null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -64,7 +64,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     public async Task CommentOnIssue_WithoutBody_ReturnsBadRequest()
     {
         var request = new { body = "" };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues/1/comments", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues/1/comments", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -73,7 +73,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     public async Task CommentOnPull_WithoutBody_ReturnsBadRequest()
     {
         var request = new { body = "" };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/pulls/1/comments", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/pulls/1/comments", UriKind.Relative), request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -81,9 +81,9 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task ListLabels_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/gh/labels", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/gh/labels", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("labels", out var labels));
         Assert.Equal(JsonValueKind.Array, labels.ValueKind);
@@ -93,7 +93,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task UpdateIssue_NullBody_ReturnsBadRequest()
     {
-        var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/gh/issues/1", UriKind.Relative), (object?)null).ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/gh/issues/1", UriKind.Relative), (object?)null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -101,7 +101,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task SyncFromGitHub_ReturnsOk()
     {
-        var response = await _client.PostAsync(new Uri("/mcpserver/gh/issues/sync/from-github?limit=5", UriKind.Relative), null).ConfigureAwait(true);
+        var response = await _client.PostAsync(new Uri("/mcpserver/gh/issues/sync/from-github?limit=5", UriKind.Relative), null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -109,7 +109,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task SyncToGitHub_ReturnsOk()
     {
-        var response = await _client.PostAsync(new Uri("/mcpserver/gh/issues/sync/to-github", UriKind.Relative), null).ConfigureAwait(true);
+        var response = await _client.PostAsync(new Uri("/mcpserver/gh/issues/sync/to-github", UriKind.Relative), null, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -117,9 +117,9 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task ListWorkflowRuns_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcpserver/gh/actions/runs?limit=5", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/gh/actions/runs?limit=5", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("runs", out var runs));
         Assert.Equal(JsonValueKind.Array, runs.ValueKind);
@@ -132,17 +132,17 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
         var expiresAt = DateTimeOffset.UtcNow.AddHours(1);
         var setResponse = await _client.PutAsJsonAsync(
             new Uri("/mcpserver/gh/auth/token", UriKind.Relative),
-            new { accessToken = "gho_test_token", expiresAtUtc = expiresAt }).ConfigureAwait(true);
+            new { accessToken = "gho_test_token", expiresAtUtc = expiresAt }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, setResponse.StatusCode);
 
-        var statusResponse = await _client.GetAsync(new Uri("/mcpserver/gh/auth/status", UriKind.Relative)).ConfigureAwait(true);
+        var statusResponse = await _client.GetAsync(new Uri("/mcpserver/gh/auth/status", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, statusResponse.StatusCode);
-        var statusJson = await statusResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var statusJson = await statusResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var statusDoc = JsonDocument.Parse(statusJson);
         Assert.True(statusDoc.RootElement.TryGetProperty("hasStoredToken", out var hasStoredToken));
         Assert.True(hasStoredToken.GetBoolean());
 
-        var deleteResponse = await _client.DeleteAsync(new Uri("/mcpserver/gh/auth/token", UriKind.Relative)).ConfigureAwait(true);
+        var deleteResponse = await _client.DeleteAsync(new Uri("/mcpserver/gh/auth/token", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
     }
 
@@ -150,13 +150,13 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     [Fact]
     public async Task OAuthConfig_AndAuthorizeUrlBehavior()
     {
-        var configResponse = await _client.GetAsync(new Uri("/mcpserver/gh/oauth/config", UriKind.Relative)).ConfigureAwait(true);
+        var configResponse = await _client.GetAsync(new Uri("/mcpserver/gh/oauth/config", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, configResponse.StatusCode);
-        var configJson = await configResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        var configJson = await configResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         using var configDoc = JsonDocument.Parse(configJson);
         Assert.True(configDoc.RootElement.TryGetProperty("isConfigured", out _));
 
-        var authorizeResponse = await _client.GetAsync(new Uri("/mcpserver/gh/oauth/authorize-url?state=abc", UriKind.Relative)).ConfigureAwait(true);
+        var authorizeResponse = await _client.GetAsync(new Uri("/mcpserver/gh/oauth/authorize-url?state=abc", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(
             authorizeResponse.StatusCode == HttpStatusCode.OK
             || authorizeResponse.StatusCode == HttpStatusCode.BadRequest);

@@ -18,7 +18,7 @@ public sealed class BashCommandToolTests
         var runner = new FakeProcessRunner(new ProcessRunResult(-1, null, "bash not found."));
         var tool = new BashCommandTool(runner, Workspace);
 
-        var result = await tool.RunAsync("echo hi").ConfigureAwait(true);
+        var result = await tool.RunAsync("echo hi", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.False(result.Available);
         Assert.False(result.Success);
@@ -32,7 +32,7 @@ public sealed class BashCommandToolTests
         var runner = new FakeProcessRunner(new ProcessRunResult(0, "hi", null));
         var tool = new BashCommandTool(runner, Workspace);
 
-        var result = await tool.RunAsync("echo hi").ConfigureAwait(true);
+        var result = await tool.RunAsync("echo hi", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Available);
         Assert.True(result.Success);
@@ -49,7 +49,7 @@ public sealed class BashCommandToolTests
         var runner = new FakeProcessRunner(new ProcessRunResult(2, null, "boom"));
         var tool = new BashCommandTool(runner, Workspace);
 
-        var result = await tool.RunAsync("false").ConfigureAwait(true);
+        var result = await tool.RunAsync("false", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(result.Available);
         Assert.False(result.Success);

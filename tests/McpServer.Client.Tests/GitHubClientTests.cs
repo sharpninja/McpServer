@@ -20,7 +20,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        await client.ListIssuesAsync(state: "open", limit: 10);
+        await client.ListIssuesAsync(state: "open", limit: 10, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("state=open", handler.LastRequest!.RequestUri!.Query);
         Assert.Contains("limit=10", handler.LastRequest.RequestUri.Query);
@@ -33,7 +33,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.GetIssueAsync(42);
+        var result = await client.GetIssueAsync(42, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(42, result.Number);
         Assert.Contains("/mcpserver/gh/issues/42", handler.LastRequest!.RequestUri!.AbsolutePath);
@@ -46,7 +46,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        await client.CloseIssueAsync(1, reason: "completed");
+        await client.CloseIssueAsync(1, reason: "completed", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("reason=completed", handler.LastRequest!.RequestUri!.Query);
         Assert.Contains("/close", handler.LastRequest.RequestUri.AbsolutePath);
@@ -59,7 +59,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.SyncFromGitHubAsync();
+        var result = await client.SyncFromGitHubAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Equal(5, result.Synced);
@@ -72,7 +72,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.CreateIssueAsync(new Models.GitHubIssueRequest { Title = "Bug" });
+        var result = await client.CreateIssueAsync(new Models.GitHubIssueRequest { Title = "Bug" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/issues", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -86,7 +86,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.UpdateIssueAsync(42, new Models.GitHubIssueUpdateRequest { Title = "Updated" });
+        var result = await client.UpdateIssueAsync(42, new Models.GitHubIssueUpdateRequest { Title = "Updated" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/issues/42", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -100,7 +100,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        await client.ReopenIssueAsync(7);
+        await client.ReopenIssueAsync(7, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/issues/7/reopen", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -113,7 +113,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        await client.CommentOnIssueAsync(5, "Nice work!");
+        await client.CommentOnIssueAsync(5, "Nice work!", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/issues/5/comments", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -127,7 +127,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.ListLabelsAsync();
+        var result = await client.ListLabelsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/labels", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -141,7 +141,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.ListPullsAsync(state: "open");
+        var result = await client.ListPullsAsync(state: "open", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("state=open", handler.LastRequest!.RequestUri!.Query);
         Assert.Single(result.Pulls);
@@ -154,7 +154,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        await client.CommentOnPullAsync(3, "LGTM");
+        await client.CommentOnPullAsync(3, "LGTM", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/pulls/3/comments", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -168,7 +168,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.SyncToGitHubAsync();
+        var result = await client.SyncToGitHubAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/to-github", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -182,7 +182,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.SyncIssueAsync(10, "from-github");
+        var result = await client.SyncIssueAsync(10, "from-github", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/issues/10/sync", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -197,7 +197,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.GetAuthStatusAsync();
+        var result = await client.GetAuthStatusAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains("/mcpserver/gh/auth/status", handler.LastRequest!.RequestUri!.AbsolutePath);
         Assert.True(result.HasStoredToken);
@@ -210,7 +210,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        await client.SetAuthTokenAsync(new Models.GitHubAuthTokenUpsertRequest { AccessToken = "gho_test" });
+        await client.SetAuthTokenAsync(new Models.GitHubAuthTokenUpsertRequest { AccessToken = "gho_test" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/auth/token", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -224,7 +224,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        await client.ListWorkflowRunsAsync(branch: "main", status: "completed", eventName: "push", workflow: "ci", limit: 10);
+        await client.ListWorkflowRunsAsync(branch: "main", status: "completed", eventName: "push", workflow: "ci", limit: 10, cancellationToken: TestContext.Current.CancellationToken);
 
         var query = handler.LastRequest!.RequestUri!.Query;
         Assert.Contains("branch=main", query);
@@ -241,7 +241,7 @@ public sealed class GitHubClientTests
         using var http = new HttpClient(handler);
         var client = new GitHubClient(http, DefaultOptions);
 
-        var result = await client.RerunWorkflowRunAsync(55);
+        var result = await client.RerunWorkflowRunAsync(55, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/gh/actions/runs/55/rerun", handler.LastRequest.RequestUri!.AbsolutePath);

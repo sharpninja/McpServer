@@ -297,6 +297,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 if (_sessionLogWorkflow is not null)
                 {
                     // Mirror completion to clear local active turn for any follow-on legacy commands.
+                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);
                     var resp = GetString(args, "response") ?? "completed";
                     await _sessionLogWorkflow.CompleteTurnAsync(resp, cancellationToken).ConfigureAwait(false);
                 }
@@ -321,6 +322,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 // This keeps the legacy append path working even after a begin that carried explicit ids.
                 if (_sessionLogWorkflow is not null)
                 {
+                    await ApplyQueryTitleOverrideAsync(_sessionLogWorkflow, args, cancellationToken).ConfigureAwait(false);
                     var acts = GetSessionActions(args, "actions");
                     if (acts.Count > 0)
                     {
@@ -400,7 +402,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         var payload = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
         foreach (var key in new[]
                  {
-                     "response", "interpretation", "tokenCount", "model", "tags", "contextList",
+                      "response", "interpretation", "tokenCount", "model", "queryTitle", "tags", "contextList",
                      "designDecisions", "commits", "actions", "filesModified", "blockers", "processingDialog",
                  })
         {
@@ -416,6 +418,18 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         return payload;
+    }
+
+    private static async Task ApplyQueryTitleOverrideAsync(
+        ISessionLogWorkflow workflow,
+        IReadOnlyDictionary<string, object?> args,
+        CancellationToken cancellationToken)
+    {
+        var queryTitle = GetString(args, "queryTitle");
+        if (!string.IsNullOrWhiteSpace(queryTitle))
+        {
+            await workflow.UpdateTurnTitleAsync(queryTitle, cancellationToken).ConfigureAwait(false);
+        }
     }
 
     private async Task<IYamlEnvelope> DispatchSessionLogRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
@@ -487,6 +501,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case SessionLogCommandShapes.UpdateTurnMethod:
+                    await ApplyQueryTitleOverrideAsync(workflow, args, cancellationToken).ConfigureAwait(false);
                     await workflow.UpdateTurnAsync(
                         GetString(args, "response"),
                         GetString(args, "interpretation"),
@@ -498,6 +513,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case SessionLogCommandShapes.CompleteTurnMethod:
+                    await ApplyQueryTitleOverrideAsync(workflow, args, cancellationToken).ConfigureAwait(false);
                     await workflow.CompleteTurnAsync(
                         RequireString(args, "response"),
                         cancellationToken).ConfigureAwait(false);
@@ -520,6 +536,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     break;
 
                 case SessionLogCommandShapes.AppendActionsMethod:
+                    await ApplyQueryTitleOverrideAsync(workflow, args, cancellationToken).ConfigureAwait(false);
                     await workflow.AppendActionsAsync(
                         GetSessionActions(args, "actions"),
                         cancellationToken).ConfigureAwait(false);
@@ -1516,16 +1533,16 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             Section = GetString(args, "section"),
             Done = GetBool(args, "done"),
             Estimate = GetString(args, "estimate"),
-            Description = GetStringList(args, "description"),
-            TechnicalDetails = GetStringList(args, "technicalDetails"),
-            ImplementationTasks = GetTodoSubtasks(args, "implementationTasks"),
+            Description = GetOptionalStringList(args, "description"),
+            TechnicalDetails = GetOptionalStringList(args, "technicalDetails"),
+            ImplementationTasks = GetOptionalTodoSubtasks(args, "implementationTasks"),
             Note = GetString(args, "note"),
             CompletedDate = GetString(args, "completedDate"),
             DoneSummary = GetString(args, "doneSummary"),
             Remaining = GetString(args, "remaining"),
-            DependsOn = GetStringList(args, "dependsOn"),
-            FunctionalRequirements = GetStringList(args, "functionalRequirements"),
-            TechnicalRequirements = GetStringList(args, "technicalRequirements"),
+            DependsOn = GetOptionalStringList(args, "dependsOn"),
+            FunctionalRequirements = GetOptionalStringList(args, "functionalRequirements"),
+            TechnicalRequirements = GetOptionalStringList(args, "technicalRequirements"),
         };
     }
 
@@ -2072,6 +2089,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             .ToArray();
     }
 
+    private static IReadOnlyList<string>? GetOptionalStringList(IReadOnlyDictionary<string, object?> args, string name)
+        => args.ContainsKey(name) ? GetStringList(args, name) : null;
+
     private static IReadOnlyDictionary<string, string>? GetStringMap(IReadOnlyDictionary<string, object?> args, string name)
     {
         if (!args.TryGetValue(name, out var value) || value is null)
@@ -2135,6 +2155,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         var task = ConvertTodoSubtask(value);
         return task is null ? Array.Empty<ITodoSubtask>() : new[] { task };
     }
+
+    private static IReadOnlyList<ITodoSubtask>? GetOptionalTodoSubtasks(IReadOnlyDictionary<string, object?> args, string name)
+        => args.ContainsKey(name) ? GetTodoSubtasks(args, name) : null;
 
     private static ITodoSubtask? ConvertTodoSubtask(object? value)
     {

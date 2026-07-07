@@ -72,10 +72,10 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
                 section = "issues",
                 priority = "low",
                 description = new[] { "Original description that must remain unchanged." }
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
-        var createResult = await createResponse.Content.ReadFromJsonAsync<TodoMutationResultDto>().ConfigureAwait(true);
+        var createResult = await createResponse.Content.ReadFromJsonAsync<TodoMutationResultDto>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.NotNull(createResult);
         Assert.True(createResult.Success);
         Assert.NotNull(createResult.Item);
@@ -109,7 +109,7 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
             {
                 priority = "high",
                 note = updatedNote
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.OK, todoUpdateResponse.StatusCode);
 

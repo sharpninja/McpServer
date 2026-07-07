@@ -21,7 +21,7 @@ public sealed class ConfigurationClientTests
         using var http = new HttpClient(handler);
         var client = new ConfigurationClient(http, DefaultOptions);
 
-        var result = await client.GetValuesAsync();
+        var result = await client.GetValuesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/configuration", handler.LastRequest.RequestUri!.AbsolutePath);
@@ -41,7 +41,7 @@ public sealed class ConfigurationClientTests
         {
             ["VoiceConversation:CopilotModel"] = "gpt-5.4",
             ["VoiceConversation:ModelApiKey"] = null
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Patch, handler.LastRequest!.Method);
         Assert.Contains("/mcpserver/configuration", handler.LastRequest.RequestUri!.AbsolutePath);

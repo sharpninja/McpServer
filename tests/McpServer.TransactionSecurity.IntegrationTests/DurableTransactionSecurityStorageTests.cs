@@ -40,14 +40,14 @@ public sealed class DurableTransactionSecurityStorageTests
 
         using var recreatedKeyServer = CreateKeyServer(databasePath);
         var descriptor = await recreatedKeyServer
-            .GetPartyKeyAsync(PublisherPartyId, $"{PublisherPartyId}:signing:1")
+            .GetPartyKeyAsync(PublisherPartyId, $"{PublisherPartyId}:signing:1", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         var verify = await recreatedKeyServer.VerifyManifestAsync(
             new TransactionManifestVerifyRequest
             {
                 Manifest = manifest,
                 ExpectedSubscriberPartyId = SubscriberPartyId,
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var audit = await ReadAuditEventsAsync(databasePath).ConfigureAwait(true);
 
         Assert.NotNull(descriptor);
@@ -75,7 +75,7 @@ public sealed class DurableTransactionSecurityStorageTests
         }
 
         using var recreatedKeyServer = CreateKeyServer(databasePath);
-        var trace = await recreatedKeyServer.GetManifestAsync("txn-keyserver-manifest-trace").ConfigureAwait(true);
+        var trace = await recreatedKeyServer.GetManifestAsync("txn-keyserver-manifest-trace", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var traceJson = JsonSerializer.Serialize(trace);
 
         Assert.NotNull(trace);
@@ -124,7 +124,7 @@ public sealed class DurableTransactionSecurityStorageTests
                 SubscriberPartyId = SubscriberPartyId,
                 Status = "signed",
                 Limit = 1,
-            }).ConfigureAwait(true);
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var reportJson = JsonSerializer.Serialize(report);
 
         var trace = Assert.Single(report.Records);
@@ -163,7 +163,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
         using (var recreatedWithoutMaterial = CreateKeyServer(databasePath))
         {
-            var descriptor = await recreatedWithoutMaterial.GetPartyKeyAsync(PublisherPartyId, ExternalPublisherSigningKeyId)
+            var descriptor = await recreatedWithoutMaterial.GetPartyKeyAsync(PublisherPartyId, ExternalPublisherSigningKeyId, cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
             var missingPrivateMaterial = await recreatedWithoutMaterial.SignManifestAsync(
                 new TransactionManifestSignRequest
@@ -177,13 +177,13 @@ public sealed class DurableTransactionSecurityStorageTests
                     Nonce = "nonce-external-signing-missing-private",
                     DiffgramSha256 = Sha256Hex("plain-diffgram"),
                     EncryptedBodySha256 = Sha256Hex("encrypted-diffgram"),
-                }).ConfigureAwait(true);
+                }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var verifyExisting = await recreatedWithoutMaterial.VerifyManifestAsync(
                 new TransactionManifestVerifyRequest
                 {
                     Manifest = firstManifest,
                     ExpectedSubscriberPartyId = SubscriberPartyId,
-                }).ConfigureAwait(true);
+                }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.NotNull(descriptor);
             Assert.Equal(signingKey.PublicKeyPem, descriptor.PublicKeyPem);
@@ -200,7 +200,7 @@ public sealed class DurableTransactionSecurityStorageTests
             501,
             "nonce-external-signing-second",
             ExternalPublisherSigningKeyId).ConfigureAwait(true);
-        var publicDescriptor = await recreatedWithMaterial.GetPartyKeyAsync(PublisherPartyId, ExternalPublisherSigningKeyId)
+        var publicDescriptor = await recreatedWithMaterial.GetPartyKeyAsync(PublisherPartyId, ExternalPublisherSigningKeyId, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         var registrationJson = JsonSerializer.Serialize(registration);
 
@@ -227,7 +227,7 @@ public sealed class DurableTransactionSecurityStorageTests
                     ActiveSigningKeyId = ExternalPublisherSigningKeyId,
                     SigningPrivateKeyPem = privateMaterial.PrivateKeyPem,
                     SigningPublicKeyPem = conflictingPublicMaterial.PublicKeyPem,
-                })).ConfigureAwait(true);
+                }, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         Assert.Contains("does not match", exception.Message, StringComparison.Ordinal);
     }
@@ -367,17 +367,17 @@ public sealed class DurableTransactionSecurityStorageTests
 
         using (var subscriber = CreateSubscriber(keyServer, databasePath))
         {
-            var commit = await subscriber.CommitDiffgramAsync(firstRequest).ConfigureAwait(true);
+            var commit = await subscriber.CommitDiffgramAsync(firstRequest, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("committed", commit.Status);
             Assert.Equal(TransactionFailureReason.None, commit.Reason);
         }
 
         using var recreatedSubscriber = CreateSubscriber(keyServer, databasePath);
-        var status = await recreatedSubscriber.GetTransactionStatusAsync(firstManifest.TransactionId).ConfigureAwait(true);
-        var duplicate = await recreatedSubscriber.CommitDiffgramAsync(firstRequest).ConfigureAwait(true);
-        var stale = await recreatedSubscriber.CommitDiffgramAsync(CreateCommitRequest(staleManifest)).ConfigureAwait(true);
-        var staleStatus = await recreatedSubscriber.GetTransactionStatusAsync(staleManifest.TransactionId).ConfigureAwait(true);
+        var status = await recreatedSubscriber.GetTransactionStatusAsync(firstManifest.TransactionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var duplicate = await recreatedSubscriber.CommitDiffgramAsync(firstRequest, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var stale = await recreatedSubscriber.CommitDiffgramAsync(CreateCommitRequest(staleManifest), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var staleStatus = await recreatedSubscriber.GetTransactionStatusAsync(staleManifest.TransactionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var audit = await ReadAuditEventsAsync(databasePath).ConfigureAwait(true);
 
         Assert.NotNull(status);
@@ -407,11 +407,11 @@ public sealed class DurableTransactionSecurityStorageTests
         var verifier = new BlockingManifestService(keyServer);
         using var subscriber = CreateSubscriber(verifier, databasePath);
 
-        var commitTask = subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest));
+        var commitTask = subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken);
         await verifier.WaitForVerifyAsync().ConfigureAwait(true);
 
         using var observer = CreateSubscriber(keyServer, databasePath);
-        var pending = await observer.GetTransactionStatusAsync(manifest.TransactionId).ConfigureAwait(true);
+        var pending = await observer.GetTransactionStatusAsync(manifest.TransactionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.NotNull(pending);
         Assert.Equal("pending", pending.Status);
@@ -420,7 +420,7 @@ public sealed class DurableTransactionSecurityStorageTests
 
         verifier.ReleaseVerification();
         var commit = await commitTask.ConfigureAwait(true);
-        var committed = await observer.GetTransactionStatusAsync(manifest.TransactionId).ConfigureAwait(true);
+        var committed = await observer.GetTransactionStatusAsync(manifest.TransactionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", commit.Status);
         Assert.NotNull(committed);
@@ -448,8 +448,8 @@ public sealed class DurableTransactionSecurityStorageTests
         var responses = await Task.WhenAll(
                 Enumerable.Range(0, 32).Select(_ => subscriber.CommitDiffgramAsync(request)))
             .ConfigureAwait(true);
-        var finalDuplicate = await subscriber.CommitDiffgramAsync(request).ConfigureAwait(true);
-        var status = await subscriber.GetTransactionStatusAsync(manifest.TransactionId).ConfigureAwait(true);
+        var finalDuplicate = await subscriber.CommitDiffgramAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var status = await subscriber.GetTransactionStatusAsync(manifest.TransactionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var audit = await ReadAuditEventsAsync(databasePath).ConfigureAwait(true);
 
         Assert.All(responses, response =>
@@ -479,7 +479,7 @@ public sealed class DurableTransactionSecurityStorageTests
         var verifier = new BlockingManifestService(keyServer);
         using var subscriber = CreateSubscriber(verifier, databasePath);
 
-        var commitTask = subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest));
+        var commitTask = subscriber.CommitDiffgramAsync(CreateCommitRequest(manifest), cancellationToken: TestContext.Current.CancellationToken);
         await verifier.WaitForVerifyAsync().ConfigureAwait(true);
         var abort = await subscriber.AbortTransactionAsync(
                 manifest.TransactionId,
@@ -487,12 +487,12 @@ public sealed class DurableTransactionSecurityStorageTests
                 {
                     Reason = TransactionFailureReason.Aborted,
                     Actor = "abort-race-test",
-                })
+                }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         verifier.ReleaseVerification();
         var commit = await commitTask.ConfigureAwait(true);
-        var status = await subscriber.GetTransactionStatusAsync(manifest.TransactionId).ConfigureAwait(true);
+        var status = await subscriber.GetTransactionStatusAsync(manifest.TransactionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var audit = await ReadAuditEventsAsync(databasePath).ConfigureAwait(true);
 
         Assert.Equal("aborted", abort.Status);
@@ -518,8 +518,8 @@ public sealed class DurableTransactionSecurityStorageTests
                    new ScriptedTransactionPubSub(SubscriberUnavailableCommit(request.Manifest.TransactionId)),
                    store))
         {
-            var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
-            var pending = await pubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+            var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var pending = await pubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("rejected", unavailable.Status);
             Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
@@ -531,8 +531,8 @@ public sealed class DurableTransactionSecurityStorageTests
         var recoveredInner = new ScriptedTransactionPubSub(Committed(request.Manifest.TransactionId));
         using var replayStore = new SqliteTransactionSecurityStateStore(databasePath);
         using var replayPubSub = new DurableTransactionPubSub(recoveredInner, replayStore);
-        var result = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
-        var afterReplay = await replayPubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+        var result = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var afterReplay = await replayPubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.AttemptedCount);
         Assert.Equal(1, result.AcknowledgedCount);
@@ -557,7 +557,7 @@ public sealed class DurableTransactionSecurityStorageTests
                    topicName: "topic.commit",
                    subscriberId: "subscriber-a"))
         {
-            var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
+            var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
         }
@@ -568,7 +568,7 @@ public sealed class DurableTransactionSecurityStorageTests
             replayStore,
             topicName: "topic.commit",
             subscriberId: "subscriber-a");
-        var pending = await replayPubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+        var pending = await replayPubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var status = Assert.Single(pending);
         Assert.Equal("topic.commit", status.TopicName);
@@ -592,14 +592,14 @@ public sealed class DurableTransactionSecurityStorageTests
                        SubscriberUnavailableCommit(pending.Manifest.TransactionId)),
                    store))
         {
-            var committed = await pubSub.PublishCommitAsync(acknowledged).ConfigureAwait(true);
-            var unavailable = await pubSub.PublishCommitAsync(pending).ConfigureAwait(true);
+            var committed = await pubSub.PublishCommitAsync(acknowledged, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var unavailable = await pubSub.PublishCommitAsync(pending, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var claimed = await store.TryClaimPendingAsync(
                     $"commit:{pending.Manifest.TransactionId}",
                     DateTimeOffset.MaxValue,
                     CancellationToken.None)
                 .ConfigureAwait(true);
-            var retention = await pubSub.PurgeCompletedAsync(DateTimeOffset.UtcNow.AddSeconds(1), 10)
+            var retention = await pubSub.PurgeCompletedAsync(DateTimeOffset.UtcNow.AddSeconds(1), 10, cancellationToken: TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
 
             Assert.Equal(TransactionFailureReason.None, committed.Reason);
@@ -614,7 +614,7 @@ public sealed class DurableTransactionSecurityStorageTests
             recoveredInner,
             replayStore,
             TimeSpan.Zero);
-        var replay = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
+        var replay = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, replay.AttemptedCount);
         Assert.Equal(1, replay.AcknowledgedCount);
@@ -680,7 +680,7 @@ public sealed class DurableTransactionSecurityStorageTests
                     });
                 },
                 CancellationToken.None).ConfigureAwait(true);
-            var pendingAfterRollback = await pubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+            var pendingAfterRollback = await pubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("degraded", result.Status);
             Assert.True(result.RollbackSucceeded);
@@ -692,7 +692,7 @@ public sealed class DurableTransactionSecurityStorageTests
         var recoveredInner = new ScriptedTransactionPubSub(Committed(TransactionId));
         using var replayStore = new SqliteTransactionSecurityStateStore(databasePath);
         using var replayPubSub = new DurableTransactionPubSub(recoveredInner, replayStore);
-        var replay = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
+        var replay = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var auditEvents = audit.Snapshot();
 
         Assert.Equal(0, replay.AttemptedCount);
@@ -760,7 +760,7 @@ public sealed class DurableTransactionSecurityStorageTests
                     });
                 },
                 CancellationToken.None).ConfigureAwait(true);
-            var pendingAfterRollback = await pubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+            var pendingAfterRollback = await pubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("degraded", result.Status);
             Assert.Equal(TransactionFailureReason.CommitTimeout, result.Reason);
@@ -773,7 +773,7 @@ public sealed class DurableTransactionSecurityStorageTests
         var recoveredInner = new ScriptedTransactionPubSub(Committed(TransactionId));
         using var replayStore = new SqliteTransactionSecurityStateStore(databasePath);
         using var replayPubSub = new DurableTransactionPubSub(recoveredInner, replayStore);
-        var replay = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
+        var replay = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var auditEvents = audit.Snapshot();
 
         Assert.Equal(0, replay.AttemptedCount);
@@ -795,7 +795,7 @@ public sealed class DurableTransactionSecurityStorageTests
                    new ScriptedTransactionPubSub(SubscriberUnavailableCommit(request.Manifest.TransactionId)),
                    store))
         {
-            var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
+            var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
         }
@@ -807,7 +807,7 @@ public sealed class DurableTransactionSecurityStorageTests
         var results = await Task.WhenAll(
                 Enumerable.Range(0, 4).Select(_ => replayPubSub.ReplayPendingAsync()))
             .ConfigureAwait(true);
-        var afterReplay = await replayPubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+        var afterReplay = await replayPubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, results.Sum(result => result.AttemptedCount));
         Assert.Equal(1, results.Sum(result => result.AcknowledgedCount));
@@ -837,12 +837,12 @@ public sealed class DurableTransactionSecurityStorageTests
         {
             foreach (var request in requests)
             {
-                var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
+                var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
                 Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
             }
 
-            var pending = await pubSub.GetPendingMessagesAsync(MessageCount).ConfigureAwait(true);
+            var pending = await pubSub.GetPendingMessagesAsync(MessageCount, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.Equal(MessageCount, pending.Count);
         }
 
@@ -859,7 +859,7 @@ public sealed class DurableTransactionSecurityStorageTests
                 .ConfigureAwait(true);
             using var verificationStore = new SqliteTransactionSecurityStateStore(databasePath);
             using var verificationPubSub = new DurableTransactionPubSub(recoveredInner, verificationStore);
-            var afterReplay = await verificationPubSub.GetPendingMessagesAsync(MessageCount).ConfigureAwait(true);
+            var afterReplay = await verificationPubSub.GetPendingMessagesAsync(MessageCount, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal(MessageCount, results.Sum(result => result.AttemptedCount));
             Assert.Equal(MessageCount, results.Sum(result => result.AcknowledgedCount));
@@ -892,8 +892,8 @@ public sealed class DurableTransactionSecurityStorageTests
 
         var responses = await Task.WhenAll(requests.Select(request => pubSub.PublishCommitAsync(request)))
             .ConfigureAwait(true);
-        var pending = await pubSub.GetPendingMessagesAsync().ConfigureAwait(true);
-        var replay = await pubSub.ReplayPendingAsync().ConfigureAwait(true);
+        var pending = await pubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var replay = await pubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.All(responses, response =>
         {
@@ -929,7 +929,7 @@ public sealed class DurableTransactionSecurityStorageTests
             var responses = await Task.WhenAll(
                     Enumerable.Range(0, WorkerCount).Select(_ => pubSub.PublishCommitAsync(request)))
                 .ConfigureAwait(true);
-            var pending = await pubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+            var pending = await pubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.All(responses, response =>
             {
@@ -946,8 +946,8 @@ public sealed class DurableTransactionSecurityStorageTests
         var recoveredInner = new ScriptedTransactionPubSub(Committed(TransactionId));
         using var replayStore = new SqliteTransactionSecurityStateStore(databasePath);
         using var replayPubSub = new DurableTransactionPubSub(recoveredInner, replayStore);
-        var replay = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
-        var afterReplay = await replayPubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+        var replay = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var afterReplay = await replayPubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, replay.AttemptedCount);
         Assert.Equal(1, replay.AcknowledgedCount);
@@ -971,7 +971,7 @@ public sealed class DurableTransactionSecurityStorageTests
                    new ScriptedTransactionPubSub(SubscriberUnavailableCommit(request.Manifest.TransactionId)),
                    store))
         {
-            var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
+            var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var claimed = await store.TryClaimPendingAsync(
                     $"commit:{request.Manifest.TransactionId}",
                     DateTimeOffset.MaxValue,
@@ -989,8 +989,8 @@ public sealed class DurableTransactionSecurityStorageTests
             recoveredInner,
             replayStore,
             TimeSpan.Zero);
-        var result = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
-        var afterReplay = await replayPubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+        var result = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var afterReplay = await replayPubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.AttemptedCount);
         Assert.Equal(1, result.AcknowledgedCount);
@@ -1013,7 +1013,7 @@ public sealed class DurableTransactionSecurityStorageTests
                    new ScriptedTransactionPubSub(SubscriberUnavailableCommit(request.Manifest.TransactionId)),
                    store))
         {
-            var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
+            var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var claimed = await store.TryClaimPendingAsync(
                     $"commit:{request.Manifest.TransactionId}",
                     DateTimeOffset.MaxValue,
@@ -1031,8 +1031,8 @@ public sealed class DurableTransactionSecurityStorageTests
             recoveredInner,
             replayStore,
             TimeSpan.FromHours(1));
-        var pending = await replayPubSub.GetPendingMessagesAsync().ConfigureAwait(true);
-        var result = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
+        var pending = await replayPubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var result = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Empty(pending);
         Assert.Equal(0, result.AttemptedCount);
@@ -1054,13 +1054,13 @@ public sealed class DurableTransactionSecurityStorageTests
         var replay = provider.GetRequiredService<ITransactionPubSubReplayService>();
         var store = provider.GetRequiredService<ITransactionPubSubBrokerStore>();
 
-        var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
+        var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var claimed = await store.TryClaimPendingAsync(
                 $"commit:{request.Manifest.TransactionId}",
                 DateTimeOffset.MaxValue,
                 CancellationToken.None)
             .ConfigureAwait(true);
-        var result = await replay.ReplayPendingAsync().ConfigureAwait(true);
+        var result = await replay.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
         Assert.NotNull(claimed);
@@ -1084,13 +1084,13 @@ public sealed class DurableTransactionSecurityStorageTests
         var replay = provider.GetRequiredService<ITransactionPubSubReplayService>();
         var store = provider.GetRequiredService<ITransactionPubSubBrokerStore>();
 
-        var unavailable = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
+        var unavailable = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var claimed = await store.TryClaimPendingAsync(
                 $"commit:{request.Manifest.TransactionId}",
                 DateTimeOffset.MaxValue,
                 CancellationToken.None)
             .ConfigureAwait(true);
-        var result = await replay.ReplayPendingAsync().ConfigureAwait(true);
+        var result = await replay.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
         Assert.NotNull(claimed);
@@ -1109,9 +1109,9 @@ public sealed class DurableTransactionSecurityStorageTests
         using var store = new SqliteTransactionSecurityStateStore(workspace.GetPath("pubsub-ack.db"));
         using var pubSub = new DurableTransactionPubSub(inner, store);
 
-        var first = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
-        var second = await pubSub.PublishCommitAsync(request).ConfigureAwait(true);
-        var replay = await pubSub.ReplayPendingAsync().ConfigureAwait(true);
+        var first = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var second = await pubSub.PublishCommitAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var replay = await pubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("committed", first.Status);
         Assert.Equal("committed", second.Status);
@@ -1134,9 +1134,9 @@ public sealed class DurableTransactionSecurityStorageTests
         using var store = new SqliteTransactionSecurityStateStore(workspace.GetPath("pubsub-conflict.db"));
         using var pubSub = new DurableTransactionPubSub(inner, store);
 
-        var unavailable = await pubSub.PublishCommitAsync(original).ConfigureAwait(true);
-        var conflict = await pubSub.PublishCommitAsync(conflicting).ConfigureAwait(true);
-        var replay = await pubSub.ReplayPendingAsync().ConfigureAwait(true);
+        var unavailable = await pubSub.PublishCommitAsync(original, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var conflict = await pubSub.PublishCommitAsync(conflicting, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var replay = await pubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
         Assert.Equal("rejected", conflict.Status);
@@ -1164,8 +1164,8 @@ public sealed class DurableTransactionSecurityStorageTests
                    new ScriptedTransactionPubSub(abortResponses: [SubscriberUnavailableAbort(TransactionId)]),
                    store))
         {
-            var unavailable = await pubSub.PublishAbortAsync(TransactionId, request).ConfigureAwait(true);
-            var pending = await pubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+            var unavailable = await pubSub.PublishAbortAsync(TransactionId, request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var pending = await pubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("rejected", unavailable.Status);
             Assert.Equal(TransactionFailureReason.SubscriberUnavailable, unavailable.Reason);
@@ -1177,8 +1177,8 @@ public sealed class DurableTransactionSecurityStorageTests
         var recoveredInner = new ScriptedTransactionPubSub(abortResponses: [Aborted(TransactionId)]);
         using var replayStore = new SqliteTransactionSecurityStateStore(databasePath);
         using var replayPubSub = new DurableTransactionPubSub(recoveredInner, replayStore);
-        var result = await replayPubSub.ReplayPendingAsync().ConfigureAwait(true);
-        var afterReplay = await replayPubSub.GetPendingMessagesAsync().ConfigureAwait(true);
+        var result = await replayPubSub.ReplayPendingAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var afterReplay = await replayPubSub.GetPendingMessagesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(1, result.AttemptedCount);
         Assert.Equal(1, result.AcknowledgedCount);

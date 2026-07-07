@@ -38,7 +38,7 @@ public sealed class IssueSyncE2ETests
         _todoService.UpdateAsync("ISSUE-42", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
 
-        var createResult = await _sut.SyncIssueToTodoAsync(issue).ConfigureAwait(true);
+        var createResult = await _sut.SyncIssueToTodoAsync(issue, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(createResult.Success);
 
         // Verify it was created with correct priority and section from labels
@@ -64,7 +64,7 @@ public sealed class IssueSyncE2ETests
         _github.UpdateIssueAsync(42, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "https://github.com/test/issues/42", null));
 
-        var syncBackResult = await _sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
+        var syncBackResult = await _sut.SyncTodoToIssueAsync("ISSUE-42", ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(syncBackResult.Success);
 
         await _github.Received(1).CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -93,7 +93,7 @@ public sealed class IssueSyncE2ETests
         _todoService.UpdateAsync(Arg.Any<string>(), Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new TodoMutationResult(true));
 
-        var result = await _sut.SyncAllIssuesToTodosAsync("open", 30).ConfigureAwait(true);
+        var result = await _sut.SyncAllIssuesToTodosAsync("open", 30, ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(2, result.Synced);
         Assert.Equal(0, result.Failed);
@@ -121,7 +121,7 @@ public sealed class IssueSyncE2ETests
         _github.UpdateIssueAsync(1, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "url", null));
 
-        var result = await _sut.SyncAllTodosToIssuesAsync().ConfigureAwait(true);
+        var result = await _sut.SyncAllTodosToIssuesAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         // Only ISSUE-1 should be synced (MVP-APP-001 is not an ISSUE-* id)
         Assert.Equal(1, result.Synced);
