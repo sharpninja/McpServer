@@ -21,6 +21,7 @@ using McpServer.Support.Mcp.Identity;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
+using McpServer.Support.Mcp.Extensions;
 using McpServer.Support.Mcp.Services;
 using McpServer.TransactionSecurity.Services;
 using McpServer.Support.Mcp.Services.FederationAdapters;
@@ -368,6 +369,7 @@ builder.Services.AddSingleton<IRequirementsDocumentService>(sp =>
 builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<IRequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
+builder.Services.AddAgentHelpServices(builder.Configuration);
 builder.Services.AddTriageServices();
 builder.Services.AddSingleton<VoiceConversationService>();
 builder.Services.AddSingleton<IVoiceConversationService>(sp =>
@@ -879,6 +881,7 @@ app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService,
 }).ExcludeFromDescription();
 
 app.MapMcp("/mcp-transport");
+app.UseWebSockets();
 app.MapControllers();
 
 app.MapGet("/pair", async (IOptions<PairingOptions> opts, PairingHtmlRenderer pairingRenderer) =>

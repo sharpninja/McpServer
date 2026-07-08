@@ -2125,3 +2125,48 @@ Scope: layer-1+
 - [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
 - [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 
+## TR-MCP-HELP-001
+
+**Agent Help options and startup validation** — `AgentHelpOptions` binds from the `AgentHelp` configuration section; `AgentHelpOptionsValidator` rejects unsupported execution strategies, missing transcript/incident directories, and incomplete API key wiring.
+Scope: layer-1+
+
+## TR-MCP-HELP-002
+
+**Agent Help HTTP and WebSocket API surface** — `AgentHelpController` exposes session create, status, synchronous turn, SSE stream, transcript retrieval, and WebSocket turn streaming under `/mcpserver/agent-help`.
+Scope: layer-1+
+
+## TR-MCP-HELP-003
+
+**Help transcript JSONL writer** — `HelpTranscriptWriter` appends one JSON object per line under the configured transcript directory and reads all entries for a session.
+Scope: layer-1+
+
+## TR-MCP-HELP-004
+
+**Deterministic inbound guard** — `AgentHelpInboundGuard` applies stable injection and benign-bypass rules before helper execution.
+Scope: layer-1+
+
+## TR-MCP-HELP-005
+
+**Guard incident JSON logger** — `AgentHelpIncidentLogger` writes one incident file per blocked inbound message and supports session-scoped reads.
+Scope: layer-1+
+
+## TR-MCP-HELP-006
+
+**Stub corpus bootstrap** — `AgentHelpCorpusService` returns a deterministic context pack summary without full indexing when corpus bootstrap is enabled.
+Scope: layer-1+
+
+## TR-MCP-HELP-007
+
+**In-memory conversation orchestration** — `AgentHelpConversationService` maintains the session registry, evaluates inbound guards, executes helper turns, and coordinates transcript and incident persistence.
+Scope: layer-1+
+
+## TR-MCP-HELP-008
+
+**Outcome analysis recommendations** — `AgentHelpOutcomeService` derives triage and documentation TODO recommendations from help session transcripts and incidents.
+Scope: layer-1+
+
+## TR-MCP-HELP-009
+
+**MCP STDIO and typed client adapters** — `FwhMcpTools.AgentHelp` exposes `agent_help_*` tools; `AgentHelpClient` and `McpServerClient.AgentHelp` mirror the REST controller contracts.
+Scope: layer-1+
+

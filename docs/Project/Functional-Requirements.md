@@ -1727,3 +1727,92 @@ Scope: layer-1+
 - [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 
+## Agent Help
+
+## FR-MCP-HELP-001 Agent Help conversation API
+
+Agents stuck on MCP Server surfaces can open help sessions, submit turns, query status, retrieve transcripts, and stream responses over HTTP.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] POST `/mcpserver/agent-help/session` creates a `help-*` session and returns execution strategy metadata.
+- [x] GET `/mcpserver/agent-help/session/{id}` returns the current session status snapshot.
+- [x] POST `/mcpserver/agent-help/session/{id}/turn` processes synchronous turns.
+- [x] POST `/mcpserver/agent-help/session/{id}/turn/stream` and WebSocket `/mcpserver/agent-help/session/{id}/stream` emit streaming events.
+
+## FR-MCP-HELP-002 Inbound guardrails
+
+Inbound user messages are evaluated by deterministic guard rules before helper execution; violations terminate the session.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Injection fixtures (ignore-instructions, api-key-exfiltration, write-todo-yaml, disable-guardrails) are blocked with stable rule IDs.
+- [x] Benign bypass fixtures (normal help requests, MCP failure descriptions, todo.yaml questions) are allowed.
+- [x] Blocked turns set `terminated_guardrail` status and persist `guardrail_violation` transcript evidence.
+
+## FR-MCP-HELP-003 Transcript persistence
+
+Help turns are captured as append-only JSONL under the workspace data root.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] One JSON object per line is written under `agent-help/transcripts/{sessionId}.jsonl`.
+- [x] Append operations do not overwrite prior entries.
+- [x] GET `/mcpserver/agent-help/session/{id}/transcript` returns all persisted entries.
+
+## FR-MCP-HELP-004 Guard incident logging
+
+Blocked inbound messages produce durable incident records for operator review.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] One JSON file per incident is written under `agent-help/incidents`.
+- [x] Incidents include ruleId, reason, matched snippet, sessionId, and turnId.
+- [x] Incidents are queryable by sessionId.
+
+## FR-MCP-HELP-005 Corpus bootstrap and outcome analysis
+
+Sessions optionally bootstrap a stub context pack; completed sessions can be analyzed for triage and documentation follow-ups.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Session create returns a corpus summary when `CorpusBootstrapEnabled` is true.
+- [x] Outcome analysis derives triage and documentation TODO recommendations from transcripts and incidents.
+
+## FR-MCP-HELP-006 MCP STDIO tool parity
+
+STDIO MCP exposes `agent_help_create_session`, `agent_help_submit_turn`, and `agent_help_get_status` mirroring the HTTP controller.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Tools accept `workspacePath` and delegate to `IAgentHelpConversationService`.
+- [x] `agent_help_create_session` accepts caller linkage and issue summary fields for session seeding.
+- [x] Tool names are referenced from the marker prompt template.
+
+## FR-MCP-HELP-007 Typed client library
+
+`SharpNinja.McpServer.Client` exposes `AgentHelpClient` on `McpServerClient` for session create, turn submit, status, and transcript retrieval.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] `McpServerClient.AgentHelp` exposes typed methods for the REST surface.
+- [x] Request and response DTO shapes match `AgentHelpController`.
+
+## FR-MCP-HELP-008 Marker prompt guidance
+
+Generated markers instruct agents when and how to invoke Agent Help for MCP Server issues.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Marker prompt template contains `## Agent Help (MCP Server issues)`.
+- [x] Section references `agent_help_create_session`, `workflow.agenthelp.createSession`, and `/mcpserver/agent-help/session`.
+
+## FR-MCP-HELP-009 REPL workflow parity
+
+The REPL exposes `workflow.agenthelp.*` typed wrappers with the same contracts as REST and MCP tools.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] `workflow.agenthelp.createSession`, `submitTurn`, and `getStatus` route through `AgentHelpClient`.
+- [x] YAML validation and error envelopes match existing workflow namespaces.
+
+## FR-MCP-HELP-010 Agent Help configuration
+
+`AgentHelp` options control enablement, guard behavior, storage paths, execution strategy, and helper model defaults.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] `AgentHelp` section in `appsettings.yaml` binds to `AgentHelpOptions`.
+- [x] Validator rejects unknown execution strategies, missing directories, and incomplete API key wiring.
+- [x] Disabled Agent Help returns 503 from endpoints.
+

@@ -9,6 +9,13 @@ Serilog:
       Microsoft.AspNetCore: Warning
       McpServer.Support.Mcp.Logging: Verbose
 AllowedHosts: '*'
+AgentHelp:
+  Enabled: true
+  DefaultExecutionStrategy: one-shot-cli
+  UseEchoHelperFallback: true
+  GuardEnabled: true
+  TranscriptDirectory: agent-help/transcripts
+  IncidentDirectory: agent-help/incidents
 DataFolder: .
 Embedding:
   Dimensions: 384

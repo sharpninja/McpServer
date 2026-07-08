@@ -1,0 +1,16 @@
+=== dotnet test tests/McpServer.Repl.Core.Tests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
+Passed!  - Failed: 0, Passed: 9, Skipped: 0, Total: 9
+
+=== dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
+Passed!  - Failed: 0, Passed: 24, Skipped: 0, Total: 24
+
+=== dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug --filter "FullyQualifiedName~AgentHelp" ===
+Passed!  - Failed: 0, Passed: 4, Skipped: 0, Total: 4
+
+=== Combined AgentHelp test totals ===
+Unit (Repl.Core + Support.Mcp.Tests): 33 passed, 0 skipped
+Integration: 4 passed, 0 skipped
+Grand total: 37 passed, 0 skipped
+
+=== build.ps1 Compile ===
+Integration test run rebuilt McpServer.Repl.Core, McpServer.Repl.Host, McpServer.Support.Mcp, and test projects successfully (see integration test build log in terminals/21.txt).

@@ -226,6 +226,7 @@ Main endpoints:
 - `/mcpserver/repo`
 - `/mcpserver/gh`
 - `/mcpserver/sync`
+- `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
 - `/health`
 - `/swagger`
 

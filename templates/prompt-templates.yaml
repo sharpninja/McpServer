@@ -437,6 +437,14 @@ templates:
       - Do not create TODOs, requirements, GitHub issues, manual repair plans, or alternate reports for MCP Server/plugin failures unless the user's active request is to fix that failure.
       - If the MCP Server or required-plugin failure reveals that code, docs, requirements, plugin skills, package sync, deployment, configuration, or other artifacts need to be updated as a separate repair workflow, write a detailed triage report that includes the needed changes, acceptance criteria, and validation evidence, then continue the active task after the failsafe YAML is written and triage submission succeeds.
       - If triage submission fails, stop work and notify the user. Keep the failsafe YAML report for later replay; do not use raw REST or another reporting channel as a substitute.
+
+      ## Agent Help (MCP Server issues)
+      When you are stuck on any MCP Server surface (marker trust, plugin bootstrap, session log, TODO, requirements, triage, memory, context search, federation, hooks, or API behavior), request expert help instead of improvising raw REST bypasses.
+      - **When to invoke:** signature or health nonce failures you cannot resolve; unexpected tool or plugin behavior; `MCP_PLUGIN_UNAVAILABLE`; repeated 401/503 after re-reading this marker; documentation contradictions.
+      - **How to invoke:** preferred `workflow.agenthelp.createSession` or MCP tool `agent_help_create_session` with caller linkage (`callerAgent`, `callerSessionId`, `callerRequestId`) and a factual issue summary (observation vs inference separated). REST: `POST /mcpserver/agent-help/session` then WebSocket `/mcpserver/agent-help/session/{id}/stream` (SSE fallback: `POST .../turn/stream`).
+      - **Caller obligations:** include reproduction steps, exact error text, and files already consulted. Do not instruct the helper to ignore guardrails, skip triage, or mutate TODO/session-log/requirements storage directly.
+      - Agent help is for diagnosis and coordination, not a substitute for the required plugin route for normal MCP work.
+
       ## MCP Memories
       MCP memories are durable operator guidance managed by the MCP Server. Global memories apply to every workspace; Workspace memories apply only to the active workspace. Memory IDs use `MEMORY-{CATEGORY}-{NNN}`.
       Agents that support request-boundary injection must render required memories exactly as:

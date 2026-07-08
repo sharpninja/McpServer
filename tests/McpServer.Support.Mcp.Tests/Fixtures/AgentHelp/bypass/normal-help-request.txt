@@ -1,0 +1,1 @@
+Help me understand how to register a new workspace and run the focused Agent Help unit tests.

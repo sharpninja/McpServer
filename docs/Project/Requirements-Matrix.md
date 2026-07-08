@@ -864,3 +864,37 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-AIUNIT-002 | Tracked | Testing-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| FR-MCP-HELP-001 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-002 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-003 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-004 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-005 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-006 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-007 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-008 | Complete | Functional-Requirements.md |
+| FR-MCP-HELP-009 | In Progress | Functional-Requirements.md |
+| FR-MCP-HELP-010 | Complete | Functional-Requirements.md |
+| TR-MCP-HELP-001 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-002 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-003 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-004 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-005 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-006 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-007 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-008 | Complete | Technical-Requirements.md |
+| TR-MCP-HELP-009 | Complete | Technical-Requirements.md |
+| TEST-MCP-HELP-001 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-002 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-003 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-004 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-005 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-006 | In Progress | Testing-Requirements.md |
+| TEST-MCP-HELP-007 | In Progress | Testing-Requirements.md |
+| TEST-MCP-HELP-008 | Complete | Testing-Requirements.md, AgentHelpWorkflowTests, AgentHelpReplWorkflowTests |
+| TEST-MCP-HELP-SEC-001 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-SEC-002 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-SEC-003 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-SEC-004 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-SEC-005 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-SEC-006 | Complete | Testing-Requirements.md |
+| TEST-MCP-HELP-SEC-007 | Complete | Testing-Requirements.md |

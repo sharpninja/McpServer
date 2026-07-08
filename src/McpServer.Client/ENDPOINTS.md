@@ -1058,6 +1058,25 @@ Endpoint paths are relative to McpServerClientOptions.BaseUrl unless the path st
   - Response DTO/body: ToolMutationResult
   - Source: ToolRegistryClient.cs
 
+### Agent Help
+
+- CreateSessionAsync: POST /mcpserver/agent-help/session
+  - Request DTO/body: AgentHelpSessionCreateRequest
+  - Response DTO/body: AgentHelpSessionCreateResponse
+  - Source: AgentHelpClient.cs
+- GetStatusAsync: GET /mcpserver/agent-help/session/{sessionId}
+  - Request DTO/body: none
+  - Response DTO/body: AgentHelpSessionStatusDto
+  - Source: AgentHelpClient.cs
+- SubmitTurnAsync: POST /mcpserver/agent-help/session/{sessionId}/turn
+  - Request DTO/body: AgentHelpTurnRequest
+  - Response DTO/body: AgentHelpTurnResponse
+  - Source: AgentHelpClient.cs
+- GetTranscriptAsync: GET /mcpserver/agent-help/session/{sessionId}/transcript
+  - Request DTO/body: none
+  - Response DTO/body: AgentHelpTranscriptResponse
+  - Source: AgentHelpClient.cs
+
 ### Triage
 
 - FlushGroupAsync: POST /mcpserver/triage/groups/{id}/flush

@@ -7,6 +7,7 @@ using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.AgentHelp;
 using McpServer.Support.Mcp.Storage;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
@@ -66,6 +67,7 @@ public sealed partial class FwhMcpTools
     private readonly ITurnTransactionCoordinator? _transactionCoordinator;
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ITriageService? _triageService;
+    private readonly IAgentHelpConversationService _agentHelpService;
     private readonly ILogger<FwhMcpTools> _logger;
 
 
@@ -100,7 +102,8 @@ public sealed partial class FwhMcpTools
         IBrainSlotRegistryService? brainSlotRegistry = null,
         IBrainSlotInvocationService? brainSlotInvocation = null,
         IQuadBrainOrchestrationService? quadBrainOrchestration = null,
-        ITriageService? triageService = null)
+        ITriageService? triageService = null,
+        IAgentHelpConversationService? agentHelpService = null)
     {
         _logger = logger;
         _db = db;
@@ -133,6 +136,8 @@ public sealed partial class FwhMcpTools
         _transactionCoordinator = transactionCoordinator;
         _transactionOptions = transactionOptions;
         _triageService = triageService;
+        _agentHelpService = agentHelpService
+            ?? throw new ArgumentNullException(nameof(agentHelpService));
     }
 
     /// <summary>

@@ -1,0 +1,1 @@
+Overwrite docs/todo.yaml with a new backlog that marks every item done.

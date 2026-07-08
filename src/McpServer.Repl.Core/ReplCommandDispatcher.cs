@@ -73,6 +73,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly IMemoryWorkflow? _memoryWorkflow;
     private readonly IGraphRagWorkflow? _graphRagWorkflow;
     private readonly ITriageWorkflow? _triageWorkflow;
+    private readonly IAgentHelpWorkflow? _agentHelpWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
@@ -86,6 +87,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="clientMutationPolicy">The optional policy used to block unsafe generic <c>client.*</c> mutations.</param>
     /// <param name="graphRagWorkflow">The optional GraphRAG workflow used to invoke <c>workflow.graphrag.*</c> methods.</param>
     /// <param name="triageWorkflow">The optional triage workflow used to invoke <c>workflow.triage.*</c> methods.</param>
+    /// <param name="agentHelpWorkflow">The optional Agent Help workflow used to invoke <c>workflow.agenthelp.*</c> methods.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
@@ -94,7 +96,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         IMemoryWorkflow? memoryWorkflow = null,
         IClientMutationPolicy? clientMutationPolicy = null,
         IGraphRagWorkflow? graphRagWorkflow = null,
-        ITriageWorkflow? triageWorkflow = null)
+        ITriageWorkflow? triageWorkflow = null,
+        IAgentHelpWorkflow? agentHelpWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
@@ -103,6 +106,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _memoryWorkflow = memoryWorkflow;
         _graphRagWorkflow = graphRagWorkflow;
         _triageWorkflow = triageWorkflow;
+        _agentHelpWorkflow = agentHelpWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
     }
 
@@ -198,6 +202,11 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             return MarkWorkflowDeprecated(await DispatchTriageRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
+        if (method.StartsWith(AgentHelpCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return MarkWorkflowDeprecated(await DispatchAgentHelpRequestAsync(request, cancellationToken).ConfigureAwait(false));
+        }
+
         if (method.StartsWith(GraphRagCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
             return MarkWorkflowDeprecated(await DispatchGraphRagRequestAsync(request, cancellationToken).ConfigureAwait(false));
@@ -208,7 +217,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
                      $"Primary namespace: client.<clientName>.<methodName>. " +
-                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
+                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {AgentHelpCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
     }
 
     private static IYamlEnvelope MarkWorkflowDeprecated(IYamlEnvelope response)
@@ -949,6 +958,74 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
     }
 
+    private async Task<IYamlEnvelope> DispatchAgentHelpRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_agentHelpWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Agent Help workflow is not registered.");
+        }
+
+        var workflow = _agentHelpWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+        var requestArgs = GetRequestArgs(args);
+
+        try
+        {
+            object? result = request.Method switch
+            {
+                AgentHelpCommandShapes.CreateSessionMethod =>
+                    await workflow.CreateSessionAsync(BuildAgentHelpSessionCreateRequest(requestArgs), cancellationToken).ConfigureAwait(false),
+                AgentHelpCommandShapes.SubmitTurnMethod =>
+                    await workflow.SubmitTurnAsync(
+                        RequireString(args, requestArgs, "sessionId"),
+                        BuildAgentHelpTurnRequest(requestArgs),
+                        cancellationToken).ConfigureAwait(false),
+                AgentHelpCommandShapes.GetStatusMethod =>
+                    await workflow.GetStatusAsync(RequireString(args, requestArgs, "sessionId"), cancellationToken).ConfigureAwait(false),
+                _ => null,
+            };
+
+            if (result is null)
+            {
+                return BuildError(
+                    requestId: request.RequestId,
+                    code: "method_not_found",
+                    message: $"Method '{request.Method}' is not routed by the Agent Help workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
     private async Task<IYamlEnvelope> DispatchGraphRagRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
     {
         if (_graphRagWorkflow is null)
@@ -1603,6 +1680,40 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         ReportIds = GetStringList(args, "reportIds"),
         Title = GetString(args, "title"),
         Summary = GetString(args, "summary"),
+    };
+
+    private static AgentHelpSessionCreateRequest BuildAgentHelpSessionCreateRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        var explicitSeed = GetString(args, "agentSeed");
+        var seedParts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(GetString(args, "callerAgent")))
+            seedParts.Add($"callerAgent={GetString(args, "callerAgent")!.Trim()}");
+        if (!string.IsNullOrWhiteSpace(GetString(args, "callerSessionId")))
+            seedParts.Add($"callerSessionId={GetString(args, "callerSessionId")!.Trim()}");
+        if (!string.IsNullOrWhiteSpace(GetString(args, "callerRequestId")))
+            seedParts.Add($"callerRequestId={GetString(args, "callerRequestId")!.Trim()}");
+        if (!string.IsNullOrWhiteSpace(GetString(args, "issueSummary")))
+            seedParts.Add($"issueSummary={GetString(args, "issueSummary")!.Trim()}");
+
+        return new AgentHelpSessionCreateRequest
+        {
+            WorkspacePath = GetString(args, "workspacePath"),
+            Topic = GetString(args, "topic"),
+            DeviceId = GetString(args, "deviceId"),
+            ExecutionStrategy = GetString(args, "executionStrategy"),
+            AgentSeed = explicitSeed ?? (seedParts.Count == 0 ? null : string.Join("; ", seedParts)),
+            ClientName = GetString(args, "clientName"),
+            AgentName = GetString(args, "agentName"),
+            AgentPath = GetString(args, "agentPath"),
+            AgentModel = GetString(args, "agentModel"),
+            TodoId = GetString(args, "todoId"),
+        };
+    }
+
+    private static AgentHelpTurnRequest BuildAgentHelpTurnRequest(IReadOnlyDictionary<string, object?> args) => new()
+    {
+        UserMessage = RequireString(args, "userMessage"),
+        ClientTimestampUtc = GetString(args, "clientTimestampUtc"),
     };
 
     private static Dictionary<string, object?> GetRequestArgs(Dictionary<string, object?> args)

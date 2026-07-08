@@ -100,13 +100,28 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
+    /// Verifies that the marker prompt template instructs agents to use Agent Help for MCP Server issues.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-HELP-008, TEST-MCP-HELP-SEC-007.
+    /// </remarks>
+    [Fact]
+    public void MarkerPromptTemplate_ContainsAgentHelpSection()
+    {
+        var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
+        var content = File.ReadAllText(path);
+
+        Assert.Contains("## Agent Help (MCP Server issues)", content);
+        Assert.Contains("agent_help_create_session", content);
+        Assert.Contains("workflow.agenthelp.createSession", content);
+        Assert.Contains("/mcpserver/agent-help/session", content);
+    }
+
+    /// <summary>
     /// Verifies that the marker prompt template carries hub-and-spoke federation diagnostics.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: FR-MCP-103, PLAN-FEDERATION-001 agent/operator surface.
-    /// Test data: <c>templates\prompt-templates.yaml</c>.
-    /// This data is used to ensure generated markers tell agents how to identify
-    /// hub/proxy topology and stale local state before using MCP endpoints.
     /// </remarks>
     [Fact]
     public void MarkerPromptTemplate_ContainsFederationTopologyDiagnostics()

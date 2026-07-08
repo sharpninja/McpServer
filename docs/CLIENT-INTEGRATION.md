@@ -67,6 +67,7 @@ Key tool categories:
 - **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`, `sessionlog_open`, `sessionlog_begin_turn`, `sessionlog_complete_turn`, `sessionlog_fail_turn`
 - **Session Logs (replace/remove)**: `sessionlog_replace_turn`, `sessionlog_replace_section`, `sessionlog_clear_section`, `sessionlog_delete_item`, `sessionlog_delete_turn`, `sessionlog_delete_session` (PUT=replace, DELETE=remove; see [session-log-workflow-api.md](context/session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete))
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
+- **Agent Help**: `agent_help_create_session`, `agent_help_submit_turn`, `agent_help_get_status` (see marker `## Agent Help (MCP Server issues)`)
 
 ## Workspace Targeting
 
@@ -100,6 +101,23 @@ var launch = await client.Desktop.LaunchAsync(new DesktopLaunchRequest
     WaitForExit = true,
 });
 ```
+
+Agent Help for MCP Server issue diagnosis:
+
+```csharp
+var help = await client.AgentHelp.CreateSessionAsync(new AgentHelpSessionCreateRequest
+{
+    WorkspacePath = client.WorkspacePath,
+    Topic = "marker trust failure",
+});
+var turn = await client.AgentHelp.SubmitTurnAsync(help.SessionId, new AgentHelpTurnRequest
+{
+    UserMessage = "POST /mcpserver/todo returns 401 after server restart.",
+});
+var status = await client.AgentHelp.GetStatusAsync(help.SessionId);
+```
+
+REST surface: `/mcpserver/agent-help/session`, `/mcpserver/agent-help/session/{id}`, `/mcpserver/agent-help/session/{id}/turn`, `/mcpserver/agent-help/session/{id}/transcript`, plus SSE/WebSocket streaming endpoints.
 
 Remote desktop launch also requires the server-side `Mcp:DesktopLaunch:Enabled` feature gate,
 the `Mcp:DesktopLaunch:AllowedExecutables` allowlist, and the privileged

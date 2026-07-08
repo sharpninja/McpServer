@@ -109,12 +109,13 @@ public sealed class McpServerClient
         TurnTransactions = new TurnTransactionsClient(http, options, holder);
         BrainSlots = new BrainSlotClient(http, options, holder);
         Triage = new TriageClient(http, options, holder);
+        AgentHelp = new AgentHelpClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, GraphRag, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
-            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage
+            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage, AgentHelp
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -437,4 +438,10 @@ public sealed class McpServerClient
     /// <para>See <see cref="TriageClient"/> for the full method list.</para>
     /// </summary>
     public TriageClient Triage { get; }
+
+    /// <summary>
+    /// FR-MCP-HELP-007: Agent Help conversation endpoints for MCP Server issue diagnosis.
+    /// <para>See <see cref="AgentHelpClient"/> for the full method list.</para>
+    /// </summary>
+    public AgentHelpClient AgentHelp { get; }
 }

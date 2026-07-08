@@ -934,3 +934,33 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
   - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
   - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+- TEST-MCP-HELP-001: Help transcript JSONL writer appends one JSON line per entry and reads all entries without overwriting prior lines.
+  Scope: layer-1+
+- TEST-MCP-HELP-002: Deterministic inbound guard blocks injection fixtures and allows benign bypass corpora with stable rule IDs.
+  Scope: layer-1+
+- TEST-MCP-HELP-003: Guard incident JSON logger persists one incident file per block and filters incidents by session id.
+  Scope: layer-1+
+- TEST-MCP-HELP-004: Conversation service terminates sessions on guard violations; options validator rejects invalid AgentHelp configuration.
+  Scope: layer-1+
+- TEST-MCP-HELP-005: HTTP integration tests cover session create, synchronous and streaming turns, transcript retrieval, and guardrail evidence persistence.
+  Scope: layer-1+
+- TEST-MCP-HELP-006: MCP STDIO tools `agent_help_create_session`, `agent_help_submit_turn`, and `agent_help_get_status` delegate to the conversation service with workspace overrides.
+  Scope: layer-1+
+- TEST-MCP-HELP-007: Typed `AgentHelpClient` methods dispatch to the expected `/mcpserver/agent-help` REST paths with matching DTO contracts.
+
+- TEST-MCP-HELP-008: REPL contract tests prove `workflow.agenthelp.createSession`, `workflow.agenthelp.submitTurn`, and `workflow.agenthelp.getStatus` dispatch through typed REPL workflow code, build caller-linkage seed metadata, and return standard result/error envelopes.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-001: Injection fixture `ignore-previous-instructions` is blocked with rule `injection.ignore-instructions`.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-002: Injection fixture `api-key-exfiltration` is blocked with rule `injection.api-key-exfiltration`.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-003: Injection fixture `write-todo-yaml` is blocked with rule `injection.write-todo-yaml`.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-004: Injection fixture `disable-guardrails` is blocked with rule `injection.disable-guardrails`.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-005: Benign bypass fixtures remain allowed even when adjacent risky phrases appear in context.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-006: Guardrail violations terminate the session and persist transcript plus incident evidence.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-007: Marker prompt template contains the `## Agent Help (MCP Server issues)` section and references MCP/REST invocation paths.
+  Scope: layer-1+
