@@ -25,9 +25,9 @@ public sealed class AgentHelpOptions
 
     /// <summary>
     /// Default execution strategy used when callers do not explicitly choose one.
-    /// Supported values are <c>one-shot-cli</c>, <c>copilot-cli</c>, <c>codex-cli</c>, and <c>hosted-mcp-agent</c>.
+    /// Supported values are <c>grok-cli</c>, <c>one-shot-cli</c>, <c>copilot-cli</c>, <c>codex-cli</c>, and <c>hosted-mcp-agent</c>.
     /// </summary>
-    public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.OneShotCli;
+    public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.GrokCli;
 
     /// <summary>
     /// Optional API key injected into the underlying agent/model process.

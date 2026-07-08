@@ -49,6 +49,30 @@ public sealed class AgentHelpOptionsValidationTests
         Assert.True(result.Succeeded);
     }
 
+    /// <summary>TEST-MCP-HELP-004: The grok-cli execution strategy passes options validation.</summary>
+    [Fact]
+    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsGrokCli()
+    {
+        var validator = new AgentHelpOptionsValidator();
+        var options = new AgentHelpOptions
+        {
+            DefaultExecutionStrategy = AgentExecutionStrategyNames.GrokCli,
+        };
+
+        var result = validator.Validate(null, options);
+
+        Assert.True(result.Succeeded);
+    }
+
+    /// <summary>FR-MCP-HELP-001: Agent Help defaults its execution strategy to grok-cli.</summary>
+    [Fact]
+    public void AgentHelpOptions_DefaultExecutionStrategy_IsGrokCli()
+    {
+        var options = new AgentHelpOptions();
+
+        Assert.Equal(AgentExecutionStrategyNames.GrokCli, options.DefaultExecutionStrategy);
+    }
+
     [Fact]
     public void Validate_Fails_WhenModelApiKeyConfiguredWithoutEnvironmentVariableName()
     {

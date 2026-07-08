@@ -8,14 +8,17 @@ internal static class AgentExecutionStrategyNames
     public const string CopilotCli = "copilot-cli";
     public const string CodexCli = "codex-cli";
     public const string OneShotCli = "one-shot-cli";
+    public const string GrokCli = "grok-cli";
     public const string HostedMcpAgent = "hosted-mcp-agent";
     public const string HostedAgentFrameworkLegacy = "hosted-agentframework";
+    public const string GrokBuildLegacy = "grok-build";
 
     public static IReadOnlyList<string> SupportedNames { get; } =
     [
         CopilotCli,
         CodexCli,
         OneShotCli,
+        GrokCli,
         HostedMcpAgent,
     ];
 
@@ -32,9 +35,13 @@ internal static class AgentExecutionStrategyNames
 
     private static string NormalizeAlias(string strategyName)
     {
-        return string.Equals(strategyName, HostedAgentFrameworkLegacy, StringComparison.OrdinalIgnoreCase)
-            ? HostedMcpAgent
-            : strategyName;
+        if (string.Equals(strategyName, HostedAgentFrameworkLegacy, StringComparison.OrdinalIgnoreCase))
+            return HostedMcpAgent;
+
+        if (string.Equals(strategyName, GrokBuildLegacy, StringComparison.OrdinalIgnoreCase))
+            return GrokCli;
+
+        return strategyName;
     }
 }
 
@@ -104,7 +111,8 @@ public static class AgentExecutionServiceCollectionExtensions
 {
     /// <summary>
     /// FR-MCP-052..058: Adds the default agent execution strategy set, including the generic
-    /// one-shot CLI backend, legacy Copilot CLI backend, Codex CLI backend, and hosted MCP Agent backend.
+    /// one-shot CLI backend, legacy Copilot CLI backend, Codex CLI backend, Grok CLI backend,
+    /// and hosted MCP Agent backend.
     /// </summary>
     /// <param name="services">The service collection receiving the strategy registrations.</param>
     /// <returns>The same <paramref name="services"/> instance for chaining.</returns>
@@ -115,6 +123,7 @@ public static class AgentExecutionServiceCollectionExtensions
         services.AddSingleton<IAgentExecutionStrategy, CopilotCliAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategy, CodexCliAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategy, OneShotCliAgentExecutionStrategy>();
+        services.AddSingleton<IAgentExecutionStrategy, GrokCliAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategy, HostedMcpAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategyResolver, AgentExecutionStrategyResolver>();
         return services;

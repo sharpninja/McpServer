@@ -11,7 +11,7 @@ Serilog:
 AllowedHosts: '*'
 AgentHelp:
   Enabled: true
-  DefaultExecutionStrategy: one-shot-cli
+  DefaultExecutionStrategy: grok-cli
   UseEchoHelperFallback: true
   GuardEnabled: true
   CorpusBootstrapEnabled: true
