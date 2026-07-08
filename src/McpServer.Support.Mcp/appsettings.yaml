@@ -14,6 +14,21 @@ AgentHelp:
   DefaultExecutionStrategy: one-shot-cli
   UseEchoHelperFallback: true
   GuardEnabled: true
+  CorpusBootstrapEnabled: true
+  MaxContextCharacters: 12000
+  ContextSearchChunkLimit: 8
+  PinnedPaths:
+    - workspace:AGENTS-README-FIRST.yaml
+    - workspace:AGENTS.md
+    - workspace:.github/copilot-instructions.md
+    - primary:docs/MCP-SERVER.md
+    - primary:docs/CLIENT-INTEGRATION.md
+    - primary:docs/context/todo-schema.md
+    - primary:docs/context/session-log-schema.md
+    - primary:docs/context/api-capabilities.md
+    - primary:templates/prompt-templates.yaml
+    - data:templates/prompt-templates.yaml
+    - install:templates/prompt-templates.yaml
   TranscriptDirectory: agent-help/transcripts
   IncidentDirectory: agent-help/incidents
 DataFolder: .
@@ -84,12 +99,23 @@ Mcp:
     Enabled: true
     EnhanceContextSearch: true
     RootPath: mcp-data/graphrag
+    GlobalRootPath: graphrag-global
+    SeedCanonicalDocsOnStartup: true
+    IndexGlobalCorpusOnStartup: true
     DefaultQueryMode: local
     DefaultMaxChunks: 20
     IndexTimeoutSeconds: 600
     QueryTimeoutSeconds: 120
     MaxConcurrentIndexJobsPerWorkspace: 1
     ArtifactVersion: v1
+    CanonicalDocPaths:
+      - docs/MCP-SERVER.md
+      - docs/CLIENT-INTEGRATION.md
+      - docs/context/todo-schema.md
+      - docs/context/session-log-schema.md
+      - docs/context/api-capabilities.md
+      - templates/prompt-templates.yaml
+      - AGENTS.md
   BrainSlots:
     ExecutionEnabled: false
     AllowLoopbackEndpoints: false

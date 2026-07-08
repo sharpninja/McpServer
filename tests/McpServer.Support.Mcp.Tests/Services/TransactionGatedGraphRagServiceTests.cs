@@ -143,12 +143,12 @@ public sealed class TransactionGatedGraphRagServiceTests
         var sut = CreateSut(inner, coordinator, RequiredOptions());
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await sut.InitializeAsync(CancellationToken.None).ConfigureAwait(true))
+                async () => await sut.InitializeAsync(cancellationToken: CancellationToken.None).ConfigureAwait(true))
             .ConfigureAwait(true);
 
         Assert.Contains("transaction gate unavailable", exception.Message, StringComparison.Ordinal);
         await inner.DidNotReceive()
-            .InitializeAsync(Arg.Any<CancellationToken>())
+            .InitializeAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
 
@@ -157,7 +157,8 @@ public sealed class TransactionGatedGraphRagServiceTests
     public async Task ReadMethods_WhenRequiredTransactionsActive_DelegateToInner()
     {
         var inner = Substitute.For<IGraphRagService>();
-        inner.GetStatusAsync(Arg.Any<CancellationToken>()).Returns(new GraphRagStatusResponse { Enabled = true });
+        inner.GetStatusAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>())
+            .Returns(new GraphRagStatusResponse { Enabled = true });
         inner.QueryAsync(Arg.Any<GraphRagQueryRequest>(), Arg.Any<CancellationToken>())
             .Returns(new GraphRagQueryResponse { Query = "hello", Answer = "world" });
         inner.ListDocumentsAsync(0, 50, null, Arg.Any<CancellationToken>())
@@ -180,7 +181,7 @@ public sealed class TransactionGatedGraphRagServiceTests
             });
         var sut = CreateSut(inner, RequiredCoordinator(), RequiredOptions());
 
-        Assert.True((await sut.GetStatusAsync(CancellationToken.None).ConfigureAwait(true)).Enabled);
+        Assert.True((await sut.GetStatusAsync(cancellationToken: CancellationToken.None).ConfigureAwait(true)).Enabled);
         Assert.Equal("world", (await sut.QueryAsync(new GraphRagQueryRequest { Query = "hello" }, CancellationToken.None).ConfigureAwait(true)).Answer);
         Assert.Empty((await sut.ListDocumentsAsync(ct: CancellationToken.None).ConfigureAwait(true)).Documents);
         Assert.Equal("doc-1", (await sut.GetDocumentChunksAsync("doc-1", CancellationToken.None).ConfigureAwait(true))!.DocumentId);

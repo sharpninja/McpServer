@@ -124,7 +124,7 @@ public sealed class AgentHelpConversationServiceTests
             GuardEnabled = true,
             CorpusBootstrapEnabled = false,
         };
-        var monitor = new TestOptionsMonitor<AgentHelpOptions>(options);
+        var monitor = new AgentHelpTestOptionsMonitor<AgentHelpOptions>(options);
         var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "." });
         var primaryTodo = Substitute.For<ITodoService>();
         var todoFactory = Substitute.For<ITodoServiceFactory>();
@@ -139,7 +139,11 @@ public sealed class AgentHelpConversationServiceTests
             new AgentHelpInboundGuard(),
             new HelpTranscriptWriter(monitor, NullLogger<HelpTranscriptWriter>.Instance),
             new AgentHelpIncidentLogger(monitor, NullLogger<AgentHelpIncidentLogger>.Instance),
-            new AgentHelpCorpusService(monitor, NullLogger<AgentHelpCorpusService>.Instance),
+            new AgentHelpCorpusService(
+                monitor,
+                new Microsoft.AspNetCore.Http.HttpContextAccessor(),
+                AgentHelpPinnedPathResolverTestFactory.Create(),
+                NullLogger<AgentHelpCorpusService>.Instance),
             accessor,
             monitor,
             NullLogger<AgentHelpConversationService>.Instance);

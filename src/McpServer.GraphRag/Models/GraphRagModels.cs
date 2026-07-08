@@ -5,6 +5,9 @@ namespace McpServer.Support.Mcp.Models;
 /// <summary>Query request for GraphRAG retrieval.</summary>
 public sealed class GraphRagQueryRequest
 {
+    /// <summary>TR-MCP-GRAPHRAG-GLOBAL-001: Storage scope for the query target.</summary>
+    public GraphRagStorageScope Scope { get; set; } = GraphRagStorageScope.Workspace;
+
     public string? Query { get; set; }
     public string? Mode { get; set; }
     public int? MaxChunks { get; set; }
@@ -18,6 +21,9 @@ public sealed class GraphRagQueryRequest
 /// <summary>Index request for GraphRAG.</summary>
 public sealed class GraphRagIndexRequest
 {
+    /// <summary>TR-MCP-GRAPHRAG-GLOBAL-001: Storage scope for the index target.</summary>
+    public GraphRagStorageScope Scope { get; set; } = GraphRagStorageScope.Workspace;
+
     public bool Force { get; set; }
 }
 
@@ -25,6 +31,10 @@ public sealed class GraphRagIndexRequest
 public sealed class GraphRagStatusResponse
 {
     public bool Enabled { get; set; }
+
+    /// <summary>TR-MCP-GRAPHRAG-GLOBAL-001: Storage scope for this status payload.</summary>
+    public GraphRagStorageScope Scope { get; set; } = GraphRagStorageScope.Workspace;
+
     public string WorkspacePath { get; set; } = string.Empty;
     public string GraphRoot { get; set; } = string.Empty;
     public string State { get; set; } = "disabled";
@@ -58,6 +68,9 @@ public sealed class GraphRagCitation
 /// <summary>Query response for GraphRAG operations.</summary>
 public sealed class GraphRagQueryResponse
 {
+    /// <summary>TR-MCP-GRAPHRAG-GLOBAL-001: Storage scope used for the query.</summary>
+    public GraphRagStorageScope Scope { get; set; } = GraphRagStorageScope.Workspace;
+
     public string Query { get; set; } = string.Empty;
     public string Mode { get; set; } = "local";
     public string Answer { get; set; } = string.Empty;

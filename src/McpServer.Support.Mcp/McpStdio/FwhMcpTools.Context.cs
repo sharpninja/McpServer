@@ -145,30 +145,36 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>Get GraphRAG readiness status for the workspace.</summary>
-    [McpServerTool(Name = "graphrag_status"), Description("Get GraphRAG status for the workspace (initialized, indexed, backend, last index time).")]
+    [McpServerTool(Name = "graphrag_status"), Description("Get GraphRAG status for the workspace or global scope (initialized, indexed, backend, last index time).")]
     public async Task<string> GraphRagStatus(
-        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Workspace path (required for workspace scope)")] string workspacePath,
+        [Description("Storage scope: workspace or global")] string scope = "workspace",
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
-        var status = await _graphRagService.GetStatusAsync(cancellationToken).ConfigureAwait(false);
+        var storageScope = ParseGraphRagStorageScope(scope);
+        var status = await _graphRagService.GetStatusAsync(storageScope, cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(status);
     }
 
     /// <summary>Trigger GraphRAG indexing for the workspace.</summary>
-    [McpServerTool(Name = "graphrag_index"), Description("Initialize or rebuild GraphRAG index for the workspace.")]
+    [McpServerTool(Name = "graphrag_index"), Description("Initialize or rebuild GraphRAG index for the workspace or global scope.")]
     public async Task<string> GraphRagIndex(
-        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Workspace path (required for workspace scope)")] string workspacePath,
         [Description("Force re-index if true")] bool force = false,
+        [Description("Storage scope: workspace or global")] string scope = "workspace",
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
-        var statusBefore = await _graphRagService.GetStatusAsync(cancellationToken).ConfigureAwait(false);
+        var storageScope = ParseGraphRagStorageScope(scope);
+        var statusBefore = await _graphRagService.GetStatusAsync(storageScope, cancellationToken).ConfigureAwait(false);
         if (!force && string.Equals(statusBefore.State, "indexing", StringComparison.OrdinalIgnoreCase))
             return JsonSerializer.Serialize(new { error = "GraphRAG index already in progress for this workspace.", code = "index_conflict" });
         try
         {
-            var status = await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = force }, cancellationToken).ConfigureAwait(false);
+            var status = await _graphRagService.IndexAsync(
+                new GraphRagIndexRequest { Force = force, Scope = storageScope },
+                cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(status);
         }
         catch (InvalidOperationException ex)
@@ -178,10 +184,11 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>Run a GraphRAG query with citations and optional context chunks.</summary>
-    [McpServerTool(Name = "graphrag_query"), Description("Run a GraphRAG query for the workspace and return answer, citations, and optional context chunks.")]
+    [McpServerTool(Name = "graphrag_query"), Description("Run a GraphRAG query for the workspace or global scope and return answer, citations, and optional context chunks.")]
     public async Task<string> GraphRagQuery(
         [Description("Query text")] string query,
-        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Workspace path (required for workspace scope)")] string workspacePath,
+        [Description("Storage scope: workspace or global")] string scope = "workspace",
         [Description("Query mode (local/global/drift), optional")] string? mode = null,
         [Description("Maximum context chunks to return (default 20)")] int maxChunks = 20,
         [Description("Include context chunks in response (default true)")] bool includeContextChunks = true,
@@ -192,8 +199,10 @@ public sealed partial class FwhMcpTools
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
+        var storageScope = ParseGraphRagStorageScope(scope);
         var result = await _graphRagService.QueryAsync(new GraphRagQueryRequest
         {
+            Scope = storageScope,
             Query = query,
             Mode = mode,
             MaxChunks = maxChunks,
@@ -205,6 +214,11 @@ public sealed partial class FwhMcpTools
         }, cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(result);
     }
+
+    private static GraphRagStorageScope ParseGraphRagStorageScope(string? scope)
+        => string.Equals(scope, "global", StringComparison.OrdinalIgnoreCase)
+            ? GraphRagStorageScope.Global
+            : GraphRagStorageScope.Workspace;
 
     // ── Ad-Hoc Text Ingestion (FR-MCP-078, TR-GRAPHRAG-ADHOC-001) ──
 

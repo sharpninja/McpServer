@@ -9,11 +9,19 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public interface IGraphRagService
 {
-    /// <summary>Gets the current GraphRAG status for the workspace.</summary>
-    Task<GraphRagStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default);
+    /// <summary>Gets the current GraphRAG status for the requested storage scope.</summary>
+    /// <param name="scope">Workspace-local or host-global storage scope.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task<GraphRagStatusResponse> GetStatusAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default);
 
-    /// <summary>Initializes the GraphRAG directory structure for the workspace.</summary>
-    Task<GraphRagStatusResponse> InitializeAsync(CancellationToken cancellationToken = default);
+    /// <summary>Initializes the GraphRAG directory structure for the requested storage scope.</summary>
+    /// <param name="scope">Workspace-local or host-global storage scope.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task<GraphRagStatusResponse> InitializeAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default);
 
     /// <summary>Indexes the GraphRAG corpus for the workspace.</summary>
     Task<GraphRagStatusResponse> IndexAsync(GraphRagIndexRequest? request = null, CancellationToken cancellationToken = default);

@@ -1,0 +1,19 @@
+PLAN-GRAPHRAG-GLOBAL-001 implementation receipt
+Date: 2026-07-08
+
+Scope implemented:
+- GraphRagStorageScope enum (Workspace, Global)
+- GraphRagOptions: GlobalRootPath, SeedCanonicalDocsOnStartup, IndexGlobalCorpusOnStartup, CanonicalDocPaths
+- GraphRagService global scope resolution under {DataFolder}/{GlobalRootPath}
+- Global query searches graphrag-global input corpus directly (graphrag-global-input)
+- GraphRagGlobalCorpusStartupSeeder copies primary-workspace canonical docs at startup
+- Agent Help PreferGlobalGraphRag + IGlobalGraphRagCorpusSource wiring
+- Controller ?scope=global, MCP tools scope parameter, appsettings.yaml updates
+- PinnedPaths defaults reduced to workspace-only files
+
+Test command:
+dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~GraphRag|FullyQualifiedName~AgentHelp"
+
+Result:
+Passed!  - Failed: 0, Passed: 167, Skipped: 0, Total: 167
+Exit code: 0

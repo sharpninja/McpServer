@@ -208,7 +208,7 @@ public sealed class FederatedGraphRagServiceTests
     public async Task GetStatusAsync_AlwaysDelegatesToLocal()
     {
         var expected = new GraphRagStatusResponse();
-        _inner.GetStatusAsync(Arg.Any<CancellationToken>()).Returns(expected);
+        _inner.GetStatusAsync(Arg.Any<GraphRagStorageScope>(), Arg.Any<CancellationToken>()).Returns(expected);
 
         var sut = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
         var result = await sut.GetStatusAsync(cancellationToken: TestContext.Current.CancellationToken);

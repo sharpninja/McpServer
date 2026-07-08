@@ -5,6 +5,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -109,6 +110,62 @@ public sealed class GraphRagServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task InitializeAsync_GlobalScope_UsesDataFolderRoot()
+    {
+        var dataFolder = Path.Combine(_workspacePath, "mcp-data");
+        Directory.CreateDirectory(dataFolder);
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = dataFolder })
+            .Build();
+
+        var sut = CreateSut(enabled: true, configuration: configuration, globalRootPath: "graphrag-global");
+        var status = await sut.InitializeAsync(GraphRagStorageScope.Global, cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        Assert.Equal(GraphRagStorageScope.Global, status.Scope);
+        Assert.Equal("(global)", status.WorkspacePath);
+        Assert.StartsWith(Path.Combine(dataFolder, "graphrag-global"), status.GraphRoot, StringComparison.OrdinalIgnoreCase);
+        Assert.True(Directory.Exists(Path.Combine(status.GraphRoot, "input")));
+    }
+
+    [Fact]
+    public async Task QueryAsync_GlobalScope_SearchesGlobalInputCorpus()
+    {
+        var dataFolder = Path.Combine(_workspacePath, "mcp-data");
+        Directory.CreateDirectory(dataFolder);
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = dataFolder })
+            .Build();
+
+        var sut = CreateSut(enabled: true, configuration: configuration, globalRootPath: "graphrag-global");
+        var initialized = await sut.InitializeAsync(GraphRagStorageScope.Global, cancellationToken: TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        var docPath = Path.Combine(initialized.GraphRoot, "input", "canonical", "docs", "todo-schema.md");
+        Directory.CreateDirectory(Path.GetDirectoryName(docPath)!);
+        await File.WriteAllTextAsync(
+            docPath,
+            "Use workflow.todo.update with done: true and doneSummary.",
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.IndexAsync(
+            new GraphRagIndexRequest { Scope = GraphRagStorageScope.Global, Force = true },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var response = await sut.QueryAsync(
+            new GraphRagQueryRequest
+            {
+                Scope = GraphRagStorageScope.Global,
+                Query = "workflow.todo.update doneSummary",
+                IncludeContextChunks = true,
+            },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(GraphRagStorageScope.Global, response.Scope);
+        Assert.Contains("workflow.todo.update", response.Answer, StringComparison.Ordinal);
+        Assert.Contains(response.SourceKeys, key => key.StartsWith("global:", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal("graphrag-global-input", response.QueryCorpus);
+    }
+
+    [Fact]
     public async Task Status_WithRootedPath_UsesWorkspaceIsolatedSubfolders()
     {
         var sharedRoot = Path.Combine(_workspacePath, "shared-graphrag-root");
@@ -163,17 +220,23 @@ public sealed class GraphRagServiceTests : IDisposable
         string? backendCommand = null,
         IProcessRunner? processRunner = null,
         string? workspacePath = null,
-        string? rootPath = null)
+        string? rootPath = null,
+        string? globalRootPath = null,
+        IConfiguration? configuration = null)
     {
         var effectiveWorkspacePath = workspacePath ?? _workspacePath;
         var options = Microsoft.Extensions.Options.Options.Create(new GraphRagOptions
         {
             Enabled = enabled,
             RootPath = rootPath ?? "mcp-data/graphrag",
+            GlobalRootPath = globalRootPath ?? "graphrag-global",
             BackendCommand = backendCommand,
             BackendArgs = "{operation} --graphRoot {graphRoot} --workspace {workspacePath}",
             ArtifactVersion = "v1"
         });
+        var effectiveConfiguration = configuration ?? new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = _workspacePath })
+            .Build();
         var ingestion = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = effectiveWorkspacePath });
         var workspaceContext = new WorkspaceContext { WorkspacePath = effectiveWorkspacePath };
         var contextSearch = Substitute.For<IContextSearchService>();
@@ -220,6 +283,7 @@ public sealed class GraphRagServiceTests : IDisposable
         return new GraphRagService(
             options,
             ingestion,
+            effectiveConfiguration,
             workspaceContext,
             contextSearch,
             adapters,

@@ -34,14 +34,18 @@ public sealed class TransactionGatedGraphRagService : IGraphRagService
     }
 
     /// <inheritdoc />
-    public Task<GraphRagStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
-        => _inner.GetStatusAsync(cancellationToken);
+    public Task<GraphRagStatusResponse> GetStatusAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default)
+        => _inner.GetStatusAsync(scope, cancellationToken);
 
     /// <inheritdoc />
-    public Task<GraphRagStatusResponse> InitializeAsync(CancellationToken cancellationToken = default)
+    public Task<GraphRagStatusResponse> InitializeAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default)
     {
         ThrowIfMutationBlocked();
-        return _inner.InitializeAsync(cancellationToken);
+        return _inner.InitializeAsync(scope, cancellationToken);
     }
 
     /// <inheritdoc />

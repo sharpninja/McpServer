@@ -15,7 +15,9 @@ public sealed class GraphRagStatusQueryHandler(IGraphRagService graphRagService)
     {
         try
         {
-            var response = await graphRagService.GetStatusAsync(context.CancellationToken).ConfigureAwait(false);
+            var response = await graphRagService
+                .GetStatusAsync(GraphRagStorageScope.Workspace, context.CancellationToken)
+                .ConfigureAwait(false);
             return Result<GraphRagStatusResponse>.Success(response);
         }
         catch (Exception ex)

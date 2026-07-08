@@ -13,4 +13,7 @@ Integration: 4 passed, 0 skipped
 Grand total: 37 passed, 0 skipped
 
 === build.ps1 Compile ===
-Integration test run rebuilt McpServer.Repl.Core, McpServer.Repl.Host, McpServer.Support.Mcp, and test projects successfully (see integration test build log in terminals/21.txt).
+Build succeeded on 7/8/2026 12:59:38 PM (2:11 total, 0 warnings, 0 errors)
+
+=== build.ps1 UpdateService ===
+Update complete: Service McpServer Running, version 1.4.2+c56f391a, Health OK, WSHealth OK (25/25)

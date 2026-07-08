@@ -7,6 +7,7 @@ using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.AgentHelp;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -96,7 +97,8 @@ public sealed class GraphRagMcpToolTests : IDisposable
             todoUpdateService,
             Substitute.For<ITodoExecutionService>(),
             Substitute.For<IPromptTemplateService>(),
-            NullLogger<FwhMcpTools>.Instance);
+            NullLogger<FwhMcpTools>.Instance,
+            agentHelpService: Substitute.For<IAgentHelpConversationService>());
     }
 
     /// <summary>Disposes DB context.</summary>

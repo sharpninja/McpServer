@@ -52,6 +52,35 @@ public sealed class GraphRagOptions
     /// Optional artifact version label written into workspace GraphRAG status for compatibility checks.
     /// </summary>
     public string ArtifactVersion { get; set; } = "v1";
+
+    /// <summary>
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: Relative path under the effective data folder for the host-global GraphRAG store.
+    /// </summary>
+    public string GlobalRootPath { get; set; } = "graphrag-global";
+
+    /// <summary>
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: When true, copies canonical docs from the primary workspace into the global input folder at startup.
+    /// </summary>
+    public bool SeedCanonicalDocsOnStartup { get; set; } = true;
+
+    /// <summary>
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: When true, triggers a global GraphRAG index after canonical doc seeding at startup.
+    /// </summary>
+    public bool IndexGlobalCorpusOnStartup { get; set; } = true;
+
+    /// <summary>
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: Relative paths (from the primary workspace root) seeded into the global GraphRAG input corpus.
+    /// </summary>
+    public List<string> CanonicalDocPaths { get; set; } =
+    [
+        "docs/MCP-SERVER.md",
+        "docs/CLIENT-INTEGRATION.md",
+        "docs/context/todo-schema.md",
+        "docs/context/session-log-schema.md",
+        "docs/context/api-capabilities.md",
+        "templates/prompt-templates.yaml",
+        "AGENTS.md",
+    ];
 }
 
 #pragma warning restore CS1591

@@ -5,6 +5,7 @@ using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.AgentHelp;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -196,6 +197,7 @@ public sealed class TriageMcpToolTests : IDisposable
             Substitute.For<ITodoExecutionService>(),
             Substitute.For<IPromptTemplateService>(),
             NullLogger<FwhMcpTools>.Instance,
-            triageService: triageService);
+            triageService: triageService,
+            agentHelpService: Substitute.For<IAgentHelpConversationService>());
     }
 }

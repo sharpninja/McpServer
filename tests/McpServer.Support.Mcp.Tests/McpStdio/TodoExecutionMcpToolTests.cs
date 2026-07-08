@@ -6,6 +6,7 @@ using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.AgentHelp;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -100,7 +101,8 @@ public sealed class TodoExecutionMcpToolTests : IDisposable
             _todoExecutionService,
             Substitute.For<IPromptTemplateService>(),
             NullLogger<FwhMcpTools>.Instance,
-            todoMutations: _todoMutations);
+            todoMutations: _todoMutations,
+            agentHelpService: Substitute.For<IAgentHelpConversationService>());
     }
 
     /// <summary>

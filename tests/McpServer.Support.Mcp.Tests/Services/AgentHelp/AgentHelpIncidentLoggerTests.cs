@@ -81,7 +81,7 @@ public sealed class AgentHelpIncidentLoggerTests
 
     private static AgentHelpIncidentLogger CreateLogger()
     {
-        var monitor = new TestOptionsMonitor<AgentHelpOptions>(new AgentHelpOptions());
+        var monitor = new AgentHelpTestOptionsMonitor<AgentHelpOptions>(new AgentHelpOptions());
         return new AgentHelpIncidentLogger(monitor, NullLogger<AgentHelpIncidentLogger>.Instance);
     }
 

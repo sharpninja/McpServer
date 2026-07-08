@@ -94,15 +94,38 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             executionStrategy,
             request?.TodoId,
             request?.Topic,
+            request?.CallerAgent,
+            request?.CallerSessionId,
+            request?.CallerRequestId,
+            request?.IssueSummary,
             now);
         _sessions[sessionId] = state;
 
         AgentHelpCorpusSummary? corpusSummary = null;
         if (opts.CorpusBootstrapEnabled)
         {
-            corpusSummary = await _corpusService.BootstrapAsync(workspacePath, request?.Topic, cancellationToken)
+            var bootstrap = await _corpusService.BootstrapAsync(
+                    workspacePath,
+                    request?.Topic,
+                    request?.IssueSummary,
+                    request?.TodoId,
+                    cancellationToken)
                 .ConfigureAwait(false);
+            corpusSummary = bootstrap.ToSummary();
             state.CorpusSummary = corpusSummary;
+            state.PromptContext = new AgentHelpPromptContext
+            {
+                WorkspacePath = workspacePath,
+                Topic = request?.Topic,
+                TodoId = request?.TodoId,
+                CallerAgent = request?.CallerAgent,
+                CallerSessionId = request?.CallerSessionId,
+                CallerRequestId = request?.CallerRequestId,
+                IssueSummary = request?.IssueSummary,
+                CustomSeed = request?.AgentSeed,
+                ContextPackText = bootstrap.ContextPackText,
+                SourceKeys = bootstrap.SourceKeys,
+            };
 
             await AppendTranscriptAsync(
                 state,
@@ -112,9 +135,23 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
                     SessionId = sessionId,
                     Role = "system",
                     Category = "corpus",
-                    Text = corpusSummary.Summary,
+                    Text = $"{corpusSummary.Summary} sources=[{string.Join(", ", corpusSummary.SourceKeys)}]",
                 },
                 cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            state.PromptContext = new AgentHelpPromptContext
+            {
+                WorkspacePath = workspacePath,
+                Topic = request?.Topic,
+                TodoId = request?.TodoId,
+                CallerAgent = request?.CallerAgent,
+                CallerSessionId = request?.CallerSessionId,
+                CallerRequestId = request?.CallerRequestId,
+                IssueSummary = request?.IssueSummary,
+                CustomSeed = request?.AgentSeed,
+            };
         }
 
         _logger.LogInformation("Created Agent Help session {SessionId} for workspace {WorkspacePath}", sessionId, workspacePath);
@@ -539,16 +576,28 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
 
     private static string BuildHelperPrompt(AgentHelpSessionState state, string userMessage)
     {
-        if (string.IsNullOrWhiteSpace(state.AgentSeed))
-            return userMessage;
+        var context = state.PromptContext ?? new AgentHelpPromptContext
+        {
+            WorkspacePath = state.WorkspacePath,
+            Topic = state.Topic,
+            TodoId = state.TodoId,
+            CustomSeed = state.AgentSeed,
+        };
 
-        return $"{state.AgentSeed.Trim()}{Environment.NewLine}{Environment.NewLine}{userMessage}";
+        return AgentHelpPromptBuilder.BuildTurnPrompt(context, userMessage);
     }
 
     private static string BuildEchoHelperResponse(AgentHelpSessionState state, string userMessage)
     {
-        var topic = string.IsNullOrWhiteSpace(state.Topic) ? "general assistance" : state.Topic.Trim();
-        return $"Agent Help echo: I received your request about '{topic}'. You said: {userMessage}";
+        var context = state.PromptContext ?? new AgentHelpPromptContext
+        {
+            WorkspacePath = state.WorkspacePath,
+            Topic = state.Topic,
+            TodoId = state.TodoId,
+            CustomSeed = state.AgentSeed,
+        };
+
+        return AgentHelpPromptBuilder.SynthesizeEchoResponse(context, userMessage);
     }
 
     private AgentCliClientOptions BuildAgentCliOptions(AgentHelpSessionState state)
@@ -650,6 +699,10 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             string executionStrategy,
             string? todoId,
             string? topic,
+            string? callerAgent,
+            string? callerSessionId,
+            string? callerRequestId,
+            string? issueSummary,
             DateTimeOffset now)
         {
             SessionId = sessionId;
@@ -666,6 +719,10 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             ExecutionStrategy = executionStrategy;
             TodoId = todoId;
             Topic = topic;
+            CallerAgent = callerAgent;
+            CallerSessionId = callerSessionId;
+            CallerRequestId = callerRequestId;
+            IssueSummary = issueSummary;
             CreatedUtc = now;
             LastUpdatedUtc = now;
         }
@@ -684,7 +741,12 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
         public string ExecutionStrategy { get; }
         public string? TodoId { get; }
         public string? Topic { get; }
+        public string? CallerAgent { get; }
+        public string? CallerSessionId { get; }
+        public string? CallerRequestId { get; }
+        public string? IssueSummary { get; }
         public AgentHelpCorpusSummary? CorpusSummary { get; set; }
+        public AgentHelpPromptContext? PromptContext { get; set; }
         public DateTimeOffset CreatedUtc { get; set; }
         public DateTimeOffset LastUpdatedUtc { get; set; }
         public bool IsTurnActive { get; set; }

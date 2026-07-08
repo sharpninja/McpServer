@@ -645,6 +645,7 @@ builder.Services.AddHostedService<TodoBootstrapImporter>();
 // Registered after TodoBootstrapImporter so the database and workspace registrations are ready; the seeder
 // is a no-op unless execution is enabled and slots are configured, and never aborts startup on failure.
 builder.Services.AddHostedService<BrainSlotStartupSeeder>();
+builder.Services.AddHostedService<GraphRagGlobalCorpusStartupSeeder>();
 
 var mvcBuilder = builder.Services.AddControllers();
 #if !DEBUG

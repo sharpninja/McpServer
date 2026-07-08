@@ -12,6 +12,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
@@ -25,12 +26,15 @@ internal sealed class GraphRagService : IGraphRagService
 {
     private const string StatusFileName = "graphrag-status.json";
     private const string ReadyArtifactFileName = "output/graphrag-index-ready.json";
+    private const string GlobalLockKey = "__global__";
+    private const string GlobalWorkspaceLabel = "(global)";
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
     private static readonly ConcurrentDictionary<string, SemaphoreSlim> s_workspaceIndexLocks = new(StringComparer.OrdinalIgnoreCase);
     private static readonly ConcurrentDictionary<string, string> s_workspaceActiveJobs = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly GraphRagOptions _options;
     private readonly IngestionOptions _ingestionOptions;
+    private readonly IConfiguration _configuration;
     private readonly WorkspaceContext _workspaceContext;
     private readonly IContextSearchService _contextSearchService;
     private readonly IReadOnlyList<IGraphRagBackendAdapter> _backendAdapters;
@@ -43,6 +47,7 @@ internal sealed class GraphRagService : IGraphRagService
     public GraphRagService(
         IOptions<GraphRagOptions> options,
         IOptions<IngestionOptions> ingestionOptions,
+        IConfiguration configuration,
         WorkspaceContext workspaceContext,
         IContextSearchService contextSearchService,
         IEnumerable<IGraphRagBackendAdapter> backendAdapters,
@@ -53,6 +58,7 @@ internal sealed class GraphRagService : IGraphRagService
     {
         _options = options.Value;
         _ingestionOptions = ingestionOptions.Value;
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _workspaceContext = workspaceContext;
         _contextSearchService = contextSearchService;
         _backendAdapters = backendAdapters.ToList();
@@ -62,15 +68,18 @@ internal sealed class GraphRagService : IGraphRagService
         _vectorIndexService = vectorIndexService;
     }
 
-    public async Task<GraphRagStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
+    public async Task<GraphRagStatusResponse> GetStatusAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default)
     {
-        var workspacePath = ResolveWorkspacePath();
-        var graphRoot = ResolveGraphRoot(workspacePath);
+        var execution = ResolveExecutionContext(scope);
+        var workspacePath = execution.WorkspaceLabel;
+        var graphRoot = execution.GraphRoot;
         var inputPath = Path.Combine(graphRoot, "input");
         var persisted = await TryReadStatusAsync(graphRoot, cancellationToken).ConfigureAwait(false);
         var backend = SelectBackend();
         var initialized = HasInitializedStructure(graphRoot);
-        var activeJobId = s_workspaceActiveJobs.TryGetValue(workspacePath, out var currentJobId) ? currentJobId : null;
+        var activeJobId = s_workspaceActiveJobs.TryGetValue(execution.LockKey, out var currentJobId) ? currentJobId : null;
         var isIndexedByArtifact = IsReadyArtifactPresent(graphRoot);
         var isIndexed = persisted?.IsIndexed == true && isIndexedByArtifact;
         var backendAvailabilityError = GetBackendAvailabilityError(backend);
@@ -82,6 +91,7 @@ internal sealed class GraphRagService : IGraphRagService
         return new GraphRagStatusResponse
         {
             Enabled = _options.Enabled,
+            Scope = scope,
             WorkspacePath = workspacePath,
             GraphRoot = graphRoot,
             State = ResolveState(_options.Enabled, initialized, isIndexed, activeJobId, backendAvailabilityError ?? persisted?.LastError),
@@ -102,15 +112,19 @@ internal sealed class GraphRagService : IGraphRagService
             InputPath = inputPath,
             InputDocumentCount = inputDocumentCount,
             VisibilityNote = isInternalFallback
-                ? "internal-fallback indexes files under GraphRAG input but query results come from context-search."
+                ? scope == GraphRagStorageScope.Global
+                    ? "internal-fallback indexes files under global GraphRAG input and queries that corpus directly."
+                    : "internal-fallback indexes files under GraphRAG input but query results come from context-search."
                 : null
         };
     }
 
-    public async Task<GraphRagStatusResponse> InitializeAsync(CancellationToken cancellationToken = default)
+    public async Task<GraphRagStatusResponse> InitializeAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default)
     {
-        var workspacePath = ResolveWorkspacePath();
-        var graphRoot = ResolveGraphRoot(workspacePath);
+        var execution = ResolveExecutionContext(scope);
+        var graphRoot = execution.GraphRoot;
         EnsureGraphDirectories(graphRoot);
 
         var existing = await TryReadStatusAsync(graphRoot, cancellationToken).ConfigureAwait(false);
@@ -130,23 +144,27 @@ internal sealed class GraphRagService : IGraphRagService
         };
         await WriteStatusAsync(graphRoot, status, cancellationToken).ConfigureAwait(false);
 
-        return await GetStatusAsync(cancellationToken).ConfigureAwait(false);
+        return await GetStatusAsync(scope, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<GraphRagStatusResponse> IndexAsync(GraphRagIndexRequest? request = null, CancellationToken cancellationToken = default)
     {
-        var workspacePath = ResolveWorkspacePath();
-        var graphRoot = ResolveGraphRoot(workspacePath);
+        var scope = request?.Scope ?? GraphRagStorageScope.Workspace;
+        var execution = ResolveExecutionContext(scope);
+        var workspacePath = execution.WorkspaceLabel;
+        var graphRoot = execution.GraphRoot;
         EnsureGraphDirectories(graphRoot);
         CleanupStaleArtifacts(graphRoot);
         var readyArtifactPath = GetReadyArtifactPath(graphRoot);
         var backend = SelectBackend();
         var backendContext = new GraphRagBackendExecutionContext(workspacePath, graphRoot, _options);
-        var lockKey = workspacePath;
+        var lockKey = execution.LockKey;
         var workspaceLock = s_workspaceIndexLocks.GetOrAdd(lockKey, _ => new SemaphoreSlim(1, 1));
         var maxConcurrency = Math.Max(1, _options.MaxConcurrentIndexJobsPerWorkspace);
         if (maxConcurrency <= 1 && !await workspaceLock.WaitAsync(0, cancellationToken).ConfigureAwait(false))
-            throw new InvalidOperationException("A GraphRAG index operation is already running for this workspace.");
+            throw new InvalidOperationException(scope == GraphRagStorageScope.Global
+                ? "A global GraphRAG index operation is already running."
+                : "A GraphRAG index operation is already running for this workspace.");
 
         var jobId = $"job-{Guid.NewGuid():N}";
         s_workspaceActiveJobs[lockKey] = jobId;
@@ -232,12 +250,13 @@ internal sealed class GraphRagService : IGraphRagService
                 workspaceLock.Release();
         }
 
-        return await GetStatusAsync(cancellationToken).ConfigureAwait(false);
+        return await GetStatusAsync(scope, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<GraphRagQueryResponse> QueryAsync(GraphRagQueryRequest request, CancellationToken cancellationToken = default)
     {
-        var status = await GetStatusAsync(cancellationToken).ConfigureAwait(false);
+        var scope = request.Scope;
+        var status = await GetStatusAsync(scope, cancellationToken).ConfigureAwait(false);
         var query = (request.Query ?? string.Empty).Trim();
         if (string.IsNullOrWhiteSpace(query))
             throw new InvalidOperationException("query is required");
@@ -262,18 +281,38 @@ internal sealed class GraphRagService : IGraphRagService
             fallbackReason = "external_query_failed";
         }
 
-        var searchResult = await _contextSearchService.SearchAsync(query, maxChunks, null, cancellationToken).ConfigureAwait(false);
-        var chunks = searchResult.Chunks.Select(c => new ContextChunk
+        IReadOnlyList<ContextChunk> chunks;
+        IReadOnlyList<string> sourceKeys;
+        string queryCorpus;
+        string? visibilityNote;
+        if (scope == GraphRagStorageScope.Global)
         {
-            Id = c.ChunkId,
-            DocumentId = c.DocumentId,
-            Content = c.Content,
-            TokenCount = c.TokenCount,
-            ChunkIndex = c.ChunkIndex
-        }).ToList();
+            var globalSearch = await SearchGlobalInputCorpusAsync(status.GraphRoot, query, maxChunks, cancellationToken)
+                .ConfigureAwait(false);
+            chunks = globalSearch.Chunks;
+            sourceKeys = globalSearch.SourceKeys;
+            queryCorpus = "graphrag-global-input";
+            visibilityNote = "Global query reads canonical docs from the host-global GraphRAG input corpus.";
+        }
+        else
+        {
+            var searchResult = await _contextSearchService.SearchAsync(query, maxChunks, null, cancellationToken)
+                .ConfigureAwait(false);
+            chunks = searchResult.Chunks.Select(c => new ContextChunk
+            {
+                Id = c.ChunkId,
+                DocumentId = c.DocumentId,
+                Content = c.Content,
+                TokenCount = c.TokenCount,
+                ChunkIndex = c.ChunkIndex
+            }).ToList();
+            sourceKeys = searchResult.SourceKeys;
+            queryCorpus = "context-search";
+            visibilityNote = "Fallback query uses context-search chunks; GraphRAG input visibility depends on ingestion into context-search.";
+        }
 
         var citations = chunks
-            .Zip(searchResult.SourceKeys.DefaultIfEmpty(string.Empty), (chunk, sourceKey) => new GraphRagCitation
+            .Zip(sourceKeys.DefaultIfEmpty(string.Empty), (chunk, sourceKey) => new GraphRagCitation
             {
                 ChunkId = chunk.Id,
                 SourceKey = string.IsNullOrWhiteSpace(sourceKey) ? chunk.DocumentId : sourceKey,
@@ -281,24 +320,25 @@ internal sealed class GraphRagService : IGraphRagService
             })
             .ToList();
 
-        var answer = BuildFallbackAnswer(query, chunks.Count, searchResult.SourceKeys, mode);
+        var answer = BuildFallbackAnswer(query, chunks.Count, sourceKeys, mode);
         return new GraphRagQueryResponse
         {
+            Scope = scope,
             Query = query,
             Mode = mode,
             Answer = answer,
             Chunks = request.IncludeContextChunks ? chunks : [],
-            SourceKeys = searchResult.SourceKeys,
+            SourceKeys = sourceKeys,
             Citations = citations,
             Entities = BuildEntitiesFromChunks(chunks, request.MaxEntities),
-            Relationships = BuildRelationshipsFromSourceKeys(searchResult.SourceKeys, request.MaxRelationships),
-            Communities = BuildCommunities(searchResult.SourceKeys, request.CommunityDepth),
+            Relationships = BuildRelationshipsFromSourceKeys(sourceKeys, request.MaxRelationships),
+            Communities = BuildCommunities(sourceKeys, request.CommunityDepth),
             FallbackUsed = fallbackUsed,
             FallbackReason = fallbackReason,
             FailureCode = fallbackUsed ? "query_fallback" : null,
             Backend = SelectBackend().AdapterName,
-            QueryCorpus = "context-search",
-            VisibilityNote = "Fallback query uses context-search chunks; GraphRAG input visibility depends on ingestion into context-search."
+            QueryCorpus = queryCorpus,
+            VisibilityNote = visibilityNote
         };
     }
 
@@ -706,6 +746,109 @@ internal sealed class GraphRagService : IGraphRagService
         }
         return Path.GetFullPath(Path.Combine(workspacePath, _options.RootPath));
     }
+
+    private GraphRagExecutionContext ResolveExecutionContext(GraphRagStorageScope scope)
+    {
+        if (scope == GraphRagStorageScope.Global)
+        {
+            var dataFolder = McpInstanceResolver.GetEffectiveDataFolder(_configuration, instanceName: null);
+            var graphRoot = Path.GetFullPath(Path.Combine(dataFolder, _options.GlobalRootPath));
+            return new GraphRagExecutionContext(GlobalWorkspaceLabel, graphRoot, GlobalLockKey);
+        }
+
+        var workspacePath = ResolveWorkspacePath();
+        return new GraphRagExecutionContext(workspacePath, ResolveGraphRoot(workspacePath), workspacePath);
+    }
+
+    private static async Task<(IReadOnlyList<ContextChunk> Chunks, IReadOnlyList<string> SourceKeys)> SearchGlobalInputCorpusAsync(
+        string graphRoot,
+        string query,
+        int maxChunks,
+        CancellationToken cancellationToken)
+    {
+        var inputPath = Path.Combine(graphRoot, "input");
+        if (!Directory.Exists(inputPath))
+            return ([], []);
+
+        var keywords = query.Split(
+            [' ', '\r', '\n', '\t'],
+            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (keywords.Length == 0)
+            return ([], []);
+
+        var matches = new List<(string RelativePath, string Content, int Score)>();
+        foreach (var filePath in Directory.EnumerateFiles(inputPath, "*", SearchOption.AllDirectories))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!IsTextLikeFile(filePath))
+                continue;
+
+            string content;
+            try
+            {
+                content = await File.ReadAllTextAsync(filePath, cancellationToken).ConfigureAwait(false);
+            }
+            catch (IOException)
+            {
+                continue;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(content))
+                continue;
+
+            var score = keywords.Count(keyword => content.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            if (score <= 0)
+                continue;
+
+            var relativePath = Path.GetRelativePath(inputPath, filePath).Replace('\\', '/');
+            matches.Add((relativePath, content, score));
+        }
+
+        var topMatches = matches
+            .OrderByDescending(match => match.Score)
+            .ThenBy(match => match.RelativePath, StringComparer.OrdinalIgnoreCase)
+            .Take(maxChunks)
+            .ToList();
+
+        var chunks = new List<ContextChunk>(topMatches.Count);
+        var sourceKeys = new List<string>(topMatches.Count);
+        for (var index = 0; index < topMatches.Count; index++)
+        {
+            var match = topMatches[index];
+            var excerpt = match.Content.Length > 1200 ? match.Content[..1200] : match.Content;
+            var sourceKey = $"global:{match.RelativePath}";
+            chunks.Add(new ContextChunk
+            {
+                Id = $"global-{index}",
+                DocumentId = sourceKey,
+                Content = excerpt.Trim(),
+                TokenCount = Math.Max(1, excerpt.Length / 4),
+                ChunkIndex = index
+            });
+            sourceKeys.Add(sourceKey);
+        }
+
+        return (chunks, sourceKeys);
+    }
+
+    private static bool IsTextLikeFile(string filePath)
+    {
+        var extension = Path.GetExtension(filePath);
+        return extension.Equals(".md", StringComparison.OrdinalIgnoreCase)
+               || extension.Equals(".txt", StringComparison.OrdinalIgnoreCase)
+               || extension.Equals(".yaml", StringComparison.OrdinalIgnoreCase)
+               || extension.Equals(".yml", StringComparison.OrdinalIgnoreCase)
+               || extension.Equals(".json", StringComparison.OrdinalIgnoreCase)
+               || extension.Equals(".cs", StringComparison.OrdinalIgnoreCase)
+               || extension.Equals(".ps1", StringComparison.OrdinalIgnoreCase)
+               || string.IsNullOrEmpty(extension);
+    }
+
+    private sealed record GraphRagExecutionContext(string WorkspaceLabel, string GraphRoot, string LockKey);
 
     private static void EnsureGraphDirectories(string graphRoot)
     {

@@ -66,6 +66,29 @@ public sealed class AgentHelpOptions
     public bool CorpusBootstrapEnabled { get; set; } = true;
 
     /// <summary>
+    /// Maximum characters of seeded context injected into helper prompts.
+    /// </summary>
+    public int MaxContextCharacters { get; set; } = 12_000;
+
+    /// <summary>
+    /// Maximum indexed search chunks to merge into the seeded context pack.
+    /// </summary>
+    public int ContextSearchChunkLimit { get; set; } = 8;
+
+    /// <summary>
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: When true, Agent Help queries the host-global GraphRAG corpus before pinned filesystem paths.
+    /// </summary>
+    public bool PreferGlobalGraphRag { get; set; } = true;
+
+    /// <summary>
+    /// Pinned document path tokens seeded into every Agent Help context pack.
+    /// Tokens may be absolute paths or scoped relative paths:
+    /// <c>workspace:</c> (workspace root), <c>data:</c> (effective MCP data folder), <c>install:</c> (server content root).
+    /// Unscoped tokens default to <c>workspace:</c>.
+    /// </summary>
+    public List<string> PinnedPaths { get; set; } = [];
+
+    /// <summary>
     /// Maximum number of turns retained in the in-memory session registry per session.
     /// </summary>
     public int MaxTurnsPerSession { get; set; } = 50;

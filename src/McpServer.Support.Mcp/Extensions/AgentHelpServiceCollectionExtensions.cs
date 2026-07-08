@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Services.AgentHelp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,9 @@ public static class AgentHelpServiceCollectionExtensions
         services.TryAddSingleton<HelpTranscriptWriter>();
         services.TryAddSingleton<AgentHelpInboundGuard>();
         services.TryAddSingleton<AgentHelpIncidentLogger>();
+        services.TryAddSingleton<IGlobalGraphRagCorpusSource, GlobalGraphRagCorpusSource>();
         services.TryAddSingleton<AgentHelpCorpusService>();
+        services.TryAddSingleton<AgentHelpPinnedPathResolver>();
         services.TryAddSingleton<AgentHelpOutcomeService>();
         services.TryAddSingleton<AgentHelpConversationService>();
         services.TryAddSingleton<IAgentHelpConversationService>(sp =>

@@ -1,5 +1,5 @@
 mode: ContinuousDelivery
-next-version: 1.4.1
+next-version: 1.4.2
 assembly-versioning-scheme: MajorMinorPatch
 assembly-informational-format: '{SemVer}+Branch.{BranchName}.Sha.{ShortSha}'
 branches:

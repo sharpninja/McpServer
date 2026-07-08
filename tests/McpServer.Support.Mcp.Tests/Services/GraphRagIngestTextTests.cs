@@ -5,6 +5,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
@@ -192,9 +193,14 @@ public sealed class GraphRagIngestTextTests : IDisposable
             new InternalFallbackGraphRagBackendAdapter()
         };
 
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = _tempWorkspacePath })
+            .Build();
+
         return new GraphRagService(
             graphRagOptions,
             ingestionOptions,
+            configuration,
             workspaceContext,
             contextSearch,
             adapters,

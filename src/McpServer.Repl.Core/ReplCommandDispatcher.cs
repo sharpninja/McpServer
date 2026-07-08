@@ -1683,32 +1683,23 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     };
 
     private static AgentHelpSessionCreateRequest BuildAgentHelpSessionCreateRequest(IReadOnlyDictionary<string, object?> args)
-    {
-        var explicitSeed = GetString(args, "agentSeed");
-        var seedParts = new List<string>();
-        if (!string.IsNullOrWhiteSpace(GetString(args, "callerAgent")))
-            seedParts.Add($"callerAgent={GetString(args, "callerAgent")!.Trim()}");
-        if (!string.IsNullOrWhiteSpace(GetString(args, "callerSessionId")))
-            seedParts.Add($"callerSessionId={GetString(args, "callerSessionId")!.Trim()}");
-        if (!string.IsNullOrWhiteSpace(GetString(args, "callerRequestId")))
-            seedParts.Add($"callerRequestId={GetString(args, "callerRequestId")!.Trim()}");
-        if (!string.IsNullOrWhiteSpace(GetString(args, "issueSummary")))
-            seedParts.Add($"issueSummary={GetString(args, "issueSummary")!.Trim()}");
-
-        return new AgentHelpSessionCreateRequest
+        => new()
         {
             WorkspacePath = GetString(args, "workspacePath"),
             Topic = GetString(args, "topic"),
             DeviceId = GetString(args, "deviceId"),
             ExecutionStrategy = GetString(args, "executionStrategy"),
-            AgentSeed = explicitSeed ?? (seedParts.Count == 0 ? null : string.Join("; ", seedParts)),
+            AgentSeed = GetString(args, "agentSeed"),
             ClientName = GetString(args, "clientName"),
             AgentName = GetString(args, "agentName"),
             AgentPath = GetString(args, "agentPath"),
             AgentModel = GetString(args, "agentModel"),
             TodoId = GetString(args, "todoId"),
+            CallerAgent = GetString(args, "callerAgent"),
+            CallerSessionId = GetString(args, "callerSessionId"),
+            CallerRequestId = GetString(args, "callerRequestId"),
+            IssueSummary = GetString(args, "issueSummary"),
         };
-    }
 
     private static AgentHelpTurnRequest BuildAgentHelpTurnRequest(IReadOnlyDictionary<string, object?> args) => new()
     {

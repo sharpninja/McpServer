@@ -142,12 +142,16 @@ public sealed class FederatedGraphRagService : IGraphRagService
     // ── Pass-through operations ──
 
     /// <inheritdoc />
-    public Task<GraphRagStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
-        => _inner.GetStatusAsync(cancellationToken);
+    public Task<GraphRagStatusResponse> GetStatusAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default)
+        => _inner.GetStatusAsync(scope, cancellationToken);
 
     /// <inheritdoc />
-    public Task<GraphRagStatusResponse> InitializeAsync(CancellationToken cancellationToken = default)
-        => _inner.InitializeAsync(cancellationToken);
+    public Task<GraphRagStatusResponse> InitializeAsync(
+        GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default)
+        => _inner.InitializeAsync(scope, cancellationToken);
 
     /// <inheritdoc />
     public Task<GraphRagStatusResponse> IndexAsync(GraphRagIndexRequest? request = null, CancellationToken cancellationToken = default)

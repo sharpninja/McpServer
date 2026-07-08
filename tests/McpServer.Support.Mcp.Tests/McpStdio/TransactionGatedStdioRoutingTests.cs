@@ -7,6 +7,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.AgentHelp;
 using McpServer.Support.Mcp.Storage;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
@@ -565,7 +566,8 @@ public sealed class TransactionGatedStdioRoutingTests : IDisposable
             NullLogger<FwhMcpTools>.Instance,
             todoMutations: todoMutations,
             transactionCoordinator: transactionCoordinator,
-            transactionOptions: MsOptions.Options.Create(transactionOptions ?? new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
+            transactionOptions: MsOptions.Options.Create(transactionOptions ?? new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }),
+            agentHelpService: Substitute.For<IAgentHelpConversationService>());
     }
 
     private sealed class CapturingCoordinator : ITurnTransactionCoordinator

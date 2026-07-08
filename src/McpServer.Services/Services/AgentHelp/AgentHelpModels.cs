@@ -60,6 +60,26 @@ public sealed record AgentHelpSessionCreateRequest
     /// Optional topic label used for corpus bootstrap and outcome triage.
     /// </summary>
     public string? Topic { get; init; }
+
+    /// <summary>
+    /// Optional caller agent identity for session linkage and incident correlation.
+    /// </summary>
+    public string? CallerAgent { get; init; }
+
+    /// <summary>
+    /// Optional caller session id for linkage.
+    /// </summary>
+    public string? CallerSessionId { get; init; }
+
+    /// <summary>
+    /// Optional caller request/turn id for linkage.
+    /// </summary>
+    public string? CallerRequestId { get; init; }
+
+    /// <summary>
+    /// Optional factual issue summary (observation vs inference separated).
+    /// </summary>
+    public string? IssueSummary { get; init; }
 }
 
 /// <summary>
@@ -327,7 +347,7 @@ public sealed record AgentHelpIncidentRecord
 }
 
 /// <summary>
-/// FR-MCP-HELP-005: Stub corpus bootstrap summary returned to helper sessions.
+/// FR-MCP-HELP-005: Corpus bootstrap summary returned to helper sessions.
 /// TR-MCP-HELP-006: Context pack summary contract.
 /// </summary>
 public sealed record AgentHelpCorpusSummary
@@ -338,9 +358,14 @@ public sealed record AgentHelpCorpusSummary
     public required string WorkspacePath { get; init; }
 
     /// <summary>
-    /// Number of documents included in the stub context pack.
+    /// Estimated number of markdown/yaml documents under docs/.
     /// </summary>
     public int DocumentCount { get; init; }
+
+    /// <summary>
+    /// Number of context excerpts loaded into the pack.
+    /// </summary>
+    public int ChunkCount { get; init; }
 
     /// <summary>
     /// Topic labels included in the context pack.
@@ -356,6 +381,16 @@ public sealed record AgentHelpCorpusSummary
     /// Bootstrap timestamp in ISO 8601 UTC format.
     /// </summary>
     public required string BootstrappedUtc { get; init; }
+
+    /// <summary>
+    /// Source keys represented in the seeded context pack.
+    /// </summary>
+    public IReadOnlyList<string> SourceKeys { get; init; } = [];
+
+    /// <summary>
+    /// Character length of the seeded context pack text injected into prompts.
+    /// </summary>
+    public int ContextCharacterCount { get; init; }
 }
 
 /// <summary>

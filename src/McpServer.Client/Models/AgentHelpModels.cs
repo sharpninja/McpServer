@@ -48,6 +48,22 @@ public sealed record AgentHelpSessionCreateRequest
     /// <summary>Optional topic label.</summary>
     [JsonPropertyName("topic")]
     public string? Topic { get; init; }
+
+    /// <summary>Optional caller agent identity.</summary>
+    [JsonPropertyName("callerAgent")]
+    public string? CallerAgent { get; init; }
+
+    /// <summary>Optional caller session id.</summary>
+    [JsonPropertyName("callerSessionId")]
+    public string? CallerSessionId { get; init; }
+
+    /// <summary>Optional caller request/turn id.</summary>
+    [JsonPropertyName("callerRequestId")]
+    public string? CallerRequestId { get; init; }
+
+    /// <summary>Optional factual issue summary.</summary>
+    [JsonPropertyName("issueSummary")]
+    public string? IssueSummary { get; init; }
 }
 
 /// <summary>FR-MCP-HELP-001: Response returned when an Agent Help session is created.</summary>
@@ -78,16 +94,24 @@ public sealed record AgentHelpSessionCreateResponse
     public AgentHelpCorpusSummary? CorpusSummary { get; init; }
 }
 
-/// <summary>FR-MCP-HELP-005: Stub corpus bootstrap summary.</summary>
+/// <summary>FR-MCP-HELP-005: Corpus bootstrap summary.</summary>
 public sealed record AgentHelpCorpusSummary
 {
-    /// <summary>Number of documents in the stub pack.</summary>
+    /// <summary>Workspace path used for corpus bootstrap.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; init; }
+
+    /// <summary>Estimated document count under docs/.</summary>
     [JsonPropertyName("documentCount")]
     public int DocumentCount { get; init; }
 
-    /// <summary>Number of topics in the stub pack.</summary>
-    [JsonPropertyName("topicCount")]
-    public int TopicCount { get; init; }
+    /// <summary>Number of context excerpts loaded.</summary>
+    [JsonPropertyName("chunkCount")]
+    public int ChunkCount { get; init; }
+
+    /// <summary>Topic labels included in the context pack.</summary>
+    [JsonPropertyName("topics")]
+    public IReadOnlyList<string> Topics { get; init; } = [];
 
     /// <summary>Human-readable corpus summary.</summary>
     [JsonPropertyName("summary")]
@@ -96,6 +120,14 @@ public sealed record AgentHelpCorpusSummary
     /// <summary>Bootstrap timestamp in ISO 8601 UTC format.</summary>
     [JsonPropertyName("bootstrappedUtc")]
     public required string BootstrappedUtc { get; init; }
+
+    /// <summary>Source keys represented in the context pack.</summary>
+    [JsonPropertyName("sourceKeys")]
+    public IReadOnlyList<string> SourceKeys { get; init; } = [];
+
+    /// <summary>Character length of seeded context injected into prompts.</summary>
+    [JsonPropertyName("contextCharacterCount")]
+    public int ContextCharacterCount { get; init; }
 }
 
 /// <summary>FR-MCP-HELP-001: Request body for a single Agent Help turn.</summary>

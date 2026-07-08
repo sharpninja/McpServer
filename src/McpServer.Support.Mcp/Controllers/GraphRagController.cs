@@ -22,12 +22,14 @@ public sealed class GraphRagController : ControllerBase
         _graphRagService = graphRagService;
     }
 
-    /// <summary>Gets the current GraphRAG status for the workspace.</summary>
+    /// <summary>Gets the current GraphRAG status for the workspace or global scope.</summary>
     [HttpGet("status")]
     [ProducesResponseType(typeof(GraphRagStatusResponse), StatusCodes.Status200OK)]
-    public async Task<ActionResult<GraphRagStatusResponse>> GetStatusAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<GraphRagStatusResponse>> GetStatusAsync(
+        [FromQuery] GraphRagStorageScope scope = GraphRagStorageScope.Workspace,
+        CancellationToken cancellationToken = default)
     {
-        return Ok(await _graphRagService.GetStatusAsync(cancellationToken).ConfigureAwait(false));
+        return Ok(await _graphRagService.GetStatusAsync(scope, cancellationToken).ConfigureAwait(false));
     }
 
     /// <summary>Triggers a GraphRAG index operation.</summary>

@@ -54,6 +54,7 @@ Key rules:
 
 ## Context Loading by Task Type
 
+- Agent Help: see marker `## Agent Help (MCP Server issues)` in `AGENTS-README-FIRST.yaml`; API `/mcpserver/agent-help`
 - Session logging → `docs/context/session-log-schema.md` + `docs/context/module-bootstrap.md`
 - TODO management → `docs/context/todo-schema.md` + `docs/context/module-bootstrap.md`
 - API integration → `docs/context/api-capabilities.md` (or `GET /swagger/v1/swagger.json`)

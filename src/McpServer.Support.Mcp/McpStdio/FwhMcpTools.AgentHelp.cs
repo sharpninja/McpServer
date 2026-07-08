@@ -23,23 +23,16 @@ public sealed partial class FwhMcpTools
         ApplyWorkspaceOverride(workspacePath);
         try
         {
-            var seedParts = new List<string>();
-            if (!string.IsNullOrWhiteSpace(callerAgent))
-                seedParts.Add($"callerAgent={callerAgent.Trim()}");
-            if (!string.IsNullOrWhiteSpace(callerSessionId))
-                seedParts.Add($"callerSessionId={callerSessionId.Trim()}");
-            if (!string.IsNullOrWhiteSpace(callerRequestId))
-                seedParts.Add($"callerRequestId={callerRequestId.Trim()}");
-            if (!string.IsNullOrWhiteSpace(issueSummary))
-                seedParts.Add($"issueSummary={issueSummary.Trim()}");
-
             var request = new AgentHelpSessionCreateRequest
             {
                 WorkspacePath = workspacePath,
                 Topic = topic,
                 DeviceId = deviceId,
                 ExecutionStrategy = executionStrategy,
-                AgentSeed = seedParts.Count == 0 ? null : string.Join("; ", seedParts),
+                CallerAgent = callerAgent,
+                CallerSessionId = callerSessionId,
+                CallerRequestId = callerRequestId,
+                IssueSummary = issueSummary,
             };
 
             var result = await _agentHelpService
