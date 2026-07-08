@@ -69,7 +69,13 @@ public sealed class GraphRagOptions
     public bool IndexGlobalCorpusOnStartup { get; set; } = true;
 
     /// <summary>
-    /// TR-MCP-GRAPHRAG-GLOBAL-001: Relative paths (from the primary workspace root) seeded into the global GraphRAG input corpus.
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: Optional absolute or data-folder-relative path to the canonical McpServer source tree.
+    /// When empty, the seeder falls back to the primary workspace and <c>Mcp:RepoRoot</c>.
+    /// </summary>
+    public string? CanonicalSourceWorkspacePath { get; set; }
+
+    /// <summary>
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: Relative paths (from the canonical source workspace root) seeded into the global GraphRAG input corpus.
     /// </summary>
     public List<string> CanonicalDocPaths { get; set; } =
     [

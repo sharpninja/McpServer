@@ -58,6 +58,13 @@ public sealed class AgentHelpPinnedPathResolver
         => options.PinnedPaths.Count > 0 ? options.PinnedPaths : s_defaultPinnedPaths;
 
     /// <summary>
+    /// TR-MCP-GRAPHRAG-GLOBAL-001: Resolves the MCP Server primary workspace root when available.
+    /// </summary>
+    /// <returns>Absolute primary workspace path, or <see langword="null"/> when unavailable.</returns>
+    public string? TryGetPrimaryWorkspacePath()
+        => ResolvePrimaryWorkspacePath();
+
+    /// <summary>
     /// FR-MCP-HELP-005: Resolves a pinned path token to an on-disk file path when the file exists.
     /// </summary>
     /// <param name="token">Pinned path token. Supports <c>workspace:</c>, <c>data:</c>, <c>install:</c>, or absolute paths.</param>

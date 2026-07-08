@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services.AgentHelp;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -62,12 +63,13 @@ public sealed class GraphRagGlobalCorpusStartupSeeder : IHostedService
         using var scope = _scopeFactory.CreateScope();
         var graphRagService = scope.ServiceProvider.GetRequiredService<IGraphRagService>();
         var pinnedPathResolver = scope.ServiceProvider.GetRequiredService<AgentHelpPinnedPathResolver>();
-        var workspaceService = scope.ServiceProvider.GetService<IWorkspaceService>();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        var hostEnvironment = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
 
-        var primaryWorkspacePath = ResolvePrimaryWorkspacePath(workspaceService);
-        if (string.IsNullOrWhiteSpace(primaryWorkspacePath))
+        var sourceWorkspacePath = ResolveCanonicalSourceWorkspacePath(options, pinnedPathResolver, configuration, hostEnvironment);
+        if (string.IsNullOrWhiteSpace(sourceWorkspacePath))
         {
-            _logger.LogWarning("Global GraphRAG seeding skipped because the primary workspace could not be resolved.");
+            _logger.LogWarning("Global GraphRAG seeding skipped because the canonical source workspace could not be resolved.");
             return 0;
         }
 
@@ -80,20 +82,17 @@ public sealed class GraphRagGlobalCorpusStartupSeeder : IHostedService
         foreach (var relativePath in options.CanonicalDocPaths.Where(path => !string.IsNullOrWhiteSpace(path)))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var token = $"primary:{relativePath.Trim().TrimStart('/', '\\')}";
-            var resolved = pinnedPathResolver.TryResolve(token, primaryWorkspacePath);
-            if (resolved is null)
+            var normalizedRelative = relativePath.Trim().TrimStart('/', '\\').Replace('\\', '/');
+            var sourcePath = Path.GetFullPath(Path.Combine(sourceWorkspacePath, normalizedRelative.Replace('/', Path.DirectorySeparatorChar)));
+            if (!File.Exists(sourcePath))
                 continue;
 
-            var destinationRelative = resolved.Value.SourceKey
-                .Replace("primary:", string.Empty, StringComparison.OrdinalIgnoreCase)
-                .Replace('\\', '/');
-            var destinationPath = Path.Combine(inputRoot, destinationRelative.Replace('/', Path.DirectorySeparatorChar));
+            var destinationPath = Path.Combine(inputRoot, normalizedRelative.Replace('/', Path.DirectorySeparatorChar));
             var destinationDirectory = Path.GetDirectoryName(destinationPath);
             if (!string.IsNullOrWhiteSpace(destinationDirectory))
                 Directory.CreateDirectory(destinationDirectory);
 
-            File.Copy(resolved.Value.FullPath, destinationPath, overwrite: true);
+            File.Copy(sourcePath, destinationPath, overwrite: true);
             copied++;
         }
 
@@ -117,24 +116,32 @@ public sealed class GraphRagGlobalCorpusStartupSeeder : IHostedService
         return copied;
     }
 
-    private static string? ResolvePrimaryWorkspacePath(IWorkspaceService? workspaceService)
+    private static string? ResolveCanonicalSourceWorkspacePath(
+        GraphRagOptions options,
+        AgentHelpPinnedPathResolver pinnedPathResolver,
+        IConfiguration configuration,
+        IHostEnvironment hostEnvironment)
     {
-        if (workspaceService is not null)
+        if (!string.IsNullOrWhiteSpace(options.CanonicalSourceWorkspacePath))
         {
-            try
-            {
-                var items = workspaceService.ListAsync().GetAwaiter().GetResult().Items;
-                var primary = items.FirstOrDefault(item => item.IsPrimary && item.IsEnabled)
-                    ?? items.FirstOrDefault(item => item.IsEnabled);
-                if (!string.IsNullOrWhiteSpace(primary?.WorkspacePath))
-                    return Path.GetFullPath(primary.WorkspacePath);
-            }
-            catch (InvalidOperationException)
-            {
-                // Fall through for hosts without a ready workspace registry.
-            }
+            var configured = options.CanonicalSourceWorkspacePath.Trim();
+            return Path.IsPathRooted(configured)
+                ? Path.GetFullPath(configured)
+                : Path.GetFullPath(Path.Combine(
+                    McpInstanceResolver.GetEffectiveDataFolder(configuration, instanceName: null),
+                    configured));
         }
 
-        return null;
+        var primary = pinnedPathResolver.TryGetPrimaryWorkspacePath();
+        if (!string.IsNullOrWhiteSpace(primary))
+            return primary;
+
+        var repoRoot = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName: null, "RepoRoot");
+        if (string.IsNullOrWhiteSpace(repoRoot))
+            return null;
+
+        return Path.IsPathRooted(repoRoot)
+            ? Path.GetFullPath(repoRoot)
+            : Path.GetFullPath(Path.Combine(hostEnvironment.ContentRootPath, repoRoot));
     }
 }
