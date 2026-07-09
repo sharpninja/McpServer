@@ -1,0 +1,31 @@
+{
+  "name": "get_todo_execution_context",
+  "description": "Hydrate a single bounded working set for a Byrd execution TODO.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "todoId": {
+        "description": "Execution TODO ID",
+        "type": "string"
+      },
+      "requirementSnippetLimit": {
+        "description": "Maximum requirement snippets to return (default 5)",
+        "type": "integer",
+        "default": 5
+      },
+      "sessionTurnSummaryLimit": {
+        "description": "Maximum recent turn summaries to return (default 5)",
+        "type": "integer",
+        "default": 5
+      }
+    },
+    "required": [
+      "workspacePath",
+      "todoId"
+    ]
+  }
+}

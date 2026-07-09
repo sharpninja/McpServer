@@ -1,0 +1,40 @@
+{
+  "name": "todo_list",
+  "description": "Query TODO items. Optional filters: section, priority, done.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "section": {
+        "description": "Section filter (e.g. mvp-app)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "priority": {
+        "description": "Priority filter (high/medium/low)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "done": {
+        "description": "Done filter (true/false)",
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

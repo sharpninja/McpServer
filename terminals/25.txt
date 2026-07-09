@@ -1,0 +1,22 @@
+---
+pid: 42324
+cwd: "F:\GitHub\McpServer"
+command: "dotnet build F:\\GitHub\\McpServer\\McpServer.sln -c Debug --no-restore 2>&1 | Select-Object -Last 15"
+started_at: 2026-07-08T17:58:15.333Z
+running_for_ms: 355011   
+---
+  McpServer.McpAgent.SampleHost -> F:\GitHub\McpServer\src\McpServer.McpAgent.SampleHost\bin\Debug\net10.0\McpServer.McpAgent.SampleHost.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.McpAgent.Tests -> F:\GitHub\McpServer\tests\McpServer.McpAgent.Tests\bin\Debug\net10.0\McpServer.McpAgent.Tests.dll
+  McpServer.QBAgent.Tools -> F:\GitHub\McpServer\src\McpServer.QBAgent.Tools\bin\Debug\net10.0\McpServer.QBAgent.Tools.dll
+  McpServer.QBAgent -> F:\GitHub\McpServer\src\McpServer.QBAgent\bin\Debug\net10.0\McpServer.QBAgent.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.QBAgent.Tests -> F:\GitHub\McpServer\tests\McpServer.QBAgent.Tests\bin\Debug\net10.0\McpServer.QBAgent.Tests.dll
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+  McpServer.Support.Mcp.IntegrationTests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.IntegrationTests\bin\Debug\net10.0\McpServer.Support.Mcp.IntegrationTests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:29.94

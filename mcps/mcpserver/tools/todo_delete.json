@@ -1,0 +1,21 @@
+{
+  "name": "todo_delete",
+  "description": "Delete a TODO item by id.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "TODO item id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "workspacePath"
+    ]
+  }
+}

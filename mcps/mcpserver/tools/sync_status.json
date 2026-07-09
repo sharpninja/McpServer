@@ -1,0 +1,16 @@
+{
+  "name": "sync_status",
+  "description": "Get last sync run status (lastRun, status, error, counts).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

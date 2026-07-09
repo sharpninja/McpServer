@@ -1,0 +1,21 @@
+{
+  "name": "github_comment_pull",
+  "description": "Add a comment to a GitHub pull request.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "prId": {
+        "description": "PR number or id",
+        "type": "string"
+      },
+      "body": {
+        "description": "Comment body",
+        "type": "string"
+      }
+    },
+    "required": [
+      "prId",
+      "body"
+    ]
+  }
+}

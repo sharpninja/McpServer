@@ -1,0 +1,37 @@
+---
+pid: 24032
+cwd: "F:\GitHub\McpServer"
+command: "cd F:\\GitHub\\McpServer && dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter \"FullyQualifiedName~AgentHelp\" 2>&1 | Select-Object -Last 30"
+started_at: 2026-07-08T18:55:05.207Z
+running_for_ms: 1209991  
+---
+  Restored F:\GitHub\McpServer\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj (in 489 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Cqrs\McpServer.Cqrs.csproj (in 489 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Client\McpServer.Client.csproj (in 489 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj (in 489 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj (in 489 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Storage\McpServer.Storage.csproj (in 563 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj (in 563 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj (in 563 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj (in 563 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.GraphRag\McpServer.GraphRag.csproj (in 642 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.McpAgent\McpServer.McpAgent.csproj (in 641 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj (in 642 ms).
+  Restored F:\GitHub\McpServer\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj (in 646 ms).
+  1 of 15 projects are up-to-date for restore.
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Services\AgentHelp\AgentHelpCorpusServiceTests.cs(39,27): error CS0246: The type or namespace name 'TestOptionsMonitor<>' could not be found (are you missing a using directive or an assembly reference?) [F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj]
+F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Services\AgentHelp\AgentHelpCorpusServiceTests.cs(45,29): error xUnit1051: Calls to methods which accept CancellationToken should use TestContext.Current.CancellationToken to allow test cancellation to be more responsive. (https://xunit.net/xunit.analyzers/rules/xUnit1051) [F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj]

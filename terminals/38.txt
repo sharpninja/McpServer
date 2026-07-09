@@ -1,0 +1,28 @@
+---
+pid: 16976
+cwd: "F:\GitHub\McpServer"
+command: "pwsh -NoProfile -Command \"dotnet build 'F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\McpServer.Support.Mcp.csproj' -c Debug --no-restore 2>&1 | Select-Object -Last 40\""
+started_at: 2026-07-08T19:24:19.226Z
+running_for_ms: 3260005  
+---
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+F:\GitHub\McpServer\src\McpServer.GraphRag\Queries\GraphRagStatusQueryHandler.cs(18,65): error CS1503: Argument 1: cannot convert from 'System.Threading.CancellationToken' to 'McpServer.Support.Mcp.Models.GraphRagStorageScope' [F:\GitHub\McpServer\src\McpServer.GraphRag\McpServer.GraphRag.csproj]
+
+Build FAILED.
+
+F:\GitHub\McpServer\src\McpServer.GraphRag\Queries\GraphRagStatusQueryHandler.cs(18,65): error CS1503: Argument 1: cannot convert from 'System.Threading.CancellationToken' to 'McpServer.Support.Mcp.Models.GraphRagStorageScope' [F:\GitHub\McpServer\src\McpServer.GraphRag\McpServer.GraphRag.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:15.18

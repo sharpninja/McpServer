@@ -1,0 +1,21 @@
+{
+  "name": "todo_get",
+  "description": "Get a single TODO item by its id (e.g. MVP-APP-001).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "TODO item id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "workspacePath"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "get_todo_delta_context",
+  "description": "Fetch only what changed since the last checkpoint for a Byrd TODO.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "todoId": {
+        "description": "Execution TODO ID",
+        "type": "string"
+      },
+      "sinceCheckpointId": {
+        "description": "Checkpoint ID to diff from",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "todoId"
+    ]
+  }
+}

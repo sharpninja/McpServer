@@ -1,0 +1,15 @@
+---
+pid: 15932
+cwd: "F:\GitHub\McpServer"
+command: "Copy-Item -Path \"F:\\GitHub\\McpServer\\templates\\prompt-templates.yaml\" -Destination \"C:\\ProgramData\\McpServer-Data\\templates\\prompt-templates.yaml\" -Force; $apiKey = (Select-String -Path \"F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml\" -Pattern '^apiKey:\\s*(\\S+)' | ForEach-Object { $_.Matches[0].Groups[1].Value }); $headers = @{ 'X-Api-Key' = $apiKey; 'X-Workspace-Path' = 'F:\\GitHub\\McpServer' }; $regen = Invoke-RestMethod -Uri \"http://PAYTON-LEGION2:7147/mcpserver/workspace/markers/regenerate\" -Method POST -Headers $headers -TimeoutSec 60; $regen | ConvertTo-Json; Select-String -Path \"F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml\" -Pattern \"Agent Help|agent_help_create_session|workflow\\.agenthelp\" | ForEach-Object { $_.Line }"
+started_at: 2026-07-08T18:03:18.618Z
+running_for_ms: 4314984  
+---
+Copy-Item: Access to the path 'C:\ProgramData\McpServer-Data\templates\prompt-templates.yaml' is denied.
+{
+  "regenerated": true,
+  "workspaceCount": 24
+}
+  ## Agent Help (MCP Server issues)
+  - **How to invoke:** preferred `workflow.agenthelp.createSession` or MCP tool `agent_help_create_session` with caller linkage (`callerAgent`, `callerSessionId`, `callerRequestId`) and a factual issue summary (observation vs inference separated). REST: `POST /mcpserver/agent-help/session` then WebSocket `/mcpserver/agent-help/session/{id}/stream` (SSE fallback: `POST .../turn/stream`).
+  - Agent help is for diagnosis and coordination, not a substitute for the required plugin route for normal MCP work.

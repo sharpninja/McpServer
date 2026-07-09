@@ -1,0 +1,16 @@
+{
+  "name": "get_next_ready_todo",
+  "description": "Advance work without rereading the whole plan.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

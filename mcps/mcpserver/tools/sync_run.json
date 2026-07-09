@@ -1,0 +1,16 @@
+{
+  "name": "sync_run",
+  "description": "Trigger full ingestion (repo, session logs, external docs). Returns run result.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

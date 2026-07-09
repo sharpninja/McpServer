@@ -1,0 +1,13 @@
+---
+pid: 32652
+cwd: "F:\GitHub\McpServer"
+command: "Start-Sleep -Seconds 15; Get-Service McpServer | Format-List Name,Status; $nonce = \"resume2-$(Get-Random)\"; try { $h = Invoke-RestMethod -Uri \"http://PAYTON-LEGION2:7147/health?nonce=$nonce\" -TimeoutSec 30; Write-Output \"HEALTH_OK nonce=$nonce response=$($h | ConvertTo-Json -Compress)\" } catch { Write-Output \"HEALTH_FAIL: $_\" }; Test-Path F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml"
+started_at: 2026-07-08T18:02:04.876Z
+running_for_ms: 4390006  
+---
+
+Name   : McpServer
+Status : StartPending
+
+HEALTH_FAIL: No connection could be made because the target machine actively refused it.
+False

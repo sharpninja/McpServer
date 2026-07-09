@@ -1,0 +1,68 @@
+{
+  "name": "desktop_launch",
+  "description": "Launch a desktop process using CreateProcessWithTokenW. Use this to open GUI applications on the user's interactive desktop.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "executablePath": {
+        "description": "Full path to executable",
+        "type": "string"
+      },
+      "arguments": {
+        "description": "Command-line arguments",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "workingDirectory": {
+        "description": "Working directory for the process",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "environmentVariables": {
+        "description": "JSON object of environment variables to set",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "createNoWindow": {
+        "description": "If true, launch without a visible window",
+        "type": "boolean",
+        "default": false
+      },
+      "windowStyle": {
+        "description": "Window style: Normal, Hidden, Minimized, Maximized",
+        "type": "string",
+        "default": "Normal"
+      },
+      "waitForExit": {
+        "description": "If true, wait for the process to exit before returning",
+        "type": "boolean",
+        "default": false
+      },
+      "timeoutMs": {
+        "description": "Timeout in ms when waiting for exit",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "executablePath"
+    ]
+  }
+}

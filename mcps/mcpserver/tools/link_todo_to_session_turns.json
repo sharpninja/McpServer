@@ -1,0 +1,35 @@
+{
+  "name": "link_todo_to_session_turns",
+  "description": "Attach historical evidence to a Byrd TODO without duplicating log content.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "todoId": {
+        "description": "Execution TODO ID",
+        "type": "string"
+      },
+      "sessionTurnIds": {
+        "description": "Session turn IDs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "todoId"
+    ]
+  }
+}

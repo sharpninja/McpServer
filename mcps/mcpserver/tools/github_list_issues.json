@@ -1,0 +1,22 @@
+{
+  "name": "github_list_issues",
+  "description": "List GitHub issues. Optional state filter and limit.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "state": {
+        "description": "State filter (open/closed/all)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "limit": {
+        "description": "Max issues to return (default 30)",
+        "type": "integer",
+        "default": 30
+      }
+    }
+  }
+}

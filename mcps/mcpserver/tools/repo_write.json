@@ -1,0 +1,26 @@
+{
+  "name": "repo_write",
+  "description": "Write content to a path. Path must be allowed; audit logged.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "description": "Relative path from repo root",
+        "type": "string"
+      },
+      "content": {
+        "description": "File content to write",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "content",
+      "workspacePath"
+    ]
+  }
+}

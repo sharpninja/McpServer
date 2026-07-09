@@ -1,0 +1,32 @@
+{
+  "sessionId": "help-20260708185114-534da0de5a264834b08af63ec9c032c4",
+  "items": [
+    {
+      "timestampUtc": "2026-07-08T13:51:14.9221387-05:00",
+      "sessionId": "help-20260708185114-534da0de5a264834b08af63ec9c032c4",
+      "turnId": null,
+      "role": "system",
+      "category": "corpus",
+      "text": "Stub context pack for 'McpServer' with 110 document(s) across 3 topic(s).",
+      "guardRuleId": null
+    },
+    {
+      "timestampUtc": "2026-07-08T13:51:15.0431385-05:00",
+      "sessionId": "help-20260708185114-534da0de5a264834b08af63ec9c032c4",
+      "turnId": "turn-0001",
+      "role": "user",
+      "category": "transcript",
+      "text": "How do I mark an MCP TODO as done using the Grok mcpserver plugin? I have TODO id PLAN-AGENTHELP-001. Give the exact workflow.todo.update params and any prerequisites like session bootstrap.",
+      "guardRuleId": null
+    },
+    {
+      "timestampUtc": "2026-07-08T13:51:15.1012388-05:00",
+      "sessionId": "help-20260708185114-534da0de5a264834b08af63ec9c032c4",
+      "turnId": "turn-0001",
+      "role": "assistant",
+      "category": "transcript",
+      "text": "Agent Help echo: I received your request about 'MCP TODO workflow'. You said: How do I mark an MCP TODO as done using the Grok mcpserver plugin? I have TODO id PLAN-AGENTHELP-001. Give the exact workflow.todo.update params and any prerequisites like session bootstrap.",
+      "guardRuleId": null
+    }
+  ]
+}

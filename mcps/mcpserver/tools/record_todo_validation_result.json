@@ -1,0 +1,78 @@
+{
+  "name": "record_todo_validation_result",
+  "description": "Persist validation state, including device validation artifacts, for a Byrd TODO.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "todoId": {
+        "description": "Execution TODO ID",
+        "type": "string"
+      },
+      "result": {
+        "description": "Validation result string",
+        "type": "string"
+      },
+      "summary": {
+        "description": "Validation summary",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "artifactIds": {
+        "description": "Artifact IDs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "sessionTurnIds": {
+        "description": "Session turn IDs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "unitTestsPassing": {
+        "description": "Whether unit tests are passing",
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "default": null
+      },
+      "integrationTestsPassing": {
+        "description": "Whether integration tests are passing",
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "todoId",
+      "result"
+    ]
+  }
+}

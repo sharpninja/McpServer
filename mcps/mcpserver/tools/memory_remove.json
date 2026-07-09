@@ -1,0 +1,21 @@
+{
+  "name": "memory_remove",
+  "description": "Remove a visible memory item by id.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "id": {
+        "description": "Memory id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath",
+      "id"
+    ]
+  }
+}

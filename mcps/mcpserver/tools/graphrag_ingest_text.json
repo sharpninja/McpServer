@@ -1,0 +1,50 @@
+{
+  "name": "graphrag_ingest_text",
+  "description": "Ingest raw text into the GraphRAG corpus, creating a document and chunks.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "content": {
+        "description": "Text content to ingest",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "title": {
+        "description": "Optional document title",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "sourceType": {
+        "description": "Source type classification (default 'adhoc-text')",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "sourceKey": {
+        "description": "Source key / path for the document",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "triggerReindex": {
+        "description": "Trigger full reindex after ingestion",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "content",
+      "workspacePath"
+    ]
+  }
+}

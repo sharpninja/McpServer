@@ -1,0 +1,21 @@
+{
+  "name": "github_comment_issue",
+  "description": "Add a comment to a GitHub issue.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "issueId": {
+        "description": "Issue number or id",
+        "type": "string"
+      },
+      "body": {
+        "description": "Comment body",
+        "type": "string"
+      }
+    },
+    "required": [
+      "issueId",
+      "body"
+    ]
+  }
+}

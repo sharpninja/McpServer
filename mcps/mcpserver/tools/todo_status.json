@@ -1,0 +1,21 @@
+{
+  "name": "todo_status",
+  "description": "Invoke Copilot to generate a status report for a TODO item in the workspace.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "TODO item id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "workspacePath"
+    ]
+  }
+}

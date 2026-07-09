@@ -1,0 +1,120 @@
+{
+  "name": "create_todos_from_plan",
+  "description": "Decompose an approved plan into executable TODO items inside an iteration phase.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "phaseId": {
+        "description": "Iteration phase ID",
+        "type": "string"
+      },
+      "planId": {
+        "description": "Plan ID",
+        "type": "string"
+      },
+      "todos": {
+        "description": "Planned TODO definitions",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "goal": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "summary": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "acceptanceCriteria": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "constraints": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "requirementIds": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "relevantFiles": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "dependsOnTodoIds": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "phaseId",
+      "planId"
+    ]
+  }
+}

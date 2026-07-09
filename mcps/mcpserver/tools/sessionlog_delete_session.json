@@ -1,0 +1,26 @@
+{
+  "name": "sessionlog_delete_session",
+  "description": "Delete an entire session and every turn and child row beneath it. Irreversible.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "workspacePath"
+    ]
+  }
+}

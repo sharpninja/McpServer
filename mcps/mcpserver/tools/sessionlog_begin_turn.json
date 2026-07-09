@@ -1,0 +1,47 @@
+{
+  "name": "sessionlog_begin_turn",
+  "description": "Begin (or re-open) a session turn with status in_progress. Stateless; keyed by agent + sessionId + requestId.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id",
+        "type": "string"
+      },
+      "requestId": {
+        "description": "Request id (req-yyyyMMddTHHmmssZ-slug)",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "queryTitle": {
+        "description": "Short turn title",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "queryText": {
+        "description": "Full user query text",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "requestId",
+      "workspacePath"
+    ]
+  }
+}

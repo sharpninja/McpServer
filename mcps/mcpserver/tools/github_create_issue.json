@@ -1,0 +1,24 @@
+{
+  "name": "github_create_issue",
+  "description": "Create a GitHub issue with title and optional body.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "description": "Issue title",
+        "type": "string"
+      },
+      "body": {
+        "description": "Issue body",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "title"
+    ]
+  }
+}

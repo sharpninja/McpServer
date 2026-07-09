@@ -1,0 +1,14 @@
+---
+pid: 40988
+cwd: "F:\GitHub\McpServer"
+command: "gsudo pwsh -NoProfile -ExecutionPolicy Bypass -File \"F:\\GitHub\\McpServer\\terminals\\restart-and-verify-graphrag.ps1\""
+started_at: 2026-07-08T19:47:58.779Z
+running_for_ms: 1840004  
+---
+C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\AGENTS.md
+C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\docs\CLIENT-INTEGRATION.md
+C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\docs\MCP-SERVER.md
+C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\docs\context\api-capabilities.md
+C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\docs\context\session-log-schema.md
+C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\docs\context\todo-schema.md
+C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\templates\prompt-templates.yaml

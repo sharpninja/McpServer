@@ -1,0 +1,57 @@
+{
+  "name": "graphrag_update_relationship",
+  "description": "Update an existing graph relationship by ID.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "relationshipId": {
+        "description": "Relationship ID to update",
+        "type": "string"
+      },
+      "sourceEntityId": {
+        "description": "Source entity ID",
+        "type": "string"
+      },
+      "targetEntityId": {
+        "description": "Target entity ID",
+        "type": "string"
+      },
+      "relationshipType": {
+        "description": "Relationship type",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "description": {
+        "description": "Updated description",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "weight": {
+        "description": "Updated weight (default 1.0)",
+        "type": "number",
+        "default": 1
+      },
+      "metadata": {
+        "description": "Updated JSON metadata",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "relationshipId",
+      "sourceEntityId",
+      "targetEntityId",
+      "relationshipType",
+      "workspacePath"
+    ]
+  }
+}

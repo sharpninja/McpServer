@@ -1,0 +1,75 @@
+{
+  "name": "set_todo_test_plan",
+  "description": "Store test files and commands before implementation begins.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "todoId": {
+        "description": "Execution TODO ID",
+        "type": "string"
+      },
+      "unitTestsDefined": {
+        "description": "Whether unit tests are defined",
+        "type": "boolean"
+      },
+      "integrationTestsDefined": {
+        "description": "Whether integration tests are defined",
+        "type": "boolean",
+        "default": false
+      },
+      "testFilePaths": {
+        "description": "Test file paths",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "testCommands": {
+        "description": "Test commands",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "unitTestsPassing": {
+        "description": "Whether unit tests are already passing",
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "default": null
+      },
+      "integrationTestsPassing": {
+        "description": "Whether integration tests are already passing",
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "todoId",
+      "unitTestsDefined"
+    ]
+  }
+}

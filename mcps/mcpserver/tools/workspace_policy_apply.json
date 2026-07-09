@@ -1,0 +1,21 @@
+{
+  "name": "workspace_policy_apply",
+  "description": "Apply a natural-language workspace policy directive (ban/unban/clear for licenses, countries, organizations, or individuals).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path hint for current-scope resolution (required)",
+        "type": "string"
+      },
+      "directive": {
+        "description": "Natural-language policy directive",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath",
+      "directive"
+    ]
+  }
+}

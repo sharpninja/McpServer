@@ -1,0 +1,64 @@
+{
+  "name": "sessionlog_query",
+  "description": "Query session logs with optional filters: agent, model, text, from, to, limit.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "agent": {
+        "description": "Agent filter (e.g. cursor, copilot)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "model": {
+        "description": "Model filter",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "text": {
+        "description": "Text search",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "from": {
+        "description": "From date (ISO 8601)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "to": {
+        "description": "To date (ISO 8601)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "limit": {
+        "description": "Max results (default 100)",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

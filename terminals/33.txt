@@ -1,0 +1,13 @@
+---
+pid: 41436
+cwd: "F:\GitHub\McpServer"
+command: "gsudo pwsh.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"F:\\GitHub\\McpServer\\docs\\receipts-template-sync-restart.ps1\" 2>&1 | Tee-Object -FilePath \"F:\\GitHub\\McpServer\\docs\\receipts-template-sync-restart.txt\""
+started_at: 2026-07-08T18:48:18.993Z
+running_for_ms: 1615014  
+---
+COPIED F:\GitHub\McpServer\templates\prompt-templates.yaml -> C:\ProgramData\McpServer-Data\templates\prompt-templates.yaml
+COPIED F:\GitHub\McpServer\templates\prompt-templates.yaml -> C:\ProgramData\McpServer\templates\prompt-templates.yaml
+SERVICE_STATUS=Running
+HEALTH_STATUS=Healthy
+HEALTH_NONCE=tpl-sync-461186633
+HEALTH_VERSION=1.4.2+c56f391a04c5858485251560a3bee95c695f5d9b

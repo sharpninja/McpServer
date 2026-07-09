@@ -1138,6 +1138,14 @@ Integration test with the data layer up: /mcpserver/todo returns 200 with a vali
 - [x] /ready returns 200 Healthy with workspace-ready check.
 
 
+## TEST-MCP-HELP
+
+### TEST-MCP-HELP-008
+
+grok-cli is a supported strategy name, grok-build normalizes and resolves to grok-cli, the resolver returns the grok strategy, AgentHelpOptions defaults DefaultExecutionStrategy to grok-cli, the validator accepts grok-cli, and GrokCliAgentExecutionStrategy builds the expected grok argument list and resolves the grok executable.
+
+
+
 ## TEST-MCP-MEMORY
 
 ### TEST-MCP-MEMORY-001

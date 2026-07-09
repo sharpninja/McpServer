@@ -1,0 +1,50 @@
+{
+  "name": "requirements_create",
+  "description": "Create a requirement entry. type = fr|tr|test|mapping. For mapping, body is comma-separated TR ids and testIds is comma-separated TEST ids.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "description": "Entry type: fr, tr, test, or mapping",
+        "type": "string"
+      },
+      "id": {
+        "description": "Entry id (FR/TR/TEST id or FR id for mapping rows)",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "title": {
+        "description": "Title (required for fr; optional for tr; ignored for test/mapping)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "body": {
+        "description": "Body text (required for fr/tr/test; for mapping use comma-separated TR ids)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "testIds": {
+        "description": "Comma-separated TEST ids for mapping rows",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "type",
+      "id",
+      "workspacePath"
+    ]
+  }
+}

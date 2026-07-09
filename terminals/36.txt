@@ -1,0 +1,19 @@
+---
+pid: 23608
+cwd: "F:\GitHub\McpServer"
+command: "cd F:\\GitHub\\McpServer && dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter \"FullyQualifiedName~AgentHelp\" 2>&1 | Select-Object -Last 12"
+started_at: 2026-07-08T18:57:17.335Z
+running_for_ms: 1075005  
+---
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    29, Skipped:     0, Total:    29, Duration: 572 ms - McpServer.Support.Mcp.Tests.dll (net10.0)

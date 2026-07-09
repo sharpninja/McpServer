@@ -318,7 +318,7 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
 
             yield return new AgentHelpStreamEvent
             {
-                Type = result.Status == "error" ? "error" : "done",
+                Type = result.Status == "completed" ? "done" : "error",
                 TurnId = turnId,
                 Status = result.Status,
                 Message = result.Error,
@@ -467,8 +467,38 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             }
         }
 
-        var assistantText = await ExecuteHelperAsync(state, trimmed, cancellationToken).ConfigureAwait(false);
+        var helperResult = await ExecuteHelperAsync(state, trimmed, cancellationToken).ConfigureAwait(false);
 
+        if (!string.IsNullOrWhiteSpace(helperResult.ProgressText))
+        {
+            await AppendTranscriptAsync(
+                state,
+                new AgentHelpTranscriptEntry
+                {
+                    TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                    SessionId = state.SessionId,
+                    TurnId = turnId,
+                    Role = "assistant",
+                    Category = "progress",
+                    Text = helperResult.ProgressText,
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        if (!string.Equals(helperResult.Status, "completed", StringComparison.Ordinal))
+        {
+            return new AgentHelpTurnResponse
+            {
+                SessionId = state.SessionId,
+                TurnId = turnId,
+                Status = helperResult.Status,
+                Error = helperResult.Error,
+                GuardResult = guardResult,
+                LatencyMs = 0,
+            };
+        }
+
+        var assistantText = helperResult.AssistantText ?? string.Empty;
         await AppendTranscriptAsync(
             state,
             new AgentHelpTranscriptEntry
@@ -537,7 +567,7 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
         return incident.IncidentId;
     }
 
-    private async Task<string> ExecuteHelperAsync(
+    private async Task<AgentHelpHelperResult> ExecuteHelperAsync(
         AgentHelpSessionState state,
         string userMessage,
         CancellationToken cancellationToken)
@@ -560,7 +590,29 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
 
                 var result = await session.ReadInitialResponseAsync(cancellationToken).ConfigureAwait(false);
                 if (result.State == AgentCliResultState.Success && !string.IsNullOrWhiteSpace(result.Body))
-                    return result.Body.Trim();
+                {
+                    var finalAnswer = TryExtractFinalAnswer(result.Body);
+                    if (finalAnswer is not null)
+                        return AgentHelpHelperResult.Completed(finalAnswer.Text, finalAnswer.ProgressText);
+
+                    var trimmedBody = result.Body.Trim();
+                    if (LooksLikeProgressOnlyOutput(trimmedBody))
+                    {
+                        return AgentHelpHelperResult.Incomplete(
+                            $"Agent Help helper did not produce a final answer. Expected direct answer text or output containing '{AgentHelpPromptBuilder.FinalAnswerMarker}'.",
+                            trimmedBody);
+                    }
+
+                    return AgentHelpHelperResult.Completed(trimmedBody);
+                }
+
+                if (result.State != AgentCliResultState.Success && !_options.CurrentValue.UseEchoHelperFallback)
+                {
+                    var error = string.IsNullOrWhiteSpace(result.Stderr)
+                        ? "Agent Help helper failed without stderr."
+                        : result.Stderr.Trim();
+                    return AgentHelpHelperResult.Failed(error);
+                }
             }
             catch (Exception ex) when (ex is InvalidOperationException or ArgumentException)
             {
@@ -569,10 +621,54 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
         }
 
         if (_options.CurrentValue.UseEchoHelperFallback)
-            return BuildEchoHelperResponse(state, userMessage);
+            return AgentHelpHelperResult.Completed(BuildEchoHelperResponse(state, userMessage));
 
-        throw new InvalidOperationException("No Agent Help execution strategy is available and echo fallback is disabled.");
+        return AgentHelpHelperResult.Failed("No Agent Help execution strategy is available and echo fallback is disabled.");
     }
+
+    private static AgentHelpFinalAnswer? TryExtractFinalAnswer(string rawOutput)
+    {
+        if (string.IsNullOrWhiteSpace(rawOutput))
+            return null;
+
+        var markerIndex = rawOutput.IndexOf(
+            AgentHelpPromptBuilder.FinalAnswerMarker,
+            StringComparison.OrdinalIgnoreCase);
+        if (markerIndex < 0)
+            return null;
+
+        var progressText = rawOutput[..markerIndex].Trim();
+        var finalAnswer = rawOutput[(markerIndex + AgentHelpPromptBuilder.FinalAnswerMarker.Length)..].Trim();
+        return string.IsNullOrWhiteSpace(finalAnswer)
+            ? null
+            : new AgentHelpFinalAnswer(
+                finalAnswer,
+                string.IsNullOrWhiteSpace(progressText) ? null : progressText);
+    }
+
+    private static bool LooksLikeProgressOnlyOutput(string rawOutput)
+    {
+        if (string.IsNullOrWhiteSpace(rawOutput))
+            return true;
+
+        var normalized = string.Join(
+            ' ',
+            rawOutput.Trim().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+        var lower = normalized.ToLowerInvariant();
+        return lower.StartsWith("i'll ", StringComparison.Ordinal)
+            || lower.StartsWith("i will ", StringComparison.Ordinal)
+            || lower.StartsWith("i’m ", StringComparison.Ordinal)
+            || lower.StartsWith("i'm ", StringComparison.Ordinal)
+            || lower.StartsWith("first i'll ", StringComparison.Ordinal)
+            || lower.StartsWith("first i will ", StringComparison.Ordinal)
+            || lower.StartsWith("let me ", StringComparison.Ordinal)
+            || lower.StartsWith("following workspace bootstrap", StringComparison.Ordinal)
+            || lower.StartsWith("bootstrapping ", StringComparison.Ordinal)
+            || lower.StartsWith("bootstrap ", StringComparison.Ordinal)
+            || lower.Contains(" then answering from the evidence", StringComparison.Ordinal)
+            || lower.Contains("bootstrap mcp health", StringComparison.Ordinal);
+    }
+
 
     private static string BuildHelperPrompt(AgentHelpSessionState state, string userMessage)
     {
@@ -683,6 +779,24 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             yield return text.Substring(index, length);
         }
     }
+
+    private sealed record AgentHelpHelperResult(
+        string Status,
+        string? AssistantText,
+        string? Error,
+        string? ProgressText)
+    {
+        public static AgentHelpHelperResult Completed(string assistantText, string? progressText = null)
+            => new("completed", assistantText, null, progressText);
+
+        public static AgentHelpHelperResult Incomplete(string error, string? progressText = null)
+            => new("incomplete", null, error, progressText);
+
+        public static AgentHelpHelperResult Failed(string error)
+            => new("error", null, error, null);
+    }
+
+    private sealed record AgentHelpFinalAnswer(string Text, string? ProgressText);
 
     private sealed class AgentHelpSessionState
     {

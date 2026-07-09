@@ -1110,6 +1110,61 @@ Scope: layer-1+
 Placeholder requirement backfilled for TODO link FR-MCP-DOCFXWIKI-001.
 Scope: layer-1+
 
+## FR-MCP-HELP-001 FR-MCP-HELP-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-001.
+Scope: layer-1+
+
+## FR-MCP-HELP-002 FR-MCP-HELP-002
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-002.
+Scope: layer-1+
+
+## FR-MCP-HELP-003 FR-MCP-HELP-003
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-003.
+Scope: layer-1+
+
+## FR-MCP-HELP-004 FR-MCP-HELP-004
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-004.
+Scope: layer-1+
+
+## FR-MCP-HELP-005 FR-MCP-HELP-005
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-005.
+Scope: layer-1+
+
+## FR-MCP-HELP-006 FR-MCP-HELP-006
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-006.
+Scope: layer-1+
+
+## FR-MCP-HELP-007 FR-MCP-HELP-007
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-007.
+Scope: layer-1+
+
+## FR-MCP-HELP-008 FR-MCP-HELP-008
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-008.
+Scope: layer-1+
+
+## FR-MCP-HELP-009 FR-MCP-HELP-009
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-009.
+Scope: layer-1+
+
+## FR-MCP-HELP-010 FR-MCP-HELP-010
+
+Placeholder requirement backfilled for TODO link FR-MCP-HELP-010.
+Scope: layer-1+
+
+## FR-MCP-HELP-011 Agent Help grok-cli execution strategy and default
+
+Agent Help SHALL provide a Grok CLI execution strategy named grok-cli (with grok-build accepted as an alias) and SHALL use grok-cli as the default execution strategy when a caller does not specify one.
+Scope: layer-1+
+
 ## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.

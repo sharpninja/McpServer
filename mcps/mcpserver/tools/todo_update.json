@@ -1,0 +1,53 @@
+{
+  "name": "todo_update",
+  "description": "Update a TODO item by id. Only provided fields are changed.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "TODO item id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "title": {
+        "description": "Updated title",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "priority": {
+        "description": "Updated priority",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "done": {
+        "description": "Mark as done",
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "default": null
+      },
+      "note": {
+        "description": "Updated note",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "id",
+      "workspacePath"
+    ]
+  }
+}

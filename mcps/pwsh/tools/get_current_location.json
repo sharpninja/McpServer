@@ -1,0 +1,22 @@
+{
+  "name": "get_current_location",
+  "description": "Retrieves the current location and all available drives (providers) from the PowerShell session. Returns current_location and other_drive_locations array. Call this when you need to understand the current PowerShell context, as users may change location during the session. When executing multiple invoke_expression commands in succession, calling once at the beginning is sufficient.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent_id": {
+        "description": "Agent ID for sub-agent console isolation. Obtain this by calling start_console with is_subagent=true. Do not pass arbitrary strings.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "is_subagent": {
+        "description": "Set to true if you are a sub-agent. A unique agent_id will be allocated and returned in the response. Use that agent_id for all subsequent tool calls.",
+        "type": "boolean",
+        "default": false
+      }
+    }
+  }
+}

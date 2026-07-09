@@ -1,0 +1,16 @@
+{
+  "name": "context_sources",
+  "description": "List indexed document sources (sourceKey, sourceType, ingestedAt).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

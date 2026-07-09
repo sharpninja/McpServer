@@ -1,0 +1,42 @@
+{
+  "name": "sessionlog_open",
+  "description": "Idempotently open (ensure) a session keyed by agent + sessionId. Stateless; safe to call from any process.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type (e.g. ClaudeCode)",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id (Agent-yyyyMMddTHHmmssZ-suffix)",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "title": {
+        "description": "Session title (used only on create)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "model": {
+        "description": "Model id (used only on create)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "workspacePath"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "todo_projection_status",
+  "description": "Get projection status for database-backed TODO storage.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

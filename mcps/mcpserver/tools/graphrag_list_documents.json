@@ -1,0 +1,34 @@
+{
+  "name": "graphrag_list_documents",
+  "description": "List documents in the GraphRAG corpus with pagination and optional source type filter.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "skip": {
+        "description": "Number of documents to skip (default 0)",
+        "type": "integer",
+        "default": 0
+      },
+      "take": {
+        "description": "Maximum documents to return (default 50)",
+        "type": "integer",
+        "default": 50
+      },
+      "sourceType": {
+        "description": "Optional source type filter",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

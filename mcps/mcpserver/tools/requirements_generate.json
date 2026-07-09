@@ -1,0 +1,32 @@
+{
+  "name": "requirements_generate",
+  "description": "Generate requirements documents. doc = functional|technical|testing|mapping|matrix|all (default all). format = markdown|wiki. doc=all writes files to the workspace and returns export metadata.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "doc": {
+        "description": "Document selector: functional, technical, testing, mapping, matrix, or all",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": "all"
+      },
+      "format": {
+        "description": "Output format: markdown or wiki",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": "markdown"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

@@ -223,6 +223,7 @@ public sealed class ProcessEnvironmentService(
         AddIfExists(parts, Path.Combine(localAppData, "Microsoft", "WinGet", "Links"));
         AddIfExists(parts, Path.Combine(userProfile, "scoop", "shims"));
         AddIfExists(parts, Path.Combine(userProfile, ".cargo", "bin"));
+        AddIfExists(parts, Path.Combine(userProfile, ".grok", "bin"));
         AddIfExists(parts, Path.Combine(userProfile, "AppData", "Roaming", "npm"));
 
         return string.Join(";", parts);

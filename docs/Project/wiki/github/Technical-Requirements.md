@@ -793,6 +793,56 @@ Scope: layer-1+
 - [x] WorkspaceReadinessHealthCheck is registered as AddCheck with "workspace-ready" tag on /ready endpoint.
 - [x] Returns Unhealthy when !WorkspaceTokenService.IsInitialized, when no enabled workspace is registered, or when primary workspace has no seeded token.
 
+## TR-MCP-HELP-001
+
+**TR-MCP-HELP-001** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-001.
+Scope: layer-1+
+
+## TR-MCP-HELP-002
+
+**TR-MCP-HELP-002** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-002.
+Scope: layer-1+
+
+## TR-MCP-HELP-003
+
+**TR-MCP-HELP-003** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-003.
+Scope: layer-1+
+
+## TR-MCP-HELP-004
+
+**TR-MCP-HELP-004** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-004.
+Scope: layer-1+
+
+## TR-MCP-HELP-005
+
+**TR-MCP-HELP-005** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-005.
+Scope: layer-1+
+
+## TR-MCP-HELP-006
+
+**TR-MCP-HELP-006** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-006.
+Scope: layer-1+
+
+## TR-MCP-HELP-007
+
+**TR-MCP-HELP-007** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-007.
+Scope: layer-1+
+
+## TR-MCP-HELP-008
+
+**TR-MCP-HELP-008** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-008.
+Scope: layer-1+
+
+## TR-MCP-HELP-009
+
+**TR-MCP-HELP-009** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-009.
+Scope: layer-1+
+
+## TR-MCP-HELP-010
+
+**GrokCliAgentExecutionStrategy one-shot grok invocation** — GrokCliAgentExecutionStrategy SHALL run grok as a one-shot process delivering the prompt via --prompt-file and capturing plain stdout, resolve the grok executable via ProcessEnvironmentService, be registered in AddAgentExecutionStrategies, and be resolvable by name grok-cli with grok-build normalizing to grok-cli; AgentHelpOptions.DefaultExecutionStrategy defaults to grok-cli.
+Scope: layer-1+
+
 ## TR-MCP-HTTP-001
 
 **MCP Streamable HTTP Endpoint** — `app.MapMcp("/mcp-transport")` maps the native MCP protocol handler at a path separate from the REST routes (`/mcpserver/*`). The endpoint requires an `Accept: application/json, text/event-stream` header and returns HTTP 406 without it. Uses `ModelContextProtocol.AspNetCore` 0.9.0-preview.1.

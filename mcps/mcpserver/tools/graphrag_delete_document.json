@@ -1,0 +1,21 @@
+{
+  "name": "graphrag_delete_document",
+  "description": "Delete a document and its chunks from the GraphRAG corpus.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "documentId": {
+        "description": "Document ID to delete",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "documentId",
+      "workspacePath"
+    ]
+  }
+}

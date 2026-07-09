@@ -1,0 +1,21 @@
+{
+  "name": "repo_read",
+  "description": "Read file content by relative path from repo root. Path must be allowed.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "description": "Relative path from repo root",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "workspacePath"
+    ]
+  }
+}

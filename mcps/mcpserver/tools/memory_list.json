@@ -1,0 +1,40 @@
+{
+  "name": "memory_list",
+  "description": "List effective memory items. Optional filters: scope, category, keyword.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "scope": {
+        "description": "Optional scope filter: Effective, Global, or Workspace",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "category": {
+        "description": "Optional category filter",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "keyword": {
+        "description": "Optional keyword filter",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

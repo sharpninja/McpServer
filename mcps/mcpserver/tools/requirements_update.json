@@ -1,0 +1,50 @@
+{
+  "name": "requirements_update",
+  "description": "Update a requirement entry. type = fr|tr|test|mapping. Omitted title/body values keep the current value.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "description": "Entry type: fr, tr, test, or mapping",
+        "type": "string"
+      },
+      "id": {
+        "description": "Entry id (FR/TR/TEST id or FR id for mapping rows)",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "title": {
+        "description": "Updated title (fr/tr only)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "body": {
+        "description": "Updated body text or mapping TR id list",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "testIds": {
+        "description": "Updated comma-separated TEST ids for mapping rows",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "type",
+      "id",
+      "workspacePath"
+    ]
+  }
+}

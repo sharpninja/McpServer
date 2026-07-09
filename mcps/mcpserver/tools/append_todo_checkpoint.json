@@ -1,0 +1,107 @@
+{
+  "name": "append_todo_checkpoint",
+  "description": "Record progress, decisions, failures, or validation results for a Byrd TODO.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "todoId": {
+        "description": "Execution TODO ID",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Checkpoint kind",
+        "type": "string",
+        "enum": [
+          "PlanningDecision",
+          "TestDefined",
+          "TestPassing",
+          "ImplementationProgress",
+          "ValidationPassed",
+          "ValidationFailed",
+          "Blocker",
+          "DeviceValidation",
+          "CommitCreated",
+          "RequirementRefined"
+        ]
+      },
+      "summary": {
+        "description": "Checkpoint summary",
+        "type": "string"
+      },
+      "nextAction": {
+        "description": "Suggested next action",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "requirementIds": {
+        "description": "Requirement IDs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "sessionTurnIds": {
+        "description": "Session turn IDs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "artifactIds": {
+        "description": "Artifact IDs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "commitShas": {
+        "description": "Commit SHAs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "todoId",
+      "kind",
+      "summary"
+    ]
+  }
+}

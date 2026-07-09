@@ -1,0 +1,148 @@
+{
+  "name": "adb_step",
+  "description": "Perform a fixed safe ADB action such as screenshot, tap, swipe, text, keyevent, wait, launch_app, or get_focus.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "action": {
+        "description": "ADB action",
+        "type": "string",
+        "enum": [
+          "Screenshot",
+          "Tap",
+          "Swipe",
+          "Text",
+          "Keyevent",
+          "Wait",
+          "LaunchApp",
+          "GetFocus"
+        ]
+      },
+      "deviceSerial": {
+        "description": "Optional device serial",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "captureScreenshot": {
+        "description": "Capture a screenshot after the action",
+        "type": "boolean",
+        "default": false
+      },
+      "instruction": {
+        "description": "Optional user-facing instruction",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "x": {
+        "description": "Tap X coordinate",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "y": {
+        "description": "Tap Y coordinate",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "startX": {
+        "description": "Swipe start X coordinate",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "startY": {
+        "description": "Swipe start Y coordinate",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "endX": {
+        "description": "Swipe end X coordinate",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "endY": {
+        "description": "Swipe end Y coordinate",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "durationMs": {
+        "description": "Optional duration in milliseconds",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "text": {
+        "description": "Text payload",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "keyEvent": {
+        "description": "Key event value",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "packageName": {
+        "description": "Package name to launch",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "activityName": {
+        "description": "Activity name for explicit launches",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "waitMilliseconds": {
+        "description": "Wait duration in milliseconds",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "action"
+    ]
+  }
+}

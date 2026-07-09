@@ -1,0 +1,40 @@
+{
+  "name": "prompt_template_list",
+  "description": "List prompt templates. Optional filters: category, tag, keyword.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "category": {
+        "description": "Optional category filter",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "tag": {
+        "description": "Optional tag filter",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "keyword": {
+        "description": "Optional keyword search",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

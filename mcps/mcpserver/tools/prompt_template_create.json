@@ -1,0 +1,60 @@
+{
+  "name": "prompt_template_create",
+  "description": "Create a new prompt template.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "id": {
+        "description": "Unique kebab-case ID",
+        "type": "string"
+      },
+      "title": {
+        "description": "Template title",
+        "type": "string"
+      },
+      "category": {
+        "description": "Grouping category",
+        "type": "string"
+      },
+      "content": {
+        "description": "Template body content (Handlebars)",
+        "type": "string"
+      },
+      "tags": {
+        "description": "Comma-separated tags",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "description": {
+        "description": "Template description",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "engine": {
+        "description": "Rendering engine (default: handlebars)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "id",
+      "title",
+      "category",
+      "content"
+    ]
+  }
+}

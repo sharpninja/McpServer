@@ -1,0 +1,21 @@
+{
+  "name": "graphrag_delete_relationship",
+  "description": "Delete a graph relationship by its ID.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "relationshipId": {
+        "description": "Relationship ID to delete",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "relationshipId",
+      "workspacePath"
+    ]
+  }
+}

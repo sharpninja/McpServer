@@ -1,0 +1,49 @@
+---
+pid: 45020
+cwd: "F:\GitHub\McpServer"
+command: "dotnet build \"F:\\GitHub\\McpServer\\src\\McpServer.Services\\McpServer.Services.csproj\" -c Debug --no-restore 2>&1; dotnet build \"F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj\" -c Debug 2>&1"
+started_at: 2026-07-08T17:31:00.805Z
+running_for_ms: 80013    
+---
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+
+Build FAILED.
+
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:06.81
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+
+Build FAILED.
+
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,57): error CS1503: Argument 1: cannot convert from 'char' to 'string' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+F:\GitHub\McpServer\src\McpServer.Services\Services\AgentHelp\AgentHelpIncidentLogger.cs(49,62): error CS1503: Argument 2: cannot convert from 'char' to 'string?' [F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:08.07

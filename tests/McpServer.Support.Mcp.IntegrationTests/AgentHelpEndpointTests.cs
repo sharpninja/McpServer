@@ -3,7 +3,11 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using McpServer.Common.AgentCli;
+using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Services.AgentHelp;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests;
@@ -12,20 +16,38 @@ namespace McpServer.Support.Mcp.IntegrationTests;
 /// TEST-MCP-HELP-005: Agent Help HTTP endpoint integration tests.
 /// </summary>
 [Trait("Category", "Integration")]
-public sealed class AgentHelpEndpointTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
+public sealed class AgentHelpEndpointTests : IDisposable
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);
 
     private readonly CustomWebApplicationFactory _factory;
     private readonly HttpClient _client;
 
-    public AgentHelpEndpointTests(CustomWebApplicationFactory factory)
+    public AgentHelpEndpointTests()
     {
-        _factory = factory;
-        _client = factory.CreateAuthenticatedClient();
+        _factory = new CustomWebApplicationFactory(ConfigureAgentHelpStrategy);
+        _client = _factory.CreateAuthenticatedClient();
     }
 
-    public void Dispose() => _client.Dispose();
+    private static void ConfigureAgentHelpStrategy(IServiceCollection services)
+    {
+        services.RemoveAll<IAgentExecutionStrategyResolver>();
+        services.AddSingleton<IAgentExecutionStrategyResolver>(
+            new FakeAgentExecutionStrategyResolver(
+                new FakeAgentExecutionStrategy(
+                    AgentExecutionStrategyNames.GrokCli,
+                    new AgentCliResult
+                    {
+                        State = AgentCliResultState.Success,
+                        Body = "FINAL ANSWER:\nAgent Help endpoint response.",
+                    })));
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
+        _factory.Dispose();
+    }
 
     [Fact]
     public async Task CreateSession_ReturnsSessionId()
@@ -125,6 +147,27 @@ public sealed class AgentHelpEndpointTests : IClassFixture<CustomWebApplicationF
             new AgentHelpTurnRequest { UserMessage = benign },
             TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, turnResponse.StatusCode);
+        var turn = await turnResponse.Content.ReadFromJsonAsync<AgentHelpTurnResponse>(
+            s_jsonOptions,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(turn);
+        Assert.Equal("completed", turn!.Status);
+        Assert.Equal("Agent Help endpoint response.", turn.AssistantDisplayText);
+        Assert.Null(turn.Error);
+
+        using var statusResponse = await _client.GetAsync(
+            $"/mcpserver/agent-help/session/{Uri.EscapeDataString(sessionId)}",
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, statusResponse.StatusCode);
+        var status = await statusResponse.Content.ReadFromJsonAsync<AgentHelpSessionStatusDto>(
+            s_jsonOptions,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(status);
+        Assert.Equal("idle", status!.Status);
+        Assert.False(status.IsTurnActive);
+        Assert.Null(status.LastError);
 
         using var transcriptResponse = await _client.GetAsync(
             $"/mcpserver/agent-help/session/{Uri.EscapeDataString(sessionId)}/transcript",
@@ -138,7 +181,11 @@ public sealed class AgentHelpEndpointTests : IClassFixture<CustomWebApplicationF
         Assert.NotNull(transcript);
         Assert.Equal(sessionId, transcript!.SessionId);
         Assert.Contains(transcript.Items, item => string.Equals(item.Role, "user", StringComparison.OrdinalIgnoreCase));
-        Assert.Contains(transcript.Items, item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase));
+        var assistant = Assert.Single(
+            transcript.Items,
+            item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal("Agent Help endpoint response.", assistant.Text);
+        Assert.DoesNotContain("FINAL ANSWER:", assistant.Text, StringComparison.OrdinalIgnoreCase);
     }
 
     private async Task<string> CreateSessionAsync()
@@ -199,4 +246,58 @@ public sealed class AgentHelpEndpointTests : IClassFixture<CustomWebApplicationF
 
     private static string? GetEventType(JsonElement element)
         => element.TryGetProperty("type", out var type) ? type.GetString() : null;
+
+    private sealed class FakeAgentExecutionStrategyResolver(IAgentExecutionStrategy strategy)
+        : IAgentExecutionStrategyResolver
+    {
+        public IAgentExecutionStrategy Resolve(string? strategyName) => strategy;
+    }
+
+    private sealed class FakeAgentExecutionStrategy(string name, AgentCliResult result) : IAgentExecutionStrategy
+    {
+        public string Name { get; } = name;
+
+        public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+            AgentExecutionSessionRequest request,
+            CancellationToken cancellationToken = default)
+            => ValueTask.FromResult<IAgentExecutionSession>(new FakeAgentExecutionSession(result));
+    }
+
+    private sealed class FakeAgentExecutionSession(AgentCliResult result) : IAgentExecutionSession
+    {
+        public bool IsAlive => false;
+
+        public int? ProcessId => null;
+
+        public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult(result);
+
+        public async IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(
+            [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            if (!string.IsNullOrWhiteSpace(result.Body))
+                yield return result.Body;
+
+            await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default)
+            => Task.FromResult(result);
+
+        public async IAsyncEnumerable<string> SendStreamingAsync(
+            string prompt,
+            [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            if (!string.IsNullOrWhiteSpace(result.Body))
+                yield return result.Body;
+
+            await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        public Task SendEscapeAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        public Task EndAsync(TimeSpan timeout) => Task.CompletedTask;
+
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+    }
 }

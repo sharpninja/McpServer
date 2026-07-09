@@ -1,0 +1,36 @@
+{
+  "name": "sessionlog_clear_section",
+  "description": "Remove ALL items in a turn section. section in: actions, tags, context, dialog, commits, designDecisions, requirementsDiscovered, filesModified, blockers.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id",
+        "type": "string"
+      },
+      "requestId": {
+        "description": "Request id",
+        "type": "string"
+      },
+      "section": {
+        "description": "Section name",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "requestId",
+      "section",
+      "workspacePath"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "get_active_todo",
+  "description": "Return the single TODO Codex should work on next.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

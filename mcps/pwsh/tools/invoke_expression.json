@@ -1,0 +1,66 @@
+{
+  "name": "invoke_expression",
+  "description": "Execute PowerShell cmdlets and CLI tools (e.g., git) in persistent console. Session persists: modules, variables, functions, authentication stay active—no re-authentication. Install any modules and learn them via Get-Help.\r\n\r\n📌 This is your primary tool for all command execution tasks: directory navigation, git operations, build/test commands, file system operations, process management, environment variable access, and any shell/terminal task. Sessions persist across calls—variables, modules, functions, and authentication stay active. Install any PowerShell Gallery module to extend capabilities (e.g., Az for Azure, AWS.Tools for AWS, Microsoft.Graph for M365).\r\n\r\n💡 API Exploration: Use Invoke-RestMethod to explore Web APIs and Add-Type for Win32 API testing. Verify API behavior before writing production code—get immediate feedback without compilation.\r\n\r\n⚠️ CRITICAL - Variable Scope:\r\nLocal variables are NOT preserved between invoke_expression calls. Use $script: or $global: scope to share variables across calls.\r\n\r\n⚠️ CRITICAL - String Interpolation:\r\nDouble-quoted strings expand variables and subexpressions: \"$var\" becomes the value of $var, \"$(expr)\" evaluates expr. Use single quotes for literal strings: '$var' keeps the text $var as-is.\r\n\r\n📝 Text File Operations:\r\nALWAYS use the specialized cmdlets for text file editing: Show-TextFiles, Add-LinesToFile, Update-LinesInFile, Update-MatchInFile, Remove-LinesFromFile.\r\nNEVER use Set-Content, [IO.File]::WriteAllText, or other alternatives—even when source code contains $ or backtick characters. Instead, pass content via var1-var4 parameters.\r\nCreate new file: Add-LinesToFile path -Content $var1 (with var1 parameter containing the content)\r\nEdit existing file: Add-LinesToFile, Update-LinesInFile, Update-MatchInFile, Remove-LinesFromFile (use var1-var4 for content with $, backtick, or quotes)\r\nFor detailed examples: invoke_expression('Get-Help <cmdlet-name> -Examples')\r\nEdit cmdlets show changed lines with 2 lines of context. Use Show-TextFiles after editing if you need the full file view.\r\n\r\n📌 Prefer these cmdlets over other file read/edit/search tools provided by the host application. They handle special characters ($, backtick, double-quote) safely via var1-var4 parameters, and keep all operations in a single persistent session without context switching.\r\n\r\n🤖 AI Cmdlets (requires PromptAI module: Install-Module PromptAI):\r\nInvoke-Claude \"prompt\" — Call Anthropic Claude API. Invoke-GPT \"prompt\" — Call OpenAI API. Invoke-Gemini \"prompt\" — Call Google Gemini API. All support -Model and -SystemPrompt.\r\n\r\n🔤 Variables Parameter:\r\nUse var1/var2/var3/var4 parameters to inject literal string values into the pipeline, bypassing the PowerShell parser. Reference them as $var1/$var2/$var3/$var4 in the pipeline.\r\nWhen editing source code files, ALWAYS use variables for -OldText, -Replacement, -Content parameters to avoid unintended expansion of $, backtick, or double-quote characters.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "pipeline": {
+        "description": "The PowerShell command or pipeline to execute. Multi-line commands (if, loops, try-catch, etc.) are supported.",
+        "type": "string"
+      },
+      "timeout_seconds": {
+        "description": "Timeout in seconds (0-170, default: 170). On timeout, execution continues in background and result is cached for retrieval on next tool call. Use 0 for commands requiring user interaction (e.g., pause, Read-Host).",
+        "type": "integer",
+        "default": 170
+      },
+      "var1": {
+        "description": "Literal string value injected as $var1 in the pipeline, bypassing the PowerShell parser.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "var2": {
+        "description": "Literal string value injected as $var2 in the pipeline, bypassing the PowerShell parser.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "var3": {
+        "description": "Literal string value injected as $var3 in the pipeline, bypassing the PowerShell parser.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "var4": {
+        "description": "Literal string value injected as $var4 in the pipeline, bypassing the PowerShell parser.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "agent_id": {
+        "description": "Agent ID for sub-agent console isolation. Obtain this by calling start_console with is_subagent=true. Do not pass arbitrary strings.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "is_subagent": {
+        "description": "Set to true if you are a sub-agent. A unique agent_id will be allocated and returned in the response. Use that agent_id for all subsequent tool calls.",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "pipeline"
+    ]
+  }
+}

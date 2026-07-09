@@ -1,8 +1,10 @@
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Services.AgentHelp;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -115,12 +117,106 @@ public sealed class AgentHelpConversationServiceTests
         Assert.Contains(events, e => string.Equals(e.Type, "done", StringComparison.Ordinal));
     }
 
-    private static AgentHelpConversationService CreateService()
+    [Fact]
+    public async Task SubmitTurnAsync_StrategyProgressOnlyOutput_ReturnsIncompleteAndDoesNotPersistFinalAssistantTranscript()
+    {
+        var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
+        var service = CreateService(
+            new FakeAgentExecutionStrategy(
+                "test-strategy",
+                new AgentCliResult
+                {
+                    State = AgentCliResultState.Success,
+                    Body = "Following workspace bootstrap, then answering from the evidence.",
+                }),
+            useEchoHelperFallback: false);
+        var created = await service.CreateSessionAsync(
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await service.SubmitTurnAsync(
+            created.SessionId,
+            new AgentHelpTurnRequest { UserMessage = "Please answer directly now." },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.Equal("incomplete", result!.Status);
+        Assert.Null(result.AssistantDisplayText);
+        Assert.Contains("FINAL ANSWER", result.Error, StringComparison.OrdinalIgnoreCase);
+
+        var status = await service.GetStatusAsync(created.SessionId, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.NotNull(status);
+        Assert.False(status!.IsTurnActive);
+        Assert.Equal("incomplete", status.Status);
+
+        var transcript = await service.GetTranscriptAsync(created.SessionId, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.NotNull(transcript);
+        Assert.DoesNotContain(
+            transcript!.Items,
+            item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(item.Category, "transcript", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(
+            transcript.Items,
+            item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(item.Category, "progress", StringComparison.OrdinalIgnoreCase)
+                && item.Text.Contains("Following workspace bootstrap", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public async Task SubmitTurnAsync_StrategyFinalAnswerMarker_PersistsFinalAnswerOnly()
+    {
+        var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
+        var service = CreateService(
+            new FakeAgentExecutionStrategy(
+                "test-strategy",
+                new AgentCliResult
+                {
+                    State = AgentCliResultState.Success,
+                    Body = "I will inspect the workspace.\nFINAL ANSWER:\nUse workflow.todo.update with id BUG-TRIAGE-022.",
+                }),
+            useEchoHelperFallback: false);
+        var created = await service.CreateSessionAsync(
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await service.SubmitTurnAsync(
+            created.SessionId,
+            new AgentHelpTurnRequest { UserMessage = "How do I update the TODO?" },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.Equal("completed", result!.Status);
+        Assert.Equal("Use workflow.todo.update with id BUG-TRIAGE-022.", result.AssistantDisplayText);
+
+        var transcript = await service.GetTranscriptAsync(created.SessionId, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.NotNull(transcript);
+        var assistant = Assert.Single(
+            transcript!.Items,
+            item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(item.Category, "transcript", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal("Use workflow.todo.update with id BUG-TRIAGE-022.", assistant.Text);
+        Assert.DoesNotContain("I will inspect", assistant.Text, StringComparison.Ordinal);
+    }
+
+    private static AgentHelpConversationService CreateService(
+        IAgentExecutionStrategy? strategy = null,
+        bool useEchoHelperFallback = true)
     {
         var options = new AgentHelpOptions
         {
             Enabled = true,
-            UseEchoHelperFallback = true,
+            UseEchoHelperFallback = useEchoHelperFallback,
             GuardEnabled = true,
             CorpusBootstrapEnabled = false,
         };
@@ -134,6 +230,10 @@ public sealed class AgentHelpConversationServiceTests
             new TodoServiceResolver(primaryTodo, ingestionOptions, todoFactory),
             new HttpContextAccessor(),
             ingestionOptions);
+        var services = new ServiceCollection();
+        if (strategy is not null)
+            services.AddSingleton<IAgentExecutionStrategyResolver>(new FakeAgentExecutionStrategyResolver(strategy));
+        var serviceProvider = services.BuildServiceProvider();
 
         return new AgentHelpConversationService(
             new AgentHelpInboundGuard(),
@@ -146,8 +246,61 @@ public sealed class AgentHelpConversationServiceTests
                 NullLogger<AgentHelpCorpusService>.Instance),
             accessor,
             monitor,
-            NullLogger<AgentHelpConversationService>.Instance);
+            NullLogger<AgentHelpConversationService>.Instance,
+            serviceProvider);
     }
+
+    private sealed class FakeAgentExecutionStrategyResolver(IAgentExecutionStrategy strategy) : IAgentExecutionStrategyResolver
+    {
+        public IAgentExecutionStrategy Resolve(string? strategyName) => strategy;
+    }
+
+    private sealed class FakeAgentExecutionStrategy(string name, AgentCliResult result) : IAgentExecutionStrategy
+    {
+        public string Name { get; } = name;
+
+        public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+            AgentExecutionSessionRequest request,
+            CancellationToken cancellationToken = default)
+            => ValueTask.FromResult<IAgentExecutionSession>(new FakeAgentExecutionSession(result));
+    }
+
+    private sealed class FakeAgentExecutionSession(AgentCliResult result) : IAgentExecutionSession
+    {
+        public bool IsAlive => false;
+
+        public int? ProcessId => null;
+
+        public Task<AgentCliResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult(result);
+
+        public async IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(
+            [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            if (!string.IsNullOrWhiteSpace(result.Body))
+                yield return result.Body;
+            await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        public Task<AgentCliResult> SendAsync(string prompt, CancellationToken cancellationToken = default)
+            => Task.FromResult(result);
+
+        public async IAsyncEnumerable<string> SendStreamingAsync(
+            string prompt,
+            [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            if (!string.IsNullOrWhiteSpace(result.Body))
+                yield return result.Body;
+            await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        public Task SendEscapeAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        public Task EndAsync(TimeSpan timeout) => Task.CompletedTask;
+
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+    }
+
 
     private sealed class TestOptionsMonitor<T> : IOptionsMonitor<T>
         where T : class

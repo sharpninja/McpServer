@@ -1,0 +1,21 @@
+{
+  "name": "brain_slot_disable",
+  "description": "Disable an external brain-slot definition.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "slotId": {
+        "description": "Slot id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "slotId",
+      "workspacePath"
+    ]
+  }
+}

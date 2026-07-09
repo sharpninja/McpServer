@@ -1,0 +1,24 @@
+{
+  "name": "repo_list",
+  "description": "List files and directories under a relative path. Empty path = repo root.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "path": {
+        "description": "Relative path (optional, default repo root)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

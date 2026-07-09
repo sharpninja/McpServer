@@ -1,0 +1,22 @@
+{
+  "name": "github_list_pulls",
+  "description": "List GitHub pull requests. Optional state filter and limit.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "state": {
+        "description": "State filter (open/closed/all)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "limit": {
+        "description": "Max PRs to return (default 30)",
+        "type": "integer",
+        "default": 30
+      }
+    }
+  }
+}

@@ -237,19 +237,63 @@ public sealed class ConfiguredTriageResearchRunnerTests
     }
 
     /// <summary>
-    /// TEST-MCP-TRIAGE-003: default triage options use the generic one-shot CLI strategy
-    /// with Cline selected as the default agent command.
+    /// TEST-MCP-TRIAGE-003: default triage options use the Agent Help Grok strategy
+    /// through the dedicated one-shot Grok CLI runner, then fall back to Claude.
     /// </summary>
     [Fact]
-    public void TriageOptions_DefaultsToOneShotClineAgent()
+    public void TriageOptions_DefaultsToAgentHelpGrokOneShotStrategy()
     {
         var options = new TriageOptions();
 
         Assert.Equal("triage", options.AgentName);
-        Assert.Equal("cline", options.AgentPath);
+        Assert.Equal("grok", options.AgentPath);
         Assert.Equal("auto", options.AgentModel);
-        Assert.Equal(AgentExecutionStrategyNames.OneShotCli, options.ExecutionStrategy);
+        Assert.Equal(AgentExecutionStrategyNames.GrokCli, options.ExecutionStrategy);
+        Assert.NotNull(options.Secondary);
+        var secondary = options.Secondary!;
+        Assert.Equal("triage-claude", secondary.AgentName);
+        Assert.Equal("claude", secondary.AgentPath);
+        Assert.Null(options.Tertiary);
         Assert.True(options.MaxRunTime > TimeSpan.FromMinutes(10));
+    }
+
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-003: the configured runner routes default triage through the same
+    /// Grok strategy selected by Agent Help while still using a single initial-response run.
+    /// </summary>
+    [Fact]
+    public async Task RunAsync_WithDefaultOptions_UsesAgentHelpGrokStrategyAsOneShot()
+    {
+        var strategy = new CapturingAgentExecutionStrategy();
+        var resolver = new CapturingAgentExecutionStrategyResolver(strategy);
+        var runner = new ConfiguredTriageResearchRunner(
+            Microsoft.Extensions.Options.Options.Create(new TriageOptions()),
+            resolver);
+
+        var result = await runner.RunAsync(new TriageResearchRequest(
+            new TriageGroupDetail
+            {
+                GroupId = "triage-group-001",
+                Status = "collecting",
+                ReportCount = 1,
+                WorkspacePath = "F:\\GitHub\\McpServer",
+                Title = "Plugin triage bug",
+                Summary = "Plugin wrapper failed",
+                QuietDeadlineUtc = DateTimeOffset.UtcNow,
+            },
+            "{}",
+            "rendered prompt",
+            "F:\\GitHub\\McpServer"), cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(result.Success);
+        Assert.Equal(AgentExecutionStrategyNames.GrokCli, resolver.LastStrategyName);
+        Assert.NotNull(strategy.LastRequest);
+        var request = strategy.LastRequest!;
+        Assert.Equal(AgentExecutionStrategyNames.GrokCli, request.ExecutionStrategy);
+        Assert.Equal("grok", request.Options.AgentPath);
+        Assert.Equal("auto", request.Options.Model);
+        Assert.Equal(TimeSpan.FromSeconds(5), strategy.Session.EndTimeout);
     }
 
     private sealed class CapturingAgentExecutionStrategyResolver(IAgentExecutionStrategy strategy) : IAgentExecutionStrategyResolver

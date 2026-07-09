@@ -1,0 +1,16 @@
+{
+  "name": "graphrag_status",
+  "description": "Get GraphRAG status for the workspace (initialized, indexed, backend, last index time).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

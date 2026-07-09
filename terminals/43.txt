@@ -1,0 +1,12 @@
+---
+pid: 7040
+cwd: "F:\GitHub\McpServer"
+command: "dotnet test \"F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj\" -c Debug 2>&1 | Select-Object -Last 5"
+started_at: 2026-07-08T19:39:49.780Z
+running_for_ms: 2330006  
+---
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:  1487, Skipped:     0, Total:  1487, Duration: 19 h 40 m - McpServer.Support.Mcp.Tests.dll (net10.0)

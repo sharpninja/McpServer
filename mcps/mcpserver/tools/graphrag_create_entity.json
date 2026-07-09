@@ -1,0 +1,42 @@
+{
+  "name": "graphrag_create_entity",
+  "description": "Create a new graph entity in the GraphRAG knowledge graph.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Entity display name",
+        "type": "string"
+      },
+      "entityType": {
+        "description": "Entity type (e.g. person, organization, concept)",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "description": {
+        "description": "Optional description",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "metadata": {
+        "description": "Optional JSON metadata",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "name",
+      "entityType",
+      "workspacePath"
+    ]
+  }
+}

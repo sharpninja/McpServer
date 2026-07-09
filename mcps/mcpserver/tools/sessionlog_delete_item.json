@@ -1,0 +1,41 @@
+{
+  "name": "sessionlog_delete_item",
+  "description": "Remove a single item from a turn section. itemKey is the value for string sections (tags/context/string-lists), the SHA for commits, the Order for actions, and the ordinal for dialog.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id",
+        "type": "string"
+      },
+      "requestId": {
+        "description": "Request id",
+        "type": "string"
+      },
+      "section": {
+        "description": "Section name",
+        "type": "string"
+      },
+      "itemKey": {
+        "description": "Natural key of the item to remove",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "requestId",
+      "section",
+      "itemKey",
+      "workspacePath"
+    ]
+  }
+}

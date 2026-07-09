@@ -1,6 +1,9 @@
 - [Home](Home)
-- [Functional Requirements](Functional-Requirements)
-- [Technical Requirements](Technical-Requirements)
-- [Testing Requirements](Testing-Requirements)
-- [Traceability Mapping](TR-per-FR-Mapping)
-- [Requirements Matrix](Requirements-Matrix)
+- Requirements
+  - [Functional Requirements](Functional-Requirements)
+  - [Technical Requirements](Technical-Requirements)
+  - [Testing Requirements](Testing-Requirements)
+  - [Traceability Mapping](TR-per-FR-Mapping)
+  - [Requirements Matrix](Requirements-Matrix)
+- Case Studies
+  - [Triage Plugin Code Quality Case Study](Case-Studies/Triage-Plugin-Code-Quality-Case-Study)

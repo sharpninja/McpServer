@@ -1,0 +1,16 @@
+{
+  "name": "todo_projection_repair",
+  "description": "Repair TODO.yaml projection from authoritative database-backed TODO storage.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

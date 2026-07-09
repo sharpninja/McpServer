@@ -1,0 +1,11 @@
+---
+pid: 38732
+cwd: "F:\GitHub\McpServer"
+command: "$apiKey = 'iAVadU3jmLeT5Z25oiSVGlgriCHadyM7YbUaxOOZ1Xo'; Invoke-RestMethod -Method Post -Uri 'http://localhost:7147/mcpserver/workspace/markers/regenerate' -Headers @{'X-Api-Key'=$apiKey} | ConvertTo-Json"
+started_at: 2026-07-08T18:03:23.597Z
+running_for_ms: 44998    
+---
+{
+  "regenerated": true,
+  "workspaceCount": 24
+}

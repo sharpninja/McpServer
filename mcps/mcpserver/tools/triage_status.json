@@ -1,0 +1,32 @@
+{
+  "name": "triage_status",
+  "description": "Get asynchronous triage status by reportId or groupId.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path for the status lookup.",
+        "type": "string"
+      },
+      "reportId": {
+        "description": "Optional report id.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "groupId": {
+        "description": "Optional group id.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

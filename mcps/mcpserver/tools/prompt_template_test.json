@@ -1,0 +1,37 @@
+{
+  "name": "prompt_template_test",
+  "description": "Test/render a prompt template with sample variable data. Provide templateId for stored templates or inlineTemplate for ad-hoc testing.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "variablesJson": {
+        "description": "JSON object of variable values",
+        "type": "string"
+      },
+      "templateId": {
+        "description": "Template ID (for stored templates)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "inlineTemplate": {
+        "description": "Inline template content (for ad-hoc testing)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "variablesJson"
+    ]
+  }
+}

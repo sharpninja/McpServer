@@ -1,0 +1,71 @@
+{
+  "name": "graphrag_query",
+  "description": "Run a GraphRAG query for the workspace and return answer, citations, and optional context chunks.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "description": "Query text",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "mode": {
+        "description": "Query mode (local/global/drift), optional",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "maxChunks": {
+        "description": "Maximum context chunks to return (default 20)",
+        "type": "integer",
+        "default": 20
+      },
+      "includeContextChunks": {
+        "description": "Include context chunks in response (default true)",
+        "type": "boolean",
+        "default": true
+      },
+      "maxEntities": {
+        "description": "Maximum entities to include (default service setting)",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "maxRelationships": {
+        "description": "Maximum relationships to include (default service setting)",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "communityDepth": {
+        "description": "Community depth for graph summarization (default service setting)",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      },
+      "responseTokenBudget": {
+        "description": "Response token budget hint (optional)",
+        "type": [
+          "integer",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "query",
+      "workspacePath"
+    ]
+  }
+}

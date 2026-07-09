@@ -1,0 +1,75 @@
+{
+  "turn": {
+    "sessionId": "help-20260708195859-018d906b1e8b4481b39def410a53c292",
+    "turnId": "turn-0001",
+    "status": "completed",
+    "assistantDisplayText": "Agent Help (context-guided fallback): the helper model is unavailable, so this answer is synthesized from seeded workspace context.\r\n\r\nQuestion: How do I query the global GraphRAG scope for canonical McpServer documentation from Agent Help or the REST API?\nWhat is the exact endpoint, request body fields, and MCP tool parameters for scope=global?\nAlso give the workflow.todo.update params to mark PLAN-GRAPHRAG-GLOBAL-001 done.\r\n\r\nRelevant workspace excerpts:\r\n### workspace:AGENTS-README-FIRST.yaml\r\nflow, write a detailed triage report that includes the needed changes, acceptance criteria, and validation evidence, then continue the active task after the failsafe YAML is written and triage submission succeeds.\r\n  - If triage submission fails, stop work and notify the user. Keep the failsafe YAML report for later replay; do not use raw REST or another reporting channel as a substitute.\r\n\r\n  ## Agent Help (MCP Server issues)\r\n  When you are stuck on any MCP Server surface (marker trust, plugin bootstrap, session log, TODO, requirements, triage, memory,...\r\n### global:canonical/AGENTS.md\r\n# Agent Instructions\r\n\r\n## Session Start\r\n\r\n1. Read `AGENTS-README-FIRST.yaml` in the repo root for the current API key and endpoints.\r\n2. For specific operational steps (session bootstrap, session log turn workflow, and helper command sequence), follow `AGENTS-README-FIRST.yaml`.\r\n\r\nOn every subsequent user message:\r\n\r\n1. Follow `AGENTS-README-FIRST.yaml` for specific operational instructions.\r\n2. Complete the user's request.\r\n\r\n## Rules\n\n1. `templates/prompt-templates.yaml` (`default-marker-prompt`) is the source of truth for specific agent instructions. `AGEN...\r\n### global:canonical/docs/context/session-log-schema.md\r\n# Session Log Schema Reference\r\n\r\nLoad this file when you need to create, update, or query session logs.\r\nFor specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.\r\n\r\n## Endpoints\r\n\r\n- `POST /mcpserver/sessionlog` — create or update a session log\r\n- `GET /mcpserver/sessionlog?limit=N&offset=M` — query recent session logs\r\n- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` — stream reasoning dialog\r\n\r\n## Naming Conventions (Normative)\r\n\r\n- `sessionId` must match `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>...\r\n\r\nConsult: global:canonical/templates/prompt-templates.yaml, global:canonical/AGENTS.md, global:canonical/docs/MCP-SERVER.md, global:canonical/docs/CLIENT-INTEGRATION.md, global:canonical/docs/context/api-capabilities.md, global:canonical/docs/context/todo-schema.md, global:canonical/docs/context/session-log-schema.md, workspace:AGENTS-README-FIRST.yaml, workspace:AGENTS.md, workspace:.github/copilot-instructions.md\r\n\r\nNext step: use the required agent plugin (workflow.* or MCP tools) rather than raw REST for TODO, session log, and requirements mutations.",
+    "error": null,
+    "latencyMs": 256,
+    "guardResult": {
+      "allowed": true,
+      "ruleId": null,
+      "reason": "Message passed inbound guard checks.",
+      "matchedSnippet": null
+    },
+    "incidentId": null
+  },
+  "corpusSummary": {
+    "workspacePath": "F:\\GitHub\\McpServer",
+    "documentCount": 110,
+    "chunkCount": 10,
+    "topics": [
+      "Global GraphRAG scope",
+      "todo:PLAN-GRAPHRAG-GLOBAL-001",
+      "requirements"
+    ],
+    "summary": "Loaded 10 context excerpt(s) from 10 source(s) for topic 'Global GraphRAG scope'.",
+    "bootstrappedUtc": "2026-07-08T14:59:00.251131-05:00",
+    "sourceKeys": [
+      "global:canonical/templates/prompt-templates.yaml",
+      "global:canonical/AGENTS.md",
+      "global:canonical/docs/MCP-SERVER.md",
+      "global:canonical/docs/CLIENT-INTEGRATION.md",
+      "global:canonical/docs/context/api-capabilities.md",
+      "global:canonical/docs/context/todo-schema.md",
+      "global:canonical/docs/context/session-log-schema.md",
+      "workspace:AGENTS-README-FIRST.yaml",
+      "workspace:AGENTS.md",
+      "workspace:.github/copilot-instructions.md"
+    ],
+    "contextCharacterCount": 10813
+  },
+  "transcript": {
+    "sessionId": "help-20260708195859-018d906b1e8b4481b39def410a53c292",
+    "items": [
+      {
+        "timestampUtc": "2026-07-08T14:58:59.0693006-05:00",
+        "sessionId": "help-20260708195859-018d906b1e8b4481b39def410a53c292",
+        "turnId": null,
+        "role": "system",
+        "category": "corpus",
+        "text": "Loaded 10 context excerpt(s) from 10 source(s) for topic 'Global GraphRAG scope'. sources=[global:canonical/templates/prompt-templates.yaml, global:canonical/AGENTS.md, global:canonical/docs/MCP-SERVER.md, global:canonical/docs/CLIENT-INTEGRATION.md, global:canonical/docs/context/api-capabilities.md, global:canonical/docs/context/todo-schema.md, global:canonical/docs/context/session-log-schema.md, workspace:AGENTS-README-FIRST.yaml, workspace:AGENTS.md, workspace:.github/copilot-instructions.md]",
+        "guardRuleId": null
+      },
+      {
+        "timestampUtc": "2026-07-08T14:59:00.3620061-05:00",
+        "sessionId": "help-20260708195859-018d906b1e8b4481b39def410a53c292",
+        "turnId": "turn-0001",
+        "role": "user",
+        "category": "transcript",
+        "text": "How do I query the global GraphRAG scope for canonical McpServer documentation from Agent Help or the REST API?\nWhat is the exact endpoint, request body fields, and MCP tool parameters for scope=global?\nAlso give the workflow.todo.update params to mark PLAN-GRAPHRAG-GLOBAL-001 done.",
+        "guardRuleId": null
+      },
+      {
+        "timestampUtc": "2026-07-08T14:59:00.6152099-05:00",
+        "sessionId": "help-20260708195859-018d906b1e8b4481b39def410a53c292",
+        "turnId": "turn-0001",
+        "role": "assistant",
+        "category": "transcript",
+        "text": "Agent Help (context-guided fallback): the helper model is unavailable, so this answer is synthesized from seeded workspace context.\r\n\r\nQuestion: How do I query the global GraphRAG scope for canonical McpServer documentation from Agent Help or the REST API?\nWhat is the exact endpoint, request body fields, and MCP tool parameters for scope=global?\nAlso give the workflow.todo.update params to mark PLAN-GRAPHRAG-GLOBAL-001 done.\r\n\r\nRelevant workspace excerpts:\r\n### workspace:AGENTS-README-FIRST.yaml\r\nflow, write a detailed triage report that includes the needed changes, acceptance criteria, and validation evidence, then continue the active task after the failsafe YAML is written and triage submission succeeds.\r\n  - If triage submission fails, stop work and notify the user. Keep the failsafe YAML report for later replay; do not use raw REST or another reporting channel as a substitute.\r\n\r\n  ## Agent Help (MCP Server issues)\r\n  When you are stuck on any MCP Server surface (marker trust, plugin bootstrap, session log, TODO, requirements, triage, memory,...\r\n### global:canonical/AGENTS.md\r\n# Agent Instructions\r\n\r\n## Session Start\r\n\r\n1. Read `AGENTS-README-FIRST.yaml` in the repo root for the current API key and endpoints.\r\n2. For specific operational steps (session bootstrap, session log turn workflow, and helper command sequence), follow `AGENTS-README-FIRST.yaml`.\r\n\r\nOn every subsequent user message:\r\n\r\n1. Follow `AGENTS-README-FIRST.yaml` for specific operational instructions.\r\n2. Complete the user's request.\r\n\r\n## Rules\n\n1. `templates/prompt-templates.yaml` (`default-marker-prompt`) is the source of truth for specific agent instructions. `AGEN...\r\n### global:canonical/docs/context/session-log-schema.md\r\n# Session Log Schema Reference\r\n\r\nLoad this file when you need to create, update, or query session logs.\r\nFor specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.\r\n\r\n## Endpoints\r\n\r\n- `POST /mcpserver/sessionlog` — create or update a session log\r\n- `GET /mcpserver/sessionlog?limit=N&offset=M` — query recent session logs\r\n- `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` — stream reasoning dialog\r\n\r\n## Naming Conventions (Normative)\r\n\r\n- `sessionId` must match `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>...\r\n\r\nConsult: global:canonical/templates/prompt-templates.yaml, global:canonical/AGENTS.md, global:canonical/docs/MCP-SERVER.md, global:canonical/docs/CLIENT-INTEGRATION.md, global:canonical/docs/context/api-capabilities.md, global:canonical/docs/context/todo-schema.md, global:canonical/docs/context/session-log-schema.md, workspace:AGENTS-README-FIRST.yaml, workspace:AGENTS.md, workspace:.github/copilot-instructions.md\r\n\r\nNext step: use the required agent plugin (workflow.* or MCP tools) rather than raw REST for TODO, session log, and requirements mutations.",
+        "guardRuleId": null
+      }
+    ]
+  },
+  "sessionId": "help-20260708195859-018d906b1e8b4481b39def410a53c292"
+}

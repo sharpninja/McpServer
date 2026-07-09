@@ -1,0 +1,32 @@
+---
+pid: 36112
+cwd: "F:\GitHub\McpServer"
+command: "pwsh -NoProfile -File \"F:\\GitHub\\McpServer\\build.ps1\" Test 2>&1 | Select-Object -Last 25"
+started_at: 2026-07-08T19:32:19.265Z
+running_for_ms: 2780007  
+---
+[ERR] Test: [xUnit.net 00:00:14.99]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryRemove_DelegatesToMemoryService [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.00]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryList_DelegatesToMemoryService [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.01]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryUpdate_WhenTransactionGateRegistered_DelegatesToTransactionGate [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.02]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryUpdate_DelegatesToMemoryService [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.03]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryAdd_WhenTransactionGateRegistered_DelegatesToTransactionGate [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.04]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryRemove_WhenTransactionGateRegistered_DelegatesToTransactionGate [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.05]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryList_WithEffectiveScope_ForwardsNullScope [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.05]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryGet_DelegatesToMemoryService [FAIL]
+[ERR] Test: [xUnit.net 00:00:15.06]     McpServer.Support.Mcp.Tests.McpStdio.MemoryMcpToolTests.MemoryAdd_DelegatesToMemoryService [FAIL]
+[ERR] Test: [xUnit.net 00:00:17.64]     McpServer.Support.Mcp.Tests.McpStdio.TriageMcpToolTests.TriageReport_DelegatesToTriageService [FAIL]
+[ERR] Test: [xUnit.net 00:00:17.67]     McpServer.Support.Mcp.Tests.McpStdio.TriageMcpToolTests.TriageStatus_WithoutIds_ReturnsGroupQuery [FAIL]
+[ERR] Test: [xUnit.net 00:00:17.67]     McpServer.Support.Mcp.Tests.McpStdio.TriageMcpToolTests.TriageStatus_WithReportId_ReturnsReport [FAIL]
+[ERR] Test: Target Test has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:03
+Compile            Succeeded       1:23
+Test               Failed          0:42   // ProcessException: Process 'dotnet.exe' exited with code 1.
+───────────────────────────────────────
+Total                              2:08
+═══════════════════════════════════════
+​
+Build failed on 7/8/2026 2:34:37 PM. (╯°□°）╯︵ ┻━┻

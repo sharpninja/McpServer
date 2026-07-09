@@ -1,0 +1,84 @@
+{
+  "name": "create_iteration_phase",
+  "description": "Create a bounded Byrd iteration phase aligned to requirements and scope.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "name": {
+        "description": "Phase name",
+        "type": "string"
+      },
+      "summary": {
+        "description": "Phase summary",
+        "type": "string"
+      },
+      "requirementIds": {
+        "description": "Linked requirement IDs",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "entryCriteria": {
+        "description": "Entry criteria",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "exitCriteria": {
+        "description": "Exit criteria",
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": null
+      },
+      "createdFromPlanId": {
+        "description": "Originating plan ID",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "branch": {
+        "description": "Branch associated with the phase",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "name",
+      "summary"
+    ]
+  }
+}

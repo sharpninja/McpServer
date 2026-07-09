@@ -1,0 +1,69 @@
+{
+  "name": "prompt_template_update",
+  "description": "Update an existing prompt template. Null fields are not changed.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "id": {
+        "description": "Template identifier",
+        "type": "string"
+      },
+      "title": {
+        "description": "Updated title",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "category": {
+        "description": "Updated category",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "content": {
+        "description": "Updated content",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "tags": {
+        "description": "Updated comma-separated tags",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "description": {
+        "description": "Updated description",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "engine": {
+        "description": "Updated engine",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "id"
+    ]
+  }
+}

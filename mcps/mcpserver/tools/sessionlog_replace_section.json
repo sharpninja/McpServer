@@ -1,0 +1,41 @@
+{
+  "name": "sessionlog_replace_section",
+  "description": "REPLACE one section of a turn (PUT). section in: actions, tags, context, dialog, commits, designDecisions, requirementsDiscovered, filesModified, blockers. sectionJson is a UnifiedRequestEntryDto whose matching property holds the new contents; an empty/omitted property clears the section. Other sections untouched.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id",
+        "type": "string"
+      },
+      "requestId": {
+        "description": "Request id",
+        "type": "string"
+      },
+      "section": {
+        "description": "Section name (e.g. tags, actions, commits, designDecisions)",
+        "type": "string"
+      },
+      "sectionJson": {
+        "description": "JSON UnifiedRequestEntryDto carrying the section's new contents",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "requestId",
+      "section",
+      "sectionJson",
+      "workspacePath"
+    ]
+  }
+}

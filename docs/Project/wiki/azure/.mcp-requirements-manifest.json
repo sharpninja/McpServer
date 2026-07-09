@@ -1,13 +1,14 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-07-07T09:14:20.2208829+00:00",
+  "generatedAtUtc": "2026-07-09T05:43:48.962515+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
     "Technical-Requirements.md",
     "Testing-Requirements.md",
     "TR-per-FR-Mapping.md",
-    "Requirements-Matrix.md"
+    "Requirements-Matrix.md",
+    "Case-Studies/Triage-Plugin-Code-Quality-Case-Study.md"
   ]
 }

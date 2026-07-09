@@ -1,0 +1,27 @@
+---
+pid: 33428
+cwd: "F:\GitHub\McpServer"
+command: "gsudo pwsh -NoProfile -File \"F:\\GitHub\\McpServer\\build.ps1\" UpdateService 2>&1 | Select-Object -Last 20"
+started_at: 2026-07-08T19:45:28.836Z
+running_for_ms: 1990000  
+---
+14:47:04 [INF]   Backup directory removed.
+14:47:04 [INF] 
+14:47:04 [INF] === Update complete ===
+14:47:04 [INF]   Service : McpServer (Running)
+14:47:04 [INF]   Path    : C:\ProgramData\McpServer
+14:47:04 [INF]   Health  : OK
+14:47:04 [INF]   WSHealth: OK (25/25)
+14:47:04 [INF]   Config  : 1 restored, 1 backed up
+14:47:04 [INF]   Data    : 6 restored item(s), 6 backed up item(s)
+14:47:04 [INF]   Archive : C:\Users\kingd\McpServer-Backups\McpServer-backup-20260708-144559530.zip
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+UpdateService      Succeeded       1:05
+───────────────────────────────────────
+Total                              1:05
+═══════════════════════════════════════
+​
+Build succeeded on 7/8/2026 2:47:04 PM. ＼（＾ᴗ＾）／

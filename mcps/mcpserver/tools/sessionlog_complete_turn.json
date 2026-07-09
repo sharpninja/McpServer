@@ -1,0 +1,39 @@
+{
+  "name": "sessionlog_complete_turn",
+  "description": "Complete a session turn. Merges turnJson (UnifiedRequestEntryDto) additively onto the existing turn; requires at least one design decision, action, or commit.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id",
+        "type": "string"
+      },
+      "requestId": {
+        "description": "Request id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "turnJson": {
+        "description": "Optional JSON turn payload (UnifiedRequestEntryDto) merged additively",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "requestId",
+      "workspacePath"
+    ]
+  }
+}

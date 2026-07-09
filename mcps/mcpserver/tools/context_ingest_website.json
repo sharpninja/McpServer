@@ -1,0 +1,51 @@
+{
+  "name": "context_ingest_website",
+  "description": "Ingest context directly from a website URL with bounded crawl controls.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "description": "Website URL to ingest",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "includeSubpages": {
+        "description": "Crawl same-host subpages",
+        "type": "boolean",
+        "default": false
+      },
+      "maxPages": {
+        "description": "Maximum pages to fetch (default 20)",
+        "type": "integer",
+        "default": 20
+      },
+      "maxDepth": {
+        "description": "Maximum crawl depth when subpages are enabled (default 1)",
+        "type": "integer",
+        "default": 1
+      },
+      "maxBytesPerPage": {
+        "description": "Maximum bytes downloaded per page (default 262144)",
+        "type": "integer",
+        "default": 262144
+      },
+      "forceRefresh": {
+        "description": "Force refresh semantics for existing documents",
+        "type": "boolean",
+        "default": false
+      },
+      "triggerGraphRagIndex": {
+        "description": "Trigger GraphRAG index after ingest",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "url",
+      "workspacePath"
+    ]
+  }
+}

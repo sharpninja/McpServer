@@ -1,0 +1,7 @@
+---
+pid: 27068
+cwd: "F:\GitHub\McpServer"
+command: "Start-Sleep -Seconds 30"
+started_at: 2026-07-08T17:42:24.426Z
+running_for_ms: 75012    
+---

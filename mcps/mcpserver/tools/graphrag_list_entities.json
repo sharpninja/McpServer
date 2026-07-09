@@ -1,0 +1,34 @@
+{
+  "name": "graphrag_list_entities",
+  "description": "List graph entities with pagination and optional type filter.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "skip": {
+        "description": "Number of entities to skip (default 0)",
+        "type": "integer",
+        "default": 0
+      },
+      "take": {
+        "description": "Maximum entities to return (default 50)",
+        "type": "integer",
+        "default": 50
+      },
+      "entityType": {
+        "description": "Optional entity type filter",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

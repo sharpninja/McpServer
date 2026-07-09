@@ -1,0 +1,52 @@
+{
+  "name": "graphrag_create_relationship",
+  "description": "Create a new graph relationship between two entities.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "sourceEntityId": {
+        "description": "Source entity ID",
+        "type": "string"
+      },
+      "targetEntityId": {
+        "description": "Target entity ID",
+        "type": "string"
+      },
+      "relationshipType": {
+        "description": "Relationship type",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "description": {
+        "description": "Optional description",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "weight": {
+        "description": "Weight/strength (default 1.0)",
+        "type": "number",
+        "default": 1
+      },
+      "metadata": {
+        "description": "Optional JSON metadata",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "sourceEntityId",
+      "targetEntityId",
+      "relationshipType",
+      "workspacePath"
+    ]
+  }
+}

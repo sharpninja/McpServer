@@ -1,0 +1,52 @@
+{
+  "name": "todo_create",
+  "description": "Create a new TODO item. Requires id, title, section, priority.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "Item id (e.g. MVP-APP-006 or ISSUE-NEW)",
+        "type": "string"
+      },
+      "title": {
+        "description": "Item title",
+        "type": "string"
+      },
+      "section": {
+        "description": "Section (e.g. mvp-app)",
+        "type": "string"
+      },
+      "priority": {
+        "description": "Priority (high/medium/low)",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "estimate": {
+        "description": "Estimate string",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "description": {
+        "description": "Description text",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "id",
+      "title",
+      "section",
+      "priority",
+      "workspacePath"
+    ]
+  }
+}

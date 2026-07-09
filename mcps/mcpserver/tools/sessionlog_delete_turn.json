@@ -1,0 +1,31 @@
+{
+  "name": "sessionlog_delete_turn",
+  "description": "Delete a single turn (and all of its child rows). The parent session is preserved.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "agent": {
+        "description": "Agent source type",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Session id",
+        "type": "string"
+      },
+      "requestId": {
+        "description": "Request id",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "agent",
+      "sessionId",
+      "requestId",
+      "workspacePath"
+    ]
+  }
+}

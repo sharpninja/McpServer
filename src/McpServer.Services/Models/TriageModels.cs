@@ -380,28 +380,28 @@ public sealed class TriageOptions
     public string? AgentName { get; set; } = "triage";
 
     /// <summary>Direct triage agent executable path.</summary>
-    public string? AgentPath { get; set; } = "cline";
+    public string? AgentPath { get; set; } = "grok";
 
     /// <summary>Direct triage agent model id.</summary>
     public string AgentModel { get; set; } = "auto";
 
     /// <summary>Primary triage agent execution strategy.</summary>
-    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.OneShotCli;
+    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.GrokCli;
 
     /// <summary>Additional environment variables passed to the primary agent.</summary>
     public Dictionary<string, string> AgentParameters { get; set; } = [];
 
     /// <summary>
     /// TR-MCP-TRIAGE-006: Secondary triage strategy tried when the primary agent fails with a
-    /// retryable API error (4xx/rate-limit/unavailable) or times out. Default: grok.
+    /// retryable API error (4xx/rate-limit/unavailable) or times out. Default: claude.
     /// </summary>
-    public TriageFallbackAgent? Secondary { get; set; } = new() { AgentName = "triage-grok", AgentPath = "grok" };
+    public TriageFallbackAgent? Secondary { get; set; } = new() { AgentName = "triage-claude", AgentPath = "claude" };
 
     /// <summary>
     /// TR-MCP-TRIAGE-006: Tertiary triage strategy tried when the secondary agent also fails with a
-    /// retryable API error or times out. Default: claude.
+    /// retryable API error or times out. Default: none.
     /// </summary>
-    public TriageFallbackAgent? Tertiary { get; set; } = new() { AgentName = "triage-claude", AgentPath = "claude" };
+    public TriageFallbackAgent? Tertiary { get; set; }
 
     /// <summary>
     /// TR-MCP-TRIAGE-006: Case-insensitive substrings in agent stderr/body that mark a retryable API

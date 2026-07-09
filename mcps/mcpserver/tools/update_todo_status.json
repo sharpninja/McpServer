@@ -1,0 +1,45 @@
+{
+  "name": "update_todo_status",
+  "description": "Move a Byrd TODO through its execution states with process enforcement.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "todoId": {
+        "description": "Execution TODO ID",
+        "type": "string"
+      },
+      "targetStatus": {
+        "description": "Target execution status",
+        "type": "string",
+        "enum": [
+          "Draft",
+          "Planned",
+          "TestDesign",
+          "TestReady",
+          "Implementing",
+          "Validating",
+          "Blocked",
+          "Complete",
+          "Cancelled"
+        ]
+      },
+      "reason": {
+        "description": "Optional transition reason",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "todoId",
+      "targetStatus"
+    ]
+  }
+}

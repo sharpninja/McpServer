@@ -1,0 +1,72 @@
+{
+  "name": "agent_help_create_session",
+  "description": "Create an Agent Help session when stuck on MCP Server surfaces (marker trust, plugins, session log, TODO, triage, etc.).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "topic": {
+        "description": "Optional topic label for corpus bootstrap and outcome triage",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "callerAgent": {
+        "description": "Optional caller agent identity for linkage",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "callerSessionId": {
+        "description": "Optional caller session id for linkage",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "callerRequestId": {
+        "description": "Optional caller request/turn id for linkage",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "issueSummary": {
+        "description": "Optional factual issue summary (observation vs inference separated)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "deviceId": {
+        "description": "Optional device id for session affinity",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "executionStrategy": {
+        "description": "Optional execution strategy override",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "wait_for_completion",
+  "description": "Wait for busy console(s) to complete and retrieve cached results. Use this after receiving 'Pipeline is still running' response instead of executing Start-Sleep (which would open a new console).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "timeout_seconds": {
+        "description": "Maximum seconds to wait for completion (1-170, default: 30). Returns early if a console completes.",
+        "type": "integer",
+        "default": 30
+      },
+      "agent_id": {
+        "description": "Agent ID for sub-agent console isolation. Obtain this by calling start_console with is_subagent=true. Do not pass arbitrary strings.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "is_subagent": {
+        "description": "Set to true if you are a sub-agent. A unique agent_id will be allocated and returned in the response. Use that agent_id for all subsequent tool calls.",
+        "type": "boolean",
+        "default": false
+      }
+    }
+  }
+}

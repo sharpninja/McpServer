@@ -1,0 +1,21 @@
+{
+  "name": "agent_help_get_status",
+  "description": "Get current status for an Agent Help session.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Agent Help session id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath",
+      "sessionId"
+    ]
+  }
+}

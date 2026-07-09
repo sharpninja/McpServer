@@ -1,0 +1,21 @@
+{
+  "name": "sessionlog_submit",
+  "description": "Submit (upsert) a session log. Body is JSON string conforming to UnifiedSessionLogDto.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "json": {
+        "description": "JSON string of the session log payload",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "json",
+      "workspacePath"
+    ]
+  }
+}

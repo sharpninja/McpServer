@@ -1,0 +1,24 @@
+{
+  "name": "requirements_list",
+  "description": "List requirements entries. type = fr|tr|test|mapping|all (default all).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "type": {
+        "description": "Entry type: fr, tr, test, mapping, or all",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": "all"
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}

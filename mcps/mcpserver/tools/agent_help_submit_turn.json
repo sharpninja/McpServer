@@ -1,0 +1,26 @@
+{
+  "name": "agent_help_submit_turn",
+  "description": "Submit one Agent Help turn for synchronous processing.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "sessionId": {
+        "description": "Agent Help session id returned by agent_help_create_session",
+        "type": "string"
+      },
+      "userMessage": {
+        "description": "User message for this help turn",
+        "type": "string"
+      }
+    },
+    "required": [
+      "workspacePath",
+      "sessionId",
+      "userMessage"
+    ]
+  }
+}

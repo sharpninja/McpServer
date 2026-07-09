@@ -59,7 +59,7 @@ Triage:
   MaxRunTime: 00:10:00
   PromptTemplateId: triage-research-bug-report
   AgentName: triage
-  AgentPath: C:\Users\kingd\AppData\Roaming\npm\codex.cmd
+  AgentPath: grok
   AgentModel: auto
-  ExecutionStrategy: codex-cli
+  ExecutionStrategy: grok-cli
   AgentParameters: {}

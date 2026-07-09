@@ -1,0 +1,52 @@
+{
+  "name": "brain_slot_aot_reconcile",
+  "description": "Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "input": {
+        "description": "Original input prompt",
+        "type": "string"
+      },
+      "leftOutput": {
+        "description": "Committed LeftHemisphere output",
+        "type": "string"
+      },
+      "rightOutput": {
+        "description": "Committed RightHemisphere output",
+        "type": "string"
+      },
+      "curiosityOutput": {
+        "description": "Committed CuriosityEngine output",
+        "type": "string"
+      },
+      "turnId": {
+        "description": "Owning session-log turn id",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "metadataJson": {
+        "description": "Optional JSON object of string metadata",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "input",
+      "leftOutput",
+      "rightOutput",
+      "curiosityOutput"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "requirements_delete",
+  "description": "Delete a requirement entry. type = fr|tr|test|mapping.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "description": "Entry type: fr, tr, test, or mapping",
+        "type": "string"
+      },
+      "id": {
+        "description": "Entry id (FR/TR/TEST id or FR id for mapping rows)",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "type",
+      "id",
+      "workspacePath"
+    ]
+  }
+}

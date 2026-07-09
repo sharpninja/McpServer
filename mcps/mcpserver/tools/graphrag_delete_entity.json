@@ -1,0 +1,21 @@
+{
+  "name": "graphrag_delete_entity",
+  "description": "Delete a graph entity by its ID.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "entityId": {
+        "description": "Entity ID to delete",
+        "type": "string"
+      },
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      }
+    },
+    "required": [
+      "entityId",
+      "workspacePath"
+    ]
+  }
+}

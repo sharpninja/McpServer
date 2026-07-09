@@ -1,0 +1,50 @@
+{
+  "name": "memory_add",
+  "description": "Add a memory item. Defaults to Workspace scope.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "category": {
+        "description": "Memory category",
+        "type": "string"
+      },
+      "text": {
+        "description": "Memory text",
+        "type": "string"
+      },
+      "scope": {
+        "description": "Memory scope: Global or Workspace (default Workspace)",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "id": {
+        "description": "Optional explicit memory id",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "updatedBy": {
+        "description": "Optional updater identity",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "category",
+      "text"
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "name": "triage_report",
+  "description": "Submit an incidental bug report for asynchronous triage. Do not use for the user's active requested fix.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path for the current task. MCP Server-related bugs may route to the registered McpServer workspace.",
+        "type": "string"
+      },
+      "title": {
+        "description": "Bug title.",
+        "type": "string"
+      },
+      "summary": {
+        "description": "Bug summary.",
+        "type": "string"
+      },
+      "component": {
+        "description": "Optional component, plugin, command, or subsystem.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "severity": {
+        "description": "Optional severity: low, medium, high, or critical.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "dedupeKey": {
+        "description": "Optional stable dedupe key.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "errorSignature": {
+        "description": "Optional error signature.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "affectedPaths": {
+        "description": "Optional comma-separated affected paths.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "reporterAgent": {
+        "description": "Optional reporting agent identity.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "title",
+      "summary"
+    ]
+  }
+}

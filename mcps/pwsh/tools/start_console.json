@@ -1,0 +1,46 @@
+{
+  "name": "start_console",
+  "description": "Ensure a PowerShell console is available, or launch a new one. When reason is empty or omitted, reuses an existing standby console if one is available. When reason is provided, always launches a new console regardless of existing ones.\r\n\r\n📌 This is your primary tool for all command execution tasks: directory navigation, git operations, build/test commands, file system operations, process management, environment variable access, and any shell/terminal task. Sessions persist across calls (authentication, variables, modules stay active). Install any PowerShell Gallery module without admin privileges to extend capabilities (e.g., Az for Azure, AWS.Tools for AWS, Microsoft.Graph for M365).",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "reason": {
+        "description": "Do NOT specify unless you need a separate console. Forces a new console launch. Omit to reuse an existing standby console (preferred).",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "banner": {
+        "description": "Message displayed at console startup (e.g. greeting, joke, fun fact). Be creative and make the user smile!",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "start_location": {
+        "description": "Optional starting directory path. If relative, resolved from home directory. Defaults to home directory if not specified.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "agent_id": {
+        "description": "Agent ID for sub-agent console isolation. Obtain this by calling start_console with is_subagent=true. Do not pass arbitrary strings.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "is_subagent": {
+        "description": "Set to true if you are a sub-agent. A unique agent_id will be allocated and returned in the response. Use that agent_id for all subsequent tool calls.",
+        "type": "boolean",
+        "default": false
+      }
+    }
+  }
+}

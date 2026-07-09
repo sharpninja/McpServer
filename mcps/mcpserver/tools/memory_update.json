@@ -1,0 +1,53 @@
+{
+  "name": "memory_update",
+  "description": "Update a memory item by id. Only provided fields are changed.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "id": {
+        "description": "Memory id",
+        "type": "string"
+      },
+      "category": {
+        "description": "Optional category replacement",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "text": {
+        "description": "Optional text replacement",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "scope": {
+        "description": "Optional scope replacement: Global or Workspace",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "updatedBy": {
+        "description": "Optional updater identity",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "workspacePath",
+      "id"
+    ]
+  }
+}

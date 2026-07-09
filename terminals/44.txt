@@ -1,0 +1,133 @@
+---
+pid: 24168
+cwd: "F:\GitHub\McpServer"
+command: "gsudo pwsh -NoProfile -File \"F:\\GitHub\\McpServer\\build.ps1\" UpdateService 2>&1"
+started_at: 2026-07-08T19:42:23.610Z
+running_for_ms: 2175008  
+---
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬══════════════════
+║ UpdateService
+╬═════════
+​
+14:42:38 [INF] >> 0/8  Bumping GitVersion next-version patch ...
+14:42:38 [INF]   1.4.2 -> 1.4.3
+14:42:38 [INF] > "C:\Program Files\Git\cmd\git.exe" -C "F:\GitHub\McpServer" add GitVersion.yml
+14:42:38 [INF] >> 1/8  Stopping service 'McpServer' ...
+14:42:39 [INF]   Service stopped.
+14:42:39 [INF]   Deployment version: 1.4.3
+14:42:39 [INF] >> 2/8  Backing up config and data files ...
+14:42:40 [INF]   Data folder: C:\ProgramData\McpServer-Data
+14:42:40 [INF]   Backed up data items: docs, mcp-data, mcp.db, mcp.db.migrated, templates
+14:42:40 [INF]   Backed up config files: appsettings.yaml
+14:42:40 [INF]   Archived to: C:\Users\kingd\McpServer-Backups\McpServer-backup-20260708-144238557.zip
+14:42:40 [INF] >> 3/8  Publishing new build ...
+14:42:40 [INF] > "C:\Program Files\dotnet\dotnet.exe" publish F:\GitHub\McpServer\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --property:IncludeNativeLibrariesForSelfExtract=true --property:PackageVersion=1.4.3 --property:Version=1.4.3 --property:InformationalVersion=1.4.3 --output C:\Users\kingd\AppData\Local\Temp\McpServer-publish-stage
+14:42:41 [DBG]   Determining projects to restore...
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj (in 1.13 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Common.AgentCli\McpServer.Common.AgentCli.csproj (in 1.13 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Cqrs\McpServer.Cqrs.csproj (in 1.13 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj (in 1.13 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj (in 1.13 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Client\McpServer.Client.csproj (in 1.13 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Storage\McpServer.Storage.csproj (in 1.29 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj (in 1.29 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj (in 1.29 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj (in 1.29 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.McpAgent\McpServer.McpAgent.csproj (in 1.38 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.GraphRag\McpServer.GraphRag.csproj (in 1.39 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Services\McpServer.Services.csproj (in 1.39 sec).
+14:42:44 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj (in 1.42 sec).
+14:42:51 [DBG]   McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Release\net10.0\McpServer.Common.AgentCli.dll
+14:42:51 [DBG]   McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Release\net10.0\McpServer.Cqrs.dll
+14:42:52 [DBG]   McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Release\net10.0\McpServer.ServiceDefaults.dll
+14:42:52 [DBG]   McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Release\net10.0\McpServer.TransactionSecurity.dll
+14:42:53 [DBG]   McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Release\net10.0\McpServer.Client.dll
+14:42:57 [DBG]   McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Release\net10.0\McpServer.Repl.Core.dll
+14:42:58 [DBG]   McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Release\net10.0\McpServer.Storage.dll
+14:42:59 [DBG]   McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Release\net10.0\McpServer.McpAgent.dll
+14:43:16 [DBG]   McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Release\net10.0\McpServer.Storage.SqlServerMigrations.dll
+14:43:17 [DBG]   McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Release\net10.0\McpServer.Storage.SqliteMigrations.dll
+14:43:17 [DBG]   McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Release\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+14:43:26 [DBG]   McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Release\net10.0\McpServer.Services.dll
+14:43:27 [DBG]   McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Release\net10.0\McpServer.GraphRag.dll
+14:43:38 [DBG]   McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Release\net10.0\win-x64\McpServer.Support.Mcp.dll
+14:43:40 [DBG]   McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\McpServer-publish-stage\
+14:43:40 [INF] > "C:\Program Files\dotnet\dotnet.exe" publish F:\GitHub\McpServer\src\McpServer.Launcher\McpServer.Launcher.csproj --configuration Release --self-contained true --runtime win-x64 --property:PublishSingleFile=true --property:IncludeNativeLibrariesForSelfExtract=true --property:PackageVersion=1.4.3 --property:Version=1.4.3 --property:InformationalVersion=1.4.3 --output C:\Users\kingd\AppData\Local\Temp\McpServer-launcher-stage
+14:43:41 [DBG]   Determining projects to restore...
+14:43:42 [DBG]   Restored F:\GitHub\McpServer\src\McpServer.Launcher\McpServer.Launcher.csproj (in 332 ms).
+14:43:43 [DBG]   McpServer.Launcher -> F:\GitHub\McpServer\src\McpServer.Launcher\bin\Release\net10.0-windows\win-x64\McpServer.Launcher.dll
+14:43:43 [DBG]   McpServer.Launcher -> C:\Users\kingd\AppData\Local\Temp\McpServer-launcher-stage\
+14:43:43 [INF]   Cleaning stale files before copy ...
+14:43:43 [INF]   Removed stale items: 5 file(s), 4 directories
+14:43:44 [INF]   Brain-slot config deployed: C:\ProgramData\McpServer\config\brain-slots\quad-brain-slot-assignments.yaml
+14:43:44 [INF]   Launcher sidecar present: C:\ProgramData\McpServer\McpServer.Launcher.exe
+14:43:44 [INF]   Publish complete.
+14:43:44 [INF] >> 4/8  Restoring config and data files ...
+14:43:44 [INF]   Restored config files: appsettings.yaml
+14:43:44 [INF]   Restored data folder: C:\ProgramData\McpServer-Data
+14:43:44 [INF]   Restored data items: docs, mcp-data, mcp.db, mcp.db.migrated, templates
+14:43:44 [INF] >> 5/9  Ensuring service registration ...
+14:43:45 [INF]   Deployment manifest: C:\ProgramData\McpServer\.mcpservice-deployment.json
+14:43:45 [INF] >> 6/9  Starting service 'McpServer' ...
+14:44:09 [INF]   Service status: Running
+14:44:09 [INF] >> 7/9  Verifying health on port 7147 ...
+14:44:24 [INF]   Health: HTTP 200 - {"status":"Healthy","version":"1.4.3\u002Bef822f79116f0772df3aa4723c5e1090b918c5b8","checks":[{"name":"self","status":"Healthy","description":null,"duration":1.0813},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":2.4733}]}
+14:44:24 [INF] >> 8/9  Verifying workspace health checks from deployed config ...
+14:44:27 [INF]   Health: HTTP 200 - {"status":"Healthy","version":"1.4.3\u002Bef822f79116f0772df3aa4723c5e1090b918c5b8","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.1437},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.0313}]}
+14:44:27 [INF]   OK Avalonia.RemoteControl [] F:\GitHub\Avalonia.RemoteControl
+14:44:27 [INF]   OK BBCrawler [] F:\GitHub\BBCrawler
+14:44:27 [INF]   OK BodyAndBrain.Engine [] F:\GitHub\BodyAndBrain.Engine
+14:44:27 [INF]   OK C:\Users\kingd\OneDrive\Documents\PowerShell\Snippets [] C:\Users\kingd\OneDrive\Documents\PowerShell\Snippets
+14:44:27 [INF]   OK CbmEngine [] F:\GitHub\CbmEngine
+14:44:27 [INF]   OK F:\GitHub\aiUnit [] F:\GitHub\aiUnit
+14:44:27 [INF]   OK F:\GitHub\bitnet-b1.58-sharp [] F:\GitHub\bitnet-b1.58-sharp
+14:44:27 [INF]   OK F:\GitHub\FunWasHad [] F:\GitHub\FunWasHad
+14:44:27 [INF]   OK F:\GitHub\MarkdownServer\AspNetServices [] F:\GitHub\MarkdownServer\AspNetServices
+14:44:27 [INF]   OK F:\GitHub\McpServer [] F:\GitHub\McpServer
+14:44:27 [INF]   OK F:\GitHub\McpServerManager [] F:\GitHub\McpServerManager
+14:44:27 [INF]   OK F:\GitHub\TruckMate [] F:\GitHub\TruckMate
+14:44:27 [INF]   OK F:\GitHub\vice-sharp [] F:\GitHub\vice-sharp
+14:44:27 [INF]   OK FeatureFlags [] F:\GitHub\FeatureFlags
+14:44:27 [INF]   OK global [] 
+14:44:27 [INF]   OK LlamaDeck [] F:\GitHub\LlamaDeck
+14:44:27 [INF]   OK McpServer [] C:\ProgramData\McpServer
+14:44:27 [INF]   OK mcpserver-opencode-plugin [] F:\GitHub\mcpserver-opencode-plugin
+14:44:27 [INF]   OK MouseKeyProxy [] F:\GitHub\MouseKeyProxy
+14:44:27 [INF]   OK MouseKeyProxy-Fresh [] f:\github\MouseKeyProxy-Fresh
+14:44:27 [INF]   OK RedditPublish [] F:\GitHub\RedditPublish
+14:44:27 [INF]   OK repairs [] F:\GitHub\repairs
+14:44:27 [INF]   OK RiskyStars [] F:\GitHub\RiskyStars
+14:44:27 [INF]   OK think-coach [] C:\Users\kingd\Downloads\think-coach
+14:44:27 [INF]   OK valhalla-dotnet [] F:\github\valhalla-dotnet
+14:44:27 [INF] >> 9/9  Cleanup ...
+14:44:27 [INF]   Backup directory removed.
+14:44:27 [INF] 
+14:44:27 [INF] === Update complete ===
+14:44:27 [INF]   Service : McpServer (Running)
+14:44:27 [INF]   Path    : C:\ProgramData\McpServer
+14:44:27 [INF]   Health  : OK
+14:44:27 [INF]   WSHealth: OK (25/25)
+14:44:27 [INF]   Config  : 1 restored, 1 backed up
+14:44:27 [INF]   Data    : 5 restored item(s), 5 backed up item(s)
+14:44:27 [INF]   Archive : C:\Users\kingd\McpServer-Backups\McpServer-backup-20260708-144238557.zip
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+UpdateService      Succeeded       1:48
+───────────────────────────────────────
+Total                              1:48
+═══════════════════════════════════════
+​
+Build succeeded on 7/8/2026 2:44:27 PM. ＼（＾ᴗ＾）／

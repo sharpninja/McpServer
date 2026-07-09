@@ -1,0 +1,21 @@
+{
+  "name": "graphrag_index",
+  "description": "Initialize or rebuild GraphRAG index for the workspace.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required)",
+        "type": "string"
+      },
+      "force": {
+        "description": "Force re-index if true",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "workspacePath"
+    ]
+  }
+}
