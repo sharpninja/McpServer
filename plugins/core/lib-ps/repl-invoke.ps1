@@ -637,9 +637,8 @@ function Invoke-ReplSubmitSessionFallback {
 }
 
 function Invoke-ReplPersistTurn {
-    # Persist the turn via client.SessionLog.UpsertTurnAsync with a failsafe
-    # capture first, falling back to full-session SubmitAsync only when the
-    # upsert method is missing (sh twin: _repl_persist_turn, commit 97aab2d).
+    # The REPL owns primary/failsafe selection. The plugin submits one snapshot and
+    # only inspects the durable persistence result returned by the REPL.
     param(
         [Parameter(Mandatory)][string]$RequestId,
         [Parameter(Mandatory)][string]$Title,
@@ -648,6 +647,7 @@ function Invoke-ReplPersistTurn {
         [string]$ActionsYaml = '',
         [object[]]$ProcessingDialog = @()
     )
+    $script:LastReplPersistenceDetails = $null
     $meta = Get-ReplSessionMeta
     if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
@@ -656,61 +656,44 @@ function Invoke-ReplPersistTurn {
         -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml `
         -ProcessingDialog $ProcessingDialog
 
-    $envelope = New-McpPluginReplRequest `
-        -RequestId "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$(Get-Random -Maximum 0xffff)" `
-        -Method 'client.SessionLog.UpsertTurnAsync' `
-        -Params $turnObj
-    $jsonEnvelope = ConvertTo-McpPluginJson -InputObject $envelope -Depth 10 -Compress
-
-    $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.UpsertTurnAsync' `
-        -ParamsYaml $jsonEnvelope -Label 'session_upsertTurn'
-
-    # Send as JSON envelope (reliable serialization, no manual YAML text)
-    $tmp = Join-Path (Get-ReplInvokeCacheDir) "envelope-$RequestId.json"
-    [System.IO.File]::WriteAllText($tmp, $jsonEnvelope, [System.Text.Encoding]::UTF8)
-    try {
-        $psi = [System.Diagnostics.ProcessStartInfo]::new()
-        $psi.FileName = 'mcpserver-repl'
-        $psi.ArgumentList.Add('--agent-stdio')
-        if ($script:AgentName -and $script:AgentName -ne 'default') {
-            $psi.ArgumentList.Add('--agent'); $psi.ArgumentList.Add($script:AgentName)
-        }
-        $psi.RedirectStandardInput = $true
-        $psi.RedirectStandardOutput = $true
-        $psi.UseShellExecute = $false
-        $psi.CreateNoWindow = $true
-        Set-ReplProcessWorkspace -StartInfo $psi
-        $psi.StandardOutputEncoding = [System.Text.Encoding]::UTF8
-        $proc = [System.Diagnostics.Process]::Start($psi)
-        $fs = [System.IO.File]::OpenRead($tmp)
-        $fs.CopyTo($proc.StandardInput.BaseStream)
-        $fs.Close()
-        $proc.StandardInput.Close()
-        $outTask = $proc.StandardOutput.ReadToEndAsync()
-        $outTask.Wait(30000) | Out-Null
-        $output = $outTask.Result
-        $proc.WaitForExit()
-        $output = $output -replace "[\uFEFF]", ''
-        $isErr = $output -match '(?m)^type:\s*error\b'
-        if ($proc.ExitCode -eq 0 -and -not $isErr) {
-            Clear-ReplFailsafe -Path $failsafe
-            return $true
-        }
-        if ($output -match 'method_not_found' -or $output -match 'Session not found') {
-            Clear-ReplFailsafe -Path $failsafe
-            $fallbackOk = Invoke-ReplSubmitSessionFallback -Meta $meta -RequestId $RequestId `
-                -Title $Title -Status $Status -ResponseText $ResponseText `
-                -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog
-            if (-not $fallbackOk) {
-                throw "Session log fallback submit failed for request '$RequestId'."
-            }
-            return $true
-        }
-        $message = "Session log persistence failed for request '$RequestId'. ExitCode=$($proc.ExitCode). Output=$output"
-        throw $message
-    } finally {
-        Remove-Item $tmp -ErrorAction SilentlyContinue
+    $sessionTitle = Get-ReplSessionStateValue -Key 'title'
+    if (-not $sessionTitle) { $sessionTitle = $Title }
+    $sessionStarted = Get-ReplSessionStateValue -Key 'started'
+    if (-not $sessionStarted) { $sessionStarted = [string]$turnObj.turn.timestamp }
+    $sessionLog = [ordered]@{
+        sourceType = $meta.SourceType
+        sessionId = $meta.SessionId
+        title = $sessionTitle
+        model = [string]$turnObj.turn.model
+        started = $sessionStarted
+        lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        status = 'in_progress'
+        turnCount = 1
+        turns = @($turnObj.turn)
     }
+    $paramsJson = ConvertTo-McpPluginJson -InputObject ([ordered]@{
+        sessionLog = $sessionLog
+    }) -Depth 20 -Compress
+
+    $result = Invoke-ReplRaw -Method 'repl.sessionlog.persistTurn' -ParamsYaml $paramsJson
+    if (-not $result.Success) {
+        throw "Session log persistence failed for request '$RequestId'. Output=$($result.Output) Error=$($result.Error)"
+    }
+
+    $response = Convert-ReplParamsYamlToObject -ParamsYaml $result.Output
+    $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
+    $details = Get-ReplObjectValue -InputObject $payload -Name 'result'
+    if (-not $details) {
+        throw "Session log persistence returned no durable result for request '$RequestId'."
+    }
+
+    $persisted = Get-ReplObjectValue -InputObject $details -Name 'persisted'
+    if ($persisted -ne $true) {
+        throw "Session log persistence did not confirm a durable write for request '$RequestId'."
+    }
+
+    $script:LastReplPersistenceDetails = $details
+    return $true
 }
 
 function Update-ReplTurnCacheStatus {
@@ -803,6 +786,23 @@ function Update-ReplTurnAudit {
     return $true
 }
 
+function Get-ReplObjectValue {
+    param(
+        $InputObject,
+        [Parameter(Mandatory)][string]$Name
+    )
+
+    if ($null -eq $InputObject) { return $null }
+    if ($InputObject -is [System.Collections.IDictionary]) {
+        if ($InputObject.Contains($Name)) { return $InputObject[$Name] }
+        return $null
+    }
+
+    $property = $InputObject.PSObject.Properties[$Name]
+    if ($property) { return $property.Value }
+    return $null
+}
+
 function Get-ReplParamString {
     param(
         [string]$ParamsYaml,
@@ -811,9 +811,9 @@ function Get-ReplParamString {
     if (-not $ParamsYaml) { return '' }
     $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
     if (-not $params) { return '' }
-    $propertyNames = @($params.PSObject.Properties.Name)
-    if ($propertyNames -notcontains $Name -or $null -eq $params.$Name) { return '' }
-    return [string]$params.$Name
+    $value = Get-ReplObjectValue -InputObject $params -Name $Name
+    if ($null -eq $value) { return '' }
+    return [string]$value
 }
 
 function Update-ReplTurnTitleFromParams {
@@ -912,13 +912,10 @@ function Get-ReplDialogItemsFromParams {
     $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
     if (-not $params) { return @() }
 
-    $propertyNames = @($params.PSObject.Properties.Name)
     $rawItems = @()
-    if ($propertyNames -contains 'dialogItems') {
-        $rawItems = @($params.dialogItems)
-    } elseif ($propertyNames -contains 'dialog') {
-        $rawItems = @($params.dialog)
-    }
+    $rawValue = Get-ReplObjectValue -InputObject $params -Name 'dialogItems'
+    if ($null -eq $rawValue) { $rawValue = Get-ReplObjectValue -InputObject $params -Name 'dialog' }
+    if ($null -ne $rawValue) { $rawItems = @($rawValue) }
 
     $items = @()
     foreach ($rawItem in $rawItems) {
@@ -952,17 +949,18 @@ function Invoke-WorkflowAppendDialog {
     }
 
     $dialogItems = @(Get-ReplDialogItemsFromParams -ParamsYaml $ParamsYaml)
-    if ($dialogItems.Count -gt 0) {
-        Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml | Out-Null
-        Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
-        $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-        $title = Get-ReplTurnCacheField -Field 'queryTitle'
-        $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
-            -Status 'in_progress' -ResponseText 'Dialog appended.' `
-            -ProcessingDialog $dialogItems
+    if ($dialogItems.Count -eq 0) {
+        [Console]::Error.WriteLine('workflow.sessionlog.appendDialog requires at least one valid dialogItems or dialog entry.')
+        return $false
     }
 
-    return $true
+    Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml | Out-Null
+    Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
+    $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
+    $title = Get-ReplTurnCacheField -Field 'queryTitle'
+    return [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+        -Status 'in_progress' -ResponseText 'Dialog appended.' `
+        -ProcessingDialog $dialogItems)
 }
 
 function Invoke-WorkflowCompleteTurn {
@@ -978,8 +976,9 @@ function Invoke-WorkflowCompleteTurn {
     $responseText = '(no response provided)'
     if ($ParamsYaml) {
         $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
-        if ($params -and ($params.PSObject.Properties.Name -contains 'response')) {
-            $responseText = [string]$params.response
+        $responseValue = Get-ReplObjectValue -InputObject $params -Name 'response'
+        if ($null -ne $responseValue) {
+            $responseText = [string]$responseValue
         }
     }
     Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml | Out-Null
@@ -993,9 +992,21 @@ function Invoke-WorkflowCompleteTurn {
 
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
     $title = Get-ReplTurnCacheField -Field 'queryTitle'
-    $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
+    $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
         -Status 'completed' -ResponseText $responseText -ActionsYaml $actionsBlock
-    return $true
+    )
+    if ($persisted -and $script:LastReplPersistenceDetails) {
+        $degraded = Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'degraded'
+        if ($degraded -eq $true) {
+            $message = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'message')
+            $failsafePath = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'failsafePath')
+            if ([string]::IsNullOrWhiteSpace($message)) {
+                $message = 'MCP Session Log persistence is degraded.'
+            }
+            [Console]::Error.WriteLine("$message FailsafePath='$failsafePath'.")
+        }
+    }
+    return $persisted
 }
 
 function Invoke-ReplMethod {

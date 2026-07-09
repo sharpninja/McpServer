@@ -68,6 +68,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
 
     private readonly IGenericClientPassthrough _passthrough;
     private readonly ISessionLogWorkflow? _sessionLogWorkflow;
+    private readonly ISessionLogPersistenceStrategy? _sessionLogPersistenceStrategy;
     private readonly IRequirementsWorkflow? _requirementsWorkflow;
     private readonly ITodoWorkflow? _todoWorkflow;
     private readonly IMemoryWorkflow? _memoryWorkflow;
@@ -81,6 +82,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// </summary>
     /// <param name="passthrough">The generic client passthrough used to invoke <c>client.*.*</c> methods.</param>
     /// <param name="sessionLogWorkflow">The optional session-log workflow used to invoke <c>workflow.sessionlog.*</c> methods.</param>
+    /// <param name="sessionLogPersistenceStrategy">The optional REPL-native session-log persistence coordinator.</param>
     /// <param name="requirementsWorkflow">The optional requirements workflow used to invoke <c>workflow.requirements.*</c> methods.</param>
     /// <param name="todoWorkflow">The optional TODO workflow used to invoke <c>workflow.todo.*</c> methods.</param>
     /// <param name="memoryWorkflow">The optional memory workflow used to invoke <c>workflow.memory.*</c> methods.</param>
@@ -97,10 +99,12 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         IClientMutationPolicy? clientMutationPolicy = null,
         IGraphRagWorkflow? graphRagWorkflow = null,
         ITriageWorkflow? triageWorkflow = null,
-        IAgentHelpWorkflow? agentHelpWorkflow = null)
+        IAgentHelpWorkflow? agentHelpWorkflow = null,
+        ISessionLogPersistenceStrategy? sessionLogPersistenceStrategy = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
+        _sessionLogPersistenceStrategy = sessionLogPersistenceStrategy;
         _requirementsWorkflow = requirementsWorkflow;
         _todoWorkflow = todoWorkflow;
         _memoryWorkflow = memoryWorkflow;
@@ -169,6 +173,11 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                 });
         }
 
+        if (string.Equals(method, SessionLogCommandShapes.PersistTurnMethod, StringComparison.Ordinal))
+        {
+            return await DispatchSessionLogPersistenceRequestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
         if (method.StartsWith("client.", StringComparison.Ordinal))
         {
             return await DispatchClientRequestAsync(request, cancellationToken).ConfigureAwait(false);
@@ -218,6 +227,62 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             message: $"Method '{method}' is not routed by this dispatcher. " +
                      $"Primary namespace: client.<clientName>.<methodName>. " +
                      $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {AgentHelpCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
+    }
+
+    private async Task<IYamlEnvelope> DispatchSessionLogPersistenceRequestAsync(
+        IRequestPayload request,
+        CancellationToken cancellationToken)
+    {
+        if (_sessionLogPersistenceStrategy is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Session-log persistence strategies are not registered.");
+        }
+
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            var sessionLog = BuildSessionLogRecovery(args);
+            var persistence = await _sessionLogPersistenceStrategy
+                .PersistAsync(sessionLog, cancellationToken)
+                .ConfigureAwait(false);
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = new Dictionary<string, object?>
+                    {
+                        ["persisted"] = persistence.Persisted,
+                        ["degraded"] = persistence.Degraded,
+                        ["persistenceStrategy"] = persistence.Strategy,
+                        ["failsafePath"] = persistence.FailsafePath,
+                        ["message"] = persistence.Message,
+                    },
+                },
+            };
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "session_log_persistence_failed",
+                message: exception.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["exceptionType"] = exception.GetType().FullName,
+                });
+        }
     }
 
     private static IYamlEnvelope MarkWorkflowDeprecated(IYamlEnvelope response)

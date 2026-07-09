@@ -92,6 +92,17 @@ public static class ServiceCollectionExtensions
         // FR-MCP-REPL-001, TR-MCP-REPL-001/003/004: YAML envelope serialization,
         // generic client passthrough, command dispatcher, and stream-level protocol loop.
         services.AddSingleton<IYamlSerializer, YamlSerializer>();
+        services.AddSingleton<ISessionLogPersistenceStrategy>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            var primary = new McpSessionLogPersistenceStrategy(
+                new SessionLogClientAdapter(clientFactory.SessionLog));
+            var failsafe = new FilesystemSessionLogPersistenceStrategy(
+                MarkerFileClientOptionsResolver.ResolveWorkspacePath(),
+                sp.GetRequiredService<IYamlSerializer>(),
+                TimeProvider.System);
+            return new FailoverSessionLogPersistenceStrategy(primary, failsafe);
+        });
         services.AddSingleton<IClientMutationPolicy>(sp =>
             new KnownUnsafeClientMutationPolicy(() =>
             {
@@ -118,7 +129,8 @@ public static class ServiceCollectionExtensions
                 sp.GetRequiredService<IClientMutationPolicy>(),
                 sp.GetRequiredService<IGraphRagWorkflow>(),
                 sp.GetRequiredService<ITriageWorkflow>(),
-                sp.GetRequiredService<IAgentHelpWorkflow>()));
+                sp.GetRequiredService<IAgentHelpWorkflow>(),
+                sp.GetRequiredService<ISessionLogPersistenceStrategy>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

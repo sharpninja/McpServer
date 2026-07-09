@@ -129,6 +129,12 @@ public static class SessionLogCommandShapes
     /// Method: <c>workflow.sessionlog.importRecovery</c>
     /// </summary>
     public const string ImportRecoveryMethod = "workflow.sessionlog.importRecovery";
+
+    /// <summary>
+    /// REPL-native command that persists a session-log snapshot through primary and failsafe strategies.
+    /// Method: <c>repl.sessionlog.persistTurn</c>
+    /// </summary>
+    public const string PersistTurnMethod = "repl.sessionlog.persistTurn";
 }
 
 /// <summary>

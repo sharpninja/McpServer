@@ -165,8 +165,9 @@ public sealed class AgentHelpReplWorkflowTests
         => request is not null
            && request.WorkspacePath == "F:\\GitHub\\McpServer"
            && request.Topic == "marker trust"
-           && request.AgentSeed is not null
-           && request.AgentSeed.Contains("callerAgent=Codex", StringComparison.Ordinal);
+           && request.CallerAgent == "Codex"
+           && request.IssueSummary == "Marker signature mismatch after service restart."
+           && request.AgentSeed is null;
 
     private static bool MatchesSubmitTurnRequest(AgentHelpTurnRequest? request)
         => request is not null && request.UserMessage == "What should I check first?";

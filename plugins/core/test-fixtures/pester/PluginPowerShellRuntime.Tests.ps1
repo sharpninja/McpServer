@@ -911,3 +911,140 @@ agent_plugins:
         }
     }
 }
+
+Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
+    It 'parses dictionary-backed dialogItems YAML and property-backed JSON' {
+        . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+        $payload = [ordered]@{
+            dialogItems = @(
+                [ordered]@{
+                    role = 'assistant'
+                    content = 'first diagnostic'
+                    category = 'analysis'
+                },
+                [ordered]@{
+                    role = 'assistant'
+                    content = 'selected the independent REPL failsafe strategy'
+                    category = 'decision'
+                }
+            )
+        }
+        $yaml = $payload | ConvertTo-Yaml -Options WithIndentedSequences
+        $json = $payload | ConvertTo-Json -Depth 10 -Compress
+
+        $yamlParams = Convert-ReplParamsYamlToObject -ParamsYaml $yaml
+        $yamlParams | Should -BeOfType ([System.Collections.IDictionary])
+        $yamlItems = @(Get-ReplDialogItemsFromParams -ParamsYaml $yaml)
+        $jsonItems = @(Get-ReplDialogItemsFromParams -ParamsYaml $json)
+
+        $yamlItems.Count | Should -Be 2
+        $yamlItems[0].content | Should -Be 'first diagnostic'
+        $yamlItems[1].category | Should -Be 'decision'
+        $jsonItems.Count | Should -Be 2
+        $jsonItems[1].content | Should -Be 'selected the independent REPL failsafe strategy'
+    }
+
+    It 'rejects appendDialog when no dialog items can be parsed' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+
+        try {
+            $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            function Assert-ReplCurrentTurnFresh { return $true }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260709T211800Z-dialog-red'
+                queryTitle = 'Dialog parser red test'
+                status = 'in_progress'
+                auditDialog = 0
+            })
+
+            Invoke-WorkflowAppendDialog -ParamsYaml '{"unexpected":true}' | Should -BeFalse
+            (Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml'))['auditDialog'] | Should -Be 0
+        } finally {
+            if ($previousFresh) {
+                Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock
+            }
+            if ($null -ne $previousPluginRoot) {
+                $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
+            } else {
+                Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
+    It 'routes persistence through the REPL-native strategy without plugin-side failsafe writes' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+        $match = [regex]::Match(
+            $source,
+            '(?s)function Invoke-ReplPersistTurn\s*\{(?<body>.*?)\r?\n\}\r?\n\r?\nfunction Update-ReplTurnCacheStatus')
+
+        $match.Success | Should -BeTrue
+        $match.Groups['body'].Value | Should -Match 'Invoke-ReplRaw'
+        $match.Groups['body'].Value | Should -Match 'repl\.sessionlog\.persistTurn'
+        $match.Groups['body'].Value | Should -Not -Match 'Write-ReplFailsafe'
+    }
+
+    It 'reports degraded persistence and its failsafe path only when completeTurn closes the turn' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+        $originalError = [Console]::Error
+        $errorWriter = [System.IO.StringWriter]::new()
+
+        try {
+            $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            function Assert-ReplCurrentTurnFresh { return $true }
+            function Invoke-ReplPersistTurn {
+                $script:LastReplPersistenceDetails = [ordered]@{
+                    persisted = $true
+                    degraded = $true
+                    persistenceStrategy = 'filesystem-failsafe'
+                    failsafePath = 'C:\failsafe\turn.yaml'
+                    message = 'MCP Session Log persistence is degraded. Turn saved to failsafe path.'
+                }
+                return $true
+            }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260709T214500Z-degraded-close'
+                queryTitle = 'Degraded close test'
+                status = 'in_progress'
+                auditDialog = 0
+            })
+            [Console]::SetError($errorWriter)
+
+            Invoke-WorkflowCompleteTurn -ParamsYaml '{"response":"Done"}' | Should -BeTrue
+
+            $errorWriter.ToString() | Should -Match 'degraded'
+            $errorWriter.ToString() | Should -Match 'C:\\failsafe\\turn\.yaml'
+        } finally {
+            [Console]::SetError($originalError)
+            if ($previousPersist) {
+                Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock
+            }
+            if ($previousFresh) {
+                Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock
+            }
+            if ($null -ne $previousPluginRoot) {
+                $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
+            } else {
+                Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+            $errorWriter.Dispose()
+        }
+    }
+}
