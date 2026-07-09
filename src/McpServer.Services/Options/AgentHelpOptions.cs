@@ -24,7 +24,7 @@ public sealed class AgentHelpOptions
     public string HelperModel { get; set; } = "gpt-5.3-codex";
 
     /// <summary>
-    /// Default execution strategy used when callers do not explicitly choose one.
+    /// FR-MCP-HELP-011: Default execution strategy used when callers do not explicitly choose one.
     /// Supported values are <c>grok-cli</c>, <c>one-shot-cli</c>, <c>copilot-cli</c>, <c>codex-cli</c>, and <c>hosted-mcp-agent</c>.
     /// </summary>
     public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.GrokCli;

@@ -5,8 +5,8 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// FR-MCP-052..058: Verifies the execution strategy resolver maps the canonical grok-cli
-/// name and the grok-build alias to the registered Grok CLI strategy.
+/// TEST-MCP-HELP-008, FR-MCP-HELP-011: Verifies the execution strategy resolver maps the
+/// canonical grok-cli name and the grok-build alias to the registered Grok CLI strategy.
 /// </summary>
 public sealed class AgentExecutionStrategyResolverTests
 {

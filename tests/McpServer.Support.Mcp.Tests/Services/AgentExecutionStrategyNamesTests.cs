@@ -4,8 +4,8 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// FR-MCP-052..058: Verifies the agent execution strategy name catalog, including the
-/// Grok CLI strategy name, its alias, and support/normalization behavior.
+/// TEST-MCP-HELP-008, FR-MCP-HELP-011: Verifies the agent execution strategy name catalog,
+/// including the Grok CLI strategy name, its alias, and support/normalization behavior.
 /// </summary>
 public sealed class AgentExecutionStrategyNamesTests
 {

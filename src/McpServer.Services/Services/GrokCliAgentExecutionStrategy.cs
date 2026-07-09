@@ -10,9 +10,10 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// FR-MCP-052..058, TR-MCP-TRIAGE-003: Runs the Grok CLI through reusable one-shot
-/// <c>grok --prompt-file</c> invocations for non-interactive direct-agent prompts such as
-/// the Agent Help conversation helper. Output is read from the plain-format stdout stream.
+/// FR-MCP-052..058, FR-MCP-HELP-011, TR-MCP-HELP-010, TR-MCP-TRIAGE-003: Runs the Grok CLI
+/// through reusable one-shot <c>grok --prompt-file</c> invocations for non-interactive
+/// direct-agent prompts such as the Agent Help conversation helper. Output is read from the
+/// plain-format stdout stream.
 /// </summary>
 internal sealed class GrokCliAgentExecutionStrategy(
     IProcessEnvironmentService processEnvironment,

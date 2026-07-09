@@ -5,8 +5,8 @@ using Xunit;
 namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TR-MCP-TRIAGE-003: Verifies the Grok CLI execution strategy identity, executable
-/// resolution defaults, and one-shot command-line construction.
+/// TEST-MCP-HELP-008, TR-MCP-HELP-010: Verifies the Grok CLI execution strategy identity,
+/// executable resolution defaults, and one-shot command-line construction.
 /// </summary>
 public sealed class GrokCliAgentExecutionStrategyTests
 {
