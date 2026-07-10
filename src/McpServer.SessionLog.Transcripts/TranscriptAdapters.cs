@@ -173,23 +173,29 @@ internal sealed class GrokTranscriptAdapter : JsonTranscriptAdapterBase
         var records = await TranscriptUtilities.ReadJsonLinesAsync(path, cancellationToken).ConfigureAwait(false);
         var sessionId = TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
         string? model = null;
+        var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
         var order = 1;
         foreach (var record in records)
         {
             var type = TranscriptUtilities.GetString(record, "type") ?? string.Empty;
             var role = TranscriptUtilities.GetString(record, "role") ?? (type is "system" or "user" or "assistant" ? type : null);
-            if (string.IsNullOrWhiteSpace(role) && type.Equals("chat_message", StringComparison.Ordinal))
-                role = TranscriptUtilities.GetString(record, "role");
             if (string.IsNullOrWhiteSpace(role))
+            {
+                var diagnosticCode = type.Equals("chat_message", StringComparison.Ordinal) ? "grok_missing_role" : "grok_unknown_record";
+                var diagnosticMessage = type.Equals("chat_message", StringComparison.Ordinal)
+                    ? "Grok chat_message record is missing a role and was not normalized."
+                    : "Grok JSONL record type '" + (string.IsNullOrWhiteSpace(type) ? "<missing>" : type) + "' was not normalized.";
+                diagnostics.Add(new TranscriptDiagnostic(diagnosticCode, diagnosticMessage, "warning", path));
                 continue;
+            }
 
             model = TranscriptUtilities.GetString(record, "model") ?? model;
             var text = TranscriptUtilities.GetString(record, "content") ?? TranscriptUtilities.GetString(record, "message") ?? type;
             events.Add(CreateEvent("grok-event-" + order.ToString(System.Globalization.CultureInfo.InvariantCulture), order++, role, type, text, TranscriptUtilities.ReadTimestamp(record)));
         }
 
-        return BuildSession(SourceKind, sessionId, events, bundle.Files, model: model);
+        return BuildSession(SourceKind, sessionId, events, bundle.Files, model: model, diagnostics: diagnostics);
     }
 }
 

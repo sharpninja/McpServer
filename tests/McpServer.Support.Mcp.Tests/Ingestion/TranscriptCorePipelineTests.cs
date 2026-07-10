@@ -210,6 +210,40 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
+    /// <summary>Verifies unsupported Grok JSONL records are diagnosed instead of silently discarded.</summary>
+    [Fact]
+    public async Task IngestionService_GrokUnsupportedRecordsEmitDiagnostics()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-grok-diagnostics", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        try
+        {
+            var transcriptPath = Path.Combine(tempDirectory, "events.jsonl");
+            await File.WriteAllLinesAsync(transcriptPath, [
+                "{\"type\":\"chat_message\",\"role\":\"assistant\",\"message\":\"hello from grok\",\"model\":\"grok-test\"}",
+                "{\"type\":\"mcp_config_resolved\",\"servers\":[{\"name\":\"mcpserver\"}]}",
+                "{\"type\":\"chat_message\",\"message\":\"missing role\"}"
+            ], TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(transcriptPath)
+            {
+                SourceKind = TranscriptSourceKind.Grok,
+                Persist = false
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Single(session.Events);
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "grok_unknown_record" && diagnostic.Severity == "warning");
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "grok_missing_role" && diagnostic.Severity == "warning");
+        }
+        finally
+        {
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
     public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()
