@@ -289,9 +289,12 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
             var partColumns = tables.Contains("part")
                 ? await OpenCodeSqliteUtilities.ReadColumnNamesAsync(connection, "part", cancellationToken).ConfigureAwait(false)
                 : [];
+            var toolEventColumns = tables.Contains("tool_event")
+                ? await OpenCodeSqliteUtilities.ReadColumnNamesAsync(connection, "tool_event", cancellationToken).ConfigureAwait(false)
+                : [];
 
             var sessionMetadata = await ReadSqliteSessionMetadataAsync(connection, sessionColumns, bundle.Files, cancellationToken).ConfigureAwait(false);
-            var messageProjection = await ReadSqliteMessagesAsync(connection, messageColumns, partColumns, sessionMetadata.SessionId, sessionMetadata.Model, diagnostics, sourcePath, cancellationToken).ConfigureAwait(false);
+            var messageProjection = await ReadSqliteMessagesAsync(connection, messageColumns, partColumns, toolEventColumns, sessionMetadata.SessionId, sessionMetadata.Model, diagnostics, sourcePath, cancellationToken).ConfigureAwait(false);
             return BuildSession(
                 TranscriptSourceKind.OpenCode,
                 sessionMetadata.SessionId,
@@ -339,6 +342,7 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         SqliteConnection connection,
         IReadOnlySet<string> messageColumns,
         IReadOnlySet<string> partColumns,
+        IReadOnlySet<string> toolEventColumns,
         string sessionId,
         string? seedModel,
         List<TranscriptDiagnostic> diagnostics,
@@ -396,7 +400,58 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
                 string.IsNullOrWhiteSpace(row.ProviderId) ? null : new Dictionary<string, string>(StringComparer.Ordinal) { ["providerId"] = row.ProviderId }));
         }
 
+        events.AddRange(await ReadSqliteToolEventsAsync(connection, toolEventColumns, sessionId, order, diagnostics, sourcePath, cancellationToken).ConfigureAwait(false));
         return new OpenCodeSqliteMessageProjection(events, model);
+    }
+
+    private static async Task<IReadOnlyList<TranscriptEvent>> ReadSqliteToolEventsAsync(
+        SqliteConnection connection,
+        IReadOnlySet<string> toolEventColumns,
+        string sessionId,
+        int startOrder,
+        List<TranscriptDiagnostic> diagnostics,
+        string sourcePath,
+        CancellationToken cancellationToken)
+    {
+        if (toolEventColumns.Count == 0 || !toolEventColumns.Contains("session_id"))
+            return [];
+
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(toolEventColumns, "id", "id") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(toolEventColumns, "message_id", "message_id") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(toolEventColumns, "tool_name", "tool_name") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(toolEventColumns, "status", "status") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(toolEventColumns, "payload_json", "payload_json")
+            + " FROM " + OpenCodeSqliteUtilities.QuoteIdentifier("tool_event")
+            + " WHERE " + OpenCodeSqliteUtilities.QuoteIdentifier("session_id") + " = $sessionId"
+            + " ORDER BY " + OpenCodeSqliteUtilities.OrderColumnOrFallback(toolEventColumns, "time_created", "created_at", "id") + ";";
+        command.Parameters.AddWithValue("$sessionId", sessionId);
+
+        var events = new List<TranscriptEvent>();
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+        {
+            var id = ReadNullableString(reader, 0) ?? "opencode-sqlite-tool-" + (events.Count + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var messageId = ReadNullableString(reader, 1);
+            var toolName = ReadNullableString(reader, 2);
+            var status = ReadNullableString(reader, 3);
+            var payloadJson = ReadNullableString(reader, 4);
+            var blocks = string.IsNullOrWhiteSpace(payloadJson)
+                ? Array.Empty<TranscriptContentBlock>()
+                : ExtractBlocksFromOpenCodeJson(payloadJson, "tool_event", diagnostics, sourcePath);
+            var metadata = new Dictionary<string, string>(StringComparer.Ordinal);
+            if (!string.IsNullOrWhiteSpace(messageId))
+                metadata["messageId"] = messageId;
+            if (!string.IsNullOrWhiteSpace(toolName))
+                metadata["toolName"] = toolName;
+            if (!string.IsNullOrWhiteSpace(status))
+                metadata["status"] = status;
+
+            events.Add(new TranscriptEvent(id, startOrder + events.Count, "tool", "tool_event", blocks, metadata: metadata));
+        }
+
+        return events;
     }
 
     private static async Task<IReadOnlyList<TranscriptContentBlock>> ReadSqlitePartsAsync(
