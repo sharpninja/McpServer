@@ -30,12 +30,12 @@ switch ($host_) {
     'codex' {
         $agent = 'Codex'; $model = 'codex'; $tag = 'codex'; $outputMode = 'cli'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:CODEX_PLUGIN_ROOT)
-        $startChain = @()
+        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:CODEX_WORKSPACE_PATH, $env:CODEX_PROJECT_DIR, $env:CODEX_CWD)
     }
     'copilot' {
         $agent = 'Copilot'; $model = 'copilot'; $tag = 'copilot'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:PLUGIN_ROOT, $env:CLAUDE_PLUGIN_ROOT)
-        $startChain = @()
+        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:COPILOT_WORKSPACE_PATH, $env:COPILOT_PROJECT_DIR)
     }
     'grok' {
         $agent = 'GrokCode'; $model = 'grok'; $tag = 'grok'; $outputMode = 'hook'
@@ -60,7 +60,7 @@ switch ($host_) {
     default {
         $agent = 'Codex'; $model = 'codex'; $tag = 'mcpserver'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT)
-        $startChain = @()
+        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
 }
 

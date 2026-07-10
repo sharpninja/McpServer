@@ -116,6 +116,52 @@ acceptanceCriteria:
         }
     }
 
+    It 'TEST-MCP-CACHE-001 resolves runtime state under the workspace .mcpServer agent directory' {
+        $workspaceRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($workspaceRoot)
+        [void][System.IO.Directory]::CreateDirectory($pluginRoot)
+
+        $previous = @{}
+        foreach ($name in @(
+                'MCP_CACHE_DIR_OVERRIDE',
+                'PLUGIN_ROOT_OVERRIDE',
+                'MCP_WORKSPACE_PATH',
+                'MCPSERVER_WORKSPACE_PATH',
+                'MCP_WORKSPACE_START_DIR',
+                'CLAUDE_PROJECT_DIR',
+                'MCP_PLUGIN_ROOT',
+                'MCP_AGENT_NAME',
+                'PLUGIN_AGENT_DEFAULT')) {
+            $previous[$name] = [Environment]::GetEnvironmentVariable($name)
+        }
+
+        try {
+            Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            $env:MCP_WORKSPACE_PATH = $workspaceRoot
+            $env:MCPSERVER_WORKSPACE_PATH = $workspaceRoot
+            $env:MCP_WORKSPACE_START_DIR = $workspaceRoot
+            $env:CLAUDE_PROJECT_DIR = $workspaceRoot
+            $env:MCP_PLUGIN_ROOT = $pluginRoot
+            $env:MCP_AGENT_NAME = 'Codex'
+            $env:PLUGIN_AGENT_DEFAULT = 'Codex'
+
+            . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')
+            Resolve-McpCacheDir | Should -Be (Join-Path $workspaceRoot '.mcpServer\codex')
+        } finally {
+            foreach ($entry in $previous.GetEnumerator()) {
+                if ($null -eq $entry.Value) {
+                    Remove-Item ("Env:\$($entry.Key)") -ErrorAction SilentlyContinue
+                } else {
+                    Set-Item ("Env:\$($entry.Key)") $entry.Value
+                }
+            }
+            Remove-Item -LiteralPath $workspaceRoot -Recurse -Force -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 handles appendDialog locally instead of dispatching it as a raw server method' {
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($pluginRoot)
@@ -828,14 +874,15 @@ acceptanceCriteria:
         }
     }
 
-    It 'TEST-MCP-PLUGIN-PSONLY-001 resolves cache directories by override, workspace, and plugin fallback precedence' {
+    It 'TEST-MCP-PLUGIN-PSONLY-001 resolves explicit override, workspace, and legacy test cache precedence' {
         $envNames = @(
             'MCP_CACHE_DIR_OVERRIDE',
             'MCPSERVER_WORKSPACE_PATH',
             'MCP_WORKSPACE_PATH',
             'MCP_PLUGIN_ROOT',
             'MCP_WORKSPACE_START_DIR',
-            'PLUGIN_ROOT_OVERRIDE'
+            'PLUGIN_ROOT_OVERRIDE',
+            'MCP_AGENT_NAME'
         )
         $previousEnv = @{}
         foreach ($name in $envNames) {
@@ -858,13 +905,17 @@ acceptanceCriteria:
 
             Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             $env:MCPSERVER_WORKSPACE_PATH = $workspace
-            Resolve-McpCacheDir | Should -Be (Join-Path $workspace 'cache')
+            $env:MCP_AGENT_NAME = 'Codex'
+            Resolve-McpCacheDir | Should -Be (Join-Path $workspace '.mcpServer\codex')
 
             Remove-Item Env:\MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue
             Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue
             $env:MCP_PLUGIN_ROOT = $pluginRoot
             $env:MCP_WORKSPACE_START_DIR = $pluginRoot
-            Resolve-McpCacheDir | Should -Be (Join-Path $pluginRoot 'cache')
+            $legacyRoot = Join-Path $root 'legacy-cache-root'
+            [void][System.IO.Directory]::CreateDirectory($legacyRoot)
+            $env:PLUGIN_ROOT_OVERRIDE = $legacyRoot
+            Resolve-McpCacheDir | Should -Be (Join-Path $legacyRoot 'cache')
         } finally {
             Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             Remove-Item Env:\MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue
@@ -949,10 +1000,10 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         $cacheDir = Join-Path $pluginRoot 'cache'
         [void][System.IO.Directory]::CreateDirectory($cacheDir)
-        $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
 
         try {
-            $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
             function Assert-ReplCurrentTurnFresh { return $true }
@@ -970,10 +1021,10 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
             if ($previousFresh) {
                 Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock
             }
-            if ($null -ne $previousPluginRoot) {
-                $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
             } else {
-                Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             }
             Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
         }
@@ -997,12 +1048,12 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         $cacheDir = Join-Path $pluginRoot 'cache'
         [void][System.IO.Directory]::CreateDirectory($cacheDir)
-        $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
         $originalError = [Console]::Error
         $errorWriter = [System.IO.StringWriter]::new()
 
         try {
-            $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
@@ -1038,10 +1089,10 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
             if ($previousFresh) {
                 Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock
             }
-            if ($null -ne $previousPluginRoot) {
-                $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
             } else {
-                Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             }
             Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
             $errorWriter.Dispose()

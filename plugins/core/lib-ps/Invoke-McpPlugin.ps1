@@ -14,7 +14,7 @@ param(
 
     [string]$ResponsePath,
 
-    [string]$WorkspacePath = $(if ($env:MCP_WORKSPACE_PATH) { $env:MCP_WORKSPACE_PATH } elseif ($env:MCPSERVER_WORKSPACE_PATH) { $env:MCPSERVER_WORKSPACE_PATH } elseif ($env:CLAUDE_PROJECT_DIR) { $env:CLAUDE_PROJECT_DIR } else { (Get-Location).ProviderPath }),
+    [string]$WorkspacePath = $(if ($env:MCP_WORKSPACE_PATH) { $env:MCP_WORKSPACE_PATH } elseif ($env:MCPSERVER_WORKSPACE_PATH) { $env:MCPSERVER_WORKSPACE_PATH } elseif ($env:CODEX_WORKSPACE_PATH) { $env:CODEX_WORKSPACE_PATH } elseif ($env:CODEX_PROJECT_DIR) { $env:CODEX_PROJECT_DIR } elseif ($env:CLAUDE_PROJECT_DIR) { $env:CLAUDE_PROJECT_DIR } else { (Get-Location).ProviderPath }),
 
     [string]$PluginRoot = $(if ($env:MCP_PLUGIN_ROOT) { $env:MCP_PLUGIN_ROOT } elseif ($env:CLAUDE_PLUGIN_ROOT) { $env:CLAUDE_PLUGIN_ROOT } else { Split-Path -Parent $PSScriptRoot }),
 
@@ -114,12 +114,22 @@ function Invoke-PluginPowerShellScript {
 
     $pluginRootFull = Resolve-FullPath $script:McpPluginInvocation.PluginRoot
     $workspaceFull = Resolve-OptionalDirectory $script:McpPluginInvocation.WorkspacePath
-    $cacheRootFull = if ($script:McpPluginInvocation.CacheRoot) {
+    $cacheOverrideFull = if ($script:McpPluginInvocation.CacheRoot) {
         Resolve-OptionalDirectory $script:McpPluginInvocation.CacheRoot
-    } elseif ($env:PLUGIN_ROOT_OVERRIDE) {
-        Resolve-OptionalDirectory $env:PLUGIN_ROOT_OVERRIDE
+    } elseif ($env:MCP_CACHE_DIR_OVERRIDE) {
+        Resolve-OptionalDirectory $env:MCP_CACHE_DIR_OVERRIDE
     } else {
-        $pluginRootFull
+        $null
+    }
+    $legacyCacheRootFull = if (-not $cacheOverrideFull -and $env:PLUGIN_ROOT_OVERRIDE) {
+        try {
+            $legacyFull = Resolve-OptionalDirectory $env:PLUGIN_ROOT_OVERRIDE
+            if (-not [string]::Equals($legacyFull.TrimEnd('\\'), $pluginRootFull.TrimEnd('\\'), [System.StringComparison]::OrdinalIgnoreCase)) {
+                $legacyFull
+            }
+        } catch {
+            $null
+        }
     }
 
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
@@ -139,7 +149,13 @@ function Invoke-PluginPowerShellScript {
     }
     $startInfo.Environment['MCP_PLUGIN_ROOT'] = $pluginRootFull
     $startInfo.Environment['CLAUDE_PLUGIN_ROOT'] = $pluginRootFull
-    $startInfo.Environment['PLUGIN_ROOT_OVERRIDE'] = $cacheRootFull
+    [void]$startInfo.Environment.Remove('MCP_CACHE_DIR_OVERRIDE')
+    [void]$startInfo.Environment.Remove('PLUGIN_ROOT_OVERRIDE')
+    if ($cacheOverrideFull) {
+        $startInfo.Environment['MCP_CACHE_DIR_OVERRIDE'] = $cacheOverrideFull
+    } elseif ($legacyCacheRootFull) {
+        $startInfo.Environment['PLUGIN_ROOT_OVERRIDE'] = $legacyCacheRootFull
+    }
     $startInfo.Environment['MCP_WORKSPACE_PATH'] = $workspaceFull
     $startInfo.Environment['MCPSERVER_WORKSPACE_PATH'] = $workspaceFull
     $startInfo.Environment['MCP_WORKSPACE_START_DIR'] = $workspaceFull
