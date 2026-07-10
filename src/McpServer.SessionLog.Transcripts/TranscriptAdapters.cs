@@ -125,6 +125,7 @@ internal sealed class ClaudeTranscriptAdapter : JsonTranscriptAdapterBase
         var sessionId = TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
         string? model = null;
         string? workspacePath = null;
+        var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
         var order = 1;
         foreach (var record in records)
@@ -133,10 +134,16 @@ internal sealed class ClaudeTranscriptAdapter : JsonTranscriptAdapterBase
             workspacePath = TranscriptUtilities.GetString(record, "cwd") ?? workspacePath;
             var nativeType = TranscriptUtilities.GetString(record, "type") ?? string.Empty;
             if (nativeType is not ("user" or "assistant"))
+            {
+                diagnostics.Add(new TranscriptDiagnostic("claude_unknown_record", "Claude JSONL record type '" + (string.IsNullOrWhiteSpace(nativeType) ? "<missing>" : nativeType) + "' was not normalized.", "warning", path));
                 continue;
+            }
 
             if (TranscriptUtilities.GetObject(record, "message") is not { } message)
+            {
+                diagnostics.Add(new TranscriptDiagnostic("claude_missing_message", "Claude user/assistant record is missing a message object and was not normalized.", "warning", path));
                 continue;
+            }
 
             var role = TranscriptUtilities.GetString(message, "role") ?? nativeType;
             model = TranscriptUtilities.GetString(message, "model") ?? model;
@@ -152,7 +159,7 @@ internal sealed class ClaudeTranscriptAdapter : JsonTranscriptAdapterBase
                 TranscriptUtilities.ReadTimestamp(record)));
         }
 
-        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, model: model, workspacePath: workspacePath);
+        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, model: model, workspacePath: workspacePath, diagnostics: diagnostics);
     }
 }
 

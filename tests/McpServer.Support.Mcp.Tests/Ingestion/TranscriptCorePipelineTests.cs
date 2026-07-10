@@ -175,6 +175,41 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
+    /// <summary>Verifies unsupported Claude JSONL records are diagnosed instead of silently discarded.</summary>
+    [Fact]
+    public async Task IngestionService_ClaudeUnsupportedRecordsEmitDiagnostics()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-claude-diagnostics", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        try
+        {
+            var transcriptPath = Path.Combine(tempDirectory, "session.jsonl");
+            await File.WriteAllLinesAsync(transcriptPath, [
+                "{\"type\":\"user\",\"sessionId\":\"claude-diagnostic-fixture\",\"cwd\":\"F:/GitHub/Sample\",\"uuid\":\"claude-msg-1\",\"message\":{\"role\":\"user\",\"content\":[{\"type\":\"text\",\"text\":\"hello\"}]}}",
+                "{\"type\":\"summary\",\"sessionId\":\"claude-diagnostic-fixture\",\"summary\":\"should diagnose\"}",
+                "{\"type\":\"assistant\",\"sessionId\":\"claude-diagnostic-fixture\",\"uuid\":\"claude-missing-message\"}"
+            ], TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(transcriptPath)
+            {
+                SourceKind = TranscriptSourceKind.Claude,
+                Persist = false
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Equal("claude-diagnostic-fixture", session.SessionId);
+            Assert.Single(session.Events);
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "claude_unknown_record" && diagnostic.Severity == "warning");
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "claude_missing_message" && diagnostic.Severity == "warning");
+        }
+        finally
+        {
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
     public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()
