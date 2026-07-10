@@ -343,6 +343,38 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
+    /// <summary>Verifies OpenCode JSONL step starts without finishes are diagnosed as incomplete turns.</summary>
+    [Fact]
+    public async Task IngestionService_OpenCodeJsonlIncompleteStepEmitsDiagnostic()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-opencode-incomplete-step", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        try
+        {
+            var transcriptPath = Path.Combine(tempDirectory, "events.jsonl");
+            await File.WriteAllLinesAsync(transcriptPath, [
+                "{\"type\":\"step_start\",\"timestamp\":1783672962383,\"sessionID\":\"ses_opencode_incomplete_fixture\",\"part\":{\"id\":\"opencode-step-start\",\"messageID\":\"msg-opencode-incomplete\",\"type\":\"step-start\"}}",
+                "{\"type\":\"text\",\"timestamp\":1783672963404,\"sessionID\":\"ses_opencode_incomplete_fixture\",\"part\":{\"id\":\"opencode-text\",\"messageID\":\"msg-opencode-incomplete\",\"type\":\"text\",\"text\":\"partial opencode response\"}}"
+            ], TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(transcriptPath)
+            {
+                SourceKind = TranscriptSourceKind.OpenCode,
+                Persist = false,
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Single(session.Events);
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "opencode_jsonl_incomplete_step" && diagnostic.Severity == "warning");
+        }
+        finally
+        {
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
     public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()

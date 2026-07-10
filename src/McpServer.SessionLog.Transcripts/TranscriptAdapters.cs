@@ -306,6 +306,7 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
         var order = 1;
+        var openSteps = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var record in records)
         {
             var type = TranscriptUtilities.GetString(record, "type") ?? string.Empty;
@@ -315,6 +316,12 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
                 continue;
             }
 
+            var stepKey = TranscriptUtilities.GetString(part, "messageID") ?? TranscriptUtilities.GetString(part, "messageId") ?? TranscriptUtilities.GetString(part, "id");
+            if (type.Equals("step_start", StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(stepKey))
+                openSteps[stepKey] = stepKey;
+            else if (type.Equals("step_finish", StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(stepKey))
+                openSteps.Remove(stepKey);
+
             if (!type.Equals("text", StringComparison.Ordinal))
             {
                 var diagnosticType = string.IsNullOrWhiteSpace(type) ? "<missing>" : type;
@@ -323,6 +330,11 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
             }
 
             events.Add(CreateEvent(TranscriptUtilities.GetString(part, "id") ?? "opencode-event-" + order.ToString(System.Globalization.CultureInfo.InvariantCulture), order++, "assistant", type, TranscriptUtilities.GetString(part, "text"), TranscriptUtilities.ReadTimestamp(record)));
+        }
+
+        foreach (var stepKey in openSteps.Keys.OrderBy(item => item, StringComparer.Ordinal))
+        {
+            diagnostics.Add(new TranscriptDiagnostic("opencode_jsonl_incomplete_step", "OpenCode JSONL step did not have a matching finish record: " + stepKey + ".", "warning", path));
         }
 
         return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, diagnostics: diagnostics);
