@@ -12,15 +12,40 @@ internal static class TranscriptRunArtifactWriter
 
     internal static void ValidatePersistenceRequest(TranscriptIngestionRequest request)
     {
-        ArgumentNullException.ThrowIfNull(request);
-        var missing = new List<string>();
-        if (string.IsNullOrWhiteSpace(request.Agent))
-            missing.Add(nameof(request.Agent));
-        if (string.IsNullOrWhiteSpace(request.WorkspacePath))
-            missing.Add(nameof(request.WorkspacePath));
+        ValidateArtifactRequest(request, "persistence");
+    }
 
-        if (missing.Count > 0)
-            throw new ArgumentException("Transcript persistence requires " + string.Join(" and ", missing) + ".", nameof(request));
+    internal static async Task<TranscriptIngestionResult> WriteArtifactsAsync(
+        TranscriptIngestionRequest request,
+        IReadOnlyList<TranscriptSession> sessions,
+        IReadOnlyList<TranscriptDiagnostic> diagnostics,
+        CancellationToken cancellationToken)
+    {
+        var (runId, artifactRoot, _) = PrepareArtifactRoot(request, sessions, "artifacts");
+        var receipts = new List<TranscriptSessionReceipt>();
+        foreach (var session in sessions)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var identity = CreateArtifactIdentity(session);
+            var receipt = await WriteSessionArtifactsAsync(
+                session,
+                artifactRoot,
+                identity,
+                "normalized",
+                importRecoveryPath: string.Empty,
+                cancellationToken).ConfigureAwait(false);
+            receipts.Add(receipt);
+        }
+
+        return new TranscriptIngestionResult(
+            sessions,
+            diagnostics,
+            runId,
+            artifactRoot,
+            importRecoveryPaths: [],
+            persisted: false,
+            degraded: false,
+            receipts);
     }
 
     internal static async Task<TranscriptIngestionResult> WritePendingAsync(
@@ -29,14 +54,8 @@ internal static class TranscriptRunArtifactWriter
         IReadOnlyList<TranscriptDiagnostic> diagnostics,
         CancellationToken cancellationToken)
     {
-        ValidatePersistenceRequest(request);
-        var workspacePath = Path.GetFullPath(request.WorkspacePath!);
-        var agent = SanitizePathSegment(request.Agent!);
-        var runId = SanitizePathSegment(string.IsNullOrWhiteSpace(request.RunId) ? CreateRunId(sessions) : request.RunId!);
-        var agentRoot = Path.Combine(workspacePath, ".mcpServer", agent);
-        var artifactRoot = Path.Combine(agentRoot, "transcripts", "runs", runId);
+        var (runId, artifactRoot, agentRoot) = PrepareArtifactRoot(request, sessions, "persistence");
         var recoveryRoot = Path.Combine(agentRoot, "failsafe", "pending");
-        Directory.CreateDirectory(artifactRoot);
         Directory.CreateDirectory(recoveryRoot);
 
         var receipts = new List<TranscriptSessionReceipt>();
@@ -44,30 +63,15 @@ internal static class TranscriptRunArtifactWriter
         foreach (var session in sessions)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var rootId = string.IsNullOrWhiteSpace(session.NativeSessionId) ? session.SessionId : session.NativeSessionId!;
-            var sourceHash = TranscriptUtilities.ComputeShortHash(string.Join("|", session.SourceFiles.Select(Path.GetFullPath).Order(StringComparer.OrdinalIgnoreCase)));
-            var artifactPrefix = SanitizePathSegment(session.SessionId) + "." + sourceHash;
-            var yamlPath = Path.Combine(artifactRoot, artifactPrefix + ".sessionlog.yaml");
-            await File.WriteAllTextAsync(yamlPath, session.CanonicalYaml, cancellationToken).ConfigureAwait(false);
-
-            string? compatibilityPath = null;
-            if (session.CompatibilityArtifact is not null)
-            {
-                compatibilityPath = Path.Combine(artifactRoot, SanitizePathSegment(session.CompatibilityArtifact.FileName));
-                await File.WriteAllTextAsync(compatibilityPath, session.CompatibilityArtifact.Content, cancellationToken).ConfigureAwait(false);
-            }
-
-            var recoveryPath = Path.Combine(recoveryRoot, SanitizePathSegment(rootId) + "." + sourceHash + ".importRecovery.yaml");
-            var receipt = new TranscriptSessionReceipt(
-                session.SourceKind,
-                rootId,
-                session.SessionId,
-                sourceHash,
+            var identity = CreateArtifactIdentity(session);
+            var recoveryPath = Path.Combine(recoveryRoot, SanitizePathSegment(identity.RootId) + "." + identity.SourceHash + ".importRecovery.yaml");
+            var receipt = await WriteSessionArtifactsAsync(
+                session,
+                artifactRoot,
+                identity,
                 "pending",
-                yamlPath,
                 recoveryPath,
-                compatibilityPath,
-                session.Diagnostics);
+                cancellationToken).ConfigureAwait(false);
             var recoveryEnvelope = CreateRecoveryEnvelope(request, runId, receipt, session);
             await File.WriteAllTextAsync(recoveryPath, RecoverySerializer.Serialize(recoveryEnvelope), cancellationToken).ConfigureAwait(false);
             receipts.Add(receipt);
@@ -83,6 +87,72 @@ internal static class TranscriptRunArtifactWriter
             persisted: false,
             degraded: true,
             receipts);
+    }
+
+    private static void ValidateArtifactRequest(TranscriptIngestionRequest request, string operation)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var missing = new List<string>();
+        if (string.IsNullOrWhiteSpace(request.Agent))
+            missing.Add(nameof(request.Agent));
+        if (string.IsNullOrWhiteSpace(request.WorkspacePath))
+            missing.Add(nameof(request.WorkspacePath));
+
+        if (missing.Count > 0)
+            throw new ArgumentException("Transcript " + operation + " requires " + string.Join(" and ", missing) + ".", nameof(request));
+    }
+
+    private static (string RunId, string ArtifactRoot, string AgentRoot) PrepareArtifactRoot(
+        TranscriptIngestionRequest request,
+        IReadOnlyList<TranscriptSession> sessions,
+        string operation)
+    {
+        ValidateArtifactRequest(request, operation);
+        var workspacePath = Path.GetFullPath(request.WorkspacePath!);
+        var agent = SanitizePathSegment(request.Agent!);
+        var runId = SanitizePathSegment(string.IsNullOrWhiteSpace(request.RunId) ? CreateRunId(sessions) : request.RunId!);
+        var agentRoot = Path.Combine(workspacePath, ".mcpServer", agent);
+        var artifactRoot = Path.Combine(agentRoot, "transcripts", "runs", runId);
+        Directory.CreateDirectory(artifactRoot);
+        return (runId, artifactRoot, agentRoot);
+    }
+
+    private static (string RootId, string SourceHash, string ArtifactPrefix) CreateArtifactIdentity(TranscriptSession session)
+    {
+        var rootId = string.IsNullOrWhiteSpace(session.NativeSessionId) ? session.SessionId : session.NativeSessionId!;
+        var sourceHash = TranscriptUtilities.ComputeShortHash(string.Join("|", session.SourceFiles.Select(Path.GetFullPath).Order(StringComparer.OrdinalIgnoreCase)));
+        var artifactPrefix = SanitizePathSegment(session.SessionId) + "." + sourceHash;
+        return (rootId, sourceHash, artifactPrefix);
+    }
+
+    private static async Task<TranscriptSessionReceipt> WriteSessionArtifactsAsync(
+        TranscriptSession session,
+        string artifactRoot,
+        (string RootId, string SourceHash, string ArtifactPrefix) identity,
+        string status,
+        string importRecoveryPath,
+        CancellationToken cancellationToken)
+    {
+        var yamlPath = Path.Combine(artifactRoot, identity.ArtifactPrefix + ".sessionlog.yaml");
+        await File.WriteAllTextAsync(yamlPath, session.CanonicalYaml, cancellationToken).ConfigureAwait(false);
+
+        string? compatibilityPath = null;
+        if (session.CompatibilityArtifact is not null)
+        {
+            compatibilityPath = Path.Combine(artifactRoot, SanitizePathSegment(session.CompatibilityArtifact.FileName));
+            await File.WriteAllTextAsync(compatibilityPath, session.CompatibilityArtifact.Content, cancellationToken).ConfigureAwait(false);
+        }
+
+        return new TranscriptSessionReceipt(
+            session.SourceKind,
+            identity.RootId,
+            session.SessionId,
+            identity.SourceHash,
+            status,
+            yamlPath,
+            importRecoveryPath,
+            compatibilityPath,
+            session.Diagnostics);
     }
 
     private static IReadOnlyDictionary<string, object?> CreateRecoveryEnvelope(

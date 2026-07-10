@@ -9,11 +9,13 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 [Trait("Category", "Integration")]
 public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactory>
 {
+    private readonly CustomWebApplicationFactory _factory;
     private readonly HttpClient _client;
 
     /// <summary>Initializes a new instance of the <see cref="McpTransportTests"/> class.</summary>
     public McpTransportTests(CustomWebApplicationFactory factory)
     {
+        _factory = factory;
         _client = factory.CreateClient();
     }
 
@@ -191,6 +193,89 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
         Assert.Contains("error", body, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public async Task McpTransport_ToolsList_IncludesTranscriptTools()
+    {
+        await InitializeMcpAsync().ConfigureAwait(true);
+
+        var body = await SendMcpRequestAsync(new
+        {
+            jsonrpc = "2.0",
+            id = 7,
+            method = "tools/list"
+        }).ConfigureAwait(true);
+
+        Assert.Contains("sessionlog_ingest_path", body, StringComparison.Ordinal);
+        Assert.Contains("sessionlog_normalize_path", body, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task McpTransport_SessionLogIngestPathTool_PersistsRealFixture()
+    {
+        await InitializeMcpAsync().ConfigureAwait(true);
+        var relativePath = Path.Combine("transcripts", Guid.NewGuid().ToString("N"), "codex", "session.jsonl");
+        CopyRealFixtureToWorkspace("codex/session.jsonl", relativePath);
+
+        var body = await SendMcpRequestAsync(new
+        {
+            jsonrpc = "2.0",
+            id = 8,
+            method = "tools/call",
+            @params = new
+            {
+                name = "sessionlog_ingest_path",
+                arguments = new
+                {
+                    workspacePath = _factory.WorkspacePath,
+                    path = relativePath,
+                    agent = "Codex",
+                    source = "Codex",
+                    recursive = false,
+                    strict = true,
+                    persist = true
+                }
+            }
+        }).ConfigureAwait(true);
+
+        Assert.Contains("codex-real-fixture-session", body, StringComparison.Ordinal);
+        Assert.Contains("sessionLogId:", body, StringComparison.Ordinal);
+        Assert.Contains("persisted", body, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task McpTransport_SessionLogNormalizePathTool_WritesArtifactsWithoutPersistence()
+    {
+        await InitializeMcpAsync().ConfigureAwait(true);
+        var relativePath = Path.Combine("transcripts", Guid.NewGuid().ToString("N"), "codex", "session.jsonl");
+        CopyRealFixtureToWorkspace("codex/session.jsonl", relativePath);
+
+        var body = await SendMcpRequestAsync(new
+        {
+            jsonrpc = "2.0",
+            id = 9,
+            method = "tools/call",
+            @params = new
+            {
+                name = "sessionlog_normalize_path",
+                arguments = new
+                {
+                    workspacePath = _factory.WorkspacePath,
+                    path = relativePath,
+                    agent = "Codex",
+                    targetProfile = "Grok",
+                    source = "Codex",
+                    recursive = false,
+                    strict = true
+                }
+            }
+        }).ConfigureAwait(true);
+
+        Assert.Contains("codex-real-fixture-session", body, StringComparison.Ordinal);
+        Assert.Contains("compatibilityArtifactPath", body, StringComparison.Ordinal);
+        Assert.Contains(".jsonl", body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("persisted", body, StringComparison.OrdinalIgnoreCase);
+    }
+
     private async Task InitializeMcpAsync()
     {
         var initRequest = new
@@ -208,6 +293,21 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
 
         var body = await SendMcpRequestAsync(initRequest).ConfigureAwait(true);
         Assert.Contains("serverInfo", body, StringComparison.Ordinal);
+    }
+
+    private void CopyRealFixtureToWorkspace(string sourceRelativePath, string workspaceRelativePath)
+    {
+        var destination = Path.Combine(_factory.WorkspacePath, workspaceRelativePath);
+        Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+        File.Copy(ResolveRealFixturePath(sourceRelativePath), destination, overwrite: true);
+    }
+
+    private static string ResolveRealFixturePath(string relativePath)
+    {
+        var path = Path.Combine(CustomWebApplicationFactory.ResolveSolutionRoot(), "tests", "McpServer.Support.Mcp.Tests", "Fixtures", "Transcripts", "real", relativePath);
+        if (!File.Exists(path))
+            throw new FileNotFoundException("Missing real transcript fixture.", path);
+        return path;
     }
 
     private async Task<string> SendMcpRequestAsync(object payload)

@@ -96,6 +96,49 @@ public sealed class TranscriptCorePipelineTests
         });
     }
 
+    /// <summary>Verifies manual normalization writes canonical and compatibility artifacts without primary session persistence.</summary>
+    [Fact]
+    public async Task IngestionService_NormalizationWritesArtifactsWithoutSessionPersistence()
+    {
+        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-normalize", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempWorkspace);
+        try
+        {
+            var transcriptDirectory = Path.Combine(tempWorkspace, "transcripts");
+            Directory.CreateDirectory(transcriptDirectory);
+            File.Copy(Path.Combine(ResolveRealFixtureRoot(), "codex", "session.jsonl"), Path.Combine(transcriptDirectory, "session.jsonl"));
+            var inputPath = Path.Combine("transcripts", "session.jsonl");
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(inputPath)
+            {
+                SourceKind = TranscriptSourceKind.Codex,
+                Persist = false,
+                Agent = "Codex",
+                WorkspacePath = tempWorkspace,
+                CompatibilityProfile = TranscriptCompatibilityProfile.Grok,
+                RunId = "run-normalize-artifacts"
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.False(result.Persisted);
+            Assert.False(result.Degraded);
+            Assert.Empty(result.ImportRecoveryPaths);
+            var receipt = Assert.Single(result.Receipts);
+            Assert.Equal("normalized", receipt.Status);
+            Assert.Equal("codex-real-fixture-session", receipt.SessionId);
+            Assert.True(File.Exists(receipt.YamlArtifactPath), receipt.YamlArtifactPath);
+            Assert.False(File.Exists(receipt.ImportRecoveryPath), receipt.ImportRecoveryPath);
+            Assert.NotNull(receipt.CompatibilityArtifactPath);
+            Assert.True(File.Exists(receipt.CompatibilityArtifactPath), receipt.CompatibilityArtifactPath);
+            Assert.Contains("codex-real-fixture-session", await File.ReadAllTextAsync(receipt.YamlArtifactPath, TestContext.Current.CancellationToken).ConfigureAwait(true), StringComparison.Ordinal);
+        }
+        finally
+        {
+            if (Directory.Exists(tempWorkspace))
+                Directory.Delete(tempWorkspace, recursive: true);
+        }
+    }
+
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
     public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()
@@ -122,7 +165,10 @@ public sealed class TranscriptCorePipelineTests
         Directory.CreateDirectory(tempWorkspace);
         try
         {
-            var inputPath = Path.Combine(ResolveRealFixtureRoot(), "codex", "session.jsonl");
+            var transcriptDirectory = Path.Combine(tempWorkspace, "transcripts");
+            Directory.CreateDirectory(transcriptDirectory);
+            File.Copy(Path.Combine(ResolveRealFixtureRoot(), "codex", "session.jsonl"), Path.Combine(transcriptDirectory, "session.jsonl"));
+            var inputPath = Path.Combine("transcripts", "session.jsonl");
             var service = TranscriptIngestionService.CreateDefault();
 
             var result = await service.IngestPathAsync(new TranscriptIngestionRequest(inputPath)

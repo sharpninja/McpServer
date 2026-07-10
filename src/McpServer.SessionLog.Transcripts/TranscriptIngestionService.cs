@@ -92,6 +92,13 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
                 : await PersistPendingAsync(request, pending, cancellationToken).ConfigureAwait(false);
         }
 
+        if (request.CompatibilityProfile != TranscriptCompatibilityProfile.None &&
+            !string.IsNullOrWhiteSpace(request.Agent) &&
+            !string.IsNullOrWhiteSpace(request.WorkspacePath))
+        {
+            return await TranscriptRunArtifactWriter.WriteArtifactsAsync(request, sessions, diagnostics, cancellationToken).ConfigureAwait(false);
+        }
+
         return new TranscriptIngestionResult(sessions, diagnostics);
     }
 
