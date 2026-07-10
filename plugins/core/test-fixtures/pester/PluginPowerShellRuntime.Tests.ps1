@@ -657,6 +657,19 @@ acceptanceCriteria:
         }
     }
 
+
+    It 'TEST-MCP-TRANSCRIPT-010 marker prompt requires model-authored session logging' {
+        $guidancePath = Join-Path $script:RepoRoot 'templates\prompt-templates.yaml'
+        Test-Path -LiteralPath $guidancePath | Should -BeTrue
+
+        $content = [System.IO.File]::ReadAllText($guidancePath)
+
+        $content | Should -Match 'Model-Authored Session Logging'
+        $content | Should -Match 'Models must write MCP Session Log turns'
+        $content | Should -Match 'Plugins must not ingest local chat transcripts'
+        $content | Should -Match 'Transcript ingestion and normalization are explicit non-plugin server/client/REPL/MCP operations'
+    }
+
     It 'TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation' {
         $skillFiles = Get-ChildItem -LiteralPath (Join-Path $script:StagedRoot 'skills') -Filter 'SKILL.md' -Recurse -File
         $skillFiles.Count | Should -BeGreaterThan 0
