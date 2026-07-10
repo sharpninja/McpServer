@@ -230,6 +230,38 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
+    /// <summary>Verifies persisted path ingestion resolves workspace-relative transcript paths beneath the active workspace.</summary>
+    [Fact]
+    public async Task IngestionService_PersistAllowsWorkspaceRelativePath()
+    {
+        var tempWorkspace = Path.Combine(Path.GetTempPath(), "mcp-transcript-workspace", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempWorkspace);
+        try
+        {
+            var transcriptDirectory = Path.Combine(tempWorkspace, "transcripts");
+            Directory.CreateDirectory(transcriptDirectory);
+            File.Copy(Path.Combine(ResolveRealFixtureRoot(), "codex", "session.jsonl"), Path.Combine(transcriptDirectory, "session.jsonl"));
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(Path.Combine("transcripts", "session.jsonl"))
+            {
+                SourceKind = TranscriptSourceKind.Codex,
+                Persist = true,
+                Agent = "Codex",
+                WorkspacePath = tempWorkspace,
+                RunId = "run-workspace-relative-path"
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var receipt = Assert.Single(result.Receipts);
+            Assert.Equal("codex-real-fixture-session", receipt.SessionId);
+        }
+        finally
+        {
+            if (Directory.Exists(tempWorkspace))
+                Directory.Delete(tempWorkspace, recursive: true);
+        }
+    }
+
     /// <summary>Verifies configured provider transcript roots are allowed even when outside the workspace.</summary>
     [Fact]
     public async Task IngestionService_PersistAllowsConfiguredProviderTranscriptRoot()

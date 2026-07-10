@@ -8,8 +8,12 @@ internal static class TranscriptPathSecurity
         if (string.IsNullOrWhiteSpace(request.WorkspacePath))
             return Path.GetFullPath(request.Path);
 
-        var sourcePath = ResolveCanonicalPath(request.Path);
-        var roots = new List<string> { ResolveCanonicalPath(request.WorkspacePath!) };
+        var workspacePath = ResolveCanonicalPath(request.WorkspacePath!);
+        var inputPath = Path.IsPathRooted(request.Path)
+            ? request.Path
+            : Path.Combine(request.WorkspacePath!, request.Path);
+        var sourcePath = ResolveCanonicalPath(inputPath);
+        var roots = new List<string> { workspacePath };
         roots.AddRange(request.ProviderTranscriptRoots.Where(root => !string.IsNullOrWhiteSpace(root)).Select(ResolveCanonicalPath));
 
         if (roots.Any(root => IsUnderRoot(sourcePath, root)))
