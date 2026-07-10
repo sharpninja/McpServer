@@ -83,6 +83,47 @@ public sealed class OpenCodeSqliteTranscriptTests
         }
     }
 
+    /// <summary>Verifies OpenCode SQLite tool events with missing parent messages are diagnosed while preserved.</summary>
+    [Fact]
+    public async Task IngestionService_DiagnosesOpenCodeSqliteOrphanToolEvent()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite-orphan-tool", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        try
+        {
+            var databasePath = Path.Combine(tempDirectory, "opencode.db");
+            await CreateOpenCodeSqliteFixtureAsync(databasePath).ConfigureAwait(true);
+            var connectionString = new SqliteConnectionStringBuilder
+            {
+                DataSource = databasePath
+            }.ToString();
+            await using (var connection = new SqliteConnection(connectionString))
+            {
+                await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+                await ExecuteNonQueryAsync(connection, "INSERT INTO tool_event (id, session_id, message_id, tool_name, status, payload_json, time_created) VALUES ('tool-orphan', 'ses_sqlite_fixture', 'missing-message', 'shell', 'completed', '{\"content\":\"orphaned sqlite tool result\"}', 1735689602500);").ConfigureAwait(true);
+            }
+
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(databasePath)
+            {
+                SourceKind = TranscriptSourceKind.OpenCode,
+                Persist = false,
+                CompatibilityProfile = TranscriptCompatibilityProfile.None
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Contains(session.Events, item => item.Id.Equals("tool-orphan", StringComparison.Ordinal) && JoinText(item.Content).Contains("orphaned sqlite tool result", StringComparison.Ordinal));
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "opencode_orphan_tool_event" && diagnostic.Severity == "warning");
+        }
+        finally
+        {
+            SqliteConnection.ClearAllPools();
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
     private static async Task CreateOpenCodeSqliteFixtureAsync(string databasePath)
     {
         var connectionString = new SqliteConnectionStringBuilder

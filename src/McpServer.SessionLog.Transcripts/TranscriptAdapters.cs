@@ -435,6 +435,7 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
             }
         }
 
+        var messageIds = rows.Select(row => row.Id).ToHashSet(StringComparer.Ordinal);
         var events = new List<TranscriptEvent>();
         var order = 1;
         var model = seedModel;
@@ -456,7 +457,7 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
                 string.IsNullOrWhiteSpace(row.ProviderId) ? null : new Dictionary<string, string>(StringComparer.Ordinal) { ["providerId"] = row.ProviderId }));
         }
 
-        events.AddRange(await ReadSqliteToolEventsAsync(connection, toolEventColumns, sessionId, order, diagnostics, sourcePath, cancellationToken).ConfigureAwait(false));
+        events.AddRange(await ReadSqliteToolEventsAsync(connection, toolEventColumns, sessionId, messageIds, order, diagnostics, sourcePath, cancellationToken).ConfigureAwait(false));
         return new OpenCodeSqliteMessageProjection(ReorderEvents(events), model);
     }
 
@@ -464,6 +465,7 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         SqliteConnection connection,
         IReadOnlySet<string> toolEventColumns,
         string sessionId,
+        IReadOnlySet<string> messageIds,
         int startOrder,
         List<TranscriptDiagnostic> diagnostics,
         string sourcePath,
@@ -492,6 +494,10 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         {
             var id = ReadNullableString(reader, 0) ?? "opencode-sqlite-tool-" + (events.Count + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
             var messageId = ReadNullableString(reader, 1);
+            if (!string.IsNullOrWhiteSpace(messageId) && !messageIds.Contains(messageId))
+            {
+                diagnostics.Add(new TranscriptDiagnostic("opencode_orphan_tool_event", "OpenCode SQLite tool event references a missing message: " + messageId + ".", "warning", sourcePath));
+            }
             var toolName = ReadNullableString(reader, 2);
             var status = ReadNullableString(reader, 3);
             var payloadJson = ReadNullableString(reader, 4);
