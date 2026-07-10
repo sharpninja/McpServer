@@ -38,7 +38,7 @@ Slice 2 through Slice 8 add source adapters and projectors one provider at a tim
 
 Slice 9 adds HTTP, upload, typed client, MCP tool, and REPL transport contracts. It cannot start until the core service exposes stable request and receipt models.
 
-Slice 10 adds Claude, Codex, and Grok plugin helpers and checkpoint recovery. It cannot remove legacy parser code until typed parity is proven by tests.
+Slice 10 verifies Claude, Codex, and Grok plugins do not expose transcript ingestion helpers, skills, or endpoint shortcuts. Models must write session logs through the normal session-log tools themselves; transcript import stays on non-plugin server/client/REPL surfaces. Legacy parser code cannot be removed until non-plugin typed parity is proven by tests.
 
 Slice 11 updates generated documentation, REPL inventory, plugin docs, prompt templates, and `AGENTS-README-FIRST.yaml` through object-first mutation and regeneration only.
 
