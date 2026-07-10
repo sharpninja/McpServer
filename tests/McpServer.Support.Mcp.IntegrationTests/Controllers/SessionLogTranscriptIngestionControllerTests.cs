@@ -102,6 +102,40 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
         Assert.False(Directory.Exists(Path.Combine(_factory.WorkspacePath, ".mcpServer", "Claude", "transcripts", "staging", body.RunId!)));
     }
 
+    /// <summary>Verifies mixed upload bundles continue after a bundle failure and return HTTP 207.</summary>
+    [Fact]
+    public async Task IngestUploadAsync_MixedZipBundleReturnsMultiStatusWhenStrictFalse()
+    {
+        var invalidCodex = "{\"timestamp\":\"2026-07-10T08:31:17.000Z\",\"type\":\"session_meta\",\"payload\":{\"id\":\"codex-bad-fixture-session\"}}" + Environment.NewLine + "{not-json";
+        var zipBytes = CreateZip(
+            ("good/session.jsonl", File.ReadAllText(ResolveRealFixturePath("codex/session.jsonl"))),
+            ("bad/session.jsonl", invalidCodex));
+        using var form = new MultipartFormDataContent
+        {
+            { new StringContent("Codex", Encoding.UTF8), "agent" },
+            { new StringContent("Auto", Encoding.UTF8), "source" },
+            { new StringContent("true", Encoding.UTF8), "recursive" },
+            { new StringContent("false", Encoding.UTF8), "strict" },
+            { new StringContent("true", Encoding.UTF8), "persist" },
+        };
+        using var fileContent = new ByteArrayContent(zipBytes);
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/zip");
+        form.Add(fileContent, "files", "mixed.zip");
+
+        var response = await _client.PostAsync(
+            new Uri("/mcpserver/sessionlog/ingest/upload", UriKind.Relative),
+            form,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal((HttpStatusCode)207, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<TranscriptIngestRunResponse>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(body);
+        Assert.Equal(1, body!.TotalSessions);
+        Assert.Contains(body.Diagnostics, diagnostic => diagnostic.Code == "normalize_failed");
+        Assert.Contains(body.Receipts, receipt => receipt.SessionId == "codex-real-fixture-session");
+        Assert.False(Directory.Exists(Path.Combine(_factory.WorkspacePath, ".mcpServer", "Codex", "transcripts", "staging", body.RunId!)));
+    }
+
     /// <summary>Verifies ZIP uploads reject duplicate canonical paths before ingestion starts.</summary>
     [Fact]
     public async Task IngestUploadAsync_RejectsDuplicateZipPaths()

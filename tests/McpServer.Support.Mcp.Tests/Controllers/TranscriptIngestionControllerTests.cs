@@ -75,6 +75,56 @@ public sealed class TranscriptIngestionControllerTests
         Assert.EndsWith("root.hash.importRecovery.yaml", body.Receipts[0].ImportRecoveryPath, StringComparison.Ordinal);
     }
 
+    /// <summary>Path ingestion returns 207 Multi-Status when a folder run continues after one bundle fails.</summary>
+    [Fact]
+    public async Task IngestPathAsync_ReturnsMultiStatusForPartialBundleFailure()
+    {
+        var service = Substitute.For<ITranscriptIngestionService>();
+        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-controller", Guid.NewGuid().ToString("N"));
+        var receipt = new TranscriptSessionReceipt(
+            TranscriptSourceKind.Codex,
+            "root",
+            "session-1",
+            "hash",
+            "pending",
+            Path.Combine(workspacePath, ".mcpServer", "Codex", "transcripts", "runs", "run-partial", "session-1.hash.sessionlog.yaml"),
+            Path.Combine(workspacePath, ".mcpServer", "Codex", "failsafe", "pending", "root.hash.importRecovery.yaml"));
+        var diagnostic = new TranscriptDiagnostic("normalize_failed", "Malformed transcript bundle.", "warning", "bad/session.jsonl");
+        var ingestionResult = new TranscriptIngestionResult(
+            sessions: [],
+            diagnostics: [diagnostic],
+            runId: "run-partial",
+            artifactRootPath: Path.Combine(workspacePath, ".mcpServer", "Codex", "transcripts", "runs", "run-partial"),
+            importRecoveryPaths: [receipt.ImportRecoveryPath],
+            persisted: false,
+            degraded: true,
+            receipts: [receipt]);
+        service.IngestPathAsync(Arg.Any<TranscriptIngestionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromResult(ingestionResult));
+        var controller = new SessionLogTranscriptIngestionController(
+            service,
+            new WorkspaceContext { WorkspacePath = workspacePath },
+            NullLogger<SessionLogTranscriptIngestionController>.Instance);
+
+        var response = await controller.IngestPathAsync(new TranscriptIngestPathRequest
+        {
+            Path = "transcripts",
+            Agent = "Codex",
+            Source = TranscriptSourceKind.Auto,
+            Recursive = true,
+            Strict = false,
+            Persist = true,
+        }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var multiStatus = Assert.IsType<ObjectResult>(response.Result);
+        Assert.Equal(StatusCodes.Status207MultiStatus, multiStatus.StatusCode);
+        var body = Assert.IsType<TranscriptIngestRunResponse>(multiStatus.Value);
+        Assert.Equal("run-partial", body.RunId);
+        Assert.Single(body.Receipts);
+        Assert.Single(body.Diagnostics);
+        Assert.Equal("normalize_failed", body.Diagnostics[0].Code);
+    }
+
     /// <summary>Verifies the endpoint requires a resolved workspace context.</summary>
     [Fact]
     public async Task IngestPathAsync_ReturnsNotFoundWhenWorkspaceIsMissing()
@@ -176,6 +226,59 @@ public sealed class TranscriptIngestionControllerTests
         Assert.False(Directory.Exists(captured.Path));
         Assert.Equal("upload-1", body.RunId);
         Assert.Single(body.Receipts);
+        Directory.Delete(workspacePath, recursive: true);
+    }
+
+    /// <summary>Upload ingestion returns 207 Multi-Status when a bundle failure is reported with successful receipts.</summary>
+    [Fact]
+    public async Task IngestUploadAsync_ReturnsMultiStatusForPartialBundleFailure()
+    {
+        var service = Substitute.For<ITranscriptIngestionService>();
+        var workspacePath = Path.Combine(Path.GetTempPath(), "mcp-transcript-upload", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(workspacePath);
+        var receipt = new TranscriptSessionReceipt(
+            TranscriptSourceKind.Codex,
+            "root",
+            "session-1",
+            "hash",
+            "pending",
+            Path.Combine(workspacePath, ".mcpServer", "Codex", "transcripts", "runs", "upload-partial", "session-1.hash.sessionlog.yaml"),
+            Path.Combine(workspacePath, ".mcpServer", "Codex", "failsafe", "pending", "root.hash.importRecovery.yaml"));
+        var diagnostic = new TranscriptDiagnostic("normalize_failed", "Malformed transcript bundle.", "warning", "bad/session.jsonl");
+        var ingestionResult = new TranscriptIngestionResult(
+            sessions: [],
+            diagnostics: [diagnostic],
+            runId: "upload-partial",
+            artifactRootPath: Path.Combine(workspacePath, ".mcpServer", "Codex", "transcripts", "runs", "upload-partial"),
+            importRecoveryPaths: [receipt.ImportRecoveryPath],
+            persisted: false,
+            degraded: true,
+            receipts: [receipt]);
+        service.IngestPathAsync(Arg.Any<TranscriptIngestionRequest>(), Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromResult(ingestionResult));
+        var controller = new SessionLogTranscriptIngestionController(
+            service,
+            new WorkspaceContext { WorkspacePath = workspacePath },
+            NullLogger<SessionLogTranscriptIngestionController>.Instance);
+        var file = CreateFormFile("session.jsonl", "{\"type\":\"session_meta\",\"payload\":{\"id\":\"session-1\"}}");
+
+        var response = await controller.IngestUploadAsync(new TranscriptIngestUploadRequest
+        {
+            Agent = "Codex",
+            Source = TranscriptSourceKind.Auto,
+            Recursive = true,
+            Strict = false,
+            Persist = true,
+            Files = [file],
+        }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var multiStatus = Assert.IsType<ObjectResult>(response.Result);
+        Assert.Equal(StatusCodes.Status207MultiStatus, multiStatus.StatusCode);
+        var body = Assert.IsType<TranscriptIngestRunResponse>(multiStatus.Value);
+        Assert.Equal("upload-partial", body.RunId);
+        Assert.Single(body.Receipts);
+        Assert.Single(body.Diagnostics);
+        Assert.Equal("normalize_failed", body.Diagnostics[0].Code);
         Directory.Delete(workspacePath, recursive: true);
     }
 

@@ -73,7 +73,7 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
         try
         {
             var result = await _ingestionService.IngestPathAsync(ingestionRequest, cancellationToken).ConfigureAwait(false);
-            return Ok(TranscriptIngestRunResponse.FromResult(result));
+            return BuildRunResponse(result);
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -140,7 +140,7 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
             };
 
             var result = await _ingestionService.IngestPathAsync(ingestionRequest, cancellationToken).ConfigureAwait(false);
-            return Ok(TranscriptIngestRunResponse.FromResult(result));
+            return BuildRunResponse(result);
         }
         catch (TranscriptUploadLimitExceededException ex)
         {
@@ -168,6 +168,31 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
             if (Directory.Exists(stagingRoot))
                 Directory.Delete(stagingRoot, recursive: true);
         }
+    }
+
+    private static ActionResult<TranscriptIngestRunResponse> BuildRunResponse(TranscriptIngestionResult result)
+    {
+        var response = TranscriptIngestRunResponse.FromResult(result);
+        if (HasPartialBundleFailure(result))
+        {
+            return new ObjectResult(response)
+            {
+                StatusCode = StatusCodes.Status207MultiStatus,
+            };
+        }
+
+        return new OkObjectResult(response);
+    }
+
+    private static bool HasPartialBundleFailure(TranscriptIngestionResult result)
+    {
+        var hasSuccessfulOutput = result.Receipts.Count > 0 || result.Sessions.Count > 0;
+        if (!hasSuccessfulOutput)
+            return false;
+
+        return result.Diagnostics.Any(diagnostic =>
+            diagnostic.Code.Equals("normalize_failed", StringComparison.OrdinalIgnoreCase)
+            || diagnostic.Code.Equals("adapter_missing", StringComparison.OrdinalIgnoreCase));
     }
 
     private static async Task StageUploadFileAsync(
