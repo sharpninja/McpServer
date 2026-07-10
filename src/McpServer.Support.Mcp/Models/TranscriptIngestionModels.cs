@@ -171,6 +171,11 @@ public sealed class TranscriptSessionReceiptResponse
     [JsonPropertyName("compatibilityArtifactPath")]
     public string? CompatibilityArtifactPath { get; set; }
 
+
+    /// <summary>Receipt returned by the primary session-log persistence path.</summary>
+    [JsonPropertyName("persistenceReceipt")]
+    public string? PersistenceReceipt { get; set; }
+
     /// <summary>Per-session diagnostics.</summary>
     [JsonPropertyName("diagnostics")]
     public IReadOnlyList<TranscriptDiagnosticResponse> Diagnostics { get; set; } = [];
@@ -191,6 +196,7 @@ public sealed class TranscriptSessionReceiptResponse
             YamlArtifactPath = receipt.YamlArtifactPath,
             ImportRecoveryPath = receipt.ImportRecoveryPath,
             CompatibilityArtifactPath = receipt.CompatibilityArtifactPath,
+            PersistenceReceipt = receipt.PersistenceReceipt,
             Diagnostics = receipt.Diagnostics.Select(TranscriptDiagnosticResponse.FromDiagnostic).ToArray(),
         };
     }

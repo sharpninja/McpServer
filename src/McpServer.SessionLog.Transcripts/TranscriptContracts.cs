@@ -311,6 +311,7 @@ public sealed class TranscriptSessionReceipt
     /// <param name="importRecoveryPath">Pending import recovery envelope path named from the root identifier.</param>
     /// <param name="compatibilityArtifactPath">Optional compatibility JSONL artifact path.</param>
     /// <param name="diagnostics">Session diagnostics.</param>
+    /// <param name="persistenceReceipt">Receipt returned by the primary session-log persistence path.</param>
     public TranscriptSessionReceipt(
         TranscriptSourceKind sourceKind,
         string rootId,
@@ -320,7 +321,8 @@ public sealed class TranscriptSessionReceipt
         string yamlArtifactPath,
         string importRecoveryPath,
         string? compatibilityArtifactPath = null,
-        IReadOnlyList<TranscriptDiagnostic>? diagnostics = null)
+        IReadOnlyList<TranscriptDiagnostic>? diagnostics = null,
+        string? persistenceReceipt = null)
     {
         SourceKind = sourceKind;
         RootId = rootId;
@@ -331,6 +333,7 @@ public sealed class TranscriptSessionReceipt
         ImportRecoveryPath = importRecoveryPath;
         CompatibilityArtifactPath = compatibilityArtifactPath;
         Diagnostics = diagnostics ?? [];
+        PersistenceReceipt = persistenceReceipt;
     }
 
     /// <summary>Detected source kind.</summary>
@@ -359,6 +362,9 @@ public sealed class TranscriptSessionReceipt
 
     /// <summary>Session diagnostics.</summary>
     public IReadOnlyList<TranscriptDiagnostic> Diagnostics { get; }
+
+    /// <summary>Receipt returned by the primary session-log persistence path.</summary>
+    public string? PersistenceReceipt { get; }
 }
 
 /// <summary>Result from a transcript ingestion run.</summary>
@@ -452,6 +458,22 @@ public interface ITranscriptProfileProjector
     /// <param name="session">Normalized transcript session.</param>
     /// <returns>Compatibility artifact content.</returns>
     string Project(TranscriptSession session);
+}
+
+/// <summary>Persists normalized transcript sessions through the primary session-log persistence path.</summary>
+public interface ITranscriptSessionPersister
+{
+    /// <summary>Persists one normalized transcript session after its write-ahead recovery envelope has been created.</summary>
+    /// <param name="request">Original ingestion request.</param>
+    /// <param name="session">Normalized transcript session.</param>
+    /// <param name="receipt">Pending session receipt whose recovery envelope is still present.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A persistence receipt from the primary session-log persistence path.</returns>
+    Task<string> PersistAsync(
+        TranscriptIngestionRequest request,
+        TranscriptSession session,
+        TranscriptSessionReceipt receipt,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>Coordinates transcript detection, normalization, projection, and later persistence.</summary>

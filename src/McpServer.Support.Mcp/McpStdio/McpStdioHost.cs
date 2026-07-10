@@ -214,7 +214,8 @@ public static class McpStdioHost
         builder.Services.AddTriageServices();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
-        builder.Services.AddSingleton<ITranscriptIngestionService>(_ => TranscriptIngestionService.CreateDefault());
+        builder.Services.AddScoped<ITranscriptSessionPersister, TranscriptSessionLogPersister>();
+        builder.Services.AddScoped<ITranscriptIngestionService>(sp => TranscriptIngestionService.CreateDefault(sp.GetRequiredService<ITranscriptSessionPersister>()));
         builder.Services.AddScoped<ExternalDocsIngestor>();
         builder.Services.AddScoped<GitHubIngestor>();
         builder.Services.AddScoped<IssueIngestor>();

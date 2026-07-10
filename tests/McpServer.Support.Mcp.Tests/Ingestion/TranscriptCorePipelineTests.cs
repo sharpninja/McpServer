@@ -343,4 +343,39 @@ public sealed class TranscriptCorePipelineTests
 
         throw new DirectoryNotFoundException("Unable to locate real transcript fixture root from test output directory.");
     }
+
+    private sealed class RecordingTranscriptPersister : ITranscriptSessionPersister
+    {
+        private readonly string _receipt;
+
+        internal RecordingTranscriptPersister(string receipt)
+        {
+            _receipt = receipt;
+        }
+
+        internal List<TranscriptSessionReceipt> ReceiptsSeen { get; } = [];
+
+        internal bool RecoveryFileExistedDuringPersist { get; private set; }
+
+        public Task<string> PersistAsync(
+            TranscriptIngestionRequest request,
+            TranscriptSession session,
+            TranscriptSessionReceipt receipt,
+            CancellationToken cancellationToken = default)
+        {
+            ReceiptsSeen.Add(receipt);
+            RecoveryFileExistedDuringPersist = File.Exists(receipt.ImportRecoveryPath);
+            return Task.FromResult(_receipt);
+        }
+    }
+
+    private sealed class FailingTranscriptPersister : ITranscriptSessionPersister
+    {
+        public Task<string> PersistAsync(
+            TranscriptIngestionRequest request,
+            TranscriptSession session,
+            TranscriptSessionReceipt receipt,
+            CancellationToken cancellationToken = default)
+            => Task.FromException<string>(new InvalidOperationException("session log submit failed"));
+    }
 }

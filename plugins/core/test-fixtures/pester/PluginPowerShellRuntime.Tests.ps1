@@ -637,6 +637,26 @@ acceptanceCriteria:
         $content | Should -Match 'currently enforceable'
     }
 
+    It 'TEST-MCP-TRANSCRIPT-010 transcript ingestion helper and skill are staged for plugin hosts' {
+        $helperPath = Join-Path $script:LibRoot 'transcript-ingestion.ps1'
+        Test-Path -LiteralPath $helperPath | Should -BeTrue
+        $helper = [System.IO.File]::ReadAllText($helperPath)
+
+        $helper | Should -Match 'repl\.sessionlog\.ingestTranscripts'
+        $helper | Should -Match 'repl\.sessionlog\.normalizeTranscripts'
+        $helper | Should -Match 'ConvertTo-Yaml'
+        $helper | Should -Match 'targetProfile'
+        $helper | Should -Match 'Persist\.IsPresent'
+
+        $skillPath = Join-Path $script:StagedRoot 'skills\transcript-ingestion\SKILL.md'
+        Test-Path -LiteralPath $skillPath | Should -BeTrue
+        $skill = [System.IO.File]::ReadAllText($skillPath)
+        $skill | Should -Match 'Claude, Codex, and Grok'
+        $skill | Should -Match 'transcript-ingestion\.ps1'
+        $skill | Should -Match 'repl\.sessionlog\.ingestTranscripts'
+        $skill | Should -Match 'repl\.sessionlog\.normalizeTranscripts'
+        $skill | Should -Match 'YAML Mutation Rule'
+    }
     It 'TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation' {
         $skillFiles = Get-ChildItem -LiteralPath (Join-Path $script:StagedRoot 'skills') -Filter 'SKILL.md' -Recurse -File
         $skillFiles.Count | Should -BeGreaterThan 0

@@ -6,24 +6,29 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
     private readonly ITranscriptBundleDetector _detector;
     private readonly IReadOnlyDictionary<TranscriptSourceKind, ITranscriptSourceAdapter> _adapters;
     private readonly IReadOnlyDictionary<TranscriptCompatibilityProfile, ITranscriptProfileProjector> _projectors;
+    private readonly ITranscriptSessionPersister? _persister;
 
     /// <summary>Initializes a transcript ingestion service.</summary>
     /// <param name="detector">Bundle detector.</param>
     /// <param name="adapters">Source adapters.</param>
     /// <param name="projectors">Optional compatibility profile projectors.</param>
+    /// <param name="persister">Optional primary session-log persister.</param>
     public TranscriptIngestionService(
         ITranscriptBundleDetector detector,
         IEnumerable<ITranscriptSourceAdapter> adapters,
-        IEnumerable<ITranscriptProfileProjector>? projectors = null)
+        IEnumerable<ITranscriptProfileProjector>? projectors = null,
+        ITranscriptSessionPersister? persister = null)
     {
         _detector = detector ?? throw new ArgumentNullException(nameof(detector));
         _adapters = adapters?.ToDictionary(adapter => adapter.SourceKind) ?? throw new ArgumentNullException(nameof(adapters));
         _projectors = projectors?.ToDictionary(projector => projector.Profile) ?? new Dictionary<TranscriptCompatibilityProfile, ITranscriptProfileProjector>();
+        _persister = persister;
     }
 
     /// <summary>Creates the default detector and source adapter set.</summary>
+    /// <param name="persister">Optional primary session-log persister.</param>
     /// <returns>A default transcript ingestion service.</returns>
-    public static TranscriptIngestionService CreateDefault()
+    public static TranscriptIngestionService CreateDefault(ITranscriptSessionPersister? persister = null)
     {
         return new TranscriptIngestionService(
             new TranscriptBundleDetector(),
@@ -39,7 +44,8 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
                 new ClaudeTranscriptProfileProjector(),
                 new CodexTranscriptProfileProjector(),
                 new GrokTranscriptProfileProjector()
-            ]);
+            ],
+            persister);
     }
 
     /// <inheritdoc />
@@ -79,11 +85,77 @@ public sealed class TranscriptIngestionService : ITranscriptIngestionService
         }
 
         if (request.Persist)
-            return await TranscriptRunArtifactWriter.WritePendingAsync(request, sessions, diagnostics, cancellationToken).ConfigureAwait(false);
+        {
+            var pending = await TranscriptRunArtifactWriter.WritePendingAsync(request, sessions, diagnostics, cancellationToken).ConfigureAwait(false);
+            return _persister is null
+                ? pending
+                : await PersistPendingAsync(request, pending, cancellationToken).ConfigureAwait(false);
+        }
 
         return new TranscriptIngestionResult(sessions, diagnostics);
     }
 
+    private async Task<TranscriptIngestionResult> PersistPendingAsync(
+        TranscriptIngestionRequest request,
+        TranscriptIngestionResult pending,
+        CancellationToken cancellationToken)
+    {
+        var diagnostics = pending.Diagnostics.ToList();
+        var receipts = new List<TranscriptSessionReceipt>();
+        var retainedRecoveryPaths = new List<string>();
+        var allPersisted = true;
+
+        for (var i = 0; i < pending.Receipts.Count; i++)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var receipt = pending.Receipts[i];
+            var session = pending.Sessions[i];
+            try
+            {
+                var persistenceReceipt = await _persister!.PersistAsync(request, session, receipt, cancellationToken).ConfigureAwait(false);
+                DeleteRecoveryFile(receipt.ImportRecoveryPath);
+                receipts.Add(CloneReceipt(receipt, "persisted", persistenceReceipt));
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                allPersisted = false;
+                retainedRecoveryPaths.Add(receipt.ImportRecoveryPath);
+                diagnostics.Add(new TranscriptDiagnostic("persistence_failed", ex.Message, "error", receipt.YamlArtifactPath));
+                receipts.Add(receipt);
+            }
+        }
+
+        return new TranscriptIngestionResult(
+            pending.Sessions,
+            diagnostics,
+            pending.RunId,
+            pending.ArtifactRootPath,
+            retainedRecoveryPaths,
+            persisted: allPersisted,
+            degraded: !allPersisted,
+            receipts);
+    }
+
+    private static TranscriptSessionReceipt CloneReceipt(TranscriptSessionReceipt receipt, string status, string? persistenceReceipt)
+    {
+        return new TranscriptSessionReceipt(
+            receipt.SourceKind,
+            receipt.RootId,
+            receipt.SessionId,
+            receipt.SourceHash,
+            status,
+            receipt.YamlArtifactPath,
+            receipt.ImportRecoveryPath,
+            receipt.CompatibilityArtifactPath,
+            receipt.Diagnostics,
+            persistenceReceipt);
+    }
+
+    private static void DeleteRecoveryFile(string path)
+    {
+        if (File.Exists(path))
+            File.Delete(path);
+    }
     private TranscriptSession ProjectCompatibility(TranscriptSession session, TranscriptCompatibilityProfile profile)
     {
         if (profile == TranscriptCompatibilityProfile.None)
