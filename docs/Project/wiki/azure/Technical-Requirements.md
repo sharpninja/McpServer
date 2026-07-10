@@ -805,47 +805,47 @@ Scope: layer-1+
 
 ## TR-MCP-HELP-001
 
-**TR-MCP-HELP-001** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-001.
+**Agent Help options and startup validation** — AgentHelpOptions binds from the AgentHelp configuration section; AgentHelpOptionsValidator rejects unsupported execution strategies, missing transcript or incident directories, and incomplete API key wiring.
 Scope: layer-1+
 
 ## TR-MCP-HELP-002
 
-**TR-MCP-HELP-002** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-002.
+**Agent Help HTTP and WebSocket API surface** — AgentHelpController exposes session create, status, synchronous turn, SSE stream, transcript retrieval, and WebSocket turn streaming under /mcpserver/agent-help.
 Scope: layer-1+
 
 ## TR-MCP-HELP-003
 
-**TR-MCP-HELP-003** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-003.
+**Help transcript JSONL writer** — HelpTranscriptWriter appends one JSON object per line under the configured transcript directory and reads all entries for a session.
 Scope: layer-1+
 
 ## TR-MCP-HELP-004
 
-**TR-MCP-HELP-004** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-004.
+**Deterministic inbound guard** — AgentHelpInboundGuard applies stable injection and benign-bypass rules before helper execution.
 Scope: layer-1+
 
 ## TR-MCP-HELP-005
 
-**TR-MCP-HELP-005** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-005.
+**Guard incident JSON logger** — AgentHelpIncidentLogger writes one incident file per blocked inbound message and supports session-scoped reads.
 Scope: layer-1+
 
 ## TR-MCP-HELP-006
 
-**TR-MCP-HELP-006** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-006.
+**Stub corpus bootstrap** — AgentHelpCorpusService returns a deterministic context pack summary without full indexing when corpus bootstrap is enabled.
 Scope: layer-1+
 
 ## TR-MCP-HELP-007
 
-**TR-MCP-HELP-007** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-007.
+**In-memory conversation orchestration** — AgentHelpConversationService maintains the session registry, evaluates inbound guards, executes helper turns, and coordinates transcript and incident persistence.
 Scope: layer-1+
 
 ## TR-MCP-HELP-008
 
-**TR-MCP-HELP-008** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-008.
+**Outcome analysis recommendations** — AgentHelpOutcomeService derives triage and documentation TODO recommendations from help session transcripts and incidents.
 Scope: layer-1+
 
 ## TR-MCP-HELP-009
 
-**TR-MCP-HELP-009** — Placeholder requirement backfilled for TODO link TR-MCP-HELP-009.
+**MCP STDIO and typed client adapters** — FwhMcpTools.AgentHelp exposes agent_help tools; AgentHelpClient and McpServerClient.AgentHelp mirror the REST controller contracts.
 Scope: layer-1+
 
 ## TR-MCP-HELP-010
@@ -1857,6 +1857,63 @@ Scope: layer-1+
 
 **Tool Registry Default Bucket Seeding** — On startup, `Program.cs` reads `Mcp:ToolRegistry:DefaultBuckets` and calls `IToolBucketService.EnsureDefaultBucketsAsync` to register any configured buckets not already in the database. Idempotent: existing buckets are not modified.
 Scope: layer-1+
+
+## TR-MCP-TRANSCRIPT-001
+
+**Bounded transcript reader and parser registry** — Implement streaming transcript readers with size, line, record, timeout, and cancellation bounds plus deterministic source adapter selection.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Readers enforce byte, line, record, timeout, cancellation, recursion, and archive limits with diagnostics.
+
+## TR-MCP-TRANSCRIPT-002
+
+**Source adapters and bundle detection** — Implement adapters for Claude, Codex, Grok, Cline, Copilot, and OpenCode plus bundle detection for native files, folders, ZIPs, and SQLite snapshots.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Each supported provider has verified fixtures and adapter-specific diagnostics.
+
+## TR-MCP-TRANSCRIPT-003
+
+**Neutral event model and projectors** — Define loss-aware neutral transcript events and Claude, Codex, and Grok compatibility projectors while preserving provenance and derived-value markers.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Canonical projection is produced from neutral events, not from reparsed compatibility output.
+
+## TR-MCP-TRANSCRIPT-004
+
+**Canonical YAML and write-ahead persistence** — Use existing SessionLogIngestor, UnifiedSessionLog DTOs, and IYamlSerializer to write deterministic importRecovery YAML and persist through the current session-log path.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Failsafe pending artifacts are atomically written before submission and deleted only after non-degraded persistence success.
+
+## TR-MCP-TRANSCRIPT-005
+
+**REPL import and model-owned session logging** — Expose shared transcript conversion/import through non-plugin typed server, client, MCP, and REPL surfaces while keeping plugin packages free of transcript ingestion endpoints, helpers, skills, handwritten YAML, and parser forks.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] REPL and native MCP transcript ingestion remain available through typed non-plugin surfaces with workspace-bound security controls.
+- [ ] Claude, Codex, and Grok plugin packages contain no transcript ingestion helper or skill and instruct models to use workflow.sessionlog tools for live session logging.
+
+## TR-MCP-TRANSCRIPT-006
+
+**Recursive discovery upload extraction and path security** — Implement recursive bundle discovery, upload extraction, ZIP defenses, allowlisted roots, traversal rejection, and symlink/reparse escape prevention.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Traversal, duplicate canonical paths, links, external absolute paths, reparse escapes, and decompression ratio violations are rejected.
+
+## TR-MCP-TRANSCRIPT-007
+
+**HTTP client MCP and REPL contracts** — Add typed REST request/result models, SessionLogClient ingestion methods, native MCP tools, and REPL commands for path ingestion and normalization.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] HTTP, stdio MCP, typed client, and REPL expose matching option defaults and receipt fields.
+
+## TR-MCP-TRANSCRIPT-008
+
+**Provider normalization and native stores** — Support secondary provider normalization for Cline paired JSON, Copilot event streams, OpenCode JSONL exports, and read-only OpenCode SQLite snapshots.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] OpenCode SQLite ingestion uses a consistent backup snapshot and never writes to source DB or WAL files.
 
 ## TR-MCP-TRIAGE-001
 

@@ -1119,54 +1119,54 @@ Scope: layer-1+
 - [ ] Generic hosted agents and QBAgent expose the same read-only capabilities without duplicate tool names.
 - [ ] Existing repository read, list, write, and edit contracts remain compatible.
 
-## FR-MCP-HELP-001 FR-MCP-HELP-001
+## FR-MCP-HELP-001 Agent Help conversation API
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-001.
+Agents stuck on MCP Server surfaces can open help sessions, submit turns, query status, retrieve transcripts, and stream responses over HTTP.
 Scope: layer-1+
 
-## FR-MCP-HELP-002 FR-MCP-HELP-002
+## FR-MCP-HELP-002 Inbound guardrails
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-002.
+Inbound user messages are evaluated by deterministic guard rules before helper execution; violations terminate the session.
 Scope: layer-1+
 
-## FR-MCP-HELP-003 FR-MCP-HELP-003
+## FR-MCP-HELP-003 Transcript persistence
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-003.
+Help turns are captured as append-only JSONL under the workspace data root.
 Scope: layer-1+
 
-## FR-MCP-HELP-004 FR-MCP-HELP-004
+## FR-MCP-HELP-004 Guard incident logging
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-004.
+Blocked inbound messages produce durable incident records for operator review.
 Scope: layer-1+
 
-## FR-MCP-HELP-005 FR-MCP-HELP-005
+## FR-MCP-HELP-005 Corpus bootstrap and outcome analysis
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-005.
+Sessions optionally bootstrap a stub context pack; completed sessions can be analyzed for triage and documentation follow-ups.
 Scope: layer-1+
 
-## FR-MCP-HELP-006 FR-MCP-HELP-006
+## FR-MCP-HELP-006 MCP STDIO tool parity
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-006.
+STDIO MCP exposes agent_help_create_session, agent_help_submit_turn, and agent_help_get_status mirroring the HTTP controller.
 Scope: layer-1+
 
-## FR-MCP-HELP-007 FR-MCP-HELP-007
+## FR-MCP-HELP-007 Typed client library
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-007.
+SharpNinja.McpServer.Client exposes AgentHelpClient on McpServerClient for session create, turn submit, status, and transcript retrieval.
 Scope: layer-1+
 
-## FR-MCP-HELP-008 FR-MCP-HELP-008
+## FR-MCP-HELP-008 Marker prompt guidance
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-008.
+Generated markers instruct agents when and how to invoke Agent Help for MCP Server issues.
 Scope: layer-1+
 
-## FR-MCP-HELP-009 FR-MCP-HELP-009
+## FR-MCP-HELP-009 REPL workflow parity
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-009.
+The REPL exposes workflow.agenthelp typed wrappers with the same contracts as REST and MCP tools.
 Scope: layer-1+
 
-## FR-MCP-HELP-010 FR-MCP-HELP-010
+## FR-MCP-HELP-010 Agent Help configuration
 
-Placeholder requirement backfilled for TODO link FR-MCP-HELP-010.
+AgentHelp options control enablement, guard behavior, storage paths, execution strategy, and helper model defaults.
 Scope: layer-1+
 
 ## FR-MCP-HELP-011 Agent Help grok-cli execution strategy and default
@@ -1619,6 +1619,70 @@ Scope: layer-1+
 - [x] Closing an open TODO sets the item status to DONE by setting done true and records a non-empty completion timestamp. (evidence: TodoControllerTests.CloseAsync_WhenItemExists_SetsDoneAndCompletedDate asserts done true and UTC completedDate.)
 - [x] Closing a missing TODO returns the existing not-found mutation failure behavior. (evidence: TodoControllerTests.CloseAsync_WhenItemMissing_ReturnsNotFound.)
 - [x] The typed client exposes the same close-by-id operation. (evidence: TodoClientTests.CloseAsync_PostsCorrectUrl.)
+
+## FR-MCP-TRANSCRIPT-001 Transcript source ingestion
+
+The system shall ingest agent transcript bundles from supported source formats with deterministic source detection and diagnostics.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Auto detection identifies exactly one supported source or rejects ambiguous and unsupported input with diagnostics.
+- [ ] Folder, multipart, and ZIP ingestion discover independent session bundles without mixing sessions.
+
+## FR-MCP-TRANSCRIPT-002 Faithful loss-aware normalization
+
+The system shall normalize supported transcripts into a neutral event model without silently discarding malformed, unknown, partial, or unpaired records.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Native identity, ordering, timestamps, roles, content blocks, reasoning, tool calls/results, usage, failures, workspace metadata, subagents, and provenance are preserved when present.
+- [ ] Missing semantic values remain absent and derived required IDs are deterministic and explicitly marked.
+
+## FR-MCP-TRANSCRIPT-003 Canonical session log projection
+
+The system shall project neutral transcript events directly into canonical Session Log YAML using the existing session-log serializer and model.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Canonical Session Log YAML is deterministic, redacted, and produced without reparsing compatibility JSONL.
+- [ ] Compatibility profile output is optional and caller-selected for Claude, Codex, or Grok.
+
+## FR-MCP-TRANSCRIPT-004 Idempotent import and recovery
+
+The system shall import transcript-derived Session Log YAML through the existing persistence path with write-ahead recovery and idempotent replay.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Each detected session bundle is an independent idempotent unit with a stable replay key and receipt.
+- [ ] A failsafe importRecovery envelope is retained unless persistence explicitly reports persisted=true and degraded=false.
+
+## FR-MCP-TRANSCRIPT-005 Model-owned session log writing for Claude Codex Grok
+
+Claude, Codex, and Grok models shall write MCP Session Log entries themselves through the normal session-log APIs; plugins shall not expose transcript ingestion or normalization endpoints, helpers, skills, or parser forks.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Claude, Codex, and Grok plugins expose no transcript ingestion or normalization helper, skill, endpoint shortcut, or duplicated parser code.
+- [ ] Models continue to write session-log turns, actions, decisions, and completions through the existing workflow.sessionlog tools instead of relying on automatic transcript ingestion.
+
+## FR-MCP-TRANSCRIPT-006 HTTP path and upload ingestion
+
+The system shall expose HTTP transcript ingestion for allowlisted server-local files/folders, multipart uploads, multi-file uploads, and ZIP uploads.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] POST /mcpserver/sessionlog/ingest/path accepts file or folder input with shared options and returns per-session receipts.
+- [ ] POST /mcpserver/sessionlog/ingest/upload accepts multipart files and ZIP bundles within documented limits.
+
+## FR-MCP-TRANSCRIPT-007 REPL and MCP ingestion parity
+
+The system shall expose transcript ingestion and normalization through typed client, REPL, and native MCP tools with equivalent behavior.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Typed client methods, REPL methods, and MCP tools expose path ingestion and path normalization with matching options and receipts.
+- [ ] MCP calls retain required workspacePath while hosted and REPL agents resolve workspace ownership from their bound client.
+
+## FR-MCP-TRANSCRIPT-008 Secondary provider normalization
+
+The system shall normalize Cline, Copilot, and OpenCode transcripts and native stores into canonical Session Log YAML and optional Claude, Codex, or Grok compatibility JSONL.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Cline paired session metadata/messages JSON and JSONL exports are supported.
+- [ ] Copilot events.jsonl folders and OpenCode JSONL plus read-only SQLite snapshots are supported without writing source stores.
 
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 
