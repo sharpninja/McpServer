@@ -60,6 +60,7 @@
     <ProjectReference Include="..\McpServer.Storage.PostgreSqlMigrations\McpServer.Storage.PostgreSqlMigrations.csproj" />
     <ProjectReference Include="..\McpServer.Storage.SqlServerMigrations\McpServer.Storage.SqlServerMigrations.csproj" />
     <ProjectReference Include="..\McpServer.Services\McpServer.Services.csproj" />
+    <ProjectReference Include="..\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj" />
     <ProjectReference Include="..\McpServer.GraphRag\McpServer.GraphRag.csproj" />
   </ItemGroup>
   <ItemGroup>

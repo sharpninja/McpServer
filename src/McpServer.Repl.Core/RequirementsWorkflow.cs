@@ -32,6 +32,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     private static readonly Regex FrIdPattern = new(@"^FR-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
     private static readonly Regex TrIdPattern = new(@"^TR-[A-Z0-9]+(?:-[A-Z0-9]+)+-\d{3}$", RegexOptions.Compiled);
     private static readonly Regex TestIdPattern = new(@"^TEST-[A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3}$", RegexOptions.Compiled);
+    private static readonly Regex MappingRequirementIdPattern = new(@"^(FR|TR|TEST)-[A-Z0-9]+(-[A-Z0-9]+)*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex LayerKeyPattern = new(@"^[A-Za-z0-9][A-Za-z0-9._-]*$", RegexOptions.Compiled);
 
     /// <summary>
@@ -463,7 +464,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         var trIds = NormalizeIds(request.TrIds, request.TrId);
         var testIds = NormalizeIds(request.TestIds, request.TestId);
 
-        if (string.IsNullOrEmpty(request.FrId))
+        if (string.IsNullOrWhiteSpace(request.FrId))
         {
             throw new ArgumentException("FR ID is required for requirement mappings");
         }
@@ -473,19 +474,20 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             throw new ArgumentException("At least one TR or TEST ID must be provided");
         }
 
-        ValidateFrId(request.FrId);
+        var frId = request.FrId.Trim();
+        ValidateMappingRequirementId(frId, "FR");
         try
         {
-            await _client.GetFrAsync(request.FrId, cancellationToken);
+            await _client.GetFrAsync(frId, cancellationToken);
         }
         catch
         {
-            throw new InvalidOperationException($"Referenced FR does not exist: {request.FrId}");
+            throw new InvalidOperationException($"Referenced FR does not exist: {frId}");
         }
 
         foreach (var id in trIds)
         {
-            ValidateTrId(id);
+            ValidateMappingRequirementId(id, "TR");
             try
             {
                 await _client.GetTrAsync(id, cancellationToken);
@@ -498,7 +500,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         foreach (var id in testIds)
         {
-            ValidateTestId(id);
+            ValidateMappingRequirementId(id, "TEST");
             try
             {
                 await _client.GetTestAsync(id, cancellationToken);
@@ -511,7 +513,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         try
         {
-            var existing = await _client.GetMappingAsync(request.FrId, cancellationToken);
+            var existing = await _client.GetMappingAsync(frId, cancellationToken);
             trIds = NormalizeIds(existing.TrIds.Concat(trIds), null);
             testIds = NormalizeIds(existing.TestIds.Concat(testIds), null);
         }
@@ -526,7 +528,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             TestIds = testIds
         };
 
-        var mapping = await _client.UpsertMappingAsync(request.FrId, upsertRequest, cancellationToken);
+        var mapping = await _client.UpsertMappingAsync(frId, upsertRequest, cancellationToken);
         var item = new MappingItemAdapter(
             mapping.FrId,
             trIds.FirstOrDefault(),
@@ -546,21 +548,24 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         var mappings = await _client.ListMappingsAsync(cancellationToken);
         var matching = mappings.AsEnumerable();
 
-        if (!string.IsNullOrEmpty(frId))
+        if (!string.IsNullOrWhiteSpace(frId))
         {
-            ValidateFrId(frId);
+            frId = frId.Trim();
+            ValidateMappingRequirementId(frId, "FR");
             matching = matching.Where(m => m.FrId == frId);
         }
 
-        if (!string.IsNullOrEmpty(trId))
+        if (!string.IsNullOrWhiteSpace(trId))
         {
-            ValidateTrId(trId);
+            trId = trId.Trim();
+            ValidateMappingRequirementId(trId, "TR");
             matching = matching.Where(m => m.TrIds.Contains(trId));
         }
 
-        if (!string.IsNullOrEmpty(testId))
+        if (!string.IsNullOrWhiteSpace(testId))
         {
-            ValidateTestId(testId);
+            testId = testId.Trim();
+            ValidateMappingRequirementId(testId, "TEST");
             matching = matching.Where(m => m.TestIds.Contains(testId));
         }
 
@@ -741,6 +746,21 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
                 return;
             default:
                 throw new ArgumentException($"Invalid requirement kind: {kind}. Valid values: fr, tr, test");
+        }
+    }
+
+    private static void ValidateMappingRequirementId(string id, string expectedPrefix)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            throw new ArgumentException($"{expectedPrefix} ID cannot be null or empty", nameof(id));
+        }
+
+        if (!MappingRequirementIdPattern.IsMatch(id)
+            || !id.StartsWith(expectedPrefix + "-", StringComparison.OrdinalIgnoreCase)
+            || id.Contains('*', StringComparison.Ordinal))
+        {
+            throw new ArgumentException($"Invalid {expectedPrefix} ID format: {id}");
         }
     }
 

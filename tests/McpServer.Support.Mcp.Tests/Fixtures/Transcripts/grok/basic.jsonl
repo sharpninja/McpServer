@@ -1,0 +1,6 @@
+{"kind":"conversation.created","conversationId":"grok-fixture-001","createdAt":"2026-07-01T12:00:00Z","model":"grok-placeholder"}
+{"kind":"message","conversationId":"grok-fixture-001","messageId":"grok-u-1","createdAt":"2026-07-01T12:00:01Z","role":"user","content":"Run tests."}
+{"kind":"reasoning","conversationId":"grok-fixture-001","messageId":"grok-r-1","createdAt":"2026-07-01T12:00:02Z","text":"Need identify focused project."}
+{"kind":"tool_call","conversationId":"grok-fixture-001","messageId":"grok-t-1","createdAt":"2026-07-01T12:00:03Z","toolName":"powershell","arguments":{"command":"dotnet test tests/Sample.Tests"}}
+{"kind":"tool_result","conversationId":"grok-fixture-001","messageId":"grok-t-1","createdAt":"2026-07-01T12:00:04Z","status":"error","error":"Project not found"}
+{"kind":"message","conversationId":"grok-fixture-001","messageId":"grok-a-1","createdAt":"2026-07-01T12:00:05Z","role":"assistant","content":"The focused test project was not found."}

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-10T08:43:19.000Z",
+  "agent": "cline",
+  "sessionId": "cline-real-fixture-session",
+  "messages": [
+    {
+      "id": "cline-real-fixture-user",
+      "role": "user",
+      "content": "[redacted user prompt]",
+      "ts": "2026-07-10T08:43:18.708Z"
+    }
+  ],
+  "system_prompt": "[redacted system prompt]"
+}

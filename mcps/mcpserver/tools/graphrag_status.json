@@ -1,12 +1,17 @@
 {
   "name": "graphrag_status",
-  "description": "Get GraphRAG status for the workspace (initialized, indexed, backend, last index time).",
+  "description": "Get GraphRAG status for the workspace or global scope (initialized, indexed, backend, last index time).",
   "inputSchema": {
     "type": "object",
     "properties": {
       "workspacePath": {
-        "description": "Workspace path (required)",
+        "description": "Workspace path (required for workspace scope)",
         "type": "string"
+      },
+      "scope": {
+        "description": "Storage scope: workspace or global",
+        "type": "string",
+        "default": "workspace"
       }
     },
     "required": [

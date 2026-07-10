@@ -1,6 +1,6 @@
 {
   "name": "graphrag_query",
-  "description": "Run a GraphRAG query for the workspace and return answer, citations, and optional context chunks.",
+  "description": "Run a GraphRAG query for the workspace or global scope and return answer, citations, and optional context chunks.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -9,8 +9,13 @@
         "type": "string"
       },
       "workspacePath": {
-        "description": "Workspace path (required)",
+        "description": "Workspace path (required for workspace scope)",
         "type": "string"
+      },
+      "scope": {
+        "description": "Storage scope: workspace or global",
+        "type": "string",
+        "default": "workspace"
       },
       "mode": {
         "description": "Query mode (local/global/drift), optional",

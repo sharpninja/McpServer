@@ -135,6 +135,19 @@ public static class SessionLogCommandShapes
     /// Method: <c>repl.sessionlog.persistTurn</c>
     /// </summary>
     public const string PersistTurnMethod = "repl.sessionlog.persistTurn";
+
+
+    /// <summary>
+    /// REPL-native command that ingests transcript input through the typed SessionLog client.
+    /// Method: <c>repl.sessionlog.ingestTranscripts</c>
+    /// </summary>
+    public const string IngestTranscriptsMethod = "repl.sessionlog.ingestTranscripts";
+
+    /// <summary>
+    /// REPL-native command that normalizes transcript input to canonical Session Log YAML and a selected compatibility profile.
+    /// Method: <c>repl.sessionlog.normalizeTranscripts</c>
+    /// </summary>
+    public const string NormalizeTranscriptsMethod = "repl.sessionlog.normalizeTranscripts";
 }
 
 /// <summary>

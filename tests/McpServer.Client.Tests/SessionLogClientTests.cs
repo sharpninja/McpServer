@@ -133,4 +133,72 @@ public sealed class SessionLogClientTests
         Assert.Equal(5, result.TurnId);
         Assert.Equal("r1", result.RequestId);
     }
+    [Fact]
+    public async System.Threading.Tasks.Task IngestTranscriptPathAsync_PostsPathContract()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runId":"run-1","totalSessions":1,"persisted":false,"degraded":true,"receipts":[{"source":"Codex","rootId":"root","sessionId":"session-1","sourceHash":"hash","status":"pending","yamlArtifactPath":"F:/workspace/.mcpServer/Codex/transcripts/runs/run-1/session-1.hash.sessionlog.yaml","importRecoveryPath":"F:/workspace/.mcpServer/Codex/failsafe/pending/root.hash.importRecovery.yaml"}]}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        var result = await client.IngestTranscriptPathAsync(new TranscriptIngestPathRequest
+        {
+            Path = "transcripts/session.jsonl",
+            Agent = "Codex",
+            Source = TranscriptSourceKind.Codex,
+            Recursive = false,
+            Strict = true,
+            Persist = true,
+            CompatibilityProfile = TranscriptCompatibilityProfile.Codex,
+            EmitNormalizedProfile = true,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Equal("/mcpserver/sessionlog/ingest/path", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"path\":\"transcripts/session.jsonl\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"agent\":\"Codex\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"source\":\"Codex\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"compatibilityProfile\":\"Codex\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Equal("run-1", result.RunId);
+        Assert.Equal(1, result.TotalSessions);
+        Assert.False(result.Persisted);
+        Assert.True(result.Degraded);
+        Assert.Contains("root.hash.importRecovery.yaml", result.Receipts[0].ImportRecoveryPath, StringComparison.Ordinal);
+    }
+    [Fact]
+    public async System.Threading.Tasks.Task IngestTranscriptUploadAsync_PostsMultipartUploadContract()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runId":"upload-1","totalSessions":1,"persisted":false,"degraded":true,"receipts":[{"source":"Codex","rootId":"root","sessionId":"session-1","sourceHash":"hash","status":"pending","yamlArtifactPath":"F:/workspace/.mcpServer/Codex/transcripts/runs/upload-1/session-1.hash.sessionlog.yaml","importRecoveryPath":"F:/workspace/.mcpServer/Codex/failsafe/pending/root.hash.importRecovery.yaml"}]}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        var result = await client.IngestTranscriptUploadAsync(new TranscriptIngestUploadRequest
+        {
+            Agent = "Codex",
+            Source = TranscriptSourceKind.Codex,
+            Recursive = true,
+            Strict = true,
+            Persist = true,
+            CompatibilityProfile = TranscriptCompatibilityProfile.Codex,
+            EmitNormalizedProfile = true,
+            Files =
+            [
+                new TranscriptUploadFile
+                {
+                    FileName = "session.jsonl",
+                    ContentType = "application/jsonl",
+                    Content = System.Text.Encoding.UTF8.GetBytes("{\"session_meta\":{\"id\":\"session-1\"}}")
+                }
+            ]
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Equal("/mcpserver/sessionlog/ingest/upload", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.StartsWith("multipart/form-data", handler.LastRequest.Content!.Headers.ContentType!.MediaType, StringComparison.Ordinal);
+        Assert.Contains("name=agent", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("Codex", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("name=source", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("filename=session.jsonl", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Equal("upload-1", result.RunId);
+        Assert.Contains("root.hash.importRecovery.yaml", result.Receipts[0].ImportRecoveryPath, StringComparison.Ordinal);
+    }
 }

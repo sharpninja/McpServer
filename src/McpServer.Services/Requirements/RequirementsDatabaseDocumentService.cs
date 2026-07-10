@@ -961,7 +961,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         return docType switch
         {
             RequirementsDocType.Functional => (RequirementsDocumentRenderer.RenderFunctional(await GetAllFrAsync(ct).ConfigureAwait(false)), "text/markdown"),
-            RequirementsDocType.Technical => (RequirementsDocumentRenderer.RenderTechnical(await GetAllTrAsync(ct).ConfigureAwait(false)), "text/markdown"),
+            RequirementsDocType.Technical => (RequirementsDocumentRenderer.RenderTechnical(await GetAllTrAsync(ct).ConfigureAwait(false), await GetAllMappingsAsync(ct).ConfigureAwait(false)), "text/markdown"),
             RequirementsDocType.Testing => (RequirementsDocumentRenderer.RenderTesting(await GetAllTestAsync(ct).ConfigureAwait(false)), "text/markdown"),
             RequirementsDocType.Mapping => (RequirementsDocumentRenderer.RenderMapping(await GetAllMappingsAsync(ct).ConfigureAwait(false)), "text/markdown"),
             RequirementsDocType.Matrix => (RequirementsDocumentRenderer.RenderMatrix(

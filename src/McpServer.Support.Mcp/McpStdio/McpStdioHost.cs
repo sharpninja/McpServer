@@ -6,6 +6,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Common.AgentCli;
 using McpServer.Common.AgentCli.Extensions;
 using McpServer.GraphRag;
+using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
@@ -213,6 +214,7 @@ public static class McpStdioHost
         builder.Services.AddTriageServices();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
+        builder.Services.AddSingleton<ITranscriptIngestionService>(_ => TranscriptIngestionService.CreateDefault());
         builder.Services.AddScoped<ExternalDocsIngestor>();
         builder.Services.AddScoped<GitHubIngestor>();
         builder.Services.AddScoped<IssueIngestor>();

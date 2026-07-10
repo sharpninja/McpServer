@@ -298,6 +298,34 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
+    public void ParseTechnical_StripsGeneratedStatusMetadataFromBody()
+    {
+        var parsed = RequirementsDocumentParser.ParseTechnical("""
+            # Technical Requirements (MCP Server)
+
+            ## TR-MCP-QUAD-001
+
+            **Brain-slot storage** — Persist brain-slot definitions.
+            Scope: layer-1+
+            **Acceptance Criteria:**
+            - [x] Existing criterion
+
+            **Status:** completed
+            **Status:** pending
+            **Covered by:** FR: FR-MCP-123; TEST: TEST-MCP-163
+            """);
+
+        var entry = Assert.Single(parsed);
+        Assert.Equal("TR-MCP-QUAD-001", entry.Id);
+        Assert.Equal("completed", entry.Status);
+        Assert.DoesNotContain("**Status:**", entry.Body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("**Covered by:** FR: FR-MCP-123", entry.Body, StringComparison.Ordinal);
+        var criterion = Assert.Single(entry.AcceptanceCriteria!);
+        Assert.Equal("Existing criterion", criterion.Text);
+        Assert.True(criterion.IsSatisfied);
+    }
+
+    [Fact]
     public void ParseTesting_AcceptsWikiGroupedTableRows()
     {
         var parsed = RequirementsDocumentParser.ParseTesting("""

@@ -1,0 +1,137 @@
+{
+  "info": {
+    "id": "ses_opencode_real_fixture",
+    "slug": "silent-moon",
+    "projectID": "opencode-real-fixture-project",
+    "directory": "[redacted:session-directory]",
+    "path": ".tmp/agent-log-generation/opencode-work",
+    "title": "[redacted:session-title]",
+    "agent": "build",
+    "model": {
+      "id": "big-pickle",
+      "providerID": "opencode",
+      "variant": "default"
+    },
+    "version": "1.17.18",
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "cost": 0,
+    "tokens": {
+      "input": 15073,
+      "output": 7,
+      "reasoning": 21,
+      "cache": {
+        "read": 0,
+        "write": 0
+      }
+    },
+    "permission": [
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_enter",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_exit",
+        "pattern": "*",
+        "action": "deny"
+      }
+    ],
+    "time": {
+      "created": 1783672957035,
+      "updated": 1783672964040
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "role": "user",
+        "time": {
+          "created": 1783672957187
+        },
+        "agent": "build",
+        "model": {
+          "providerID": "opencode",
+          "modelID": "big-pickle"
+        },
+        "summary": {
+          "diffs": []
+        },
+        "id": "msg_opencode_real_fixture_user",
+        "sessionID": "ses_opencode_real_fixture"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "[redacted:text]",
+          "id": "prt_opencode_real_fixture_user_text",
+          "sessionID": "ses_opencode_real_fixture",
+          "messageID": "msg_opencode_real_fixture_user"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_opencode_real_fixture_user",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "[redacted:cwd]",
+          "root": "[redacted:root]"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 15101,
+          "input": 15073,
+          "output": 7,
+          "reasoning": 21,
+          "cache": {
+            "write": 0,
+            "read": 0
+          }
+        },
+        "modelID": "big-pickle",
+        "providerID": "opencode",
+        "time": {
+          "created": 1783672958438,
+          "completed": 1783672964006
+        },
+        "finish": "stop",
+        "id": "msg_opencode_real_fixture_assistant",
+        "sessionID": "ses_opencode_real_fixture"
+      },
+      "parts": [
+        {
+          "snapshot": "[redacted:snapshot]",
+          "type": "step-start",
+          "id": "prt_opencode_real_fixture_step",
+          "sessionID": "ses_opencode_real_fixture",
+          "messageID": "msg_opencode_real_fixture_assistant"
+        },
+        {
+          "type": "text",
+          "text": "MCP transcript smoke test.",
+          "id": "prt_opencode_real_fixture_text",
+          "sessionID": "ses_opencode_real_fixture",
+          "messageID": "msg_opencode_real_fixture_assistant"
+        },
+        {
+          "reason": "stop",
+          "type": "step-finish",
+          "id": "prt_opencode_real_fixture_finish",
+          "sessionID": "ses_opencode_real_fixture",
+          "messageID": "msg_opencode_real_fixture_assistant"
+        }
+      ]
+    }
+  ]
+}

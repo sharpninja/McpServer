@@ -510,6 +510,17 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] IsInitialized returns true after GenerateToken.
 - TEST-MCP-BATCH-001: Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
   Scope: layer-1+
+- TEST-MCP-FILETOOLS-001: Unit tests must cover repository discovery behavior, path safety, MCP schemas, client delegation, hosted-agent registration, QBAgent registration, and backward compatibility.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Focused current-plus-prior unit scopes complete with zero failures and zero skipped tests at every Byrd slice gate.
+  - [ ] Tests cover defaults, paging, truncation, recursion, regex/glob behavior, cancellation, caps, empty results, and path-policy failures.
+- TEST-MCP-FILETOOLSINT-001: Integration tests must prove HTTP MCP, stdio MCP, REST client, hosted-agent, QBAgent, and workspace-isolation behavior for read_file, list_dir, and grep_files.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] HTTP and stdio tools/list advertise all three exact tool names and schemas.
+  - [ ] All three tools execute against an isolated workspace through REST/client and MCP transport paths.
+  - [ ] Development deployment passes live discovery and invocation checks before environment promotion.
 - TEST-MCP-HEALTH-002: WorkspaceReadinessHealthCheck returns Healthy when an enabled primary workspace is registered and has a seeded token; returns Unhealthy when the token subsystem is uninitialized, no enabled workspace is registered, or the primary workspace has no seeded token.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -523,6 +534,36 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] /mcpserver/todo returns 200 with valid token and no X-Workspace-Path.
   - [x] Unknown or missing API keys return 401.
   - [x] /ready returns 200 Healthy with workspace-ready check.
+- TEST-MCP-HELP-001: Help transcript JSONL writer appends one JSON line per entry and reads all entries without overwriting prior lines.
+  Scope: layer-1+
+- TEST-MCP-HELP-002: Deterministic inbound guard blocks injection fixtures and allows benign bypass corpora with stable rule IDs.
+  Scope: layer-1+
+- TEST-MCP-HELP-003: Guard incident JSON logger persists one incident file per block and filters incidents by session id.
+  Scope: layer-1+
+- TEST-MCP-HELP-004: Conversation service terminates sessions on guard violations; options validator rejects invalid AgentHelp configuration.
+  Scope: layer-1+
+- TEST-MCP-HELP-005: HTTP integration tests cover session create, synchronous and streaming turns, transcript retrieval, and guardrail evidence persistence.
+  Scope: layer-1+
+- TEST-MCP-HELP-006: MCP STDIO tools agent_help_create_session, agent_help_submit_turn, and agent_help_get_status delegate to the conversation service with workspace overrides.
+  Scope: layer-1+
+- TEST-MCP-HELP-007: Typed AgentHelpClient methods dispatch to the expected /mcpserver/agent-help REST paths with matching DTO contracts.
+  Scope: layer-1+
+- TEST-MCP-HELP-008: REPL contract tests prove workflow.agenthelp.createSession, workflow.agenthelp.submitTurn, and workflow.agenthelp.getStatus dispatch through typed REPL workflow code, build caller-linkage seed metadata, and return standard result/error envelopes.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-001: Injection fixture ignore-previous-instructions is blocked with rule injection.ignore-instructions.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-002: Injection fixture api-key-exfiltration is blocked with rule injection.api-key-exfiltration.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-003: Injection fixture write-todo-yaml is blocked with rule injection.write-todo-yaml.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-004: Injection fixture disable-guardrails is blocked with rule injection.disable-guardrails.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-005: Benign bypass fixtures remain allowed even when adjacent risky phrases appear in context.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-006: Guardrail violations terminate the session and persist transcript plus incident evidence.
+  Scope: layer-1+
+- TEST-MCP-HELP-SEC-007: Marker prompt template contains the Agent Help (MCP Server issues) section and references MCP/REST invocation paths.
+  Scope: layer-1+
 - TEST-MCP-MEMORY-001: Storage isolation tests SHALL prove Global memories and Workspace memories in two workspaces list as Global plus current workspace only, and that update/remove by ID cannot mutate another workspace-local memory.
   Scope: layer-1+
 - TEST-MCP-MEMORY-002: CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures.
@@ -561,6 +602,12 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-PLUGINCORE-003: bats: daemon roundtrip with --- terminator; one child serves N sends; auto-restart after kill; concurrent sends; persistent wrapper threads JSON params and honors fallback.
   Scope: layer-1+
+- TEST-MCP-PLUGINCORE-004: Automated PowerShell runtime and plugin parity tests SHALL cover dictionary-backed multi-item dialog parsing, persistence delegation, empty-payload failure, propagation, and checksum integrity with zero failures and zero skips.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] A red test reproduces the documented appendDialog silent no-op with ConvertFrom-Yaml dictionary output.
+  - [ ] Tests prove multi-item delegation and fail-closed empty payload behavior.
+  - [ ] Canonical and propagated plugin suites complete with zero failures and zero skips.
 - TEST-MCP-PLUGIN-TRIAGE-001: Every plugin skill bundle documents when and how to submit triage reports and the async expectation.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -746,6 +793,13 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [x] Signature verification succeeds for LF-only signed payload on all platforms
   - [x] Test validates cross-platform Environment.NewLine compatibility
+- TEST-MCP-REPL-025: Mock-backed unit and real-filesystem integration tests SHALL prove primary and failsafe strategy isolation, non-terminal degradation isolation, terminal notification, replay artifact fidelity, V4 path scoping, atomic writes, cancellation, dual failure, and normal primary behavior with zero failures and zero skips.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] A failing primary mock does not fail non-terminal plugin persistence when the failsafe mock succeeds.
+  - [ ] Closing a degraded turn returns the exact failsafe path and the artifact round-trips the attempted turn payload.
+  - [ ] Primary success, explicit cancellation, and dual-failure paths are covered.
+  - [ ] Current and prior McpServer.Repl.Core scopes complete with zero failures and zero skips.
 - TEST-MCP-REPL-TRIAGE-001: Full client.triage.* and workflow.triage.* REPL surface works with correct envelopes.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -801,6 +855,46 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-TRACE-REPL-001: Traceability audit coverage for completed REPL rows FR-MCP-REPL-001 through FR-MCP-REPL-005. These rows are covered by the existing REPL workflow, command-shape, YAML-envelope, and client-delegation test families documented under TEST-MCP-REPL-001 through TEST-MCP-REPL-020.
   Scope: layer-1+
+- TEST-MCP-TRANSCRIPT-001: Unit tests cover source detection and parser fixture coverage for Claude, Codex, Grok, Cline, Copilot, and OpenCode formats.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Fixtures identify supported source kinds and reject ambiguous/unknown bundles.
+- TEST-MCP-TRANSCRIPT-002: Unit tests verify neutral-to-session-log mapping preserves native values, keeps absent semantics absent, and marks deterministic derived IDs.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Missing model, token, response, action, status, and timestamp fields are not invented.
+- TEST-MCP-TRANSCRIPT-003: Unit tests cover malformed lines, unknown events, incomplete turns, mixed schemas, cancellation, limits, traversal, and path escape rejection.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Strict mode rejects error diagnostics while lenient mode returns valid data plus diagnostics.
+- TEST-MCP-TRANSCRIPT-004: Unit tests verify canonical YAML serialization is deterministic, redacted, LF-normalized, UTF-8 without BOM, and round-trips to equivalent objects.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Repeated runs over identical normalized input produce byte-identical YAML.
+- TEST-MCP-TRANSCRIPT-005: Unit tests verify idempotent replay keys, richer-field preservation, pre-submit failsafe creation, and retention/deletion based on precise persistence receipts.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Failsafe files are deleted only when persisted=true and degraded=false.
+- TEST-MCP-TRANSCRIPT-006: Unit and contract tests verify Codex, Claude, and Grok plugin helpers call the shared core and produce equivalent receipts from equivalent fixtures.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Plugin inventory and invocation tests expose no duplicate parser or tool names.
+- TEST-MCP-TRANSCRIPT-007: Integration tests cover /mcpserver/sessionlog/ingest/path and /upload for defaults, folder discovery, multipart, ZIP limits, and security rejections.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Invalid requests return 400, unauthorized paths 403, exceeded limits 413, and mixed folder runs 207 Multi-Status where appropriate.
+- TEST-MCP-TRANSCRIPT-008: Tests verify typed client, REPL commands, HTTP MCP discovery, stdio MCP discovery, and tool invocation for transcript ingestion and normalization.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] sessionlog_ingest_path and sessionlog_normalize_path require workspacePath and delegate through the shared service.
+- TEST-MCP-TRANSCRIPT-009: Tests cover Cline paired JSON/JSONL, Copilot events folders, OpenCode JSONL, and read-only OpenCode SQLite snapshot normalization.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] OpenCode SQLite tests prove consistent backup snapshot use and no source DB/WAL writes.
+- TEST-MCP-TRANSCRIPT-010: End-to-end plugin tests verify Claude hook transcript_path, Codex active session JSONL, and Grok verified hook/configured root ingestion and recovery.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Real sanitized samples from all six source formats can be ingested or normalized through the supported external agent surfaces.
 - TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -822,8 +916,6 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] Tests verify failed runs preserve output or errors and do not create TODOs.
 - TEST-MCP-TRIAGE-006: Multi-workspace isolation prevents cross-workspace grouping and status leakage.
-- TEST-MCP-TRIAGE-007: Soft-deleting a triage group removes the group and its reports from queries while retaining the rows marked deleted; deleting a missing group throws not-found; the REPL workflow routes workflow.triage.deleteGroup with required groupId and optional reason.
-- TEST-MCP-TRIAGE-008: The triage fallback classifier flags 4xx/rate-limit/unavailable signals and timeouts (and ignores success and generic errors); ConfiguredTriageResearchRunner advances the primary, secondary, then tertiary strategies on retryable failures, short-circuits on success, skips a disabled tier, and does not fall back on non-retryable failures.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Tests verify query filters and grouping scope never cross workspace boundaries.
@@ -934,33 +1026,3 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
   - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
   - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
-- TEST-MCP-HELP-001: Help transcript JSONL writer appends one JSON line per entry and reads all entries without overwriting prior lines.
-  Scope: layer-1+
-- TEST-MCP-HELP-002: Deterministic inbound guard blocks injection fixtures and allows benign bypass corpora with stable rule IDs.
-  Scope: layer-1+
-- TEST-MCP-HELP-003: Guard incident JSON logger persists one incident file per block and filters incidents by session id.
-  Scope: layer-1+
-- TEST-MCP-HELP-004: Conversation service terminates sessions on guard violations; options validator rejects invalid AgentHelp configuration.
-  Scope: layer-1+
-- TEST-MCP-HELP-005: HTTP integration tests cover session create, synchronous and streaming turns, transcript retrieval, and guardrail evidence persistence.
-  Scope: layer-1+
-- TEST-MCP-HELP-006: MCP STDIO tools `agent_help_create_session`, `agent_help_submit_turn`, and `agent_help_get_status` delegate to the conversation service with workspace overrides.
-  Scope: layer-1+
-- TEST-MCP-HELP-007: Typed `AgentHelpClient` methods dispatch to the expected `/mcpserver/agent-help` REST paths with matching DTO contracts.
-
-- TEST-MCP-HELP-008: REPL contract tests prove `workflow.agenthelp.createSession`, `workflow.agenthelp.submitTurn`, and `workflow.agenthelp.getStatus` dispatch through typed REPL workflow code, build caller-linkage seed metadata, and return standard result/error envelopes.
-  Scope: layer-1+
-- TEST-MCP-HELP-SEC-001: Injection fixture `ignore-previous-instructions` is blocked with rule `injection.ignore-instructions`.
-  Scope: layer-1+
-- TEST-MCP-HELP-SEC-002: Injection fixture `api-key-exfiltration` is blocked with rule `injection.api-key-exfiltration`.
-  Scope: layer-1+
-- TEST-MCP-HELP-SEC-003: Injection fixture `write-todo-yaml` is blocked with rule `injection.write-todo-yaml`.
-  Scope: layer-1+
-- TEST-MCP-HELP-SEC-004: Injection fixture `disable-guardrails` is blocked with rule `injection.disable-guardrails`.
-  Scope: layer-1+
-- TEST-MCP-HELP-SEC-005: Benign bypass fixtures remain allowed even when adjacent risky phrases appear in context.
-  Scope: layer-1+
-- TEST-MCP-HELP-SEC-006: Guardrail violations terminate the session and persist transcript plus incident evidence.
-  Scope: layer-1+
-- TEST-MCP-HELP-SEC-007: Marker prompt template contains the `## Agent Help (MCP Server issues)` section and references MCP/REST invocation paths.
-  Scope: layer-1+

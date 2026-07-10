@@ -1,0 +1,49 @@
+{
+  "generatedAtUtc": "2026-07-10T08:45:00Z",
+  "requirement": "MCP-TRANSCRIPT-001",
+  "sanitization": "Private content, tokens, user paths, request identifiers, and opaque reasoning payloads are redacted while native provider schemas are retained.",
+  "fixtures": [
+    {
+      "agent": "Codex",
+      "sourceKind": "Codex",
+      "source": "C:/Users/<user>/.codex/sessions/2026/07/10/*.jsonl",
+      "capture": "existing-real-session",
+      "path": "codex/session.jsonl"
+    },
+    {
+      "agent": "Claude",
+      "sourceKind": "Claude",
+      "source": "C:/Users/<user>/.claude/projects/*/*.jsonl",
+      "capture": "existing-real-session",
+      "path": "claude/session.jsonl"
+    },
+    {
+      "agent": "Grok",
+      "sourceKind": "Grok",
+      "source": "C:/Users/<user>/.grok/sessions/*",
+      "capture": "existing-real-session",
+      "path": "grok/chat_history.jsonl"
+    },
+    {
+      "agent": "Cline",
+      "sourceKind": "Cline",
+      "source": "F:/GitHub/McpServer/.tmp/agent-log-generation/cline-data/sessions/*",
+      "capture": "fresh-smoke-session-provider-rejected",
+      "path": "cline/session.json"
+    },
+    {
+      "agent": "Copilot",
+      "sourceKind": "Copilot",
+      "source": "copilot -p --output-format json",
+      "capture": "fresh-smoke-session-success",
+      "path": "copilot/events.jsonl"
+    },
+    {
+      "agent": "OpenCode",
+      "sourceKind": "OpenCode",
+      "source": "opencode run --format json and opencode export --sanitize",
+      "capture": "fresh-smoke-session-success",
+      "path": "opencode/export.json"
+    }
+  ]
+}

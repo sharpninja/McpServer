@@ -1105,6 +1105,75 @@ Scope: layer-1+
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
 Scope: layer-1+
 
+## FR-MCP-DOCFXWIKI-001 FR-MCP-DOCFXWIKI-001
+
+Placeholder requirement backfilled for TODO link FR-MCP-DOCFXWIKI-001.
+Scope: layer-1+
+
+## FR-MCP-FILETOOLS-001 Global repository discovery tools
+
+Every MCP transport, hosted agent, and QBAgent surface must expose read_file, list_dir, and grep_files through one server-owned repository discovery implementation.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] HTTP and stdio MCP tools/list expose read_file, list_dir, and grep_files with the documented schemas.
+- [ ] Generic hosted agents and QBAgent expose the same read-only capabilities without duplicate tool names.
+- [ ] Existing repository read, list, write, and edit contracts remain compatible.
+
+## FR-MCP-HELP-001 Agent Help conversation API
+
+Agents stuck on MCP Server surfaces can open help sessions, submit turns, query status, retrieve transcripts, and stream responses over HTTP.
+Scope: layer-1+
+
+## FR-MCP-HELP-002 Inbound guardrails
+
+Inbound user messages are evaluated by deterministic guard rules before helper execution; violations terminate the session.
+Scope: layer-1+
+
+## FR-MCP-HELP-003 Transcript persistence
+
+Help turns are captured as append-only JSONL under the workspace data root.
+Scope: layer-1+
+
+## FR-MCP-HELP-004 Guard incident logging
+
+Blocked inbound messages produce durable incident records for operator review.
+Scope: layer-1+
+
+## FR-MCP-HELP-005 Corpus bootstrap and outcome analysis
+
+Sessions optionally bootstrap a stub context pack; completed sessions can be analyzed for triage and documentation follow-ups.
+Scope: layer-1+
+
+## FR-MCP-HELP-006 MCP STDIO tool parity
+
+STDIO MCP exposes agent_help_create_session, agent_help_submit_turn, and agent_help_get_status mirroring the HTTP controller.
+Scope: layer-1+
+
+## FR-MCP-HELP-007 Typed client library
+
+SharpNinja.McpServer.Client exposes AgentHelpClient on McpServerClient for session create, turn submit, status, and transcript retrieval.
+Scope: layer-1+
+
+## FR-MCP-HELP-008 Marker prompt guidance
+
+Generated markers instruct agents when and how to invoke Agent Help for MCP Server issues.
+Scope: layer-1+
+
+## FR-MCP-HELP-009 REPL workflow parity
+
+The REPL exposes workflow.agenthelp typed wrappers with the same contracts as REST and MCP tools.
+Scope: layer-1+
+
+## FR-MCP-HELP-010 Agent Help configuration
+
+AgentHelp options control enablement, guard behavior, storage paths, execution strategy, and helper model defaults.
+Scope: layer-1+
+
+## FR-MCP-HELP-011 Agent Help grok-cli execution strategy and default
+
+Agent Help SHALL provide a Grok CLI execution strategy named grok-cli (with grok-build accepted as an alias) and SHALL use grok-cli as the default execution strategy when a caller does not specify one.
+Scope: layer-1+
+
 ## FR-MCP-LIVE-CODEX-20260603T2014Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.
@@ -1224,6 +1293,15 @@ Scope: layer-1+
 
 A persistent REPL daemon SHALL serve many requests from one long-lived repl child over NDJSON framing, with auto-start, crash-restart, and spawn-per-call fallback.
 Scope: layer-1+
+
+## FR-MCP-PLUGINCORE-004 Reliable plugin session-log dialog parsing
+
+Official McpServer plugins SHALL parse documented dialogItems and dialog payloads, preserve every item, and reject empty or unparseable appendDialog input instead of reporting a successful no-op.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Documented dialogItems arrays preserve every dialog item and increment auditDialog by the accepted item count.
+- [ ] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.
+- [ ] The canonical parsing fix propagates to every official plugin distribution without checksum drift.
 
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
 
@@ -1457,6 +1535,16 @@ Scope: layer-1+
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
 Scope: layer-1+
 
+## FR-MCP-REPL-009 Degraded session-log persistence isolation
+
+The MCP REPL SHALL isolate plugins from MCP Session Log service degradation during session and in-progress turn operations. When a turn closes while the primary service is degraded, the REPL SHALL durably persist the complete turn through an independent failsafe strategy and SHALL notify the caller with the failsafe path.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds.
+- [ ] The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status.
+- [ ] completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.
+- [ ] Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence.
+
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
 FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
@@ -1532,6 +1620,70 @@ Scope: layer-1+
 - [x] Closing a missing TODO returns the existing not-found mutation failure behavior. (evidence: TodoControllerTests.CloseAsync_WhenItemMissing_ReturnsNotFound.)
 - [x] The typed client exposes the same close-by-id operation. (evidence: TodoClientTests.CloseAsync_PostsCorrectUrl.)
 
+## FR-MCP-TRANSCRIPT-001 Transcript source ingestion
+
+The system shall ingest agent transcript bundles from supported source formats with deterministic source detection and diagnostics.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Auto detection identifies exactly one supported source or rejects ambiguous and unsupported input with diagnostics.
+- [ ] Folder, multipart, and ZIP ingestion discover independent session bundles without mixing sessions.
+
+## FR-MCP-TRANSCRIPT-002 Faithful loss-aware normalization
+
+The system shall normalize supported transcripts into a neutral event model without silently discarding malformed, unknown, partial, or unpaired records.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Native identity, ordering, timestamps, roles, content blocks, reasoning, tool calls/results, usage, failures, workspace metadata, subagents, and provenance are preserved when present.
+- [ ] Missing semantic values remain absent and derived required IDs are deterministic and explicitly marked.
+
+## FR-MCP-TRANSCRIPT-003 Canonical session log projection
+
+The system shall project neutral transcript events directly into canonical Session Log YAML using the existing session-log serializer and model.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Canonical Session Log YAML is deterministic, redacted, and produced without reparsing compatibility JSONL.
+- [ ] Compatibility profile output is optional and caller-selected for Claude, Codex, or Grok.
+
+## FR-MCP-TRANSCRIPT-004 Idempotent import and recovery
+
+The system shall import transcript-derived Session Log YAML through the existing persistence path with write-ahead recovery and idempotent replay.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Each detected session bundle is an independent idempotent unit with a stable replay key and receipt.
+- [ ] A failsafe importRecovery envelope is retained unless persistence explicitly reports persisted=true and degraded=false.
+
+## FR-MCP-TRANSCRIPT-005 Claude Codex Grok plugin parity
+
+Claude, Codex, and Grok plugins shall expose transcript ingestion and normalization through thin shared-core callers without private parser forks.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Codex, Claude, and Grok plugin paths invoke the same shared parser and projection code.
+- [ ] Dead duplicated parser and handwritten YAML code is removed only after typed parity tests pass.
+
+## FR-MCP-TRANSCRIPT-006 HTTP path and upload ingestion
+
+The system shall expose HTTP transcript ingestion for allowlisted server-local files/folders, multipart uploads, multi-file uploads, and ZIP uploads.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] POST /mcpserver/sessionlog/ingest/path accepts file or folder input with shared options and returns per-session receipts.
+- [ ] POST /mcpserver/sessionlog/ingest/upload accepts multipart files and ZIP bundles within documented limits.
+
+## FR-MCP-TRANSCRIPT-007 REPL and MCP ingestion parity
+
+The system shall expose transcript ingestion and normalization through typed client, REPL, and native MCP tools with equivalent behavior.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Typed client methods, REPL methods, and MCP tools expose path ingestion and path normalization with matching options and receipts.
+- [ ] MCP calls retain required workspacePath while hosted and REPL agents resolve workspace ownership from their bound client.
+
+## FR-MCP-TRANSCRIPT-008 Secondary provider normalization
+
+The system shall normalize Cline, Copilot, and OpenCode transcripts and native stores into canonical Session Log YAML and optional Claude, Codex, or Grok compatibility JSONL.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Cline paired session metadata/messages JSON and JSONL exports are supported.
+- [ ] Copilot events.jsonl folders and OpenCode JSONL plus read-only SQLite snapshots are supported without writing source stores.
+
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 
 Agents can submit workspace-scoped incidental bug reports without leaving their current task.
@@ -1569,26 +1721,6 @@ Scope: layer-1+
 - [ ] Each plugin skill bundle includes triage guidance.
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
-
-## FR-MCP-TRIAGE-005 Triage group soft-delete
-
-Operators can soft-delete a triage group and its reports so resolved or obsolete triage items no longer appear in queries, while the underlying rows are retained for audit.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Deleting a group soft-deletes the group and all of its reports and decomposed report list-items so they are excluded from group, report, and dashboard queries.
-- [x] The deleted rows remain in storage marked deleted (IsDeleted, DeletedAtUtc, optional DeleteReason).
-- [x] Delete is exposed over REST (DELETE /mcpserver/triage/groups/{id}), the typed client, and the REPL workflow surface (workflow.triage.deleteGroup).
-- [x] Deleting a missing group returns not-found.
-
-## FR-MCP-TRIAGE-006 Triage research agent fallback chain
-
-When the triage research agent fails with a retryable API error (4xx, rate-limit, or unavailable) or times out, the runner retries the same prompt against a configured secondary strategy and then a tertiary strategy before returning failure, so a rate-limited or unavailable primary agent does not strand a triage group.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] A primary run that returns a configured retryable signal (4xx/rate-limit/unavailable) or times out advances to the secondary strategy, then the tertiary strategy.
-- [x] A non-retryable primary failure returns immediately without invoking the fallback tiers.
-- [x] A successful tier short-circuits the chain and no later tier runs.
-- [x] Primary, secondary, and tertiary strategies are configured in appsettings.yaml (default secondary grok, tertiary claude).
 
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 
@@ -1726,93 +1858,4 @@ Scope: layer-1+
 - [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
-
-## Agent Help
-
-## FR-MCP-HELP-001 Agent Help conversation API
-
-Agents stuck on MCP Server surfaces can open help sessions, submit turns, query status, retrieve transcripts, and stream responses over HTTP.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] POST `/mcpserver/agent-help/session` creates a `help-*` session and returns execution strategy metadata.
-- [x] GET `/mcpserver/agent-help/session/{id}` returns the current session status snapshot.
-- [x] POST `/mcpserver/agent-help/session/{id}/turn` processes synchronous turns.
-- [x] POST `/mcpserver/agent-help/session/{id}/turn/stream` and WebSocket `/mcpserver/agent-help/session/{id}/stream` emit streaming events.
-
-## FR-MCP-HELP-002 Inbound guardrails
-
-Inbound user messages are evaluated by deterministic guard rules before helper execution; violations terminate the session.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Injection fixtures (ignore-instructions, api-key-exfiltration, write-todo-yaml, disable-guardrails) are blocked with stable rule IDs.
-- [x] Benign bypass fixtures (normal help requests, MCP failure descriptions, todo.yaml questions) are allowed.
-- [x] Blocked turns set `terminated_guardrail` status and persist `guardrail_violation` transcript evidence.
-
-## FR-MCP-HELP-003 Transcript persistence
-
-Help turns are captured as append-only JSONL under the workspace data root.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] One JSON object per line is written under `agent-help/transcripts/{sessionId}.jsonl`.
-- [x] Append operations do not overwrite prior entries.
-- [x] GET `/mcpserver/agent-help/session/{id}/transcript` returns all persisted entries.
-
-## FR-MCP-HELP-004 Guard incident logging
-
-Blocked inbound messages produce durable incident records for operator review.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] One JSON file per incident is written under `agent-help/incidents`.
-- [x] Incidents include ruleId, reason, matched snippet, sessionId, and turnId.
-- [x] Incidents are queryable by sessionId.
-
-## FR-MCP-HELP-005 Corpus bootstrap and outcome analysis
-
-Sessions optionally bootstrap a stub context pack; completed sessions can be analyzed for triage and documentation follow-ups.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Session create returns a corpus summary when `CorpusBootstrapEnabled` is true.
-- [x] Outcome analysis derives triage and documentation TODO recommendations from transcripts and incidents.
-
-## FR-MCP-HELP-006 MCP STDIO tool parity
-
-STDIO MCP exposes `agent_help_create_session`, `agent_help_submit_turn`, and `agent_help_get_status` mirroring the HTTP controller.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Tools accept `workspacePath` and delegate to `IAgentHelpConversationService`.
-- [x] `agent_help_create_session` accepts caller linkage and issue summary fields for session seeding.
-- [x] Tool names are referenced from the marker prompt template.
-
-## FR-MCP-HELP-007 Typed client library
-
-`SharpNinja.McpServer.Client` exposes `AgentHelpClient` on `McpServerClient` for session create, turn submit, status, and transcript retrieval.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] `McpServerClient.AgentHelp` exposes typed methods for the REST surface.
-- [x] Request and response DTO shapes match `AgentHelpController`.
-
-## FR-MCP-HELP-008 Marker prompt guidance
-
-Generated markers instruct agents when and how to invoke Agent Help for MCP Server issues.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Marker prompt template contains `## Agent Help (MCP Server issues)`.
-- [x] Section references `agent_help_create_session`, `workflow.agenthelp.createSession`, and `/mcpserver/agent-help/session`.
-
-## FR-MCP-HELP-009 REPL workflow parity
-
-The REPL exposes `workflow.agenthelp.*` typed wrappers with the same contracts as REST and MCP tools.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] `workflow.agenthelp.createSession`, `submitTurn`, and `getStatus` route through `AgentHelpClient`.
-- [x] YAML validation and error envelopes match existing workflow namespaces.
-
-## FR-MCP-HELP-010 Agent Help configuration
-
-`AgentHelp` options control enablement, guard behavior, storage paths, execution strategy, and helper model defaults.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] `AgentHelp` section in `appsettings.yaml` binds to `AgentHelpOptions`.
-- [x] Validator rejects unknown execution strategies, missing directories, and incomplete API key wiring.
-- [x] Disabled Agent Help returns 503 from endpoints.
 

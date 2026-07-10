@@ -2,6 +2,7 @@
 
 using System.ComponentModel;
 using System.Text.Json;
+using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements;
@@ -68,6 +69,7 @@ public sealed partial class FwhMcpTools
     private readonly IOptions<TurnTransactionOptions>? _transactionOptions;
     private readonly ITriageService? _triageService;
     private readonly IAgentHelpConversationService _agentHelpService;
+    private readonly ITranscriptIngestionService? _transcriptIngestionService;
     private readonly ILogger<FwhMcpTools> _logger;
 
 
@@ -103,7 +105,8 @@ public sealed partial class FwhMcpTools
         IBrainSlotInvocationService? brainSlotInvocation = null,
         IQuadBrainOrchestrationService? quadBrainOrchestration = null,
         ITriageService? triageService = null,
-        IAgentHelpConversationService? agentHelpService = null)
+        IAgentHelpConversationService? agentHelpService = null,
+        ITranscriptIngestionService? transcriptIngestionService = null)
     {
         _logger = logger;
         _db = db;
@@ -138,6 +141,7 @@ public sealed partial class FwhMcpTools
         _triageService = triageService;
         _agentHelpService = agentHelpService
             ?? throw new ArgumentNullException(nameof(agentHelpService));
+        _transcriptIngestionService = transcriptIngestionService;
     }
 
     /// <summary>

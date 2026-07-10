@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using McpServer.Client.Models;
@@ -77,6 +78,49 @@ public sealed class SessionLogClient : McpClientBase
         if (request.Offset != 0) parts.Add($"offset={request.Offset}");
         var qs = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
         return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken);
+    }
+
+
+    /// <summary>Ingests a server-local transcript file or folder through the session-log ingestion pipeline.</summary>
+    public async Task<TranscriptIngestRunResponse> IngestTranscriptPathAsync(
+        TranscriptIngestPathRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return await PostAsync<TranscriptIngestRunResponse>("mcpserver/sessionlog/ingest/path", request, cancellationToken);
+    }
+
+
+    /// <summary>Uploads transcript files and ingests them through the session-log ingestion pipeline.</summary>
+    public async Task<TranscriptIngestRunResponse> IngestTranscriptUploadAsync(
+        TranscriptIngestUploadRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        using var form = new MultipartFormDataContent();
+        AddFormString(form, "agent", request.Agent);
+        AddFormString(form, "source", request.Source.ToString());
+        AddFormString(form, "recursive", request.Recursive.ToString().ToLowerInvariant());
+        AddFormString(form, "strict", request.Strict.ToString().ToLowerInvariant());
+        AddFormString(form, "persist", request.Persist.ToString().ToLowerInvariant());
+        AddFormString(form, "compatibilityProfile", request.CompatibilityProfile.ToString());
+        AddFormString(form, "emitNormalizedProfile", request.EmitNormalizedProfile.ToString().ToLowerInvariant());
+
+        foreach (var file in request.Files)
+        {
+            if (file is null)
+                continue;
+            var content = new ByteArrayContent(file.Content ?? []);
+            content.Headers.ContentType = MediaTypeHeaderValue.Parse(string.IsNullOrWhiteSpace(file.ContentType) ? "application/octet-stream" : file.ContentType!);
+            form.Add(content, "files", file.FileName);
+        }
+
+        return await PostContentAsync<TranscriptIngestRunResponse>("mcpserver/sessionlog/ingest/upload", form, cancellationToken);
+    }
+
+    private static void AddFormString(MultipartFormDataContent form, string name, string? value)
+    {
+        form.Add(new StringContent(value ?? string.Empty), name);
     }
 
     /// <summary>Append processing dialog items to a session log turn.</summary>

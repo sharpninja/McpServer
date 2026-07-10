@@ -234,6 +234,66 @@ public abstract class McpClientBase
     protected Task<T> PatchIncludingNullsAsync<T>(string path, object? body, CancellationToken cancellationToken)
         => SendAsync<T>(HttpMethod.Patch, path, body, s_jsonOptionsIncludingNulls, cancellationToken);
 
+
+    /// <summary>Sends a POST request with caller-provided HTTP content and deserializes the JSON response.</summary>
+    /// <typeparam name="T">Response DTO type.</typeparam>
+    /// <param name="path">Relative API path.</param>
+    /// <param name="content">HTTP content to send.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Deserialized response body.</returns>
+    protected async Task<T> PostContentAsync<T>(string path, HttpContent content, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+        using var response = await SendContentRawAsync(HttpMethod.Post, path, content, cancellationToken).ConfigureAwait(true);
+        return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(true);
+    }
+
+    private async Task<HttpResponseMessage> SendContentRawAsync(
+        HttpMethod method,
+        string path,
+        HttpContent content,
+        CancellationToken cancellationToken)
+    {
+        EnsureAuthenticated();
+
+        var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
+        using var request = new HttpRequestMessage(method, uri);
+
+        if (!string.IsNullOrWhiteSpace(BearerToken))
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+        else if (!string.IsNullOrWhiteSpace(ApiKey))
+            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+
+        if (!string.IsNullOrWhiteSpace(WorkspacePath))
+            request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
+
+        AppendCustomHeaders(request);
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        request.Content = content;
+
+        HttpResponseMessage response;
+        try
+        {
+            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogError(ex, "[McpClient] NETWORK ERROR {Method} {Uri}", method, uri);
+            throw;
+        }
+
+        if (response.IsSuccessStatusCode)
+            return response;
+
+        using (response)
+        {
+            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
+            ThrowForStatus(response.StatusCode, body);
+        }
+
+        throw new McpServerException("Unexpected HTTP failure.", 500);
+    }
+
     /// <summary>Sends a DELETE request and deserializes the JSON response body to <typeparamref name="T"/>.</summary>
     /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
     protected Task<T> DeleteAsync<T>(string path, CancellationToken cancellationToken)

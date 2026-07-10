@@ -1,17 +1,22 @@
 {
   "name": "graphrag_index",
-  "description": "Initialize or rebuild GraphRAG index for the workspace.",
+  "description": "Initialize or rebuild GraphRAG index for the workspace or global scope.",
   "inputSchema": {
     "type": "object",
     "properties": {
       "workspacePath": {
-        "description": "Workspace path (required)",
+        "description": "Workspace path (required for workspace scope)",
         "type": "string"
       },
       "force": {
         "description": "Force re-index if true",
         "type": "boolean",
         "default": false
+      },
+      "scope": {
+        "description": "Storage scope: workspace or global",
+        "type": "string",
+        "default": "workspace"
       }
     },
     "required": [

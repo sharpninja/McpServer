@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.2.11430.68
@@ -98,6 +98,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.QBAgent.Skills", "src\McpServer.QBAgent.Skills\McpServer.QBAgent.Skills.csproj", "{D0EEB559-73B0-46B3-8730-2C61B2048308}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Review.Tests", "tests\McpServer.Review.Tests\McpServer.Review.Tests.csproj", "{8A3C2724-E4B3-4883-BEE3-5B7F4D91A148}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.SessionLog.Transcripts", "src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj", "{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -649,6 +651,18 @@ Global
 		{8A3C2724-E4B3-4883-BEE3-5B7F4D91A148}.Release|x64.Build.0 = Release|x64
 		{8A3C2724-E4B3-4883-BEE3-5B7F4D91A148}.Release|x86.ActiveCfg = Release|x86
 		{8A3C2724-E4B3-4883-BEE3-5B7F4D91A148}.Release|x86.Build.0 = Release|x86
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Debug|x64.Build.0 = Debug|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Debug|x86.Build.0 = Debug|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Release|x64.ActiveCfg = Release|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Release|x64.Build.0 = Release|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -699,5 +713,6 @@ Global
 		{B92E1B4C-55CE-4526-A45F-37D11187C0B4} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
 		{D0EEB559-73B0-46B3-8730-2C61B2048308} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
 		{8A3C2724-E4B3-4883-BEE3-5B7F4D91A148} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
+		{E00A26CA-183C-4AEC-8F34-A994EB34A3AB} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
 	EndGlobalSection
 EndGlobal

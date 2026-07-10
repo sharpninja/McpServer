@@ -75,6 +75,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly IGraphRagWorkflow? _graphRagWorkflow;
     private readonly ITriageWorkflow? _triageWorkflow;
     private readonly IAgentHelpWorkflow? _agentHelpWorkflow;
+    private readonly ITranscriptIngestionWorkflow? _transcriptIngestionWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
@@ -90,6 +91,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="graphRagWorkflow">The optional GraphRAG workflow used to invoke <c>workflow.graphrag.*</c> methods.</param>
     /// <param name="triageWorkflow">The optional triage workflow used to invoke <c>workflow.triage.*</c> methods.</param>
     /// <param name="agentHelpWorkflow">The optional Agent Help workflow used to invoke <c>workflow.agenthelp.*</c> methods.</param>
+    /// <param name="transcriptIngestionWorkflow">The optional transcript ingestion workflow used to invoke <c>repl.sessionlog.*Transcripts</c> methods.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
@@ -100,7 +102,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         IGraphRagWorkflow? graphRagWorkflow = null,
         ITriageWorkflow? triageWorkflow = null,
         IAgentHelpWorkflow? agentHelpWorkflow = null,
-        ISessionLogPersistenceStrategy? sessionLogPersistenceStrategy = null)
+        ISessionLogPersistenceStrategy? sessionLogPersistenceStrategy = null,
+        ITranscriptIngestionWorkflow? transcriptIngestionWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
@@ -111,6 +114,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _graphRagWorkflow = graphRagWorkflow;
         _triageWorkflow = triageWorkflow;
         _agentHelpWorkflow = agentHelpWorkflow;
+        _transcriptIngestionWorkflow = transcriptIngestionWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
     }
 
@@ -176,6 +180,12 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         if (string.Equals(method, SessionLogCommandShapes.PersistTurnMethod, StringComparison.Ordinal))
         {
             return await DispatchSessionLogPersistenceRequestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (string.Equals(method, SessionLogCommandShapes.IngestTranscriptsMethod, StringComparison.Ordinal) ||
+            string.Equals(method, SessionLogCommandShapes.NormalizeTranscriptsMethod, StringComparison.Ordinal))
+        {
+            return await DispatchTranscriptIngestionRequestAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
         if (method.StartsWith("client.", StringComparison.Ordinal))
@@ -664,6 +674,107 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     ["exceptionType"] = ex.GetType().FullName,
                 });
         }
+    }
+
+    private async Task<IYamlEnvelope> DispatchTranscriptIngestionRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_transcriptIngestionWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Transcript ingestion workflow is not registered.");
+        }
+
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            var normalize = string.Equals(request.Method, SessionLogCommandShapes.NormalizeTranscriptsMethod, StringComparison.Ordinal);
+            var transcriptRequest = BuildTranscriptIngestPathRequest(args, normalize);
+            var result = normalize
+                ? await _transcriptIngestionWorkflow.NormalizeTranscriptsAsync(transcriptRequest, cancellationToken).ConfigureAwait(false)
+                : await _transcriptIngestionWorkflow.IngestTranscriptsAsync(transcriptRequest, cancellationToken).ConfigureAwait(false);
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private static TranscriptIngestPathRequest BuildTranscriptIngestPathRequest(
+        IReadOnlyDictionary<string, object?> args,
+        bool normalize)
+    {
+        var source = ParseEnum(GetString(args, "source"), TranscriptSourceKind.Auto, "source");
+        if (normalize)
+        {
+            var profileName = GetString(args, "targetProfile") ?? GetString(args, "compatibilityProfile");
+            var profile = ParseEnum(profileName, TranscriptCompatibilityProfile.None, "targetProfile");
+            if (profile == TranscriptCompatibilityProfile.None)
+                throw new ArgumentException("Missing required parameter: targetProfile");
+
+            return new TranscriptIngestPathRequest
+            {
+                Path = RequireString(args, "path"),
+                Agent = RequireString(args, "agent"),
+                Source = source,
+                Recursive = GetBool(args, "recursive") ?? true,
+                Strict = GetBool(args, "strict") ?? true,
+                Persist = GetBool(args, "persist") ?? false,
+                CompatibilityProfile = profile,
+                EmitNormalizedProfile = true,
+            };
+        }
+
+        var compatibilityProfile = ParseEnum(GetString(args, "compatibilityProfile"), TranscriptCompatibilityProfile.None, "compatibilityProfile");
+        return new TranscriptIngestPathRequest
+        {
+            Path = RequireString(args, "path"),
+            Agent = RequireString(args, "agent"),
+            Source = source,
+            Recursive = GetBool(args, "recursive") ?? true,
+            Strict = GetBool(args, "strict") ?? true,
+            Persist = GetBool(args, "persist") ?? true,
+            CompatibilityProfile = compatibilityProfile,
+            EmitNormalizedProfile = GetBool(args, "emitNormalizedProfile") ?? compatibilityProfile != TranscriptCompatibilityProfile.None,
+        };
+    }
+
+    private static TEnum ParseEnum<TEnum>(string? value, TEnum defaultValue, string parameterName)
+        where TEnum : struct, Enum
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return defaultValue;
+
+        if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var parsed))
+            return parsed;
+
+        throw new ArgumentException($"Invalid {parameterName}: {value}");
     }
 
     private async Task<IYamlEnvelope> DispatchTodoRequestAsync(

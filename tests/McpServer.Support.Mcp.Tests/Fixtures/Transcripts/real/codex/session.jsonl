@@ -1,0 +1,6 @@
+{"timestamp":"2026-07-10T08:31:17.000Z","type":"session_meta","payload":{"id":"codex-real-fixture-session","timestamp":"2026-07-10T08:31:17.000Z","cwd":"F:/GitHub/McpServer","originator":"codex_cli","cli_version":"redacted"}}
+{"timestamp":"2026-07-10T08:31:18.000Z","type":"event_msg","payload":{"level":"info","message":"[redacted status event]"}}
+{"timestamp":"2026-07-10T08:31:19.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"[redacted user prompt]"}]}}
+{"timestamp":"2026-07-10T08:31:20.000Z","type":"world_state","payload":{"cwd":"F:/GitHub/McpServer","sandbox_policy":"workspace-write","approval_policy":"on-request"}}
+{"timestamp":"2026-07-10T08:31:21.000Z","type":"turn_context","payload":{"turn_id":"codex-real-fixture-turn","thread_id":"redacted","cwd":"F:/GitHub/McpServer"}}
+{"timestamp":"2026-07-10T08:31:22.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"[redacted assistant response]"}]}}

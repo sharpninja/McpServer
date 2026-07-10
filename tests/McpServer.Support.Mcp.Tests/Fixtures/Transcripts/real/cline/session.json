@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "session_id": "cline-real-fixture-session",
+  "source": "cli",
+  "pid": 0,
+  "started_at": "2026-07-10T08:43:18.708Z",
+  "ended_at": "2026-07-10T08:43:19.000Z",
+  "exit_code": 1,
+  "status": "error",
+  "interactive": false,
+  "provider": "cline",
+  "model": "~x-ai/grok-latest",
+  "cwd": "F:/GitHub/McpServer/.tmp/agent-log-generation/opencode-work",
+  "workspace_root": "F:/GitHub/McpServer/.tmp/agent-log-generation/opencode-work",
+  "team_name": null,
+  "enable_tools": false,
+  "enable_spawn": false,
+  "enable_teams": false,
+  "prompt": "[redacted user prompt]",
+  "metadata": {
+    "diagnostic": "Insufficient balance. Cline Credits balance is redacted.",
+    "capture": "fresh-smoke-session-provider-rejected"
+  },
+  "messages_path": "cline-real-fixture-session.messages.json"
+}

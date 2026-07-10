@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements.Models;
 
@@ -34,6 +34,10 @@ internal static class RequirementsDocumentParser
         @"^\s*(?:[-*]\s*)?(?:\*\*)?Scope(?:\*\*)?\s*:\s*(?<value>.+?)\s*$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+    private static readonly Regex s_statusLineRegex = new(
+        @"^\s*(?:[-*]\s*)?(?:\*\*)?Status\s*:\s*(?:\*\*)?\s*(?<value>.+?)\s*$",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
     public static IReadOnlyList<FrEntry> ParseFunctional(string? content)
     {
         if (string.IsNullOrWhiteSpace(content))
@@ -48,7 +52,8 @@ internal static class RequirementsDocumentParser
             var id = match.Groups["id"].Value.Trim();
             var title = CleanHeadingTitle(match.Groups["title"].Value);
             var (bodyWithScope, acceptanceCriteria) = SplitAcceptanceCriteria(NormalizeBody(match.Groups["body"].Value));
-            var (body, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(bodyWithScope);
+            var (bodyWithoutScope, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(bodyWithScope);
+            var (body, status) = SplitStatusMetadata(bodyWithoutScope);
             if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(title))
                 continue;
 
@@ -56,6 +61,7 @@ internal static class RequirementsDocumentParser
                 id,
                 title,
                 body,
+                Status: status,
                 AcceptanceCriteria: acceptanceCriteria,
                 ScopeStartLayerKey: scopeStartLayerKey,
                 ScopeEndLayerKey: scopeEndLayerKey));
@@ -82,11 +88,13 @@ internal static class RequirementsDocumentParser
             var bodyRaw = NormalizeBody(match.Groups["body"].Value);
             var (title, bodyWithCriteria) = SplitTechnicalTitle(bodyRaw);
             var (bodyWithScope, acceptanceCriteria) = SplitAcceptanceCriteria(bodyWithCriteria);
-            var (body, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(bodyWithScope);
+            var (bodyWithoutScope, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(bodyWithScope);
+            var (body, status) = SplitStatusMetadata(bodyWithoutScope);
             list.Add(new TrEntry(
                 id,
                 title,
                 body,
+                Status: status,
                 AcceptanceCriteria: acceptanceCriteria,
                 ScopeStartLayerKey: scopeStartLayerKey,
                 ScopeEndLayerKey: scopeEndLayerKey));
@@ -267,7 +275,15 @@ internal static class RequirementsDocumentParser
             {
                 var criterion = ParseAcceptanceCriterion(line);
                 if (criterion is not null)
+                {
                     criteria.Add(criterion);
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                bodyLines.Add(line);
                 continue;
             }
 
@@ -275,6 +291,34 @@ internal static class RequirementsDocumentParser
         }
 
         return (NormalizeBody(string.Join('\n', bodyLines)), criteria);
+    }
+
+    private static (string Body, string Status) SplitStatusMetadata(string body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return (string.Empty, "pending");
+
+        var bodyLines = new List<string>();
+        var status = "pending";
+        var hasStatus = false;
+        foreach (var line in NormalizeLines(body))
+        {
+            var match = s_statusLineRegex.Match(line);
+            if (!match.Success)
+            {
+                bodyLines.Add(line);
+                continue;
+            }
+
+            var parsed = match.Groups["value"].Value.Trim();
+            if (!hasStatus && !string.IsNullOrWhiteSpace(parsed))
+            {
+                status = parsed;
+                hasStatus = true;
+            }
+        }
+
+        return (NormalizeBody(string.Join('\n', bodyLines)), status);
     }
 
     private static (string Body, string ScopeStartLayerKey, string? ScopeEndLayerKey) SplitScopeMetadata(string body)
@@ -419,7 +463,8 @@ internal static class RequirementsDocumentParser
         IReadOnlyList<AcceptanceCriterion> criteria)
     {
         var id = rawId.Trim();
-        var (condition, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(rawCondition.Trim());
+        var (conditionWithoutScope, scopeStartLayerKey, scopeEndLayerKey) = SplitScopeMetadata(rawCondition.Trim());
+        var (condition, status) = SplitStatusMetadata(conditionWithoutScope);
         if (string.IsNullOrWhiteSpace(id)
             || string.IsNullOrWhiteSpace(condition)
             || !id.StartsWith("TEST-", StringComparison.OrdinalIgnoreCase)
@@ -431,6 +476,7 @@ internal static class RequirementsDocumentParser
         entries.Add(new TestEntry(
             id,
             condition,
+            Status: status,
             AcceptanceCriteria: criteria,
             ScopeStartLayerKey: scopeStartLayerKey,
             ScopeEndLayerKey: scopeEndLayerKey));

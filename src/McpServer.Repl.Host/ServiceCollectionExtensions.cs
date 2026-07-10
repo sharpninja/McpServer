@@ -88,6 +88,12 @@ public static class ServiceCollectionExtensions
             return new McpServer.Repl.Core.SessionLogWorkflow(clientFactory.SessionLog, TimeProvider.System);
         });
 
+        // Register transcript ingestion workflow for repl.sessionlog.ingestTranscripts and normalizeTranscripts.
+        services.AddSingleton<ITranscriptIngestionWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new McpServer.Repl.Core.TranscriptIngestionWorkflow(clientFactory.SessionLog);
+        });
         // Register YAML protocol primitives used by agent-stdio mode.
         // FR-MCP-REPL-001, TR-MCP-REPL-001/003/004: YAML envelope serialization,
         // generic client passthrough, command dispatcher, and stream-level protocol loop.
@@ -130,7 +136,8 @@ public static class ServiceCollectionExtensions
                 sp.GetRequiredService<IGraphRagWorkflow>(),
                 sp.GetRequiredService<ITriageWorkflow>(),
                 sp.GetRequiredService<IAgentHelpWorkflow>(),
-                sp.GetRequiredService<ISessionLogPersistenceStrategy>()));
+                sp.GetRequiredService<ISessionLogPersistenceStrategy>(),
+                sp.GetRequiredService<ITranscriptIngestionWorkflow>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

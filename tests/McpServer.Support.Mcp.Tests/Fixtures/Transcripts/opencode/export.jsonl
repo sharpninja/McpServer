@@ -1,0 +1,2 @@
+{"session_id":"opencode-fixture-001","event":"message","id":"opencode-u-1","time":"2026-07-01T15:00:01Z","role":"user","parts":[{"type":"text","text":"Check service status."}]}
+{"session_id":"opencode-fixture-001","event":"assistant","id":"opencode-a-1","time":"2026-07-01T15:00:02Z","model":"opencode-placeholder","parts":[{"type":"text","text":"I will inspect the status command."}],"usage":{"prompt":9,"completion":7}}

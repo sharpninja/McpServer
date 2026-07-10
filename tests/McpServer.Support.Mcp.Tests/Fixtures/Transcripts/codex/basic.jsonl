@@ -1,0 +1,6 @@
+{"event":"session_meta","id":"codex-fixture-001","timestamp":"2026-07-01T11:00:00Z","workspace":"F:/GitHub/Sample","model":"codex-placeholder"}
+{"event":"turn_context","turn_id":"turn-1","timestamp":"2026-07-01T11:00:01Z","role":"user","content":[{"type":"text","text":"Read AGENTS.md"}]}
+{"event":"response_item","turn_id":"turn-1","timestamp":"2026-07-01T11:00:02Z","item":{"type":"reasoning","summary":"Need inspect repo instructions first."}}
+{"event":"tool_call","turn_id":"turn-1","timestamp":"2026-07-01T11:00:03Z","call_id":"call-1","tool":"read_file","arguments":{"file_path":"AGENTS.md"}}
+{"event":"tool_result","turn_id":"turn-1","timestamp":"2026-07-01T11:00:04Z","call_id":"call-1","status":"success","content":"Complete the user's request."}
+{"event":"response_item","turn_id":"turn-1","timestamp":"2026-07-01T11:00:05Z","item":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Read the repo instructions."}],"usage":{"input_tokens":20,"output_tokens":6}}}

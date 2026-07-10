@@ -581,7 +581,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         return docType switch
         {
             RequirementsDocType.Functional => Task.FromResult((RequirementsDocumentRenderer.RenderFunctional(_frEntries), "text/markdown")),
-            RequirementsDocType.Technical => Task.FromResult((RequirementsDocumentRenderer.RenderTechnical(_trEntries), "text/markdown")),
+            RequirementsDocType.Technical => Task.FromResult((RequirementsDocumentRenderer.RenderTechnical(_trEntries, _mappings), "text/markdown")),
             RequirementsDocType.Testing => Task.FromResult((RequirementsDocumentRenderer.RenderTesting(_testEntries), "text/markdown")),
             RequirementsDocType.Mapping => Task.FromResult((RequirementsDocumentRenderer.RenderMapping(_mappings), "text/markdown")),
             RequirementsDocType.Matrix => Task.FromResult((RequirementsDocumentRenderer.RenderMatrix(_frEntries, _trEntries, _testEntries, ReadFileIfExists(_options.MatrixPath)), "text/markdown")),
@@ -636,7 +636,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         await AtomicWriteAsync(_options.FunctionalRequirementsPath, RequirementsDocumentRenderer.RenderFunctional(_frEntries), ct).ConfigureAwait(false);
 
     private async Task PersistTechnicalAsync(CancellationToken ct) =>
-        await AtomicWriteAsync(_options.TechnicalRequirementsPath, RequirementsDocumentRenderer.RenderTechnical(_trEntries), ct).ConfigureAwait(false);
+        await AtomicWriteAsync(_options.TechnicalRequirementsPath, RequirementsDocumentRenderer.RenderTechnical(_trEntries, _mappings), ct).ConfigureAwait(false);
 
     private async Task PersistTestingAsync(CancellationToken ct) =>
         await AtomicWriteAsync(_options.TestingRequirementsPath, RequirementsDocumentRenderer.RenderTesting(_testEntries), ct).ConfigureAwait(false);

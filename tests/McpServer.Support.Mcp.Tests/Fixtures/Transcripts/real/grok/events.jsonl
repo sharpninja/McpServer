@@ -1,0 +1,4 @@
+{"ts":"2026-07-10T08:42:00.000Z","type":"mcp_config_resolved","servers":[{"name":"mcpserver","transport":"stdio","target":"[redacted]"}],"disabled":[]}
+{"ts":"2026-07-10T08:42:01.000Z","type":"mcp_server_starting","server_name":"mcpserver","transport":"stdio","target":"[redacted]","timeout_sec":30}
+{"ts":"2026-07-10T08:42:02.000Z","type":"mcp_server_started","server_name":"mcpserver","pid":0}
+{"ts":"2026-07-10T08:42:03.000Z","type":"chat_message","role":"assistant","message_id":"grok-real-fixture-assistant"}

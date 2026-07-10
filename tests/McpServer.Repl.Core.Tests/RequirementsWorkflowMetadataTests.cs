@@ -133,6 +133,53 @@ public sealed class RequirementsWorkflowMetadataTests
         Assert.Contains("\"status\":\"completed\"", testHandler.LastRequestBody);
     }
 
+    [Fact]
+    public async Task CreateMappingAsync_AllowsLegacyStoredIdsThroughMappingWorkflow()
+    {
+        using var http = new HttpClient(new LegacyMappingHttpHandler());
+        var workflow = new RequirementsWorkflow(new RequirementsClient(http, Options));
+        var request = Substitute.For<IMappingCreateRequest>();
+        request.FrId.Returns("FR-MCP-LIVE-CODEX-20260603T2014Z");
+        request.TrIds.Returns(["TR-MCP-MT-003A"]);
+        request.TrId.Returns((string?)null);
+        request.TestIds.Returns(["TEST-SUPPORT-010B-1"]);
+        request.TestId.Returns((string?)null);
+        request.Notes.Returns("legacy mapping");
+
+        var result = await workflow.CreateMappingAsync(request, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(result.Success);
+        Assert.NotNull(result.Item);
+        Assert.Equal("FR-MCP-LIVE-CODEX-20260603T2014Z", result.Item.FrId);
+        Assert.Equal("TR-MCP-MT-003A", result.Item.TrId);
+        Assert.Equal("TEST-SUPPORT-010B-1", result.Item.TestId);
+    }
+
+    private sealed class LegacyMappingHttpHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var path = request.RequestUri?.AbsolutePath ?? string.Empty;
+            if (request.Method == HttpMethod.Get && path.Contains("/mcpserver/requirements/fr/FR-MCP-LIVE-CODEX-20260603T2014Z", StringComparison.Ordinal))
+                return Task.FromResult(Json(HttpStatusCode.OK, """{"id":"FR-MCP-LIVE-CODEX-20260603T2014Z","title":"Legacy FR","body":"Legacy FR"}"""));
+            if (request.Method == HttpMethod.Get && path.Contains("/mcpserver/requirements/tr/TR-MCP-MT-003A", StringComparison.Ordinal))
+                return Task.FromResult(Json(HttpStatusCode.OK, """{"id":"TR-MCP-MT-003A","title":"Legacy TR","body":"Legacy TR"}"""));
+            if (request.Method == HttpMethod.Get && path.Contains("/mcpserver/requirements/test/TEST-SUPPORT-010B-1", StringComparison.Ordinal))
+                return Task.FromResult(Json(HttpStatusCode.OK, """{"id":"TEST-SUPPORT-010B-1","title":"Legacy TEST","condition":"Legacy TEST"}"""));
+            if (request.Method == HttpMethod.Get && path.Contains("/mcpserver/requirements/mapping/FR-MCP-LIVE-CODEX-20260603T2014Z", StringComparison.Ordinal))
+                return Task.FromResult(Json(HttpStatusCode.NotFound, """{"error":"not found"}"""));
+            if (request.Method == HttpMethod.Put && path.Contains("/mcpserver/requirements/mapping/FR-MCP-LIVE-CODEX-20260603T2014Z", StringComparison.Ordinal))
+                return Task.FromResult(Json(HttpStatusCode.OK, """{"frId":"FR-MCP-LIVE-CODEX-20260603T2014Z","trIds":["TR-MCP-MT-003A"],"testIds":["TEST-SUPPORT-010B-1"]}"""));
+
+            return Task.FromResult(Json(HttpStatusCode.BadRequest, """{"error":"unexpected request"}"""));
+        }
+
+        private static HttpResponseMessage Json(HttpStatusCode statusCode, string body) => new(statusCode)
+        {
+            Content = new StringContent(body, Encoding.UTF8, "application/json")
+        };
+    }
+
     private sealed class CapturingHttpHandler : HttpMessageHandler
     {
         private readonly string _responseBody;

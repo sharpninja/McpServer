@@ -1,0 +1,6 @@
+[
+  { "id": "cline-u-1", "ts": "2026-07-01T13:00:01Z", "role": "user", "text": "Open the build file." },
+  { "id": "cline-a-1", "ts": "2026-07-01T13:00:02Z", "role": "assistant", "content": [{ "type": "tool_call", "id": "cline-call-1", "name": "read_file", "input": { "path": "build.ps1" } }] },
+  { "id": "cline-r-1", "ts": "2026-07-01T13:00:03Z", "role": "tool", "toolCallId": "cline-call-1", "text": "param()" },
+  { "id": "cline-a-2", "ts": "2026-07-01T13:00:04Z", "role": "assistant", "text": "The build file starts with an empty param block." }
+]

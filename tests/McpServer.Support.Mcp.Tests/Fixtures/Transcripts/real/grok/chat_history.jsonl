@@ -1,0 +1,4 @@
+{"type":"system","content":"[redacted system prompt]"}
+{"type":"user","content":"[redacted synthetic workspace context]","synthetic_reason":"workspace_context"}
+{"type":"user","content":"[redacted user prompt]"}
+{"type":"assistant","content":"[redacted assistant response]","model":"grok-code-fast-1","finish_reason":"stop"}

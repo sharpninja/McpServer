@@ -1,0 +1,2 @@
+{"sessionId":"cline-fixture-001","type":"message","id":"cline-u-1","timestamp":"2026-07-01T13:00:01Z","role":"user","text":"Open the build file."}
+{"sessionId":"cline-fixture-001","type":"message","id":"cline-a-2","timestamp":"2026-07-01T13:00:04Z","role":"assistant","text":"The build file starts with an empty param block."}

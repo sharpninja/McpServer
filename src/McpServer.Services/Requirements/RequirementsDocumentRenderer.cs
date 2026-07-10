@@ -32,9 +32,13 @@ internal static class RequirementsDocumentRenderer
         return sb.ToString();
     }
 
-    public static string RenderTechnical(IEnumerable<TrEntry> entries)
+    public static string RenderTechnical(IEnumerable<TrEntry> entries) =>
+        RenderTechnical(entries, mappings: null);
+
+    public static string RenderTechnical(IEnumerable<TrEntry> entries, IEnumerable<FrTrMapping>? mappings)
     {
         var sb = new StringBuilder();
+        var coverageByTrId = BuildCoverageByTechnicalId(mappings);
         sb.AppendLine("# Technical Requirements (MCP Server)");
         sb.AppendLine();
 
@@ -55,6 +59,8 @@ internal static class RequirementsDocumentRenderer
                 sb.AppendLine(entry.Body.Trim());
             }
 
+            AppendCoverageMetadata(sb, entry, coverageByTrId);
+            AppendStatusMetadata(sb, entry);
             AppendScopeMetadata(sb, entry.ScopeStartLayerKey, entry.ScopeEndLayerKey);
             AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria);
 
@@ -81,6 +87,95 @@ internal static class RequirementsDocumentRenderer
             sb.AppendLine();
 
         return sb.ToString();
+    }
+
+    /// <summary>Renders requirement status metadata in a deterministic Markdown-friendly form.</summary>
+    internal static void AppendStatusMetadata(StringBuilder sb, string status, string listItemIndent = "")
+    {
+        var normalized = string.IsNullOrWhiteSpace(status) ? "pending" : status.Trim();
+        sb.Append(listItemIndent).Append("**Status:** ").AppendLine(normalized);
+    }
+
+    internal static void AppendStatusMetadata(StringBuilder sb, TrEntry entry)
+    {
+        if (entry.Body.Contains("**Status:**", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        AppendStatusMetadata(sb, entry.Status);
+    }
+
+    /// <summary>Renders mapping-derived coverage metadata for technical requirements that do not already declare coverage.</summary>
+    internal static void AppendCoverageMetadata(
+        StringBuilder sb,
+        TrEntry entry,
+        IReadOnlyDictionary<string, string> coverageByTrId)
+    {
+        if (entry.Body.Contains("**Covered by:**", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        if (!coverageByTrId.TryGetValue(entry.Id, out var coverage) || string.IsNullOrWhiteSpace(coverage))
+            return;
+
+        sb.Append("**Covered by:** ").AppendLine(coverage);
+    }
+
+    private static IReadOnlyDictionary<string, string> BuildCoverageByTechnicalId(IEnumerable<FrTrMapping>? mappings)
+    {
+        var frByTrId = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        var testByTrId = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        if (mappings is null)
+            return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var mapping in mappings)
+        {
+            foreach (var trId in mapping.TrIds)
+            {
+                if (string.IsNullOrWhiteSpace(trId))
+                    continue;
+
+                var normalizedTrId = trId.Trim();
+                AddUnique(GetOrAdd(frByTrId, normalizedTrId), mapping.FrId);
+                foreach (var testId in mapping.TestIds)
+                    AddUnique(GetOrAdd(testByTrId, normalizedTrId), testId);
+            }
+        }
+
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var trId in frByTrId.Keys.Concat(testByTrId.Keys).Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            var parts = new List<string>();
+            if (frByTrId.TryGetValue(trId, out var frIds) && frIds.Count > 0)
+                parts.Add("FR: " + string.Join(", ", frIds));
+            if (testByTrId.TryGetValue(trId, out var testIds) && testIds.Count > 0)
+                parts.Add("TEST: " + string.Join(", ", testIds));
+            if (parts.Count > 0)
+                result[trId] = string.Join("; ", parts);
+        }
+
+        return result;
+    }
+
+    private static List<string> GetOrAdd(Dictionary<string, List<string>> valuesByKey, string key)
+    {
+        if (!valuesByKey.TryGetValue(key, out var values))
+        {
+            values = [];
+            valuesByKey[key] = values;
+        }
+
+        return values;
+    }
+
+    private static void AddUnique(List<string> values, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return;
+
+        var normalized = value.Trim();
+        if (values.Any(existing => existing.Equals(normalized, StringComparison.OrdinalIgnoreCase)))
+            return;
+
+        values.Add(normalized);
     }
 
     /// <summary>
