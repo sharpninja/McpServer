@@ -1,5 +1,6 @@
 // TR-PLANNED-CORE-013: Runs the MCP server over STDIO (stdin/stdout JSON-RPC) when --transport stdio.
 
+using McpServer.Support.Mcp.Extensions;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
@@ -7,6 +8,7 @@ using McpServer.Common.AgentCli;
 using McpServer.Common.AgentCli.Extensions;
 using McpServer.GraphRag;
 using McpServer.SessionLog.Transcripts;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
@@ -56,6 +58,7 @@ public static class McpStdioHost
         builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
         builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
         builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(TriageOptions.SectionName));
+        builder.Services.Configure<DesktopLaunchOptions>(builder.Configuration.GetSection(DesktopLaunchOptions.SectionName));
         var requiredRepoAllowlistPatterns = new[]
         {
             "src/McpServer.Cqrs/**/*.cs",
@@ -118,6 +121,10 @@ public static class McpStdioHost
             new TemplateStorageOptionsPostConfigure(builder.Configuration, instanceName));
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
         builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
+        builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>();
+        builder.Services.AddSingleton<WorkspaceTokenService>();
+        builder.Services.AddSingleton<ApiKeyIssuanceGuard>();
+        builder.Services.AddSingleton(new ServerRuntimeInfo(DateTimeOffset.UtcNow, 0));
         AddStdioTransactionSecurity(builder.Services, builder.Configuration);
         builder.Services.AddHttpClient(WebsiteIngestor.HttpClientName, (sp, client) =>
         {
@@ -136,6 +143,8 @@ public static class McpStdioHost
             options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(180);
         });
         builder.Services.AddSingleton<Chunker>();
+        builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
+        builder.Services.AddSingleton<IVectorIndexService, VectorIndexService>();
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
         builder.Services.AddSingleton<IProcessSpawner, DefaultProcessSpawner>();
@@ -211,6 +220,7 @@ public static class McpStdioHost
                 sp.GetRequiredService<IOptions<IngestionOptions>>(),
                 sp.GetRequiredService<ILogger<AuditedAgentCliClient>>()));
         builder.Services.AddAgentExecutionStrategies();
+        builder.Services.AddAgentHelpServices(builder.Configuration);
         builder.Services.AddTriageServices();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
