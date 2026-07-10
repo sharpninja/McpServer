@@ -1116,6 +1116,29 @@ Regression tests SHALL verify all plugin batch requirement methods accept uninde
 
 
 
+## TEST-MCP-FILETOOLS
+
+### TEST-MCP-FILETOOLS-001
+
+Unit tests must cover repository discovery behavior, path safety, MCP schemas, client delegation, hosted-agent registration, QBAgent registration, and backward compatibility.
+
+**Acceptance Criteria:**
+- [ ] Focused current-plus-prior unit scopes complete with zero failures and zero skipped tests at every Byrd slice gate.
+- [ ] Tests cover defaults, paging, truncation, recursion, regex/glob behavior, cancellation, caps, empty results, and path-policy failures.
+
+
+## TEST-MCP-FILETOOLSINT
+
+### TEST-MCP-FILETOOLSINT-001
+
+Integration tests must prove HTTP MCP, stdio MCP, REST client, hosted-agent, QBAgent, and workspace-isolation behavior for read_file, list_dir, and grep_files.
+
+**Acceptance Criteria:**
+- [ ] HTTP and stdio tools/list advertise all three exact tool names and schemas.
+- [ ] All three tools execute against an isolated workspace through REST/client and MCP transport paths.
+- [ ] Development deployment passes live discovery and invocation checks before environment promotion.
+
+
 ## TEST-MCP-HEALTH
 
 ### TEST-MCP-HEALTH-002
@@ -1240,6 +1263,15 @@ core-guard job fails on a seeded undeclared lib file and passes when declared in
 
 bats: daemon roundtrip with --- terminator; one child serves N sends; auto-restart after kill; concurrent sends; persistent wrapper threads JSON params and honors fallback.
 
+
+### TEST-MCP-PLUGINCORE-004
+
+Automated PowerShell runtime and plugin parity tests SHALL cover dictionary-backed multi-item dialog parsing, persistence delegation, empty-payload failure, propagation, and checksum integrity with zero failures and zero skips.
+
+**Acceptance Criteria:**
+- [ ] A red test reproduces the documented appendDialog silent no-op with ConvertFrom-Yaml dictionary output.
+- [ ] Tests prove multi-item delegation and fail-closed empty payload behavior.
+- [ ] Canonical and propagated plugin suites complete with zero failures and zero skips.
 
 
 ## TEST-MCP-QBAGENT
@@ -1610,6 +1642,16 @@ Given a marker whose HMAC payload is signed with LF-only (\n) line endings (matc
 **Acceptance Criteria:**
 - [x] Signature verification succeeds for LF-only signed payload on all platforms
 - [x] Test validates cross-platform Environment.NewLine compatibility
+
+### TEST-MCP-REPL-025
+
+Mock-backed unit and real-filesystem integration tests SHALL prove primary and failsafe strategy isolation, non-terminal degradation isolation, terminal notification, replay artifact fidelity, V4 path scoping, atomic writes, cancellation, dual failure, and normal primary behavior with zero failures and zero skips.
+
+**Acceptance Criteria:**
+- [ ] A failing primary mock does not fail non-terminal plugin persistence when the failsafe mock succeeds.
+- [ ] Closing a degraded turn returns the exact failsafe path and the artifact round-trips the attempted turn payload.
+- [ ] Primary success, explicit cancellation, and dual-failure paths are covered.
+- [ ] Current and prior McpServer.Repl.Core scopes complete with zero failures and zero skips.
 
 
 ## TEST-MCP-REPL-TRIAGE

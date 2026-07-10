@@ -724,6 +724,16 @@ Scope: layer-1+
 - [ ] Memory delete is an idempotent soft delete; missing or already deleted rows return applied success.
 - [ ] Workspace-scoped memory rows cannot be applied to a different workspace.
 
+## TR-MCP-FILETOOLS-001
+
+**Server-owned repository discovery core** — A single read-only repository discovery service must implement OpenAI-compatible read_file, list_dir, and grep_files behavior while enforcing active-workspace containment, allowlists, traversal rejection, and reparse-point safety.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] read_file uses one-based offsets, defaults to 2000 lines, prefixes L<n>, and truncates each line at 500 characters.
+- [ ] list_dir returns a deterministic sorted tree with one-based paging, default limit 25, and default depth 2.
+- [ ] grep_files applies bounded regex search, optional glob filtering, a 30-second bound, a 2000-result maximum, and modification-time ordering.
+- [ ] All paths remain inside the active workspace and pass existing allowlist and reparse-point protections.
+
 ## TR-MCP-GH-001
 
 **GitHub OAuth Bootstrap Configuration Contract** — The server SHALL bind GitHub integration settings from `Mcp:GitHub`, including OAuth client metadata (`ClientId`, `RedirectUri`, `AuthorizeEndpoint`, `Scopes`) and token store path/fallback policy flags. REST endpoints under `/mcpserver/gh/oauth/*` SHALL expose the effective bootstrap configuration and authorize URL composition.
@@ -1070,6 +1080,14 @@ Scope: layer-1+
 
 **repl-daemon.js TCP broker + repl-persistent.sh wrapper** — Detached node broker keeps one repl child, NDJSON in/--- out, state-file readiness, idle shutdown, restart; shell wrapper builds envelopes and falls back to spawn-per-call.
 Scope: layer-1+
+
+## TR-MCP-PLUGINCORE-004
+
+**Dictionary-safe plugin dialog parsing** — The canonical PowerShell plugin core SHALL read dialogItems and dialog from IDictionary and property-backed parameter objects and SHALL fail closed when no dialog items are parsed.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Get-ReplDialogItemsFromParams supports ConvertFrom-Yaml dictionary output and PSCustomObject output.
+- [ ] Invoke-WorkflowAppendDialog returns failure and writes an actionable error when no items are parsed.
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
@@ -1507,6 +1525,16 @@ Scope: layer-1+
 
 `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
 Scope: layer-1+
+
+## TR-MCP-REPL-010
+
+**Independent REPL session-log persistence strategies** — McpServer.Repl.Core SHALL define separate primary MCP and filesystem failsafe session-log persistence strategies plus a failover coordinator. REPL session-log persistence calls SHALL route through the coordinator, suppress degraded notifications for non-terminal plugin operations after durable fallback, and return terminal persistence details. The failsafe strategy SHALL atomically write a replayable session-log envelope to the V4 workspace-and-agent-scoped pending path.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Primary and failsafe persistence implementations are independently mockable and neither implementation contains fallback orchestration.
+- [ ] Failover does not catch explicit caller cancellation and propagates an error when both primary and failsafe persistence fail.
+- [ ] Failsafe writes use an atomic replace or move and return the final absolute artifact path.
+- [ ] Terminal dispatcher results expose degraded, persistenceStrategy, failsafePath, and message fields.
 
 ## TR-MCP-REPL-TRIAGE-001
 

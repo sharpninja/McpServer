@@ -1110,6 +1110,15 @@ Scope: layer-1+
 Placeholder requirement backfilled for TODO link FR-MCP-DOCFXWIKI-001.
 Scope: layer-1+
 
+## FR-MCP-FILETOOLS-001 Global repository discovery tools
+
+Every MCP transport, hosted agent, and QBAgent surface must expose read_file, list_dir, and grep_files through one server-owned repository discovery implementation.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] HTTP and stdio MCP tools/list expose read_file, list_dir, and grep_files with the documented schemas.
+- [ ] Generic hosted agents and QBAgent expose the same read-only capabilities without duplicate tool names.
+- [ ] Existing repository read, list, write, and edit contracts remain compatible.
+
 ## FR-MCP-HELP-001 FR-MCP-HELP-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-HELP-001.
@@ -1284,6 +1293,15 @@ Scope: layer-1+
 
 A persistent REPL daemon SHALL serve many requests from one long-lived repl child over NDJSON framing, with auto-start, crash-restart, and spawn-per-call fallback.
 Scope: layer-1+
+
+## FR-MCP-PLUGINCORE-004 Reliable plugin session-log dialog parsing
+
+Official McpServer plugins SHALL parse documented dialogItems and dialog payloads, preserve every item, and reject empty or unparseable appendDialog input instead of reporting a successful no-op.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Documented dialogItems arrays preserve every dialog item and increment auditDialog by the accepted item count.
+- [ ] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.
+- [ ] The canonical parsing fix propagates to every official plugin distribution without checksum drift.
 
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
 
@@ -1516,6 +1534,16 @@ Scope: layer-1+
 
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
 Scope: layer-1+
+
+## FR-MCP-REPL-009 Degraded session-log persistence isolation
+
+The MCP REPL SHALL isolate plugins from MCP Session Log service degradation during session and in-progress turn operations. When a turn closes while the primary service is degraded, the REPL SHALL durably persist the complete turn through an independent failsafe strategy and SHALL notify the caller with the failsafe path.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds.
+- [ ] The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status.
+- [ ] completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.
+- [ ] Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence.
 
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
