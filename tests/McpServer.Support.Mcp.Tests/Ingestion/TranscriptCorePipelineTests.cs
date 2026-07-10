@@ -139,6 +139,42 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
+    /// <summary>Verifies unsupported Codex JSONL records are diagnosed instead of silently discarded.</summary>
+    [Fact]
+    public async Task IngestionService_CodexUnsupportedRecordsEmitDiagnostics()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-codex-diagnostics", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        try
+        {
+            var transcriptPath = Path.Combine(tempDirectory, "session.jsonl");
+            await File.WriteAllLinesAsync(transcriptPath, [
+                "{\"type\":\"session_meta\",\"payload\":{\"id\":\"codex-diagnostic-fixture\",\"cwd\":\"F:/GitHub/Sample\"}}",
+                "{\"type\":\"response_item\",\"payload\":{\"id\":\"msg-1\",\"role\":\"user\",\"content\":[{\"type\":\"input_text\",\"text\":\"hello\"}]}}",
+                "{\"type\":\"unmapped_record\",\"payload\":{\"reason\":\"should diagnose\"}}",
+                "{\"type\":\"response_item\",\"payload\":{\"id\":\"msg-missing-role\",\"content\":[{\"type\":\"output_text\",\"text\":\"dropped\"}]}}"
+            ], TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(transcriptPath)
+            {
+                SourceKind = TranscriptSourceKind.Codex,
+                Persist = false
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Equal("codex-diagnostic-fixture", session.SessionId);
+            Assert.Single(session.Events);
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "codex_unknown_record" && diagnostic.Severity == "warning");
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "codex_missing_role" && diagnostic.Severity == "warning");
+        }
+        finally
+        {
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
     public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()

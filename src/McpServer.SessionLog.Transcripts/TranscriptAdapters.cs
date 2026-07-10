@@ -58,24 +58,45 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
         var records = await TranscriptUtilities.ReadJsonLinesAsync(path, cancellationToken).ConfigureAwait(false);
         var sessionId = TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
         string? workspacePath = null;
+        var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
         var order = 1;
         foreach (var record in records)
         {
             var type = TranscriptUtilities.GetString(record, "type") ?? string.Empty;
-            if (type.Equals("session_meta", StringComparison.Ordinal) && TranscriptUtilities.GetObject(record, "payload") is { } meta)
+            if (type.Equals("session_meta", StringComparison.Ordinal))
             {
-                sessionId = TranscriptUtilities.GetString(meta, "id") ?? sessionId;
-                workspacePath = TranscriptUtilities.GetString(meta, "cwd") ?? workspacePath;
+                if (TranscriptUtilities.GetObject(record, "payload") is { } meta)
+                {
+                    sessionId = TranscriptUtilities.GetString(meta, "id") ?? sessionId;
+                    workspacePath = TranscriptUtilities.GetString(meta, "cwd") ?? workspacePath;
+                }
+                else
+                {
+                    diagnostics.Add(new TranscriptDiagnostic("codex_malformed_session_meta", "Codex session_meta record is missing an object payload.", "warning", path));
+                }
+
                 continue;
             }
 
-            if (!type.Equals("response_item", StringComparison.Ordinal) || TranscriptUtilities.GetObject(record, "payload") is not { } payload)
+            if (!type.Equals("response_item", StringComparison.Ordinal))
+            {
+                diagnostics.Add(new TranscriptDiagnostic("codex_unknown_record", "Codex JSONL record type '" + (string.IsNullOrWhiteSpace(type) ? "<missing>" : type) + "' was not normalized.", "warning", path));
                 continue;
+            }
+
+            if (TranscriptUtilities.GetObject(record, "payload") is not { } payload)
+            {
+                diagnostics.Add(new TranscriptDiagnostic("codex_missing_payload", "Codex response_item record is missing an object payload.", "warning", path));
+                continue;
+            }
 
             var role = TranscriptUtilities.GetString(payload, "role");
             if (string.IsNullOrWhiteSpace(role))
+            {
+                diagnostics.Add(new TranscriptDiagnostic("codex_missing_role", "Codex response_item record is missing a role and was not normalized.", "warning", path));
                 continue;
+            }
 
             var content = payload.TryGetProperty("content", out var contentElement)
                 ? TranscriptUtilities.ExtractContentBlocks(contentElement)
@@ -89,7 +110,7 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
                 TranscriptUtilities.ReadTimestamp(record)));
         }
 
-        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, workspacePath: workspacePath);
+        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, workspacePath: workspacePath, diagnostics: diagnostics);
     }
 }
 
