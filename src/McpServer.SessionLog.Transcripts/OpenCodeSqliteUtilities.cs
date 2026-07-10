@@ -55,13 +55,24 @@ internal static class OpenCodeSqliteUtilities
         Directory.CreateDirectory(snapshotDirectory);
         var snapshotPath = Path.Combine(snapshotDirectory, sourceFileName);
 
-        await CopyFileAsync(sourceFullPath, snapshotPath, cancellationToken).ConfigureAwait(false);
-        foreach (var suffix in new[] { "-wal", "-shm" })
+        var sourceConnectionString = new SqliteConnectionStringBuilder
         {
-            var sidecarPath = sourceFullPath + suffix;
-            if (File.Exists(sidecarPath))
-                await CopyFileAsync(sidecarPath, snapshotPath + suffix, cancellationToken).ConfigureAwait(false);
-        }
+            DataSource = sourceFullPath,
+            Mode = SqliteOpenMode.ReadOnly,
+            Cache = SqliteCacheMode.Shared
+        }.ToString();
+        var snapshotConnectionString = new SqliteConnectionStringBuilder
+        {
+            DataSource = snapshotPath,
+            Mode = SqliteOpenMode.ReadWriteCreate
+        }.ToString();
+
+        await using var sourceConnection = new SqliteConnection(sourceConnectionString);
+        await using var snapshotConnection = new SqliteConnection(snapshotConnectionString);
+        await sourceConnection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        await snapshotConnection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+        sourceConnection.BackupDatabase(snapshotConnection);
 
         return snapshotPath;
     }
@@ -148,12 +159,5 @@ internal static class OpenCodeSqliteUtilities
         catch (UnauthorizedAccessException)
         {
         }
-    }
-
-    private static async Task CopyFileAsync(string sourcePath, string destinationPath, CancellationToken cancellationToken)
-    {
-        await using var source = new FileStream(sourcePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 64 * 1024, FileOptions.Asynchronous | FileOptions.SequentialScan);
-        await using var destination = new FileStream(destinationPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, FileOptions.Asynchronous);
-        await source.CopyToAsync(destination, cancellationToken).ConfigureAwait(false);
     }
 }

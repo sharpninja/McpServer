@@ -124,6 +124,66 @@ public sealed class OpenCodeSqliteTranscriptTests
         }
     }
 
+    /// <summary>Verifies OpenCode SQLite snapshots capture WAL-backed rows as a standalone database.</summary>
+    [Fact]
+    public async Task Snapshot_CapturesWalBackedRowsAsStandaloneDatabase()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-opencode-sqlite-wal", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        string? snapshotPath = null;
+        try
+        {
+            var databasePath = Path.Combine(tempDirectory, "opencode.db");
+            await CreateOpenCodeSqliteFixtureAsync(databasePath).ConfigureAwait(true);
+            await using (var sourceConnection = new SqliteConnection(new SqliteConnectionStringBuilder { DataSource = databasePath }.ToString()))
+            {
+                await sourceConnection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+                await ExecuteNonQueryAsync(sourceConnection, "PRAGMA journal_mode=WAL;").ConfigureAwait(true);
+                await ExecuteNonQueryAsync(sourceConnection, "INSERT INTO message (id, session_id, role, model_id, provider_id, time_created, time_completed) VALUES ('msg-wal', 'ses_sqlite_fixture', 'assistant', 'opencode/gpt-test', 'opencode', 1735689604000, 1735689604000);").ConfigureAwait(true);
+                await ExecuteNonQueryAsync(sourceConnection, "INSERT INTO part (id, message_id, session_id, type, json) VALUES ('part-wal', 'msg-wal', 'ses_sqlite_fixture', 'text', '{\"text\":\"wal backed sqlite content\"}');").ConfigureAwait(true);
+                Assert.True(File.Exists(databasePath + "-wal"), "The fixture must keep committed content in a WAL sidecar before snapshotting.");
+
+                snapshotPath = await CreateOpenCodeSnapshotAsync(databasePath).ConfigureAwait(true);
+            }
+
+            Assert.False(File.Exists(snapshotPath + "-wal"), "A consistent backup snapshot should be a standalone database file.");
+            Assert.False(File.Exists(snapshotPath + "-shm"), "A consistent backup snapshot should not require a copied shared-memory sidecar.");
+
+            await using var snapshotConnection = new SqliteConnection(new SqliteConnectionStringBuilder
+            {
+                DataSource = snapshotPath,
+                Mode = SqliteOpenMode.ReadOnly
+            }.ToString());
+            await snapshotConnection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await using var command = snapshotConnection.CreateCommand();
+            command.CommandText = "SELECT json FROM part WHERE id = 'part-wal';";
+            var value = await command.ExecuteScalarAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Contains("wal backed sqlite content", Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture), StringComparison.Ordinal);
+            Assert.True(File.Exists(databasePath + "-wal"), "Snapshotting must not checkpoint away or delete the source WAL file.");
+        }
+        finally
+        {
+            SqliteConnection.ClearAllPools();
+            if (!string.IsNullOrWhiteSpace(snapshotPath))
+            {
+                var snapshotDirectory = Path.GetDirectoryName(snapshotPath);
+                if (!string.IsNullOrWhiteSpace(snapshotDirectory) && Directory.Exists(snapshotDirectory))
+                    Directory.Delete(snapshotDirectory, recursive: true);
+            }
+
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
+    private static async Task<string> CreateOpenCodeSnapshotAsync(string databasePath)
+    {
+        var utilitiesType = typeof(TranscriptIngestionService).Assembly.GetType("McpServer.SessionLog.Transcripts.OpenCodeSqliteUtilities", throwOnError: true)!;
+        var method = utilitiesType.GetMethod("CreateSnapshotAsync", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!;
+        var task = (Task<string>)method.Invoke(null, [databasePath, TestContext.Current.CancellationToken])!;
+        return await task.ConfigureAwait(true);
+    }
+
     private static async Task CreateOpenCodeSqliteFixtureAsync(string databasePath)
     {
         var connectionString = new SqliteConnectionStringBuilder
