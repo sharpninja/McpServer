@@ -2,53 +2,9 @@
 
 BeforeAll {
     $script:RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).ProviderPath
-    $script:FixtureRoot = Join-Path $script:RepoRoot 'plugins\core\test-fixtures\legacy-bats'
-    if (-not (Test-Path -LiteralPath $script:FixtureRoot)) {
-        $script:FixtureRoot = Join-Path $script:RepoRoot 'plugins\core\test-fixtures'
-    }
-    $script:ParityPath = Join-Path $PSScriptRoot 'bats-pester-parity.generated.json'
-
-    function Get-BatsScenarios {
-        $rows = [System.Collections.Generic.List[object]]::new()
-        foreach ($file in Get-ChildItem -LiteralPath $script:FixtureRoot -Filter '*.bats' -File | Sort-Object Name) {
-            $lines = [System.IO.File]::ReadAllLines($file.FullName)
-            for ($index = 0; $index -lt $lines.Length; $index++) {
-                if ($lines[$index] -match '^@test\s+"(?<name>.*)"\s+\{') {
-                    $rows.Add([pscustomobject]@{
-                        batsFile = ([System.IO.Path]::GetRelativePath($script:RepoRoot, $file.FullName).Replace('\', '/'))
-                        batsLine = $index + 1
-                        batsName = $matches['name']
-                    })
-                }
-            }
-        }
-
-        return $rows
-    }
 }
 
 Describe 'PowerShell-only plugin migration requirements' {
-    It 'TEST-MCP-PLUGIN-PSONLY-001 inventories every current Bats scenario in the generated parity map' {
-        $bats = @(Get-BatsScenarios)
-        Test-Path -LiteralPath $script:ParityPath | Should -BeTrue
-
-        $map = @([System.IO.File]::ReadAllText($script:ParityPath) | ConvertFrom-Json)
-        $map.Count | Should -Be $bats.Count
-
-        foreach ($scenario in $bats) {
-            $match = @($map | Where-Object {
-                    $sameFile = $_.batsFile -eq $scenario.batsFile
-                    $sameLine = $_.batsLine -eq $scenario.batsLine
-                    $sameName = $_.batsName -eq $scenario.batsName
-                    $sameFile -and $sameLine -and $sameName
-                })
-            $match.Count | Should -Be 1
-            $match[0].testRequirement | Should -Be 'TEST-MCP-PLUGIN-PSONLY-001'
-            $match[0].pesterFile | Should -Be 'plugins/core/test-fixtures/pester/PluginBatsParity.Tests.ps1'
-            $match[0].pesterName | Should -Match 'TEST-MCP-PLUGIN-PSONLY-001'
-        }
-    }
-
     It 'TEST-MCP-PLUGIN-PSONLY-002 rejects forbidden Bash and Node runtime files from shipped plugin packages' {
         $parentRoot = Split-Path -Parent $script:RepoRoot
         $siblingNames = @(

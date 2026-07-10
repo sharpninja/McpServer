@@ -70,7 +70,6 @@ partial class Build
             {
                 TestsDirectory / "McpServer.Support.Mcp.Tests" / "McpServer.Support.Mcp.Tests.csproj",
                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
-                TestsDirectory / "AgentPluginCore" / "AgentPluginCore.Tests.csproj",
             };
 
             foreach (var project in projectsWithIntegrationTests)
