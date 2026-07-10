@@ -303,18 +303,29 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
 
         var records = await TranscriptUtilities.ReadJsonLinesAsync(path, cancellationToken).ConfigureAwait(false);
         var sessionId = records.Select(record => TranscriptUtilities.GetString(record, "sessionID")).FirstOrDefault(value => !string.IsNullOrWhiteSpace(value)) ?? TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
+        var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
         var order = 1;
         foreach (var record in records)
         {
             var type = TranscriptUtilities.GetString(record, "type") ?? string.Empty;
-            if (!type.Equals("text", StringComparison.Ordinal) || TranscriptUtilities.GetObject(record, "part") is not { } part)
+            if (TranscriptUtilities.GetObject(record, "part") is not { } part)
+            {
+                diagnostics.Add(new TranscriptDiagnostic("opencode_jsonl_missing_part", "OpenCode JSONL record is missing a part object.", "warning", path));
                 continue;
+            }
+
+            if (!type.Equals("text", StringComparison.Ordinal))
+            {
+                var diagnosticType = string.IsNullOrWhiteSpace(type) ? "<missing>" : type;
+                diagnostics.Add(new TranscriptDiagnostic("opencode_jsonl_unknown_record", "Unsupported OpenCode JSONL record type: " + diagnosticType + ".", "warning", path));
+                continue;
+            }
 
             events.Add(CreateEvent(TranscriptUtilities.GetString(part, "id") ?? "opencode-event-" + order.ToString(System.Globalization.CultureInfo.InvariantCulture), order++, "assistant", type, TranscriptUtilities.GetString(part, "text"), TranscriptUtilities.ReadTimestamp(record)));
         }
 
-        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId);
+        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, diagnostics: diagnostics);
     }
 
     private static async Task<TranscriptSession> NormalizeSqliteSnapshotAsync(TranscriptBundle bundle, CancellationToken cancellationToken)
