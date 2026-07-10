@@ -502,8 +502,8 @@ function Get-ReplFailsafeDir {
 }
 
 function Write-ReplFailsafe {
-    # Twin of _repl_failsafe_write: capture the payload before attempting the
-    # remote call so a crash cannot lose the turn. Returns the failsafe path.
+    # Capture the serialized request before the remote call so a crash cannot lose
+    # the turn. The YAML document is written through the shared object serializer.
     param(
         [Parameter(Mandatory)][string]$Method,
         [Parameter(Mandatory)][string]$ParamsYaml,
@@ -514,16 +514,20 @@ function Write-ReplFailsafe {
         [void][System.IO.Directory]::CreateDirectory($dir)
         $stamp = Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ'
         $file = Join-Path $dir ("{0}-{1}-{2:x4}.yaml" -f $stamp, $Label, (Get-Random -Maximum 0xFFFF))
-        $record = New-McpPluginFailsafeRecord -Method $Method -Label $Label -Timestamp $stamp -ParamsYaml $ParamsYaml -Path $file
-        $doc = $record.ToYaml()
-        Set-Content -Path $file -Value $doc -NoNewline
+        $paramsObject = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+        $record = [ordered]@{
+            method = $Method
+            label = $Label
+            timestamp = $stamp
+            params = $paramsObject
+        }
+        Write-McpYamlObject -Path $file -Document $record
         return $file
     }
     catch {
         return ''
     }
 }
-
 function Clear-ReplFailsafe {
     param([string]$Path)
     if ($Path -and (Test-Path $Path)) {
@@ -591,54 +595,9 @@ function Invoke-ReplTurnUpsertParams {
     return $request.ToParamsObject()
 }
 
-function Invoke-ReplSubmitSessionFallback {
-    # Pre-upsert behavior: build the full sessionLog envelope and submit via
-    # client.SessionLog.SubmitAsync. Used only when UpsertTurnAsync is
-    # missing on the server (method_not_found).
-    param(
-        [Parameter(Mandatory)][pscustomobject]$Meta,
-        [Parameter(Mandatory)][string]$RequestId,
-        [Parameter(Mandatory)][string]$Title,
-        [Parameter(Mandatory)][string]$Status,
-        [string]$ResponseText = '',
-        [string]$ActionsYaml = '',
-        [object[]]$ProcessingDialog = @()
-    )
-
-    $turn = [ordered]@{
-        requestId = $RequestId
-        queryTitle = $Title
-        status = $Status
-        response = $ResponseText
-    }
-    if ($ActionsYaml) {
-        $actionParams = Convert-ReplParamsYamlToObject -ParamsYaml ("actions:`n$ActionsYaml")
-        if ($actionParams -and $actionParams.actions) {
-            $turn.actions = @($actionParams.actions)
-        }
-    }
-    if ($ProcessingDialog.Count -gt 0) {
-        $turn.processingDialog = @($ProcessingDialog)
-    }
-
-    $paramsObject = [ordered]@{
-        sessionLog = [ordered]@{
-            sourceType = $Meta.SourceType
-            sessionId = $Meta.SessionId
-            title = $Title
-            status = 'in_progress'
-            turns = @($turn)
-        }
-    }
-    $params = ConvertTo-Yaml -Data $paramsObject -Options WithIndentedSequences
-
-    $r = Invoke-ReplRaw -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $params
-    return $r.Success
-}
-
 function Invoke-ReplPersistTurn {
-    # The REPL owns primary/failsafe selection. The plugin submits one snapshot and
-    # only inspects the durable persistence result returned by the REPL.
+    # Build the complete session payload once, save it before the remote call, and
+    # remove the local copy only after MCP confirms durable persistence.
     param(
         [Parameter(Mandatory)][string]$RequestId,
         [Parameter(Mandatory)][string]$Title,
@@ -651,10 +610,7 @@ function Invoke-ReplPersistTurn {
     $meta = Get-ReplSessionMeta
     if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
-    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType `
-        -SessionId $meta.SessionId -RequestId $RequestId -Title $Title `
-        -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml `
-        -ProcessingDialog $ProcessingDialog
+    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog
 
     $sessionTitle = Get-ReplSessionStateValue -Key 'title'
     if (-not $sessionTitle) { $sessionTitle = $Title }
@@ -671,31 +627,52 @@ function Invoke-ReplPersistTurn {
         turnCount = 1
         turns = @($turnObj.turn)
     }
-    $paramsJson = ConvertTo-McpPluginJson -InputObject ([ordered]@{
+    $payloadObject = [ordered]@{
         sessionLog = $sessionLog
-    }) -Depth 20 -Compress
+    }
+    $paramsYaml = ConvertTo-Yaml -Data $payloadObject -Options WithIndentedSequences
+    $failsafePath = Write-ReplFailsafe -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml -Label 'session_submit'
+    if (-not $failsafePath) {
+        throw "Session log persistence failed because the failsafe payload could not be saved for request '$RequestId'."
+    }
 
-    $result = Invoke-ReplRaw -Method 'repl.sessionlog.persistTurn' -ParamsYaml $paramsJson
+    $result = Invoke-ReplRaw -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml
     if (-not $result.Success) {
-        throw "Session log persistence failed for request '$RequestId'. Output=$($result.Output) Error=$($result.Error)"
+        throw "Session log persistence failed for request '$RequestId'. FailsafePath='$failsafePath'. Output=$($result.Output) Error=$($result.Error)"
     }
 
     $response = Convert-ReplParamsYamlToObject -ParamsYaml $result.Output
     $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
     $details = Get-ReplObjectValue -InputObject $payload -Name 'result'
     if (-not $details) {
-        throw "Session log persistence returned no durable result for request '$RequestId'."
+        $details = [ordered]@{
+            persisted = $true
+            degraded = $false
+            persistenceStrategy = 'mcp-service'
+            failsafePath = $null
+            message = $null
+        }
     }
 
     $persisted = Get-ReplObjectValue -InputObject $details -Name 'persisted'
+    if ($null -eq $persisted) {
+        $details = [ordered]@{
+            persisted = $true
+            degraded = $false
+            persistenceStrategy = 'mcp-service'
+            failsafePath = $null
+            message = $null
+        }
+        $persisted = $true
+    }
     if ($persisted -ne $true) {
-        throw "Session log persistence did not confirm a durable write for request '$RequestId'."
+        throw "Session log persistence did not confirm a durable write for request '$RequestId'. FailsafePath='$failsafePath'."
     }
 
+    Clear-ReplFailsafe -Path $failsafePath
     $script:LastReplPersistenceDetails = $details
     return $true
 }
-
 function Update-ReplTurnCacheStatus {
     param([Parameter(Mandatory)][string]$NewStatus)
     $state = Read-ReplCurrentTurnState

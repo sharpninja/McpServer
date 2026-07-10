@@ -86,9 +86,11 @@ acceptanceCriteria:
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($pluginRoot)
         $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
 
         try {
             $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            $env:MCP_CACHE_DIR_OVERRIDE = (Join-Path $pluginRoot 'cache')
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
 
             $actionsPayload = [ordered]@{
@@ -111,6 +113,11 @@ acceptanceCriteria:
                 $env:PLUGIN_ROOT_OVERRIDE = $previousPluginRoot
             } else {
                 Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             }
             Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
         }
@@ -166,9 +173,11 @@ acceptanceCriteria:
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($pluginRoot)
         $previousPluginRoot = $env:PLUGIN_ROOT_OVERRIDE
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
 
         try {
             $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
+            $env:MCP_CACHE_DIR_OVERRIDE = (Join-Path $pluginRoot 'cache')
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
             function Invoke-ReplRaw {
@@ -198,6 +207,11 @@ acceptanceCriteria:
             } else {
                 Remove-Item Env:\PLUGIN_ROOT_OVERRIDE -ErrorAction SilentlyContinue
             }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
             Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
             Remove-Variable -Name appendDialogResult -Scope Script -ErrorAction SilentlyContinue
         }
@@ -220,7 +234,7 @@ acceptanceCriteria:
             $result = Invoke-PluginChildProcess `
                 -ScriptPath (Join-Path $script:LibRoot 'repl-invoke.ps1') `
                 -Arguments @('-Method', 'workflow.sessionlog.appendActions', '-ParamsYaml', $actionsPayload) `
-                -Environment @{ PLUGIN_ROOT_OVERRIDE = $pluginRoot }
+                -Environment @{ PLUGIN_ROOT_OVERRIDE = $pluginRoot; MCP_CACHE_DIR_OVERRIDE = (Join-Path $pluginRoot 'cache') }
 
             $result.ExitCode | Should -Be 1
             ($result.Stdout + $result.Stderr) | Should -Match 'current-turn\.yaml'
@@ -491,7 +505,7 @@ acceptanceCriteria:
         $replContent | Should -Match 'New-McpPluginSessionMeta'
         $replContent | Should -Match 'New-McpPluginActionRecord'
         $replContent | Should -Match 'New-McpPluginTurnUpsertRequest'
-        $replContent | Should -Match 'New-McpPluginFailsafeRecord'
+        $replContent | Should -Match 'Write-McpYamlObject'
         $replContent | Should -Match 'ConvertTo-McpPluginJson'
     }
 
@@ -1005,6 +1019,7 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
             function Assert-ReplCurrentTurnFresh { return $true }
 
@@ -1032,16 +1047,103 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
 }
 
 Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
-    It 'routes persistence through the REPL-native strategy without plugin-side failsafe writes' {
+    It 'routes persistence through canonical client submit and enforces failsafe ordering' {
         $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
         $match = [regex]::Match(
             $source,
-            '(?s)function Invoke-ReplPersistTurn\s*\{(?<body>.*?)\r?\n\}\r?\n\r?\nfunction Update-ReplTurnCacheStatus')
+            '(?s)function Invoke-ReplPersistTurn\s*\{(?<body>.*?)\r?\n\}\r?\nfunction Update-ReplTurnCacheStatus')
 
         $match.Success | Should -BeTrue
-        $match.Groups['body'].Value | Should -Match 'Invoke-ReplRaw'
-        $match.Groups['body'].Value | Should -Match 'repl\.sessionlog\.persistTurn'
-        $match.Groups['body'].Value | Should -Not -Match 'Write-ReplFailsafe'
+        $match.Groups['body'].Value | Should -Match 'ConvertTo-Yaml\s+-Data'
+        $match.Groups['body'].Value | Should -Match 'Write-ReplFailsafe'
+        $match.Groups['body'].Value | Should -Match 'client\.SessionLog\.SubmitAsync'
+        $match.Groups['body'].Value | Should -Match 'Clear-ReplFailsafe'
+        $match.Groups['body'].Value | Should -Not -Match 'repl\.sessionlog\.persistTurn'
+    }
+
+    It 'writes a YAML failsafe before submit and clears it after durable success' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                sessionId = 'Codex-20260709T220000Z-plugin-session'
+                title = 'Failsafe order test'
+                started = '2026-07-09T22:00:00Z'
+            })
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:rawMethod = $Method
+                $script:failsafeAtSubmit = @(Get-ChildItem -LiteralPath (Get-ReplFailsafeDir) -Filter '*.yaml' -File).Count
+                $script:rawYaml = $ParamsYaml
+                return New-McpPluginReplResult -Success $true -Output ("type: result" + [Environment]::NewLine + "payload:" + [Environment]::NewLine + "  result:" + [Environment]::NewLine + "    persisted: true") -ExitCode 0
+            }
+
+            Invoke-ReplPersistTurn -RequestId 'req-20260709T220001Z-failsafe' -Title 'Failsafe order test' -Status 'completed' -ResponseText 'Done' | Should -BeTrue
+            $script:rawMethod | Should -Be 'client.SessionLog.SubmitAsync'
+            $script:failsafeAtSubmit | Should -Be 1
+            $script:rawYaml | Should -Match 'sessionLog:'
+            @(Get-ChildItem -LiteralPath (Get-ReplFailsafeDir) -Filter '*.yaml' -File).Count | Should -Be 0
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+            Remove-Variable -Name rawMethod, failsafeAtSubmit, rawYaml -Scope Script -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'retains the YAML failsafe when MCP rejects the submit' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                sessionId = 'Codex-20260709T220000Z-plugin-session'
+                title = 'Failsafe rejection test'
+                started = '2026-07-09T22:00:00Z'
+            })
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                return New-McpPluginReplResult -Success $false -Output ("type: error" + [Environment]::NewLine + "payload:" + [Environment]::NewLine + "  code: unavailable") -ExitCode 1
+            }
+
+            { Invoke-ReplPersistTurn -RequestId 'req-20260709T220002Z-failsafe' -Title 'Failsafe rejection test' -Status 'completed' -ResponseText 'Done' } | Should -Throw '*FailsafePath*'
+            @(Get-ChildItem -LiteralPath (Get-ReplFailsafeDir) -Filter '*.yaml' -File).Count | Should -Be 1
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
     }
 
     It 'reports degraded persistence and its failsafe path only when completeTurn closes the turn' {
@@ -1054,6 +1156,7 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
 
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
