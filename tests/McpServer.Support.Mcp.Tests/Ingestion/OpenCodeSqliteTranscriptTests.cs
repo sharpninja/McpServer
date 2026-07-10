@@ -63,6 +63,13 @@ public sealed class OpenCodeSqliteTranscriptTests
             Assert.Contains(session.Events, item => item.Role.Equals("user", StringComparison.Ordinal) && JoinText(item.Content).Contains("hello from sqlite", StringComparison.Ordinal));
             Assert.Contains(session.Events, item => item.Role.Equals("assistant", StringComparison.Ordinal) && JoinText(item.Content).Contains("reply from sqlite", StringComparison.Ordinal));
             Assert.Contains(session.Events, item => item.NativeType.Equals("tool_event", StringComparison.Ordinal) && JoinText(item.Content).Contains("sqlite tool result", StringComparison.Ordinal));
+            Assert.Equal(
+                ["msg-user", "msg-assistant", "tool-sqlite", "msg-followup"],
+                session.Events
+                    .OrderBy(item => item.Order)
+                    .Select(item => item.Id)
+                    .ToArray());
+
             Assert.Contains("sourceType: OpenCode", session.CanonicalYaml, StringComparison.Ordinal);
             Assert.Contains("sessionId: ses_sqlite_fixture", session.CanonicalYaml, StringComparison.Ordinal);
             Assert.Equal(originalLastWrite, sourceInfo.LastWriteTimeUtc);
@@ -88,13 +95,15 @@ public sealed class OpenCodeSqliteTranscriptTests
         await ExecuteNonQueryAsync(connection, "CREATE TABLE session (id TEXT PRIMARY KEY, title TEXT, version TEXT, time_created INTEGER, time_updated INTEGER, workspace_path TEXT);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "CREATE TABLE message (id TEXT PRIMARY KEY, session_id TEXT NOT NULL, role TEXT NOT NULL, model_id TEXT, provider_id TEXT, time_created INTEGER, time_completed INTEGER);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "CREATE TABLE part (id TEXT PRIMARY KEY, message_id TEXT NOT NULL, session_id TEXT NOT NULL, type TEXT NOT NULL, json TEXT NOT NULL);").ConfigureAwait(true);
-        await ExecuteNonQueryAsync(connection, "CREATE TABLE tool_event (id TEXT PRIMARY KEY, session_id TEXT NOT NULL, message_id TEXT, tool_name TEXT, status TEXT, payload_json TEXT);").ConfigureAwait(true);
+        await ExecuteNonQueryAsync(connection, "CREATE TABLE tool_event (id TEXT PRIMARY KEY, session_id TEXT NOT NULL, message_id TEXT, tool_name TEXT, status TEXT, payload_json TEXT, time_created INTEGER);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO session (id, title, version, time_created, time_updated, workspace_path) VALUES ('ses_sqlite_fixture', 'SQLite Fixture', '1.0', 1735689600000, 1735689602000, 'F:/GitHub/SampleWorkspace');").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO message (id, session_id, role, model_id, provider_id, time_created, time_completed) VALUES ('msg-user', 'ses_sqlite_fixture', 'user', NULL, 'opencode', 1735689600000, 1735689600000);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO message (id, session_id, role, model_id, provider_id, time_created, time_completed) VALUES ('msg-assistant', 'ses_sqlite_fixture', 'assistant', 'opencode/gpt-test', 'opencode', 1735689601000, 1735689602000);").ConfigureAwait(true);
+        await ExecuteNonQueryAsync(connection, "INSERT INTO message (id, session_id, role, model_id, provider_id, time_created, time_completed) VALUES ('msg-followup', 'ses_sqlite_fixture', 'user', NULL, 'opencode', 1735689603000, 1735689603000);").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO part (id, message_id, session_id, type, json) VALUES ('part-user', 'msg-user', 'ses_sqlite_fixture', 'text', '{\"text\":\"hello from sqlite\"}');").ConfigureAwait(true);
         await ExecuteNonQueryAsync(connection, "INSERT INTO part (id, message_id, session_id, type, json) VALUES ('part-assistant', 'msg-assistant', 'ses_sqlite_fixture', 'text', '{\"text\":\"reply from sqlite\"}');").ConfigureAwait(true);
-        await ExecuteNonQueryAsync(connection, "INSERT INTO tool_event (id, session_id, message_id, tool_name, status, payload_json) VALUES ('tool-sqlite', 'ses_sqlite_fixture', 'msg-assistant', 'shell', 'completed', '{\"content\":\"sqlite tool result\"}');").ConfigureAwait(true);
+        await ExecuteNonQueryAsync(connection, "INSERT INTO part (id, message_id, session_id, type, json) VALUES ('part-followup', 'msg-followup', 'ses_sqlite_fixture', 'text', '{\"text\":\"followup after tool\"}');").ConfigureAwait(true);
+        await ExecuteNonQueryAsync(connection, "INSERT INTO tool_event (id, session_id, message_id, tool_name, status, payload_json, time_created) VALUES ('tool-sqlite', 'ses_sqlite_fixture', 'msg-assistant', 'shell', 'completed', '{\"content\":\"sqlite tool result\"}', 1735689601500);").ConfigureAwait(true);
     }
 
     private static async Task ExecuteNonQueryAsync(SqliteConnection connection, string commandText)
