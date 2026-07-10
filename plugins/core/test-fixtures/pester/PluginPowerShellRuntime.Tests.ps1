@@ -657,6 +657,77 @@ acceptanceCriteria:
         $skill | Should -Match 'repl\.sessionlog\.normalizeTranscripts'
         $skill | Should -Match 'YAML Mutation Rule'
     }
+
+    It 'TEST-MCP-TRANSCRIPT-010 resolves real host transcript paths for Claude Codex and Grok plugin recovery' {
+        $helperRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $capturePath = Join-Path $helperRoot 'captures.jsonl'
+        [void][System.IO.Directory]::CreateDirectory($helperRoot)
+
+        try {
+            Copy-Item -LiteralPath (Join-Path $script:LibRoot 'transcript-ingestion.ps1') -Destination $helperRoot
+            Copy-Item -LiteralPath (Join-Path $script:LibRoot 'yaml-object-mutation.ps1') -Destination $helperRoot
+            $stub = @'
+param(
+    [Parameter(Mandatory)][string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+$record = [ordered]@{
+    method = $Method
+    paramsYaml = $ParamsYaml
+}
+[System.IO.File]::AppendAllText($env:MCP_TRANSCRIPT_TEST_CAPTURE, (($record | ConvertTo-Json -Compress) + [Environment]::NewLine))
+Write-Output "type: result"
+Write-Output "payload:"
+Write-Output "  result:"
+Write-Output "    status: captured"
+'@
+            [System.IO.File]::WriteAllText((Join-Path $helperRoot 'repl-invoke.ps1'), $stub)
+
+            $fixturesRoot = Join-Path $script:RepoRoot 'tests\McpServer.Support.Mcp.Tests\Fixtures\Transcripts\real'
+            $claudeFixture = Join-Path $fixturesRoot 'claude\session.jsonl'
+            $codexFixture = Join-Path $fixturesRoot 'codex\session.jsonl'
+            $grokRoot = Join-Path $helperRoot 'grok-root'
+            [void][System.IO.Directory]::CreateDirectory($grokRoot)
+            $grokFixture = Join-Path $grokRoot 'chat_history.jsonl'
+            Copy-Item -LiteralPath (Join-Path $fixturesRoot 'grok\chat_history.jsonl') -Destination $grokFixture
+
+            $cases = @(
+                [pscustomobject]@{ Name = 'Claude hook transcript_path'; Agent = 'ClaudeCode'; Source = 'Claude'; ExpectedPath = $claudeFixture; Environment = @{ transcript_path = $claudeFixture } },
+                [pscustomobject]@{ Name = 'Codex active session JSONL'; Agent = 'Codex'; Source = 'Codex'; ExpectedPath = $codexFixture; Environment = @{ CODEX_SESSION_FILE = $codexFixture } },
+                [pscustomobject]@{ Name = 'Grok configured transcript root'; Agent = 'GrokCode'; Source = 'Grok'; ExpectedPath = $grokFixture; Environment = @{ GROK_TRANSCRIPT_ROOT = $grokRoot } }
+            )
+
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            foreach ($case in $cases) {
+                Remove-Item -LiteralPath $capturePath -Force -ErrorAction SilentlyContinue
+                $environment = @{
+                    MCP_TRANSCRIPT_TEST_CAPTURE = $capturePath
+                    PLUGIN_AGENT_NAME = $case.Agent
+                }
+                foreach ($entry in $case.Environment.GetEnumerator()) {
+                    $environment[$entry.Key] = $entry.Value
+                }
+
+                $result = Invoke-PluginChildProcess `
+                    -ScriptPath (Join-Path $helperRoot 'transcript-ingestion.ps1') `
+                    -Arguments @('-Source', $case.Source, '-NoPersist') `
+                    -Environment $environment
+
+                $result.ExitCode | Should -Be 0 -Because $case.Name
+                $record = Get-Content -LiteralPath $capturePath | Select-Object -Last 1 | ConvertFrom-Json
+                $record.method | Should -Be 'repl.sessionlog.ingestTranscripts'
+                $params = Convert-ReplParamsYamlToObject -ParamsYaml $record.paramsYaml
+                $params.path | Should -Be $case.ExpectedPath
+                $params.agent | Should -Be $case.Agent
+                $params.source | Should -Be $case.Source
+                $params.persist | Should -BeFalse
+            }
+        } finally {
+            Remove-Item -LiteralPath $helperRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation' {
         $skillFiles = Get-ChildItem -LiteralPath (Join-Path $script:StagedRoot 'skills') -Filter 'SKILL.md' -Recurse -File
         $skillFiles.Count | Should -BeGreaterThan 0
