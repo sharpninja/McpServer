@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Data.Sqlite;
 
 namespace McpServer.SessionLog.Transcripts;
 
@@ -251,6 +252,9 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
         var path = bundle.Files[0];
         if (Path.GetExtension(path).Equals(".json", StringComparison.OrdinalIgnoreCase))
             return await NormalizeExportAsync(bundle, cancellationToken).ConfigureAwait(false);
+        if (OpenCodeSqliteUtilities.IsSnapshotPath(path))
+            return await NormalizeSqliteSnapshotAsync(bundle, cancellationToken).ConfigureAwait(false);
+
 
         var records = await TranscriptUtilities.ReadJsonLinesAsync(path, cancellationToken).ConfigureAwait(false);
         var sessionId = records.Select(record => TranscriptUtilities.GetString(record, "sessionID")).FirstOrDefault(value => !string.IsNullOrWhiteSpace(value)) ?? TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
@@ -267,6 +271,236 @@ internal sealed class OpenCodeTranscriptAdapter : JsonTranscriptAdapterBase
 
         return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId);
     }
+
+    private static async Task<TranscriptSession> NormalizeSqliteSnapshotAsync(TranscriptBundle bundle, CancellationToken cancellationToken)
+    {
+        var sourcePath = bundle.Files[0];
+        var snapshotPath = await OpenCodeSqliteUtilities.CreateSnapshotAsync(sourcePath, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await using var connection = await OpenCodeSqliteUtilities.OpenReadOnlyAsync(snapshotPath, cancellationToken).ConfigureAwait(false);
+            var tables = await OpenCodeSqliteUtilities.ReadTableNamesAsync(connection, cancellationToken).ConfigureAwait(false);
+            if (!tables.Contains("session") || !tables.Contains("message"))
+                throw new InvalidDataException("OpenCode SQLite snapshot is missing required session/message tables: " + sourcePath);
+
+            var diagnostics = new List<TranscriptDiagnostic>();
+            var sessionColumns = await OpenCodeSqliteUtilities.ReadColumnNamesAsync(connection, "session", cancellationToken).ConfigureAwait(false);
+            var messageColumns = await OpenCodeSqliteUtilities.ReadColumnNamesAsync(connection, "message", cancellationToken).ConfigureAwait(false);
+            var partColumns = tables.Contains("part")
+                ? await OpenCodeSqliteUtilities.ReadColumnNamesAsync(connection, "part", cancellationToken).ConfigureAwait(false)
+                : [];
+
+            var sessionMetadata = await ReadSqliteSessionMetadataAsync(connection, sessionColumns, bundle.Files, cancellationToken).ConfigureAwait(false);
+            var messageProjection = await ReadSqliteMessagesAsync(connection, messageColumns, partColumns, sessionMetadata.SessionId, sessionMetadata.Model, diagnostics, sourcePath, cancellationToken).ConfigureAwait(false);
+            return BuildSession(
+                TranscriptSourceKind.OpenCode,
+                sessionMetadata.SessionId,
+                messageProjection.Events,
+                bundle.Files,
+                nativeSessionId: sessionMetadata.SessionId,
+                model: messageProjection.Model ?? sessionMetadata.Model,
+                workspacePath: sessionMetadata.WorkspacePath,
+                diagnostics: diagnostics);
+        }
+        finally
+        {
+            SqliteConnection.ClearAllPools();
+            OpenCodeSqliteUtilities.DeleteSnapshotDirectory(snapshotPath);
+        }
+    }
+
+    private static async Task<OpenCodeSqliteSessionMetadata> ReadSqliteSessionMetadataAsync(
+        SqliteConnection connection,
+        IReadOnlySet<string> sessionColumns,
+        IReadOnlyList<string> sourceFiles,
+        CancellationToken cancellationToken)
+    {
+        var sessionId = TranscriptUtilities.DeriveSessionId(TranscriptSourceKind.OpenCode, sourceFiles);
+        var orderColumn = OpenCodeSqliteUtilities.OrderColumnOrFallback(sessionColumns, "time_created", "created_at", "id");
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(sessionColumns, "id", "id") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(sessionColumns, "workspace_path", "workspace_path") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(sessionColumns, "model", "model")
+            + " FROM " + OpenCodeSqliteUtilities.QuoteIdentifier("session")
+            + " ORDER BY " + orderColumn + " LIMIT 1;";
+
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            return new OpenCodeSqliteSessionMetadata(sessionId, null, null);
+
+        return new OpenCodeSqliteSessionMetadata(
+            ReadNullableString(reader, 0) ?? sessionId,
+            ReadNullableString(reader, 2),
+            ReadNullableString(reader, 1));
+    }
+
+    private static async Task<OpenCodeSqliteMessageProjection> ReadSqliteMessagesAsync(
+        SqliteConnection connection,
+        IReadOnlySet<string> messageColumns,
+        IReadOnlySet<string> partColumns,
+        string sessionId,
+        string? seedModel,
+        List<TranscriptDiagnostic> diagnostics,
+        string sourcePath,
+        CancellationToken cancellationToken)
+    {
+        var orderColumn = OpenCodeSqliteUtilities.OrderColumnOrFallback(messageColumns, "time_created", "created_at", "id");
+        var timestampColumn = SelectTimestampColumnOrNull(messageColumns);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(messageColumns, "id", "id") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(messageColumns, "role", "role") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(messageColumns, "model_id", "model_id") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(messageColumns, "provider_id", "provider_id") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(messageColumns, "content_json", "content_json") + ", "
+            + timestampColumn + " AS " + OpenCodeSqliteUtilities.QuoteIdentifier("timestamp")
+            + " FROM " + OpenCodeSqliteUtilities.QuoteIdentifier("message")
+            + " WHERE " + OpenCodeSqliteUtilities.QuoteIdentifier("session_id") + " = $sessionId"
+            + " ORDER BY " + orderColumn + ", " + OpenCodeSqliteUtilities.QuoteIdentifier("id") + ";";
+        command.Parameters.AddWithValue("$sessionId", sessionId);
+
+        var rows = new List<OpenCodeSqliteMessageRow>();
+        await using (var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
+        {
+            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            {
+                rows.Add(new OpenCodeSqliteMessageRow(
+                    ReadNullableString(reader, 0) ?? "opencode-sqlite-message-" + (rows.Count + 1).ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    ReadNullableString(reader, 1) ?? "unknown",
+                    ReadNullableString(reader, 2),
+                    ReadNullableString(reader, 3),
+                    ReadNullableString(reader, 4),
+                    ReadTimestampFromDatabase(reader.IsDBNull(5) ? null : reader.GetValue(5))));
+            }
+        }
+
+        var events = new List<TranscriptEvent>();
+        var order = 1;
+        var model = seedModel;
+        foreach (var row in rows)
+        {
+            model ??= row.ModelId;
+            var blocks = new List<TranscriptContentBlock>();
+            if (!string.IsNullOrWhiteSpace(row.ContentJson))
+                blocks.AddRange(ExtractBlocksFromOpenCodeJson(row.ContentJson, "text", diagnostics, sourcePath));
+            blocks.AddRange(await ReadSqlitePartsAsync(connection, partColumns, row.Id, diagnostics, sourcePath, cancellationToken).ConfigureAwait(false));
+
+            events.Add(new TranscriptEvent(
+                row.Id,
+                order++,
+                row.Role,
+                "message",
+                blocks,
+                row.TimestampUtc,
+                string.IsNullOrWhiteSpace(row.ProviderId) ? null : new Dictionary<string, string>(StringComparer.Ordinal) { ["providerId"] = row.ProviderId }));
+        }
+
+        return new OpenCodeSqliteMessageProjection(events, model);
+    }
+
+    private static async Task<IReadOnlyList<TranscriptContentBlock>> ReadSqlitePartsAsync(
+        SqliteConnection connection,
+        IReadOnlySet<string> partColumns,
+        string messageId,
+        List<TranscriptDiagnostic> diagnostics,
+        string sourcePath,
+        CancellationToken cancellationToken)
+    {
+        if (partColumns.Count == 0 || !partColumns.Contains("message_id"))
+            return [];
+
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(partColumns, "type", "type") + ", "
+            + OpenCodeSqliteUtilities.SelectColumnOrNull(partColumns, "json", "json")
+            + " FROM " + OpenCodeSqliteUtilities.QuoteIdentifier("part")
+            + " WHERE " + OpenCodeSqliteUtilities.QuoteIdentifier("message_id") + " = $messageId"
+            + " ORDER BY " + OpenCodeSqliteUtilities.OrderColumnOrFallback(partColumns, "time_created", "id") + ";";
+        command.Parameters.AddWithValue("$messageId", messageId);
+
+        var blocks = new List<TranscriptContentBlock>();
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+        {
+            var type = ReadNullableString(reader, 0) ?? "text";
+            var json = ReadNullableString(reader, 1);
+            if (!string.IsNullOrWhiteSpace(json))
+                blocks.AddRange(ExtractBlocksFromOpenCodeJson(json, type, diagnostics, sourcePath));
+        }
+
+        return blocks;
+    }
+
+    private static IReadOnlyList<TranscriptContentBlock> ExtractBlocksFromOpenCodeJson(string json, string fallbackType, List<TranscriptDiagnostic> diagnostics, string sourcePath)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(json);
+            var root = document.RootElement;
+            if (root.ValueKind == JsonValueKind.String)
+                return [new TranscriptContentBlock(fallbackType, root.GetString())];
+            if (root.ValueKind == JsonValueKind.Array)
+                return TranscriptUtilities.ExtractContentBlocks(root);
+            if (root.ValueKind != JsonValueKind.Object)
+                return [];
+
+            foreach (var propertyName in new[] { "text", "content", "value" })
+            {
+                if (!root.TryGetProperty(propertyName, out var property))
+                    continue;
+                if (property.ValueKind == JsonValueKind.String)
+                    return [new TranscriptContentBlock(fallbackType, property.GetString())];
+                if (property.ValueKind == JsonValueKind.Array)
+                    return TranscriptUtilities.ExtractContentBlocks(property);
+            }
+
+            if (root.TryGetProperty("parts", out var parts) && parts.ValueKind == JsonValueKind.Array)
+                return TranscriptUtilities.ExtractContentBlocks(parts);
+
+            diagnostics.Add(new TranscriptDiagnostic("opencode_part_without_text", "OpenCode SQLite part did not contain text content.", path: sourcePath));
+            return [];
+        }
+        catch (JsonException exception)
+        {
+            diagnostics.Add(new TranscriptDiagnostic("opencode_malformed_part_json", "OpenCode SQLite part JSON could not be parsed: " + exception.Message, "error", sourcePath));
+            return [];
+        }
+    }
+
+    private static string SelectTimestampColumnOrNull(IReadOnlySet<string> columns)
+    {
+        if (columns.Contains("time_created"))
+            return OpenCodeSqliteUtilities.QuoteIdentifier("time_created");
+        if (columns.Contains("created_at"))
+            return OpenCodeSqliteUtilities.QuoteIdentifier("created_at");
+        return "NULL";
+    }
+
+    private static string? ReadNullableString(SqliteDataReader reader, int ordinal)
+        => reader.IsDBNull(ordinal) ? null : Convert.ToString(reader.GetValue(ordinal), System.Globalization.CultureInfo.InvariantCulture);
+
+    private static DateTimeOffset? ReadTimestampFromDatabase(object? value)
+    {
+        if (value is null)
+            return null;
+        if (value is long number)
+            return number > 10_000_000_000 ? DateTimeOffset.FromUnixTimeMilliseconds(number) : DateTimeOffset.FromUnixTimeSeconds(number);
+        var text = Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture);
+        if (string.IsNullOrWhiteSpace(text))
+            return null;
+        if (long.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var parsedNumber))
+            return parsedNumber > 10_000_000_000 ? DateTimeOffset.FromUnixTimeMilliseconds(parsedNumber) : DateTimeOffset.FromUnixTimeSeconds(parsedNumber);
+        if (DateTimeOffset.TryParse(text, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out var parsedDate))
+            return parsedDate.ToUniversalTime();
+        return null;
+    }
+
+    private sealed record OpenCodeSqliteSessionMetadata(string SessionId, string? Model, string? WorkspacePath);
+
+    private sealed record OpenCodeSqliteMessageProjection(IReadOnlyList<TranscriptEvent> Events, string? Model);
+
+    private sealed record OpenCodeSqliteMessageRow(string Id, string Role, string? ModelId, string? ProviderId, string? ContentJson, DateTimeOffset? TimestampUtc);
 
     private static async Task<TranscriptSession> NormalizeExportAsync(TranscriptBundle bundle, CancellationToken cancellationToken)
     {

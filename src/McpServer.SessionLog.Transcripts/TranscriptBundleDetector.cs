@@ -42,6 +42,14 @@ public sealed class TranscriptBundleDetector : ITranscriptBundleDetector
         {
             cancellationToken.ThrowIfCancellationRequested();
             var extension = Path.GetExtension(candidate);
+            if (OpenCodeSqliteUtilities.IsSnapshotPath(candidate))
+            {
+                var sqliteSourceKind = await DetectFileAsync(candidate, cancellationToken).ConfigureAwait(false);
+                if (sqliteSourceKind != TranscriptSourceKind.Auto)
+                    bundles.Add(new TranscriptBundle(candidate, sqliteSourceKind, [candidate]));
+                continue;
+            }
+
             if (!extension.Equals(".jsonl", StringComparison.OrdinalIgnoreCase)
                 && !extension.Equals(".json", StringComparison.OrdinalIgnoreCase))
             {
@@ -63,6 +71,9 @@ public sealed class TranscriptBundleDetector : ITranscriptBundleDetector
     private static async Task<TranscriptSourceKind> DetectFileAsync(string path, CancellationToken cancellationToken)
     {
         var extension = Path.GetExtension(path);
+        if (OpenCodeSqliteUtilities.IsSnapshotPath(path))
+            return await OpenCodeSqliteUtilities.LooksLikeOpenCodeStoreAsync(path, cancellationToken).ConfigureAwait(false) ? TranscriptSourceKind.OpenCode : TranscriptSourceKind.Auto;
+
         if (extension.Equals(".json", StringComparison.OrdinalIgnoreCase))
             return await DetectJsonFileAsync(path, cancellationToken).ConfigureAwait(false);
 
