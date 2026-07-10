@@ -217,6 +217,7 @@ internal sealed class ClineTranscriptAdapter : JsonTranscriptAdapterBase
         var sessionId = TranscriptUtilities.GetString(sessionRoot, "session_id") ?? TranscriptUtilities.GetString(messagesRoot, "sessionId") ?? TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
         var model = TranscriptUtilities.GetString(sessionRoot, "model");
         var workspacePath = TranscriptUtilities.GetString(sessionRoot, "workspace_root") ?? TranscriptUtilities.GetString(sessionRoot, "cwd");
+        var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
         var order = 1;
         if (messagesRoot.TryGetProperty("messages", out var messages) && messages.ValueKind == JsonValueKind.Array)
@@ -228,8 +229,10 @@ internal sealed class ClineTranscriptAdapter : JsonTranscriptAdapterBase
                 events.Add(CreateEvent(TranscriptUtilities.GetString(message, "id") ?? "cline-event-" + order.ToString(System.Globalization.CultureInfo.InvariantCulture), order++, role, "message", text, TranscriptUtilities.ReadTimestamp(message)));
             }
         }
-
-        var diagnostics = new List<TranscriptDiagnostic>();
+        else
+        {
+            diagnostics.Add(new TranscriptDiagnostic("cline_missing_messages", "Cline messages file is missing a messages array.", "warning", messagesFile));
+        }
         if (TranscriptUtilities.GetObject(sessionRoot, "metadata") is { } metadata)
         {
             var diagnosticText = TranscriptUtilities.GetString(metadata, "diagnostic");

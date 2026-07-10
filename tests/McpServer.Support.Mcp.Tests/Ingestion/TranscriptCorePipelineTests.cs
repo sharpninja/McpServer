@@ -278,6 +278,37 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
+    /// <summary>Verifies malformed Cline paired JSON is diagnosed instead of silently discarded.</summary>
+    [Fact]
+    public async Task IngestionService_ClineMalformedMessagesEmitDiagnostics()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-cline-diagnostics", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        try
+        {
+            var sessionPath = Path.Combine(tempDirectory, "session.json");
+            var messagesPath = Path.Combine(tempDirectory, "messages.json");
+            await File.WriteAllTextAsync(sessionPath, "{\"session_id\":\"cline-diagnostic-fixture\",\"model\":\"cline-test\",\"workspace_root\":\"F:/GitHub/Sample\"}", TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await File.WriteAllTextAsync(messagesPath, "{\"sessionId\":\"cline-diagnostic-fixture\",\"messages\":{\"invalid\":true}}", TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(tempDirectory)
+            {
+                SourceKind = TranscriptSourceKind.Cline,
+                Persist = false,
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Empty(session.Events);
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "cline_missing_messages" && diagnostic.Severity == "warning");
+        }
+        finally
+        {
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
     public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()
