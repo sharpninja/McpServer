@@ -254,13 +254,17 @@ internal sealed class CopilotTranscriptAdapter : JsonTranscriptAdapterBase
         var records = await TranscriptUtilities.ReadJsonLinesAsync(path, cancellationToken).ConfigureAwait(false);
         var sessionId = TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
         string? model = null;
+        var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
         var order = 1;
         foreach (var record in records)
         {
             var type = TranscriptUtilities.GetString(record, "type") ?? string.Empty;
             if (TranscriptUtilities.GetObject(record, "data") is not { } data)
+            {
+                diagnostics.Add(new TranscriptDiagnostic("copilot_missing_data", "Copilot event record is missing a data object and was not normalized.", "warning", path));
                 continue;
+            }
 
             if (type.Equals("user.message", StringComparison.Ordinal))
             {
@@ -271,9 +275,13 @@ internal sealed class CopilotTranscriptAdapter : JsonTranscriptAdapterBase
                 model = TranscriptUtilities.GetString(data, "model") ?? model;
                 events.Add(CreateEvent(TranscriptUtilities.GetString(record, "id") ?? "copilot-event-" + order.ToString(System.Globalization.CultureInfo.InvariantCulture), order++, "assistant", type, TranscriptUtilities.GetString(data, "content"), TranscriptUtilities.ReadTimestamp(record)));
             }
+            else
+            {
+                diagnostics.Add(new TranscriptDiagnostic("copilot_unknown_record", "Copilot event type '" + (string.IsNullOrWhiteSpace(type) ? "<missing>" : type) + "' was not normalized.", "warning", path));
+            }
         }
 
-        return BuildSession(SourceKind, sessionId, events, bundle.Files, model: model);
+        return BuildSession(SourceKind, sessionId, events, bundle.Files, model: model, diagnostics: diagnostics);
     }
 }
 

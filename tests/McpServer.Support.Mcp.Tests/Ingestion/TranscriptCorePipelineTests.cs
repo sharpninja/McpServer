@@ -244,6 +244,40 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
+    /// <summary>Verifies unsupported Copilot event records are diagnosed instead of silently discarded.</summary>
+    [Fact]
+    public async Task IngestionService_CopilotUnsupportedRecordsEmitDiagnostics()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-copilot-diagnostics", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        try
+        {
+            var transcriptPath = Path.Combine(tempDirectory, "events.jsonl");
+            await File.WriteAllLinesAsync(transcriptPath, [
+                "{\"type\":\"user.message\",\"id\":\"copilot-user\",\"data\":{\"message\":\"hello from copilot\"}}",
+                "{\"type\":\"assistant.turn_start\",\"id\":\"copilot-turn\",\"data\":{\"turnId\":\"0\"}}",
+                "{\"type\":\"assistant.message\",\"id\":\"copilot-missing-data\"}"
+            ], TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(transcriptPath)
+            {
+                SourceKind = TranscriptSourceKind.Copilot,
+                Persist = false
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Single(session.Events);
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "copilot_unknown_record" && diagnostic.Severity == "warning");
+            Assert.Contains(session.Diagnostics, diagnostic => diagnostic.Code == "copilot_missing_data" && diagnostic.Severity == "warning");
+        }
+        finally
+        {
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
     /// <summary>Verifies persisted transcript runs require workspace-owned cache identity.</summary>
     [Fact]
     public async Task IngestionService_PersistRequiresAgentAndWorkspacePath()
