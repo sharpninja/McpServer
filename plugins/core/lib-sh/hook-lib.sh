@@ -611,18 +611,6 @@ ${query_text_block}"
         fi
     fi
 
-    # Discover Codex JSONL transcript path for this session (env-gated;
-    # self-disabling when the CODEX_* vars are unset).
-    local codex_jsonl_path
-    codex_jsonl_path="${CODEX_SESSION_FILE:-${CODEX_ROLLOUT_FILE:-}}"
-    if [ -z "$codex_jsonl_path" ] && command -v node >/dev/null 2>&1; then
-        local codex_session_dir today_dir
-        codex_session_dir="${CODEX_SESSION_DIR:-${HOME}/.codex/sessions}"
-        today_dir="${codex_session_dir}/$(date -u +%Y/%m/%d 2>/dev/null || true)"
-        if [ -d "$today_dir" ]; then
-            codex_jsonl_path="$(ls -t "${today_dir}"/rollout-*.jsonl 2>/dev/null | head -1 || true)"
-        fi
-    fi
 
     # Record the active turn so the Stop hook can verify completion.
     # queryText is persisted (codex fix) so later import/recovery keeps the
@@ -635,9 +623,6 @@ ${query_text_block}"
         printf 'status: in_progress\n'
         printf 'codeEdits: 0\n'
         printf 'lastBuildStatus: unknown\n'
-        if [ -n "$codex_jsonl_path" ] && [ -f "$codex_jsonl_path" ]; then
-            printf 'codexJsonlPath: "%s"\n' "$codex_jsonl_path"
-        fi
         printf 'queryText: |\n'
         printf '%s\n' "${query_text_block}"
     } > "$CACHE_DIR/current-turn.yaml"
@@ -716,17 +701,12 @@ stop_gate_main() {
     code_edits="${code_edits:-0}"
 
     # Gate 1 - turn not completed. Self-heal by auto-completing the turn via
-    # the repl-invoke shim, enriched from the Codex JSONL when recorded.
+    # the repl-invoke shim with a model-authored fallback response only.
     if [ "$turn_status" = "in_progress" ]; then
         if [ -f "$HOOK_LIB_DIR/repl-invoke.sh" ]; then
-            local codex_jsonl_path_sg auto_params jsonl_params
-            codex_jsonl_path_sg="$(yaml_get "$turn_file" codexJsonlPath 2>/dev/null | tr -d '"' || true)"
+            local auto_params
             auto_params="response: |
-    Auto-closed by stop-gate.sh (turn self-heal). The agent cannot invoke workflow.sessionlog.* directly; the hook now finalizes the turn when the response finishes."
-            if [ -n "$codex_jsonl_path_sg" ] && [ -f "$codex_jsonl_path_sg" ] && command -v node >/dev/null 2>&1; then
-                jsonl_params="$(node "${HOOK_LIB_DIR}/codex-jsonl-enrich.js" "$codex_jsonl_path_sg" "Auto-closed by stop-gate.sh (turn self-heal; enriched from Codex JSONL)" 2>/dev/null || true)"
-                [ -n "$jsonl_params" ] && auto_params="$jsonl_params"
-            fi
+    Auto-closed by stop-gate.sh (turn self-heal). The agent did not complete the turn before the stop gate ran."
             local complete_timeout complete_params_file
             complete_timeout="${MCP_STOP_GATE_COMPLETE_TIMEOUT_SECONDS:-${REPL_SESSIONLOG_REPL_TIMEOUT:-8}}"
             case "$complete_timeout" in
@@ -1072,94 +1052,8 @@ health_check_main() {
 # ---------------------------------------------------------------------------
 
 subagent_import_main() {
-    if ! command -v node >/dev/null 2>&1; then
-        exit 0
-    fi
-
-    local parent_jsonl="${CODEX_SESSION_FILE:-${CODEX_ROLLOUT_FILE:-}}"
-    if [ -z "$parent_jsonl" ] && [ -f "$CACHE_DIR/current-turn.yaml" ]; then
-        parent_jsonl="$(yaml_get "$CACHE_DIR/current-turn.yaml" codexJsonlPath 2>/dev/null | tr -d '"' || true)"
-    fi
-
-    if [ -z "$parent_jsonl" ] || [ ! -f "$parent_jsonl" ]; then
-        exit 0
-    fi
-
-    # Load session state to get session ID
-    local session_id
-    session_id="$(yaml_get "$CACHE_DIR/session-state.yaml" sessionId 2>/dev/null || true)"
-    if [ -z "$session_id" ]; then
-        exit 0
-    fi
-
-    # Get parent turn request ID for linking
-    local parent_turn_id
-    parent_turn_id="$(yaml_get "$CACHE_DIR/current-turn.yaml" turnRequestId 2>/dev/null || true)"
-
-    hook_require_repl_invoke
-
-    # Discover subagent transcripts from the parent JSONL
-    local subagents_json
-    subagents_json="$(node "${HOOK_LIB_DIR}/codex-jsonl.js" subagents "$parent_jsonl" 2>/dev/null || true)"
-    if [ -z "$subagents_json" ] || [ "$subagents_json" = "[]" ]; then
-        exit 0
-    fi
-
-    # Track imported subagent sessions to prevent duplicates
-    local imported_tracker="$CACHE_DIR/subagent-imported.txt"
-    touch "$imported_tracker" 2>/dev/null || true
-
-    # Process each subagent
-    echo "$subagents_json" | node -e "
-const data = require('fs').readFileSync(0,'utf8').trim();
-let subs = [];
-try { subs = JSON.parse(data); } catch {}
-for (const sub of subs) {
-  process.stdout.write(sub.path + '\t' + (sub.agentNickname || '') + '\t' + (sub.sessionId || '') + '\n');
-}
-" 2>/dev/null | while IFS=$'\t' read -r subagent_path nickname subagent_session_id; do
-        [ -z "$subagent_path" ] || [ ! -f "$subagent_path" ] && continue
-
-        # Skip if already imported
-        local import_key="${subagent_session_id:-${subagent_path}}"
-        if grep -qxF "$import_key" "$imported_tracker" 2>/dev/null; then
-            continue
-        fi
-
-        # Import the subagent transcript
-        local import_lines
-        import_lines="$(node "${HOOK_LIB_DIR}/codex-jsonl.js" import "$subagent_path" "$session_id" "$parent_turn_id" 2>/dev/null || true)"
-        [ -z "$import_lines" ] && continue
-
-        local success=0
-        while IFS=$'\t' read -r method params_b64 label; do
-            [ -z "$method" ] || [ -z "$params_b64" ] && continue
-            local params
-            params="$(printf '%s' "$params_b64" | base64 --decode 2>/dev/null || true)"
-            [ -z "$params" ] && continue
-            if type repl_invoke >/dev/null 2>&1; then
-                if repl_invoke "$method" "$params" >/dev/null 2>&1; then
-                    success=1
-                fi
-            fi
-        done <<< "$import_lines"
-
-        # Add parent turn action linking to this subagent
-        if [ "$success" = "1" ] && [ -n "$parent_turn_id" ] && type repl_invoke >/dev/null 2>&1; then
-            local nick_label="${nickname:-subagent}"
-            local append_params="actions:
-  - order: 99
-    type: session_log
-    status: completed
-    description: Subagent ${nick_label} transcript imported as MCP session-log turns: ${subagent_path}
-    filePath: ${subagent_path}"
-            repl_invoke "workflow.sessionlog.appendActions" "$append_params" >/dev/null 2>&1 || true
-        fi
-
-        # Mark as imported
-        printf '%s\n' "$import_key" >> "$imported_tracker"
-    done
-
+    # Plugins do not ingest local transcripts for session logging.
+    # Subagents must write their own MCP Session Log turns through workflow.sessionlog.*.
     exit 0
 }
 

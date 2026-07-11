@@ -287,7 +287,7 @@ For each plugin in priority order (suggested: codex + grok first because of suba
 - Run the full parity harness against this plugin; all assertions must pass.
 - Update the plugin's Plugin-Validation-Testing-Plan.md with parity v1 checklist.
 - Specific per-plugin work items (examples — final list lives in the TODOs):
-  - **Codex**: Adopt core for its scoped cache layout + JSONL enrichment; add device/workflow guidance as thin wrappers over core; ensure session-start.sh etc. delegate to core.
+  - **Codex**: Adopt core for its scoped cache layout and model-authored session-log workflow; add device/workflow guidance as thin wrappers over core; ensure session-start.sh etc. delegate to core.
   - **Cline + Cline v2**: Make the 3 lib/*.sh scripts thin shims over the core (or call the TS core); ensure V2 plugin registers the enforcement tools if they become MCP-callable; complete workspace + full surface parity.
   - **Claude Code / Grok / Copilot**: Replace their current lib/ scripts with the v1 shims; ensure subagent-import and plan-*.sh call the core; verify hooks.json still produces identical side-effects.
   - **Claude Cowork**: Ensure its special handoff + .mcp.json stdio path still honors the identical cache and enforcement state machine; update the cowork-contract.md.

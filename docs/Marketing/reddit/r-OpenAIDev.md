@@ -12,7 +12,7 @@ PASTE BELOW THIS LINE
 
 [McpServer](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI coding agents a shared, persistent backend over the Model Context Protocol: local semantic search, a queryable TODO list, session logging with a full audit trail, requirements traceability, and GitHub sync. One local process, HTTP REST (Swagger) or MCP STDIO.
 
-There is a Codex plugin for the OpenAI Codex CLI. Beyond the shared workflow surface (session, TODO, requirements, workspace), it imports Codex JSONL transcripts as first-class session turns, so the agent's own run history becomes queryable, audited context rather than something that scrolls away.
+There is a Codex plugin for the OpenAI Codex CLI. Beyond the shared workflow surface (session, TODO, requirements, workspace), it gives the model a first-class way to write audited session-log turns directly, so the agent's own work history becomes queryable context rather than something that scrolls away.
 
 This post is about one feature: triage, which lets the agent report its own infrastructure bugs without hijacking your task.
 
@@ -27,6 +27,6 @@ This post is about one feature: triage, which lets the agent report its own infr
 
 **What it surfaced** is the useful part: stale plugin cache versus marker metadata, hook installation drift, split cache roots (a session-log append that silently no-ops), REPL surface drift, and shell runtime drift. Each one became a written requirement, then an observable acceptance criterion, then a test, instead of a one-off fix that gets forgotten. Full writeup: [Triage Plugin Code Quality Case Study](https://github.com/sharpninja/McpServer/blob/main/docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md).
 
-Codex plugin: [mcpserver-codex-plugin](https://github.com/sharpninja/mcpserver-codex-plugin). How the eight plugins compare (integration mechanism, hooks, transcript capture, and more): [AGENT-PLUGIN-FEATURE-MATRIX.md](https://github.com/sharpninja/McpServer/blob/main/docs/AGENT-PLUGIN-FEATURE-MATRIX.md).
+Codex plugin: [mcpserver-codex-plugin](https://github.com/sharpninja/mcpserver-codex-plugin). How the eight plugins compare (integration mechanism, hooks, session-log ownership, and more): [AGENT-PLUGIN-FEATURE-MATRIX.md](https://github.com/sharpninja/McpServer/blob/main/docs/AGENT-PLUGIN-FEATURE-MATRIX.md).
 
 Disclosure: this is my project. If you run Codex CLI agents against real repos, what infrastructure failures would you want captured automatically, and how would you want them surfaced? Happy to answer anything about the Codex integration, the MCP surface, or the triage design.

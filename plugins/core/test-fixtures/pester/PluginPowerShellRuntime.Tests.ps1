@@ -670,6 +670,21 @@ acceptanceCriteria:
         $content | Should -Match 'Transcript ingestion and normalization are explicit non-plugin server/client/REPL/MCP operations'
     }
 
+    It 'TEST-MCP-TRANSCRIPT-010 removes legacy Codex JSONL parser helpers' {
+        Test-Path -LiteralPath (Join-Path $script:RepoRoot 'plugins\core\lib-sh\codex-jsonl.js') | Should -BeFalse
+        Test-Path -LiteralPath (Join-Path $script:RepoRoot 'plugins\core\lib-sh\codex-jsonl-enrich.js') | Should -BeFalse
+
+        $hookPath = Join-Path $script:RepoRoot 'plugins\core\lib-sh\hook-lib.sh'
+        $hookContent = [System.IO.File]::ReadAllText($hookPath)
+        $hookContent | Should -Not -Match 'codexJsonlPath'
+        $hookContent | Should -Not -Match 'codex-jsonl'
+
+        $matrixPath = Join-Path $script:RepoRoot 'docs\AGENT-PLUGIN-FEATURE-MATRIX.md'
+        $matrixContent = [System.IO.File]::ReadAllText($matrixPath)
+        $matrixContent | Should -Not -Match 'codex-jsonl'
+        $matrixContent | Should -Not -Match 'transcript enrichment'
+    }
+
     It 'TEST-MCP-YAML-MUTATION-001 all staged plugin skills teach object-first YAML mutation' {
         $skillFiles = Get-ChildItem -LiteralPath (Join-Path $script:StagedRoot 'skills') -Filter 'SKILL.md' -Recurse -File
         $skillFiles.Count | Should -BeGreaterThan 0
