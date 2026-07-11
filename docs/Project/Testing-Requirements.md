@@ -875,10 +875,11 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Failsafe files are deleted only when persisted=true and degraded=false.
-- TEST-MCP-TRANSCRIPT-006: Unit and contract tests verify Codex, Claude, and Grok plugin helpers call the shared core and produce equivalent receipts from equivalent fixtures.
+- TEST-MCP-TRANSCRIPT-006: Unit and contract tests verify transcript conversion is implemented only in the shared non-plugin transcript core and plugin packages contain no transcript ingestion helpers, skills, endpoint shortcuts, or parser forks.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Plugin inventory and invocation tests expose no duplicate parser or tool names.
+  - [ ] Plugin inventory tests prove transcript ingestion helper files, skills, and REPL endpoint shortcuts are absent.
+  - [ ] Shared core transcript tests cover parser and projector behavior without relying on plugin-specific ingestion code.
 - TEST-MCP-TRANSCRIPT-007: Integration tests cover /mcpserver/sessionlog/ingest/path and /upload for defaults, folder discovery, multipart, ZIP limits, and security rejections.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -891,10 +892,11 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] OpenCode SQLite tests prove consistent backup snapshot use and no source DB/WAL writes.
-- TEST-MCP-TRANSCRIPT-010: End-to-end plugin tests verify Claude hook transcript_path, Codex active session JSONL, and Grok verified hook/configured root ingestion and recovery.
+- TEST-MCP-TRANSCRIPT-010: End-to-end plugin tests verify Claude, Codex, and Grok plugin packages do not expose transcript ingestion while model-run logging continues through normal workflow.sessionlog tools and non-plugin transcript ingestion remains externally verifiable.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Real sanitized samples from all six source formats can be ingested or normalized through the supported external agent surfaces.
+  - [ ] Claude, Codex, and Grok plugin packages expose no transcript ingestion skill, helper, or endpoint shortcut.
+  - [ ] Representative model sessions can write turns, actions, and completions through workflow.sessionlog without automatic transcript import.
 - TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
   Scope: layer-1+
   **Acceptance Criteria:**

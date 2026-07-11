@@ -1652,13 +1652,13 @@ Scope: layer-1+
 - [ ] Each detected session bundle is an independent idempotent unit with a stable replay key and receipt.
 - [ ] A failsafe importRecovery envelope is retained unless persistence explicitly reports persisted=true and degraded=false.
 
-## FR-MCP-TRANSCRIPT-005 Claude Codex Grok plugin parity
+## FR-MCP-TRANSCRIPT-005 Model-owned session log writing for Claude Codex Grok
 
-Claude, Codex, and Grok plugins shall expose transcript ingestion and normalization through thin shared-core callers without private parser forks.
+Claude, Codex, and Grok models shall write MCP Session Log entries themselves through the normal session-log APIs; plugins shall not expose transcript ingestion or normalization endpoints, helpers, skills, or parser forks.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Codex, Claude, and Grok plugin paths invoke the same shared parser and projection code.
-- [ ] Dead duplicated parser and handwritten YAML code is removed only after typed parity tests pass.
+- [ ] Claude, Codex, and Grok plugins expose no transcript ingestion or normalization helper, skill, endpoint shortcut, or duplicated parser code.
+- [ ] Models continue to write session-log turns, actions, decisions, and completions through the existing workflow.sessionlog tools instead of relying on automatic transcript ingestion.
 
 ## FR-MCP-TRANSCRIPT-006 HTTP path and upload ingestion
 
