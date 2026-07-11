@@ -858,45 +858,45 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-TRANSCRIPT-001: Unit tests cover source detection and parser fixture coverage for Claude, Codex, Grok, Cline, Copilot, and OpenCode formats.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Fixtures identify supported source kinds and reject ambiguous/unknown bundles.
+  - [x] Fixtures identify supported source kinds and reject ambiguous/unknown bundles. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: TranscriptFixtureInventoryTests; Detector_DiscoversEverySupportedRealTranscriptSource.)
 - TEST-MCP-TRANSCRIPT-002: Unit tests verify neutral-to-session-log mapping preserves native values, keeps absent semantics absent, and marks deterministic derived IDs.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Missing model, token, response, action, status, and timestamp fields are not invented.
+  - [x] Missing model, token, response, action, status, and timestamp fields are not invented. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: loss-aware normalization and unsupported/malformed diagnostics in TranscriptCorePipelineTests.)
 - TEST-MCP-TRANSCRIPT-003: Unit tests cover malformed lines, unknown events, incomplete turns, mixed schemas, cancellation, limits, traversal, and path escape rejection.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Strict mode rejects error diagnostics while lenient mode returns valid data plus diagnostics.
+  - [x] Strict mode rejects error diagnostics while lenient mode returns valid data plus diagnostics. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: malformed/unsupported/incomplete adapter tests and HTTP strict=false multi-status coverage.)
 - TEST-MCP-TRANSCRIPT-004: Unit tests verify canonical YAML serialization is deterministic, redacted, LF-normalized, UTF-8 without BOM, and round-trips to equivalent objects.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Repeated runs over identical normalized input produce byte-identical YAML.
+  - [x] Repeated runs over identical normalized input produce byte-identical YAML. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: NormalizationWritesArtifactsWithoutSessionPersistence and canonical mapping checks.)
 - TEST-MCP-TRANSCRIPT-005: Unit tests verify idempotent replay keys, richer-field preservation, pre-submit failsafe creation, and retention/deletion based on precise persistence receipts.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Failsafe files are deleted only when persisted=true and degraded=false.
+  - [x] Failsafe files are deleted only when persisted=true and degraded=false. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: HTTP path persistence/deletion; pending failsafe envelope; root-id failsafe naming; TEST-MCP-REPL-025 Pester.)
 - TEST-MCP-TRANSCRIPT-006: Unit and contract tests verify transcript conversion is implemented only in the shared non-plugin transcript core and plugin packages contain no transcript ingestion helpers, skills, endpoint shortcuts, or parser forks.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Plugin inventory tests prove transcript ingestion helper files, skills, and REPL endpoint shortcuts are absent.
-  - [ ] Shared core transcript tests cover parser and projector behavior without relying on plugin-specific ingestion code.
+  - [x] Plugin inventory tests prove transcript ingestion helper files, skills, and REPL endpoint shortcuts are absent. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: plugin Pester TEST-MCP-TRANSCRIPT-010 endpoint absence and legacy parser removal.)
+  - [x] Shared core transcript tests cover parser and projector behavior without relying on plugin-specific ingestion code. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: Support.Mcp transcript unit scope 60/0/0 and plugin endpoint absence.)
 - TEST-MCP-TRANSCRIPT-007: Integration tests cover /mcpserver/sessionlog/ingest/path and /upload for defaults, folder discovery, multipart, ZIP limits, and security rejections.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Invalid requests return 400, unauthorized paths 403, exceeded limits 413, and mixed folder runs 207 Multi-Status where appropriate.
+  - [x] Invalid requests return 400, unauthorized paths 403, exceeded limits 413, and mixed folder runs 207 Multi-Status where appropriate. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: TranscriptIngestionControllerTests status mapping; SessionLogTranscriptIngestionControllerTests mixed ZIP/security.)
 - TEST-MCP-TRANSCRIPT-008: Tests verify typed client, REPL commands, HTTP MCP discovery, stdio MCP discovery, and tool invocation for transcript ingestion and normalization.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] sessionlog_ingest_path and sessionlog_normalize_path require workspacePath and delegate through the shared service.
+  - [x] sessionlog_ingest_path and sessionlog_normalize_path require workspacePath and delegate through the shared service. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: TranscriptMcpTool/StdioHost; McpTransport transcript tools; Repl.Core dispatcher; Client ingest tests.)
 - TEST-MCP-TRANSCRIPT-009: Tests cover Cline paired JSON/JSONL, Copilot events folders, OpenCode JSONL, and read-only OpenCode SQLite snapshot normalization.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] OpenCode SQLite tests prove consistent backup snapshot use and no source DB/WAL writes.
+  - [x] OpenCode SQLite tests prove consistent backup snapshot use and no source DB/WAL writes. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: OpenCodeSqliteTranscriptTests normalization without source writes and WAL snapshot capture.)
 - TEST-MCP-TRANSCRIPT-010: End-to-end plugin tests verify Claude, Codex, and Grok plugin packages do not expose transcript ingestion while model-run logging continues through normal workflow.sessionlog tools and non-plugin transcript ingestion remains externally verifiable.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [ ] Claude, Codex, and Grok plugin packages expose no transcript ingestion skill, helper, or endpoint shortcut.
-  - [ ] Representative model sessions can write turns, actions, and completions through workflow.sessionlog without automatic transcript import.
+  - [x] Claude, Codex, and Grok plugin packages expose no transcript ingestion skill, helper, or endpoint shortcut. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: clean plugin Pester TEST-MCP-TRANSCRIPT-010 endpoint absence.)
+  - [x] Representative model sessions can write turns, actions, and completions through workflow.sessionlog without automatic transcript import. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: clean plugin Pester model-authored logging checks; live Codex turn req-20260711T022759Z-prompt-c4f0. External-client sampling remains the separate deployment TODO gate.)
 - TEST-MCP-TRIAGE-001: Intake accepts valid reports and rejects invalid reports across REST, client, and REPL.
   Scope: layer-1+
   **Acceptance Criteria:**

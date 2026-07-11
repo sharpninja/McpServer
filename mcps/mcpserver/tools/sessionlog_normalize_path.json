@@ -1,0 +1,54 @@
+{
+  "name": "sessionlog_normalize_path",
+  "description": "Normalize a transcript file or folder to canonical Session Log YAML and a selected Claude, Codex, or Grok compatibility profile.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required).",
+        "type": "string"
+      },
+      "path": {
+        "description": "Transcript file or folder path, workspace-relative or allowed absolute path.",
+        "type": "string"
+      },
+      "agent": {
+        "description": "Agent that owns .mcpServer transcript artifacts.",
+        "type": "string"
+      },
+      "targetProfile": {
+        "description": "Required target profile: Claude, Codex, or Grok.",
+        "type": "string"
+      },
+      "source": {
+        "description": "Optional transcript source: Auto, Claude, Codex, Grok, Cline, Copilot, or OpenCode.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "recursive": {
+        "description": "Whether folder discovery recurses.",
+        "type": "boolean",
+        "default": true
+      },
+      "strict": {
+        "description": "Whether malformed records fail the bundle.",
+        "type": "boolean",
+        "default": true
+      },
+      "persist": {
+        "description": "Whether to persist through the ingestion persistence path. Defaults false for manual normalization.",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "workspacePath",
+      "path",
+      "agent",
+      "targetProfile"
+    ]
+  }
+}

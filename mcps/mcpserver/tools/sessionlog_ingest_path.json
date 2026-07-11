@@ -1,0 +1,62 @@
+{
+  "name": "sessionlog_ingest_path",
+  "description": "Ingest a transcript file or folder from a workspace-contained or allowlisted server-local path.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "workspacePath": {
+        "description": "Workspace path (required).",
+        "type": "string"
+      },
+      "path": {
+        "description": "Transcript file or folder path, workspace-relative or allowed absolute path.",
+        "type": "string"
+      },
+      "agent": {
+        "description": "Agent that owns .mcpServer transcript artifacts.",
+        "type": "string"
+      },
+      "source": {
+        "description": "Optional transcript source: Auto, Claude, Codex, Grok, Cline, Copilot, or OpenCode.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "recursive": {
+        "description": "Whether folder discovery recurses.",
+        "type": "boolean",
+        "default": true
+      },
+      "strict": {
+        "description": "Whether malformed records fail the bundle.",
+        "type": "boolean",
+        "default": true
+      },
+      "persist": {
+        "description": "Whether to persist through the ingestion persistence path.",
+        "type": "boolean",
+        "default": true
+      },
+      "compatibilityProfile": {
+        "description": "Optional compatibility profile: None, Claude, Codex, or Grok.",
+        "type": [
+          "string",
+          "null"
+        ],
+        "default": null
+      },
+      "emitNormalizedProfile": {
+        "description": "Whether to emit the selected compatibility profile artifact.",
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "workspacePath",
+      "path",
+      "agent"
+    ]
+  }
+}
