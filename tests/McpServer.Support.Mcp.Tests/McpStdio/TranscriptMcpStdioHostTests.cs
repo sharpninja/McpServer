@@ -186,7 +186,7 @@ public sealed class TranscriptMcpStdioHostTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS-README-FIRST.yaml"))
+            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln"))
                 && Directory.Exists(Path.Combine(directory.FullName, "src"))
                 && Directory.Exists(Path.Combine(directory.FullName, "tests")))
             {
