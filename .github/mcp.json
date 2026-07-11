@@ -1,0 +1,6 @@
+{
+  "mcpserver": {
+    "type": "http",
+    "url": "http://localhost:7147/mcp-transport"
+  }
+}

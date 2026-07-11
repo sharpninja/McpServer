@@ -55,6 +55,19 @@ Agents must verify marker signature and health nonce first. During bootstrap, ac
   - Typical local root: `F:\GitHub\mcpserver-opencode-plugin`
   - Runtime: OpenCode plugin SDK (createMcpServerPlugin), built with `npm run build`. Shares the ReplBridge + marker-resolver + cache core.
 
+## MCP Client Verification
+
+For workspace-scoped Copilot discovery, this repository uses `.github/mcp.json` with the flat HTTP entry for `mcpserver`. Do not place that flat entry in root `.mcp.json`: Claude Code also parses root `.mcp.json` and expects an `mcpServers` object there.
+
+Current local validation commands for external clients:
+
+- `codex mcp get mcpserver` should show `transport: streamable_http` and `url: http://localhost:7147/mcp-transport` from global Codex MCP config.
+- `claude mcp get mcpserver` should show a user-scoped HTTP server connected to `http://localhost:7147/mcp-transport`.
+- `grok mcp doctor mcpserver` should report handshake OK and discovered tools.
+- `copilot mcp get mcpserver` should report `Source: Workspace (<workspace>\.github\mcp.json)`.
+- `cline config mcp` should list `mcpserver` and `PowerShell.MCP`.
+- `opencode mcp list` should report `mcpserver` connected; the supported add command writes to the user OpenCode config.
+
 ## Codex Quick Check
 
 ```powershell
