@@ -652,9 +652,17 @@ acceptanceCriteria:
             $content | Should -Not -Match 'repl\.sessionlog\.normalizeTranscripts'
             $content | Should -Not -Match 'transcript-ingestion\.ps1'
             $content | Should -Not -Match 'automatically captures rich session fields from .* JSONL transcripts'
+            $content | Should -Not -Match 'plugin can auto-capture rich session fields'
+            $content | Should -Not -Match 'Where your agent''s hooks or transcript integration are available'
+            $content | Should -Not -Match 'JSONL-extracted text'
             $content | Should -Not -Match 'Subagent Transcript Import'
             $content | Should -Not -Match 'PowerShell import command exposed by the active plugin package'
         }
+
+        $sessionSkillPath = Join-Path $script:StagedRoot 'skills\session\SKILL.md'
+        $sessionSkillContent = [System.IO.File]::ReadAllText($sessionSkillPath)
+        $sessionSkillContent | Should -Match 'The active model must write its own session log'
+        $sessionSkillContent | Should -Not -Match 'importRecovery'
     }
 
 
