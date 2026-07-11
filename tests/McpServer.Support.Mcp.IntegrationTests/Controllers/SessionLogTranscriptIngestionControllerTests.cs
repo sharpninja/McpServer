@@ -66,6 +66,56 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
         Assert.Contains("codex-real-fixture-session", await File.ReadAllTextAsync(receipt.YamlArtifactPath, TestContext.Current.CancellationToken).ConfigureAwait(true), StringComparison.Ordinal);
     }
 
+    /// <summary>Verifies every real sanitized agent fixture normalizes through the HTTP path endpoint.</summary>
+    [Theory]
+    [InlineData("Codex", TranscriptSourceKind.Codex, "codex/session.jsonl", "codex-real-fixture-session")]
+    [InlineData("Claude", TranscriptSourceKind.Claude, "claude/session.jsonl", "claude-real-fixture-session")]
+    [InlineData("Grok", TranscriptSourceKind.Grok, "grok/chat_history.jsonl", "grok-derived")]
+    [InlineData("Cline", TranscriptSourceKind.Cline, "cline", "cline-real-fixture-session")]
+    [InlineData("Copilot", TranscriptSourceKind.Copilot, "copilot/events.jsonl", "copilot-derived")]
+    [InlineData("OpenCode", TranscriptSourceKind.OpenCode, "opencode/export.json", "ses_opencode_real_fixture")]
+    public async Task IngestPathAsync_RealFixtureForEachAgentNormalizesThroughHttp(
+        string agent,
+        TranscriptSourceKind source,
+        string fixtureRelativePath,
+        string expectedSessionId)
+    {
+        var workspaceRelativePath = Path.Combine("transcripts", agent.ToLowerInvariant(), fixtureRelativePath).Replace('\\', '/');
+        CopyRealPathToWorkspace(fixtureRelativePath, workspaceRelativePath);
+        var request = new TranscriptIngestPathRequest
+        {
+            Path = workspaceRelativePath,
+            Agent = agent,
+            Source = source,
+            Recursive = true,
+            Strict = true,
+            Persist = false,
+            CompatibilityProfile = TranscriptCompatibilityProfile.Codex,
+            EmitNormalizedProfile = true,
+        };
+
+        var response = await _client.PostAsJsonAsync(
+            new Uri("/mcpserver/sessionlog/ingest/path", UriKind.Relative),
+            request,
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<TranscriptIngestRunResponse>(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(body);
+        Assert.False(body!.Persisted);
+        Assert.False(body.Degraded);
+        Assert.Equal(1, body.TotalSessions);
+        Assert.Empty(body.ImportRecoveryPaths);
+        var receipt = Assert.Single(body.Receipts);
+        Assert.Equal(agent, receipt.Source);
+        Assert.StartsWith(expectedSessionId, receipt.SessionId, StringComparison.Ordinal);
+        Assert.Equal("normalized", receipt.Status);
+        Assert.StartsWith(expectedSessionId, Path.GetFileName(receipt.YamlArtifactPath), StringComparison.Ordinal);
+        Assert.True(File.Exists(receipt.YamlArtifactPath), receipt.YamlArtifactPath);
+        Assert.False(File.Exists(receipt.ImportRecoveryPath), receipt.ImportRecoveryPath);
+        Assert.Contains(receipt.SessionId, await File.ReadAllTextAsync(receipt.YamlArtifactPath, TestContext.Current.CancellationToken).ConfigureAwait(true), StringComparison.Ordinal);
+    }
+
     /// <summary>Verifies multipart ZIP upload ingestion persists and removes the per-run staging directory.</summary>
     [Fact]
     public async Task IngestUploadAsync_ZipClaudeFixturePersistsAndDeletesStagingRun()
@@ -155,6 +205,40 @@ public sealed class SessionLogTranscriptIngestionControllerTests : IClassFixture
             TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    private void CopyRealPathToWorkspace(string sourceRelativePath, string workspaceRelativePath)
+    {
+        var source = Path.Combine(CustomWebApplicationFactory.ResolveSolutionRoot(), "tests", "McpServer.Support.Mcp.Tests", "Fixtures", "Transcripts", "real", sourceRelativePath);
+        var destination = Path.Combine(_factory.WorkspacePath, workspaceRelativePath);
+        if (File.Exists(source))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+            File.Copy(source, destination, overwrite: true);
+            return;
+        }
+
+        if (Directory.Exists(source))
+        {
+            CopyDirectory(source, destination);
+            return;
+        }
+
+        throw new FileNotFoundException("Missing real transcript fixture.", source);
+    }
+
+    private static void CopyDirectory(string sourceDirectory, string destinationDirectory)
+    {
+        Directory.CreateDirectory(destinationDirectory);
+        foreach (var file in Directory.EnumerateFiles(sourceDirectory))
+        {
+            File.Copy(file, Path.Combine(destinationDirectory, Path.GetFileName(file)), overwrite: true);
+        }
+
+        foreach (var directory in Directory.EnumerateDirectories(sourceDirectory))
+        {
+            CopyDirectory(directory, Path.Combine(destinationDirectory, Path.GetFileName(directory)));
+        }
     }
 
     private void CopyRealFixtureToWorkspace(string sourceRelativePath, string workspaceRelativePath)
