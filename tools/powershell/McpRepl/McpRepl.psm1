@@ -126,7 +126,6 @@ function Invoke-McpRepl {
 
 function Resolve-McpCacheDir {
     if ($env:MCP_CACHE_DIR_OVERRIDE) { return $env:MCP_CACHE_DIR_OVERRIDE }
-    if ($env:PLUGIN_ROOT_OVERRIDE)   { return (Join-Path $env:PLUGIN_ROOT_OVERRIDE 'cache') }
     return (Join-Path $env:USERPROFILE '.mcpServer\cache')
 }
 

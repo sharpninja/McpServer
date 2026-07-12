@@ -16,7 +16,7 @@ session-log logic lives here and is distributed by sync.
 - `hooks-templates/` - reference hook wrappers (5-10 lines each) that source
   `lib/plugin-env.sh` + the shared lib and call one shared entry function.
 - `test-fixtures/` - shared bats suites and golden REPL envelope fixtures,
-  parameterized by `PLUGIN_ROOT_OVERRIDE`, runnable against the core itself
+  parameterized by explicit plugin roots plus `MCP_CACHE_DIR_OVERRIDE`, runnable against the core itself
   and against any synced plugin repo.
 - `sync/` - distribution tooling:
   - `sync-plugin-core.sh|ps1 <plugin-root> [--include-ps]` copies the libs
