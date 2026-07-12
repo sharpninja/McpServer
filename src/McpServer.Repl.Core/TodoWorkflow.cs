@@ -32,6 +32,7 @@ namespace McpServer.Repl.Core;
 public sealed class TodoWorkflow : ITodoWorkflow
 {
     private readonly TodoClient _client;
+    private readonly ITodoSelectionStore _selectionStore;
     private TodoSelectionState? _currentSelection;
 
     /// <summary>
@@ -39,9 +40,21 @@ public sealed class TodoWorkflow : ITodoWorkflow
     /// </summary>
     /// <param name="client">The TodoClient to use for operations.</param>
     public TodoWorkflow(TodoClient client)
+        : this(client, NullTodoSelectionStore.Instance)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TodoWorkflow"/> class.
+    /// </summary>
+    /// <param name="client">The TodoClient to use for operations.</param>
+    /// <param name="selectionStore">Durable selection store used for selected update/delete commands.</param>
+    public TodoWorkflow(TodoClient client, ITodoSelectionStore? selectionStore)
     {
         ArgumentNullException.ThrowIfNull(client);
         _client = client;
+        _selectionStore = selectionStore ?? NullTodoSelectionStore.Instance;
+        _currentSelection = ToSelectionState(_selectionStore.Load());
     }
 
     /// <inheritdoc />
@@ -87,14 +100,13 @@ public sealed class TodoWorkflow : ITodoWorkflow
         try
         {
             var item = await _client.GetAsync(id, cancellationToken);
-            _currentSelection = new TodoSelectionState(
+            SetSelection(new TodoSelectionState(
                 item.Id,
                 item.Title,
                 item.Section,
                 item.Priority,
                 item.Done,
-                DateTimeOffset.UtcNow
-            );
+                DateTimeOffset.UtcNow));
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
@@ -158,23 +170,31 @@ public sealed class TodoWorkflow : ITodoWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        if (_currentSelection == null)
-            throw new InvalidOperationException("No TODO is currently selected");
+        var selection = CurrentSelection()
+            ?? throw new InvalidOperationException("No TODO is currently selected");
 
         var clientRequest = MapUpdateRequest(request);
-        var result = await _client.UpdateAsync(_currentSelection.Id, clientRequest, cancellationToken);
+        TodoMutationResult result;
+        try
+        {
+            result = await _client.UpdateAsync(selection.Id, clientRequest, cancellationToken);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            ClearSelection(selection.Id);
+            throw new InvalidOperationException($"Selected TODO item no longer exists: {selection.Id}", ex);
+        }
 
-        // Update selection state with new values
+        // Update selection state with new values.
         if (result.Success && result.Item != null)
         {
-            _currentSelection = new TodoSelectionState(
+            SetSelection(new TodoSelectionState(
                 result.Item.Id,
                 result.Item.Title,
                 result.Item.Section,
                 result.Item.Priority,
                 result.Item.Done,
-                _currentSelection.SelectedAt
-            );
+                selection.SelectedAt));
         }
 
         return new TodoMutationResultAdapter(result);
@@ -192,22 +212,32 @@ public sealed class TodoWorkflow : ITodoWorkflow
         if (!result.Success)
             throw new InvalidOperationException(result.Error ?? "Failed to delete TODO item");
 
-        // Clear selection if we deleted the selected item
-        if (_currentSelection?.Id == id)
-            _currentSelection = null;
+        // Clear selection if we deleted the selected item.
+        if (CurrentSelection()?.Id == id)
+            ClearSelection(id);
     }
 
     /// <inheritdoc />
     public async Task DeleteAsync(CancellationToken cancellationToken = default)
     {
-        if (_currentSelection == null)
-            throw new InvalidOperationException("No TODO is currently selected");
+        var selection = CurrentSelection()
+            ?? throw new InvalidOperationException("No TODO is currently selected");
 
-        var result = await _client.DeleteAsync(_currentSelection.Id, cancellationToken);
+        TodoMutationResult result;
+        try
+        {
+            result = await _client.DeleteAsync(selection.Id, cancellationToken);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            ClearSelection(selection.Id);
+            throw new InvalidOperationException($"Selected TODO item no longer exists: {selection.Id}", ex);
+        }
+
         if (!result.Success)
             throw new InvalidOperationException(result.Error ?? "Failed to delete TODO item");
 
-        _currentSelection = null;
+        ClearSelection(selection.Id);
     }
 
     /// <inheritdoc />
@@ -489,7 +519,39 @@ public sealed class TodoWorkflow : ITodoWorkflow
     /// <inheritdoc />
     public ITodoSelectionState? CurrentSelection()
     {
+        if (_currentSelection is not null)
+            return _currentSelection;
+
+        _currentSelection = ToSelectionState(_selectionStore.Load());
         return _currentSelection;
+    }
+
+    private void SetSelection(TodoSelectionState selection)
+    {
+        _currentSelection = selection;
+        _selectionStore.Save(selection);
+    }
+
+    private void ClearSelection(string? id = null)
+    {
+        if (string.IsNullOrWhiteSpace(id) || string.Equals(_currentSelection?.Id, id, StringComparison.Ordinal))
+            _currentSelection = null;
+        _selectionStore.Clear(id);
+    }
+
+    private static TodoSelectionState? ToSelectionState(ITodoSelectionState? selection)
+    {
+        if (selection is null)
+            return null;
+        if (selection is TodoSelectionState typed)
+            return typed;
+        return new TodoSelectionState(
+            selection.Id,
+            selection.Title,
+            selection.Section,
+            selection.Priority,
+            selection.Done,
+            selection.SelectedAt);
     }
 
     private static void ValidateTodoId(string id)

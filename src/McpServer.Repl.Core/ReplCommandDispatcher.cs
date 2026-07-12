@@ -1163,6 +1163,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         cancellationToken).ConfigureAwait(false),
                 AgentHelpCommandShapes.GetStatusMethod =>
                     await workflow.GetStatusAsync(RequireString(args, requestArgs, "sessionId"), cancellationToken).ConfigureAwait(false),
+                AgentHelpCommandShapes.GetTranscriptMethod =>
+                    await workflow.GetTranscriptAsync(RequireString(args, requestArgs, "sessionId"), cancellationToken).ConfigureAwait(false),
                 _ => null,
             };
 

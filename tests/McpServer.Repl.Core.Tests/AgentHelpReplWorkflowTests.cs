@@ -26,13 +26,14 @@ public sealed class AgentHelpReplWorkflowTests
             ["userMessage"] = "What should I check first?",
         }];
         yield return [AgentHelpCommandShapes.GetStatusMethod, new Dictionary<string, object?> { ["sessionId"] = "help-001" }];
+        yield return [AgentHelpCommandShapes.GetTranscriptMethod, new Dictionary<string, object?> { ["sessionId"] = "help-001" }];
     }
 
     /// <summary>TEST-MCP-HELP-008: the route table covers the complete Agent Help wrapper surface.</summary>
     [Fact]
     public void AgentHelpRouteCases_CoverAllCommandShapes()
     {
-        Assert.Equal(3, AgentHelpRouteCases().Count());
+        Assert.Equal(4, AgentHelpRouteCases().Count());
     }
 
     /// <summary>
@@ -138,6 +139,22 @@ public sealed class AgentHelpReplWorkflowTests
                 LastUpdatedUtc = "2026-07-08T00:00:00Z",
                 ExecutionStrategy = "stub",
             });
+        workflow.GetTranscriptAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new AgentHelpTranscriptResponse
+            {
+                SessionId = "help-001",
+                Items =
+                [
+                    new AgentHelpTranscriptEntry
+                    {
+                        SessionId = "help-001",
+                        Role = "assistant",
+                        Category = "transcript",
+                        Text = "Recovered transcript text.",
+                        TimestampUtc = "2026-07-08T00:00:00Z",
+                    },
+                ],
+            });
     }
 
     private static async Task AssertReceivedAsync(IAgentHelpWorkflow workflow, string method)
@@ -157,6 +174,9 @@ public sealed class AgentHelpReplWorkflowTests
                 break;
             case AgentHelpCommandShapes.GetStatusMethod:
                 await workflow.Received(1).GetStatusAsync("help-001", Arg.Any<CancellationToken>());
+                break;
+            case AgentHelpCommandShapes.GetTranscriptMethod:
+                await workflow.Received(1).GetTranscriptAsync("help-001", Arg.Any<CancellationToken>());
                 break;
         }
     }

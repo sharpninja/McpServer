@@ -34,6 +34,9 @@ Ported now:
    `completeTurn` now reject calls without `current-turn.yaml` instead of
    reporting success. `appendDialog` is handled locally and persists
    `processingDialog` through the turn upsert path.
+7. Session-log begin hardening: `beginTurn` writes `current-turn.yaml`,
+   persists the opened turn shell through `Invoke-ReplPersistTurn`, and
+   only reports success after the cache write and persistence confirm.
 
 Documented gaps (deferred by the report as Phase 2 scope decisions; do not
 silently treat as parity debt):
@@ -42,9 +45,9 @@ silently treat as parity debt):
   `final-response.sh`, `memory-context.sh`, `mcp.<host>.status.sh`,
   `hook-lib.sh`. The `Invoke-McpPlugin.ps1` entry script shells into the
   bash implementations instead.
-- `Invoke-ReplMethod` still treats `workflow.sessionlog.beginTurn` /
-  `openSession` as pure no-ops (no ps1 turn caching). The sh shim owns the
-  turn cache.
+- `Invoke-ReplMethod` still treats `workflow.sessionlog.openSession` as a
+  pure no-op; the hook/bootstrap path owns session-state creation before
+  PowerShell `beginTurn` can open a cached turn.
 - The upsert flow's "compat marker" first attempt
   (`_repl_invoke_raw_in_workspace ... compat`) is not ported: the ps1 shim
   has no compat-marker/workspace-re-anchoring machinery, so it issues a

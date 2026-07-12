@@ -66,6 +66,11 @@ public sealed class AgentHelpOptions
     public bool CorpusBootstrapEnabled { get; set; } = true;
 
     /// <summary>
+    /// Finite wall-clock timeout for one-shot helper CLI execution.
+    /// </summary>
+    public TimeSpan HelperTimeout { get; set; } = TimeSpan.FromMinutes(2);
+
+    /// <summary>
     /// Maximum characters of seeded context injected into helper prompts.
     /// </summary>
     public int MaxContextCharacters { get; set; } = 12_000;

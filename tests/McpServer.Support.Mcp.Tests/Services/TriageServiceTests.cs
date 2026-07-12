@@ -287,6 +287,228 @@ public sealed class TriageServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGE-004: agent output with incidental preamble text still yields the
+    /// schema-valid JSON object used to create the BUG-TRIAGE TODO.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_ResearchOutputWithPreamble_ExtractsJsonAndCreatesTodo()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                Investigating how the triage group should be classified.
+                {"title":"Fix triage JSON extraction","summary":"Triage agents may write progress before the final JSON.","severity":"high","acceptanceCriteria":["Preamble text before JSON does not fail schema validation"],"implementationNotes":["Extract the first balanced JSON object from successful agent output."]}
+                """,
+                null));
+
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call => new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = ((TodoCreateRequest)call[0]!).Id,
+                    Title = ((TodoCreateRequest)call[0]!).Title,
+                    Section = ((TodoCreateRequest)call[0]!).Section,
+                    Priority = ((TodoCreateRequest)call[0]!).Priority,
+                    Done = false,
+                }));
+
+        var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await sut.SubmitReportAsync(CreateReport("research-preamble"), cancellationToken: TestContext.Current.CancellationToken);
+
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        await todo.Received(1).CreateAsync(
+            Arg.Is<TodoCreateRequest>(request =>
+                request != null &&
+                request.Id == "BUG-TRIAGE-001" &&
+                request.Title == "Fix triage JSON extraction"),
+            Arg.Any<CancellationToken>());
+
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: BUG-TRIAGE id allocation considers orphaned TODO rows
+    /// that were created before a triage group recorded CreatedTodoId.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_ExistingUnownedBugTriageTodo_UsesNextId()
+    {
+        using (var db = CreateDb(PrimaryWorkspace))
+        {
+            db.TodoItems.Add(SeedTodoItem("BUG-TRIAGE-052", "Orphaned triage TODO"));
+            await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        }
+
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                {"title":"Fix orphaned triage id allocation","summary":"Triage must skip BUG-TRIAGE ids already present in TodoItems.","severity":"high","acceptanceCriteria":["Existing orphaned BUG-TRIAGE TODO ids are skipped"],"implementationNotes":["Scan TodoItems directly before allocating the next id."]}
+                """,
+                null));
+
+        TodoCreateRequest? createdRequest = null;
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Do<TodoCreateRequest>(request => createdRequest = request), Arg.Any<CancellationToken>())
+            .Returns(call => new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = ((TodoCreateRequest)call[0]!).Id,
+                    Title = ((TodoCreateRequest)call[0]!).Title,
+                    Section = ((TodoCreateRequest)call[0]!).Section,
+                    Priority = ((TodoCreateRequest)call[0]!).Priority,
+                    Done = false,
+                }));
+
+        var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await sut.SubmitReportAsync(CreateReport("research-orphaned-todo-id"), cancellationToken: TestContext.Current.CancellationToken);
+
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        Assert.NotNull(createdRequest);
+        Assert.Equal("BUG-TRIAGE-053", createdRequest.Id);
+
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-053", group.CreatedTodoId);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: TODO id collision during triage creation retries with the next
+    /// BUG-TRIAGE id instead of wedging the group in failed state.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_WhenGeneratedTodoIdAlreadyExists_RetriesWithNextBugTriageId()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                {"title":"Fix duplicate triage id","summary":"The first generated BUG-TRIAGE id already exists.","severity":"medium","acceptanceCriteria":["Retry uses the next id"],"implementationNotes":[]}
+                """,
+                null));
+
+        var requestedIds = new List<string>();
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var request = (TodoCreateRequest)call[0]!;
+                requestedIds.Add(request.Id);
+                if (request.Id == "BUG-TRIAGE-001")
+                {
+                    return new TodoMutationResult(
+                        false,
+                        "Item with id 'BUG-TRIAGE-001' already exists.",
+                        null,
+                        TodoMutationFailureKind.Conflict);
+                }
+
+                return new TodoMutationResult(
+                    true,
+                    Item: new TodoFlatItem
+                    {
+                        Id = request.Id,
+                        Title = request.Title,
+                        Section = request.Section,
+                        Priority = request.Priority,
+                        Done = false,
+                    });
+            });
+
+        var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await sut.SubmitReportAsync(CreateReport("duplicate-triage-id"), cancellationToken: TestContext.Current.CancellationToken);
+
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        Assert.Equal(["BUG-TRIAGE-001", "BUG-TRIAGE-002"], requestedIds);
+
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-002", group.CreatedTodoId);
+        Assert.Null(group.LastError);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: successful research output with no JSON creates a fallback
+    /// TODO from the grouped report data and records diagnostics instead of wedging triage.
+    /// </summary>
+    [Fact]
+    public async Task ProcessDueGroupsAsync_ResearchOutputWithoutJson_CreatesFallbackTodoWithDiagnostics()
+    {
+        var runner = Substitute.For<ITriageResearchRunner>();
+        runner.RunAsync(Arg.Any<TriageResearchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TriageResearchRunResult(
+                true,
+                """
+                I'll inspect the PowerShell.MCP text-edit helper and return triage JSON only.
+                Looking for the text-edit helper and any atomic replace/move logic tied to TEMP.
+                """,
+                null));
+
+        TodoCreateRequest? createdRequest = null;
+        var todo = Substitute.For<ITodoService>();
+        todo.QueryAsync(Arg.Any<TodoQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoQueryResult([], 0));
+        todo.CreateAsync(Arg.Do<TodoCreateRequest>(request => createdRequest = request), Arg.Any<CancellationToken>())
+            .Returns(call => new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = ((TodoCreateRequest)call[0]!).Id,
+                    Title = ((TodoCreateRequest)call[0]!).Title,
+                    Section = ((TodoCreateRequest)call[0]!).Section,
+                    Priority = ((TodoCreateRequest)call[0]!).Priority,
+                    Done = false,
+                }));
+
+        var sut = CreateService(PrimaryWorkspace, runner: runner, todo: todo, quietPeriod: TimeSpan.Zero);
+        var submit = await sut.SubmitReportAsync(CreateReport("research-no-json"), cancellationToken: TestContext.Current.CancellationToken);
+
+        var processed = await sut.ProcessDueGroupsAsync(CancellationToken.None);
+
+        Assert.Equal(1, processed.ProcessedGroups);
+        Assert.NotNull(createdRequest);
+        Assert.Equal("BUG-TRIAGE-001", createdRequest.Id);
+        Assert.Equal("REPL triage wrapper failure", createdRequest.Title);
+        Assert.Equal("medium", createdRequest.Priority);
+        var technicalDetails = createdRequest.TechnicalDetails ?? [];
+        Assert.Contains(technicalDetails, detail => detail.Contains("Fallback TODO created", StringComparison.Ordinal));
+        Assert.Contains(technicalDetails, detail => detail.Contains("Raw triage research output is preserved", StringComparison.Ordinal));
+
+        var group = await sut.GetGroupAsync(submit.GroupId, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal("completed", group.Status);
+        Assert.Equal("BUG-TRIAGE-001", group.CreatedTodoId);
+
+        var run = Assert.Single((await sut.QueryRunsAsync(
+            status: "completed",
+            groupId: submit.GroupId,
+            workspacePath: PrimaryWorkspace,
+            cancellationToken: TestContext.Current.CancellationToken)).Items);
+        Assert.Equal("BUG-TRIAGE-001", run.CreatedTodoId);
+        Assert.Contains("Fallback TODO created", run.ResponseJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-004: triage-created TODOs are routed through the host-selected
     /// triage TODO creator instead of directly mutating the read/query TODO service.
     /// </summary>

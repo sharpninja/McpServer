@@ -16,4 +16,7 @@ public static class AgentHelpCommandShapes
 
     /// <summary>Method: <c>workflow.agenthelp.getStatus</c>.</summary>
     public const string GetStatusMethod = "workflow.agenthelp.getStatus";
+
+    /// <summary>Method: <c>workflow.agenthelp.getTranscript</c>.</summary>
+    public const string GetTranscriptMethod = "workflow.agenthelp.getTranscript";
 }

@@ -76,12 +76,25 @@ if (Test-Path -LiteralPath $oldEnv) {
     Remove-Item -LiteralPath $oldEnv -Force
 }
 
-if ($HostName -eq 'claude-code') {
+if ($HostName -ne 'codex') {
     $hooksRoot = Join-Path $PluginRoot 'hooks'
     if (-not (Test-Path -LiteralPath $hooksRoot)) {
         [void][System.IO.Directory]::CreateDirectory($hooksRoot)
     }
-    Copy-Item -LiteralPath (Join-Path $templateDir 'hooks.claude-code.json') -Destination (Join-Path $hooksRoot 'hooks.json') -Force
+
+    $rootExpression = switch ($HostName) {
+        'grok' { '${GROK_PLUGIN_ROOT:-${PLUGIN_ROOT:-$CLAUDE_PLUGIN_ROOT}}' }
+        'copilot' { '${COPILOT_PLUGIN_ROOT:-${PLUGIN_ROOT:-$CLAUDE_PLUGIN_ROOT}}' }
+        'cowork' { '${COWORK_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}' }
+        'claude-cowork' { '${COWORK_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT}}' }
+        default { '${CLAUDE_PLUGIN_ROOT}' }
+    }
+
+    $hooksJson = [System.IO.File]::ReadAllText((Join-Path $templateDir 'hooks.claude-code.json')).
+        Replace('${CLAUDE_PLUGIN_ROOT}', $rootExpression)
+    $hooksPath = Join-Path $hooksRoot 'hooks.json'
+    [System.IO.File]::WriteAllText($hooksPath, $hooksJson, [System.Text.UTF8Encoding]::new($false))
+    [void]($hooksJson | ConvertFrom-Json -Depth 20 -ErrorAction Stop)
 }
 
 Write-Output "generated $HostName PowerShell wrappers in $wrapperDir"

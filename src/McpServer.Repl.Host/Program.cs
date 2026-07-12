@@ -96,7 +96,7 @@ static IHost CreateHost(string? workspacePathOverride, string? markerFileOverrid
         .ConfigureServices((context, services) =>
         {
             services.AddInProcessTransactionSecurity(context.Configuration);
-            services.AddReplCoreServices();
+            services.AddReplCoreServices(workspacePathOverride, agentOverride);
 
             services.AddSingleton(sp =>
             {

@@ -35,6 +35,8 @@ public sealed class TriageService : ITriageService
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
     };
 
+    private static readonly SemaphoreSlim TodoCreationLock = new(1, 1);
+
     private readonly McpDbContext _db;
     private readonly WorkspaceContext _workspaceContext;
     private readonly IWorkspaceService _workspaceService;
@@ -931,33 +933,41 @@ public sealed class TriageService : ITriageService
             }
 
             var schema = ValidateResearchOutput(rawResult.OutputJson);
-            if (!schema.Valid || schema.Output is null)
+            var researchOutput = schema.Output;
+            var schemaError = schema.Error;
+            if ((!schema.Valid || researchOutput is null) && !ContainsJsonObject(rawResult.OutputJson))
             {
-                MarkResearchFailure(group, run, schema.Error ?? "Triage research output failed schema validation.");
+                researchOutput = BuildFallbackResearchOutput(
+                    detail,
+                    schemaError ?? "Triage research output failed schema validation.",
+                    run.RunId);
+            }
+
+            if (researchOutput is null)
+            {
+                MarkResearchFailure(group, run, schemaError ?? "Triage research output failed schema validation.");
                 await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 return;
             }
 
-            var todoId = await GenerateNextTodoIdAsync(cancellationToken).ConfigureAwait(false);
-            var createResult = await _triageTodoCreator.CreateAsync(new TodoCreateRequest
+            TriageTodoCreationAttempt creationAttempt;
+            await TodoCreationLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+            try
             {
-                Id = todoId,
-                Title = schema.Output.Title.Trim(),
-                Section = "Backlog",
-                Priority = NormalizeTodoPriority(schema.Output.Severity),
-                Description =
-                [
-                    schema.Output.Summary.Trim(),
-                    $"Triage group: {group.GroupId}",
-                    $"Reports: {group.ReportCount.ToString(CultureInfo.InvariantCulture)}",
-                ],
-                TechnicalDetails = BuildTechnicalDetails(schema.Output),
-                FunctionalRequirements = ["FR-MCP-TRIAGE-002"],
-                TechnicalRequirements = ["TR-MCP-TRIAGE-004"],
-            }, cancellationToken).ConfigureAwait(false);
+                creationAttempt = await CreateTriageTodoWithRetryAsync(group, researchOutput, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            finally
+            {
+                TodoCreationLock.Release();
+            }
 
-            var todoCreatedWithWarning = await ConfirmTodoCreatedWithWarningAsync(createResult, todoId, cancellationToken)
-                .ConfigureAwait(false);
+            var todoId = creationAttempt.RequestedTodoId;
+            var createResult = creationAttempt.Result;
+            var todoCreatedWithWarning = creationAttempt.CreatedWithWarning;
+            if (createResult is null)
+                throw new InvalidOperationException("Triage TODO creation did not return a result.");
+
             if (!createResult.Success && !todoCreatedWithWarning)
             {
                 MarkResearchFailure(group, run, createResult.Error ?? "TODO creation failed.");
@@ -972,7 +982,7 @@ public sealed class TriageService : ITriageService
             run.CreatedTodoId = createdTodoId;
             run.Status = StatusCompleted;
             run.Error = todoCreatedWithWarning ? createResult.Error : null;
-            run.ResponseJson = JsonSerializer.Serialize(schema.Output, JsonOptions);
+            run.ResponseJson = JsonSerializer.Serialize(researchOutput, JsonOptions);
             run.CompletedUtc = _timeProvider.GetUtcNow();
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -1096,6 +1106,63 @@ public sealed class TriageService : ITriageService
         }
     }
 
+    private async Task<TriageTodoCreationAttempt> CreateTriageTodoWithRetryAsync(
+        TriageGroupEntity group,
+        ResearchOutput researchOutput,
+        CancellationToken cancellationToken)
+    {
+        var minimumBugNumber = 0;
+        TodoMutationResult? lastResult = null;
+        var lastTodoId = string.Empty;
+
+        for (var attempt = 0; attempt < 25; attempt++)
+        {
+            var todoId = await GenerateNextTodoIdAsync(cancellationToken, minimumBugNumber).ConfigureAwait(false);
+            var createResult = await _triageTodoCreator.CreateAsync(new TodoCreateRequest
+            {
+                Id = todoId,
+                Title = researchOutput.Title.Trim(),
+                Section = "Backlog",
+                Priority = NormalizeTodoPriority(researchOutput.Severity),
+                Description =
+                [
+                    researchOutput.Summary.Trim(),
+                    $"Triage group: {group.GroupId}",
+                    $"Reports: {group.ReportCount.ToString(CultureInfo.InvariantCulture)}",
+                ],
+                TechnicalDetails = BuildTechnicalDetails(researchOutput),
+                FunctionalRequirements = ["FR-MCP-TRIAGE-002"],
+                TechnicalRequirements = ["TR-MCP-TRIAGE-004"],
+            }, cancellationToken).ConfigureAwait(false);
+
+            lastTodoId = todoId;
+            var todoCreatedWithWarning = await ConfirmTodoCreatedWithWarningAsync(createResult, todoId, cancellationToken)
+                .ConfigureAwait(false);
+            if (createResult.Success || todoCreatedWithWarning || !IsTodoIdConflict(createResult, todoId))
+                return new TriageTodoCreationAttempt(todoId, createResult, todoCreatedWithWarning);
+
+            minimumBugNumber = Math.Max(minimumBugNumber, ParseBugNumber(todoId));
+            lastResult = createResult;
+        }
+
+        return new TriageTodoCreationAttempt(
+            lastTodoId,
+            lastResult ?? new TodoMutationResult(
+                false,
+                "TODO creation failed after repeated id collisions.",
+                null,
+                TodoMutationFailureKind.Conflict),
+            false);
+    }
+
+    private static bool IsTodoIdConflict(TodoMutationResult result, string todoId)
+    {
+        return !result.Success &&
+            result.FailureKind == TodoMutationFailureKind.Conflict &&
+            !string.IsNullOrWhiteSpace(result.Error) &&
+            result.Error.Contains(todoId, StringComparison.OrdinalIgnoreCase);
+    }
+
     private async Task<bool> ConfirmTodoCreatedWithWarningAsync(
         TodoMutationResult result,
         string requestedTodoId,
@@ -1142,9 +1209,9 @@ public sealed class TriageService : ITriageService
         return string.IsNullOrWhiteSpace(final) ? streamed : final;
     }
 
-    private async Task<string> GenerateNextTodoIdAsync(CancellationToken cancellationToken)
+    private async Task<string> GenerateNextTodoIdAsync(CancellationToken cancellationToken, int minimumBugNumber = 0)
     {
-        var max = 0;
+        var max = Math.Max(0, minimumBugNumber);
         var existingGroups = await _db.TriageGroups
             .IgnoreQueryFilters()
             .Where(g => g.CreatedTodoId != null && g.CreatedTodoId.StartsWith(TodoPrefix))
@@ -1153,6 +1220,17 @@ public sealed class TriageService : ITriageService
             .ConfigureAwait(false);
 
         foreach (var id in existingGroups)
+            max = Math.Max(max, ParseBugNumber(id));
+
+        var existingTodos = await _db.TodoItems
+            .IgnoreQueryFilters()
+            .AsNoTracking()
+            .Where(todo => todo.Id.StartsWith(TodoPrefix))
+            .Select(todo => todo.Id)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        foreach (var id in existingTodos)
             max = Math.Max(max, ParseBugNumber(id));
 
         try
@@ -1496,9 +1574,10 @@ public sealed class TriageService : ITriageService
         if (string.IsNullOrWhiteSpace(outputJson))
             return (false, null, "Triage research output failed schema validation: empty output.");
 
+        var candidateJson = ExtractResearchOutputJson(outputJson);
         try
         {
-            var output = JsonSerializer.Deserialize<ResearchOutput>(outputJson, JsonOptions);
+            var output = JsonSerializer.Deserialize<ResearchOutput>(candidateJson, JsonOptions);
             if (output is null ||
                 string.IsNullOrWhiteSpace(output.Title) ||
                 string.IsNullOrWhiteSpace(output.Summary) ||
@@ -1514,6 +1593,96 @@ public sealed class TriageService : ITriageService
             return (false, null, $"Triage research output failed schema validation: {ex.Message}");
         }
     }
+
+    private static string ExtractResearchOutputJson(string outputJson)
+    {
+        var trimmed = outputJson.Trim();
+        var start = trimmed.IndexOf('{', StringComparison.Ordinal);
+        if (start < 0)
+            return trimmed;
+
+        var inString = false;
+        var escaped = false;
+        var depth = 0;
+        for (var i = start; i < trimmed.Length; i++)
+        {
+            var current = trimmed[i];
+            if (inString)
+            {
+                if (escaped)
+                {
+                    escaped = false;
+                }
+                else if (current == '\\')
+                {
+                    escaped = true;
+                }
+                else if (current == '"')
+                {
+                    inString = false;
+                }
+
+                continue;
+            }
+
+            if (current == '"')
+            {
+                inString = true;
+            }
+            else if (current == '{')
+            {
+                depth++;
+            }
+            else if (current == '}')
+            {
+                depth--;
+                if (depth == 0)
+                    return trimmed[start..(i + 1)];
+            }
+        }
+
+        return trimmed;
+    }
+
+    private static bool ContainsJsonObject(string? outputJson)
+        => !string.IsNullOrWhiteSpace(outputJson) && outputJson.Contains('{', StringComparison.Ordinal);
+
+    private static ResearchOutput BuildFallbackResearchOutput(
+        TriageGroupDetail detail,
+        string validationError,
+        string runId)
+    {
+        var title = FirstNonEmpty(
+            detail.Title,
+            detail.Reports.FirstOrDefault()?.Title,
+            $"Process triage group {detail.GroupId}");
+        var summary = FirstNonEmpty(
+            detail.Summary,
+            detail.Reports.FirstOrDefault()?.Summary,
+            $"Grouped triage reports require investigation for {detail.GroupId}.");
+
+        return new ResearchOutput
+        {
+            Title = title,
+            Summary = summary,
+            Severity = "medium",
+            AcceptanceCriteria =
+            [
+                "Investigate and resolve the grouped triage report.",
+                "Add or update validation that proves the triage issue is fixed.",
+                "Verify the workflow no longer reproduces this triage report.",
+            ],
+            ImplementationNotes =
+            [
+                "Fallback TODO created because successful triage research output contained no JSON object.",
+                $"Research validation error: {validationError}",
+                $"Raw triage research output is preserved on run {runId}.",
+            ],
+        };
+    }
+
+    private static string FirstNonEmpty(params string?[] values)
+        => values.FirstOrDefault(value => !string.IsNullOrWhiteSpace(value))?.Trim() ?? string.Empty;
 
     private static string NormalizeTodoPriority(string? severity)
     {
@@ -1552,6 +1721,11 @@ public sealed class TriageService : ITriageService
 
         public IReadOnlyList<string> ImplementationNotes { get; init; } = [];
     }
+
+    private sealed record TriageTodoCreationAttempt(
+        string RequestedTodoId,
+        TodoMutationResult Result,
+        bool CreatedWithWarning);
 
     private sealed record TriageSelection(
         IReadOnlyList<TriageReportEntity> Reports,
