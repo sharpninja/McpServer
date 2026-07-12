@@ -140,17 +140,19 @@ cache_scope_session_key() {
 cache_scope_init() {
     local plugin_root="${1:-$(cd "$CACHE_SCOPE_SCRIPT_DIR/.." && pwd)}"
     local start_dir="${2:-$(pwd)}"
-    local storage_root="${PLUGIN_ROOT_OVERRIDE:-$plugin_root}"
+    local storage_root="$plugin_root"
 
     # Unified resolver (Phase 2 shared core): anchor the cache root through
     # resolve_cache_dir (override / marker / workspace aware) so scoped
-    # runtime state and cache-manager pending flushes share one tree. Falls
-    # back to <storage_root>/cache when the resolver is unavailable.
+    # runtime state and cache-manager pending flushes share one tree.
     local base_cache=""
     if type resolve_cache_dir >/dev/null 2>&1; then
-        base_cache="$(MCP_WORKSPACE_START_DIR="${MCP_WORKSPACE_START_DIR:-$start_dir}" MCP_PLUGIN_ROOT="${MCP_PLUGIN_ROOT:-$storage_root}" resolve_cache_dir 2>/dev/null; true)"
+        base_cache="$(MCP_WORKSPACE_START_DIR="${MCP_WORKSPACE_START_DIR:-$start_dir}" MCP_PLUGIN_ROOT="${MCP_PLUGIN_ROOT:-$storage_root}" resolve_cache_dir 2>/dev/null || true)"
     fi
-    [ -n "$base_cache" ] || base_cache="${storage_root}/cache"
+    if [ -z "$base_cache" ]; then
+        printf '%s\n' 'Unable to initialize plugin cache without an active workspace cache.' >&2
+        return 1
+    fi
 
     MCP_PLUGIN_CACHE_ROOT="${base_cache}"
     MCP_PLUGIN_WORKSPACE_PATH="$(cache_scope_workspace_path "$start_dir")"

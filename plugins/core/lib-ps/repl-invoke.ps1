@@ -40,8 +40,8 @@ if (-not $shimCommand.Parameters.ContainsKey('ProcessingDialog')) {
 Import-McpYamlSerializer
 . (Join-Path $PSScriptRoot 'marker-resolver.ps1')
 
-$script:ReplInvokePluginRoot = if ($env:PLUGIN_ROOT_OVERRIDE) {
-    $env:PLUGIN_ROOT_OVERRIDE
+$script:ReplInvokePluginRoot = if ($env:MCP_PLUGIN_ROOT) {
+    $env:MCP_PLUGIN_ROOT
 } else {
     Split-Path -Parent $PSScriptRoot
 }

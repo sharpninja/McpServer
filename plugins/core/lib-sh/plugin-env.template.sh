@@ -29,7 +29,7 @@
 # Pass-through knobs (no per-host values; core reads them directly):
 #   REPL_TIMEOUT, REPL_SESSIONLOG_REPL_TIMEOUT (default 8),
 #   MCP_PLUGIN_STALE_LOCK_SECONDS (default 120),
-#   MCP_CACHE_DIR_OVERRIDE (precedence 1), PLUGIN_ROOT_OVERRIDE (test hook),
+#   MCP_CACHE_DIR_OVERRIDE (the only cache override),
 #   MCP_SESSION_ID, MCP_SESSION_TITLE,
 #   MCPSERVER_WORKSPACE_PATH / MCP_WORKSPACE_PATH,
 #   MCPSERVER_REQUIREMENTS_PREFER_WORKFLOW_CREATE

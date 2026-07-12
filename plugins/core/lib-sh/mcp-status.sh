@@ -9,7 +9,7 @@ if [ -f "$SCRIPT_DIR/plugin-env.sh" ]; then
     source "$SCRIPT_DIR/plugin-env.sh" 2>/dev/null || true
 fi
 MCP_PLUGIN_ROOT="${MCP_PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-$SCRIPT_PLUGIN_ROOT}}"
-CACHE_ROOT="${PLUGIN_ROOT_OVERRIDE:-$MCP_PLUGIN_ROOT}"
+CACHE_ROOT="$MCP_PLUGIN_ROOT"
 WORKSPACE_PATH="${MCP_WORKSPACE_PATH:-${MCPSERVER_WORKSPACE_PATH:-${MCP_WORKSPACE_START_DIR:-${CLAUDE_PROJECT_DIR:-$(pwd)}}}}"
 
 # Status label derives from this file's name (mcp.<host>.status.sh -> 

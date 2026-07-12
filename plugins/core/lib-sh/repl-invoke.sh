@@ -9,7 +9,7 @@ set -uo pipefail
 # - the real client.* MCP methods exposed by mcpserver-repl
 
 REPL_INVOKE_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPL_INVOKE_PLUGIN_ROOT="${PLUGIN_ROOT_OVERRIDE:-$(cd "$REPL_INVOKE_SCRIPT_DIR/.." && pwd)}"
+REPL_INVOKE_PLUGIN_ROOT="${MCP_PLUGIN_ROOT:-$(cd "$REPL_INVOKE_SCRIPT_DIR/.." && pwd)}"
 REPL_INVOKE_CACHE_DIR="${REPL_INVOKE_PLUGIN_ROOT}/cache"
 
 # shellcheck source=./cache-scope.sh

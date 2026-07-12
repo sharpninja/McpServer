@@ -25,37 +25,37 @@ switch ($host_) {
     { $_ -in 'cowork', 'claude-cowork' } {
         $agent = 'ClaudeCowork'; $model = 'claude'; $tag = 'claude-cowork'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:CLAUDE_PLUGIN_ROOT)
-        $startChain = @($env:COWORK_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:CLAUDE_COWORK_WORKSPACE_PATH, $env:CLAUDE_PROJECT_DIR)
+        $startChain = @($env:COWORK_WORKSPACE_PATH, $env:CLAUDE_COWORK_WORKSPACE_PATH, $env:CLAUDE_PROJECT_DIR, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
     'codex' {
         $agent = 'Codex'; $model = 'codex'; $tag = 'codex'; $outputMode = 'cli'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:CODEX_PLUGIN_ROOT)
-        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:CODEX_WORKSPACE_PATH, $env:CODEX_PROJECT_DIR, $env:CODEX_CWD)
+        $startChain = @($env:CODEX_CWD, $env:CODEX_WORKSPACE_PATH, $env:CODEX_PROJECT_DIR, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
     'copilot' {
         $agent = 'Copilot'; $model = 'copilot'; $tag = 'copilot'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:PLUGIN_ROOT, $env:CLAUDE_PLUGIN_ROOT)
-        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:COPILOT_WORKSPACE_PATH, $env:COPILOT_PROJECT_DIR)
+        $startChain = @($env:COPILOT_WORKSPACE_PATH, $env:COPILOT_PROJECT_DIR, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
     'grok' {
         $agent = 'GrokCode'; $model = 'grok'; $tag = 'grok'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:GROK_PLUGIN_ROOT, $env:PLUGIN_ROOT, $env:CLAUDE_PLUGIN_ROOT)
-        $startChain = @($env:CLAUDE_PROJECT_DIR)
+        $startChain = @($env:GROK_WORKSPACE_PATH, $env:GROK_PROJECT_DIR, $env:CLAUDE_PROJECT_DIR, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
     'cline' {
         $agent = 'Cline'; $model = 'cline'; $tag = 'cline'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:CLINE_PLUGIN_ROOT, $env:PLUGIN_ROOT)
-        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:CLINE_WORKSPACE_PATH)
+        $startChain = @($env:CLINE_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
     'cline-v2' {
         $agent = 'Cline'; $model = 'cline'; $tag = 'cline-v2'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:CLINE_PLUGIN_ROOT, $env:PLUGIN_ROOT)
-        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:CLINE_WORKSPACE_PATH)
+        $startChain = @($env:CLINE_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
     'opencode' {
         $agent = 'OpenCode'; $model = 'opencode'; $tag = 'opencode'; $outputMode = 'hook'
         $rootChain = @($env:MCP_PLUGIN_ROOT, $env:OPENCODE_PLUGIN_ROOT, $env:PLUGIN_ROOT)
-        $startChain = @($env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH, $env:OPENCODE_WORKSPACE_PATH)
+        $startChain = @($env:OPENCODE_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH, $env:MCP_WORKSPACE_PATH)
     }
     default {
         $agent = 'Codex'; $model = 'codex'; $tag = 'mcpserver'; $outputMode = 'hook'

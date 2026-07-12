@@ -7,10 +7,8 @@
 
     Precedence:
       1. MCP_CACHE_DIR_OVERRIDE for an explicit test or recovery override.
-      2. MCP/host workspace environment variables.
-      3. The workspace marker found by walking upward from the start path.
-      4. PLUGIN_ROOT_OVERRIDE only as a legacy test cache root when it is not
-         the plugin root itself.
+      2. The workspace marker found from the explicit or active start path.
+      3. MCP/host workspace environment variables as a markerless fallback.
  #>
 
 $script:ResolveCacheDirScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -82,23 +80,11 @@ function Get-McpWorkspaceFromEnvironment {
 
 function Resolve-McpCacheDir {
     [CmdletBinding()]
-    param()
+    param([string]$StartPath)
 
     if ($env:MCP_CACHE_DIR_OVERRIDE) {
         return $env:MCP_CACHE_DIR_OVERRIDE
     }
-
-    $configuredWorkspace = Get-McpWorkspaceFromEnvironment
-    if ($configuredWorkspace) {
-        return (Join-McpWorkspaceCachePath -WorkspacePath $configuredWorkspace)
-    }
-
-    $startDir = @(
-        $env:MCP_WORKSPACE_START_DIR,
-        $env:CLAUDE_PROJECT_DIR,
-        $env:CODEX_CWD,
-        (Get-Location).Path
-    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
 
     if (-not (Get-Command Find-MarkerFile -ErrorAction SilentlyContinue)) {
         $resolver = Join-Path $script:ResolveCacheDirScriptDir 'marker-resolver.ps1'
@@ -107,29 +93,33 @@ function Resolve-McpCacheDir {
         }
     }
 
+    $startCandidates = if (-not [string]::IsNullOrWhiteSpace($StartPath)) {
+        @($StartPath)
+    } else {
+        @(
+            (Get-Location).Path,
+            $env:MCP_WORKSPACE_START_DIR,
+            $env:CLAUDE_PROJECT_DIR,
+            $env:CODEX_CWD
+        ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
+    }
+
     if (Get-Command Find-MarkerFile -ErrorAction SilentlyContinue) {
-        try {
-            $markerFile = Find-MarkerFile -StartDir $startDir
-            if ($markerFile) {
-                return (Join-McpWorkspaceCachePath -WorkspacePath (Split-Path -Parent $markerFile))
+        foreach ($startDir in $startCandidates) {
+            try {
+                $markerFile = Find-MarkerFile -StartDir $startDir
+                if ($markerFile) {
+                    return (Join-McpWorkspaceCachePath -WorkspacePath (Split-Path -Parent $markerFile))
+                }
+            } catch {
+                # Try the next active start candidate, then configured env.
             }
-        } catch {
-            # Continue to the explicit legacy test hook below.
         }
     }
 
-    $legacyRoot = $env:PLUGIN_ROOT_OVERRIDE
-    $pluginRoot = Get-McpPluginRoot
-    if ($legacyRoot) {
-        try {
-            $legacyFull = [System.IO.Path]::GetFullPath($legacyRoot)
-            $pluginFull = [System.IO.Path]::GetFullPath($pluginRoot)
-            if (-not [string]::Equals($legacyFull.TrimEnd('\'), $pluginFull.TrimEnd('\'), [System.StringComparison]::OrdinalIgnoreCase)) {
-                return (Join-Path $legacyRoot 'cache')
-            }
-        } catch {
-            # An invalid legacy root is not a valid workspace.
-        }
+    $configuredWorkspace = Get-McpWorkspaceFromEnvironment
+    if ($configuredWorkspace) {
+        return (Join-McpWorkspaceCachePath -WorkspacePath $configuredWorkspace)
     }
 
     throw "Unable to resolve the active workspace cache. Set MCP_WORKSPACE_PATH or MCP_CACHE_DIR_OVERRIDE; plugin install paths are not workspace caches."

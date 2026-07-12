@@ -100,6 +100,23 @@ Remove-PreviousCoreFiles
 
 $manifestFiles = [ordered]@{}
 
+function Copy-CoreFile {
+    param(
+        [Parameter(Mandatory)][string]$SourcePath,
+        [Parameter(Mandatory)][string]$DestinationPath
+    )
+
+    $textExtensions = @('.ps1', '.psm1', '.psd1', '.sh', '.bash', '.yaml', '.yml', '.json', '.md', '.txt')
+    if ($textExtensions -contains [System.IO.Path]::GetExtension($SourcePath).ToLowerInvariant()) {
+        $text = [System.IO.File]::ReadAllText($SourcePath)
+        $text = $text -replace "`r`n", "`n" -replace "`r", "`n"
+        [System.IO.File]::WriteAllText($DestinationPath, $text, [System.Text.UTF8Encoding]::new($false))
+        return
+    }
+
+    Copy-Item $SourcePath $DestinationPath -Force
+}
+
 function Sync-Tree {
     param([string]$SourceDir)
     if (-not (Test-Path $SourceDir)) { return }
@@ -108,7 +125,7 @@ function Sync-Tree {
         $rel = $_.FullName.Substring($SourceDir.Length + 1) -replace '\\', '/'
         $dest = Join-Path $PluginRoot "lib/$rel"
         New-Item -ItemType Directory -Force (Split-Path -Parent $dest) | Out-Null
-        Copy-Item $_.FullName $dest -Force
+        Copy-CoreFile -SourcePath $_.FullName -DestinationPath $dest
         $hash = (Get-FileHash -Path $dest -Algorithm SHA256).Hash.ToLowerInvariant()
         $manifestFiles["lib/$rel"] = $hash
     }

@@ -220,17 +220,6 @@ function Invoke-PluginPowerShellScript {
     } else {
         $null
     }
-    $legacyCacheRootFull = if (-not $cacheOverrideFull -and $env:PLUGIN_ROOT_OVERRIDE) {
-        try {
-            $legacyFull = Resolve-OptionalDirectory $env:PLUGIN_ROOT_OVERRIDE
-            if (-not [string]::Equals($legacyFull.TrimEnd('\\'), $pluginRootFull.TrimEnd('\\'), [System.StringComparison]::OrdinalIgnoreCase)) {
-                $legacyFull
-            }
-        } catch {
-            $null
-        }
-    }
-
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = (Get-Command pwsh -ErrorAction Stop).Source
     $startInfo.WorkingDirectory = $workspaceFull
@@ -274,8 +263,6 @@ function Invoke-PluginPowerShellScript {
     [void]$startInfo.Environment.Remove('PLUGIN_ROOT_OVERRIDE')
     if ($cacheOverrideFull) {
         $startInfo.Environment['MCP_CACHE_DIR_OVERRIDE'] = $cacheOverrideFull
-    } elseif ($legacyCacheRootFull) {
-        $startInfo.Environment['PLUGIN_ROOT_OVERRIDE'] = $legacyCacheRootFull
     }
     $startInfo.Environment['MCP_WORKSPACE_PATH'] = $workspaceFull
     $startInfo.Environment['MCPSERVER_WORKSPACE_PATH'] = $workspaceFull

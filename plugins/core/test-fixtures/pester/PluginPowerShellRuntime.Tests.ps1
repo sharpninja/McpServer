@@ -146,6 +146,7 @@ acceptanceCriteria:
             $previous[$name] = [Environment]::GetEnvironmentVariable($name)
         }
 
+        $oldLocation = (Get-Location).ProviderPath
         try {
             Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             $env:PLUGIN_ROOT_OVERRIDE = $pluginRoot
@@ -156,10 +157,12 @@ acceptanceCriteria:
             $env:MCP_PLUGIN_ROOT = $pluginRoot
             $env:MCP_AGENT_NAME = 'Codex'
             $env:PLUGIN_AGENT_DEFAULT = 'Codex'
+            Set-Location -LiteralPath $workspaceRoot
 
             . (Join-Path $script:LibRoot 'resolve-cache-dir.ps1')
             Resolve-McpCacheDir | Should -Be (Join-Path $workspaceRoot '.mcpServer\codex')
         } finally {
+            Set-Location -LiteralPath $oldLocation
             foreach ($entry in $previous.GetEnumerator()) {
                 if ($null -eq $entry.Value) {
                     Remove-Item ("Env:\$($entry.Key)") -ErrorAction SilentlyContinue
@@ -1629,6 +1632,99 @@ throw "Unexpected method $Method"
         }
     }
 
+    It 'TEST-MCP-BUGTRIAGE-053 Codex hook resolves explicit workspace cache before stale generic env' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $activeWorkspace = Join-Path $root 'McpServer'
+        $staleWorkspace = Join-Path $root 'MouseKeyProxy'
+        $activeCache = Join-Path $activeWorkspace '.mcpServer\codex'
+        $staleCache = Join-Path $staleWorkspace '.mcpServer\codex'
+        $pluginRoot = Join-Path $root 'mcpserver-codex-plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        [void][System.IO.Directory]::CreateDirectory($activeCache)
+        [void][System.IO.Directory]::CreateDirectory($staleCache)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)][string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+$ErrorActionPreference = 'Stop'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $scriptDir 'yaml-object-mutation.ps1')
+Import-McpYamlSerializer
+
+[System.IO.File]::AppendAllText($env:TEST_REPL_LOG, "$Method`n", [System.Text.UTF8Encoding]::new($false))
+if ($Method -ne 'workflow.sessionlog.beginTurn') {
+    throw "Unexpected method $Method"
+}
+
+$params = $ParamsYaml | ConvertFrom-Yaml -Ordered -ErrorAction Stop
+Write-McpYamlObject -Path (Join-Path $env:TEST_ACTIVE_CACHE 'current-turn.yaml') -Document ([ordered]@{
+    turnRequestId = [string]$params['requestId']
+    queryTitle = [string]$params['queryTitle']
+    queryText = [string]$params['queryText']
+    status = 'active'
+    sessionId = 'Codex-20260712T000000Z-active'
+})
+'{}'
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        try {
+            $activeMarker = Join-Path $activeWorkspace 'AGENTS-README-FIRST.yaml'
+            $staleMarker = Join-Path $staleWorkspace 'AGENTS-README-FIRST.yaml'
+            [System.IO.File]::WriteAllText($activeMarker, "workspacePath: $activeWorkspace`n", [System.Text.UTF8Encoding]::new($false))
+            [System.IO.File]::WriteAllText($staleMarker, "workspacePath: $staleWorkspace`n", [System.Text.UTF8Encoding]::new($false))
+            $activeMarkerItem = Get-Item -LiteralPath $activeMarker
+
+            Write-McpYamlObject -Path (Join-Path $activeCache 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260712T000000Z-active'
+                agent = 'Codex'
+                markerFilePath = $activeMarkerItem.FullName
+                markerLastWriteUtc = $activeMarkerItem.LastWriteTimeUtc.ToString('O')
+            })
+
+            $replLog = Join-Path $root 'repl.log'
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'user-prompt-submit', '-HostName', 'codex', '-WorkspacePath', $activeWorkspace) `
+                -Environment @{
+                    MCP_WORKSPACE_PATH = $staleWorkspace
+                    MCPSERVER_WORKSPACE_PATH = $staleWorkspace
+                    MCP_WORKSPACE_START_DIR = $staleWorkspace
+                    MCP_AGENT_NAME = 'Codex'
+                    PLUGIN_AGENT_DEFAULT = 'Codex'
+                    MCP_PLUGIN_HOST = 'codex'
+                    MCP_PLUGIN_ROOT = $pluginRoot
+                    MCP_CACHE_DIR_OVERRIDE = ''
+                    PLUGIN_ROOT_OVERRIDE = ''
+                    TEST_ACTIVE_CACHE = $activeCache
+                    TEST_REPL_LOG = $replLog
+                } `
+                -InputText '{"prompt":"Explicit workspace cache regression"}'
+
+            $result.ExitCode | Should -Be 0
+            $output = $result.Stdout | ConvertFrom-Json
+            $output.hookSpecificOutput.status | Should -Be 'turn-opened'
+            Test-Path -LiteralPath (Join-Path $activeCache 'current-turn.yaml') | Should -BeTrue
+            Test-Path -LiteralPath (Join-Path $staleCache 'current-turn.yaml') | Should -BeFalse
+            Test-Path -LiteralPath (Join-Path $staleCache 'no-session-recovery.yaml') | Should -BeFalse
+            $turn = Read-McpYamlObject -Path (Join-Path $activeCache 'current-turn.yaml')
+            $turn['sessionId'] | Should -Be 'Codex-20260712T000000Z-active'
+            [System.IO.File]::ReadAllText($replLog) | Should -Match 'workflow.sessionlog.beginTurn'
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
 
     It 'TEST-MCP-BUGTRIAGE-039 wrapper defaults workspace to cwd marker over stale env' {
         $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
@@ -2460,7 +2556,7 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
         }
     }
 
-    It 'TEST-MCP-PLUGIN-PSONLY-001 resolves explicit override, workspace, and legacy test cache precedence' {
+    It 'TEST-MCP-PLUGIN-PSONLY-001 resolves explicit override, active workspace, and fails closed without workspace' {
         $envNames = @(
             'MCP_CACHE_DIR_OVERRIDE',
             'MCPSERVER_WORKSPACE_PATH',
@@ -2492,6 +2588,7 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
         $override = Join-Path $root 'override'
         $workspace = Join-Path $root 'workspace'
         $pluginRoot = Join-Path $root 'plugin'
+        $oldLocation = (Get-Location).ProviderPath
         [void][System.IO.Directory]::CreateDirectory($workspace)
         [void][System.IO.Directory]::CreateDirectory($pluginRoot)
 
@@ -2502,17 +2599,19 @@ Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([
             Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             $env:MCPSERVER_WORKSPACE_PATH = $workspace
             $env:MCP_AGENT_NAME = 'Codex'
+            Set-Location -LiteralPath $workspace
             Resolve-McpCacheDir | Should -Be (Join-Path $workspace '.mcpServer\codex')
 
             Remove-Item Env:\MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue
             Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue
             $env:MCP_PLUGIN_ROOT = $pluginRoot
             $env:MCP_WORKSPACE_START_DIR = $pluginRoot
-            $legacyRoot = Join-Path $root 'legacy-cache-root'
-            [void][System.IO.Directory]::CreateDirectory($legacyRoot)
-            $env:PLUGIN_ROOT_OVERRIDE = $legacyRoot
-            Resolve-McpCacheDir | Should -Be (Join-Path $legacyRoot 'cache')
+            $env:PLUGIN_ROOT_OVERRIDE = (Join-Path $root 'legacy-cache-root')
+            [void][System.IO.Directory]::CreateDirectory($env:PLUGIN_ROOT_OVERRIDE)
+            Set-Location -LiteralPath $pluginRoot
+            { Resolve-McpCacheDir } | Should -Throw '*Unable to resolve the active workspace cache*'
         } finally {
+            Set-Location -LiteralPath $oldLocation
             Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             Remove-Item Env:\MCPSERVER_WORKSPACE_PATH -ErrorAction SilentlyContinue
             Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue

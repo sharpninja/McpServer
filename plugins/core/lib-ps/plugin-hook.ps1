@@ -83,7 +83,9 @@ function Confirm-PowerShellMcpRuntime {
 }
 
 function Get-PluginCacheDir {
-    $cacheDir = Resolve-McpCacheDir
+    param([string]$StartPath)
+
+    $cacheDir = Resolve-McpCacheDir -StartPath $StartPath
     if (-not (Test-Path -LiteralPath $cacheDir)) {
         [void][System.IO.Directory]::CreateDirectory($cacheDir)
     }
@@ -95,11 +97,27 @@ function Get-PluginStartPath {
 
     if ($PreferredPath) { return $PreferredPath }
     if ($WorkspacePath) { return $WorkspacePath }
-    if ($env:MCP_WORKSPACE_PATH) { return $env:MCP_WORKSPACE_PATH }
-    if ($env:MCPSERVER_WORKSPACE_PATH) { return $env:MCPSERVER_WORKSPACE_PATH }
+
+    $currentPath = (Get-Location).ProviderPath
+    if ($currentPath -and (Get-Command Find-MarkerFile -ErrorAction SilentlyContinue)) {
+        try {
+            if (Find-MarkerFile -StartDir $currentPath) { return $currentPath }
+        } catch {
+        }
+    }
+
     if ($env:MCP_WORKSPACE_START_DIR) { return $env:MCP_WORKSPACE_START_DIR }
     if ($env:CLAUDE_PROJECT_DIR) { return $env:CLAUDE_PROJECT_DIR }
-    return (Get-Location).ProviderPath
+    if ($env:CODEX_CWD) { return $env:CODEX_CWD }
+    if ($env:CODEX_WORKSPACE_PATH) { return $env:CODEX_WORKSPACE_PATH }
+    if ($env:CODEX_PROJECT_DIR) { return $env:CODEX_PROJECT_DIR }
+    if ($env:COWORK_WORKSPACE_PATH) { return $env:COWORK_WORKSPACE_PATH }
+    if ($env:COPILOT_WORKSPACE_PATH) { return $env:COPILOT_WORKSPACE_PATH }
+    if ($env:CLINE_WORKSPACE_PATH) { return $env:CLINE_WORKSPACE_PATH }
+    if ($env:OPENCODE_WORKSPACE_PATH) { return $env:OPENCODE_WORKSPACE_PATH }
+    if ($env:MCPSERVER_WORKSPACE_PATH) { return $env:MCPSERVER_WORKSPACE_PATH }
+    if ($env:MCP_WORKSPACE_PATH) { return $env:MCP_WORKSPACE_PATH }
+    return $currentPath
 }
 
 function Get-YamlScalar {
@@ -199,7 +217,7 @@ function Start-PluginSession {
     param([string]$StartPath)
 
     $start = Get-PluginStartPath -PreferredPath $StartPath
-    $cacheDir = Get-PluginCacheDir
+    $cacheDir = Get-PluginCacheDir -StartPath $start
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     $markerSnapshot = $null
     try {
@@ -522,7 +540,7 @@ function Ensure-PluginMarkerFresh {
     param([string]$StartPath)
 
     $start = Get-PluginStartPath -PreferredPath $StartPath
-    $cacheDir = Get-PluginCacheDir
+    $cacheDir = Get-PluginCacheDir -StartPath $start
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
 
     try {
@@ -586,9 +604,9 @@ function Ensure-PluginMarkerFresh {
 }
 
 function Open-PluginTurn {
-    $cacheDir = Get-PluginCacheDir
-    $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    $sessionFile = Join-Path $cacheDir 'session-state.yaml'
     Ensure-PluginMarkerFresh -StartPath $startPath | Out-Null
     if (Test-Path -LiteralPath $sessionFile) {
         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
@@ -694,7 +712,8 @@ function Open-PluginTurn {
 }
 
 function Close-PluginTurnIfNeeded {
-    $cacheDir = Get-PluginCacheDir
+    $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    $cacheDir = Get-PluginCacheDir -StartPath $startPath
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
     if ($env:CLAUDE_STOP_HOOK_ACTIVE -eq 'true') {
         Write-PluginJson ([ordered]@{})
@@ -783,7 +802,8 @@ function Close-PluginTurnIfNeeded {
 }
 
 function Invoke-CodeVerify {
-    $cacheDir = Get-PluginCacheDir
+    $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    $cacheDir = Get-PluginCacheDir -StartPath $startPath
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
     $payload = Read-HookInput
     $filePath = Get-HookPayloadValue -Payload $payload -Name 'file_path'
