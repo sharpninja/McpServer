@@ -33,6 +33,36 @@ function Resolve-McpYamlFilePath {
     return $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
 }
 
+function Invoke-McpYamlFileOperation {
+    <#
+    .SYNOPSIS
+        Runs a YAML file operation with retry/backoff for transient file locks.
+    .PARAMETER Operation
+        File-system operation to execute.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][scriptblock]$Operation,
+        [int]$Attempts = 8,
+        [int]$InitialDelayMilliseconds = 25
+    )
+
+    $delay = [Math]::Max(1, $InitialDelayMilliseconds)
+    for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+        try {
+            return (& $Operation)
+        } catch [System.IO.IOException] {
+            if ($attempt -ge $Attempts) { throw }
+        } catch [System.UnauthorizedAccessException] {
+            if ($attempt -ge $Attempts) { throw }
+        }
+
+        Start-Sleep -Milliseconds $delay
+        $delay = [Math]::Min($delay * 2, 500)
+    }
+
+    throw 'YAML file operation failed after retry attempts.'
+}
 function Read-McpYamlObject {
     <#
     .SYNOPSIS
@@ -58,7 +88,9 @@ function Read-McpYamlObject {
         throw "YAML file not found: $resolvedPath"
     }
 
-    $yamlText = [System.IO.File]::ReadAllText($resolvedPath)
+    $yamlText = Invoke-McpYamlFileOperation -Operation {
+        [System.IO.File]::ReadAllText($resolvedPath)
+    }
     if ([string]::IsNullOrWhiteSpace($yamlText)) {
         if ($Create) {
             return [ordered]@{}
@@ -97,8 +129,15 @@ function Write-McpYamlObject {
         $parentPath,
         ([System.IO.Path]::GetFileName($resolvedPath) + "." + [System.Guid]::NewGuid().ToString("N") + ".tmp"))
 
-    [System.IO.File]::WriteAllText($tempPath, ($yamlText.TrimEnd() + "`n"), [System.Text.UTF8Encoding]::new($false))
-    [System.IO.File]::Move($tempPath, $resolvedPath, $true)
+    try {
+        [System.IO.File]::WriteAllText($tempPath, ($yamlText.TrimEnd() + "`n"), [System.Text.UTF8Encoding]::new($false))
+        Invoke-McpYamlFileOperation -Operation {
+            [System.IO.File]::Move($tempPath, $resolvedPath, $true)
+        } | Out-Null
+    } catch {
+        Remove-Item -LiteralPath $tempPath -Force -ErrorAction SilentlyContinue
+        throw
+    }
 }
 
 function Update-McpYamlObject {

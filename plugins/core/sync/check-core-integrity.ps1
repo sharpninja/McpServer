@@ -52,3 +52,4 @@ if ($failures -gt 0) {
 }
 
 Write-Output "core integrity OK: $checked files match"
+exit 0

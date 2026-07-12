@@ -46,4 +46,15 @@ public sealed class AgentHelpWorkflow : IAgentHelpWorkflow
 
         return _client.GetStatusAsync(sessionId, cancellationToken);
     }
+
+    /// <inheritdoc />
+    public Task<AgentHelpTranscriptResponse> GetTranscriptAsync(
+        string sessionId,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(sessionId))
+            throw new ArgumentException("Session id is required.", nameof(sessionId));
+
+        return _client.GetTranscriptAsync(sessionId, cancellationToken);
+    }
 }

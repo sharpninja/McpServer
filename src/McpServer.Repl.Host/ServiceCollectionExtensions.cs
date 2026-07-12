@@ -25,14 +25,20 @@ public static class ServiceCollectionExtensions
     /// Registers protocol handlers, workspace selectors, marker file readers, and auth rotation handlers.
     /// </summary>
     /// <param name="services">The service collection to configure.</param>
+    /// <param name="workspacePathOverride">Optional workspace root used for per-workspace workflow state.</param>
+    /// <param name="agentOverride">Optional agent identifier used for per-agent workflow state.</param>
     /// <returns>The configured service collection for fluent chaining.</returns>
-    public static IServiceCollection AddReplCoreServices(this IServiceCollection services)
+    public static IServiceCollection AddReplCoreServices(this IServiceCollection services, string? workspacePathOverride = null, string? agentOverride = null)
     {
-        // Register TODO workflow (implementation lives in McpServer.Repl.Core)
+        // Register TODO workflow (implementation lives in McpServer.Repl.Core).
+        services.AddSingleton<ITodoSelectionStore>(_ =>
+            FileTodoSelectionStore.CreateForWorkspace(workspacePathOverride, agentOverride));
         services.AddSingleton<TodoWorkflow>(sp =>
         {
             var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
-            return new McpServer.Repl.Core.TodoWorkflow(clientFactory.Todo);
+            return new McpServer.Repl.Core.TodoWorkflow(
+                clientFactory.Todo,
+                sp.GetRequiredService<ITodoSelectionStore>());
         });
         services.AddSingleton<ITodoWorkflow>(sp =>
         {

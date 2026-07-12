@@ -928,9 +928,53 @@ public sealed class RequirementsController : ControllerBase
             if (docType != RequirementsDocType.All)
                 return BadRequest(new { error = "Wiki generation requires doc=all." });
 
-            var wikiExport = await _requirements.GenerateWikiAsync(ResolveWikiOutputRoot(), ct: cancellationToken).ConfigureAwait(false);
-            var zipBytes = CreateWikiExportZip(wikiExport);
-            return File(zipBytes, "application/zip", "requirements-wiki-documents.zip");
+            RequirementsDocumentExportResult wikiExport;
+            try
+            {
+                wikiExport = await _requirements.GenerateWikiAsync(ResolveWikiOutputRoot(), ct: cancellationToken).ConfigureAwait(false);
+            }
+            catch (RequirementsConflictException ex)
+            {
+                return BuildGenerateError(ex, "transaction", 409);
+            }
+            catch (ArgumentException ex)
+            {
+                return BuildGenerateError(ex, "validation", 400);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BuildGenerateError(ex, "config load", 400);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return BuildGenerateError(ex, "export write", 409);
+            }
+            catch (IOException ex)
+            {
+                return BuildGenerateError(ex, "export write", 409);
+            }
+
+            try
+            {
+                var zipBytes = CreateWikiExportZip(wikiExport);
+                return File(zipBytes, "application/zip", "requirements-wiki-documents.zip");
+            }
+            catch (FileNotFoundException ex)
+            {
+                return BuildGenerateError(ex, "zip assembly", 409);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BuildGenerateError(ex, "zip assembly", 409);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return BuildGenerateError(ex, "zip assembly", 409);
+            }
+            catch (IOException ex)
+            {
+                return BuildGenerateError(ex, "zip assembly", 409);
+            }
         }
 
         if (normalizedFormat is not "markdown" and not "yaml")
@@ -954,6 +998,18 @@ public sealed class RequirementsController : ControllerBase
         };
 
         return File(Encoding.UTF8.GetBytes(content), mimeType, fileName);
+    }
+
+    private IActionResult BuildGenerateError(Exception exception, string stage, int statusCode)
+    {
+        _logger.LogError("{ExceptionDetail}", exception.ToString());
+        var payload = new { error = exception.Message, stage };
+        return statusCode switch
+        {
+            400 => BadRequest(payload),
+            409 => Conflict(payload),
+            _ => StatusCode(statusCode, payload)
+        };
     }
 
     private static byte[] CreateWikiExportZip(RequirementsDocumentExportResult wikiExport)

@@ -620,10 +620,19 @@ public abstract class McpClientBase
         try
         {
             using var doc = JsonDocument.Parse(content);
+            var stage = doc.RootElement.TryGetProperty("stage", out var stageProperty)
+                ? stageProperty.GetString()
+                : null;
+            string? message = null;
             if (doc.RootElement.TryGetProperty("error", out var err))
-                return err.GetString();
-            if (doc.RootElement.TryGetProperty("errorMessage", out var errMsg))
-                return errMsg.GetString();
+                message = err.GetString();
+            else if (doc.RootElement.TryGetProperty("errorMessage", out var errMsg))
+                message = errMsg.GetString();
+
+            if (!string.IsNullOrWhiteSpace(message) && !string.IsNullOrWhiteSpace(stage))
+                return $"{message} (stage: {stage})";
+            if (!string.IsNullOrWhiteSpace(message))
+                return message;
         }
         catch (JsonException)
         {

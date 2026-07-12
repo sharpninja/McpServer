@@ -11,7 +11,8 @@ BeforeAll {
             [Parameter(Mandatory)][string]$ScriptPath,
             [string[]]$Arguments = @(),
             [hashtable]$Environment = @{},
-            [string]$InputText = ''
+            [string]$InputText = '',
+            [bool]$RedirectStandardInput = $true
         )
 
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
@@ -26,7 +27,7 @@ BeforeAll {
         }
         $psi.WorkingDirectory = $script:RepoRoot
         $psi.UseShellExecute = $false
-        $psi.RedirectStandardInput = $true
+        $psi.RedirectStandardInput = $RedirectStandardInput
         $psi.RedirectStandardOutput = $true
         $psi.RedirectStandardError = $true
         foreach ($key in $Environment.Keys) {
@@ -34,10 +35,12 @@ BeforeAll {
         }
 
         $process = [System.Diagnostics.Process]::Start($psi)
-        if ($InputText) {
-            $process.StandardInput.Write($InputText)
+        if ($RedirectStandardInput) {
+            if ($InputText) {
+                $process.StandardInput.Write($InputText)
+            }
+            $process.StandardInput.Close()
         }
-        $process.StandardInput.Close()
         $stdout = $process.StandardOutput.ReadToEndAsync()
         $stderr = $process.StandardError.ReadToEndAsync()
         $process.WaitForExit(30000) | Should -BeTrue
@@ -169,6 +172,362 @@ acceptanceCriteria:
         }
     }
 
+    It 'TEST-MCP-BUGTRIAGE-034 bash cache scope keeps MCP_CACHE_DIR_OVERRIDE flat' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'plugins\core\lib-sh\cache-scope.sh'))
+
+        $source | Should -Match 'MCP_CACHE_DIR_OVERRIDE'
+        $source | Should -Match 'if \[ -n "\$\{MCP_CACHE_DIR_OVERRIDE:-\}" \]; then'
+        $source | Should -Match 'MCP_PLUGIN_WORKSPACE_CACHE_DIR="\$\{MCP_PLUGIN_CACHE_ROOT\}"'
+        $source | Should -Match 'MCP_PLUGIN_SESSION_CACHE_DIR="\$\{MCP_PLUGIN_CACHE_ROOT\}"'
+        $source | Should -Match 'REPL_INVOKE_CACHE_DIR="\$\{MCP_PLUGIN_CACHE_ROOT\}"'
+    }
+    It 'TEST-MCP-BUGTRIAGE-028 bash cache resolver and scope use canonical workspace agent root' {
+        $resolver = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'plugins\core\lib-sh\resolve-cache-dir.sh'))
+        $scope = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'plugins\core\lib-sh\cache-scope.sh'))
+
+        $resolver | Should -Match '\.mcpServer'
+        $resolver | Should -Match 'resolve_cache_agent_key'
+        $resolver.Contains('printf ''%s/cache'' "$configured_workspace"') | Should -BeFalse
+        $resolver.Contains('printf ''%s/cache'' "$(dirname "$marker_file")"') | Should -BeFalse
+        $scope | Should -Match 'MCP_PLUGIN_WORKSPACE_CACHE_DIR="\$\{MCP_PLUGIN_CACHE_ROOT\}"'
+        $scope | Should -Match 'MCP_PLUGIN_SESSION_CACHE_DIR="\$\{MCP_PLUGIN_CACHE_ROOT\}"'
+        $scope | Should -Match 'CACHE_DIR="\$MCP_PLUGIN_CACHE_ROOT"'
+        $scope | Should -Not -Match 'MCP_PLUGIN_WORKSPACE_CACHE_DIR="\$\{MCP_PLUGIN_CACHE_ROOT\}/workspaces/'
+        $scope | Should -Not -Match 'MCP_PLUGIN_SESSION_CACHE_DIR="\$\{MCP_PLUGIN_WORKSPACE_CACHE_DIR\}/sessions/'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-036 creates current-turn.yaml when beginTurn is invoked directly' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousWorkspace = $env:MCP_WORKSPACE_PATH
+        $script:beginTurnPersistArgs = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            $env:MCP_WORKSPACE_PATH = $pluginRoot
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            $previousSnapshot = Get-Command Get-MarkerFileSnapshot -CommandType Function -ErrorAction Stop
+            function Invoke-ReplPersistTurn {
+                param(
+                    [Parameter(Mandatory)][string]$RequestId,
+                    [Parameter(Mandatory)][string]$Title,
+                    [Parameter(Mandatory)][string]$Status,
+                    [string]$ResponseText = '',
+                    [string]$ActionsYaml = '',
+                    [object[]]$ProcessingDialog = @()
+                )
+                $script:beginTurnPersistArgs = [ordered]@{
+                    RequestId = $RequestId
+                    Title = $Title
+                    Status = $Status
+                    ResponseText = $ResponseText
+                }
+                return $true
+            }
+            function Get-MarkerFileSnapshot {
+                param([string]$StartDir)
+                [pscustomobject]@{
+                    markerFilePath = (Join-Path $StartDir 'AGENTS-README-FIRST.yaml')
+                    markerLastWriteUtc = '2026-07-11T00:00:00Z'
+                }
+            }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260711T000000Z-plugin-session'
+                agent = 'Codex'
+                started = '2026-07-11T00:00:00Z'
+                lastUpdated = '2026-07-11T00:00:00Z'
+            })
+            $paramsYaml = [ordered]@{
+                requestId = 'req-20260711T000000Z-begin-red'
+                queryTitle = 'Begin turn direct test'
+                queryText = "Line one`nLine two"
+            } | ConvertTo-Yaml -Options WithIndentedSequences
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml | Out-Null
+
+            $turn = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            $turn['turnRequestId'] | Should -Be 'req-20260711T000000Z-begin-red'
+            $turn['queryTitle'] | Should -Be 'Begin turn direct test'
+            $turn['queryText'] | Should -Be "Line one`nLine two"
+            $turn['status'] | Should -Be 'in_progress'
+            $turn['sessionId'] | Should -Be 'Codex-20260711T000000Z-plugin-session'
+            $turn['auditActions'] | Should -Be 0
+            $script:beginTurnPersistArgs.RequestId | Should -Be 'req-20260711T000000Z-begin-red'
+            $script:beginTurnPersistArgs.Status | Should -Be 'in_progress'
+            $script:beginTurnPersistArgs.ResponseText | Should -Be '(turn opened)'
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+        } finally {
+            if ($previousPersist) {
+                Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock
+            }
+            if ($previousSnapshot) {
+                Set-Item -Path Function:\Get-MarkerFileSnapshot -Value $previousSnapshot.ScriptBlock
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousWorkspace) {
+                $env:MCP_WORKSPACE_PATH = $previousWorkspace
+            } else {
+                Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue
+            }
+            Remove-Variable -Name beginTurnPersistArgs -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-041 keeps current turn in_progress when completeTurn persistence fails' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            function Assert-ReplCurrentTurnFresh { return $true }
+            function Invoke-ReplPersistTurn { return $false }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260711T000000Z-plugin-session'
+                agent = 'Codex'
+            })
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260711T000001Z-complete-red'
+                queryTitle = 'Complete failure test'
+                status = 'in_progress'
+                queryText = 'Complete failure test'
+                auditActions = 0
+            })
+
+            Invoke-WorkflowCompleteTurn -ParamsYaml '{"response":"Done"}' | Should -BeFalse
+            (Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml'))['status'] | Should -Be 'in_progress'
+        } finally {
+            if ($previousFresh) {
+                Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock
+            }
+            if ($previousPersist) {
+                Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-046 counts list-item action audit fields' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $script:appendActionsPersistArgs = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            function Assert-ReplCurrentTurnFresh { return $true }
+            function Invoke-ReplPersistTurn {
+                param(
+                    [Parameter(Mandatory)][string]$RequestId,
+                    [Parameter(Mandatory)][string]$Title,
+                    [Parameter(Mandatory)][string]$Status,
+                    [string]$ResponseText = '',
+                    [string]$ActionsYaml = '',
+                    [object[]]$ProcessingDialog = @()
+                )
+                $script:appendActionsPersistArgs = [ordered]@{
+                    RequestId = $RequestId
+                    Title = $Title
+                    Status = $Status
+                    ActionsYaml = $ActionsYaml
+                }
+                return $true
+            }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260711T000000Z-plugin-session'
+                agent = 'Codex'
+            })
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260711T000002Z-actions-red'
+                queryTitle = 'Append actions list counter test'
+                status = 'in_progress'
+                queryText = 'Append actions list counter test'
+                codeEdits = 0
+                auditActions = 0
+                auditFiles = 0
+                auditDecisions = 0
+                auditCommits = 0
+            })
+            $paramsYaml = @'
+actions:
+  - type: design_decision
+    description: Chose the direct beginTurn cache owner
+    status: completed
+  - type: commit
+    description: Captured checkpoint commit
+    status: completed
+  - filePath: src/FirstKey.cs
+    type: edit
+    description: Edited first-key file path
+    status: completed
+  - type: edit
+    description: Edited nested file path
+    status: completed
+    filePath: src/Nested.cs
+'@
+
+            Invoke-WorkflowAppendActions -ParamsYaml $paramsYaml | Should -BeTrue
+
+            $turn = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            $turn['auditActions'] | Should -Be 4
+            $turn['auditFiles'] | Should -Be 2
+            $turn['auditDecisions'] | Should -Be 1
+            $turn['auditCommits'] | Should -Be 1
+            $turn['codeEdits'] | Should -Be 2
+            $script:appendActionsPersistArgs.ActionsYaml | Should -Match 'type: design_decision'
+            $script:appendActionsPersistArgs.ActionsYaml | Should -Match 'filePath: src/Nested.cs'
+        } finally {
+            if ($previousFresh) {
+                Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock
+            }
+            if ($previousPersist) {
+                Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Variable -Name appendActionsPersistArgs -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-067 handles updateTurn locally with cached session state' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $script:updateTurnPersistArgs = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Assert-ReplCurrentTurnFresh { return $true }
+            function Invoke-ReplRaw { throw 'raw dispatch should not be used for workflow.sessionlog.updateTurn' }
+            function Invoke-ReplPersistTurn {
+                param(
+                    [Parameter(Mandatory)][string]$RequestId,
+                    [Parameter(Mandatory)][string]$Title,
+                    [Parameter(Mandatory)][string]$Status,
+                    [string]$ResponseText = '',
+                    [string]$ActionsYaml = '',
+                    [object[]]$ProcessingDialog = @(),
+                    [string]$Interpretation = '',
+                    [int]$TokenCount = 0,
+                    [string[]]$Tags = @(),
+                    [string[]]$ContextList = @()
+                )
+                $script:updateTurnPersistArgs = [ordered]@{
+                    RequestId = $RequestId
+                    Title = $Title
+                    Status = $Status
+                    ResponseText = $ResponseText
+                    Interpretation = $Interpretation
+                    TokenCount = $TokenCount
+                    Tags = @($Tags)
+                    ContextList = @($ContextList)
+                }
+                return $true
+            }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260712T000000Z-plugin-session'
+                agent = 'Codex'
+            })
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260712T000001Z-update-red'
+                queryTitle = 'Original update title'
+                status = 'in_progress'
+                queryText = 'Original update prompt'
+                response = 'previous response'
+            })
+            $paramsYaml = @'
+queryTitle: Updated update title
+response: Captured response
+interpretation: Captured interpretation
+tokenCount: 321
+tags:
+- triage
+- codex
+contextList:
+- plugins/core/lib-ps/repl-invoke.ps1
+'@
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.updateTurn' -ParamsYaml $paramsYaml
+
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:updateTurnPersistArgs.RequestId | Should -Be 'req-20260712T000001Z-update-red'
+            $script:updateTurnPersistArgs.Title | Should -Be 'Updated update title'
+            $script:updateTurnPersistArgs.Status | Should -Be 'in_progress'
+            $script:updateTurnPersistArgs.ResponseText | Should -Be 'Captured response'
+            $script:updateTurnPersistArgs.Interpretation | Should -Be 'Captured interpretation'
+            $script:updateTurnPersistArgs.TokenCount | Should -Be 321
+            $script:updateTurnPersistArgs.Tags | Should -Be @('triage', 'codex')
+            $script:updateTurnPersistArgs.ContextList | Should -Be @('plugins/core/lib-ps/repl-invoke.ps1')
+
+            $turn = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            $turn['queryTitle'] | Should -Be 'Updated update title'
+            $turn['response'] | Should -Be 'Captured response'
+            $turn['interpretation'] | Should -Be 'Captured interpretation'
+            $turn['tokenCount'] | Should -Be 321
+            @($turn['tags']) | Should -Be @('triage', 'codex')
+            @($turn['contextList']) | Should -Be @('plugins/core/lib-ps/repl-invoke.ps1')
+        } finally {
+            if ($previousFresh) {
+                Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock
+            }
+            if ($previousPersist) {
+                Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock
+            }
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Variable -Name updateTurnPersistArgs -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 handles appendDialog locally instead of dispatching it as a raw server method' {
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($pluginRoot)
@@ -282,7 +641,10 @@ acceptanceCriteria:
         $source | Should -Match 'Continuation or hook-triggered turn'
         $source | Should -Match 'Continuation turn'
         $source | Should -Not -Match ([regex]::Escape('if (-not $prompt) { $prompt = ''User prompt'' }'))
-        $source | Should -Match 'Write-McpYamlObject -Path \$turnFile -Document \$turnState'
+        $source | Should -Match 'turn-open-failed'
+        $source | Should -Match 'workflow\.sessionlog\.beginTurn did not create current-turn\.yaml'
+        $source | Should -Match 'openedRequestId'
+        $source | Should -Not -Match 'Write-McpYamlObject -Path \$turnFile -Document \$turnState'
         $source | Should -Match 'markerFilePath'
         $source | Should -Match 'markerLastWriteUtc'
         $source | Should -Match 'sessionId'
@@ -305,9 +667,225 @@ acceptanceCriteria:
         $source | Should -Match 'activeSessionId'
         $source | Should -Match 'markerFilePath'
         $source | Should -Match 'markerLastWriteUtc'
-        $source | Should -Match 'Run the active agent prompt hook again'
+        $source | Should -Match 'health-check the marker'
         $source | Should -Match 'Assert-ReplCurrentTurnFresh -Method ''workflow.sessionlog.appendActions'''
         $source | Should -Match 'Assert-ReplCurrentTurnFresh -Method ''workflow.sessionlog.completeTurn'''
+    }
+
+
+    It 'TEST-MCP-BUGTRIAGE-052 refreshes marker-only drift before appendActions' {
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousWorkspace = $env:MCP_WORKSPACE_PATH
+        $previousAgent = $env:MCP_AGENT_NAME
+        $previousBootstrap = $null
+        $previousPersist = $null
+        $script:capturedActionsYaml = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            $env:MCP_WORKSPACE_PATH = $workspace
+            $env:MCP_AGENT_NAME = 'Codex'
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            function Invoke-FullBootstrap { param([string]$StartDir) return $true }
+            function Invoke-ReplPersistTurn {
+                param(
+                    [string]$RequestId,
+                    [string]$Title,
+                    [string]$Status,
+                    [string]$ResponseText,
+                    [string]$ActionsYaml
+                )
+                $script:capturedActionsYaml = $ActionsYaml
+                return $true
+            }
+
+            $marker = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+            [System.IO.File]::WriteAllText($marker, "workspacePath: $workspace`n")
+            $fingerprintA = [datetime]'2026-07-11T19:00:00Z'
+            [System.IO.File]::SetLastWriteTimeUtc($marker, $fingerprintA)
+            $snapshotA = Get-MarkerFileSnapshot -StartDir $workspace
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260711T190000Z-plugin-session'
+                agent = 'Codex'
+                markerFilePath = $snapshotA.markerFilePath
+                markerLastWriteUtc = $snapshotA.markerLastWriteUtc
+            })
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260711T190000Z-marker-drift'
+                queryTitle = 'Marker drift test'
+                status = 'in_progress'
+                sessionId = 'Codex-20260711T190000Z-plugin-session'
+                auditActions = 0
+                markerFilePath = $snapshotA.markerFilePath
+                markerLastWriteUtc = $snapshotA.markerLastWriteUtc
+            })
+            $fingerprintB = [datetime]'2026-07-11T19:05:00Z'
+            [System.IO.File]::SetLastWriteTimeUtc($marker, $fingerprintB)
+            $snapshotB = Get-MarkerFileSnapshot -StartDir $workspace
+            $payload = [ordered]@{
+                actions = @(
+                    [ordered]@{
+                        type = 'test'
+                        description = 'append after marker drift'
+                    }
+                )
+            } | ConvertTo-Yaml -Options WithIndentedSequences
+
+            Invoke-WorkflowAppendActions -ParamsYaml $payload | Should -BeTrue
+            $turnState = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            $turnState['markerFilePath'] | Should -Be $snapshotB.markerFilePath
+            $turnState['markerLastWriteUtc'] | Should -Be $snapshotB.markerLastWriteUtc
+            $turnState['auditActions'] | Should -Be 1
+            $script:capturedActionsYaml | Should -Match 'append after marker drift'
+        } finally {
+            if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
+            if ($previousBootstrap) { Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }
+            if ($null -ne $previousAgent) { $env:MCP_AGENT_NAME = $previousAgent } else { Remove-Item Env:\MCP_AGENT_NAME -ErrorAction SilentlyContinue }
+            Remove-Variable -Name capturedActionsYaml -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+    It 'TEST-MCP-BUGTRIAGE-058 stores post-bootstrap marker snapshot in session-state' {
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousWorkspace = $env:MCP_WORKSPACE_PATH
+        $previousAgent = $env:MCP_AGENT_NAME
+        $previousSnapshot = $null
+        $previousBootstrap = $null
+        $script:markerSnapshotCalls = 0
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            $env:MCP_WORKSPACE_PATH = $workspace
+            $env:MCP_AGENT_NAME = 'Codex'
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousSnapshot = Get-Command Get-MarkerFileSnapshot -CommandType Function -ErrorAction Stop
+            $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
+            function Get-MarkerFileSnapshot {
+                param([string]$StartDir)
+
+                $script:markerSnapshotCalls++
+                $stamp = if ($script:markerSnapshotCalls -eq 1) {
+                    '2026-07-11T19:00:00Z'
+                } else {
+                    '2026-07-11T19:05:00Z'
+                }
+
+                [ordered]@{
+                    markerFilePath = Join-Path $StartDir 'AGENTS-README-FIRST.yaml'
+                    markerLastWriteUtc = $stamp
+                }
+            }
+            function Invoke-FullBootstrap { param([string]$StartDir) return $true }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'MCP_UNTRUSTED'
+                markerFilePath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+                markerLastWriteUtc = '2026-07-11T18:55:00Z'
+            })
+
+            Assert-ReplMarkerFresh | Should -BeTrue
+
+            $state = Read-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml')
+            $state['status'] | Should -Be 'verified'
+            $state['markerLastWriteUtc'] | Should -Be '2026-07-11T19:05:00Z'
+            $state['sessionId'] | Should -Not -BeNullOrEmpty
+            $script:markerSnapshotCalls | Should -Be 2
+        } finally {
+            if ($previousSnapshot) { Set-Item -Path Function:\Get-MarkerFileSnapshot -Value $previousSnapshot.ScriptBlock }
+            if ($previousBootstrap) { Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }
+            if ($null -ne $previousAgent) { $env:MCP_AGENT_NAME = $previousAgent } else { Remove-Item Env:\MCP_AGENT_NAME -ErrorAction SilentlyContinue }
+            Remove-Variable -Name markerSnapshotCalls -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+    It 'TEST-MCP-BUGTRIAGE-029 completeTurn refreshes marker-only drift before closeout' {
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousWorkspace = $env:MCP_WORKSPACE_PATH
+        $previousAgent = $env:MCP_AGENT_NAME
+        $previousBootstrap = $null
+        $previousPersist = $null
+        $script:capturedCompleteStatus = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            $env:MCP_WORKSPACE_PATH = $workspace
+            $env:MCP_AGENT_NAME = 'Codex'
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            function Invoke-FullBootstrap { param([string]$StartDir) return $true }
+            function Invoke-ReplPersistTurn {
+                param(
+                    [string]$RequestId,
+                    [string]$Title,
+                    [string]$Status,
+                    [string]$ResponseText,
+                    [string]$ActionsYaml
+                )
+                $script:capturedCompleteStatus = $Status
+                return $true
+            }
+
+            $marker = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+            [System.IO.File]::WriteAllText($marker, "workspacePath: $workspace`n")
+            [System.IO.File]::SetLastWriteTimeUtc($marker, [datetime]'2026-07-11T19:10:00Z')
+            $snapshotA = Get-MarkerFileSnapshot -StartDir $workspace
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260711T191000Z-plugin-session'
+                agent = 'Codex'
+                markerFilePath = $snapshotA.markerFilePath
+                markerLastWriteUtc = $snapshotA.markerLastWriteUtc
+            })
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260711T191000Z-closeout-drift'
+                queryTitle = 'Closeout marker drift test'
+                status = 'in_progress'
+                sessionId = 'Codex-20260711T191000Z-plugin-session'
+                auditActions = 0
+                markerFilePath = $snapshotA.markerFilePath
+                markerLastWriteUtc = $snapshotA.markerLastWriteUtc
+            })
+            [System.IO.File]::SetLastWriteTimeUtc($marker, [datetime]'2026-07-11T19:15:00Z')
+            $snapshotB = Get-MarkerFileSnapshot -StartDir $workspace
+
+            Invoke-WorkflowCompleteTurn -ParamsYaml 'response: Done after marker drift' | Should -BeTrue
+            $turnState = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            $turnState['status'] | Should -Be 'completed'
+            $turnState['markerFilePath'] | Should -Be $snapshotB.markerFilePath
+            $turnState['markerLastWriteUtc'] | Should -Be $snapshotB.markerLastWriteUtc
+            $script:capturedCompleteStatus | Should -Be 'completed'
+        } finally {
+            if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
+            if ($previousBootstrap) { Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousWorkspace) { $env:MCP_WORKSPACE_PATH = $previousWorkspace } else { Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue }
+            if ($null -ne $previousAgent) { $env:MCP_AGENT_NAME = $previousAgent } else { Remove-Item Env:\MCP_AGENT_NAME -ErrorAction SilentlyContinue }
+            Remove-Variable -Name capturedCompleteStatus -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
     }
 
     It 'TEST-MCP-PLUGIN-PSONLY-001 emits raw REPL YAML on the success stream' {
@@ -411,6 +989,106 @@ acceptanceCriteria:
         $result.Success | Should -BeTrue
     }
 
+    It 'TEST-MCP-BUGTRIAGE-038 exposes discoverable object-safe triage helpers' {
+        Remove-Module McpPluginShim -Force -ErrorAction SilentlyContinue
+        Import-Module (Join-Path $script:LibRoot 'McpPluginShim.psm1') -Force
+
+        $commands = @(Get-Command -Module McpPluginShim '*Triage*').Name
+        $commands | Should -Contain 'New-McpTriageReportParams'
+        $commands | Should -Contain 'New-McpTriageGetReportParams'
+        $commands | Should -Contain 'New-McpTriageQueryGroupsParams'
+
+        $params = New-McpTriageReportParams `
+            -Title 'Object-safe triage report' `
+            -Summary 'The plugin exposes a typed object path for triage reports.' `
+            -Component 'mcpserver-plugin' `
+            -AffectedPaths @('lib/repl-invoke.ps1') `
+            -AffectedSymbols @('workflow.triage.report') `
+            -ErrorSignature 'object_safe_triage' `
+            -ReporterAgent 'Codex'
+
+        $params.title | Should -Be 'Object-safe triage report'
+        $params.affectedPaths | Should -Be @('lib/repl-invoke.ps1')
+        $params.reporterAgent | Should -Be 'Codex'
+
+        $request = New-McpPluginReplRequest `
+            -RequestId 'req-20260711T203000Z-triage' `
+            -Method 'workflow.triage.report' `
+            -Params $params
+        $json = ConvertTo-McpPluginJson -InputObject $request -Depth 20 -Compress
+        $json | Should -Match '"method":"workflow.triage.report"'
+        $json | Should -Match '"title":"Object-safe triage report"'
+
+        $help = Get-Help New-McpTriageReportParams -Full | Out-String -Width 200
+        $help | Should -Match 'workflow\.triage\.report'
+        $help | Should -Match 'Title'
+        $help | Should -Match 'ReporterAgent'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-038 Invoke-McpPlugin serializes ParamsObject for triage reports' {
+        Remove-Module McpPluginShim -Force -ErrorAction SilentlyContinue
+        Import-Module (Join-Path $script:LibRoot 'McpPluginShim.psm1') -Force
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $pluginRoot = Join-Path $root 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $cacheRoot = Join-Path $root 'cache'
+        $capturePath = Join-Path $root 'params.yaml'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheRoot)
+
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)][string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+[System.IO.File]::WriteAllText($env:MCP_CAPTURE_METHOD_PATH, $Method, [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($env:MCP_CAPTURE_PARAMS_PATH, $ParamsYaml, [System.Text.UTF8Encoding]::new($false))
+'{}'
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        $previousCaptureParams = $env:MCP_CAPTURE_PARAMS_PATH
+        $previousCaptureMethod = $env:MCP_CAPTURE_METHOD_PATH
+        $env:MCP_CAPTURE_PARAMS_PATH = $capturePath
+        $env:MCP_CAPTURE_METHOD_PATH = (Join-Path $root 'method.txt')
+
+        try {
+            $params = New-McpTriageReportParams `
+                -Title 'ParamsObject triage report' `
+                -Summary 'The wrapper converts native PowerShell objects to YAML.' `
+                -Component 'mcpserver-plugin' `
+                -AffectedPaths @('lib/Invoke-McpPlugin.ps1') `
+                -ErrorSignature 'params_object_triage' `
+                -ReporterAgent 'Codex'
+
+            $output = & (Join-Path $script:LibRoot 'Invoke-McpPlugin.ps1') `
+                -Command Invoke `
+                -Method 'workflow.triage.report' `
+                -ParamsObject $params `
+                -WorkspacePath $workspace `
+                -PluginRoot $pluginRoot `
+                -CacheRoot $cacheRoot `
+                -TimeoutSeconds 5
+
+            $output | Should -Be '{}'
+            [System.IO.File]::ReadAllText($env:MCP_CAPTURE_METHOD_PATH) | Should -Be 'workflow.triage.report'
+            $paramsYaml = [System.IO.File]::ReadAllText($capturePath)
+            $paramsYaml | Should -Match 'title: ParamsObject triage report'
+            $paramsYaml | Should -Match 'reporterAgent: Codex'
+            $paramsYaml | Should -Not -Match '^type: request'
+        } finally {
+            if ($null -ne $previousCaptureParams) { $env:MCP_CAPTURE_PARAMS_PATH = $previousCaptureParams } else { Remove-Item Env:\MCP_CAPTURE_PARAMS_PATH -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCaptureMethod) { $env:MCP_CAPTURE_METHOD_PATH = $previousCaptureMethod } else { Remove-Item Env:\MCP_CAPTURE_METHOD_PATH -ErrorAction SilentlyContinue }
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 documents every public shim DTO member through discoverable help' {
         Remove-Module McpPluginShim -Force -ErrorAction SilentlyContinue
         Import-Module (Join-Path $script:LibRoot 'McpPluginShim.psm1') -Force
@@ -422,6 +1100,7 @@ acceptanceCriteria:
                 'Method',
                 'Params',
                 'ParamsPath',
+                'ParamsObject',
                 'Response',
                 'ResponsePath',
                 'WorkspacePath',
@@ -560,6 +1239,475 @@ acceptanceCriteria:
         }
     }
 
+    It 'TEST-MCP-BUGTRIAGE-037 wrapper prefers explicit markerless workspace cache over stale override' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'markerless-workspace'
+        $staleOverride = Join-Path $root 'stale-cache'
+        $sourcePluginRoot = Join-Path $script:RepoRoot 'plugins\core'
+        $workspaceCache = Join-Path $workspace '.mcpServer\codex'
+        [void][System.IO.Directory]::CreateDirectory($workspaceCache)
+        [void][System.IO.Directory]::CreateDirectory($staleOverride)
+        try {
+            Write-McpYamlObject -Path (Join-Path $workspaceCache 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260711T000000Z-markerless'
+                agent = 'Codex'
+            })
+            Write-McpYamlObject -Path (Join-Path $workspaceCache 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260711T000003Z-markerless'
+                queryTitle = 'Markerless workspace cache test'
+                status = 'in_progress'
+                sessionId = 'Codex-20260711T000000Z-markerless'
+                queryText = 'Markerless workspace cache test'
+                codeEdits = 0
+                auditActions = 0
+            })
+
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'Invoke-McpPlugin.ps1') `
+                -Arguments @('-Command', 'Invoke', '-Method', 'workflow.sessionlog.appendActions', '-WorkspacePath', $workspace, '-PluginRoot', $sourcePluginRoot, '-TimeoutSeconds', '5') `
+                -Environment @{
+                    MCP_CACHE_DIR_OVERRIDE = $staleOverride
+                    MCP_AGENT_NAME = 'Codex'
+                    PLUGIN_AGENT_DEFAULT = 'Codex'
+                    MCP_PLUGIN_ROOT = $sourcePluginRoot
+                }
+
+            $result.ExitCode | Should -Be 0
+            ($result.Stdout + $result.Stderr) | Should -Not -Match ([regex]::Escape($staleOverride))
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-023 Claude wrapper prefers active workspace cache over foreign env cache' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $activeWorkspace = Join-Path $root 'active-workspace'
+        $foreignWorkspace = Join-Path $root 'foreign-workspace'
+        $activeCache = Join-Path $activeWorkspace '.mcpServer\claude'
+        $foreignCache = Join-Path $foreignWorkspace '.mcpServer\claude'
+        $sourcePluginRoot = Join-Path $script:RepoRoot 'plugins\core'
+        [void][System.IO.Directory]::CreateDirectory($activeCache)
+        [void][System.IO.Directory]::CreateDirectory($foreignCache)
+
+        try {
+            Write-McpYamlObject -Path (Join-Path $activeCache 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'ClaudeCode-20260711T000000Z-active'
+                agent = 'ClaudeCode'
+            })
+            Write-McpYamlObject -Path (Join-Path $activeCache 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260711T000004Z-claude-active'
+                queryTitle = 'Claude active workspace cache test'
+                status = 'in_progress'
+                sessionId = 'ClaudeCode-20260711T000000Z-active'
+                queryText = 'Claude active workspace cache test'
+                codeEdits = 0
+                auditActions = 0
+                auditFiles = 0
+                auditDecisions = 0
+                auditCommits = 0
+            })
+            Write-McpYamlObject -Path (Join-Path $foreignCache 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'ClaudeCode-20260711T000000Z-foreign'
+                agent = 'ClaudeCode'
+            })
+
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'Invoke-McpPlugin.ps1') `
+                -Arguments @('-Command', 'Invoke', '-Method', 'workflow.sessionlog.appendActions', '-WorkspacePath', $activeWorkspace, '-PluginRoot', $sourcePluginRoot, '-TimeoutSeconds', '5') `
+                -Environment @{
+                    MCP_CACHE_DIR_OVERRIDE = $foreignCache
+                    MCP_WORKSPACE_PATH = $foreignWorkspace
+                    MCPSERVER_WORKSPACE_PATH = $foreignWorkspace
+                    CLAUDE_PROJECT_DIR = $foreignWorkspace
+                    MCP_AGENT_NAME = 'ClaudeCode'
+                    PLUGIN_AGENT_DEFAULT = 'ClaudeCode'
+                    MCP_PLUGIN_ROOT = $sourcePluginRoot
+                }
+
+            $result.ExitCode | Should -Be 0
+            ($result.Stdout + $result.Stderr) | Should -Not -Match ([regex]::Escape($foreignCache))
+            $turn = Read-McpYamlObject -Path (Join-Path $activeCache 'current-turn.yaml')
+            $turn['sessionId'] | Should -Be 'ClaudeCode-20260711T000000Z-active'
+            Test-Path (Join-Path $foreignCache 'current-turn.yaml') | Should -BeFalse
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+
+    It 'TEST-MCP-BUGTRIAGE-024 Claude Invoke-McpPlugin pins child host over ambient Codex' {
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $pluginRoot = Join-Path $root 'mcpserver-claude-code-plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $ambientCodexCache = Join-Path $root 'codex-cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($ambientCodexCache)
+
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+[pscustomobject]@{
+    host = $env:MCP_PLUGIN_HOST
+    agent = $env:MCP_AGENT_NAME
+    agentDefault = $env:PLUGIN_AGENT_DEFAULT
+    cacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+    workspace = $env:MCP_WORKSPACE_PATH
+    claudeProject = $env:CLAUDE_PROJECT_DIR
+} | ConvertTo-Json -Compress
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'Invoke-McpPlugin.ps1') `
+                -Arguments @('-Command', 'Invoke', '-Method', 'workflow.sessionlog.appendActions', '-WorkspacePath', $workspace, '-PluginRoot', $pluginRoot, '-TimeoutSeconds', '5') `
+                -Environment @{
+                    MCP_PLUGIN_HOST = 'codex'
+                    MCP_AGENT_NAME = 'Codex'
+                    MCP_AGENT_ID = 'Codex'
+                    MCP_SESSION_AGENT = 'Codex'
+                    PLUGIN_AGENT_DEFAULT = 'Codex'
+                    MCP_CACHE_DIR_OVERRIDE = $ambientCodexCache
+                    CODEX_WORKSPACE_PATH = Join-Path $root 'codex-workspace'
+                    MCP_PLUGIN_ROOT = Join-Path $root 'mcpserver-codex-plugin'
+                }
+
+            $result.ExitCode | Should -Be 0
+            $child = $result.Stdout | ConvertFrom-Json
+            $child.host | Should -Be 'claude-code'
+            $child.agent | Should -Be 'ClaudeCode'
+            $child.agentDefault | Should -Be 'ClaudeCode'
+            $child.cacheOverride | Should -BeNullOrEmpty
+            $child.workspace | Should -Be (Resolve-Path -LiteralPath $workspace).ProviderPath
+            $child.claudeProject | Should -Be (Resolve-Path -LiteralPath $workspace).ProviderPath
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-032 Codex hook rejects verified foreign-agent session state' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $pluginRoot = Join-Path $root 'mcpserver-codex-plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $workspace = Join-Path $root 'workspace'
+        $cacheDir = Join-Path $workspace '.mcpServer\codex'
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)][string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+$ErrorActionPreference = 'Stop'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $scriptDir 'yaml-object-mutation.ps1')
+Import-McpYamlSerializer
+
+if ($Method -ne 'workflow.sessionlog.beginTurn') {
+    throw "Unexpected method $Method"
+}
+
+$params = $ParamsYaml | ConvertFrom-Yaml -Ordered -ErrorAction Stop
+$cacheDir = Resolve-Path -LiteralPath (Join-Path $env:MCP_WORKSPACE_PATH '.mcpServer\codex')
+Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+    turnRequestId = [string]$params['requestId']
+    queryTitle = [string]$params['queryTitle']
+    queryText = [string]$params['queryText']
+    status = 'active'
+    sessionId = 'ClaudeCode-20260711T000000Z-foreign'
+})
+'{}'
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        $markerPath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        [System.IO.File]::WriteAllText($markerPath, "workspacePath: $workspace`nbaseUrl: http://127.0.0.1:1`napiKey: test-key`n", [System.Text.UTF8Encoding]::new($false))
+        $markerItem = Get-Item -LiteralPath $markerPath
+        Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+            status = 'verified'
+            sessionId = 'ClaudeCode-20260711T000000Z-foreign'
+            agent = 'ClaudeCode'
+            markerFilePath = $markerItem.FullName
+            markerLastWriteUtc = $markerItem.LastWriteTimeUtc.ToString('O')
+        })
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'user-prompt-submit', '-HostName', 'codex', '-WorkspacePath', $workspace, '-Params', '{"prompt":"Codex should not reuse Claude state"}') `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $pluginRoot
+                    MCP_PLUGIN_HOST = 'codex'
+                    MCP_AGENT_NAME = 'Codex'
+                    PLUGIN_AGENT_DEFAULT = 'Codex'
+                    MCP_WORKSPACE_PATH = $workspace
+                    MCPSERVER_WORKSPACE_PATH = $workspace
+                    MCP_WORKSPACE_START_DIR = $workspace
+                } `
+                -RedirectStandardInput:$false
+
+            $result.ExitCode | Should -Be 0
+            $output = $result.Stdout | ConvertFrom-Json
+            $output.hookSpecificOutput.status | Should -Be 'no-session'
+            Test-Path -LiteralPath (Join-Path $cacheDir 'current-turn.yaml') | Should -BeFalse
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+
+    It 'TEST-MCP-BUGTRIAGE-047 health-checks no-session recovery before suppressing create retries' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $workspace = Join-Path $root 'workspace'
+        $pluginRoot = Join-Path $root 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $cacheDir = Join-Path $root 'cache'
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $markerPath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        Write-McpYamlObject -Path $markerPath -Document ([ordered]@{
+            workspace = 'NoSessionRecoveryTest'
+            workspacePath = $workspace
+            baseUrl = 'http://127.0.0.1:1'
+            apiKey = 'test-key'
+            port = 1
+        })
+
+        $markerStub = @'
+#Requires -Version 7.0
+$script:MARKER_FILENAME = 'AGENTS-README-FIRST.yaml'
+
+function Find-MarkerFile {
+    param([string]$StartDir = (Get-Location).Path)
+    return (Join-Path $StartDir $script:MARKER_FILENAME)
+}
+
+function Get-MarkerFileSnapshot {
+    param([string]$StartDir = (Get-Location).Path)
+    $path = Find-MarkerFile -StartDir $StartDir
+    $item = Get-Item -LiteralPath $path
+    [ordered]@{
+        markerFilePath = $item.FullName
+        markerLastWriteUtc = $item.LastWriteTimeUtc.ToString('O')
+    }
+}
+
+function Invoke-FullBootstrap {
+    param([string]$StartDir = (Get-Location).Path)
+    $counterPath = Join-Path $env:MCP_CACHE_DIR_OVERRIDE 'bootstrap-calls.txt'
+    $count = 0
+    if (Test-Path -LiteralPath $counterPath) {
+        $count = [int]([System.IO.File]::ReadAllText($counterPath))
+    }
+    $count++
+    [System.IO.File]::WriteAllText($counterPath, [string]$count)
+    if ($count -eq 1 -or $count -eq 2 -or $count -eq 4) { return $false }
+    return $true
+}
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'marker-resolver.ps1'), $markerStub, [System.Text.UTF8Encoding]::new($false))
+
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)][string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+$ErrorActionPreference = 'Stop'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $scriptDir 'yaml-object-mutation.ps1')
+Import-McpYamlSerializer
+
+if ($Method -eq 'workflow.triage.report') {
+    $params = $ParamsYaml | ConvertFrom-Yaml -Ordered -ErrorAction Stop
+    Write-McpYamlObject -Path (Join-Path $env:MCP_CACHE_DIR_OVERRIDE 'triage-report.yaml') -Document $params
+    "type: result`npayload:`n  reportId: BUG-TRIAGE-047"
+    exit 0
+}
+
+if ($Method -eq 'workflow.sessionlog.beginTurn') {
+    $params = $ParamsYaml | ConvertFrom-Yaml -Ordered -ErrorAction Stop
+    Write-McpYamlObject -Path (Join-Path $env:MCP_CACHE_DIR_OVERRIDE 'current-turn.yaml') -Document ([ordered]@{
+        turnRequestId = [string]$params['requestId']
+        queryTitle = [string]$params['queryTitle']
+        queryText = [string]$params['queryText']
+        status = 'active'
+    })
+    '{}'
+    exit 0
+}
+
+throw "Unexpected method $Method"
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        $environment = @{
+            MCP_PLUGIN_ROOT = $pluginRoot
+            MCP_PLUGIN_HOST = 'codex'
+            MCP_AGENT_NAME = 'Codex'
+            PLUGIN_AGENT_DEFAULT = 'Codex'
+            MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            MCP_WORKSPACE_PATH = $workspace
+            MCPSERVER_WORKSPACE_PATH = $workspace
+            MCP_WORKSPACE_START_DIR = $workspace
+        }
+
+        try {
+            $first = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'user-prompt-submit', '-HostName', 'codex', '-WorkspacePath', $workspace, '-Params', '{"prompt":"Recover no-session"}') `
+                -Environment $environment `
+                -RedirectStandardInput:$false
+
+            $first.ExitCode | Should -Be 0
+            $firstOutput = $first.Stdout | ConvertFrom-Json
+            $firstOutput.hookSpecificOutput.status | Should -Be 'no-session'
+            $firstOutput.hookSpecificOutput.recoveryStatus | Should -Be 'session-create-failed'
+            $firstOutput.hookSpecificOutput.healthStatus | Should -Be 'healthy'
+            $firstOutput.hookSpecificOutput.failsafePath | Should -Not -BeNullOrEmpty
+            Test-Path -LiteralPath $firstOutput.hookSpecificOutput.failsafePath | Should -BeTrue
+            (Read-McpYamlObject -Path (Join-Path $cacheDir 'no-session-recovery.yaml'))['triageSubmitted'] | Should -BeTrue
+            Test-Path -LiteralPath (Join-Path $cacheDir 'triage-report.yaml') | Should -BeTrue
+            [int]([System.IO.File]::ReadAllText((Join-Path $cacheDir 'bootstrap-calls.txt'))) | Should -Be 4
+
+            $second = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'user-prompt-submit', '-HostName', 'codex', '-WorkspacePath', $workspace, '-Params', '{"prompt":"Still degraded"}') `
+                -Environment $environment `
+                -RedirectStandardInput:$false
+
+            $secondOutput = $second.Stdout | ConvertFrom-Json
+            $secondOutput.hookSpecificOutput.status | Should -Be 'no-session'
+            $secondOutput.hookSpecificOutput.recoveryStatus | Should -Be 'session-create-failed'
+            [int]([System.IO.File]::ReadAllText((Join-Path $cacheDir 'bootstrap-calls.txt'))) | Should -Be 5
+
+            (Get-Item -LiteralPath $markerPath).LastWriteTimeUtc = (Get-Date).ToUniversalTime().AddMinutes(1)
+            $third = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'user-prompt-submit', '-HostName', 'codex', '-WorkspacePath', $workspace, '-Params', '{"prompt":"Marker changed"}') `
+                -Environment $environment `
+                -RedirectStandardInput:$false
+
+            $thirdOutput = $third.Stdout | ConvertFrom-Json
+            $thirdOutput.hookSpecificOutput.status | Should -Be 'turn-opened'
+            [int]([System.IO.File]::ReadAllText((Join-Path $cacheDir 'bootstrap-calls.txt'))) | Should -Be 6
+            Test-Path -LiteralPath (Join-Path $cacheDir 'current-turn.yaml') | Should -BeTrue
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+
+    It 'TEST-MCP-BUGTRIAGE-039 wrapper defaults workspace to cwd marker over stale env' {
+        $root = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $activeWorkspace = Join-Path $root 'TCS2'
+        $staleWorkspace = Join-Path $root 'MouseKeyProxy'
+        $pluginRoot = Join-Path $root 'mcpserver-codex-plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        [void][System.IO.Directory]::CreateDirectory($activeWorkspace)
+        [void][System.IO.Directory]::CreateDirectory($staleWorkspace)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        [System.IO.File]::WriteAllText((Join-Path $activeWorkspace 'AGENTS-README-FIRST.yaml'), "workspacePath: $activeWorkspace`n", [System.Text.UTF8Encoding]::new($false))
+        [System.IO.File]::WriteAllText((Join-Path $staleWorkspace 'AGENTS-README-FIRST.yaml'), "workspacePath: $staleWorkspace`n", [System.Text.UTF8Encoding]::new($false))
+
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+[pscustomobject]@{
+    method = $Method
+    workspace = $env:MCP_WORKSPACE_PATH
+    serverWorkspace = $env:MCPSERVER_WORKSPACE_PATH
+    cacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+} | ConvertTo-Json -Compress
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        try {
+            $psi = [System.Diagnostics.ProcessStartInfo]::new()
+            $psi.FileName = (Get-Command pwsh -ErrorAction Stop).Source
+            $psi.ArgumentList.Add('-NoLogo')
+            $psi.ArgumentList.Add('-NoProfile')
+            $psi.ArgumentList.Add('-NonInteractive')
+            $psi.ArgumentList.Add('-File')
+            $psi.ArgumentList.Add((Join-Path $script:LibRoot 'Invoke-McpPlugin.ps1'))
+            $psi.ArgumentList.Add('-Command')
+            $psi.ArgumentList.Add('Invoke')
+            $psi.ArgumentList.Add('-Method')
+            $psi.ArgumentList.Add('workflow.sessionlog.appendActions')
+            $psi.ArgumentList.Add('-PluginRoot')
+            $psi.ArgumentList.Add($pluginRoot)
+            $psi.ArgumentList.Add('-TimeoutSeconds')
+            $psi.ArgumentList.Add('5')
+            $psi.WorkingDirectory = $activeWorkspace
+            $psi.UseShellExecute = $false
+            $psi.RedirectStandardOutput = $true
+            $psi.RedirectStandardError = $true
+            $psi.Environment['MCP_WORKSPACE_PATH'] = $staleWorkspace
+            $psi.Environment['MCPSERVER_WORKSPACE_PATH'] = $staleWorkspace
+            $psi.Environment['CODEX_WORKSPACE_PATH'] = $staleWorkspace
+            $psi.Environment['CODEX_PROJECT_DIR'] = $staleWorkspace
+            [void]$psi.Environment.Remove('MCP_CACHE_DIR_OVERRIDE')
+            [void]$psi.Environment.Remove('PLUGIN_ROOT_OVERRIDE')
+            $psi.Environment['MCP_AGENT_NAME'] = 'Codex'
+            $psi.Environment['PLUGIN_AGENT_DEFAULT'] = 'Codex'
+
+            $process = [System.Diagnostics.Process]::Start($psi)
+            $stdout = $process.StandardOutput.ReadToEndAsync()
+            $stderr = $process.StandardError.ReadToEndAsync()
+            $process.WaitForExit(30000) | Should -BeTrue
+
+            $process.ExitCode | Should -Be 0
+            $child = $stdout.Result.Trim() | ConvertFrom-Json
+            $expectedWorkspace = (Resolve-Path -LiteralPath $activeWorkspace).ProviderPath
+            $child.workspace | Should -Be $expectedWorkspace
+            $child.serverWorkspace | Should -Be $expectedWorkspace
+            $child.cacheOverride | Should -BeNullOrEmpty
+            $stderr.Result | Should -Not -Match ([regex]::Escape($staleWorkspace))
+        } finally {
+            Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 FR-MCP-PLUGIN-PSONLY-003 fails closed before MCP work when the runtime is refused' {
         $result = Invoke-PluginChildProcess `
             -ScriptPath (Join-Path $script:StagedRoot 'lib\plugin-hook.ps1') `
@@ -594,6 +1742,27 @@ acceptanceCriteria:
         $result.Stdout | Should -Be '{}'
     }
 
+    It 'TEST-MCP-BUGTRIAGE-059 generated Grok PostToolUse hook manifest is valid JSON' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($pluginRoot)
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:RepoRoot 'plugins\core\hooks-templates\generate-wrappers.ps1') `
+                -Arguments @('-HostName', 'grok', '-PluginRoot', $pluginRoot)
+
+            $result.ExitCode | Should -Be 0
+            $hooksPath = Join-Path $pluginRoot 'hooks\hooks.json'
+            Test-Path -LiteralPath $hooksPath | Should -BeTrue
+            $jsonText = [System.IO.File]::ReadAllText($hooksPath)
+            $manifest = $jsonText | ConvertFrom-Json -Depth 20 -ErrorAction Stop
+            $manifest.hooks.PostToolUse.Count | Should -Be 2
+            $codeVerify = $manifest.hooks.PostToolUse[1].hooks[1].command
+            $codeVerify | Should -Be 'pwsh -NoLogo -NoProfile -NonInteractive -File "${GROK_PLUGIN_ROOT:-${PLUGIN_ROOT:-$CLAUDE_PLUGIN_ROOT}}/hooks/scripts/code-verify.ps1"'
+        } finally {
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
     It 'TEST-MCP-PLUGIN-PSONLY-002 status entrypoint returns JSON status without mutation' {
         $result = Invoke-PluginChildProcess `
             -ScriptPath (Join-Path $script:StagedRoot 'lib\mcp-status.ps1') `
@@ -624,6 +1793,315 @@ acceptanceCriteria:
         $status.requirementClientMethods | Should -Contain 'client.Requirements.GetEffectiveRequirementsAsync'
     }
 
+
+    It 'TEST-MCP-BUGTRIAGE-031 status rejects marker-only verified session-state' {
+        $scratchRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $scratchRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+        Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+            status = 'verified'
+            lastUpdated = '2026-07-11T19:14:59Z'
+            agent = 'Codex'
+            markerFilePath = 'F:\GitHub\McpServer\AGENTS-README-FIRST.yaml'
+            markerLastWriteUtc = '2026-07-11T17:50:01.7108064Z'
+        })
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'mcp-status.ps1') `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $script:StagedRoot
+                    MCP_PLUGIN_HOST = 'codex'
+                    MCP_AGENT_NAME = 'Codex'
+                    MCP_CACHE_DIR_OVERRIDE = $cacheDir
+                    MCP_WORKSPACE_PATH = $script:RepoRoot
+                    MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
+                }
+
+            $result.ExitCode | Should -Be 0
+            $status = $result.Stdout | ConvertFrom-Json
+            $status.status | Should -Be 'no-session'
+            $status.hasSession | Should -BeFalse
+        } finally {
+            Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-031 plugin hook rejects verified session-state without sessionId' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $source | Should -Match 'function Test-PluginSessionStateValid'
+        $source | Should -Match "Contains\('sessionId'\)"
+        $source | Should -Match 'Test-PluginSessionStateValid -State \$openSessionState'
+        $source | Should -Not -Match 'if \(\(Get-YamlScalar -Path \$sessionFile -Key ''status''\) -ne ''verified''\)'
+    }
+
+
+    It 'TEST-MCP-BUGTRIAGE-051 marker refresh writes sessionId before reporting verified' {
+        $scratchRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $scratchRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousWorkspace = $env:MCP_WORKSPACE_PATH
+        $previousAgent = $env:MCP_AGENT_NAME
+        $previousBootstrap = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            $env:MCP_WORKSPACE_PATH = $script:RepoRoot
+            $env:MCP_AGENT_NAME = 'Codex'
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
+            function Invoke-FullBootstrap { param([string]$StartDir) return $true }
+            $snapshot = Get-MarkerFileSnapshot -StartDir $script:RepoRoot
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                agent = 'Codex'
+                markerFilePath = $snapshot.markerFilePath
+                markerLastWriteUtc = $snapshot.markerLastWriteUtc
+            })
+
+            Assert-ReplMarkerFresh | Should -BeTrue
+            $state = Read-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml')
+            $state['sessionId'] | Should -Match '^Codex-\d{8}T\d{6}Z-plugin-session$'
+        } finally {
+            if ($previousBootstrap) {
+                Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock
+            }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousWorkspace) {
+                $env:MCP_WORKSPACE_PATH = $previousWorkspace
+            } else {
+                Remove-Item Env:\MCP_WORKSPACE_PATH -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousAgent) {
+                $env:MCP_AGENT_NAME = $previousAgent
+            } else {
+                Remove-Item Env:\MCP_AGENT_NAME -ErrorAction SilentlyContinue
+            }
+            Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-068 stop-gate blocks completed edited turns with failed last build status' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $scratchRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $pluginRoot = Join-Path $scratchRoot 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $cacheDir = Join-Path $scratchRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+        Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+            turnRequestId = 'req-20260712T000002Z-stopgate-red'
+            queryTitle = 'Completed stale build status test'
+            status = 'completed'
+            queryText = 'Completed stale build status test'
+            codeEdits = 4
+            lastBuildStatus = 'failed'
+            auditActions = 1
+            auditFiles = 1
+            auditDialog = 0
+            auditDecisions = 0
+        })
+
+        $environment = @{
+            MCP_PLUGIN_ROOT = $pluginRoot
+            MCP_PLUGIN_HOST = 'codex'
+            MCP_AGENT_NAME = 'Codex'
+            PLUGIN_ROOT_OVERRIDE = $scratchRoot
+            MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            MCP_WORKSPACE_PATH = $script:RepoRoot
+            MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
+        }
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'stop-gate', '-HostName', 'codex') `
+                -Environment $environment
+            $result.ExitCode | Should -Be 0
+            $json = $result.Stdout | ConvertFrom-Json
+            $json.decision | Should -Be 'block'
+            $json.reason | Should -Match 'Last build in this turn failed after 4 code edit'
+        } finally {
+            Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-033 code-verify accepts explicit and pipeline hook payloads' {
+        $scratchRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $pluginRoot = Join-Path $scratchRoot 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        [void][System.IO.Directory]::CreateDirectory($scratchRoot)
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+        & (Join-Path $script:RepoRoot 'plugins\core\hooks-templates\generate-wrappers.ps1') `
+            -HostName 'claude-code' `
+            -PluginRoot $pluginRoot | Out-Null
+
+        $scratchFile = Join-Path $scratchRoot 'edited.txt'
+        [System.IO.File]::WriteAllText($scratchFile, 'content')
+        $paramsFile = Join-Path $scratchRoot 'hook-payload.json'
+        $payload = [ordered]@{
+            tool_name = 'Edit'
+            tool_input = [ordered]@{ file_path = $scratchFile }
+        } | ConvertTo-Json -Depth 10 -Compress
+        [System.IO.File]::WriteAllText($paramsFile, $payload)
+
+        $environment = @{
+            MCP_PLUGIN_ROOT = $pluginRoot
+            MCP_PLUGIN_HOST = 'claude-code'
+            MCP_AGENT_NAME = 'ClaudeCode'
+            PLUGIN_ROOT_OVERRIDE = $scratchRoot
+            MCP_CACHE_DIR_OVERRIDE = (Join-Path $scratchRoot 'cache')
+            MCP_WORKSPACE_PATH = $script:RepoRoot
+            MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
+        }
+
+        try {
+            $paramsResult = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'code-verify', '-HostName', 'claude-code', '-Params', $payload) `
+                -Environment $environment
+            $paramsResult.ExitCode | Should -Be 0
+            ($paramsResult.Stdout | ConvertFrom-Json).status | Should -Be 'succeeded'
+
+            $paramsPathResult = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'code-verify', '-HostName', 'claude-code', '-ParamsPath', $paramsFile) `
+                -Environment $environment
+            $paramsPathResult.ExitCode | Should -Be 0
+            ($paramsPathResult.Stdout | ConvertFrom-Json).status | Should -Be 'succeeded'
+
+            $pipelineResult = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'hooks\scripts\code-verify.ps1') `
+                -Environment $environment `
+                -InputText $payload
+            $pipelineResult.ExitCode | Should -Be 0
+            ($pipelineResult.Stdout | ConvertFrom-Json).status | Should -Be 'succeeded'
+            $pipelineResult.Stderr | Should -Not -Match 'input object cannot be bound'
+        } finally {
+            Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+    It 'TEST-MCP-BUGTRIAGE-030 user-prompt-submit uses explicit prompt payload without redirected stdin' {
+        . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+        Import-McpYamlSerializer
+
+        $scratchRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $pluginRoot = Join-Path $scratchRoot 'plugin'
+        $libRoot = Join-Path $pluginRoot 'lib'
+        $workspace = Join-Path $scratchRoot 'workspace'
+        $cacheDir = Join-Path $scratchRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($libRoot)
+        [void][System.IO.Directory]::CreateDirectory($workspace)
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        Copy-Item -Path (Join-Path $script:LibRoot '*') -Destination $libRoot -Recurse -Force
+
+        $replStub = @'
+#Requires -Version 7.0
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory)][string]$Method,
+    [string]$ParamsYaml = ''
+)
+
+$ErrorActionPreference = 'Stop'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $scriptDir 'yaml-object-mutation.ps1')
+Import-McpYamlSerializer
+
+if ($Method -ne 'workflow.sessionlog.beginTurn') {
+    throw "Unexpected method $Method"
+}
+
+$params = $ParamsYaml | ConvertFrom-Yaml -Ordered -ErrorAction Stop
+$cacheDir = $env:MCP_CACHE_DIR_OVERRIDE
+if (-not $cacheDir) {
+    throw 'MCP_CACHE_DIR_OVERRIDE is required.'
+}
+
+Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+    turnRequestId = [string]$params['requestId']
+    queryTitle = [string]$params['queryTitle']
+    queryText = [string]$params['queryText']
+    status = 'active'
+})
+
+'{}'
+'@
+        [System.IO.File]::WriteAllText((Join-Path $libRoot 'repl-invoke.ps1'), $replStub, [System.Text.UTF8Encoding]::new($false))
+
+        $markerPath = Join-Path $workspace 'AGENTS-README-FIRST.yaml'
+        Write-McpYamlObject -Path $markerPath -Document ([ordered]@{
+            workspace = 'PluginPromptPayloadTest'
+            workspacePath = $workspace
+            baseUrl = 'http://127.0.0.1:1'
+            apiKey = 'test-key'
+            port = 1
+        })
+        $markerItem = Get-Item -LiteralPath $markerPath
+        Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+            status = 'verified'
+            sessionId = 'session-bugtriage-030'
+            workspacePath = $workspace
+            agent = 'Codex'
+            lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+            markerFilePath = $markerItem.FullName
+            markerLastWriteUtc = $markerItem.LastWriteTimeUtc.ToString('O')
+        })
+
+        $prompt = "Real nonredirected prompt`nSecond line"
+        $payload = [ordered]@{ prompt = $prompt } | ConvertTo-Json -Depth 10 -Compress
+        $environment = @{
+            MCP_PLUGIN_ROOT = $pluginRoot
+            MCP_PLUGIN_HOST = 'codex'
+            MCP_AGENT_NAME = 'Codex'
+            MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            MCP_WORKSPACE_PATH = $workspace
+            MCPSERVER_WORKSPACE_PATH = $workspace
+            MCP_WORKSPACE_START_DIR = $workspace
+        }
+
+        try {
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $pluginRoot 'lib\plugin-hook.ps1') `
+                -Arguments @('-HookName', 'user-prompt-submit', '-HostName', 'codex', '-WorkspacePath', $workspace, '-Params', $payload) `
+                -Environment $environment `
+                -RedirectStandardInput:$false
+
+            $result.ExitCode | Should -Be 0
+            $output = $result.Stdout | ConvertFrom-Json
+            $output.hookSpecificOutput.status | Should -Be 'turn-opened'
+
+            $turn = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            [string]$turn['queryTitle'] | Should -Be 'Real nonredirected prompt'
+            [string]$turn['queryText'] | Should -Be $prompt
+            [string]$turn['queryTitle'] | Should -Not -Be 'User prompt'
+            [string]$turn['queryText'] | Should -Not -Be 'Continuation or hook-triggered turn.'
+        } finally {
+            Remove-Item -LiteralPath $scratchRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-033 generated wrappers forward explicit hook payload parameters' {
+        $template = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'plugins\core\hooks-templates\wrapper.ps1.template'))
+
+        $template | Should -Match '\[string\]\$Params'
+        $template | Should -Match '\[string\]\$ParamsPath'
+        $template | Should -Match 'ValueFromPipeline'
+        $template | Should -Match 'hookArguments\.Params'
+        $template | Should -Match 'hookArguments\.ParamsPath'
+    }
     It 'TEST-MCP-REQSCOPE-005 requirements guidance tells agents to use current effective layer visibility' {
         $guidancePath = Join-Path $script:RepoRoot 'templates\prompt-templates.yaml'
         Test-Path -LiteralPath $guidancePath | Should -BeTrue
@@ -726,6 +2204,23 @@ acceptanceCriteria:
         $document['Triage']['QuietPeriodMinutes'] | Should -Be 15
     }
 
+    It 'TEST-MCP-BUGTRIAGE-066 plugin hook scalar YAML updates use lock-safe object mutation' {
+        $hookContent = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+        $yamlContent = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'yaml-object-mutation.ps1'))
+
+        $setBody = [regex]::Match($hookContent, 'function Set-YamlScalar \{.*?\n\}', [System.Text.RegularExpressions.RegexOptions]::Singleline).Value
+        $getBody = [regex]::Match($hookContent, 'function Get-YamlScalar \{.*?\n\}', [System.Text.RegularExpressions.RegexOptions]::Singleline).Value
+
+        $setBody | Should -Match 'Set-McpYamlObjectValue'
+        $setBody | Should -Not -Match 'WriteAllText|ReadAllText|\[regex\]::Replace'
+        $getBody | Should -Match 'Read-McpYamlObject'
+        $yamlContent | Should -Match 'function Invoke-McpYamlFileOperation'
+        $yamlContent | Should -Match 'catch \[System\.IO\.IOException\]'
+        $yamlContent | Should -Match 'catch \[System\.UnauthorizedAccessException\]'
+        $yamlContent | Should -Match 'Start-Sleep -Milliseconds \$delay'
+        $yamlContent | Should -Match '\[System\.IO\.File\]::Move\(\$tempPath, \$resolvedPath, \$true\)'
+    }
+
     It 'TEST-MCP-YAML-MUTATION-003 core sync manifest is built from a serialized object' {
         $content = [System.IO.File]::ReadAllText((Join-Path $script:RepoRoot 'plugins\core\sync\sync-plugin-core.ps1'))
 
@@ -761,6 +2256,18 @@ acceptanceCriteria:
         $content | Should -Match 'ConvertTo-Yaml'
         $content | Should -Not -Match '\$paramsYaml\s*=\s*"requestId:'
         $content | Should -Not -Match '\$paramsYaml\s*=\s*"response:\s*\|'
+    }
+
+
+    It 'TEST-MCP-BUGTRIAGE-050 triage skill documents schema-valid REPL status methods' {
+        $skillPath = Join-Path $script:StagedRoot 'skills\triage\SKILL.md'
+        $content = [System.IO.File]::ReadAllText($skillPath)
+
+        $content | Should -Match 'Native MCP clients may use `triage_status`'
+        $content | Should -Match 'workflow\.triage\.getReport'
+        $content | Should -Match 'workflow\.triage\.getGroup'
+        $content | Should -Match 'workflow\.triage\.queryGroups'
+        $content | Should -Not -Match '- Use `triage_status` to inspect a report or group later\.'
     }
 
     It 'TEST-MCP-TRIAGE-003 session log persistence failures are observable' {
@@ -860,6 +2367,15 @@ acceptanceCriteria:
         $content | Should -Not -Match 'GAPS.md'
     }
 
+    It 'TEST-MCP-BUGTRIAGE-027 core integrity checker exits 0 on success' {
+        $result = Invoke-PluginChildProcess `
+            -ScriptPath (Join-Path $script:RepoRoot 'plugins\core\sync\check-core-integrity.ps1') `
+            -Arguments @('-PluginRoot', $script:StagedRoot)
+
+        $result.ExitCode | Should -Be 0
+        $result.Stdout | Should -Match 'core integrity OK: \d+ files match'
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 writes pending cache records with deterministic sequence and payload fields' {
         $cacheRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         $env:MCP_CACHE_DIR_OVERRIDE = $cacheRoot
@@ -894,19 +2410,19 @@ acceptanceCriteria:
         Copy-Item -LiteralPath (Join-Path $script:LibRoot 'resolve-cache-dir.ps1') -Destination $libCopy
         [System.IO.File]::WriteAllText(
             (Join-Path $libCopy 'repl-invoke.ps1'),
-            "param([string]`$Method)`nAdd-Content -LiteralPath '$($workRoot.Replace("'", "''"))\replay.log' -Value `$Method`n"
+            "param([string]`$Method, [string]`$ParamsYaml)`nAdd-Content -LiteralPath '$($workRoot.Replace("'", "''"))\replay.log' -Value `"`$Method|`$ParamsYaml`"`n"
         )
 
         $env:MCP_CACHE_DIR_OVERRIDE = $cacheRoot
         try {
-            & (Join-Path $libCopy 'cache-manager.ps1') -Action write -Method 'workflow.todo.create' | Out-Null
-            & (Join-Path $libCopy 'cache-manager.ps1') -Action write -Method 'workflow.todo.update' | Out-Null
+            & (Join-Path $libCopy 'cache-manager.ps1') -Action write -Method 'workflow.todo.create' -ParamsYaml "title: First" | Out-Null
+            & (Join-Path $libCopy 'cache-manager.ps1') -Action write -Method 'workflow.todo.update' -ParamsYaml "id: TODO-1" | Out-Null
             $result = & (Join-Path $libCopy 'cache-manager.ps1') -Action flush
 
             $result | Should -Be 'flushed=2 failed=0 pending=0'
             [System.IO.File]::ReadAllLines((Join-Path $workRoot 'replay.log')) | Should -Be @(
-                'workflow.todo.create',
-                'workflow.todo.update'
+                'workflow.todo.create|title: First',
+                'workflow.todo.update|id: TODO-1'
             )
         } finally {
             Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
@@ -952,7 +2468,17 @@ acceptanceCriteria:
             'MCP_PLUGIN_ROOT',
             'MCP_WORKSPACE_START_DIR',
             'PLUGIN_ROOT_OVERRIDE',
-            'MCP_AGENT_NAME'
+            'MCP_AGENT_NAME',
+            'PLUGIN_AGENT_NAME',
+            'PLUGIN_AGENT_DEFAULT',
+            'MCP_PLUGIN_HOST',
+            'CLAUDE_PROJECT_DIR',
+            'CODEX_CWD',
+            'CODEX_WORKSPACE_PATH',
+            'CODEX_PROJECT_DIR',
+            'COWORK_WORKSPACE_PATH',
+            'CLINE_WORKSPACE_PATH',
+            'OPENCODE_WORKSPACE_PATH'
         )
         $previousEnv = @{}
         foreach ($name in $envNames) {
@@ -1064,6 +2590,65 @@ Describe 'TEST-MCP-PLUGINCORE-004 session-log dialog parsing' {
         $yamlItems[1].category | Should -Be 'decision'
         $jsonItems.Count | Should -Be 2
         $jsonItems[1].content | Should -Be 'selected the independent REPL failsafe strategy'
+    }
+
+
+    It 'persists multi-item appendDialog payloads and increments auditDialog' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFresh = $null
+        $previousPersist = $null
+        $script:capturedProcessingDialog = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            function Assert-ReplCurrentTurnFresh { return $true }
+            function Invoke-ReplPersistTurn {
+                param(
+                    [string]$RequestId,
+                    [string]$Title,
+                    [string]$Status,
+                    [string]$ResponseText,
+                    [object[]]$ProcessingDialog
+                )
+                $script:capturedProcessingDialog = $ProcessingDialog
+                return $true
+            }
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260709T211900Z-dialog-green'
+                queryTitle = 'Dialog parser green test'
+                status = 'in_progress'
+                auditDialog = 0
+            })
+            $payload = [ordered]@{
+                dialogItems = @(
+                    [ordered]@{ role = 'assistant'; content = 'first diagnostic'; category = 'analysis' },
+                    [ordered]@{ role = 'assistant'; content = 'selected the independent REPL failsafe strategy'; category = 'decision' }
+                )
+            } | ConvertTo-Yaml -Options WithIndentedSequences
+
+            Invoke-WorkflowAppendDialog -ParamsYaml $payload | Should -BeTrue
+            $turn = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            $turn['auditDialog'] | Should -Be 2
+            @($script:capturedProcessingDialog).Count | Should -Be 2
+            @($script:capturedProcessingDialog)[1]['category'] | Should -Be 'decision'
+        } finally {
+            if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($null -ne $previousCacheOverride) {
+                $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
+            } else {
+                Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            Remove-Variable -Name capturedProcessingDialog -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
     }
 
     It 'rejects appendDialog when no dialog items can be parsed' {
@@ -1257,4 +2842,22 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
             $errorWriter.Dispose()
         }
     }
+
+    It 'TEST-MCP-BUGTRIAGE-041 repl-invoke reloads marker resolver in its own script scope' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+
+        $source | Should -Match '\. \(Join-Path \$PSScriptRoot ''marker-resolver\.ps1''\)'
+        $source | Should -Not -Match 'if \(-not \(Get-Command Find-MarkerFile'
+    }
+
+    It 'TEST-MCP-BUGTRIAGE-041 plugin hook checks REPL exit code instead of assignment success' {
+        $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'plugin-hook.ps1'))
+
+        $source | Should -Match '\$script:LastPluginReplExitCode = 0'
+        $source | Should -Match 'Get-Variable -Name LASTEXITCODE -Scope Global -ErrorAction SilentlyContinue'
+        $source | Should -Match '\$script:LastPluginReplExitCode = if \(\$null -ne \$exitCodeVariable'
+        $source | Should -Match 'if \(\$script:LastPluginReplExitCode -ne 0\)'
+        $source | Should -Not -Match 'if \(-not \$\?\) \{'
+    }
+
 }

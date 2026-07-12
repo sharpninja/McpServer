@@ -15,6 +15,9 @@ class McpPluginInvocationOptions {
     # Optional path to a YAML parameter document.
     [string]$ParamsPath
 
+    # Native PowerShell parameter object serialized by Invoke-McpPlugin.ps1.
+    [object]$ParamsObject
+
     # Inline final response text supplied by the caller.
     [string]$Response
 
@@ -38,6 +41,7 @@ class McpPluginInvocationOptions {
         [string]$method,
         [string]$params,
         [string]$paramsPath,
+        [object]$paramsObject,
         [string]$response,
         [string]$responsePath,
         [string]$workspacePath,
@@ -49,6 +53,7 @@ class McpPluginInvocationOptions {
         $this.Method = $method
         $this.Params = $params
         $this.ParamsPath = $paramsPath
+        $this.ParamsObject = $paramsObject
         $this.Response = $response
         $this.ResponsePath = $responsePath
         $this.WorkspacePath = $workspacePath
@@ -213,6 +218,7 @@ function New-McpPluginInvocationOptions {
         Method - Workflow or client method used when Command is Invoke.
         Params - Inline YAML parameter text.
         ParamsPath - File containing YAML parameter text.
+        ParamsObject - Native PowerShell object serialized to YAML by Invoke-McpPlugin.ps1.
         Response - Inline response text for CompleteTurn.
         ResponsePath - File containing response text for CompleteTurn.
         WorkspacePath - Workspace directory and child process working directory.
@@ -229,6 +235,7 @@ function New-McpPluginInvocationOptions {
         [string]$Method = '',
         [string]$Params = '',
         [string]$ParamsPath = '',
+        [object]$ParamsObject = $null,
         [string]$Response = '',
         [string]$ResponsePath = '',
         [string]$WorkspacePath = '',
@@ -242,6 +249,7 @@ function New-McpPluginInvocationOptions {
         $Method,
         $Params,
         $ParamsPath,
+        $ParamsObject,
         $Response,
         $ResponsePath,
         $WorkspacePath,
@@ -377,6 +385,10 @@ function New-McpPluginTurnUpsertRequest {
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
         [Parameter(Mandatory)][string]$Model,
+        [int]$TokenCount = 0,
+        [string]$Interpretation = '',
+        [string[]]$Tags = @(),
+        [string[]]$ContextList = @(),
         [string[]]$FilesModified = @(),
         [object[]]$Actions = @(),
         [object[]]$ProcessingDialog = @()
@@ -390,7 +402,19 @@ function New-McpPluginTurnUpsertRequest {
         response = $ResponseText
         status = $Status
         model = $Model
-        tokenCount = 0
+        tokenCount = $TokenCount
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($Interpretation)) {
+        $turn.interpretation = $Interpretation
+    }
+
+    if ($Tags.Count -gt 0) {
+        $turn.tags = @($Tags)
+    }
+
+    if ($ContextList.Count -gt 0) {
+        $turn.contextList = @($ContextList)
     }
 
     if ($FilesModified.Count -gt 0) {
@@ -435,6 +459,137 @@ function New-McpPluginFailsafeRecord {
     )
 
     return [McpPluginFailsafeRecord]::new($Method, $Label, $Timestamp, $ParamsYaml, $Path)
+}
+
+function New-McpTriageReportParams {
+    <#
+    .SYNOPSIS
+        Creates object-safe params for workflow.triage.report.
+    .DESCRIPTION
+        Returns an ordered PowerShell map that can be passed to Invoke-McpPlugin.ps1
+        with -ParamsObject or to New-McpPluginReplRequest -Params. This avoids
+        handwritten YAML while preserving the workflow.triage.report contract.
+
+        Members:
+        Title - Short problem statement.
+        Summary - Observed failure and why it matters.
+        Component - Product area, package, or plugin name.
+        AffectedPaths - Relevant file paths when known.
+        AffectedSymbols - Relevant methods, commands, or API names when known.
+        ErrorSignature - Stable error text, status code, or exception type.
+        DedupeKey - Stable key for repeated reports.
+        Evidence - Compact command output or reproduction context.
+        ReporterAgent - Real submitting agent identity.
+    .EXAMPLE
+        $params = New-McpTriageReportParams -Title 'Plugin wrapper hides errors' -Summary 'workflow.triage.report failures are not visible.' -Component mcpserver-plugin -ReporterAgent Codex
+        ./lib/Invoke-McpPlugin.ps1 -Command Invoke -Method workflow.triage.report -ParamsObject $params
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Title,
+        [Parameter(Mandatory)][string]$Summary,
+        [string]$Component = '',
+        [string[]]$AffectedPaths = @(),
+        [string[]]$AffectedSymbols = @(),
+        [string]$ErrorSignature = '',
+        [string]$DedupeKey = '',
+        [string]$Evidence = '',
+        [string]$ReporterAgent = '',
+        [string]$WorkspacePath = '',
+        [string]$SessionId = '',
+        [string]$TurnId = '',
+        [string]$CurrentTodoId = '',
+        [string[]]$ReproductionHints = @(),
+        [string[]]$Tags = @(),
+        [string]$IdempotencyKey = ''
+    )
+
+    $params = [ordered]@{
+        title = $Title
+        summary = $Summary
+    }
+
+    foreach ($entry in @(
+        @{ Name = 'component'; Value = $Component },
+        @{ Name = 'errorSignature'; Value = $ErrorSignature },
+        @{ Name = 'dedupeKey'; Value = $DedupeKey },
+        @{ Name = 'evidence'; Value = $Evidence },
+        @{ Name = 'reporterAgent'; Value = $ReporterAgent },
+        @{ Name = 'workspacePath'; Value = $WorkspacePath },
+        @{ Name = 'sessionId'; Value = $SessionId },
+        @{ Name = 'turnId'; Value = $TurnId },
+        @{ Name = 'currentTodoId'; Value = $CurrentTodoId },
+        @{ Name = 'idempotencyKey'; Value = $IdempotencyKey }
+    )) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$entry.Value)) {
+            $params[$entry.Name] = [string]$entry.Value
+        }
+    }
+
+    foreach ($entry in @(
+        @{ Name = 'affectedPaths'; Value = $AffectedPaths },
+        @{ Name = 'affectedSymbols'; Value = $AffectedSymbols },
+        @{ Name = 'reproductionHints'; Value = $ReproductionHints },
+        @{ Name = 'tags'; Value = $Tags }
+    )) {
+        $values = @(@($entry.Value) | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
+        if ($values.Count -gt 0) {
+            $params[$entry.Name] = [string[]]$values
+        }
+    }
+
+    return $params
+}
+
+function New-McpTriageGetReportParams {
+    <#
+    .SYNOPSIS
+        Creates object-safe params for workflow.triage.getReport.
+    .DESCRIPTION
+        Returns an ordered map containing reportId for status inspection without handwritten YAML.
+    .EXAMPLE
+        ./lib/Invoke-McpPlugin.ps1 -Command Invoke -Method workflow.triage.getReport -ParamsObject (New-McpTriageGetReportParams -ReportId triage-report-123)
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$ReportId)
+
+    return [ordered]@{ reportId = $ReportId }
+}
+
+function New-McpTriageGetGroupParams {
+    <#
+    .SYNOPSIS
+        Creates object-safe params for workflow.triage.getGroup.
+    .DESCRIPTION
+        Returns an ordered map containing groupId for group status inspection without handwritten YAML.
+    .EXAMPLE
+        ./lib/Invoke-McpPlugin.ps1 -Command Invoke -Method workflow.triage.getGroup -ParamsObject (New-McpTriageGetGroupParams -GroupId triage-group-123)
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$GroupId)
+
+    return [ordered]@{ groupId = $GroupId }
+}
+
+function New-McpTriageQueryGroupsParams {
+    <#
+    .SYNOPSIS
+        Creates object-safe params for workflow.triage.queryGroups.
+    .DESCRIPTION
+        Returns an ordered map containing optional status and workspacePath filters for triage group queries.
+    .EXAMPLE
+        ./lib/Invoke-McpPlugin.ps1 -Command Invoke -Method workflow.triage.queryGroups -ParamsObject (New-McpTriageQueryGroupsParams -Status pending)
+    #>
+    [CmdletBinding()]
+    param(
+        [string]$Status = '',
+        [string]$WorkspacePath = ''
+    )
+
+    $params = [ordered]@{}
+    if (-not [string]::IsNullOrWhiteSpace($Status)) { $params['status'] = $Status }
+    if (-not [string]::IsNullOrWhiteSpace($WorkspacePath)) { $params['workspacePath'] = $WorkspacePath }
+    return $params
 }
 
 function ConvertTo-McpPluginJson {
@@ -486,5 +641,9 @@ Export-ModuleMember -Function @(
     'New-McpPluginActionRecord',
     'New-McpPluginTurnUpsertRequest',
     'New-McpPluginFailsafeRecord',
+    'New-McpTriageReportParams',
+    'New-McpTriageGetReportParams',
+    'New-McpTriageGetGroupParams',
+    'New-McpTriageQueryGroupsParams',
     'ConvertTo-McpPluginJson'
 )

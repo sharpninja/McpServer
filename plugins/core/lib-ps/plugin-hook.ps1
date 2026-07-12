@@ -10,7 +10,14 @@ param(
     [ValidateSet('flat', 'scoped')]
     [string]$CacheMode = 'scoped',
 
-    [string]$WorkspacePath
+    [string]$WorkspacePath,
+
+    [string]$Params,
+
+    [string]$ParamsPath,
+
+    [Parameter(ValueFromPipeline = $true)]
+    [object]$InputObject
 )
 
 Set-StrictMode -Version Latest
@@ -102,9 +109,10 @@ function Get-YamlScalar {
     )
 
     if (-not (Test-Path -LiteralPath $Path)) { return $null }
-    $match = Select-String -LiteralPath $Path -Pattern "^$([regex]::Escape($Key)):\s*(.*)$" | Select-Object -First 1
-    if (-not $match) { return $null }
-    return $match.Matches[0].Groups[1].Value.Trim().Trim('"')
+    $document = Read-McpYamlObject -Path $Path
+    if ($document -isnot [System.Collections.IDictionary]) { return $null }
+    if (-not $document.Contains($Key) -or $null -eq $document[$Key]) { return $null }
+    return ([string]$document[$Key]).Trim().Trim('"')
 }
 
 function Set-YamlScalar {
@@ -115,20 +123,34 @@ function Set-YamlScalar {
     )
 
     if (-not (Test-Path -LiteralPath $Path)) { return }
-    $text = [System.IO.File]::ReadAllText($Path)
-    $pattern = "(?m)^$([regex]::Escape($Key)):\s*.*$"
-    if ($text -match $pattern) {
-        $text = [regex]::Replace($text, $pattern, "${Key}: $Value")
-    } else {
-        $text = $text.TrimEnd() + "`n${Key}: $Value`n"
-    }
-    [System.IO.File]::WriteAllText($Path, $text)
+    Set-McpYamlObjectValue -Path $Path -KeyPath @($Key) -Value $Value | Out-Null
 }
 
 function Read-HookInput {
+    if ($Params) {
+        return $Params
+    }
+
+    if ($ParamsPath) {
+        if (-not (Test-Path -LiteralPath $ParamsPath)) {
+            throw "Hook params file was not found: $ParamsPath"
+        }
+
+        return [System.IO.File]::ReadAllText($ParamsPath)
+    }
+
+    if ($null -ne $InputObject) {
+        if ($InputObject -is [string]) {
+            return [string]$InputObject
+        }
+
+        return ($InputObject | ConvertTo-Json -Depth 20 -Compress)
+    }
+
     if ([Console]::IsInputRedirected) {
         return [Console]::In.ReadToEnd()
     }
+
     return ''
 }
 
@@ -153,6 +175,7 @@ function Invoke-PluginRepl {
         [string]$ParamsYaml = ''
     )
 
+    $script:LastPluginReplExitCode = 0
     if ($env:MCP_PLUGIN_REPL_LOG) {
         $entry = @(
             "method: $Method"
@@ -168,6 +191,8 @@ function Invoke-PluginRepl {
     }
 
     & (Join-Path $script:ScriptDir 'repl-invoke.ps1') -Method $Method -ParamsYaml $ParamsYaml
+    $exitCodeVariable = Get-Variable -Name LASTEXITCODE -Scope Global -ErrorAction SilentlyContinue
+    $script:LastPluginReplExitCode = if ($null -ne $exitCodeVariable -and $null -ne $exitCodeVariable.Value) { [int]$exitCodeVariable.Value } else { 0 }
 }
 
 function Start-PluginSession {
@@ -222,6 +247,277 @@ function Start-PluginSession {
     Write-PluginJson ([ordered]@{})
 }
 
+function ConvertTo-PluginAgentKey {
+    param([string]$AgentName)
+
+    if ([string]::IsNullOrWhiteSpace($AgentName)) { return '' }
+
+    switch ($AgentName.Trim().ToLowerInvariant()) {
+        'claude' { return 'claude' }
+        'claudecode' { return 'claude' }
+        'claude-code' { return 'claude' }
+        'claudecowork' { return 'cowork' }
+        'claude-cowork' { return 'cowork' }
+        'codex' { return 'codex' }
+        'copilot' { return 'copilot' }
+        'grok' { return 'grok' }
+        'grokcode' { return 'grok' }
+        'grok-code' { return 'grok' }
+        'cline' { return 'cline' }
+        'cline-v2' { return 'cline' }
+        'opencode' { return 'opencode' }
+        'open-code' { return 'opencode' }
+    }
+
+    return (($AgentName.Trim() -replace '[^A-Za-z0-9]+', '-').Trim('-').ToLowerInvariant())
+}
+
+function Get-PluginExpectedAgentKey {
+    $agent = @(
+        $env:MCP_AGENT_NAME,
+        $env:PLUGIN_AGENT_DEFAULT,
+        $env:MCP_PLUGIN_HOST
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+
+    return (ConvertTo-PluginAgentKey -AgentName $agent)
+}
+
+function Test-PluginSessionStateValid {
+    param($State)
+
+    if ($State -isnot [System.Collections.IDictionary]) { return $false }
+    if ([string]$State['status'] -ne 'verified') { return $false }
+
+    $sessionId = if ($State.Contains('sessionId')) { [string]$State['sessionId'] } else { '' }
+    if ([string]::IsNullOrWhiteSpace($sessionId.Trim().Trim('''').Trim('"'))) { return $false }
+
+    $expectedAgentKey = Get-PluginExpectedAgentKey
+    if ($expectedAgentKey) {
+        $stateAgent = if ($State.Contains('agent')) { [string]$State['agent'] } else { '' }
+        if ((ConvertTo-PluginAgentKey -AgentName $stateAgent) -ne $expectedAgentKey) { return $false }
+    }
+
+    return $true
+}
+
+function Get-PluginNoSessionRecoveryPath {
+    param([Parameter(Mandatory)][string]$CacheDir)
+
+    return (Join-Path $CacheDir 'no-session-recovery.yaml')
+}
+
+function Read-PluginNoSessionRecoveryState {
+    param([Parameter(Mandatory)][string]$CacheDir)
+
+    $path = Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir
+    if (-not (Test-Path -LiteralPath $path)) { return $null }
+
+    try {
+        return Read-McpYamlObject -Path $path
+    } catch {
+        return $null
+    }
+}
+
+function Get-PluginNoSessionRootId {
+    param($Snapshot)
+
+    if ($Snapshot) {
+        return 'no-session:{0}:{1}' -f $Snapshot.markerFilePath, $Snapshot.markerLastWriteUtc
+    }
+
+    return 'no-session:unknown-marker'
+}
+
+function ConvertTo-PluginSafeFileStem {
+    param([Parameter(Mandatory)][string]$Value)
+
+    $hashBytes = [System.Security.Cryptography.SHA256]::HashData([System.Text.Encoding]::UTF8.GetBytes($Value))
+    $hash = ([Convert]::ToHexString($hashBytes)).Substring(0, 12).ToLowerInvariant()
+    $stem = (($Value -replace '[^A-Za-z0-9._-]+', '-').Trim('-'))
+    if (-not $stem) { $stem = 'root' }
+    if ($stem.Length -gt 80) { $stem = $stem.Substring(0, 80).Trim('-') }
+    return ('{0}-{1}' -f $stem, $hash)
+}
+
+function Write-PluginRecoveryFailsafe {
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        [Parameter(Mandatory)][string]$Label,
+        [Parameter(Mandatory)][string]$RootId,
+        [Parameter(Mandatory)][string]$Method,
+        [Parameter(Mandatory)]$Payload
+    )
+
+    try {
+        $dir = Join-Path $CacheDir 'failsafe\pending'
+        [void][System.IO.Directory]::CreateDirectory($dir)
+        $fileName = '{0}-{1}.yaml' -f $Label, (ConvertTo-PluginSafeFileStem -Value $RootId)
+        $path = Join-Path $dir $fileName
+        $record = [ordered]@{
+            method = $Method
+            label = $Label
+            rootId = $RootId
+            timestamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+            payload = $Payload
+        }
+        Write-McpYamlObject -Path $path -Document $record
+        return $path
+    } catch {
+        return ''
+    }
+}
+
+function Clear-PluginRecoveryFailsafe {
+    param([string]$Path)
+
+    if ($Path -and (Test-Path -LiteralPath $Path)) {
+        Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Test-PluginNoSessionRetrySuppressed {
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        $Snapshot
+    )
+
+    $state = Read-PluginNoSessionRecoveryState -CacheDir $CacheDir
+    if ($state -isnot [System.Collections.IDictionary]) { return $false }
+    if ([string]$state['status'] -ne 'session-create-failed') { return $false }
+    if (-not $Snapshot) { return $true }
+
+    return ([string]$state['markerFilePath'] -eq [string]$Snapshot.markerFilePath -and
+        [string]$state['markerLastWriteUtc'] -eq [string]$Snapshot.markerLastWriteUtc)
+}
+
+function Submit-PluginNoSessionTriage {
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        [Parameter(Mandatory)][string]$StartPath,
+        $Snapshot,
+        [Parameter(Mandatory)][string]$Reason
+    )
+
+    $agent = if ($env:MCP_AGENT_NAME) { $env:MCP_AGENT_NAME } elseif ($env:PLUGIN_AGENT_DEFAULT) { $env:PLUGIN_AGENT_DEFAULT } else { $HostName }
+    $rootId = 'triage:{0}' -f (Get-PluginNoSessionRootId -Snapshot $Snapshot)
+    $params = [ordered]@{
+        title = 'Plugin session recovery could not create verified session state'
+        summary = 'The plugin health check succeeded, but session-state.yaml could not be recreated. Work should continue with degraded failsafe session logging until the marker timestamp changes.'
+        component = 'mcpserver-plugin-core'
+        affectedPaths = @('plugins/core/lib-ps/plugin-hook.ps1', 'plugins/core/lib-ps/repl-invoke.ps1')
+        affectedSymbols = @('Open-PluginTurn', 'Start-PluginSession', 'Ensure-PluginMarkerFresh')
+        errorSignature = 'plugin-no-session-create-failed'
+        dedupeKey = $rootId
+        evidence = $Reason
+        reporterAgent = $agent
+        workspacePath = $StartPath
+        tags = @('BUG-TRIAGE-047', 'plugin', 'session-recovery')
+        idempotencyKey = $rootId
+    }
+    if ($Snapshot) {
+        $params['reproductionHints'] = @(
+            ('markerFilePath={0}' -f $Snapshot.markerFilePath),
+            ('markerLastWriteUtc={0}' -f $Snapshot.markerLastWriteUtc)
+        )
+    }
+
+    $failsafePath = Write-PluginRecoveryFailsafe -CacheDir $CacheDir -Label 'no-session-triage' -RootId $rootId -Method 'workflow.triage.report' -Payload $params
+    $paramsYaml = ConvertTo-PluginParamsYaml $params
+    $output = Invoke-PluginRepl -Method 'workflow.triage.report' -ParamsYaml $paramsYaml
+    if ($script:LastPluginReplExitCode -eq 0) {
+        Clear-PluginRecoveryFailsafe -Path $failsafePath
+        return [ordered]@{ submitted = $true; failsafePath = $null; output = (($output | Out-String).Trim()) }
+    }
+
+    return [ordered]@{ submitted = $false; failsafePath = $failsafePath; output = (($output | Out-String).Trim()) }
+}
+
+function Invoke-PluginNoSessionRecovery {
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        [Parameter(Mandatory)][string]$SessionFile,
+        [Parameter(Mandatory)][string]$StartPath
+    )
+
+    $snapshot = $null
+    try {
+        $snapshot = Get-MarkerFileSnapshot -StartDir $StartPath
+    } catch {
+        $snapshot = $null
+    }
+
+    $rootId = Get-PluginNoSessionRootId -Snapshot $snapshot
+    $healthOk = $false
+    try {
+        $healthOk = [bool](Invoke-FullBootstrap -StartDir $StartPath)
+    } catch {
+        $healthOk = $false
+    }
+
+    if (-not $healthOk) {
+        $state = [ordered]@{
+            status = 'health-failed'
+            healthStatus = 'failed'
+            lastCheckedUtc = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        if ($snapshot) {
+            $state['markerFilePath'] = $snapshot.markerFilePath
+            $state['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
+        }
+        Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $state
+        return $state
+    }
+
+    if (Test-PluginNoSessionRetrySuppressed -CacheDir $CacheDir -Snapshot $snapshot) {
+        $state = Read-PluginNoSessionRecoveryState -CacheDir $CacheDir
+        $state['healthStatus'] = 'healthy'
+        $state['lastCheckedUtc'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        $state['message'] = 'Session creation retry suppressed until AGENTS-README-FIRST.yaml marker timestamp changes.'
+        $failsafePayload = [ordered]@{
+            workspacePath = $StartPath
+            markerFilePath = if ($snapshot) { $snapshot.markerFilePath } else { '' }
+            markerLastWriteUtc = if ($snapshot) { $snapshot.markerLastWriteUtc } else { '' }
+            status = 'session-create-failed'
+        }
+        $state['failsafePath'] = Write-PluginRecoveryFailsafe -CacheDir $CacheDir -Label 'no-session-recovery' -RootId $rootId -Method 'workflow.sessionlog.recovery' -Payload $failsafePayload
+        Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $state
+        return $state
+    }
+
+    Start-PluginSession -StartPath $StartPath | Out-Null
+    $stateAfterCreate = if (Test-Path -LiteralPath $SessionFile) { Read-McpYamlObject -Path $SessionFile } else { $null }
+    if (Test-PluginSessionStateValid -State $stateAfterCreate) {
+        $recoveryPath = Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir
+        if (Test-Path -LiteralPath $recoveryPath) { Remove-Item -LiteralPath $recoveryPath -Force -ErrorAction SilentlyContinue }
+        return [ordered]@{ status = 'recovered'; healthStatus = 'healthy' }
+    }
+
+    $reason = 'health check succeeded, but session-state.yaml remained missing or unverified after Start-PluginSession.'
+    $triage = Submit-PluginNoSessionTriage -CacheDir $CacheDir -StartPath $StartPath -Snapshot $snapshot -Reason $reason
+    $failsafePayload = [ordered]@{
+        workspacePath = $StartPath
+        markerFilePath = if ($snapshot) { $snapshot.markerFilePath } else { '' }
+        markerLastWriteUtc = if ($snapshot) { $snapshot.markerLastWriteUtc } else { '' }
+        reason = $reason
+        triageSubmitted = [bool]$triage['submitted']
+    }
+    $failsafePath = Write-PluginRecoveryFailsafe -CacheDir $CacheDir -Label 'no-session-recovery' -RootId $rootId -Method 'workflow.sessionlog.recovery' -Payload $failsafePayload
+    $failureState = [ordered]@{
+        status = 'session-create-failed'
+        healthStatus = 'healthy'
+        lastCheckedUtc = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        markerFilePath = if ($snapshot) { $snapshot.markerFilePath } else { '' }
+        markerLastWriteUtc = if ($snapshot) { $snapshot.markerLastWriteUtc } else { '' }
+        triageSubmitted = [bool]$triage['submitted']
+        triageFailsafePath = [string]$triage['failsafePath']
+        failsafePath = $failsafePath
+        message = 'Session creation failed after a healthy marker/bootstrap check; retry suppressed until the marker timestamp changes.'
+    }
+    Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $failureState
+    return $failureState
+}
+
 function Ensure-PluginMarkerFresh {
     param([string]$StartPath)
 
@@ -230,7 +526,17 @@ function Ensure-PluginMarkerFresh {
     $sessionFile = Join-Path $cacheDir 'session-state.yaml'
 
     try {
+        $snapshotForRetry = $null
+        try {
+            $snapshotForRetry = Get-MarkerFileSnapshot -StartDir $start
+        } catch {
+            $snapshotForRetry = $null
+        }
+
         if (-not (Test-Path -LiteralPath $sessionFile)) {
+            if (Test-PluginNoSessionRetrySuppressed -CacheDir $cacheDir -Snapshot $snapshotForRetry) {
+                return $false
+            }
             Start-PluginSession -StartPath $start | Out-Null
         }
 
@@ -239,11 +545,21 @@ function Ensure-PluginMarkerFresh {
         }
 
         $state = Read-McpYamlObject -Path $sessionFile
-        if ([string]$state['status'] -ne 'verified') {
-            return $false
-        }
+        if (-not (Test-PluginSessionStateValid -State $state)) {
+            if (Test-PluginNoSessionRetrySuppressed -CacheDir $cacheDir -Snapshot $snapshotForRetry) {
+                return $false
+            }
+            Start-PluginSession -StartPath $start | Out-Null
+            if (-not (Test-Path -LiteralPath $sessionFile)) {
+                return $false
+            }
 
-        $snapshot = Get-MarkerFileSnapshot -StartDir $start
+            $state = Read-McpYamlObject -Path $sessionFile
+            if (-not (Test-PluginSessionStateValid -State $state)) {
+                return $false
+            }
+        }
+        $snapshot = if ($snapshotForRetry) { $snapshotForRetry } else { Get-MarkerFileSnapshot -StartDir $start }
         $cachedPath = [string]$state['markerFilePath']
         $cachedWriteUtc = [string]$state['markerLastWriteUtc']
 
@@ -252,7 +568,7 @@ function Ensure-PluginMarkerFresh {
             $state = Read-McpYamlObject -Path $sessionFile
         }
 
-        return ([string]$state['status'] -eq 'verified')
+        return (Test-PluginSessionStateValid -State $state)
     } catch {
         $untrustedState = [ordered]@{
             status = 'MCP_UNTRUSTED'
@@ -285,9 +601,23 @@ function Open-PluginTurn {
         }
     }
 
-    if ((Get-YamlScalar -Path $sessionFile -Key 'status') -ne 'verified') {
-        Write-PluginJson ([ordered]@{ hookSpecificOutput = [ordered]@{ hookEventName = 'UserPromptSubmit'; status = 'no-session' } })
-        return
+    $openSessionState = if (Test-Path -LiteralPath $sessionFile) { Read-McpYamlObject -Path $sessionFile } else { $null }
+    if (-not (Test-PluginSessionStateValid -State $openSessionState)) {
+        $recovery = Invoke-PluginNoSessionRecovery -CacheDir $cacheDir -SessionFile $sessionFile -StartPath $startPath
+        $openSessionState = if (Test-Path -LiteralPath $sessionFile) { Read-McpYamlObject -Path $sessionFile } else { $null }
+        if (-not (Test-PluginSessionStateValid -State $openSessionState)) {
+            Write-PluginJson ([ordered]@{
+                hookSpecificOutput = [ordered]@{
+                    hookEventName = 'UserPromptSubmit'
+                    status = 'no-session'
+                    recoveryStatus = [string]$recovery['status']
+                    healthStatus = [string]$recovery['healthStatus']
+                    failsafePath = [string]$recovery['failsafePath']
+                    message = 'MCP session unavailable after health recovery. Continue user work with degraded failsafe session logging; retry session creation after AGENTS-README-FIRST.yaml marker timestamp changes.'
+                }
+            })
+            return
+        }
     }
 
     $payload = Read-HookInput
@@ -310,30 +640,44 @@ function Open-PluginTurn {
         queryTitle = $title
         queryText = $prompt
     })
-    Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml | Out-Null
+    $beginOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml
+    if ($script:LastPluginReplExitCode -ne 0) {
+        Write-PluginJson ([ordered]@{
+            hookSpecificOutput = [ordered]@{
+                hookEventName = 'UserPromptSubmit'
+                status = 'turn-open-failed'
+                turnRequestId = $turnRequestId
+                reason = 'workflow.sessionlog.beginTurn failed'
+                output = (($beginOutput | Out-String).Trim())
+            }
+        })
+        return
+    }
 
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
-    $turnState = [ordered]@{
-        turnRequestId = $turnRequestId
-        queryTitle = $title
-        openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
-        status = 'in_progress'
-        codeEdits = 0
-        lastBuildStatus = 'unknown'
-        auditActions = 0
-        auditFiles = 0
-        auditDialog = 0
-        auditDecisions = 0
-        queryText = $prompt
+    if (-not (Test-Path -LiteralPath $turnFile)) {
+        Write-PluginJson ([ordered]@{
+            hookSpecificOutput = [ordered]@{
+                hookEventName = 'UserPromptSubmit'
+                status = 'turn-open-failed'
+                turnRequestId = $turnRequestId
+                reason = 'workflow.sessionlog.beginTurn did not create current-turn.yaml'
+            }
+        })
+        return
     }
-    if ($sessionId) {
-        $turnState['sessionId'] = $sessionId
+    $openedRequestId = Get-YamlScalar -Path $turnFile -Key 'turnRequestId'
+    if ($openedRequestId -ne $turnRequestId) {
+        Write-PluginJson ([ordered]@{
+            hookSpecificOutput = [ordered]@{
+                hookEventName = 'UserPromptSubmit'
+                status = 'turn-open-failed'
+                turnRequestId = $turnRequestId
+                reason = "workflow.sessionlog.beginTurn opened '$openedRequestId' instead of '$turnRequestId'"
+            }
+        })
+        return
     }
-    if ($markerSnapshot) {
-        $turnState['markerFilePath'] = $markerSnapshot.markerFilePath
-        $turnState['markerLastWriteUtc'] = $markerSnapshot.markerLastWriteUtc
-    }
-    Write-McpYamlObject -Path $turnFile -Document $turnState
 
     Write-PluginJson ([ordered]@{
         hookSpecificOutput = [ordered]@{
@@ -389,8 +733,16 @@ function Close-PluginTurnIfNeeded {
         $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
             response = $response
         })
-        Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml | Out-Null
-        Set-YamlScalar -Path $turnFile -Key 'status' -Value 'completed'
+        $completeOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
+        if ($script:LastPluginReplExitCode -ne 0) {
+            Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn failed; current turn remains in_progress'; output = (($completeOutput | Out-String).Trim()) })
+            return
+        }
+        $status = Get-YamlScalar -Path $turnFile -Key 'status'
+        if ($status -ne 'completed') {
+            Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn did not mark the current turn completed' })
+            return
+        }
     }
 
     $edits = [int]((Get-YamlScalar -Path $turnFile -Key 'codeEdits') ?? '0')

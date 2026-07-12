@@ -478,6 +478,22 @@ public sealed class RequirementsClientTests
         Assert.Equal(HttpMethod.Get, handler.LastRequest.Method);
     }
 
+
+    [Fact]
+    public async System.Threading.Tasks.Task GenerateAsync_WikiError_IncludesStructuredStage()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.Conflict,
+            """{"error":"transaction coordinator degraded","stage":"transaction"}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var ex = await Assert.ThrowsAsync<McpConflictException>(
+            () => client.GenerateAsync("all", "wiki", cancellationToken: TestContext.Current.CancellationToken));
+
+        Assert.Contains("transaction coordinator degraded", ex.Message, StringComparison.Ordinal);
+        Assert.Contains("stage: transaction", ex.Message, StringComparison.Ordinal);
+    }
     [Fact]
     public async System.Threading.Tasks.Task IngestAsync_PostsMarkdownPayload()
     {

@@ -34,14 +34,35 @@ $requirementClientMethods = @(
     'client.Requirements.GetEffectiveRequirementsAsync'
 )
 
+function Test-McpStatusSessionState {
+    param([Parameter(Mandatory)][string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) { return $false }
+
+    try {
+        $statusLine = Select-String -LiteralPath $Path -Pattern '^status:\s*verified\s*$' | Select-Object -First 1
+        if (-not $statusLine) { return $false }
+
+        $sessionLine = Select-String -LiteralPath $Path -Pattern '^sessionId:\s*(?<value>.+)$' | Select-Object -First 1
+        if (-not $sessionLine) { return $false }
+
+        $sessionId = [string]$sessionLine.Matches[0].Groups['value'].Value
+        $sessionId = $sessionId.Trim().Trim('''').Trim('"')
+        return -not [string]::IsNullOrWhiteSpace($sessionId)
+    } catch {
+        return $false
+    }
+}
+
+$hasSession = Test-McpStatusSessionState -Path $sessionFile
 $status = [ordered]@{
-    status = if (Test-Path -LiteralPath $sessionFile) { 'available' } else { 'no-session' }
+    status = if ($hasSession) { 'available' } else { 'no-session' }
     agent = $env:MCP_AGENT_NAME
     namespaces = $namespaces
     requirementMethods = $requirementMethods
     requirementClientMethods = $requirementClientMethods
     cacheDir = $cacheDir
-    hasSession = Test-Path -LiteralPath $sessionFile
+    hasSession = $hasSession
     hasCurrentTurn = Test-Path -LiteralPath $turnFile
     pendingCount = if (Test-Path -LiteralPath $pendingDir) { @(Get-ChildItem -LiteralPath $pendingDir -Filter '*.yaml' -File -ErrorAction SilentlyContinue).Count } else { 0 }
 }

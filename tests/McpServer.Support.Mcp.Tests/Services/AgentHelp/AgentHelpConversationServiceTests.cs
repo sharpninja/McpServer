@@ -169,6 +169,154 @@ public sealed class AgentHelpConversationServiceTests
     }
 
     [Fact]
+    public async Task SubmitTurnAsync_StrategyPlanOnlyOutput_ReturnsIncompleteAndRetainsProgressOnly()
+    {
+        var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
+        var service = CreateService(
+            new FakeAgentExecutionStrategy(
+                "test-strategy",
+                new AgentCliResult
+                {
+                    State = AgentCliResultState.Success,
+                    Body = "Plan: inspect the marker, check the TODO state, then provide the final recommendation.",
+                }),
+            useEchoHelperFallback: false);
+        var created = await service.CreateSessionAsync(
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await service.SubmitTurnAsync(
+            created.SessionId,
+            new AgentHelpTurnRequest { UserMessage = "What is the fix?" },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.Equal("incomplete", result!.Status);
+        Assert.Null(result.AssistantDisplayText);
+        Assert.Contains("FINAL ANSWER", result.Error, StringComparison.OrdinalIgnoreCase);
+
+        var transcript = await service.GetTranscriptAsync(created.SessionId, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.NotNull(transcript);
+        Assert.DoesNotContain(
+            transcript!.Items,
+            item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(item.Category, "transcript", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(
+            transcript.Items,
+            item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(item.Category, "progress", StringComparison.OrdinalIgnoreCase)
+                && item.Text.Contains("Plan: inspect", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public async Task SubmitTurnAsync_StrategyEmptyFinalAnswerMarker_ReturnsIncomplete()
+    {
+        var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
+        var service = CreateService(
+            new FakeAgentExecutionStrategy(
+                "test-strategy",
+                new AgentCliResult
+                {
+                    State = AgentCliResultState.Success,
+                    Body = "I inspected the issue.\nFINAL ANSWER:\n   ",
+                }),
+            useEchoHelperFallback: false);
+        var created = await service.CreateSessionAsync(
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await service.SubmitTurnAsync(
+            created.SessionId,
+            new AgentHelpTurnRequest { UserMessage = "What is the fix?" },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.Equal("incomplete", result!.Status);
+        Assert.Null(result.AssistantDisplayText);
+    }
+
+    [Fact]
+    public async Task SubmitTurnAsync_StrategyFailure_PersistsErrorTranscript()
+    {
+        var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
+        var service = CreateService(
+            new FakeAgentExecutionStrategy(
+                "test-strategy",
+                new AgentCliResult
+                {
+                    State = AgentCliResultState.Error,
+                    Stderr = "helper timed out after 00:02:00",
+                }),
+            useEchoHelperFallback: false);
+        var created = await service.CreateSessionAsync(
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await service.SubmitTurnAsync(
+            created.SessionId,
+            new AgentHelpTurnRequest { UserMessage = "Run the helper." },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.Equal("error", result!.Status);
+
+        var transcript = await service.GetTranscriptAsync(created.SessionId, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+        Assert.NotNull(transcript);
+        Assert.Contains(
+            transcript!.Items,
+            item => string.Equals(item.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                && string.Equals(item.Category, "error", StringComparison.OrdinalIgnoreCase)
+                && item.Text.Contains("helper timed out", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task SubmitTurnAsync_StrategyReceivesFiniteHelperTimeout()
+    {
+        var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
+        var strategy = new CapturingAgentExecutionStrategy(
+            "test-strategy",
+            new AgentCliResult
+            {
+                State = AgentCliResultState.Success,
+                Body = "FINAL ANSWER: use the bounded helper timeout.",
+            });
+        var service = CreateService(
+            strategy,
+            useEchoHelperFallback: false,
+            configureOptions: options => options.HelperTimeout = TimeSpan.FromSeconds(75));
+        var created = await service.CreateSessionAsync(
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await service.SubmitTurnAsync(
+            created.SessionId,
+            new AgentHelpTurnRequest { UserMessage = "Check timeout wiring." },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.Equal("completed", result!.Status);
+        Assert.Equal(TimeSpan.FromSeconds(75), strategy.LastRequest?.Options.Timeout);
+    }
+
+    [Fact]
     public async Task SubmitTurnAsync_StrategyFinalAnswerMarker_PersistsFinalAnswerOnly()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
@@ -211,7 +359,8 @@ public sealed class AgentHelpConversationServiceTests
 
     private static AgentHelpConversationService CreateService(
         IAgentExecutionStrategy? strategy = null,
-        bool useEchoHelperFallback = true)
+        bool useEchoHelperFallback = true,
+        Action<AgentHelpOptions>? configureOptions = null)
     {
         var options = new AgentHelpOptions
         {
@@ -220,6 +369,7 @@ public sealed class AgentHelpConversationServiceTests
             GuardEnabled = true,
             CorpusBootstrapEnabled = false,
         };
+        configureOptions?.Invoke(options);
         var monitor = new AgentHelpTestOptionsMonitor<AgentHelpOptions>(options);
         var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "." });
         var primaryTodo = Substitute.For<ITodoService>();
@@ -255,14 +405,28 @@ public sealed class AgentHelpConversationServiceTests
         public IAgentExecutionStrategy Resolve(string? strategyName) => strategy;
     }
 
-    private sealed class FakeAgentExecutionStrategy(string name, AgentCliResult result) : IAgentExecutionStrategy
+    private class FakeAgentExecutionStrategy(string name, AgentCliResult result) : IAgentExecutionStrategy
     {
         public string Name { get; } = name;
 
-        public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+        public virtual ValueTask<IAgentExecutionSession> CreateSessionAsync(
             AgentExecutionSessionRequest request,
             CancellationToken cancellationToken = default)
             => ValueTask.FromResult<IAgentExecutionSession>(new FakeAgentExecutionSession(result));
+    }
+
+    private sealed class CapturingAgentExecutionStrategy(string name, AgentCliResult result)
+        : FakeAgentExecutionStrategy(name, result)
+    {
+        public AgentExecutionSessionRequest? LastRequest { get; private set; }
+
+        public override ValueTask<IAgentExecutionSession> CreateSessionAsync(
+            AgentExecutionSessionRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            LastRequest = request;
+            return base.CreateSessionAsync(request, cancellationToken);
+        }
     }
 
     private sealed class FakeAgentExecutionSession(AgentCliResult result) : IAgentExecutionSession

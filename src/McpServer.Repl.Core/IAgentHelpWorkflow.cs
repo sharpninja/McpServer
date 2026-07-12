@@ -22,4 +22,9 @@ public interface IAgentHelpWorkflow
     Task<AgentHelpSessionStatusDto> GetStatusAsync(
         string sessionId,
         CancellationToken cancellationToken = default);
+
+    /// <summary>Gets transcript entries for an Agent Help session.</summary>
+    Task<AgentHelpTranscriptResponse> GetTranscriptAsync(
+        string sessionId,
+        CancellationToken cancellationToken = default);
 }

@@ -96,4 +96,27 @@ public sealed partial class FwhMcpTools
             return JsonSerializer.Serialize(new { error = ex.Message }, s_camelCaseOptions);
         }
     }
+
+    /// <summary>FR-MCP-HELP-006: Get Agent Help session transcript entries.</summary>
+    [McpServerTool(Name = "agent_help_get_transcript"), Description("Get transcript entries for an Agent Help session.")]
+    public async Task<string> AgentHelpGetTranscript(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Agent Help session id")] string sessionId,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _agentHelpService.GetTranscriptAsync(sessionId, cancellationToken).ConfigureAwait(false);
+            if (result is null)
+                return JsonSerializer.Serialize(new { error = $"Agent Help session '{sessionId}' not found." }, s_camelCaseOptions);
+
+            return JsonSerializer.Serialize(result, s_camelCaseOptions);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message }, s_camelCaseOptions);
+        }
+    }
 }

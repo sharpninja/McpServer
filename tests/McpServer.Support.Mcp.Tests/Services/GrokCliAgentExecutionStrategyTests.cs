@@ -47,6 +47,21 @@ public sealed class GrokCliAgentExecutionStrategyTests
             GrokCliAgentExecutionStrategy.ResolveGrokExecutable(@"C:\Users\kingd\.grok\bin\grok.exe"));
     }
 
+    /// <summary>TEST-MCP-BUGTRIAGE-042: Grok one-shot forwards the configured model argument.</summary>
+    [Fact]
+    public void BuildGrokArgumentList_ConfiguredModel_IncludesModelFlag()
+    {
+        var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
+            workingDirectory: @"F:\GitHub\McpServer",
+            promptFilePath: @"C:\temp\grok-prompt.txt",
+            model: "grok-4.3");
+
+        Assert.Contains("--model", args);
+        Assert.Contains("grok-4.3", args);
+        var orderedArgs = args.ToArray();
+        Assert.True(Array.IndexOf(orderedArgs, "--model") < Array.IndexOf(orderedArgs, "--output-format"));
+    }
+
     /// <summary>The one-shot command line carries the prompt file, working directory, and plan/effort flags in order.</summary>
     [Fact]
     public void BuildGrokArgumentList_ContainsExpectedFlagsInOrder()

@@ -2,9 +2,9 @@
 set -uo pipefail
 
 # Shared cache scoping for plugin runtime state. Runtime files live under:
-#   cache/workspaces/<workspace-key>/sessions/<session-key>/
+#   .mcpServer/<agent>/
 # Bootstrap-only state uses:
-#   cache/workspaces/<workspace-key>/bootstrap/
+#   .mcpServer/<agent>/
 
 CACHE_SCOPE_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -155,25 +155,28 @@ cache_scope_init() {
     MCP_PLUGIN_CACHE_ROOT="${base_cache}"
     MCP_PLUGIN_WORKSPACE_PATH="$(cache_scope_workspace_path "$start_dir")"
     MCP_PLUGIN_WORKSPACE_KEY="$(cache_scope_workspace_key "$MCP_PLUGIN_WORKSPACE_PATH")"
-    MCP_PLUGIN_WORKSPACE_CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}/workspaces/${MCP_PLUGIN_WORKSPACE_KEY}"
 
-    local session_id="${MCP_SESSION_ID:-}"
-    if [ -z "$session_id" ] && [ -f "${MCP_PLUGIN_WORKSPACE_CACHE_DIR}/active-session" ]; then
-        session_id="$(head -1 "${MCP_PLUGIN_WORKSPACE_CACHE_DIR}/active-session" 2>/dev/null | tr -d '\r')"
+    if [ -n "${MCP_CACHE_DIR_OVERRIDE:-}" ]; then
+        MCP_PLUGIN_WORKSPACE_CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}"
+        MCP_PLUGIN_SESSION_ID="${MCP_SESSION_ID:-}"
+        MCP_PLUGIN_SESSION_KEY="${MCP_PLUGIN_SESSION_ID:-override}"
+        MCP_PLUGIN_SESSION_CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}"
+        CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}"
+        REPL_INVOKE_CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}"
+        PENDING_DIR="${CACHE_DIR}/pending"
+        mkdir -p "$CACHE_DIR"
+        export MCP_PLUGIN_CACHE_ROOT MCP_PLUGIN_WORKSPACE_PATH MCP_PLUGIN_WORKSPACE_KEY MCP_PLUGIN_WORKSPACE_CACHE_DIR
+        export MCP_PLUGIN_SESSION_ID MCP_PLUGIN_SESSION_KEY MCP_PLUGIN_SESSION_CACHE_DIR
+        export CACHE_DIR REPL_INVOKE_CACHE_DIR PENDING_DIR
+        return 0
     fi
 
-    if [ -n "$session_id" ]; then
-        MCP_PLUGIN_SESSION_ID="$session_id"
-        MCP_PLUGIN_SESSION_KEY="$(cache_scope_session_key "$session_id")"
-        MCP_PLUGIN_SESSION_CACHE_DIR="${MCP_PLUGIN_WORKSPACE_CACHE_DIR}/sessions/${MCP_PLUGIN_SESSION_KEY}"
-    else
-        MCP_PLUGIN_SESSION_ID=""
-        MCP_PLUGIN_SESSION_KEY="bootstrap"
-        MCP_PLUGIN_SESSION_CACHE_DIR="${MCP_PLUGIN_WORKSPACE_CACHE_DIR}/bootstrap"
-    fi
-
-    CACHE_DIR="$MCP_PLUGIN_SESSION_CACHE_DIR"
-    REPL_INVOKE_CACHE_DIR="$MCP_PLUGIN_SESSION_CACHE_DIR"
+    MCP_PLUGIN_WORKSPACE_CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}"
+    MCP_PLUGIN_SESSION_ID="${MCP_SESSION_ID:-}"
+    MCP_PLUGIN_SESSION_KEY="${MCP_PLUGIN_SESSION_ID:-canonical}"
+    MCP_PLUGIN_SESSION_CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}"
+    CACHE_DIR="$MCP_PLUGIN_CACHE_ROOT"
+    REPL_INVOKE_CACHE_DIR="$MCP_PLUGIN_CACHE_ROOT"
     PENDING_DIR="${CACHE_DIR}/pending"
 
     mkdir -p "$CACHE_DIR"
@@ -192,9 +195,9 @@ cache_scope_select_session() {
 
     MCP_PLUGIN_SESSION_ID="$session_id"
     MCP_PLUGIN_SESSION_KEY="$(cache_scope_session_key "$session_id")"
-    MCP_PLUGIN_SESSION_CACHE_DIR="${MCP_PLUGIN_WORKSPACE_CACHE_DIR}/sessions/${MCP_PLUGIN_SESSION_KEY}"
-    CACHE_DIR="$MCP_PLUGIN_SESSION_CACHE_DIR"
-    REPL_INVOKE_CACHE_DIR="$MCP_PLUGIN_SESSION_CACHE_DIR"
+    MCP_PLUGIN_SESSION_CACHE_DIR="${MCP_PLUGIN_CACHE_ROOT}"
+    CACHE_DIR="$MCP_PLUGIN_CACHE_ROOT"
+    REPL_INVOKE_CACHE_DIR="$MCP_PLUGIN_CACHE_ROOT"
     PENDING_DIR="${CACHE_DIR}/pending"
 
     mkdir -p "$CACHE_DIR"

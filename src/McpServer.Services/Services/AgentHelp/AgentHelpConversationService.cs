@@ -181,60 +181,89 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             return null;
 
         await state.Gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        var turnId = state.LastTurnId ?? "turn-0000";
+        var sw = Stopwatch.StartNew();
+        var startedTurn = false;
+        AgentHelpTurnResponse? result = null;
         try
         {
             if (state.Terminated)
             {
-                return new AgentHelpTurnResponse
+                result = new AgentHelpTurnResponse
                 {
                     SessionId = sessionId,
-                    TurnId = state.LastTurnId ?? "turn-0000",
+                    TurnId = turnId,
                     Status = "terminated_guardrail",
                     Error = "Session was terminated due to a guardrail violation.",
                     LatencyMs = 0,
                 };
             }
-
-            if (state.IsTurnActive)
+            else if (state.IsTurnActive)
             {
-                return new AgentHelpTurnResponse
+                result = new AgentHelpTurnResponse
                 {
                     SessionId = sessionId,
-                    TurnId = state.LastTurnId ?? "turn-0000",
+                    TurnId = turnId,
                     Status = "busy",
                     AssistantDisplayText = "Another help turn is already running for this session.",
                     Error = "Session already has an active turn.",
                     LatencyMs = 0,
                 };
             }
-
-            state.IsTurnActive = true;
-            state.Status = "thinking";
-            state.LastError = null;
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
-            state.TurnCounter++;
-            var turnId = $"turn-{state.TurnCounter.ToString("0000", CultureInfo.InvariantCulture)}";
-            state.LastTurnId = turnId;
-
-            var sw = Stopwatch.StartNew();
-            var result = await ExecuteTurnCoreAsync(state, turnId, request.UserMessage, cancellationToken)
-                .ConfigureAwait(false);
-            sw.Stop();
-
-            state.IsTurnActive = false;
-            state.Status = result.Status is "completed" ? "idle" : result.Status;
-            state.LastError = result.Error;
-            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
-
-            return result with
+            else
             {
-                LatencyMs = (int)Math.Clamp(sw.ElapsedMilliseconds, 0, int.MaxValue),
+                state.IsTurnActive = true;
+                startedTurn = true;
+                state.Status = "thinking";
+                state.LastError = null;
+                state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+                state.TurnCounter++;
+                turnId = $"turn-{state.TurnCounter.ToString("0000", CultureInfo.InvariantCulture)}";
+                state.LastTurnId = turnId;
+
+                result = await ExecuteTurnCoreAsync(state, turnId, request.UserMessage, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            const string error = "Agent Help turn was cancelled or timed out.";
+            result = new AgentHelpTurnResponse
+            {
+                SessionId = sessionId,
+                TurnId = turnId,
+                Status = "error",
+                AssistantDisplayText = error,
+                Error = error,
+                LatencyMs = 0,
             };
+
+            if (startedTurn)
+                await AppendAssistantErrorTranscriptAsync(state, turnId, error, CancellationToken.None).ConfigureAwait(false);
         }
         finally
         {
+            sw.Stop();
+            if (result is not null)
+            {
+                result = result with
+                {
+                    LatencyMs = (int)Math.Clamp(sw.ElapsedMilliseconds, 0, int.MaxValue),
+                };
+            }
+
+            if (startedTurn)
+            {
+                state.IsTurnActive = false;
+                state.Status = result?.Status is "completed" ? "idle" : result?.Status ?? "error";
+                state.LastError = result?.Error;
+                state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            }
+
             state.Gate.Release();
         }
+
+        return result;
     }
 
     /// <inheritdoc />
@@ -487,6 +516,9 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
 
         if (!string.Equals(helperResult.Status, "completed", StringComparison.Ordinal))
         {
+            if (!string.IsNullOrWhiteSpace(helperResult.Error))
+                await AppendAssistantErrorTranscriptAsync(state, turnId, helperResult.Error, cancellationToken).ConfigureAwait(false);
+
             return new AgentHelpTurnResponse
             {
                 SessionId = state.SessionId,
@@ -521,6 +553,26 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             GuardResult = guardResult,
             LatencyMs = 0,
         };
+    }
+
+    private async Task AppendAssistantErrorTranscriptAsync(
+        AgentHelpSessionState state,
+        string turnId,
+        string error,
+        CancellationToken cancellationToken)
+    {
+        await AppendTranscriptAsync(
+            state,
+            new AgentHelpTranscriptEntry
+            {
+                TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                SessionId = state.SessionId,
+                TurnId = turnId,
+                Role = "assistant",
+                Category = "error",
+                Text = error,
+            },
+            cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<string> RecordBlockedTurnAsync(
@@ -596,6 +648,13 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
                         return AgentHelpHelperResult.Completed(finalAnswer.Text, finalAnswer.ProgressText);
 
                     var trimmedBody = result.Body.Trim();
+                    if (ContainsFinalAnswerMarker(result.Body))
+                    {
+                        return AgentHelpHelperResult.Incomplete(
+                            $"Agent Help helper produced '{AgentHelpPromptBuilder.FinalAnswerMarker}' without a final answer body.",
+                            trimmedBody);
+                    }
+
                     if (LooksLikeProgressOnlyOutput(trimmedBody))
                     {
                         return AgentHelpHelperResult.Incomplete(
@@ -646,6 +705,10 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
                 string.IsNullOrWhiteSpace(progressText) ? null : progressText);
     }
 
+    private static bool ContainsFinalAnswerMarker(string rawOutput) =>
+        !string.IsNullOrWhiteSpace(rawOutput)
+        && rawOutput.IndexOf(AgentHelpPromptBuilder.FinalAnswerMarker, StringComparison.OrdinalIgnoreCase) >= 0;
+
     private static bool LooksLikeProgressOnlyOutput(string rawOutput)
     {
         if (string.IsNullOrWhiteSpace(rawOutput))
@@ -665,6 +728,12 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
             || lower.StartsWith("following workspace bootstrap", StringComparison.Ordinal)
             || lower.StartsWith("bootstrapping ", StringComparison.Ordinal)
             || lower.StartsWith("bootstrap ", StringComparison.Ordinal)
+            || lower.StartsWith("plan:", StringComparison.Ordinal)
+            || lower.StartsWith("plan -", StringComparison.Ordinal)
+            || lower.StartsWith("here is the plan", StringComparison.Ordinal)
+            || lower.StartsWith("here's the plan", StringComparison.Ordinal)
+            || lower.StartsWith("i need to ", StringComparison.Ordinal)
+            || lower.StartsWith("i can help by ", StringComparison.Ordinal)
             || lower.Contains(" then answering from the evidence", StringComparison.Ordinal)
             || lower.Contains("bootstrap mcp health", StringComparison.Ordinal);
     }
@@ -706,7 +775,7 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
                 : state.AgentPath,
             Model = string.IsNullOrWhiteSpace(state.AgentModel) ? opts.HelperModel : state.AgentModel,
             Silent = true,
-            Timeout = Timeout.InfiniteTimeSpan,
+            Timeout = opts.HelperTimeout,
             WorkingDirectory = state.WorkspacePath,
         };
 

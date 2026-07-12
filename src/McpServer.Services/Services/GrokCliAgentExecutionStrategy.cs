@@ -46,20 +46,39 @@ internal sealed class GrokCliAgentExecutionStrategy(
 
     /// <summary>
     /// Builds the Grok CLI one-shot argument list: prompt file, working directory, plan permission
-    /// mode, plain output, and highest effort/reasoning-effort.
+    /// mode, optional model, plain output, and highest effort/reasoning-effort.
     /// </summary>
     /// <param name="workingDirectory">The working directory passed via <c>--cwd</c>.</param>
     /// <param name="promptFilePath">The temp file passed via <c>--prompt-file</c>.</param>
+    /// <param name="model">Optional Grok model name passed via <c>--model</c>.</param>
     /// <returns>The ordered argument list.</returns>
-    internal static IReadOnlyList<string> BuildGrokArgumentList(string workingDirectory, string promptFilePath) =>
-    [
-        "--prompt-file", promptFilePath,
-        "--cwd", workingDirectory,
-        "--permission-mode", "plan",
-        "--output-format", "plain",
-        "--effort", HighestEffort,
-        "--reasoning-effort", HighestEffort,
-    ];
+    internal static IReadOnlyList<string> BuildGrokArgumentList(
+        string workingDirectory,
+        string promptFilePath,
+        string? model = null)
+    {
+        var arguments = new List<string>
+        {
+            "--prompt-file", promptFilePath,
+            "--cwd", workingDirectory,
+            "--permission-mode", "plan",
+        };
+
+        if (!string.IsNullOrWhiteSpace(model))
+        {
+            arguments.Add("--model");
+            arguments.Add(model.Trim());
+        }
+
+        arguments.AddRange(
+        [
+            "--output-format", "plain",
+            "--effort", HighestEffort,
+            "--reasoning-effort", HighestEffort,
+        ]);
+
+        return arguments;
+    }
 
     /// <inheritdoc />
     public ValueTask<IAgentExecutionSession> CreateSessionAsync(
@@ -173,6 +192,11 @@ internal sealed class GrokCliAgentExecutionStrategy(
             var stderrBuilder = new StringBuilder();
             var stdoutTask = Task.CompletedTask;
             var stderrTask = Task.CompletedTask;
+            using var waitCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            var timeout = request.Options.Timeout;
+            if (timeout > TimeSpan.Zero && timeout != Timeout.InfiniteTimeSpan)
+                waitCts.CancelAfter(timeout);
+
             try
             {
                 stdoutTask = CaptureStreamAsync(
@@ -187,7 +211,7 @@ internal sealed class GrokCliAgentExecutionStrategy(
                     stderrBuilder,
                     request.Options.AgentOutputReceivedAsync,
                     CancellationToken.None);
-                await _process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+                await _process.WaitForExitAsync(waitCts.Token).ConfigureAwait(false);
                 await WaitForCaptureAsync(stdoutTask).ConfigureAwait(false);
                 await WaitForCaptureAsync(stderrTask).ConfigureAwait(false);
 
@@ -215,7 +239,7 @@ internal sealed class GrokCliAgentExecutionStrategy(
                     ExitCode = _process.ExitCode,
                 };
             }
-            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            catch (OperationCanceledException) when (waitCts.IsCancellationRequested)
             {
                 if (_process is { HasExited: false })
                     _process.Kill();
@@ -225,7 +249,7 @@ internal sealed class GrokCliAgentExecutionStrategy(
                 var stdout = stdoutBuilder.ToString();
                 var stderr = AppendProcessError(
                     stderrBuilder.ToString(),
-                    "error: Grok CLI run was cancelled or timed out.");
+                    BuildGrokCancellationMessage(request.Options.Timeout));
                 return new AgentCliResult
                 {
                     State = AgentCliResultState.Error,
@@ -260,7 +284,7 @@ internal sealed class GrokCliAgentExecutionStrategy(
                 RedirectStandardError = true,
             };
 
-            foreach (var argument in BuildGrokArgumentList(workingDirectory, promptFilePath))
+            foreach (var argument in BuildGrokArgumentList(workingDirectory, promptFilePath, options.Model))
                 psi.ArgumentList.Add(argument);
 
             processEnvironment.ApplyAll(psi, options.RunAs, options.GitHubToken);
@@ -368,6 +392,11 @@ internal sealed class GrokCliAgentExecutionStrategy(
                 // The process streams can close while cancellation is killing the process.
             }
         }
+
+        private static string BuildGrokCancellationMessage(TimeSpan timeout) =>
+            timeout > TimeSpan.Zero && timeout != Timeout.InfiniteTimeSpan
+                ? $"error: Grok CLI run was cancelled or timed out after {timeout}."
+                : "error: Grok CLI run was cancelled or timed out.";
 
         private static string AppendProcessError(string? current, string error)
         {

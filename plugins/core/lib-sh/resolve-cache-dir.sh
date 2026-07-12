@@ -9,10 +9,10 @@
 # Precedence:
 #   1. $MCP_CACHE_DIR_OVERRIDE    - explicit override (any path).
 #   2. $PLUGIN_ROOT_OVERRIDE/cache - legacy test hook (kept for bats suites).
-#   3. workspace env/cache        - $MCPSERVER_WORKSPACE_PATH or
+#   3. workspace env/.mcpServer/<agent>        - $MCPSERVER_WORKSPACE_PATH or
 #                                   $MCP_WORKSPACE_PATH when it names an
 #                                   existing directory (host-neutral).
-#   4. <markerDir>/cache          - workspace resolved by walking up for
+#   4. <markerDir>/.mcpServer/<agent>          - workspace resolved by walking up for
 #                                   AGENTS-README-FIRST.yaml. Production path.
 #   5. $MCP_PLUGIN_ROOT/cache     - last-resort fallback (legacy
 #                                   $CLAUDE_PLUGIN_ROOT honored).
@@ -27,6 +27,31 @@ if type resolve_cache_dir >/dev/null 2>&1; then
 fi
 
 _RESOLVE_CACHE_DIR_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+resolve_cache_agent_key() {
+    local agent="${MCP_AGENT_NAME:-${PLUGIN_AGENT_NAME:-${PLUGIN_AGENT_DEFAULT:-${MCP_PLUGIN_HOST:-default}}}}"
+    local normalized
+    normalized="$(printf '%s' "$agent" | tr '[:upper:]' '[:lower:]')"
+
+    case "$normalized" in
+        claude|claudecode|claude-code) printf '%s' 'claude'; return 0 ;;
+        claudecowork|claude-cowork) printf '%s' 'cowork'; return 0 ;;
+        codex) printf '%s' 'codex'; return 0 ;;
+        copilot) printf '%s' 'copilot'; return 0 ;;
+        grok|grokcode|grok-code) printf '%s' 'grok'; return 0 ;;
+        cline|cline-v2) printf '%s' 'cline'; return 0 ;;
+        opencode|open-code) printf '%s' 'opencode'; return 0 ;;
+    esac
+
+    normalized="$(printf '%s' "$normalized" | sed 's/[^a-z0-9][^a-z0-9]*/-/g; s/^-//; s/-$//')"
+    [ -n "$normalized" ] || normalized='default'
+    printf '%s' "$normalized"
+}
+
+resolve_workspace_cache_dir() {
+    local workspace_path="$1"
+    printf '%s/.mcpServer/%s' "$workspace_path" "$(resolve_cache_agent_key)"
+}
 
 resolve_cache_dir() {
     if [ -n "${MCP_CACHE_DIR_OVERRIDE:-}" ]; then
@@ -43,7 +68,7 @@ resolve_cache_dir() {
     # path is supplied via env and exists, its cache dir wins over walking.
     local configured_workspace="${MCPSERVER_WORKSPACE_PATH:-${MCP_WORKSPACE_PATH:-}}"
     if [ -n "$configured_workspace" ] && [ -d "$configured_workspace" ]; then
-        printf '%s/cache' "$configured_workspace"
+        resolve_workspace_cache_dir "$configured_workspace"
         return 0
     fi
 
@@ -64,7 +89,7 @@ resolve_cache_dir() {
     if type find_marker_file >/dev/null 2>&1; then
         local marker_file
         if marker_file=$(find_marker_file "$start_dir" 2>/dev/null); then
-            printf '%s/cache' "$(dirname "$marker_file")"
+            resolve_workspace_cache_dir "$(dirname "$marker_file")"
             return 0
         fi
     fi

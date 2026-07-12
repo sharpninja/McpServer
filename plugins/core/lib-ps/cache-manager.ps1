@@ -20,6 +20,31 @@ if (-not (Get-Command Resolve-McpCacheDir -ErrorAction SilentlyContinue)) {
     . (Join-Path $scriptDir 'resolve-cache-dir.ps1')
 }
 
+function Get-PendingParamsYaml {
+    param([Parameter(Mandatory)][string]$Content)
+
+    $lines = $Content -split "`r?`n"
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        $match = [regex]::Match($lines[$i], '^params:\s*(.*)$')
+        if (-not $match.Success) { continue }
+
+        $inline = $match.Groups[1].Value.Trim()
+        if ($inline -and $inline -ne '{}') { return $inline }
+        if ($inline -eq '{}') { return '' }
+
+        $params = [System.Collections.Generic.List[string]]::new()
+        for ($j = $i + 1; $j -lt $lines.Count; $j++) {
+            $line = $lines[$j]
+            if (-not $line.StartsWith('  ', [StringComparison]::Ordinal)) { break }
+            $params.Add($line.Substring(2))
+        }
+
+        return ($params -join "`n")
+    }
+
+    return ''
+}
+
 $cacheDir = Resolve-McpCacheDir
 $pendingDir = Join-Path $cacheDir 'pending'
 
@@ -61,8 +86,14 @@ retryCount: 0
             if ($retryCount -ge $maxRetries) { continue }
 
             $method = $methodMatch.Groups[1].Value.Trim()
+            $paramsYaml = Get-PendingParamsYaml -Content $content
             try {
-                & "$scriptDir\repl-invoke.ps1" -Method $method | Out-Null
+                if ($paramsYaml) {
+                    & "$scriptDir\repl-invoke.ps1" -Method $method -ParamsYaml $paramsYaml | Out-Null
+                } else {
+                    & "$scriptDir\repl-invoke.ps1" -Method $method | Out-Null
+                }
+
                 Remove-Item $item.FullName -Force
                 $flushed++
             } catch {

@@ -44,6 +44,10 @@ public sealed class AgentHelpOptionsValidator : IValidateOptions<AgentHelpOption
         {
             return ValidateOptionsResult.Fail("AgentHelp MaxTurnsPerSession must be at least 1.");
         }
+        if (options.HelperTimeout <= TimeSpan.Zero || options.HelperTimeout == Timeout.InfiniteTimeSpan)
+        {
+            return ValidateOptionsResult.Fail("AgentHelp HelperTimeout must be a positive finite duration.");
+        }
 
         return ValidateOptionsResult.Success;
     }
