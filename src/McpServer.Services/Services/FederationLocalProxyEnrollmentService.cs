@@ -124,7 +124,7 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
         response.EnsureSuccessStatusCode();
 
         var result = await response.Content
-            .ReadFromJsonAsync<FederationEnrollmentResponse>(cancellationToken)
+            .ReadFromJsonAsync(McpServicesJsonContext.Default.FederationEnrollmentResponse, cancellationToken)
             .ConfigureAwait(false);
         if (result is null || !result.Accepted)
             throw new InvalidOperationException("Federation hub did not accept LocalProxy enrollment.");
@@ -150,11 +150,21 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
     private HttpClient CreateHubClient()
         => _httpClientFactory.CreateClient(FederationProxyService.HttpClientName);
 
-    private HttpRequestMessage CreateHubPostRequest<TRequest>(string requestUri, TRequest request)
+    private HttpRequestMessage CreateHubPostRequest(string requestUri, FederationEnrollmentRequest request)
+        => CreateHubPostRequestCore(
+            requestUri,
+            JsonContent.Create(request, McpServicesJsonContext.Default.FederationEnrollmentRequest));
+
+    private HttpRequestMessage CreateHubPostRequest(string requestUri, FederationHeartbeatRequest request)
+        => CreateHubPostRequestCore(
+            requestUri,
+            JsonContent.Create(request, McpServicesJsonContext.Default.FederationHeartbeatRequest));
+
+    private HttpRequestMessage CreateHubPostRequestCore(string requestUri, HttpContent content)
     {
         var message = new HttpRequestMessage(HttpMethod.Post, requestUri)
         {
-            Content = JsonContent.Create(request),
+            Content = content,
         };
 
         if (!string.IsNullOrWhiteSpace(_registry.HubAccessToken))
@@ -167,13 +177,13 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
         => $"http://{Environment.MachineName}:{_runtimeInfo.ListenPort}";
 
     private string BuildMetadataJson(string cycle)
-        => JsonSerializer.Serialize(new
-        {
-            cycle,
-            machineName = Environment.MachineName,
-            processId = Environment.ProcessId,
-            serverStartedAtUtc = _runtimeInfo.StartedAtUtc,
-        }, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        => JsonSerializer.Serialize(
+            new FederationLocalProxyMetadataPayload(
+                cycle,
+                Environment.MachineName,
+                Environment.ProcessId,
+                _runtimeInfo.StartedAtUtc),
+            McpServicesJsonContext.Default.FederationLocalProxyMetadataPayload);
 
     private async Task<IReadOnlyList<FederationWorkspaceRegistrationRequest>> BuildWorkspaceInventoryAsync(CancellationToken cancellationToken)
     {
@@ -187,13 +197,21 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
                 WorkspaceName = string.IsNullOrWhiteSpace(w.Name) ? Path.GetFileName(w.WorkspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)) : w.Name,
                 WorkspacePath = w.WorkspacePath,
                 IsEnabled = w.IsEnabled,
-                MetadataJson = JsonSerializer.Serialize(new
-                {
-                    isPrimary = w.IsPrimary,
-                    dataDirectory = w.DataDirectory,
-                    tunnelProvider = w.TunnelProvider,
-                }, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+                MetadataJson = JsonSerializer.Serialize(
+                    new FederationWorkspaceMetadataPayload(w.IsPrimary, w.DataDirectory, w.TunnelProvider),
+                    McpServicesJsonContext.Default.FederationWorkspaceMetadataPayload),
             })
             .ToList();
     }
 }
+
+internal sealed record FederationLocalProxyMetadataPayload(
+    string Cycle,
+    string MachineName,
+    int ProcessId,
+    DateTimeOffset ServerStartedAtUtc);
+
+internal sealed record FederationWorkspaceMetadataPayload(
+    bool IsPrimary,
+    string? DataDirectory,
+    string? TunnelProvider);

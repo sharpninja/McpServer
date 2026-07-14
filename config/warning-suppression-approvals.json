@@ -1,0 +1,74 @@
+[
+  {
+    "diagnosticId": "CA1416",
+    "scope": "build/WindowsServiceHelper.cs",
+    "mechanism": "PragmaWarningDisable",
+    "justification": "The helper is Windows-service deployment infrastructure and is intentionally Windows-only.",
+    "owner": "Build",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when service deployment no longer calls Windows-only APIs or the helper is isolated under platform-specific build configuration."
+  },
+  {
+    "diagnosticId": "CA1416",
+    "scope": "build/Build.UpdateService.cs",
+    "mechanism": "PragmaWarningDisable",
+    "justification": "The UpdateService target manages the local Windows service and intentionally uses Windows-only service APIs.",
+    "owner": "Build",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when UpdateService is replaced by a cross-platform deployment path or moved behind platform-specific build configuration."
+  },
+  {
+    "diagnosticId": "CA1416",
+    "scope": "build/Build.TrustedThirdParty.cs",
+    "mechanism": "PragmaWarningDisable",
+    "justification": "Trusted third-party service deployment is Windows-only operational tooling.",
+    "owner": "Build",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when trusted-party deployment no longer uses Windows service APIs or is split into a Windows-only build artifact."
+  },
+  {
+    "diagnosticId": "CA1416",
+    "scope": "build/Build.TestDependencies.cs",
+    "mechanism": "PragmaWarningDisable",
+    "justification": "Integration-test dependency tooling targets the Windows development host used for MCP Server validation.",
+    "owner": "Build",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when test dependency setup is made cross-platform or isolated behind platform-specific build configuration."
+  },
+  {
+    "diagnosticId": "CA2227",
+    "scope": "src/McpServer.Services/Models/TodoModels.cs",
+    "mechanism": "PragmaWarningDisable",
+    "justification": "YamlDotNet models require settable collection properties for TODO YAML deserialization compatibility.",
+    "owner": "Services",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when TODO YAML models move to a custom immutable deserialization path."
+  },
+  {
+    "diagnosticId": "CA2227",
+    "scope": "src/McpServer.Services/Models/UnifiedSessionLogDto.cs",
+    "mechanism": "SuppressMessage",
+    "justification": "Session log DTO collections are settable to preserve JSON schema compatibility and deserialization behavior.",
+    "owner": "Services",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when the session log compatibility DTO is retired or deserialization supports immutable collections."
+  },
+  {
+    "diagnosticId": "CA1819",
+    "scope": "src/McpServer.Storage/Entities/ContextChunkEntity.cs",
+    "mechanism": "SuppressMessage",
+    "justification": "EF Core stores embedding bytes as a nullable BLOB; byte[] is the storage contract rather than a public mutable API.",
+    "owner": "Storage",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when embedding storage changes away from byte[] BLOB persistence or when EF mapping supports a non-array contract."
+  },
+  {
+    "diagnosticId": "CA1416",
+    "scope": "src/McpServer.Support.Mcp/Program.cs",
+    "mechanism": "PragmaWarningDisable",
+    "justification": "Windows EventLog setup is guarded by SupportedOSPlatform and only used for Windows service diagnostics.",
+    "owner": "Support.Mcp",
+    "permanence": "conditional",
+    "reviewCondition": "Remove when EventLog diagnostics are replaced with a platform-neutral logging provider or platform analysis no longer requires local suppression."
+  }
+]

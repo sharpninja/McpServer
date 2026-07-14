@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,7 @@ public sealed class AgentCliClient(
     }
 
     /// <inheritdoc />
+    [RequiresUnreferencedCode("Generic CLI output parsing requires runtime serializer metadata for arbitrary caller-supplied types.")]
     public async Task<AgentCliResult<T>> InvokeAsync<T>(
         string prompt,
         AgentCliClientOptions? options = null,

@@ -1,17 +1,17 @@
 # MCP Server
 
-Workspace-scoped AI agent infrastructure for .NET — context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, and agent orchestration over HTTP and MCP STDIO transports.
+Workspace-scoped AI agent infrastructure for .NET - context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, and agent orchestration over HTTP and MCP STDIO transports.
 
 ## Key Features
 
-- **Dual transport** — HTTP REST with Swagger UI and MCP-over-STDIO for direct agent integration
-- **Multi-tenant workspaces** — single port, workspace isolation via header, API key, or default resolution
-- **Agent orchestration** — process-isolated agent pool with branch strategies, PowerShell sessions, and desktop automation
-- **Semantic search** — ONNX-based vector embeddings with HNSW indexing, optional GraphRAG enhancement
-- **Requirements traceability** — FR/TR/TEST document management with validation and Markdown/ZIP export
-- **Multi-provider storage** — SQLite, SQL Server, and PostgreSQL with automatic migrations
-- **REPL CLI tool** — `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
-- **Typed .NET client** — `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
+- **Dual transport** - HTTP REST with Swagger UI and MCP-over-STDIO for direct agent integration
+- **Multi-tenant workspaces** - single port, workspace isolation via header, API key, or default resolution
+- **Agent orchestration** - process-isolated agent pool with branch strategies, PowerShell sessions, and desktop automation
+- **Semantic search** - ONNX-based vector embeddings with HNSW indexing, optional GraphRAG enhancement
+- **Requirements traceability** - FR/TR/TEST document management with validation and Markdown/ZIP export
+- **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with automatic migrations
+- **REPL CLI tool** - `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
+- **Typed .NET client** - `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
 
 ## Quick Start
 
@@ -37,6 +37,7 @@ src/
   McpServer.McpAgent         Microsoft Agent Framework integration
   McpServer.Repl.Core        REPL protocol, request envelopes, trust bootstrap
   McpServer.Repl.Host        mcpserver-repl CLI tool
+  McpServer.SessionLog.Transcripts  Transcript detection, normalization, and canonical YAML (Claude, Codex, Grok, Cline, Copilot, OpenCode)
   McpServer.Services         Business logic (ingestion, indexing, TODO, GitHub, agents)
   McpServer.Storage          EF Core abstraction + vector indexing
   McpServer.GraphRag         Hybrid semantic search with GraphRAG
@@ -76,7 +77,7 @@ Direct `--agent-stdio` callers send one single-line JSON request envelope per st
 | Route | Capability |
 |---|---|
 | `/mcpserver/todo` | TODO CRUD, audit history, priority/section filtering, prompt generation |
-| `/mcpserver/sessionlog` | Session log upsert, query, full-text search, pagination |
+| `/mcpserver/sessionlog` | Session log upsert, query, full-text search, pagination, transcript import (six agent formats) |
 | `/mcpserver/context` | Hybrid semantic search with GraphRAG, deterministic context packs |
 | `/mcpserver/agents` | Agent definitions, workspace config, deployment status |
 | `/mcpserver/agent-pool` | Pool lifecycle, health monitoring, process isolation |
@@ -108,10 +109,10 @@ Primary config section: `Mcp`. Instance overrides under `Mcp:Instances:{name}`.
     "RepoRoot": ".",
     "DataSource": "mcp.db",
     "ApiKey": "your-api-key",
-    "TodoStorage": { "Provider": "yaml" },
+    "TodoStorage": { "Provider": "database" },
     "Instances": {
       "default": { "Port": 7147, "RepoRoot": "." },
-      "alt-local": { "Port": 7157, "TodoStorage": { "Provider": "sqlite" } }
+      "alt-local": { "Port": 7157, "TodoStorage": { "Provider": "database" } }
     }
   }
 }
@@ -138,7 +139,7 @@ Environment overrides: `PORT` (runtime port), `MCP_INSTANCE` (instance selection
 | SQL Server | `McpServer.Storage.SqlServerMigrations` |
 | PostgreSQL | `McpServer.Storage.PostgreSqlMigrations` |
 
-TODO items can be stored as YAML files on disk (`yaml`) or in a SQLite table (`sqlite`), configured per instance.
+TODO items live in the configured database (the sole source of truth); `docs/Project/TODO.yaml` is a read-only projection. The removed `yaml` provider fails fast, and `sqlite` is a deprecated alias for `database` (TR-MCP-CFG-007).
 
 Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW index for semantic search.
 
@@ -216,12 +217,12 @@ Sample host: `src/McpServer.McpAgent.SampleHost/`
 
 16 test projects covering unit, integration, and SpecFlow validation:
 
-- `Build.Tests` — build system and configuration (43 tests)
-- `McpServer.Support.Mcp.Tests` / `.IntegrationTests` — server API and database
-- `McpServer.Client.Tests` — REST client serialization
-- `McpServer.McpAgent.Tests` — agent workflows and tool adapters
-- `McpServer.Repl.Core.Tests` / `.IntegrationTests` — REPL protocol
-- `McpServer.Cqrs.Tests` — CQRS dispatcher and pipeline
+- `Build.Tests` - build system and configuration (43 tests)
+- `McpServer.Support.Mcp.Tests` / `.IntegrationTests` - server API and database
+- `McpServer.Client.Tests` - REST client serialization
+- `McpServer.McpAgent.Tests` - agent workflows and tool adapters
+- `McpServer.Repl.Core.Tests` / `.IntegrationTests` - REPL protocol
+- `McpServer.Cqrs.Tests` - CQRS dispatcher and pipeline
 - 7 SpecFlow validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
 
 ## Prerequisites

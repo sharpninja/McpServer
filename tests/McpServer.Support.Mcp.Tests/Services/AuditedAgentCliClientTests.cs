@@ -114,11 +114,11 @@ public sealed class AuditedAgentCliClientTests
         if (dto?.Turns is not { Count: 1 })
             return false;
 
-        var entry = dto.Turns[0];
+        var entry = dto.Turns!.First();
         if (entry.Actions is not { Count: > 0 })
             return false;
 
-        return string.Equals(entry.Actions[0].Type, "copilot_invocation", StringComparison.Ordinal)
+        return string.Equals(entry.Actions!.First().Type, "copilot_invocation", StringComparison.Ordinal)
                && string.Equals(entry.Status, "completed", StringComparison.Ordinal);
     }
 
@@ -127,7 +127,7 @@ public sealed class AuditedAgentCliClientTests
         if (dto?.Turns is not { Count: 1 })
             return false;
 
-        var entry = dto.Turns[0];
+        var entry = dto.Turns!.First();
         return string.Equals(entry.Status, "completed", StringComparison.Ordinal)
                && string.Equals(entry.QueryTitle, "Copilot invoke_streaming", StringComparison.Ordinal);
     }

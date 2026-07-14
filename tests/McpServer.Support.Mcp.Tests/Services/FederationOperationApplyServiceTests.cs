@@ -254,6 +254,8 @@ public sealed class FederationOperationApplyServiceTests
 
         public bool IsLocalOnly => false;
 
+        public bool SupportsApply => true;
+
         public string? PayloadJson { get; private set; }
 
         public string? HttpMethod { get; private set; }

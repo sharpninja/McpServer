@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace McpServer.Support.Mcp.Storage.Entities;
 
@@ -20,25 +19,25 @@ public sealed class SessionLogTurnEntity
     public long SessionLogId { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Unique request identifier within the session.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? RequestId { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Timestamp of the request (UTC).</summary>
     public DateTimeOffset? Timestamp { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: AI model used for this turn.</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? Model { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Model provider (e.g. OpenAI, Anthropic).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? ModelProvider { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Full user query text.</summary>
     public string? QueryText { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Short title summarizing the query.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? QueryTitle { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Agent response text.</summary>
@@ -48,7 +47,7 @@ public sealed class SessionLogTurnEntity
     public string? Interpretation { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Turn status (e.g. completed, in_progress).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? Status { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Token count for this turn.</summary>
@@ -73,27 +72,21 @@ public sealed class SessionLogTurnEntity
     public SessionLogEntity? SessionLog { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to actions.</summary>
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogActionEntity> Actions { get; set; } = new List<SessionLogActionEntity>();
+    public ICollection<SessionLogActionEntity> Actions { get; } = new List<SessionLogActionEntity>();
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to tags.</summary>
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogTurnTagEntity> Tags { get; set; } = new List<SessionLogTurnTagEntity>();
+    public ICollection<SessionLogTurnTagEntity> Tags { get; } = new List<SessionLogTurnTagEntity>();
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to context items.</summary>
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogTurnContextEntity> ContextItems { get; set; } = new List<SessionLogTurnContextEntity>();
+    public ICollection<SessionLogTurnContextEntity> ContextItems { get; } = new List<SessionLogTurnContextEntity>();
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to processing dialog items. The AI model can independently append dialog items.</summary>
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogProcessingDialogEntity> ProcessingDialog { get; set; } = new List<SessionLogProcessingDialogEntity>();
+    public ICollection<SessionLogProcessingDialogEntity> ProcessingDialog { get; } = new List<SessionLogProcessingDialogEntity>();
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to commits recorded during this turn.</summary>
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogCommitEntity> Commits { get; set; } = new List<SessionLogCommitEntity>();
+    public ICollection<SessionLogCommitEntity> Commits { get; } = new List<SessionLogCommitEntity>();
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to generic string-list items (design decisions, requirements, files modified, blockers).</summary>
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogTurnStringListEntity> StringListItems { get; set; } = new List<SessionLogTurnStringListEntity>();
+    public ICollection<SessionLogTurnStringListEntity> StringListItems { get; } = new List<SessionLogTurnStringListEntity>();
 }
 

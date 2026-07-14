@@ -16,7 +16,8 @@ public sealed class EventStreamClient : McpClientBase
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        TypeInfoResolver = McpClientJsonContext.Default
     };
 
     /// <inheritdoc />
@@ -68,7 +69,7 @@ public sealed class EventStreamClient : McpClientBase
             ChangeEvent? changeEvent;
             try
             {
-                changeEvent = JsonSerializer.Deserialize<ChangeEvent>(payload, s_jsonOptions);
+                changeEvent = (ChangeEvent?)JsonSerializer.Deserialize(payload, s_jsonOptions.GetTypeInfo(typeof(ChangeEvent)));
             }
             catch (JsonException)
             {

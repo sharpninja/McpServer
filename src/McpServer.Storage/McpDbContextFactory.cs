@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using McpServer.Support.Mcp.Storage.Database;
@@ -15,6 +16,10 @@ public sealed class McpDbContextFactory : IDesignTimeDbContextFactory<McpDbConte
     private const string DefaultSqlServerConnectionString = "Server=(localdb)\\MSSQLLocalDB;Database=mcp_design_time;Trusted_Connection=True;TrustServerCertificate=True";
 
     /// <inheritdoc />
+    [UnconditionalSuppressMessage(
+        "Trimming",
+        "IL2026:Members attributed with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
+        Justification = "This factory is only for EF Core design-time tooling; trimmed runtime hosts do not invoke it.")]
     public McpDbContext CreateDbContext(string[] args)
     {
         var providerName = GetArgumentValue(args, "provider")

@@ -78,13 +78,6 @@ return await rootCommand.InvokeAsync(args);
 
 static IHost CreateHost(string? workspacePathOverride, string? markerFileOverride, string? agentOverride, bool suppressConsoleLogging)
 {
-    // Set agent early so the marker resolver and per-agent cache (for Codex vs Claude etc.)
-    // can key trust state correctly. This must be done before any resolution.
-    if (!string.IsNullOrWhiteSpace(agentOverride))
-    {
-        MarkerFileClientOptionsResolver.AgentOverride = agentOverride;
-    }
-
     return Host.CreateDefaultBuilder()
         .ConfigureLogging(logging =>
         {
@@ -108,6 +101,15 @@ static IHost CreateHost(string? workspacePathOverride, string? markerFileOverrid
                     agentOverride);
                 if (!ok || options is null)
                 {
+                    var logger = sp.GetService<ILoggerFactory>()
+                        ?.CreateLogger("McpServer.Repl.Host.MarkerFileClientOptionsResolver");
+                    logger?.LogWarning(
+                        "Marker resolver failed for workspace '{WorkspacePathOverride}', marker '{MarkerFileOverride}', agent '{AgentOverride}'. Falling back to legacy resolution. Diagnostic: {Diagnostic}",
+                        workspacePathOverride,
+                        markerFileOverride,
+                        agentOverride,
+                        error);
+
                     // Fall back to the legacy resolver so the CLI does not crash; the
                     // diagnostic message is forwarded into McpServerClient so any
                     // subsequent EnsureAuthenticated failure can surface the root cause.

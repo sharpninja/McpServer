@@ -14,33 +14,33 @@ public sealed class WorkspaceEntity
     /// absolute workspace path; the empty string is reserved for global rows.
     /// </summary>
     [Key]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Normalized workspace root path, or empty for the global row.</summary>
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public string WorkspacePath { get; set; } = string.Empty;
 
     /// <summary>Human-readable workspace name.</summary>
     [Required]
-    [MaxLength(512)]
+    [StringLength(512)]
     public string Name { get; set; } = "workspace";
 
     /// <summary>Relative TODO file path for the workspace.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string TodoPath { get; set; } = "docs/todo.yaml";
 
     /// <summary>Optional data directory override.</summary>
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public string? DataDirectory { get; set; }
 
     /// <summary>Optional tunnel provider key.</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? TunnelProvider { get; set; }
 
     /// <summary>Optional process identity for child workspace processes.</summary>
-    [MaxLength(512)]
+    [StringLength(512)]
     public string? RunAs { get; set; }
 
     /// <summary>True when the host serves this workspace directly.</summary>
@@ -66,12 +66,12 @@ public sealed class WorkspaceEntity
     public List<WorkspaceBannedItemEntity> BannedItems { get; set; } = [];
 
     /// <summary>Optional absolute path to the agent executable.</summary>
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public string? AgentPath { get; set; }
 
     /// <summary>FR-MCP-WORKSPACE-LAYER-001: current requirement scope layer for this workspace.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public string CurrentRequirementLayerKey { get; set; } = "layer-1";
 
     /// <summary>UTC timestamp when this workspace was first registered.</summary>
@@ -87,10 +87,10 @@ public sealed class WorkspaceEntity
     public DateTimeOffset? DeletedAtUtc { get; set; }
 
     /// <summary>Actor or subsystem that soft-deleted the row.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? DeletedBy { get; set; }
 
     /// <summary>Optional reason recorded for the soft delete.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? DeleteReason { get; set; }
 }

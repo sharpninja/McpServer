@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace McpServer.Common.AgentCli;
 
 /// <summary>TR-CLI-001: Interface for invoking the CLI agent agent.</summary>
@@ -23,6 +25,7 @@ public interface IAgentCliClient
     /// <param name="options">Optional per-call configuration overrides.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A strongly-typed <see cref="AgentCliResult{T}"/>.</returns>
+    [RequiresUnreferencedCode("Generic CLI output parsing requires runtime serializer metadata for arbitrary caller-supplied types.")]
     Task<AgentCliResult<T>> InvokeAsync<T>(
         string prompt,
         AgentCliClientOptions? options = null,

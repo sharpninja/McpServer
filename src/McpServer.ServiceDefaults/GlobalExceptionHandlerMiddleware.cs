@@ -15,7 +15,6 @@ namespace Microsoft.Extensions.Hosting;
 /// </summary>
 internal sealed partial class GlobalExceptionHandlerMiddleware
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly Regex s_bearerTokenRegex = new(@"Bearer\s+[A-Za-z0-9\-\._~\+/]+=*", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex s_connectionStringRegex = new(@"(?i)(password|pwd|secret|token|apikey|api_key|clientsecret|client_secret)\s*=\s*[^;\s]+", RegexOptions.Compiled);
     private static readonly Regex s_jsonSecretRegex = new(@"(?i)\""(password|pwd|secret|token|access_token|refresh_token|apiKey|api_key|clientSecret|client_secret)\""\s*:\s*\""[^\""]+\""", RegexOptions.Compiled);
@@ -44,9 +43,7 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
             Log.RequestCancelled(_logger, context.Request.Method, context.Request.Path);
         }
 
-#pragma warning disable CA1031
         catch (Exception ex)
-#pragma warning restore CA1031
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             var operation = GetOperation(context);
@@ -74,7 +71,8 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
                 TimestampUtc = DateTimeOffset.UtcNow,
             };
 
-            await context.Response.WriteAsync(JsonSerializer.Serialize(payload, s_jsonOptions)).ConfigureAwait(false);
+            var result = JsonSerializer.Serialize(payload, ServiceDefaultsJsonContext.Default.HttpErrorResponse);
+            await context.Response.WriteAsync(result).ConfigureAwait(false);
         }
     }
 

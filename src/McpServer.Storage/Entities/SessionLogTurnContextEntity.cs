@@ -23,7 +23,7 @@ public sealed class SessionLogTurnContextEntity
 
     /// <summary>TR-PLANNED-CORE-013: Context item value (path, URL, or reference).</summary>
     [Required]
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public required string ContextItem { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent entry.</summary>

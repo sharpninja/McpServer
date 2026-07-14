@@ -104,7 +104,7 @@ public sealed class TransactionGatedSessionLogServiceTests
         Assert.Equal("Seed Session", restored!.Title);
         Assert.NotNull(restored.Turns);
         Assert.Single(restored.Turns!);
-        Assert.Equal("seed response", restored.Turns![0].Response);
+        Assert.Equal("seed response", restored.Turns!.First().Response);
     }
 
     /// <summary>

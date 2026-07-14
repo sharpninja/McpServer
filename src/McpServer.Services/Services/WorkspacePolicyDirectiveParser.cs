@@ -109,7 +109,7 @@ public sealed class WorkspacePolicyDirectiveParser : IWorkspacePolicyDirectivePa
             }
 
             var content = StripMarkdownCodeFence(result.Body);
-            var dto = JsonSerializer.Deserialize<CopilotDirectiveDto>(content, s_jsonOptions);
+            var dto = JsonSerializer.Deserialize(content, McpServicesJsonContext.Default.CopilotDirectiveDto);
             if (dto is null)
                 return new WorkspacePolicyParseResult { Success = false, Error = "Copilot returned an empty parse payload." };
 
@@ -475,17 +475,13 @@ public sealed class WorkspacePolicyDirectiveParser : IWorkspacePolicyDirectivePa
         return withoutHeader.Trim();
     }
 
-    private static readonly JsonSerializerOptions s_jsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-    };
+}
 
-    private sealed record CopilotDirectiveDto
-    {
-        public string? Action { get; init; }
-        public string? Category { get; init; }
-        public List<string>? Values { get; init; }
-        public string? Scope { get; init; }
-        public string? WorkspacePath { get; init; }
-    }
+internal sealed record CopilotDirectiveDto
+{
+    public string? Action { get; init; }
+    public string? Category { get; init; }
+    public List<string>? Values { get; init; }
+    public string? Scope { get; init; }
+    public string? WorkspacePath { get; init; }
 }

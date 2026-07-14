@@ -10,32 +10,32 @@ public sealed class RequirementTraceabilityLinkEntity
 {
     /// <summary>Resolved workspace discriminator, normally the absolute workspace path.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Source requirement kind. DB-FK-001 fixes this to <c>fr</c>.</summary>
     [Required]
-    [MaxLength(16)]
+    [StringLength(16)]
     public string SourceKind { get; set; } = "fr";
 
     /// <summary>Source functional requirement identifier.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public string FrId { get; set; } = string.Empty;
 
     /// <summary>Target requirement kind: <c>tr</c> or <c>test</c>.</summary>
     [Required]
-    [MaxLength(16)]
+    [StringLength(16)]
     public string TargetKind { get; set; } = string.Empty;
 
     /// <summary>Target technical or testing requirement identifier.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public string TargetId { get; set; } = string.Empty;
 
     /// <summary>UTC timestamp when the link was created.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public string CreatedAtUtc { get; set; } = string.Empty;
 
     /// <summary>Source functional requirement navigation.</summary>

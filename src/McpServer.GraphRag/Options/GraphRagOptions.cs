@@ -1,12 +1,11 @@
 namespace McpServer.Support.Mcp.Options;
 
-#pragma warning disable CS1591
-
 /// <summary>
 /// Configuration for GraphRAG integration.
 /// </summary>
 public sealed class GraphRagOptions
 {
+    /// <summary>Configuration section name for GraphRAG options.</summary>
     public const string SectionName = "Mcp:GraphRag";
 
     /// <summary>Enable GraphRAG endpoints and service behavior.</summary>
@@ -88,5 +87,3 @@ public sealed class GraphRagOptions
         "AGENTS.md",
     ];
 }
-
-#pragma warning restore CS1591

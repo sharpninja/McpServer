@@ -15,7 +15,7 @@ namespace McpServer.Client;
 /// <seealso cref="McpServerClient.Requirements"/>
 public sealed class RequirementsClient : McpClientBase
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = McpClientJsonContext.Default };
 
     /// <inheritdoc />
     public RequirementsClient(HttpClient http, McpServerClientOptions options)
@@ -277,7 +277,7 @@ public sealed class RequirementsClient : McpClientBase
         var (content, contentType) = await GetBytesAsync(path, cancellationToken);
         if (string.Equals(contentType, "application/json", StringComparison.OrdinalIgnoreCase))
         {
-            var export = JsonSerializer.Deserialize<RequirementsDocumentExportResult>(content, s_jsonOptions);
+            var export = (RequirementsDocumentExportResult?)JsonSerializer.Deserialize(content, s_jsonOptions.GetTypeInfo(typeof(RequirementsDocumentExportResult)));
             return new RequirementsGeneratedDocument
             {
                 Content = content,

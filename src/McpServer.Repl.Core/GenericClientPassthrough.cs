@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 // FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Generic client passthrough implementation
 // FR-MCP-REPL-003: Command Namespace Parity - Client operation forwarding implementation
 // FR-MCP-REPL-005: Orchestration State Visibility - State query implementation
@@ -15,12 +16,14 @@ using System.Linq;
 // TEST-MCP-REPL-008: Context REPL operations match REST endpoints
 // TEST-MCP-REPL-011: Generic client passthrough delegates to correct client methods
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using McpServer.Client;
+using McpServer.Client.Models;
 
 namespace McpServer.Repl.Core;
 
@@ -42,7 +45,8 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
-        Converters = { new FlexibleBooleanJsonConverter() }
+        Converters = { new FlexibleBooleanJsonConverter() },
+        TypeInfoResolver = McpClientJsonContext.Default,
     };
 
     /// <summary>
@@ -83,7 +87,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         }
 
         // Step 2: Resolve method by name
-        var method = ResolveMethod(clientInstance.GetType(), methodName);
+        var method = ResolveMethod(GetPreservedClientType(clientProperty.Name), methodName);
 
         // Step 3: Bind arguments to method parameters
         var parameters = method.GetParameters();
@@ -93,22 +97,10 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         try
         {
             var result = method.Invoke(clientInstance, boundArgs);
-
             // Step 5: Await if the result is a Task
             if (result is Task task)
             {
-                await task.ConfigureAwait(false);
-
-                // Extract result from Task<T>. Runtime async tasks are often derived
-                // task types, so check for the public Result property instead of an
-                // exact generic type definition match.
-                var resultProperty = task.GetType().GetProperty("Result", BindingFlags.Public | BindingFlags.Instance);
-                if (resultProperty is not null)
-                {
-                    return resultProperty.GetValue(task);
-                }
-
-                return null;
+                return await AwaitTaskResultAsync(task, method.ReturnType).ConfigureAwait(false);
             }
 
             return result;
@@ -140,11 +132,53 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
 
         return match;
     }
+    /// <summary>
+    /// Resolves a statically preserved client type for trim-safe method reflection.
+    /// </summary>
+    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
+    private static Type GetPreservedClientType(string clientName)
+    {
+        return clientName.ToUpperInvariant() switch
+        {
+            "TODO" => typeof(TodoClient),
+            "CONTEXT" => typeof(ContextClient),
+            "GRAPHRAG" => typeof(GraphRagClient),
+            "SESSIONLOG" => typeof(SessionLogClient),
+            "MEMORY" => typeof(MemoryClient),
+            "GITHUB" => typeof(GitHubClient),
+            "REQUIREMENTS" => typeof(RequirementsClient),
+            "VOICE" => typeof(VoiceClient),
+            "EVENTS" => typeof(EventStreamClient),
+            "REPO" => typeof(RepoClient),
+            "DESKTOP" => typeof(DesktopClient),
+            "TUNNEL" => typeof(TunnelClient),
+            "WORKSPACE" => typeof(WorkspaceClient),
+            "CONFIGURATION" => typeof(ConfigurationClient),
+            "TOOLS" => typeof(ToolRegistryClient),
+            "AUTHCONFIG" => typeof(AuthConfigClient),
+            "DIAGNOSTIC" => typeof(DiagnosticClient),
+            "TEMPLATE" => typeof(TemplateClient),
+            "AGENTPOOL" => typeof(AgentPoolClient),
+            "AGENT" => typeof(AgentClient),
+            "HEALTH" => typeof(HealthClient),
+            "FEDERATION" => typeof(FederationClient),
+            "KEYSERVER" => typeof(KeyServerClient),
+            "SUBSCRIBER" => typeof(SubscriberClient),
+            "TURNTRANSACTIONS" => typeof(TurnTransactionsClient),
+            "BRAINSLOTS" => typeof(BrainSlotClient),
+            "TRIAGE" => typeof(TriageClient),
+            "AGENTHELP" => typeof(AgentHelpClient),
+            _ => throw new InvalidOperationException(
+                $"Unknown client: {clientName}. Valid clients: {GetValidClientNames()}"),
+        };
+    }
 
     /// <summary>
     /// Resolves a public async method on the client by name.
     /// </summary>
-    private MethodInfo ResolveMethod(Type clientType, string methodName)
+    private MethodInfo ResolveMethod(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type clientType,
+        string methodName)
     {
         var methods = clientType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
@@ -162,7 +196,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         {
             var validMethods = string.Join(", ", methods
                 .Where(m => m.ReturnType.IsGenericType &&
-                           m.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+                            m.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
                 .Select(m => m.Name)
                 .Distinct()
                 .OrderBy(n => n));
@@ -172,6 +206,407 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         }
 
         return match;
+    }
+
+    private static async Task<object?> AwaitTaskResultAsync(Task task, Type taskType)
+    {
+        switch (task)
+        {
+            case Task<ActiveTodoContext> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ActiveTodoResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AdbStepResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentDefinition> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentDefinitionListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentEventListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentHelpSessionCreateResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentHelpSessionStatusDto> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentHelpTranscriptResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentHelpTurnResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentPoolConnectResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentPoolEnqueueResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentPoolMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentPoolPromptResolutionResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentProcessInfo> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentRunningListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentSeedDefaultsResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentValidateResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentWorkspaceConfig> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AgentWorkspaceListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AotReconciliationResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AppendTodoCheckpointResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AuthConfigResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AuthDeviceAuthorizationResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<AuthTokenResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<bool> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<BrainSlotDto> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<BrainSlotInvokeResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<BrainSlotStatusResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<BucketBrowseResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<BucketListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<BucketMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<BucketSyncResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ContextPack> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ContextSearchResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ContextSourcesResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<CreateIterationPhaseResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<CreateTodosFromPlanResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<DesktopLaunchResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<DiagnosticAppSettingsPathResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<DiagnosticExecutionPathResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<DialogAppendResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<Dictionary<string, string>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<DiffgramCommitResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<EffectiveRequirementsResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationConflictInfo> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationConnectionInfo> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationEnrollmentResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationHeartbeatResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationOperationResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationPushResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationQueueStatusResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationStatusResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationTargetInfo> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FederationWorkspaceInfo> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FrEntry> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<FrTrMapping> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubAuthorizeUrlResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubAuthStatusResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubCreateIssueResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubIssueDetail> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubIssueListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubLabelsResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubOAuthConfigResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubOperationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubPullListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubWorkflowRunDetail> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GitHubWorkflowRunListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GlobalPromptResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphEntityListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphEntityResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRagDocumentChunksResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRagDocumentDeleteResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRagDocumentListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRagIngestTextResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRagQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRagStatusResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRelationshipListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<GraphRelationshipResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<HealthCheckResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<HttpStatusCode> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<int> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<AgentPoolAgentStatus>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<AgentPoolQueueItem>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<BrainSlotDto>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<FrEntry>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<FrTrMapping>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<RequirementScopeLayer>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<TestEntry>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<TransactionPubSubMessageStatus>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<TrEntry>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IssueSyncResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<LinkTodoToSessionTurnsResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<FederationConflictInfo>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<FederationProxyInfo>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<FederationStateAdapterCoverage>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<FederationSyncItem>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<FederationTargetInfo>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<FederationWorkspaceInfo>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<TunnelProviderInfo>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<List<WorkspaceRouteInfo>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<MarkerFileTimestampResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<MarkerRegenerationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<MemoryItem> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<MemoryMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<MemoryQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<PartyKeyDescriptor> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<PartyRegistrationResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<QuadBrainOrchestrationResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<QuadBrainWeightUpdateResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RebuildIndexResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RecordTodoValidationResultResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RepoEditResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RepoFileReadResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RepoListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RepoWriteResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RequirementsAnalysisResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RequirementsBatchResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RequirementScopeLayer> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RequirementsGeneratedDocument> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RequirementsIngestResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<RequirementsMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ServerStartupResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionLifecycleOpenResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionLogMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionLogQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionLogSubmitResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionLogTurnSubmitResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionLogWorkspaceStampRepairResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SetTodoTestPlanResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SingleIssueSyncResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<string> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TemplateItem> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TemplateMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TemplateQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TemplateResolveResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TemplateTestResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TestEntry> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TodoAuditQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TodoDeltaContext> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TodoFlatItem> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TodoMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TodoProjectionRepairResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TodoProjectionStatusResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TodoQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ToolDto> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ToolMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<ToolSearchResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionAbortResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionManifestSignResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionManifestTraceRecord> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionManifestTraceReport> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionManifestVerifyResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionPubSubReplayResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionPubSubRetentionResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TransactionStatusResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TranscriptIngestRunResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TrEntry> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageCreatedTodoQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageDashboardResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageGroupDeleteResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageGroupDetail> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageGroupEditResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageGroupQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageReportDetail> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageReportSubmitResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageResearchRunDetail> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TriageRunQueryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TunnelDiscoveryResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TunnelProviderInfo> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<TurnTransactionStatusResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UpdateTodoStatusResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<VoiceEscapeResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<VoiceInterruptResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<VoiceSessionCreateResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<VoiceSessionStatus> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<VoiceTranscriptResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<VoiceTurnResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WebsiteIngestResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceCurrentRequirementLayer> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceDto> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceInitResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceListResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceMutationResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspacePolicyApplyResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceProcessStatus> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            default:
+                return await AwaitNonGenericTaskAsync(task, taskType).ConfigureAwait(false);
+        }
+    }
+
+    private static async Task<object?> AwaitTypedTaskResultAsync<TResult>(Task<TResult> task)
+    {
+        return await task.ConfigureAwait(false);
+    }
+
+    private static async Task<object?> AwaitNonGenericTaskAsync(Task task, Type taskType)
+    {
+        await task.ConfigureAwait(false);
+        if (taskType != typeof(Task))
+        {
+            throw new InvalidOperationException($"Unsupported task result type: {taskType.FullName ?? taskType.Name}");
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -312,8 +747,8 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         // Handle complex objects via JSON serialization
         try
         {
-            var json = JsonSerializer.Serialize(NormalizeForJson(value), _jsonOptions);
-            return JsonSerializer.Deserialize(json, underlyingType, _jsonOptions);
+            var json = SerializeWithConfiguredMetadata(NormalizeForJson(value));
+            return JsonSerializer.Deserialize(json, _jsonOptions.GetTypeInfo(underlyingType));
         }
         catch (Exception ex)
         {
@@ -328,8 +763,21 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     /// </summary>
     private object? CoerceCollection(object? value, Type targetType, string? parameterName)
     {
-        var json = JsonSerializer.Serialize(NormalizeForJson(value), _jsonOptions);
-        return JsonSerializer.Deserialize(json, targetType, _jsonOptions);
+        var json = SerializeWithConfiguredMetadata(NormalizeForJson(value));
+        return JsonSerializer.Deserialize(json, _jsonOptions.GetTypeInfo(targetType));
+    }
+
+    /// <summary>
+    /// Serializes normalized YAML values through configured JSON metadata.
+    /// </summary>
+    private static string SerializeWithConfiguredMetadata(object? value)
+    {
+        if (value is null)
+        {
+            return "null";
+        }
+
+        return JsonSerializer.Serialize(value, _jsonOptions.GetTypeInfo(value.GetType()));
     }
 
     /// <summary>

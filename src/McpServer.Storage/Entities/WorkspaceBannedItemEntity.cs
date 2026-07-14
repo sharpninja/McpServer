@@ -19,12 +19,12 @@ public sealed class WorkspaceBannedItemEntity
     /// Owning workspace id. Doubles as the multi-tenant discriminator and the foreign key to
     /// <see cref="WorkspaceEntity.WorkspaceId"/>.
     /// </summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Discriminator identifying which policy list this item belongs to (License, Country, Organization, Individual).</summary>
     [Required]
-    [MaxLength(32)]
+    [StringLength(32)]
     public required string Category { get; set; }
 
     /// <summary>Ordinal position within the policy list.</summary>

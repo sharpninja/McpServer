@@ -55,7 +55,8 @@
         "UpdateTrustedThirdPartyService",
         "ValidateConfig",
         "ValidatePluginPowerShellOnly",
-        "ValidateTraceability"
+        "ValidateTraceability",
+        "ValidateWarningSuppressions"
       ]
     },
     "Verbosity": {

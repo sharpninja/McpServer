@@ -219,34 +219,19 @@ public static class ServiceDefaultsExtensions
             }
 
             context.Response.ContentType = "application/json";
-            var payload = new Dictionary<string, object?>
-            {
-                ["status"] = report.Status.ToString(),
-                ["version"] = version,
-                ["checks"] = includeException
-                    ? report.Entries.Select(e => new
-                    {
-                        name = e.Key,
-                        status = e.Value.Status.ToString(),
-                        description = e.Value.Description ?? string.Empty,
-                        exception = e.Value.Exception?.Message,
-                        duration = e.Value.Duration.TotalMilliseconds
-                    })
-                    : report.Entries.Select(e => new
-                    {
-                        name = e.Key,
-                        status = e.Value.Status.ToString(),
-                        description = e.Value.Description,
-                        duration = e.Value.Duration.TotalMilliseconds
-                    })
-            };
-
-            if (context.Request.Query.TryGetValue("nonce", out var nonceValues))
-            {
-                payload["nonce"] = nonceValues.ToString();
-            }
-
-            var result = System.Text.Json.JsonSerializer.Serialize(payload);
+            var checks = report.Entries
+                .Select(e => new HealthCheckEntryResponse(
+                    e.Key,
+                    e.Value.Status.ToString(),
+                    includeException ? e.Value.Description ?? string.Empty : e.Value.Description,
+                    e.Value.Duration.TotalMilliseconds,
+                    includeException ? e.Value.Exception?.Message : null))
+                .ToArray();
+            var nonce = context.Request.Query.TryGetValue("nonce", out var nonceValues)
+                ? nonceValues.ToString()
+                : null;
+            var payload = new HealthCheckResponse(report.Status.ToString(), version, checks, nonce);
+            var result = System.Text.Json.JsonSerializer.Serialize(payload, ServiceDefaultsJsonContext.Default.HealthCheckResponse);
             await context.Response.WriteAsync(result).ConfigureAwait(false);
         };
     }

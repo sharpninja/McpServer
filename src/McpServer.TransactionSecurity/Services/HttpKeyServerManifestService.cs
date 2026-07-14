@@ -1,4 +1,6 @@
 using System.Net.Http.Json;
+using System.Text.Json.Serialization.Metadata;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 
 namespace McpServer.TransactionSecurity.Services;
@@ -24,6 +26,8 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
         => await PostAsync(
             "mcpserver/keyserver/manifests/sign",
             request,
+            TransactionSecurityJsonContext.Default.TransactionManifestSignRequest,
+            TransactionSecurityJsonContext.Default.TransactionManifestSignResponse,
             () => new TransactionManifestSignResponse
             {
                 Success = false,
@@ -38,6 +42,8 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
         => await PostAsync(
             "mcpserver/keyserver/manifests/verify",
             request,
+            TransactionSecurityJsonContext.Default.TransactionManifestVerifyRequest,
+            TransactionSecurityJsonContext.Default.TransactionManifestVerifyResponse,
             () => new TransactionManifestVerifyResponse
             {
                 IsValid = false,
@@ -56,8 +62,9 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
         try
         {
             return await _http
-                .GetFromJsonAsync<TransactionManifestTraceRecord>(
+                .GetFromJsonAsync(
                     $"mcpserver/keyserver/manifests/{Uri.EscapeDataString(transactionId.Trim())}",
+                    TransactionSecurityJsonContext.Default.TransactionManifestTraceRecord,
                     cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -77,8 +84,9 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
         try
         {
             return await _http
-                .GetFromJsonAsync<TransactionManifestTraceReport>(
+                .GetFromJsonAsync(
                     $"mcpserver/keyserver/manifests/report{BuildReportQuery(request, limit)}",
+                    TransactionSecurityJsonContext.Default.TransactionManifestTraceReport,
                     cancellationToken)
                 .ConfigureAwait(false)
                 ?? EmptyReport(request, limit);
@@ -92,13 +100,15 @@ public sealed class HttpKeyServerManifestService : IKeyServerManifestService
     private async Task<TResponse> PostAsync<TRequest, TResponse>(
         string path,
         TRequest request,
+        JsonTypeInfo<TRequest> requestTypeInfo,
+        JsonTypeInfo<TResponse> responseTypeInfo,
         Func<TResponse> unavailableResponse,
         CancellationToken cancellationToken)
     {
         try
         {
-            using var response = await _http.PostAsJsonAsync(path, request, cancellationToken).ConfigureAwait(false);
-            var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken).ConfigureAwait(false);
+            using var response = await _http.PostAsJsonAsync(path, request, requestTypeInfo, cancellationToken).ConfigureAwait(false);
+            var result = await response.Content.ReadFromJsonAsync(responseTypeInfo, cancellationToken).ConfigureAwait(false);
             return result ?? unavailableResponse();
         }
         catch (Exception ex) when ((ex is HttpRequestException || ex is TaskCanceledException) && !cancellationToken.IsCancellationRequested)

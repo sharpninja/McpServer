@@ -1,0 +1,54 @@
+# aiUnit Review: warning-suppression
+
+- Run-log: `from attribute execution`
+
+## Prompt
+
+```text
+Review warning suppression governance for PLAN-WARNREMEDIATION-001.
+
+Scope
+- docs/Project requirement exports and live MCP requirements for FR-MCP-139, TR-MCP-QUALITY-001, TEST-MCP-AIUNIT-002
+- PLAN-WARNREMEDIATION-001 TODO current decisions and implementation task state
+- Directory.Build.props, project NoWarn entries, pragma warning directives, SuppressMessage attributes, editorconfig analyzer severity, and any broad warning bypasses
+- tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs
+
+Approved decisions
+- CA1416 may remain suppressed only for Windows only code paths with justification and review condition
+- CA1819 may remain suppressed where array returning API is intentional and justified
+- Current CA2227 suppressions may remain only for non observable JSON or YAML or options binding DTOs and EF navigation collections
+- Observable collections must be repopulated in place rather than suppressed
+- CA1308 is not approved and code must use invariant case insensitive comparison or explicit mapping rather than lowercase normalization
+- CS8632 is not approved and every project must enable nullable annotations and remove CS8632 NoWarn entries
+- TreatWarningsAsErrors false and stale ASP0019 suppressions are not approved and must remain removed
+
+Completed remediation decisions to audit
+- xUnit1051 is not approved and test projects must pass TestContext cancellation tokens to cancellable async APIs instead of suppressing the analyzer
+- xUnit1041 is not approved and xUnit v3 tests must use supported fixture or ITestOutputHelper patterns instead of suppressing constructor injection diagnostics
+- CA1812 is not approved and middleware or DI-only types must be made visible to analyzers through real construction or removed
+- CA1848 is not approved and no editorconfig or project-level disable may remain for LoggerMessage guidance
+- CA2000 is not approved and disposal warnings must be fixed or proven stale by removing the pragma and building clean
+- CA1861 is not approved and constant array arguments must be hoisted rather than suppressed
+- CA1062 is not approved and public migration methods must validate arguments rather than suppressing the rule
+- CS0436 is not approved and stale type-conflict NoWarn entries must be removed
+- CS0618 is not approved and obsolete APIs must be replaced with current APIs plus focused regression tests
+- CA1055 is not approved and string return APIs must not advertise URI semantics
+- NU5104 is not approved and stable packages must not depend on prerelease packages
+- NU1901 and NU1903 are not approved and vulnerable package advisories must be resolved by package updates and a clean vulnerability scan
+
+Acceptance criteria to audit
+- Every suppression decision above is captured in TR-MCP-QUALITY-001 structured acceptance criteria
+- TEST-MCP-AIUNIT-002 maps to TR-MCP-QUALITY-001 and has aiUnit prompt coverage
+- PLAN-WARNREMEDIATION-001 lists approved suppressions separately from required code fixes and marks only validated work done
+- No unapproved warning suppression or broad warning bypass is introduced or marked complete without build or test evidence
+- Generated requirements documents and traceability mappings include the FR, TR, and TEST records
+
+Return structured findings in the aiUnit review format with severity, title, detail, recommendation, filePath, and line.
+Report no findings only if every item above is satisfied by durable artifacts.
+```
+
+## Response
+
+```json
+{"schemaVersion":"aiunit.review.findings.v1","reviewType":"project","status":"pass","summary":"Warning-suppression governance for PLAN-WARNREMEDIATION-001 now matches durable artifacts. Prior blockers (CA1848 editorconfig disable plus approval, CS8602 pragmas, stale CA1819 justification, Storage 612/618 migration pragmas) are gone. Live inventory is deny-by-default clean: 19 occurrences, 8 approvals, 0 errors, only CA1416/CA1819/CA2227. TreatWarningsAsErrors remains true; no project NoWarn, WarningsNotAsErrors, SuppressTrimAnalysisWarnings, or CA1848 editorconfig override. WarningSuppression Build.Tests 18/0/0; TrimAnalysis inventory tests 8/0/0. FR-MCP-139, TR-MCP-QUALITY-001, TEST-MCP-AIUNIT-002 exist with mapping and wiki export rows. PLAN done=false with 45/48 tasks done and only W20/W24/W25 open. No blocking unapproved suppressions; residual work is correctly still open for trim IL remediation and final closeout.","reviewedScope":"PLAN-WARNREMEDIATION-001 (live MCP TODO); FR-MCP-139 / TR-MCP-QUALITY-001 / TEST-MCP-AIUNIT-002 and wiki exports; config/warning-suppression-approvals.json; artifacts/warnings/warning-suppression-inventory.json; Directory.Build.props; .editorconfig; build/WarningSuppressionScanner.cs and ApprovalValidator; src suppressions (CA1416/CA1819/CA2227); Storage and provider migration trees; tests/Build.Tests WarningSuppression and TrimAnalysis; tests/McpServer.Review.Tests/AiReviewTests.cs; build/Build.AiWarningSuppressionReview.cs","agent":{"name":"GrokCode","provider":"xAI","model":"grok-4"},"findings":[{"severity":"info","category":"positive","title":"Prior high-severity governance blockers are remediated and validator-clean","detail":"artifacts/warnings/warning-suppression-inventory.json reports 19 occurrences, 8 approvals, 0 errors limited to CA1416 (6), CA2227 (12), and CA1819 (1). config/warning-suppression-approvals.json contains only those three diagnostic families with owner, permanence, and reviewCondition. Live source scan finds no CA1848, CS8602, project NoWarn, WarningsNotAsErrors, TreatWarningsAsErrors=false, or SuppressTrimAnalysisWarnings=true outside intentional Build.Tests fixtures. .editorconfig has no CA1848 severity override. ContextChunkEntity CA1819 Justification now states the EF BLOB contract rather than a nonexistent Directory.Build.props NoWarn. Storage and provider migration trees have zero pragma warning disables. Directory.Build.props TreatWarningsAsErrors is true. Build.Tests filter WarningSuppression passed 18/0/0; TrimAnalysis passed 8/0/0.","recommendation":"Keep ValidateWarningSuppressions in the closeout gate. After W20/W25, re-scan and require inventory errors remain zero with only the approved CA1416/CA1819/CA2227 scopes.","filePath":"artifacts/warnings/warning-suppression-inventory.json","line":1,"ruleId":"GOVERNANCE-INVENTORY-CLEAN","confidence":0.98,"agent":"GrokCode"},{"severity":"info","category":"requirements","title":"FR/TR/TEST governance records and prompt coverage are present and mapped","detail":"FR-MCP-139 acceptance criteria are checked with evidence pointing at the approval register and remediation removals. TR-MCP-QUALITY-001 records approved CA1416/CA1819/CA2227 decisions and not-approved remediations including CA1848, with structured evidence strings. TR-per-FR-Mapping.md maps FR-MCP-139 to TR-MCP-QUALITY-001 and TEST-MCP-AIUNIT-002. Requirements-Matrix.md lists all three as Tracked. Testing-Requirements.md TEST-MCP-AIUNIT-002 has four checked prompt/NUKE coverage criteria. AiReviewTests.WarningSuppressionGovernanceReview and Build.AiWarningSuppressionReview provide the required aiUnit path.","recommendation":"After W25 final gate evidence, promote matrix rows and TR status only when PLAN-WARNREMEDIATION-001 is actually done and the TEST closeout AC is checked with this review artifact attached.","filePath":"docs/Project/TR-per-FR-Mapping.md","line":143,"ruleId":"REQ-TRACEABILITY-PRESENT","confidence":0.96,"agent":"GrokCode"},{"severity":"info","category":"closeout","title":"TEST-MCP-AIUNIT-002 closeout AC and PLAN W24/W25 correctly remain open","detail":"Testing-Requirements.md still has an open AC requiring an aiUnit review result or documented blocker before PLAN-WARNREMEDIATION-001 is marked done. Live TODO PLAN-WARNREMEDIATION-001 has done=false, 45 completed implementation tasks, and three open tasks: W20 trim IL remediation, W24 independent aiUnit review, W25 final multi-gate verification. That open closeout state is appropriate for this review run.","recommendation":"Persist this review under docs/reviews, mark W24 done only if no blocking findings remain, complete W20 and W25 with machine evidence, then check the TEST closeout AC and complete the PLAN via MCP.","filePath":"docs/Project/Testing-Requirements.md","line":495,"ruleId":"TEST-CLOSEOUT-OPEN-EXPECTED","confidence":0.97,"agent":"GrokCode"},{"severity":"low","category":"todo-drift","title":"W20 task text still emphasizes removing SuppressTrimAnalysisWarnings after the property is already gone","detail":"PLAN-WARNREMEDIATION-001 open task W20 still says to remove the repository-wide SuppressTrimAnalysisWarnings property. Repository scan of csproj/props finds no SuppressTrimAnalysisWarnings=true, and the warning inventory has zero SuppressTrimAnalysisWarnings occurrences. W19 TrimAnalysisWarningInventoryTests still encode a non-zero IL* baseline (for example large IL2026 counts on McpServer.QBAgent and McpServer.Repl.Host) and currently pass 8/0/0 against that captured inventory. Real remaining W20 work is fixing those trim warnings down toward zero, not deleting a property that is already absent.","recommendation":"Update W20 via MCP todo_update so the task text targets reducing W19 IL* inventories to zero with annotations or design changes, and note that SuppressTrimAnalysisWarnings is already removed. Do not mark W20 done until the trim baseline is actually remediated or an explicit approved residual policy is recorded.","filePath":"tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs","line":108,"ruleId":"W20-TASK-TEXT-STALE","confidence":0.9,"agent":"GrokCode"},{"severity":"info","category":"status","title":"TR and matrix status fields remain non-Complete while closeout tasks are open","detail":"TR-MCP-QUALITY-001 still shows Status pending even though its structured acceptance criteria checkboxes are marked complete. Requirements-Matrix.md keeps FR-MCP-139, TR-MCP-QUALITY-001, and TEST-MCP-AIUNIT-002 as Tracked. That is consistent with PLAN still open (W20/W24/W25) and the TEST closeout AC still unchecked, but reviewers should not treat checkbox completeness alone as PLAN closeout.","recommendation":"Keep status pending/Tracked until W20 residual trim work, this W24 review artifact, and W25 full gate evidence are complete. Then update status through MCP requirements APIs in one closeout batch.","filePath":"docs/Project/Technical-Requirements.md","line":1795,"ruleId":"STATUS-PENDING-EXPECTED","confidence":0.92,"agent":"GrokCode"}],"runLog":{"path":"aiunit-results\\aiunit-review-project-20260713T175555.436Z.json","markdownPath":"aiunit-results\\aiunit-review-project-20260713T175555.436Z.md","startedUtc":"2026-07-13T17:55:55.4360626\u002B00:00"}}
+```

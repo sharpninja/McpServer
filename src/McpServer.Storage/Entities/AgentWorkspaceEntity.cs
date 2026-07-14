@@ -18,11 +18,11 @@ public class AgentWorkspaceEntity
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Agent type identifier (FK to <see cref="AgentDefinitionEntity"/>).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string AgentDefinitionId { get; set; } = "";
 
     /// <summary>Absolute workspace path.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspacePath { get; set; } = "";
 
     /// <summary>Whether this agent is enabled in the workspace.</summary>
@@ -32,18 +32,18 @@ public class AgentWorkspaceEntity
     public bool Banned { get; set; }
 
     /// <summary>Reason for banning.</summary>
-    [MaxLength(512)]
+    [StringLength(512)]
     public string? BannedReason { get; set; }
 
     /// <summary>PR number that must be merged/closed before unbanning.</summary>
     public int? BannedUntilPr { get; set; }
 
     /// <summary>Isolation strategy: none, worktree, or clone.</summary>
-    [MaxLength(16)]
+    [StringLength(16)]
     public string AgentIsolation { get; set; } = "worktree";
 
     /// <summary>Override launch command (null = use definition default).</summary>
-    [MaxLength(512)]
+    [StringLength(512)]
     public string? LaunchCommandOverride { get; set; }
 
     /// <summary>4NF override-list rows (former <c>ModelsOverrideJson</c> / <c>InstructionFilesOverrideJson</c>),
@@ -51,7 +51,7 @@ public class AgentWorkspaceEntity
     public List<AgentWorkspaceListItemEntity> ListItems { get; set; } = [];
 
     /// <summary>Override branch strategy (null = use definition default).</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? BranchStrategyOverride { get; set; }
 
     /// <summary>Override seed prompt (null = use definition default).</summary>
@@ -61,7 +61,7 @@ public class AgentWorkspaceEntity
     public string MarkerAdditions { get; set; } = "";
 
     /// <summary>Restart policy for the runtime process: never, on-failure, or always.</summary>
-    [MaxLength(32)]
+    [StringLength(32)]
     public string RestartPolicy { get; set; } = "never";
 
     /// <summary>When this agent was added to the workspace.</summary>

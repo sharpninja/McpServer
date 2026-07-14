@@ -18,27 +18,27 @@ public sealed class ToolBucketEntity
 
     /// <summary>Short unique name for this bucket (e.g. <c>official</c>, <c>community</c>).</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Name { get; set; }
 
     /// <summary>GitHub repository owner (user or org).</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string Owner { get; set; }
 
     /// <summary>GitHub repository name.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string Repo { get; set; }
 
     /// <summary>Branch to read manifests from (default: <c>main</c>).</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public string Branch { get; set; } = "main";
 
     /// <summary>Path within the repo where tool manifests live (default: root <c>/</c>).</summary>
     [Required]
-    [MaxLength(512)]
+    [StringLength(512)]
     public string ManifestPath { get; set; } = "/";
 
     /// <summary>When the bucket was added.</summary>

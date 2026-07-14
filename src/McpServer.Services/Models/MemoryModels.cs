@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>Memory visibility scope.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<MemoryScope>))]
 public enum MemoryScope
 {
     /// <summary>Memory visible to every workspace.</summary>

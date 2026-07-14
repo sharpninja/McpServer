@@ -19,12 +19,12 @@ public sealed class TriageReportListItemEntity
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Foreign key to the parent triage report.</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string ReportId { get; set; } = string.Empty;
 
     /// <summary>Discriminator identifying which list this item belongs to (AffectedPath, AffectedSymbol, ReproductionHint, Tag).</summary>
     [Required]
-    [MaxLength(32)]
+    [StringLength(32)]
     public required string ListType { get; set; }
 
     /// <summary>Ordinal position within the list.</summary>

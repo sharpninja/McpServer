@@ -17,8 +17,8 @@ source "${REPL_INVOKE_SCRIPT_DIR}/cache-scope.sh"
 cache_scope_init "$REPL_INVOKE_PLUGIN_ROOT" "$(pwd)"
 
 # Agent for per-agent REPL cache and isolation. Plugins must pass --agent on every invocation.
-# Preferred: MCP_AGENT_NAME (set by plugin-env), fallback to PLUGIN_AGENT_DEFAULT.
-AGENT_NAME="${MCP_AGENT_NAME:-${PLUGIN_AGENT_DEFAULT:-${MCP_SESSION_AGENT:-default}}}"
+# Keep this precedence aligned with resolve-cache-dir.sh and MarkerFileClientOptionsResolver.ResolveAgentKey.
+AGENT_NAME="${MCP_AGENT_NAME:-${PLUGIN_AGENT_NAME:-${PLUGIN_AGENT_DEFAULT:-${MCP_PLUGIN_HOST:-default}}}}"
 
 _repl_now_iso() {
     date -u +%Y-%m-%dT%H:%M:%SZ

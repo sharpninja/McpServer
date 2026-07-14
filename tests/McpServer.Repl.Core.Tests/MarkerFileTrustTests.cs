@@ -186,10 +186,8 @@ public class MarkerFileTrustTests
         reader.WatchAsync("/home/user/project", callback, cancellationToken: TestContext.Current.CancellationToken)
             .Returns(callInfo =>
             {
-#pragma warning disable CS8602
-                var cb = callInfo.Arg<Func<IMarkerFileData, Task>>();
+                var cb = callInfo.Arg<Func<IMarkerFileData, Task>>()!;
                 return cb(markerData);
-#pragma warning restore CS8602
             });
 
         await reader.WatchAsync("/home/user/project", callback, cancellationToken: TestContext.Current.CancellationToken);

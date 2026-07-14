@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
 
 namespace McpServer.Support.Mcp.Storage.Entities;
 
@@ -19,16 +18,16 @@ public sealed class SessionLogEntity
 
     /// <summary>TR-PLANNED-CORE-013: Agent source type (e.g. Cursor, Copilot). Unique with WorkspaceId and SessionId.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public required string SourceType { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Unique session identifier within the workspace and source type.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string SessionId { get; set; }
 
     /// <summary>Optional foreign key link to a known agent definition.</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? AgentDefinitionId { get; set; }
 
     /// <summary>Optional navigation to the linked agent definition.</summary>
@@ -36,11 +35,11 @@ public sealed class SessionLogEntity
     public AgentDefinitionEntity? AgentDefinition { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Human-readable session title.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? Title { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: AI model used for the session.</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? Model { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Session start timestamp (UTC).</summary>
@@ -50,7 +49,7 @@ public sealed class SessionLogEntity
     public DateTimeOffset? LastUpdated { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Session status (e.g. completed, in_progress).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? Status { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Number of request/response turns.</summary>
@@ -61,7 +60,7 @@ public sealed class SessionLogEntity
     public int? TotalTokens { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Cursor-specific session label.</summary>
-    [MaxLength(512)]
+    [StringLength(512)]
     public string? CursorSessionLabel { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Average success score across turns.</summary>
@@ -80,30 +79,29 @@ public sealed class SessionLogEntity
     public int? CopilotInProgressCount { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Project name from workspace.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? Project { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Target framework from workspace.</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? TargetFramework { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Repository URL or name from workspace.</summary>
-    [MaxLength(512)]
+    [StringLength(512)]
     public string? Repository { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Git branch name from workspace.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? Branch { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Full path to the source JSON file that was imported.</summary>
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public string? SourceFilePath { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: SHA-256 hash of the source file content at the time the record was last updated. Used to skip unchanged files during sync.</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? ContentHash { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to session log turns.</summary>
-    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogTurnEntity> Turns { get; set; } = new List<SessionLogTurnEntity>();
+    public ICollection<SessionLogTurnEntity> Turns { get; } = new List<SessionLogTurnEntity>();
 }

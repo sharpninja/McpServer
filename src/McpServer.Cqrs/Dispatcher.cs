@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -42,6 +43,7 @@ public sealed class Dispatcher : IDispatcher, ILoggerProvider
     /// <param name="command">The command to dispatch.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The handler result.</returns>
+    [RequiresUnreferencedCode("CQRS reflection dispatch builds closed handler types at runtime. Trimmed apps should call explicitly registered handlers or provide a generated dispatcher.")]
     public Task<Result<TResult>> SendAsync<TResult>(ICommand<TResult> command, CancellationToken ct = default)
         => DispatchAsync<TResult>(command, typeof(ICommandHandler<,>), ct);
 
@@ -52,9 +54,11 @@ public sealed class Dispatcher : IDispatcher, ILoggerProvider
     /// <param name="query">The query to dispatch.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The handler result.</returns>
+    [RequiresUnreferencedCode("CQRS reflection dispatch builds closed handler types at runtime. Trimmed apps should call explicitly registered handlers or provide a generated dispatcher.")]
     public Task<Result<TResult>> QueryAsync<TResult>(IQuery<TResult> query, CancellationToken ct = default)
         => DispatchAsync<TResult>(query, typeof(IQueryHandler<,>), ct);
 
+    [RequiresUnreferencedCode("CQRS reflection dispatch builds closed handler types at runtime. Trimmed apps should call explicitly registered handlers or provide a generated dispatcher.")]
     private async Task<Result<TResult>> DispatchAsync<TResult>(object request, Type handlerOpenType, CancellationToken ct)
     {
         var requestType = request.GetType();
@@ -168,6 +172,7 @@ public sealed class Dispatcher : IDispatcher, ILoggerProvider
         }
     }
 
+    [RequiresUnreferencedCode("CQRS reflection dispatch invokes handler methods by name at runtime. Trimmed apps should call explicitly registered handlers or provide a generated dispatcher.")]
     private static async Task<Result<TResult>> InvokeHandler<TResult>(
         object handler, Type handlerType, object request, CallContext context)
     {

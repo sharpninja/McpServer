@@ -25,37 +25,37 @@ public sealed class TodoItemEntity
     /// primary key with <see cref="Id"/>.
     /// </summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Canonical TODO identifier (e.g. <c>MVP-APP-001</c>, <c>ISSUE-17</c>).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Id { get; set; }
 
     /// <summary>Short human-readable title.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public required string Title { get; set; }
 
     /// <summary>Section key (e.g. <c>mvp-app</c>, <c>mvp-support</c>).</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Section { get; set; }
 
     /// <summary>Priority level: <c>high</c> | <c>medium</c> | <c>low</c>.</summary>
     [Required]
-    [MaxLength(16)]
+    [StringLength(16)]
     public required string Priority { get; set; }
 
     /// <summary>Done flag.</summary>
     public bool Done { get; set; }
 
     /// <summary>Effort estimate (free text, e.g. <c>96-128 hours</c>).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? Estimate { get; set; }
 
     /// <summary>Optional inline note.</summary>
-    [MaxLength(4096)]
+    [StringLength(4096)]
     public string? Note { get; set; }
 
     /// <summary>
@@ -77,7 +77,7 @@ public sealed class TodoItemEntity
     public List<TodoItemTaskEntity> ImplementationTaskRows { get; set; } = [];
 
     /// <summary>Completion date (ISO-8601 or free text) when Done.</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? CompletedDate { get; set; }
 
     /// <summary>Done summary text.</summary>
@@ -87,16 +87,16 @@ public sealed class TodoItemEntity
     public string? Remaining { get; set; }
 
     /// <summary>Priority note override.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? PriorityNote { get; set; }
 
     /// <summary>Reference link or document path.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? Reference { get; set; }
 
     /// <summary>Item kind discriminator (default <c>standard</c>).</summary>
     [Required]
-    [MaxLength(32)]
+    [StringLength(32)]
     public string ItemKind { get; set; } = "standard";
 
     /// <summary>Sort order of the containing section.</summary>
@@ -106,6 +106,6 @@ public sealed class TodoItemEntity
     public int ItemOrder { get; set; }
 
     /// <summary>Code-review phase label for remediation items.</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? PhaseLabel { get; set; }
 }

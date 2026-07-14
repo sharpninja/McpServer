@@ -20,7 +20,7 @@ public sealed class SessionLogTurnTagEntity
 
     /// <summary>TR-PLANNED-CORE-013: Tag value.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string Tag { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent entry.</summary>

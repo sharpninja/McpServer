@@ -510,6 +510,13 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] IsInitialized returns true after GenerateToken.
 - TEST-MCP-BATCH-001: Regression tests SHALL verify all plugin batch requirement methods accept unindented YAML records, indented YAML records, and inline JSON-array records while preserving nested acceptanceCriteria arrays and boolean isSatisfied fields.
   Scope: layer-1+
+- TEST-MCP-DOCFXWIKI-001: Tests must prove typed DocFX configuration, isolated process execution, secure artifact mapping, backward compatibility, and GitHub/Azure wiki output integration.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Mock-backed unit tests cover configuration defaults, validation, process requests, platform filtering, staging, manifest inclusion, and failure cleanup.
+  - [ ] A real DocFX scratch-workspace test generates content and verifies both GitHub and Azure output trees.
+  - [ ] Traversal, absolute external paths, reparse escapes, duplicate targets, timeout, non-zero exit, and missing output are covered.
+  - [ ] The current-plus-prior gate reports zero failures and zero skips.
 - TEST-MCP-FILETOOLS-001: Unit tests must cover repository discovery behavior, path safety, MCP schemas, client delegation, hosted-agent registration, QBAgent registration, and backward compatibility.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -608,6 +615,14 @@ These tests must pass with mocks before the real client construction logic is fi
   - [ ] A red test reproduces the documented appendDialog silent no-op with ConvertFrom-Yaml dictionary output.
   - [ ] Tests prove multi-item delegation and fail-closed empty payload behavior.
   - [ ] Canonical and propagated plugin suites complete with zero failures and zero skips.
+- TEST-MCP-PLUGININT-001: A shared deterministic Theory and companion AiTheory matrix must exercise the real Session Log workflow for all supported agent plugins.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Exactly eight scenario rows cover Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode.
+  - [ ] Every deterministic row proves bootstrap, begin, append action/dialog, complete, durable query, and workspace cache isolation.
+  - [ ] Every AiTheory row receives the persisted receipt/artifact and returns a strict semantic completeness result that is asserted by the test.
+  - [ ] A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path.
+  - [ ] The focused target and each plugin native suite complete with zero failures and zero skips.
 - TEST-MCP-PLUGIN-TRIAGE-001: Every plugin skill bundle documents when and how to submit triage reports and the async expectation.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -767,8 +782,12 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-REPL-017: ✅ **Complete** - Given workspace selection via workspace selector, when commands target specific workspaces, then workspace context is properly scoped. **Covered by:** `WorkspaceSelectionTests`, `AuthKeyAndWorkspaceTests`
   Scope: layer-1+
-- TEST-MCP-REPL-018: ✅ **Complete** - Given orchestration rules for trust and auth, when workflows execute, then trust-before-auth and nonce-validation rules are enforced. **Covered by:** `OrchestrationRulesTests`, `TrustBootstrapFlowTests`
+- TEST-MCP-REPL-018: Tests must verify canonical agent keying, explicit --agent propagation, absence of production AgentOverride leakage, and named-agent child process launch behavior.
   Scope: layer-1+
+  **Acceptance Criteria:**
+  - [x] Canonicalization theory covers Codex, ClaudeCode, GrokCode, and OpenCode-style names. (evidence: tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+  - [x] Resolver test proves cache record agent key is canonical and AgentOverride remains unset after production resolution. (evidence: tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+  - [x] Child process helper test proves --agent and the named value are present in the launched REPL argument list. (evidence: tests/McpServer.Repl.IntegrationTests/ReplChildProcessHelper.cs; tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
 - TEST-MCP-REPL-019: ✅ **Complete** - Given namespace-organized command shapes, when workflows execute, then operations delegate to typed client contracts without duplicating business logic. **Covered by:** `TodoWorkflowTests`, `SessionLogWorkflowTests`, `RequirementsWorkflowTests`, `GenericClientPassthroughTests`
   Scope: layer-1+
 - TEST-MCP-REPL-020: ✅ **Complete** - Given concurrent REPL operations, when workflows maintain stateful context, then session state and TODO selection are properly isolated per workflow instance. **Covered by:** `SessionLogWorkflowTests` (state management), `TodoWorkflowTests` (selection state)
@@ -836,6 +855,13 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Cline, Cline v2, and Opencode build/test gates pass with acceptanceCriteria coverage. (evidence: Cline and Cline v2 npm build/test passed; Opencode npm build and full Jest passed with coverage thresholds.)
 - TEST-MCP-REQACPLUGIN-TS: In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) proves req_create_fr/req_update_fr/req_create_test forward acceptanceCriteria into the request payload with zero failures and zero skips.
   Scope: layer-1+
+- TEST-MCP-SESSIONLOGSAN-001: Tests must prove default and configured redaction across the complete session-log DTO graph and all supported read transports without changing persisted raw data or query semantics.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Unit tests cover every default detector, overlapping rules, deterministic replacements, recursive object payloads, invalid patterns, duplicate IDs, timeouts, and non-mutation.
+  - [ ] Service tests cover QueryAsync and GetAsync for every DTO field and preserve total count, ordering, offset, and limit.
+  - [ ] HTTP, stdio, and federated integration tests return redacted payloads while direct database verification retains raw values.
+  - [ ] Executed current-plus-prior test scope reports zero failures and zero skips.
 - TEST-MCP-SUBLOG-001: Parseable sink posts a correctly shaped batch to /api/v1/ingest with X-P-Stream and basic auth; the subscriber invokes the message log once per received message with correct status/reason; sink errors do not fail the commit; no-op default logs nothing.
   Scope: layer-1+
   **Acceptance Criteria:**

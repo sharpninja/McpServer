@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 
@@ -70,7 +71,6 @@ public sealed class TransactionDiffgramProtector : ITransactionDiffgramProtector
     private const int AesNonceSizeBytes = 12;
     private const int AesTagSizeBytes = 16;
 
-    private static readonly JsonSerializerOptions EnvelopeJsonOptions = new(JsonSerializerDefaults.Web);
 
     /// <inheritdoc />
     public DiffgramProtectionResult Protect(string plaintextJson, PartyKeyDescriptor subscriberEncryptionKey)
@@ -124,7 +124,7 @@ public sealed class TransactionDiffgramProtector : ITransactionDiffgramProtector
             CiphertextBase64 = Convert.ToBase64String(ciphertext),
             TagBase64 = Convert.ToBase64String(tag),
         };
-        var envelopeBytes = JsonSerializer.SerializeToUtf8Bytes(envelope, EnvelopeJsonOptions);
+        var envelopeBytes = JsonSerializer.SerializeToUtf8Bytes(envelope, typeof(ProtectedDiffgramEnvelope), TransactionSecurityJsonContext.Default);
         return new DiffgramProtectionResult
         {
             EncryptedDiffgramBase64 = Convert.ToBase64String(envelopeBytes),
@@ -267,7 +267,7 @@ public sealed class TransactionDiffgramProtector : ITransactionDiffgramProtector
         try
         {
             envelopeBytes = Convert.FromBase64String(encryptedDiffgramBase64);
-            envelope = JsonSerializer.Deserialize<ProtectedDiffgramEnvelope>(envelopeBytes, EnvelopeJsonOptions);
+            envelope = (ProtectedDiffgramEnvelope?)JsonSerializer.Deserialize(envelopeBytes, typeof(ProtectedDiffgramEnvelope), TransactionSecurityJsonContext.Default);
             if (envelope is null ||
                 !string.Equals(envelope.Type, EnvelopeType, StringComparison.Ordinal) ||
                 envelope.SchemaVersion != 1 ||
@@ -343,7 +343,7 @@ public sealed class TransactionDiffgramProtector : ITransactionDiffgramProtector
     private static string HashHex(byte[] bytes)
         => Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
 
-    private sealed class ProtectedDiffgramEnvelope
+    internal sealed class ProtectedDiffgramEnvelope
     {
         [JsonPropertyName("type")]
         public string Type { get; set; } = string.Empty;

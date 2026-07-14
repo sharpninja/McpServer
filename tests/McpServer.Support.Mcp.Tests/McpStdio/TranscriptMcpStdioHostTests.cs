@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using McpServer.Support.Mcp.McpStdio;
 
@@ -31,18 +32,23 @@ public sealed class TranscriptMcpStdioHostTests
         var dbPath = Path.Combine(dataRoot, "mcp.db");
 
         using var process = StartStdioHost(executablePath, repositoryRoot, dataRoot, dbPath);
-        var stdoutTask = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
-        var stderrTask = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+        var stdout = new StringBuilder();
+        var stderr = new StringBuilder();
+        var stdoutTask = CaptureAsync(process.StandardOutput, stdout, TestContext.Current.CancellationToken);
+        var stderrTask = CaptureAsync(process.StandardError, stderr, TestContext.Current.CancellationToken);
 
-        await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken).ConfigureAwait(true);
         foreach (var message in CreateMessages(repositoryRoot, fixturePath))
         {
             await process.StandardInput.WriteLineAsync(message.AsMemory(), TestContext.Current.CancellationToken).ConfigureAwait(true);
             await process.StandardInput.FlushAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-            await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
-        await Task.Delay(TimeSpan.FromSeconds(8), TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await WaitForOutputAsync(
+            stdout,
+            text => text.Contains("compatibilityArtifactPath", StringComparison.Ordinal),
+            TimeSpan.FromSeconds(45),
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
         process.StandardInput.Close();
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken, timeout.Token);
@@ -56,15 +62,57 @@ public sealed class TranscriptMcpStdioHostTests
             throw;
         }
 
-        var stdout = await stdoutTask.ConfigureAwait(true);
-        var stderr = await stderrTask.ConfigureAwait(true);
+        await stdoutTask.ConfigureAwait(true);
+        await stderrTask.ConfigureAwait(true);
+        var stdoutText = stdout.ToString();
+        var stderrText = stderr.ToString();
 
         Assert.Equal(0, process.ExitCode);
-        Assert.DoesNotContain("threw an unhandled exception", stderr, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("sessionlog_ingest_path", stdout, StringComparison.Ordinal);
-        Assert.Contains("sessionlog_normalize_path", stdout, StringComparison.Ordinal);
-        Assert.Contains("codex-real-fixture-session", stdout, StringComparison.Ordinal);
-        Assert.Contains("compatibilityArtifactPath", stdout, StringComparison.Ordinal);
+        Assert.DoesNotContain("threw an unhandled exception", stderrText, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("sessionlog_ingest_path", stdoutText, StringComparison.Ordinal);
+        Assert.Contains("sessionlog_normalize_path", stdoutText, StringComparison.Ordinal);
+        Assert.Contains("codex-real-fixture-session", stdoutText, StringComparison.Ordinal);
+        Assert.Contains("compatibilityArtifactPath", stdoutText, StringComparison.Ordinal);
+    }
+
+    private static async Task CaptureAsync(StreamReader reader, StringBuilder destination, CancellationToken cancellationToken)
+    {
+        var buffer = new char[4096];
+        while (true)
+        {
+            var read = await reader.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken).ConfigureAwait(false);
+            if (read == 0)
+                return;
+
+            lock (destination)
+                destination.Append(buffer, 0, read);
+        }
+    }
+
+    private static async Task WaitForOutputAsync(
+        StringBuilder output,
+        Func<string, bool> predicate,
+        TimeSpan timeout,
+        CancellationToken cancellationToken)
+    {
+        var deadline = DateTimeOffset.UtcNow.Add(timeout);
+        while (DateTimeOffset.UtcNow < deadline)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            string snapshot;
+            lock (output)
+                snapshot = output.ToString();
+
+            if (predicate(snapshot))
+                return;
+
+            await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken).ConfigureAwait(false);
+        }
+
+        string finalSnapshot;
+        lock (output)
+            finalSnapshot = output.ToString();
+        throw new TimeoutException($"Timed out waiting for stdio output. Current stdout: {finalSnapshot}");
     }
 
     private static Process StartStdioHost(string executablePath, string repositoryRoot, string dataRoot, string dbPath)

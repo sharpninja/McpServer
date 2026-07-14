@@ -23,12 +23,6 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         TimeSpan.FromMilliseconds(100)
     ];
 
-    private static readonly JsonSerializerOptions s_jsonOptions = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        WriteIndented = true,
-    };
-
     private readonly IOptionsMonitor<GitHubIntegrationOptions> _options;
     private readonly IDataProtector _protector;
     private readonly ILogger<FileGitHubWorkspaceTokenStore> _logger;
@@ -155,7 +149,7 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         {
             EnsureRestrictedFilePermissions(path);
             var json = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
-            var doc = JsonSerializer.Deserialize<GitHubTokenStoreDocument>(json, s_jsonOptions);
+            var doc = JsonSerializer.Deserialize(json, GitHubTokenStoreJsonContext.Default.GitHubTokenStoreDocument);
             return doc ?? new GitHubTokenStoreDocument();
         }
         catch (JsonException ex)
@@ -172,7 +166,7 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         if (!string.IsNullOrWhiteSpace(dir))
             Directory.CreateDirectory(dir);
 
-        var json = JsonSerializer.Serialize(doc, s_jsonOptions);
+        var json = JsonSerializer.Serialize(doc, GitHubTokenStoreJsonContext.Default.GitHubTokenStoreDocument);
         var tmp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
         try
         {
@@ -329,19 +323,20 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
             .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
     }
 
-    private sealed class GitHubTokenStoreDocument
-    {
-        public List<GitHubTokenStoreEntry> Entries { get; set; } = [];
-    }
+}
 
-    private sealed class GitHubTokenStoreEntry
-    {
-        public string WorkspacePath { get; set; } = string.Empty;
+internal sealed class GitHubTokenStoreDocument
+{
+    public List<GitHubTokenStoreEntry> Entries { get; set; } = [];
+}
 
-        public string AccessTokenProtected { get; set; } = string.Empty;
+internal sealed class GitHubTokenStoreEntry
+{
+    public string WorkspacePath { get; set; } = string.Empty;
 
-        public DateTimeOffset UpdatedAtUtc { get; set; }
+    public string AccessTokenProtected { get; set; } = string.Empty;
 
-        public DateTimeOffset? ExpiresAtUtc { get; set; }
-    }
+    public DateTimeOffset UpdatedAtUtc { get; set; }
+
+    public DateTimeOffset? ExpiresAtUtc { get; set; }
 }

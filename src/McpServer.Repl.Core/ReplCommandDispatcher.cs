@@ -4,10 +4,13 @@
 // TEST-MCP-REPL-001: REPL host processes well-formed YAML command envelopes
 
 using System.Collections;
+using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
+using McpServer.Client;
 using McpServer.Client.Models;
-
 namespace McpServer.Repl.Core;
 
 /// <summary>
@@ -64,6 +67,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     {
         PropertyNameCaseInsensitive = true,
         Converters = { new FlexibleBooleanJsonConverter() },
+        TypeInfoResolver = JsonTypeInfoResolver.Combine(ReplCoreJsonContext.Default, McpClientJsonContext.Default),
     };
 
     private readonly IGenericClientPassthrough _passthrough;
@@ -1723,8 +1727,68 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         var normalized = NormalizeJsonElement(value);
-        var json = JsonSerializer.Serialize(normalized, JsonOptions);
-        return JsonSerializer.Deserialize<T>(json, JsonOptions);
+        var json = ToJsonNode(normalized)?.ToJsonString() ?? "null";
+        return (T?)JsonSerializer.Deserialize(json, JsonOptions.GetTypeInfo(typeof(T)));
+    }
+
+    private static JsonNode? ToJsonNode(object? value)
+    {
+        if (value is null)
+        {
+            return null;
+        }
+
+        if (value is JsonElement element)
+        {
+            return ToJsonNode(NormalizeJsonElement(element));
+        }
+
+        if (value is IDictionary dictionary)
+        {
+            var jsonObject = new JsonObject();
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                var key = Convert.ToString(entry.Key, CultureInfo.InvariantCulture);
+                if (!string.IsNullOrWhiteSpace(key))
+                {
+                    jsonObject[key] = ToJsonNode(entry.Value);
+                }
+            }
+
+            return jsonObject;
+        }
+
+        if (value is IEnumerable sequence and not string)
+        {
+            var jsonArray = new JsonArray();
+            foreach (var item in sequence)
+            {
+                jsonArray.Add(ToJsonNode(item));
+            }
+
+            return jsonArray;
+        }
+
+        return value switch
+        {
+            string text => JsonValue.Create(text),
+            bool boolean => JsonValue.Create(boolean),
+            byte number => JsonValue.Create(number),
+            sbyte number => JsonValue.Create(number),
+            short number => JsonValue.Create(number),
+            ushort number => JsonValue.Create(number),
+            int number => JsonValue.Create(number),
+            uint number => JsonValue.Create(number),
+            long number => JsonValue.Create(number),
+            ulong number => JsonValue.Create(number),
+            float number => JsonValue.Create(number),
+            double number => JsonValue.Create(number),
+            decimal number => JsonValue.Create(number),
+            DateTime valueDate => JsonValue.Create(valueDate),
+            DateTimeOffset valueDate => JsonValue.Create(valueDate),
+            Guid valueGuid => JsonValue.Create(valueGuid),
+            _ => JsonValue.Create(Convert.ToString(value, CultureInfo.InvariantCulture)),
+        };
     }
 
     private static IReadOnlyList<AcceptanceCriterion>? GetAcceptanceCriteria(
@@ -2598,7 +2662,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         };
     }
 
-    private sealed class DialogItemAdapter : IDialogItem
+    internal sealed class DialogItemAdapter : IDialogItem
     {
         public DateTimeOffset Timestamp { get; init; }
 
@@ -2609,7 +2673,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         public string Category { get; init; } = string.Empty;
     }
 
-    private sealed class SessionActionAdapter : ISessionAction
+    internal sealed class SessionActionAdapter : ISessionAction
     {
         public int Order { get; init; }
 

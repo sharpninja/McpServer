@@ -1,4 +1,3 @@
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Options;
@@ -11,12 +10,6 @@ namespace McpServer.Support.Mcp.Services.AgentHelp;
 /// </summary>
 public sealed class AgentHelpIncidentLogger
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
-    {
-        WriteIndented = true,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-    };
-
     private readonly IOptionsMonitor<AgentHelpOptions> _options;
     private readonly ILogger<AgentHelpIncidentLogger> _logger;
 
@@ -48,7 +41,7 @@ public sealed class AgentHelpIncidentLogger
 
         var fileName = $"{incident.TimestampUtc.Replace(":", "-", StringComparison.Ordinal)}-{incident.IncidentId}.json";
         var filePath = Path.Combine(incidentDir, fileName);
-        var json = JsonSerializer.Serialize(incident, s_jsonOptions);
+        var json = JsonSerializer.Serialize(incident, AgentHelpJsonContext.Default.AgentHelpIncidentRecord);
         await File.WriteAllTextAsync(filePath, json, cancellationToken).ConfigureAwait(false);
 
         _logger.LogWarning(
@@ -83,7 +76,7 @@ public sealed class AgentHelpIncidentLogger
             try
             {
                 var json = await File.ReadAllTextAsync(filePath, cancellationToken).ConfigureAwait(false);
-                var incident = JsonSerializer.Deserialize<AgentHelpIncidentRecord>(json, s_jsonOptions);
+                var incident = JsonSerializer.Deserialize(json, AgentHelpJsonContext.Default.AgentHelpIncidentRecord);
                 if (incident is not null
                     && string.Equals(incident.SessionId, sessionId, StringComparison.OrdinalIgnoreCase))
                 {

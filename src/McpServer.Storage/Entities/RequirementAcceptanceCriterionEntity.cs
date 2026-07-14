@@ -15,22 +15,22 @@ public sealed class RequirementAcceptanceCriterionEntity
     public long Id { get; set; }
 
     /// <summary>Owning requirement workspace discriminator (part of the composite parent key).</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Owning requirement kind (part of the composite parent key).</summary>
-    [MaxLength(16)]
+    [StringLength(16)]
     public string RequirementKind { get; set; } = string.Empty;
 
     /// <summary>Owning requirement id (part of the composite parent key).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string RequirementId { get; set; } = string.Empty;
 
     /// <summary>Ordinal position within the requirement's acceptance-criteria list.</summary>
     public int Ordinal { get; set; }
 
     /// <summary>Criterion identifier (the acceptance criterion's own id).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string CriterionId { get; set; } = string.Empty;
 
     /// <summary>Criterion text.</summary>

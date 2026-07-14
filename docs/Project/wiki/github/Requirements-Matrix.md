@@ -936,5 +936,14 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-TRANSCRIPT-008 | Tracked | Testing-Requirements.md |
 | TEST-MCP-TRANSCRIPT-009 | Tracked | Testing-Requirements.md |
 | TEST-MCP-TRANSCRIPT-010 | Tracked | Testing-Requirements.md |
+| FR-MCP-PLUGININT-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-SESSIONLOGSAN-001 | Tracked | Functional-Requirements.md |
+| TR-MCP-PLUGININT-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-SESSIONLOGSAN-001 | Tracked | Technical-Requirements.md |
+| TEST-MCP-DOCFXWIKI-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGININT-001 | Tracked | Testing-Requirements.md |
+| TEST-MCP-SESSIONLOGSAN-001 | Tracked | Testing-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TEST-MCP-TRANSCRIPT-011 | Tracked | Testing-Requirements.md |
+| TEST-MCP-TRANSCRIPT-012 | Tracked | Testing-Requirements.md |

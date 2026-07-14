@@ -146,10 +146,8 @@ public class RequestResponseCorrelationTests
         protocol.When(x => x.RegisterEventHandler("workspace.changed", Arg.Any<Func<IEventPayload, Task>>()))
             .Do(callInfo =>
             {
-#pragma warning disable CS8602
-                var h = callInfo.Arg<Func<IEventPayload, Task>>();
+                var h = callInfo.Arg<Func<IEventPayload, Task>>()!;
                 _ = h(eventPayload);
-#pragma warning restore CS8602
             });
 
         protocol.RegisterEventHandler("workspace.changed", handler);

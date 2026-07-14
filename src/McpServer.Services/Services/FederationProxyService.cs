@@ -317,13 +317,12 @@ public sealed class FederationProxyService
         context.Response.ContentType = "application/json";
         context.Response.Headers[FederationHeaders.Queued] = "true";
         context.Response.Headers[FederationHeaders.OperationId] = response.OperationId;
+        var accepted = new FederationQueuedOperationAcceptedResponse(
+            response.OperationId,
+            response.Status,
+            Queued: true);
         await context.Response.WriteAsync(
-            JsonSerializer.Serialize(new
-            {
-                operationId = response.OperationId,
-                status = response.Status,
-                queued = true,
-            }),
+            JsonSerializer.Serialize(accepted, McpServicesJsonContext.Default.FederationQueuedOperationAcceptedResponse),
             cancellationToken)
             .ConfigureAwait(false);
         return true;
@@ -555,7 +554,7 @@ public sealed class FederationProxyService
         var headers = request.Headers
             .Where(h => !IsSecretHeader(h.Key))
             .ToDictionary(h => h.Key, h => h.Value.ToArray(), StringComparer.OrdinalIgnoreCase);
-        return JsonSerializer.Serialize(headers);
+        return JsonSerializer.Serialize(headers, McpServicesJsonContext.Default.DictionaryStringStringArray);
     }
 
     private static bool IsSecretHeader(string header)
@@ -570,3 +569,8 @@ public sealed class FederationProxyService
         public static RequestBodyCapture Empty { get; } = new(true, null);
     }
 }
+
+internal sealed record FederationQueuedOperationAcceptedResponse(
+    string OperationId,
+    string Status,
+    bool Queued);

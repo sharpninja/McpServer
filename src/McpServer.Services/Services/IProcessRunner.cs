@@ -35,9 +35,11 @@ public sealed record ProcessRunResult(int ExitCode, string? Stdout, string? Stde
 /// <param name="GitHubTokenOverride">Optional token override passed as <c>GH_TOKEN</c>.</param>
 /// <param name="WorkingDirectory">Optional working directory for the process.</param>
 /// <param name="EnvironmentVariables">Optional per-process environment variable overrides.</param>
+/// <param name="ArgumentList">Optional structured argument list. When supplied, arguments are passed without shell parsing.</param>
 public sealed record ProcessRunRequest(
     string FileName,
     string Arguments,
     string? GitHubTokenOverride = null,
     string? WorkingDirectory = null,
-    IReadOnlyDictionary<string, string?>? EnvironmentVariables = null);
+    IReadOnlyDictionary<string, string?>? EnvironmentVariables = null,
+    IReadOnlyList<string>? ArgumentList = null);

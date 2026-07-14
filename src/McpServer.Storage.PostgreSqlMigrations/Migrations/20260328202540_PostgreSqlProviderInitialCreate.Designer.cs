@@ -18,7 +18,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
-#pragma warning disable 612, 618
+
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
@@ -1003,7 +1003,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                 {
                     b.Navigation("Tags");
                 });
-#pragma warning restore 612, 618
+
         }
     }
 }

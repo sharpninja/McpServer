@@ -11,49 +11,49 @@ public sealed class DataAuditLogEntity
 {
     /// <summary>Stable audit row identifier.</summary>
     [Key]
-    [MaxLength(64)]
+    [StringLength(64)]
     public string AuditId { get; set; } = Guid.NewGuid().ToString("N");
 
     /// <summary>Workspace affected by the mutation, or empty for global rows.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Entity CLR type or domain kind.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public string EntityKind { get; set; } = string.Empty;
 
     /// <summary>Stable key for the affected entity.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string EntityKey { get; set; } = string.Empty;
 
     /// <summary>Semantic action, such as create, update, or delete.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public string Action { get; set; } = string.Empty;
 
     /// <summary>Actor responsible for the mutation.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public string Actor { get; set; } = "system";
 
     /// <summary>Agent, service, import, federation, or other source type.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public string SourceType { get; set; } = "McpDbContext";
 
     /// <summary>Optional request identifier for correlation.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? RequestId { get; set; }
 
     /// <summary>Optional cross-system correlation identifier.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? CorrelationId { get; set; }
 
     /// <summary>Optional federation operation identifier.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? FederationOperationId { get; set; }
 
     /// <summary>UTC timestamp when the mutation was recorded.</summary>

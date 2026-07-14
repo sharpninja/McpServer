@@ -11,7 +11,7 @@ public sealed class GraphRelationshipEntity
 {
     /// <summary>Unique relationship identifier. Format: "gr-{Guid:N}".</summary>
     [Key]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string Id { get; set; }
 
     /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant isolation.</summary>
@@ -19,28 +19,28 @@ public sealed class GraphRelationshipEntity
 
     /// <summary>Source entity identifier (foreign key).</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string SourceEntityId { get; set; }
 
     /// <summary>Target entity identifier (foreign key).</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string TargetEntityId { get; set; }
 
     /// <summary>Relationship classification (e.g. "depends_on", "authored_by").</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string RelationshipType { get; set; }
 
     /// <summary>Optional free-text description of the relationship.</summary>
-    [MaxLength(4096)]
+    [StringLength(4096)]
     public string? Description { get; set; }
 
     /// <summary>Numeric weight/strength of the relationship. Default 1.0.</summary>
     public double Weight { get; set; } = 1.0;
 
     /// <summary>Optional JSON blob for extensible key-value metadata.</summary>
-    [MaxLength(8192)]
+    [StringLength(8192)]
     public string? Metadata { get; set; }
 
     /// <summary>UTC timestamp when the relationship was created.</summary>

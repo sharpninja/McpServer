@@ -63,7 +63,7 @@ Hybrid search combining SQLite FTS5 full-text with HNSW vector similarity (384-d
 
 ### Storage
 
-EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, PostgreSQL, and SQL Server. TODO items use a pluggable backend: YAML file-backed (`TodoService`) or SQLite table-backed (`SqliteTodoService`), selected via `Mcp:TodoStorage:Provider`.
+EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, PostgreSQL, and SQL Server. TODO items live in the configured database as the sole source of truth; `docs/Project/TODO.yaml` is a read-only projection. `Mcp:TodoStorage:Provider` accepts `database` (`sqlite` is a deprecated alias; the removed `yaml` value fails fast per TR-MCP-CFG-007).
 
 ### Key Projects
 

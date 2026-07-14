@@ -34,6 +34,9 @@ public abstract class FederationStateAdapterBase : IFederationStateAdapter
     public virtual bool IsLocalOnly => false;
 
     /// <inheritdoc />
+    public virtual bool SupportsApply => false;
+
+    /// <inheritdoc />
     public abstract ValueTask<FederationStateSnapshot> SnapshotAsync(string resourceId, CancellationToken cancellationToken);
 
     /// <inheritdoc />
@@ -88,16 +91,18 @@ public abstract class DatabaseFederationStateAdapterBase : FederationStateAdapte
     protected IServiceScopeFactory ScopeFactory { get; }
 
     /// <inheritdoc />
+    public override bool SupportsApply => true;
+
+    /// <inheritdoc />
     public override async ValueTask<FederationStateSnapshot> SnapshotAsync(string resourceId, CancellationToken cancellationToken)
     {
-        var payload = await ReadPayloadAsync(resourceId, cancellationToken).ConfigureAwait(false);
-        var payloadJson = JsonSerializer.Serialize(payload, JsonOptions);
+        var payloadJson = await ReadPayloadJsonAsync(resourceId, cancellationToken).ConfigureAwait(false);
         return new FederationStateSnapshot
         {
             Domain = Domain,
             ResourceId = resourceId,
-            PayloadJson = payloadJson,
-            Version = payload is null ? null : await GetVersionAsync(resourceId, cancellationToken).ConfigureAwait(false),
+            PayloadJson = payloadJson ?? "null",
+            Version = payloadJson is null ? null : await GetVersionAsync(resourceId, cancellationToken).ConfigureAwait(false),
         };
     }
 
@@ -108,16 +113,16 @@ public abstract class DatabaseFederationStateAdapterBase : FederationStateAdapte
         if (!string.IsNullOrWhiteSpace(explicitVersion))
             return explicitVersion;
 
-        var payload = await ReadPayloadAsync(resourceId, cancellationToken).ConfigureAwait(false);
-        return payload is null ? null : VersionFromPayload(JsonSerializer.Serialize(payload, JsonOptions));
+        var payloadJson = await ReadPayloadJsonAsync(resourceId, cancellationToken).ConfigureAwait(false);
+        return payloadJson is null ? null : VersionFromPayload(payloadJson);
     }
 
-    /// <summary>Reads a domain payload from the database.</summary>
+    /// <summary>Reads a serialized domain payload from the database.</summary>
     /// <param name="db">Database context.</param>
     /// <param name="resourceId">Domain resource identifier.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The snapshot payload, or <c>null</c> when the resource does not exist.</returns>
-    protected abstract Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken);
+    /// <returns>The serialized snapshot payload, or <c>null</c> when the resource does not exist.</returns>
+    protected abstract Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken);
 
     /// <summary>Reads an authoritative version token when the domain has one.</summary>
     /// <param name="db">Database context.</param>
@@ -127,11 +132,11 @@ public abstract class DatabaseFederationStateAdapterBase : FederationStateAdapte
     protected virtual Task<string?> ReadExplicitVersionAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
         => Task.FromResult<string?>(null);
 
-    private async Task<object?> ReadPayloadAsync(string resourceId, CancellationToken cancellationToken)
+    private async Task<string?> ReadPayloadJsonAsync(string resourceId, CancellationToken cancellationToken)
     {
         await using var scope = ScopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        return await ReadPayloadAsync(db, resourceId, cancellationToken).ConfigureAwait(false);
+        return await ReadPayloadJsonAsync(db, resourceId, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<string?> GetExplicitVersionAsync(string resourceId, CancellationToken cancellationToken)
@@ -156,10 +161,13 @@ public sealed class WorkspaceFederationStateAdapter : FederationStateAdapterBase
     }
 
     /// <inheritdoc />
+    public override bool SupportsApply => true;
+
+    /// <inheritdoc />
     public override async ValueTask<FederationStateSnapshot> SnapshotAsync(string resourceId, CancellationToken cancellationToken)
     {
         var workspace = await GetWorkspaceAsync(resourceId, cancellationToken).ConfigureAwait(false);
-        var payloadJson = JsonSerializer.Serialize(workspace, JsonOptions);
+        var payloadJson = JsonSerializer.Serialize(workspace, typeof(WorkspaceDto), FederationAdapterJsonContext.Default);
         return new FederationStateSnapshot
         {
             Domain = Domain,
@@ -200,7 +208,7 @@ public sealed class WorkspaceFederationStateAdapter : FederationStateAdapterBase
         WorkspaceDto? payload;
         try
         {
-            payload = JsonSerializer.Deserialize<WorkspaceDto>(operation.PayloadJson, JsonOptions);
+            payload = (WorkspaceDto?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(WorkspaceDto), FederationAdapterJsonContext.Default);
         }
         catch (JsonException ex)
         {
@@ -344,7 +352,7 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
     }
 
     /// <inheritdoc />
-    protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    protected override async Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
         var row = await db.TodoItems
             .AsNoTracking()
@@ -373,35 +381,40 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
         string? SerializeListType(string listType)
         {
             var values = listRows.Where(r => r.ListType == listType).Select(r => r.Value).ToList();
-            return values.Count == 0 ? null : JsonSerializer.Serialize(values, JsonOptions);
+            return values.Count == 0
+                ? null
+                : JsonSerializer.Serialize(values, typeof(List<string>), FederationAdapterJsonContext.Default);
         }
 
-        var item = new
+        var item = new TodoSnapshotItemPayload
         {
-            row.Id,
-            row.Title,
-            row.Section,
-            row.Priority,
-            row.Done,
-            row.Estimate,
-            row.Note,
+            Id = row.Id,
+            Title = row.Title,
+            Section = row.Section,
+            Priority = row.Priority,
+            Done = row.Done,
+            Estimate = row.Estimate,
+            Note = row.Note,
             DescriptionJson = SerializeListType("Description"),
             TechnicalDetailsJson = SerializeListType("TechnicalDetail"),
             ImplementationTasksJson = taskRows.Count == 0
                 ? null
-                : JsonSerializer.Serialize(taskRows.Select(t => new { task = t.Task, done = t.Done }).ToList(), JsonOptions),
-            row.CompletedDate,
-            row.DoneSummary,
-            row.Remaining,
-            row.PriorityNote,
-            row.Reference,
+                : JsonSerializer.Serialize(
+                    taskRows.Select(t => new TodoFlatTask(t.Task, t.Done)).ToList(),
+                    typeof(List<TodoFlatTask>),
+                    FederationAdapterJsonContext.Default),
+            CompletedDate = row.CompletedDate,
+            DoneSummary = row.DoneSummary,
+            Remaining = row.Remaining,
+            PriorityNote = row.PriorityNote,
+            Reference = row.Reference,
             DependsOnJson = SerializeListType("DependsOn"),
             FunctionalRequirementsJson = SerializeListType("FunctionalRequirement"),
             TechnicalRequirementsJson = SerializeListType("TechnicalRequirement"),
-            row.ItemKind,
-            row.SectionOrder,
-            row.ItemOrder,
-            row.PhaseLabel,
+            ItemKind = row.ItemKind,
+            SectionOrder = row.SectionOrder,
+            ItemOrder = row.ItemOrder,
+            PhaseLabel = row.PhaseLabel,
         };
 
         var audit = await db.TodoAuditHistory
@@ -410,17 +423,22 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
             .OrderByDescending(a => a.Version)
             .ThenByDescending(a => a.AuditId)
             .Take(20)
-            .Select(a => new
+            .Select(a => new TodoAuditPayload
             {
-                a.Version,
-                a.Action,
-                a.RecordedAtUtc,
-                a.Source,
+                Version = a.Version,
+                Action = a.Action,
+                RecordedAtUtc = a.RecordedAtUtc,
+                Source = a.Source,
             })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return new { item, audit };
+        var payload = new TodoSnapshotPayload
+        {
+            Item = item,
+            Audit = audit,
+        };
+        return JsonSerializer.Serialize(payload, typeof(TodoSnapshotPayload), FederationAdapterJsonContext.Default);
     }
 
     /// <inheritdoc />
@@ -440,7 +458,7 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
         FederationStateOperation operation,
         CancellationToken cancellationToken)
     {
-        var request = JsonSerializer.Deserialize<TodoCreateRequest>(operation.PayloadJson, JsonOptions);
+        var request = (TodoCreateRequest?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(TodoCreateRequest), FederationAdapterJsonContext.Default);
         if (request is null)
             return Conflict("TODO create payload is empty.");
 
@@ -457,7 +475,7 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
         if (string.IsNullOrWhiteSpace(todoId))
             return Conflict("TODO update operation does not identify a TODO id.");
 
-        var request = JsonSerializer.Deserialize<TodoUpdateRequest>(operation.PayloadJson, JsonOptions);
+        var request = (TodoUpdateRequest?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(TodoUpdateRequest), FederationAdapterJsonContext.Default);
         if (request is null)
             return Conflict("TODO update payload is empty.");
 
@@ -509,6 +527,71 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
             Conflict = true,
             Message = message,
         };
+
+    internal sealed class TodoSnapshotPayload
+    {
+        public TodoSnapshotItemPayload? Item { get; set; }
+
+        public List<TodoAuditPayload> Audit { get; set; } = [];
+    }
+
+    internal sealed class TodoSnapshotItemPayload
+    {
+        public string Id { get; set; } = string.Empty;
+
+        public string Title { get; set; } = string.Empty;
+
+        public string Section { get; set; } = string.Empty;
+
+        public string Priority { get; set; } = string.Empty;
+
+        public bool Done { get; set; }
+
+        public string? Estimate { get; set; }
+
+        public string? Note { get; set; }
+
+        public string? DescriptionJson { get; set; }
+
+        public string? TechnicalDetailsJson { get; set; }
+
+        public string? ImplementationTasksJson { get; set; }
+
+        public string? CompletedDate { get; set; }
+
+        public string? DoneSummary { get; set; }
+
+        public string? Remaining { get; set; }
+
+        public string? PriorityNote { get; set; }
+
+        public string? Reference { get; set; }
+
+        public string? DependsOnJson { get; set; }
+
+        public string? FunctionalRequirementsJson { get; set; }
+
+        public string? TechnicalRequirementsJson { get; set; }
+
+        public string ItemKind { get; set; } = "standard";
+
+        public int SectionOrder { get; set; }
+
+        public int ItemOrder { get; set; }
+
+        public string? PhaseLabel { get; set; }
+    }
+
+    internal sealed class TodoAuditPayload
+    {
+        public int Version { get; set; }
+
+        public string Action { get; set; } = string.Empty;
+
+        public string RecordedAtUtc { get; set; } = string.Empty;
+
+        public string? Source { get; set; }
+    }
 
     private static string? ResolveTodoId(FederationStateOperation operation)
     {
@@ -583,7 +666,7 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
     }
 
     /// <inheritdoc />
-    protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    protected override async Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
         var id = NormalizeId(resourceId);
         if (!IsValidMemoryId(id))
@@ -611,7 +694,7 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
         if (row is null || row.IsDeleted)
             return null;
 
-        return new MemoryItem
+        var payload = new MemoryItem
         {
             Id = row.Id,
             Category = row.Category,
@@ -623,6 +706,7 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
             UpdatedAtUtc = row.UpdatedAtUtc,
             UpdatedBy = row.UpdatedBy,
         };
+        return JsonSerializer.Serialize(payload, typeof(MemoryItem), FederationAdapterJsonContext.Default);
     }
 
     /// <inheritdoc />
@@ -808,7 +892,7 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
     }
 
     private static MemoryApplyPayload DeserializePayload(string payloadJson)
-        => JsonSerializer.Deserialize<MemoryApplyPayload>(payloadJson, JsonOptions) ?? new MemoryApplyPayload();
+        => (MemoryApplyPayload?)JsonSerializer.Deserialize(payloadJson, typeof(MemoryApplyPayload), FederationAdapterJsonContext.Default) ?? new MemoryApplyPayload();
 
     private static bool IsEquivalentCreate(
         MemoryEntity existing,
@@ -892,7 +976,7 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
             Message = message,
         };
 
-    private sealed record MemoryApplyPayload
+    internal sealed record MemoryApplyPayload
     {
         public string? Id { get; init; }
 
@@ -953,7 +1037,7 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
         UnifiedSessionLogDto? payload;
         try
         {
-            payload = JsonSerializer.Deserialize<UnifiedSessionLogDto>(operation.PayloadJson, JsonOptions);
+            payload = (UnifiedSessionLogDto?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(UnifiedSessionLogDto), FederationAdapterJsonContext.Default);
         }
         catch (JsonException ex)
         {
@@ -976,7 +1060,7 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
     }
 
     /// <inheritdoc />
-    protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    protected override async Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
         var key = SessionLogKey.Parse(resourceId);
         var query = db.SessionLogs.AsNoTracking().Where(s => s.SessionId == key.SessionId);
@@ -984,20 +1068,20 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
             query = query.Where(s => s.SourceType == key.SourceType);
 
         var session = await query
-            .Select(s => new
+            .Select(s => new SessionLogSnapshotRow
             {
-                s.Id,
-                s.SourceType,
-                s.SessionId,
-                s.AgentDefinitionId,
-                s.Title,
-                s.Model,
-                s.Started,
-                s.LastUpdated,
-                s.Status,
-                s.TurnCount,
-                s.TotalTokens,
-                s.ContentHash,
+                Id = s.Id,
+                SourceType = s.SourceType,
+                SessionId = s.SessionId,
+                AgentDefinitionId = s.AgentDefinitionId,
+                Title = s.Title,
+                Model = s.Model,
+                Started = s.Started,
+                LastUpdated = s.LastUpdated,
+                Status = s.Status,
+                TurnCount = s.TurnCount,
+                TotalTokens = s.TotalTokens,
+                ContentHash = s.ContentHash,
             })
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -1010,35 +1094,36 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
             .Where(t => t.SessionLogId == session.Id)
             .OrderBy(t => t.Timestamp)
             .ThenBy(t => t.Id)
-            .Select(t => new
+            .Select(t => new SessionLogTurnSnapshotPayload
             {
-                t.RequestId,
-                t.Timestamp,
-                t.Model,
-                t.ModelProvider,
-                t.QueryTitle,
-                t.Status,
-                t.TokenCount,
-                t.FailureNote,
+                RequestId = t.RequestId,
+                Timestamp = t.Timestamp,
+                Model = t.Model,
+                ModelProvider = t.ModelProvider,
+                QueryTitle = t.QueryTitle,
+                Status = t.Status,
+                TokenCount = t.TokenCount,
+                FailureNote = t.FailureNote,
             })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return new
+        var payload = new SessionLogSnapshotPayload
         {
-            session.SourceType,
-            session.SessionId,
-            session.AgentDefinitionId,
-            session.Title,
-            session.Model,
-            session.Started,
-            session.LastUpdated,
-            session.Status,
-            session.TurnCount,
-            session.TotalTokens,
-            session.ContentHash,
-            turns,
+            SourceType = session.SourceType,
+            SessionId = session.SessionId,
+            AgentDefinitionId = session.AgentDefinitionId,
+            Title = session.Title,
+            Model = session.Model,
+            Started = session.Started,
+            LastUpdated = session.LastUpdated,
+            Status = session.Status,
+            TurnCount = session.TurnCount,
+            TotalTokens = session.TotalTokens,
+            ContentHash = session.ContentHash,
+            Turns = turns,
         };
+        return JsonSerializer.Serialize(payload, typeof(SessionLogSnapshotPayload), FederationAdapterJsonContext.Default);
     }
 
     /// <inheritdoc />
@@ -1066,6 +1151,79 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
             Conflict = true,
             Message = message,
         };
+
+    internal sealed class SessionLogSnapshotRow
+    {
+        public long Id { get; set; }
+
+        public string? SourceType { get; set; }
+
+        public string? SessionId { get; set; }
+
+        public string? AgentDefinitionId { get; set; }
+
+        public string? Title { get; set; }
+
+        public string? Model { get; set; }
+
+        public DateTimeOffset? Started { get; set; }
+
+        public DateTimeOffset? LastUpdated { get; set; }
+
+        public string? Status { get; set; }
+
+        public int TurnCount { get; set; }
+
+        public int? TotalTokens { get; set; }
+
+        public string? ContentHash { get; set; }
+    }
+
+    internal sealed class SessionLogSnapshotPayload
+    {
+        public string? SourceType { get; set; }
+
+        public string? SessionId { get; set; }
+
+        public string? AgentDefinitionId { get; set; }
+
+        public string? Title { get; set; }
+
+        public string? Model { get; set; }
+
+        public DateTimeOffset? Started { get; set; }
+
+        public DateTimeOffset? LastUpdated { get; set; }
+
+        public string? Status { get; set; }
+
+        public int TurnCount { get; set; }
+
+        public int? TotalTokens { get; set; }
+
+        public string? ContentHash { get; set; }
+
+        public List<SessionLogTurnSnapshotPayload> Turns { get; set; } = [];
+    }
+
+    internal sealed class SessionLogTurnSnapshotPayload
+    {
+        public string? RequestId { get; set; }
+
+        public DateTimeOffset? Timestamp { get; set; }
+
+        public string? Model { get; set; }
+
+        public string? ModelProvider { get; set; }
+
+        public string? QueryTitle { get; set; }
+
+        public string? Status { get; set; }
+
+        public int? TokenCount { get; set; }
+
+        public string? FailureNote { get; set; }
+    }
 
     private static IQueryable<SessionLogEntity> SessionLogGraphQuery(McpDbContext db)
         => db.SessionLogs
@@ -1180,7 +1338,7 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
         RequirementsPayload? payload;
         try
         {
-            payload = JsonSerializer.Deserialize<RequirementsPayload>(operation.PayloadJson, JsonOptions);
+            payload = (RequirementsPayload?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(RequirementsPayload), FederationAdapterJsonContext.Default);
         }
         catch (JsonException ex)
         {
@@ -1202,7 +1360,7 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
     }
 
     /// <inheritdoc />
-    protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    protected override async Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
         var requirementKey = RequirementKey.Parse(resourceId);
         var requirementsQuery = db.Requirements.AsNoTracking();
@@ -1213,14 +1371,14 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
         var requirements = await requirementsQuery
             .OrderBy(r => r.Kind)
             .ThenBy(r => r.Id)
-            .Select(r => new
+            .Select(r => new RequirementPayload
             {
-                r.Kind,
-                r.Id,
-                r.Title,
-                r.Body,
-                r.CreatedAtUtc,
-                r.UpdatedAtUtc,
+                Kind = r.Kind,
+                Id = r.Id,
+                Title = r.Title,
+                Body = r.Body,
+                CreatedAtUtc = r.CreatedAtUtc,
+                UpdatedAtUtc = r.UpdatedAtUtc,
             })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -1235,17 +1393,22 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
             .OrderBy(l => l.FrId)
             .ThenBy(l => l.TargetKind)
             .ThenBy(l => l.TargetId)
-            .Select(l => new
+            .Select(l => new RequirementLinkPayload
             {
-                l.FrId,
-                l.TargetKind,
-                l.TargetId,
-                l.CreatedAtUtc,
+                FrId = l.FrId,
+                TargetKind = l.TargetKind,
+                TargetId = l.TargetId,
+                CreatedAtUtc = l.CreatedAtUtc,
             })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return new { requirements, links };
+        var payload = new RequirementsPayload
+        {
+            Requirements = requirements,
+            Links = links,
+        };
+        return JsonSerializer.Serialize(payload, typeof(RequirementsPayload), FederationAdapterJsonContext.Default);
     }
 
     private static async Task UpsertRequirementAsync(
@@ -1312,14 +1475,14 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
             Message = message,
         };
 
-    private sealed class RequirementsPayload
+    internal sealed class RequirementsPayload
     {
         public List<RequirementPayload> Requirements { get; set; } = [];
 
         public List<RequirementLinkPayload> Links { get; set; } = [];
     }
 
-    private sealed class RequirementPayload
+    internal sealed class RequirementPayload
     {
         public string Kind { get; set; } = string.Empty;
 
@@ -1334,7 +1497,7 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
         public string? UpdatedAtUtc { get; set; }
     }
 
-    private sealed class RequirementLinkPayload
+    internal sealed class RequirementLinkPayload
     {
         public string FrId { get; set; } = string.Empty;
 
@@ -1387,7 +1550,7 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
         ToolsBucketsPayload? payload;
         try
         {
-            payload = JsonSerializer.Deserialize<ToolsBucketsPayload>(operation.PayloadJson, JsonOptions);
+            payload = (ToolsBucketsPayload?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(ToolsBucketsPayload), FederationAdapterJsonContext.Default);
         }
         catch (JsonException ex)
         {
@@ -1411,21 +1574,21 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
     }
 
     /// <inheritdoc />
-    protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    protected override async Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
         var buckets = await db.ToolBuckets
             .AsNoTracking()
             .Where(b => b.Name == resourceId || resourceId == "*")
             .OrderBy(b => b.Name)
-            .Select(b => new
+            .Select(b => new ToolBucketPayload
             {
-                b.Name,
-                b.Owner,
-                b.Repo,
-                b.Branch,
-                b.ManifestPath,
-                b.DateTimeCreated,
-                b.DateTimeLastSynced,
+                Name = b.Name,
+                Owner = b.Owner,
+                Repo = b.Repo,
+                Branch = b.Branch,
+                ManifestPath = b.ManifestPath,
+                DateTimeCreated = b.DateTimeCreated,
+                DateTimeLastSynced = b.DateTimeLastSynced,
             })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -1434,22 +1597,30 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
             .AsNoTracking()
             .Where(t => t.BucketName == resourceId || t.Name == resourceId || resourceId == "*")
             .OrderBy(t => t.Name)
-            .Select(t => new
+            .Select(t => new ToolDefinitionPayload
             {
-                t.Name,
-                t.Description,
-                t.ParameterSchema,
-                t.CommandTemplate,
-                t.WorkspacePath,
-                t.BucketName,
-                t.DateTimeCreated,
-                t.DateTimeModified,
+                Name = t.Name,
+                Description = t.Description,
+                ParameterSchema = t.ParameterSchema,
+                CommandTemplate = t.CommandTemplate,
+                WorkspacePath = t.WorkspacePath,
+                BucketName = t.BucketName,
+                DateTimeCreated = t.DateTimeCreated,
+                DateTimeModified = t.DateTimeModified,
                 Tags = t.Tags.OrderBy(tag => tag.Tag).Select(tag => tag.Tag).ToList(),
             })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return buckets.Count == 0 && tools.Count == 0 ? null : new { buckets, tools };
+        if (buckets.Count == 0 && tools.Count == 0)
+            return null;
+
+        var payload = new ToolsBucketsPayload
+        {
+            Buckets = buckets,
+            Tools = tools,
+        };
+        return JsonSerializer.Serialize(payload, typeof(ToolsBucketsPayload), FederationAdapterJsonContext.Default);
     }
 
     private static async Task UpsertBucketAsync(McpDbContext db, ToolBucketPayload bucket, CancellationToken cancellationToken)
@@ -1515,14 +1686,14 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
             Message = message,
         };
 
-    private sealed class ToolsBucketsPayload
+    internal sealed class ToolsBucketsPayload
     {
         public List<ToolBucketPayload> Buckets { get; set; } = [];
 
         public List<ToolDefinitionPayload> Tools { get; set; } = [];
     }
 
-    private sealed class ToolBucketPayload
+    internal sealed class ToolBucketPayload
     {
         public string Name { get; set; } = string.Empty;
 
@@ -1539,7 +1710,7 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
         public DateTimeOffset? DateTimeLastSynced { get; set; }
     }
 
-    private sealed class ToolDefinitionPayload
+    internal sealed class ToolDefinitionPayload
     {
         public string Name { get; set; } = string.Empty;
 
@@ -1601,7 +1772,7 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
         AgentsPayload? payload;
         try
         {
-            payload = JsonSerializer.Deserialize<AgentsPayload>(operation.PayloadJson, JsonOptions);
+            payload = (AgentsPayload?)JsonSerializer.Deserialize(operation.PayloadJson, typeof(AgentsPayload), FederationAdapterJsonContext.Default);
         }
         catch (JsonException ex)
         {
@@ -1625,7 +1796,7 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
     }
 
     /// <inheritdoc />
-    protected override async Task<object?> ReadPayloadAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
+    protected override async Task<string?> ReadPayloadJsonAsync(McpDbContext db, string resourceId, CancellationToken cancellationToken)
     {
         // Lists live in 4NF child tables (auto-included); the wire snapshot keeps its
         // serialized-JSON field shape so federated peers are unaffected by the decomposition.
@@ -1636,19 +1807,21 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         var definitions = definitionRows
-            .Select(a => new
+            .Select(a => new AgentDefinitionPayload
             {
-                a.Id,
-                a.DisplayName,
-                a.DefaultLaunchCommand,
-                a.DefaultInstructionFile,
+                Id = a.Id,
+                DisplayName = a.DisplayName,
+                DefaultLaunchCommand = a.DefaultLaunchCommand,
+                DefaultInstructionFile = a.DefaultInstructionFile,
                 DefaultModelsJson = JsonSerializer.Serialize(
-                    a.Models.OrderBy(m => m.Ordinal).Select(m => m.Model).ToList(), JsonOptions),
-                a.DefaultBranchStrategy,
-                a.DefaultSeedPrompt,
-                a.IsBuiltIn,
-                a.CreatedAt,
-                a.ModifiedAt,
+                    a.Models.OrderBy(m => m.Ordinal).Select(m => m.Model).ToList(),
+                    typeof(List<string>),
+                    FederationAdapterJsonContext.Default),
+                DefaultBranchStrategy = a.DefaultBranchStrategy,
+                DefaultSeedPrompt = a.DefaultSeedPrompt,
+                IsBuiltIn = a.IsBuiltIn,
+                CreatedAt = a.CreatedAt,
+                ModifiedAt = a.ModifiedAt,
             })
             .ToList();
 
@@ -1667,31 +1840,41 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
                 .OrderBy(r => r.Ordinal)
                 .Select(r => r.Value)
                 .ToList();
-            return values.Count == 0 ? null : JsonSerializer.Serialize(values, JsonOptions);
+            return values.Count == 0
+                ? null
+                : JsonSerializer.Serialize(values, typeof(List<string>), FederationAdapterJsonContext.Default);
         }
 
         var workspaceConfigs = workspaceRows
-            .Select(a => new
+            .Select(a => new AgentWorkspacePayload
             {
-                a.AgentDefinitionId,
-                a.WorkspacePath,
-                a.Enabled,
-                a.Banned,
-                a.BannedReason,
-                a.BannedUntilPr,
-                a.AgentIsolation,
-                a.LaunchCommandOverride,
+                AgentDefinitionId = a.AgentDefinitionId,
+                WorkspacePath = a.WorkspacePath,
+                Enabled = a.Enabled,
+                Banned = a.Banned,
+                BannedReason = a.BannedReason,
+                BannedUntilPr = a.BannedUntilPr,
+                AgentIsolation = a.AgentIsolation,
+                LaunchCommandOverride = a.LaunchCommandOverride,
                 ModelsOverrideJson = SerializeOverride(a, "ModelOverride"),
-                a.BranchStrategyOverride,
-                a.SeedPromptOverride,
-                a.MarkerAdditions,
+                BranchStrategyOverride = a.BranchStrategyOverride,
+                SeedPromptOverride = a.SeedPromptOverride,
+                MarkerAdditions = a.MarkerAdditions,
                 InstructionFilesOverrideJson = SerializeOverride(a, "InstructionFileOverride"),
-                a.RestartPolicy,
-                a.AddedAt,
+                RestartPolicy = a.RestartPolicy,
+                AddedAt = a.AddedAt,
             })
             .ToList();
 
-        return definitions.Count == 0 && workspaceConfigs.Count == 0 ? null : new { definitions, workspaceConfigs };
+        if (definitions.Count == 0 && workspaceConfigs.Count == 0)
+            return null;
+
+        var payload = new AgentsPayload
+        {
+            Definitions = definitions,
+            WorkspaceConfigs = workspaceConfigs,
+        };
+        return JsonSerializer.Serialize(payload, typeof(AgentsPayload), FederationAdapterJsonContext.Default);
     }
 
     private static async Task UpsertAgentDefinitionAsync(
@@ -1736,7 +1919,7 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
             return null;
         try
         {
-            return JsonSerializer.Deserialize<List<string>>(json, JsonOptions);
+            return (List<string>?)JsonSerializer.Deserialize(json, typeof(List<string>), FederationAdapterJsonContext.Default);
         }
         catch (JsonException)
         {
@@ -1792,14 +1975,14 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
             Message = message,
         };
 
-    private sealed class AgentsPayload
+    internal sealed class AgentsPayload
     {
         public List<AgentDefinitionPayload> Definitions { get; set; } = [];
 
         public List<AgentWorkspacePayload> WorkspaceConfigs { get; set; } = [];
     }
 
-    private sealed class AgentDefinitionPayload
+    internal sealed class AgentDefinitionPayload
     {
         public string Id { get; set; } = string.Empty;
 
@@ -1822,7 +2005,7 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
         public DateTime? ModifiedAt { get; set; }
     }
 
-    private sealed class AgentWorkspacePayload
+    internal sealed class AgentWorkspacePayload
     {
         public string AgentDefinitionId { get; set; } = string.Empty;
 
@@ -1856,6 +2039,13 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
     }
 }
 
+internal sealed class LocalOnlyFederationPayload
+{
+    public bool LocalOnly { get; set; }
+
+    public string? Reason { get; set; }
+}
+
 /// <summary>Federation adapter for domains that are intentionally local-only.</summary>
 public sealed class LocalOnlyFederationStateAdapter : FederationStateAdapterBase
 {
@@ -1876,7 +2066,8 @@ public sealed class LocalOnlyFederationStateAdapter : FederationStateAdapterBase
     /// <inheritdoc />
     public override ValueTask<FederationStateSnapshot> SnapshotAsync(string resourceId, CancellationToken cancellationToken)
     {
-        var payloadJson = JsonSerializer.Serialize(new { localOnly = true, reason = _reason }, JsonOptions);
+        var payload = new LocalOnlyFederationPayload { LocalOnly = true, Reason = _reason };
+        var payloadJson = JsonSerializer.Serialize(payload, typeof(LocalOnlyFederationPayload), FederationAdapterJsonContext.Default);
         return new(new FederationStateSnapshot
         {
             Domain = Domain,

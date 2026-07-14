@@ -42,7 +42,6 @@ internal sealed class TodoBootstrapImporter : IHostedService
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IConfiguration _configuration;
     private readonly ILogger<TodoBootstrapImporter> _logger;
-    private readonly JsonSerializerOptions _json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     /// <summary>Initializes a new instance of the <see cref="TodoBootstrapImporter"/> class.</summary>
     public TodoBootstrapImporter(
@@ -226,9 +225,10 @@ internal sealed class TodoBootstrapImporter : IHostedService
 
         if (file.CodeReviewRemediation?.Phases is { Count: > 0 } phases)
         {
-            for (var index = 0; index < phases.Count; index++)
+            var indexedPhases = phases.ToArray();
+            for (var index = 0; index < indexedPhases.Length; index++)
             {
-                var phase = phases[index];
+                var phase = indexedPhases[index];
                 if (phase?.Id is null)
                     continue;
                 var entity = new TodoItemEntity
@@ -282,7 +282,7 @@ internal sealed class TodoBootstrapImporter : IHostedService
         List<TodoItemEntity> items,
         List<TodoAuditHistoryEntity> history,
         string sectionKey,
-        List<TodoItem>? source,
+        IEnumerable<TodoItem>? source,
         string priority,
         int sectionOrder,
         string importedAtUtc)
@@ -290,9 +290,9 @@ internal sealed class TodoBootstrapImporter : IHostedService
         if (source is null)
             return;
 
-        for (var index = 0; index < source.Count; index++)
+        var index = 0;
+        foreach (var item in source)
         {
-            var item = source[index];
             if (item?.Id is null)
                 continue;
             var entity = new TodoItemEntity
@@ -317,6 +317,7 @@ internal sealed class TodoBootstrapImporter : IHostedService
             };
             items.Add(entity);
             history.Add(BuildAuditRow(entity, importedAtUtc));
+            index++;
         }
     }
 
@@ -327,7 +328,7 @@ internal sealed class TodoBootstrapImporter : IHostedService
             Version = 1,
             Action = "imported",
             RecordedAtUtc = importedAtUtc,
-            SnapshotJson = JsonSerializer.Serialize(entity, _json),
+            SnapshotJson = JsonSerializer.Serialize(entity, McpServicesJsonContext.Default.TodoItemEntity),
             PreviousSnapshotJson = null,
             Source = YamlBootstrapSource,
         };
@@ -344,24 +345,25 @@ internal sealed class TodoBootstrapImporter : IHostedService
         return rows;
     }
 
-    private static void AddListRows(List<TodoItemListItemEntity> rows, string todoId, string listType, List<string>? values)
+    private static void AddListRows(List<TodoItemListItemEntity> rows, string todoId, string listType, IEnumerable<string>? values)
     {
         if (values is null)
             return;
-        for (var i = 0; i < values.Count; i++)
+        var ordinal = 0;
+        foreach (var value in values)
         {
             rows.Add(new TodoItemListItemEntity
             {
                 TodoId = todoId,
                 ListType = listType,
-                Ordinal = i,
-                Value = values[i],
+                Ordinal = ordinal++,
+                Value = value,
             });
         }
     }
 
     /// <summary>Builds the 4NF implementation sub-task child rows for an imported TODO.</summary>
-    private static List<TodoItemTaskEntity> ToTaskRows(string todoId, List<ImplementationTask>? value)
+    private static List<TodoItemTaskEntity> ToTaskRows(string todoId, IEnumerable<ImplementationTask>? value)
     {
         var rows = new List<TodoItemTaskEntity>();
         if (value is null)

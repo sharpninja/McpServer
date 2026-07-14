@@ -19,16 +19,16 @@ public sealed class TodoItemListItemEntity
     public long Id { get; set; }
 
     /// <summary>Owning TODO workspace discriminator (part of the composite parent key).</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Owning TODO id (part of the composite parent key).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string TodoId { get; set; } = string.Empty;
 
     /// <summary>Discriminator identifying which list this item belongs to (Description, TechnicalDetail, DependsOn, FunctionalRequirement, TechnicalRequirement).</summary>
     [Required]
-    [MaxLength(32)]
+    [StringLength(32)]
     public required string ListType { get; set; }
 
     /// <summary>Ordinal position within the list.</summary>

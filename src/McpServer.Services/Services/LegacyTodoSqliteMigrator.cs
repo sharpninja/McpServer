@@ -247,7 +247,7 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         List<LegacyTask>? tasks;
         try
         {
-            tasks = JsonSerializer.Deserialize<List<LegacyTask>>(json, s_legacyJson);
+            tasks = JsonSerializer.Deserialize(json, LegacyTodoSqliteJsonContext.Default.ListLegacyTask);
         }
         catch (JsonException)
         {
@@ -274,21 +274,12 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
             return null;
         try
         {
-            return JsonSerializer.Deserialize<List<string>>(json);
+            return JsonSerializer.Deserialize(json, LegacyTodoSqliteJsonContext.Default.ListString);
         }
         catch (JsonException)
         {
             return null;
         }
-    }
-
-    private static readonly JsonSerializerOptions s_legacyJson = new(JsonSerializerDefaults.Web);
-
-    private sealed record LegacyTask
-    {
-        public string? Task { get; init; }
-
-        public bool Done { get; init; }
     }
 
     private static List<TodoDocumentNoteEntity> ToNoteRows(string? json)
@@ -306,7 +297,7 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         List<LegacyCompletedGroup>? groups;
         try
         {
-            groups = JsonSerializer.Deserialize<List<LegacyCompletedGroup>>(json, s_legacyJson);
+            groups = JsonSerializer.Deserialize(json, LegacyTodoSqliteJsonContext.Default.ListLegacyCompletedGroup);
         }
         catch (JsonException)
         {
@@ -330,22 +321,6 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
                         Summary = item?.Summary,
                     }).ToList(),
             }).ToList();
-    }
-
-    private sealed record LegacyCompletedGroup
-    {
-        public string? Date { get; init; }
-
-        public List<LegacyCompletedItem>? Items { get; init; }
-    }
-
-    private sealed record LegacyCompletedItem
-    {
-        public string? Id { get; init; }
-
-        public string? Qualifier { get; init; }
-
-        public string? Summary { get; init; }
     }
 
     private static async Task<List<TodoAuditHistoryEntity>> ReadHistoryAsync(SqliteConnection connection, CancellationToken cancellationToken)
@@ -409,4 +384,27 @@ internal sealed class LegacyTodoSqliteMigrator : IHostedService
         SkippedTargetPopulated,
         Migrated,
     }
+}
+
+internal sealed record LegacyTask
+{
+    public string? Task { get; init; }
+
+    public bool Done { get; init; }
+}
+
+internal sealed record LegacyCompletedGroup
+{
+    public string? Date { get; init; }
+
+    public List<LegacyCompletedItem>? Items { get; init; }
+}
+
+internal sealed record LegacyCompletedItem
+{
+    public string? Id { get; init; }
+
+    public string? Qualifier { get; init; }
+
+    public string? Summary { get; init; }
 }

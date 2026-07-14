@@ -17,7 +17,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
-#pragma warning disable 612, 618
+
             modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
@@ -1098,7 +1098,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 {
                     b.Navigation("Tags");
                 });
-#pragma warning restore 612, 618
+
         }
     }
 }

@@ -72,7 +72,7 @@ public class LoginHandler
                 TokenEndpoint = _cachedTokenEndpoint ?? "",
                 ClientId = _cachedClientId ?? "mcp-director",
             };
-            var json = JsonSerializer.Serialize(cached, s_cacheJsonOpts);
+            var json = JsonSerializer.Serialize(cached, ReplHostCacheJsonContext.Default.CachedToken);
             File.WriteAllText(s_cachePath, json);
             _logger.LogDebug("Token saved to {Path}", s_cachePath);
         }
@@ -90,7 +90,7 @@ public class LoginHandler
         try
         {
             var json = File.ReadAllText(s_cachePath);
-            return JsonSerializer.Deserialize<CachedToken>(json, s_cacheJsonOpts);
+            return JsonSerializer.Deserialize(json, ReplHostCacheJsonContext.Default.CachedToken);
         }
         catch (Exception ex)
         {
@@ -552,7 +552,7 @@ public class LoginHandler
             }
 
             var deviceJson = await deviceResponse.Content.ReadAsStringAsync(cancellationToken);
-            var device = JsonSerializer.Deserialize<DeviceAuthResponse>(deviceJson, s_jsonOpts);
+            var device = JsonSerializer.Deserialize(deviceJson, ReplHostJsonContext.Default.DeviceAuthResponse);
             if (device is null)
             {
                 AnsiConsole.MarkupLine("[red]Failed to parse device authorization response.[/]");
@@ -604,7 +604,7 @@ public class LoginHandler
 
                 var pollResponse = await httpClient.PostAsync(tokenEndpoint, pollContent, cancellationToken);
                 var pollJson = await pollResponse.Content.ReadAsStringAsync(cancellationToken);
-                var tokenResult = JsonSerializer.Deserialize<DeviceTokenResponse>(pollJson, s_jsonOpts);
+                var tokenResult = JsonSerializer.Deserialize(pollJson, ReplHostJsonContext.Default.DeviceTokenResponse);
 
                 if (tokenResult is null)
                     continue;
@@ -672,22 +672,9 @@ public class LoginHandler
         }
     }
 
-    private static readonly JsonSerializerOptions s_jsonOpts = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-    };
-
-    private static readonly JsonSerializerOptions s_cacheJsonOpts = new()
-    {
-        WriteIndented = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        PropertyNameCaseInsensitive = true,
-    };
-
     // ── DTOs ────────────────────────────────────────────────────────────
 
-    private sealed class CachedToken
+    internal sealed class CachedToken
     {
         public string AccessToken { get; set; } = "";
         public string RefreshToken { get; set; } = "";
@@ -697,7 +684,7 @@ public class LoginHandler
         public string ClientId { get; set; } = "mcp-director";
     }
 
-    private sealed class DeviceAuthResponse
+    internal sealed class DeviceAuthResponse
     {
         [JsonPropertyName("device_code")]
         public string DeviceCode { get; set; } = "";
@@ -713,7 +700,7 @@ public class LoginHandler
         public int Interval { get; set; }
     }
 
-    private sealed class DeviceTokenResponse
+    internal sealed class DeviceTokenResponse
     {
         [JsonPropertyName("access_token")]
         public string? AccessToken { get; set; }

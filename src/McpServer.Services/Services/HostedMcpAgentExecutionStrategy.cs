@@ -313,7 +313,6 @@ internal sealed class HostedMcpAgentExecutionStrategy(
         : IChatClient, IAsyncDisposable
     {
         private const string ReadySentinel = "Esc to cancel";
-        private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);
 
         private readonly SemaphoreSlim _gate = new(1, 1);
         private AgentCliInteractiveSession? _session;
@@ -617,7 +616,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             {
                 null => "null",
                 string text => text,
-                _ => JsonSerializer.Serialize(result, s_jsonOptions),
+                _ => JsonSerializer.Serialize(result, McpClientJsonContext.Default.Object),
             };
 
         private static bool TryParseEnvelope(string body, out ResponseEnvelope envelope)

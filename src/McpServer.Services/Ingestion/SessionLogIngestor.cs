@@ -39,7 +39,6 @@ public sealed class SessionLogIngestor
     private readonly WorkspaceContext _workspaceContext;
     private readonly ISessionLogService _sessionLogService;
     private readonly ILogger<SessionLogIngestor> _logger;
-    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
@@ -130,7 +129,7 @@ public sealed class SessionLogIngestor
     {
         try
         {
-            var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, s_jsonOptions);
+            var dto = JsonSerializer.Deserialize(json, SessionLogIngestionJsonContext.Default.UnifiedSessionLogDto);
             if (dto == null) return json;
             var sb = new StringBuilder();
             sb.Append("Session: ").Append(dto.Title ?? dto.SessionId ?? "unknown").AppendLine();
@@ -327,13 +326,13 @@ public sealed class SessionLogIngestor
         // Handle copilotStatistics
         if (root.TryGetProperty("copilotStatistics", out var cs) && cs.ValueKind == JsonValueKind.Object)
         {
-            dto.CopilotStatistics = JsonSerializer.Deserialize<CopilotStatisticsDto>(cs.GetRawText(), s_jsonOptions);
+            dto.CopilotStatistics = JsonSerializer.Deserialize(cs.GetRawText(), SessionLogIngestionJsonContext.Default.CopilotStatisticsDto);
         }
 
         // Turns: use standard deserialization (turns schema is consistent)
         if (root.TryGetProperty("turns", out var turns) && turns.ValueKind == JsonValueKind.Array)
         {
-            dto.Turns = JsonSerializer.Deserialize<List<UnifiedRequestEntryDto>>(turns.GetRawText(), s_jsonOptions);
+            dto.Turns = JsonSerializer.Deserialize(turns.GetRawText(), SessionLogIngestionJsonContext.Default.ListUnifiedRequestEntryDto);
         }
 
         return dto;

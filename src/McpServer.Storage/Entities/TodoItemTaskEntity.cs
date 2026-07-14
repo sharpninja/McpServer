@@ -14,11 +14,11 @@ public sealed class TodoItemTaskEntity
     public long Id { get; set; }
 
     /// <summary>Owning TODO workspace discriminator (part of the composite parent key).</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Owning TODO id (part of the composite parent key).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string TodoId { get; set; } = string.Empty;
 
     /// <summary>Ordinal position within the implementation-tasks list.</summary>

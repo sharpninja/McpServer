@@ -9,20 +9,20 @@ public sealed class FederationProxyEntity
 {
     /// <summary>Stable proxy identifier supplied by the proxy or assigned by the hub.</summary>
     [Key]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string ProxyId { get; set; }
 
     /// <summary>Human-readable proxy display name, usually the machine name.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? DisplayName { get; set; }
 
     /// <summary>Federation role reported by the proxy.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public string Role { get; set; } = "LocalProxy";
 
     /// <summary>Proxy base URL when it can receive hub fanout or execution callbacks.</summary>
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public string? BaseUrl { get; set; }
 
     /// <summary>Opaque metadata JSON reported by the proxy.</summary>
@@ -39,6 +39,6 @@ public sealed class FederationProxyEntity
 
     /// <summary>Current health/status label such as <c>enrolled</c> or <c>online</c>.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public string Status { get; set; } = "enrolled";
 }

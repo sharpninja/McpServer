@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Options;
@@ -12,12 +11,6 @@ namespace McpServer.Support.Mcp.Services.AgentHelp;
 /// </summary>
 public sealed class HelpTranscriptWriter
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
-    {
-        WriteIndented = false,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-    };
-
     private readonly IOptionsMonitor<AgentHelpOptions> _options;
     private readonly ILogger<HelpTranscriptWriter> _logger;
 
@@ -51,7 +44,7 @@ public sealed class HelpTranscriptWriter
         Directory.CreateDirectory(transcriptDir);
 
         var filePath = Path.Combine(transcriptDir, $"{SanitizeFileName(entry.SessionId)}.jsonl");
-        var line = JsonSerializer.Serialize(entry, s_jsonOptions) + Environment.NewLine;
+        var line = JsonSerializer.Serialize(entry, AgentHelpTranscriptJsonContext.Default.AgentHelpTranscriptEntry) + Environment.NewLine;
         var bytes = Encoding.UTF8.GetBytes(line);
 
         await using var stream = new FileStream(
@@ -98,7 +91,7 @@ public sealed class HelpTranscriptWriter
 
             try
             {
-                var entry = JsonSerializer.Deserialize<AgentHelpTranscriptEntry>(line, s_jsonOptions);
+                var entry = JsonSerializer.Deserialize(line, AgentHelpTranscriptJsonContext.Default.AgentHelpTranscriptEntry);
                 if (entry is not null)
                     entries.Add(entry);
             }

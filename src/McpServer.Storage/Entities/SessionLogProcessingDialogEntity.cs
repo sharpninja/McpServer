@@ -27,7 +27,7 @@ public sealed class SessionLogProcessingDialogEntity
 
     /// <summary>TR-PLANNED-CORE-013: Role of the speaker (e.g. model, tool, system, user).</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public required string Role { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Content of the processing dialog item.</summary>
@@ -35,7 +35,7 @@ public sealed class SessionLogProcessingDialogEntity
     public required string Content { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Optional category (e.g. reasoning, tool_call, tool_result, observation, decision).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? Category { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent turn.</summary>

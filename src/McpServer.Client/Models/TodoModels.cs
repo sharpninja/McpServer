@@ -268,7 +268,7 @@ public sealed class TodoMutationResult
 }
 
 /// <summary>Classifies the failure mode of a TODO mutation.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<TodoMutationFailureKind>))]
 public enum TodoMutationFailureKind
 {
     /// <summary>No failure classification applies.</summary>
@@ -431,7 +431,7 @@ public sealed class RequirementsAnalysisResult
 }
 
 /// <summary>Byrd execution status for an active TODO.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<TodoExecutionStatus>))]
 public enum TodoExecutionStatus
 {
     /// <summary>The TODO exists but has not yet been planned for execution.</summary>
@@ -463,7 +463,7 @@ public enum TodoExecutionStatus
 }
 
 /// <summary>Byrd execution priority for an active TODO.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<TodoExecutionPriority>))]
 public enum TodoExecutionPriority
 {
     /// <summary>Low execution priority.</summary>
@@ -480,7 +480,7 @@ public enum TodoExecutionPriority
 }
 
 /// <summary>Byrd iteration phase status.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<TodoIterationPhaseStatus>))]
 public enum TodoIterationPhaseStatus
 {
     /// <summary>The phase is in planning.</summary>
@@ -503,7 +503,7 @@ public enum TodoIterationPhaseStatus
 }
 
 /// <summary>Kinds of checkpoints that can be recorded against a Byrd TODO.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<TodoCheckpointKind>))]
 public enum TodoCheckpointKind
 {
     /// <summary>Planning decision checkpoint.</summary>
@@ -538,7 +538,7 @@ public enum TodoCheckpointKind
 }
 
 /// <summary>Safe ADB actions supported by the MCP server.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<AdbStepAction>))]
 public enum AdbStepAction
 {
     /// <summary>Capture a screenshot.</summary>

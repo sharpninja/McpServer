@@ -51,8 +51,7 @@ public sealed class UnifiedSessionLogDto
     /// <summary>Ordered request/response turns.</summary>
     [JsonPropertyName("turns")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<UnifiedRequestEntryDto>? Turns { get; set; }
+    public ICollection<UnifiedRequestEntryDto>? Turns { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Total token count across all turns.</summary>
     [JsonPropertyName("totalTokens")]
@@ -145,8 +144,7 @@ public sealed class UnifiedRequestEntryDto
     /// <summary>Actions taken by the agent for this request.</summary>
     [JsonPropertyName("actions")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<UnifiedActionDto>? Actions { get; set; }
+    public ICollection<UnifiedActionDto>? Actions { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: AI model used for this specific entry.</summary>
     [JsonPropertyName("model")]
@@ -163,14 +161,12 @@ public sealed class UnifiedRequestEntryDto
     /// <summary>TR-PLANNED-CORE-013: Tags associated with this entry.</summary>
     [JsonPropertyName("tags")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<string>? Tags { get; set; }
+    public ICollection<string>? Tags { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Context items referenced by this entry.</summary>
     [JsonPropertyName("contextList")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<string>? ContextList { get; set; }
+    public ICollection<string>? ContextList { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Failure note if the entry failed.</summary>
     [JsonPropertyName("failureNote")]
@@ -195,38 +191,32 @@ public sealed class UnifiedRequestEntryDto
     /// <summary>TR-PLANNED-CORE-013: Processing dialog — model reasoning, tool calls, and execution trace appended during request execution.</summary>
     [JsonPropertyName("processingDialog")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<ProcessingDialogItemDto>? ProcessingDialog { get; set; }
+    public ICollection<ProcessingDialogItemDto>? ProcessingDialog { get; set; }
 
     /// <summary>Git commits made during this request entry.</summary>
     [JsonPropertyName("commits")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<SessionLogCommitDto>? Commits { get; set; }
+    public ICollection<SessionLogCommitDto>? Commits { get; set; }
 
     /// <summary>Design decisions made during this interaction (decision text, rationale, alternatives).</summary>
     [JsonPropertyName("designDecisions")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<string>? DesignDecisions { get; set; }
+    public ICollection<string>? DesignDecisions { get; set; }
 
     /// <summary>Requirement IDs discovered or created during this interaction (e.g. "TR-MCP-CQRS-001", "FR-MCP-029").</summary>
     [JsonPropertyName("requirementsDiscovered")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<string>? RequirementsDiscovered { get; set; }
+    public ICollection<string>? RequirementsDiscovered { get; set; }
 
     /// <summary>File paths modified during this interaction.</summary>
     [JsonPropertyName("filesModified")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<string>? FilesModified { get; set; }
+    public ICollection<string>? FilesModified { get; set; }
 
     /// <summary>Blockers or issues preventing progress during this interaction.</summary>
     [JsonPropertyName("blockers")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<string>? Blockers { get; set; }
+    public ICollection<string>? Blockers { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: Single processing dialog entry recording model reasoning during request execution.</summary>
@@ -299,6 +289,5 @@ public sealed class SessionLogCommitDto
     /// <summary>Files changed in this commit.</summary>
     [JsonPropertyName("filesChanged")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
-    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<string>? FilesChanged { get; set; }
+    public ICollection<string>? FilesChanged { get; set; }
 }

@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-#pragma warning disable CS1591
-
 namespace McpServer.Client.Models;
 
 /// <summary>Request for context search.</summary>
@@ -116,24 +114,31 @@ public sealed class ContextSource
 /// <summary>Request for website URL ingestion.</summary>
 public sealed class WebsiteIngestRequest
 {
+    /// <summary>URL submitted for website ingestion.</summary>
     [JsonPropertyName("url")]
     public string Url { get; set; } = string.Empty;
 
+    /// <summary>Whether the ingestion run should include linked subpages.</summary>
     [JsonPropertyName("includeSubpages")]
     public bool IncludeSubpages { get; set; }
 
+    /// <summary>Maximum number of pages to ingest.</summary>
     [JsonPropertyName("maxPages")]
     public int MaxPages { get; set; } = 20;
 
+    /// <summary>Maximum crawl depth for linked pages.</summary>
     [JsonPropertyName("maxDepth")]
     public int MaxDepth { get; set; } = 1;
 
+    /// <summary>Maximum bytes to read from each page.</summary>
     [JsonPropertyName("maxBytesPerPage")]
     public int MaxBytesPerPage { get; set; } = 262_144;
 
+    /// <summary>Whether existing website ingestion cache entries should be refreshed.</summary>
     [JsonPropertyName("forceRefresh")]
     public bool ForceRefresh { get; set; }
 
+    /// <summary>Whether GraphRAG indexing should run after ingestion.</summary>
     [JsonPropertyName("triggerGraphRagIndex")]
     public bool TriggerGraphRagIndex { get; set; }
 }
@@ -141,18 +146,23 @@ public sealed class WebsiteIngestRequest
 /// <summary>Per-URL website ingestion outcome.</summary>
 public sealed class WebsiteIngestUrlResult
 {
+    /// <summary>URL processed during website ingestion.</summary>
     [JsonPropertyName("url")]
     public string Url { get; set; } = string.Empty;
 
+    /// <summary>Status value reported for the URL.</summary>
     [JsonPropertyName("status")]
     public string Status { get; set; } = string.Empty;
 
+    /// <summary>Source key assigned to the ingested content.</summary>
     [JsonPropertyName("sourceKey")]
     public string? SourceKey { get; set; }
 
+    /// <summary>Optional status or diagnostic message.</summary>
     [JsonPropertyName("message")]
     public string? Message { get; set; }
 
+    /// <summary>Number of chunks written for the URL.</summary>
     [JsonPropertyName("chunksWritten")]
     public int ChunksWritten { get; set; }
 }
@@ -160,30 +170,39 @@ public sealed class WebsiteIngestUrlResult
 /// <summary>Website ingestion response payload.</summary>
 public sealed class WebsiteIngestResult
 {
+    /// <summary>Identifier for the ingestion run.</summary>
     [JsonPropertyName("runId")]
     public string RunId { get; set; } = string.Empty;
 
+    /// <summary>UTC timestamp when the run started.</summary>
     [JsonPropertyName("startedAtUtc")]
     public string? StartedAtUtc { get; set; }
 
+    /// <summary>UTC timestamp when the run completed.</summary>
     [JsonPropertyName("completedAtUtc")]
     public string? CompletedAtUtc { get; set; }
 
+    /// <summary>Status value reported for the operation.</summary>
     [JsonPropertyName("status")]
     public string Status { get; set; } = string.Empty;
 
+    /// <summary>Number of documents ingested.</summary>
     [JsonPropertyName("documentsIngested")]
     public int DocumentsIngested { get; set; }
 
+    /// <summary>Number of chunks written during ingestion.</summary>
     [JsonPropertyName("chunksWritten")]
     public int ChunksWritten { get; set; }
 
+    /// <summary>Per-URL ingestion results.</summary>
     [JsonPropertyName("urlResults")]
     public IReadOnlyList<WebsiteIngestUrlResult> UrlResults { get; set; } = [];
 
+    /// <summary>Whether GraphRAG indexing completed for the run.</summary>
     [JsonPropertyName("graphRagIndexed")]
     public bool GraphRagIndexed { get; set; }
 
+    /// <summary>Optional GraphRAG indexing error message.</summary>
     [JsonPropertyName("graphRagIndexError")]
     public string? GraphRagIndexError { get; set; }
 }
@@ -191,27 +210,35 @@ public sealed class WebsiteIngestResult
 /// <summary>Request for GraphRAG query.</summary>
 public sealed class GraphRagQueryRequest
 {
+    /// <summary>GraphRAG query text.</summary>
     [JsonPropertyName("query")]
     public string Query { get; set; } = string.Empty;
 
+    /// <summary>GraphRAG query mode.</summary>
     [JsonPropertyName("mode")]
     public string? Mode { get; set; }
 
+    /// <summary>Maximum number of chunks to include.</summary>
     [JsonPropertyName("maxChunks")]
     public int? MaxChunks { get; set; }
 
+    /// <summary>Whether context chunks should be included in the response.</summary>
     [JsonPropertyName("includeContextChunks")]
     public bool IncludeContextChunks { get; set; } = true;
 
+    /// <summary>Maximum number of entities to include.</summary>
     [JsonPropertyName("maxEntities")]
     public int? MaxEntities { get; set; }
 
+    /// <summary>Maximum number of relationships to include.</summary>
     [JsonPropertyName("maxRelationships")]
     public int? MaxRelationships { get; set; }
 
+    /// <summary>Maximum community traversal depth.</summary>
     [JsonPropertyName("communityDepth")]
     public int? CommunityDepth { get; set; }
 
+    /// <summary>Token budget for the generated response.</summary>
     [JsonPropertyName("responseTokenBudget")]
     public int? ResponseTokenBudget { get; set; }
 }
@@ -219,6 +246,7 @@ public sealed class GraphRagQueryRequest
 /// <summary>Request for GraphRAG index operation.</summary>
 public sealed class GraphRagIndexRequest
 {
+    /// <summary>Whether the index operation should force a rebuild.</summary>
     [JsonPropertyName("force")]
     public bool Force { get; set; }
 }
@@ -226,66 +254,87 @@ public sealed class GraphRagIndexRequest
 /// <summary>GraphRAG status response.</summary>
 public sealed class GraphRagStatusResult
 {
+    /// <summary>Whether GraphRAG is enabled.</summary>
     [JsonPropertyName("enabled")]
     public bool Enabled { get; set; }
 
+    /// <summary>Workspace path associated with the GraphRAG status.</summary>
     [JsonPropertyName("workspacePath")]
     public string WorkspacePath { get; set; } = string.Empty;
 
+    /// <summary>Resolved GraphRAG storage root.</summary>
     [JsonPropertyName("graphRoot")]
     public string GraphRoot { get; set; } = string.Empty;
 
+    /// <summary>GraphRAG readiness state.</summary>
     [JsonPropertyName("state")]
     public string State { get; set; } = string.Empty;
 
+    /// <summary>Whether GraphRAG storage has been initialized.</summary>
     [JsonPropertyName("isInitialized")]
     public bool IsInitialized { get; set; }
 
+    /// <summary>Whether the GraphRAG corpus is indexed.</summary>
     [JsonPropertyName("isIndexed")]
     public bool IsIndexed { get; set; }
 
+    /// <summary>UTC timestamp for the most recent index run.</summary>
     [JsonPropertyName("lastIndexedAtUtc")]
     public string? LastIndexedAtUtc { get; set; }
 
+    /// <summary>UTC timestamp for the most recent successful operation.</summary>
     [JsonPropertyName("lastSuccessAtUtc")]
     public string? LastSuccessAtUtc { get; set; }
 
+    /// <summary>UTC timestamp for the most recent failed operation.</summary>
     [JsonPropertyName("lastFailureAtUtc")]
     public string? LastFailureAtUtc { get; set; }
 
+    /// <summary>Identifier of the active GraphRAG job, when present.</summary>
     [JsonPropertyName("activeJobId")]
     public string? ActiveJobId { get; set; }
 
+    /// <summary>Optional failure code for the operation.</summary>
     [JsonPropertyName("failureCode")]
     public string? FailureCode { get; set; }
 
+    /// <summary>Last recorded GraphRAG error message.</summary>
     [JsonPropertyName("lastError")]
     public string? LastError { get; set; }
 
+    /// <summary>GraphRAG artifact version label.</summary>
     [JsonPropertyName("artifactVersion")]
     public string ArtifactVersion { get; set; } = string.Empty;
 
+    /// <summary>Duration of the most recent index run in milliseconds.</summary>
     [JsonPropertyName("lastIndexDurationMs")]
     public long? LastIndexDurationMs { get; set; }
 
+    /// <summary>Number of documents indexed in the most recent run.</summary>
     [JsonPropertyName("lastIndexedDocumentCount")]
     public int? LastIndexedDocumentCount { get; set; }
 
+    /// <summary>GraphRAG backend that produced the status.</summary>
     [JsonPropertyName("backend")]
     public string Backend { get; set; } = string.Empty;
 
+    /// <summary>Corpus name used for indexing.</summary>
     [JsonPropertyName("indexCorpus")]
     public string IndexCorpus { get; set; } = string.Empty;
 
+    /// <summary>Corpus name used for querying.</summary>
     [JsonPropertyName("queryCorpus")]
     public string QueryCorpus { get; set; } = string.Empty;
 
+    /// <summary>Resolved input path for the GraphRAG corpus.</summary>
     [JsonPropertyName("inputPath")]
     public string InputPath { get; set; } = string.Empty;
 
+    /// <summary>Number of input documents discovered.</summary>
     [JsonPropertyName("inputDocumentCount")]
     public int InputDocumentCount { get; set; }
 
+    /// <summary>Optional note describing result visibility.</summary>
     [JsonPropertyName("visibilityNote")]
     public string? VisibilityNote { get; set; }
 }
@@ -293,12 +342,15 @@ public sealed class GraphRagStatusResult
 /// <summary>GraphRAG citation entry.</summary>
 public sealed class GraphRagCitation
 {
+    /// <summary>Source key referenced by the citation.</summary>
     [JsonPropertyName("sourceKey")]
     public string SourceKey { get; set; } = string.Empty;
 
+    /// <summary>Optional chunk identifier.</summary>
     [JsonPropertyName("chunkId")]
     public string? ChunkId { get; set; }
 
+    /// <summary>Optional citation snippet.</summary>
     [JsonPropertyName("snippet")]
     public string? Snippet { get; set; }
 }
@@ -306,48 +358,63 @@ public sealed class GraphRagCitation
 /// <summary>GraphRAG query response.</summary>
 public sealed class GraphRagQueryResult
 {
+    /// <summary>GraphRAG query text.</summary>
     [JsonPropertyName("query")]
     public string Query { get; set; } = string.Empty;
 
+    /// <summary>GraphRAG query mode.</summary>
     [JsonPropertyName("mode")]
     public string Mode { get; set; } = string.Empty;
 
+    /// <summary>Answer text returned by GraphRAG.</summary>
     [JsonPropertyName("answer")]
     public string Answer { get; set; } = string.Empty;
 
+    /// <summary>Citations returned with the GraphRAG answer.</summary>
     [JsonPropertyName("citations")]
     public IReadOnlyList<GraphRagCitation> Citations { get; set; } = [];
 
+    /// <summary>Context chunks returned with the GraphRAG answer.</summary>
     [JsonPropertyName("chunks")]
     public IReadOnlyList<ContextChunkResult> Chunks { get; set; } = [];
 
+    /// <summary>Source keys referenced by the result.</summary>
     [JsonPropertyName("sourceKeys")]
     public IReadOnlyList<string> SourceKeys { get; set; } = [];
 
+    /// <summary>Entities returned with the GraphRAG answer.</summary>
     [JsonPropertyName("entities")]
     public IReadOnlyList<string> Entities { get; set; } = [];
 
+    /// <summary>Relationships returned with the GraphRAG answer.</summary>
     [JsonPropertyName("relationships")]
     public IReadOnlyList<string> Relationships { get; set; } = [];
 
+    /// <summary>Communities returned with the GraphRAG answer.</summary>
     [JsonPropertyName("communities")]
     public IReadOnlyList<string> Communities { get; set; } = [];
 
+    /// <summary>Whether a fallback response path was used.</summary>
     [JsonPropertyName("fallbackUsed")]
     public bool FallbackUsed { get; set; }
 
+    /// <summary>Reason the fallback response path was used.</summary>
     [JsonPropertyName("fallbackReason")]
     public string? FallbackReason { get; set; }
 
+    /// <summary>Optional failure code for the operation.</summary>
     [JsonPropertyName("failureCode")]
     public string? FailureCode { get; set; }
 
+    /// <summary>GraphRAG backend that produced the result.</summary>
     [JsonPropertyName("backend")]
     public string Backend { get; set; } = string.Empty;
 
+    /// <summary>Corpus name used for querying.</summary>
     [JsonPropertyName("queryCorpus")]
     public string QueryCorpus { get; set; } = string.Empty;
 
+    /// <summary>Optional note describing result visibility.</summary>
     [JsonPropertyName("visibilityNote")]
     public string? VisibilityNote { get; set; }
 }
@@ -647,5 +714,3 @@ public sealed class GraphRelationshipListResult
     [JsonPropertyName("totalCount")]
     public int TotalCount { get; set; }
 }
-
-#pragma warning restore CS1591

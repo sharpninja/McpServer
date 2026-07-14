@@ -10,7 +10,7 @@ public sealed class ContextChunkEntity
 {
     /// <summary>TR-PLANNED-CORE-013: Unique chunk identifier.</summary>
     [Key]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string Id { get; set; }
 
     /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
@@ -18,7 +18,7 @@ public sealed class ContextChunkEntity
 
     /// <summary>TR-PLANNED-CORE-013: Parent document identifier.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string DocumentId { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Chunk text content.</summary>
@@ -32,7 +32,7 @@ public sealed class ContextChunkEntity
     public int ChunkIndex { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Embedding vector stored as BLOB (nullable, populated during ingestion).</summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "Suppressed globally in Directory.Build.props")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "EF Core stores embedding bytes as a nullable BLOB; byte[] is the storage contract rather than a public mutable API.")]
     public byte[]? Embedding { get; set; }
 
     /// <summary>Navigation to document.</summary>

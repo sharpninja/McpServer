@@ -30,11 +30,6 @@ public sealed class TriageService : ITriageService
     private static readonly string[] TriageQueueStatuses = ["new", "quieting", "pending", StatusCollecting];
     private static readonly string[] ReportGroupQueueStatuses = ["ready", StatusQueued, "in_progress", StatusProcessing, "retry_pending"];
 
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
-    {
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-    };
-
     private static readonly SemaphoreSlim TodoCreationLock = new(1, 1);
 
     private readonly McpDbContext _db;
@@ -912,7 +907,7 @@ public sealed class TriageService : ITriageService
         try
         {
             var detail = await ToGroupDetailAsync(group, includeReports: true, cancellationToken).ConfigureAwait(false);
-            var groupJson = JsonSerializer.Serialize(detail, JsonOptions);
+            var groupJson = JsonSerializer.Serialize(detail, typeof(TriageGroupDetail), McpServicesJsonContext.Default);
             var prompt = await RenderPromptAsync(detail, groupJson, cancellationToken).ConfigureAwait(false);
             run.GroupJson = groupJson;
             run.Prompt = prompt;
@@ -982,7 +977,7 @@ public sealed class TriageService : ITriageService
             run.CreatedTodoId = createdTodoId;
             run.Status = StatusCompleted;
             run.Error = todoCreatedWithWarning ? createResult.Error : null;
-            run.ResponseJson = JsonSerializer.Serialize(researchOutput, JsonOptions);
+            run.ResponseJson = JsonSerializer.Serialize(researchOutput, typeof(ResearchOutput), McpServicesJsonContext.Default);
             run.CompletedUtc = _timeProvider.GetUtcNow();
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -1511,7 +1506,12 @@ public sealed class TriageService : ITriageService
     }
 
     private static string? SerializeMap(IReadOnlyDictionary<string, string>? values)
-        => values is { Count: > 0 } ? JsonSerializer.Serialize(values, JsonOptions) : null;
+        => values is { Count: > 0 }
+            ? JsonSerializer.Serialize(
+                values.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal),
+                typeof(Dictionary<string, string>),
+                McpServicesJsonContext.Default)
+            : null;
 
     private static string? TrimOrNull(string? value)
         => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
@@ -1577,7 +1577,7 @@ public sealed class TriageService : ITriageService
         var candidateJson = ExtractResearchOutputJson(outputJson);
         try
         {
-            var output = JsonSerializer.Deserialize<ResearchOutput>(candidateJson, JsonOptions);
+            var output = (ResearchOutput?)JsonSerializer.Deserialize(candidateJson, typeof(ResearchOutput), McpServicesJsonContext.Default);
             if (output is null ||
                 string.IsNullOrWhiteSpace(output.Title) ||
                 string.IsNullOrWhiteSpace(output.Summary) ||
@@ -1709,7 +1709,7 @@ public sealed class TriageService : ITriageService
         return details;
     }
 
-    private sealed record ResearchOutput
+    internal sealed record ResearchOutput
     {
         public string Title { get; init; } = string.Empty;
 

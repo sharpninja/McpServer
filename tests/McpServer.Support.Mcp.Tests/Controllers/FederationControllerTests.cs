@@ -698,6 +698,8 @@ public sealed class FederationControllerTests
 
         public bool IsLocalOnly { get; }
 
+        public bool SupportsApply => _applySupported;
+
         public ValueTask<FederationStateSnapshot> SnapshotAsync(
             string? resourceId,
             CancellationToken cancellationToken)

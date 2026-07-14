@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using Microsoft.Extensions.Options;
@@ -163,6 +164,33 @@ public sealed class InMemoryTransactionAuditWriter : ITransactionAuditWriter
     }
 }
 
+/// <summary>
+/// Plain JSON body stored inside transaction diffgram evidence.
+/// </summary>
+internal sealed class TurnTransactionDiffgramBody
+{
+    /// <summary>Diffgram schema version.</summary>
+    public int SchemaVersion { get; set; }
+
+    /// <summary>Transaction identifier.</summary>
+    public string? TransactionId { get; set; }
+
+    /// <summary>Session-log turn identifier.</summary>
+    public string? TurnId { get; set; }
+
+    /// <summary>Operation name being committed.</summary>
+    public string OperationName { get; set; } = string.Empty;
+
+    /// <summary>Serialized operation body.</summary>
+    public string OperationBodyJson { get; set; } = string.Empty;
+
+    /// <summary>Transaction sequence number.</summary>
+    public long Sequence { get; set; }
+
+    /// <summary>UTC capture timestamp.</summary>
+    public DateTimeOffset CapturedAtUtc { get; set; }
+}
+
 /// <summary>TR-MCP-TXN-001: JSON diffgram builder for coordinator evidence.</summary>
 public sealed class JsonDiffgramBuilder : IDiffgramBuilder
 {
@@ -179,16 +207,17 @@ public sealed class JsonDiffgramBuilder : IDiffgramBuilder
     public DiffgramPayload Build(TurnTransactionRequest request, PartyKeyDescriptor? subscriberEncryptionKey = null)
     {
         ArgumentNullException.ThrowIfNull(request);
-        var body = JsonSerializer.Serialize(new
+        var bodyPayload = new TurnTransactionDiffgramBody
         {
-            schemaVersion = 1,
-            request.TransactionId,
-            request.TurnId,
-            request.OperationName,
-            request.OperationBodyJson,
-            request.Sequence,
-            capturedAtUtc = DateTimeOffset.UtcNow,
-        });
+            SchemaVersion = 1,
+            TransactionId = request.TransactionId,
+            TurnId = request.TurnId,
+            OperationName = request.OperationName,
+            OperationBodyJson = request.OperationBodyJson,
+            Sequence = request.Sequence,
+            CapturedAtUtc = DateTimeOffset.UtcNow,
+        };
+        var body = JsonSerializer.Serialize(bodyPayload, typeof(TurnTransactionDiffgramBody), TransactionSecurityJsonContext.Default);
         if (subscriberEncryptionKey is not null)
         {
             var protectedDiffgram = _protector.Protect(body, subscriberEncryptionKey);

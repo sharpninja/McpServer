@@ -21,11 +21,6 @@ internal static class RequirementsWikiDocumentRenderer
         RequirementsDocumentRenderer.MatrixFileName
     ];
 
-    private static readonly JsonSerializerOptions s_manifestOptions = new()
-    {
-        WriteIndented = true
-    };
-
     internal static IReadOnlyList<RequirementsRenderedDocument> RenderCanonicalFiles(
         IEnumerable<FrEntry> functional,
         IEnumerable<TrEntry> technical,
@@ -47,7 +42,8 @@ internal static class RequirementsWikiDocumentRenderer
         IEnumerable<FrTrMapping> mappings,
         DateTimeOffset generatedAtUtc,
         string? existingMatrixMarkdown = null,
-        RequirementsWikiExportConfig? config = null)
+        RequirementsWikiExportConfig? config = null,
+        IReadOnlyList<RequirementsRenderedDocument>? extensionDocuments = null)
     {
         var documents = new Dictionary<string, string>(StringComparer.Ordinal)
         {
@@ -59,8 +55,12 @@ internal static class RequirementsWikiDocumentRenderer
             [RequirementsDocumentRenderer.MatrixFileName] = RequirementsDocumentRenderer.RenderMatrix(functional, technical, testing, existingMatrixMarkdown)
         };
 
+        var extensions = extensionDocuments ?? [];
         if (config is not null)
-            return RenderConfiguredWikiFiles(config, generatedAtUtc, documents);
+            return RenderConfiguredWikiFiles(config, generatedAtUtc, documents, extensions);
+
+        if (extensions.Count > 0)
+            throw new InvalidOperationException("Extension wiki documents require docs/wiki.yaml configuration.");
 
         var files = new List<RequirementsRenderedDocument>();
         AddPlatform(files, AzureFolder, generatedAtUtc, documents);
@@ -71,11 +71,12 @@ internal static class RequirementsWikiDocumentRenderer
     private static IReadOnlyList<RequirementsRenderedDocument> RenderConfiguredWikiFiles(
         RequirementsWikiExportConfig config,
         DateTimeOffset generatedAtUtc,
-        IReadOnlyDictionary<string, string> generatedDocuments)
+        IReadOnlyDictionary<string, string> generatedDocuments,
+        IReadOnlyList<RequirementsRenderedDocument> extensionDocuments)
     {
         var files = new List<RequirementsRenderedDocument>();
-        AddConfiguredPlatform(files, config, AzureFolder, generatedAtUtc, generatedDocuments);
-        AddConfiguredPlatform(files, config, GitHubFolder, generatedAtUtc, generatedDocuments);
+        AddConfiguredPlatform(files, config, AzureFolder, generatedAtUtc, generatedDocuments, extensionDocuments);
+        AddConfiguredPlatform(files, config, GitHubFolder, generatedAtUtc, generatedDocuments, extensionDocuments);
         return files;
     }
 
@@ -84,7 +85,8 @@ internal static class RequirementsWikiDocumentRenderer
         RequirementsWikiExportConfig config,
         string platform,
         DateTimeOffset generatedAtUtc,
-        IReadOnlyDictionary<string, string> generatedDocuments)
+        IReadOnlyDictionary<string, string> generatedDocuments,
+        IReadOnlyList<RequirementsRenderedDocument> extensionDocuments)
     {
         var platformDocuments = config.Documents
             .Where(document => document.AppliesTo(platform))
@@ -92,10 +94,20 @@ internal static class RequirementsWikiDocumentRenderer
         var platformDocumentIds = platformDocuments
             .Select(static document => document.Id)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var platformExtensions = GetPlatformExtensionDocuments(extensionDocuments, platform);
+        var manifestTargets = platformDocuments
+            .Select(static document => document.Target)
+            .Concat(platformExtensions.Select(document => GetPlatformRelativePath(document.RelativePath, platform)))
+            .ToList();
+        var managedDocuments = GetPlatformManagedDocuments(config, platform, platformDocumentIds);
+        var reservedTargets = manifestTargets
+            .Concat(managedDocuments.Select(document => GetPlatformRelativePath(document.RelativePath, platform)))
+            .Prepend(ManifestFileName);
+        ValidateUniquePlatformTargets(platform, reservedTargets);
 
         files.Add(new(
             $"{platform}/{ManifestFileName}",
-            RenderManifest(platform, generatedAtUtc, platformDocuments.Select(static document => document.Target)),
+            RenderManifest(platform, generatedAtUtc, manifestTargets),
             "application/json"));
 
         foreach (var document in platformDocuments)
@@ -106,16 +118,66 @@ internal static class RequirementsWikiDocumentRenderer
                 "text/markdown"));
         }
 
+        foreach (var document in platformExtensions)
+            files.Add(document);
+
+        foreach (var document in managedDocuments)
+            files.Add(document);
+    }
+
+    private static IReadOnlyList<RequirementsRenderedDocument> GetPlatformManagedDocuments(
+        RequirementsWikiExportConfig config,
+        string platform,
+        ISet<string> platformDocumentIds)
+    {
         if (platform.Equals(AzureFolder, StringComparison.Ordinal))
         {
-            foreach (var orderFile in RenderAzureOrderFiles(config.Navigation, config, platformDocumentIds))
-                files.Add(new($"{platform}/{orderFile.RelativePath}", orderFile.Content, "text/plain"));
+            return RenderAzureOrderFiles(config.Navigation, config, platformDocumentIds)
+                .Select(orderFile => new RequirementsRenderedDocument($"{platform}/{orderFile.RelativePath}", orderFile.Content, "text/plain"))
+                .ToList();
         }
-        else
+
+        return
+        [
+            new RequirementsRenderedDocument($"{platform}/_Sidebar.md", RenderGitHubSidebar(config.Navigation, config, platformDocumentIds), "text/markdown"),
+            new RequirementsRenderedDocument($"{platform}/_Footer.md", "Generated from MCP requirements wiki export.\n", "text/markdown")
+        ];
+    }
+
+    private static void ValidateUniquePlatformTargets(string platform, IEnumerable<string> platformRelativePaths)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var relativePath in platformRelativePaths)
         {
-            files.Add(new($"{platform}/_Sidebar.md", RenderGitHubSidebar(config.Navigation, config, platformDocumentIds), "text/markdown"));
-            files.Add(new($"{platform}/_Footer.md", "Generated from MCP requirements wiki export.\n", "text/markdown"));
+            var normalized = relativePath.Replace('\\', '/');
+            if (!seen.Add(normalized))
+                throw new InvalidOperationException($"Duplicate wiki export path '{platform}/{normalized}'.");
         }
+    }
+
+    private static IReadOnlyList<RequirementsRenderedDocument> GetPlatformExtensionDocuments(
+        IEnumerable<RequirementsRenderedDocument> extensionDocuments,
+        string platform)
+        => extensionDocuments
+            .Where(document => HasPlatformPrefix(document.RelativePath, platform))
+            .OrderBy(static document => document.RelativePath, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(static document => document.RelativePath, StringComparer.Ordinal)
+            .ToList();
+
+    private static bool HasPlatformPrefix(string relativePath, string platform)
+    {
+        var normalized = relativePath.Replace('\\', '/');
+        return normalized.StartsWith(platform + "/", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string GetPlatformRelativePath(string relativePath, string platform)
+    {
+        var normalized = relativePath.Replace('\\', '/');
+        var prefix = platform + "/";
+        if (!normalized.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException($"Extension document '{relativePath}' does not target platform '{platform}'.");
+
+        return normalized[prefix.Length..];
     }
 
     private static void AddPlatform(
@@ -142,15 +204,13 @@ internal static class RequirementsWikiDocumentRenderer
 
     private static string RenderManifest(string platform, DateTimeOffset generatedAtUtc, IEnumerable<string>? documents = null)
     {
-        var manifest = new
-        {
-            schema = "mcp-requirements-wiki/v1",
+        var manifest = new RequirementsWikiManifest(
+            "mcp-requirements-wiki/v1",
             platform,
             generatedAtUtc,
-            documents = documents?.ToArray() ?? s_documentFiles
-        };
+            documents?.ToArray() ?? s_documentFiles);
 
-        return JsonSerializer.Serialize(manifest, s_manifestOptions) + "\n";
+        return JsonSerializer.Serialize(manifest, RequirementsWikiJsonContext.Default.RequirementsWikiManifest) + "\n";
     }
 
     private static string RenderHome() =>

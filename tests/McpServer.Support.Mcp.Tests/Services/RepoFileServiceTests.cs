@@ -55,6 +55,38 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Null(result);
     }
 
+    /// <summary>
+    /// TR-MCP-QUALITY-001: Rooted paths outside the active workspace are rejected
+    /// before any repository read, list, write, edit, or transactional capture.
+    /// </summary>
+    [Fact]
+    public async Task RootedExternalPath_AcrossRepoOperations_IsRejected()
+    {
+        var outsideDir = Path.Combine(Path.GetTempPath(), $"repo_external_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(outsideDir);
+        var outsideFile = Path.Combine(outsideDir, "outside.txt");
+        await File.WriteAllTextAsync(outsideFile, "outside", TestContext.Current.CancellationToken).ConfigureAwait(true);
+        try
+        {
+            var read = await _sut.ReadAsync(outsideFile, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var list = await _sut.ListAsync(outsideDir, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var write = await _sut.WriteAsync(outsideFile, "changed", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var edit = await _sut.EditAsync(outsideFile, "outside", "changed", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var snapshot = await _sut.CaptureForWriteAsync(outsideFile, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.Null(read);
+            Assert.Empty(list.Entries);
+            Assert.False(write.Written);
+            Assert.False(edit.Written);
+            Assert.Null(snapshot);
+            Assert.Equal("outside", await File.ReadAllTextAsync(outsideFile, TestContext.Current.CancellationToken).ConfigureAwait(true));
+        }
+        finally
+        {
+            Directory.Delete(outsideDir, recursive: true);
+        }
+    }
+
     [Fact]
     public async Task ReadAsync_DisallowedPath_ReturnsNull()
     {

@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Native;
 using McpServer.Support.Mcp.Options;
@@ -20,12 +20,6 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed partial class VoiceConversationService : IVoiceConversationService, IDisposable
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
-    {
-        WriteIndented = false,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-    };
-
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private readonly IAgentCliClient _copilotClient;
     private readonly IAgentExecutionStrategyResolver _strategyResolver;
@@ -844,17 +838,17 @@ public sealed partial class VoiceConversationService
                         });
                     }
 
-                    var modelToolResultPayload = new
+                    var modelToolResultPayload = new JsonObject
                     {
-                        step,
-                        toolName = toolOutcome.Record.ToolName,
-                        status = toolOutcome.Record.Status,
-                        isMutation = toolOutcome.Record.IsMutation,
-                        error = toolOutcome.Record.Error,
-                        summary = toolOutcome.Record.ResultSummary,
-                        result = toolOutcome.ResultForModel
+                        ["step"] = step,
+                        ["toolName"] = toolOutcome.Record.ToolName,
+                        ["status"] = toolOutcome.Record.Status,
+                        ["isMutation"] = toolOutcome.Record.IsMutation,
+                        ["error"] = toolOutcome.Record.Error,
+                        ["summary"] = toolOutcome.Record.ResultSummary,
+                        ["result"] = toolOutcome.ResultForModel.DeepClone()
                     };
-                    toolResultsForPrompt.Add(JsonSerializer.Serialize(modelToolResultPayload, s_jsonOptions));
+                    toolResultsForPrompt.Add(modelToolResultPayload.ToJsonString());
                     continue;
                 }
                 default:
@@ -979,14 +973,14 @@ public sealed partial class VoiceConversationService
 
         var normalizedToolName = toolName.Trim().ToLowerInvariant();
         var isMutation = IsMutationTool(normalizedToolName);
-        var argsJson = JsonSerializer.Serialize(arguments, s_jsonOptions);
+        var argsJson = arguments.GetRawText();
 
         if (!guardState.TryRegister(normalizedToolName, argsJson, isMutation, out var guardError))
             return BlockedToolOutcome(turnId, step, normalizedToolName, arguments, isMutation, guardError ?? "Blocked by guardrail.");
 
         try
         {
-            object resultPayload;
+            JsonNode resultPayload;
             string summary;
 
             switch (normalizedToolName)
@@ -1010,13 +1004,7 @@ public sealed partial class VoiceConversationService
                     var result = await _workspaceAccessor.GetTodoService().QueryAsync(query, cancellationToken).ConfigureAwait(false);
                     var limit = Math.Clamp(GetOptionalInt(arguments, "limit") ?? 10, 1, 50);
                     var items = result.Items.Take(limit).Select(MapTodoSummary).ToList();
-                    resultPayload = new
-                    {
-                        success = true,
-                        totalCount = result.TotalCount,
-                        returnedCount = items.Count,
-                        items
-                    };
+                    resultPayload = CreateTodoQueryResultPayload(result.TotalCount, items);
                     summary = $"Returned {items.Count} todo item(s) (total {result.TotalCount}).";
                     break;
                 }
@@ -1027,12 +1015,12 @@ public sealed partial class VoiceConversationService
                     var item = await _workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
                     if (item is null)
                     {
-                        resultPayload = new { success = false, error = $"Todo '{id}' not found." };
+                        resultPayload = CreateToolErrorPayload($"Todo '{id}' not found.");
                         summary = $"Todo '{id}' not found.";
                     }
                     else
                     {
-                        resultPayload = new { success = true, item };
+                        resultPayload = CreateToolItemPayload(item);
                         summary = $"Loaded todo {item.Id}.";
                     }
 
@@ -1061,7 +1049,7 @@ public sealed partial class VoiceConversationService
                     };
 
                     var result = await _todoCreationService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
-                    resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
+                    resultPayload = CreateToolMutationPayload(result.Success, result.Error, result.Item);
                     summary = result.Success && result.Item is not null
                         ? $"Created todo {result.Item.Id}."
                         : $"Create failed: {result.Error}";
@@ -1096,7 +1084,7 @@ public sealed partial class VoiceConversationService
                     };
 
                     var result = await _todoUpdateService.UpdateAsync(id, update, cancellationToken).ConfigureAwait(false);
-                    resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
+                    resultPayload = CreateToolMutationPayload(result.Success, result.Error, result.Item);
                     summary = result.Success
                         ? $"Updated todo {id}."
                         : $"Update failed for {id}: {result.Error}";
@@ -1107,7 +1095,7 @@ public sealed partial class VoiceConversationService
                     EnsureOnlyProperties(arguments, normalizedToolName, ["id"]);
                     var id = RequireString(arguments, "id");
                     var result = await _workspaceAccessor.GetTodoService().DeleteAsync(id, cancellationToken).ConfigureAwait(false);
-                    resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
+                    resultPayload = CreateToolMutationPayload(result.Success, result.Error, result.Item);
                     summary = result.Success
                         ? $"Deleted todo {id}."
                         : $"Delete failed for {id}: {result.Error}";
@@ -1120,14 +1108,14 @@ public sealed partial class VoiceConversationService
                     var current = await _workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
                     if (current is null)
                     {
-                        resultPayload = new { success = false, error = $"Todo '{id}' not found." };
+                        resultPayload = CreateToolErrorPayload($"Todo '{id}' not found.");
                         summary = $"Todo '{id}' not found.";
                     }
                     else
                     {
                         var targetDone = GetOptionalNullableBool(arguments, "done") ?? !current.Done;
                         var result = await _todoUpdateService.UpdateAsync(id, new TodoUpdateRequest { Done = targetDone }, cancellationToken).ConfigureAwait(false);
-                        resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
+                        resultPayload = CreateToolMutationPayload(result.Success, result.Error, result.Item);
                         summary = result.Success
                             ? (targetDone ? $"Marked {id} done." : $"Reopened {id}.")
                             : $"Toggle failed for {id}: {result.Error}";
@@ -1177,21 +1165,67 @@ public sealed partial class VoiceConversationService
                     ResultSummary = null,
                     Error = ex.Message
                 },
-                new { success = false, error = ex.Message });
+                CreateToolErrorPayload(ex.Message));
         }
 
-        static object MapTodoSummary(TodoFlatItem item)
-            => new
-            {
-                id = item.Id,
-                title = item.Title,
-                section = item.Section,
-                priority = item.Priority,
-                done = item.Done,
-                estimate = item.Estimate,
-                remaining = item.Remaining
-            };
     }
+
+    private static JsonObject CreateTodoQueryResultPayload(int totalCount, IReadOnlyList<JsonObject> items)
+    {
+        var itemsArray = new JsonArray();
+        foreach (var item in items)
+            itemsArray.Add(item.DeepClone());
+
+        return new JsonObject
+        {
+            ["success"] = true,
+            ["totalCount"] = totalCount,
+            ["returnedCount"] = items.Count,
+            ["items"] = itemsArray
+        };
+    }
+
+    private static JsonObject CreateToolErrorPayload(string error)
+        => new()
+        {
+            ["success"] = false,
+            ["error"] = error
+        };
+
+    private static JsonObject CreateToolItemPayload(TodoFlatItem item)
+        => new()
+        {
+            ["success"] = true,
+            ["item"] = JsonSerializer.SerializeToNode(item, McpServicesJsonContext.Default.TodoFlatItem)
+        };
+
+    private static JsonObject CreateToolMutationPayload(bool success, string? error, TodoFlatItem? item)
+        => new()
+        {
+            ["success"] = success,
+            ["error"] = error,
+            ["item"] = item is null ? null : JsonSerializer.SerializeToNode(item, McpServicesJsonContext.Default.TodoFlatItem)
+        };
+
+    private static JsonObject CreateBlockedToolPayload(string error)
+        => new()
+        {
+            ["success"] = false,
+            ["blocked"] = true,
+            ["error"] = error
+        };
+
+    private static JsonObject MapTodoSummary(TodoFlatItem item)
+        => new()
+        {
+            ["id"] = item.Id,
+            ["title"] = item.Title,
+            ["section"] = item.Section,
+            ["priority"] = item.Priority,
+            ["done"] = item.Done,
+            ["estimate"] = item.Estimate,
+            ["remaining"] = item.Remaining
+        };
 
     private static ToolExecutionOutcome BlockedToolOutcome(
         string turnId,
@@ -1207,13 +1241,13 @@ public sealed partial class VoiceConversationService
                 TurnId = turnId,
                 ToolName = toolName,
                 Step = step,
-                ArgumentsJson = JsonSerializer.Serialize(arguments, s_jsonOptions),
+                ArgumentsJson = arguments.GetRawText(),
                 Status = "blocked",
                 IsMutation = isMutation,
                 ResultSummary = null,
                 Error = error
             },
-            new { success = false, blocked = true, error });
+            CreateBlockedToolPayload(error));
     }
 
     private static VoiceTurnExecutionResult ErrorResult(string message, IReadOnlyList<VoiceToolCallRecordDto> toolCalls)
@@ -1952,7 +1986,7 @@ public sealed partial class VoiceConversationService
 
     private sealed record ToolExecutionOutcome(
         VoiceToolCallRecordDto Record,
-        object ResultForModel);
+        JsonNode ResultForModel);
 
     private sealed class VoiceTurnGuardState
     {

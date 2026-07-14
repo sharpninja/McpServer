@@ -446,6 +446,8 @@ public sealed class FederationProxyServiceTests
 
         public bool IsLocalOnly => false;
 
+        public bool SupportsApply => true;
+
         public ValueTask<FederationStateSnapshot> SnapshotAsync(string resourceId, CancellationToken cancellationToken)
             => new(new FederationStateSnapshot { Domain = Domain, ResourceId = resourceId, Version = "v1", PayloadJson = "{}" });
 

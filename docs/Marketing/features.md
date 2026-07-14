@@ -8,7 +8,7 @@
 ---
 
 ## Feature 2 — TODO Management
-**What it does:** Full CRUD and query API for TODO items. YAML file-backed or SQLite table-backed storage. Accessible over HTTP REST and MCP STDIO.
+**What it does:** Full CRUD and query API for TODO items. Database-backed storage (SQLite, SQL Server, or PostgreSQL) with a read-only TODO.yaml projection. Accessible over HTTP REST and MCP STDIO.
 **Why it matters:** TODO items become a structured API resource. Agents create, update, complete, and filter TODOs programmatically.
 **Endpoints:** `GET/POST/PUT/DELETE /mcpserver/todo`
 

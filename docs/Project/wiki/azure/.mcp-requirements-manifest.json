@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-07-11T21:03:43.4162745+00:00",
+  "generatedAtUtc": "2026-07-14T18:05:49.3780532+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -9,6 +9,18 @@
     "Testing-Requirements.md",
     "TR-per-FR-Mapping.md",
     "Requirements-Matrix.md",
-    "Case-Studies/Triage-Plugin-Code-Quality-Case-Study.md"
+    "Case-Studies/Triage-Plugin-Code-Quality-Case-Study.md",
+    "User-Guide.md",
+    "FAQ.md",
+    "Client-Integration.md",
+    "REPL-User-Guide.md",
+    "REPL-Agent-Guide.md",
+    "REPL-Migration-Guide.md",
+    "MCP-Server-Operations.md",
+    "QuadBrain.md",
+    "QBAgent.md",
+    "Agent-Plugin-Availability.md",
+    "Agent-Plugin-Feature-Matrix.md",
+    "Byrd-Development-Process.md"
   ]
 }

@@ -175,12 +175,16 @@ builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(
 builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSection(GitHubIntegrationOptions.SectionName));
 builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
+builder.Services.AddOptions<SessionLogSanitizationOptions>()
+    .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
+    .ValidateOnStart();
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
 builder.Services.Configure<AgentProcessManagerOptions>(builder.Configuration.GetSection(AgentProcessManagerOptions.SectionName));
 builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(TriageOptions.SectionName));
 builder.Services.AddInProcessTransactionSecurity(builder.Configuration);
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
+builder.Services.AddSingleton<IValidateOptions<SessionLogSanitizationOptions>, SessionLogSanitizationOptionsValidator>();
 builder.Services.AddSingleton<AppSettingsFileService>();
 var requiredRepoAllowlistPatterns = new[]
 {
@@ -284,6 +288,8 @@ builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>();
 builder.Services.AddSingleton<Chunker>();
 builder.Services.AddDataProtection();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+builder.Services.AddSingleton<IRequirementsDocFxWorkflowRunner, RequirementsDocFxWorkflowRunner>();
+builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator, RequirementsWikiExportOrchestrator>();
 builder.Services.AddSingleton<IAgentProcessManager, AgentProcessManager>();
 builder.Services.AddSingleton<IAgentIsolationStrategy, NoneAgentIsolationStrategy>();
 builder.Services.AddSingleton<IAgentIsolationStrategy, WorktreeAgentIsolationStrategy>();
@@ -428,6 +434,7 @@ builder.Services.AddSingleton<IAgentCliClient>(sp =>
         sp.GetRequiredService<IOptions<IngestionOptions>>(),
         sp.GetRequiredService<ILogger<AuditedAgentCliClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
+builder.Services.AddScoped<ISessionLogSanitizer, SessionLogSanitizer>();
 builder.Services.AddScoped<IMemoryService, MemoryService>();
 builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
 builder.Services.AddScoped<Fts5SearchService>();
@@ -581,11 +588,14 @@ builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederation
             sp.GetService<ITurnTransactionCoordinator>(),
             sp.GetService<WorkspaceContext>(),
             sp.GetService<IOptions<TurnTransactionOptions>>());
-        return new FederatedSessionLogService(
+        var federated = new FederatedSessionLogService(
             inner,
             sp.GetRequiredService<FederationRegistry>(),
             sp.GetRequiredService<IFederationDataClient>(),
             sp.GetRequiredService<ILogger<FederatedSessionLogService>>());
+        return new SessionLogSanitizingService(
+            federated,
+            sp.GetRequiredService<ISessionLogSanitizer>());
     });
 }
 

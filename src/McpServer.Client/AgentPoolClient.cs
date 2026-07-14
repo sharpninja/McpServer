@@ -16,7 +16,8 @@ public sealed class AgentPoolClient : McpClientBase
 {
     private static readonly JsonSerializerOptions s_streamJsonOptions = new()
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        TypeInfoResolver = McpClientJsonContext.Default
     };
 
     /// <inheritdoc />
@@ -122,7 +123,7 @@ public sealed class AgentPoolClient : McpClientBase
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
-            var item = JsonSerializer.Deserialize<T>(line, s_streamJsonOptions);
+            var item = (T?)JsonSerializer.Deserialize(line, s_streamJsonOptions.GetTypeInfo(typeof(T)));
             if (item is not null)
                 yield return item;
         }

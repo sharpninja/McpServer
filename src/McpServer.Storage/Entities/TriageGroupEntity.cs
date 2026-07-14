@@ -9,27 +9,27 @@ public sealed class TriageGroupEntity
 {
     /// <summary>Workspace discriminator used by MCP multi-tenant filters.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Durable triage group id.</summary>
     [Key]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string GroupId { get; set; }
 
     /// <summary>Deterministic workspace-scoped grouping key.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string GroupKey { get; set; }
 
     /// <summary>Effective workspace path used for grouping.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public required string EffectiveWorkspacePath { get; set; }
 
     /// <summary>Representative title.</summary>
     [Required]
-    [MaxLength(512)]
+    [StringLength(512)]
     public required string Title { get; set; }
 
     /// <summary>Representative summary.</summary>
@@ -38,7 +38,7 @@ public sealed class TriageGroupEntity
 
     /// <summary>Group status.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public required string Status { get; set; }
 
     /// <summary>Number of reports currently attached to the group.</summary>
@@ -57,7 +57,7 @@ public sealed class TriageGroupEntity
     public bool IsMcpServerRelated { get; set; }
 
     /// <summary>Created backlog TODO id when research succeeds.</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? CreatedTodoId { get; set; }
 
     /// <summary>Inspectable latest failure state.</summary>

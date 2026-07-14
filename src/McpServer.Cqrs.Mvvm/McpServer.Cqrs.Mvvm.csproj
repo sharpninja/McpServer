@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>McpServer.Cqrs.Mvvm</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031</NoWarn>
 
     <!-- NuGet Package Metadata -->
     <PackageId>SharpNinja.McpServer.Cqrs.Mvvm</PackageId>

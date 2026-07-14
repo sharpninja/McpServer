@@ -3,7 +3,6 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-#pragma warning disable CA1002 // YamlDotNet requires mutable List<T> for deserialization
 #pragma warning disable CA2227 // YamlDotNet requires settable collection properties
 
 namespace McpServer.Support.Mcp.Models;
@@ -23,10 +22,10 @@ public sealed class TodoFile
     public CodeReviewSection? CodeReviewRemediation { get; set; }
 
     /// <summary>Groups of completed items by date.</summary>
-    public List<CompletedGroup>? Completed { get; set; }
+    public ICollection<CompletedGroup>? Completed { get; set; }
 
     /// <summary>Free-form notes.</summary>
-    public List<string>? Notes { get; set; }
+    public ICollection<string>? Notes { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: A section grouping TODO items by priority level.</summary>
@@ -34,15 +33,15 @@ public sealed class TodoSection
 {
     /// <summary>High-priority TODO items.</summary>
     [YamlMember(Alias = "high-priority")]
-    public List<TodoItem>? HighPriority { get; set; }
+    public ICollection<TodoItem>? HighPriority { get; set; }
 
     /// <summary>Medium-priority TODO items.</summary>
     [YamlMember(Alias = "medium-priority")]
-    public List<TodoItem>? MediumPriority { get; set; }
+    public ICollection<TodoItem>? MediumPriority { get; set; }
 
     /// <summary>Low-priority TODO items.</summary>
     [YamlMember(Alias = "low-priority")]
-    public List<TodoItem>? LowPriority { get; set; }
+    public ICollection<TodoItem>? LowPriority { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: A single TODO item with metadata and implementation tasks.</summary>
@@ -74,7 +73,7 @@ public sealed class TodoItem
 
     /// <summary>Multi-line description of the item.</summary>
     [YamlMember(Alias = "description")]
-    public List<string>? Description { get; set; }
+    public ICollection<string>? Description { get; set; }
 
     /// <summary>Summary of what was done when the item was completed.</summary>
     [YamlMember(Alias = "done-summary")]
@@ -86,7 +85,7 @@ public sealed class TodoItem
 
     /// <summary>Technical details or implementation notes.</summary>
     [YamlMember(Alias = "technical-details")]
-    public List<string>? TechnicalDetails { get; set; }
+    public ICollection<string>? TechnicalDetails { get; set; }
 
     /// <summary>Note explaining the priority level.</summary>
     [YamlMember(Alias = "priority-note")]
@@ -98,19 +97,19 @@ public sealed class TodoItem
 
     /// <summary>IDs of TODO items this item depends on.</summary>
     [YamlMember(Alias = "depends-on")]
-    public List<string>? DependsOn { get; set; }
+    public ICollection<string>? DependsOn { get; set; }
 
     /// <summary>Associated functional requirement IDs (e.g. FR-LOC-001).</summary>
     [YamlMember(Alias = "functional-requirements")]
-    public List<string>? FunctionalRequirements { get; set; }
+    public ICollection<string>? FunctionalRequirements { get; set; }
 
     /// <summary>Associated technical requirement IDs (e.g. TR-LOC-001).</summary>
     [YamlMember(Alias = "technical-requirements")]
-    public List<string>? TechnicalRequirements { get; set; }
+    public ICollection<string>? TechnicalRequirements { get; set; }
 
     /// <summary>Sub-tasks for implementing this item.</summary>
     [YamlMember(Alias = "implementation-tasks")]
-    public List<ImplementationTask>? ImplementationTasks { get; set; }
+    public ICollection<ImplementationTask>? ImplementationTasks { get; set; }
 }
 
 /// <summary>
@@ -149,7 +148,7 @@ public sealed class LegacyTodoFlatItem
 
     /// <summary>Legacy multiline description.</summary>
     [YamlMember(Alias = "description")]
-    public List<string>? Description { get; set; }
+    public ICollection<string>? Description { get; set; }
 
     /// <summary>Legacy note field.</summary>
     [YamlMember(Alias = "note")]
@@ -161,23 +160,23 @@ public sealed class LegacyTodoFlatItem
 
     /// <summary>Legacy technical details field.</summary>
     [YamlMember(Alias = "technicalDetails", ApplyNamingConventions = false)]
-    public List<string>? TechnicalDetails { get; set; }
+    public ICollection<string>? TechnicalDetails { get; set; }
 
     /// <summary>Legacy functional requirements field.</summary>
     [YamlMember(Alias = "functionalRequirements", ApplyNamingConventions = false)]
-    public List<string>? FunctionalRequirements { get; set; }
+    public ICollection<string>? FunctionalRequirements { get; set; }
 
     /// <summary>Legacy technical requirements field.</summary>
     [YamlMember(Alias = "technicalRequirements", ApplyNamingConventions = false)]
-    public List<string>? TechnicalRequirements { get; set; }
+    public ICollection<string>? TechnicalRequirements { get; set; }
 
     /// <summary>Legacy dependency field.</summary>
     [YamlMember(Alias = "dependsOn", ApplyNamingConventions = false)]
-    public List<string>? DependsOn { get; set; }
+    public ICollection<string>? DependsOn { get; set; }
 
     /// <summary>Legacy implementation tasks field.</summary>
     [YamlMember(Alias = "implementationTasks", ApplyNamingConventions = false)]
-    public List<ImplementationTask>? ImplementationTasks { get; set; }
+    public ICollection<ImplementationTask>? ImplementationTasks { get; set; }
 
     /// <summary>Legacy completion date field.</summary>
     [YamlMember(Alias = "completedDate", ApplyNamingConventions = false)]
@@ -213,7 +212,7 @@ public sealed class CodeReviewSection
 
     /// <summary>Remediation phases for the code review.</summary>
     [YamlMember(Alias = "phases")]
-    public List<CodeReviewPhase>? Phases { get; set; }
+    public ICollection<CodeReviewPhase>? Phases { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: A code review remediation phase.</summary>
@@ -241,7 +240,7 @@ public sealed class CodeReviewPhase
 
     /// <summary>Sub-tasks for implementing this phase.</summary>
     [YamlMember(Alias = "implementation-tasks")]
-    public List<ImplementationTask>? ImplementationTasks { get; set; }
+    public ICollection<ImplementationTask>? ImplementationTasks { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: A group of completed items by date.</summary>
@@ -253,7 +252,7 @@ public sealed class CompletedGroup
 
     /// <summary>Items completed on this date.</summary>
     [YamlMember(Alias = "items")]
-    public List<CompletedItem>? Items { get; set; }
+    public ICollection<CompletedItem>? Items { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: A completed item summary entry.</summary>
@@ -279,7 +278,7 @@ public sealed class CompletedItem
 internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
 {
     /// <inheritdoc />
-    public bool Accepts(Type type) => type == typeof(List<string>);
+    public bool Accepts(Type type) => type == typeof(List<string>) || type == typeof(ICollection<string>);
 
     /// <inheritdoc />
     public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
@@ -334,7 +333,7 @@ internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
         ArgumentNullException.ThrowIfNull(emitter);
         ArgumentNullException.ThrowIfNull(serializer);
 
-        var values = (List<string>?)value ?? [];
+        var values = (IEnumerable<string>?)value ?? [];
         emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
         foreach (var item in values)
         {

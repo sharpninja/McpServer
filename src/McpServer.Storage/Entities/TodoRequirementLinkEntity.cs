@@ -11,22 +11,22 @@ public sealed class TodoRequirementLinkEntity
 {
     /// <summary>Workspace discriminator for both TODO and requirement.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Canonical TODO identifier.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public string TodoId { get; set; } = string.Empty;
 
     /// <summary>Requirement kind: fr, tr, or test.</summary>
     [Required]
-    [MaxLength(16)]
+    [StringLength(16)]
     public string RequirementKind { get; set; } = string.Empty;
 
     /// <summary>Requirement identifier.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public string RequirementId { get; set; } = string.Empty;
 
     /// <summary>UTC timestamp when the link was created.</summary>

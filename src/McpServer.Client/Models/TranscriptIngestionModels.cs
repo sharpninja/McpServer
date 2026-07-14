@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace McpServer.Client.Models;
 
 /// <summary>Supported transcript source formats for ingestion.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<TranscriptSourceKind>))]
 public enum TranscriptSourceKind
 {
     /// <summary>Automatically detect the transcript source kind.</summary>
@@ -30,7 +30,7 @@ public enum TranscriptSourceKind
 }
 
 /// <summary>Optional provider profile emitted beside canonical Session Log YAML.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<TranscriptCompatibilityProfile>))]
 public enum TranscriptCompatibilityProfile
 {
     /// <summary>No compatibility JSONL output.</summary>

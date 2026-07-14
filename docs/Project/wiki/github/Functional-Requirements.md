@@ -1085,9 +1085,9 @@ Scope: layer-1+
 The MCP Server workspace must maintain durable governance for warning suppression decisions, approved exceptions, required code fixes, validation evidence, and traceability across TODO and requirements artifacts.
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] Approved warning suppressions are recorded with diagnostic code, justification, owner, permanence, and review condition.
-- [ ] Unapproved diagnostics and broad warning bypasses remain remediation work until code, configuration, package metadata, or dependency changes remove the warning source.
-- [ ] PLAN-WARNREMEDIATION-001 stays current with approved suppressions separated from required fixes and marks only validated work as done.
+- [x] Approved warning suppressions are recorded with diagnostic code, justification, owner, permanence, and review condition. (evidence: config/warning-suppression-approvals.json records current approved CA1416, CA1819, and CA2227 suppressions with owner, permanence, and review condition.)
+- [x] Unapproved diagnostics and broad warning bypasses remain remediation work until code, configuration, package metadata, or dependency changes remove the warning source. (evidence: .editorconfig CA1848 severity override removed; CA1848 and CS8602 approval entries removed; CS8602 pragmas removed; Storage migration obsolete pragmas removed.)
+- [x] PLAN-WARNREMEDIATION-001 stays current with approved suppressions separated from required fixes and marks only validated work as done. (evidence: PLAN-WARNREMEDIATION-001 W15/W18/W21-W24 evidence updated in TODO state; approved suppressions remain in config/warning-suppression-approvals.json.)
 - [x] Requirements exports and traceability mappings include the suppression governance FR, TR, and aiUnit TEST records. (evidence: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md, docs/Project/Requirements-Matrix.md, docs/Project/requirements-wiki-documents.zip)
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
@@ -1105,10 +1105,17 @@ Scope: layer-1+
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
 Scope: layer-1+
 
-## FR-MCP-DOCFXWIKI-001 FR-MCP-DOCFXWIKI-001
+## FR-MCP-DOCFXWIKI-001 Optional DocFX content in requirements wiki exports
 
-Placeholder requirement backfilled for TODO link FR-MCP-DOCFXWIKI-001.
+A workspace may declare one or more DocFX workflows whose generated content is included in GitHub and Azure requirements wiki artifacts without changing existing exports when no workflow is configured.
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] docs/wiki.yaml may omit docfx entirely and produce byte-equivalent requirements wiki behavior apart from generated timestamps.
+- [ ] Each configured workflow builds DocFX once and maps its generated files into the selected GitHub and Azure wiki roots.
+- [ ] Platform filters include content only in the requested github and/or azure outputs.
+- [ ] Generated DocFX files appear in platform manifests and stale generated files are removed on the next successful export.
+- [ ] Workspace traversal, absolute external paths, and reparse-point escapes are rejected before command execution or file copy.
+- [ ] Invalid configuration, process timeout, non-zero exit, or missing output fails the export without publishing a partial wiki artifact.
 
 ## FR-MCP-FILETOOLS-001 Global repository discovery tools
 
@@ -1302,6 +1309,17 @@ Scope: layer-1+
 - [ ] Documented dialogItems arrays preserve every dialog item and increment auditDialog by the accepted item count.
 - [ ] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.
 - [ ] The canonical parsing fix propagates to every official plugin distribution without checksum drift.
+
+## FR-MCP-PLUGININT-001 End-to-end Session Log validation for every agent plugin
+
+The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real MCP Server.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every supported plugin has a scenario that bootstraps a session, begins a turn, appends representative action and dialog data, completes the turn, and verifies durable server-visible content.
+- [ ] Each scenario resolves cache state only under {workspace}/.mcpServer/{agent}.
+- [ ] Setting PLUGIN_ROOT_OVERRIDE cannot redirect session or turn cache state.
+- [ ] The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios.
+- [ ] The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario.
 
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
 
@@ -1535,6 +1553,15 @@ Scope: layer-1+
 **Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
 Scope: layer-1+
 
+## FR-MCP-REPL-008 Per-agent REPL isolation
+
+Agent REPL callers must identify the invoking agent on every mcpserver-repl invocation so session, cache, and verified marker state are isolated per agent and workspace.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Every plugin REPL launcher passes --agent, including the default agent value. (evidence: plugins/core/lib-sh/repl-invoke.sh; plugins/core/lib-ps/repl-invoke.ps1; plugins/core/lib-sh/repl-daemon.js; plugins/core/lib-node/src/transport/repl-bridge.ts)
+- [x] Verified marker cache entries are keyed by canonical agent identity and workspace. (evidence: src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs; tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+- [x] Named-agent child process invocation is covered by integration tests. (evidence: tests/McpServer.Repl.IntegrationTests/ReplChildProcessHelper.cs; tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+
 ## FR-MCP-REPL-009 Degraded session-log persistence isolation
 
 The MCP REPL SHALL isolate plugins from MCP Session Log service degradation during session and in-progress turn operations. When a turn closes while the primary service is degraded, the REPL SHALL durably persist the complete turn through an independent failsafe strategy and SHALL notify the caller with the failsafe path.
@@ -1599,6 +1626,17 @@ Scope: layer-1+
 
 Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-004.
 Scope: layer-1+
+
+## FR-MCP-SESSIONLOGSAN-001 Sanitized session-log read responses
+
+Session-log query and single-session read responses must redact built-in credential forms and workspace-configured regular-expression matches before data leaves the server while preserving the raw persisted session log.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Query and single-session GET responses redact secrets from session metadata, turns, actions, processing dialog, contexts, files, blockers, requirements, commits, raw context, and original entry payloads.
+- [ ] Stored entities and submitted DTOs remain unchanged; sanitization is an outbound projection only.
+- [ ] Default credential detectors are active without custom configuration and custom workspace rules may add bounded regex matches.
+- [ ] Filtering, total count, ordering, offset, and limit are computed from raw data and remain unchanged after redaction.
+- [ ] Federated and stdio read surfaces apply the same sanitization behavior.
 
 ## FR-MCP-SUBLOG-001 Subscriber high-performance message logging
 

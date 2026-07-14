@@ -19,34 +19,34 @@ public sealed class ToolDefinitionEntity
 
     /// <summary>Unique tool name (e.g. <c>screenshot</c>, <c>clipboard_copy</c>).</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Name { get; set; }
 
     /// <summary>Short human-readable description shown to agents.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public required string Description { get; set; }
 
     /// <summary>JSON schema describing the tool's input parameters (optional).</summary>
-    [MaxLength(8192)]
+    [StringLength(8192)]
     public string? ParameterSchema { get; set; }
 
     /// <summary>Command or executable template for invocation (e.g. <c>pwsh.exe -File Take-Screenshot.ps1 -Path {path}</c>).</summary>
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public string? CommandTemplate { get; set; }
 
     /// <summary>
     /// Optional workspace scope. When <c>null</c> the tool is global (available to all workspaces).
     /// When set, the tool is visible only within that workspace (plus all global tools).
     /// </summary>
-    [MaxLength(2048)]
+    [StringLength(2048)]
     public string? WorkspacePath { get; set; }
 
     /// <summary>
     /// Name of the bucket this tool was installed from, or <c>null</c> if created manually.
     /// Used to track provenance and enable updates from the source bucket.
     /// </summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? BucketName { get; set; }
 
     /// <summary>When the tool was registered.</summary>
@@ -55,7 +55,6 @@ public sealed class ToolDefinitionEntity
     /// <summary>When the tool was last modified.</summary>
     public DateTimeOffset DateTimeModified { get; set; }
 
-    /// <summary>Tags for keyword-based discovery. EF Core requires mutable collection for relationship fixup.</summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<ToolDefinitionTagEntity> Tags { get; set; } = new List<ToolDefinitionTagEntity>();
+    /// <summary>Tags for keyword-based discovery. EF Core populates the initialized collection during relationship fixup.</summary>
+    public ICollection<ToolDefinitionTagEntity> Tags { get; } = new List<ToolDefinitionTagEntity>();
 }

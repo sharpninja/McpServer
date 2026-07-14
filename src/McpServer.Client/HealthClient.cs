@@ -13,7 +13,7 @@ namespace McpServer.Client;
 /// <seealso cref="McpServerClient.Health"/>
 public sealed class HealthClient : McpClientBase
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = McpClientJsonContext.Default };
 
     private readonly HttpClient _http;
     private readonly string _scheme;
@@ -102,7 +102,7 @@ public sealed class HealthClient : McpClientBase
                 (int)response.StatusCode);
         }
 
-        return JsonSerializer.Deserialize<T>(content, s_jsonOptions)
-            ?? throw new McpServerException("Response deserialized to null.", (int)response.StatusCode);
+        return (T)(JsonSerializer.Deserialize(content, s_jsonOptions.GetTypeInfo(typeof(T)))
+            ?? throw new McpServerException("Response deserialized to null.", (int)response.StatusCode));
     }
 }

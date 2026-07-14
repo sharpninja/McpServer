@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using McpServer.Common.AgentCli;
@@ -75,6 +76,7 @@ public sealed class AuditedAgentCliClient : IAgentCliClient
     }
 
     /// <inheritdoc />
+    [RequiresUnreferencedCode("Generic CLI output parsing requires runtime serializer metadata for arbitrary caller-supplied types.")]
     public async Task<AgentCliResult<T>> InvokeAsync<T>(
         string prompt,
         AgentCliClientOptions? options = null,

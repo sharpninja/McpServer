@@ -47,9 +47,11 @@ $script:ReplInvokePluginRoot = if ($env:MCP_PLUGIN_ROOT) {
 }
 
 # Agent for per-agent REPL cache and isolation. Must be passed to every mcpserver-repl call.
+# Keep this precedence aligned with resolve-cache-dir.sh and MarkerFileClientOptionsResolver.ResolveAgentKey.
 $script:AgentName = if ($env:MCP_AGENT_NAME) { $env:MCP_AGENT_NAME }
                    elseif ($env:PLUGIN_AGENT_NAME) { $env:PLUGIN_AGENT_NAME }
                    elseif ($env:PLUGIN_AGENT_DEFAULT) { $env:PLUGIN_AGENT_DEFAULT }
+                   elseif ($env:MCP_PLUGIN_HOST) { $env:MCP_PLUGIN_HOST }
                    else { 'default' }
 
 if (-not (Get-Command Resolve-McpCacheDir -ErrorAction SilentlyContinue)) {
@@ -400,10 +402,8 @@ function Invoke-ReplRaw {
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
         $psi.FileName = 'mcpserver-repl'
         $psi.ArgumentList.Add('--agent-stdio')
-        if ($script:AgentName -and $script:AgentName -ne 'default') {
-            $psi.ArgumentList.Add('--agent')
-            $psi.ArgumentList.Add($script:AgentName)
-        }
+        $psi.ArgumentList.Add('--agent')
+        $psi.ArgumentList.Add($script:AgentName)
         $psi.RedirectStandardInput = $true
         $psi.RedirectStandardOutput = $true
         # Do NOT redirect stderr: mcpserver-repl logs verbose 'info:' lines

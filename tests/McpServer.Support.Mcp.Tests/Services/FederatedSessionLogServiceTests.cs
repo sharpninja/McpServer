@@ -123,6 +123,33 @@ public sealed class FederatedSessionLogServiceTests
         Assert.Equal("S-002", result.Items[0].SessionId);
     }
 
+    /// <summary>When federation is wrapped by the sanitizer decorator, local and remote merged items are both redacted.</summary>
+    [Fact]
+    public async Task QueryAsync_WhenWrappedBySanitizer_RedactsLocalAndRemoteMergedItems()
+    {
+        var localLog = MakeLog("Codex", "S-LOCAL", "local password=hunter2");
+        var remoteLog = MakeLog("Claude", "S-REMOTE", "remote password=hunter2");
+        _inner.QueryAsync(Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new SessionLogQueryResult { TotalCount = 1, Limit = 25, Offset = 5, Items = [localLog] });
+        _client.QuerySessionLogsAsync(Arg.Any<FederationTarget>(), Arg.Any<SessionLogQueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new SessionLogQueryResult { TotalCount = 1, Limit = 25, Offset = 5, Items = [remoteLog] });
+        var federated = CreateSut(CreateRegistry(enabled: true, defaultTarget: "remote"));
+        var sanitizer = new SessionLogSanitizer(Microsoft.Extensions.Options.Options.Create(new SessionLogSanitizationOptions()));
+        var sut = new SessionLogSanitizingService(federated, sanitizer);
+
+        var result = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 25, Offset = 5 }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(2, result.Items.Count);
+        Assert.Equal(2, result.TotalCount);
+        Assert.Equal(25, result.Limit);
+        Assert.Equal(5, result.Offset);
+        Assert.All(result.Items, item =>
+        {
+            Assert.DoesNotContain("hunter2", item.Title, StringComparison.Ordinal);
+            Assert.Contains("[REDACTED:secret-assignment]", item.Title, StringComparison.Ordinal);
+        });
+    }
+
     // --- Write operations ---
 
     /// <summary>SubmitAsync always delegates to the inner service.</summary>

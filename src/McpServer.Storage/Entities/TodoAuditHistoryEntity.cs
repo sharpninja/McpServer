@@ -24,12 +24,12 @@ public sealed class TodoAuditHistoryEntity
     /// <c>(TodoId, Version)</c> may exist under different workspaces.
     /// </summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>TODO item identifier this audit row belongs to.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string TodoId { get; set; }
 
     /// <summary>Monotonic version number for <see cref="TodoId"/> (starts at 1).</summary>
@@ -37,12 +37,12 @@ public sealed class TodoAuditHistoryEntity
 
     /// <summary>Action label: <c>imported</c> | <c>created</c> | <c>updated</c> | <c>deleted</c>.</summary>
     [Required]
-    [MaxLength(32)]
+    [StringLength(32)]
     public required string Action { get; set; }
 
     /// <summary>UTC timestamp when the audit row was recorded (ISO-8601).</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public required string RecordedAtUtc { get; set; }
 
     /// <summary>JSON-serialized post-mutation <see cref="TodoItemEntity"/> snapshot.</summary>
@@ -52,6 +52,6 @@ public sealed class TodoAuditHistoryEntity
     public string? PreviousSnapshotJson { get; set; }
 
     /// <summary>Origin of the mutation or backfill (e.g. <c>yaml-import</c>, <c>api</c>).</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? Source { get; set; }
 }

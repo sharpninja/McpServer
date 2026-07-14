@@ -48,7 +48,6 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
     private readonly IHttpContextAccessor? _httpContextAccessor;
     private readonly string? _fixedWorkspacePath;
     private readonly SemaphoreSlim _writeLock = new(1, 1);
-    private readonly JsonSerializerOptions _json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EfTodoService"/> class.
@@ -1603,25 +1602,35 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         TechnicalRequirements = ListValues(e, TechnicalRequirementListType),
     };
 
-    private string? SerializeList(IReadOnlyList<string>? value) => value is null ? null : JsonSerializer.Serialize(value, _json);
+    private static string? SerializeList(IReadOnlyList<string>? value)
+        => value is null
+            ? null
+            : JsonSerializer.Serialize(value.ToList(), typeof(List<string>), McpServicesJsonContext.Default);
 
-    private string? SerializeTasks(IReadOnlyList<TodoFlatTask>? value) => value is null ? null : JsonSerializer.Serialize(value, _json);
+    private static string? SerializeTasks(IReadOnlyList<TodoFlatTask>? value)
+        => value is null
+            ? null
+            : JsonSerializer.Serialize(value.ToList(), typeof(List<TodoFlatTask>), McpServicesJsonContext.Default);
 
-    private string? SerializeFlatItem(TodoFlatItem? item) => item is null ? null : JsonSerializer.Serialize(item, _json);
+    private static string? SerializeFlatItem(TodoFlatItem? item)
+        => item is null
+            ? null
+            : JsonSerializer.Serialize(item, typeof(TodoFlatItem), McpServicesJsonContext.Default);
 
-    private T? DeserializeJson<T>(string? value)
+    private static List<string>? DeserializeList(string? value)
         => string.IsNullOrWhiteSpace(value)
-            ? default
-            : JsonSerializer.Deserialize<T>(value, _json);
+            ? null
+            : (List<string>?)JsonSerializer.Deserialize(value, typeof(List<string>), McpServicesJsonContext.Default);
 
-    private List<string>? DeserializeList(string? value)
-        => DeserializeJson<List<string>>(value);
+    private static List<TodoFlatTask>? DeserializeTasks(string? value)
+        => string.IsNullOrWhiteSpace(value)
+            ? null
+            : (List<TodoFlatTask>?)JsonSerializer.Deserialize(value, typeof(List<TodoFlatTask>), McpServicesJsonContext.Default);
 
-    private List<TodoFlatTask>? DeserializeTasks(string? value)
-        => DeserializeJson<List<TodoFlatTask>>(value);
-
-    private TodoFlatItem? DeserializeFlatItem(string? value)
-        => DeserializeJson<TodoFlatItem>(value);
+    private static TodoFlatItem? DeserializeFlatItem(string? value)
+        => string.IsNullOrWhiteSpace(value)
+            ? null
+            : (TodoFlatItem?)JsonSerializer.Deserialize(value, typeof(TodoFlatItem), McpServicesJsonContext.Default);
 
     private static string NormalizeYaml(string yaml)
         => yaml.Replace("\r\n", "\n", StringComparison.Ordinal).Trim();

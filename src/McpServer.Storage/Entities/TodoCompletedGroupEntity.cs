@@ -15,7 +15,7 @@ public sealed class TodoCompletedGroupEntity
     public long Id { get; set; }
 
     /// <summary>Owning document-metadata workspace discriminator (part of the composite parent key).</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Owning document-metadata singleton key (always 1; part of the composite parent key).</summary>
@@ -25,7 +25,7 @@ public sealed class TodoCompletedGroupEntity
     public int Ordinal { get; set; }
 
     /// <summary>Completion date label for the group.</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? Date { get; set; }
 
     /// <summary>Navigation to the owning document metadata singleton.</summary>

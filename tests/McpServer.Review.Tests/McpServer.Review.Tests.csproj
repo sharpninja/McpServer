@@ -32,6 +32,10 @@
 
   <ItemGroup>
     <None Update="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="aiunit-grok-single.cmd" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="aiunit-grok-json.cmd" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="aiunit-grok-json.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="aiunit-claude-print.cmd" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

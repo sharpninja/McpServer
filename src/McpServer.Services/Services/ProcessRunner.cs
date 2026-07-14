@@ -38,7 +38,16 @@ public sealed class ProcessRunner(
         {
             using var process = new Process();
             process.StartInfo.FileName = request.FileName;
-            process.StartInfo.Arguments = request.Arguments;
+            if (request.ArgumentList is { Count: > 0 })
+            {
+                foreach (var argument in request.ArgumentList)
+                    process.StartInfo.ArgumentList.Add(argument);
+            }
+            else
+            {
+                process.StartInfo.Arguments = request.Arguments;
+            }
+
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.UseShellExecute = false;

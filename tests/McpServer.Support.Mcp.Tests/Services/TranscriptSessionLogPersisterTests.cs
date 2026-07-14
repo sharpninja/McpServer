@@ -79,8 +79,8 @@ public sealed class TranscriptSessionLogPersisterTests
         Assert.Equal(yamlPath, capturedSourceFilePath);
         Assert.Equal("hash", capturedContentHash);
         Assert.NotNull(capturedDto.Turns);
-        Assert.Equal("Run the tests", capturedDto.Turns[0].QueryText);
-        Assert.Equal("Tests passed", capturedDto.Turns[1].Response);
-        Assert.Contains("transcript-import", capturedDto.Turns[0].Tags ?? []);
+        Assert.Equal("Run the tests", capturedDto.Turns!.ElementAt(0).QueryText);
+        Assert.Equal("Tests passed", capturedDto.Turns!.ElementAt(1).Response);
+        Assert.Contains("transcript-import", capturedDto.Turns!.ElementAt(0).Tags ?? []);
     }
 }

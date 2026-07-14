@@ -14,8 +14,6 @@ namespace McpServer.Repl.Host;
 /// </summary>
 public sealed class TransactionalTodoWorkflow : ITodoWorkflow
 {
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
-
     private readonly ITodoWorkflow _inner;
     private readonly TodoClient _client;
     private readonly ITurnTransactionCoordinator? _coordinator;
@@ -70,7 +68,9 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         ITodoMutationResult? mutationResult = null;
         var transaction = BuildTransactionRequest(
             "workflow.todo.create",
-            new TodoCreateTransactionPayload(MapCreateRequest(request)));
+            JsonSerializer.Serialize(
+                new TodoCreateTransactionPayload(MapCreateRequest(request)),
+                ReplHostJsonContext.Default.TodoCreateTransactionPayload));
         var result = await ExecuteAsync(
                 transaction,
                 async ct =>
@@ -242,7 +242,9 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         TodoFlatItem? snapshot = null;
         var transaction = BuildTransactionRequest(
             operationName,
-            new TodoUpdateTransactionPayload(id, selectedOperation, MapUpdateRequest(request)));
+            JsonSerializer.Serialize(
+                new TodoUpdateTransactionPayload(id, selectedOperation, MapUpdateRequest(request)),
+                ReplHostJsonContext.Default.TodoUpdateTransactionPayload));
         var result = await ExecuteAsync(
                 transaction,
                 async ct =>
@@ -278,7 +280,9 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         TodoFlatItem? snapshot = null;
         var transaction = BuildTransactionRequest(
             operationName,
-            new TodoDeleteTransactionPayload(id, selectedOperation));
+            JsonSerializer.Serialize(
+                new TodoDeleteTransactionPayload(id, selectedOperation),
+                ReplHostJsonContext.Default.TodoDeleteTransactionPayload));
         var result = await ExecuteAsync(
                 transaction,
                 async ct =>
@@ -289,7 +293,9 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
                     return new TurnMutationResult
                     {
                         Success = true,
-                        ResultJson = JsonSerializer.Serialize(new { Success = true, Id = id }, JsonOptions),
+                        ResultJson = JsonSerializer.Serialize(
+                            new TodoDeleteResultPayload(true, id),
+                            ReplHostJsonContext.Default.TodoDeleteResultPayload),
                         RollbackAsync = rollbackCt => RollbackDeleteAsync(snapshot, selectedOperation, rollbackCt),
                     };
                 },
@@ -341,14 +347,14 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
         return await _coordinator.ExecuteAsync(request, mutation, cancellationToken).ConfigureAwait(false);
     }
 
-    private TurnTransactionRequest BuildTransactionRequest(string operationName, object operationBody)
+    private TurnTransactionRequest BuildTransactionRequest(string operationName, string operationBodyJson)
     {
         var sequence = NextSequence();
         return new TurnTransactionRequest
         {
             TurnId = $"{operationName}-{sequence}",
             OperationName = operationName,
-            OperationBodyJson = JsonSerializer.Serialize(operationBody, JsonOptions),
+            OperationBodyJson = operationBodyJson,
             Sequence = sequence,
             Mutating = true,
         };
@@ -496,13 +502,15 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
     private static string SerializeMutationResult(ITodoMutationResult result)
     {
         if (!result.Success)
-            return JsonSerializer.Serialize(new { result.Success }, JsonOptions);
-
-        return JsonSerializer.Serialize(new
         {
-            result.Success,
-            Item = ToFlatItem(result.Item),
-        }, JsonOptions);
+            return JsonSerializer.Serialize(
+                new TodoMutationStatusPayload(result.Success),
+                ReplHostJsonContext.Default.TodoMutationStatusPayload);
+        }
+
+        return JsonSerializer.Serialize(
+            new TodoMutationSuccessPayload(result.Success, ToFlatItem(result.Item)),
+            ReplHostJsonContext.Default.TodoMutationSuccessPayload);
     }
 
     private static TodoFlatItem ToFlatItem(ITodoItem item)
@@ -551,9 +559,15 @@ public sealed class TransactionalTodoWorkflow : ITodoWorkflow
             $"Turn transaction coordinator did not commit {operationName} '{transactionId}': {message}");
     }
 
-    private sealed record TodoCreateTransactionPayload(TodoCreateRequest Request);
+    internal sealed record TodoCreateTransactionPayload(TodoCreateRequest Request);
 
-    private sealed record TodoDeleteTransactionPayload(string Id, bool SelectedOperation);
+    internal sealed record TodoDeleteTransactionPayload(string Id, bool SelectedOperation);
 
-    private sealed record TodoUpdateTransactionPayload(string Id, bool SelectedOperation, TodoUpdateRequest Request);
+    internal sealed record TodoUpdateTransactionPayload(string Id, bool SelectedOperation, TodoUpdateRequest Request);
+
+    internal sealed record TodoDeleteResultPayload(bool Success, string Id);
+
+    internal sealed record TodoMutationStatusPayload(bool Success);
+
+    internal sealed record TodoMutationSuccessPayload(bool Success, TodoFlatItem Item);
 }

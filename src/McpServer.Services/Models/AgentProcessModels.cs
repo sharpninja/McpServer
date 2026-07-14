@@ -5,7 +5,7 @@ namespace McpServer.Support.Mcp.Models;
 /// <summary>
 /// Runtime lifecycle state for a managed agent process.
 /// </summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<AgentProcessStatus>))]
 public enum AgentProcessStatus
 {
     /// <summary>

@@ -16,13 +16,6 @@ public sealed class ToolBucketService : IToolBucketService
 {
     private static readonly HttpClient s_defaultHttpClient = CreateDefaultHttpClient();
 
-    private static readonly JsonSerializerOptions s_jsonOpts = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        ReadCommentHandling = JsonCommentHandling.Skip,
-        AllowTrailingCommas = true,
-    };
-
     private readonly McpDbContext _db;
     private readonly IChangeEventBus? _eventBus;
     private readonly IProcessRunner _processRunner;
@@ -265,7 +258,7 @@ public sealed class ToolBucketService : IToolBucketService
         JsonElement[] files;
         try
         {
-            files = JsonSerializer.Deserialize<JsonElement[]>(listResult.Stdout, s_jsonOpts) ?? [];
+            files = JsonSerializer.Deserialize(listResult.Stdout, ToolBucketJsonContext.Default.JsonElementArray) ?? [];
         }
         catch (JsonException ex)
         {
@@ -309,7 +302,7 @@ public sealed class ToolBucketService : IToolBucketService
         JsonElement[] files;
         try
         {
-            files = JsonSerializer.Deserialize<JsonElement[]>(json, s_jsonOpts) ?? [];
+            files = JsonSerializer.Deserialize(json, ToolBucketJsonContext.Default.JsonElementArray) ?? [];
         }
         catch (JsonException ex)
         {
@@ -354,7 +347,7 @@ public sealed class ToolBucketService : IToolBucketService
 
             try
             {
-                var manifest = JsonSerializer.Deserialize<ToolManifestFile>(manifestJson, s_jsonOpts);
+                var manifest = JsonSerializer.Deserialize(manifestJson, ToolBucketJsonContext.Default.ToolManifestFile);
                 if (manifest is not null && !string.IsNullOrWhiteSpace(manifest.Name))
                 {
                     manifests.Add(new ToolManifest(
@@ -422,7 +415,7 @@ public sealed class ToolBucketService : IToolBucketService
         e.DateTimeCreated, e.DateTimeLastSynced);
 
     /// <summary>Internal deserialization model for JSON manifest files in a bucket repo.</summary>
-    private sealed class ToolManifestFile
+    internal sealed class ToolManifestFile
     {
         /// <summary>Tool name.</summary>
         public string? Name { get; set; }

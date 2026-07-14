@@ -4,7 +4,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>McpServer.Support.Mcp</RootNamespace>
-    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CA3003;CA1056;CA1054</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

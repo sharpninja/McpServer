@@ -22,6 +22,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private readonly RequirementsOptions _options;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<RequirementsDocumentService> _logger;
+    private readonly IRequirementsWikiExportOrchestrator _wikiExportOrchestrator;
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly List<FrEntry> _frEntries;
     private readonly List<TrEntry> _trEntries;
@@ -31,11 +32,17 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private string _currentRequirementLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey;
 
     /// <summary>Initializes a new instance of the <see cref="RequirementsDocumentService"/> class.</summary>
-    public RequirementsDocumentService(IOptions<RequirementsOptions> options, ILogger<RequirementsDocumentService> logger, IChangeEventBus? eventBus = null)
+    public RequirementsDocumentService(
+        IOptions<RequirementsOptions> options,
+        ILogger<RequirementsDocumentService> logger,
+        IChangeEventBus? eventBus = null,
+        IRequirementsWikiExportOrchestrator? wikiExportOrchestrator = null)
     {
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         _eventBus = eventBus;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _wikiExportOrchestrator = wikiExportOrchestrator
+            ?? new RequirementsWikiExportOrchestrator(new DisabledRequirementsDocFxWorkflowRunner());
 
         _frEntries = RequirementsDocumentParser.ParseFunctional(ReadFileIfExists(_options.FunctionalRequirementsPath)).ToList();
         _trEntries = RequirementsDocumentParser.ParseTechnical(ReadFileIfExists(_options.TechnicalRequirementsPath)).ToList();
@@ -612,24 +619,17 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         ct.ThrowIfCancellationRequested();
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var config = RequirementsWikiExportConfigLoader.Load(TryInferWorkspacePathFromOptions(), _options);
-        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(
-            _frEntries,
-            _trEntries,
-            _testEntries,
-            _mappings,
-            generated,
-            ReadExistingMatrixForWikiExport(outputRootPath),
-            config);
-
-        return await RequirementsDocumentExportWriter.WriteAsync(
+        var request = new RequirementsWikiExportRequest(
             outputRootPath,
-            "wiki",
-            "all",
             generated,
-            documents,
-            [RequirementsWikiDocumentRenderer.AzureFolder, RequirementsWikiDocumentRenderer.GitHubFolder],
-            ct).ConfigureAwait(false);
+            TryInferWorkspacePathFromOptions(),
+            _options,
+            _frEntries.ToArray(),
+            _trEntries.ToArray(),
+            _testEntries.ToArray(),
+            _mappings.ToArray(),
+            ReadExistingMatrixForWikiExport(outputRootPath));
+        return await _wikiExportOrchestrator.ExportAsync(request, ct).ConfigureAwait(false);
     }
 
     private async Task PersistFunctionalAsync(CancellationToken ct) =>

@@ -42,12 +42,14 @@ public abstract class McpClientBase
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+        TypeInfoResolver = McpClientJsonContext.Default
     };
     private static readonly JsonSerializerOptions s_jsonOptionsIncludingNulls = new()
     {
         PropertyNameCaseInsensitive = true,
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never,
+        TypeInfoResolver = McpClientJsonContext.Default
     };
 
     private readonly HttpClient _http;
@@ -349,7 +351,7 @@ public abstract class McpClientBase
 
         if (body is not null)
             request.Content = new StringContent(
-                JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
+                JsonSerializer.Serialize(body, s_jsonOptions.GetTypeInfo(body.GetType())), Encoding.UTF8, "application/json");
 
         HttpResponseMessage response;
         try
@@ -497,7 +499,7 @@ public abstract class McpClientBase
 
         if (body is not null)
             request.Content = new StringContent(
-                JsonSerializer.Serialize(body, requestSerializerOptions), Encoding.UTF8, "application/json");
+                JsonSerializer.Serialize(body, requestSerializerOptions.GetTypeInfo(body.GetType())), Encoding.UTF8, "application/json");
 
         HttpResponseMessage response;
         try
@@ -564,7 +566,7 @@ public abstract class McpClientBase
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
         if (body is not null)
             request.Content = new StringContent(
-                JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
+                JsonSerializer.Serialize(body, s_jsonOptions.GetTypeInfo(body.GetType())), Encoding.UTF8, "application/json");
 
         using var response = await _http.SendAsync(
             request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
@@ -598,8 +600,8 @@ public abstract class McpClientBase
         if (!response.IsSuccessStatusCode)
             ThrowForStatus(response.StatusCode, content);
 
-        return JsonSerializer.Deserialize<T>(content, s_jsonOptions)
-            ?? throw new McpServerException("Response deserialized to null.", (int)response.StatusCode);
+        return (T)(JsonSerializer.Deserialize(content, s_jsonOptions.GetTypeInfo(typeof(T)))
+            ?? throw new McpServerException("Response deserialized to null.", (int)response.StatusCode));
     }
 
     private static void ThrowForStatus(HttpStatusCode statusCode, string content)

@@ -22,18 +22,18 @@ public sealed class SessionLogCommitEntity
     public int Ordinal { get; set; }
 
     /// <summary>Git commit SHA hash (full or abbreviated).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? Sha { get; set; }
 
     /// <summary>Git branch name.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? Branch { get; set; }
 
     /// <summary>Commit message text.</summary>
     public string? Message { get; set; }
 
     /// <summary>Commit author name or email.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? Author { get; set; }
 
     /// <summary>Commit timestamp (UTC).</summary>

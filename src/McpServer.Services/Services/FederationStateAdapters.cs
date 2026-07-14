@@ -14,6 +14,9 @@ public interface IFederationStateAdapter
     /// <summary>Whether this domain is intentionally local-only and exempt from replication.</summary>
     bool IsLocalOnly { get; }
 
+    /// <summary>Whether this adapter supports applying inbound federation operations.</summary>
+    bool SupportsApply => false;
+
     /// <summary>Creates a point-in-time snapshot for a resource.</summary>
     ValueTask<FederationStateSnapshot> SnapshotAsync(string resourceId, CancellationToken cancellationToken);
 
@@ -179,11 +182,5 @@ public sealed class FederationStateAdapterRegistry
             })
             .ToList();
 
-    private static bool AdapterOverridesApply(IFederationStateAdapter adapter)
-    {
-        var method = adapter.GetType().GetMethod(nameof(IFederationStateAdapter.ApplyAsync), [typeof(FederationStateOperation), typeof(CancellationToken)]);
-        return method?.DeclaringType is { } declaringType &&
-               declaringType != typeof(FederationStateAdapterBase) &&
-               declaringType != typeof(DatabaseFederationStateAdapterBase);
-    }
+    private static bool AdapterOverridesApply(IFederationStateAdapter adapter) => adapter.SupportsApply;
 }

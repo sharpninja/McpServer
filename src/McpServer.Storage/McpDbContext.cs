@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Data.Common;
 using System.Text.Json;
@@ -18,6 +19,7 @@ public sealed class McpDbContext : DbContext
     private string _workspaceId;
 
     /// <summary>TR-PLANNED-CORE-013: Constructor for DI with workspace context.</summary>
+    [RequiresUnreferencedCode("EF Core DbContext construction is not trim-safe upstream; trimmed hosts must preserve the storage model or avoid EF-backed storage.")]
     public McpDbContext(DbContextOptions<McpDbContext> options, WorkspaceContext? workspaceContext = null)
         : base(options)
     {
@@ -1130,7 +1132,7 @@ public sealed class McpDbContext : DbContext
                 p => p.Metadata.Name,
                 p => SanitizeAuditValue(p.Metadata.Name, originalValues ? p.OriginalValue : p.CurrentValue));
 
-        return JsonSerializer.Serialize(snapshot);
+        return JsonSerializer.Serialize(snapshot, StorageAuditJsonContext.Default.DictionaryStringObject);
     }
 
     private static object? SanitizeAuditValue(string name, object? value)

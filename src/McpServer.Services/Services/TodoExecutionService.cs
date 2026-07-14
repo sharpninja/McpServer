@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements;
@@ -18,7 +17,6 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
 {
     private const string GeneratedTodoIdPrefix = "EXEC-TODO-";
     private static readonly ConcurrentDictionary<string, SemaphoreSlim> s_stateLocks = new(StringComparer.OrdinalIgnoreCase);
-    private static readonly JsonSerializerOptions s_stateJsonOptions = CreateJsonOptions();
     private static readonly Regex s_nonAlphaNumericRegex = new("[^a-z0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     private static readonly Regex s_currentFocusRegex = new(@"mCurrentFocus=Window\{.*?\s(?<focus>[A-Za-z0-9_.$]+/[A-Za-z0-9_.$]+)\}", RegexOptions.Compiled);
     private static readonly Regex s_focusedAppRegex = new(@"mFocusedApp=.*?\s(?<focus>[A-Za-z0-9_.$]+/[A-Za-z0-9_.$]+)", RegexOptions.Compiled);
@@ -883,18 +881,6 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
         }
     }
 
-    private static JsonSerializerOptions CreateJsonOptions()
-    {
-        var options = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            WriteIndented = true,
-        };
-        options.Converters.Add(new JsonStringEnumConverter());
-        return options;
-    }
-
     private static SemaphoreSlim GetStateLock(string statePath)
         => s_stateLocks.GetOrAdd(statePath, static _ => new SemaphoreSlim(1, 1));
 
@@ -1203,7 +1189,7 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
             return new TodoExecutionStateDocument();
 
         await using var stream = File.OpenRead(statePath);
-        var state = await JsonSerializer.DeserializeAsync<TodoExecutionStateDocument>(stream, s_stateJsonOptions, cancellationToken).ConfigureAwait(false);
+        var state = await JsonSerializer.DeserializeAsync(stream, TodoExecutionStateJsonContext.Default.TodoExecutionStateDocument, cancellationToken).ConfigureAwait(false);
         return state ?? new TodoExecutionStateDocument();
     }
 
@@ -1211,7 +1197,7 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
     {
         Directory.CreateDirectory(Path.GetDirectoryName(statePath)!);
         await using var stream = File.Create(statePath);
-        await JsonSerializer.SerializeAsync(stream, state, s_stateJsonOptions, cancellationToken).ConfigureAwait(false);
+        await JsonSerializer.SerializeAsync(stream, state, TodoExecutionStateJsonContext.Default.TodoExecutionStateDocument, cancellationToken).ConfigureAwait(false);
         await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
     }
 
@@ -1493,24 +1479,25 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
     private static string BuildAdbCommandSummary(string deviceSerial, string command)
         => $"adb -s {deviceSerial} {command}";
 
-    private sealed class TodoExecutionStateDocument
-    {
-        /// <summary>Next phase number.</summary>
-        public int NextPhaseNumber { get; set; } = 1;
+}
 
-        /// <summary>Next TODO number.</summary>
-        public int NextTodoNumber { get; set; } = 1;
+internal sealed class TodoExecutionStateDocument
+{
+    /// <summary>Next phase number.</summary>
+    public int NextPhaseNumber { get; set; } = 1;
 
-        /// <summary>Next checkpoint number.</summary>
-        public int NextCheckpointNumber { get; set; } = 1;
+    /// <summary>Next TODO number.</summary>
+    public int NextTodoNumber { get; set; } = 1;
 
-        /// <summary>Stored phases.</summary>
-        public List<TodoIterationPhase> Phases { get; set; } = [];
+    /// <summary>Next checkpoint number.</summary>
+    public int NextCheckpointNumber { get; set; } = 1;
 
-        /// <summary>Stored execution TODOs.</summary>
-        public List<TodoExecutionRecord> Todos { get; set; } = [];
+    /// <summary>Stored phases.</summary>
+    public List<TodoIterationPhase> Phases { get; set; } = [];
 
-        /// <summary>Stored checkpoints.</summary>
-        public List<TodoCheckpoint> Checkpoints { get; set; } = [];
-    }
+    /// <summary>Stored execution TODOs.</summary>
+    public List<TodoExecutionRecord> Todos { get; set; } = [];
+
+    /// <summary>Stored checkpoints.</summary>
+    public List<TodoCheckpoint> Checkpoints { get; set; } = [];
 }

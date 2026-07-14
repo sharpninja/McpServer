@@ -14,7 +14,7 @@ public sealed class TodoDocumentNoteEntity
     public long Id { get; set; }
 
     /// <summary>Owning document-metadata workspace discriminator (part of the composite parent key).</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Owning document-metadata singleton key (always 1; part of the composite parent key).</summary>

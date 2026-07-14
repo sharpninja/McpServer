@@ -13,12 +13,12 @@ public sealed class FederationOutboxEntity
 
     /// <summary>Destination proxy ID.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string ProxyId { get; set; }
 
     /// <summary>Operation to deliver to the proxy.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string OperationId { get; set; }
 
     /// <summary>UTC timestamp when the outbox row was created.</summary>

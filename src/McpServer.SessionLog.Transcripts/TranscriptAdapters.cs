@@ -58,31 +58,53 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
         var records = await TranscriptUtilities.ReadJsonLinesAsync(path, cancellationToken).ConfigureAwait(false);
         var sessionId = TranscriptUtilities.DeriveSessionId(SourceKind, bundle.Files);
         string? workspacePath = null;
+        string? model = null;
         var diagnostics = new List<TranscriptDiagnostic>();
         var events = new List<TranscriptEvent>();
+        var unknownRecordCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var unknownResponseItemCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var eventMsgCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var nonConversationCounts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var encryptedReasoningCount = 0;
         var order = 1;
         foreach (var record in records)
         {
             var type = TranscriptUtilities.GetString(record, "type") ?? string.Empty;
-            if (type.Equals("session_meta", StringComparison.Ordinal))
+            switch (type)
             {
-                if (TranscriptUtilities.GetObject(record, "payload") is { } meta)
-                {
-                    sessionId = TranscriptUtilities.GetString(meta, "id") ?? sessionId;
-                    workspacePath = TranscriptUtilities.GetString(meta, "cwd") ?? workspacePath;
-                }
-                else
-                {
-                    diagnostics.Add(new TranscriptDiagnostic("codex_malformed_session_meta", "Codex session_meta record is missing an object payload.", "warning", path));
-                }
+                case "session_meta":
+                    if (TranscriptUtilities.GetObject(record, "payload") is { } meta)
+                    {
+                        sessionId = TranscriptUtilities.GetString(meta, "id") ?? sessionId;
+                        workspacePath = TranscriptUtilities.GetString(meta, "cwd") ?? workspacePath;
+                    }
+                    else
+                    {
+                        diagnostics.Add(new TranscriptDiagnostic("codex_malformed_session_meta", "Codex session_meta record is missing an object payload.", "warning", path));
+                    }
 
-                continue;
-            }
+                    continue;
+                case "turn_context":
+                    if (TranscriptUtilities.GetObject(record, "payload") is { } turnContext)
+                    {
+                        workspacePath ??= TranscriptUtilities.GetString(turnContext, "cwd");
+                        model ??= TranscriptUtilities.GetString(turnContext, "model");
+                    }
 
-            if (!type.Equals("response_item", StringComparison.Ordinal))
-            {
-                diagnostics.Add(new TranscriptDiagnostic("codex_unknown_record", "Codex JSONL record type '" + (string.IsNullOrWhiteSpace(type) ? "<missing>" : type) + "' was not normalized.", "warning", path));
-                continue;
+                    continue;
+                case "event_msg":
+                    // UI mirror of response_item records; conversation text is normalized from response_item.
+                    Increment(eventMsgCounts, PayloadType(record) ?? "<none>");
+                    continue;
+                case "world_state":
+                case "compacted":
+                    Increment(nonConversationCounts, type);
+                    continue;
+                case "response_item":
+                    break;
+                default:
+                    Increment(unknownRecordCounts, string.IsNullOrWhiteSpace(type) ? "<missing>" : type);
+                    continue;
             }
 
             if (TranscriptUtilities.GetObject(record, "payload") is not { } payload)
@@ -91,27 +113,146 @@ internal sealed class CodexTranscriptAdapter : JsonTranscriptAdapterBase
                 continue;
             }
 
-            var role = TranscriptUtilities.GetString(payload, "role");
-            if (string.IsNullOrWhiteSpace(role))
+            var payloadType = TranscriptUtilities.GetString(payload, "type") ?? "message";
+            var timestamp = TranscriptUtilities.ReadTimestamp(record);
+            switch (payloadType)
             {
-                diagnostics.Add(new TranscriptDiagnostic("codex_missing_role", "Codex response_item record is missing a role and was not normalized.", "warning", path));
-                continue;
-            }
+                case "message":
+                    var role = TranscriptUtilities.GetString(payload, "role");
+                    if (string.IsNullOrWhiteSpace(role))
+                    {
+                        diagnostics.Add(new TranscriptDiagnostic("codex_missing_role", "Codex response_item record is missing a role and was not normalized.", "warning", path));
+                        continue;
+                    }
 
-            var content = payload.TryGetProperty("content", out var contentElement)
-                ? TranscriptUtilities.ExtractContentBlocks(contentElement)
-                : [];
-            events.Add(new TranscriptEvent(
-                TranscriptUtilities.GetString(payload, "id") ?? "codex-event-" + order.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                order++,
-                role,
-                type,
-                content,
-                TranscriptUtilities.ReadTimestamp(record)));
+                    var content = payload.TryGetProperty("content", out var contentElement)
+                        ? TranscriptUtilities.ExtractContentBlocks(contentElement)
+                        : [];
+                    events.Add(new TranscriptEvent(
+                        EventId(payload, order),
+                        order++,
+                        role,
+                        type,
+                        content,
+                        timestamp));
+                    continue;
+                case "reasoning":
+                    var reasoningBlocks = new List<TranscriptContentBlock>();
+                    if (payload.TryGetProperty("summary", out var summaryElement))
+                        reasoningBlocks.AddRange(TranscriptUtilities.ExtractContentBlocks(summaryElement));
+                    if (payload.TryGetProperty("content", out var reasoningContent))
+                        reasoningBlocks.AddRange(TranscriptUtilities.ExtractContentBlocks(reasoningContent));
+                    if (reasoningBlocks.Count == 0)
+                    {
+                        // Encrypted-only reasoning carries no recoverable text; counted once below.
+                        encryptedReasoningCount++;
+                        continue;
+                    }
+
+                    events.Add(new TranscriptEvent(
+                        EventId(payload, order),
+                        order++,
+                        "assistant",
+                        "reasoning",
+                        reasoningBlocks,
+                        timestamp));
+                    continue;
+                case "function_call":
+                case "custom_tool_call":
+                case "local_shell_call":
+                case "web_search_call":
+                    var toolName = TranscriptUtilities.GetString(payload, "name") ?? payloadType;
+                    var toolInput = TranscriptUtilities.GetString(payload, "arguments") ?? TranscriptUtilities.GetString(payload, "input");
+                    if (toolInput is null && payload.TryGetProperty("action", out var actionElement))
+                        toolInput = actionElement.GetRawText();
+                    var callText = string.IsNullOrWhiteSpace(toolInput) ? toolName : toolName + "\n" + toolInput;
+                    events.Add(new TranscriptEvent(
+                        EventId(payload, order),
+                        order++,
+                        "assistant",
+                        payloadType,
+                        [new TranscriptContentBlock("tool_call", callText)],
+                        timestamp,
+                        ToolMetadata(payload, toolName)));
+                    continue;
+                case "function_call_output":
+                case "custom_tool_call_output":
+                case "local_shell_call_output":
+                    var outputText = TranscriptUtilities.GetString(payload, "output");
+                    if (outputText is null && payload.TryGetProperty("output", out var outputElement))
+                    {
+                        var outputBlocks = TranscriptUtilities.ExtractContentBlocks(outputElement);
+                        outputText = outputBlocks.Count > 0 ? TranscriptUtilities.JoinText(outputBlocks) : outputElement.GetRawText();
+                    }
+
+                    events.Add(new TranscriptEvent(
+                        EventId(payload, order),
+                        order++,
+                        "tool",
+                        payloadType,
+                        string.IsNullOrWhiteSpace(outputText) ? [] : [new TranscriptContentBlock("tool_output", outputText)],
+                        timestamp,
+                        ToolMetadata(payload, toolName: null)));
+                    continue;
+                default:
+                    Increment(unknownResponseItemCounts, payloadType);
+                    continue;
+            }
         }
 
-        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, workspacePath: workspacePath, diagnostics: diagnostics);
+        AppendAggregateDiagnostics(diagnostics, path, unknownRecordCounts, unknownResponseItemCounts, eventMsgCounts, nonConversationCounts, encryptedReasoningCount);
+        return BuildSession(SourceKind, sessionId, events, bundle.Files, nativeSessionId: sessionId, model: model, workspacePath: workspacePath, diagnostics: diagnostics);
     }
+
+    private static string? PayloadType(JsonElement record)
+        => TranscriptUtilities.GetObject(record, "payload") is { } payload ? TranscriptUtilities.GetString(payload, "type") : null;
+
+    private static string EventId(JsonElement payload, int order)
+        => TranscriptUtilities.GetString(payload, "id")
+           ?? TranscriptUtilities.GetString(payload, "call_id")
+           ?? "codex-event-" + order.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+    private static IReadOnlyDictionary<string, string> ToolMetadata(JsonElement payload, string? toolName)
+    {
+        var metadata = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (TranscriptUtilities.GetString(payload, "call_id") is { } callId)
+            metadata["call_id"] = callId;
+        if (toolName is not null)
+            metadata["name"] = toolName;
+        if (TranscriptUtilities.GetString(payload, "status") is { } status)
+            metadata["status"] = status;
+        return metadata;
+    }
+
+    private static void Increment(Dictionary<string, int> counts, string key)
+        => counts[key] = counts.TryGetValue(key, out var current) ? current + 1 : 1;
+
+    private static void AppendAggregateDiagnostics(
+        List<TranscriptDiagnostic> diagnostics,
+        string path,
+        Dictionary<string, int> unknownRecordCounts,
+        Dictionary<string, int> unknownResponseItemCounts,
+        Dictionary<string, int> eventMsgCounts,
+        Dictionary<string, int> nonConversationCounts,
+        int encryptedReasoningCount)
+    {
+        foreach (var (type, count) in unknownRecordCounts)
+            diagnostics.Add(new TranscriptDiagnostic("codex_unknown_record", "Codex JSONL record type '" + type + "' was not normalized (" + Format(count) + ").", "warning", path));
+        foreach (var (type, count) in unknownResponseItemCounts)
+            diagnostics.Add(new TranscriptDiagnostic("codex_unknown_response_item", "Codex response_item payload type '" + type + "' was not normalized (" + Format(count) + ").", "warning", path));
+        if (eventMsgCounts.Count > 0)
+            diagnostics.Add(new TranscriptDiagnostic("codex_event_msg_skipped", "Codex event_msg records were skipped as UI mirrors of response_item records: " + Format(eventMsgCounts.Values.Sum()) + " across types " + FormatCounts(eventMsgCounts) + ".", "info", path));
+        if (nonConversationCounts.Count > 0)
+            diagnostics.Add(new TranscriptDiagnostic("codex_nonconversation_skipped", "Codex non-conversation records were skipped: " + FormatCounts(nonConversationCounts) + ".", "info", path));
+        if (encryptedReasoningCount > 0)
+            diagnostics.Add(new TranscriptDiagnostic("codex_encrypted_reasoning", "Codex reasoning records without recoverable summary text were skipped: " + Format(encryptedReasoningCount) + ".", "info", path));
+    }
+
+    private static string Format(int count)
+        => count.ToString(System.Globalization.CultureInfo.InvariantCulture) + " record(s)";
+
+    private static string FormatCounts(Dictionary<string, int> counts)
+        => string.Join(", ", counts.Select(pair => pair.Key + "=" + pair.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)));
 }
 
 internal sealed class ClaudeTranscriptAdapter : JsonTranscriptAdapterBase

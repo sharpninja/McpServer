@@ -26,13 +26,8 @@ public interface ITodoSelectionStore
 /// <summary>
 /// File-backed TODO selection store scoped to a workspace, agent, and active plugin session.
 /// </summary>
-public sealed class FileTodoSelectionStore : ITodoSelectionStore
+public sealed partial class FileTodoSelectionStore : ITodoSelectionStore
 {
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
-    {
-        WriteIndented = true,
-    };
-
     private readonly string _selectionFilePath;
 
     /// <summary>Initializes a new instance of the <see cref="FileTodoSelectionStore"/> class.</summary>
@@ -69,9 +64,9 @@ public sealed class FileTodoSelectionStore : ITodoSelectionStore
 
         try
         {
-            var record = JsonSerializer.Deserialize<PersistedTodoSelection>(
+            var record = JsonSerializer.Deserialize(
                 File.ReadAllText(_selectionFilePath),
-                JsonOptions);
+                TodoSelectionJsonContext.Default.PersistedTodoSelection);
             if (record is null || string.IsNullOrWhiteSpace(record.Id))
                 return null;
 
@@ -113,7 +108,10 @@ public sealed class FileTodoSelectionStore : ITodoSelectionStore
             selection.Done,
             selection.SelectedAt);
         var tempPath = $"{_selectionFilePath}.{Guid.NewGuid():N}.tmp";
-        File.WriteAllText(tempPath, JsonSerializer.Serialize(record, JsonOptions), Encoding.UTF8);
+        File.WriteAllText(
+            tempPath,
+            JsonSerializer.Serialize(record, TodoSelectionJsonContext.Default.PersistedTodoSelection),
+            Encoding.UTF8);
         File.Move(tempPath, _selectionFilePath, overwrite: true);
     }
 
@@ -230,6 +228,10 @@ public sealed class FileTodoSelectionStore : ITodoSelectionStore
         [property: JsonPropertyName("priority")] string? Priority,
         [property: JsonPropertyName("done")] bool Done,
         [property: JsonPropertyName("selectedAt")] DateTimeOffset SelectedAt);
+
+    [JsonSourceGenerationOptions(JsonSerializerDefaults.Web, WriteIndented = true)]
+    [JsonSerializable(typeof(PersistedTodoSelection))]
+    private sealed partial class TodoSelectionJsonContext : JsonSerializerContext;
 }
 
 internal sealed class NullTodoSelectionStore : ITodoSelectionStore

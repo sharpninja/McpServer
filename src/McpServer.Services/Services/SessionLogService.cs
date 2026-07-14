@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using McpServer.Cqrs.Search;
 using McpServer.McpAgent;
 using McpServer.Support.Mcp.Models;
@@ -126,6 +128,16 @@ public sealed class SessionLogService : ISessionLogService
 
         var existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
 
+        // Sessions are soft-delete only; resubmission is the recovery path. When the live
+        // lookup misses but a tombstoned session still holds the unique
+        // (WorkspaceId, SourceType, SessionId) key, restore its row graph and resubmit onto
+        // it instead of failing the insert on the unique index.
+        if (existing is null
+            && await TryReviveTombstonedSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false))
+        {
+            existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
+        }
+
         var wasCreated = existing is null;
         if (existing != null)
         {
@@ -146,7 +158,8 @@ public sealed class SessionLogService : ISessionLogService
                 ContentHash = contentHash
             };
             MapDtoToEntity(dto, existing);
-            existing.Turns = MapNewTurns(dto.Turns);
+            foreach (var turn in MapNewTurns(dto.Turns))
+                existing.Turns.Add(turn);
             RefreshSessionSummaryFromTurns(existing);
             _db.SessionLogs.Add(existing);
             _logger.LogInformation("Created session log {SourceType}/{SessionId}", dto.SourceType, dto.SessionId);
@@ -719,6 +732,8 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sessionId);
         SyncDbWorkspaceFromContext();
 
+        // Session delete stays canonical-only by policy: imported sessions (provider-native
+        // ids) are not deletable; their repair path is turn resubmission, not deletion.
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
         if (sessionIdError is not null)
             throw new ArgumentException(sessionIdError, nameof(sessionId));
@@ -790,14 +805,63 @@ public sealed class SessionLogService : ISessionLogService
             cancellationToken);
     }
 
-    private void ValidateTurnIdentifiers(string sourceType, string sessionId, string requestId)
+    private async Task<bool> TryReviveTombstonedSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken)
     {
-        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
-        if (sessionIdError is not null)
-            throw new ArgumentException(sessionIdError, nameof(sessionId));
-        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);
-        if (requestIdError is not null)
-            throw new ArgumentException(requestIdError, nameof(requestId));
+        // Only the SoftDelete named filter is bypassed; the Workspace filter stays active so
+        // revival can never cross workspaces.
+        var sessionRowId = await _db.SessionLogs
+            .IgnoreQueryFilters(["SoftDelete"])
+            .Where(s => s.SourceType == sourceType && s.SessionId == sessionId)
+            .Select(s => (long?)s.Id)
+            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+        if (sessionRowId is null)
+            return false;
+
+        var turnIds = _db.SessionLogTurns
+            .IgnoreQueryFilters(["SoftDelete"])
+            .Where(t => t.SessionLogId == sessionRowId.Value)
+            .Select(t => t.Id);
+
+        await RestoreRowsAsync(_db.SessionLogActions.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurnTags.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurnContexts.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogProcessingDialogs.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogCommits.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurnStringLists.IgnoreQueryFilters(["SoftDelete"]).Where(x => turnIds.Contains(x.SessionLogTurnId)), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogTurns.IgnoreQueryFilters(["SoftDelete"]).Where(t => t.SessionLogId == sessionRowId.Value), cancellationToken).ConfigureAwait(false);
+        await RestoreRowsAsync(_db.SessionLogs.IgnoreQueryFilters(["SoftDelete"]).Where(s => s.Id == sessionRowId.Value), cancellationToken).ConfigureAwait(false);
+
+        _db.ChangeTracker.Clear();
+        _logger.LogInformation("Revived soft-deleted session log {SourceType}/{SessionId} (Id={Id}) for resubmission", sourceType, sessionId, sessionRowId.Value);
+        return true;
+    }
+
+    private static Task<int> RestoreRowsAsync<TEntity>(
+        IQueryable<TEntity> query,
+        CancellationToken cancellationToken)
+        where TEntity : class
+    {
+        return query.ExecuteUpdateAsync(
+            setters => setters
+                .SetProperty(entity => EF.Property<bool>(entity, "IsDeleted"), false)
+                .SetProperty(entity => EF.Property<DateTimeOffset?>(entity, "DeletedAtUtc"), (DateTimeOffset?)null)
+                .SetProperty(entity => EF.Property<string?>(entity, "DeletedBy"), (string?)null)
+                .SetProperty(entity => EF.Property<string?>(entity, "DeleteReason"), (string?)null),
+            cancellationToken);
+    }
+
+    private static void ValidateTurnIdentifiers(string sourceType, string sessionId, string requestId)
+    {
+        // Presence-only checks: the callers (ReplaceTurnSectionAsync, DeleteTurnItemAsync,
+        // DeleteTurnAsync) are keyed lookups on existing rows, and transcript imports persist
+        // provider-native session/request ids that do not follow the canonical format enforced
+        // on creation paths (OpenSessionAsync, UpsertTurnAsync, non-import SubmitAsync).
+        if (string.IsNullOrWhiteSpace(sourceType))
+            throw new ArgumentException("SourceType is required.", nameof(sourceType));
+        if (string.IsNullOrWhiteSpace(sessionId))
+            throw new ArgumentException("SessionId is required.", nameof(sessionId));
+        if (string.IsNullOrWhiteSpace(requestId))
+            throw new ArgumentException("RequestId is required.", nameof(requestId));
     }
 
     private void ApplySectionReplace(SessionLogTurnEntity turn, TurnSection section, UnifiedRequestEntryDto payload)
@@ -1034,12 +1098,12 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 
-    private void UpsertTurns(SessionLogEntity session, List<UnifiedRequestEntryDto>? dtoTurns)
+    private void UpsertTurns(SessionLogEntity session, IEnumerable<UnifiedRequestEntryDto>? dtoTurns)
     {
-        var incoming = dtoTurns ?? [];
+        var incoming = dtoTurns?.ToArray() ?? [];
         var deduped = new List<UnifiedRequestEntryDto>();
         var seenRequestIds = new HashSet<string>(StringComparer.Ordinal);
-        for (var i = incoming.Count - 1; i >= 0; i--)
+        for (var i = incoming.Length - 1; i >= 0; i--)
         {
             var dto = incoming[i];
             if (dto.RequestId == null || seenRequestIds.Add(dto.RequestId))
@@ -1124,8 +1188,8 @@ public sealed class SessionLogService : ISessionLogService
 
     private static void MergeCollection<TIncoming, TEntity>(
         ICollection<TEntity> target,
-        TIncoming? incoming,
-        Func<TIncoming?, List<TEntity>> map,
+        IEnumerable<TIncoming>? incoming,
+        Func<IEnumerable<TIncoming>?, List<TEntity>> map,
         Func<TEntity, TEntity, bool> same,
         bool mergeOmittedFields)
         where TEntity : class
@@ -1147,7 +1211,7 @@ public sealed class SessionLogService : ISessionLogService
     private void ReplaceStringListItems(
         SessionLogTurnEntity entity,
         string listType,
-        List<string>? incoming,
+        IEnumerable<string>? incoming,
         bool mergeOmittedFields)
     {
         if (!mergeOmittedFields)
@@ -1161,14 +1225,14 @@ public sealed class SessionLogService : ISessionLogService
                 entity.StringListItems.Remove(existing);
             }
 
-            var values = incoming ?? [];
-            for (var i = 0; i < values.Count; i++)
+            var replacementOrdinal = 0;
+            foreach (var value in incoming ?? [])
             {
                 entity.StringListItems.Add(new SessionLogTurnStringListEntity
                 {
                     ListType = listType,
-                    Ordinal = i,
-                    Value = values[i]
+                    Ordinal = replacementOrdinal++,
+                    Value = value
                 });
             }
 
@@ -1200,17 +1264,13 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 
-    private static List<SessionLogTurnEntity> MapNewTurns(List<UnifiedRequestEntryDto>? turns)
+    private static List<SessionLogTurnEntity> MapNewTurns(IEnumerable<UnifiedRequestEntryDto>? turns)
     {
-        if (turns is null or { Count: 0 })
-            return [];
-
-        return turns.Select(MapSingleEntry).ToList();
+        return turns?.Select(MapSingleEntry).ToList() ?? [];
     }
-
     private static SessionLogTurnEntity MapSingleEntry(UnifiedRequestEntryDto e)
     {
-        return new SessionLogTurnEntity
+        var entity = new SessionLogTurnEntity
         {
             RequestId = e.RequestId,
             Timestamp = ParseDateTimeOffset(e.Timestamp),
@@ -1227,16 +1287,26 @@ public sealed class SessionLogService : ISessionLogService
             IsPremium = e.IsPremium,
             RawContextJson = SerializeJson(e.RawContext),
             OriginalEntryJson = SerializeJson(e.OriginalEntry),
-            Actions = MapActions(e.Actions),
-            Tags = MapTags(e.Tags),
-            ContextItems = MapContextItems(e.ContextList),
-            ProcessingDialog = MapProcessingDialog(e.ProcessingDialog),
-            Commits = MapCommits(e.Commits),
-            StringListItems = MapStringListItems(e)
         };
+
+        AddRange(entity.Actions, MapActions(e.Actions));
+        AddRange(entity.Tags, MapTags(e.Tags));
+        AddRange(entity.ContextItems, MapContextItems(e.ContextList));
+        AddRange(entity.ProcessingDialog, MapProcessingDialog(e.ProcessingDialog));
+        AddRange(entity.Commits, MapCommits(e.Commits));
+        AddRange(entity.StringListItems, MapStringListItems(e));
+
+        return entity;
     }
 
-    private static List<SessionLogActionEntity> MapActions(List<UnifiedActionDto>? actions)
+    private static void AddRange<TEntity>(ICollection<TEntity> target, IEnumerable<TEntity> source)
+    {
+        foreach (var item in source)
+            target.Add(item);
+    }
+
+
+    private static List<SessionLogActionEntity> MapActions(IEnumerable<UnifiedActionDto>? actions)
     {
         return actions?.Select((a, i) => new SessionLogActionEntity
         {
@@ -1248,12 +1318,12 @@ public sealed class SessionLogService : ISessionLogService
         }).ToList() ?? [];
     }
 
-    private static List<SessionLogTurnTagEntity> MapTags(List<string>? tags)
+    private static List<SessionLogTurnTagEntity> MapTags(IEnumerable<string>? tags)
     {
         return tags?.Select(t => new SessionLogTurnTagEntity { Tag = t }).ToList() ?? [];
     }
 
-    private static List<SessionLogTurnContextEntity> MapContextItems(List<string>? contextList)
+    private static List<SessionLogTurnContextEntity> MapContextItems(IEnumerable<string>? contextList)
     {
         return contextList?.Select((c, i) => new SessionLogTurnContextEntity
         {
@@ -1262,7 +1332,7 @@ public sealed class SessionLogService : ISessionLogService
         }).ToList() ?? [];
     }
 
-    private static List<SessionLogProcessingDialogEntity> MapProcessingDialog(List<ProcessingDialogItemDto>? dialog)
+    private static List<SessionLogProcessingDialogEntity> MapProcessingDialog(IEnumerable<ProcessingDialogItemDto>? dialog)
     {
         return dialog?.Select((d, i) => new SessionLogProcessingDialogEntity
         {
@@ -1274,7 +1344,7 @@ public sealed class SessionLogService : ISessionLogService
         }).ToList() ?? [];
     }
 
-    private static List<SessionLogCommitEntity> MapCommits(List<SessionLogCommitDto>? commits)
+    private static List<SessionLogCommitEntity> MapCommits(IEnumerable<SessionLogCommitDto>? commits)
     {
         return commits?.Select((c, i) => new SessionLogCommitEntity
         {
@@ -1342,17 +1412,19 @@ public sealed class SessionLogService : ISessionLogService
         return items;
     }
 
-    private static void AddStringListItems(ICollection<SessionLogTurnStringListEntity> items, string listType, List<string>? values)
+    private static void AddStringListItems(ICollection<SessionLogTurnStringListEntity> items, string listType, IEnumerable<string>? values)
     {
-        if (values is not { Count: > 0 })
+        if (values is null)
             return;
-        for (int i = 0; i < values.Count; i++)
+
+        var ordinal = 0;
+        foreach (var value in values)
         {
             items.Add(new SessionLogTurnStringListEntity
             {
                 ListType = listType,
-                Ordinal = i,
-                Value = values[i]
+                Ordinal = ordinal++,
+                Value = value
             });
         }
     }
@@ -1475,14 +1547,68 @@ public sealed class SessionLogService : ISessionLogService
 
     private static string? SerializeJson(object? value)
     {
-        return value is null ? null : JsonSerializer.Serialize(value);
+        return value is null ? null : ToJsonNode(value)?.ToJsonString();
     }
 
     private static object? DeserializeJson(string? json)
     {
         if (string.IsNullOrWhiteSpace(json))
             return null;
-        return JsonSerializer.Deserialize<object>(json);
+
+        using var document = JsonDocument.Parse(json);
+        return document.RootElement.Clone();
+    }
+
+    private static JsonNode? ToJsonNode(object? value)
+    {
+        return value switch
+        {
+            null => null,
+            JsonNode node => node.DeepClone(),
+            JsonElement element => JsonNode.Parse(element.GetRawText()),
+            JsonDocument document => JsonNode.Parse(document.RootElement.GetRawText()),
+            string text => JsonValue.Create(text),
+            bool boolean => JsonValue.Create(boolean),
+            byte number => JsonValue.Create(number),
+            short number => JsonValue.Create(number),
+            int number => JsonValue.Create(number),
+            long number => JsonValue.Create(number),
+            float number => JsonValue.Create(number),
+            double number => JsonValue.Create(number),
+            decimal number => JsonValue.Create(number),
+            DateTime valueDate => JsonValue.Create(valueDate),
+            DateTimeOffset valueDate => JsonValue.Create(valueDate),
+            Guid guid => JsonValue.Create(guid),
+            IReadOnlyDictionary<string, object?> dictionary => ToJsonObject(dictionary),
+            IDictionary<string, object?> dictionary => ToJsonObject(dictionary),
+            IDictionary dictionary => ToJsonObject(dictionary),
+            IEnumerable enumerable => ToJsonArray(enumerable),
+            _ => JsonValue.Create(value.ToString())
+        };
+    }
+
+    private static JsonObject ToJsonObject(IEnumerable<KeyValuePair<string, object?>> dictionary)
+    {
+        var json = new JsonObject();
+        foreach (var pair in dictionary)
+            json[pair.Key] = ToJsonNode(pair.Value);
+        return json;
+    }
+
+    private static JsonObject ToJsonObject(IDictionary dictionary)
+    {
+        var json = new JsonObject();
+        foreach (DictionaryEntry pair in dictionary)
+            json[Convert.ToString(pair.Key, CultureInfo.InvariantCulture) ?? string.Empty] = ToJsonNode(pair.Value);
+        return json;
+    }
+
+    private static JsonArray ToJsonArray(IEnumerable values)
+    {
+        var json = new JsonArray();
+        foreach (var value in values)
+            json.Add(ToJsonNode(value));
+        return json;
     }
 
     private static List<string>? MapStringListToDto(ICollection<SessionLogTurnStringListEntity> items, string listType)

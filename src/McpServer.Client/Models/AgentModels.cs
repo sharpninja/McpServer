@@ -487,7 +487,7 @@ public sealed class AgentValidateResult
 /// <summary>
 /// Runtime lifecycle state for a managed agent process.
 /// </summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<AgentProcessStatus>))]
 public enum AgentProcessStatus
 {
     /// <summary>The process is starting but has not yet been confirmed as running.</summary>

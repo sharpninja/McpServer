@@ -52,7 +52,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
         Assert.Null(turn.Blockers);             // cleared
         Assert.NotNull(turn.Actions);
         Assert.Single(turn.Actions!);
-        Assert.Equal("only remaining action", turn.Actions![0].Description);
+        Assert.Equal("only remaining action", turn.Actions!.First().Description);
     }
 
     [Fact]
@@ -158,7 +158,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Single(turn.Commits!);
-        Assert.Equal("sha-1", turn.Commits![0].Sha);
+        Assert.Equal("sha-1", turn.Commits!.First().Sha);
     }
 
     [Fact]
@@ -173,7 +173,7 @@ public sealed class SessionLogServiceReplaceDeleteTests
 
         var turn = await GetTurnAsync(connection, sessionId).ConfigureAwait(true);
         Assert.Single(turn.Actions!);
-        Assert.Equal(0, turn.Actions![0].Order);
+        Assert.Equal(0, turn.Actions!.First().Order);
     }
 
     [Fact]

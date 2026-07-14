@@ -13,6 +13,7 @@ public sealed class ReplChildProcessHelper : IDisposable
     private static readonly TimeSpan StartupProbeTimeout = TimeSpan.FromMilliseconds(250);
     private static readonly TimeSpan ShutdownTimeout = TimeSpan.FromSeconds(2);
 
+    private readonly string _agentName;
     private Process? _process;
     private readonly List<string> _stdoutLines = new();
     private readonly List<string> _stderrLines = new();
@@ -21,6 +22,14 @@ public sealed class ReplChildProcessHelper : IDisposable
     private int? _stdoutBlockScalarIndent;
     private bool _disposed;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReplChildProcessHelper"/> class.
+    /// </summary>
+    /// <param name="agentName">Agent identifier passed to <c>mcpserver-repl --agent</c>.</param>
+    public ReplChildProcessHelper(string agentName = "default")
+    {
+        _agentName = string.IsNullOrWhiteSpace(agentName) ? "default" : agentName;
+    }
     /// <summary>
     /// Gets all stdout lines received from the child process.
     /// </summary>
@@ -60,6 +69,16 @@ public sealed class ReplChildProcessHelper : IDisposable
     public bool IsRunning => _process != null && !_process.HasExited;
 
     /// <summary>
+    /// Gets the agent name passed to the child REPL process.
+    /// </summary>
+    public string AgentName => _agentName;
+
+    /// <summary>
+    /// Gets the most recent child process argument list.
+    /// </summary>
+    public IReadOnlyList<string> LastStartArguments { get; private set; } = Array.Empty<string>();
+
+    /// <summary>
     /// Launches the mcpserver-repl --agent-stdio child process.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -96,6 +115,8 @@ public sealed class ReplChildProcessHelper : IDisposable
         };
         startInfo.ArgumentList.Add(hostAssemblyPath);
         startInfo.ArgumentList.Add("--agent-stdio");
+        startInfo.ArgumentList.Add("--agent");
+        startInfo.ArgumentList.Add(_agentName);
         startInfo.ArgumentList.Add("--workspace-path");
         startInfo.ArgumentList.Add(workspaceRoot);
         if (File.Exists(markerPath))
@@ -106,10 +127,13 @@ public sealed class ReplChildProcessHelper : IDisposable
 
         startInfo.Environment["MCP_WORKSPACE_PATH"] = workspaceRoot;
         startInfo.Environment["MCPSERVER_WORKSPACE_PATH"] = workspaceRoot;
+        startInfo.Environment["MCP_AGENT_NAME"] = _agentName;
+        startInfo.Environment["PLUGIN_AGENT_NAME"] = _agentName;
         startInfo.Environment["MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS"] = "10";
         startInfo.Environment["MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS"] = "8";
         startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
         startInfo.Environment["DOTNET_NOLOGO"] = "1";
+        LastStartArguments = startInfo.ArgumentList.ToArray();
 
         _process = new Process { StartInfo = startInfo };
         _process.OutputDataReceived += OnStdoutDataReceived;

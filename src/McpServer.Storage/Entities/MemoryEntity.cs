@@ -21,24 +21,24 @@ public sealed class MemoryEntity
 
     /// <summary>Stable globally unique memory id, such as <c>MEMORY-USER-001</c>.</summary>
     [Key]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Id { get; set; }
 
     /// <summary>Normalized category token used in generated ids and filtering.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Category { get; set; }
 
     /// <summary>Memory scope: <c>Global</c> or <c>Workspace</c>.</summary>
     [Required]
-    [MaxLength(16)]
+    [StringLength(16)]
     public required string Scope { get; set; }
 
     /// <summary>
     /// Optional workspace owner. Null for Global memories; required for
     /// Workspace memories.
     /// </summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? WorkspaceId { get; set; }
 
     /// <summary>Raw memory text stored exactly as the service receives it after line sanitization.</summary>
@@ -55,6 +55,6 @@ public sealed class MemoryEntity
     public DateTimeOffset UpdatedAtUtc { get; set; }
 
     /// <summary>Optional actor or subsystem that last changed the memory.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? UpdatedBy { get; set; }
 }

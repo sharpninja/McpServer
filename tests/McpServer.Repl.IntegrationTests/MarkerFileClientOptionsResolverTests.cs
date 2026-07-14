@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Repl.Host;
 
 namespace McpServer.Repl.IntegrationTests;
@@ -178,6 +179,83 @@ public sealed class MarkerFileClientOptionsResolverTests
         {
             Directory.Delete(root, recursive: true);
         }
+    }
+    /// <summary>
+    /// FR-MCP-REPL-008 / TR-MCP-REPL-009: agent names from plugin hosts are
+    /// canonicalized before keying verified marker cache entries.
+    /// </summary>
+    [Theory]
+    [InlineData("Codex", "codex")]
+    [InlineData("ClaudeCode", "claude")]
+    [InlineData("GrokCode", "grok")]
+    [InlineData("open-code", "opencode")]
+    public void ResolveAgentKey_CanonicalizesSharedAgentInputs(string input, string expected)
+    {
+        Assert.Equal(expected, MarkerFileClientOptionsResolver.ResolveAgentKey(input));
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-008 / TR-MCP-REPL-009: production resolution uses the supplied
+    /// agent argument without leaking it through the mutable test hook.
+    /// </summary>
+    [Fact]
+    public void TryResolveWithDiagnostics_WritesCanonicalAgentCacheWithoutGlobalOverride()
+    {
+        var root = CreateTemporaryWorkspace();
+        var cacheRoot = Path.Combine(Path.GetTempPath(), $"repl-marker-cache-{Guid.NewGuid():N}");
+        var originalCacheOverride = MarkerFileClientOptionsResolver.CacheDirectoryOverride;
+        var originalAgentOverride = MarkerFileClientOptionsResolver.AgentOverride;
+        try
+        {
+            Directory.CreateDirectory(cacheRoot);
+            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), BuildMarker(root));
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = cacheRoot;
+            MarkerFileClientOptionsResolver.AgentOverride = null;
+
+            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(
+                workspacePathOverride: root,
+                markerPathOverride: null,
+                out var options,
+                out var error,
+                agent: "ClaudeCode");
+
+            Assert.True(ok, error);
+            Assert.NotNull(options);
+            Assert.Null(MarkerFileClientOptionsResolver.AgentOverride);
+            var cacheJson = File.ReadAllText(Path.Combine(cacheRoot, "verified-markers.json"));
+            using var document = JsonDocument.Parse(cacheJson);
+            var entry = Assert.Single(document.RootElement.EnumerateArray());
+            Assert.Equal("claude", entry.GetProperty("agent").GetString());
+        }
+        finally
+        {
+            MarkerFileClientOptionsResolver.CacheDirectoryOverride = originalCacheOverride;
+            MarkerFileClientOptionsResolver.AgentOverride = originalAgentOverride;
+            Directory.Delete(root, recursive: true);
+            if (Directory.Exists(cacheRoot))
+            {
+                Directory.Delete(cacheRoot, recursive: true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-REPL-018: child-process integration helpers exercise explicit
+    /// named-agent REPL invocation rather than relying on a markerless default.
+    /// </summary>
+    [Fact]
+    public async Task ReplChildProcessHelper_WithNamedAgent_StartsWithExplicitAgentArgument()
+    {
+        using var helper = new ReplChildProcessHelper("GrokCode");
+
+        await helper.StartAsync(TestContext.Current.CancellationToken);
+
+        var args = helper.LastStartArguments.ToArray();
+        var agentIndex = Array.IndexOf(args, "--agent");
+        Assert.True(agentIndex >= 0, "The child process must receive --agent.");
+        Assert.True(agentIndex + 1 < args.Length, "The --agent argument must include a value.");
+        Assert.Equal("GrokCode", args[agentIndex + 1]);
+        Assert.True(helper.IsRunning, helper.Diagnostics);
     }
 
     private static string CreateTemporaryWorkspace()

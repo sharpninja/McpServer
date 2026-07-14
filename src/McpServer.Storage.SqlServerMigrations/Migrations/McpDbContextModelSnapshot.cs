@@ -15,7 +15,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
-#pragma warning disable 612, 618
+
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -4159,7 +4159,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                 {
                     b.Navigation("BannedItems");
                 });
-#pragma warning restore 612, 618
+
         }
     }
 }

@@ -18,19 +18,19 @@ public class AgentEventLogEntity
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Agent type identifier.</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string AgentId { get; set; } = "";
 
     /// <summary>Workspace path where the event occurred.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspacePath { get; set; } = "";
 
     /// <summary>Type of event (Add, Launch, Exit, Ban, Unban, Delete, Merge, Init).</summary>
-    [MaxLength(32)]
+    [StringLength(32)]
     public string EventType { get; set; } = "";
 
     /// <summary>User ID from JWT sub claim (who triggered the event).</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? UserId { get; set; }
 
     /// <summary>Additional event details (JSON).</summary>

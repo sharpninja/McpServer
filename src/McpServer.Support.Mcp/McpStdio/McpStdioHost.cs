@@ -59,6 +59,10 @@ public static class McpStdioHost
         builder.Services.Configure<BrainSlotOptions>(builder.Configuration.GetSection(BrainSlotOptions.SectionName));
         builder.Services.Configure<TriageOptions>(builder.Configuration.GetSection(TriageOptions.SectionName));
         builder.Services.Configure<DesktopLaunchOptions>(builder.Configuration.GetSection(DesktopLaunchOptions.SectionName));
+        builder.Services.AddOptions<SessionLogSanitizationOptions>()
+            .Bind(builder.Configuration.GetSection(SessionLogSanitizationOptions.SectionName))
+            .ValidateOnStart();
+        builder.Services.AddSingleton<IValidateOptions<SessionLogSanitizationOptions>, SessionLogSanitizationOptionsValidator>();
         var requiredRepoAllowlistPatterns = new[]
         {
             "src/McpServer.Cqrs/**/*.cs",
@@ -147,6 +151,8 @@ public static class McpStdioHost
         builder.Services.AddSingleton<IVectorIndexService, VectorIndexService>();
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+        builder.Services.AddSingleton<IRequirementsDocFxWorkflowRunner, RequirementsDocFxWorkflowRunner>();
+        builder.Services.AddSingleton<IRequirementsWikiExportOrchestrator, RequirementsWikiExportOrchestrator>();
         builder.Services.AddSingleton<IProcessSpawner, DefaultProcessSpawner>();
         builder.Services.AddSingleton<FileGitHubWorkspaceTokenStore>();
         builder.Services.AddSingleton<IGitHubWorkspaceTokenStore>(sp =>
@@ -242,15 +248,19 @@ public static class McpStdioHost
                 sp.GetService<IOptions<TurnTransactionOptions>>());
         });
         builder.Services.AddScoped<DesktopLaunchService>();
+        builder.Services.AddScoped<ISessionLogSanitizer, SessionLogSanitizer>();
         builder.Services.AddScoped<ISessionLogService>(sp =>
         {
             var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
-            return new TransactionGatedSessionLogService(
+            var gated = new TransactionGatedSessionLogService(
                 inner,
                 sp.GetRequiredService<McpDbContext>(),
                 sp.GetService<ITurnTransactionCoordinator>(),
                 sp.GetService<WorkspaceContext>(),
                 sp.GetService<IOptions<TurnTransactionOptions>>());
+            return new SessionLogSanitizingService(
+                gated,
+                sp.GetRequiredService<ISessionLogSanitizer>());
         });
         builder.Services.AddScoped<IMemoryService, MemoryService>();
         builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();

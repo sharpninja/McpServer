@@ -29,30 +29,78 @@ public static class MarkerFileClientOptionsResolver
     /// </summary>
     public static string? CacheDirectoryOverride { get; set; }
 
-    /// <summary>
-    /// Test hook only. Allows tests to simulate a specific agent (e.g. "Codex", "ClaudeCode")
-    /// so per-agent cache isolation can be verified.
-    /// </summary>
-    public static string? AgentOverride { get; set; }
-
     private static string GetVerifiedCachePath()
     {
         var dir = CacheDirectoryOverride ?? s_verifiedCacheDir;
         return Path.Combine(dir, "verified-markers.json");
     }
 
-    private static string GetCurrentAgent()
+    /// <summary>
+    /// Test hook only. Allows tests to simulate a specific agent when callers do
+    /// not pass the production <c>--agent</c> value directly.
+    /// </summary>
+    public static string? AgentOverride { get; set; }
+
+    /// <summary>
+    /// Resolves the canonical per-agent key used for verified marker cache isolation.
+    /// </summary>
+    /// <param name="explicitAgent">Optional explicit agent identifier from <c>--agent</c>.</param>
+    /// <returns>The canonical cache key for the agent.</returns>
+    public static string ResolveAgentKey(string? explicitAgent = null)
     {
-        if (!string.IsNullOrWhiteSpace(AgentOverride))
-            return AgentOverride;
+        var agent = !string.IsNullOrWhiteSpace(explicitAgent)
+            ? explicitAgent
+            : !string.IsNullOrWhiteSpace(AgentOverride)
+                ? AgentOverride
+                : Environment.GetEnvironmentVariable("MCP_AGENT_NAME")
+                    ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_NAME")
+                    ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_DEFAULT")
+                    ?? Environment.GetEnvironmentVariable("MCP_PLUGIN_HOST")
+                    ?? "default";
 
-        return Environment.GetEnvironmentVariable("MCP_AGENT_NAME")
-            ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_NAME")
-            ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_DEFAULT")
-            ?? "default";
+        return CanonicalizeAgentKey(agent);
     }
-    // FR-MCP-REPL-008 TR-MCP-REPL-009: agent sourced from CLI --agent (via AgentOverride) or env for per-agent cache keys.
 
+    private static string CanonicalizeAgentKey(string? agent)
+    {
+        var normalized = string.IsNullOrWhiteSpace(agent)
+            ? "default"
+            : agent.Trim().ToLowerInvariant();
+
+        return normalized switch
+        {
+            "claude" or "claudecode" or "claude-code" => "claude",
+            "claudecowork" or "claude-cowork" => "cowork",
+            "codex" => "codex",
+            "copilot" => "copilot",
+            "grok" or "grokcode" or "grok-code" => "grok",
+            "cline" or "cline-v2" => "cline",
+            "opencode" or "open-code" => "opencode",
+            _ => SanitizeAgentKey(normalized),
+        };
+    }
+
+    private static string SanitizeAgentKey(string agent)
+    {
+        var builder = new StringBuilder(agent.Length);
+        var lastWasSeparator = false;
+        foreach (var ch in agent)
+        {
+            if (char.IsAsciiLetterOrDigit(ch))
+            {
+                builder.Append(ch);
+                lastWasSeparator = false;
+            }
+            else if (!lastWasSeparator && builder.Length > 0)
+            {
+                builder.Append('-');
+                lastWasSeparator = true;
+            }
+        }
+
+        return builder.ToString().Trim('-') is { Length: > 0 } key ? key : "default";
+    }
+    // FR-MCP-REPL-008 TR-MCP-REPL-009: agent sourced from CLI --agent or shared env precedence for per-agent cache keys.
     /// <summary>
     /// Represents a previously verified marker for fast-path trust within TTL.
     /// Keyed by (WorkspacePath, Agent) so Codex and Claude (etc.) sessions do not mix
@@ -128,10 +176,7 @@ public static class MarkerFileClientOptionsResolver
     public static bool TryLoadTrustedMarker(string workspacePath, out MarkerSettings marker, string? agent = null)
     {
         marker = default;
-        if (!string.IsNullOrWhiteSpace(agent))
-        {
-            AgentOverride = agent;
-        }
+        var agentKey = ResolveAgentKey(agent);
 
         var markerPath = FindMarkerFile(workspacePath);
         if (string.IsNullOrWhiteSpace(markerPath) || !File.Exists(markerPath))
@@ -146,7 +191,7 @@ public static class MarkerFileClientOptionsResolver
         }
 
         // Prefer cache hit (same rules as TryResolveWithDiagnostics) before re-verifying.
-        if (TryUseCachedVerification(parsed.Value, out _))
+        if (TryUseCachedVerification(parsed.Value, agentKey, out _))
         {
             marker = parsed.Value;
             return true;
@@ -158,7 +203,7 @@ public static class MarkerFileClientOptionsResolver
         }
 
         marker = parsed.Value;
-        SaveVerifiedCacheEntry(parsed.Value);
+        SaveVerifiedCacheEntry(parsed.Value, agentKey);
         return true;
     }
 
@@ -222,10 +267,7 @@ public static class MarkerFileClientOptionsResolver
         options = null;
         error = string.Empty;
 
-        if (!string.IsNullOrWhiteSpace(agent))
-        {
-            AgentOverride = agent;
-        }
+        var agentKey = ResolveAgentKey(agent);
 
         string? markerPath;
         IReadOnlyList<string> searchedPaths;
@@ -267,7 +309,7 @@ public static class MarkerFileClientOptionsResolver
         // Use local verified marker cache (24h TTL, invalidated on apiKey change in marker)
         // to avoid repeating the full marker discovery + signature verification trust chain
         // on every agent REPL invocation.
-        if (TryUseCachedVerification(parsed.Value, out var cachedOptions) && cachedOptions is not null)
+        if (TryUseCachedVerification(parsed.Value, agentKey, out var cachedOptions) && cachedOptions is not null)
         {
             options = cachedOptions;
             return true;
@@ -287,7 +329,7 @@ public static class MarkerFileClientOptionsResolver
         };
 
         // Persist successful verification for future calls within TTL.
-        SaveVerifiedCacheEntry(parsed.Value);
+        SaveVerifiedCacheEntry(parsed.Value, agentKey);
         return true;
     }
 
@@ -480,12 +522,11 @@ public static class MarkerFileClientOptionsResolver
             .Append('\n');
     }
 
-    private static bool TryUseCachedVerification(MarkerSettings current, out McpServerClientOptions? options)
+    private static bool TryUseCachedVerification(MarkerSettings current, string agentId, out McpServerClientOptions? options)
     {
         options = null;
         try
         {
-            var agentId = GetCurrentAgent();
             var cachePath = GetVerifiedCachePath();
             if (!File.Exists(cachePath))
                 return false;
@@ -522,54 +563,72 @@ public static class MarkerFileClientOptionsResolver
             return false;
         }
     }
-
-    private static void SaveVerifiedCacheEntry(MarkerSettings verified)
+    private static void SaveVerifiedCacheEntry(MarkerSettings verified, string agentId)
     {
         try
         {
-            var agentId = GetCurrentAgent();
             var cachePath = GetVerifiedCachePath();
             var dir = Path.GetDirectoryName(cachePath)!;
             Directory.CreateDirectory(dir);
 
-            List<VerifiedMarkerCacheEntry> entries = new();
-            if (File.Exists(cachePath))
+            var lockPath = cachePath + ".lock";
+            for (var attempt = 0; attempt < 5; attempt++)
             {
                 try
                 {
-                    var json = File.ReadAllText(cachePath);
-                    entries = JsonSerializer.Deserialize<List<VerifiedMarkerCacheEntry>>(json, s_cacheJsonOpts) ?? new();
+                    using var lockStream = new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                    WriteVerifiedCacheEntryUnderLock(cachePath, verified, agentId);
+                    return;
                 }
-                catch { /* ignore corrupt cache */ }
+                catch (IOException) when (attempt < 4)
+                {
+                    Thread.Sleep(TimeSpan.FromMilliseconds(50 * (attempt + 1)));
+                }
             }
-
-            // Remove any prior entry for this (workspace, agent) combination
-            // (treat missing Agent as "default" for backward compat with pre-per-agent caches)
-            entries.RemoveAll(e =>
-                string.Equals(e.WorkspacePath, verified.WorkspacePath, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(e.Agent ?? "default", agentId, StringComparison.OrdinalIgnoreCase));
-
-            var newEntry = new VerifiedMarkerCacheEntry(
-                WorkspacePath: verified.WorkspacePath,
-                Agent: agentId,
-                ApiKey: verified.ApiKey,
-                SignatureValue: verified.SignatureValue,
-                VerifiedAtUtc: DateTimeOffset.UtcNow,
-                ExpiresAtUtc: DateTimeOffset.UtcNow.AddHours(VerifiedCacheHours));
-
-            entries.Add(newEntry);
-
-            // Trim very old entries
-            var cutoff = DateTimeOffset.UtcNow.AddDays(-7);
-            entries = entries.Where(e => e.ExpiresAtUtc > cutoff).ToList();
-
-            var outJson = JsonSerializer.Serialize(entries, s_cacheJsonOpts);
-            File.WriteAllText(cachePath, outJson);
         }
         catch
         {
             // Best effort; do not fail resolution on cache write problems.
         }
+    }
+
+    private static void WriteVerifiedCacheEntryUnderLock(string cachePath, MarkerSettings verified, string agentId)
+    {
+        List<VerifiedMarkerCacheEntry> entries = new();
+        if (File.Exists(cachePath))
+        {
+            try
+            {
+                var json = File.ReadAllText(cachePath);
+                entries = JsonSerializer.Deserialize<List<VerifiedMarkerCacheEntry>>(json, s_cacheJsonOpts) ?? new();
+            }
+            catch { /* ignore corrupt cache */ }
+        }
+
+        // Remove any prior entry for this (workspace, agent) combination
+        // (treat missing Agent as "default" for backward compat with pre-per-agent caches)
+        entries.RemoveAll(e =>
+            string.Equals(e.WorkspacePath, verified.WorkspacePath, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(e.Agent ?? "default", agentId, StringComparison.OrdinalIgnoreCase));
+
+        var newEntry = new VerifiedMarkerCacheEntry(
+            WorkspacePath: verified.WorkspacePath,
+            Agent: agentId,
+            ApiKey: verified.ApiKey,
+            SignatureValue: verified.SignatureValue,
+            VerifiedAtUtc: DateTimeOffset.UtcNow,
+            ExpiresAtUtc: DateTimeOffset.UtcNow.AddHours(VerifiedCacheHours));
+
+        entries.Add(newEntry);
+
+        // Trim very old entries.
+        var cutoff = DateTimeOffset.UtcNow.AddDays(-7);
+        entries = entries.Where(e => e.ExpiresAtUtc > cutoff).ToList();
+
+        var outJson = JsonSerializer.Serialize(entries, s_cacheJsonOpts);
+        var tempPath = cachePath + ".tmp";
+        File.WriteAllText(tempPath, outJson);
+        File.Move(tempPath, cachePath, overwrite: true);
     }
 
     /// <summary>

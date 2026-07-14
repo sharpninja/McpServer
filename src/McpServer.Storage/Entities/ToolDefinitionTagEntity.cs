@@ -24,6 +24,6 @@ public sealed class ToolDefinitionTagEntity
 
     /// <summary>Lowercase keyword tag (e.g. <c>screenshot</c>, <c>clipboard</c>).</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Tag { get; set; }
 }

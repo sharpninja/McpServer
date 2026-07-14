@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace McpServer.Client.Models;
 
 /// <summary>Memory visibility scope.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<MemoryScope>))]
 public enum MemoryScope
 {
     /// <summary>Memory visible to every workspace.</summary>
@@ -112,7 +112,7 @@ public sealed class MemoryQueryResult
 }
 
 /// <summary>Failure mode for memory mutations.</summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter<MemoryMutationFailureKind>))]
 public enum MemoryMutationFailureKind
 {
     /// <summary>No failure classification applies.</summary>

@@ -769,10 +769,17 @@ Scope: layer-1+
 
 ## TR-MCP-DOCFXWIKI-001
 
-**TR-MCP-DOCFXWIKI-001** — Placeholder requirement backfilled for TODO link TR-MCP-DOCFXWIKI-001.
-**Covered by:** FR: FR-MCP-DOCFXWIKI-001
+**Typed and isolated DocFX wiki workflow execution** — DocFX workflows must be loaded through typed wiki configuration, executed without a shell through a bounded process abstraction, staged under the workspace, and merged through the existing requirements wiki renderer and atomic export writer.
+**Covered by:** FR: FR-MCP-DOCFXWIKI-001; TEST: TEST-MCP-DOCFXWIKI-001
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The optional docfx.workflows collection is deserialized into typed models and validated without line-oriented YAML parsing.
+- [ ] Workflow executable and argument-list values are passed through ProcessStartInfo without shell interpretation and execute in a validated workspace-contained working directory.
+- [ ] Each workflow has bounded timeout, output-root, target-root, and platform settings; duplicate target paths and unsupported files fail validation.
+- [ ] A shared orchestration service is used by both file-backed and database-backed GenerateWikiAsync implementations.
+- [ ] DocFX output is converted to RequirementsRenderedDocument instances so manifest generation, atomic writes, and stale-file deletion remain single-path behavior.
+- [ ] Cancellation or workflow failure removes staging data and leaves the previously published wiki output unchanged.
 
 ## TR-MCP-DRY-001
 
@@ -1297,6 +1304,20 @@ Scope: layer-1+
 - [ ] Get-ReplDialogItemsFromParams supports ConvertFrom-Yaml dictionary output and PSCustomObject output.
 - [ ] Invoke-WorkflowAppendDialog returns failure and writes an actionable error when no items are parsed.
 
+## TR-MCP-PLUGININT-001
+
+**Shared multi-plugin Session Log integration harness** — A central integration test harness must drive each plugin repository through its supported entrypoint against one disposable real MCP Server workspace, use a shared scenario catalog, and add aiUnit semantic validation without replacing deterministic assertions.
+**Covered by:** FR: FR-MCP-PLUGININT-001; TEST: TEST-MCP-PLUGININT-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A typed PluginSessionLogScenario catalog contains agent identity, repository, supported entrypoint, environment variables, cache folder name, and expected source type for all eight plugins.
+- [ ] The fixture starts or binds to a real MCP Server on an isolated workspace and verifies marker trust before invoking plugins.
+- [ ] PowerShell/hook plugins and Node SDK plugins are invoked through their supported production entrypoints, not by bypassing them with raw REST.
+- [ ] Each row asserts session, turn, action, dialog, completion status, cache path, source revision, and failsafe cleanup from server and filesystem receipts.
+- [ ] AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate.
+- [ ] The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped.
+
 ## TR-MCP-PLUGIN-SKILLS-001
 
 **Probe TR id pattern** — Probe only; should not be created if id validation fails or duplicate cleanup is needed.
@@ -1774,27 +1795,28 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
-- [ ] CA1416 is approved only for Windows only code paths with explicit platform justification and a review condition that removes the suppression if the code becomes cross platform.
-- [ ] CA1819 is approved where returning arrays is intentional for DTO or API shape and the suppression includes justification.
-- [ ] Current CA2227 suppressions are approved only for non observable JSON, YAML, options binding DTOs, and EF navigation collections. Observable collections must be repopulated in place and not suppressed.
+- [x] CA1416 is approved only for Windows only code paths with explicit platform justification and a review condition that removes the suppression if the code becomes cross platform. (evidence: config/warning-suppression-approvals.json contains scoped CA1416 approvals for Windows-only service/event-log and platform-gated code paths.)
+- [x] CA1819 is approved where returning arrays is intentional for DTO or API shape and the suppression includes justification. (evidence: config/warning-suppression-approvals.json and ContextChunkEntity.Embedding justify byte[] as EF Core BLOB storage contract.)
+- [x] Current CA2227 suppressions are approved only for non observable JSON, YAML, options binding DTOs, and EF navigation collections. Observable collections must be repopulated in place and not suppressed. (evidence: config/warning-suppression-approvals.json and WarningSuppressionValidationTargetTests CA2227 allowed-scope check.)
 - [x] CA1308 is not approved. Code must use explicit mapping or invariant case insensitive comparison rather than lower case normalization. (evidence: src/McpServer.Support.Mcp/Logging/ParseableEventFormatter.cs, src/McpServer.Services/Ingestion/MarkdownSessionLogParser.cs, src/McpServer.Storage/Indexing/EmbeddingService.cs, tests/McpServer.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs)
 - [x] CS8632 is not approved. Every project must enable nullable annotations and CS8632 NoWarn entries must be removed. (evidence: Directory.Build.props, build/_build.csproj, lib/NSubstitute/NSubstitute.csproj, tests/Build.Tests/Build.Tests.csproj, solution build on 2026-07-07)
 - [x] TreatWarningsAsErrors false is not approved. The build project warning bypass must remain removed after warning clean validation. (evidence: Directory.Build.props and dotnet build McpServer.sln -c Debug -v minimal passed with zero warnings and zero errors on 2026-07-07)
 - [x] Stale ASP0019 suppressions are not approved. ASP0019 NoWarn entries must remain removed when no IHeaderDictionary Add usage remains. (evidence: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj, tests/McpServer.Support.Mcp.IntegrationTests/McpServer.Support.Mcp.IntegrationTests.csproj, solution build on 2026-07-07)
-- [ ] Every warning suppression or warning bypass not explicitly approved by this TR must remain open remediation work until fixed and validated.
+- [x] Every warning suppression or warning bypass not explicitly approved by this TR must remain open remediation work until fixed and validated. (evidence: ValidateWarningSuppressions passes after CA1848, CS8602, and Storage migration obsolete pragma removals; approval register contains only scoped approved suppressions.)
 - [x] The aiUnit warning suppression governance prompt audits the suppression decisions, TODO state, requirements traceability, generated exports, and source suppression inventory. (evidence: tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs)
 - [x] xUnit1051 is not approved. Test projects must pass TestContext cancellation tokens to cancellable async APIs instead of suppressing the analyzer. (evidence: test project NoWarn entries, cancellable async call updates, dotnet build McpServer.sln -c Debug -v minimal, WorkspacePolicyDirectiveParserTests focused run)
 - [x] xUnit1041 is not approved. xUnit v3 tests must use supported fixture and output helper patterns instead of suppressing constructor injection diagnostics. (evidence: tests/McpServer.PlanReview.Tests/McpServer.PlanReview.Tests.csproj and tests/McpServer.PlanReview.Tests/PlanTransactionReviewTests.cs)
 - [x] CA1812 is not approved. Middleware and DI activated types must be made visible to analyzers through real construction or removed. (evidence: src/McpServer.ServiceDefaults/Extensions.cs and src/McpServer.ServiceDefaults/GlobalExceptionHandlerMiddleware.cs)
-- [x] CA1848 is not approved. No editorconfig, project, pragma, or attribute suppression may remain for LoggerMessage guidance. (evidence: repository suppression scan for CA1848 returned zero matches on 2026-07-07)
+- [x] CA1848 is not approved. No editorconfig, project, pragma, or attribute suppression may remain for LoggerMessage guidance. (evidence: .editorconfig CA1848 severity override removed; config/warning-suppression-approvals.json CA1848 approval removed; repository suppression scan for CA1848 returns zero matches.)
 - [x] CA2000 is not approved. Disposal warnings must be fixed or proven stale by removing the suppression and building clean. (evidence: tests/McpServer.Support.Mcp.Tests/Middleware/FederationMiddlewareTests.cs and Support.Mcp.Tests project build)
 - [x] CA1861 is not approved. Constant array arguments must be hoisted rather than suppressed. (evidence: src/McpServer.Storage/Migrations/20260212160034_AddSessionLogTables.cs and Storage project build)
 - [x] CA1062 is not approved. Public migration methods must validate migrationBuilder arguments rather than suppressing the rule. (evidence: session log migration files 20260212160034, 20260212165804, 20260212170806, and 20260212172109 plus Storage project build)
 - [x] CS0436 is not approved. Type conflict NoWarn entries must be removed once the conflict is no longer present. (evidence: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj and Support.Mcp project build)
-- [x] CS0618 is not approved. Obsolete APIs must be replaced with current APIs and covered by focused regression tests. (evidence: src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs and tests/McpServer.Support.Mcp.Tests/Options/McpDatabaseConfigurationResolverTests.cs)
+- [x] CS0618 is not approved. Obsolete APIs must be replaced with current APIs and covered by focused regression tests. (evidence: Storage migration designer and snapshot 612/618 pragmas removed; W18 warning-suppression test now scans src/McpServer.Storage/Migrations plus provider migration roots.)
 - [x] CA1055 is not approved. String return APIs must not advertise URI semantics. (evidence: src/McpServer.ServiceDefaults/RailwayConnectionStringBuilder.cs, src/McpServer.ServiceDefaults/PostgresConnectionStringResolver.cs, ServiceDefaults build, and resolver tests)
 - [x] NU5104 is not approved. Stable packages must not depend on prerelease packages or deprecated package metadata. (evidence: Directory.Packages.props stable Microsoft Agents versions, lib/NSubstitute.6.0.0/nsubstitute.nuspec, src/McpServer.McpAgent/McpServer.McpAgent.csproj, and dotnet pack McpServer.McpAgent)
 - [x] NU1901 and NU1903 are not approved. Vulnerable package advisories must be resolved by dependency updates and a clean vulnerability scan. (evidence: Directory.Packages.props transitive pins, Directory.Build.props suppression removal, and dotnet list McpServer.sln package --vulnerable --include-transitive)
+- [x] ErrorOnDuplicatePublishOutputFiles=false is not approved. Duplicate publish output enforcement must remain enabled unless a scoped approval names the exact affected projects and review condition. (evidence: Directory.Build.props suppression removed; config/warning-suppression-approvals.json stale approval removed; default publish probes passed for McpServer.Support.Mcp, McpServer.Repl.Host, McpServer.QBAgent, McpServer.McpAgent.SampleHost, and McpServer.Launcher on 2026-07-13; ValidateWarningSuppressions passed; WarningSuppression Build.Tests passed 18/0/0; inventory contains zero ErrorOnDuplicatePublishOutputFiles occurrences.)
 
 ## TR-MCP-REPL-001
 
@@ -1858,6 +1880,18 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-REPL-007; TEST: TEST-MCP-REPL-007-1, TEST-MCP-REPL-007-2, TEST-MCP-REPL-007-3
 **Status:** pending
 Scope: layer-1+
+
+## TR-MCP-REPL-009
+
+**Explicit agent identity propagation** — REPL host, plugin launchers, and verified marker cache resolution must use a single agent identity precedence and canonical cache key so Codex, Claude, Grok, and other agents cannot share stale trust or cache state accidentally.
+**Covered by:** FR: FR-MCP-REPL-008; TEST: TEST-MCP-REPL-018
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Agent resolution precedence is explicit agent, MCP_AGENT_NAME, PLUGIN_AGENT_NAME, PLUGIN_AGENT_DEFAULT, MCP_PLUGIN_HOST, then default. (evidence: src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs; plugins/core/lib-sh/repl-invoke.sh; plugins/core/lib-ps/repl-invoke.ps1; plugins/core/lib-sh/repl-daemon.js; plugins/core/lib-node/src/transport/repl-bridge.ts)
+- [x] Production resolver calls do not persist supplied --agent values through the mutable AgentOverride test hook. (evidence: src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs; tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+- [x] Verified marker cache writes use a bounded inter-process lock and atomic replacement to avoid concurrent agent read-modify-write races. (evidence: src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs)
+- [x] Resolver fallback surfaces a construction-time diagnostic before legacy resolution is used. (evidence: src/McpServer.Repl.Host/Program.cs)
 
 ## TR-MCP-REPL-010
 
@@ -2034,6 +2068,20 @@ Scope: layer-1+
 
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`
 Scope: layer-1+
+
+## TR-MCP-SESSIONLOGSAN-001
+
+**Bounded outbound session-log sanitizer** — A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and wrap the final local or federated ISessionLogService read result.
+**Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] ISessionLogSanitizer exposes DTO and string sanitization without mutating caller-owned objects.
+- [ ] SessionLogSanitizationOptions limits rule count, pattern length, and per-match timeout; invalid or duplicate rule IDs fail options validation with the offending ID.
+- [ ] Default rules cover bearer tokens, JWTs, private keys, common API-key and secret assignments, connection-string passwords, and known provider token prefixes.
+- [ ] Replacement is deterministic as [REDACTED:<rule-id>] and does not expose captured secret fragments.
+- [ ] SessionLogSanitizingService is the outermost ISessionLogService read decorator for HTTP/federation and is also registered in stdio.
+- [ ] Regex timeout during a read fails closed for the affected value, emits rule diagnostics without the input value, and never returns the unsanitized value.
 
 ## TR-MCP-SKILLS-001
 

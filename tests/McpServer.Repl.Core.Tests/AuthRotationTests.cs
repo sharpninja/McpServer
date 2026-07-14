@@ -90,10 +90,8 @@ public class AuthRotationTests
         authHandler.When(x => x.RegisterAuthChangeCallback(Arg.Any<Func<IAuthState, Task>>()))
             .Do(callInfo =>
             {
-#pragma warning disable CS8602
-                var cb = callInfo.Arg<Func<IAuthState, Task>>();
+                var cb = callInfo.Arg<Func<IAuthState, Task>>()!;
                 _ = cb(authState);
-#pragma warning restore CS8602
             });
 
         authHandler.RegisterAuthChangeCallback(callback1);

@@ -23,7 +23,7 @@ public sealed class TodoDocumentMetadataEntity
     /// document-metadata singleton without collision.
     /// </summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Fixed singleton key (always <c>1</c>). Composite-PK component.</summary>
@@ -44,19 +44,19 @@ public sealed class TodoDocumentMetadataEntity
     public List<TodoCompletedGroupEntity> CompletedGroups { get; set; } = [];
 
     /// <summary>Free-text reference to the code-review document anchor.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? CodeReviewReference { get; set; }
 
     /// <summary>UTC timestamp of last successful import from <c>TODO.yaml</c> (ISO-8601).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? LastImportedFromYamlUtc { get; set; }
 
     /// <summary>UTC timestamp of last successful projection to <c>TODO.yaml</c> (ISO-8601).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? LastProjectedToYamlUtc { get; set; }
 
     /// <summary>UTC timestamp of the most recent projection failure (ISO-8601).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? LastProjectionFailureUtc { get; set; }
 
     /// <summary>Free-text error message captured from the most recent projection failure.</summary>

@@ -23,7 +23,7 @@ public sealed class AgentWorkspaceListItemEntity
 
     /// <summary>Discriminator identifying which override list this row belongs to (ModelOverride, InstructionFileOverride).</summary>
     [Required]
-    [MaxLength(32)]
+    [StringLength(32)]
     public required string ListType { get; set; }
 
     /// <summary>Ordinal position within the override list.</summary>

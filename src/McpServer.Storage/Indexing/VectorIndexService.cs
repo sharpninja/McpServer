@@ -153,7 +153,7 @@ public sealed class VectorIndexService : IVectorIndexService, IDisposable
             var mapData = _chunkIdToInternalId
                 .Select(kv => new ChunkIdMapping(kv.Key, kv.Value))
                 .ToList();
-            var json = JsonSerializer.Serialize(mapData);
+            var json = JsonSerializer.Serialize(mapData, VectorIndexJsonContext.Default.ListChunkIdMapping);
             File.WriteAllText(mapPath, json);
 
             // Save vectors for rebuild capability
@@ -192,7 +192,7 @@ public sealed class VectorIndexService : IVectorIndexService, IDisposable
             {
                 // Load mapping
                 var json = File.ReadAllText(mapPath);
-                var mappings = JsonSerializer.Deserialize<List<ChunkIdMapping>>(json) ?? [];
+                var mappings = JsonSerializer.Deserialize(json, VectorIndexJsonContext.Default.ListChunkIdMapping) ?? [];
                 _chunkIdToInternalId.Clear();
                 _internalIdToChunkId.Clear();
                 _internalIdToVector.Clear();
@@ -321,6 +321,6 @@ public sealed class VectorIndexService : IVectorIndexService, IDisposable
         if (denom < 1e-10f) return 1f;
         return 1f - (dot / denom);
     }
-
-    private sealed record ChunkIdMapping(string ChunkId, int InternalId);
 }
+
+internal sealed record ChunkIdMapping(string ChunkId, int InternalId);

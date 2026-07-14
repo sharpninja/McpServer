@@ -9,26 +9,26 @@ public sealed class TriageResearchRunEntity
 {
     /// <summary>Workspace discriminator used by MCP multi-tenant filters.</summary>
     [Required]
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>Durable research run id.</summary>
     [Key]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string RunId { get; set; }
 
     /// <summary>Triage group id researched by this run.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string GroupId { get; set; }
 
     /// <summary>Run status.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public required string Status { get; set; }
 
     /// <summary>Prompt template id used for this run.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? PromptTemplateId { get; set; }
 
     /// <summary>Rendered prompt sent to the triage agent.</summary>
@@ -62,6 +62,6 @@ public sealed class TriageResearchRunEntity
     public DateTimeOffset? CompletedUtc { get; set; }
 
     /// <summary>Created TODO id, if any.</summary>
-    [MaxLength(128)]
+    [StringLength(128)]
     public string? CreatedTodoId { get; set; }
 }

@@ -114,8 +114,12 @@ public sealed class FederationQueuedOperationReplayService : BackgroundService
                 $"{_registry.HubBaseUrl}/mcpserver/federation/{(useEnvelope ? "envelopes" : "operations")}")
             {
                 Content = useEnvelope
-                    ? JsonContent.Create(_envelopeSigner!.Sign(operationRequest, operation.ProxyId))
-                    : JsonContent.Create(operationRequest),
+                    ? JsonContent.Create(
+                        _envelopeSigner!.Sign(operationRequest, operation.ProxyId),
+                        McpServicesJsonContext.Default.FederationExecutionEnvelope)
+                    : JsonContent.Create(
+                        operationRequest,
+                        McpServicesJsonContext.Default.FederationOperationRequest),
             };
             request.Headers.TryAddWithoutValidation(FederationHeaders.ProxyId, operation.ProxyId);
             request.Headers.TryAddWithoutValidation(FederationHeaders.OperationId, operation.OperationId);
@@ -136,7 +140,7 @@ public sealed class FederationQueuedOperationReplayService : BackgroundService
             }
 
             var hubResponse = await response.Content
-                .ReadFromJsonAsync<FederationOperationResponse>(cancellationToken)
+                .ReadFromJsonAsync(McpServicesJsonContext.Default.FederationOperationResponse, cancellationToken)
                 .ConfigureAwait(false);
             if (hubResponse is null)
             {

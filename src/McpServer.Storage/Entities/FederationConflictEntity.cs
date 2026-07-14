@@ -10,39 +10,39 @@ public sealed class FederationConflictEntity
 {
     /// <summary>Hub-wide conflict identifier.</summary>
     [Key]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string ConflictId { get; set; }
 
     /// <summary>Operation that caused the conflict.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string OperationId { get; set; }
 
     /// <summary>Proxy that submitted the conflicting operation.</summary>
     [Required]
-    [MaxLength(256)]
+    [StringLength(256)]
     public required string ProxyId { get; set; }
 
     /// <summary>Mutable state domain where the conflict occurred.</summary>
     [Required]
-    [MaxLength(128)]
+    [StringLength(128)]
     public required string Domain { get; set; }
 
     /// <summary>Domain-specific resource identifier.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? ResourceId { get; set; }
 
     /// <summary>Version observed by the proxy.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? ProxyVersion { get; set; }
 
     /// <summary>Authoritative version observed by the hub.</summary>
-    [MaxLength(256)]
+    [StringLength(256)]
     public string? HubVersion { get; set; }
 
     /// <summary>Resolution status such as <c>open</c>, <c>hub_wins</c>, or <c>proxy_wins</c>.</summary>
     [Required]
-    [MaxLength(64)]
+    [StringLength(64)]
     public string ResolutionStatus { get; set; } = "open";
 
     /// <summary>Opaque conflict details JSON for operator review.</summary>

@@ -3,6 +3,7 @@ using McpServer.TransactionSecurity.Models;
 using McpServer.TransactionSecurity.Options;
 using System.Net.Http.Json;
 using System.Text.Json;
+using McpServer.TransactionSecurity;
 
 namespace McpServer.TransactionSecurity.Services;
 
@@ -191,9 +192,10 @@ public sealed class HttpSubscriberTransactionPubSub : ITransactionPubSub
             using var response = await _http.PostAsJsonAsync(
                     "mcpserver/subscriber/diffgrams/commit",
                     request,
+                    TransactionSecurityJsonContext.Default.DiffgramCommitRequest,
                     cancellationToken)
                 .ConfigureAwait(false);
-            var body = await response.Content.ReadFromJsonAsync<DiffgramCommitResponse>(cancellationToken)
+            var body = await response.Content.ReadFromJsonAsync(TransactionSecurityJsonContext.Default.DiffgramCommitResponse, cancellationToken)
                 .ConfigureAwait(false);
             return body ?? SubscriberUnavailable(request);
         }
@@ -216,9 +218,10 @@ public sealed class HttpSubscriberTransactionPubSub : ITransactionPubSub
             using var response = await _http.PostAsJsonAsync(
                     $"mcpserver/subscriber/transactions/{Uri.EscapeDataString(transactionId)}/abort",
                     request,
+                    TransactionSecurityJsonContext.Default.TransactionAbortRequest,
                     cancellationToken)
                 .ConfigureAwait(false);
-            var body = await response.Content.ReadFromJsonAsync<TransactionAbortResponse>(cancellationToken)
+            var body = await response.Content.ReadFromJsonAsync(TransactionSecurityJsonContext.Default.TransactionAbortResponse, cancellationToken)
                 .ConfigureAwait(false);
             return body ?? SubscriberUnavailable(transactionId);
         }
@@ -377,7 +380,7 @@ public sealed class ExternalBrokerTransactionPubSub : ITransactionPubSub
 {
     private const string KindCommit = "commit";
     private const string KindAbort = "abort";
-    private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions SerializerOptions = TransactionSecurityJsonContext.Default.Options;
     private readonly ITransactionPubSubBrokerClient _brokerClient;
     private readonly TransactionPubSubTopicOptions _topics;
     private readonly IReadOnlyList<TransactionPubSubSubscriberOptions> _subscribers;
@@ -456,12 +459,30 @@ public sealed class ExternalBrokerTransactionPubSub : ITransactionPubSub
         }
     }
 
-    private TransactionPubSubEnvelope CreateEnvelope<TRequest>(
+    private static TransactionPubSubEnvelope CreateEnvelope(
         string transactionId,
         string kind,
         string topic,
         string subscriberId,
-        TRequest request)
+        DiffgramCommitRequest request)
+        => CreateEnvelopeCore(transactionId, kind, topic, subscriberId,
+            JsonSerializer.Serialize(request, TransactionSecurityJsonContext.Default.DiffgramCommitRequest));
+
+    private static TransactionPubSubEnvelope CreateEnvelope(
+        string transactionId,
+        string kind,
+        string topic,
+        string subscriberId,
+        TransactionAbortRequest request)
+        => CreateEnvelopeCore(transactionId, kind, topic, subscriberId,
+            JsonSerializer.Serialize(request, TransactionSecurityJsonContext.Default.TransactionAbortRequest));
+
+    private static TransactionPubSubEnvelope CreateEnvelopeCore(
+        string transactionId,
+        string kind,
+        string topic,
+        string subscriberId,
+        string requestJson)
         => new()
         {
             OperationId = $"{topic}:{subscriberId}:{kind}:{transactionId}",
@@ -469,7 +490,7 @@ public sealed class ExternalBrokerTransactionPubSub : ITransactionPubSub
             Kind = kind,
             Topic = topic,
             SubscriberId = subscriberId,
-            RequestJson = JsonSerializer.Serialize(request, SerializerOptions),
+            RequestJson = requestJson,
             CreatedAtUtc = DateTimeOffset.UtcNow,
         };
 
@@ -504,7 +525,7 @@ public sealed class ExternalBrokerTransactionPubSub : ITransactionPubSub
     private static DiffgramCommitResponse CommitResponse(string transactionId, TransactionPubSubAcknowledgement? ack)
     {
         if (!string.IsNullOrWhiteSpace(ack?.ResponseJson) &&
-            JsonSerializer.Deserialize<DiffgramCommitResponse>(ack.ResponseJson, SerializerOptions) is { } response)
+            JsonSerializer.Deserialize(ack.ResponseJson, TransactionSecurityJsonContext.Default.DiffgramCommitResponse) is { } response)
             return response;
 
         return new DiffgramCommitResponse
@@ -519,7 +540,7 @@ public sealed class ExternalBrokerTransactionPubSub : ITransactionPubSub
     private static TransactionAbortResponse AbortResponse(string transactionId, TransactionPubSubAcknowledgement? ack)
     {
         if (!string.IsNullOrWhiteSpace(ack?.ResponseJson) &&
-            JsonSerializer.Deserialize<TransactionAbortResponse>(ack.ResponseJson, SerializerOptions) is { } response)
+            JsonSerializer.Deserialize(ack.ResponseJson, TransactionSecurityJsonContext.Default.TransactionAbortResponse) is { } response)
             return response;
 
         return new TransactionAbortResponse
@@ -566,7 +587,7 @@ public sealed class ExternalBrokerTransactionPubSub : ITransactionPubSub
 /// <summary>Process-backed external broker client that exchanges JSON envelopes over stdin/stdout. FR-MCP-121.</summary>
 public sealed class ProcessTopicTransactionPubSubBrokerClient : ITransactionPubSubBrokerClient
 {
-    private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions SerializerOptions = TransactionSecurityJsonContext.Default.Options;
     private readonly Microsoft.Extensions.Options.IOptionsMonitor<TurnTransactionOptions> _options;
 
     /// <summary>Initializes a new instance of the <see cref="ProcessTopicTransactionPubSubBrokerClient"/> class.</summary>
@@ -601,7 +622,7 @@ public sealed class ProcessTopicTransactionPubSubBrokerClient : ITransactionPubS
                 return Unavailable(envelope);
 
             await process.StandardInput
-                .WriteLineAsync(JsonSerializer.Serialize(envelope, SerializerOptions))
+                .WriteLineAsync(JsonSerializer.Serialize(envelope, TransactionSecurityJsonContext.Default.TransactionPubSubEnvelope))
                 .ConfigureAwait(false);
             process.StandardInput.Close();
 
@@ -611,7 +632,7 @@ public sealed class ProcessTopicTransactionPubSubBrokerClient : ITransactionPubS
             if (string.IsNullOrWhiteSpace(output))
                 return Unavailable(envelope);
 
-            return JsonSerializer.Deserialize<TransactionPubSubAcknowledgement>(output, SerializerOptions)
+            return JsonSerializer.Deserialize(output, TransactionSecurityJsonContext.Default.TransactionPubSubAcknowledgement)
                 ?? Unavailable(envelope);
         }
         catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
@@ -725,7 +746,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
     private const string StatusPending = "pending";
     private const string DefaultTopicName = "mcp.turntransactions";
     private const string DefaultSubscriberId = "all-required";
-    private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions SerializerOptions = TransactionSecurityJsonContext.Default.Options;
     private readonly ITransactionPubSub _inner;
     private readonly ITransactionPubSubBrokerStore _store;
     private readonly TimeSpan _inProgressClaimLease;
@@ -882,7 +903,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
         };
         await _store.MarkCanceledAsync(
                 OperationId(KindCommit, normalizedTransactionId),
-                JsonSerializer.Serialize(response, SerializerOptions),
+                JsonSerializer.Serialize(response, TransactionSecurityJsonContext.Default.DiffgramCommitResponse),
                 reason,
                 cancellationToken)
             .ConfigureAwait(false);
@@ -893,7 +914,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
 
     private async Task<bool> ReplayCommitAsync(TransactionPubSubMessageState message, CancellationToken cancellationToken)
     {
-        var request = JsonSerializer.Deserialize<DiffgramCommitRequest>(message.RequestJson, SerializerOptions);
+        var request = JsonSerializer.Deserialize(message.RequestJson, TransactionSecurityJsonContext.Default.DiffgramCommitRequest);
         if (request is null)
         {
             await _store.MarkAttemptAsync(message.OperationId, TransactionFailureReason.Unknown, cancellationToken)
@@ -908,7 +929,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
 
     private async Task<bool> ReplayAbortAsync(TransactionPubSubMessageState message, CancellationToken cancellationToken)
     {
-        var request = JsonSerializer.Deserialize<TransactionAbortRequest>(message.RequestJson, SerializerOptions);
+        var request = JsonSerializer.Deserialize(message.RequestJson, TransactionSecurityJsonContext.Default.TransactionAbortRequest);
         if (request is null)
         {
             await _store.MarkAttemptAsync(message.OperationId, TransactionFailureReason.Unknown, cancellationToken)
@@ -934,7 +955,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
             {
                 await _store.MarkAcknowledgedAsync(
                         operationId,
-                        JsonSerializer.Serialize(response, SerializerOptions),
+                        JsonSerializer.Serialize(response, TransactionSecurityJsonContext.Default.DiffgramCommitResponse),
                         response.Reason,
                         cancellationToken)
                     .ConfigureAwait(false);
@@ -972,7 +993,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
             {
                 await _store.MarkAcknowledgedAsync(
                         operationId,
-                        JsonSerializer.Serialize(response, SerializerOptions),
+                        JsonSerializer.Serialize(response, TransactionSecurityJsonContext.Default.TransactionAbortResponse),
                         response.Reason,
                         cancellationToken)
                     .ConfigureAwait(false);
@@ -997,11 +1018,27 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
         }
     }
 
-    private TransactionPubSubMessageState CreateMessage<TRequest>(
+    private TransactionPubSubMessageState CreateMessage(
         string operationId,
         string transactionId,
         string kind,
-        TRequest request)
+        DiffgramCommitRequest request)
+        => CreateMessageCore(operationId, transactionId, kind,
+            JsonSerializer.Serialize(request, TransactionSecurityJsonContext.Default.DiffgramCommitRequest));
+
+    private TransactionPubSubMessageState CreateMessage(
+        string operationId,
+        string transactionId,
+        string kind,
+        TransactionAbortRequest request)
+        => CreateMessageCore(operationId, transactionId, kind,
+            JsonSerializer.Serialize(request, TransactionSecurityJsonContext.Default.TransactionAbortRequest));
+
+    private TransactionPubSubMessageState CreateMessageCore(
+        string operationId,
+        string transactionId,
+        string kind,
+        string requestJson)
         => new(
             operationId,
             transactionId,
@@ -1009,7 +1046,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
             _topicName,
             _subscriberId,
             StatusPending,
-            JsonSerializer.Serialize(request, SerializerOptions),
+            requestJson,
             null,
             0,
             TransactionFailureReason.None,
@@ -1034,7 +1071,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
     {
         if (string.Equals(message.Status, StatusAcknowledged, StringComparison.OrdinalIgnoreCase) &&
             !string.IsNullOrWhiteSpace(message.ResponseJson) &&
-            JsonSerializer.Deserialize<DiffgramCommitResponse>(message.ResponseJson, SerializerOptions) is { } acknowledged)
+            JsonSerializer.Deserialize(message.ResponseJson, TransactionSecurityJsonContext.Default.DiffgramCommitResponse) is { } acknowledged)
         {
             response = acknowledged;
             return true;
@@ -1050,7 +1087,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
     {
         if (string.Equals(message.Status, StatusCanceled, StringComparison.OrdinalIgnoreCase) &&
             !string.IsNullOrWhiteSpace(message.ResponseJson) &&
-            JsonSerializer.Deserialize<DiffgramCommitResponse>(message.ResponseJson, SerializerOptions) is { } canceled)
+            JsonSerializer.Deserialize(message.ResponseJson, TransactionSecurityJsonContext.Default.DiffgramCommitResponse) is { } canceled)
         {
             response = canceled;
             return true;
@@ -1066,7 +1103,7 @@ internal sealed class DurableTransactionPubSub : ITransactionPubSub, ITransactio
     {
         if (string.Equals(message.Status, StatusAcknowledged, StringComparison.OrdinalIgnoreCase) &&
             !string.IsNullOrWhiteSpace(message.ResponseJson) &&
-            JsonSerializer.Deserialize<TransactionAbortResponse>(message.ResponseJson, SerializerOptions) is { } acknowledged)
+            JsonSerializer.Deserialize(message.ResponseJson, TransactionSecurityJsonContext.Default.TransactionAbortResponse) is { } acknowledged)
         {
             response = acknowledged;
             return true;

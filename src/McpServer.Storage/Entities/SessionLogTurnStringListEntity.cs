@@ -21,7 +21,7 @@ public sealed class SessionLogTurnStringListEntity
 
     /// <summary>Discriminator identifying which list this item belongs to (DesignDecision, Requirement, FileModified, Blocker).</summary>
     [Required]
-    [MaxLength(32)]
+    [StringLength(32)]
     public required string ListType { get; set; }
 
     /// <summary>Ordinal position within the list.</summary>

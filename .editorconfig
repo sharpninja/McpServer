@@ -173,5 +173,3 @@ csharp_style_expression_bodied_local_functions = false:silent
 
 # Code analysis (CA) rules: AnalysisLevel=9.0-all in Directory.Build.props.
 # TR-QUAL-006: Do not silence analyzer warnings; fix the code instead.
-# TR-QUAL-006 exception: Allow CA1848 suppression.
-dotnet_diagnostic.CA1848.severity = none

@@ -18,7 +18,8 @@ public sealed class VoiceClient : McpClientBase
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
+        TypeInfoResolver = McpClientJsonContext.Default
     };
 
     /// <inheritdoc />
@@ -77,7 +78,7 @@ public sealed class VoiceClient : McpClientBase
             VoiceTurnStreamEvent? evt;
             try
             {
-                evt = JsonSerializer.Deserialize<VoiceTurnStreamEvent>(data, s_jsonOptions);
+                evt = (VoiceTurnStreamEvent?)JsonSerializer.Deserialize(data, s_jsonOptions.GetTypeInfo(typeof(VoiceTurnStreamEvent)));
             }
             catch (JsonException)
             {

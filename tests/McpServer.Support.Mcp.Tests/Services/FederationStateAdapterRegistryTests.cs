@@ -563,14 +563,14 @@ public sealed class FederationStateAdapterRegistryTests
                 Started = DateTimeOffset.Parse("2026-05-22T00:00:00Z"),
                 LastUpdated = DateTimeOffset.Parse("2026-05-22T00:01:00Z"),
                 Turns =
-                [
+                {
                     new SessionLogTurnEntity
                     {
                         WorkspaceId = WorkspacePath,
                         RequestId = "req-delete-replay",
                         Status = "completed",
                         Actions =
-                        [
+                        {
                             new SessionLogActionEntity
                             {
                                 WorkspaceId = WorkspacePath,
@@ -579,17 +579,17 @@ public sealed class FederationStateAdapterRegistryTests
                                 Type = "test",
                                 Status = "completed",
                             },
-                        ],
+                        },
                         Tags =
-                        [
+                        {
                             new SessionLogTurnTagEntity
                             {
                                 WorkspaceId = WorkspacePath,
                                 Tag = "delete-replay",
                             },
-                        ],
+                        },
                     },
-                ],
+                },
             });
         }).ConfigureAwait(true);
         var adapter = ResolveAdapter(provider, "session_log");

@@ -76,7 +76,7 @@ public sealed class WorkspaceProjectionWriter : IWorkspaceProjectionWriter
             var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
             var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
             var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
-            mcp["Workspaces"] = JsonSerializer.SerializeToNode(sanitized, s_jsonOptions);
+            mcp["Workspaces"] = JsonSerializer.SerializeToNode(sanitized, McpServicesJsonContext.Default.ListWorkspaceConfigEntry);
             doc["Mcp"] = mcp;
             await File.WriteAllTextAsync(path, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
         }

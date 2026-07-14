@@ -51,6 +51,22 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
             "references document"];
     }
 
+    public static IEnumerable<object[]> InvalidDocFxWorkflowCases()
+    {
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(id: "docs"), CreateDocFxWorkflow(id: "DOCS")]), "duplicates workflow id"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(executable: " ")]), "executable"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(arguments: [])]), "arguments"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(arguments: ["docfx", " "])]), "arguments"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(platforms: ["desktop"])]), "platform"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(timeoutSeconds: 0)]), "timeout"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(timeoutSeconds: 3601)]), "timeout"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(id: "api-a", targetRoot: "api"), CreateDocFxWorkflow(id: "api-b", targetRoot: "api")]), "duplicate target root"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(workingDirectory: "../outside")]), "workingDirectory"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(outputRoot: "C:/outside/docfx")]), "outputRoot"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: "../api")]), "targetRoot"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: "C:/api")]), "targetRoot"];
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_workspaceRoot))
@@ -192,6 +208,77 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
         Assert.Contains(expectedMessage, ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>TEST-MCP-DOCFXWIKI-001: omitted DocFX configuration is backward compatible.</summary>
+    [Fact]
+    public void Load_WithoutDocFxSection_ReturnsEmptyDocFxWorkflows()
+    {
+        WriteWikiYamlObject(CreateConfig([CreateDocument("home", "Home", "generated:home", "Home.md")], [CreateNavigationDocument("home")]));
+
+        var config = RequirementsWikiExportConfigLoader.Load(_workspaceRoot, CreateOptions());
+
+        Assert.NotNull(config);
+        Assert.Empty(config.DocFxWorkflows);
+    }
+
+    /// <summary>TEST-MCP-DOCFXWIKI-001: valid DocFX workflow config is normalized and retained.</summary>
+    [Fact]
+    public void Load_WithValidDocFxWorkflow_ReturnsNormalizedWorkflow()
+    {
+        Directory.CreateDirectory(Path.Combine(_workspaceRoot, "docs", "docfx"));
+        WriteWikiYamlObject(CreateConfigWithDocFx([CreateDocFxWorkflow(platforms: ["GitHub"])]));
+
+        var config = RequirementsWikiExportConfigLoader.Load(_workspaceRoot, CreateOptions());
+
+        Assert.NotNull(config);
+        var workflow = Assert.Single(config.DocFxWorkflows);
+        Assert.Equal("docs", workflow.Id);
+        Assert.Equal("dotnet", workflow.Executable);
+        Assert.Equal(["docfx", "docfx.json"], workflow.Arguments);
+        Assert.Equal(Path.GetFullPath(Path.Combine(_workspaceRoot, "docs", "docfx")), workflow.WorkingDirectoryPath);
+        Assert.Equal(Path.GetFullPath(Path.Combine(_workspaceRoot, "docs", "docfx", "_site")), workflow.OutputRootPath);
+        Assert.Equal("api", workflow.TargetRoot);
+        Assert.Contains("github", workflow.Platforms, StringComparer.OrdinalIgnoreCase);
+        Assert.DoesNotContain("azure", workflow.Platforms, StringComparer.OrdinalIgnoreCase);
+        Assert.Equal(120, workflow.TimeoutSeconds);
+    }
+
+    /// <summary>TEST-MCP-DOCFXWIKI-001: invalid DocFX workflow config reports actionable validation messages.</summary>
+    [Theory]
+    [MemberData(nameof(InvalidDocFxWorkflowCases))]
+    public void Load_InvalidDocFxWorkflow_ThrowsActionableValidation(Dictionary<string, object?> document, string expectedMessage)
+    {
+        WriteWikiYamlObject(document);
+
+        var ex = Assert.Throws<InvalidOperationException>(() => RequirementsWikiExportConfigLoader.Load(_workspaceRoot, CreateOptions()));
+
+        Assert.Contains(expectedMessage, ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>TEST-MCP-DOCFXWIKI-001: DocFX workflow paths cannot escape the workspace through reparse points.</summary>
+    [Fact]
+    public void Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation()
+    {
+        var outsideRoot = Path.Combine(Path.GetTempPath(), "mcp-docfx-outside-" + Guid.NewGuid().ToString("N"));
+        var linkPath = Path.Combine(_workspaceRoot, "docs", "docfx-link");
+        Directory.CreateDirectory(outsideRoot);
+        try
+        {
+            Directory.CreateSymbolicLink(linkPath, outsideRoot);
+            WriteWikiYamlObject(CreateConfigWithDocFx([CreateDocFxWorkflow(workingDirectory: "docs/docfx-link", outputRoot: "docs/docfx-link/_site")]));
+
+            var ex = Assert.Throws<InvalidOperationException>(() => RequirementsWikiExportConfigLoader.Load(_workspaceRoot, CreateOptions()));
+
+            Assert.Contains("reparse", ex.Message, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (Directory.Exists(linkPath))
+                Directory.Delete(linkPath);
+            if (Directory.Exists(outsideRoot))
+                Directory.Delete(outsideRoot, recursive: true);
+        }
+    }
+
     private RequirementsDocumentService CreateService() =>
         new(Microsoft.Extensions.Options.Options.Create(CreateOptions()), NullLogger<RequirementsDocumentService>.Instance);
 
@@ -221,6 +308,38 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
         if (home is not null)
             config["home"] = home;
         return config;
+    }
+
+    private static Dictionary<string, object?> CreateConfigWithDocFx(IReadOnlyList<Dictionary<string, object?>> workflows)
+    {
+        var config = CreateConfig(
+            [CreateDocument("home", "Home", "generated:home", "Home.md")],
+            [CreateNavigationDocument("home")]);
+        config["docfx"] = new Dictionary<string, object?> { ["workflows"] = workflows };
+        return config;
+    }
+
+    private static Dictionary<string, object?> CreateDocFxWorkflow(
+        string id = "docs",
+        string executable = "dotnet",
+        IReadOnlyList<string>? arguments = null,
+        string workingDirectory = "docs/docfx",
+        string outputRoot = "docs/docfx/_site",
+        string targetRoot = "api",
+        IReadOnlyList<string>? platforms = null,
+        int timeoutSeconds = 120)
+    {
+        return new Dictionary<string, object?>
+        {
+            ["id"] = id,
+            ["executable"] = executable,
+            ["arguments"] = arguments ?? ["docfx", "docfx.json"],
+            ["workingDirectory"] = workingDirectory,
+            ["outputRoot"] = outputRoot,
+            ["targetRoot"] = targetRoot,
+            ["platforms"] = platforms ?? ["github", "azure"],
+            ["timeoutSeconds"] = timeoutSeconds
+        };
     }
 
     private static Dictionary<string, object?> CreateDocument(

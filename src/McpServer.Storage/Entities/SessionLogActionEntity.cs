@@ -25,15 +25,15 @@ public sealed class SessionLogActionEntity
     public string? Description { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Action type (e.g. edit, create, delete).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? Type { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Action status (e.g. completed, failed).</summary>
-    [MaxLength(64)]
+    [StringLength(64)]
     public string? Status { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: File path affected by this action.</summary>
-    [MaxLength(1024)]
+    [StringLength(1024)]
     public string? FilePath { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent entry.</summary>

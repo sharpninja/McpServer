@@ -69,7 +69,7 @@ public sealed class SessionLogServiceTests : IDisposable
         await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-dup"), title: "Updated");
-        dto2.Turns![0].QueryText = "Updated query";
+        dto2.Turns!.First().QueryText = "Updated query";
         var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await _db.SessionLogs.Include(s => s.Turns).FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -227,8 +227,8 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenSubmittingWithTagsAndContextThenMultiValuedEntitiesArePersisted()
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "multi-valued"));
-        dto.Turns![0].Tags = ["csharp", "ef-core"];
-        dto.Turns[0].ContextList = ["src/Program.cs", "docs/README.md"];
+        dto.Turns!.First().Tags = ["csharp", "ef-core"];
+        dto.Turns!.First().ContextList = ["src/Program.cs", "docs/README.md"];
 
         var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -261,7 +261,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var dto = CreateTestDto("ClaudeCode", sessionId);
         dto.Started = null;
         dto.TurnCount = 0;
-        dto.Turns![0].Timestamp = "2026-06-10T15:40:39Z";
+        dto.Turns!.First().Timestamp = "2026-06-10T15:40:39Z";
 
         await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -422,13 +422,13 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields()
     {
         var match = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-match"));
-        match.Turns![0].QueryTitle = "Alpha kickoff";
-        match.Turns[0].Response = "Completed beta rollout";
+        match.Turns!.First().QueryTitle = "Alpha kickoff";
+        match.Turns!.First().Response = "Completed beta rollout";
         await _sut.SubmitAsync(match, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var miss = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-miss"));
-        miss.Turns![0].QueryTitle = "Alpha kickoff";
-        miss.Turns[0].Response = "Completed gamma rollout";
+        miss.Turns!.First().QueryTitle = "Alpha kickoff";
+        miss.Turns!.First().Response = "Completed gamma rollout";
         await _sut.SubmitAsync(miss, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new SessionLogQueryRequest
@@ -468,7 +468,7 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenSubmittingWithInvalidRequestIdFormatThenArgumentExceptionIsThrown()
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "bad-request-id"));
-        dto.Turns![0].RequestId = "bad";
+        dto.Turns!.First().RequestId = "bad";
         await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
     }
 
@@ -498,7 +498,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var dto = CreateTestDto("Cursor", sessionId);
         dto.Started = "2026-03-03T12:49:58.717102-06:00";
         dto.LastUpdated = "2026-03-03T12:50:58.717102-06:00";
-        dto.Turns![0].Timestamp = "2026-03-03T12:50:12.717102-06:00";
+        dto.Turns!.First().Timestamp = "2026-03-03T12:50:12.717102-06:00";
         await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var queried = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -549,8 +549,8 @@ public sealed class SessionLogServiceTests : IDisposable
 
         // Submit with same RequestId but different content
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
-        dto2.Turns![0].QueryText = "Updated query text";
-        dto2.Turns[0].Response = "Updated response";
+        dto2.Turns!.First().QueryText = "Updated query text";
+        dto2.Turns!.First().Response = "Updated response";
         await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var updatedEntry = await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -650,7 +650,7 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenQueryingSessionWithDialogThenDialogIsIncludedInDto()
     {
         var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", "dialog-query"));
-        dto.Turns![0].ProcessingDialog =
+        dto.Turns!.First().ProcessingDialog =
         [
             new ProcessingDialogItemDto { Timestamp = "2026-02-12T10:00:00Z", Role = "model", Content = "Thinking...", Category = "reasoning" }
         ];
@@ -661,8 +661,8 @@ public sealed class SessionLogServiceTests : IDisposable
         var entry = result.Items.First(i => i.SessionId == BuildSessionId("Copilot", "dialog-query")).Turns!.First();
         Assert.NotNull(entry.ProcessingDialog);
         Assert.Single(entry.ProcessingDialog!);
-        Assert.Equal("model", entry.ProcessingDialog![0].Role);
-        Assert.Equal("Thinking...", entry.ProcessingDialog[0].Content);
+        Assert.Equal("model", entry.ProcessingDialog!.First().Role);
+        Assert.Equal("Thinking...", entry.ProcessingDialog!.First().Content);
     }
 
     /// <summary>
@@ -696,21 +696,21 @@ public sealed class SessionLogServiceTests : IDisposable
         var sut = BuildSutWithWorkspaceContext(WorkspacePath);
 
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-children"));
-        dto.Turns![0].Actions =
+        dto.Turns!.First().Actions =
         [
             new UnifiedActionDto { Order = 0, Description = "Edit Program.cs", Type = "edit", Status = "completed", FilePath = "Program.cs" }
         ];
-        dto.Turns[0].Tags = ["csharp", "ef-core"];
-        dto.Turns[0].ContextList = ["docs/README.md"];
-        dto.Turns[0].ProcessingDialog =
+        dto.Turns!.First().Tags = ["csharp", "ef-core"];
+        dto.Turns!.First().ContextList = ["docs/README.md"];
+        dto.Turns!.First().ProcessingDialog =
         [
             new ProcessingDialogItemDto { Role = "model", Content = "thinking", Category = "reasoning" }
         ];
-        dto.Turns[0].Commits =
+        dto.Turns!.First().Commits =
         [
             new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "commit msg", Author = "x", FilesChanged = ["a.cs"] }
         ];
-        dto.Turns[0].FilesModified = ["a.cs"];
+        dto.Turns!.First().FilesModified = ["a.cs"];
 
         var id = await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
@@ -1257,10 +1257,10 @@ public sealed class SessionLogServiceTests : IDisposable
         using (db)
         {
             var dto = CreateTestDto("ClaudeCode", sessionId);
-            dto.Turns![0].Actions = [new UnifiedActionDto { Order = 1, Description = "edit", Type = "edit", Status = "completed", FilePath = "src/a.cs" }];
-            dto.Turns[0].Tags = ["phase0"];
-            dto.Turns[0].Commits = [new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "m" }];
-            dto.Turns[0].DesignDecisions = ["Decision: stamp children from parent."];
+            dto.Turns!.First().Actions = [new UnifiedActionDto { Order = 1, Description = "edit", Type = "edit", Status = "completed", FilePath = "src/a.cs" }];
+            dto.Turns!.First().Tags = ["phase0"];
+            dto.Turns!.First().Commits = [new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "m" }];
+            dto.Turns!.First().DesignDecisions = ["Decision: stamp children from parent."];
             await sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             var richTurn = new UnifiedRequestEntryDto
@@ -1452,8 +1452,8 @@ public sealed class SessionLogServiceTests : IDisposable
         using (db1)
         {
             var dto = CreateTestDto("ClaudeCode", sessionId);
-            dto.Turns![0].Commits = [new SessionLogCommitDto { Sha = "abc", Branch = "main", Message = "m" }];
-            dto.Turns[0].DesignDecisions = ["Decision: repair."];
+            dto.Turns!.First().Commits = [new SessionLogCommitDto { Sha = "abc", Branch = "main", Message = "m" }];
+            dto.Turns!.First().DesignDecisions = ["Decision: repair."];
             await sut1.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 
@@ -1539,9 +1539,9 @@ public sealed class SessionLogServiceTests : IDisposable
         using (db1)
         {
             var full = CreateTestDto("ClaudeCode", sessionId);
-            full.Turns![0].Response = "Original response";
-            full.Turns[0].Interpretation = "Original interpretation";
-            full.Turns[0].DesignDecisions = ["Decision: keep data."];
+            full.Turns!.First().Response = "Original response";
+            full.Turns!.First().Interpretation = "Original interpretation";
+            full.Turns!.First().DesignDecisions = ["Decision: keep data."];
             await sut1.SubmitAsync(full, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         }
 

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using McpServer.TransactionSecurity;
 using McpServer.TransactionSecurity.Options;
 
 namespace McpServer.TransactionSecurity.Services;
@@ -21,6 +22,27 @@ public sealed record SubscriberMessageLogEntry(
     string Reason,
     string? Details,
     DateTimeOffset TimestampUtc);
+
+/// <summary>
+/// Flat Parseable ingestion row for subscriber message log batches.
+/// </summary>
+internal sealed class SubscriberMessageLogPayload
+{
+    /// <summary>UTC timestamp in Parseable-friendly text form.</summary>
+    public string Timestamp { get; set; } = string.Empty;
+
+    /// <summary>Outcome event name.</summary>
+    public string Event { get; set; } = string.Empty;
+
+    /// <summary>Transaction identifier, when present.</summary>
+    public string? TransactionId { get; set; }
+
+    /// <summary>Structured result reason.</summary>
+    public string Reason { get; set; } = string.Empty;
+
+    /// <summary>Optional event detail.</summary>
+    public string? Details { get; set; }
+}
 
 /// <summary>
 /// FR-MCP-SUBLOG-001: High-performance sink for received transaction messages. Implementations MUST be
@@ -77,21 +99,22 @@ public sealed class ParseableSubscriberMessageLog : ISubscriberMessageLog
         ArgumentNullException.ThrowIfNull(entry);
         try
         {
-            var payload = JsonSerializer.Serialize(new[]
+            var payload = new[]
             {
-                new Dictionary<string, object?>
+                new SubscriberMessageLogPayload
                 {
-                    ["timestamp"] = entry.TimestampUtc.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture),
-                    ["event"] = entry.EventName,
-                    ["transactionId"] = entry.TransactionId,
-                    ["reason"] = entry.Reason,
-                    ["details"] = entry.Details,
+                    Timestamp = entry.TimestampUtc.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture),
+                    Event = entry.EventName,
+                    TransactionId = entry.TransactionId,
+                    Reason = entry.Reason,
+                    Details = entry.Details,
                 },
-            });
+            };
+            var payloadJson = JsonSerializer.Serialize(payload, typeof(SubscriberMessageLogPayload[]), TransactionSecurityJsonContext.Default);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _ingestUri)
             {
-                Content = new StringContent(payload, Encoding.UTF8, "application/json"),
+                Content = new StringContent(payloadJson, Encoding.UTF8, "application/json"),
             };
             request.Headers.TryAddWithoutValidation("X-P-Stream", _streamName);
             request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _authValue);

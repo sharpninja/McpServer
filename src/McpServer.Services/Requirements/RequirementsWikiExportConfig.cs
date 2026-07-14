@@ -17,6 +17,8 @@ internal sealed class RequirementsWikiExportConfig
 
     public IReadOnlyList<RequirementsWikiExportNavigationItem> Navigation { get; init; } = [];
 
+    public IReadOnlyList<RequirementsDocFxWorkflow> DocFxWorkflows { get; init; } = [];
+
     public IReadOnlyDictionary<string, RequirementsWikiExportDocument> DocumentsById { get; init; }
         = new Dictionary<string, RequirementsWikiExportDocument>(StringComparer.OrdinalIgnoreCase);
 }
@@ -35,6 +37,32 @@ internal sealed class RequirementsWikiExportDocument
     public string? SourcePath { get; init; }
 
     public IReadOnlySet<string> Platforms { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+    public bool AppliesTo(string platform) => Platforms.Contains(platform);
+}
+
+/// <summary>Configured DocFX workflow entry.</summary>
+internal sealed class RequirementsDocFxWorkflow
+{
+    public required string Id { get; init; }
+
+    public required string Executable { get; init; }
+
+    public IReadOnlyList<string> Arguments { get; init; } = [];
+
+    public required string WorkingDirectory { get; init; }
+
+    public required string WorkingDirectoryPath { get; init; }
+
+    public required string OutputRoot { get; init; }
+
+    public required string OutputRootPath { get; init; }
+
+    public required string TargetRoot { get; init; }
+
+    public IReadOnlySet<string> Platforms { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+    public int TimeoutSeconds { get; init; }
 
     public bool AppliesTo(string platform) => Platforms.Contains(platform);
 }
@@ -129,6 +157,7 @@ internal static class RequirementsWikiExportConfigLoader
         var navigation = ValidateNavigation(file.Navigation, documentMap, errors);
         ValidateHome(file.Home, documentMap, workspaceRoot, errors, out var homeTemplatePath);
         ValidateNavigationCoverage(documentMap, navigation, errors);
+        var docFxWorkflows = ValidateDocFxWorkflows(file.DocFx?.Workflows ?? [], workspaceRoot, errors);
 
         if (errors.Count > 0)
             throw BuildException(errors);
@@ -140,6 +169,7 @@ internal static class RequirementsWikiExportConfigLoader
             HomeTemplatePath = homeTemplatePath,
             Documents = documents,
             Navigation = navigation,
+            DocFxWorkflows = docFxWorkflows,
             DocumentsById = documentMap
         };
     }
@@ -208,6 +238,94 @@ internal static class RequirementsWikiExportConfigLoader
         }
 
         return documents;
+    }
+
+    private static IReadOnlyList<RequirementsDocFxWorkflow> ValidateDocFxWorkflows(
+        IReadOnlyList<WikiDocFxWorkflow> rawWorkflows,
+        string workspaceRoot,
+        ICollection<string> errors)
+    {
+        var workflows = new List<RequirementsDocFxWorkflow>(rawWorkflows.Count);
+        var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var targetRootsByPlatform = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        for (var index = 0; index < rawWorkflows.Count; index++)
+        {
+            var raw = rawWorkflows[index];
+            var label = $"docfx.workflows[{index}]";
+            var id = raw.Id?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(id))
+                errors.Add($"{label}.id is required.");
+            else if (!ids.Add(id))
+                errors.Add($"{label}.id duplicates workflow id '{raw.Id}'.");
+
+            var executable = raw.Executable?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(executable))
+                errors.Add($"{label}.executable is required.");
+
+            var arguments = NormalizeArguments(raw.Arguments, $"{label}.arguments", errors);
+            var platforms = NormalizePlatforms(raw.Platforms, $"{label}.platforms", errors);
+            var workingDirectoryPath = ResolveWorkspaceDirectoryPath(workspaceRoot, raw.WorkingDirectory, $"{label}.workingDirectory", errors, out var workingDirectory);
+            var outputRootPath = ResolveWorkspaceDirectoryPath(workspaceRoot, raw.OutputRoot, $"{label}.outputRoot", errors, out var outputRoot);
+            var targetRoot = NormalizeSectionPath(raw.TargetRoot, $"{label}.targetRoot", errors);
+            foreach (var platform in platforms)
+            {
+                if (!string.IsNullOrWhiteSpace(targetRoot) && !targetRootsByPlatform.Add(platform + ":" + targetRoot))
+                    errors.Add($"{label}.targetRoot duplicate target root '{targetRoot}' for platform '{platform}'.");
+            }
+
+            if (raw.TimeoutSeconds is < 1 or > 3600)
+                errors.Add($"{label}.timeoutSeconds must be between 1 and 3600.");
+
+            if (!string.IsNullOrWhiteSpace(id)
+                && !string.IsNullOrWhiteSpace(executable)
+                && arguments.Count > 0
+                && workingDirectoryPath is not null
+                && outputRootPath is not null
+                && targetRoot is not null
+                && raw.TimeoutSeconds is >= 1 and <= 3600)
+            {
+                workflows.Add(new RequirementsDocFxWorkflow
+                {
+                    Id = id,
+                    Executable = executable,
+                    Arguments = arguments,
+                    WorkingDirectory = workingDirectory!,
+                    WorkingDirectoryPath = workingDirectoryPath,
+                    OutputRoot = outputRoot!,
+                    OutputRootPath = outputRootPath,
+                    TargetRoot = targetRoot,
+                    Platforms = platforms,
+                    TimeoutSeconds = raw.TimeoutSeconds
+                });
+            }
+        }
+
+        return workflows;
+    }
+
+    private static IReadOnlyList<string> NormalizeArguments(IReadOnlyList<string> arguments, string label, ICollection<string> errors)
+    {
+        if (arguments.Count == 0)
+        {
+            errors.Add($"{label} must contain at least one argument.");
+            return [];
+        }
+
+        var normalized = new List<string>(arguments.Count);
+        for (var index = 0; index < arguments.Count; index++)
+        {
+            var argument = arguments[index];
+            if (string.IsNullOrWhiteSpace(argument))
+            {
+                errors.Add($"{label}[{index}] must not be empty.");
+                continue;
+            }
+
+            normalized.Add(argument);
+        }
+
+        return normalized;
     }
 
     private static IReadOnlyList<RequirementsWikiExportNavigationItem> ValidateNavigation(
@@ -384,22 +502,42 @@ internal static class RequirementsWikiExportConfigLoader
         if (normalized is null)
             return null;
 
-        var root = Path.GetFullPath(workspaceRoot);
-        var fullPath = Path.GetFullPath(Path.Combine(root, normalized));
-        var rootWithSeparator = root.EndsWith(Path.DirectorySeparatorChar)
-            ? root
-            : root + Path.DirectorySeparatorChar;
-        if (!fullPath.StartsWith(rootWithSeparator, StringComparison.OrdinalIgnoreCase))
-        {
-            errors.Add($"{label} escapes the workspace root.");
+        var fullPath = ResolveWorkspaceContainedPath(workspaceRoot, normalized, label, errors);
+        if (fullPath is null)
             return null;
-        }
 
         if (!File.Exists(fullPath))
             errors.Add($"{label} source file '{normalized}' does not exist.");
 
         return fullPath;
     }
+
+    private static string? ResolveWorkspaceDirectoryPath(
+        string workspaceRoot,
+        string? relativePath,
+        string label,
+        ICollection<string> errors,
+        out string? normalized)
+    {
+        normalized = NormalizeSectionPath(relativePath, label, errors);
+        if (normalized is null)
+            return null;
+
+        return ResolveWorkspaceContainedPath(workspaceRoot, normalized, label, errors);
+    }
+
+    private static string? ResolveWorkspaceContainedPath(
+        string workspaceRoot,
+        string normalizedRelativePath,
+        string label,
+        ICollection<string> errors)
+        => RequirementsWikiPathSecurity.ResolveWorkspaceContainedPath(workspaceRoot, normalizedRelativePath, label, errors);
+
+    private static bool EscapesWorkspaceThroughReparsePoint(string workspaceRoot, string fullPath)
+        => RequirementsWikiPathSecurity.EscapesWorkspaceThroughReparsePoint(workspaceRoot, fullPath);
+
+    private static string EnsureTrailingSeparator(string path)
+        => RequirementsWikiPathSecurity.EnsureTrailingSeparator(path);
 
     private static string ResolveWorkspaceRoot(string? workspaceRoot, RequirementsOptions options)
     {
@@ -436,6 +574,8 @@ internal static class RequirementsWikiExportConfigLoader
     {
         public string? Schema { get; set; }
         public WikiHome? Home { get; set; }
+        [YamlMember(Alias = "docfx")]
+        public WikiDocFx? DocFx { get; set; }
         public List<WikiDocument> Documents { get; set; } = [];
         public List<WikiNavigationItem> Navigation { get; set; } = [];
     }
@@ -444,6 +584,23 @@ internal static class RequirementsWikiExportConfigLoader
     {
         public string? Document { get; set; }
         public string? Template { get; set; }
+    }
+
+    private sealed class WikiDocFx
+    {
+        public List<WikiDocFxWorkflow> Workflows { get; set; } = [];
+    }
+
+    private sealed class WikiDocFxWorkflow
+    {
+        public string? Id { get; set; }
+        public string? Executable { get; set; }
+        public List<string> Arguments { get; set; } = [];
+        public string? WorkingDirectory { get; set; }
+        public string? OutputRoot { get; set; }
+        public string? TargetRoot { get; set; }
+        public List<string> Platforms { get; set; } = [];
+        public int TimeoutSeconds { get; set; } = 120;
     }
 
     private sealed class WikiDocument

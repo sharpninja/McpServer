@@ -16,6 +16,5 @@ public sealed class PairingOptions
     /// Users permitted to authenticate at <c>/pair</c> to view the API key.
     /// Empty list disables the pairing page.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "Options binding")]
-    public List<PairingUser> PairingUsers { get; set; } = [];
+    public List<PairingUser> PairingUsers { get; } = [];
 }

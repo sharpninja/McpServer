@@ -1116,6 +1116,19 @@ Regression tests SHALL verify all plugin batch requirement methods accept uninde
 
 
 
+## TEST-MCP-DOCFXWIKI
+
+### TEST-MCP-DOCFXWIKI-001
+
+Tests must prove typed DocFX configuration, isolated process execution, secure artifact mapping, backward compatibility, and GitHub/Azure wiki output integration.
+
+**Acceptance Criteria:**
+- [ ] Mock-backed unit tests cover configuration defaults, validation, process requests, platform filtering, staging, manifest inclusion, and failure cleanup.
+- [ ] A real DocFX scratch-workspace test generates content and verifies both GitHub and Azure output trees.
+- [ ] Traversal, absolute external paths, reparse escapes, duplicate targets, timeout, non-zero exit, and missing output are covered.
+- [ ] The current-plus-prior gate reports zero failures and zero skips.
+
+
 ## TEST-MCP-FILETOOLS
 
 ### TEST-MCP-FILETOOLS-001
@@ -1345,6 +1358,20 @@ Automated PowerShell runtime and plugin parity tests SHALL cover dictionary-back
 - [ ] A red test reproduces the documented appendDialog silent no-op with ConvertFrom-Yaml dictionary output.
 - [ ] Tests prove multi-item delegation and fail-closed empty payload behavior.
 - [ ] Canonical and propagated plugin suites complete with zero failures and zero skips.
+
+
+## TEST-MCP-PLUGININT
+
+### TEST-MCP-PLUGININT-001
+
+A shared deterministic Theory and companion AiTheory matrix must exercise the real Session Log workflow for all supported agent plugins.
+
+**Acceptance Criteria:**
+- [ ] Exactly eight scenario rows cover Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode.
+- [ ] Every deterministic row proves bootstrap, begin, append action/dialog, complete, durable query, and workspace cache isolation.
+- [ ] Every AiTheory row receives the persisted receipt/artifact and returns a strict semantic completeness result that is asserted by the test.
+- [ ] A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path.
+- [ ] The focused target and each plugin native suite complete with zero failures and zero skips.
 
 
 ## TEST-MCP-QBAGENT
@@ -1671,8 +1698,12 @@ Given a marker whose HMAC payload is signed with LF-only (`\n`) line endings (ma
 
 ### TEST-MCP-REPL-018
 
-✅ **Complete** - Given orchestration rules for trust and auth, when workflows execute, then trust-before-auth and nonce-validation rules are enforced. **Covered by:** `OrchestrationRulesTests`, `TrustBootstrapFlowTests`
+Tests must verify canonical agent keying, explicit --agent propagation, absence of production AgentOverride leakage, and named-agent child process launch behavior.
 
+**Acceptance Criteria:**
+- [x] Canonicalization theory covers Codex, ClaudeCode, GrokCode, and OpenCode-style names. (evidence: tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+- [x] Resolver test proves cache record agent key is canonical and AgentOverride remains unset after production resolution. (evidence: tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
+- [x] Child process helper test proves --agent and the named value are present in the launched REPL argument list. (evidence: tests/McpServer.Repl.IntegrationTests/ReplChildProcessHelper.cs; tests/McpServer.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs)
 
 ### TEST-MCP-REPL-019
 
@@ -1829,6 +1860,19 @@ In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) p
 
 
 
+## TEST-MCP-SESSIONLOGSAN
+
+### TEST-MCP-SESSIONLOGSAN-001
+
+Tests must prove default and configured redaction across the complete session-log DTO graph and all supported read transports without changing persisted raw data or query semantics.
+
+**Acceptance Criteria:**
+- [ ] Unit tests cover every default detector, overlapping rules, deterministic replacements, recursive object payloads, invalid patterns, duplicate IDs, timeouts, and non-mutation.
+- [ ] Service tests cover QueryAsync and GetAsync for every DTO field and preserve total count, ordering, offset, and limit.
+- [ ] HTTP, stdio, and federated integration tests return redacted payloads while direct database verification retains raw values.
+- [ ] Executed current-plus-prior test scope reports zero failures and zero skips.
+
+
 ## TEST-MCP-SUBLOG
 
 ### TEST-MCP-SUBLOG-001
@@ -1951,6 +1995,16 @@ End-to-end plugin tests verify Claude, Codex, and Grok plugin packages do not ex
 **Acceptance Criteria:**
 - [x] Claude, Codex, and Grok plugin packages expose no transcript ingestion skill, helper, or endpoint shortcut. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: clean plugin Pester TEST-MCP-TRANSCRIPT-010 endpoint absence.)
 - [x] Representative model sessions can write turns, actions, and completions through workflow.sessionlog without automatic transcript import. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: clean plugin Pester model-authored logging checks; live Codex turn req-20260711T022759Z-prompt-c4f0. External-client sampling remains the separate deployment TODO gate.)
+
+### TEST-MCP-TRANSCRIPT-011
+
+Codex transcript adapter coverage for real rollout record classes (validates TR-MCP-TRANSCRIPT-002 and TR-MCP-TRANSCRIPT-003). Unit tests in tests/McpServer.Support.Mcp.Tests/Ingestion/CodexTranscriptAdapterCoverageTests.cs verify: function_call and custom_tool_call records normalize to assistant tool-call events with call_id/name/status metadata; function_call_output and custom_tool_call_output records normalize to tool-role events preserving output text and call pairing; reasoning records with recoverable summary text normalize to assistant reasoning events while encrypted-only reasoning is skipped and reported through one aggregate info diagnostic (codex_encrypted_reasoning); event_msg records are skipped as UI mirrors of response_item records with one aggregate info diagnostic (codex_event_msg_skipped) and no warnings; turn_context records contribute session model and workspace path without diagnostics; world_state and compacted records are skipped with one aggregate info diagnostic (codex_nonconversation_skipped); unknown top-level record types and unknown response_item payload types warn once per distinct type with occurrence counts (codex_unknown_record, codex_unknown_response_item). Evidence 2026-07-14: 9/9 tests red against prior adapter, green after fix; real 2599-line rollout normalizes to 1174 events with 0 warnings (previously 166 events with 2432 warnings).
+
+
+### TEST-MCP-TRANSCRIPT-012
+
+Imported-session lifecycle semantics (validates TR-MCP-TRANSCRIPT-004). Unit tests in tests/McpServer.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs and SessionLogResubmissionReviveTests.cs verify: turn-level keyed operations (DeleteTurnAsync, ReplaceTurnSectionAsync, DeleteTurnItemAsync) accept provider-native identifiers persisted by transcript imports (UUID session ids, tool-call request ids) so turns can be repaired by resubmission; DeleteSessionAsync remains canonical-only by policy, rejecting imported session ids (sessions are soft-delete only and never deletable for imports); SubmitAsync revives a soft-deleted session that still holds the unique (WorkspaceId, SourceType, SessionId) key by restoring its row graph (session, turns, child rows) with only the SoftDelete named query filter bypassed (Workspace tenancy filter stays active) and then applying the resubmitted turn data; whitespace identifiers stay rejected. Evidence 2026-07-14: revive tests red with InvalidOperationException (disappeared after UNIQUE constraint failure) before fix, 7/7 green after; full suite green (build.ps1 Test exit 0); live recovery of session 019f2580-48c8-7912-b6a9-27f61b18d0d3 in F:\GitHub\MouseKeyProxy from tombstone to 1174 corrected turns via re-ingest plus 28 turn-level deletes of stale duplicates.
+
 
 
 ## TEST-MCP-TRIAGE

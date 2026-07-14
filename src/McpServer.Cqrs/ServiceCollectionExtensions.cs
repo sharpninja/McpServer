@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -45,6 +46,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">The service collection.</param>
     /// <param name="assemblies">The assemblies to scan for handlers.</param>
     /// <returns>The service collection for chaining.</returns>
+    [RequiresUnreferencedCode("CQRS handler assembly scanning uses reflection over runtime types. Trimmed apps should register handlers explicitly.")]
     public static IServiceCollection AddCqrsHandlers(this IServiceCollection services, params Assembly[] assemblies)
     {
         foreach (var assembly in assemblies)
@@ -75,7 +77,7 @@ public static class ServiceCollectionExtensions
     /// <typeparam name="TBehavior">The behavior type implementing <see cref="IPipelineBehavior"/>.</typeparam>
     /// <param name="services">The service collection.</param>
     /// <returns>The service collection for chaining.</returns>
-    public static IServiceCollection AddCqrsBehavior<TBehavior>(this IServiceCollection services)
+    public static IServiceCollection AddCqrsBehavior<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TBehavior>(this IServiceCollection services)
         where TBehavior : class, IPipelineBehavior
     {
         services.AddTransient<IPipelineBehavior, TBehavior>();
@@ -88,6 +90,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">The service collection.</param>
     /// <param name="handlerAssemblies">Assemblies to scan for command/query handlers.</param>
     /// <returns>The service collection for chaining.</returns>
+    [RequiresUnreferencedCode("CQRS handler assembly scanning uses reflection over runtime types. Trimmed apps should register handlers explicitly.")]
     public static IServiceCollection AddCqrs(this IServiceCollection services, params Assembly[] handlerAssemblies)
     {
         services.AddCqrsDispatcher();

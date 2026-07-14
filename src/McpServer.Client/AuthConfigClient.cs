@@ -15,7 +15,7 @@ namespace McpServer.Client;
 /// </summary>
 public sealed class AuthConfigClient : McpClientBase
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = McpClientJsonContext.Default };
 
     private readonly HttpClient _http;
     private readonly string _scheme;
@@ -45,7 +45,7 @@ public sealed class AuthConfigClient : McpClientBase
         using var response = await _http.GetAsync(uri, cancellationToken);
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync(cancellationToken);
-        return JsonSerializer.Deserialize<AuthConfigResponse>(json, s_jsonOptions)!;
+        return (AuthConfigResponse)JsonSerializer.Deserialize(json, s_jsonOptions.GetTypeInfo(typeof(AuthConfigResponse)))!;
     }
 
     /// <summary>
@@ -118,8 +118,8 @@ public sealed class AuthConfigClient : McpClientBase
                 (int)response.StatusCode);
         }
 
-        return JsonSerializer.Deserialize<T>(content, s_jsonOptions)
-            ?? throw new McpServerException("Response deserialized to null.", (int)response.StatusCode);
+        return (T)(JsonSerializer.Deserialize(content, s_jsonOptions.GetTypeInfo(typeof(T)))
+            ?? throw new McpServerException("Response deserialized to null.", (int)response.StatusCode));
     }
 
     private static IEnumerable<KeyValuePair<string, string>> RemoveBlankFields(IEnumerable<KeyValuePair<string, string?>> fields)

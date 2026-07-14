@@ -42,11 +42,6 @@ namespace McpServer.Repl.Core;
 /// </remarks>
 public sealed class SessionLogWorkflow : ISessionLogWorkflow
 {
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
-    {
-        PropertyNameCaseInsensitive = true
-    };
-
     private readonly ISessionLogClientAdapter _client;
     private readonly TimeProvider _timeProvider;
     private readonly SemaphoreSlim _lock = new(1, 1);
@@ -420,8 +415,8 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
 
     private static UnifiedSessionLogDto CloneSession(UnifiedSessionLogDto sessionLog)
     {
-        var json = JsonSerializer.Serialize(sessionLog, JsonOptions);
-        return JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, JsonOptions)
+        var json = JsonSerializer.Serialize(sessionLog, ReplCoreJsonContext.Default.UnifiedSessionLogDto);
+        return JsonSerializer.Deserialize(json, ReplCoreJsonContext.Default.UnifiedSessionLogDto)
             ?? throw new InvalidOperationException("Unable to clone session log.");
     }
 
@@ -500,8 +495,8 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
 
     private static UnifiedRequestEntryDto CloneTurn(UnifiedRequestEntryDto turn)
     {
-        var json = JsonSerializer.Serialize(turn, JsonOptions);
-        return JsonSerializer.Deserialize<UnifiedRequestEntryDto>(json, JsonOptions)
+        var json = JsonSerializer.Serialize(turn, ReplCoreJsonContext.Default.UnifiedRequestEntryDto);
+        return JsonSerializer.Deserialize(json, ReplCoreJsonContext.Default.UnifiedRequestEntryDto)
             ?? throw new InvalidOperationException("Unable to clone session turn.");
     }
 

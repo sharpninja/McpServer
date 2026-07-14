@@ -154,6 +154,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private readonly ILogger<RequirementsDatabaseDocumentService> _logger;
     private readonly IHttpContextAccessor? _httpContextAccessor;
     private readonly IChangeEventBus? _eventBus;
+    private readonly IRequirementsWikiExportOrchestrator _wikiExportOrchestrator;
     private readonly SemaphoreSlim _writeLock = new(1, 1);
 
     /// <summary>Initializes a new DB-backed requirements service.</summary>
@@ -162,13 +163,16 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         IOptions<RequirementsOptions> options,
         ILogger<RequirementsDatabaseDocumentService> logger,
         IHttpContextAccessor? httpContextAccessor = null,
-        IChangeEventBus? eventBus = null)
+        IChangeEventBus? eventBus = null,
+        IRequirementsWikiExportOrchestrator? wikiExportOrchestrator = null)
     {
         _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _httpContextAccessor = httpContextAccessor;
         _eventBus = eventBus;
+        _wikiExportOrchestrator = wikiExportOrchestrator
+            ?? new RequirementsWikiExportOrchestrator(new DisabledRequirementsDocFxWorkflowRunner());
     }
 
     /// <inheritdoc />
@@ -1002,16 +1006,17 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var mapping = await GetAllMappingsAsync(ct).ConfigureAwait(false);
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var config = RequirementsWikiExportConfigLoader.Load(TryGetRequestWorkspacePath(), _options);
-        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(fr, tr, test, mapping, generated, ReadExistingMatrixForWikiExport(outputRootPath), config);
-        return await RequirementsDocumentExportWriter.WriteAsync(
+        var request = new RequirementsWikiExportRequest(
             outputRootPath,
-            "wiki",
-            "all",
             generated,
-            documents,
-            [RequirementsWikiDocumentRenderer.AzureFolder, RequirementsWikiDocumentRenderer.GitHubFolder],
-            ct).ConfigureAwait(false);
+            TryGetRequestWorkspacePath(),
+            _options,
+            fr,
+            tr,
+            test,
+            mapping,
+            ReadExistingMatrixForWikiExport(outputRootPath));
+        return await _wikiExportOrchestrator.ExportAsync(request, ct).ConfigureAwait(false);
     }
 
     private async Task AddRequirementAsync(

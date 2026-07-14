@@ -387,14 +387,14 @@ public sealed class AgentService : IAgentService
                 {
                     AgentId = agentId,
                     EventType = AgentEventType.Launch,
-                    Details = JsonSerializer.Serialize(new
-                    {
-                        command = resolvedCommand,
-                        branchName,
-                        workDirectory,
-                        isolation = isolationStrategy.StrategyName,
-                        branchStrategy = branchStrategy.StrategyName,
-                    })
+                    Details = JsonSerializer.Serialize(
+                        new AgentLaunchEventDetails(
+                            resolvedCommand,
+                            branchName,
+                            workDirectory,
+                            isolationStrategy.StrategyName,
+                            branchStrategy.StrategyName),
+                        McpServicesJsonContext.Default.AgentLaunchEventDetails)
                 },
                 userId: null,
                 ct).ConfigureAwait(false);
@@ -439,12 +439,9 @@ public sealed class AgentService : IAgentService
             {
                 AgentId = agentId,
                 EventType = AgentEventType.Exit,
-                Details = JsonSerializer.Serialize(new
-                {
-                    workDirectory,
-                    exitCode = status?.ExitCode,
-                    status = status?.Status,
-                })
+                Details = JsonSerializer.Serialize(
+                    new AgentExitEventDetails(workDirectory, status?.ExitCode, status?.Status),
+                    McpServicesJsonContext.Default.AgentExitEventDetails)
             },
             userId: null,
             ct).ConfigureAwait(false);
@@ -647,3 +644,15 @@ public sealed class AgentService : IAgentService
         return entity ?? throw new InvalidOperationException($"Agent '{agentId}' is not configured for workspace '{workspacePath}'.");
     }
 }
+
+internal sealed record AgentLaunchEventDetails(
+    string Command,
+    string? BranchName,
+    string WorkDirectory,
+    string Isolation,
+    string BranchStrategy);
+
+internal sealed record AgentExitEventDetails(
+    string WorkDirectory,
+    int? ExitCode,
+    AgentProcessStatus? Status);

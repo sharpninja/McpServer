@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace McpServer.Common.AgentCli;
@@ -20,7 +21,8 @@ public static class ContentParser
         {
             try
             {
-                return JsonSerializer.Deserialize<JsonElement>(trimmed, s_jsonOptions);
+                using var document = JsonDocument.Parse(trimmed);
+                return document.RootElement.Clone();
             }
             catch (JsonException ex)
             {
@@ -32,6 +34,7 @@ public static class ContentParser
     }
 
     /// <summary>Attempt to parse text as JSON and deserialize to <typeparamref name="T"/>.</summary>
+    [RequiresUnreferencedCode("Generic CLI output parsing requires runtime serializer metadata for arbitrary caller-supplied types.")]
     public static T? TryParseJson<T>(string text)
     {
         ArgumentNullException.ThrowIfNull(text);
@@ -137,6 +140,7 @@ public static class ContentParser
     }
 
     /// <summary>Detect content type and deserialize as <typeparamref name="T"/>.</summary>
+    [RequiresUnreferencedCode("Generic CLI output parsing requires runtime serializer metadata for arbitrary caller-supplied types.")]
     public static (AgentCliContentType ContentType, T? Parsed) DetectAndParse<T>(string text)
     {
         var typed = TryParseJson<T>(text);

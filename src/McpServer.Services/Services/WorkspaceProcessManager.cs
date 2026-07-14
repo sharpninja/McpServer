@@ -291,7 +291,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
                 return (null, null);
             }
 
-            var info = await response.Content.ReadFromJsonAsync<FederationConnectionResult>(ct).ConfigureAwait(false);
+            var info = await response.Content
+                .ReadFromJsonAsync(McpServicesJsonContext.Default.FederationConnectionResult, ct)
+                .ConfigureAwait(false);
             if (info is null || string.IsNullOrWhiteSpace(info.ApiKey))
             {
                 _logger.LogWarning(

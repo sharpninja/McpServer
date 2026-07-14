@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace McpServer.Cqrs;
 
 /// <summary>
@@ -13,6 +15,7 @@ public interface IDispatcher
     /// <param name="command">The command to dispatch.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The handler result.</returns>
+    [RequiresUnreferencedCode("CQRS reflection dispatch builds closed handler types at runtime. Trimmed apps should call explicitly registered handlers or provide a generated dispatcher.")]
     Task<Result<TResult>> SendAsync<TResult>(ICommand<TResult> command, CancellationToken ct = default);
 
     /// <summary>
@@ -22,5 +25,6 @@ public interface IDispatcher
     /// <param name="query">The query to dispatch.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The handler result.</returns>
+    [RequiresUnreferencedCode("CQRS reflection dispatch builds closed handler types at runtime. Trimmed apps should call explicitly registered handlers or provide a generated dispatcher.")]
     Task<Result<TResult>> QueryAsync<TResult>(IQuery<TResult> query, CancellationToken ct = default);
 }

@@ -102,15 +102,29 @@ is no ambiguity between "field absent" and "clear this field".
 | `PUT` | section | **Replace one section.** Only the named section is rewritten from the payload; an empty/omitted property clears it. Other sections untouched. |
 | `DELETE` | section | Clear all items in one section. |
 | `DELETE` | section item | Remove a single item from a section. |
-| `DELETE` | turn | Remove a turn and all its child rows (the session is preserved). |
-| `DELETE` | session | Remove a session and every turn beneath it. |
+| `DELETE` | turn | Soft-delete a turn and all its child rows (the session is preserved). |
+| `DELETE` | session | Soft-delete a session and every turn beneath it. Canonical session ids only; imported provider-native ids are rejected. |
 
 `PUT` and `DELETE` are **correction operations**: unlike the append-only
-lifecycle, they intentionally rewrite or remove recorded data, including on
-turns already marked `completed`/`failed`. Use them to fix a mis-logged turn or
-purge data, not as part of normal turn flow. The terminal-turn compliance gate
+lifecycle, they intentionally rewrite or hide recorded data, including on
+turns already marked `completed`/`failed`. Use them to fix a mis-logged turn,
+not as part of normal turn flow. The terminal-turn compliance gate
 (at least one decision/action/commit) still applies to a `PUT` that sets a
 terminal status, but not to section/item/whole-turn `DELETE`.
+
+Every `DELETE` is a **soft delete**: rows are tombstoned with deletion
+metadata, never physically removed, and the tombstoned session still holds the
+unique `(workspace, sourceType, sessionId)` key. Resubmitting a session with
+the same key (for example re-running a transcript import) revives the
+tombstoned session graph and applies the resubmitted data. To repair wrong
+turn content, resubmit the turns with correct data or use the turn-level
+operations; do not route repairs through session delete.
+
+Imported transcript sessions carry provider-native identifiers (UUID session
+ids, tool-call request ids). The turn-level operations (`PUT`/`DELETE` on
+turns, sections, and items) accept those identifiers so imported turns stay
+repairable; session `DELETE` validates the canonical id format and therefore
+never targets an imported session.
 
 ### Sections
 

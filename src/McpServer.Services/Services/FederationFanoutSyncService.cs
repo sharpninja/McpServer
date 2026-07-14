@@ -86,7 +86,7 @@ public sealed class FederationFanoutSyncService : BackgroundService
 
         using var client = CreateHubClient();
         var syncUri = $"{_registry.HubBaseUrl}/mcpserver/federation/sync?proxyId={Uri.EscapeDataString(_registry.ProxyId)}&afterSequence={_lastSequence}";
-        var items = await client.GetFromJsonAsync<IReadOnlyList<FederationSyncItem>>(syncUri, cancellationToken)
+        var items = await client.GetFromJsonAsync(syncUri, McpServicesJsonContext.Default.ListFederationSyncItem, cancellationToken)
             .ConfigureAwait(false) ?? [];
 
         foreach (var item in items.OrderBy(i => i.Sequence))
@@ -208,9 +208,7 @@ public sealed class FederationFanoutSyncService : BackgroundService
         try
         {
             var json = Encoding.UTF8.GetString(Convert.FromBase64String(operation.BodyBase64));
-            request = JsonSerializer.Deserialize<FederationLocalExecutionRequest>(
-                    json,
-                    new JsonSerializerOptions(JsonSerializerDefaults.Web))
+            request = JsonSerializer.Deserialize(json, McpServicesJsonContext.Default.FederationLocalExecutionRequest)
                 ?? new FederationLocalExecutionRequest();
             return true;
         }
@@ -246,6 +244,7 @@ public sealed class FederationFanoutSyncService : BackgroundService
                     HubVersion = item.HubVersion,
                     Error = error,
                 },
+                McpServicesJsonContext.Default.FederationSyncAckRequest,
                 cancellationToken)
             .ConfigureAwait(false);
         response.EnsureSuccessStatusCode();

@@ -9,3 +9,18 @@
   - [Requirements Matrix](Requirements-Matrix)
 - Case Studies
   - [Triage Plugin Code Quality Case Study](Case-Studies/Triage-Plugin-Code-Quality-Case-Study)
+- User Guides
+  - [User Guide](User-Guide)
+  - [FAQ](FAQ)
+  - [Client Integration](Client-Integration)
+  - [REPL User Guide](REPL-User-Guide)
+  - [REPL Agent Guide](REPL-Agent-Guide)
+  - [REPL Migration Guide](REPL-Migration-Guide)
+- Architecture
+  - [MCP Server Operations Guide](MCP-Server-Operations)
+  - [QuadBrain Architecture](QuadBrain)
+  - [QBAgent](QBAgent)
+  - [Agent Plugin Availability](Agent-Plugin-Availability)
+  - [Agent Plugin Feature Matrix](Agent-Plugin-Feature-Matrix)
+- Process
+  - [Byrd Development Process v4](Byrd-Development-Process)

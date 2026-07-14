@@ -626,7 +626,8 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
     }
 
     private static SessionLogEntity CloneSession(SessionLogEntity source)
-        => new()
+    {
+        var clone = new SessionLogEntity
         {
             WorkspaceId = source.WorkspaceId,
             SourceType = source.SourceType,
@@ -651,11 +652,15 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
             Branch = source.Branch,
             SourceFilePath = source.SourceFilePath,
             ContentHash = source.ContentHash,
-            Turns = source.Turns.OrderBy(turn => turn.Id).Select(CloneTurn).ToList(),
         };
 
+        AddRange(clone.Turns, source.Turns.OrderBy(turn => turn.Id).Select(CloneTurn));
+        return clone;
+    }
+
     private static SessionLogTurnEntity CloneTurn(SessionLogTurnEntity source)
-        => new()
+    {
+        var clone = new SessionLogTurnEntity
         {
             WorkspaceId = source.WorkspaceId,
             RequestId = source.RequestId,
@@ -673,13 +678,22 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
             IsPremium = source.IsPremium,
             RawContextJson = source.RawContextJson,
             OriginalEntryJson = source.OriginalEntryJson,
-            Actions = source.Actions.OrderBy(action => action.Order).Select(CloneAction).ToList(),
-            Tags = source.Tags.Select(CloneTag).ToList(),
-            ContextItems = source.ContextItems.OrderBy(context => context.Ordinal).Select(CloneContext).ToList(),
-            ProcessingDialog = source.ProcessingDialog.OrderBy(dialog => dialog.Ordinal).Select(CloneDialog).ToList(),
-            Commits = source.Commits.OrderBy(commit => commit.Ordinal).Select(CloneCommit).ToList(),
-            StringListItems = source.StringListItems.OrderBy(item => item.Ordinal).Select(CloneStringListItem).ToList(),
         };
+
+        AddRange(clone.Actions, source.Actions.OrderBy(action => action.Order).Select(CloneAction));
+        AddRange(clone.Tags, source.Tags.Select(CloneTag));
+        AddRange(clone.ContextItems, source.ContextItems.OrderBy(context => context.Ordinal).Select(CloneContext));
+        AddRange(clone.ProcessingDialog, source.ProcessingDialog.OrderBy(dialog => dialog.Ordinal).Select(CloneDialog));
+        AddRange(clone.Commits, source.Commits.OrderBy(commit => commit.Ordinal).Select(CloneCommit));
+        AddRange(clone.StringListItems, source.StringListItems.OrderBy(item => item.Ordinal).Select(CloneStringListItem));
+        return clone;
+    }
+
+    private static void AddRange<TEntity>(ICollection<TEntity> target, IEnumerable<TEntity> source)
+    {
+        foreach (var item in source)
+            target.Add(item);
+    }
 
     private static SessionLogActionEntity CloneAction(SessionLogActionEntity source)
         => new()
