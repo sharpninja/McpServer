@@ -1754,6 +1754,17 @@ public interface IDeleteMappingResult
 ///     format: wiki
 ///     docType: all
 /// </code>
+/// Example YAML for an explicit-workspace export (overrides the session-bound workspace):
+/// <code>
+/// type: request
+/// payload:
+///   requestId: req-20260304T113901Z-gendoc-004
+///   method: workflow.requirements.generateDocument
+///   params:
+///     format: wiki
+///     docType: all
+///     workspacePath: F:\GitHub\McpServer
+/// </code>
 /// </remarks>
 public interface IGenerateDocumentParams
 {
@@ -1769,6 +1780,12 @@ public interface IGenerateDocumentParams
     /// "test" (test requirements), "matrix" (requirement traceability matrix), "all" (complete document).
     /// </summary>
     string DocType { get; }
+
+    /// <summary>
+    /// Gets the optional workspace path override. When set it replaces the repl session's bound
+    /// workspace for this export only; null or whitespace keeps the bound workspace.
+    /// </summary>
+    string? WorkspacePath { get; }
 }
 
 /// <summary>

@@ -76,6 +76,47 @@ public sealed class RequirementsClientTests
         Assert.Contains("/mcpserver/requirements/fr/FR%2FMCP%2F001", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
 
+    /// <summary>
+    /// TEST-MCP-REQWS-001: an explicit per-call workspacePath must replace the client-bound
+    /// X-Workspace-Path header on the generate request so exports cannot silently target the
+    /// session-bound workspace (triage-report-f77331f9a33e4bd0ae4f55f0470743ed).
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task GenerateAsync_WorkspacePathOverride_ReplacesWorkspaceHeader()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, "# doc", "text/markdown");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, new McpServerClientOptions
+        {
+            BaseUrl = new Uri("http://localhost:7147"),
+            ApiKey = "test-key",
+            WorkspacePath = @"F:\Bound\Workspace",
+        });
+
+        await client.GenerateAsync("all", "wiki", @"F:\Override\Workspace", TestContext.Current.CancellationToken);
+
+        Assert.Contains("/mcpserver/requirements/generate", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Equal(@"F:\Override\Workspace", Assert.Single(handler.LastRequest.Headers.GetValues("X-Workspace-Path")));
+    }
+
+    /// <summary>Without an override the client-bound workspace header is preserved on generate.</summary>
+    [Fact]
+    public async System.Threading.Tasks.Task GenerateAsync_NoOverride_KeepsBoundWorkspaceHeader()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, "# doc", "text/markdown");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, new McpServerClientOptions
+        {
+            BaseUrl = new Uri("http://localhost:7147"),
+            ApiKey = "test-key",
+            WorkspacePath = @"F:\Bound\Workspace",
+        });
+
+        await client.GenerateAsync("all", "wiki", cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(@"F:\Bound\Workspace", Assert.Single(handler.LastRequest!.Headers.GetValues("X-Workspace-Path")));
+    }
+
     [Fact]
     public async System.Threading.Tasks.Task CreateTrAsync_PostsBody()
     {

@@ -20,7 +20,9 @@ internal sealed class GrokCliAgentExecutionStrategy(
     IProcessSpawner processSpawner,
     ILogger<GrokCliAgentExecutionStrategy> logger) : IAgentExecutionStrategy
 {
-    private const string HighestEffort = "max";
+    // "high" is the strongest effort level current Grok CLIs accept; "max" is rejected at
+    // startup with "unknown effort level 'max'; use one of: high, medium, low".
+    private const string HighestEffort = "high";
 
     /// <inheritdoc />
     public string Name => AgentExecutionStrategyNames.GrokCli;
@@ -50,7 +52,9 @@ internal sealed class GrokCliAgentExecutionStrategy(
     /// </summary>
     /// <param name="workingDirectory">The working directory passed via <c>--cwd</c>.</param>
     /// <param name="promptFilePath">The temp file passed via <c>--prompt-file</c>.</param>
-    /// <param name="model">Optional Grok model name passed via <c>--model</c>.</param>
+    /// <param name="model">Optional Grok model name passed via <c>--model</c>. The sentinel value
+    /// <c>auto</c> (used by callers such as the triage runner for "no explicit model") is not a
+    /// valid Grok model id and is treated like an unset model so the CLI picks its default.</param>
     /// <returns>The ordered argument list.</returns>
     internal static IReadOnlyList<string> BuildGrokArgumentList(
         string workingDirectory,
@@ -64,7 +68,8 @@ internal sealed class GrokCliAgentExecutionStrategy(
             "--permission-mode", "plan",
         };
 
-        if (!string.IsNullOrWhiteSpace(model))
+        if (!string.IsNullOrWhiteSpace(model) &&
+            !string.Equals(model.Trim(), "auto", StringComparison.OrdinalIgnoreCase))
         {
             arguments.Add("--model");
             arguments.Add(model.Trim());

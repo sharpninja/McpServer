@@ -523,6 +523,8 @@ public sealed class GenerateDocumentParamsModel : IGenerateDocumentParams
     public string Format { get; set; } = string.Empty;
     /// <inheritdoc />
     public string DocType { get; set; } = string.Empty;
+    /// <inheritdoc />
+    public string? WorkspacePath { get; set; }
 }
 
 /// <inheritdoc />

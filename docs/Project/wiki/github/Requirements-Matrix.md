@@ -945,5 +945,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-SESSIONLOGSAN-001 | Tracked | Testing-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TEST-MCP-BUGTRIAGE-042 | Tracked | Testing-Requirements.md |
+| TEST-MCP-BUGTRIAGE-043 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REQWS-001 | Tracked | Testing-Requirements.md |
 | TEST-MCP-TRANSCRIPT-011 | Tracked | Testing-Requirements.md |
 | TEST-MCP-TRANSCRIPT-012 | Tracked | Testing-Requirements.md |

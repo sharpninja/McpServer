@@ -470,6 +470,7 @@ internal static class ReplYamlMessageValidator
             {
                 OptionalEnum(args, "format", errors, "markdown", "yaml", "wiki");
                 OptionalEnum(args, "docType", errors, "fr", "tr", "test", "matrix", "all", "functional", "technical", "testing", "mapping");
+                OptionalText(args, "workspacePath", errors);
             },
             [RequirementsCommandShapes.IngestDocumentMethod] = static (args, errors) =>
             {

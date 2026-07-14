@@ -271,10 +271,23 @@ public sealed class RequirementsClient : McpClientBase
     /// <param name="format">Document format: <c>markdown</c>, <c>yaml</c>, or <c>wiki</c>.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Generated content, media type, and optional workspace export metadata.</returns>
-    public async Task<RequirementsGeneratedDocument> GenerateAsync(string doc = "all", string format = "markdown", CancellationToken cancellationToken = default)
+    public Task<RequirementsGeneratedDocument> GenerateAsync(string doc = "all", string format = "markdown", CancellationToken cancellationToken = default)
+        => GenerateAsync(doc, format, workspacePath: null, cancellationToken);
+
+    /// <summary>
+    /// Generates requirements output for an explicit workspace, overriding the client-bound
+    /// <c>X-Workspace-Path</c> header for this call only. Guards exports against silently
+    /// targeting the session-bound workspace (triage-report-f77331f9a33e4bd0ae4f55f0470743ed).
+    /// </summary>
+    /// <param name="doc">Document selector: <c>functional</c>, <c>technical</c>, <c>testing</c>, <c>mapping</c>, <c>matrix</c>, or <c>all</c>.</param>
+    /// <param name="format">Document format: <c>markdown</c>, <c>yaml</c>, or <c>wiki</c>.</param>
+    /// <param name="workspacePath">Optional workspace path override; null or whitespace keeps the client-bound workspace.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Generated content, media type, and optional workspace export metadata.</returns>
+    public async Task<RequirementsGeneratedDocument> GenerateAsync(string doc, string format, string? workspacePath, CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/requirements/generate?doc={Uri.EscapeDataString(doc)}&format={Uri.EscapeDataString(format)}";
-        var (content, contentType) = await GetBytesAsync(path, cancellationToken);
+        var (content, contentType) = await GetBytesAsync(path, cancellationToken, workspacePath);
         if (string.Equals(contentType, "application/json", StringComparison.OrdinalIgnoreCase))
         {
             var export = (RequirementsDocumentExportResult?)JsonSerializer.Deserialize(content, s_jsonOptions.GetTypeInfo(typeof(RequirementsDocumentExportResult)));

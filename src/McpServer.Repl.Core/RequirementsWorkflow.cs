@@ -599,7 +599,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     }
 
     /// <inheritdoc />
-    public async Task<IDocumentGenerationResult> GenerateDocumentAsync(string format, string docType, CancellationToken cancellationToken = default)
+    public async Task<IDocumentGenerationResult> GenerateDocumentAsync(string format, string docType, string? workspacePath = null, CancellationToken cancellationToken = default)
     {
         ValidateFormat(format);
         ValidateDocType(docType);
@@ -619,7 +619,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             _ => throw new ArgumentException($"Invalid docType: {docType}. Valid values: fr, tr, test, matrix, all")
         };
 
-        var generatedDoc = await _client.GenerateAsync(docParam, format, cancellationToken);
+        var generatedDoc = await _client.GenerateAsync(docParam, format, workspacePath, cancellationToken);
 
         if (generatedDoc.ExportResult is not null)
         {

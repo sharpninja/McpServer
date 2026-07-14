@@ -404,6 +404,7 @@ public interface IRequirementsWorkflow
     /// </summary>
     /// <param name="format">The output format. Valid values: "markdown", "yaml".</param>
     /// <param name="docType">The document type. Valid values: "fr" (functional requirements), "tr" (technical requirements), "test" (test requirements), "matrix" (requirement mapping matrix), "all" (complete document).</param>
+    /// <param name="workspacePath">Optional workspace path override; when set it replaces the repl session's bound workspace for this export only.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A task representing the asynchronous generation operation, containing the formatted document content.</returns>
     /// <exception cref="ArgumentException">Thrown if format or docType is invalid.</exception>
@@ -427,10 +428,17 @@ public interface IRequirementsWorkflow
     /// <item><c>matrix</c> — Generates requirement traceability matrix showing all mappings</item>
     /// <item><c>all</c> — Generates complete requirements package with all sections</item>
     /// </list>
+    /// <para><strong>Workspace Override:</strong></para>
+    /// <para>
+    /// When <paramref name="workspacePath"/> is supplied it overrides the repl session's bound
+    /// workspace for this call only, so exports cannot silently target another workspace
+    /// (triage-report-f77331f9a33e4bd0ae4f55f0470743ed).
+    /// </para>
     /// </remarks>
     Task<IDocumentGenerationResult> GenerateDocumentAsync(
         string format,
         string docType,
+        string? workspacePath = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

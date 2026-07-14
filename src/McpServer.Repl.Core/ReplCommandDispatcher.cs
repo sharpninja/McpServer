@@ -1542,6 +1542,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     await _requirementsWorkflow.GenerateDocumentAsync(
                         GetString(args, "format") ?? "markdown",
                         GetString(args, "docType") ?? "all",
+                        GetString(args, "workspacePath"),
                         cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.IngestDocumentMethod =>
                     await _requirementsWorkflow.IngestDocumentAsync(

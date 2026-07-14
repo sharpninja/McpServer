@@ -76,6 +76,7 @@ Important keys:
 - `Mcp:TodoStorage:Provider` (`database`; `sqlite` is a deprecated alias for `database`, and the removed `yaml` value fails fast per TR-MCP-CFG-007)
 - `Mcp:TodoStorage:SqliteDataSource`
 - `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
+- `Mcp:Triage:*` (asynchronous triage research runner: `AgentPath`, `ExecutionStrategy`, quiet period, fallback tiers). `AgentModel: auto` is a sentinel meaning "let the agent CLI pick its default model"; the Grok strategy omits `--model` for it and pins effort to `high` (current Grok CLIs reject `max`)
 - `Mcp:Instances:{name}:*` (per-instance overrides)
 
 Environment overrides:

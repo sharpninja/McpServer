@@ -1116,6 +1116,19 @@ Regression tests SHALL verify all plugin batch requirement methods accept uninde
 
 
 
+## TEST-MCP-BUGTRIAGE
+
+### TEST-MCP-BUGTRIAGE-042
+
+Grok CLI one-shot argument construction forwards an explicitly configured model. GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_ConfiguredModel_IncludesModelFlag verifies a real model name (for example grok-4.3) emits --model before --output-format in the one-shot argument list (validates TR-MCP-TRIAGE-003 runner invocation construction).
+
+
+### TEST-MCP-BUGTRIAGE-043
+
+Grok CLI startup-rejection guards for the triage research runner (validates TR-MCP-TRIAGE-003). GrokCliAgentExecutionStrategyTests verify: the sentinel model value auto (any casing) or an empty model omits --model entirely so the CLI picks its default, because current Grok CLIs reject --model auto with "unknown model id" and the runner substitutes auto for unset tier models (BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag, 5 cases); effort flags are pinned to high because current Grok CLIs reject max with "unknown effort level" (BuildGrokArgumentList_ContainsExpectedFlagsInOrder). Evidence 2026-07-14: both rejections reproduced from captured run stderr; fixes deployed in 1.4.15/1.4.16; live research run for triage-group-27f5ecfe4c926fde completed exit 0 at 20:08Z, first successful run since 2026-07-07.
+
+
+
 ## TEST-MCP-DOCFXWIKI
 
 ### TEST-MCP-DOCFXWIKI-001
@@ -1857,6 +1870,14 @@ Per plugin family, a live invocation of workflow.requirements.createFr with acce
 ### TEST-MCP-REQACPLUGIN-TS
 
 In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) proves req_create_fr/req_update_fr/req_create_test forward acceptanceCriteria into the request payload with zero failures and zero skips.
+
+
+
+## TEST-MCP-REQWS
+
+### TEST-MCP-REQWS-001
+
+Explicit workspacePath override for requirements document generation (follow-up to triage-report-f77331f9a33e4bd0ae4f55f0470743ed). RequirementsClientTests verify GenerateAsync with a workspacePath override replaces the client-bound X-Workspace-Path header for that call only and the bound header is preserved without an override. RequirementsWorkflowWorkspaceOverrideTests verify the real RequirementsWorkflow forwards the override to the generate request, preserves the bound workspace when absent, and the ReplCommandDispatcher forwards the workspacePath param from workflow.requirements.generateDocument envelopes to the workflow. Cross-workspace override without the target workspace's API key fails with 401 (per-workspace keys) instead of silently exporting the session-bound workspace's requirements. Evidence 2026-07-14: red before implementation, Client 23/23 and Repl.Core 810/810 green after; deployed in service and mcpserver-repl 1.4.15+.
 
 
 

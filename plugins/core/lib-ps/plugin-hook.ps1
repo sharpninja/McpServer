@@ -644,6 +644,40 @@ function Open-PluginTurn {
     $title = (($prompt -split "`r?`n")[0]).Trim()
     if (-not $title) { $title = 'Continuation turn' }
     if ($title.Length -gt 60) { $title = $title.Substring(0, 60) }
+
+    # Double hook registration (plugin hooks.json plus the settings.json bridge) delivers the
+    # same prompt twice per user message; reuse the turn the first delivery opened instead of
+    # opening a duplicate session-log turn (triage-report-7c84e6437f7b42d0a67fbe32679a686a).
+    $existingTurnFile = Join-Path $cacheDir 'current-turn.yaml'
+    if (Test-Path -LiteralPath $existingTurnFile) {
+        $openTurn = Read-McpYamlObject -Path $existingTurnFile
+        if ($openTurn -is [System.Collections.IDictionary]) {
+            $openStatus = if ($openTurn.Contains('status')) { [string]$openTurn['status'] } else { '' }
+            $openQuery = if ($openTurn.Contains('queryText')) { [string]$openTurn['queryText'] } else { '' }
+            $openRequestId = if ($openTurn.Contains('turnRequestId')) { [string]$openTurn['turnRequestId'] } else { '' }
+            $openedAtText = if ($openTurn.Contains('openedAt')) { [string]$openTurn['openedAt'] } else { '' }
+            $openedRecently = $false
+            $openedAtValue = [datetime]::MinValue
+            if ($openedAtText -and [datetime]::TryParse($openedAtText.Trim('"'), [ref]$openedAtValue)) {
+                $openedRecently = ($openedAtValue.ToUniversalTime() -gt (Get-Date).ToUniversalTime().AddMinutes(-2))
+            }
+            if ($openStatus -eq 'in_progress' -and
+                -not [string]::IsNullOrWhiteSpace($openRequestId) -and
+                $openedRecently -and
+                $openQuery.Trim() -eq $prompt.Trim()) {
+                Write-PluginJson ([ordered]@{
+                    hookSpecificOutput = [ordered]@{
+                        hookEventName = 'UserPromptSubmit'
+                        status = 'turn-already-open'
+                        turnRequestId = $openRequestId
+                        additionalContext = "session log turn $openRequestId is now active. Continue the current task after any incidental triage submission."
+                    }
+                })
+                return
+            }
+        }
+    }
+
     $markerSnapshot = $null
     try {
         $markerSnapshot = Get-MarkerFileSnapshot -StartDir $startPath

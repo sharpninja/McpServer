@@ -62,6 +62,29 @@ public sealed class GrokCliAgentExecutionStrategyTests
         Assert.True(Array.IndexOf(orderedArgs, "--model") < Array.IndexOf(orderedArgs, "--output-format"));
     }
 
+    /// <summary>
+    /// TEST-MCP-BUGTRIAGE-043: the sentinel model value <c>auto</c> (any casing) means "let the
+    /// Grok CLI choose its default" and must not be forwarded, because the Grok CLI rejects
+    /// <c>--model auto</c> with "unknown model id" and the triage runner substitutes <c>auto</c>
+    /// for unset tier models. Fixture: BuildGrokArgumentList with model "auto"/"AUTO"/whitespace.
+    /// </summary>
+    [Theory]
+    [InlineData("auto")]
+    [InlineData("AUTO")]
+    [InlineData("  auto  ")]
+    [InlineData("   ")]
+    [InlineData(null)]
+    public void BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag(string? model)
+    {
+        var args = GrokCliAgentExecutionStrategy.BuildGrokArgumentList(
+            workingDirectory: @"F:\GitHub\McpServer",
+            promptFilePath: @"C:\temp\grok-prompt.txt",
+            model: model);
+
+        Assert.DoesNotContain("--model", args);
+        Assert.DoesNotContain("auto", args, StringComparer.OrdinalIgnoreCase);
+    }
+
     /// <summary>The one-shot command line carries the prompt file, working directory, and plan/effort flags in order.</summary>
     [Fact]
     public void BuildGrokArgumentList_ContainsExpectedFlagsInOrder()
@@ -70,6 +93,8 @@ public sealed class GrokCliAgentExecutionStrategyTests
             workingDirectory: @"F:\GitHub\McpServer",
             promptFilePath: @"C:\temp\grok-prompt.txt");
 
+        // "high" is the strongest effort level every deployed Grok CLI accepts; "max" is
+        // rejected at startup by current CLIs ("unknown effort level 'max'").
         Assert.Equal(
             new[]
             {
@@ -77,8 +102,8 @@ public sealed class GrokCliAgentExecutionStrategyTests
                 "--cwd", @"F:\GitHub\McpServer",
                 "--permission-mode", "plan",
                 "--output-format", "plain",
-                "--effort", "max",
-                "--reasoning-effort", "max",
+                "--effort", "high",
+                "--reasoning-effort", "high",
             },
             args);
     }

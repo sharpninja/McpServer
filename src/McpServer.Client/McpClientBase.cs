@@ -329,7 +329,8 @@ public abstract class McpClientBase
         object? body,
         HttpCompletionOption completionOption,
         string? acceptMediaType,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        string? workspacePathOverride = null)
     {
         EnsureAuthenticated();
 
@@ -341,8 +342,11 @@ public abstract class McpClientBase
         else if (!string.IsNullOrWhiteSpace(ApiKey))
             request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
 
-        if (!string.IsNullOrWhiteSpace(WorkspacePath))
-            request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
+        var effectiveWorkspacePath = string.IsNullOrWhiteSpace(workspacePathOverride)
+            ? WorkspacePath
+            : workspacePathOverride;
+        if (!string.IsNullOrWhiteSpace(effectiveWorkspacePath))
+            request.Headers.TryAddWithoutValidation("X-Workspace-Path", effectiveWorkspacePath);
 
         AppendCustomHeaders(request);
 
@@ -395,10 +399,19 @@ public abstract class McpClientBase
     /// </summary>
     /// <param name="path">Relative API path.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
+    /// <param name="workspacePathOverride">Optional per-request workspace path that replaces the
+    /// client-bound <c>X-Workspace-Path</c> header for this call only.</param>
     /// <returns>Response bytes and media type.</returns>
-    protected async Task<(byte[] Content, string? ContentType)> GetBytesAsync(string path, CancellationToken cancellationToken)
+    protected async Task<(byte[] Content, string? ContentType)> GetBytesAsync(string path, CancellationToken cancellationToken, string? workspacePathOverride = null)
     {
-        using var response = await SendRawAsync(HttpMethod.Get, path, null, cancellationToken).ConfigureAwait(true);
+        using var response = await SendRawAsync(
+            HttpMethod.Get,
+            path,
+            null,
+            HttpCompletionOption.ResponseContentRead,
+            acceptMediaType: null,
+            cancellationToken,
+            workspacePathOverride).ConfigureAwait(true);
         var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(true);
         var mediaType = response.Content.Headers.ContentType?.MediaType;
         return (bytes, mediaType);
