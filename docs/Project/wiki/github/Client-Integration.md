@@ -55,7 +55,7 @@ For MCP-compatible clients (e.g., Cursor), configure the STDIO transport:
 
 ### Available STDIO Tools
 
-See `docs/stdio-tool-contract.json` for the complete machine-readable manifest of all 22 tools.
+See `docs/stdio-tool-contract.json` for the complete machine-readable manifest of all STDIO tools.
 
 Key tool categories:
 

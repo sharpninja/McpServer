@@ -1105,6 +1105,11 @@ Scope: layer-1+
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
 Scope: layer-1+
 
+## FR-MCP-CLEARSESSION-001 Shared clear-session reset skill for all agent plugins
+
+All MCP Server agent plugins SHALL provide a shared `clear-session` skill that resets the agent to a ready state in five ordered steps: (1) end the current MCP session, (2) clear agent context (best-effort programmatic, else instruct the per-host manual clear command and pause), (3) reload the agent instruction file selected by host (CLAUDE.md for Claude hosts, AGENTS.md otherwise), (4) execute the add-profile skill, and (5) report ready.
+Scope: layer-1+
+
 ## FR-MCP-DOCFXWIKI-001 Optional DocFX content in requirements wiki exports
 
 A workspace may declare one or more DocFX workflows whose generated content is included in GitHub and Azure requirements wiki artifacts without changing existing exports when no workflow is configured.

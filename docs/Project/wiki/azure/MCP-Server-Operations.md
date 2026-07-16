@@ -279,7 +279,6 @@ Pipeline jobs include:
 - restore/build/test
 - publish artifact upload
 - Windows MSIX packaging
-- markdown lint and link checking for docs
 - DocFX docs artifact build
 - client NuGet pack and branch-conditional feed publish
 

@@ -1129,6 +1129,14 @@ Grok CLI startup-rejection guards for the triage research runner (validates TR-M
 
 
 
+## TEST-MCP-CLEARSESSION
+
+### TEST-MCP-CLEARSESSION-001
+
+Skills.Tests.ps1 (mcpserver-claude-code-plugin) asserts the clear-session SKILL.md contains the five ordered steps: workflow.sessionlog.completeTurn (end session), best-effort context clear plus the per-host manual clear commands (/clear, /new, New Task), CLAUDE.md and AGENTS.md instruction-file selection, add-profile execution, and a readiness report. Validates TR-MCP-CLEARSESSION-001 / FR-MCP-CLEARSESSION-001.
+
+
+
 ## TEST-MCP-DB
 
 ### TEST-MCP-DB-006

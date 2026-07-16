@@ -190,7 +190,7 @@ mcpserver-repl --agent-stdio
 **Server → Client (hello response):**
 
 ```json
-{"type":"hello","payload":{"protocolVersion":"1.0","serverVersion":"1.5.0","capabilities":["sessionlog","todo","requirements","streaming","client-passthrough"],"supportedNamespaces":["workflow.sessionlog","workflow.todo","workflow.requirements","client"]}}
+{"type":"hello","payload":{"protocolVersion":"1.0","capabilities":["client-passthrough","sessionlog","todo","requirements","streaming"]}}
 ```
 
 ### Command Dispatch

@@ -4,7 +4,7 @@ This guide tells agents how to replace direct `McpServerClient` HTTP calls for s
 
 ## Why Migrate
 
-The hosted McpAgent now exposes **27 tools** through the AI function surface. The 10 new REPL-backed tools provide:
+The hosted McpAgent now exposes **43 tools** through the AI function surface. The REPL-backed tools provide:
 
 - **Requirements management** (FR/TR/TEST list and get) without raw HTTP calls
 - **TODO create/delete** alongside existing query/get/update
@@ -32,7 +32,7 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 | `mcp_session_turn_complete` | `POST /mcpserver/sessionlog` | Complete a turn |
 | `mcp_session_query_history` | `GET /mcpserver/sessionlog` | **NEW** - Query session history |
 
-### TODO (7 tools)
+### TODO (8 tools)
 
 | Tool | Replaces | Description |
 |------|----------|-------------|
@@ -78,6 +78,31 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 | Tool | Description |
 |------|-------------|
 | `mcp_client_invoke` | Dynamically invoke any McpServerClient sub-client method |
+
+### Quad Brain (1 tool)
+
+| Tool | Description |
+|------|-------------|
+| `mcp_quadbrain_coding_execute` | Execute a coding task through MCP Server Quad Brain orchestration and return the committed Arbiter response |
+
+### GraphRAG (14 tools)
+
+| Tool | Description |
+|------|-------------|
+| `mcp_graphrag_ingest_text` | Ingest raw text into the workspace GraphRAG index |
+| `mcp_graphrag_list_documents` | List indexed GraphRAG documents |
+| `mcp_graphrag_get_document_chunks` | Get the chunks for an indexed document |
+| `mcp_graphrag_delete_document` | Delete a document from the index |
+| `mcp_graphrag_create_entity` | Create a graph entity |
+| `mcp_graphrag_list_entities` | List graph entities |
+| `mcp_graphrag_get_entity` | Get a graph entity by id |
+| `mcp_graphrag_update_entity` | Update a graph entity |
+| `mcp_graphrag_delete_entity` | Delete a graph entity |
+| `mcp_graphrag_create_relationship` | Create a relationship between entities |
+| `mcp_graphrag_list_relationships` | List graph relationships |
+| `mcp_graphrag_get_relationship` | Get a relationship by id |
+| `mcp_graphrag_update_relationship` | Update a relationship |
+| `mcp_graphrag_delete_relationship` | Delete a relationship |
 
 ## Migration Patterns
 

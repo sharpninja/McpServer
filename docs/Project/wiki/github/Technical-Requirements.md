@@ -556,6 +556,13 @@ Package publication SHALL be branch-conditional: `main` publishes to `nuget.org`
 **Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`, `README.md`, `docs/MCP-SERVER.md`, `docs/RELEASE-CHECKLIST.md`
 Scope: layer-1+
 
+## TR-MCP-CLEARSESSION-001
+
+**clear-session skill content contract** — The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper (lib/repl-invoke.ps1 / Invoke-McpPlugin.ps1 or hooks/scripts/session-end.ps1 where present), never raw REST. AC2 - clear context best-effort programmatically (plugin cache/session-state flush), then fall back to a per-host manual clear command (/clear for Claude, /new for Codex/OpenCode, New Task for Cline, new chat for Copilot) and pause for user confirmation; never claim context cleared when only the user can do it. AC3 - reload the agent instruction file selected by host: CLAUDE.md for claude/claude-cowork, AGENTS.md otherwise, always after re-reading AGENTS-README-FIRST.yaml, carried verbatim. AC4 - execute the add-profile skill. AC5 - report a readiness summary stating whether context was actually cleared or awaits user action. The skill SHALL be PowerShell-only (no bash/node/.sh references) and present byte-identical in all 8 agent plugin repositories.
+**Covered by:** FR: FR-MCP-CLEARSESSION-001; TEST: TEST-MCP-CLEARSESSION-001
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-COMP-001
 
 **Workspace Compliance Ban Lists** — `WorkspaceDto`, `WorkspaceCreateRequest`, and `WorkspaceUpdateRequest` include four `List<string>` properties: `BannedLicenses`, `BannedCountriesOfOrigin`, `BannedOrganizations`, `BannedIndividuals`. `MarkerFileService.BuildTemplateContext` exposes these as Handlebars context (null when empty). `DefaultPromptTemplate` uses `{{#if}}` / `{{#each}}` blocks to conditionally render compliance sections. Recognized action types: `license_violation`, `origin_violation`, `origin_review`, `entity_violation`, `dependency_add`.
