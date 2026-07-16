@@ -35,7 +35,7 @@ The default port is **7147**. Configure it with:
 - `PORT` environment variable
 - `--urls http://+:PORT` command-line argument
 
-Workspace instances are hosted as in-process Kestrel listeners starting at port **7147**.
+All workspaces share this single host port; target a specific workspace with the `X-Workspace-Path` header rather than a per-workspace port.
 
 ### How do I connect an MCP client?
 
@@ -72,12 +72,11 @@ The MCP endpoint requires the header `Accept: application/json, text/event-strea
 
 ### What TODO backends are supported?
 
-Two backends are available, configured via `Mcp:TodoStorage:Provider`:
+A single TODO backend is supported, configured via `Mcp:TodoStorage:Provider`:
 
-| Provider | Storage | Best For |
-|----------|---------|----------|
-| `yaml` (default) | `docs/Project/TODO.yaml` file | Human-readable, version-controlled |
-| `sqlite` | `mcp.db` SQLite database | High-volume, concurrent access |
+- **`database`** (default): TODO items persist through the configured database, selected by `Mcp:Database:Provider` (SQLite, PostgreSQL, or SQL Server) via `McpDatabaseProviderFactory`. The database is the sole source of truth; `docs/Project/TODO.yaml` is a read-only projection.
+- **`sqlite`**: deprecated alias for `database`; accepted for backward compatibility and mapped to `database` with a one-time warning.
+- **`yaml`**: removed. Setting this value fails fast at startup with an error directing you to use `database`.
 
 ### How are TODO IDs structured?
 
@@ -109,8 +108,9 @@ GitHub issue comment summarizing the change set.
 ### What is a workspace?
 
 A workspace maps a local folder (e.g., `E:\github\MyProject`) to a managed MCP instance with
-its own port, TODO storage, and optional tunnel. Workspace configuration is stored in
-`Mcp:Workspaces` within `appsettings.json` — not in the database — and is managed entirely
+TODO storage and an optional tunnel. The workspace registry is stored in the database, which is
+authoritative after startup/bootstrap. `Mcp:Workspaces` in `appsettings.json` is a bootstrap
+fallback and an informational projection kept in sync from the database. Workspaces are managed
 via the REST API.
 
 ### How do I create a workspace?
@@ -122,7 +122,7 @@ curl -X POST http://localhost:7147/mcpserver/workspace \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
 ```
 
-Defaults are applied automatically: name from last path segment, port auto-assigned from 7147+, TodoPath defaults to `docs/todo.yaml`.
+Defaults are applied automatically: name from last path segment, and TodoPath defaults to `docs/todo.yaml`.
 
 ### What does the init endpoint do?
 
@@ -262,7 +262,7 @@ Trigger a full re-index with `POST /mcpserver/sync/run`.
 |---------|--------------------|---------------------------------|
 | Protocol | Standard HTTP/JSON | MCP Streamable HTTP (JSON-RPC) |
 | Clients | Any HTTP client, curl, Swagger | Claude Desktop, VS Code Copilot, Cursor |
-| Tools | N/A (endpoints) | `todo_*`, `context_*`, `repo_*`, `gh_*`, `sync_*`, `sessionlog_*` |
+| Tools | N/A (endpoints) | `todo_*`, `context_*`, `repo_*`, `github_*`, `sync_*`, `sessionlog_*` |
 | Discovery | OpenAPI/Swagger | MCP tool listing |
 
 Both share the same backend services and run on the same port.
@@ -275,7 +275,7 @@ Both share the same backend services and run on the same port.
 | Context | `context_search`, `context_pack` |
 | Repository | `repo_read`, `repo_write`, `repo_list` |
 | Sync | `sync_run`, `sync_status` |
-| GitHub | `gh_list_issues`, `gh_get_issue`, `gh_create_issue`, `gh_comment_issue`, `gh_list_pulls`, `gh_comment_pull` |
+| GitHub | `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull` |
 | Session Log | `sessionlog_submit`, `sessionlog_query` |
 
 ---

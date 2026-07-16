@@ -109,8 +109,10 @@ is no ambiguity between "field absent" and "clear this field".
 lifecycle, they intentionally rewrite or hide recorded data, including on
 turns already marked `completed`/`failed`. Use them to fix a mis-logged turn,
 not as part of normal turn flow. The terminal-turn compliance gate
-(at least one decision/action/commit) still applies to a `PUT` that sets a
-terminal status, but not to section/item/whole-turn `DELETE`.
+(at least one decision/action/commit) applies only to QBAgent (ACID hosted-agent)
+sessions; for those it still applies to a `PUT` that sets a terminal status, but
+not to section/item/whole-turn `DELETE`. Ordinary-agent terminal turns
+(ClaudeCode, Cursor, Copilot, Codex, ...) are not gated.
 
 Every `DELETE` is a **soft delete**: rows are tombstoned with deletion
 metadata, never physically removed, and the tombstoned session still holds the

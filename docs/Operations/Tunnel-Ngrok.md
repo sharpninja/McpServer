@@ -36,21 +36,16 @@ This runbook documents the primary-only model and the validation steps around it
 
 ## Configure MCP
 
-Update your MCP `appsettings.json` (Windows service: `C:\ProgramData\McpServer\appsettings.json`) with:
+Update your MCP `appsettings.yaml` (Windows service: `C:\ProgramData\McpServer\appsettings.yaml`) with:
 
-```json
-{
-  "Mcp": {
-    "Tunnel": {
-      "Provider": "ngrok",
-      "Port": 7147,
-      "Ngrok": {
-        "AuthToken": "YOUR_NGROK_AUTH_TOKEN",
-        "Region": "us"
-      }
-    }
-  }
-}
+```yaml
+Mcp:
+  Tunnel:
+    Provider: ngrok
+    Port: 7147
+    Ngrok:
+      AuthToken: YOUR_NGROK_AUTH_TOKEN
+      Region: us
 ```
 
 Optional settings:

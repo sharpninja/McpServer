@@ -7,9 +7,7 @@ This repository now uses `azure-pipelines.yml` as the CI/CD source of truth for 
 The Azure pipeline covers the core repository workflow only:
 
 - Windows self-hosted build, config validation, test, version calculation, and publish artifact generation
-- Markdown lint and non-blocking markdown link checks
 - DocFX documentation build and docs artifact publication
-- Azure DevOps requirements wiki publication from the generated wiki export ZIP
 - Windows MSIX packaging as a non-blocking job
 - `McpServer.Client` package packing and branch-conditional package publication
 
@@ -19,22 +17,14 @@ It intentionally does **not** attempt to migrate or manage any separate Copilot 
 
 Optional Azure DevOps variables control the release-oriented steps:
 
-- `AgentPoolName`
-  Defaults to `Default` and identifies the Windows self-hosted agent pool used by all jobs in this pipeline.
 - `NuGetApiKey`
   Used on `main` to push `McpServer.Client` packages to `nuget.org`.
 - `AzureArtifactsFeedUrl`
   Used on non-`main` branches to push `McpServer.Client` packages to an Azure Artifacts NuGet feed.
 - `DocsAzureServiceConnection`
-  Azure service connection name for optional static website deployment of the generated docs artifact.
+  Azure service connection name for optional static website deployment of the generated docs artifact. Currently inert: the `docs_deploy` job that consumed this variable is commented out in `azure-pipelines.yml` (disabled to keep the pipeline YAML valid), so setting it triggers no deployment until the job is restored.
 - `DocsStorageAccount`
-  Azure Storage account name whose `$web` container receives the docs artifact on `main`.
-
-The `publish-azure-wiki` job uses the built-in `System.AccessToken` to push the
-`azure/` folder from `docs/requirements/requirements-wiki-documents.zip` to the
-Azure DevOps wiki repository. Enable "Allow scripts to access the OAuth token"
-on the pipeline, and make sure the build service identity can contribute to the
-`McpServer.wiki` repository.
+  Azure Storage account name whose `$web` container would receive the docs artifact on `main`. Also inert while the `docs_deploy` job is disabled.
 
 If any optional variable is absent, the corresponding publish or deploy step is skipped rather than failing the pipeline.
 

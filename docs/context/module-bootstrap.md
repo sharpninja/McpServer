@@ -26,114 +26,134 @@ mcpserver-repl
 
 ### REPL Request Format
 
-All REPL requests use this structure:
+All REPL requests use a typed envelope. The request body is `type: request` with a `payload` that carries a unique `requestId`, the namespaced `method`, and its `params`:
 
 ```yaml
-command: <command-name>
-params:
-  <param1>: <value1>
-  <param2>: <value2>
+type: request
+payload:
+  requestId: <unique-request-id>
+  method: workflow.sessionlog.* | workflow.todo.* | client.<Client>.<Method>
+  params:
+    <param1>: <value1>
+    <param2>: <value2>
 ---
 ```
+
+Methods are namespaced: `workflow.sessionlog.*` and `workflow.todo.*` are plugin-local workflow verbs that update the cache and `current-turn.yaml` and persist through the real client; `client.<Client>.<Method>` is a passthrough to any typed sub-client method.
 
 ### Session Log Operations
 
 ```yaml
-# Initialize session (returns session slug)
-command: session.init
-params:
-  agent: Copilotcli
-  model: gpt-5.3-codex
----
-
-# Create new session log
-command: session.new
-params:
-  sessionId: Copilotcli-20260304T113901Z-example
-  agent: Copilotcli
-  model: gpt-5.3-codex
-  purpose: Implement new feature
----
-
-# Add a turn
-command: session.turn.add
-params:
-  sessionId: Copilotcli-20260304T113901Z-example
+# Bootstrap the session runtime (marker + trust verification)
+type: request
+payload:
   requestId: req-20260304T113901Z-001
-  interpretation: User requested feature X
-  response: Implementing feature X
-  status: in_progress
+  method: workflow.sessionlog.bootstrap
+  params: {}
 ---
 
-# Update a turn
-command: session.turn.update
-params:
-  sessionId: Copilotcli-20260304T113901Z-example
-  requestId: req-20260304T113901Z-001
-  response: Feature X implemented successfully
-  status: complete
-  actions:
-    - type: file_create
-      status: success
-      filePath: src/feature-x.ts
+# Open a session (persists sessionId to session-state.yaml)
+type: request
+payload:
+  requestId: req-20260304T113901Z-002
+  method: workflow.sessionlog.openSession
+  params:
+    sessionId: Copilot-20260304T113901Z-example
+    title: Implement new feature
+    agent: Copilot
+    sourceType: Copilot
+    model: gpt-5.3-codex
 ---
 
-# Add action to turn
-command: session.action.add
-params:
-  sessionId: Copilotcli-20260304T113901Z-example
-  requestId: req-20260304T113901Z-001
-  action:
-    type: file_edit
-    status: success
-    filePath: src/main.ts
+# Begin a turn
+type: request
+payload:
+  requestId: req-20260304T113901Z-003
+  method: workflow.sessionlog.beginTurn
+  params:
+    requestId: req-20260304T113901Z-003
+    queryTitle: Implement feature X
+    queryText: User requested feature X
 ---
 
-# Save session log
-command: session.save
-params:
-  sessionId: Copilotcli-20260304T113901Z-example
+# Update a turn (response, interpretation, tags, contextList)
+type: request
+payload:
+  requestId: req-20260304T113901Z-003
+  method: workflow.sessionlog.updateTurn
+  params:
+    response: Implementing feature X
+    interpretation: User requested feature X
+---
+
+# Append actions to a turn (canonical type/status values)
+type: request
+payload:
+  requestId: req-20260304T113901Z-003
+  method: workflow.sessionlog.appendActions
+  params:
+    actions:
+      - description: Create the feature module
+        type: create
+        status: completed
+        filePath: src/feature-x.ts
+      - description: Wire the feature into main
+        type: edit
+        status: completed
+        filePath: src/main.ts
+---
+
+# Complete the turn
+type: request
+payload:
+  requestId: req-20260304T113901Z-003
+  method: workflow.sessionlog.completeTurn
+  params:
+    response: Feature X implemented successfully
 ---
 ```
 
 ### TODO Operations
 
 ```yaml
-# List all TODOs
-command: todo.list
+# Query TODOs (optional filters)
+type: request
+payload:
+  requestId: req-20260304T113901Z-010
+  method: workflow.todo.query
+  params: {}
 ---
 
 # Get a TODO by ID
-command: todo.get
-params:
-  id: MVP-MCP-001
+type: request
+payload:
+  requestId: req-20260304T113901Z-011
+  method: workflow.todo.get
+  params:
+    id: MVP-MCP-001
 ---
 
 # Create a TODO
-command: todo.create
-params:
-  id: MVP-MCP-042
-  title: Implement feature Y
-  section: Development
-  priority: high
-  description: Feature Y implementation
-  implementationTasks:
-    - description: Task 1
-      done: false
-    - description: Task 2
-      done: false
+type: request
+payload:
+  requestId: req-20260304T113901Z-012
+  method: workflow.todo.create
+  params:
+    id: MVP-MCP-042
+    title: Implement feature Y
+    section: Development
+    priority: high
+    description: Feature Y implementation
 ---
 
 # Update a TODO
-command: todo.update
-params:
-  id: MVP-MCP-042
-  done: true
-  implementationTasks:
-    - description: Task 1
-      done: true
-    - description: Task 2
-      done: true
+type: request
+payload:
+  requestId: req-20260304T113901Z-013
+  method: workflow.todo.update
+  params:
+    id: MVP-MCP-042
+    done: true
 ---
 ```
 
@@ -147,20 +167,26 @@ params:
 
 ### REPL Response Format
 
+A successful response is `type: result` with the matching `requestId` and a command-specific `result`:
+
 ```yaml
-success: true
-result:
-  <command-specific-data>
+type: result
+payload:
+  requestId: <matching-request-id>
+  result:
+    <command-specific-data>
 ---
 ```
 
-or on error:
+On error the response is `type: error` with a structured code, message, and details:
 
 ```yaml
-success: false
-error:
-  message: "Error description"
-  code: "ERROR_CODE"
+type: error
+payload:
+  requestId: <matching-request-id>
+  code: ERROR_CODE
+  message: Error description
+  details: {}
 ---
 ```
 

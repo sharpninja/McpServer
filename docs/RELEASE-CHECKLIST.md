@@ -24,11 +24,11 @@
 
 ### Configuration
 
-- [ ] `appsettings.json` has all required keys with sensible defaults
-- [ ] `C:\ProgramData\McpServer\appsettings.json` is the canonical Windows service config (no `appsettings.Production.json` override)
+- [ ] `appsettings.yaml` has all required keys with sensible defaults
+- [ ] `C:\ProgramData\McpServer\appsettings.yaml` is the canonical Windows service config (a legacy `appsettings.json` in the install directory is rejected at startup by `WindowsServiceDeploymentGuard` and removed on redeploy by `scripts\Update-McpService.ps1`; no `appsettings.{Environment}.yaml` override)
 - [ ] Environment variable overrides work (Mcp__Port, Mcp__RepoRoot, etc.)
 - [ ] Feature toggles (Embedding:Enabled, VectorIndex:Enabled) respect settings
-- [ ] Per-instance TODO storage backend selection works (YAML and SQLite)
+- [ ] TODO storage uses the single `database` provider (Provider=database; legacy `sqlite` accepted as an alias, `yaml` rejected) routed through Mcp:Database:Provider, and TODO.yaml is a read-only projection
 
 ### Documentation
 

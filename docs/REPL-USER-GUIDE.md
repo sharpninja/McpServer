@@ -83,10 +83,10 @@ When a workspace marker declares `agent_plugins.policy: required`, agents should
 
 ### Server URL
 
-Set the MCP server URL via environment variable (defaults to `http://localhost:5000`):
+Set the MCP server URL via environment variable (defaults to `http://localhost:7147`):
 
 ```powershell
-$env:MCP_SERVER_URL = "http://localhost:5000"
+$env:MCP_SERVER_URL = "http://localhost:7147"
 mcpserver-repl --interactive
 ```
 
@@ -695,10 +695,10 @@ dotnet tool list -g
 
 ```powershell
 # Check server is running
-curl http://localhost:5000/health
+curl http://localhost:7147/health
 
 # Set correct URL
-$env:MCP_SERVER_URL = "http://localhost:5000"
+$env:MCP_SERVER_URL = "http://localhost:7147"
 ```
 
 ### Invalid Session ID Format

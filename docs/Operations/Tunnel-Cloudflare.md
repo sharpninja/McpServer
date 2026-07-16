@@ -42,52 +42,38 @@ Implementation note:
 
 ## Configure MCP
 
-Update your MCP `appsettings.json` (Windows service: `C:\ProgramData\McpServer\appsettings.json`) with one of the following.
+Update your MCP `appsettings.yaml` (Windows service: `C:\ProgramData\McpServer\appsettings.yaml`) with one of the following.
 
 ### Quick Tunnel (Dev/Ad Hoc)
 
-```json
-{
-  "Mcp": {
-    "Tunnel": {
-      "Provider": "cloudflare",
-      "Port": 7147,
-      "Cloudflare": {}
-    }
-  }
-}
+```yaml
+Mcp:
+  Tunnel:
+    Provider: cloudflare
+    Port: 7147
+    Cloudflare: {}
 ```
 
 Optional quick-tunnel hostname setting (only if your `cloudflared` workflow supports it):
 
-```json
-{
-  "Mcp": {
-    "Tunnel": {
-      "Provider": "cloudflare",
-      "Port": 7147,
-      "Cloudflare": {
-        "Hostname": "mcp.example.com"
-      }
-    }
-  }
-}
+```yaml
+Mcp:
+  Tunnel:
+    Provider: cloudflare
+    Port: 7147
+    Cloudflare:
+      Hostname: mcp.example.com
 ```
 
 ### Named Tunnel (Recommended for Stable Hostnames)
 
-```json
-{
-  "Mcp": {
-    "Tunnel": {
-      "Provider": "cloudflare",
-      "Port": 7147,
-      "Cloudflare": {
-        "TunnelName": "mcp-prod"
-      }
-    }
-  }
-}
+```yaml
+Mcp:
+  Tunnel:
+    Provider: cloudflare
+    Port: 7147
+    Cloudflare:
+      TunnelName: mcp-prod
 ```
 
 Notes:
