@@ -133,6 +133,37 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
             cancellationToken);
 
     /// <inheritdoc />
+    public Task<long> SetSessionTitleAsync(
+        string sourceType,
+        string sessionId,
+        string title,
+        CancellationToken cancellationToken = default)
+        => ExecuteMutationAsync(
+            "sessionlog.set_session_title",
+            new SetSessionTitlePayload(sourceType, sessionId, title),
+            sourceType,
+            sessionId,
+            MissingSnapshotRollbackPolicy.RestorePreMutation,
+            ct => _inner.SetSessionTitleAsync(sourceType, sessionId, title, ct),
+            cancellationToken);
+
+    /// <inheritdoc />
+    public Task<long> SetTurnTitleAsync(
+        string sourceType,
+        string sessionId,
+        string requestId,
+        string title,
+        CancellationToken cancellationToken = default)
+        => ExecuteMutationAsync(
+            "sessionlog.set_turn_title",
+            new SetTurnTitlePayload(sourceType, sessionId, requestId, title),
+            sourceType,
+            sessionId,
+            MissingSnapshotRollbackPolicy.RestorePreMutation,
+            ct => _inner.SetTurnTitleAsync(sourceType, sessionId, requestId, title, ct),
+            cancellationToken);
+
+    /// <inheritdoc />
     public Task<bool> ReplaceTurnSectionAsync(
         string sourceType,
         string sessionId,
@@ -854,4 +885,8 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         string ItemKey);
 
     private sealed record DeleteTurnPayload(string SourceType, string SessionId, string RequestId);
+
+    private sealed record SetSessionTitlePayload(string SourceType, string SessionId, string Title);
+
+    private sealed record SetTurnTitlePayload(string SourceType, string SessionId, string RequestId, string Title);
 }

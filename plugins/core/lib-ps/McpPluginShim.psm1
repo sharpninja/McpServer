@@ -381,7 +381,7 @@ function New-McpPluginTurnUpsertRequest {
         [Parameter(Mandatory)][string]$RequestId,
         [Parameter(Mandatory)][string]$Timestamp,
         [Parameter(Mandatory)][string]$QueryText,
-        [Parameter(Mandatory)][string]$Title,
+        [AllowEmptyString()][string]$Title = '',
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
         [Parameter(Mandatory)][string]$Model,
@@ -398,11 +398,18 @@ function New-McpPluginTurnUpsertRequest {
         requestId = $RequestId
         timestamp = $Timestamp
         queryText = $QueryText
-        queryTitle = $Title
         response = $ResponseText
         status = $Status
         model = $Model
         tokenCount = $TokenCount
+    }
+
+    # TR-MCP-REPL-015: include queryTitle only when a title is actually supplied.
+    # An empty title means "omit" so the server preserves the existing title
+    # (FR-SUPPORT-015) instead of an incidental re-submit clobbering it with a
+    # stale local cache value.
+    if (-not [string]::IsNullOrWhiteSpace($Title)) {
+        $turn.queryTitle = $Title
     }
 
     if (-not [string]::IsNullOrWhiteSpace($Interpretation)) {

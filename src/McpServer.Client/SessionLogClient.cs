@@ -226,6 +226,28 @@ public sealed class SessionLogClient : McpClientBase
     }
 
     /// <summary>
+    /// TR-MCP-SESSIONLOG-005: Explicitly set an existing session's title (dedicated
+    /// retitle path that a stale whole-session re-submit cannot clobber).
+    /// </summary>
+    public async Task<SessionLogMutationResult> SetSessionTitleAsync(
+        string agent, string sessionId, string title, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/title";
+        return await PostAsync<SessionLogMutationResult>(path, new { title }, cancellationToken);
+    }
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-005: Explicitly set an existing turn's title (dedicated
+    /// retitle path; does not reset omitted scalars or clear collections).
+    /// </summary>
+    public async Task<SessionLogMutationResult> SetTurnTitleAsync(
+        string agent, string sessionId, string requestId, string title, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/title";
+        return await PostAsync<SessionLogMutationResult>(path, new { title }, cancellationToken);
+    }
+
+    /// <summary>
     /// FR-SUPPORT-010G: PUT a single turn section - REPLACE just that section.
     /// Sections: actions, tags, context, dialog, commits, designDecisions,
     /// requirementsDiscovered, filesModified, blockers. The matching property on

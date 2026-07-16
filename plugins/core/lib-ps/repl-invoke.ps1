@@ -563,6 +563,19 @@ function Get-ReplSessionStateValue {
     return [string]$state[$Key]
 }
 
+function Set-ReplSessionStateValue {
+    # TR-MCP-REPL-014/015: object-first read-modify-write of a single session-state
+    # key (e.g. the stable session 'title'). Never edits YAML as text.
+    param(
+        [Parameter(Mandatory)][string]$Key,
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Value)
+    $f = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
+    $state = Read-McpYamlObject -Path $f -Create
+    $state[$Key] = $Value
+    Write-McpYamlObject -Path $f -Document $state
+    return $true
+}
+
 function Get-ReplCurrentTurnValue {
     param([Parameter(Mandatory)][string]$Key)
     $state = Read-ReplCurrentTurnState
@@ -723,7 +736,8 @@ function Invoke-ReplPersistTurn {
     # remove the local copy only after MCP confirms durable persistence.
     param(
         [Parameter(Mandatory)][string]$RequestId,
-        [Parameter(Mandatory)][string]$Title,
+        [AllowEmptyString()][string]$Title = '',
+        [switch]$IncludeSessionTitle,
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
         [string]$ActionsYaml = '',
@@ -739,20 +753,24 @@ function Invoke-ReplPersistTurn {
 
     $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList
 
+    # TR-MCP-REPL-015: send the session title only when the caller explicitly seeds
+    # or sets it (IncludeSessionTitle). Otherwise omit it so an incidental re-submit
+    # never retitles the session; the server preserves the omitted field.
     $sessionTitle = Get-ReplSessionStateValue -Key 'title'
-    if (-not $sessionTitle) { $sessionTitle = $Title }
     $sessionStarted = Get-ReplSessionStateValue -Key 'started'
     if (-not $sessionStarted) { $sessionStarted = [string]$turnObj.turn.timestamp }
     $sessionLog = [ordered]@{
         sourceType = $meta.SourceType
         sessionId = $meta.SessionId
-        title = $sessionTitle
         model = [string]$turnObj.turn.model
         started = $sessionStarted
         lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         status = 'in_progress'
         turnCount = 1
         turns = @($turnObj.turn)
+    }
+    if ($IncludeSessionTitle -and -not [string]::IsNullOrWhiteSpace($sessionTitle)) {
+        $sessionLog.title = $sessionTitle
     }
     $payloadObject = [ordered]@{
         sessionLog = $sessionLog
@@ -1011,10 +1029,10 @@ function Invoke-ReplSupersedeCurrentTurnIfInProgress {
     if ($status -ne 'in_progress') { return }
     $oldRequestId = if ($state.Contains('turnRequestId')) { [string]$state['turnRequestId'] } else { '' }
     if (-not $oldRequestId -or $oldRequestId -eq $NextRequestId) { return }
-    $oldTitle = if ($state.Contains('queryTitle') -and $state['queryTitle']) { [string]$state['queryTitle'] } else { 'Superseded turn' }
-
     try {
-        [void](Invoke-ReplPersistTurn -RequestId $oldRequestId -Title $oldTitle -Status 'canceled' -ResponseText "Superseded by $NextRequestId before it was completed.")
+        # TR-MCP-REPL-015: omit the title so superseding a turn preserves any
+        # agent-refined or server-side title instead of re-sending the stale cache.
+        [void](Invoke-ReplPersistTurn -RequestId $oldRequestId -Title '' -Status 'canceled' -ResponseText "Superseded by $NextRequestId before it was completed.")
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.beginTurn could not persist superseded turn '$oldRequestId': $_")
     }
@@ -1063,7 +1081,15 @@ function Invoke-WorkflowBeginTurn {
     try {
         Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId $requestId
         Write-ReplCurrentTurnState -State $turnState
-        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)')
+        # TR-MCP-REPL-015: seed the session title from the first turn only. Once
+        # session-state has a title, later turns omit it (so the session is not
+        # retitled to each new prompt); setSessionTitle changes it explicitly.
+        $existingSessionTitle = Get-ReplSessionStateValue -Key 'title'
+        $seedSessionTitle = ([string]::IsNullOrWhiteSpace($existingSessionTitle) -and -not [string]::IsNullOrWhiteSpace($queryTitle))
+        if ($seedSessionTitle) {
+            Set-ReplSessionStateValue -Key 'title' -Value $queryTitle | Out-Null
+        }
+        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
         if (-not $persisted) {
             [Console]::Error.WriteLine("workflow.sessionlog.beginTurn did not confirm durable persistence for '$requestId'.")
             return $false
@@ -1096,7 +1122,7 @@ function Invoke-WorkflowAppendActions {
     }
 
     if ($ParamsYaml -and $ParamsYaml.Trim()) {
-        Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml | Out-Null
+        $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
         if ($added -gt 0) {
             Update-ReplTurnCacheEdits -Increment $added | Out-Null
         }
@@ -1109,7 +1135,9 @@ function Invoke-WorkflowAppendActions {
         Update-ReplTurnAudit -Field 'auditCommits' -Increment $comC | Out-Null
 
         $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-        $title = Get-ReplTurnCacheField -Field 'queryTitle'
+        # TR-MCP-REPL-015: send the turn title only when explicitly set this call;
+        # otherwise omit so a stale cache title cannot clobber the server value.
+        $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
         $null = Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText 'Actions appended.' `
             -ActionsYaml $actionsBlock
@@ -1166,10 +1194,11 @@ function Invoke-WorkflowAppendDialog {
         return $false
     }
 
-    Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml | Out-Null
+    $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
     Update-ReplTurnAudit -Field 'auditDialog' -Increment $dialogItems.Count | Out-Null
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-    $title = Get-ReplTurnCacheField -Field 'queryTitle'
+    # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
+    $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     return [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
         -Status 'in_progress' -ResponseText 'Dialog appended.' `
         -ProcessingDialog $dialogItems)
@@ -1186,7 +1215,7 @@ function Invoke-WorkflowUpdateTurn {
     }
 
     $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
-    Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml | Out-Null
+    $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
 
     $state = Read-ReplCurrentTurnState
     $responseText = if ($state -and $state.Contains('response')) { [string]$state['response'] } else { '' }
@@ -1222,7 +1251,8 @@ function Invoke-WorkflowUpdateTurn {
     }
 
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-    $title = Get-ReplTurnCacheField -Field 'queryTitle'
+    # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
+    $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     try {
         return [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
             -Status 'in_progress' -ResponseText $responseText `
@@ -1251,7 +1281,7 @@ function Invoke-WorkflowCompleteTurn {
             $responseText = [string]$responseValue
         }
     }
-    Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml | Out-Null
+    $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
 
     $actionsBlock = ''
     if ($ParamsYaml -and ($ParamsYaml -match '(?m)^\s*actions:' -or $ParamsYaml -match '(?m)^\s*actions:\s*\S')) {
@@ -1259,7 +1289,8 @@ function Invoke-WorkflowCompleteTurn {
     }
 
     $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
-    $title = Get-ReplTurnCacheField -Field 'queryTitle'
+    # TR-MCP-REPL-015: send the turn title only when explicitly set this call.
+    $title = if ($explicitTitle) { Get-ReplTurnCacheField -Field 'queryTitle' } else { '' }
     $persisted = $false
     try {
         $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title $title `
@@ -1290,6 +1321,88 @@ function Invoke-WorkflowCompleteTurn {
 
 }
 
+function Invoke-WorkflowSetTurnTitle {
+    # TR-MCP-REPL-014: dedicated turn retitle. Updates the local cache queryTitle
+    # and calls the server SetTurnTitle path, so the title is durable even though
+    # incidental re-submits now omit the title (TR-MCP-REPL-015).
+    param([string]$ParamsYaml)
+    $turnFile = Get-ReplCurrentTurnFile
+    if (-not (Test-Path $turnFile)) {
+        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.setTurnTitle')
+    }
+    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.setTurnTitle')) {
+        return $false
+    }
+
+    $title = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'queryTitle'
+    if ([string]::IsNullOrWhiteSpace($title)) {
+        [Console]::Error.WriteLine('workflow.sessionlog.setTurnTitle requires a non-empty queryTitle.')
+        return $false
+    }
+
+    $meta = Get-ReplSessionMeta
+    if (-not $meta) {
+        [Console]::Error.WriteLine("workflow.sessionlog.setTurnTitle requires cached session metadata. $(Get-ReplRecoveryGuidance)")
+        return $false
+    }
+    $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
+    if ([string]::IsNullOrWhiteSpace($reqId)) {
+        [Console]::Error.WriteLine('workflow.sessionlog.setTurnTitle requires an active turn requestId.')
+        return $false
+    }
+
+    Set-ReplTurnCacheField -Field 'queryTitle' -Value $title | Out-Null
+
+    $callParams = [ordered]@{
+        agent     = $meta.SourceType
+        sessionId = $meta.SessionId
+        requestId = $reqId
+        title     = $title
+    }
+    $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+    $result = Invoke-ReplRaw -Method 'client.SessionLog.SetTurnTitleAsync' -ParamsYaml $callYaml
+    if (-not $result.Success) {
+        [Console]::Error.WriteLine("workflow.sessionlog.setTurnTitle server call failed: $($result.Error)$($result.Output)")
+        return $false
+    }
+    return $true
+}
+
+function Invoke-WorkflowSetSessionTitle {
+    # TR-MCP-REPL-014: dedicated session retitle. Writes the stable session-state
+    # title and calls the server SetSessionTitle path.
+    param([string]$ParamsYaml)
+    $title = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'title'
+    if ([string]::IsNullOrWhiteSpace($title)) {
+        $title = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'sessionTitle'
+    }
+    if ([string]::IsNullOrWhiteSpace($title)) {
+        [Console]::Error.WriteLine('workflow.sessionlog.setSessionTitle requires a non-empty title.')
+        return $false
+    }
+
+    $meta = Get-ReplSessionMeta
+    if (-not $meta) {
+        [Console]::Error.WriteLine("workflow.sessionlog.setSessionTitle requires cached session metadata. $(Get-ReplRecoveryGuidance)")
+        return $false
+    }
+
+    Set-ReplSessionStateValue -Key 'title' -Value $title | Out-Null
+
+    $callParams = [ordered]@{
+        agent     = $meta.SourceType
+        sessionId = $meta.SessionId
+        title     = $title
+    }
+    $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+    $result = Invoke-ReplRaw -Method 'client.SessionLog.SetSessionTitleAsync' -ParamsYaml $callYaml
+    if (-not $result.Success) {
+        [Console]::Error.WriteLine("workflow.sessionlog.setSessionTitle server call failed: $($result.Error)$($result.Output)")
+        return $false
+    }
+    return $true
+}
+
 function Invoke-ReplMethod {
     [CmdletBinding()]
     param(
@@ -1308,6 +1421,8 @@ function Invoke-ReplMethod {
         'workflow.sessionlog.appendActions'   { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendActions -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.appendDialog'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendDialog -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.completeTurn'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowCompleteTurn -ParamsYaml $ParamsYaml); return }
+        'workflow.sessionlog.setTurnTitle'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowSetTurnTitle -ParamsYaml $ParamsYaml); return }
+        'workflow.sessionlog.setSessionTitle' { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowSetSessionTitle -ParamsYaml $ParamsYaml); return }
     }
 
     $r = Invoke-ReplRaw -Method $Method -ParamsYaml $ParamsYaml

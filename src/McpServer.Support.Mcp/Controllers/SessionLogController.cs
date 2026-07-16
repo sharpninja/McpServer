@@ -256,6 +256,81 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
+    /// TR-MCP-SESSIONLOG-005: Explicitly set an existing session's title. This is
+    /// the dedicated session-retitle path, so a whole-session submit (which the
+    /// plugin now issues with the title omitted on incidental re-submit) cannot
+    /// clobber an agent rename.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="body">Body carrying the new session title.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the session row id, 400 on validation failure, or 404 if the session does not exist.</returns>
+    [HttpPost("{agent}/{sessionId}/title")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SetSessionTitleAsync(
+        string agent,
+        string sessionId,
+        [FromBody] SessionTitleRequest? body,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var sessionRowId = await _service.SetSessionTitleAsync(agent, sessionId, body?.Title ?? string.Empty, cancellationToken).ConfigureAwait(false);
+            return Ok(new { turnId = sessionRowId, agent, sessionId, retitled = true });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid session identifier.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-005: Explicitly set an existing turn's title. The
+    /// dedicated turn-retitle path; unlike the PUT replace it does not reset
+    /// omitted scalars or clear collections.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="body">Body carrying the new turn title.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the turn id, 400 on validation failure, or 404 if the session or turn does not exist.</returns>
+    [HttpPost("{agent}/{sessionId}/{requestId}/title")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SetTurnTitleAsync(
+        string agent,
+        string sessionId,
+        string requestId,
+        [FromBody] SessionTitleRequest? body,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var turnId = await _service.SetTurnTitleAsync(agent, sessionId, requestId, body?.Title ?? string.Empty, cancellationToken).ConfigureAwait(false);
+            return Ok(new { turnId, agent, sessionId, requestId, retitled = true });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid turn identifier.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// FR-SUPPORT-014: Begins (or re-opens) a turn keyed by
     /// (agent, sessionId, requestId) with status in_progress. Stateless: no
     /// in-process "active session" is required or kept.
@@ -606,3 +681,7 @@ public sealed record SessionLifecycleOpenRequest(string? Title, string? Model);
 /// <param name="Timestamp">ISO 8601 turn timestamp; defaults to now.</param>
 /// <param name="Model">AI model identifier.</param>
 public sealed record SessionLifecycleBeginRequest(string? QueryTitle, string? QueryText, string? Timestamp, string? Model);
+
+/// <summary>TR-MCP-SESSIONLOG-005: Body for the explicit session/turn title-set endpoints.</summary>
+/// <param name="Title">New title to set on the session or turn.</param>
+public sealed record SessionTitleRequest(string? Title);

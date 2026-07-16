@@ -1656,6 +1656,68 @@ public sealed class SessionLogServiceTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetSessionTitleAsync sets
+    /// the title on an existing session. Fixture: in-memory EF session created via
+    /// SubmitAsync with an original title, then explicitly retitled.
+    /// </summary>
+    [Fact]
+    public async Task SetSessionTitleAsync_ExistingSession_UpdatesTitle()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "set-session-title");
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId, title: "Original session title"), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await _sut.SetSessionTitleAsync("ClaudeCode", sessionId, "Renamed session title", TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.IgnoreQueryFilters()
+            .FirstAsync(s => s.SessionId == sessionId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("Renamed session title", stored.Title);
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetTurnTitleAsync sets the
+    /// QueryTitle on an existing turn. Fixture: in-memory EF session with the
+    /// default CreateTestDto turn (req-...-entry-001), then explicitly retitled.
+    /// </summary>
+    [Fact]
+    public async Task SetTurnTitleAsync_ExistingTurn_UpdatesQueryTitle()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "set-turn-title");
+        const string requestId = "req-20260211T100100Z-entry-001";
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await _sut.SetTurnTitleAsync("ClaudeCode", sessionId, requestId, "Refined turn title", TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var turn = await _db.SessionLogTurns.IgnoreQueryFilters()
+            .FirstAsync(t => t.RequestId == requestId, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("Refined turn title", turn.QueryTitle);
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetSessionTitleAsync throws
+    /// InvalidOperationException when the target session does not exist.
+    /// </summary>
+    [Fact]
+    public async Task SetSessionTitleAsync_MissingSession_Throws()
+    {
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _sut.SetSessionTitleAsync("ClaudeCode", BuildSessionId("ClaudeCode", "missing-session"), "x", TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-SESSIONLOG-005 / TR-MCP-SESSIONLOG-005: SetTurnTitleAsync throws
+    /// InvalidOperationException when the session exists but the turn does not.
+    /// </summary>
+    [Fact]
+    public async Task SetTurnTitleAsync_MissingTurn_Throws()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", "set-turn-title-missing");
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", sessionId), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            _sut.SetTurnTitleAsync("ClaudeCode", sessionId, "req-20260211T100100Z-entry-999", "x", TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
     private static void DriftTurnRows(SqliteConnection connection, string sessionId, bool driftGrandchildren = false)
     {
         EnsureWorkspaceRow(connection, DriftedWorkspacePath);

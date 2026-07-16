@@ -618,6 +618,74 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <inheritdoc />
+    public async Task<long> SetSessionTitleAsync(string sourceType, string sessionId, string title, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        ArgumentNullException.ThrowIfNull(title);
+        SyncDbWorkspaceFromContext();
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+
+        // TR-MCP-SESSIONLOG-005: dedicated session retitle. Unlike the additive
+        // SubmitAsync merge (which the plugin now calls with the title omitted),
+        // this explicitly overwrites the session Title so an agent rename sticks.
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
+            ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
+
+        session.Title = title;
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return session.Id;
+    }
+
+    /// <inheritdoc />
+    public async Task<long> SetTurnTitleAsync(string sourceType, string sessionId, string requestId, string title, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        ArgumentNullException.ThrowIfNull(requestId);
+        ArgumentNullException.ThrowIfNull(title);
+        SyncDbWorkspaceFromContext();
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+
+        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);
+        if (requestIdError is not null)
+            throw new ArgumentException(requestIdError, nameof(requestId));
+
+        // TR-MCP-SESSIONLOG-005: dedicated turn retitle. Explicitly overwrites the
+        // turn QueryTitle without the reset-omitted-scalars semantics of
+        // ReplaceTurnAsync, so an agent-refined title survives incidental submits.
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
+            ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
+
+        var turn = session.Turns.FirstOrDefault(t => t.RequestId == requestId)
+            ?? throw new InvalidOperationException($"Turn not found: {sourceType}/{sessionId}/{requestId}");
+
+        turn.QueryTitle = title;
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return turn.Id;
+    }
+
+    /// <inheritdoc />
     public async Task<bool> ReplaceTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, UnifiedRequestEntryDto payload, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(sourceType);

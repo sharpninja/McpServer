@@ -981,5 +981,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-CLEARSESSION-001 | Tracked | Functional-Requirements.md |
 | TR-MCP-CLEARSESSION-001 | Tracked | Technical-Requirements.md |
 | TEST-MCP-CLEARSESSION-001 | Tracked | Testing-Requirements.md |
+| FR-MCP-REPL-010 | Tracked | Functional-Requirements.md |
+| TR-MCP-REPL-014 | Tracked | Technical-Requirements.md |
+| TR-MCP-REPL-015 | Tracked | Technical-Requirements.md |
+| TR-MCP-SESSIONLOG-005 | Tracked | Technical-Requirements.md |
+| TEST-MCP-REPL-029 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-030 | Tracked | Testing-Requirements.md |
+| TEST-MCP-SESSIONLOG-005 | Tracked | Testing-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

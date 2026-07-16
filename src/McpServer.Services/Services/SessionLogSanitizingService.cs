@@ -92,6 +92,27 @@ public sealed class SessionLogSanitizingService : ISessionLogService
     }
 
     /// <inheritdoc />
+    public Task<long> SetSessionTitleAsync(
+        string sourceType,
+        string sessionId,
+        string title,
+        CancellationToken cancellationToken = default)
+    {
+        return inner.SetSessionTitleAsync(sourceType, sessionId, title, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<long> SetTurnTitleAsync(
+        string sourceType,
+        string sessionId,
+        string requestId,
+        string title,
+        CancellationToken cancellationToken = default)
+    {
+        return inner.SetTurnTitleAsync(sourceType, sessionId, requestId, title, cancellationToken);
+    }
+
+    /// <inheritdoc />
     public Task<bool> ReplaceTurnSectionAsync(
         string sourceType,
         string sessionId,

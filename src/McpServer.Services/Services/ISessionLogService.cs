@@ -170,6 +170,36 @@ public interface ISessionLogService
     Task<bool> OpenSessionAsync(string sourceType, string sessionId, string? title = null, string? model = null, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// TR-MCP-SESSIONLOG-005: Explicitly set the title of an existing session.
+    /// This is the dedicated session-retitle path; the whole-session additive
+    /// submit (<see cref="SubmitAsync"/>) never re-titles a session it did not
+    /// create when the plugin omits the title, so an agent uses this to durably
+    /// rename a session without a stale re-submit clobbering it.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="title">New session title.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The persisted session id.</returns>
+    /// <exception cref="InvalidOperationException">When the session does not exist.</exception>
+    Task<long> SetSessionTitleAsync(string sourceType, string sessionId, string title, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-005: Explicitly set the QueryTitle of an existing turn.
+    /// This is the dedicated turn-retitle path; an agent uses it to durably refine
+    /// a turn's title without a full <see cref="ReplaceTurnAsync"/> that would
+    /// reset omitted scalar fields and clear collections.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="requestId">Turn request identifier.</param>
+    /// <param name="title">New turn title.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The persisted turn id.</returns>
+    /// <exception cref="InvalidOperationException">When the session or turn does not exist.</exception>
+    Task<long> SetTurnTitleAsync(string sourceType, string sessionId, string requestId, string title, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// BUG-SESSIONLOG-WS-005: Re-stamps session-log child rows (turns and their
     /// children) whose WorkspaceId drifted away from their parent session's
     /// WorkspaceId. Idempotent data repair for stamping inconsistencies introduced

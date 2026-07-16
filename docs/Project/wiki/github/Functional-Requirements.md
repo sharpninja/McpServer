@@ -1577,6 +1577,11 @@ Scope: layer-1+
 - [ ] completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.
 - [ ] Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence.
 
+## FR-MCP-REPL-010 Plugin session-log title refinement surfaces
+
+The MCP REPL plugin SHALL expose setTurnTitle and setSessionTitle workflow methods that durably update the active turn's title and the session title through explicit server title-update paths, so an agent-refined title survives the whole-session re-submit the plugin issues on every subsequent persist. Scope: layer-1+. Acceptance Criteria: (1) workflow.sessionlog.setTurnTitle updates current-turn.yaml queryTitle and persists the new title to the server for the active turn; (2) workflow.sessionlog.setSessionTitle writes session-state.yaml title and persists the new session title to the server; (3) a subsequent supersede/complete/append whole-session re-submit does not revert either title.
+Scope: layer-1+
+
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
 FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.

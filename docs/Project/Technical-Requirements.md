@@ -1968,6 +1968,20 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-REPL-014
+
+**Plugin setTurnTitle and setSessionTitle handlers** — repl-invoke.ps1 Invoke-ReplMethod MUST dispatch workflow.sessionlog.setTurnTitle to a handler that updates current-turn.yaml queryTitle (Set-ReplTurnCacheField) and calls the server turn title-update path, and workflow.sessionlog.setSessionTitle to a handler that read-modify-writes session-state.yaml title and calls the server session title-update path. Both MUST fail closed (non-zero result) when no active session/turn cache is present. Validated by TEST-MCP-REPL-029. Covered by FR: FR-MCP-REPL-010. Status: pending. Scope: layer-1+.
+**Covered by:** FR: FR-MCP-REPL-010; TEST: TEST-MCP-REPL-029, TEST-MCP-REPL-030
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-015
+
+**Plugin omits titles on incidental whole-session re-submit** — Invoke-ReplPersistTurn MUST omit the turn QueryTitle and the session Title on incidental re-submits (supersede, appendActions, appendDialog, updateTurn, completeTurn) unless a title is explicitly supplied in that operation. Because the server preserves omitted fields (FR-SUPPORT-015), an agent-set or server-preserved title then survives the whole-session re-submit instead of being clobbered by the stale local cache value. beginTurn still seeds the new turn's provisional QueryTitle, and seeds the session Title only on the first turn (when session-state has no title yet); an explicit queryTitle param on appendActions/appendDialog/updateTurn/completeTurn still updates the turn title. Validated by TEST-MCP-REPL-030. Covered by FR: FR-MCP-REPL-010. Status: pending. Scope: layer-1+.
+**Covered by:** FR: FR-MCP-REPL-010; TEST: TEST-MCP-REPL-029, TEST-MCP-REPL-030
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-REPL-TRIAGE-001
 
 **Triage REPL surface** — REPL parity for triage through client passthrough and typed workflow wrappers.
@@ -2156,21 +2170,28 @@ Scope: layer-1+
 ## TR-MCP-SESSIONLOG-001
 
 **Session-log lifecycle tools return structured errors** — The session-log lifecycle MCP tools (sessionlog_complete_turn, sessionlog_fail_turn) SHALL return a structured {error} result for every failure mode, including a malformed turnJson payload and a workspace-resolution failure; no failure may surface as the ModelContextProtocol SDK's opaque "An error occurred invoking sessionlog_complete_turn" message. Acceptance Criteria: (AC1) sessionlog_complete_turn/sessionlog_fail_turn with a malformed turnJson return {error} carrying the exception message and no success field; (AC2) a workspace-resolution failure during ApplyWorkspaceOverride returns {error} rather than escaping uncaught; (AC3) a valid or null turnJson still returns {success:true}. Origin: BUG-TRIAGE-070/075 (JsonSerializer.Deserialize and ApplyWorkspaceOverride were outside the try in FinalizeLifecycleTurnToolAsync/UpsertLifecycleTurnToolAsync, FwhMcpTools.SessionLog.cs). Validated by TEST-MCP-SESSIONLOG-001.
-**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-SESSIONLOG-002
 
 **Session-log text search covers dialog and child collections** — Session-log query text search SHALL match content in processing-dialog items, actions (description/type/filePath), commits (message/sha/branch/files), string-list sections (design decisions / requirements discovered / files modified / blockers), tags, and context items - not only the four turn scalar fields (QueryText, QueryTitle, Response, Interpretation). Acceptance Criteria: (AC1) a query whose term exists only in a processing-dialog item returns the session; (AC2) a query whose term exists only in an action description returns the session; (AC3) existing scalar-field and boolean queries still return the correct sessions. Origin: BUG-TRIAGE-070 (SessionLogService.BuildSearchText joined only the four scalar fields). The full turn graph is Include-loaded in QueryAsync before the client-side matcher runs, so child navigations are populated for both SQLite and SQL Server. Validated by TEST-MCP-SESSIONLOG-002.
-**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-SESSIONLOG-003
 
 **Terminal-turn compliance gate is QBAgent-only** — The terminal-turn decision/action/commit compliance gate (ValidateTerminalTurnCompliance) SHALL apply only to the QBAgent ACID source type; standard agents (ClaudeCode, Cursor, Copilot, ...) SHALL be able to complete or fail a turn with no decision/action/commit items. The sessionlog_complete_turn and sessionlog_fail_turn MCP tool descriptions SHALL state this QBAgent-only scope so operators/triage do not misattribute plugin-side completion failures to a server gate. Acceptance Criteria: (AC1) UpsertTurnAsync with a completed empty turn is accepted for a ClaudeCode session and rejected (ArgumentException) for a QBAgent session; (AC2) the complete/fail tool descriptions state the gate is QBAgent-only. Origin: BUG-TRIAGE-082/083 (reporter hypothesized the server gate blocked ClaudeCode completions; the gate is QBAgent-only, so the real cause is plugin-local). Validated by TEST-MCP-SESSIONLOG-003.
-**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-SESSIONLOG-005
+
+**Dedicated session and turn title-update service, endpoints, and client** — ISessionLogService MUST expose SetSessionTitleAsync(sourceType, sessionId, title) and SetTurnTitleAsync(sourceType, sessionId, requestId, title) that unconditionally set the title on an existing session or turn (throwing when the session or turn does not exist), save, and publish a change event. SessionLogService, the TransactionGated decorator, and the Federated decorator MUST implement or delegate these. The capability MUST be reachable via REST on SessionLogController and via the typed SessionLogClient. Validated by TEST-MCP-SESSIONLOG-005. Covered by FR: FR-SUPPORT-012. Status: pending. Scope: layer-1+.
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
 **Status:** pending
 Scope: layer-1+
 
@@ -2850,7 +2871,7 @@ Scope: layer-1+
 ## TR-SUPPORT-LOG-010
 
 **Session-log ProblemDetails contract** — Session-log REST endpoints SHALL return application/problem+json for malformed JSON binding and domain validation failures. Error keys SHALL identify the JSON root or offending domain field rather than leaking action parameter names such as dto.
-**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
 **Status:** completed
 Scope: layer-1+
 

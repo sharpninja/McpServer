@@ -841,6 +841,10 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-REPL-028: ReplWorkspaceResolution.Tests.ps1: a marker-bearing current directory outranks an inherited MCP_WORKSPACE_PATH when the repl bridge resolves the workspace. Validates TR-MCP-REPL-013 / BUG-TRIAGE-077.
   Scope: layer-1+
+- TEST-MCP-REPL-029: Validates TR-MCP-REPL-014. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 (Example-B override pattern): workflow.sessionlog.setTurnTitle updates current-turn.yaml queryTitle and invokes the server turn title-update path; workflow.sessionlog.setSessionTitle writes session-state.yaml title and invokes the server session title-update path; both fail closed (non-zero) when no session/turn cache is present. Red before the handlers, green after. Scope: layer-1+.
+  Scope: layer-1+
+- TEST-MCP-REPL-030: Validates TR-MCP-REPL-015. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 (Example-B override pattern capturing Invoke-ReplPersistTurn args): an incidental re-submit (appendActions/appendDialog/completeTurn/supersede) with no explicit queryTitle param omits the turn title (and session title) from the persisted payload so a server-preserved title is not clobbered; an explicit queryTitle param still sends and updates the turn title; beginTurn seeds the turn title and seeds the session title only when session-state has none. Red before the omit change, green after. Scope: layer-1+.
+  Scope: layer-1+
 - TEST-MCP-REPL-TRIAGE-001: Full client.triage.* and workflow.triage.* REPL surface works with correct envelopes.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -888,6 +892,8 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-SESSIONLOG-002: Validates TR-MCP-SESSIONLOG-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: QueryAsync_TextMatchesProcessingDialogContent seeds a session whose unique token exists only in a ProcessingDialog item Content and asserts the text query returns it; QueryAsync_TextMatchesActionDescription does the same for an action Description. Red before widening BuildSearchText (both returned 0), green after. Existing QueryAsync scalar/boolean search tests (WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields et al.) remain green as the AC3 regression guard.
   Scope: layer-1+
 - TEST-MCP-SESSIONLOG-003: Validates TR-MCP-SESSIONLOG-003. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: UpsertTurnAsync_CompletedEmptyTurn_AcceptedForClaudeCode_RejectedForQBAgent seeds a ClaudeCode session and a QBAgent session, then asserts a completed turn with zero decisions/actions/commits returns a turnId for ClaudeCode and throws ArgumentException for QBAgent. Regression guard locking the QBAgent-only scope so a future broadening of the gate to standard agents fails. Tool-description accuracy (AC2) applied in FwhMcpTools.SessionLog.cs.
+  Scope: layer-1+
+- TEST-MCP-SESSIONLOG-005: Validates TR-MCP-SESSIONLOG-005. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: SetSessionTitleAsync unconditionally changes an existing session Title; SetTurnTitleAsync unconditionally changes an existing turn QueryTitle; both throw InvalidOperationException when the session or turn does not exist. Red before the methods exist, green after. Scope: layer-1+.
   Scope: layer-1+
 - TEST-MCP-SESSIONLOGSAN-001: Tests must prove default and configured redaction across the complete session-log DTO graph and all supported read transports without changing persisted raw data or query semantics.
   Scope: layer-1+

@@ -218,7 +218,8 @@ acceptanceCriteria:
             function Invoke-ReplPersistTurn {
                 param(
                     [Parameter(Mandatory)][string]$RequestId,
-                    [Parameter(Mandatory)][string]$Title,
+                    [AllowEmptyString()][string]$Title = '',
+                    [switch]$IncludeSessionTitle,
                     [Parameter(Mandatory)][string]$Status,
                     [string]$ResponseText = '',
                     [string]$ActionsYaml = '',
@@ -349,7 +350,8 @@ acceptanceCriteria:
             function Invoke-ReplPersistTurn {
                 param(
                     [Parameter(Mandatory)][string]$RequestId,
-                    [Parameter(Mandatory)][string]$Title,
+                    [AllowEmptyString()][string]$Title = '',
+                    [switch]$IncludeSessionTitle,
                     [Parameter(Mandatory)][string]$Status,
                     [string]$ResponseText = '',
                     [string]$ActionsYaml = '',
@@ -527,6 +529,120 @@ contextList:
                 Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             }
             Remove-Variable -Name updateTurnPersistArgs -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-030 omits the turn title on an incidental appendActions but sends an explicit one' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $script:reql030Args = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
+            function Assert-ReplCurrentTurnFresh { return $true }
+            function Invoke-ReplPersistTurn {
+                param(
+                    [Parameter(Mandatory)][string]$RequestId,
+                    [AllowEmptyString()][string]$Title = '',
+                    [switch]$IncludeSessionTitle,
+                    [Parameter(Mandatory)][string]$Status,
+                    [string]$ResponseText = '',
+                    [string]$ActionsYaml = '',
+                    [object[]]$ProcessingDialog = @(),
+                    [string]$Interpretation = '',
+                    [int]$TokenCount = 0,
+                    [string[]]$Tags = @(),
+                    [string[]]$ContextList = @()
+                )
+                $script:reql030Args = [ordered]@{ Title = $Title; IncludeSessionTitle = [bool]$IncludeSessionTitle }
+                return $true
+            }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260712T000000Z-plugin-session'
+                agent = 'Codex'
+                title = 'Stable session title'
+            })
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260712T000002Z-omit'
+                queryTitle = 'Provisional turn title'
+                status = 'in_progress'
+                queryText = 'Prompt'
+            })
+
+            # TR-MCP-REPL-015: incidental append (no queryTitle) must omit the title.
+            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n- type: note`n  description: work"
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:reql030Args.Title | Should -Be ''
+            $script:reql030Args.IncludeSessionTitle | Should -BeFalse
+
+            # An explicit queryTitle param still sends and updates the turn title.
+            $script:reql030Args = $null
+            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "queryTitle: Explicit new title`nactions:`n- type: note`n  description: work"
+            $script:reql030Args.Title | Should -Be 'Explicit new title'
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            Remove-Variable -Name reql030Args -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-029 setTurnTitle and setSessionTitle update the cache and call the dedicated server methods' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $script:reql029Calls = @()
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Assert-ReplCurrentTurnFresh { return $true }
+            function Invoke-ReplRaw {
+                param([Parameter(Mandatory)][string]$Method, [string]$ParamsYaml = '')
+                $script:reql029Calls += [ordered]@{ Method = $Method; ParamsYaml = $ParamsYaml }
+                return [pscustomobject]@{ Success = $true; Output = ''; Error = '' }
+            }
+
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'Codex-20260712T000000Z-plugin-session'
+                agent = 'Codex'
+            })
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = 'req-20260712T000003Z-retitle'
+                queryTitle = 'Provisional'
+                status = 'in_progress'
+                queryText = 'Prompt'
+            })
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.setTurnTitle' -ParamsYaml 'queryTitle: Refined turn title'
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $turn = Read-McpYamlObject -Path (Join-Path $cacheDir 'current-turn.yaml')
+            $turn['queryTitle'] | Should -Be 'Refined turn title'
+            @($script:reql029Calls | Where-Object { $_.Method -eq 'client.SessionLog.SetTurnTitleAsync' }).Count | Should -Be 1
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.setSessionTitle' -ParamsYaml 'title: Refined session title'
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $session = Read-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml')
+            $session['title'] | Should -Be 'Refined session title'
+            @($script:reql029Calls | Where-Object { $_.Method -eq 'client.SessionLog.SetSessionTitleAsync' }).Count | Should -Be 1
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            Remove-Variable -Name reql029Calls -Scope Script -ErrorAction SilentlyContinue
             Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
         }
     }

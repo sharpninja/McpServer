@@ -86,6 +86,14 @@ public sealed class FederatedSessionLogService : ISessionLogService
         => _inner.ReplaceTurnAsync(sourceType, sessionId, turn, cancellationToken);
 
     /// <inheritdoc />
+    public Task<long> SetSessionTitleAsync(string sourceType, string sessionId, string title, CancellationToken cancellationToken = default)
+        => _inner.SetSessionTitleAsync(sourceType, sessionId, title, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<long> SetTurnTitleAsync(string sourceType, string sessionId, string requestId, string title, CancellationToken cancellationToken = default)
+        => _inner.SetTurnTitleAsync(sourceType, sessionId, requestId, title, cancellationToken);
+
+    /// <inheritdoc />
     public Task<bool> ReplaceTurnSectionAsync(string sourceType, string sessionId, string requestId, string section, UnifiedRequestEntryDto payload, CancellationToken cancellationToken = default)
         => _inner.ReplaceTurnSectionAsync(sourceType, sessionId, requestId, section, payload, cancellationToken);
 

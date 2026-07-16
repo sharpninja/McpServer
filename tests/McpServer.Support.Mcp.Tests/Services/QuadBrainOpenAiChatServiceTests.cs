@@ -538,6 +538,12 @@ public sealed class QuadBrainOpenAiChatServiceTests
             CancellationToken cancellationToken = default)
             => throw new NotSupportedException();
 
+        public Task<long> SetSessionTitleAsync(string sourceType, string sessionId, string title, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<long> SetTurnTitleAsync(string sourceType, string sessionId, string requestId, string title, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
         public Task<bool> ReplaceTurnSectionAsync(
             string sourceType,
             string sessionId,
