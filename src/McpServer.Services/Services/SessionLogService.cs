@@ -682,6 +682,11 @@ public sealed class SessionLogService : ISessionLogService
         return true;
     }
 
+    // TR-MCP-DB-006: concurrent turn deletes on one session are serialized through a process-wide
+    // per-session gate so a burst (observed: 13 parallel deletes) cannot exhaust/poison the SQL
+    // Server connection pool. Different sessions still delete concurrently (BUG-TRIAGE-079).
+    private static readonly KeyedAsyncLock s_deleteTurnLock = new();
+
     /// <inheritdoc />
     public async Task<bool> DeleteTurnAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
     {
@@ -690,6 +695,8 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(requestId);
         SyncDbWorkspaceFromContext();
         ValidateTurnIdentifiers(sourceType, sessionId, requestId);
+
+        await using var _ = await s_deleteTurnLock.AcquireAsync($"{sourceType}/{sessionId}", cancellationToken).ConfigureAwait(false);
 
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
         var turnEntity = session?.Turns.FirstOrDefault(t => t.RequestId == requestId);
@@ -1004,11 +1011,42 @@ public sealed class SessionLogService : ISessionLogService
             || string.Equals(status, "cancelled", StringComparison.OrdinalIgnoreCase)
             || string.Equals(status, "canceled", StringComparison.OrdinalIgnoreCase));
 
+    // TR-MCP-SESSIONLOG-002: text search covers the turn scalar fields AND the materialized child
+    // collections (dialog, actions, commits, string-lists, tags, context) so content that lives only
+    // in a dialog item / action / commit is discoverable. The full turn graph is Include-loaded in
+    // QueryAsync before this client-side filter runs, so these navigations are populated.
     private static string BuildSearchText(SessionLogTurnEntity turn)
-        => string.Join(
-            " ",
-            new[] { turn.QueryText, turn.QueryTitle, turn.Response, turn.Interpretation }
-                .Where(static value => !string.IsNullOrWhiteSpace(value)));
+    {
+        var parts = new List<string?>
+        {
+            turn.QueryText, turn.QueryTitle, turn.Response, turn.Interpretation, turn.FailureNote,
+        };
+
+        foreach (var dialog in turn.ProcessingDialog)
+            parts.Add(dialog.Content);
+        foreach (var action in turn.Actions)
+        {
+            parts.Add(action.Description);
+            parts.Add(action.Type);
+            parts.Add(action.FilePath);
+        }
+        foreach (var commit in turn.Commits)
+        {
+            parts.Add(commit.Message);
+            parts.Add(commit.Sha);
+            parts.Add(commit.Branch);
+            foreach (var file in commit.Files)
+                parts.Add(file.Path);
+        }
+        foreach (var item in turn.StringListItems)
+            parts.Add(item.Value);
+        foreach (var tag in turn.Tags)
+            parts.Add(tag.Tag);
+        foreach (var context in turn.ContextItems)
+            parts.Add(context.ContextItem);
+
+        return string.Join(" ", parts.Where(static value => !string.IsNullOrWhiteSpace(value)));
+    }
 
     private async Task ResolveAgentDefinitionLinkAsync(UnifiedSessionLogDto dto, SessionLogEntity entity, CancellationToken cancellationToken)
     {

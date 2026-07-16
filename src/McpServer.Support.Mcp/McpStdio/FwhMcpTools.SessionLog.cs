@@ -141,7 +141,7 @@ public sealed partial class FwhMcpTools
         }, cancellationToken);
 
     /// <summary>FR-SUPPORT-014: Stateless complete-turn with additive merge.</summary>
-    [McpServerTool(Name = "sessionlog_complete_turn"), Description("Complete a session turn. Merges turnJson (UnifiedRequestEntryDto) additively onto the existing turn; requires at least one design decision, action, or commit.")]
+    [McpServerTool(Name = "sessionlog_complete_turn"), Description("Complete a session turn. Merges turnJson (UnifiedRequestEntryDto) additively onto the existing turn. The at-least-one design-decision/action/commit compliance gate applies ONLY to the QBAgent ACID source type; standard agents (ClaudeCode, Cursor, Copilot, ...) may complete a turn with no items.")]
     public Task<string> SessionLogCompleteTurn(
         [Description("Agent source type")] string agent,
         [Description("Session id")] string sessionId,
@@ -152,7 +152,7 @@ public sealed partial class FwhMcpTools
         => FinalizeLifecycleTurnToolAsync(agent, sessionId, requestId, workspacePath, "completed", turnJson, cancellationToken);
 
     /// <summary>FR-SUPPORT-014: Stateless fail-turn with additive merge.</summary>
-    [McpServerTool(Name = "sessionlog_fail_turn"), Description("Fail a session turn, recording the failure note. Merges turnJson additively; subject to the same compliance gate as complete.")]
+    [McpServerTool(Name = "sessionlog_fail_turn"), Description("Fail a session turn, recording the failure note. Merges turnJson additively; subject to the same QBAgent-only compliance gate as complete (standard agents are not gated).")]
     public Task<string> SessionLogFailTurn(
         [Description("Agent source type")] string agent,
         [Description("Session id")] string sessionId,
@@ -317,10 +317,21 @@ public sealed partial class FwhMcpTools
         string agent, string sessionId, string requestId, string workspacePath,
         string status, string? turnJson, CancellationToken cancellationToken)
     {
+        // TR-MCP-SESSIONLOG-001: parse the optional payload inside a guard so a malformed turnJson
+        // returns a structured {error} instead of an uncaught JsonException that the MCP SDK
+        // surfaces as the opaque "An error occurred invoking sessionlog_complete_turn".
         UnifiedRequestEntryDto? payload = null;
         if (!string.IsNullOrWhiteSpace(turnJson))
         {
-            payload = JsonSerializer.Deserialize<UnifiedRequestEntryDto>(turnJson, s_caseInsensitiveOptions);
+            try
+            {
+                payload = JsonSerializer.Deserialize<UnifiedRequestEntryDto>(turnJson, s_caseInsensitiveOptions);
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
+                return Task.FromResult(JsonSerializer.Serialize(new { error = ex.Message }));
+            }
         }
 
         return UpsertLifecycleTurnToolAsync(agent, sessionId, requestId, workspacePath, status, turn =>
@@ -350,9 +361,11 @@ public sealed partial class FwhMcpTools
         string agent, string sessionId, string requestId, string workspacePath,
         string status, Action<UnifiedRequestEntryDto> populate, CancellationToken cancellationToken)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        // TR-MCP-SESSIONLOG-001: ApplyWorkspaceOverride is inside the try so any workspace-resolution
+        // failure also returns a structured {error} rather than escaping to the opaque SDK message.
         try
         {
+            ApplyWorkspaceOverride(workspacePath);
             var turn = new UnifiedRequestEntryDto
             {
                 RequestId = requestId,

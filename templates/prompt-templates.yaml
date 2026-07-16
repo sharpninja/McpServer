@@ -477,6 +477,7 @@ templates:
       - Prefer single-quoted PowerShell strings for literal regex, paths, JSON/YAML snippets, and text containing pipeline characters such as `|`.
       - When a command needs nested quoting, choose one of these patterns before improvising: `-File` with explicit arguments; piping stdin to the called tool or script; single-quoted or double-quoted here-strings; `-EncodedCommand` for complex inline PowerShell; or correct backtick escaping for embedded PowerShell quotes.
       - If a regex or literal argument contains `|`, `&`, `;`, parentheses, braces, or quotes, verify it is inside a single PowerShell argument before running.
+      - Text-edit cmdlets (Add-LinesToFile, Update-LinesInFile, Update-MatchInFile, Remove-LinesFromFile) stage a replacement file and move it into place. That move fails when `TEMP`/`TMP` point at a different volume than the file being edited (cross-volume move). Before editing files on a non-system drive, set `TEMP` and `TMP` to a directory on the same volume as the target (for example an `F:` temp dir when editing `F:\...`), and always verify the edit landed afterward (re-read or diff), because a failed move can leave the requested edit unapplied while still previewing the diff. The PowerShell.MCP module is installed unpinned from PSGallery; if a fixed upstream version is later identified, pin it.
 
       ## Byrd Development Process
       `Byrd Dev Process`, `BDP`, `BPDv4`, and `Byrd Development Process` refer to `F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`.

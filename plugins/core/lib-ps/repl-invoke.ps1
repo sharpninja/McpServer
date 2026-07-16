@@ -54,6 +54,32 @@ $script:AgentName = if ($env:MCP_AGENT_NAME) { $env:MCP_AGENT_NAME }
                    elseif ($env:MCP_PLUGIN_HOST) { $env:MCP_PLUGIN_HOST }
                    else { 'default' }
 
+function Get-ReplCanonicalAgentName {
+    # TR-MCP-REPL-011: map the resolved agent (which can fall back to lowercase 'default' or a
+    # lowercase host key like 'claude-code') to a PascalCase source type so composed session ids
+    # satisfy the server regex ^[A-Z][A-Za-z0-9]*-... (BUG-TRIAGE-085).
+    param([string]$AgentName)
+
+    if ([string]::IsNullOrWhiteSpace($AgentName)) { return 'ClaudeCode' }
+
+    switch (($AgentName.Trim().ToLowerInvariant() -replace '[^a-z0-9]', '')) {
+        'claude'       { return 'ClaudeCode' }
+        'claudecode'   { return 'ClaudeCode' }
+        'claudecowork' { return 'ClaudeCowork' }
+        'codex'        { return 'Codex' }
+        'copilot'      { return 'Copilot' }
+        'grok'         { return 'GrokCode' }
+        'grokcode'     { return 'GrokCode' }
+        'cline'        { return 'Cline' }
+        'clinev2'      { return 'Cline' }
+        'opencode'     { return 'OpenCode' }
+    }
+
+    $parts = [regex]::Split($AgentName.Trim(), '[^A-Za-z0-9]+') | Where-Object { $_ }
+    if (-not $parts) { return 'ClaudeCode' }
+    return (-join ($parts | ForEach-Object { $_.Substring(0, 1).ToUpperInvariant() + $_.Substring(1) }))
+}
+
 if (-not (Get-Command Resolve-McpCacheDir -ErrorAction SilentlyContinue)) {
     . (Join-Path $PSScriptRoot 'resolve-cache-dir.ps1')
 }
@@ -69,7 +95,36 @@ function New-ReplPluginSessionId {
     $suffix = ($suffix.ToLowerInvariant() -replace '[^a-z0-9]+', '-').Trim('-')
     if (-not $suffix) { $suffix = 'plugin-session' }
 
-    return '{0}-{1}-{2}' -f $script:AgentName, $timestamp, $suffix
+    return '{0}-{1}-{2}' -f (Get-ReplCanonicalAgentName $script:AgentName), $timestamp, $suffix
+}
+
+function Invoke-WorkflowOpenSession {
+    # TR-MCP-REPL-011: persist an explicit valid sessionId into session-state.yaml instead of the
+    # historical no-op, so an explicit openSession can recover a bad/rotated local session id
+    # (BUG-TRIAGE-085; previously documented as a gap in GAPS.md).
+    param([string]$ParamsYaml)
+
+    $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+    $sessionId = ''
+    if ($params -is [System.Collections.IDictionary] -and $params.Contains('sessionId')) {
+        $sessionId = [string]$params['sessionId']
+    } elseif ($params -and $params.PSObject.Properties['sessionId']) {
+        $sessionId = [string]$params.PSObject.Properties['sessionId'].Value
+    }
+    if ([string]::IsNullOrWhiteSpace($sessionId)) { return $false }
+
+    $sessionId = ConvertTo-ReplCanonicalSessionId -SessionId $sessionId.Trim()
+    $sessionFile = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
+    $state = Read-McpYamlObject -Path $sessionFile -Create
+    if ($state -isnot [System.Collections.IDictionary]) { $state = [ordered]@{} }
+    $state['status'] = 'verified'
+    $state['sessionId'] = $sessionId
+    if (-not $state.Contains('agent') -or [string]::IsNullOrWhiteSpace([string]$state['agent'])) {
+        $state['agent'] = Get-ReplCanonicalAgentName $script:AgentName
+    }
+    $state['lastUpdated'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    Write-McpYamlObject -Path $sessionFile -Document $state
+    return $true
 }
 
 
@@ -393,6 +448,25 @@ function Get-ReplSessionMeta {
     New-McpPluginSessionMeta -SourceType $prefix -SessionId $sid
 }
 
+function Get-ReplMethodTimeoutSeconds {
+    # TR-MCP-REPL-012: per-method timeout. Long-running requirement/agent methods (which invoke
+    # external CLIs and can take minutes) get an extended, env-configurable budget; everything else
+    # keeps the short default so sessionlog calls fail fast (BUG-TRIAGE-072).
+    param([Parameter(Mandatory)][string]$Method)
+
+    $default = if ($env:REPL_TIMEOUT) { [int]$env:REPL_TIMEOUT } else { 30 }
+    $long = if ($env:REPL_LONG_TIMEOUT) { [int]$env:REPL_LONG_TIMEOUT } else { 300 }
+
+    switch -Wildcard ($Method) {
+        'workflow.todo.analyzeRequirements'       { return $long }
+        'workflow.requirements.generateDocument'  { return $long }
+        'workflow.requirements.ingestDocument'    { return $long }
+        'workflow.requirements.analyze*'          { return $long }
+        'client.Requirements.Analyze*'            { return $long }
+        default                                   { return $default }
+    }
+}
+
 function Invoke-ReplRaw {
     param(
         [Parameter(Mandatory)][string]$Method,
@@ -408,7 +482,7 @@ function Invoke-ReplRaw {
     }
 
     $requestId = "req-$(Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ')-$((Get-Random -Maximum 0xFFFF).ToString('x4'))"
-    $timeout = if ($env:REPL_TIMEOUT) { [int]$env:REPL_TIMEOUT } else { 30 }
+    $timeout = Get-ReplMethodTimeoutSeconds -Method $Method
 
     # Build as an object and serialize to JSON so request envelopes keep a
     # single canonical shape across plugin hosts.
@@ -886,11 +960,12 @@ function Assert-ReplCurrentTurnFresh {
         $staleReasons += 'markerLastWriteUtc'
     }
 
+    # TR-MCP-PLUGIN-012: a sessionId-only mismatch means the session rotated (Start-PluginSession
+    # minted a new id) while the turn cache still carries the old one. Re-bind the turn to the active
+    # session (below) instead of hard-rejecting every subsequent completeTurn (BUG-TRIAGE-071/075).
+    # Marker drift (wrong-workspace) is still rejected separately.
     if ($staleReasons -contains 'sessionId') {
-        $markerPath = if ($snapshot) { $snapshot.markerFilePath } else { '' }
-        $markerLastWriteUtc = if ($snapshot) { $snapshot.markerLastWriteUtc } else { '' }
-        [Console]::Error.WriteLine("$Method rejected stale current-turn cache '$turnFile'. staleSessionId='$turnSessionId' activeSessionId='$activeSessionId' markerFilePath='$markerPath' markerLastWriteUtc='$markerLastWriteUtc' staleReasons='sessionId'. $(Get-ReplRecoveryGuidance)")
-        return $false
+        [Console]::Error.WriteLine("$Method re-binding current-turn cache '$turnFile' from rotated sessionId '$turnSessionId' to active sessionId '$activeSessionId'.")
     }
 
     $markerDriftReasons = @($staleReasons | Where-Object { $_ -eq 'markerFilePath' -or $_ -eq 'markerLastWriteUtc' })
@@ -904,12 +979,6 @@ function Assert-ReplCurrentTurnFresh {
 
         $sessionState = Read-McpYamlObject -Path $sessionFile -Create
         $activeSessionId = if ($sessionState.Contains('sessionId')) { [string]$sessionState['sessionId'] } else { '' }
-        if ($turnSessionId -and $activeSessionId -and $turnSessionId -ne $activeSessionId) {
-            $markerPath = if ($snapshot) { $snapshot.markerFilePath } else { '' }
-            $markerLastWriteUtc = if ($snapshot) { $snapshot.markerLastWriteUtc } else { '' }
-            [Console]::Error.WriteLine("$Method rejected stale current-turn cache '$turnFile'. staleSessionId='$turnSessionId' activeSessionId='$activeSessionId' markerFilePath='$markerPath' markerLastWriteUtc='$markerLastWriteUtc' staleReasons='sessionId'. $(Get-ReplRecoveryGuidance)")
-            return $false
-        }
 
         try {
             $snapshot = Get-MarkerFileSnapshot -StartDir $workspace
@@ -918,7 +987,8 @@ function Assert-ReplCurrentTurnFresh {
         }
     }
 
-    if (-not $turnSessionId -and $activeSessionId) { $turnState['sessionId'] = $activeSessionId }
+    # TR-MCP-PLUGIN-012: adopt the active session id (rotation re-bind, or fill when the turn has none).
+    if ($activeSessionId -and $turnSessionId -ne $activeSessionId) { $turnState['sessionId'] = $activeSessionId }
     if ($snapshot) {
         $turnState['markerFilePath'] = $snapshot.markerFilePath
         $turnState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
@@ -1233,7 +1303,7 @@ function Invoke-ReplMethod {
     # the flag unset made the script-entry exit 1 even on a successful persist.
     switch -Wildcard ($Method) {
         'workflow.sessionlog.beginTurn'       { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowBeginTurn -ParamsYaml $ParamsYaml); return }
-        'workflow.sessionlog.openSession'     { $script:LastInvokeReplMethodSuccess = $true; return }
+        'workflow.sessionlog.openSession'     { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowOpenSession -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.updateTurn'      { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowUpdateTurn -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.appendActions'   { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendActions -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.appendDialog'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendDialog -ParamsYaml $ParamsYaml); return }

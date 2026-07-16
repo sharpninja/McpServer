@@ -782,6 +782,25 @@ function Close-PluginTurnIfNeeded {
             return
         }
 
+        # TR-MCP-PLUGIN-011: no-op (do not block) for phantom/empty turns - system-event prompts
+        # (<task-notification>, <user_query>, <command-*>, <local-command-*>) or turns with no
+        # recorded work at all. There is nothing to complete under them and the server does not gate
+        # standard agents, so blocking is pure Stop-hook noise (BUG-TRIAGE-082/083).
+        $stopEdits = [int]((Get-YamlScalar -Path $turnFile -Key 'codeEdits') ?? '0')
+        $stopAuditTotal = [int]((Get-YamlScalar -Path $turnFile -Key 'auditActions') ?? '0') +
+                          [int]((Get-YamlScalar -Path $turnFile -Key 'auditFiles') ?? '0') +
+                          [int]((Get-YamlScalar -Path $turnFile -Key 'auditDialog') ?? '0') +
+                          [int]((Get-YamlScalar -Path $turnFile -Key 'auditDecisions') ?? '0') +
+                          [int]((Get-YamlScalar -Path $turnFile -Key 'auditCommits') ?? '0')
+        $stopTitle = (Get-YamlScalar -Path $turnFile -Key 'queryTitle') ?? ''
+        $stopText = (Get-YamlScalar -Path $turnFile -Key 'queryText') ?? ''
+        $stopFirstLine = @($stopTitle, $stopText) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -First 1
+        $stopIsSystemEvent = $stopFirstLine -match '^\s*<(task-notification|user_query|command-name|command-message|command-args|local-command-[a-z-]+)>'
+        if ($stopIsSystemEvent -or ($stopEdits -le 0 -and $stopAuditTotal -le 0)) {
+            Write-PluginJson ([ordered]@{})
+            return
+        }
+
         $response = 'Auto-closed by PowerShell stop gate.'
         $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
             response = $response
@@ -816,9 +835,12 @@ function Close-PluginTurnIfNeeded {
     $auditFiles = Get-YamlScalar -Path $turnFile -Key 'auditFiles'
     $auditDialog = Get-YamlScalar -Path $turnFile -Key 'auditDialog'
     $auditDecisions = Get-YamlScalar -Path $turnFile -Key 'auditDecisions'
-    $hasAuditSchema = $null -ne $auditActions -or $null -ne $auditFiles -or $null -ne $auditDialog -or $null -ne $auditDecisions
+    # TR-MCP-PLUGIN-011: auditCommits is a real audit signal and must count toward completeness so a
+    # completed code-edit turn recorded only via commits is not falsely blocked (BUG-TRIAGE-071).
+    $auditCommits = Get-YamlScalar -Path $turnFile -Key 'auditCommits'
+    $hasAuditSchema = $null -ne $auditActions -or $null -ne $auditFiles -or $null -ne $auditDialog -or $null -ne $auditDecisions -or $null -ne $auditCommits
     if ($edits -gt 0 -and $hasAuditSchema) {
-        $auditTotal = [int](($auditActions ?? '0')) + [int](($auditFiles ?? '0')) + [int](($auditDialog ?? '0')) + [int](($auditDecisions ?? '0'))
+        $auditTotal = [int](($auditActions ?? '0')) + [int](($auditFiles ?? '0')) + [int](($auditDialog ?? '0')) + [int](($auditDecisions ?? '0')) + [int](($auditCommits ?? '0'))
         if ($auditTotal -le 0) {
             $acceptAudit = Join-Path $cacheDir 'turn-accept-incomplete-audit.marker'
             if (Test-Path -LiteralPath $acceptAudit) {

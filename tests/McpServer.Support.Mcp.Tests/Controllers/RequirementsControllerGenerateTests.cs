@@ -95,6 +95,28 @@ public sealed class RequirementsControllerGenerateTests
         }
     }
 
+    /// <summary>
+    /// TR-MCP-REQEXPORT-002 / TEST-MCP-REQEXPORT-002 (BUG-TRIAGE-073): an exception type outside the
+    /// pre-existing catch list (here KeyNotFoundException) is surfaced as a structured 500 naming the
+    /// exceptionType, never an opaque internal_server_error from the global middleware.
+    /// </summary>
+    [Fact]
+    public async Task GenerateAsync_WikiUnlistedException_ReturnsStructuredErrorNamingExceptionType()
+    {
+        var requirements = Substitute.For<IRequirementsDocumentService>();
+        requirements.GenerateWikiAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<RequirementsDocumentExportResult>(new KeyNotFoundException("generated:functional source missing")));
+        var controller = CreateController(requirements);
+
+        var result = await controller.GenerateAsync("all", "wiki", CancellationToken.None).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, objectResult.StatusCode);
+        var json = JsonSerializer.Serialize(objectResult.Value);
+        Assert.Contains("generated:functional source missing", json, StringComparison.Ordinal);
+        Assert.Contains("KeyNotFoundException", json, StringComparison.Ordinal);
+    }
+
     private static RequirementsController CreateController(IRequirementsDocumentService requirements)
         => new(
             requirements,

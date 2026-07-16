@@ -63,14 +63,21 @@ public sealed class SessionLogSanitizerTimeoutTests
     {
         var options = new SessionLogSanitizationOptions
         {
-            // Must stay far above per-call scheduler/JIT jitter on trivial fields (a 1 ms budget
-            // flaked by timing out "password=hunter2") yet far below the effectively unbounded
-            // catastrophic-backtracking runtime of the 20k-char pathological input.
             RegexTimeoutMilliseconds = 100,
             Rules = [new SessionLogRedactionRuleOptions { Id = "catastrophic", Pattern = "(a+)+$" }],
         };
 
-        return new SessionLogSanitizer(Microsoft.Extensions.Options.Options.Create(options), logger);
+        // TR-MCP-SESSIONLOGSAN-002: force the catastrophic rule to raise RegexMatchTimeoutException
+        // deterministically for the large pathological input (length + pattern, no wall-clock), so the
+        // fail-open behavior is verified without scheduler jitter (BUG-TRIAGE-081). Short inputs and
+        // other rules run the real Regex.Replace.
+        return new SessionLogSanitizer(
+            Microsoft.Extensions.Options.Options.Create(options),
+            logger,
+            (regex, input, evaluator) =>
+                input.Length > 10000 && regex.ToString().Contains("(a+)+", StringComparison.Ordinal)
+                    ? throw new System.Text.RegularExpressions.RegexMatchTimeoutException()
+                    : regex.Replace(input, evaluator));
     }
 
     private sealed class CapturingLogger<T> : ILogger<T>

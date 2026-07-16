@@ -656,35 +656,42 @@ Scope: layer-1+
 ## TR-MCP-DB-001
 
 **Database-authoritative workspace registry** — Workspaces must be stored in a canonical Workspaces table as the source of truth, with appsettings workspace entries generated only as informational projections after successful database commits.
-**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-DB-002
 
 **Workspace foreign-key integrity** — Every persistent table with WorkspaceId must have a required FK to Workspaces, including global rows through a reserved empty WorkspaceId row and federation workspace mappings.
-**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-DB-003
 
 **Soft deletes for persistent MCP data** — Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain state.
-**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-DB-004
 
 **Generic audit ledger for mutable data** — Every mutable persistent database entity must emit append-only audit rows with workspace, entity key, action, actor/source, timestamps, and previous/current snapshots, while TODO-specific audit history remains compatible.
-**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-DB-005
 
 **TODO and requirement relational links** — TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced requirements backfilled before FK enforcement.
-**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-DB-006
+
+**Concurrent turn deletes serialized per session** — Concurrent sessionlog_delete_turn operations on a single session SHALL be serialized through a process-wide per-session gate so a burst (observed: 13 parallel deletes) cannot exhaust or poison the SQL Server connection pool; deletes on different sessions SHALL still run concurrently; the deployed SqlClient ConnectRetryCount=6/ConnectRetryInterval=10s defaults SHALL be preserved. Acceptance Criteria: (AC1) acquiring the per-session lock for the same key blocks a second acquirer until release, while a different key acquires without blocking (KeyedAsyncLock); (AC2) DeleteTurnAsync continues to soft-delete a turn and refresh the parent turn count correctly under the lock. Origin: BUG-TRIAGE-079 (concurrent gated deletes poisoned the pool with SqlClient error 19 then 40 for ~3 minutes while SQL Server stayed up). Note: pool poisoning is a SQL-Server-runtime property not unit-reproducible; the deterministic serialization proof is the KeyedAsyncLock unit test, with SessionLogService.DeleteTurnAsync wrapped in the per-session lock keyed by sourceType/sessionId. Validated by TEST-MCP-DB-006.
+**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
 
@@ -1253,7 +1260,7 @@ Scope: layer-1+
 ## TR-MCP-PLUGIN-008
 
 **Codex requirements update command fallback parity** — The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
-**Covered by:** FR: FR-MCP-106; TEST: TEST-MCP-142
+**Covered by:** FR: FR-MCP-106; TEST: TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013
 **Status:** pending
 Scope: layer-1+
 
@@ -1270,6 +1277,27 @@ Scope: layer-1+
 
 **PowerShell wrapper process timeout control** — Invoke-CodexMcpPlugin.ps1 SHALL expose a TimeoutSeconds parameter, wait only up to that bound for plugin helper processes, terminate timed-out processes, and avoid stdout/stderr read ordering that can deadlock the wrapper.
 **Covered by:** FR: FR-MCP-117; TEST: TEST-MCP-157
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PLUGIN-011
+
+**Stop gate no-ops phantom turns and counts commits** — The Claude plugin Stop gate (Close-PluginTurnIfNeeded) SHALL NOT block session end for phantom/empty turns and SHALL count commits toward audit completeness. Acceptance Criteria: (AC1) an in_progress turn whose prompt is a system-event wrapper (first line matching <task-notification>, <user_query>, <command-name|message|args>, <local-command-*>) OR that has zero recorded work (auditActions+auditFiles+auditDialog+auditDecisions+auditCommits == 0 AND codeEdits == 0) is no-op'd (empty {} result), not blocked, and does not invoke completeTurn; (AC2) a completed code-edit turn whose only audit signal is auditCommits>0 is not blocked with 'audit is incomplete' (auditCommits is included in both hasAuditSchema and the audit-total sum). Origin: BUG-TRIAGE-071 (auditCommits omitted from the audit sum), BUG-TRIAGE-082/083 (Stop gate blocked on empty/task-notification turns). Applied to plugins/core/lib-ps/plugin-hook.ps1 (canonical) and mcpserver-claude-code-plugin/lib. Validated by TEST-MCP-PLUGIN-011.
+**Covered by:** FR: FR-MCP-106; TEST: TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PLUGIN-012
+
+**Session rotation re-binds current-turn cache** — When the plugin session id rotates (Start-PluginSession mints a new sessionId) while a current-turn cache still carries the old sessionId, Assert-ReplCurrentTurnFresh SHALL re-bind the turn to the active session and treat it as fresh, rather than hard-rejecting every subsequent completeTurn/appendActions as stale. Marker drift (wrong-workspace) SHALL still be rejected separately. Acceptance Criteria: (AC1) with session-state.yaml sessionId=B and current-turn.yaml sessionId=A (same/absent marker), Assert-ReplCurrentTurnFresh returns true and rewrites current-turn.yaml sessionId to B; (AC2) the failsafe persist path (ReplFailsafe) is unaffected. Origin: BUG-TRIAGE-071/075 (Start-PluginSession rotated the sessionId without superseding current-turn.yaml, so the sessionId-mismatch branch rejected completeTurn indefinitely). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib. Validated by TEST-MCP-PLUGIN-012.
+**Covered by:** FR: FR-MCP-106; TEST: TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PLUGIN-013
+
+**UserPromptSubmit hook opens exactly one turn per prompt** — The UserPromptSubmit plugin hook SHALL open exactly one session-log turn per user prompt even when both the plugin hooks.json registration and the settings.json bridge deliver the prompt; a repeated identical prompt reuses the already-open turn. AC1: the second delivery of the same prompt returns turn-already-open and does not call beginTurn. AC2: a differing prompt opens a new turn. Guards BUG-TRIAGE-077 via TEST-MCP-PLUGIN-013 (HookTurnDedupe.Tests.ps1).
+**Covered by:** FR: FR-MCP-106; TEST: TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013
 **Status:** pending
 Scope: layer-1+
 
@@ -1297,12 +1325,19 @@ Scope: layer-1+
 ## TR-MCP-PLUGINCORE-004
 
 **Dictionary-safe plugin dialog parsing** — The canonical PowerShell plugin core SHALL read dialogItems and dialog from IDictionary and property-backed parameter objects and SHALL fail closed when no dialog items are parsed.
-**Covered by:** FR: FR-MCP-PLUGINCORE-004; TEST: TEST-MCP-PLUGINCORE-004
+**Covered by:** FR: FR-MCP-PLUGINCORE-004; TEST: TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Get-ReplDialogItemsFromParams supports ConvertFrom-Yaml dictionary output and PSCustomObject output.
 - [ ] Invoke-WorkflowAppendDialog returns failure and writes an actionable error when no items are parsed.
+
+## TR-MCP-PLUGINCORE-005
+
+**PowerShell.MCP cross-volume text-edit workaround documented** — Operator guidance SHALL document the PowerShell.MCP cross-volume text-edit workaround in the PowerShell.Mcp Command Routing block: the text-edit cmdlets (Add-LinesToFile/Update-LinesInFile/Update-MatchInFile/Remove-LinesFromFile) stage a replacement file and move it into place, and that move fails when TEMP/TMP are on a different volume than the target; the fix is to set TEMP/TMP to a directory on the same volume as the edit target and to verify the edit landed afterward, since a failed move can leave the edit unapplied while still previewing the diff. Acceptance Criteria: (AC1) templates/prompt-templates.yaml and its graphrag canonical mirror both contain the same-volume TEMP/TMP + verify-after-edit note and both parse as YAML; (AC2) the added guidance contains no em-dashes. Origin: BUG-TRIAGE-084 (third-party PowerShell.MCP module cross-volume replacement-move failure; prior art 054/056 resolved as an undocumented operational workaround). The module is unpinned in Confirm-PowerShellMcpRuntime; a version pin is a future option. Validated by TEST-MCP-PLUGINCORE-005.
+**Covered by:** FR: FR-MCP-PLUGINCORE-004; TEST: TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-PLUGININT-001
 
@@ -1896,7 +1931,7 @@ Scope: layer-1+
 ## TR-MCP-REPL-010
 
 **Independent REPL session-log persistence strategies** — McpServer.Repl.Core SHALL define separate primary MCP and filesystem failsafe session-log persistence strategies plus a failover coordinator. REPL session-log persistence calls SHALL route through the coordinator, suppress degraded notifications for non-terminal plugin operations after durable fallback, and return terminal persistence details. The failsafe strategy SHALL atomically write a replayable session-log envelope to the V4 workspace-and-agent-scoped pending path.
-**Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025
+**Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -1904,6 +1939,27 @@ Scope: layer-1+
 - [ ] Failover does not catch explicit caller cancellation and propagates an error when both primary and failsafe persistence fail.
 - [ ] Failsafe writes use an atomic replace or move and return the final absolute artifact path.
 - [ ] Terminal dispatcher results expose degraded, persistenceStrategy, failsafePath, and message fields.
+
+## TR-MCP-REPL-011
+
+**PascalCase session-id agent + openSession persistence** — Composed plugin session ids SHALL use a PascalCase source-type agent segment (never lowercase 'default' or a lowercase host key) so they satisfy the server sessionId regex ^[A-Z][A-Za-z0-9]*-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$; and workflow.sessionlog.openSession SHALL persist an explicit valid sessionId into session-state.yaml instead of being a success no-op. Acceptance Criteria: (AC1) Get-ReplCanonicalAgentName maps 'default' to 'Default' (regex-valid), 'claude-code'/'claudecode' to 'ClaudeCode', 'codex' to 'Codex', 'grok' to 'GrokCode', and its output always matches ^[A-Z][A-Za-z0-9]*$; New-ReplPluginSessionId composes the agent segment through it; (AC2) Invoke-WorkflowOpenSession given an explicit sessionId writes status=verified + that sessionId into session-state.yaml and returns true. Origin: BUG-TRIAGE-085 (AgentName fell back to lowercase 'default' producing server-rejected ids; openSession never persisted an explicit id). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib; do not relax server validation. Validated by TEST-MCP-REPL-011.
+**Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-012
+
+**Per-method REPL invocation timeout** — REPL invocation timeouts SHALL be resolved per method: long-running requirement/agent methods (workflow.todo.analyzeRequirements, workflow.requirements.generateDocument/ingestDocument/analyze*, client.Requirements.Analyze*) SHALL use an extended, env-configurable budget (REPL_LONG_TIMEOUT, default 300s) while all other methods keep the short default (REPL_TIMEOUT, default 30s). Acceptance Criteria: (AC1) Get-ReplMethodTimeoutSeconds returns >30 for analyzeRequirements/generateDocument and 30 for sessionlog methods; (AC2) REPL_TIMEOUT overrides the short default and REPL_LONG_TIMEOUT overrides the long budget; Invoke-ReplRaw uses Get-ReplMethodTimeoutSeconds. Origin: BUG-TRIAGE-072 (workflow.todo.analyzeRequirements, which blocks on an external Copilot CLI, was killed at the flat 30s REPL_TIMEOUT). Applied to plugins/core/lib-ps/repl-invoke.ps1 (canonical) and mcpserver-claude-code-plugin/lib. Validated by TEST-MCP-REPL-027.
+**Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-013
+
+**Marker-bearing current directory outranks inherited workspace env for repl resolution** — A marker-bearing current directory SHALL outrank inherited workspace environment variables when the repl bridge resolves the active workspace, so a hook launched from the correct repo binds to that repo's marker rather than a stale inherited MCP_WORKSPACE_PATH. AC1: with a marker at cwd and a conflicting MCP_WORKSPACE_PATH, resolution returns cwd. Guards BUG-TRIAGE-077 via TEST-MCP-REPL-028 (ReplWorkspaceResolution.Tests.ps1).
+**Covered by:** FR: FR-MCP-REPL-009; TEST: TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-REPL-TRIAGE-001
 
@@ -1997,12 +2053,33 @@ Scope: layer-1+
 ## TR-MCP-REQEXPORT-001
 
 **Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC** — The requirements wiki renderer shall preserve TEST grouping while emitting each TEST requirement as a heading with description text and a nested Acceptance Criteria checklist generated from the structured acceptanceCriteria field.
-**Covered by:** FR: FR-MCP-112; TEST: TEST-MCP-152
+**Covered by:** FR: FR-MCP-112; TEST: TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Wiki testing export output contains per-TEST headings and description paragraphs. (evidence: RequirementsWikiDocumentRenderer now renders grouped TEST entries as Markdown sections headed by TEST requirement IDs.)
 - [x] Structured acceptanceCriteria entries render as bullet/checklist list items with evidence when supplied. (evidence: RequirementsDocumentRenderer.AppendAcceptanceCriteria is reused by wiki rendering and focused tests assert checklist output.)
+
+## TR-MCP-REQEXPORT-002
+
+**Wiki generate surfaces real exception, never opaque 500** — The requirements generate endpoint (GET /mcpserver/requirements/generate?format=wiki) SHALL surface the real exception - message, exceptionType, stage, details - as a structured HTTP 500 for any failure outside the pre-existing catch list (RequirementsConflictException/ArgumentException/InvalidOperationException/UnauthorizedAccessException/IOException); no wiki generation failure may reach the global exception middleware and return an opaque internal_server_error. Acceptance Criteria: (AC1) an exception type outside the listed set (e.g. KeyNotFoundException) returns a structured 500 body naming exceptionType and the message; (AC2) successful wiki export still returns the ZIP; (AC3) the existing structured 400/409 paths (config load, transaction, zip assembly) are unchanged. Origin: BUG-TRIAGE-073 (wiki branch had no catch-all; yaml/all path succeeds while wiki/all 500s opaquely in some workspaces). Validated by TEST-MCP-REQEXPORT-002.
+**Covered by:** FR: FR-MCP-112; TEST: TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REQEXPORT-003
+
+**Requirements generateDocument accepts markdown for all non-wiki docTypes** — generateDocument SHALL accept format=markdown for every non-wiki docType (functional, technical, testing, mapping, matrix) at the JSON schema, ReplYamlMessageValidator, and RequirementsWorkflow layers. AC1: a call {format:markdown,docType:matrix} returns markdown content, not a format rejection. AC2: no layer restricts format to {yaml,wiki}. Encodes BUG-TRIAGE-074 (non-reproducing) so a future enum narrowing fails TEST-MCP-REQEXPORT-003.
+**Covered by:** FR: FR-MCP-112; TEST: TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REQEXPORT-004
+
+**Requirements generateDocument honors explicit workspacePath override end-to-end** — generateDocument SHALL honor an explicit workspacePath override end-to-end; a cross-workspace call without that workspace's API key fails 401 and never silently exports the session-bound workspace. AC1: an explicit workspacePath with a valid key returns that workspace's requirements. AC2: an unauthorized cross-workspace call returns 401, not a silent fallback to the session-bound workspace. Guards BUG-TRIAGE-078 via TEST-MCP-REQWS-001.
+**Covered by:** FR: FR-MCP-112; TEST: TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-REQSCOPE-001
 
@@ -2069,10 +2146,31 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`
 Scope: layer-1+
 
+## TR-MCP-SESSIONLOG-001
+
+**Session-log lifecycle tools return structured errors** — The session-log lifecycle MCP tools (sessionlog_complete_turn, sessionlog_fail_turn) SHALL return a structured {error} result for every failure mode, including a malformed turnJson payload and a workspace-resolution failure; no failure may surface as the ModelContextProtocol SDK's opaque "An error occurred invoking sessionlog_complete_turn" message. Acceptance Criteria: (AC1) sessionlog_complete_turn/sessionlog_fail_turn with a malformed turnJson return {error} carrying the exception message and no success field; (AC2) a workspace-resolution failure during ApplyWorkspaceOverride returns {error} rather than escaping uncaught; (AC3) a valid or null turnJson still returns {success:true}. Origin: BUG-TRIAGE-070/075 (JsonSerializer.Deserialize and ApplyWorkspaceOverride were outside the try in FinalizeLifecycleTurnToolAsync/UpsertLifecycleTurnToolAsync, FwhMcpTools.SessionLog.cs). Validated by TEST-MCP-SESSIONLOG-001.
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-SESSIONLOG-002
+
+**Session-log text search covers dialog and child collections** — Session-log query text search SHALL match content in processing-dialog items, actions (description/type/filePath), commits (message/sha/branch/files), string-list sections (design decisions / requirements discovered / files modified / blockers), tags, and context items - not only the four turn scalar fields (QueryText, QueryTitle, Response, Interpretation). Acceptance Criteria: (AC1) a query whose term exists only in a processing-dialog item returns the session; (AC2) a query whose term exists only in an action description returns the session; (AC3) existing scalar-field and boolean queries still return the correct sessions. Origin: BUG-TRIAGE-070 (SessionLogService.BuildSearchText joined only the four scalar fields). The full turn graph is Include-loaded in QueryAsync before the client-side matcher runs, so child navigations are populated for both SQLite and SQL Server. Validated by TEST-MCP-SESSIONLOG-002.
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-SESSIONLOG-003
+
+**Terminal-turn compliance gate is QBAgent-only** — The terminal-turn decision/action/commit compliance gate (ValidateTerminalTurnCompliance) SHALL apply only to the QBAgent ACID source type; standard agents (ClaudeCode, Cursor, Copilot, ...) SHALL be able to complete or fail a turn with no decision/action/commit items. The sessionlog_complete_turn and sessionlog_fail_turn MCP tool descriptions SHALL state this QBAgent-only scope so operators/triage do not misattribute plugin-side completion failures to a server gate. Acceptance Criteria: (AC1) UpsertTurnAsync with a completed empty turn is accepted for a ClaudeCode session and rejected (ArgumentException) for a QBAgent session; (AC2) the complete/fail tool descriptions state the gate is QBAgent-only. Origin: BUG-TRIAGE-082/083 (reporter hypothesized the server gate blocked ClaudeCode completions; the gate is QBAgent-only, so the real cause is plugin-local). Validated by TEST-MCP-SESSIONLOG-003.
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-SESSIONLOGSAN-001
 
 **Bounded outbound session-log sanitizer** — A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and wrap the final local or federated ISessionLogService read result.
-**Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001
+**Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -2082,6 +2180,13 @@ Scope: layer-1+
 - [ ] Replacement is deterministic as [REDACTED:<rule-id>] and does not expose captured secret fragments.
 - [ ] SessionLogSanitizingService is the outermost ISessionLogService read decorator for HTTP/federation and is also registered in stdio.
 - [ ] Regex timeout during a read fails closed for the affected value, emits rule diagnostics without the input value, and never returns the unsanitized value.
+
+## TR-MCP-SESSIONLOGSAN-002
+
+**Sanitizer timeout fail-open is deterministically testable** — The session-log sanitizer per-rule regex evaluation SHALL be exposed through an injectable seam (RegexReplaceInvoker, defaulting to Regex.Replace in production) so its timeout fail-open behavior can be verified deterministically - forcing exactly one field/rule to raise RegexMatchTimeoutException - independent of catastrophic-backtracking wall-clock jitter. Acceptance Criteria: (AC1) with an injected invoker that raises RegexMatchTimeoutException for the pathological field, SanitizeString returns [REDACTED:{ruleId}:timeout] for that field while other fields continue to be sanitized by their rules, across repeated isolated runs (no flake); (AC2) production behavior is unchanged (default invoker is Regex.Replace). Origin: BUG-TRIAGE-081 (SessionLogSanitizerTimeoutTests flaked under scheduler jitter; the deployed 1ms->100ms budget was a mitigation, not deterministic). Validated by TEST-MCP-SESSIONLOGSAN-002.
+**Covered by:** FR: FR-MCP-SESSIONLOGSAN-001; TEST: TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-SKILLS-001
 
@@ -2321,7 +2426,7 @@ Scope: layer-1+
 ## TR-MCP-TRANSCRIPT-002
 
 **Source adapters and bundle detection** — Implement adapters for Claude, Codex, Grok, Cline, Copilot, and OpenCode plus bundle detection for native files, folders, ZIPs, and SQLite snapshots.
-**Covered by:** FR: FR-MCP-TRANSCRIPT-001, FR-MCP-TRANSCRIPT-002, FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-007, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010
+**Covered by:** FR: FR-MCP-TRANSCRIPT-001, FR-MCP-TRANSCRIPT-002, FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-007, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -2330,7 +2435,7 @@ Scope: layer-1+
 ## TR-MCP-TRANSCRIPT-003
 
 **Neutral event model and projectors** — Define loss-aware neutral transcript events and Claude, Codex, and Grok compatibility projectors while preserving provenance and derived-value markers.
-**Covered by:** FR: FR-MCP-TRANSCRIPT-002, FR-MCP-TRANSCRIPT-003, FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-004, TEST-MCP-TRANSCRIPT-010
+**Covered by:** FR: FR-MCP-TRANSCRIPT-002, FR-MCP-TRANSCRIPT-003, FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-004, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -2375,11 +2480,18 @@ Scope: layer-1+
 ## TR-MCP-TRANSCRIPT-008
 
 **Provider normalization and native stores** — Support secondary provider normalization for Cline paired JSON, Copilot event streams, OpenCode JSONL exports, and read-only OpenCode SQLite snapshots.
-**Covered by:** FR: FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010
+**Covered by:** FR: FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Cline, Copilot, and OpenCode native storage tests verify loss-aware normalization and OpenCode snapshot read-only behavior. (evidence: 2026-07-10 focused gates: Support.Mcp transcript unit 60/0/0, transcript integration+McpTransport 22/0/0, Repl.Core transcript 4/0/0, Client ingest transcript 2/0/0, clean plugin Pester 47/0/0. Tests: real fixture normalization; OpenCodeSqliteTranscriptTests no DB/WAL writes and WAL snapshot capture.)
+
+## TR-MCP-TRANSCRIPT-009
+
+**Codex transcript ingestion normalizes tool-call, reasoning, and turn_context records** — Codex transcript ingestion SHALL normalize tool-call, reasoning, and turn_context rollout records so known record classes do not emit codex_missing_role or codex_unknown_record warnings. AC1: ingesting a Codex rollout fixture produces 0 warnings for these known classes and the full event count (vs the old ~2432 warnings). Guards BUG-TRIAGE-080 via TEST-MCP-TRANSCRIPT-011 and TEST-MCP-TRANSCRIPT-012.
+**Covered by:** FR: FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-TRIAGE-001
 
@@ -2412,11 +2524,18 @@ Scope: layer-1+
 ## TR-MCP-TRIAGE-004
 
 **Triage schema and TODO creation** — Triage research output is schema-validated and converted idempotently into BUG-TRIAGE TODOs.
-**Covered by:** FR: FR-MCP-TRIAGE-004; TEST: TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006
+**Covered by:** FR: FR-MCP-TRIAGE-004; TEST: TEST-MCP-BUGTRIAGE-043, TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006
 **Status:** planned
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Valid research output creates one backlog TODO and failed output creates none.
+
+## TR-MCP-TRIAGE-005
+
+**Triage Grok runner omits CLI-rejected flags** — The triage Grok CLI runner SHALL NOT pass --model auto or --effort max, both of which the Grok CLI rejects at startup. AC1: BuildGrokArgumentList omits --model when the model is the 'auto' sentinel. AC2: effort is pinned to 'high' (HighestEffort), never 'max'. Guards BUG-TRIAGE-076 via TEST-MCP-BUGTRIAGE-043.
+**Covered by:** FR: FR-MCP-TRIAGE-004; TEST: TEST-MCP-BUGTRIAGE-043, TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-TUN-001
 
@@ -2724,7 +2843,7 @@ Scope: layer-1+
 ## TR-SUPPORT-LOG-010
 
 **Session-log ProblemDetails contract** — Session-log REST endpoints SHALL return application/problem+json for malformed JSON binding and domain validation failures. Error keys SHALL identify the JSON root or offending domain field rather than leaking action parameter names such as dto.
-**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
+**Covered by:** FR: FR-SUPPORT-012; TEST: TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2
 **Status:** completed
 Scope: layer-1+
 

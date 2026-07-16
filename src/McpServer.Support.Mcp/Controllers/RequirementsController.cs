@@ -953,6 +953,13 @@ public sealed class RequirementsController : ControllerBase
             {
                 return BuildGenerateError(ex, "export write", 409);
             }
+            // TR-MCP-REQEXPORT-002: any exception outside the listed set (e.g. KeyNotFoundException,
+            // NotSupportedException) is surfaced with its real cause + exceptionType instead of
+            // escaping to the global middleware as an opaque internal_server_error (BUG-TRIAGE-073).
+            catch (Exception ex)
+            {
+                return BuildGenerateExportError(ex, "wiki export");
+            }
 
             try
             {
@@ -974,6 +981,10 @@ public sealed class RequirementsController : ControllerBase
             catch (IOException ex)
             {
                 return BuildGenerateError(ex, "zip assembly", 409);
+            }
+            catch (Exception ex)
+            {
+                return BuildGenerateExportError(ex, "zip assembly");
             }
         }
 
@@ -1010,6 +1021,25 @@ public sealed class RequirementsController : ControllerBase
             409 => Conflict(payload),
             _ => StatusCode(statusCode, payload)
         };
+    }
+
+    /// <summary>
+    /// TR-MCP-REQEXPORT-002: catch-all error for the wiki generate path that surfaces the real cause
+    /// (message + exceptionType + details) as a structured HTTP 500 so the caller (REPL) never sees the
+    /// opaque internal_server_error the global middleware would otherwise emit. Mirrors the pattern in
+    /// RepairFrPlaceholdersAsync.
+    /// </summary>
+    private IActionResult BuildGenerateExportError(Exception exception, string stage)
+    {
+        _logger.LogError(exception, "Requirements wiki generation failed at stage {Stage}. Full exception: {Exception}", stage, exception.ToString());
+        return StatusCode(500, new
+        {
+            error = "internal_server_error",
+            message = exception.Message,
+            exceptionType = exception.GetType().FullName,
+            stage,
+            details = exception.ToString()
+        });
     }
 
     private static byte[] CreateWikiExportZip(RequirementsDocumentExportResult wikiExport)

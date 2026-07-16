@@ -20,6 +20,18 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
     private readonly ILogger<SessionLogSanitizer> logger;
     private readonly IReadOnlyList<RedactionRule> rules;
 
+    // TR-MCP-SESSIONLOGSAN-002: the per-rule regex replace is an injectable seam so the timeout
+    // fail-open behavior can be verified deterministically (a test forces exactly one field to raise
+    // RegexMatchTimeoutException) instead of depending on catastrophic-backtracking wall-clock jitter
+    // (BUG-TRIAGE-081). The default is a plain Regex.Replace, so production behavior is unchanged.
+    private readonly RegexReplaceInvoker regexReplace;
+
+    /// <summary>Runs a redaction rule's regex replace; the seam that makes timeout behavior testable.</summary>
+    internal delegate string RegexReplaceInvoker(Regex regex, string input, MatchEvaluator evaluator);
+
+    private static readonly RegexReplaceInvoker DefaultRegexReplace =
+        static (regex, input, evaluator) => regex.Replace(input, evaluator);
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SessionLogSanitizer"/> class.
     /// </summary>
@@ -37,12 +49,28 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
     public SessionLogSanitizer(
         IOptions<SessionLogSanitizationOptions> options,
         ILogger<SessionLogSanitizer> logger)
+        : this(options, logger, DefaultRegexReplace)
+    {
+    }
+
+    /// <summary>
+    /// Test seam constructor: injects the regex-replace invoker so timeout handling is deterministic.
+    /// </summary>
+    /// <param name="options">Sanitization options.</param>
+    /// <param name="logger">Logger used for sanitized timeout diagnostics.</param>
+    /// <param name="regexReplace">Regex replace invoker (defaults to Regex.Replace in production).</param>
+    internal SessionLogSanitizer(
+        IOptions<SessionLogSanitizationOptions> options,
+        ILogger<SessionLogSanitizer> logger,
+        RegexReplaceInvoker regexReplace)
     {
         ArgumentNullException.ThrowIfNull(options);
         ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(regexReplace);
 
         this.options = options.Value;
         this.logger = logger;
+        this.regexReplace = regexReplace;
         rules = BuildRules(this.options);
     }
 
@@ -59,7 +87,7 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
         {
             try
             {
-                sanitized = rule.Regex.Replace(sanitized, match => rule.Replace(match));
+                sanitized = regexReplace(rule.Regex, sanitized, match => rule.Replace(match));
             }
             catch (RegexMatchTimeoutException)
             {

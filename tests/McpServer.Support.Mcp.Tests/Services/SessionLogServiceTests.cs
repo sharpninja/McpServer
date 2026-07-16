@@ -440,6 +440,86 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Equal(BuildSessionId("Cursor", "bool-match"), item.SessionId);
     }
 
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-002 / TEST-MCP-SESSIONLOG-002 (BUG-TRIAGE-070): a text query whose term
+    /// exists only inside a processing-dialog item returns the session (dialog content was previously
+    /// unsearchable because BuildSearchText joined only the four turn scalar fields).
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_TextMatchesProcessingDialogContent()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-search"));
+        var turn = dto.Turns!.First();
+        turn.QueryText = "generic query";
+        turn.QueryTitle = "generic title";
+        turn.Response = "generic response";
+        turn.Interpretation = null;
+        turn.ProcessingDialog =
+        [
+            new ProcessingDialogItemDto { Timestamp = "2026-02-11T10:02:00Z", Role = "model", Content = "zircondialogtoken reasoning step", Category = "reasoning" }
+        ];
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Text = "zircondialogtoken" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "dialog-search"), item.SessionId);
+    }
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-002 / TEST-MCP-SESSIONLOG-002: a text query whose term exists only inside an
+    /// action description returns the session.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_TextMatchesActionDescription()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "action-search"));
+        var turn = dto.Turns!.First();
+        turn.QueryText = "plain query";
+        turn.QueryTitle = "plain title";
+        turn.Response = "plain response";
+        turn.Interpretation = null;
+        turn.Actions =
+        [
+            new UnifiedActionDto { Order = 0, Description = "quartzactiontoken edited a file", Type = "edit", Status = "completed", FilePath = "src/Foo.cs" }
+        ];
+        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Text = "quartzactiontoken" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "action-search"), item.SessionId);
+    }
+
+    /// <summary>
+    /// TR-MCP-SESSIONLOG-003 / TEST-MCP-SESSIONLOG-003 (BUG-TRIAGE-082/083 scope clarity): the terminal-turn
+    /// decision/action/commit compliance gate applies ONLY to the QBAgent ACID source type. A completed
+    /// ClaudeCode turn with no decisions/actions/commits is accepted; the same for QBAgent is rejected.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_CompletedEmptyTurn_AcceptedForClaudeCode_RejectedForQBAgent()
+    {
+        var claudeSession = BuildSessionId("ClaudeCode", "gate-standard");
+        await _sut.SubmitAsync(CreateTestDto("ClaudeCode", claudeSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var claudeTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260304T113901Z-gate-standard",
+            Status = "completed",
+        };
+        var turnId = await _sut.UpsertTurnAsync("ClaudeCode", claudeSession, claudeTurn, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(turnId > 0);
+
+        var qbSession = BuildSessionId("QBAgent", "gate-acid");
+        await _sut.SubmitAsync(CreateTestDto("QBAgent", qbSession), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var qbTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260304T113901Z-gate-acid",
+            Status = "completed",
+        };
+        await Assert.ThrowsAsync<ArgumentException>(
+            () => _sut.UpsertTurnAsync("QBAgent", qbSession, qbTurn, TestContext.Current.CancellationToken)).ConfigureAwait(true);
+    }
+
     [Fact]
     public async Task WhenSubmittingWithMissingSourceTypeThenArgumentExceptionIsThrown()
     {

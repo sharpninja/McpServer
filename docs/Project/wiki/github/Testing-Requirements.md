@@ -1129,6 +1129,14 @@ Grok CLI startup-rejection guards for the triage research runner (validates TR-M
 
 
 
+## TEST-MCP-DB
+
+### TEST-MCP-DB-006
+
+Validates TR-MCP-DB-006. tests/McpServer.Support.Mcp.Tests/Services/KeyedAsyncLockTests.cs: AcquireAsync_SameKey_BlocksUntilReleased asserts a second same-key acquire stays pending (Task.WhenAny vs a 250ms delay) until the first is disposed, then completes; AcquireAsync_DifferentKeys_DoNotBlockEachOther asserts a different-key acquire completes while the first key is held. The pair discriminates a correct keyed lock from a no-op (fails SameKey) and a global lock (fails DifferentKeys) - red-verified against a no-op stub, green after implementing per-key reference-counted SemaphoreSlim. SessionLogServiceReplaceDeleteTests confirm DeleteTurnAsync correctness is preserved under the lock (AC2).
+
+
+
 ## TEST-MCP-DOCFXWIKI
 
 ### TEST-MCP-DOCFXWIKI-001
@@ -1336,6 +1344,24 @@ Memory federation tests SHALL prove memory adapter diagnostics, /mcpserver/memor
 - [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
 
 
+## TEST-MCP-PLUGIN
+
+### TEST-MCP-PLUGIN-011
+
+Validates TR-MCP-PLUGIN-011. mcpserver-claude-code-plugin/tests/StopGateHardening.Tests.ps1: 'does not block a completed code-edit turn whose only audit signal is commits' seeds current-turn.yaml (status=completed, codeEdits=1, all audit counters 0 except auditCommits=2) and asserts the stop-gate output does not contain a block/'audit is incomplete'; 'no-ops instead of blocking for a task-notification phantom turn' seeds status=in_progress, queryTitle=<task-notification>, zero work, and asserts no block and no completeTurn in the repl log. Red before the fix (audit-incomplete block; completeTurn-did-not-mark-completed block), green after. Pester harness uses MCP_CACHE_DIR_OVERRIDE + MCP_PLUGIN_REPL_LOG/RESPONSE mocks.
+
+
+### TEST-MCP-PLUGIN-012
+
+Validates TR-MCP-PLUGIN-012. mcpserver-claude-code-plugin/tests/CurrentTurnSessionRebind.Tests.ps1 dot-sources ..\lib\repl-invoke.ps1, seeds session-state.yaml (sessionId B) and current-turn.yaml (sessionId A, in_progress), calls Assert-ReplCurrentTurnFresh, and asserts it returns true and current-turn.yaml sessionId is now B. Red before the fix (stale-sessionId reject returned false), green after replacing the two sessionId hard-rejects with an active-session re-bind. ReplFailsafe.Tests.ps1 remain green (AC2).
+
+
+### TEST-MCP-PLUGIN-013
+
+HookTurnDedupe.Tests.ps1: the UserPromptSubmit hook reuses the open turn on a duplicate prompt (returns turn-already-open, does not call beginTurn) and opens a new turn for a differing prompt. Hermetic via a self-contained marker plus the forced host identity. Validates TR-MCP-PLUGIN-013 / BUG-TRIAGE-077.
+
+
+
 ## TEST-MCP-PLUGIN-TRIAGE
 
 ### TEST-MCP-PLUGIN-TRIAGE-001
@@ -1371,6 +1397,11 @@ Automated PowerShell runtime and plugin parity tests SHALL cover dictionary-back
 - [ ] A red test reproduces the documented appendDialog silent no-op with ConvertFrom-Yaml dictionary output.
 - [ ] Tests prove multi-item delegation and fail-closed empty payload behavior.
 - [ ] Canonical and propagated plugin suites complete with zero failures and zero skips.
+
+### TEST-MCP-PLUGINCORE-005
+
+Validates TR-MCP-PLUGINCORE-005. Doc-presence + parse check (receipt captured 2026-07-16): ConvertFrom-Yaml parses both templates/prompt-templates.yaml and src/McpServer.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml; both contain the strings 'same volume as the target' and 'cross-volume move' in the PowerShell.Mcp Command Routing block; the added guidance text contains no em-dashes/en-dashes (pre-existing dashes elsewhere in the template are out of scope).
+
 
 
 ## TEST-MCP-PLUGININT
@@ -1770,6 +1801,21 @@ Mock-backed unit and real-filesystem integration tests SHALL prove primary and f
 - [ ] Primary success, explicit cancellation, and dual-failure paths are covered.
 - [ ] Current and prior McpServer.Repl.Core scopes complete with zero failures and zero skips.
 
+### TEST-MCP-REPL-026
+
+Validates TR-MCP-REPL-011 (PascalCase session-id agent + openSession persistence). mcpserver-claude-code-plugin/tests/SessionIdCanonicalAgent.Tests.ps1 dot-sources ..\lib\repl-invoke.ps1: asserts Get-ReplCanonicalAgentName('default')='Default' and matches ^[A-Z][A-Za-z0-9]*$, 'claude-code'/'claudecode'='ClaudeCode', 'codex'='Codex', 'grok'='GrokCode'; and Invoke-WorkflowOpenSession with 'sessionId: ClaudeCode-...-explicit' writes status=verified + that sessionId into session-state.yaml and returns true. Red before implementation (functions did not exist / openSession was a no-op), green after. Note: uses id 026 because TEST-MCP-REPL-011 was already taken.
+
+
+### TEST-MCP-REPL-027
+
+Validates TR-MCP-REPL-012. mcpserver-claude-code-plugin/tests/ReplMethodTimeout.Tests.ps1 dot-sources ..\lib\repl-invoke.ps1: asserts Get-ReplMethodTimeoutSeconds returns >30 for workflow.todo.analyzeRequirements and workflow.requirements.generateDocument and exactly 30 for workflow.sessionlog.completeTurn/beginTurn; and with REPL_TIMEOUT=45/REPL_LONG_TIMEOUT=600 set, returns 45 for sessionlog and 600 for analyzeRequirements. Red before implementation (function absent), green after; Invoke-ReplRaw now uses Get-ReplMethodTimeoutSeconds.
+
+
+### TEST-MCP-REPL-028
+
+ReplWorkspaceResolution.Tests.ps1: a marker-bearing current directory outranks an inherited MCP_WORKSPACE_PATH when the repl bridge resolves the workspace. Validates TR-MCP-REPL-013 / BUG-TRIAGE-077.
+
+
 
 ## TEST-MCP-REPL-TRIAGE
 
@@ -1873,11 +1919,42 @@ In each TS plugin, tests/requirements.test.ts (or tests/complex-tools.test.ts) p
 
 
 
+## TEST-MCP-REQEXPORT
+
+### TEST-MCP-REQEXPORT-002
+
+Validates TR-MCP-REQEXPORT-002. tests/McpServer.Support.Mcp.Tests/Controllers/RequirementsControllerGenerateTests.cs: GenerateAsync_WikiUnlistedException_ReturnsStructuredErrorNamingExceptionType substitutes IRequirementsDocumentService.GenerateWikiAsync to throw KeyNotFoundException and asserts the action returns an ObjectResult status 500 whose body contains the message and KeyNotFoundException (exceptionType). Red before the catch-all (the exception escaped/threw), green after adding catch(Exception)->BuildGenerateExportError to both wiki try blocks. Existing GenerateAsync_WikiConfigFailure/WikiConflictFailure/WikiZipAssemblyFailure tests remain green (AC3).
+
+
+### TEST-MCP-REQEXPORT-003
+
+Verifies generateDocument accepts format=markdown for docType=matrix (and other non-wiki docTypes) without a format rejection at the schema, validator, and workflow layers. Validates TR-MCP-REQEXPORT-003 / BUG-TRIAGE-074.
+
+
+
 ## TEST-MCP-REQWS
 
 ### TEST-MCP-REQWS-001
 
 Explicit workspacePath override for requirements document generation (follow-up to triage-report-f77331f9a33e4bd0ae4f55f0470743ed). RequirementsClientTests verify GenerateAsync with a workspacePath override replaces the client-bound X-Workspace-Path header for that call only and the bound header is preserved without an override. RequirementsWorkflowWorkspaceOverrideTests verify the real RequirementsWorkflow forwards the override to the generate request, preserves the bound workspace when absent, and the ReplCommandDispatcher forwards the workspacePath param from workflow.requirements.generateDocument envelopes to the workflow. Cross-workspace override without the target workspace's API key fails with 401 (per-workspace keys) instead of silently exporting the session-bound workspace's requirements. Evidence 2026-07-14: red before implementation, Client 23/23 and Repl.Core 810/810 green after; deployed in service and mcpserver-repl 1.4.15+.
+
+
+
+## TEST-MCP-SESSIONLOG
+
+### TEST-MCP-SESSIONLOG-001
+
+Validates TR-MCP-SESSIONLOG-001. tests/McpServer.Support.Mcp.Tests/McpStdio/SessionLogLifecycleToolErrorTests.cs: SessionLogCompleteTurn_MalformedTurnJson_ReturnsStructuredError and SessionLogFailTurn_MalformedTurnJson_ReturnsStructuredError assert a malformed turnJson yields a JSON {error} (with message, no success) instead of a thrown JsonException; SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess asserts the happy path still returns {success:true}. Red before the fix (2 of 3 threw), green after moving the deserialize into a try/catch and ApplyWorkspaceOverride inside the service try.
+
+
+### TEST-MCP-SESSIONLOG-002
+
+Validates TR-MCP-SESSIONLOG-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: QueryAsync_TextMatchesProcessingDialogContent seeds a session whose unique token exists only in a ProcessingDialog item Content and asserts the text query returns it; QueryAsync_TextMatchesActionDescription does the same for an action Description. Red before widening BuildSearchText (both returned 0), green after. Existing QueryAsync scalar/boolean search tests (WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields et al.) remain green as the AC3 regression guard.
+
+
+### TEST-MCP-SESSIONLOG-003
+
+Validates TR-MCP-SESSIONLOG-003. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: UpsertTurnAsync_CompletedEmptyTurn_AcceptedForClaudeCode_RejectedForQBAgent seeds a ClaudeCode session and a QBAgent session, then asserts a completed turn with zero decisions/actions/commits returns a turnId for ClaudeCode and throws ArgumentException for QBAgent. Regression guard locking the QBAgent-only scope so a future broadening of the gate to standard agents fails. Tool-description accuracy (AC2) applied in FwhMcpTools.SessionLog.cs.
 
 
 
@@ -1892,6 +1969,11 @@ Tests must prove default and configured redaction across the complete session-lo
 - [ ] Service tests cover QueryAsync and GetAsync for every DTO field and preserve total count, ordering, offset, and limit.
 - [ ] HTTP, stdio, and federated integration tests return redacted payloads while direct database verification retains raw values.
 - [ ] Executed current-plus-prior test scope reports zero failures and zero skips.
+
+### TEST-MCP-SESSIONLOGSAN-002
+
+Validates TR-MCP-SESSIONLOGSAN-002. tests/McpServer.Support.Mcp.Tests/Services/SessionLogSanitizerTimeoutTests.cs: CreateTimeoutSanitizer now constructs SessionLogSanitizer with an injected RegexReplaceInvoker that raises RegexMatchTimeoutException deterministically for the catastrophic rule on large input (length>10000 + pattern match, no wall-clock). SanitizeString_WhenConfiguredRuleTimesOut_ReturnsTimeoutTokenAndDoesNotLogInput and SanitizeSessionLog_WhenOneFieldTimesOut_ContinuesSanitizingOtherFields verified 10/10 green across repeated isolated runs (previously flaked pass/pass/fail). Production path uses the default Regex.Replace invoker.
+
 
 
 ## TEST-MCP-SUBLOG
