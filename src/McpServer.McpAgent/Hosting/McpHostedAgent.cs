@@ -65,8 +65,7 @@ public sealed class McpHostedAgent : IMcpHostedAgent
             Client, SessionLog, Todo, PowerShellSessions,
             requirements ?? throw new ArgumentNullException(nameof(requirements)),
             clientPassthrough ?? throw new ArgumentNullException(nameof(clientPassthrough)),
-            replSessionLog ?? throw new ArgumentNullException(nameof(replSessionLog)),
-            _options);
+            replSessionLog ?? throw new ArgumentNullException(nameof(replSessionLog)));
         var functions = toolAdapter.CreateFunctions();
         Registration = new McpHostedAgentRegistration(
             _agentOptions,
@@ -136,23 +135,12 @@ public sealed class McpHostedAgent : IMcpHostedAgent
             agent,
             runOptions,
             QBAgentDefinition.Instance,
-            toolNames,
-            ExecuteQuadBrainCodingTaskAsync);
+            toolNames);
     }
 
     /// <inheritdoc />
     public ChatClientAgentRunOptions CreateRunOptions(ChatClientAgentRunOptions? baseOptions = null) =>
         Registration.CreateRunOptions(baseOptions);
-
-    /// <inheritdoc />
-    public Task<QuadBrainOrchestrationResponse> ExecuteQuadBrainCodingTaskAsync(
-        McpQuadBrainCodingAgentRequest request,
-        CancellationToken cancellationToken = default) =>
-        McpQuadBrainCodingAgentRouter.ExecuteAsync(
-            Client,
-            _options,
-            request ?? throw new ArgumentNullException(nameof(request)),
-            cancellationToken);
 
     private ChatClientAgentRunOptions CreateRunOptionsCore(ChatClientAgentRunOptions? baseOptions)
     {

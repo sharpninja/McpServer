@@ -165,7 +165,6 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             "KEYSERVER" => typeof(KeyServerClient),
             "SUBSCRIBER" => typeof(SubscriberClient),
             "TURNTRANSACTIONS" => typeof(TurnTransactionsClient),
-            "BRAINSLOTS" => typeof(BrainSlotClient),
             "TRIAGE" => typeof(TriageClient),
             "AGENTHELP" => typeof(AgentHelpClient),
             _ => throw new InvalidOperationException(
@@ -254,8 +253,6 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<AgentWorkspaceListResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
-            case Task<AotReconciliationResponse> typedTask:
-                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<AppendTodoCheckpointResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<AuthConfigResponse> typedTask:
@@ -265,12 +262,6 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             case Task<AuthTokenResponse> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<bool> typedTask:
-                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
-            case Task<BrainSlotDto> typedTask:
-                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
-            case Task<BrainSlotInvokeResponse> typedTask:
-                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
-            case Task<BrainSlotStatusResponse> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<BucketBrowseResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
@@ -384,8 +375,6 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<IReadOnlyList<AgentPoolQueueItem>> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
-            case Task<IReadOnlyList<BrainSlotDto>> typedTask:
-                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<IReadOnlyList<FrEntry>> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<IReadOnlyList<FrTrMapping>> typedTask:
@@ -431,10 +420,6 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             case Task<PartyKeyDescriptor> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<PartyRegistrationResponse> typedTask:
-                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
-            case Task<QuadBrainOrchestrationResponse> typedTask:
-                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
-            case Task<QuadBrainWeightUpdateResponse> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<RebuildIndexResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);

@@ -49,7 +49,7 @@ var hostedAgent = serviceProvider.GetRequiredService<IMcpHostedAgent>();
 var runtime = hostedAgent.CreateAcidTightlyCoupledRuntime(chatClient);
 ```
 
-The ACID profile extends Microsoft Agent Framework through `Microsoft.Agents.AI.ChatClientAgent`. It does not certify every MCP endpoint as transactional. By default it exposes only the built-in session/audit, read-only TODO, repository read/list, requirements read, the transaction-gated `mcp_quadbrain_coding_execute` coding tool, and GraphRAG read/list/get tools. Generic passthrough, desktop launch, local PowerShell, repository writes, TODO mutations, and GraphRAG mutations remain hidden until a separate transaction and audit contract authorizes them.
+The ACID profile extends Microsoft Agent Framework through `Microsoft.Agents.AI.ChatClientAgent`. It does not certify every MCP endpoint as transactional. By default it exposes only the built-in session/audit, read-only TODO, repository read/list, requirements read, and GraphRAG read/list/get tools. Generic passthrough, desktop launch, local PowerShell, repository writes, TODO mutations, and GraphRAG mutations remain hidden until a separate transaction and audit contract authorizes them.
 
 ## Built-in workflows
 
@@ -62,7 +62,6 @@ The ACID profile extends Microsoft Agent Framework through `Microsoft.Agents.AI.
   - update TODO items
   - run plan/status/implementation flows with streaming or buffered helpers
 - hosted-agent MCP tools
-  - `mcp_quadbrain_coding_execute`
   - `mcp_repo_read`, `mcp_repo_list`, `mcp_repo_write`
   - `mcp_desktop_launch`
   - `mcp_powershell_session_create`, `mcp_powershell_session_command`, `mcp_powershell_session_close`

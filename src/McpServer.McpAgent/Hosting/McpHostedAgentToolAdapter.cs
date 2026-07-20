@@ -25,7 +25,6 @@ internal sealed class McpHostedAgentToolAdapter
     private readonly IRequirementsWorkflow _requirements;
     private readonly IGenericClientPassthrough _clientPassthrough;
     private readonly IReplSessionLogWorkflow _replSessionLog;
-    private readonly McpAgentOptions _options;
 
     public McpHostedAgentToolAdapter(
         McpServerClient client,
@@ -34,8 +33,7 @@ internal sealed class McpHostedAgentToolAdapter
         IHostedPowerShellSessionManager powerShellSessions,
         IRequirementsWorkflow requirements,
         IGenericClientPassthrough clientPassthrough,
-        IReplSessionLogWorkflow replSessionLog,
-        McpAgentOptions options)
+        IReplSessionLogWorkflow replSessionLog)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _sessionLog = sessionLog ?? throw new ArgumentNullException(nameof(sessionLog));
@@ -44,7 +42,6 @@ internal sealed class McpHostedAgentToolAdapter
         _requirements = requirements ?? throw new ArgumentNullException(nameof(requirements));
         _clientPassthrough = clientPassthrough ?? throw new ArgumentNullException(nameof(clientPassthrough));
         _replSessionLog = replSessionLog ?? throw new ArgumentNullException(nameof(replSessionLog));
-        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
     public IReadOnlyList<AIFunction> CreateFunctions() =>
@@ -168,12 +165,6 @@ internal sealed class McpHostedAgentToolAdapter
             (Func<string, CancellationToken, Task<ITestItem>>)GetTestRequirementAsync,
             "mcp_requirements_get_test",
             "Get a specific test requirement by its canonical identifier (e.g. TEST-MCP-001)."),
-
-        // ── Quad Brain coding-agent tool (FR-MCP-137/TR-MCP-AGENT-016) ──
-        CreateTool(
-            (Func<McpQuadBrainCodingAgentRequest, CancellationToken, Task<QuadBrainOrchestrationResponse>>)ExecuteQuadBrainCodingTaskAsync,
-            "mcp_quadbrain_coding_execute",
-            "Execute a coding task through MCP Server Quad Brain orchestration and return the committed Arbiter response."),
 
         // ── Generic client passthrough (REPL-backed) ───────────────────
         CreateTool(
@@ -426,17 +417,6 @@ internal sealed class McpHostedAgentToolAdapter
         string id,
         CancellationToken cancellationToken) =>
         _requirements.GetTestAsync(id, cancellationToken);
-
-    // ── Quad Brain coding-agent implementation ─────────────────────────
-
-    private Task<QuadBrainOrchestrationResponse> ExecuteQuadBrainCodingTaskAsync(
-        McpQuadBrainCodingAgentRequest request,
-        CancellationToken cancellationToken) =>
-        McpQuadBrainCodingAgentRouter.ExecuteAsync(
-            _client,
-            _options,
-            request ?? throw new ArgumentNullException(nameof(request)),
-            cancellationToken);
 
     // ── Generic client passthrough (REPL-backed) ───────────────────────
 

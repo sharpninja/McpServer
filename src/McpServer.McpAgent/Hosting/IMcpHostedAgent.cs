@@ -92,17 +92,6 @@ public interface IMcpHostedAgent
         ChatClientAgentRunOptions? baseOptions = null);
 
     /// <summary>
-    /// Executes a coding task through MCP Server Quad Brain orchestration using the same route exposed
-    /// by the model-visible <c>mcp_quadbrain_coding_execute</c> tool.
-    /// </summary>
-    /// <param name="request">The coding-agent request containing prompt, turn id, and metadata.</param>
-    /// <param name="cancellationToken">Cancellation token for the MCP Server request.</param>
-    /// <returns>The committed Quad Brain orchestration response returned by MCP Server.</returns>
-    Task<QuadBrainOrchestrationResponse> ExecuteQuadBrainCodingTaskAsync(
-        McpQuadBrainCodingAgentRequest request,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
      /// Creates <see cref="ChatClientAgentRunOptions"/> that attach the built-in MCP workflow tools
      /// through <see cref="Microsoft.Extensions.AI.ChatOptions.Tools"/> and wrap the supplied chat
      /// client with function invocation support, including the local in-process PowerShell session

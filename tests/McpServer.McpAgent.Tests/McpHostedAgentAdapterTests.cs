@@ -65,7 +65,6 @@ public sealed class McpHostedAgentAdapterTests
             "mcp_requirements_get_fr",
             "mcp_requirements_get_tr",
             "mcp_requirements_get_test",
-            "mcp_quadbrain_coding_execute",
             "mcp_client_invoke",
             "mcp_graphrag_ingest_text",
             "mcp_graphrag_list_documents",
@@ -166,7 +165,6 @@ public sealed class McpHostedAgentAdapterTests
         Assert.False(invokingClient.AllowConcurrentInvocation);
         Assert.False(runOptions.ChatOptions!.AllowMultipleToolCalls);
         Assert.Equal(QBAgentDefinition.Instance.AllowedToolNames, toolNames);
-        Assert.Contains("mcp_quadbrain_coding_execute", toolNames);
         Assert.DoesNotContain("mcp_client_invoke", toolNames);
         Assert.DoesNotContain("mcp_powershell_session_command", toolNames);
         Assert.DoesNotContain("mcp_repo_write", toolNames);
@@ -174,49 +172,26 @@ public sealed class McpHostedAgentAdapterTests
     }
 
     /// <summary>
-    /// TEST-MCP-187: Verifies that the ACID runtime exposes a typed host-callable coding-agent path
-    /// that executes through the same Quad Brain orchestration endpoint as the model-visible tool.
+    /// TEST-MCP-QBABSENCE-002: Verifies that the ACID runtime bundle no longer carries any
+    /// QuadBrain-named surface. The runtime exposes only the agent, sealed run options, definition,
+    /// and tool names, and none of those tool names references QuadBrain.
     /// </summary>
     [Fact]
-    public async Task AcidRuntime_ExecuteCodingTaskAsync_RoutesThroughQuadBrainOrchestration()
+    public void AcidRuntime_ExposesNoQuadBrainSurface()
     {
         var (hostedAgent, handler) = CreateHostedAgent(configureOptions: static options =>
             options.UseAcidTightlyCoupledProfile());
         using var chatClient = new StubChatClient();
         var runtime = hostedAgent.CreateAcidTightlyCoupledRuntime(chatClient);
 
-        var response = await runtime.ExecuteCodingTaskAsync(
-            new McpQuadBrainCodingAgentRequest
-            {
-                Prompt = "Implement a transactional rollback guard for a C# repository method.",
-                TaskKind = "implementation",
-                TurnId = "turn-acid-coding",
-                AdmitCuriosityToGraphRag = true,
-                Metadata = new Dictionary<string, string>
-                {
-                    ["repo"] = "McpServer",
-                    ["language"] = "csharp",
-                },
-            },
-            CancellationToken.None);
-
-        var request = Assert.Single(handler.Requests, static request =>
-            request.RequestUri.AbsolutePath == "/mcpserver/brain-slots/orchestrate");
-        using var body = JsonDocument.Parse(request.Body!);
-        var metadata = body.RootElement.GetProperty("metadata");
-
-        Assert.Equal("Committed", response.Status);
-        Assert.Equal("Quad Brain coding result for implementation", response.Output);
-        Assert.Equal(HttpMethod.Post, request.Method);
-        Assert.Equal("Implement a transactional rollback guard for a C# repository method.", body.RootElement.GetProperty("input").GetString());
-        Assert.Equal("turn-acid-coding", body.RootElement.GetProperty("turnId").GetString());
-        Assert.True(body.RootElement.GetProperty("admitCuriosityToGraphRag").GetBoolean());
-        Assert.Equal("McpServer", metadata.GetProperty("repo").GetString());
-        Assert.Equal("csharp", metadata.GetProperty("language").GetString());
-        Assert.Equal("Microsoft.AgentFramework", metadata.GetProperty("codingAgent.surface").GetString());
-        Assert.Equal("implementation", metadata.GetProperty("codingAgent.taskKind").GetString());
-        Assert.Equal(nameof(McpAgentExecutionProfile.AcidTightlyCoupled), metadata.GetProperty("codingAgent.executionProfile").GetString());
-        Assert.Equal(McpHostedAgentDefaults.QBAgentSourceType, metadata.GetProperty("codingAgent.sourceType").GetString());
+        Assert.NotEmpty(runtime.ToolNames);
+        Assert.DoesNotContain(
+            runtime.ToolNames,
+            static name => name.Contains("quadbrain", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(
+            typeof(QBAgentRuntime).GetMethods(),
+            static method => method.Name.Contains("Coding", StringComparison.OrdinalIgnoreCase));
+        Assert.Empty(handler.Requests);
     }
 
     /// <summary>
@@ -647,7 +622,6 @@ public sealed class McpHostedAgentAdapterTests
                 "/mcpserver/repo/list" when request.Method == HttpMethod.Get => CreateRepoListResponse(request.RequestUri!),
                 "/mcpserver/repo/file" when request.Method == HttpMethod.Post => CreateRepoWriteResponse(body!),
                 "/mcpserver/desktop/launch" when request.Method == HttpMethod.Post => CreateDesktopLaunchResponse(),
-                "/mcpserver/brain-slots/orchestrate" when request.Method == HttpMethod.Post => CreateQuadBrainOrchestrationResponse(body!),
                 _ => throw new InvalidOperationException($"Unexpected MCP request path '{request.RequestUri.AbsolutePath}'."),
             };
         }
@@ -740,45 +714,6 @@ public sealed class McpHostedAgentAdapterTests
                     ProcessId = 4242,
                     ExitCode = 0
                 }));
-
-        private static HttpResponseMessage CreateQuadBrainOrchestrationResponse(string body)
-        {
-            using var document = JsonDocument.Parse(body);
-            var taskKind = document.RootElement
-                .GetProperty("metadata")
-                .GetProperty("codingAgent.taskKind")
-                .GetString();
-
-            return CreateJsonResponse(
-                HttpStatusCode.OK,
-                JsonSerializer.Serialize(
-                    new QuadBrainOrchestrationResponse
-                    {
-                        Status = "Committed",
-                        Reason = "Committed",
-                        Output = $"Quad Brain coding result for {taskKind}",
-                        TransactionId = "txn-quad-coding",
-                        DiffgramId = "diff-quad-coding",
-                        StartedAtUtc = new DateTimeOffset(2026, 03, 09, 15, 01, 05, TimeSpan.Zero),
-                        CompletedAtUtc = new DateTimeOffset(2026, 03, 09, 15, 01, 06, TimeSpan.Zero),
-                        RoleResults =
-                        [
-                            new QuadBrainRoleResult
-                            {
-                                Role = "ArbiterOfTruth",
-                                SlotId = "brain-slot:aot",
-                                Status = "Committed",
-                                Reason = "Committed",
-                                ModelId = "grok-build",
-                                TransactionId = "txn-aot",
-                                DiffgramId = "diff-aot",
-                                Output = $"Quad Brain coding result for {taskKind}",
-                                OrchestrationWeight = 1,
-                                WeightVersion = 1,
-                            },
-                        ],
-                    }));
-        }
 
         private static string? GetQueryParameter(Uri requestUri, string name)
         {
