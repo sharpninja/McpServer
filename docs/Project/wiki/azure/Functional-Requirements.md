@@ -1090,6 +1090,16 @@ Scope: layer-1+
 - [x] PLAN-WARNREMEDIATION-001 stays current with approved suppressions separated from required fixes and marks only validated work as done. (evidence: PLAN-WARNREMEDIATION-001 W15/W18/W21-W24 evidence updated in TODO state; approved suppressions remain in config/warning-suppression-approvals.json.)
 - [x] Requirements exports and traceability mappings include the suppression governance FR, TR, and aiUnit TEST records. (evidence: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md, docs/Project/Requirements-Matrix.md, docs/Project/requirements-wiki-documents.zip)
 
+## FR-MCP-140 Self-describing marker signature canonicalization
+
+The generated AGENTS-README-FIRST.yaml marker file shall embed the complete marker-v1 canonical field list and encoding contract inside the signature block so that any agent can reconstruct and verify the HMAC-SHA256 signature without consulting server source code, documentation, or a helper module. Recovered from origin/claude/dreamy-brahmagupta (commit ccda0a4e, 2026-04-09) where it was authored as FR-MCP-081; that id has since been reused on develop for Byrd Iteration Phase and TODO Execution Persistence, so this work is renumbered. Extends FR-MCP-076 (marker trust bootstrap) and TR-MCP-SEC-003 (signed marker bootstrap), neither of which states that the payload field list is emitted or that it is table-driven. Motivation: the marker-v1 field order is currently hand-reimplemented in at least six independent verifiers (McpSession.psm1, plugins lib-ps and lib-sh marker resolvers, the lib-node and mcp-repl-ts TypeScript resolvers, mcpserver-agent-core marker-trust.ts, MarkerFileClientOptionsResolver.cs) plus a prose spec in REPL-AGENT-GUIDE.md, with no test binding them together; a missed update makes a verifier compute a different HMAC and log MCP_UNTRUSTED.
+Scope: layer-1+
+
+## FR-MCP-141 Service-account process environment fidelity
+
+When the server runs as a Windows service under a non-interactive account, child processes it launches shall resolve executables and environment the same way an interactive user session would. Executable resolution shall skip Microsoft\WindowsApps App-Execution-Alias stubs, which are zero-byte reparse points that fail with Win32Exception 1920 for service accounts. Tunnel providers shall apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the child process so provider configuration files resolve, and shall resolve the provider binary against that enriched PATH. A missing provider binary shall be reported at Warning with a message naming the service-account and Store-alias causes and the available remedies, not as an unexplained error. Recovered from origin/claude/busy-dubinsky (2026-04-04 to 2026-04-05), which registered no requirement of any kind.
+Scope: layer-1+
+
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
@@ -1194,6 +1204,11 @@ Scope: layer-1+
 ## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.
+Scope: layer-1+
+
+## FR-MCP-MARKER-004 Marker removal deletes the marker and leaves no tombstone
+
+Removing the AGENTS-README-FIRST.yaml workspace marker must delete the file. It must not rename the marker to an AGENTS-README-FIRST.yaml.deleted-{timestamp} archive copy that is never reclaimed. The marker is regenerated in full on every server start and carries the per-workspace API key that rotates on each restart, so an archived copy preserves no recoverable state of value while leaving an expired credential on disk. Each graceful shutdown currently leaves one tombstone permanently: as of 2026-07-20 the McpServer workspace held 19 of them, 587,033 bytes, dated 2026-07-08 through 2026-07-16, every one containing the apiKey that was live when it was written. TR-MCP-DB-003 (soft deletes for persistent MCP data) governs persistent MCP domain rows and their relationships; it does not extend to regenerated filesystem artifacts, and applying it to the marker was an over-generalization. The same rule applies to the legacy .mcp-server.yaml and .mcp-server.json markers removed alongside it.
 Scope: layer-1+
 
 ## FR-MCP-MEMORY-001 Global and workspace memory storage

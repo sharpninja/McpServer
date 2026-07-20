@@ -42,6 +42,14 @@ HMAC key. **The signed payload is canonicalised as `key=value` lines separated
 by a single LF (`\n`) — never CRLF, regardless of the host operating system.**
 The hex-encoded digest must match `signature.value` in the marker (case-insensitive).
 
+Since FR-MCP-140 the marker is self-describing: the `signature` block carries a
+`fields` array listing the canonical field names in payload order, and a `format`
+string stating the encoding. Prefer reading `signature.fields` from the marker you
+are verifying over hard-coding the list below, because that array is generated from
+the same ordered definition the server signs with and reflects the conditional
+`agentPlugins` tail for that specific marker. The list below documents the same order
+for reference, and a unit test binds the two together so they cannot drift.
+
 The canonical key order is:
 
 ```text

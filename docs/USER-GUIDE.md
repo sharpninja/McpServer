@@ -89,8 +89,14 @@ Key fields:
 - endpoint map (`health`, `swagger`, `todo`, `sessionLog`, etc.)
 - `workspacePath`, `workspace`
 - `serverStartedAtUtc`, `markerWrittenAtUtc`
-- `signature`
+- `signature`, including `fields` and `format`, which describe the signed payload itself
 - `trust_bootstrap`
+
+The `signature` block is self-describing: `fields` lists the canonical field names in the
+exact order they are fed to HMAC-SHA256, and `format` states the encoding (`key=value` per
+line, trailing LF on the final line, UTF-8). Verifiers should read that array from the marker
+they are checking rather than hard-coding a field list, since it reflects the conditional
+`agentPlugins` tail for that specific marker.
 
 Example use:
 

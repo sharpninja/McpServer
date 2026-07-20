@@ -11,8 +11,8 @@ and how it behaves operationally.
 
 A QuadBrain decision runs four roles in sequence and reconciles them:
 
-- **LeftHemisphere** - structured decomposition, deterministic checks, risk-focused analysis.
-- **RightHemisphere** - alternatives, pattern-level opportunities, creative solution paths.
+- **Creativity** - alternatives, pattern-level opportunities, and creative solution paths.
+- **Logic** - structured decomposition, deterministic checks, logical reasoning, deduction, and validity.
 - **CuriosityEngine** - missing evidence, challenged assumptions, research and gap detection.
 - **ArbiterOfTruth (AoT)** - reconciles the three role outputs over the original input and returns the
   final, committed decision.
@@ -105,17 +105,17 @@ Each entry in `Slots` defines one brain:
 
 ```yaml
     Slots:
-      - SlotId: brain-slot-left-hemisphere
-        Role: LeftHemisphere           # LeftHemisphere | RightHemisphere | CuriosityEngine | ArbiterOfTruth
-        DisplayName: Left Brain
+      - SlotId: brain-slot-creativity
+        Role: Creativity           # Creativity | Logic | CuriosityEngine | ArbiterOfTruth
+        DisplayName: Creativity
         ProviderKind: OpenAICompatible # OpenAI | OpenAICompatible
         ModelId: my-model
         Endpoint: http://127.0.0.1:8312/v1   # optional; required for OpenAICompatible
-        CredentialReference: env:MY_LEFT_API_KEY
+        CredentialReference: env:MY_CREATIVITY_API_KEY
         Enabled: true
         TimeoutSeconds: 180
         MaxOutputTokens: 4096
-        SystemPrompt: You are the LeftHemisphere brain slot. Produce structured decomposition...
+        SystemPrompt: You are the Creativity brain slot. Generate alternatives and explore creative solution paths...
         OrchestrationWeight: 1.0
         ReplaceExisting: true
 ```
@@ -185,7 +185,7 @@ The same operations are available over the MCP STDIO/transport surface and the t
 ```json
 {
   "quadReady": true,
-  "roleReadiness": { "LeftHemisphere": true, "RightHemisphere": true,
+  "roleReadiness": { "Creativity": true, "Logic": true,
                      "CuriosityEngine": true, "ArbiterOfTruth": true },
   "missingRoles": [], "disabledRoles": [], "validationErrors": []
 }
@@ -212,7 +212,7 @@ version mismatch is rejected.
 
 ## 6. How a decision is produced
 
-1. LeftHemisphere, RightHemisphere, then CuriosityEngine are each invoked with a role-specific prompt; each
+1. Creativity, Logic, then CuriosityEngine are each invoked with a role-specific prompt; each
    must commit a non-empty output or the loop rejects.
 2. ArbiterOfTruth reconciles the three committed outputs over the original input and commits the final
    decision.

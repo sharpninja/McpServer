@@ -1022,6 +1022,26 @@ Verifies that the hosted MCP coding agent executes coding prompts through the Qu
 - [x] Tests use an in-memory MCP HTTP handler and do not require live external model credentials or network calls.
 - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
 
+### TEST-MCP-189
+
+Validates FR-MCP-140 and TR-MCP-SEC-005. Unit: the emitted AGENTS-README-FIRST.yaml signature block contains a fields array and a format string, and the fields array lists exactly the canonical marker-v1 payload field names in the order BuildSignaturePayload emits them. Unit, byte-compatibility gate: the HMAC-SHA256 signature value computed for a fixed known marker is unchanged by the refactor, proving the six existing independent verifiers (McpSession.psm1, plugins lib-ps and lib-sh marker resolvers, lib-node and mcp-repl-ts TypeScript resolvers, mcpserver-agent-core marker-trust.ts, MarkerFileClientOptionsResolver.cs) continue to validate. Unit, conditional tail: a marker written with an agentPlugins contract emits the agentPlugins.policy and agentPlugins.contractDigest names in fields, and a marker written without one does not. Unit, drift guard: the canonical key order documented in docs/REPL-AGENT-GUIDE.md matches SignaturePayloadFields exactly, so the prose specification cannot drift from the code.
+
+
+### TEST-MCP-190
+
+Validates FR-MCP-141 and TR-MCP-SVC-002. Unit: ResolveExecutable skips a PATH entry under Microsoft\WindowsApps that contains a zero-byte alias stub of the requested name, and returns a real executable from a later PATH entry instead. Unit, false-positive guard: a PATH entry under C:\Program Files\WindowsApps, the genuine MSIX install root, is NOT skipped, so packaged executables such as the Store PowerShell remain resolvable; the guard matches only the Microsoft\WindowsApps alias directory. Unit: when the only candidate lies under Microsoft\WindowsApps, resolution reports not-found rather than returning the unusable stub path.
+
+
+### TEST-MCP-191
+
+Validates FR-MCP-141 and TR-MCP-TUN-004. Unit: NgrokTunnelProvider constructed with an IProcessEnvironmentService applies the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the child ProcessStartInfo it builds for the ngrok process. Unit: the provider resolves the ngrok binary through ResolveExecutable against that enriched PATH rather than passing the literal string ngrok as the file name. Unit: when the binary cannot be resolved the provider logs at Warning rather than Error, and the emitted message names both the Windows-service or Store-alias cause and the remedies. Note that these paths are dormant under the shipped configuration (Tunnel Provider empty, Ngrok.Enabled false), so the coverage is unit-level rather than end to end.
+
+
+### TEST-MCP-192
+
+Validates TR-MCP-SEC-006 under FR-MCP-129 and FR-MCP-134. Unit: a brain slot whose party id was renamed to brain-slot:creativity, with an active signing key still registered only under the legacy brain-slot:left-hemisphere party, becomes ready after reconciliation, and the key material under the new key id brain-slot:creativity:signing:1 is byte-identical to the legacy key material. Unit, preservation: the legacy party row and legacy key row still exist and remain active after reconciliation, so historical diffgram signatures that reference the legacy key id stay verifiable; the operation is a copy, never a move. Unit, idempotence: running reconciliation twice performs no second write and leaves exactly one key per party id. Unit, no-op paths: reconciliation does nothing when the new party already has an active signing key, and does nothing when no legacy party or key exists, and it never generates new key material in either case. Unit: the same mapping holds for Logic from the legacy brain-slot:right-hemisphere party, while CuriosityEngine and ArbiterOfTruth are untouched.
+
+
 
 ## TEST-MCP-ACID
 
@@ -1281,6 +1301,14 @@ Guardrail violations terminate the session and persist transcript plus incident 
 ### TEST-MCP-HELP-SEC-007
 
 Marker prompt template contains the Agent Help (MCP Server issues) section and references MCP/REST invocation paths.
+
+
+
+## TEST-MCP-MARKER
+
+### TEST-MCP-MARKER-004
+
+Validates FR-MCP-MARKER-004 and TR-MCP-MARKER-004. Unit: RemoveMarker on a temp workspace containing a marker file with sentinel content deletes the marker and leaves zero files matching AGENTS-README-FIRST.yaml.deleted-*, replacing RemoveMarker_ArchivesMarkerFileInsteadOfDeletingIt which asserted exactly the opposite. Unit: RemoveMarker on a workspace that also contains legacy .mcp-server.yaml and .mcp-server.json markers deletes all three and leaves no tombstone for any of them. Unit: RemoveMarker on a workspace with no marker present completes without throwing and creates no files.
 
 
 
