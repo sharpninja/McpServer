@@ -135,6 +135,27 @@ documents:
     platforms:
       - github
       - azure
+  - id: azure-pipelines
+    title: Azure Pipelines
+    source: docs/AZURE-PIPELINES.md
+    target: Azure-Pipelines.md
+    platforms:
+      - github
+      - azure
+  - id: release-checklist
+    title: Release Checklist
+    source: docs/RELEASE-CHECKLIST.md
+    target: Release-Checklist.md
+    platforms:
+      - github
+      - azure
+  - id: onboarding-human-ai-partnership
+    title: 'Onboarding: Human and AI Partnership'
+    source: docs/Onboarding-Human-AI-Partnership.md
+    target: Onboarding-Human-AI-Partnership.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -170,5 +191,11 @@ navigation:
     path: Process
     children:
       - document: byrd-development-process
+      - document: release-checklist
+      - document: onboarding-human-ai-partnership
+  - title: Operations
+    path: Operations
+    children:
+      - document: azure-pipelines
 docfx:
   workflows: []

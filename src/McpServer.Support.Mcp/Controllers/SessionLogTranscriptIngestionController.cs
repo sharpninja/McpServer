@@ -14,9 +14,11 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/sessionlog/ingest")]
 public sealed class SessionLogTranscriptIngestionController : ControllerBase
 {
-    private const long MaxUploadRequestBytes = 512L * 1024 * 1024;
-    private const long MaxExpandedUploadBytes = 2L * 1024 * 1024 * 1024;
-    private const long MaxSourceFileBytes = 256L * 1024 * 1024;
+    // TR-MCP-TRANSCRIPT-010: size ceilings are Int32.MaxValue. Hostile-archive guards
+    // (entry count, compression ratio, symlink and traversal rejection) are unchanged.
+    private const long MaxUploadRequestBytes = int.MaxValue;
+    private const long MaxExpandedUploadBytes = int.MaxValue;
+    private const long MaxSourceFileBytes = int.MaxValue;
     private const int MaxArchiveEntries = 10_000;
     private const double MaxCompressionRatio = 20.0;
 
@@ -202,7 +204,7 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (file.Length > MaxSourceFileBytes)
-            throw new TranscriptUploadLimitExceededException($"Transcript upload file '{file.FileName}' exceeds the 256 MiB source file limit.");
+            throw new TranscriptUploadLimitExceededException($"Transcript upload file '{file.FileName}' exceeds the 2,147,483,647 byte source file limit.");
 
         if (IsZipUpload(file))
         {
@@ -236,7 +238,7 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
             if (IsZipLink(entry))
                 throw new InvalidDataException($"Transcript ZIP entry '{entry.FullName}' is a link and is not allowed.");
             if (entry.Length > MaxSourceFileBytes)
-                throw new TranscriptUploadLimitExceededException($"Transcript ZIP entry '{entry.FullName}' exceeds the 256 MiB source file limit.");
+                throw new TranscriptUploadLimitExceededException($"Transcript ZIP entry '{entry.FullName}' exceeds the 2,147,483,647 byte source file limit.");
             if (entry.CompressedLength == 0 && entry.Length > 0)
                 throw new TranscriptUploadLimitExceededException($"Transcript ZIP entry '{entry.FullName}' exceeds the compression ratio limit.");
             if (entry.CompressedLength > 0 && entry.Length / (double)entry.CompressedLength > MaxCompressionRatio)
@@ -244,7 +246,7 @@ public sealed class SessionLogTranscriptIngestionController : ControllerBase
 
             expandedBytes += entry.Length;
             if (expandedBytes > MaxExpandedUploadBytes)
-                throw new TranscriptUploadLimitExceededException("Transcript ZIP upload exceeds the 2 GiB expanded content limit.");
+                throw new TranscriptUploadLimitExceededException("Transcript ZIP upload exceeds the 2,147,483,647 byte expanded content limit.");
 
             var destination = ResolveUploadDestination(stagingRoot, entry.FullName, stagedPaths);
             Directory.CreateDirectory(Path.GetDirectoryName(destination)!);

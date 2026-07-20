@@ -988,5 +988,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REPL-029 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-030 | Tracked | Testing-Requirements.md |
 | TEST-MCP-SESSIONLOG-005 | Tracked | Testing-Requirements.md |
+| FR-MCP-QBOLLAMA-002 | Tracked | Functional-Requirements.md |
+| FR-MCP-TRANSCRIPT-009 | Tracked | Functional-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TR-MCP-QBOLLAMA-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-TRANSCRIPT-010 | Tracked | Technical-Requirements.md |
+| TEST-MCP-QBOLLAMA-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-TRANSCRIPT-013 | Tracked | Testing-Requirements.md |

@@ -228,8 +228,20 @@ Main endpoints:
 - `/mcpserver/gh`
 - `/mcpserver/sync`
 - `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
+- `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` — provider transcript import
 - `/health`
 - `/swagger`
+
+### Transcript Ingestion Limits
+
+Transcript size ceilings are `Int32.MaxValue` (2,147,483,647) for the upload request body, expanded archive
+content, per source file, per JSONL line, and records per bundle. JSONL sources stream line by line rather than
+being read whole, so a large transcript does not have to fit in memory at once. Agent transcripts that carry a
+full tool result on a single line therefore import without special handling.
+
+Guards against hostile archives keep their original values and are not affected by those ceilings: a maximum of
+10,000 archive entries, a decompression ratio ceiling of 20:1, rejection of ZIP symlink entries, and rejection of
+paths that escape the upload root. Exceeded limits return 413; malformed or unsafe inputs return 400.
 
 ## Requirements Wiki Export
 

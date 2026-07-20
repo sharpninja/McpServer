@@ -1372,6 +1372,11 @@ Scope: layer-1+
 - [ ] Internal-tool executed and failed outcomes (interception Executed/Failed) are recorded to the session log as the turn proceeds.
 - [ ] Secret values (api keys, bearer tokens) are redacted before logging; the existing hashed BrainSlotInvocationEntity audit row is retained as the durable index.
 
+## FR-MCP-QBOLLAMA-002 Ollama integration tests provision and release their own server
+
+The QuadBrain Ollama integration tests must not require an operator to have started Ollama beforehand. At startup the test fixture probes http://localhost:11434/api/tags. If a server already answers, the fixture uses it and must leave it running after the tests finish. If no server answers, the fixture starts one from a discovered ollama executable, waits until the endpoint answers, and records that it owns the process. At teardown the fixture stops only a server it started itself, and never stops a pre-existing server. If no ollama executable can be discovered, the fixture fails with an actionable message naming the InstallOllama Nuke target rather than a bare connection-refused error. A server the fixture started must not survive the test run even when the run fails or the endpoint never becomes reachable.
+Scope: layer-1+
+
 ## FR-MCP-QBOPENAI-001 QuadBrain OpenAI-compatible chat-completions endpoint
 
 QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (chat/completions shape) backed by QuadBrain orchestration, accepting standard OpenAI chat messages and tool/function definitions and returning OpenAI-shaped completions - including assistant tool_calls when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent (FR-MCP-QBAGENT-001) consumes this endpoint as its IChatClient and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.
@@ -1731,6 +1736,11 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Cline paired JSON/JSONL, Copilot event folders, and OpenCode JSONL/SQLite snapshots normalize into canonical Session Log YAML. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestionService_NormalizesRealTranscriptFixtures, OpenCodeSqliteTranscriptTests, and real manifest coverage for Cline, Copilot, and OpenCode.)
 - [x] Secondary sources can emit optional Claude, Codex, or Grok compatibility JSONL without reparsing it for canonical YAML. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestionService_EmitsCompatibilityJsonlWhenProfileRequested and Repl.Core normalization profile tests.)
+
+## FR-MCP-TRANSCRIPT-009 Transcript ingestion size ceilings raised to Int32.MaxValue
+
+Transcript ingestion must accept transcript sources whose per-file size, per-JSONL-line size, record count, upload request size, and expanded archive size are bounded only by Int32.MaxValue (2,147,483,647). Operators ingesting large agent transcripts (notably Claude Code JSONL, where a single line can carry a full tool result) must not be rejected by the previous 256 MiB per-file, 8 MiB per-line, 2,000,000-record, 512 MiB request, or 2 GiB expanded-content ceilings. Guards that defend against hostile archives rather than large transcripts are retained unchanged: archive entry count, compression ratio, ZIP symlink rejection, and path-traversal rejection. Supersedes the ceiling values asserted by FR-MCP-TRANSCRIPT-002 and TR-MCP-TRANSCRIPT-001; the bounded-reader obligation itself is unchanged, only the bound values move.
+Scope: layer-1+
 
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 

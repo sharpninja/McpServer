@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using McpServer.SessionLog.Transcripts;
 using Xunit;
@@ -614,25 +616,79 @@ public sealed class TranscriptCorePipelineTests
         }
     }
 
-    /// <summary>Verifies JSONL normalization rejects individual records above the supported line-size bound.</summary>
+    /// <summary>
+    /// Verifies JSONL normalization accepts a single record larger than the former 8 MiB line ceiling.
+    /// Fixture: a generated Codex JSONL file whose one record carries a 9 MiB output_text payload, which is
+    /// above the retired 8 MiB bound and far below the Int32.MaxValue bound that replaced it.
+    /// Validates FR-MCP-TRANSCRIPT-009, TR-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-013.
+    /// </summary>
     [Fact]
-    public async Task IngestionService_RejectsOversizedJsonlLine()
+    public async Task IngestionService_AcceptsJsonlLineAboveFormerCeiling()
     {
         var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-tests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDirectory);
-        var path = Path.Combine(tempDirectory, "oversized.jsonl");
+        var path = Path.Combine(tempDirectory, "large-line.jsonl");
         try
         {
-            var oversizedText = new string('x', (8 * 1024 * 1024) + 1);
-            await File.WriteAllTextAsync(path, "{\"type\":\"response_item\",\"payload\":{\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"" + oversizedText + "\"}]}}", TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var largeText = new string('x', (9 * 1024 * 1024) + 1);
+            await File.WriteAllTextAsync(path, "{\"type\":\"response_item\",\"payload\":{\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"" + largeText + "\"}]}}", TestContext.Current.CancellationToken).ConfigureAwait(true);
             var service = TranscriptIngestionService.CreateDefault();
 
-            await Assert.ThrowsAsync<InvalidDataException>(async () =>
-                await service.IngestPathAsync(new TranscriptIngestionRequest(path)
-                {
-                    SourceKind = TranscriptSourceKind.Codex,
-                    Persist = false
-                }, TestContext.Current.CancellationToken).ConfigureAwait(true)).ConfigureAwait(true);
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(path)
+            {
+                SourceKind = TranscriptSourceKind.Codex,
+                Persist = false
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            Assert.NotEmpty(result.Sessions);
+            Assert.DoesNotContain(
+                result.Diagnostics,
+                diagnostic => diagnostic.Message.Contains("MiB limit", StringComparison.OrdinalIgnoreCase));
+        }
+        finally
+        {
+            if (Directory.Exists(tempDirectory))
+                Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// Verifies the streaming JSONL reader produces the same normalized events as whole-file reading did.
+    /// Fixture: a generated Codex JSONL file of 250 small records, including blank separator lines that the
+    /// reader must skip, asserting every record survives the streaming rewrite in order.
+    /// Validates TR-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-013.
+    /// </summary>
+    [Fact]
+    public async Task IngestionService_StreamingReaderPreservesAllRecords()
+    {
+        var tempDirectory = Path.Combine(Path.GetTempPath(), "mcp-transcript-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDirectory);
+        var path = Path.Combine(tempDirectory, "many-records.jsonl");
+        try
+        {
+            var builder = new StringBuilder();
+            for (var index = 0; index < 250; index++)
+            {
+                builder.Append("{\"type\":\"response_item\",\"payload\":{\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"record-")
+                    .Append(index.ToString(CultureInfo.InvariantCulture))
+                    .AppendLine("\"}]}}");
+                if (index % 50 == 0)
+                    builder.AppendLine();
+            }
+
+            await File.WriteAllTextAsync(path, builder.ToString(), TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var service = TranscriptIngestionService.CreateDefault();
+
+            var result = await service.IngestPathAsync(new TranscriptIngestionRequest(path)
+            {
+                SourceKind = TranscriptSourceKind.Codex,
+                Persist = false
+            }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var session = Assert.Single(result.Sessions);
+            Assert.Equal(250, session.Events.Count);
+            Assert.Contains("record-0", session.Events[0].Content[0].Text ?? string.Empty, StringComparison.Ordinal);
+            Assert.Contains("record-249", session.Events[^1].Content[0].Text ?? string.Empty, StringComparison.Ordinal);
         }
         finally
         {

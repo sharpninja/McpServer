@@ -85,26 +85,29 @@ internal static class TranscriptUtilities
 
     internal static async Task<IReadOnlyList<JsonElement>> ReadJsonLinesAsync(string path, CancellationToken cancellationToken)
     {
-        const long maxSourceFileBytes = 256L * 1024L * 1024L;
-        const int maxLineBytes = 8 * 1024 * 1024;
-        const int maxRecords = 2_000_000;
+        // TR-MCP-TRANSCRIPT-010: ceilings are Int32.MaxValue, and lines stream rather than being
+        // materialized whole-file, so a raised ceiling cannot turn a rejection into an OOM kill.
+        const long maxSourceFileBytes = int.MaxValue;
+        const int maxLineBytes = int.MaxValue;
+        const int maxRecords = int.MaxValue;
 
         var fileInfo = new FileInfo(path);
         if (fileInfo.Length > maxSourceFileBytes)
-            throw new InvalidDataException("Transcript source exceeds the 256 MiB per-file limit: " + path);
+            throw new InvalidDataException("Transcript source exceeds the 2,147,483,647 byte per-file limit: " + path);
 
         var records = new List<JsonElement>();
-        foreach (var line in await File.ReadAllLinesAsync(path, cancellationToken).ConfigureAwait(false))
+        using var reader = new StreamReader(path, Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
+        while (await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false) is { } line)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
             if (Encoding.UTF8.GetByteCount(line) > maxLineBytes)
-                throw new InvalidDataException("Transcript JSONL line exceeds the 8 MiB limit: " + path);
+                throw new InvalidDataException("Transcript JSONL line exceeds the 2,147,483,647 byte limit: " + path);
 
             if (records.Count >= maxRecords)
-                throw new InvalidDataException("Transcript JSONL record count exceeds the 2,000,000 record limit: " + path);
+                throw new InvalidDataException("Transcript JSONL record count exceeds the 2,147,483,647 record limit: " + path);
 
             using var document = JsonDocument.Parse(line);
             records.Add(document.RootElement.Clone());

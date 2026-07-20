@@ -22,3 +22,7 @@
   - [Agent Plugin Feature Matrix](Agent-Plugin-Feature-Matrix)
 - Process
   - [Byrd Development Process v4](Byrd-Development-Process)
+  - [Release Checklist](Release-Checklist)
+  - [Onboarding: Human and AI Partnership](Onboarding-Human-AI-Partnership)
+- Operations
+  - [Azure Pipelines](Azure-Pipelines)

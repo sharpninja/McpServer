@@ -46,7 +46,7 @@ Slice 11 updates generated documentation, REPL inventory, plugin docs, prompt te
 
 - Server-local path ingestion accepts only workspace-contained paths or configured provider transcript roots.
 - Absolute paths outside the workspace/provider roots, traversal, symlink/reparse escapes, unsupported file types, duplicate canonical archive paths, ZIP traversal, links, and decompression ratios above 20:1 are rejected.
-- Upload limits are enforced before parsing: 512 MiB request, 2 GiB expanded content, 10,000 archive entries, 256 MiB per source file, 8 MiB per JSONL line, 2,000,000 records per bundle, recursion depth 32.
+- Upload limits are enforced before parsing. Size ceilings are Int32.MaxValue (2,147,483,647) for request bytes, expanded content, per source file, per JSONL line, and records per bundle, per FR-MCP-TRANSCRIPT-009 and TR-MCP-TRANSCRIPT-010; the prior 512 MiB / 2 GiB / 256 MiB / 8 MiB / 2,000,000 values are retired. Hostile-archive guards keep their original values: 10,000 archive entries, decompression ratio 20:1, recursion depth 32.
 - OpenCode SQLite ingestion uses a consistent backup snapshot and never writes to the source database or WAL files.
 
 ## Persistence Acceptance Criteria

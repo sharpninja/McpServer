@@ -1515,6 +1515,14 @@ Integration coverage that drives the real orchestration through POST /v1/chat/co
 - [x] With no slots seeded the endpoint returns an empty decision (loop rejects QuadNotReady).
 
 
+## TEST-MCP-QBOLLAMA
+
+### TEST-MCP-QBOLLAMA-002
+
+Validates FR-MCP-QBOLLAMA-002 and TR-MCP-QBOLLAMA-002 through fake-driven unit tests of OllamaServerController that run in the default gate without a real Ollama binary. Cases: (1) a probe that succeeds immediately reports WasAlreadyRunning true and StartedByController false and never invokes the launcher; (2) StopAsync after that case does not terminate the pre-existing server; (3) a probe that fails then succeeds invokes the launcher exactly once, reports StartedByController true, and polls until reachable; (4) a resolver returning no executable throws an InvalidOperationException whose message names the InstallOllama target and never invokes the launcher; (5) a probe that never succeeds throws after the configured timeout and terminates the process the controller started, leaving no orphan; (6) StopAsync is idempotent and terminates a controller-started process exactly once across repeated calls.
+
+
+
 ## TEST-MCP-QBOPENAI
 
 ### TEST-MCP-QBOPENAI-001
@@ -2130,6 +2138,11 @@ Codex transcript adapter coverage for real rollout record classes (validates TR-
 ### TEST-MCP-TRANSCRIPT-012
 
 Imported-session lifecycle semantics (validates TR-MCP-TRANSCRIPT-004). Unit tests in tests/McpServer.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs and SessionLogResubmissionReviveTests.cs verify: turn-level keyed operations (DeleteTurnAsync, ReplaceTurnSectionAsync, DeleteTurnItemAsync) accept provider-native identifiers persisted by transcript imports (UUID session ids, tool-call request ids) so turns can be repaired by resubmission; DeleteSessionAsync remains canonical-only by policy, rejecting imported session ids (sessions are soft-delete only and never deletable for imports); SubmitAsync revives a soft-deleted session that still holds the unique (WorkspaceId, SourceType, SessionId) key by restoring its row graph (session, turns, child rows) with only the SoftDelete named query filter bypassed (Workspace tenancy filter stays active) and then applying the resubmitted turn data; whitespace identifiers stay rejected. Evidence 2026-07-14: revive tests red with InvalidOperationException (disappeared after UNIQUE constraint failure) before fix, 7/7 green after; full suite green (build.ps1 Test exit 0); live recovery of session 019f2580-48c8-7912-b6a9-27f61b18d0d3 in F:\GitHub\MouseKeyProxy from tombstone to 1174 corrected turns via re-ingest plus 28 turn-level deletes of stale duplicates.
+
+
+### TEST-MCP-TRANSCRIPT-013
+
+Validates FR-MCP-TRANSCRIPT-009 and TR-MCP-TRANSCRIPT-010. Unit: a JSONL transcript line larger than the former 8 MiB ceiling is ingested without an InvalidDataException, replacing the assertion in IngestionService_RejectsOversizedJsonlLine which is retargeted to prove the int.MaxValue ceiling is still an enforced bound rather than an absent one. Unit: the streaming reader returns identical records to the previous ReadAllLinesAsync implementation for an existing multi-record fixture, proving no regression in parse behavior. Unit: peak allocation while reading a many-small-line transcript stays proportional to the largest line rather than to file size. Integration: retained hostile-archive guards still reject their fixtures at the unchanged values, specifically archive entry count above 10,000, compression ratio above 20, ZIP symlink entries, and path-traversal entries, each returning 413 or 400 as previously mapped.
 
 
 

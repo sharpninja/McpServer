@@ -77,7 +77,7 @@ Direct `--agent-stdio` callers send one single-line JSON request envelope per st
 | Route | Capability |
 |---|---|
 | `/mcpserver/todo` | TODO CRUD, audit history, priority/section filtering, prompt generation |
-| `/mcpserver/sessionlog` | Session log upsert, query, full-text search, pagination, transcript import (six agent formats) |
+| `/mcpserver/sessionlog` | Session log upsert, query, full-text search, pagination, transcript import (six agent formats, size ceilings of `Int32.MaxValue`) |
 | `/mcpserver/context` | Hybrid semantic search with GraphRAG, deterministic context packs |
 | `/mcpserver/agents` | Agent definitions, workspace config, deployment status |
 | `/mcpserver/agent-pool` | Pool lifecycle, health monitoring, process isolation |
@@ -215,15 +215,29 @@ Sample host: `src/McpServer.McpAgent.SampleHost/`
 
 ## Tests
 
-16 test projects covering unit, integration, and SpecFlow validation:
+21 test projects covering unit, integration, and Reqnroll validation:
 
-- `Build.Tests` - build system and configuration (43 tests)
+- `Build.Tests` - build system and configuration
 - `McpServer.Support.Mcp.Tests` / `.IntegrationTests` - server API and database
 - `McpServer.Client.Tests` - REST client serialization
 - `McpServer.McpAgent.Tests` - agent workflows and tool adapters
 - `McpServer.Repl.Core.Tests` / `.IntegrationTests` - REPL protocol
 - `McpServer.Cqrs.Tests` - CQRS dispatcher and pipeline
-- 7 SpecFlow validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
+- `McpServer.QBAgent.Tests` - QuadBrain agent behavior
+- `McpServer.Launcher.Tests` - launcher host
+- `McpServer.Acid.IntegrationTests` - ACID turn-closure matrix
+- `McpServer.TransactionSecurity.IntegrationTests` - durable transaction security storage
+- `McpServer.PlanReview.Tests` / `McpServer.Review.Tests` - plan and AI review flows
+- 7 Reqnroll validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
+
+`./build.ps1 Test` runs the unit gate only: it excludes every `*.IntegrationTests` project and filters out
+`Category=Integration` and `Category=AiReview` tests. Integration suites that need provisioned dependencies run
+through `./build.ps1 MigrationIntegrationTests` or by targeting the project directly.
+
+Integration tests provision what they need. The QuadBrain Ollama tests probe `http://localhost:11434` at fixture
+startup, adopt a server that is already running, or start one from a discovered `ollama` executable and stop that
+server again at teardown. Only a server the fixture started is stopped. When no executable is discoverable the
+failure names the `InstallOllama` target, which stages the portable binaries and the required model.
 
 ## Prerequisites
 

@@ -21,8 +21,16 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 /// proving FR-MCP-134 and FR-MCP-QBOPENAI-001 execute the normal Left/Right/Arbiter workflow without faking the LLM calls.
 /// </summary>
 [Trait("Category", "Integration")]
-public sealed class QuadBrainOllamaEndpointIntegrationTests
+public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<OllamaServerFixture>
 {
+    /// <summary>Initializes the test class with the fixture that guarantees a reachable Ollama server.</summary>
+    /// <param name="ollama">
+    /// Fixture that adopts an already-running Ollama server or launches one and stops it at teardown
+    /// (FR-MCP-QBOLLAMA-002). Injection alone is what binds the server lifetime to this class.
+    /// </param>
+    public QuadBrainOllamaEndpointIntegrationTests(OllamaServerFixture ollama)
+        => ArgumentNullException.ThrowIfNull(ollama);
+
     private const string Endpoint = "v1/chat/completions";
     private const string SourceType = "QBAgent";
     private const string QBAgentVisibleModel = "QuadBrain";

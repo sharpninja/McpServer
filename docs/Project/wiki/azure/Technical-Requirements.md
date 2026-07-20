@@ -1648,6 +1648,13 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-QBOLLAMA-002
+
+**OllamaServerController with injectable probe, launcher, and ownership-scoped teardown** — Implements FR-MCP-QBOLLAMA-002. Add OllamaServerController to tests/TestSupport.Shared, a class with no xunit dependency whose probe delegate, executable resolver, process launcher, poll interval, and timeout are all injected, so its behavior is unit-testable without a real Ollama binary. It is linked into both McpServer.Support.Mcp.Tests and McpServer.Support.Mcp.IntegrationTests through tests/Directory.Build.targets, following the existing Validation.Shared linked-source idiom rather than adding a new project. EnsureRunningAsync returns a result carrying WasAlreadyRunning and StartedByController; it probes first, starts only when the probe fails, then polls until the probe succeeds or the timeout elapses. On timeout it terminates any process it started before throwing, so no orphan survives. When the resolver returns no executable it throws an InvalidOperationException naming the InstallOllama Nuke target without attempting a launch. StopAsync terminates the process only when StartedByController is true and is idempotent across repeated calls. OllamaServerFixture in the integration project implements IAsyncLifetime over the controller with the real probe (HttpClient against /api/tags), the real resolver (PATH, LOCALAPPDATA/Programs/Ollama, and the Nuke test-tools ollama directory), and a real process launcher running 'ollama serve'; QuadBrainOllamaEndpointIntegrationTests consumes it through IClassFixture.
+**Covered by:** FR: FR-MCP-QBOLLAMA-002; TEST: TEST-MCP-QBOLLAMA-002
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-QBOPENAI-001
 
 **OpenAI chat-completions surface over QuadBrain orchestration** — Add OpenAI-compatible chat-completion request/response DTOs and a server endpoint that maps an inbound OpenAI ChatCompletion request onto QuadBrain orchestration (last user turn + system context as the prompt) and returns an OpenAI ChatCompletion response carrying the Arbiter output. Subsequent slices add tool/function-calling (tools in the request, assistant tool_calls in the response) and optional streaming. QBAgent points a standard OpenAI IChatClient at this endpoint (baseUrl/apiKey from marker), runs the Agent Framework tool loop, and executes action tools.
@@ -2518,6 +2525,13 @@ Scope: layer-1+
 
 **Codex transcript ingestion normalizes tool-call, reasoning, and turn_context records** — Codex transcript ingestion SHALL normalize tool-call, reasoning, and turn_context rollout records so known record classes do not emit codex_missing_role or codex_unknown_record warnings. AC1: ingesting a Codex rollout fixture produces 0 warnings for these known classes and the full event count (vs the old ~2432 warnings). Guards BUG-TRIAGE-080 via TEST-MCP-TRANSCRIPT-011 and TEST-MCP-TRANSCRIPT-012.
 **Covered by:** FR: FR-MCP-TRANSCRIPT-008; TEST: TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-TRANSCRIPT-010
+
+**Int32.MaxValue transcript ceilings with streaming JSONL reader** — Implements FR-MCP-TRANSCRIPT-009. (1) TranscriptUtilities.ReadJsonLinesAsync raises maxSourceFileBytes from 256 MiB, maxLineBytes from 8 MiB, and maxRecords from 2,000,000 to int.MaxValue. (2) SessionLogTranscriptIngestionController raises MaxUploadRequestBytes from 512 MiB, MaxSourceFileBytes from 256 MiB, and MaxExpandedUploadBytes from 2 GiB to int.MaxValue; MaxArchiveEntries (10,000) and MaxCompressionRatio (20.0) are unchanged. RequestSizeLimit remains a compile-time constant attribute and continues to work because int.MaxValue is a constant. (3) ReadJsonLinesAsync must stop calling File.ReadAllLinesAsync, which materializes the entire transcript into a List of strings before parsing; it must stream lines through a StreamReader so that a ceiling of int.MaxValue does not convert a rejected oversize file into an out-of-memory process kill. Byte-count enforcement per line and the record-count ceiling are preserved at the new values with the same InvalidDataException messages updated to state the new limits. Acceptance: a JSONL line above the former 8 MiB ceiling ingests successfully; peak managed memory during ingestion is proportional to the largest single line rather than to total file size; all retained hostile-archive guards still reject their fixtures.
+**Covered by:** FR: FR-MCP-TRANSCRIPT-009; TEST: TEST-MCP-TRANSCRIPT-013
 **Status:** pending
 Scope: layer-1+
 
