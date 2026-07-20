@@ -263,29 +263,23 @@ public static class MarkerFileService
 
     private static void RemoveSingleFile(string markerPath, ILogger? logger)
     {
+        // TR-MCP-MARKER-004: delete the marker outright. It is regenerated in full on every server
+        // start and carries the workspace API key that rotates on each restart, so an archived
+        // .deleted-{timestamp} copy preserved nothing of value and left an expired credential on
+        // disk once per shutdown. TR-MCP-DB-003 soft-delete rules cover persistent MCP domain rows,
+        // not regenerated filesystem artifacts.
         try
         {
             if (File.Exists(markerPath))
             {
-                var archivePath = BuildArchivedMarkerPath(markerPath);
-                File.Move(markerPath, archivePath);
-                logger?.LogInformation("Archived MCP marker file from {Path} to {ArchivePath}", markerPath, archivePath);
+                File.Delete(markerPath);
+                logger?.LogInformation("Deleted MCP marker file at {Path}", markerPath);
             }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             logger?.LogWarning(ex, "Failed to remove MCP marker file: {Path}", markerPath);
         }
-    }
-
-    private static string BuildArchivedMarkerPath(string markerPath)
-    {
-        var timestamp = DateTimeOffset.UtcNow.ToString("yyyyMMddTHHmmssfffffffZ", CultureInfo.InvariantCulture);
-        var candidate = $"{markerPath}.deleted-{timestamp}";
-        for (var attempt = 1; File.Exists(candidate); attempt++)
-            candidate = $"{markerPath}.deleted-{timestamp}-{attempt}";
-
-        return candidate;
     }
 
     internal static string ResolvePrompt(

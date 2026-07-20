@@ -546,15 +546,17 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
-    /// Verifies marker removal archives active marker files instead of deleting them.
+    /// Verifies marker removal deletes the active marker file and leaves no tombstone copy behind.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: TR-MCP-DB-003 no-hard-delete behavior for durable MCP workspace artifacts.
+    /// Requirement coverage: FR-MCP-MARKER-004, TR-MCP-MARKER-004, TEST-MCP-MARKER-004.
     /// Test data: temp workspace directory with a single marker file containing sentinel text.
-    /// This data is used to prove the active marker path is removed from discovery while the contents remain recoverable.
+    /// This data is used to prove the marker is removed outright rather than renamed to a
+    /// never-reclaimed .deleted-{timestamp} archive that retains the rotated workspace API key.
+    /// TR-MCP-DB-003 governs persistent MCP domain rows, not regenerated filesystem artifacts.
     /// </remarks>
     [Fact]
-    public async Task RemoveMarker_ArchivesMarkerFileInsteadOfDeletingIt()
+    public async Task RemoveMarker_DeletesMarkerFileAndLeavesNoTombstone()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-remove-test-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(tempDir);
@@ -567,9 +569,83 @@ public sealed class MarkerFileServiceTests
             MarkerFileService.RemoveMarker(tempDir);
 
             Assert.False(File.Exists(markerPath));
-            var archived = Directory.GetFiles(tempDir, MarkerFileService.MarkerFileName + ".deleted-*");
-            var archivePath = Assert.Single(archived);
-            Assert.Equal("sentinel marker content", await File.ReadAllTextAsync(archivePath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+            Assert.Empty(Directory.GetFiles(tempDir, MarkerFileService.MarkerFileName + ".deleted-*"));
+            Assert.Empty(Directory.GetFiles(tempDir));
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(tempDir))
+                    Directory.Delete(tempDir, recursive: true);
+            }
+            catch
+            {
+                // Best-effort cleanup for temp test directory.
+            }
+        }
+    }
+
+    /// <summary>
+    /// Verifies marker removal deletes the legacy markers alongside the current one without tombstones.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-MARKER-004, TR-MCP-MARKER-004, TEST-MCP-MARKER-004.
+    /// Test data: temp workspace directory containing the current marker plus legacy .mcp-server.yaml
+    /// and .mcp-server.json markers, proving every removal path deletes rather than archives.
+    /// </remarks>
+    [Fact]
+    public async Task RemoveMarker_DeletesLegacyMarkersWithoutTombstones()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-legacy-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            foreach (var name in new[] { MarkerFileService.MarkerFileName, ".mcp-server.yaml", ".mcp-server.json" })
+            {
+                await File.WriteAllTextAsync(
+                    Path.Combine(tempDir, name),
+                    "legacy marker content",
+                    cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            }
+
+            MarkerFileService.RemoveMarker(tempDir);
+
+            Assert.Empty(Directory.GetFiles(tempDir));
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(tempDir))
+                    Directory.Delete(tempDir, recursive: true);
+            }
+            catch
+            {
+                // Best-effort cleanup for temp test directory.
+            }
+        }
+    }
+
+    /// <summary>
+    /// Verifies marker removal on a workspace with no marker present is a safe no-op.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-MARKER-004, TR-MCP-MARKER-004, TEST-MCP-MARKER-004.
+    /// Test data: an empty temp workspace directory, proving removal neither throws nor creates files.
+    /// </remarks>
+    [Fact]
+    public void RemoveMarker_WhenNoMarkerPresent_CreatesNothingAndDoesNotThrow()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-absent-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            MarkerFileService.RemoveMarker(tempDir);
+
+            Assert.Empty(Directory.GetFiles(tempDir));
         }
         finally
         {
