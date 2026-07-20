@@ -84,4 +84,82 @@ public sealed class ProcessEnvironmentServiceTests
                 Directory.Delete(tempRoot, recursive: true);
         }
     }
+
+    /// <summary>
+    /// TR-MCP-SVC-002: verifies <see cref="ProcessEnvironmentService.ResolveExecutable"/> skips any PATH
+    /// directory ending in <c>Microsoft\WindowsApps</c>. Fixture: a temp tree containing a zero-byte
+    /// <c>ngrok.exe</c> App Execution Alias stub under <c>AppData\Local\Microsoft\WindowsApps</c> and a
+    /// real <c>ngrok.exe</c> under a portable install directory, with the alias directory listed first on PATH.
+    /// The alias stub is the shape that raises Win32Exception 1920 under a service account.
+    /// </summary>
+    [Fact]
+    public void ResolveExecutable_SkipsMicrosoftWindowsAppsAliasDirectory()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-winapps-alias-{Guid.NewGuid():N}");
+        var aliasDir = Path.Combine(tempRoot, "AppData", "Local", "Microsoft", "WindowsApps");
+        var portableDir = Path.Combine(tempRoot, "tools", "ngrok");
+        var aliasStub = Path.Combine(aliasDir, "ngrok.exe");
+        var portableExe = Path.Combine(portableDir, "ngrok.exe");
+
+        Directory.CreateDirectory(aliasDir);
+        Directory.CreateDirectory(portableDir);
+        File.WriteAllBytes(aliasStub, []);
+        File.WriteAllText(portableExe, "real");
+
+        try
+        {
+            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+            startInfo.Environment["PATH"] = $"{aliasDir};{portableDir}";
+
+            var resolved = service.ResolveExecutable(startInfo, "ngrok");
+
+            Assert.Equal(portableExe, resolved);
+        }
+        finally
+        {
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// TR-MCP-SVC-002: verifies the App-Execution-Alias guard in
+    /// <see cref="ProcessEnvironmentService.ResolveExecutable"/> does NOT match the genuine
+    /// <c>Program Files\WindowsApps</c> MSIX package root, which holds real launchable executables.
+    /// Fixture: a temp tree with a single PATH entry <c>Program Files\WindowsApps\Contoso.Ngrok_1.0.0_x64</c>
+    /// containing a real <c>ngrok.exe</c>.
+    /// </summary>
+    [Fact]
+    public void ResolveExecutable_DoesNotSkipProgramFilesWindowsAppsPackageRoot()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        var tempRoot = Path.Combine(Path.GetTempPath(), $"mcpserver-msix-root-{Guid.NewGuid():N}");
+        var msixDir = Path.Combine(tempRoot, "Program Files", "WindowsApps", "Contoso.Ngrok_1.0.0_x64");
+        var msixExe = Path.Combine(msixDir, "ngrok.exe");
+
+        Directory.CreateDirectory(msixDir);
+        File.WriteAllText(msixExe, "real");
+
+        try
+        {
+            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+            var startInfo = new ProcessStartInfo { FileName = "ngrok", UseShellExecute = false };
+            startInfo.Environment["PATH"] = msixDir;
+
+            var resolved = service.ResolveExecutable(startInfo, "ngrok");
+
+            Assert.Equal(msixExe, resolved);
+        }
+        finally
+        {
+            if (Directory.Exists(tempRoot))
+                Directory.Delete(tempRoot, recursive: true);
+        }
+    }
 }

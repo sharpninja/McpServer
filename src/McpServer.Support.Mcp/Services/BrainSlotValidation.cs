@@ -46,6 +46,9 @@ internal static class BrainSlotValidation
     /// <summary>Returns the default signing key id for a party.</summary>
     public static string SigningKeyId(string partyId) => $"{partyId}:signing:1";
 
+    /// <summary>TR-MCP-SEC-006: Returns the default encryption key id for a party.</summary>
+    public static string EncryptionKeyId(string partyId) => $"{partyId}:encryption:1";
+
     /// <summary>Validates endpoint policy for a slot.</summary>
     public static void ValidateEndpoint(string providerKind, string? endpoint, IOptionsMonitor<BrainSlotOptions> options)
     {

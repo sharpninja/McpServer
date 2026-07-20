@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using McpServer.Common.AgentCli;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,6 +21,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
 
     private readonly TunnelOptions _options;
     private readonly IProcessRunner _processRunner;
+    private readonly IProcessEnvironmentService _processEnvironment;
     private readonly ILogger<NgrokTunnelProvider> _logger;
     private Process? _process;
     private CancellationTokenSource? _outputPumpCts;
@@ -33,11 +35,25 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
     private bool _startupCompleted;
     private bool _stopRequested;
 
-    /// <summary>Initializes a new instance of the <see cref="NgrokTunnelProvider"/> class.</summary>
-    public NgrokTunnelProvider(IOptions<TunnelOptions> options, IProcessRunner processRunner, ILogger<NgrokTunnelProvider> logger)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NgrokTunnelProvider"/> class.
+    /// TR-MCP-TUN-004: <paramref name="processEnvironment"/> supplies the interactive user's
+    /// profile directories and PATH so ngrok behaves identically under a service account.
+    /// </summary>
+    /// <param name="options">Tunnel configuration.</param>
+    /// <param name="processRunner">Runner used for the ngrok availability probe and API queries.</param>
+    /// <param name="processEnvironment">Supplies the interactive user's process environment.</param>
+    /// <param name="logger">Logger.</param>
+    public NgrokTunnelProvider(
+        IOptions<TunnelOptions> options,
+        IProcessRunner processRunner,
+        IProcessEnvironmentService processEnvironment,
+        ILogger<NgrokTunnelProvider> logger)
     {
+        ArgumentNullException.ThrowIfNull(options);
         _options = options.Value;
         _processRunner = processRunner;
+        _processEnvironment = processEnvironment;
         _logger = logger;
     }
 
@@ -52,8 +68,11 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         var check = await _processRunner.RunAsync(ngrokExe, "version", cancellationToken).ConfigureAwait(false);
         if (check.ExitCode != 0)
         {
-            _error = "ngrok CLI not found. Install from https://ngrok.com/download";
-            _logger.LogError("{Error}", _error);
+            // TR-MCP-TUN-004: a missing ngrok CLI is a recoverable configuration condition, not a
+            // server fault, so it is reported at Warning with the two causes seen in the field
+            // (service account without the user PATH, Microsoft Store alias stub) and the remedies.
+            _error = BuildCliNotFoundError(ngrokExe);
+            _logger.LogWarning("{Error}", _error);
             return;
         }
 
@@ -66,19 +85,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         if (ngrok.PoolingEnabled)
             args += " --pooling-enabled";
 
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = ngrokExe,
-            Arguments = args,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
-
-        // Pass auth token via environment variable to avoid exposure in process listing.
-        if (!string.IsNullOrWhiteSpace(ngrok.AuthToken))
-            startInfo.Environment["NGROK_AUTHTOKEN"] = ngrok.AuthToken;
+        var startInfo = BuildNgrokStartInfo(ngrokExe, args);
 
         _process = new Process { StartInfo = startInfo, EnableRaisingEvents = true };
         _process.Exited += OnProcessExited;
@@ -431,10 +438,67 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
     }
 
     /// <summary>
-    /// Returns the ngrok executable path from <see cref="NgrokTunnelOptions.ExecutablePath"/>
-    /// or falls back to the bare <c>ngrok</c> command name (resolved via PATH).
+    /// TR-MCP-TUN-004: builds the <see cref="ProcessStartInfo"/> for the ngrok child process.
+    /// The interactive user's <c>USERPROFILE</c>, <c>HOME</c>, <c>APPDATA</c> and <c>PATH</c> are
+    /// applied first so ngrok finds its <c>ngrok.yml</c> config under the real user profile rather
+    /// than the service account's profile, then <c>NGROK_AUTHTOKEN</c> is layered on top.
     /// </summary>
-    private string ResolveExecutablePath()
+    /// <param name="ngrokExe">Fully resolved ngrok executable path.</param>
+    /// <param name="arguments">Command line arguments for ngrok.</param>
+    /// <returns>The configured start info.</returns>
+    internal ProcessStartInfo BuildNgrokStartInfo(string ngrokExe, string arguments)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = ngrokExe,
+            Arguments = arguments,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+
+        _processEnvironment.ApplyAll(startInfo, runAsUser: null, gitHubToken: null);
+
+        // Pass auth token via environment variable to avoid exposure in process listing.
+        // NGROK_AUTHTOKEN overrides whatever is in the config file.
+        var authToken = _options.Ngrok.AuthToken;
+        if (!string.IsNullOrWhiteSpace(authToken))
+            startInfo.Environment["NGROK_AUTHTOKEN"] = authToken;
+
+        return startInfo;
+    }
+
+    /// <summary>
+    /// TR-MCP-TUN-004: builds the operator-facing message for a missing ngrok CLI. Names both
+    /// observed causes (a Windows service account that lacks the interactive user's PATH, and the
+    /// Microsoft Store App Execution Alias stub that cannot be launched from a service) together
+    /// with the remedies, or points at the configured path when one was supplied.
+    /// </summary>
+    /// <param name="ngrokExe">The executable path that failed the availability probe.</param>
+    /// <returns>The diagnostic message.</returns>
+    internal static string BuildCliNotFoundError(string ngrokExe)
+    {
+        if (!string.IsNullOrWhiteSpace(ngrokExe) && !string.Equals(ngrokExe, "ngrok", StringComparison.OrdinalIgnoreCase))
+        {
+            return $"ngrok CLI not found at configured path '{ngrokExe}'. Verify Mcp:Tunnel:Ngrok:ExecutablePath " +
+                   "points at an existing ngrok executable, or clear it to resolve ngrok from the interactive user's PATH.";
+        }
+
+        return "ngrok CLI not found on PATH. Under a Windows service the process does not inherit the interactive " +
+               "user's PATH, and the Microsoft Store build of ngrok installs only an App Execution Alias stub that a " +
+               "service account cannot launch. Install the portable ngrok from https://ngrok.com/download, set " +
+               "Mcp:Tunnel:Ngrok:ExecutablePath to its full path, or set Mcp:Tunnel:Provider to '' to disable tunneling.";
+    }
+
+    /// <summary>
+    /// TR-MCP-TUN-004: returns the ngrok executable path. Uses
+    /// <see cref="NgrokTunnelOptions.ExecutablePath"/> when configured; otherwise resolves
+    /// <c>ngrok</c> against the interactive user's PATH via <see cref="IProcessEnvironmentService"/>
+    /// so the correct binary is found even when the host runs as a Windows service.
+    /// </summary>
+    /// <returns>The resolved executable path, or the literal <c>ngrok</c> when nothing matched.</returns>
+    internal string ResolveExecutablePath()
     {
         var configured = _options.Ngrok.ExecutablePath;
         if (!string.IsNullOrWhiteSpace(configured))
@@ -443,6 +507,12 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
             return configured;
         }
 
-        return "ngrok";
+        // Probe with the interactive user's environment applied so ResolveExecutable searches the
+        // user's PATH rather than the service account's.
+        var probe = new ProcessStartInfo();
+        _processEnvironment.ApplyRunAsEnvironment(probe, runAsUser: null);
+        var resolved = _processEnvironment.ResolveExecutable(probe, "ngrok");
+        _logger.LogDebug("Resolved ngrok executable: {Path}", resolved);
+        return resolved;
     }
 }

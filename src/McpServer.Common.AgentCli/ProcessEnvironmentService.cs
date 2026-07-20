@@ -91,6 +91,18 @@ public sealed class ProcessEnvironmentService(
 
         foreach (var dir in path.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries))
         {
+            // TR-MCP-SVC-002: skip Windows App Execution Alias directories. The entries under
+            // %LOCALAPPDATA%\Microsoft\WindowsApps are zero-byte reparse points that only the
+            // interactive shell can activate; launching one from a service account with
+            // UseShellExecute=false fails with Win32Exception 1920 ("file cannot be accessed by
+            // the system"). The genuine MSIX package root, C:\Program Files\WindowsApps, holds
+            // real executables and is deliberately NOT matched by this guard.
+            if (IsAppExecutionAliasDirectory(dir))
+            {
+                logger.LogDebug("Skipping App Execution Alias directory on PATH: {Directory}", dir);
+                continue;
+            }
+
             foreach (var ext in extensions)
             {
                 var candidate = Path.Combine(dir.Trim(), fileName + ext);
@@ -104,6 +116,21 @@ public sealed class ProcessEnvironmentService(
 
         logger.LogDebug("Could not resolve {FileName} on injected PATH", fileName);
         return fileName;
+    }
+
+    /// <summary>
+    /// TR-MCP-SVC-002: returns <c>true</c> when a PATH entry points at the Windows App Execution
+    /// Alias folder (<c>...\Microsoft\WindowsApps</c>). Matching is separator-normalised and
+    /// case-insensitive. <c>C:\Program Files\WindowsApps</c> does not contain the
+    /// <c>Microsoft\WindowsApps</c> segment pair and therefore never matches.
+    /// </summary>
+    internal static bool IsAppExecutionAliasDirectory(string directory)
+    {
+        if (string.IsNullOrWhiteSpace(directory))
+            return false;
+
+        var normalized = directory.Trim().Replace('/', '\\');
+        return normalized.Contains(@"Microsoft\WindowsApps", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

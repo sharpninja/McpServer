@@ -19,6 +19,7 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
     private readonly IBrainSlotCredentialResolver _credentialResolver;
     private readonly IOptionsMonitor<BrainSlotOptions> _options;
     private readonly ILogger<BrainSlotRegistryService> _logger;
+    private readonly BrainSlotPartyKeyReconciler _partyKeyReconciler;
 
     /// <summary>Initializes a new instance of the <see cref="BrainSlotRegistryService"/> class.</summary>
     public BrainSlotRegistryService(
@@ -33,6 +34,7 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
         _credentialResolver = credentialResolver;
         _options = options;
         _logger = logger;
+        _partyKeyReconciler = new BrainSlotPartyKeyReconciler(partyRegistry, logger);
     }
 
     /// <inheritdoc />
@@ -278,8 +280,19 @@ public sealed class BrainSlotRegistryService : IBrainSlotRegistryService
         try { BrainSlotValidation.ValidateEndpoint(slot.ProviderKind, slot.Endpoint, _options); } catch (BrainSlotValidationException ex) { Fail(ex.Message); }
         if (!string.IsNullOrWhiteSpace(slot.PartyId))
         {
-            var key = await _partyRegistry.GetPartyKeyAsync(slot.PartyId, BrainSlotValidation.SigningKeyId(slot.PartyId), cancellationToken)
+            var signingKeyId = BrainSlotValidation.SigningKeyId(slot.PartyId);
+            var key = await _partyRegistry.GetPartyKeyAsync(slot.PartyId, signingKeyId, cancellationToken)
                 .ConfigureAwait(false);
+
+            // TR-MCP-SEC-006: a renamed party (Creativity/Logic) may still have its signing key under the legacy
+            // hemisphere party id. Copy it forward once, then re-read; the legacy rows stay untouched.
+            if (key is null
+                && await _partyKeyReconciler.TryAdoptLegacySigningKeyAsync(slot.PartyId, slot.Role, cancellationToken).ConfigureAwait(false))
+            {
+                key = await _partyRegistry.GetPartyKeyAsync(slot.PartyId, signingKeyId, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+
             if (key is null
                 || !string.Equals(key.Status, "active", StringComparison.OrdinalIgnoreCase)
                 || !string.Equals(key.Purpose, "signing", StringComparison.OrdinalIgnoreCase))

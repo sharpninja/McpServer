@@ -23,9 +23,71 @@ public static class MarkerFileService
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
     internal const string MarkerSignatureCanonicalization = "marker-v1";
     internal const string MarkerSignatureVerifier = "workspace_api_key";
+
+    /// <summary>
+    /// TR-MCP-SEC-005: describes how the <c>marker-v1</c> payload bytes are assembled, so an external
+    /// verifier can rebuild the signed text from the marker alone.
+    /// </summary>
+    internal const string MarkerSignatureFormat =
+        @"key=value\n per field in fields order; trailing LF on final line; UTF-8 encoded";
+
     internal const string SyncedAgentPluginVersion = "1.26.0";
     private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
     private const string WorkspaceCacheDirectoryGitIgnoreEntry = "cache/";
+
+    /// <summary>
+    /// TR-MCP-SEC-005: the authoritative ordered field list for the <c>marker-v1</c> HMAC-SHA256 payload.
+    /// <see cref="BuildSignaturePayload"/> derives its emission order from this array, so the declared
+    /// contract and the signed bytes cannot diverge.
+    /// </summary>
+    /// <remarks>
+    /// 29 fields: 10 top-level, 17 endpoint fields, and a 2-field <c>agentPlugins.*</c> tail that is
+    /// emitted only when the marker carries an agent-plugin contract. Use
+    /// <see cref="ResolveSignaturePayloadFields"/> to get the subset applicable to a specific marker.
+    /// The order and spelling here are load-bearing: changing either invalidates every signature that
+    /// external verifiers recompute, so it is pinned by tests and by docs/REPL-AGENT-GUIDE.md.
+    /// </remarks>
+    internal static readonly string[] SignaturePayloadFields =
+    [
+        "canonicalization",
+        "port",
+        "baseUrl",
+        "apiKey",
+        "workspace",
+        "workspacePath",
+        "pid",
+        "startedAt",
+        "markerWrittenAtUtc",
+        "serverStartedAtUtc",
+        "endpoints.health",
+        "endpoints.swagger",
+        "endpoints.swaggerUi",
+        "endpoints.mcpTransport",
+        "endpoints.sessionLog",
+        "endpoints.sessionLogDialog",
+        "endpoints.contextSearch",
+        "endpoints.contextPack",
+        "endpoints.contextSources",
+        "endpoints.todo",
+        "endpoints.repo",
+        "endpoints.desktop",
+        "endpoints.gitHub",
+        "endpoints.tools",
+        "endpoints.workspace",
+        "endpoints.serverStartupUtc",
+        "endpoints.markerFileTimestamp",
+
+        // Conditional tail: emitted only when marker.AgentPlugins is not null.
+        "agentPlugins.policy",
+        "agentPlugins.contractDigest",
+    ];
+
+    /// <summary>Number of trailing <see cref="SignaturePayloadFields"/> entries that are conditional.</summary>
+    private const int ConditionalAgentPluginFieldCount = 2;
+
+    /// <summary>TR-MCP-SEC-005: field order for a marker that carries no agent-plugin contract.</summary>
+    private static readonly string[] s_signaturePayloadFieldsWithoutAgentPlugins =
+        SignaturePayloadFields[..^ConditionalAgentPluginFieldCount];
 
     /// <summary>
     /// Test seam: when set, plugin-version resolution scans this directory for user plugin caches
@@ -120,6 +182,7 @@ public static class MarkerFileService
                 Algorithm = "HMAC-SHA256",
                 Canonicalization = MarkerSignatureCanonicalization,
                 Verifier = MarkerSignatureVerifier,
+                Format = MarkerSignatureFormat,
             },
             TrustBootstrap = new MarkerTrustBootstrap
             {
@@ -139,6 +202,10 @@ public static class MarkerFileService
             Prompt = ResolvePrompt(templateContext, globalPromptTemplate, workspacePromptTemplate),
         };
         agentPlugins.ContractDigest = ComputeAgentPluginsDigest(agentPlugins);
+
+        // TR-MCP-SEC-005: publish the field list this marker was actually signed over, resolved after
+        // the agent-plugin contract is attached so the conditional tail is reported faithfully.
+        marker.Signature.Fields = [.. ResolveSignaturePayloadFields(marker)];
         marker.Signature.Value = ComputeMarkerSignature(marker);
 
         try
@@ -375,45 +442,69 @@ public static class MarkerFileService
         return Convert.ToHexString(hmac.ComputeHash(payloadBytes));
     }
 
+    /// <summary>
+    /// TR-MCP-SEC-005: returns the <c>marker-v1</c> payload fields that are actually signed for
+    /// <paramref name="marker"/>, in emission order. The conditional <c>agentPlugins.*</c> tail is
+    /// present only when the marker carries an agent-plugin contract.
+    /// </summary>
+    internal static IReadOnlyList<string> ResolveSignaturePayloadFields(MarkerFile marker)
+    {
+        ArgumentNullException.ThrowIfNull(marker);
+
+        return marker.AgentPlugins is null
+            ? s_signaturePayloadFieldsWithoutAgentPlugins
+            : SignaturePayloadFields;
+    }
+
     internal static string BuildSignaturePayload(MarkerFile marker)
     {
         ArgumentNullException.ThrowIfNull(marker);
 
         var builder = new StringBuilder();
-        AppendPayloadLine(builder, "canonicalization", marker.Signature.Canonicalization);
-        AppendPayloadLine(builder, "port", marker.Port.ToString(CultureInfo.InvariantCulture));
-        AppendPayloadLine(builder, "baseUrl", marker.BaseUrl);
-        AppendPayloadLine(builder, "apiKey", marker.ApiKey);
-        AppendPayloadLine(builder, "workspace", marker.Workspace);
-        AppendPayloadLine(builder, "workspacePath", marker.WorkspacePath);
-        AppendPayloadLine(builder, "pid", marker.Pid.ToString(CultureInfo.InvariantCulture));
-        AppendPayloadLine(builder, "startedAt", marker.StartedAt);
-        AppendPayloadLine(builder, "markerWrittenAtUtc", marker.MarkerWrittenAtUtc);
-        AppendPayloadLine(builder, "serverStartedAtUtc", marker.ServerStartedAtUtc);
-        AppendPayloadLine(builder, "endpoints.health", marker.Endpoints.Health);
-        AppendPayloadLine(builder, "endpoints.swagger", marker.Endpoints.Swagger);
-        AppendPayloadLine(builder, "endpoints.swaggerUi", marker.Endpoints.SwaggerUi);
-        AppendPayloadLine(builder, "endpoints.mcpTransport", marker.Endpoints.McpTransport);
-        AppendPayloadLine(builder, "endpoints.sessionLog", marker.Endpoints.SessionLog);
-        AppendPayloadLine(builder, "endpoints.sessionLogDialog", marker.Endpoints.SessionLogDialog);
-        AppendPayloadLine(builder, "endpoints.contextSearch", marker.Endpoints.ContextSearch);
-        AppendPayloadLine(builder, "endpoints.contextPack", marker.Endpoints.ContextPack);
-        AppendPayloadLine(builder, "endpoints.contextSources", marker.Endpoints.ContextSources);
-        AppendPayloadLine(builder, "endpoints.todo", marker.Endpoints.Todo);
-        AppendPayloadLine(builder, "endpoints.repo", marker.Endpoints.Repo);
-        AppendPayloadLine(builder, "endpoints.desktop", marker.Endpoints.Desktop);
-        AppendPayloadLine(builder, "endpoints.gitHub", marker.Endpoints.GitHub);
-        AppendPayloadLine(builder, "endpoints.tools", marker.Endpoints.Tools);
-        AppendPayloadLine(builder, "endpoints.workspace", marker.Endpoints.Workspace);
-        AppendPayloadLine(builder, "endpoints.serverStartupUtc", marker.Endpoints.ServerStartupUtc);
-        AppendPayloadLine(builder, "endpoints.markerFileTimestamp", marker.Endpoints.MarkerFileTimestamp);
-        if (marker.AgentPlugins is not null)
-        {
-            AppendPayloadLine(builder, "agentPlugins.policy", marker.AgentPlugins.Policy);
-            AppendPayloadLine(builder, "agentPlugins.contractDigest", marker.AgentPlugins.ContractDigest);
-        }
+        foreach (var field in ResolveSignaturePayloadFields(marker))
+            AppendPayloadLine(builder, field, ResolveSignaturePayloadValue(marker, field));
+
         return builder.ToString();
     }
+
+    /// <summary>
+    /// TR-MCP-SEC-005: resolves the signed value for a single <see cref="SignaturePayloadFields"/> entry.
+    /// Throws when a field is declared but has no value binding, so the array and the builder cannot drift.
+    /// </summary>
+    private static string ResolveSignaturePayloadValue(MarkerFile marker, string field) => field switch
+    {
+        "canonicalization" => marker.Signature.Canonicalization,
+        "port" => marker.Port.ToString(CultureInfo.InvariantCulture),
+        "baseUrl" => marker.BaseUrl,
+        "apiKey" => marker.ApiKey,
+        "workspace" => marker.Workspace,
+        "workspacePath" => marker.WorkspacePath,
+        "pid" => marker.Pid.ToString(CultureInfo.InvariantCulture),
+        "startedAt" => marker.StartedAt,
+        "markerWrittenAtUtc" => marker.MarkerWrittenAtUtc,
+        "serverStartedAtUtc" => marker.ServerStartedAtUtc,
+        "endpoints.health" => marker.Endpoints.Health,
+        "endpoints.swagger" => marker.Endpoints.Swagger,
+        "endpoints.swaggerUi" => marker.Endpoints.SwaggerUi,
+        "endpoints.mcpTransport" => marker.Endpoints.McpTransport,
+        "endpoints.sessionLog" => marker.Endpoints.SessionLog,
+        "endpoints.sessionLogDialog" => marker.Endpoints.SessionLogDialog,
+        "endpoints.contextSearch" => marker.Endpoints.ContextSearch,
+        "endpoints.contextPack" => marker.Endpoints.ContextPack,
+        "endpoints.contextSources" => marker.Endpoints.ContextSources,
+        "endpoints.todo" => marker.Endpoints.Todo,
+        "endpoints.repo" => marker.Endpoints.Repo,
+        "endpoints.desktop" => marker.Endpoints.Desktop,
+        "endpoints.gitHub" => marker.Endpoints.GitHub,
+        "endpoints.tools" => marker.Endpoints.Tools,
+        "endpoints.workspace" => marker.Endpoints.Workspace,
+        "endpoints.serverStartupUtc" => marker.Endpoints.ServerStartupUtc,
+        "endpoints.markerFileTimestamp" => marker.Endpoints.MarkerFileTimestamp,
+        "agentPlugins.policy" => marker.AgentPlugins?.Policy ?? string.Empty,
+        "agentPlugins.contractDigest" => marker.AgentPlugins?.ContractDigest ?? string.Empty,
+        _ => throw new InvalidOperationException(
+            $"Marker signature payload field '{field}' has no value binding. Update ResolveSignaturePayloadValue when adding a field to SignaturePayloadFields."),
+    };
 
     internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath)
     {
@@ -796,6 +887,16 @@ internal sealed class MarkerSignature
     public string Algorithm { get; set; } = string.Empty;
     public string Canonicalization { get; set; } = string.Empty;
     public string Verifier { get; set; } = string.Empty;
+
+    /// <summary>
+    /// TR-MCP-SEC-005: the ordered payload field names that were actually signed for this marker,
+    /// including the conditional <c>agentPlugins.*</c> tail only when that block was emitted.
+    /// </summary>
+    public string[] Fields { get; set; } = [];
+
+    /// <summary>TR-MCP-SEC-005: how each payload line is encoded, so verifiers need no hard-coded rules.</summary>
+    public string Format { get; set; } = string.Empty;
+
     public string Value { get; set; } = string.Empty;
 }
 
