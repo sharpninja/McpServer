@@ -83,10 +83,15 @@ internal sealed class BrainSlotPartyKeyReconciler
         if (!IsAdoptableSigningKey(legacySigningKey))
             return false;
 
-        var legacyEncryptionKey = await _partyRegistry
-            .GetPartyKeyAsync(legacyPartyId, BrainSlotValidation.EncryptionKeyId(legacyPartyId), cancellationToken)
-            .ConfigureAwait(false);
-
+        // TR-MCP-SEC-006, corrected 2026-07-20. Do NOT copy the legacy public key forward.
+        // The key store has no private-key column and GetPartyKeyAsync can only ever return the
+        // public half, so registering the renamed party WITH that PEM produces a party that
+        // satisfies every readiness gate and can never sign: InMemoryKeyServerService keeps a
+        // private key only when it generated the pair itself. Registering with NO key material
+        // makes the keyserver mint a real pair whose private half is retained, so the renamed
+        // party can actually sign. Verification of historical manifests is unaffected either way,
+        // because a manifest carries its own PublisherPartyId and verification resolves the public
+        // key from that legacy party, which this method deliberately leaves untouched.
         await _partyRegistry.RegisterPartyAsync(
             new PartyRegistrationRequest
             {
@@ -94,14 +99,12 @@ internal sealed class BrainSlotPartyKeyReconciler
                 Role = BrainSlotValidation.DefaultPartyId(role),
                 ActiveSigningKeyId = signingKeyId,
                 ActiveEncryptionKeyId = BrainSlotValidation.EncryptionKeyId(normalizedPartyId),
-                SigningPublicKeyPem = legacySigningKey!.PublicKeyPem,
-                EncryptionPublicKeyPem = legacyEncryptionKey?.PublicKeyPem,
                 Status = "active",
             },
             cancellationToken).ConfigureAwait(false);
 
         _logger.LogInformation(
-            "Brain-slot party {PartyId} adopted the signing key material held by legacy party {LegacyPartyId}; the legacy party and key rows are preserved.",
+            "Brain-slot party {PartyId} was provisioned with a fresh signing key after the rename from legacy party {LegacyPartyId}; the legacy party and key rows are preserved so historical manifests stay verifiable.",
             normalizedPartyId,
             legacyPartyId);
         return true;

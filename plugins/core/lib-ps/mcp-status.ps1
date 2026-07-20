@@ -20,6 +20,7 @@ $namespaces = @(
     'workflow.triage'
     'workflow.graphrag'
     'workflow.memory'
+    'workflow.failsafe'
 )
 $requirementMethods = @(
     'workflow.requirements.listLayers'
@@ -54,6 +55,32 @@ function Test-McpStatusSessionState {
     }
 }
 
+function Measure-McpStatusYamlFile {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-017: counts YAML records directly inside one directory.
+    .DESCRIPTION
+        Returns 0 for a missing directory. Not recursive, so the quarantine
+        subdirectory is never folded into the live queue depth.
+    .PARAMETER Path
+        Directory to count.
+    #>
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Path)
+
+    if ([string]::IsNullOrWhiteSpace($Path)) { return 0 }
+    if (-not (Test-Path -LiteralPath $Path -PathType Container)) { return 0 }
+    return @(Get-ChildItem -LiteralPath $Path -Filter '*.yaml' -File -ErrorAction SilentlyContinue).Count
+}
+
+# TR-MCP-REPL-017 (BUG-TRIAGE-097): the failsafe queue is real pending work. Status
+# used to report only the 'pending' directory, so it printed pendingCount 0 while
+# captured session submits sat undrained on disk.
+$failsafeDir = try { Get-McpFailsafeDir } catch { '' }
+$quarantineDir = try { Get-McpFailsafeQuarantineDir } catch { '' }
+$pendingTurnCount = Measure-McpStatusYamlFile -Path $pendingDir
+$failsafeCount = Measure-McpStatusYamlFile -Path $failsafeDir
+$quarantineCount = Measure-McpStatusYamlFile -Path $quarantineDir
+
 $hasSession = Test-McpStatusSessionState -Path $sessionFile
 $status = [ordered]@{
     status = if ($hasSession) { 'available' } else { 'no-session' }
@@ -64,7 +91,11 @@ $status = [ordered]@{
     cacheDir = $cacheDir
     hasSession = $hasSession
     hasCurrentTurn = Test-Path -LiteralPath $turnFile
-    pendingCount = if (Test-Path -LiteralPath $pendingDir) { @(Get-ChildItem -LiteralPath $pendingDir -Filter '*.yaml' -File -ErrorAction SilentlyContinue).Count } else { 0 }
+    pendingCount = $pendingTurnCount + $failsafeCount
+    pendingTurnCount = $pendingTurnCount
+    failsafeDir = $failsafeDir
+    failsafeCount = $failsafeCount
+    failsafeQuarantineCount = $quarantineCount
 }
 
 $status | ConvertTo-Json -Compress

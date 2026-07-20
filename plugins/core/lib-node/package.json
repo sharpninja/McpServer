@@ -1,6 +1,6 @@
 {
   "name": "@sharpninja/mcpserver-plugin-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Canonical shared transport, marker-trust, cache, and session-log infrastructure for McpServer Node plugins (cline, cline-v2, opencode).",
   "license": "MIT",
   "author": "Payton Byrd (The Sharp Ninja)",

@@ -27,11 +27,13 @@ public sealed class BrainSlotPartyKeyReconcilerTests
     private const string LegacyLogicPartyId = "brain-slot:right-hemisphere";
 
     /// <summary>
-    /// TR-MCP-SEC-006: A Creativity slot whose party id was renamed to <c>brain-slot:creativity</c> adopts the
-    /// signing key still held by <c>brain-slot:left-hemisphere</c>, becomes ready, and leaves the legacy key intact.
+    /// TR-MCP-SEC-006: A Creativity slot whose party id was renamed to <c>brain-slot:creativity</c> is provisioned
+    /// with its OWN freshly minted signing key, becomes ready, and leaves the legacy key intact. The new key must
+    /// NOT be the legacy public PEM: copying that produced a party that passed readiness and could never sign,
+    /// because the key store holds no private half to copy.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_WhenCreativityPartyKeyIsMissing_CopiesLegacyHemisphereSigningKey()
+    public async Task GetStatusAsync_WhenCreativityPartyKeyIsMissing_MintsOwnKeyAndPreservesLegacy()
     {
         using var fixture = ReconcilerFixture.Create();
         var legacyKey = await fixture.RegisterLegacyPartyAsync(LegacyCreativityPartyId).ConfigureAwait(true);
@@ -40,11 +42,12 @@ public sealed class BrainSlotPartyKeyReconcilerTests
         var status = await fixture.Service.GetStatusAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(status.RoleReadiness[BrainSlotRoles.Creativity]);
-        var adopted = await fixture.GetSigningKeyAsync(CreativityPartyId).ConfigureAwait(true);
-        Assert.NotNull(adopted);
-        Assert.Equal(legacyKey.PublicKeyPem, adopted!.PublicKeyPem);
-        Assert.Equal("signing", adopted.Purpose);
-        Assert.Equal("active", adopted.Status);
+        var minted = await fixture.GetSigningKeyAsync(CreativityPartyId).ConfigureAwait(true);
+        Assert.NotNull(minted);
+        Assert.NotEqual(legacyKey.PublicKeyPem, minted!.PublicKeyPem);
+        Assert.False(string.IsNullOrWhiteSpace(minted.PublicKeyPem));
+        Assert.Equal("signing", minted.Purpose);
+        Assert.Equal("active", minted.Status);
 
         var preserved = await fixture.GetSigningKeyAsync(LegacyCreativityPartyId).ConfigureAwait(true);
         Assert.NotNull(preserved);
@@ -53,10 +56,11 @@ public sealed class BrainSlotPartyKeyReconcilerTests
     }
 
     /// <summary>
-    /// TR-MCP-SEC-006: The Logic slot adopts the signing key held by <c>brain-slot:right-hemisphere</c>.
+    /// TR-MCP-SEC-006: The Logic slot is provisioned the same way from <c>brain-slot:right-hemisphere</c>, with its
+    /// own key rather than the legacy public PEM.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_WhenLogicPartyKeyIsMissing_CopiesLegacyHemisphereSigningKey()
+    public async Task GetStatusAsync_WhenLogicPartyKeyIsMissing_MintsOwnKeyAndPreservesLegacy()
     {
         using var fixture = ReconcilerFixture.Create();
         var legacyKey = await fixture.RegisterLegacyPartyAsync(LegacyLogicPartyId).ConfigureAwait(true);
@@ -65,17 +69,18 @@ public sealed class BrainSlotPartyKeyReconcilerTests
         var status = await fixture.Service.GetStatusAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.True(status.RoleReadiness[BrainSlotRoles.Logic]);
-        var adopted = await fixture.GetSigningKeyAsync(LogicPartyId).ConfigureAwait(true);
-        Assert.NotNull(adopted);
-        Assert.Equal(legacyKey.PublicKeyPem, adopted!.PublicKeyPem);
+        var minted = await fixture.GetSigningKeyAsync(LogicPartyId).ConfigureAwait(true);
+        Assert.NotNull(minted);
+        Assert.NotEqual(legacyKey.PublicKeyPem, minted!.PublicKeyPem);
+        Assert.False(string.IsNullOrWhiteSpace(minted.PublicKeyPem));
     }
 
     /// <summary>
-    /// TR-MCP-SEC-006: Reconciliation is idempotent; repeated readiness checks keep the same adopted key material
-    /// and never rotate it.
+    /// TR-MCP-SEC-006: Reconciliation is idempotent; repeated readiness checks keep the same minted key and never
+    /// rotate it, so an installation does not churn signing identities on every status call.
     /// </summary>
     [Fact]
-    public async Task GetStatusAsync_RunTwice_KeepsTheSameAdoptedSigningKey()
+    public async Task GetStatusAsync_RunTwice_KeepsTheSameMintedSigningKey()
     {
         using var fixture = ReconcilerFixture.Create();
         var legacyKey = await fixture.RegisterLegacyPartyAsync(LegacyCreativityPartyId).ConfigureAwait(true);
@@ -88,7 +93,7 @@ public sealed class BrainSlotPartyKeyReconcilerTests
 
         Assert.NotNull(first);
         Assert.NotNull(second);
-        Assert.Equal(legacyKey.PublicKeyPem, first!.PublicKeyPem);
+        Assert.NotEqual(legacyKey.PublicKeyPem, first!.PublicKeyPem);
         Assert.Equal(first.PublicKeyPem, second!.PublicKeyPem);
         Assert.Equal(first.CreatedAtUtc, second.CreatedAtUtc);
     }

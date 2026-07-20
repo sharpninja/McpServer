@@ -3076,3 +3076,486 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
     }
 
 }
+
+Describe 'TEST-MCP-REPL-031 failsafe queue drain' {
+    <#
+    .SYNOPSIS
+        Covers BUG-TRIAGE-097: the failsafe queue captures session-log submits but
+        never replays them, so records accumulate on disk forever.
+    .DESCRIPTION
+        Validates TR-MCP-REPL-016 (oldest-first replay that clears a record only
+        after a confirmed submit, keeps rejected records, and skips the in-flight
+        record) and TR-MCP-REPL-017 (quarantine of malformed or attempt-exhausted
+        records plus Status reporting of the real queue depth).
+
+        Fixtures: a throwaway failsafe directory supplied through
+        MCPSERVER_FAILSAFE_DIR, seeded with synthetic client.SessionLog.SubmitAsync
+        records. Invoke-ReplRaw is stubbed, so no real backend and no real queue is
+        touched.
+    #>
+
+    BeforeAll {
+        function New-FailsafeDrainSandbox {
+            <#
+            .SYNOPSIS
+                Creates an isolated cache plus failsafe directory pair for one test.
+            #>
+            $root = Join-Path $script:SmokeCache ("drain-" + [guid]::NewGuid().ToString('N'))
+            $cacheDir = Join-Path $root 'cache'
+            $failsafeDir = Join-Path $root 'failsafe'
+            [void][System.IO.Directory]::CreateDirectory($cacheDir)
+            [void][System.IO.Directory]::CreateDirectory($failsafeDir)
+            [pscustomobject]@{
+                Root = $root
+                CacheDir = $cacheDir
+                FailsafeDir = $failsafeDir
+            }
+        }
+
+        function New-FailsafeDrainRecord {
+            <#
+            .SYNOPSIS
+                Writes one synthetic session-submit failsafe record into the queue.
+            #>
+            param(
+                [Parameter(Mandatory)][string]$FailsafeDir,
+                [Parameter(Mandatory)][string]$Stamp,
+                [Parameter(Mandatory)][string]$RequestId,
+                [int]$DrainAttempts = -1
+            )
+
+            $record = [ordered]@{
+                method = 'client.SessionLog.SubmitAsync'
+                label = 'session_submit'
+                timestamp = $Stamp
+                params = [ordered]@{
+                    sessionLog = [ordered]@{
+                        sourceType = 'ClaudeCode'
+                        sessionId = 'ClaudeCode-20260714T154733Z-plugin-session'
+                        turns = @(
+                            [ordered]@{
+                                requestId = $RequestId
+                                status = 'completed'
+                            }
+                        )
+                    }
+                }
+            }
+            if ($DrainAttempts -ge 0) { $record['drainAttempts'] = $DrainAttempts }
+
+            $path = Join-Path $FailsafeDir ("{0}-session_submit-{1}.yaml" -f $Stamp, $RequestId.Substring($RequestId.Length - 4))
+            Write-McpYamlObject -Path $path -Document $record
+            return $path
+        }
+    }
+
+    It 'TEST-MCP-REPL-031 replays queued records oldest-first and clears each one after a confirmed submit' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260714T154733Z' -RequestId 'req-20260714T154733Z-001-aaaa' | Out-Null
+            New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260716T112949Z' -RequestId 'req-20260716T112949Z-002-bbbb' | Out-Null
+            New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260720T230559Z' -RequestId 'req-20260720T230559Z-003-cccc' | Out-Null
+
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainReplayOrder = [System.Collections.Generic.List[string]]::new()
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:drainReplayOrder.Add("$Method|$([regex]::Match($ParamsYaml, 'req-[0-9TZ]+-\d+-\w+').Value)")
+                return New-McpPluginReplResult -Success $true -Output "type: result" -ExitCode 0
+            }
+
+            $summary = Invoke-ReplFailsafeDrain
+
+            $summary.scanned | Should -Be 3
+            $summary.replayed | Should -Be 3
+            $summary.failed | Should -Be 0
+            $summary.quarantined | Should -Be 0
+            $summary.aborted | Should -BeFalse
+            $script:drainReplayOrder.Count | Should -Be 3
+            $script:drainReplayOrder[0] | Should -Be 'client.SessionLog.SubmitAsync|req-20260714T154733Z-001-aaaa'
+            $script:drainReplayOrder[1] | Should -Be 'client.SessionLog.SubmitAsync|req-20260716T112949Z-002-bbbb'
+            $script:drainReplayOrder[2] | Should -Be 'client.SessionLog.SubmitAsync|req-20260720T230559Z-003-cccc'
+            @(Get-ChildItem -LiteralPath $sandbox.FailsafeDir -Filter '*.yaml' -File).Count | Should -Be 0
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainReplayOrder -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-032 keeps a rejected record on disk and still replays the newer records behind it' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260714T154733Z' -RequestId 'req-20260714T154733Z-001-aaaa' | Out-Null
+            $poisonPath = New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260716T112949Z' -RequestId 'req-20260716T112949Z-002-bbbb'
+            New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260720T230559Z' -RequestId 'req-20260720T230559Z-003-cccc' | Out-Null
+
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainReplayCount = 0
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:drainReplayCount++
+                if ($ParamsYaml -match 'req-20260716T112949Z-002-bbbb') {
+                    return New-McpPluginReplResult -Success $false -Output "type: error`npayload:`n  code: validation_failed" -ExitCode 1
+                }
+                return New-McpPluginReplResult -Success $true -Output "type: result" -ExitCode 0
+            }
+
+            $summary = Invoke-ReplFailsafeDrain
+
+            $script:drainReplayCount | Should -Be 3
+            $summary.replayed | Should -Be 2
+            $summary.failed | Should -Be 1
+            $summary.aborted | Should -BeFalse
+            Test-Path -LiteralPath $poisonPath | Should -BeTrue
+            @(Get-ChildItem -LiteralPath $sandbox.FailsafeDir -Filter '*.yaml' -File).Count | Should -Be 1
+            $retained = Read-McpYamlObject -Path $poisonPath
+            [int]$retained['drainAttempts'] | Should -Be 1
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainReplayCount -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-033 quarantines a malformed record with a reason instead of replaying or deleting it' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $malformedPath = Join-Path $sandbox.FailsafeDir '20260714T154733Z-session_submit-dead.yaml'
+            [System.IO.File]::WriteAllText($malformedPath, "method: client.SessionLog.SubmitAsync`nparams: [oops`n  unbalanced: '")
+            New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260720T230559Z' -RequestId 'req-20260720T230559Z-003-cccc' | Out-Null
+
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainReplayCount = 0
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:drainReplayCount++
+                return New-McpPluginReplResult -Success $true -Output "type: result" -ExitCode 0
+            }
+
+            $summary = Invoke-ReplFailsafeDrain
+
+            $script:drainReplayCount | Should -Be 1
+            $summary.quarantined | Should -Be 1
+            $summary.replayed | Should -Be 1
+            Test-Path -LiteralPath $malformedPath | Should -BeFalse
+            $quarantineDir = Get-ReplFailsafeQuarantineDir
+            Test-Path -LiteralPath $quarantineDir | Should -BeTrue
+            @(Get-ChildItem -LiteralPath $quarantineDir -Filter '*.yaml' -File).Count | Should -Be 1
+            $reasonFile = @(Get-ChildItem -LiteralPath $quarantineDir -Filter '*.reason.txt' -File)
+            $reasonFile.Count | Should -Be 1
+            [System.IO.File]::ReadAllText($reasonFile[0].FullName) | Should -Not -BeNullOrEmpty
+            @(Get-ChildItem -LiteralPath $sandbox.FailsafeDir -Filter '*.yaml' -File).Count | Should -Be 0
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainReplayCount -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-034 quarantines a record that exhausted its drain attempt budget instead of retrying forever' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $exhaustedPath = New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260714T154733Z' -RequestId 'req-20260714T154733Z-001-aaaa' -DrainAttempts 5
+
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainReplayCount = 0
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:drainReplayCount++
+                return New-McpPluginReplResult -Success $true -Output "type: result" -ExitCode 0
+            }
+
+            $summary = Invoke-ReplFailsafeDrain -MaxAttempts 5
+
+            $script:drainReplayCount | Should -Be 0
+            $summary.quarantined | Should -Be 1
+            $summary.replayed | Should -Be 0
+            Test-Path -LiteralPath $exhaustedPath | Should -BeFalse
+            @(Get-ChildItem -LiteralPath (Get-ReplFailsafeQuarantineDir) -Filter '*.yaml' -File).Count | Should -Be 1
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainReplayCount -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-035 aborts the drain and consumes no attempts when the backend is unreachable' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $firstPath = New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260714T154733Z' -RequestId 'req-20260714T154733Z-001-aaaa'
+            New-FailsafeDrainRecord -FailsafeDir $sandbox.FailsafeDir -Stamp '20260720T230559Z' -RequestId 'req-20260720T230559Z-003-cccc' | Out-Null
+
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainReplayCount = 0
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:drainReplayCount++
+                return New-McpPluginReplResult -Success $false -Output '' -Error 'MCP_UNTRUSTED: marker refresh failed before REPL request'
+            }
+
+            $summary = Invoke-ReplFailsafeDrain
+
+            $script:drainReplayCount | Should -Be 1
+            $summary.aborted | Should -BeTrue
+            $summary.abortReason | Should -Not -BeNullOrEmpty
+            $summary.replayed | Should -Be 0
+            $summary.quarantined | Should -Be 0
+            @(Get-ChildItem -LiteralPath $sandbox.FailsafeDir -Filter '*.yaml' -File).Count | Should -Be 2
+            $retained = Read-McpYamlObject -Path $firstPath
+            $retained.Contains('drainAttempts') | Should -BeFalse
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainReplayCount -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-036 skips the in-flight failsafe record written by the submit currently in progress' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $inFlightPath = Write-ReplFailsafe -Method 'client.SessionLog.SubmitAsync' -ParamsYaml "sessionLog:`n  sessionId: ClaudeCode-20260720T230559Z-plugin-session" -Label 'session_submit'
+            $inFlightPath | Should -Not -BeNullOrEmpty
+
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainReplayCount = 0
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:drainReplayCount++
+                return New-McpPluginReplResult -Success $true -Output "type: result" -ExitCode 0
+            }
+
+            $summary = Invoke-ReplFailsafeDrain
+
+            $script:drainReplayCount | Should -Be 0
+            $summary.skipped | Should -Be 1
+            $summary.replayed | Should -Be 0
+            Test-Path -LiteralPath $inFlightPath | Should -BeTrue
+
+            Clear-ReplFailsafe -Path $inFlightPath
+            Test-Path -LiteralPath $inFlightPath | Should -BeFalse
+        } finally {
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainReplayCount -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-037 triggers exactly one queue drain after the first successful REPL call' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousDrain = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $previousDrain = Get-Command Invoke-ReplFailsafeDrain -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainInvocationCount = 0
+            function Invoke-ReplFailsafeDrain {
+                param([int]$MaxRecords = 0, [int]$MaxAttempts = 5)
+                $script:drainInvocationCount++
+                return [ordered]@{ scanned = 0; replayed = 0; failed = 0; quarantined = 0; skipped = 0; aborted = $false }
+            }
+
+            Invoke-ReplFailsafeDrainOnFirstSuccess
+            Invoke-ReplFailsafeDrainOnFirstSuccess
+            Invoke-ReplFailsafeDrainOnFirstSuccess
+
+            $script:drainInvocationCount | Should -Be 1
+
+            $source = [System.IO.File]::ReadAllText((Join-Path $script:LibRoot 'repl-invoke.ps1'))
+            $rawMatch = [regex]::Match($source, '(?s)function Invoke-ReplRaw\s*\{(?<body>.*?)\r?\n\}[\r\n]+function Get-ReplSessionStateValue')
+            $rawMatch.Success | Should -BeTrue
+            $rawMatch.Groups['body'].Value | Should -Match 'Invoke-ReplFailsafeDrainOnFirstSuccess'
+        } finally {
+            if ($previousDrain) {
+                Set-Item -Path Function:\Invoke-ReplFailsafeDrain -Value $previousDrain.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplFailsafeDrain -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainInvocationCount -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-038 dispatches workflow.failsafe.drain locally without a server round trip' {
+        $sandbox = New-FailsafeDrainSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousDrain = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+
+            $previousDrain = Get-Command Invoke-ReplFailsafeDrain -CommandType Function -ErrorAction SilentlyContinue
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            $script:drainInvocationCount = 0
+            $script:drainMaxRecords = -1
+            $script:rawInvocationCount = 0
+            function Invoke-ReplFailsafeDrain {
+                param([int]$MaxRecords = 0, [int]$MaxAttempts = 5)
+                $script:drainInvocationCount++
+                $script:drainMaxRecords = $MaxRecords
+                return [ordered]@{ scanned = 2; replayed = 2; failed = 0; quarantined = 0; skipped = 0; aborted = $false; abortReason = '' }
+            }
+            function Invoke-ReplRaw {
+                param([string]$Method, [string]$ParamsYaml = '')
+                $script:rawInvocationCount++
+                return New-McpPluginReplResult -Success $true -Output "type: result" -ExitCode 0
+            }
+
+            $output = Invoke-ReplMethod -Method 'workflow.failsafe.drain' -ParamsYaml 'maxRecords: 7'
+
+            $script:drainInvocationCount | Should -Be 1
+            $script:drainMaxRecords | Should -Be 7
+            $script:rawInvocationCount | Should -Be 0
+            ($output -join "`n") | Should -Match 'replayed'
+        } finally {
+            if ($previousDrain) {
+                Set-Item -Path Function:\Invoke-ReplFailsafeDrain -Value $previousDrain.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplFailsafeDrain -ErrorAction SilentlyContinue
+            }
+            if ($previousRaw) {
+                Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock
+            } else {
+                Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-Variable -Name drainInvocationCount, drainMaxRecords, rawInvocationCount -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-039 status counts queued failsafe records in pendingCount' {
+        $sandbox = New-FailsafeDrainSandbox
+
+        try {
+            . (Join-Path $script:LibRoot 'yaml-object-mutation.ps1')
+            Import-McpYamlSerializer
+            $record = [ordered]@{
+                method = 'client.SessionLog.SubmitAsync'
+                label = 'session_submit'
+                timestamp = '20260714T154733Z'
+                params = [ordered]@{ sessionLog = [ordered]@{ sessionId = 'ClaudeCode-20260714T154733Z-plugin-session' } }
+            }
+            Write-McpYamlObject -Path (Join-Path $sandbox.FailsafeDir '20260714T154733Z-session_submit-aaaa.yaml') -Document $record
+            Write-McpYamlObject -Path (Join-Path $sandbox.FailsafeDir '20260716T112949Z-session_submit-bbbb.yaml') -Document $record
+            Write-McpYamlObject -Path (Join-Path (Join-Path $sandbox.FailsafeDir 'quarantine') '20260716T112949Z-session_submit-cccc.yaml') -Document $record
+
+            $result = Invoke-PluginChildProcess `
+                -ScriptPath (Join-Path $script:LibRoot 'mcp-status.ps1') `
+                -Environment @{
+                    MCP_PLUGIN_ROOT = $script:StagedRoot
+                    MCP_PLUGIN_HOST = 'claude-code'
+                    MCP_AGENT_NAME = 'ClaudeCode'
+                    MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+                    MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+                    MCP_WORKSPACE_PATH = $script:RepoRoot
+                    MCPSERVER_WORKSPACE_PATH = $script:RepoRoot
+                }
+
+            $result.ExitCode | Should -Be 0
+            $status = $result.Stdout | ConvertFrom-Json
+            $status.failsafeDir | Should -Be $sandbox.FailsafeDir
+            $status.failsafeCount | Should -Be 2
+            $status.failsafeQuarantineCount | Should -Be 1
+            $status.pendingCount | Should -Be 2
+        } finally {
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}

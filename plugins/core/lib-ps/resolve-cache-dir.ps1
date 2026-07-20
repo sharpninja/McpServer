@@ -124,3 +124,34 @@ function Resolve-McpCacheDir {
 
     throw "Unable to resolve the active workspace cache. Set MCP_WORKSPACE_PATH or MCP_CACHE_DIR_OVERRIDE; plugin install paths are not workspace caches."
 }
+
+function Get-McpFailsafeDir {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-016: resolves the failsafe queue directory.
+    .DESCRIPTION
+        Single source of truth for the queue location so the writer (repl-invoke),
+        the drain, and the status reporter all agree. MCPSERVER_FAILSAFE_DIR and
+        MCP_FAILSAFE_DIR override the workspace cache for tests and recovery.
+    #>
+    [CmdletBinding()]
+    param([string]$StartPath)
+
+    if ($env:MCPSERVER_FAILSAFE_DIR) { return $env:MCPSERVER_FAILSAFE_DIR }
+    if ($env:MCP_FAILSAFE_DIR) { return $env:MCP_FAILSAFE_DIR }
+    return (Join-Path (Resolve-McpCacheDir -StartPath $StartPath) 'failsafe')
+}
+
+function Get-McpFailsafeQuarantineDir {
+    <#
+    .SYNOPSIS
+        TR-MCP-REPL-017: resolves the quarantine directory under the failsafe queue.
+    .DESCRIPTION
+        Records that cannot be replayed are moved here instead of being deleted or
+        retried forever, so nothing is lost and the live queue keeps draining.
+    #>
+    [CmdletBinding()]
+    param([string]$StartPath)
+
+    return (Join-Path (Get-McpFailsafeDir -StartPath $StartPath) 'quarantine')
+}

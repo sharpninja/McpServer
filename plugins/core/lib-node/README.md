@@ -58,6 +58,29 @@ replCommand }`.
   fan-out, opencode regains the v4 workspace-scoped failsafe by consuming
   the core cache-manager (its local copy had dropped it).
 
+## Breaking changes
+
+### 0.2.0 (QuadBrain removal)
+
+Three public exports were deleted from `src/index.ts`. Any consumer that
+imported them will fail to compile against 0.2.0 and must drop the import:
+
+- `brainSlotTools`
+- `canHandleBrainSlotTool`
+- `handleBrainSlotTool`
+
+Rationale: nothing about QuadBrain is exposed to the agent plugins at all.
+Not gated, not identity-filtered: absent. QuadBrain remains reachable only as
+the OpenAI-compatible model endpoint that QBAgent calls directly, so the
+shared plugin core carries no brain-slot tool descriptors, no dispatch
+branches, and no public re-exports. `HostContext.dispatchTool` now treats
+every `brain_slot*` name as an unknown tool. Coverage lives in
+`tests/quadbrain-absence.test.ts`; the version floor is asserted in
+`tests/package-version.test.ts`.
+
+Under semver a breaking change on a `0.x` line bumps the minor, which is why
+this is 0.2.0 rather than 0.1.1 or 1.0.0.
+
 ## Validation
 
 `npm install && npx tsc --noEmit` passes. Jest suites run at fan-out time

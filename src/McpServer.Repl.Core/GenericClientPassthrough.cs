@@ -35,6 +35,13 @@ namespace McpServer.Repl.Core;
 /// This implementation resolves client properties by name (case-insensitive), resolves methods by name,
 /// coerces YAML dictionary arguments to method parameter types using <see cref="System.Text.Json"/>,
 /// invokes methods via reflection, and returns serialized results.
+/// <para>
+/// The set of reachable sub-clients is the allow-list in <see cref="TryGetPreservedClientType"/> and
+/// nothing else. A typed sub-client that exists on <see cref="McpServerClient"/> but has no entry there
+/// is deliberately unreachable through the passthrough (the brain-slot client is one such case), and the
+/// diagnostics built by <see cref="GetValidClientNames"/> are derived from that same allow-list so the
+/// error text can never advertise a name the resolver would then refuse.
+/// </para>
 /// </remarks>
 public sealed class GenericClientPassthrough : IGenericClientPassthrough
 {
@@ -114,7 +121,10 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     }
 
     /// <summary>
-    /// Resolves a client property from <see cref="McpServerClient"/> by name (case-insensitive).
+    /// Resolves a client property from <see cref="McpServerClient"/> by name (case-insensitive),
+    /// restricted to the sub-clients the passthrough is allowed to bind. A property that exists on the
+    /// client but has no <see cref="TryGetPreservedClientType"/> entry is treated as unknown here rather
+    /// than being accepted and then rejected one step later.
     /// </summary>
     private PropertyInfo ResolveClientProperty(string clientName)
     {
@@ -122,7 +132,8 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         var properties = clientType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
         var match = properties.FirstOrDefault(p =>
-            string.Equals(p.Name, clientName, StringComparison.OrdinalIgnoreCase));
+            string.Equals(p.Name, clientName, StringComparison.OrdinalIgnoreCase) &&
+            TryGetPreservedClientType(p.Name) is not null);
 
         if (match is null)
         {
@@ -133,10 +144,30 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
         return match;
     }
     /// <summary>
-    /// Resolves a statically preserved client type for trim-safe method reflection.
+    /// Resolves a statically preserved client type for trim-safe method reflection, throwing when the
+    /// name is not on the allow-list.
     /// </summary>
     [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
     private static Type GetPreservedClientType(string clientName)
+    {
+        var resolved = TryGetPreservedClientType(clientName);
+        if (resolved is null)
+        {
+            throw new InvalidOperationException(
+                $"Unknown client: {clientName}. Valid clients: {GetValidClientNames()}");
+        }
+
+        return resolved;
+    }
+
+    /// <summary>
+    /// The single source of truth for which sub-clients the passthrough can bind. Both the resolver and
+    /// the "valid clients" diagnostics read this allow-list, so the two cannot drift apart.
+    /// </summary>
+    /// <param name="clientName">The sub-client name, matched case-insensitively.</param>
+    /// <returns>The preserved client type, or <see langword="null"/> when the name is not allowed.</returns>
+    [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
+    private static Type? TryGetPreservedClientType(string clientName)
     {
         return clientName.ToUpperInvariant() switch
         {
@@ -167,8 +198,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             "TURNTRANSACTIONS" => typeof(TurnTransactionsClient),
             "TRIAGE" => typeof(TriageClient),
             "AGENTHELP" => typeof(AgentHelpClient),
-            _ => throw new InvalidOperationException(
-                $"Unknown client: {clientName}. Valid clients: {GetValidClientNames()}"),
+            _ => null,
         };
     }
 
@@ -870,16 +900,31 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
     }
 
     /// <summary>
-    /// Gets a comma-separated list of valid client names.
+    /// Gets a comma-separated list of valid client names. The list is the intersection of the properties
+    /// declared on <see cref="McpServerClient"/> and the <see cref="TryGetPreservedClientType"/>
+    /// allow-list, which is exactly what <see cref="ResolveClientProperty"/> accepts. Deriving the text
+    /// from the resolver rather than from a type-name heuristic keeps the diagnostic from advertising a
+    /// client the passthrough would then refuse to bind.
     /// </summary>
-    private static string GetValidClientNames()
+    private static string GetValidClientNames() => _validClientNames;
+
+    /// <summary>
+    /// The rendered valid-client list, computed once from the resolver allow-list.
+    /// </summary>
+    private static readonly string _validClientNames = BuildValidClientNames();
+
+    /// <summary>
+    /// Builds the comma-separated valid-client list by probing the resolver with every property name
+    /// declared on <see cref="McpServerClient"/> and keeping only the names that actually resolve.
+    /// </summary>
+    private static string BuildValidClientNames()
     {
-        var clientType = typeof(McpServerClient);
-        var properties = clientType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        var names = properties
-            .Where(p => p.PropertyType.Name.EndsWith("Client"))
+        var names = typeof(McpServerClient)
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Select(p => p.Name)
-            .OrderBy(n => n);
+            .Where(name => TryGetPreservedClientType(name) is not null)
+            .OrderBy(name => name, StringComparer.Ordinal);
+
         return string.Join(", ", names);
     }
 }

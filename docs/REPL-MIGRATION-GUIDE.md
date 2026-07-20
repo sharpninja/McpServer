@@ -79,11 +79,13 @@ When direct `--agent-stdio` is used, send one YAML envelope per document and sep
 |------|-------------|
 | `mcp_client_invoke` | Dynamically invoke any McpServerClient sub-client method |
 
-### Quad Brain (1 tool)
+### Quad Brain (0 tools)
 
-| Tool | Description |
-|------|-------------|
-| `mcp_quadbrain_coding_execute` | Execute a coding task through MCP Server Quad Brain orchestration and return the committed Arbiter response |
+QuadBrain is not exposed to hosted agents or agent plugins. The former
+`mcp_quadbrain_coding_execute` tool was removed under FR-MCP-142, along with the
+`brain_slot_*` MCP tools, the shared plugin-core brain-slot descriptors, and the
+`BRAINSLOTS` client-passthrough route. QuadBrain is reachable only by QBAgent, as the
+OpenAI-compatible model at `POST /v1/chat/completions`.
 
 ### GraphRAG (14 tools)
 
