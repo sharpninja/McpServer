@@ -36,8 +36,8 @@ internal static class BrainSlotValidation
     public static string DefaultPartyId(string role)
         => role switch
         {
-            BrainSlotRoles.LeftHemisphere => "brain-slot:left-hemisphere",
-            BrainSlotRoles.RightHemisphere => "brain-slot:right-hemisphere",
+            BrainSlotRoles.Creativity => "brain-slot:creativity",
+            BrainSlotRoles.Logic => "brain-slot:logic",
             BrainSlotRoles.CuriosityEngine => "brain-slot:curiosity-engine",
             BrainSlotRoles.ArbiterOfTruth => "brain-slot:arbiter-of-truth",
             _ => "brain-slot:" + role.Trim().ToLowerInvariant(),

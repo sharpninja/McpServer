@@ -48,7 +48,7 @@ public sealed class BrainSlotsControllerTests
 
         var action = await controller.UpsertAsync(
             "slot-1",
-            new UpsertBrainSlotRequest { Role = BrainSlotRoles.LeftHemisphere },
+            new UpsertBrainSlotRequest { Role = BrainSlotRoles.Creativity },
             CancellationToken.None).ConfigureAwait(true);
 
         Assert.IsType<BadRequestObjectResult>(action.Result);
@@ -69,7 +69,7 @@ public sealed class BrainSlotsControllerTests
 
         var action = await controller.UpsertAsync(
             "slot-1",
-            new UpsertBrainSlotRequest { Role = BrainSlotRoles.LeftHemisphere },
+            new UpsertBrainSlotRequest { Role = BrainSlotRoles.Creativity },
             CancellationToken.None).ConfigureAwait(true);
 
         Assert.IsType<ConflictObjectResult>(action.Result);
@@ -155,7 +155,7 @@ public sealed class BrainSlotsControllerTests
 
         var action = await controller.UpdateWeightsAsync(new QuadBrainWeightUpdateRequest
         {
-            RoleWeights = new Dictionary<string, double> { [BrainSlotRoles.LeftHemisphere] = 1.25 },
+            RoleWeights = new Dictionary<string, double> { [BrainSlotRoles.Creativity] = 1.25 },
             ReasonText = "approved adjustment",
             AotApproved = true,
             AdminApproved = true,
@@ -165,7 +165,7 @@ public sealed class BrainSlotsControllerTests
         var ok = Assert.IsType<OkObjectResult>(action.Result);
         Assert.IsType<QuadBrainWeightUpdateResponse>(ok.Value);
         await quad.Received(1).ExecuteWeightUpdateAsync(
-            Arg.Is<QuadBrainWeightUpdateRequest>(request => request != null && request.RoleWeights.ContainsKey(BrainSlotRoles.LeftHemisphere)),
+            Arg.Is<QuadBrainWeightUpdateRequest>(request => request != null && request.RoleWeights.ContainsKey(BrainSlotRoles.Creativity)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 }

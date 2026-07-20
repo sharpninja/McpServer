@@ -1624,8 +1624,8 @@ Field names below are the exact JSON property names declared with [JsonPropertyN
 #### AotReconciliationRequest (class)
 
 - input: string
-- leftOutput: string
-- rightOutput: string
+- creativityOutput: string
+- logicOutput: string
 - curiosityOutput: string
 - turnId: string?
 - metadata: IReadOnlyDictionary<string, string>

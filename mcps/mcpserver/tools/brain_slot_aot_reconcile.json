@@ -1,6 +1,6 @@
 {
   "name": "brain_slot_aot_reconcile",
-  "description": "Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.",
+  "description": "Run Arbiter-of-Truth reconciliation over Creativity, Logic, and Curiosity outputs.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -12,12 +12,12 @@
         "description": "Original input prompt",
         "type": "string"
       },
-      "leftOutput": {
-        "description": "Committed LeftHemisphere output",
+      "creativityOutput": {
+        "description": "Committed Creativity output",
         "type": "string"
       },
-      "rightOutput": {
-        "description": "Committed RightHemisphere output",
+      "logicOutput": {
+        "description": "Committed Logic output",
         "type": "string"
       },
       "curiosityOutput": {
@@ -44,8 +44,8 @@
     "required": [
       "workspacePath",
       "input",
-      "leftOutput",
-      "rightOutput",
+      "creativityOutput",
+      "logicOutput",
       "curiosityOutput"
     ]
   }

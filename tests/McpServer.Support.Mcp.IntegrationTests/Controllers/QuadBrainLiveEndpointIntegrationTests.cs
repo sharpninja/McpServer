@@ -42,8 +42,8 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         Assert.Equal("stop", choice.FinishReason);
         Assert.Equal("the live arbiter decision", choice.Message.Content);
         Assert.Equal(3, factory.InvokedRoles.Count);
-        Assert.Contains(BrainSlotRoles.LeftHemisphere, factory.InvokedRoles);
-        Assert.Contains(BrainSlotRoles.RightHemisphere, factory.InvokedRoles);
+        Assert.Contains(BrainSlotRoles.Creativity, factory.InvokedRoles);
+        Assert.Contains(BrainSlotRoles.Logic, factory.InvokedRoles);
         Assert.Contains(BrainSlotRoles.ArbiterOfTruth, factory.InvokedRoles);
         Assert.DoesNotContain(BrainSlotRoles.CuriosityEngine, factory.InvokedRoles);
     }

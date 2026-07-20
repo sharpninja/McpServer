@@ -5,7 +5,7 @@
 Phases A-E delivered the QBAgent tool/skill surface and wired it into the OpenAI-compatible
 QuadBrain endpoint. The live 4-brain pipeline is fully implemented and unit-tested:
 
-- `QuadBrainOrchestrationService` (real four-role decision loop: LeftHemisphere, RightHemisphere,
+- `QuadBrainOrchestrationService` (real four-role decision loop: Creativity, Logic,
   CuriosityEngine, ArbiterOfTruth).
 - `BrainSlotInvocationService` (gated, transaction-wrapped, credential-resolved per-brain invocation).
 - `BrainSlotRegistryService` (durable slot registry; auto-registers active party signing keys on enable).
@@ -63,7 +63,7 @@ the coordinator here keeps the test deterministic while still proving the real f
 ### F2a - `QuadBrainLiveOrchestrationTests` (TEST-MCP-QBLIVE-001)
 
 1. `ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision`: four real
-   invocations occur in order Left -> Right -> Curiosity -> Arbiter; the fake chat client is called
+   invocations occur in order Creativity -> Logic -> Curiosity -> Arbiter; the fake chat client is called
    four times; the response is committed and `Output` equals the Arbiter output.
 2. `ExecuteFullOrchestrationAsync_WhenArbiterEmitsToolCalls_ReturnsToolCallJsonAsOutput`.
 3. `ExecuteFullOrchestrationAsync_WhenOnlyThreeRolesSeeded_RejectsQuadNotReady`.

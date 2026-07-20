@@ -18,7 +18,7 @@ namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>
 /// TEST-MCP-QBOLLAMA-001: Exercises the OpenAI-compatible QuadBrain endpoint against the local Ollama server,
-/// proving FR-MCP-134 and FR-MCP-QBOPENAI-001 execute the normal Left/Right/Arbiter workflow without faking the LLM calls.
+/// proving FR-MCP-134 and FR-MCP-QBOPENAI-001 execute the normal Creativity/Logic/Arbiter workflow without faking the LLM calls.
 /// </summary>
 [Trait("Category", "Integration")]
 public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<OllamaServerFixture>
@@ -47,7 +47,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
 
     /// <summary>
     /// TEST-MCP-QBOLLAMA-001: Assigns the local Ollama default model to all four slots and verifies representative
-    /// prompts trigger the normal Left, Right, and Arbiter workflow with non-empty OpenAI-compatible responses.
+    /// prompts trigger the normal Creativity, Logic, and Arbiter workflow with non-empty OpenAI-compatible responses.
     /// </summary>
     [Theory]
     [InlineData("Hello")]
@@ -210,7 +210,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
                 turnId,
                 "field-variant-model",
                 OllamaOpenAiEndpoint,
-                [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+                [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth],
                 chatClientFactory.InvokedOutputs,
                 choice.Message.Content)
             .ConfigureAwait(true);
@@ -592,14 +592,14 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
 
     private static void AssertQBAgentWorkflowRoles(IReadOnlyList<string> invokedRoles)
     {
-        Assert.Contains(BrainSlotRoles.LeftHemisphere, invokedRoles);
-        Assert.Contains(BrainSlotRoles.RightHemisphere, invokedRoles);
+        Assert.Contains(BrainSlotRoles.Creativity, invokedRoles);
+        Assert.Contains(BrainSlotRoles.Logic, invokedRoles);
         Assert.Contains(BrainSlotRoles.ArbiterOfTruth, invokedRoles);
         Assert.DoesNotContain(BrainSlotRoles.CuriosityEngine, invokedRoles);
         var roles = invokedRoles.ToList();
         var arbiterIndex = roles.LastIndexOf(BrainSlotRoles.ArbiterOfTruth);
-        Assert.True(arbiterIndex > roles.IndexOf(BrainSlotRoles.LeftHemisphere), "ArbiterOfTruth must run after LeftHemisphere.");
-        Assert.True(arbiterIndex > roles.IndexOf(BrainSlotRoles.RightHemisphere), "ArbiterOfTruth must run after RightHemisphere.");
+        Assert.True(arbiterIndex > roles.IndexOf(BrainSlotRoles.Creativity), "ArbiterOfTruth must run after Creativity.");
+        Assert.True(arbiterIndex > roles.IndexOf(BrainSlotRoles.Logic), "ArbiterOfTruth must run after Logic.");
     }
 
     private static HttpClient SeedClient(CustomWebApplicationFactory factory)
@@ -642,15 +642,15 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
     private static void AssertNormalWorkflowRoles(IReadOnlyList<string> invokedRoles)
     {
         Assert.True(invokedRoles.Count >= 3, "QuadBrain must invoke both hemispheres and ArbiterOfTruth at minimum.");
-        Assert.Contains(BrainSlotRoles.LeftHemisphere, invokedRoles);
-        Assert.Contains(BrainSlotRoles.RightHemisphere, invokedRoles);
+        Assert.Contains(BrainSlotRoles.Creativity, invokedRoles);
+        Assert.Contains(BrainSlotRoles.Logic, invokedRoles);
         Assert.Contains(BrainSlotRoles.ArbiterOfTruth, invokedRoles);
         Assert.DoesNotContain(BrainSlotRoles.CuriosityEngine, invokedRoles);
         var roles = invokedRoles.ToList();
         var allowedRoles = new[]
         {
-            BrainSlotRoles.LeftHemisphere,
-            BrainSlotRoles.RightHemisphere,
+            BrainSlotRoles.Creativity,
+            BrainSlotRoles.Logic,
             BrainSlotRoles.ArbiterOfTruth,
         };
         Assert.All(
@@ -658,8 +658,8 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
             role => Assert.Contains(role, allowedRoles));
         var arbiterIndex = roles.LastIndexOf(BrainSlotRoles.ArbiterOfTruth);
         Assert.Equal(roles.Count - 1, arbiterIndex);
-        Assert.True(arbiterIndex > roles.LastIndexOf(BrainSlotRoles.LeftHemisphere), "ArbiterOfTruth must run after LeftHemisphere.");
-        Assert.True(arbiterIndex > roles.LastIndexOf(BrainSlotRoles.RightHemisphere), "ArbiterOfTruth must run after RightHemisphere.");
+        Assert.True(arbiterIndex > roles.LastIndexOf(BrainSlotRoles.Creativity), "ArbiterOfTruth must run after Creativity.");
+        Assert.True(arbiterIndex > roles.LastIndexOf(BrainSlotRoles.Logic), "ArbiterOfTruth must run after Logic.");
     }
 
     private static async Task<OpenAiChatCompletionResponse> PostAsync(HttpClient client, OpenAiChatCompletionRequest request)
@@ -832,10 +832,10 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
             {
                 var output = slot.Role switch
                 {
-                    BrainSlotRoles.LeftHemisphere => BrainSlotChatClientFactory.ExtractOpenAiCompatibleMessageText("""
+                    BrainSlotRoles.Creativity => BrainSlotChatClientFactory.ExtractOpenAiCompatibleMessageText("""
                         {"choices":[{"message":{"content":"content-field-captured","reasoning":"reasoning-field-ignored","reasoning_content":"reasoning-content-field-ignored"}}]}
                         """),
-                    BrainSlotRoles.RightHemisphere => BrainSlotChatClientFactory.ExtractOpenAiCompatibleMessageText("""
+                    BrainSlotRoles.Logic => BrainSlotChatClientFactory.ExtractOpenAiCompatibleMessageText("""
                         {"choices":[{"message":{"content":"","reasoning":"reasoning-field-captured","reasoning_content":"reasoning-content-field-ignored"}}]}
                         """),
                     BrainSlotRoles.ArbiterOfTruth => BrainSlotChatClientFactory.ExtractOpenAiCompatibleMessageText("""

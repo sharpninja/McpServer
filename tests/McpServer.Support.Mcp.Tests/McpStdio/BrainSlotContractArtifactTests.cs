@@ -32,7 +32,7 @@ public sealed class BrainSlotContractArtifactTests
             .EnumerateArray()
             .Select(item => item.GetString() ?? string.Empty)
             .ToArray();
-        Assert.Equal(["LeftHemisphere", "RightHemisphere", "CuriosityEngine", "ArbiterOfTruth"], roleValues);
+        Assert.Equal(["Creativity", "Logic", "CuriosityEngine", "ArbiterOfTruth"], roleValues);
 
         var providerValues = upsert
             .GetProperty("parameters")

@@ -17,7 +17,7 @@ public interface IBrainInteractionSessionLogger
     /// <param name="sourceType">Session-log source type (for example <c>QBAgent</c>).</param>
     /// <param name="sessionId">Session identifier; when null/empty the call is a no-op.</param>
     /// <param name="turnId">Turn request id (must match an existing turn); when null/empty the call is a no-op.</param>
-    /// <param name="role">The brain role (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth).</param>
+    /// <param name="role">The brain role (Creativity, Logic, CuriosityEngine, ArbiterOfTruth).</param>
     /// <param name="prompt">The full prompt sent to the brain.</param>
     /// <param name="output">The full output returned by the brain.</param>
     /// <param name="cancellationToken">Cancellation token.</param>

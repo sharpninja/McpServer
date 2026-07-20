@@ -13,7 +13,7 @@
         "type": "string"
       },
       "role": {
-        "description": "Role: LeftHemisphere, RightHemisphere, CuriosityEngine, or ArbiterOfTruth",
+        "description": "Role: Creativity, Logic, CuriosityEngine, or ArbiterOfTruth",
         "type": "string"
       },
       "providerKind": {

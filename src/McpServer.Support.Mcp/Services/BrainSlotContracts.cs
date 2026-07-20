@@ -7,11 +7,11 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public static class BrainSlotRoles
 {
-    /// <summary>Analytical left-hemisphere slot.</summary>
-    public const string LeftHemisphere = "LeftHemisphere";
+    /// <summary>Generative creativity slot.</summary>
+    public const string Creativity = "Creativity";
 
-    /// <summary>Associative right-hemisphere slot.</summary>
-    public const string RightHemisphere = "RightHemisphere";
+    /// <summary>Deterministic logic slot.</summary>
+    public const string Logic = "Logic";
 
     /// <summary>Research and gap-detection Curiosity slot.</summary>
     public const string CuriosityEngine = "CuriosityEngine";
@@ -22,8 +22,8 @@ public static class BrainSlotRoles
     /// <summary>All valid brain-slot roles.</summary>
     public static readonly IReadOnlyList<string> All =
     [
-        LeftHemisphere,
-        RightHemisphere,
+        Creativity,
+        Logic,
         CuriosityEngine,
         ArbiterOfTruth,
     ];
@@ -454,13 +454,13 @@ public sealed class AotReconciliationRequest
     [JsonPropertyName("input")]
     public string Input { get; set; } = string.Empty;
 
-    /// <summary>LeftHemisphere committed output.</summary>
-    [JsonPropertyName("leftOutput")]
-    public string LeftOutput { get; set; } = string.Empty;
+    /// <summary>Creativity committed output.</summary>
+    [JsonPropertyName("creativityOutput")]
+    public string CreativityOutput { get; set; } = string.Empty;
 
-    /// <summary>RightHemisphere committed output.</summary>
-    [JsonPropertyName("rightOutput")]
-    public string RightOutput { get; set; } = string.Empty;
+    /// <summary>Logic committed output.</summary>
+    [JsonPropertyName("logicOutput")]
+    public string LogicOutput { get; set; } = string.Empty;
 
     /// <summary>Optional CuriosityEngine research/context output for escalated reconciliation.</summary>
     [JsonPropertyName("curiosityOutput")]

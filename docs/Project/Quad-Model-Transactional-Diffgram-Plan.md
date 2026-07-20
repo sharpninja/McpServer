@@ -22,7 +22,7 @@ This document describes a quad-model AI system hosted inside the MCP Server, com
 
 The system features:
 
-- Four specialized models: Left Hemisphere, Right Hemisphere, Curiosity Engine, Arbiter of Truth.
+- Four specialized models: Creativity, Logic, Curiosity Engine, Arbiter of Truth.
 - Transaction-per-turn model with diffgrams and ACID guarantees.
 - Strong user directive supremacy.
 - Self-improving capabilities with rigorous safety gates.
@@ -32,8 +32,8 @@ The system features:
 
 The imported model roles are:
 
-- Left Hemisphere: analytical, sequential, structured logic, planning, validation, and rules.
-- Right Hemisphere: holistic, associative, generative fluency, context synthesis, and voice.
+- Creativity: holistic, associative, generative fluency, context synthesis, and voice.
+- Logic: analytical, sequential, structured logic, planning, validation, and rules.
 - Curiosity Engine: research, monitoring, self-improvement, gap detection, code experiments, external escalation, and frustration intervention.
 - Arbiter of Truth: oversight, routing, final gatekeeping, quality/safety arbitration, reconciliation, and directive enforcement.
 
@@ -63,7 +63,7 @@ flowchart TD
     B -->|No| C[Enter Degraded Mode]
     B -->|Yes| D[Start Transaction + Transaction Manifest]
     D --> E[3PKS Signs Manifest]
-    E --> F[Left + Right + Curiosity Process]
+    E --> F[Creativity + Logic + Curiosity Process]
     F --> G[AoT Arbitrates]
     G --> H{AoT Approves Final Diffgram?}
     H -->|No| I[Reconciliation Process]
@@ -168,8 +168,8 @@ flowchart TD
 
 Repo annotations:
 
-- `AD-AOT-001-BR-REJECT`: implemented as a voting/reconciliation round when ArbiterOfTruth semantically rejects both hemisphere responses; transaction or commit failures still fail closed.
-- `AD-AOT-001-BR-AGREE`: implemented through the QuadBrain orchestration prompt that sends LeftHemisphere and RightHemisphere evidence to ArbiterOfTruth.
+- `AD-AOT-001-BR-REJECT`: implemented as a voting/reconciliation round when ArbiterOfTruth semantically rejects both role responses; transaction or commit failures still fail closed.
+- `AD-AOT-001-BR-AGREE`: implemented through the QuadBrain orchestration prompt that sends Creativity and Logic evidence to ArbiterOfTruth.
 - `AD-AOT-001-BR-DISAGREE`: implemented as a bounded second-round vote/reconciliation branch before final fail-closed rejection.
 - `AD-AOT-001-BR-ACCEPT`: implemented through ArbiterOfTruth reconciliation returning a committed final decision.
 
@@ -207,8 +207,8 @@ Imported section: 3.6 High-Level System Architecture.
 ```mermaid
 flowchart TB
     subgraph MCP Server
-        LM[Left Hemisphere]
-        RM[Right Hemisphere]
+        CR[Creativity]
+        LG[Logic]
         CM[Curiosity Engine]
         AM[Arbiter of Truth]
         Cache[Shared Cache]
@@ -221,8 +221,8 @@ flowchart TB
     end
 
     User --> AM
-    AM --> LM & RM & CM
-    LM & RM & CM --> Cache
+    AM --> CR & LG & CM
+    CR & LG & CM --> Cache
     Cache --> PubSub
     KeyServer --> PubSub
     Sub --> PubSub

@@ -45,7 +45,7 @@ describe('brain slot tool handlers', () => {
     const upsert = brainSlotTools.find((tool) => tool.name === 'brain_slot_upsert');
     const properties = upsert?.inputSchema.properties as Record<string, unknown> | undefined;
     expect(properties?.role).toMatchObject({
-      enum: ['LeftHemisphere', 'RightHemisphere', 'CuriosityEngine', 'ArbiterOfTruth'],
+      enum: ['Creativity', 'Logic', 'CuriosityEngine', 'ArbiterOfTruth'],
     });
     expect(properties?.providerKind).toMatchObject({
       enum: ['OpenAI', 'OpenAICompatible'],
@@ -92,7 +92,7 @@ describe('brain slot tool handlers', () => {
 
     const args = {
       workspacePath: 'F:\\GitHub\\McpServer',
-      roleWeightsJson: '{"LeftHemisphere":1.2}',
+      roleWeightsJson: '{"Creativity":1.2}',
       reasonText: 'approved',
       aotApproved: true,
       adminApproved: true,

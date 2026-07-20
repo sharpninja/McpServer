@@ -31,7 +31,7 @@ public sealed class BrainSlotContainmentTests
             service.AdmitAsync(new BrainSlotDefinitionEntity
             {
                 SlotId = "left-main",
-                Role = BrainSlotRoles.LeftHemisphere,
+                Role = BrainSlotRoles.Creativity,
             }, "output", "txn-1", cancellationToken: TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         Assert.Equal(BrainSlotReasonCodes.DeferredFeatureDisabled, ex.Reason);

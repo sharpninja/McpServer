@@ -17,7 +17,7 @@ public sealed class QuadBrainOrchestrationServiceTests
 {
     private const string Workspace = @"F:\GitHub\McpServer";
 
-    /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Left, Right, then Arbiter and returns the committed final output.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Creativity, Logic, then Arbiter and returns the committed final output.</summary>
     [Fact]
     public async Task ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision()
     {
@@ -69,17 +69,17 @@ public sealed class QuadBrainOrchestrationServiceTests
         Assert.Equal("final decision", response.Output);
         Assert.Equal("txn-ArbiterOfTruth", response.TransactionId);
         Assert.Equal(3, response.RoleResults.Count);
-        Assert.Equal([BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth], response.RoleResults.Select(item => item.Role).ToArray());
+        Assert.Equal([BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth], response.RoleResults.Select(item => item.Role).ToArray());
         var calledSlotIds = invocation.ReceivedCalls()
             .Where(call => call.GetMethodInfo().Name == nameof(IBrainSlotInvocationService.InvokeAsync))
             .Select(call => (string)call.GetArguments()[0]!)
             .ToArray();
-        Assert.Equal(["lefthemisphere-main", "righthemisphere-main", "arbiteroftruth-main"], calledSlotIds);
+        Assert.Equal(["creativity-main", "logic-main", "arbiteroftruth-main"], calledSlotIds);
     }
 
-    /// <summary>TEST-MCP-QBLIVE-001: Left and Right hemispheres run in parallel, and AoT waits for both responses.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Creativity and Logic roles run in parallel, and AoT waits for both responses.</summary>
     [Fact]
-    public async Task ExecuteFullOrchestrationAsync_StartsRightBeforeLeftCompletesAndGatesAotOnBoth()
+    public async Task ExecuteFullOrchestrationAsync_StartsLogicBeforeCreativityCompletesAndGatesAotOnBoth()
     {
         using var db = CreateDbContext();
         var registry = Substitute.For<IBrainSlotRegistryService>();
@@ -97,11 +97,11 @@ public sealed class QuadBrainOrchestrationServiceTests
                 .Returns(Task.FromResult<BrainSlotDefinitionEntity?>(pair.Value));
         }
 
-        var leftStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-        var rightStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var creativityStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var logicStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
         var arbiterStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-        var leftCompletion = new TaskCompletionSource<BrainSlotInvokeResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
-        var rightCompletion = new TaskCompletionSource<BrainSlotInvokeResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var creativityCompletion = new TaskCompletionSource<BrainSlotInvokeResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var logicCompletion = new TaskCompletionSource<BrainSlotInvokeResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
         invocation.InvokeAsync(Arg.Any<string>(), Arg.Any<BrainSlotInvokeRequest>(), Arg.Any<CancellationToken>())
             .Returns(call =>
             {
@@ -109,8 +109,8 @@ public sealed class QuadBrainOrchestrationServiceTests
                 var slot = slots.Values.Single(item => item.SlotId == slotId);
                 return slot.Role switch
                 {
-                    BrainSlotRoles.LeftHemisphere => StartAndWait(leftStarted, leftCompletion.Task),
-                    BrainSlotRoles.RightHemisphere => StartAndWait(rightStarted, rightCompletion.Task),
+                    BrainSlotRoles.Creativity => StartAndWait(creativityStarted, creativityCompletion.Task),
+                    BrainSlotRoles.Logic => StartAndWait(logicStarted, logicCompletion.Task),
                     BrainSlotRoles.ArbiterOfTruth => StartAndWait(
                         arbiterStarted,
                         Task.FromResult(Response(slot, "final decision"))),
@@ -127,28 +127,28 @@ public sealed class QuadBrainOrchestrationServiceTests
 
         try
         {
-            await leftStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-            await rightStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await creativityStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await logicStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.False(arbiterStarted.Task.IsCompleted);
 
-            leftCompletion.SetResult(Response(slots[BrainSlotRoles.LeftHemisphere], "left evidence"));
+            creativityCompletion.SetResult(Response(slots[BrainSlotRoles.Creativity], "creativity evidence"));
             await Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             Assert.False(arbiterStarted.Task.IsCompleted);
 
-            rightCompletion.SetResult(Response(slots[BrainSlotRoles.RightHemisphere], "right evidence"));
+            logicCompletion.SetResult(Response(slots[BrainSlotRoles.Logic], "logic evidence"));
             await arbiterStarted.Task.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
             var response = await orchestration.WaitAsync(TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
             Assert.Equal("committed", response.Status);
             Assert.Equal("final decision", response.Output);
             Assert.Equal(
-                [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+                [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth],
                 response.RoleResults.Select(item => item.Role).ToArray());
         }
         finally
         {
-            leftCompletion.TrySetResult(Response(slots[BrainSlotRoles.LeftHemisphere], "left evidence"));
-            rightCompletion.TrySetResult(Response(slots[BrainSlotRoles.RightHemisphere], "right evidence"));
+            creativityCompletion.TrySetResult(Response(slots[BrainSlotRoles.Creativity], "creativity evidence"));
+            logicCompletion.TrySetResult(Response(slots[BrainSlotRoles.Logic], "logic evidence"));
         }
 
         static Task<BrainSlotInvokeResponse> StartAndWait(
@@ -175,7 +175,7 @@ public sealed class QuadBrainOrchestrationServiceTests
             };
     }
 
-    /// <summary>TEST-MCP-QBLIVE-001: Quad roles carry role-specific descriptions and Right uses provider temperature.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Quad roles carry role-specific descriptions and Logic uses provider temperature.</summary>
     [Fact]
     public async Task ExecuteFullOrchestrationAsync_BuildsRoleSpecificPromptInstructions()
     {
@@ -230,17 +230,17 @@ public sealed class QuadBrainOrchestrationServiceTests
             TurnId = "turn-prompt-contract",
         }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Contains("creativity", prompts[BrainSlotRoles.LeftHemisphere], StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("temperature", prompts[BrainSlotRoles.LeftHemisphere], StringComparison.OrdinalIgnoreCase);
-        Assert.Null(temperatures[BrainSlotRoles.LeftHemisphere]);
-        Assert.Contains("absolute accuracy", prompts[BrainSlotRoles.RightHemisphere], StringComparison.OrdinalIgnoreCase);
-        Assert.Equal(0.0, temperatures[BrainSlotRoles.RightHemisphere]);
+        Assert.Contains("creativity", prompts[BrainSlotRoles.Creativity], StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("temperature", prompts[BrainSlotRoles.Creativity], StringComparison.OrdinalIgnoreCase);
+        Assert.Null(temperatures[BrainSlotRoles.Creativity]);
+        Assert.Contains("logical reasoning", prompts[BrainSlotRoles.Logic], StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(0.0, temperatures[BrainSlotRoles.Logic]);
         Assert.Contains("arbiter of truth for code tasks", prompts[BrainSlotRoles.ArbiterOfTruth], StringComparison.OrdinalIgnoreCase);
         Assert.Contains("enforcer of rules for all tasks", prompts[BrainSlotRoles.ArbiterOfTruth], StringComparison.OrdinalIgnoreCase);
         Assert.Null(temperatures[BrainSlotRoles.ArbiterOfTruth]);
     }
 
-    /// <summary>TEST-MCP-QBLIVE-001: Curiosity is invoked only when both hemispheres fail to produce valid committed output.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Curiosity is invoked only when both roles fail to produce valid committed output.</summary>
     [Fact]
     public async Task ExecuteFullOrchestrationAsync_WhenBothHemispheresProduceNoValidOutput_InvokesCuriosityWithoutReturningIt()
     {
@@ -293,8 +293,8 @@ public sealed class QuadBrainOrchestrationServiceTests
 
         Assert.Equal("rejected", response.Status);
         Assert.Null(response.Output);
-        Assert.Equal([BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine], response.RoleResults.Select(item => item.Role).ToArray());
-        Assert.Equal(["lefthemisphere-main", "righthemisphere-main", "curiosityengine-main"], capturedRequests.Select(item => item.SlotId).ToArray());
+        Assert.Equal([BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.CuriosityEngine], response.RoleResults.Select(item => item.Role).ToArray());
+        Assert.Equal(["creativity-main", "logic-main", "curiosityengine-main"], capturedRequests.Select(item => item.SlotId).ToArray());
         Assert.True(capturedRequests.Single(item => item.SlotId == "curiosityengine-main").Request.AdmitToGraphRag);
         Assert.Contains(
             "curious researcher",
@@ -336,7 +336,7 @@ public sealed class QuadBrainOrchestrationServiceTests
                     votingPrompts.Add((slot.Role, request.Input, request.Temperature));
                 var output = slot.Role switch
                 {
-                    BrainSlotRoles.ArbiterOfTruth when count == 1 => "REJECT: both hemisphere responses are not valid enough.",
+                    BrainSlotRoles.ArbiterOfTruth when count == 1 => "REJECT: both role responses are not valid enough.",
                     BrainSlotRoles.ArbiterOfTruth => "final decision after voting",
                     _ when count > 1 => slot.Role + " vote",
                     _ => slot.Role + " evidence",
@@ -366,12 +366,12 @@ public sealed class QuadBrainOrchestrationServiceTests
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision after voting", response.Output);
         Assert.Equal(
-            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth, BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+            [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth, BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth],
             response.RoleResults.Select(item => item.Role).ToArray());
         Assert.False(invocationCounts.ContainsKey(BrainSlotRoles.CuriosityEngine));
-        Assert.DoesNotContain("temperature", votingPrompts.Single(item => item.Role == BrainSlotRoles.LeftHemisphere).Prompt, StringComparison.OrdinalIgnoreCase);
-        Assert.Null(votingPrompts.Single(item => item.Role == BrainSlotRoles.LeftHemisphere).Temperature);
-        Assert.Equal(0.0, votingPrompts.Single(item => item.Role == BrainSlotRoles.RightHemisphere).Temperature);
+        Assert.DoesNotContain("temperature", votingPrompts.Single(item => item.Role == BrainSlotRoles.Creativity).Prompt, StringComparison.OrdinalIgnoreCase);
+        Assert.Null(votingPrompts.Single(item => item.Role == BrainSlotRoles.Creativity).Temperature);
+        Assert.Equal(0.0, votingPrompts.Single(item => item.Role == BrainSlotRoles.Logic).Temperature);
     }
 
     /// <summary>Full orchestration rejects before provider calls when the workspace is not quad-ready.</summary>
@@ -406,7 +406,7 @@ public sealed class QuadBrainOrchestrationServiceTests
     public async Task ExecuteWeightUpdateAsync_WhenApproved_PersistsWeightsAndAudits()
     {
         using var db = CreateDbContext();
-        var slot = Slot(BrainSlotRoles.LeftHemisphere);
+        var slot = Slot(BrainSlotRoles.Creativity);
         slot.OrchestrationWeight = 1.0;
         slot.WeightVersion = 7;
         db.BrainSlotDefinitions.Add(slot);
@@ -416,8 +416,8 @@ public sealed class QuadBrainOrchestrationServiceTests
 
         var response = await service.ExecuteWeightUpdateAsync(new QuadBrainWeightUpdateRequest
         {
-            RoleWeights = new Dictionary<string, double> { [BrainSlotRoles.LeftHemisphere] = 1.5 },
-            ExpectedVersions = new Dictionary<string, int> { [BrainSlotRoles.LeftHemisphere] = 7 },
+            RoleWeights = new Dictionary<string, double> { [BrainSlotRoles.Creativity] = 1.5 },
+            ExpectedVersions = new Dictionary<string, int> { [BrainSlotRoles.Creativity] = 7 },
             ReasonText = "AoT-approved safety gate adjustment",
             ProposedBy = "Codex",
             AotApproved = true,
@@ -440,14 +440,14 @@ public sealed class QuadBrainOrchestrationServiceTests
     public async Task ExecuteWeightUpdateAsync_WhenApprovalMissing_DoesNotMutate()
     {
         using var db = CreateDbContext();
-        var slot = Slot(BrainSlotRoles.LeftHemisphere);
+        var slot = Slot(BrainSlotRoles.Creativity);
         db.BrainSlotDefinitions.Add(slot);
         await db.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         var service = CreateService(db, Substitute.For<IBrainSlotRegistryService>(), Substitute.For<IBrainSlotInvocationService>());
 
         var response = await service.ExecuteWeightUpdateAsync(new QuadBrainWeightUpdateRequest
         {
-            RoleWeights = new Dictionary<string, double> { [BrainSlotRoles.LeftHemisphere] = 2.0 },
+            RoleWeights = new Dictionary<string, double> { [BrainSlotRoles.Creativity] = 2.0 },
             ReasonText = "missing approvals",
             AotApproved = true,
             AdminApproved = false,
@@ -495,8 +495,8 @@ public sealed class QuadBrainOrchestrationServiceTests
             CredentialReference = "env:BRAIN_SLOT_TEST_KEY",
             PartyId = role switch
             {
-                BrainSlotRoles.LeftHemisphere => "brain-slot:left-hemisphere",
-                BrainSlotRoles.RightHemisphere => "brain-slot:right-hemisphere",
+                BrainSlotRoles.Creativity => "brain-slot:creativity",
+                BrainSlotRoles.Logic => "brain-slot:logic",
                 BrainSlotRoles.CuriosityEngine => "brain-slot:curiosity-engine",
                 BrainSlotRoles.ArbiterOfTruth => "brain-slot:arbiter-of-truth",
                 _ => "brain-slot:unknown",

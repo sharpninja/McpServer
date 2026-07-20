@@ -423,7 +423,7 @@
   Scope: layer-1+
   **Acceptance Criteria:**
   - [x] BrainSlotInvocationTransactionTests covers disabled gates, failed commits, delayed commits, and committed output return. (evidence: BrainSlotInvocationTransactionTests)
-- TEST-MCP-179: Curiosity admission coverage SHALL prove only CuriosityEngine can request GraphRAG/context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache/GraphRAG, and Left/Right/Arbiter invocations never mutate cache.
+- TEST-MCP-179: Curiosity admission coverage SHALL prove only CuriosityEngine can request GraphRAG/context admission, admission happens only after committed subscriber acknowledgement, failed commits do not inject model output into cache/GraphRAG, and Creativity/Logic/Arbiter invocations never mutate cache.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [x] BrainSlotInvocationTransactionTests and BrainSlotContainmentTests cover committed Curiosity admission and rejected non-Curiosity admission. (evidence: BrainSlotInvocationTransactionTests; BrainSlotContainmentTests)
@@ -435,7 +435,7 @@
   Scope: layer-1+
   **Acceptance Criteria:**
   - [x] QuadBrainOrchestrationServiceTests covers ready and non-ready orchestration paths. (evidence: QuadBrainOrchestrationServiceTests)
-- TEST-MCP-182: AoT reconciliation execution coverage SHALL prove AoT reconciliation executes through the ArbiterOfTruth slot, includes Left/Right/Curiosity evidence, returns committed output only after subscriber acknowledgement, and fails closed without fallback.
+- TEST-MCP-182: AoT reconciliation execution coverage SHALL prove AoT reconciliation executes through the ArbiterOfTruth slot, includes Creativity/Logic/Curiosity evidence, returns committed output only after subscriber acknowledgement, and fails closed without fallback.
   Scope: layer-1+
   **Acceptance Criteria:**
   - [x] QuadBrainOrchestrationServiceTests covers Arbiter invocation and committed final output. (evidence: QuadBrainOrchestrationServiceTests)
@@ -680,7 +680,7 @@ These tests must pass with mocks before the real client construction logic is fi
 - TEST-MCP-QBLIVE-001: Service-composition coverage of the real four-role Quad-Brain loop (QuadBrainOrchestrationService + BrainSlotInvocationService + BrainSlotRegistryService + in-memory key server), faking only IBrainSlotChatClientFactory and the committing transaction coordinator.
   Scope: layer-1+
   **Acceptance Criteria:**
-  - [x] All four roles are invoked in order (Left, Right, Curiosity, Arbiter) and the committed Arbiter decision is returned.
+  - [x] All four roles are invoked in order (Creativity, Logic, Curiosity, Arbiter) and the committed Arbiter decision is returned.
   - [x] A tool_calls Arbiter output is returned verbatim as the orchestration output.
   - [x] With only three roles seeded the loop rejects QuadNotReady without calling any brain.
   - [x] With execution disabled no brain is called and the loop rejects ExecutionDisabled.

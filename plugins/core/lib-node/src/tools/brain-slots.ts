@@ -2,7 +2,7 @@ import type { ToolDescriptor as Tool } from './tool-descriptor.js';
 import type { ReplBridge, ReplResponse } from '../transport/repl-bridge.js';
 import { cacheDelete, cacheWrite } from '../cache/cache-manager.js';
 
-const BRAIN_SLOT_ROLES = ['LeftHemisphere', 'RightHemisphere', 'CuriosityEngine', 'ArbiterOfTruth'] as const;
+const BRAIN_SLOT_ROLES = ['Creativity', 'Logic', 'CuriosityEngine', 'ArbiterOfTruth'] as const;
 const BRAIN_SLOT_PROVIDERS = ['OpenAI', 'OpenAICompatible'] as const;
 
 export const brainSlotTools: Tool[] = [
@@ -136,19 +136,19 @@ export const brainSlotTools: Tool[] = [
   },
   {
     name: 'brain_slot_aot_reconcile',
-    description: 'Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.',
+    description: 'Run Arbiter-of-Truth reconciliation over Creativity, Logic, and Curiosity outputs.',
     inputSchema: {
       type: 'object',
       properties: {
         workspacePath: { type: 'string', description: 'Workspace path' },
         input: { type: 'string', description: 'Original input prompt' },
-        leftOutput: { type: 'string', description: 'Committed LeftHemisphere output' },
-        rightOutput: { type: 'string', description: 'Committed RightHemisphere output' },
+        creativityOutput: { type: 'string', description: 'Committed Creativity output' },
+        logicOutput: { type: 'string', description: 'Committed Logic output' },
         curiosityOutput: { type: 'string', description: 'Committed CuriosityEngine output' },
         turnId: { type: 'string', description: 'Owning session-log turn id' },
         metadataJson: { type: 'string', description: 'JSON object of string metadata' },
       },
-      required: ['workspacePath', 'input', 'leftOutput', 'rightOutput', 'curiosityOutput'],
+      required: ['workspacePath', 'input', 'creativityOutput', 'logicOutput', 'curiosityOutput'],
     },
   },
   {

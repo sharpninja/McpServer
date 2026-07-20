@@ -269,13 +269,13 @@ public sealed class AotReconciliationRequest
     [JsonPropertyName("input")]
     public string Input { get; set; } = string.Empty;
 
-    /// <summary>LeftHemisphere committed output.</summary>
-    [JsonPropertyName("leftOutput")]
-    public string LeftOutput { get; set; } = string.Empty;
+    /// <summary>Creativity committed output.</summary>
+    [JsonPropertyName("creativityOutput")]
+    public string CreativityOutput { get; set; } = string.Empty;
 
-    /// <summary>RightHemisphere committed output.</summary>
-    [JsonPropertyName("rightOutput")]
-    public string RightOutput { get; set; } = string.Empty;
+    /// <summary>Logic committed output.</summary>
+    [JsonPropertyName("logicOutput")]
+    public string LogicOutput { get; set; } = string.Empty;
 
     /// <summary>CuriosityEngine committed output.</summary>
     [JsonPropertyName("curiosityOutput")]

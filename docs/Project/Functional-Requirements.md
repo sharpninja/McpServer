@@ -972,7 +972,7 @@ Scope: layer-1+
 
 ## FR-MCP-129 Durable external brain-slot registry and live invocation
 
-The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth, including CRUD, readiness status projection, and individually gated live model invocation.
+The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for Creativity, Logic, CuriosityEngine, and ArbiterOfTruth, including CRUD, readiness status projection, and individually gated live model invocation.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Brain-slot definitions are durable CRUD records scoped by workspace and role.
@@ -982,6 +982,7 @@ Scope: layer-1+
 - [x] REST, client, and STDIO/MCP surfaces expose list/get/upsert/delete/enable/disable/status/invoke parity.
 - [x] Invocation is rejected unless brain-slot execution is enabled, the slot is enabled, endpoint policy passes, credentials resolve, and required turn transactions are enabled.
 - [x] No implicit fallback model is used; fallback behavior remains fail-closed with structured reason codes unless a configured slot is invoked and committed.
+- [ ] Each role (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) MAY be configured with its own independent provider, model, and endpoint (best-of-breed per function); no single shared model is required across roles.
 
 ## FR-MCP-130 Transaction-gated Curiosity external result admission
 
@@ -991,7 +992,7 @@ Scope: layer-1+
 - [x] No model output is returned to the caller until the subscriber commit succeeds.
 - [x] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
 - [x] Only CuriosityEngine may request GraphRAG/context admission.
-- [x] Left, Right, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
+- [x] Creativity, Logic, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
 - [x] Curiosity admission records the committed transaction and admission metadata for audit.
 
 ## FR-MCP-131 Quad containment and authorization boundary
@@ -1026,11 +1027,11 @@ Scope: layer-1+
 
 ## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
 
-The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including Creativity, Logic, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
-- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
+- [x] Creativity, Logic, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
 - [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
 - [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
 
@@ -1364,7 +1365,7 @@ Scope: layer-1+
 
 ## FR-MCP-QBEXEC-003 Full-fidelity inter-brain session logging
 
-QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
+QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Each brain-slot invocation writes full prompt + full output text to the session log (not only SHA-256 hashes), under the correct TurnId.
@@ -1384,7 +1385,7 @@ Scope: layer-1+
 
 ## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
 
-The server provisions the four GLOBAL Quad-Brain roles (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, as a single global set. The /v1 OpenAI-compatible endpoint resolves the caller workspace from its token to scope server-side internal-tool mutations, not brain-slot visibility (brains are global).
+The server provisions the four GLOBAL Quad-Brain roles (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, as a single global set. The /v1 OpenAI-compatible endpoint resolves the caller workspace from its token to scope server-side internal-tool mutations, not brain-slot visibility (brains are global).
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] When Mcp:BrainSlots:ExecutionEnabled is true and Slots is populated, the startup seeder upserts and enables each configured slot as a single global set and the quad becomes ready in every workspace context.

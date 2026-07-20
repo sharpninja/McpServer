@@ -139,30 +139,30 @@ $slots = @(
         -SystemPrompt 'You are the CuriosityEngine researcher brain slot. Find missing evidence, challenge assumptions, surface unknowns, and label which findings are ready for GraphRAG admission after transaction commit.'
 
     New-BrainSlotAssignment `
-        -SlotId 'brain-slot-left-hemisphere-claude-code-opus-4-8' `
-        -Role 'LeftHemisphere' `
-        -RoleAlias 'LeftBrain' `
-        -DisplayName 'Left Brain - Claude Code CLI Opus 4.8' `
+        -SlotId 'brain-slot-creativity-claude-code-opus-4-8' `
+        -Role 'Creativity' `
+        -RoleAlias 'Creative' `
+        -DisplayName 'Creativity - Claude Code CLI Opus 4.8' `
         -AdapterName 'Claude Code CLI' `
         -ModelId 'claude-code-cli-opus-4.8' `
         -Endpoint $claudeEndpointValue `
         -EndpointEnvironmentVariable 'MCP_BRAIN_CLAUDE_CODE_ENDPOINT' `
         -CredentialReference $ClaudeCodeCredentialReference `
-        -PartyId 'brain-slot:left-hemisphere' `
-        -SystemPrompt 'You are the LeftHemisphere brain slot. Produce structured decomposition, deterministic checks, implementation sequencing, and risk-focused analysis.'
+        -PartyId 'brain-slot:creativity' `
+        -SystemPrompt 'You are the Creativity brain slot. Generate alternatives, spot pattern-level opportunities, explore creative solution paths, and call out assumptions that need validation.'
 
     New-BrainSlotAssignment `
-        -SlotId 'brain-slot-right-hemisphere-codex-cli-gpt-5-5' `
-        -Role 'RightHemisphere' `
-        -RoleAlias 'RightBrain' `
-        -DisplayName 'Right Brain - Codex CLI GPT-5.5' `
+        -SlotId 'brain-slot-logic-codex-cli-gpt-5-5' `
+        -Role 'Logic' `
+        -RoleAlias 'Reasoner' `
+        -DisplayName 'Logic - Codex CLI GPT-5.5' `
         -AdapterName 'Codex CLI' `
         -ModelId 'codex-cli-gpt-5.5' `
         -Endpoint $codexEndpointValue `
         -EndpointEnvironmentVariable 'MCP_BRAIN_CODEX_ENDPOINT' `
         -CredentialReference $CodexCredentialReference `
-        -PartyId 'brain-slot:right-hemisphere' `
-        -SystemPrompt 'You are the RightHemisphere brain slot. Generate alternatives, spot pattern-level opportunities, explore creative solution paths, and call out assumptions that need validation.'
+        -PartyId 'brain-slot:logic' `
+        -SystemPrompt 'You are the Logic brain slot. Produce structured decomposition, deterministic checks, implementation sequencing, and risk-focused analysis.'
 )
 
 $document = [pscustomobject][ordered]@{
@@ -198,8 +198,8 @@ $document = [pscustomobject][ordered]@{
     applyOrder = @(
         'brain-slot-arbiter-of-truth-grok-build',
         'brain-slot-curiosity-engine-claude-code-opus-4-8',
-        'brain-slot-left-hemisphere-claude-code-opus-4-8',
-        'brain-slot-right-hemisphere-codex-cli-gpt-5-5'
+        'brain-slot-creativity-claude-code-opus-4-8',
+        'brain-slot-logic-codex-cli-gpt-5-5'
     )
 }
 

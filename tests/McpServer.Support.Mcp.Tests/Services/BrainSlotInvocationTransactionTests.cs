@@ -37,7 +37,7 @@ public sealed class BrainSlotInvocationTransactionTests
     [Fact]
     public async Task InvokeAsync_WhenNonCuriosityRequestsGraphRag_ReturnsDeferredFeatureDisabled()
     {
-        using var fixture = InvocationFixture.Create(executionEnabled: true, Slot(BrainSlotRoles.LeftHemisphere));
+        using var fixture = InvocationFixture.Create(executionEnabled: true, Slot(BrainSlotRoles.Creativity));
 
         var response = await fixture.Service.InvokeAsync("slot-1", new BrainSlotInvokeRequest
         {
@@ -141,8 +141,8 @@ public sealed class BrainSlotInvocationTransactionTests
             CredentialReference = "env:BRAIN_SLOT_TEST_KEY",
             PartyId = role switch
             {
-                BrainSlotRoles.LeftHemisphere => "brain-slot:left-hemisphere",
-                BrainSlotRoles.RightHemisphere => "brain-slot:right-hemisphere",
+                BrainSlotRoles.Creativity => "brain-slot:creativity",
+                BrainSlotRoles.Logic => "brain-slot:logic",
                 BrainSlotRoles.CuriosityEngine => "brain-slot:curiosity-engine",
                 BrainSlotRoles.ArbiterOfTruth => "brain-slot:arbiter-of-truth",
                 _ => "brain-slot:unknown",

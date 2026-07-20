@@ -44,27 +44,27 @@ public sealed class QuadBrainSlotConfigurationTests
 
         AssertSlot(
             slots,
-            role: "LeftHemisphere",
-            roleAlias: "LeftBrain",
+            role: "Creativity",
+            roleAlias: "Creative",
             assignedRuntime: "Claude Code CLI",
             modelId: "claude-code-cli-opus-4.8",
-            slotId: "brain-slot-left-hemisphere-claude-code-opus-4-8",
+            slotId: "brain-slot-creativity-claude-code-opus-4-8",
             endpoint: "http://127.0.0.1:8312/v1",
             endpointEnvironmentVariable: "MCP_BRAIN_CLAUDE_CODE_ENDPOINT",
             credentialReference: "env:MCP_BRAIN_CLAUDE_CODE_API_KEY",
-            partyId: "brain-slot:left-hemisphere");
+            partyId: "brain-slot:creativity");
 
         AssertSlot(
             slots,
-            role: "RightHemisphere",
-            roleAlias: "RightBrain",
+            role: "Logic",
+            roleAlias: "Reasoner",
             assignedRuntime: "Codex CLI",
             modelId: "codex-cli-gpt-5.5",
-            slotId: "brain-slot-right-hemisphere-codex-cli-gpt-5-5",
+            slotId: "brain-slot-logic-codex-cli-gpt-5-5",
             endpoint: "http://127.0.0.1:8313/v1",
             endpointEnvironmentVariable: "MCP_BRAIN_CODEX_ENDPOINT",
             credentialReference: "env:MCP_BRAIN_CODEX_API_KEY",
-            partyId: "brain-slot:right-hemisphere");
+            partyId: "brain-slot:logic");
     }
 
     /// <summary>The generator script builds the YAML artifact through PowerShell object serialization.</summary>
@@ -114,8 +114,8 @@ public sealed class QuadBrainSlotConfigurationTests
             [
                 "brain-slot-arbiter-of-truth-grok-build",
                 "brain-slot-curiosity-engine-claude-code-opus-4-8",
-                "brain-slot-left-hemisphere-claude-code-opus-4-8",
-                "brain-slot-right-hemisphere-codex-cli-gpt-5-5",
+                "brain-slot-creativity-claude-code-opus-4-8",
+                "brain-slot-logic-codex-cli-gpt-5-5",
             ],
             applyOrder);
     }

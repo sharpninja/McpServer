@@ -25,7 +25,7 @@ public sealed class BrainSlotClientTests
         var handler = new MockHttpHandler(
             HttpStatusCode.OK,
             """
-            [{"slotId":"left-main","role":"LeftHemisphere","providerKind":"OpenAI","modelId":"gpt-5.4","credentialReference":"env:OPENAI_API_KEY","partyId":"brain-slot:left-hemisphere","enabled":true,"timeoutSeconds":30,"maxOutputTokens":1024,"createdAtUtc":"2026-06-15T00:00:00Z","updatedAtUtc":"2026-06-15T00:00:00Z"}]
+            [{"slotId":"left-main","role":"Creativity","providerKind":"OpenAI","modelId":"gpt-5.4","credentialReference":"env:OPENAI_API_KEY","partyId":"brain-slot:creativity","enabled":true,"timeoutSeconds":30,"maxOutputTokens":1024,"createdAtUtc":"2026-06-15T00:00:00Z","updatedAtUtc":"2026-06-15T00:00:00Z"}]
             """);
         using var http = new HttpClient(handler);
         var client = new BrainSlotClient(http, DefaultOptions);
@@ -33,7 +33,7 @@ public sealed class BrainSlotClientTests
         var result = await client.ListAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Single(result);
-        Assert.Equal("LeftHemisphere", result[0].Role);
+        Assert.Equal("Creativity", result[0].Role);
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
         Assert.Equal("http://localhost:7147/mcpserver/brain-slots", handler.LastRequest.RequestUri!.ToString());
         Assert.True(handler.LastRequest.Headers.Contains("X-Workspace-Path"));
@@ -147,14 +147,14 @@ public sealed class BrainSlotClientTests
         var result = await client.ReconcileAotAsync(new AotReconciliationRequest
         {
             Input = "decide",
-            LeftOutput = "left",
-            RightOutput = "right",
+            CreativityOutput = "left",
+            LogicOutput = "right",
             CuriosityOutput = "curiosity",
         }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal("approved", result.Output);
         Assert.Equal("http://localhost:7147/mcpserver/brain-slots/aot/reconcile", handler.LastRequest!.RequestUri!.ToString());
-        Assert.Contains("\"leftOutput\":\"left\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"creativityOutput\":\"left\"", handler.LastRequestBody, StringComparison.Ordinal);
     }
 
     /// <summary>UpdateWeightsAsync posts safety-gated weight updates to the weight route.</summary>
@@ -171,8 +171,8 @@ public sealed class BrainSlotClientTests
 
         var result = await client.UpdateWeightsAsync(new QuadBrainWeightUpdateRequest
         {
-            RoleWeights = new Dictionary<string, double> { ["LeftHemisphere"] = 1.2 },
-            ExpectedVersions = new Dictionary<string, int> { ["LeftHemisphere"] = 0 },
+            RoleWeights = new Dictionary<string, double> { ["Creativity"] = 1.2 },
+            ExpectedVersions = new Dictionary<string, int> { ["Creativity"] = 0 },
             ReasonText = "approved",
             AotApproved = true,
             AdminApproved = true,
@@ -181,6 +181,6 @@ public sealed class BrainSlotClientTests
 
         Assert.Equal("committed", result.Status);
         Assert.Equal("http://localhost:7147/mcpserver/brain-slots/weights/update", handler.LastRequest!.RequestUri!.ToString());
-        Assert.Contains("\"roleWeights\":{\"LeftHemisphere\":1.2}", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"roleWeights\":{\"Creativity\":1.2}", handler.LastRequestBody, StringComparison.Ordinal);
     }
 }

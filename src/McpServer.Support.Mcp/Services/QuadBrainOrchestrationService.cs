@@ -62,36 +62,36 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
             return RejectOrchestration(BrainSlotReasonCodes.QuadNotReady, started, []);
 
         var roleResults = new List<QuadBrainRoleResult>();
-        var leftSlot = slots[BrainSlotRoles.LeftHemisphere];
-        var rightSlot = slots[BrainSlotRoles.RightHemisphere];
-        var leftTask = InvokeRoleAsync(
-                leftSlot,
-                BuildRolePrompt(BrainSlotRoles.LeftHemisphere, request.Input, slots[BrainSlotRoles.LeftHemisphere]),
+        var creativitySlot = slots[BrainSlotRoles.Creativity];
+        var logicSlot = slots[BrainSlotRoles.Logic];
+        var creativityTask = InvokeRoleAsync(
+                creativitySlot,
+                BuildRolePrompt(BrainSlotRoles.Creativity, request.Input, slots[BrainSlotRoles.Creativity]),
                 request,
                 admitToGraphRag: false,
                 cancellationToken);
-        var rightTask = InvokeRoleAsync(
-                rightSlot,
-                BuildRolePrompt(BrainSlotRoles.RightHemisphere, request.Input, slots[BrainSlotRoles.RightHemisphere]),
+        var logicTask = InvokeRoleAsync(
+                logicSlot,
+                BuildRolePrompt(BrainSlotRoles.Logic, request.Input, slots[BrainSlotRoles.Logic]),
                 request,
                 admitToGraphRag: false,
                 cancellationToken);
-        await Task.WhenAll(leftTask, rightTask).ConfigureAwait(false);
+        await Task.WhenAll(creativityTask, logicTask).ConfigureAwait(false);
 
-        var left = await leftTask.ConfigureAwait(false);
-        var right = await rightTask.ConfigureAwait(false);
-        roleResults.Add(ToRoleResult(left, leftSlot));
-        roleResults.Add(ToRoleResult(right, rightSlot));
-        if (!IsTransactionCommitted(left))
-            return RejectOrchestration(left.Reason, started, roleResults);
-        if (!IsTransactionCommitted(right))
-            return RejectOrchestration(right.Reason, started, roleResults);
+        var creativity = await creativityTask.ConfigureAwait(false);
+        var logic = await logicTask.ConfigureAwait(false);
+        roleResults.Add(ToRoleResult(creativity, creativitySlot));
+        roleResults.Add(ToRoleResult(logic, logicSlot));
+        if (!IsTransactionCommitted(creativity))
+            return RejectOrchestration(creativity.Reason, started, roleResults);
+        if (!IsTransactionCommitted(logic))
+            return RejectOrchestration(logic.Reason, started, roleResults);
 
-        if (!HasValidOutput(left) && !HasValidOutput(right))
+        if (!HasValidOutput(creativity) && !HasValidOutput(logic))
         {
             var curiosity = await InvokeRoleAsync(
                     slots[BrainSlotRoles.CuriosityEngine],
-                    BuildCuriosityEscalationPrompt(request.Input, left, right, slots[BrainSlotRoles.CuriosityEngine]),
+                    BuildCuriosityEscalationPrompt(request.Input, creativity, logic, slots[BrainSlotRoles.CuriosityEngine]),
                     request,
                     request.AdmitCuriosityToGraphRag,
                     cancellationToken)
@@ -106,8 +106,8 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         var reconciliation = await ExecuteAotReconciliationAsync(new AotReconciliationRequest
         {
             Input = request.Input,
-            LeftOutput = left.Output ?? string.Empty,
-            RightOutput = right.Output ?? string.Empty,
+            CreativityOutput = creativity.Output ?? string.Empty,
+            LogicOutput = logic.Output ?? string.Empty,
             TurnId = request.TurnId,
             Metadata = AddMetadata(request.Metadata, "quadOperation", "full-orchestration"),
         }, cancellationToken).ConfigureAwait(false);
@@ -118,34 +118,34 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
             return RejectOrchestration(reconciliation.Reason, started, roleResults);
         if (IsAotSemanticRejection(reconciliation.Output))
         {
-            var voteLeftTask = InvokeRoleAsync(
-                    leftSlot,
-                    BuildVotingPrompt(BrainSlotRoles.LeftHemisphere, request.Input, left.Output, right.Output, reconciliation.Output, leftSlot),
+            var voteCreativityTask = InvokeRoleAsync(
+                    creativitySlot,
+                    BuildVotingPrompt(BrainSlotRoles.Creativity, request.Input, creativity.Output, logic.Output, reconciliation.Output, creativitySlot),
                     request,
                     admitToGraphRag: false,
                     cancellationToken);
-            var voteRightTask = InvokeRoleAsync(
-                    rightSlot,
-                    BuildVotingPrompt(BrainSlotRoles.RightHemisphere, request.Input, left.Output, right.Output, reconciliation.Output, rightSlot),
+            var voteLogicTask = InvokeRoleAsync(
+                    logicSlot,
+                    BuildVotingPrompt(BrainSlotRoles.Logic, request.Input, creativity.Output, logic.Output, reconciliation.Output, logicSlot),
                     request,
                     admitToGraphRag: false,
                     cancellationToken);
-            await Task.WhenAll(voteLeftTask, voteRightTask).ConfigureAwait(false);
+            await Task.WhenAll(voteCreativityTask, voteLogicTask).ConfigureAwait(false);
 
-            var voteLeft = await voteLeftTask.ConfigureAwait(false);
-            var voteRight = await voteRightTask.ConfigureAwait(false);
-            roleResults.Add(ToRoleResult(voteLeft, leftSlot));
-            roleResults.Add(ToRoleResult(voteRight, rightSlot));
-            if (!HasValidOutput(voteLeft))
-                return RejectOrchestration(voteLeft.Reason, started, roleResults);
-            if (!HasValidOutput(voteRight))
-                return RejectOrchestration(voteRight.Reason, started, roleResults);
+            var voteCreativity = await voteCreativityTask.ConfigureAwait(false);
+            var voteLogic = await voteLogicTask.ConfigureAwait(false);
+            roleResults.Add(ToRoleResult(voteCreativity, creativitySlot));
+            roleResults.Add(ToRoleResult(voteLogic, logicSlot));
+            if (!HasValidOutput(voteCreativity))
+                return RejectOrchestration(voteCreativity.Reason, started, roleResults);
+            if (!HasValidOutput(voteLogic))
+                return RejectOrchestration(voteLogic.Reason, started, roleResults);
 
             reconciliation = await ExecuteAotReconciliationAsync(new AotReconciliationRequest
             {
                 Input = request.Input,
-                LeftOutput = voteLeft.Output ?? string.Empty,
-                RightOutput = voteRight.Output ?? string.Empty,
+                CreativityOutput = voteCreativity.Output ?? string.Empty,
+                LogicOutput = voteLogic.Output ?? string.Empty,
                 TurnId = request.TurnId,
                 Metadata = AddMetadata(request.Metadata, "quadOperation", "voting-reconciliation"),
             }, cancellationToken).ConfigureAwait(false);
@@ -183,7 +183,7 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         ArgumentNullException.ThrowIfNull(request);
         var started = DateTimeOffset.UtcNow;
         if (string.IsNullOrWhiteSpace(request.Input)
-            || (string.IsNullOrWhiteSpace(request.LeftOutput) && string.IsNullOrWhiteSpace(request.RightOutput)))
+            || (string.IsNullOrWhiteSpace(request.CreativityOutput) && string.IsNullOrWhiteSpace(request.LogicOutput)))
         {
             return RejectAot(BrainSlotReasonCodes.ValidationFailed, started);
         }
@@ -380,8 +380,8 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
 
     private static string BuildCuriosityEscalationPrompt(
         string input,
-        BrainSlotInvokeResponse left,
-        BrainSlotInvokeResponse right,
+        BrainSlotInvokeResponse creativity,
+        BrainSlotInvokeResponse logic,
         BrainSlotDefinitionEntity slot)
         => $"""
            Quad-Brain role: {BrainSlotRoles.CuriosityEngine}
@@ -391,15 +391,15 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
            Original input:
            {input}
 
-           LeftHemisphere produced no valid committed user response.
-           Left status: {left.Status}
-           Left output:
-           {left.Output}
+           Creativity produced no valid committed user response.
+           Creativity status: {creativity.Status}
+           Creativity output:
+           {creativity.Output}
 
-           RightHemisphere produced no valid committed user response.
-           Right status: {right.Status}
-           Right output:
-           {right.Output}
+           Logic produced no valid committed user response.
+           Logic status: {logic.Status}
+           Logic output:
+           {logic.Output}
 
            Evaluate whether the user appears frustrated by previous responses and identify any deeper research or context that should be admitted for a later turn. Do not answer the user directly.
            """;
@@ -421,22 +421,22 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
            Original input:
            {request.Input}
 
-           LeftHemisphere committed analysis:
-           {request.LeftOutput}
+           Creativity committed analysis:
+           {request.CreativityOutput}
 
-           RightHemisphere committed analysis:
-           {request.RightOutput}
+           Logic committed analysis:
+           {request.LogicOutput}
            {curiositySection}
 
-           Reconcile the evidence, enforce the user's directive, identify any material uncertainty, and return the final decision. You may return the left response, the right response, or a combined response. If neither hemisphere response is valid enough to answer the user, begin the output with "REJECT:" so the runtime can start the voting/reconciliation mechanism.
+           Reconcile the evidence, enforce the user's directive, identify any material uncertainty, and return the final decision. You may return the creativity response, the logic response, or a combined response. If neither role response is valid enough to answer the user, begin the output with "REJECT:" so the runtime can start the voting/reconciliation mechanism.
            """;
     }
 
     private static string BuildVotingPrompt(
         string role,
         string input,
-        string? leftOutput,
-        string? rightOutput,
+        string? creativityOutput,
+        string? logicOutput,
         string? arbiterRejection,
         BrainSlotDefinitionEntity slot)
         => $"""
@@ -449,16 +449,16 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
            Original input:
            {input}
 
-           Initial LeftHemisphere response:
-           {leftOutput}
+           Initial Creativity response:
+           {creativityOutput}
 
-           Initial RightHemisphere response:
-           {rightOutput}
+           Initial Logic response:
+           {logicOutput}
 
            ArbiterOfTruth rejection:
            {arbiterRejection}
 
-           Vote on whether the final answer should use Left, Right, a combined answer, or remain rejected. Return only revised evidence for ArbiterOfTruth; do not answer the user directly.
+           Vote on whether the final answer should use Creativity, Logic, a combined answer, or remain rejected. Return only revised evidence for ArbiterOfTruth; do not answer the user directly.
            """;
 
     private static QuadBrainRoleResult ToRoleResult(BrainSlotInvokeResponse response, BrainSlotDefinitionEntity slot)
@@ -701,15 +701,15 @@ public sealed class QuadBrainOrchestrationService : IQuadBrainOrchestrationServi
         => (value <= 0 ? 1.0 : value).ToString("0.####", System.Globalization.CultureInfo.InvariantCulture);
 
     private static double? RoleTemperature(string role)
-        => string.Equals(role, BrainSlotRoles.RightHemisphere, StringComparison.Ordinal)
+        => string.Equals(role, BrainSlotRoles.Logic, StringComparison.Ordinal)
             ? 0.0
             : null;
 
     private static string RoleDescription(string role)
         => role switch
         {
-            BrainSlotRoles.LeftHemisphere => "Creative left-brain analyst; emphasize creativity, generative options, and novel solution paths.",
-            BrainSlotRoles.RightHemisphere => "Absolute accuracy right-brain analyst; emphasize exactness, verification, and factual correctness.",
+            BrainSlotRoles.Creativity => "Generative analyst; emphasize creativity, generative options, and novel solution paths.",
+            BrainSlotRoles.Logic => "Deterministic logic analyst; emphasize logical reasoning, deduction, inference, and validity.",
             BrainSlotRoles.CuriosityEngine => "Curious researcher; investigate frustration signals and deeper context without directly answering the user.",
             BrainSlotRoles.ArbiterOfTruth => "Arbiter of truth for code tasks and enforcer of rules for all tasks.",
             _ => "Quad-Brain specialist.",

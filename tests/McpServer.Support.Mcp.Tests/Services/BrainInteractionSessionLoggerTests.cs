@@ -27,7 +27,7 @@ public sealed class BrainInteractionSessionLoggerTests
             .Returns(2);
         var sut = CreateSut();
 
-        await sut.LogInteractionAsync("QBAgent", "S", "T", "LeftHemisphere", "the full prompt", "the full output", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await sut.LogInteractionAsync("QBAgent", "S", "T", "Creativity", "the full prompt", "the full output", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         await _sessionLog.Received(1).AppendProcessingDialogAsync(
             "QBAgent", "S", "T",
@@ -36,7 +36,7 @@ public sealed class BrainInteractionSessionLoggerTests
                 && items.Count == 2
                 && items[0].Content!.Contains("the full prompt", StringComparison.Ordinal)
                 && items[1].Content!.Contains("the full output", StringComparison.Ordinal)
-                && items[0].Content!.Contains("LeftHemisphere", StringComparison.Ordinal)),
+                && items[0].Content!.Contains("Creativity", StringComparison.Ordinal)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 

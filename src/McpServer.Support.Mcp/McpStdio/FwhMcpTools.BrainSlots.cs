@@ -45,7 +45,7 @@ public sealed partial class FwhMcpTools
     public async Task<string> BrainSlotUpsert(
         [Description("Slot id")] string slotId,
         [Description("Workspace path (required)")] string workspacePath,
-        [Description("Role: LeftHemisphere, RightHemisphere, CuriosityEngine, or ArbiterOfTruth")] string role,
+        [Description("Role: Creativity, Logic, CuriosityEngine, or ArbiterOfTruth")] string role,
         [Description("Provider kind: OpenAI or OpenAICompatible")] string providerKind,
         [Description("Model id")] string modelId,
         [Description("Credential reference using env:, config:, or file:")] string credentialReference,
@@ -215,12 +215,12 @@ public sealed partial class FwhMcpTools
     }
 
     /// <summary>Runs Arbiter-of-Truth reconciliation over committed role evidence.</summary>
-    [McpServerTool(Name = "brain_slot_aot_reconcile"), Description("Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.")]
+    [McpServerTool(Name = "brain_slot_aot_reconcile"), Description("Run Arbiter-of-Truth reconciliation over Creativity, Logic, and Curiosity outputs.")]
     public async Task<string> BrainSlotAotReconcile(
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Original input prompt")] string input,
-        [Description("Committed LeftHemisphere output")] string leftOutput,
-        [Description("Committed RightHemisphere output")] string rightOutput,
+        [Description("Committed Creativity output")] string creativityOutput,
+        [Description("Committed Logic output")] string logicOutput,
         [Description("Committed CuriosityEngine output")] string curiosityOutput,
         [Description("Owning session-log turn id")] string? turnId = null,
         [Description("Optional JSON object of string metadata")] string? metadataJson = null,
@@ -233,8 +233,8 @@ public sealed partial class FwhMcpTools
         return SerializeJson(await _quadBrainOrchestration.ExecuteAotReconciliationAsync(new AotReconciliationRequest
         {
             Input = input,
-            LeftOutput = leftOutput,
-            RightOutput = rightOutput,
+            CreativityOutput = creativityOutput,
+            LogicOutput = logicOutput,
             CuriosityOutput = curiosityOutput,
             TurnId = turnId,
             Metadata = ParseMetadata(metadataJson),

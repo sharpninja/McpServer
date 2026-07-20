@@ -244,7 +244,7 @@
       "parameters": {
         "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
         "slotId": { "type": "string", "required": true, "description": "Brain slot id" },
-        "role": { "type": "string", "required": true, "enum": ["LeftHemisphere", "RightHemisphere", "CuriosityEngine", "ArbiterOfTruth"], "description": "Quad role served by the slot" },
+        "role": { "type": "string", "required": true, "enum": ["Creativity", "Logic", "CuriosityEngine", "ArbiterOfTruth"], "description": "Quad role served by the slot" },
         "providerKind": { "type": "string", "required": true, "enum": ["OpenAI", "OpenAICompatible"], "description": "Provider kind" },
         "modelId": { "type": "string", "required": true, "description": "Provider model identifier" },
         "credentialReference": { "type": "string", "required": true, "pattern": "^(env|config|file):.+", "description": "Credential reference using env:, config:, or file:" },
@@ -323,12 +323,12 @@
     },
     {
       "name": "brain_slot_aot_reconcile",
-      "description": "Run Arbiter-of-Truth reconciliation over Left, Right, and Curiosity outputs.",
+      "description": "Run Arbiter-of-Truth reconciliation over Creativity, Logic, and Curiosity outputs.",
       "parameters": {
         "workspacePath": { "type": "string", "required": true, "description": "Workspace path (required)" },
         "input": { "type": "string", "required": true, "description": "Original input prompt" },
-        "leftOutput": { "type": "string", "required": true, "description": "Committed LeftHemisphere output" },
-        "rightOutput": { "type": "string", "required": true, "description": "Committed RightHemisphere output" },
+        "creativityOutput": { "type": "string", "required": true, "description": "Committed Creativity output" },
+        "logicOutput": { "type": "string", "required": true, "description": "Committed Logic output" },
         "curiosityOutput": { "type": "string", "required": true, "description": "Committed CuriosityEngine output" },
         "turnId": { "type": "string", "required": false, "description": "Owning session-log turn id" },
         "metadataJson": { "type": "string", "required": false, "description": "Optional JSON object of string metadata" }

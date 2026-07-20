@@ -23,7 +23,7 @@ public sealed class QuadBrainLiveOrchestrationTests
 {
     private const string WorkspacePath = @"F:\GitHub\McpServer";
 
-    /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Left, Right, and Arbiter in order.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Normal orchestration invokes Creativity, Logic, and Arbiter in order.</summary>
     [Fact]
     public async Task ExecuteFullOrchestrationAsync_WithRealServicesAndFakeBrains_CommitsArbiterDecision()
     {
@@ -39,10 +39,10 @@ public sealed class QuadBrainLiveOrchestrationTests
         Assert.Equal("final decision", response.Output);
         Assert.Equal(3, response.RoleResults.Count);
         Assert.Equal(
-            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+            [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth],
             response.RoleResults.Select(result => result.Role).ToArray());
         Assert.Equal(
-            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+            [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth],
             harness.Factory.InvokedRoles.ToArray());
     }
 
@@ -70,7 +70,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         using var harness = await LiveQuadHarness.CreateAsync(
             executionEnabled: true,
             arbiterOutput: "final decision",
-            emptyOutputRoles: [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere]).ConfigureAwait(true);
+            emptyOutputRoles: [BrainSlotRoles.Creativity, BrainSlotRoles.Logic]).ConfigureAwait(true);
 
         var response = await harness.Orchestration.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
         {
@@ -81,12 +81,12 @@ public sealed class QuadBrainLiveOrchestrationTests
         Assert.Equal("rejected", response.Status);
         Assert.Null(response.Output);
         Assert.Equal(
-            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine],
+            [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.CuriosityEngine],
             harness.Factory.InvokedRoles.ToArray());
         Assert.DoesNotContain(BrainSlotRoles.ArbiterOfTruth, harness.Factory.InvokedRoles);
     }
 
-    /// <summary>TEST-MCP-QBLIVE-001: Arbiter rejection triggers a Left/Right voting round before final response.</summary>
+    /// <summary>TEST-MCP-QBLIVE-001: Arbiter rejection triggers a Creativity/Logic voting round before final response.</summary>
     [Fact]
     public async Task ExecuteFullOrchestrationAsync_WhenArbiterRejectsInitialEvidence_RunsVotingRound()
     {
@@ -103,7 +103,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         Assert.Equal("committed", response.Status);
         Assert.Equal("final decision after voting", response.Output);
         Assert.Equal(
-            [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth, BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.ArbiterOfTruth],
+            [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth, BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.ArbiterOfTruth],
             harness.Factory.InvokedRoles.ToArray());
         Assert.DoesNotContain(BrainSlotRoles.CuriosityEngine, harness.Factory.InvokedRoles);
     }
@@ -115,7 +115,7 @@ public sealed class QuadBrainLiveOrchestrationTests
         using var harness = await LiveQuadHarness.CreateAsync(
             executionEnabled: true,
             arbiterOutput: "final decision",
-            seedRoles: [BrainSlotRoles.LeftHemisphere, BrainSlotRoles.RightHemisphere, BrainSlotRoles.CuriosityEngine]).ConfigureAwait(true);
+            seedRoles: [BrainSlotRoles.Creativity, BrainSlotRoles.Logic, BrainSlotRoles.CuriosityEngine]).ConfigureAwait(true);
 
         var response = await harness.Orchestration.ExecuteFullOrchestrationAsync(new QuadBrainOrchestrationRequest
         {

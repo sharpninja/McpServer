@@ -21,17 +21,17 @@ public sealed class BrainSlotRegistryServiceTests
     {
         using var fixture = RegistryFixture.Create();
         await fixture.Service.UpsertAsync("left-a", SlotRequest(
-                BrainSlotRoles.LeftHemisphere,
+                BrainSlotRoles.Creativity,
                 enabled: true,
-                partyId: "brain-slot:left-hemisphere-a"), cancellationToken: TestContext.Current.CancellationToken)
+                partyId: "brain-slot:creativity-a"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var ex = await Assert.ThrowsAsync<BrainSlotConflictException>(() =>
-            fixture.Service.UpsertAsync("left-b", SlotRequest(BrainSlotRoles.LeftHemisphere, enabled: true), cancellationToken: TestContext.Current.CancellationToken))
+            fixture.Service.UpsertAsync("left-b", SlotRequest(BrainSlotRoles.Creativity, enabled: true), cancellationToken: TestContext.Current.CancellationToken))
             .ConfigureAwait(true);
 
         Assert.Contains("replaceExisting=true", ex.Message, StringComparison.Ordinal);
-        Assert.Single(fixture.Db.BrainSlotDefinitions.Where(slot => slot.Enabled && slot.Role == BrainSlotRoles.LeftHemisphere));
+        Assert.Single(fixture.Db.BrainSlotDefinitions.Where(slot => slot.Enabled && slot.Role == BrainSlotRoles.Creativity));
     }
 
     /// <summary>replaceExisting=true disables the previous slot, disables its party, and audits the replacement.</summary>
@@ -40,21 +40,21 @@ public sealed class BrainSlotRegistryServiceTests
     {
         using var fixture = RegistryFixture.Create();
         await fixture.Service.UpsertAsync("left-a", SlotRequest(
-                BrainSlotRoles.LeftHemisphere,
+                BrainSlotRoles.Creativity,
                 enabled: true,
-                partyId: "brain-slot:left-hemisphere-a"), cancellationToken: TestContext.Current.CancellationToken)
+                partyId: "brain-slot:creativity-a"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         await fixture.Service.UpsertAsync("left-b", SlotRequest(
-                BrainSlotRoles.LeftHemisphere,
+                BrainSlotRoles.Creativity,
                 enabled: true,
                 replaceExisting: true,
-                partyId: "brain-slot:left-hemisphere-b"), cancellationToken: TestContext.Current.CancellationToken)
+                partyId: "brain-slot:creativity-b"), cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var rows = await fixture.Db.BrainSlotDefinitions
             .IgnoreQueryFilters()
-            .Where(slot => slot.Role == BrainSlotRoles.LeftHemisphere)
+            .Where(slot => slot.Role == BrainSlotRoles.Creativity)
             .OrderBy(slot => slot.SlotId)
             .ToListAsync(cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
@@ -64,8 +64,8 @@ public sealed class BrainSlotRegistryServiceTests
         Assert.Contains(fixture.Db.DataAuditLogs, log => log.Action == "replace" && log.EntityKey == "left-a");
 
         var disabledKey = await fixture.KeyServer.GetPartyKeyAsync(
-            "brain-slot:left-hemisphere-a",
-            "brain-slot:left-hemisphere-a:signing:1", cancellationToken: TestContext.Current.CancellationToken)
+            "brain-slot:creativity-a",
+            "brain-slot:creativity-a:signing:1", cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         Assert.NotNull(disabledKey);
         Assert.Equal("disabled", disabledKey!.Status);
@@ -120,7 +120,7 @@ public sealed class BrainSlotRegistryServiceTests
     public async Task UpsertAsync_WhenEndpointHostIsNotAllowlisted_RejectsSlot()
     {
         using var fixture = RegistryFixture.Create();
-        var request = SlotRequest(BrainSlotRoles.RightHemisphere, enabled: false);
+        var request = SlotRequest(BrainSlotRoles.Logic, enabled: false);
         request.ProviderKind = "OpenAICompatible";
         request.Endpoint = "https://models.example.test/v1";
 

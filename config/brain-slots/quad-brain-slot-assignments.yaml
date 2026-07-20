@@ -76,60 +76,60 @@ slots:
     systemPrompt: You are the CuriosityEngine researcher brain slot. Find missing evidence, challenge assumptions, surface unknowns, and label which findings are ready for GraphRAG admission after transaction commit.
     orchestrationWeight: 1
     replaceExisting: true
-- slotId: brain-slot-left-hemisphere-claude-code-opus-4-8
-  role: LeftHemisphere
-  roleAlias: LeftBrain
+- slotId: brain-slot-creativity-claude-code-opus-4-8
+  role: Creativity
+  roleAlias: Creative
   assignedRuntime: Claude Code CLI
   modelId: claude-code-cli-opus-4.8
   providerKind: OpenAICompatible
   endpoint: http://127.0.0.1:8312/v1
   endpointEnvironmentVariable: MCP_BRAIN_CLAUDE_CODE_ENDPOINT
   credentialReference: env:MCP_BRAIN_CLAUDE_CODE_API_KEY
-  partyId: brain-slot:left-hemisphere
+  partyId: brain-slot:creativity
   enabled: true
   replaceExisting: true
   upsertRequest:
-    role: LeftHemisphere
-    displayName: Left Brain - Claude Code CLI Opus 4.8
+    role: Creativity
+    displayName: Creativity - Claude Code CLI Opus 4.8
     providerKind: OpenAICompatible
     modelId: claude-code-cli-opus-4.8
     endpoint: http://127.0.0.1:8312/v1
     credentialReference: env:MCP_BRAIN_CLAUDE_CODE_API_KEY
-    partyId: brain-slot:left-hemisphere
+    partyId: brain-slot:creativity
     enabled: true
     timeoutSeconds: 180
     maxOutputTokens: 4096
-    systemPrompt: You are the LeftHemisphere brain slot. Produce structured decomposition, deterministic checks, implementation sequencing, and risk-focused analysis.
+    systemPrompt: You are the Creativity brain slot. Generate alternatives, spot pattern-level opportunities, explore creative solution paths, and call out assumptions that need validation.
     orchestrationWeight: 1
     replaceExisting: true
-- slotId: brain-slot-right-hemisphere-codex-cli-gpt-5-5
-  role: RightHemisphere
-  roleAlias: RightBrain
+- slotId: brain-slot-logic-codex-cli-gpt-5-5
+  role: Logic
+  roleAlias: Reasoner
   assignedRuntime: Codex CLI
   modelId: codex-cli-gpt-5.5
   providerKind: OpenAICompatible
   endpoint: http://127.0.0.1:8313/v1
   endpointEnvironmentVariable: MCP_BRAIN_CODEX_ENDPOINT
   credentialReference: env:MCP_BRAIN_CODEX_API_KEY
-  partyId: brain-slot:right-hemisphere
+  partyId: brain-slot:logic
   enabled: true
   replaceExisting: true
   upsertRequest:
-    role: RightHemisphere
-    displayName: Right Brain - Codex CLI GPT-5.5
+    role: Logic
+    displayName: Logic - Codex CLI GPT-5.5
     providerKind: OpenAICompatible
     modelId: codex-cli-gpt-5.5
     endpoint: http://127.0.0.1:8313/v1
     credentialReference: env:MCP_BRAIN_CODEX_API_KEY
-    partyId: brain-slot:right-hemisphere
+    partyId: brain-slot:logic
     enabled: true
     timeoutSeconds: 180
     maxOutputTokens: 4096
-    systemPrompt: You are the RightHemisphere brain slot. Generate alternatives, spot pattern-level opportunities, explore creative solution paths, and call out assumptions that need validation.
+    systemPrompt: You are the Logic brain slot. Produce structured decomposition, deterministic checks, implementation sequencing, and risk-focused analysis.
     orchestrationWeight: 1
     replaceExisting: true
 applyOrder:
 - brain-slot-arbiter-of-truth-grok-build
 - brain-slot-curiosity-engine-claude-code-opus-4-8
-- brain-slot-left-hemisphere-claude-code-opus-4-8
-- brain-slot-right-hemisphere-codex-cli-gpt-5-5
+- brain-slot-creativity-claude-code-opus-4-8
+- brain-slot-logic-codex-cli-gpt-5-5
