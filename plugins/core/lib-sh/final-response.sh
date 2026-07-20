@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 response="${1:-}"
 if [ -z "$response" ] && [ ! -t 0 ]; then
-    response="$(cat 2>/dev/null || true)"
+    response="$(cat 2>/dev/null | tr -d '\r' || true)"
 fi
 if [ -z "$response" ]; then
     response="Turn completed."
