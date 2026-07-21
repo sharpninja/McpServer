@@ -1056,7 +1056,7 @@ Scope: layer-1+
 
 ## FR-MCP-137 Quad Brain coding agent execution
 
-Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes coding tasks through QuadBrain orchestration, never bypassing the Quad Brain transaction/admission contract. ACID profile includes Quad Brain coding tool while excluding generic passthrough and other uncontrolled tools.
+RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified a hosted coding agent that reached QuadBrain orchestration through the mcp_quadbrain_coding_execute tool in the shared McpServer.McpAgent catalog. That tool is removed, because it advertised a QuadBrain capability to every hosted-agent host rather than to QBAgent alone, and it was already non-functional for QBAgent: QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail. Retired alongside TR-MCP-AGENT-016 and TEST-MCP-187. Replacement coverage is the absence suite under TEST-MCP-193. QuadBrain coding work continues server-side through POST /v1/chat/completions, the OpenAI-compatible endpoint QBAgent binds to with model id QuadBrain; that path is unchanged and separately covered. Corrected 2026-07-20 after an audit found this FR still describing removed behavior when its TR and TEST had already been retired.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
@@ -1098,6 +1098,16 @@ Scope: layer-1+
 ## FR-MCP-141 Service-account process environment fidelity
 
 When the server runs as a Windows service under a non-interactive account, child processes it launches shall resolve executables and environment the same way an interactive user session would. Executable resolution shall skip Microsoft\WindowsApps App-Execution-Alias stubs, which are zero-byte reparse points that fail with Win32Exception 1920 for service accounts. Tunnel providers shall apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the child process so provider configuration files resolve, and shall resolve the provider binary against that enriched PATH. A missing provider binary shall be reported at Warning with a message naming the service-account and Store-alias causes and the available remedies, not as an unexplained error. Recovered from origin/claude/busy-dubinsky (2026-04-04 to 2026-04-05), which registered no requirement of any kind.
+Scope: layer-1+
+
+## FR-MCP-142 QuadBrain is absent from every general agent surface
+
+No QuadBrain capability shall be exposed to general agents or to the agent plugins in any form. Absent, not gated: no brain-slot tool descriptors in the shared plugin cores, none advertised over the server MCP transports, no named client-passthrough route reaching BrainSlotClient, no QuadBrain-named tool in the shared hosted-agent catalog, and no brain-slot descriptor files in the shared mcps registry. QuadBrain remains reachable only as the OpenAI-compatible model at POST /v1/chat/completions, workspace-token authorized, which is the sole path QBAgent uses. Everything behind that endpoint stays server-side: QuadBrainOpenAiController, QuadBrainOpenAiChatService, QuadBrainOrchestrationService, the BrainSlot registry, invocation, credential, chat-client-factory and startup-seeder services, the BrainSlot storage entities and migrations, the QuadBrain tool interceptor, and config/brain-slots/quad-brain-slot-assignments.yaml. Evidence that motivated this requirement: the ClaudeCode session of 2026-07-20 could enumerate all eleven brain_slot tools from a general agent tool list, and plugins/core/lib-node/src/runtime/host-context.ts spread brainSlotTools into the ungated allToolDescriptors catalog advertised to every Node host plugin.
+Scope: layer-1+
+
+## FR-MCP-143 Session-log turns persist without a title and never lose a refined one
+
+A session-log turn shall persist end to end when its title is deliberately omitted, and a title the agent has refined shall never be overwritten by a stale local copy. Thirteen open triage reports (BUG-TRIAGE-086 through 101, excluding the already-closed 097) collapse into five root causes, of which two account for eleven of the reports. First, the plugin PowerShell core rejects an empty title at parameter binding even though TR-MCP-REPL-015 requires callers to omit the title so a stale cached one is not resubmitted, so appendDialog, appendActions, completeTurn and the supersede path all fail. Second, the typed client posts anonymous request bodies through a source-generated JSON context that has no metadata for compiler-generated types, so the dedicated retitle endpoints throw before reaching the server. The remaining three are the supersede path clobbering a server-refined title from the local cache, failTurn refusing to close a turn the plugin cache shows as active, and a storage outage leaving health reporting Healthy while every persistence call fails behind inconsistent error shapes.
 Scope: layer-1+
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
@@ -1600,6 +1610,11 @@ Scope: layer-1+
 ## FR-MCP-REPL-010 Plugin session-log title refinement surfaces
 
 The MCP REPL plugin SHALL expose setTurnTitle and setSessionTitle workflow methods that durably update the active turn's title and the session title through explicit server title-update paths, so an agent-refined title survives the whole-session re-submit the plugin issues on every subsequent persist. Scope: layer-1+. Acceptance Criteria: (1) workflow.sessionlog.setTurnTitle updates current-turn.yaml queryTitle and persists the new title to the server for the active turn; (2) workflow.sessionlog.setSessionTitle writes session-state.yaml title and persists the new session title to the server; (3) a subsequent supersede/complete/append whole-session re-submit does not revert either title.
+Scope: layer-1+
+
+## FR-MCP-REPL-011 Plugin failsafe queue drains instead of accumulating
+
+BUG-TRIAGE-097. The MCP plugin PowerShell runtime writes every session-log submit to a failsafe queue on disk before calling the backend, so a crash or an unreachable server cannot lose the turn. Until now nothing ever replayed those records: the queue only grew, and plugin Status reported pendingCount 0 while captured turns sat undrained (33 records in F:/GitHub/McpServer as of 2026-07-20, oldest 2026-07-14, eight added in a single session). An agent or operator MUST be able to get queued turns into the session log once the backend is reachable again, automatically on the first proven-reachable call and on demand through an explicit drain verb, without ever losing a record: a record leaves the queue only after its submission is confirmed, a record the backend rejects does not block the newer records behind it, and a record that cannot be replayed at all is set aside for inspection rather than deleted or retried forever. Plugin Status MUST report the real queue depth.
 Scope: layer-1+
 
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements

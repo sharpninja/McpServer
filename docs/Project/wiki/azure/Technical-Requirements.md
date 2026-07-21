@@ -244,7 +244,7 @@ Scope: layer-1+
 
 ## TR-MCP-AGENT-016
 
-**Hosted-agent Quad Brain coding adapter** — The McpServer.McpAgent package provides public DTOs, hosted-agent adapter functions, ACID allowlist membership, and typed runtime helpers that route coding requests to McpServerClient.BrainSlots.OrchestrateAsync with deterministic metadata and cancellation support.
+**Hosted-agent Quad Brain coding adapter** — RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified the mcp_quadbrain_coding_execute hosted-agent tool routing to POST mcpserver/brain-slots/orchestrate through McpQuadBrainCodingAgentRouter. Both the tool and the router are removed: the tool was registered into the shared McpServer.McpAgent catalog for every host, which violates the rule that no QuadBrain capability is exposed outside QBAgent, and it was already non-functional for QBAgent because QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail. Removed artifacts: McpHostedAgentToolAdapter tool registration and ExecuteQuadBrainCodingTaskAsync, IMcpHostedAgent.ExecuteQuadBrainCodingTaskAsync, McpHostedAgent.ExecuteQuadBrainCodingTaskAsync, QBAgentRuntime.ExecuteCodingTaskAsync and its codingTaskExecutor parameter, QBAgentDefinition allow-list entry, McpQuadBrainCodingAgentRouter.cs, and the McpQuadBrainCodingAgentRequest DTO. Server-side QuadBrain orchestration is unchanged and remains reachable only through POST /v1/chat/completions. Note that this is a public API break in the shared McpServer.McpAgent assembly, accepted deliberately as the intended consequence of the ruling.
 **Covered by:** FR: FR-MCP-137; TEST: TEST-MCP-187
 **Status:** pending
 Scope: layer-1+
@@ -560,6 +560,13 @@ Scope: layer-1+
 
 **clear-session skill content contract** — The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper (lib/repl-invoke.ps1 / Invoke-McpPlugin.ps1 or hooks/scripts/session-end.ps1 where present), never raw REST. AC2 - clear context best-effort programmatically (plugin cache/session-state flush), then fall back to a per-host manual clear command (/clear for Claude, /new for Codex/OpenCode, New Task for Cline, new chat for Copilot) and pause for user confirmation; never claim context cleared when only the user can do it. AC3 - reload the agent instruction file selected by host: CLAUDE.md for claude/claude-cowork, AGENTS.md otherwise, always after re-reading AGENTS-README-FIRST.yaml, carried verbatim. AC4 - execute the add-profile skill. AC5 - report a readiness summary stating whether context was actually cleared or awaits user action. The skill SHALL be PowerShell-only (no bash/node/.sh references) and present byte-identical in all 8 agent plugin repositories.
 **Covered by:** FR: FR-MCP-CLEARSESSION-001; TEST: TEST-MCP-CLEARSESSION-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-CLIENT-001
+
+**Typed client request bodies are registered for source-generated JSON** — Implements FR-MCP-143 and closes BUG-TRIAGE-088, 093, 095, and the client half of 090, 094, and 101. McpClientBase serializes every request through the source-generated McpClientJsonContext, whose TypeInfoResolver has no JsonTypeInfo for compiler-generated anonymous types. src/McpServer.Client/SessionLogClient.cs nevertheless posts anonymous bodies at line 160 (session lifecycle open, new { title, model }) and lines 236 and 247 (SetSessionTitleAsync and SetTurnTitleAsync, new { title }), so GetTypeInfo throws NotSupportedException and those endpoints never execute. Every request body in the typed client SHALL be a declared type carrying JsonPropertyName attributes and XML documentation, and SHALL be registered in McpClientJsonContext with JsonSerializable. The whole client SHALL be audited for the same pattern rather than only the three known sites, because this defect class was reported five separate times, and the audit result SHALL be reported. Coverage SHALL exercise the real McpClientJsonContext serialization path rather than a hand-rolled JsonSerializer call, so the test fails for the same reason production did.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
@@ -960,6 +967,13 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] WorkspaceReadinessHealthCheck is registered as AddCheck with "workspace-ready" tag on /ready endpoint.
 - [x] Returns Unhealthy when !WorkspaceTokenService.IsInitialized, when no enabled workspace is registered, or when primary workspace has no seeded token.
+
+## TR-MCP-HEALTH-003
+
+**Health reflects storage reachability and backend errors are typed** — Implements FR-MCP-143 and closes BUG-TRIAGE-096. GET /health is liveness-only (tags live: self plus FederationUpstreamHealthCheck) with no storage connectivity check, so when the database backend is unreachable the server still answers Healthy and echoes the trust nonce correctly while every persistence call fails. Observed live on 2026-07-20 when the SQL host was powered off: marker trust passed, then todo_list returned a raw SqlClient "Named Pipes Provider, error: 40" string, sessionlog_query returned a misleading "transient failure, consider EnableRetryOnFailure" hint, triage_report returned a bare "an error occurred", and the plugin wrapper returned an opaque 30-second timeout, so no caller could tell that storage was simply down. The server SHALL expose storage reachability on the health path, either by degrading the status or by an explicit storage field, WITHOUT breaking the nonce echo that marker trust bootstrap depends on. Backend-unavailable conditions SHALL surface as one typed error consistently across REST and the MCP tools, distinguishable from a malformed request. Coverage SHALL simulate an unreachable store and assert the misleading Healthy result before the fix.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-HELP-001
 
@@ -1627,6 +1641,13 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-QB-001
+
+**Remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog** — Implements FR-MCP-142. Four independent exposures were identified and all four SHALL be removed; removing only the first leaves QuadBrain reachable. (1) Shared Node plugin core: delete plugins/core/lib-node/src/tools/brain-slots.ts and tests/brain-slots.test.ts, remove the import at runtime/host-context.ts:15, the brainSlotTools spread at :40, the dispatch branch at :290, the public re-export at index.ts:49, and the brain_slot_status assertion at tests/host-context.test.ts:127, then rebuild dist because dist is gitignored and stale compiled output keeps exporting the tools. (2) Server MCP transports: delete src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.BrainSlots.cs, which declares all eleven brain_slot tools and is registered by assembly scan at Program.cs:706 WithToolsFromAssembly and by McpStdioHost, with zero identity filtering anywhere in the project, so every MCP client sees them; prune the brain-slot entries from docs/stdio-tool-contract.json and retire tests/McpServer.Support.Mcp.Tests/McpStdio/BrainSlotContractArtifactTests.cs, keeping the artifact for MemoryContractArtifactTests. (3) Named client passthrough: remove the BRAINSLOTS mapping at src/McpServer.Repl.Core/GenericClientPassthrough.cs:168 and its BrainSlot result-unwrapping cases, closing the client-invoke back door that survives tool removal. (4) Shared hosted-agent catalog: remove mcp_quadbrain_coding_execute from McpHostedAgentToolAdapter, IMcpHostedAgent, QBAgentDefinition, and McpQuadBrainCodingAgentRouter; it is advertised to every McpServer.McpAgent host and is already dead for QBAgent because QuadBrainInternalToolExecutor has no case for it. Also delete the eleven mcps/mcpserver/tools/brain_slot_*.json descriptors, which have no in-repo consumer. BrainSlotClient itself remains, because the server-side orchestration path and its tests use it; only the agent-reachable routes to it are removed.
+**Covered by:** FR: FR-MCP-142; TEST: TEST-MCP-193
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-QBAGENT-001
 
 **QBAgent marker bootstrap and graceful no-marker exit** — QBAgent startup resolves baseUrl and apiKey from the AGENTS-README-FIRST.yaml marker in the working directory (not from defaulted McpAgentOptions); binds the QuadBrain coding route to that endpoint with X-Api-Key auth; rejects/omits all non-QuadBrain surfaces; and when no marker file is found performs a clean graceful shutdown (defined exit, informational log, no endpoint contact).
@@ -1996,6 +2017,41 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-REPL-016
+
+**Failsafe queue drains oldest-first after a proven-reachable backend call** — BUG-TRIAGE-097. The plugin PowerShell runtime captures every session-log submit into the failsafe queue before the remote call but never replays it, so records accumulate forever (33 on disk in F:/GitHub/McpServer, oldest 2026-07-14). plugins/core/lib-ps/repl-invoke.ps1 MUST expose Invoke-ReplFailsafeDrain, which walks the failsafe directory oldest-first (the file name is prefixed with the UTC capture stamp, so a name sort is a chronological sort) and re-issues each record's captured method and params through Invoke-ReplRaw. A record MUST be deleted only after its submission succeeds; a record whose submission fails MUST stay on disk. client.SessionLog.SubmitAsync is an upsert keyed by sessionId plus requestId, so a replay is idempotent. A record rejected by the backend MUST NOT block the newer records behind it: the drain increments that record's drainAttempts counter and continues the walk. A transport-level failure (MCP_UNTRUSTED, mcpserver-repl not on PATH, timeout, refused connection) MUST abort the pass without consuming any attempt budget, because the backend and not the record is at fault. The drain MUST skip the record belonging to the submit currently in flight, so a drain triggered inside an active submit cannot double-submit or delete the live turn. The drain MUST be wired to the first successful Invoke-ReplRaw in the process (Invoke-ReplFailsafeDrainOnFirstSuccess, latched to run at most once and disabled by MCP_FAILSAFE_DRAIN_DISABLED=1) rather than to bootstrap: bootstrap only proves the marker file is fresh, does not prove the backend answers, and runs inside Invoke-ReplRaw, so draining there would recurse. Operators MUST be able to force a full pass with the plugin-local verb workflow.failsafe.drain (optional maxRecords and maxAttempts params), which prints the drain summary as YAML and exits non-zero only when the pass aborted.
+**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-017
+
+**Failsafe quarantine and truthful pending queue depth in plugin status** — BUG-TRIAGE-097. A failsafe record that cannot be replayed MUST be quarantined rather than retried forever or deleted, because a captured record can be the only copy of a turn. plugins/core/lib-ps/repl-invoke.ps1 MUST move a record to a quarantine subdirectory of the failsafe directory, next to a sibling .reason.txt naming the quarantine timestamp, the original path, and the reason, when the record is not readable YAML, when its root is not a mapping, when it has no method or no params, or when its drainAttempts counter has reached the attempt budget (default 5). Quarantined records MUST NOT be counted as live queue depth. plugins/core/lib-ps/resolve-cache-dir.ps1 MUST own the single resolution of the queue location (Get-McpFailsafeDir and Get-McpFailsafeQuarantineDir, honouring MCPSERVER_FAILSAFE_DIR then MCP_FAILSAFE_DIR then the workspace cache) so the writer, the drain, and the status reporter cannot disagree. plugins/core/lib-ps/mcp-status.ps1 MUST count the failsafe directory: pendingCount previously counted only the cache pending directory and therefore reported 0 while 33 captured submits sat undrained, so pendingCount MUST be the sum of pending turn records and queued failsafe records, and the status document MUST additionally expose pendingTurnCount, failsafeDir, failsafeCount, and failsafeQuarantineCount. A read-only workflow.failsafe.status verb MUST report the same depth without replaying anything.
+**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-018
+
+**Turn upsert accepts a deliberately empty title** — Implements FR-MCP-143 and closes BUG-TRIAGE-087, 089, 091, 098, the PowerShell half of 090 and 094, and the PowerShell half of 101. plugins/core/lib-ps/repl-invoke.ps1 declares the turn-upsert Title parameter as [Parameter(Mandatory)][string] with no [AllowEmptyString()] at line 944, while callers deliberately pass an empty string per TR-MCP-REPL-015 so a stale cached title is not resubmitted. PowerShell rejects the bind before any request is made, so appendDialog without a queryTitle, appendActions, completeTurn, and the supersede path all fail with a mandatory-parameter binding error rather than persisting. The parameter SHALL accept an empty string, and every call path that legitimately passes one SHALL persist. Any other mandatory string parameter on the same path that would reject a legitimate empty value SHALL be corrected the same way. Pester coverage SHALL prove the binding failure before the fix and the successful persist after, using a temporary cache directory so no test touches the real workspace state.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-019
+
+**Supersede preserves a server-refined turn title** — Implements FR-MCP-143 and closes BUG-TRIAGE-086. Invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 reads queryTitle only from the local current-turn.yaml and then re-persists the canceled turn, so a title the agent refined server-side is overwritten by the stale local value and the session title is clobbered on every prompt. The hook cannot summarize, so it writes the prompt first line or the literal placeholder, which means the local copy is frequently the worse of the two. The supersede path SHALL prefer the server-side title when the local cache holds no title or holds only the hook's raw default, and SHALL never replace a refined title with raw prompt text. Coverage SHALL prove that a refined title survives a supersede and that a genuinely absent title still results in a persisted turn.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-020
+
+**failTurn resolves the active turn from the plugin cache** — Implements FR-MCP-143 and closes BUG-TRIAGE-099. Plugin Status reports hasSession and hasCurrentTurn from the local cache (session-state.yaml carrying verified plus a non-empty sessionId, and the presence of current-turn.yaml), and the beginTurn path writes those files, but failTurn requires an empty in-process REPL state and otherwise returns "No active session exists". The result is that a turn the plugin reports as active cannot be closed as failed, so a wrap-up cannot truthfully record a validation failure and the turn is left in progress forever. failTurn SHALL resolve the active session and turn the same way the rest of the plugin does, falling back to the cache when the in-process state is empty, and SHALL close the turn as failed when the cache identifies one. Coverage SHALL prove the current refusal before the fix and a successful fail-close afterwards, using a temporary cache directory.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-REPL-TRIAGE-001
 
 **Triage REPL surface** — REPL parity for triage through client passthrough and typed workflow wrappers.
@@ -2190,7 +2246,7 @@ Scope: layer-1+
 
 ## TR-MCP-SEC-006
 
-**Brain-slot signing keys follow a renamed party id** — Implements the party and signing-key half of FR-MCP-129 and FR-MCP-134 after the Creativity/Logic rename. Trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity in TransactionSecurityDbContext), a separate SQLite database created with EnsureCreated, so the McpDbContext rename migration cannot reach them. BrainSlotRegistryService.RegisterPartyAsync registers the party only, never a key, while ValidateReadinessAsync requires GetPartyKeyAsync(slot.PartyId, "{partyId}:signing:1") to return an active signing key. Consequently, on any installation whose BrainSlotDefinitions rows were renamed to brain-slot:creativity and brain-slot:logic, readiness fails with "trusted party signing key is missing or disabled" until a key exists under the new party id. The runtime SHALL reconcile this idempotently: when a brain slot's party has no active signing key and a legacy party id exists (brain-slot:left-hemisphere for Creativity, brain-slot:right-hemisphere for Logic) holding an active signing key, the runtime SHALL register the new party and COPY the existing key material to the new key id, preserving the legacy party and key rows unchanged. Copy rather than move, because historical diffgram signatures reference the legacy key id and must remain verifiable. Reconciliation SHALL be a no-op when the new key already exists or no legacy key is found, and SHALL never generate new key material.
+**Brain-slot signing keys follow a renamed party id** — CORRECTED 2026-07-20 after the original specification was proven wrong by test. Context unchanged: trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity), a separate SQLite database created with EnsureCreated, so the McpDbContext Creativity/Logic rename migration cannot reach them; BrainSlotRegistryService.RegisterPartyAsync registers the party only and never a key, while ValidateReadinessAsync requires an active signing key at "{partyId}:signing:1". On any migrated installation the renamed party therefore starts with no key and the quad reports NotReady. WHAT WAS WRONG: the first version of this requirement said to COPY the legacy party's signing key material forward. That is impossible and harmful. PartyKeyDescriptor and KeyServerPartyKeyEntity expose only PublicKeyPem, so only the public half can ever be read; InMemoryKeyServerService retains a private ECDsa handle only for a pair it generated itself, and CreateSigningKey given a public PEM with no private PEM stores an empty private-key set. The result passed every readiness gate and could never sign: turn transactions were rejected with TransactionFailureReason.UnknownKey after the model provider had already been invoked and billed, and persisting that row also suppressed TurnTransactionCoordinator.EnsureDefaultPartiesAsync, which mints a working pair only when no key row exists. CORRECT BEHAVIOR: when a brain slot's party has no active signing key and a legacy party id exists (brain-slot:left-hemisphere for Creativity, brain-slot:right-hemisphere for Logic), the runtime SHALL register the renamed party with NO key material so the keyserver mints a fresh pair and retains its private half, and SHALL leave the legacy party and key rows untouched. Historical verification is unaffected because a manifest carries its own PublisherPartyId and VerifyManifestAsync resolves the public key from that legacy party. Reconciliation remains idempotent, is a no-op when the new key already exists or no legacy party is found, and never rotates an existing key. Proven by TEST-MCP-192 and by BrainSlotAdoptedPartyKeySigningTests, which now assert a committed turn transaction under the renamed party and continued verification of a legacy-signed manifest.
 **Status:** pending
 Scope: layer-1+
 
