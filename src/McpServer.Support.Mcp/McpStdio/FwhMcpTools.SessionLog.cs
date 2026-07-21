@@ -38,7 +38,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -72,7 +72,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -97,7 +97,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -120,7 +120,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -183,7 +183,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -211,7 +211,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -236,7 +236,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -262,7 +262,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -286,7 +286,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -309,7 +309,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -330,7 +330,7 @@ public sealed partial class FwhMcpTools
             catch (JsonException ex)
             {
                 _logger.LogError("{ExceptionDetail}", ex.ToString());
-                return Task.FromResult(JsonSerializer.Serialize(new { error = ex.Message }));
+                return Task.FromResult(McpToolErrors.Serialize(ex));
             }
         }
 
@@ -379,7 +379,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Extensions.Hosting;
@@ -57,23 +58,60 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
             }
 
             context.Response.Clear();
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             context.Response.ContentType = "application/json";
 
-            var payload = new HttpErrorResponse
+            // TR-MCP-HEALTH-003: single typed mapping for backend-unavailability. When the
+            // registered detector classifies the failure as a connection-class storage outage,
+            // return HTTP 503 with the stable machine-readable body
+            // {"error":"backend_unavailable", ...} instead of a generic 500 echoing raw
+            // provider text (raw SqlClient messages, the EnableRetryOnFailure hint).
+            HttpErrorResponse payload;
+            if (IsBackendUnavailable(context, ex))
             {
-                Status = StatusCodes.Status500InternalServerError,
-                Error = "internal_server_error",
-                Message = "The server encountered an unexpected error while processing the request.",
-                Detail = BuildSanitizedDetail(ex, operation),
-                Operation = operation,
-                TraceId = traceId,
-                TimestampUtc = DateTimeOffset.UtcNow,
-            };
+                context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                payload = new HttpErrorResponse
+                {
+                    Status = StatusCodes.Status503ServiceUnavailable,
+                    Error = "backend_unavailable",
+                    Message = "The storage backend is currently unreachable. Retry the request once connectivity is restored.",
+                    Detail = $"Operation '{operation}' failed because the storage backend is unreachable.",
+                    Operation = operation,
+                    TraceId = traceId,
+                    TimestampUtc = DateTimeOffset.UtcNow,
+                };
+            }
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                payload = new HttpErrorResponse
+                {
+                    Status = StatusCodes.Status500InternalServerError,
+                    Error = "internal_server_error",
+                    Message = "The server encountered an unexpected error while processing the request.",
+                    Detail = BuildSanitizedDetail(ex, operation),
+                    Operation = operation,
+                    TraceId = traceId,
+                    TimestampUtc = DateTimeOffset.UtcNow,
+                };
+            }
 
             var result = JsonSerializer.Serialize(payload, ServiceDefaultsJsonContext.Default.HttpErrorResponse);
             await context.Response.WriteAsync(result).ConfigureAwait(false);
         }
+    }
+
+    /// <summary>
+    /// TR-MCP-HEALTH-003: resolves the optional <see cref="IBackendUnavailabilityDetector"/> from
+    /// request services and classifies the exception. Returns false when no detector is
+    /// registered so services without storage keep the plain 500 mapping.
+    /// </summary>
+    private static bool IsBackendUnavailable(HttpContext context, Exception exception)
+    {
+        if (context.RequestServices is not { } requestServices)
+            return false;
+
+        var detector = requestServices.GetService<IBackendUnavailabilityDetector>();
+        return detector?.IsBackendUnavailable(exception) == true;
     }
 
     private static string GetOperation(HttpContext context)

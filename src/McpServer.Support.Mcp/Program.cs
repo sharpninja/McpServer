@@ -550,7 +550,18 @@ builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
     });
 builder.Services.AddHealthChecks()
     .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"])
-    .AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"]);
+    .AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"])
+    // TR-MCP-HEALTH-003 (BUG-TRIAGE-096): storage reachability is a ready-tagged check surfaced
+    // as the explicit "storage" field on the health payload. NOT tagged "live": /health keeps
+    // liveness semantics (Healthy + exact nonce echo) during a storage-only outage so marker
+    // trust bootstrap never flips agents to MCP_UNTRUSTED when the server itself is up.
+    .AddCheck<StorageConnectivityHealthCheck>(
+        StorageConnectivityHealthCheck.Name,
+        tags: ["ready", StorageConnectivityHealthCheck.StorageTag]);
+
+// TR-MCP-HEALTH-003: single typed backend-unavailable mapping used by the shared
+// GlobalExceptionHandlerMiddleware (HTTP 503 {"error":"backend_unavailable"}).
+builder.Services.AddSingleton<IBackendUnavailabilityDetector, StorageBackendUnavailabilityDetector>();
 
 // FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
 // Register the HTTP client and data client used by federation decorators.

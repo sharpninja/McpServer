@@ -201,7 +201,7 @@ public static class ServiceDefaultsExtensions
     }
 
     /// <summary>Response writer that logs the health result via ILogger (e.g. Serilog) then writes JSON.</summary>
-    private static Func<HttpContext, HealthReport, Task> CreateHealthCheckResponseWriter(bool includeException)
+    internal static Func<HttpContext, HealthReport, Task> CreateHealthCheckResponseWriter(bool includeException)
     {
         var version = Assembly.GetEntryAssembly()
             ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
@@ -230,9 +230,42 @@ public static class ServiceDefaultsExtensions
             var nonce = context.Request.Query.TryGetValue("nonce", out var nonceValues)
                 ? nonceValues.ToString()
                 : null;
-            var payload = new HealthCheckResponse(report.Status.ToString(), version, checks, nonce);
+            var storage = await ResolveStorageFieldAsync(context, report).ConfigureAwait(false);
+            var payload = new HealthCheckResponse(report.Status.ToString(), version, checks, nonce, storage);
             var result = System.Text.Json.JsonSerializer.Serialize(payload, ServiceDefaultsJsonContext.Default.HealthCheckResponse);
             await context.Response.WriteAsync(result).ConfigureAwait(false);
         };
     }
+
+    /// <summary>
+    /// TR-MCP-HEALTH-003: resolves the explicit <c>storage</c> reachability field for the health
+    /// payload from the "storage"-tagged health check, WITHOUT changing the top-level status
+    /// semantics: <c>/health</c> stays liveness-only (Healthy during a storage-only outage) and
+    /// the nonce echo is untouched. Returns <see langword="null"/> (field omitted) when the
+    /// hosting service registers no "storage"-tagged check.
+    /// </summary>
+    private static async Task<string?> ResolveStorageFieldAsync(HttpContext context, HealthReport report)
+    {
+        // Prefer an entry already computed for this request (the /ready report runs all checks).
+        foreach (var entry in report.Entries)
+        {
+            if (entry.Value.Tags.Contains(StorageCheckTag))
+                return entry.Value.Status == HealthStatus.Healthy ? "reachable" : "unreachable";
+        }
+
+        var healthCheckService = context.RequestServices.GetService<HealthCheckService>();
+        if (healthCheckService is null)
+            return null;
+
+        var storageReport = await healthCheckService
+            .CheckHealthAsync(r => r.Tags.Contains(StorageCheckTag), context.RequestAborted)
+            .ConfigureAwait(false);
+        if (storageReport.Entries.Count == 0)
+            return null;
+
+        return storageReport.Status == HealthStatus.Healthy ? "reachable" : "unreachable";
+    }
+
+    /// <summary>TR-MCP-HEALTH-003: tag that marks the storage-connectivity health check.</summary>
+    internal const string StorageCheckTag = "storage";
 }

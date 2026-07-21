@@ -157,7 +157,10 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/open";
-        return await PostAsync<SessionLifecycleOpenResult>(path, new { title, model }, cancellationToken);
+        return await PostAsync<SessionLifecycleOpenResult>(
+            path,
+            new SessionLifecycleOpenRequest { Title = title, Model = model },
+            cancellationToken);
     }
 
     /// <summary>
@@ -170,7 +173,10 @@ public sealed class SessionLogClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/begin";
-        return await PostAsync<SessionLogTurnSubmitResult>(path, new { queryTitle, queryText, model }, cancellationToken);
+        return await PostAsync<SessionLogTurnSubmitResult>(
+            path,
+            new SessionLifecycleBeginRequest { QueryTitle = queryTitle, QueryText = queryText, Model = model },
+            cancellationToken);
     }
 
     /// <summary>
@@ -233,7 +239,10 @@ public sealed class SessionLogClient : McpClientBase
         string agent, string sessionId, string title, CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/title";
-        return await PostAsync<SessionLogMutationResult>(path, new { title }, cancellationToken);
+        return await PostAsync<SessionLogMutationResult>(
+            path,
+            new SessionTitleRequest { Title = title },
+            cancellationToken);
     }
 
     /// <summary>
@@ -244,7 +253,10 @@ public sealed class SessionLogClient : McpClientBase
         string agent, string sessionId, string requestId, string title, CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/title";
-        return await PostAsync<SessionLogMutationResult>(path, new { title }, cancellationToken);
+        return await PostAsync<SessionLogMutationResult>(
+            path,
+            new SessionTitleRequest { Title = title },
+            cancellationToken);
     }
 
     /// <summary>

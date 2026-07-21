@@ -73,7 +73,7 @@ public sealed partial class FwhMcpTools
         }
         catch (Exception ex)
         {
-            return JsonSerializer.Serialize(new { error = ex.Message }, s_camelCaseOptions);
+            return McpToolErrors.Serialize(ex);
         }
     }
 
