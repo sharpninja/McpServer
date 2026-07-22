@@ -1150,6 +1150,10 @@ public sealed class SessionLogService : ISessionLogService
         if (dto.Title is not null) entity.Title = dto.Title;
         if (dto.Model is not null) entity.Model = dto.Model;
         if (dto.AgentDefinitionId is not null) entity.AgentDefinitionId = dto.AgentDefinitionId;
+        if (dto.AgentSessionId is not null) entity.AgentSessionId = dto.AgentSessionId;
+        if (dto.AgentSessionTranscriptFile is not null) entity.AgentSessionTranscriptFile = dto.AgentSessionTranscriptFile;
+        if (dto.AgentExecutablePath is not null) entity.AgentExecutablePath = dto.AgentExecutablePath;
+        if (dto.AgentExecutableVersion is not null) entity.AgentExecutableVersion = dto.AgentExecutableVersion;
         if (ParseDateTimeOffset(dto.Started) is { } started) entity.Started = started;
         if (ParseDateTimeOffset(dto.LastUpdated) is { } lastUpdated) entity.LastUpdated = lastUpdated;
         if (dto.Status is not null) entity.Status = dto.Status;
@@ -1551,6 +1555,10 @@ public sealed class SessionLogService : ISessionLogService
             SourceType = entity.SourceType,
             SessionId = entity.SessionId,
             AgentDefinitionId = entity.AgentDefinitionId,
+            AgentSessionId = entity.AgentSessionId,
+            AgentSessionTranscriptFile = entity.AgentSessionTranscriptFile,
+            AgentExecutablePath = entity.AgentExecutablePath,
+            AgentExecutableVersion = entity.AgentExecutableVersion,
             Title = entity.Title,
             Model = entity.Model,
             Started = started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),

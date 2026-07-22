@@ -1048,6 +1048,19 @@ function Invoke-ReplPersistTurn {
     if ($IncludeSessionTitle -and -not [string]::IsNullOrWhiteSpace($sessionTitle)) {
         $sessionLog.title = $sessionTitle
     }
+
+    $agentHeaderFields = [ordered]@{
+        agentSessionId = $env:MCP_AGENT_SESSION_ID
+        agentSessionTranscriptFile = $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE
+        agentExecutablePath = $env:MCP_AGENT_EXECUTABLE_PATH
+        agentExecutableVersion = $env:MCP_AGENT_EXECUTABLE_VERSION
+    }
+    foreach ($entry in $agentHeaderFields.GetEnumerator()) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$entry.Value)) {
+            $sessionLog[$entry.Key] = [string]$entry.Value
+        }
+    }
+
     $payloadObject = [ordered]@{
         sessionLog = $sessionLog
     }

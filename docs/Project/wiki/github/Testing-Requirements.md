@@ -1052,6 +1052,11 @@ Validates TR-MCP-SEC-006 under FR-MCP-129 and FR-MCP-134. Unit: a brain slot who
 Validates FR-MCP-142 and TR-MCP-QB-001. Absence tests, each written to fail if the surface returns. Node: the shared plugin core exports no brainSlotTools symbol and allToolDescriptors contains no descriptor whose name starts with brain_slot, asserted over the built package rather than the source. Node: dispatching a brain_slot name through the host context throws Unknown tool. Server: the MCP tool surface assembled from the Support.Mcp assembly contains no tool named brain_slot_ anything, asserted by scanning the registered McpServerTool names so the test survives a future file reappearing under a different name. Repl: resolving the client passthrough name BRAINSLOTS fails to resolve rather than returning BrainSlotClient. Agent framework: the shared hosted-agent tool catalog contains no tool name containing quadbrain. Registry: no file matching brain_slot_*.json exists under mcps. Positive control that the server path survives: POST /v1/chat/completions still reaches QuadBrain orchestration and QBAgentChatClientFactory still targets model id QuadBrain at the marker baseUrl, so the removal cannot be satisfied by breaking QBAgent.
 
 
+### TEST-MCP-194
+
+Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build.SyncAgentPlugins.cs, following the existing BuildTargetTests read-the-source idiom: (1) the source names the version-less stable vendor file sharpninja-mcpserver-plugin-core.tgz; (2) the source contains no versioned tarball literal matching sharpninja-mcpserver-plugin-core-digits.digits.digits.tgz, so a future hard-coded version cannot return; (3) the source asserts the packed tarball version against plugins/core/lib-node/package.json, pinned by requiring the assertion code to reference the package.json version read. Red state before the fix: the versioned constant sharpninja-mcpserver-plugin-core-0.1.0.tgz is present and the stable name is absent.
+
+
 
 ## TEST-MCP-ACID
 

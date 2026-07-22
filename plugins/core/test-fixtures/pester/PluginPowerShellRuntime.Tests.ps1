@@ -85,6 +85,67 @@ acceptanceCriteria:
         $parsed.response | Should -Be "line one`nline two`n"
     }
 
+    It 'TEST-MCP-PLUGIN-PSONLY-001 preserves agent runtime header fields in session submit bodies' {
+        $builder = Join-Path $script:RepoRoot 'plugins\core\lib-sh\sessionlog-submit-body.js'
+        $node = (Get-Command node -ErrorAction Stop).Source
+        $psi = [System.Diagnostics.ProcessStartInfo]::new()
+        $psi.FileName = $node
+        $psi.ArgumentList.Add($builder)
+        $psi.ArgumentList.Add('build')
+        $psi.UseShellExecute = $false
+        $psi.RedirectStandardOutput = $true
+        $psi.RedirectStandardError = $true
+        $psi.Environment['SESSION_SOURCE_TYPE'] = 'Codex'
+        $psi.Environment['SESSION_ID'] = 'Codex-20260722T000000Z-runtime-header'
+        $psi.Environment['SESSION_AGENT_SESSION_ID'] = 'codex-root-session-001'
+        $psi.Environment['SESSION_AGENT_SESSION_TRANSCRIPT_FILE'] = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+        $psi.Environment['SESSION_AGENT_EXECUTABLE_PATH'] = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+        $psi.Environment['SESSION_AGENT_EXECUTABLE_VERSION'] = '1.81.0'
+
+        $process = [System.Diagnostics.Process]::Start($psi)
+        $stdout = $process.StandardOutput.ReadToEndAsync()
+        $stderr = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit(30000) | Should -BeTrue
+        $process.ExitCode | Should -Be 0 -Because $stderr.Result
+
+        $session = $stdout.Result | ConvertFrom-Json
+        $session.agentSessionId | Should -Be 'codex-root-session-001'
+        $session.agentSessionTranscriptFile | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+        $session.agentExecutablePath | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+        $session.agentExecutableVersion | Should -Be '1.81.0'
+
+        $existingPath = Join-Path ([System.IO.Path]::GetTempPath()) "mcp-existing-$([guid]::NewGuid().ToString('N')).json"
+        $incomingPath = Join-Path ([System.IO.Path]::GetTempPath()) "mcp-incoming-$([guid]::NewGuid().ToString('N')).json"
+        try {
+            [System.IO.File]::WriteAllText($existingPath, (@{
+                items = @(
+                    [ordered]@{
+                        sourceType = 'Codex'
+                        sessionId = 'Codex-20260722T000000Z-runtime-header'
+                        agentSessionId = 'codex-root-session-001'
+                        agentSessionTranscriptFile = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+                        agentExecutablePath = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+                        agentExecutableVersion = '1.81.0'
+                        turns = @()
+                    }
+                )
+            } | ConvertTo-Json -Depth 10 -Compress))
+            [System.IO.File]::WriteAllText($incomingPath, (@{
+                sourceType = 'Codex'
+                sessionId = 'Codex-20260722T000000Z-runtime-header'
+                turns = @()
+            } | ConvertTo-Json -Depth 10 -Compress))
+
+            $merge = & $node $builder merge $existingPath $incomingPath | ConvertFrom-Json
+            $merge.agentSessionId | Should -Be 'codex-root-session-001'
+            $merge.agentSessionTranscriptFile | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+            $merge.agentExecutablePath | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+            $merge.agentExecutableVersion | Should -Be '1.81.0'
+        } finally {
+            Remove-Item -LiteralPath $existingPath, $incomingPath -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 rejects append and complete calls when no active turn cache exists' {
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($pluginRoot)
@@ -803,12 +864,14 @@ contextList:
         $previousAgent = $env:MCP_AGENT_NAME
         $previousBootstrap = $null
         $previousPersist = $null
+        $oldLocation = (Get-Location).ProviderPath
         $script:capturedActionsYaml = $null
 
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
             $env:MCP_WORKSPACE_PATH = $workspace
             $env:MCP_AGENT_NAME = 'Codex'
+            Set-Location -LiteralPath $workspace
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
@@ -865,6 +928,7 @@ contextList:
             $turnState['auditActions'] | Should -Be 1
             $script:capturedActionsYaml | Should -Match 'append after marker drift'
         } finally {
+            Set-Location -LiteralPath $oldLocation
             if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
             if ($previousBootstrap) { Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock }
             if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
@@ -945,12 +1009,14 @@ contextList:
         $previousAgent = $env:MCP_AGENT_NAME
         $previousBootstrap = $null
         $previousPersist = $null
+        $oldLocation = (Get-Location).ProviderPath
         $script:capturedCompleteStatus = $null
 
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
             $env:MCP_WORKSPACE_PATH = $workspace
             $env:MCP_AGENT_NAME = 'Codex'
+            Set-Location -LiteralPath $workspace
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
@@ -997,6 +1063,7 @@ contextList:
             $turnState['markerLastWriteUtc'] | Should -Be $snapshotB.markerLastWriteUtc
             $script:capturedCompleteStatus | Should -Be 'completed'
         } finally {
+            Set-Location -LiteralPath $oldLocation
             if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
             if ($previousBootstrap) { Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock }
             if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }

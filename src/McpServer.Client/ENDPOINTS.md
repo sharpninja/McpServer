@@ -2868,6 +2868,10 @@ Field names below are the exact JSON property names declared with [JsonPropertyN
 
 - sourceType: string?
 - sessionId: string?
+- agentSessionId: string?
+- agentSessionTranscriptFile: string?
+- agentExecutablePath: string?
+- agentExecutableVersion: string?
 - title: string?
 - model: string?
 - started: string?

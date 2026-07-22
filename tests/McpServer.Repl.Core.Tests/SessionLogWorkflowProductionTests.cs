@@ -160,6 +160,10 @@ public class SessionLogWorkflowProductionTests
             SessionId = "Codex-20260514T000000Z-recovery",
             Title = "Recovered Session",
             Model = "gpt-5",
+            AgentSessionId = "Codex-20260514T000000Z-agent",
+            AgentSessionTranscriptFile = "F:/GitHub/McpServer/.mcpServer/codex/transcripts/recovery.jsonl",
+            AgentExecutablePath = "C:/Users/kingd/AppData/Roaming/npm/codex.cmd",
+            AgentExecutableVersion = "1.2.3",
             Started = "2026-05-14T00:00:00Z",
             LastUpdated = "2026-05-14T00:05:00Z",
             Status = "completed",
@@ -199,6 +203,10 @@ public class SessionLogWorkflowProductionTests
         Assert.Equal(2, submitted!.Turns!.Count);
         Assert.Equal(2, submitted.TurnCount);
         Assert.Equal("completed", submitted.Status);
+        Assert.Equal("Codex-20260514T000000Z-agent", submitted.AgentSessionId);
+        Assert.Equal("F:/GitHub/McpServer/.mcpServer/codex/transcripts/recovery.jsonl", submitted.AgentSessionTranscriptFile);
+        Assert.Equal("C:/Users/kingd/AppData/Roaming/npm/codex.cmd", submitted.AgentExecutablePath);
+        Assert.Equal("1.2.3", submitted.AgentExecutableVersion);
         Assert.Contains(submitted.Turns, turn =>
             turn.RequestId == "req-20260514T000100Z-existing" &&
             turn.Actions is { Count: 2 });

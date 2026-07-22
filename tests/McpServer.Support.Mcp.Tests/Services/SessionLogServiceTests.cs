@@ -179,6 +179,42 @@ public sealed class SessionLogServiceTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// Session header agent runtime fields are persisted and returned by read models.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_WithAgentRuntimeHeaderFields_PersistsAndReturnsThem()
+    {
+        var sessionId = BuildSessionId("Codex", "agent-runtime-header");
+        var dto = CreateTestDto("Codex", sessionId);
+        dto.AgentSessionId = "Codex-20260722T213000Z-agent";
+        dto.AgentSessionTranscriptFile = @"F:\GitHub\McpServer\.mcpServer\codex\transcripts\session.jsonl";
+        dto.AgentExecutablePath = @"C:\Users\kingd\AppData\Roaming\npm\codex.cmd";
+        dto.AgentExecutableVersion = "1.2.3";
+
+        var id = await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(dto.AgentSessionId, stored.AgentSessionId);
+        Assert.Equal(dto.AgentSessionTranscriptFile, stored.AgentSessionTranscriptFile);
+        Assert.Equal(dto.AgentExecutablePath, stored.AgentExecutablePath);
+        Assert.Equal(dto.AgentExecutableVersion, stored.AgentExecutableVersion);
+
+        var fromGet = await _sut.GetAsync("Codex", sessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(fromGet);
+        Assert.Equal(dto.AgentSessionId, fromGet!.AgentSessionId);
+        Assert.Equal(dto.AgentSessionTranscriptFile, fromGet.AgentSessionTranscriptFile);
+        Assert.Equal(dto.AgentExecutablePath, fromGet.AgentExecutablePath);
+        Assert.Equal(dto.AgentExecutableVersion, fromGet.AgentExecutableVersion);
+
+        var query = await _sut.QueryAsync(new SessionLogQueryRequest(), TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var fromQuery = Assert.Single(query.Items, item => item.SessionId == sessionId);
+        Assert.Equal(dto.AgentSessionId, fromQuery.AgentSessionId);
+        Assert.Equal(dto.AgentSessionTranscriptFile, fromQuery.AgentSessionTranscriptFile);
+        Assert.Equal(dto.AgentExecutablePath, fromQuery.AgentExecutablePath);
+        Assert.Equal(dto.AgentExecutableVersion, fromQuery.AgentExecutableVersion);
+    }
+
     [Fact]
     public async Task WhenSubmittingWithCopilotStatisticsThenStatisticsArePersisted()
     {

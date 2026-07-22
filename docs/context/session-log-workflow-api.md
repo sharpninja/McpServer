@@ -56,6 +56,13 @@ Runtime state tracking for the active session and turn:
 - Invalid: `copilot-20260304T113901Z-namingconv` (lowercase prefix)
 - Invalid: `Copilot-2026-03-04-namingconv` (wrong date format)
 
+### Agent Runtime Header Fields
+- `agentSessionId`: provider-native root session identifier, when the agent exposes one.
+- `agentSessionTranscriptFile`: provider-native transcript file path, when the host exposes one.
+- `agentExecutablePath`: executable path for the agent host that produced the session.
+- `agentExecutableVersion`: executable version for the agent host that produced the session.
+- These fields are optional, session-level header metadata. They must be preserved during recovery and complete-turn submits when an incoming payload omits them.
+
 ### Request ID
 - Format: `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`
 - Regex: `^req-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$`

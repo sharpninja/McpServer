@@ -20,6 +20,22 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("agentDefinitionId")]
     public string? AgentDefinitionId { get; set; }
 
+    /// <summary>Provider-native agent session identifier for the session header.</summary>
+    [JsonPropertyName("agentSessionId")]
+    public string? AgentSessionId { get; set; }
+
+    /// <summary>Provider-native transcript file path for the session header.</summary>
+    [JsonPropertyName("agentSessionTranscriptFile")]
+    public string? AgentSessionTranscriptFile { get; set; }
+
+    /// <summary>Agent executable path captured in the session header.</summary>
+    [JsonPropertyName("agentExecutablePath")]
+    public string? AgentExecutablePath { get; set; }
+
+    /// <summary>Agent executable version captured in the session header.</summary>
+    [JsonPropertyName("agentExecutableVersion")]
+    public string? AgentExecutableVersion { get; set; }
+
     /// <summary>Human-readable session title.</summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }

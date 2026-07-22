@@ -1011,6 +1011,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-SEC-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-SEC-006 | Tracked | Technical-Requirements.md |
 | TR-MCP-SVC-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-SYNC-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-TRANSCRIPT-010 | Tracked | Technical-Requirements.md |
 | TR-MCP-TUN-004 | Tracked | Technical-Requirements.md |
 | TEST-MCP-188 | Tracked | Testing-Requirements.md |
@@ -1019,6 +1020,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-191 | Tracked | Testing-Requirements.md |
 | TEST-MCP-192 | Tracked | Testing-Requirements.md |
 | TEST-MCP-193 | Tracked | Testing-Requirements.md |
+| TEST-MCP-194 | Tracked | Testing-Requirements.md |
 | TEST-MCP-MARKER-004 | Tracked | Testing-Requirements.md |
 | TEST-MCP-QBOLLAMA-002 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-031 | Tracked | Testing-Requirements.md |

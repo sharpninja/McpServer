@@ -436,6 +436,10 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
         target.LastUpdated = LatestTimestamp(target.LastUpdated, incoming.LastUpdated);
         target.Status = PreferSessionStatus(target.Status, incoming.Status);
         target.Workspace ??= incoming.Workspace;
+        target.AgentSessionId ??= incoming.AgentSessionId;
+        target.AgentSessionTranscriptFile ??= incoming.AgentSessionTranscriptFile;
+        target.AgentExecutablePath ??= incoming.AgentExecutablePath;
+        target.AgentExecutableVersion ??= incoming.AgentExecutableVersion;
         target.CursorSessionLabel ??= incoming.CursorSessionLabel;
         target.CopilotStatistics ??= incoming.CopilotStatistics;
         target.TotalTokens ??= incoming.TotalTokens;

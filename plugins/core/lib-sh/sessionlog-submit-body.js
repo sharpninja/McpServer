@@ -91,7 +91,7 @@ function buildIncoming() {
     });
   }
 
-  return {
+  const session = {
     sourceType: text("SESSION_SOURCE_TYPE"),
     sessionId: text("SESSION_ID"),
     title: text("SESSION_TITLE"),
@@ -103,6 +103,30 @@ function buildIncoming() {
     totalTokens: 0,
     turns
   };
+
+  const agentHeaderFields = {
+    agentSessionId: text("SESSION_AGENT_SESSION_ID", text("MCP_AGENT_SESSION_ID")),
+    agentSessionTranscriptFile: text(
+      "SESSION_AGENT_SESSION_TRANSCRIPT_FILE",
+      text("MCP_AGENT_SESSION_TRANSCRIPT_FILE")
+    ),
+    agentExecutablePath: text(
+      "SESSION_AGENT_EXECUTABLE_PATH",
+      text("MCP_AGENT_EXECUTABLE_PATH")
+    ),
+    agentExecutableVersion: text(
+      "SESSION_AGENT_EXECUTABLE_VERSION",
+      text("MCP_AGENT_EXECUTABLE_VERSION")
+    ),
+  };
+
+  for (const [field, value] of Object.entries(agentHeaderFields)) {
+    if (!isEmpty(value)) {
+      session[field] = value;
+    }
+  }
+
+  return session;
 }
 
 function readJson(path, fallback) {
@@ -123,6 +147,13 @@ function readJson(path, fallback) {
 const RICH_TURN_FIELDS = [
   "interpretation", "contextList", "processingDialog",
   "designDecisions", "requirementsDiscovered", "filesModified", "blockers",
+];
+
+const RICH_SESSION_FIELDS = [
+  "agentSessionId",
+  "agentSessionTranscriptFile",
+  "agentExecutablePath",
+  "agentExecutableVersion",
 ];
 
 function isEmpty(val) {
@@ -177,6 +208,12 @@ function mergeSessions(existing, incoming) {
     ...incoming,
     turns: []
   };
+
+  for (const field of RICH_SESSION_FIELDS) {
+    if (isEmpty(incoming[field]) && !isEmpty(prior[field])) {
+      merged[field] = prior[field];
+    }
+  }
 
   const byRequestId = new Map();
   for (const turn of Array.isArray(prior.turns) ? prior.turns : []) {

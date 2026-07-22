@@ -66,6 +66,10 @@ export interface SessionState {
   sessionId: string;
   title: string;
   model?: string;
+  agentSessionId?: string;
+  agentSessionTranscriptFile?: string;
+  agentExecutablePath?: string;
+  agentExecutableVersion?: string;
   status: 'in_progress' | 'completed' | 'failed';
   currentTurn?: TurnState;
   turns: TurnState[];
@@ -87,12 +91,25 @@ export class SessionShim {
     /* no-op: nothing to initialize on the client side */
   }
 
-  open(args: { agent: string; sessionId: string; title: string; model?: string }): void {
+  open(args: {
+    agent: string;
+    sessionId: string;
+    title: string;
+    model?: string;
+    agentSessionId?: string;
+    agentSessionTranscriptFile?: string;
+    agentExecutablePath?: string;
+    agentExecutableVersion?: string;
+  }): void {
     this.state = {
       sourceType: args.agent,
       sessionId: args.sessionId,
       title: args.title,
       model: args.model,
+      agentSessionId: args.agentSessionId,
+      agentSessionTranscriptFile: args.agentSessionTranscriptFile,
+      agentExecutablePath: args.agentExecutablePath,
+      agentExecutableVersion: args.agentExecutableVersion,
       status: 'in_progress',
       turns: [],
     };
@@ -182,6 +199,14 @@ export class SessionShim {
         sessionId: this.state.sessionId,
         title: this.state.title,
         ...(this.state.model ? { model: this.state.model } : {}),
+        ...(this.state.agentSessionId ? { agentSessionId: this.state.agentSessionId } : {}),
+        ...(this.state.agentSessionTranscriptFile
+          ? { agentSessionTranscriptFile: this.state.agentSessionTranscriptFile }
+          : {}),
+        ...(this.state.agentExecutablePath ? { agentExecutablePath: this.state.agentExecutablePath } : {}),
+        ...(this.state.agentExecutableVersion
+          ? { agentExecutableVersion: this.state.agentExecutableVersion }
+          : {}),
         status: this.state.status,
         turns: allTurns.map(this.serializeTurn),
       },

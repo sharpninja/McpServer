@@ -566,7 +566,7 @@ Scope: layer-1+
 ## TR-MCP-CLIENT-001
 
 **Typed client request bodies are registered for source-generated JSON** — Implements FR-MCP-143 and closes BUG-TRIAGE-088, 093, 095, and the client half of 090, 094, and 101. McpClientBase serializes every request through the source-generated McpClientJsonContext, whose TypeInfoResolver has no JsonTypeInfo for compiler-generated anonymous types. src/McpServer.Client/SessionLogClient.cs nevertheless posts anonymous bodies at line 160 (session lifecycle open, new { title, model }) and lines 236 and 247 (SetSessionTitleAsync and SetTurnTitleAsync, new { title }), so GetTypeInfo throws NotSupportedException and those endpoints never execute. Every request body in the typed client SHALL be a declared type carrying JsonPropertyName attributes and XML documentation, and SHALL be registered in McpClientJsonContext with JsonSerializable. The whole client SHALL be audited for the same pattern rather than only the three known sites, because this defect class was reported five separate times, and the audit result SHALL be reported. Coverage SHALL exercise the real McpClientJsonContext serialization path rather than a hand-rolled JsonSerializer call, so the test fails for the same reason production did.
-**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
@@ -971,7 +971,7 @@ Scope: layer-1+
 ## TR-MCP-HEALTH-003
 
 **Health reflects storage reachability and backend errors are typed** — Implements FR-MCP-143 and closes BUG-TRIAGE-096. GET /health is liveness-only (tags live: self plus FederationUpstreamHealthCheck) with no storage connectivity check, so when the database backend is unreachable the server still answers Healthy and echoes the trust nonce correctly while every persistence call fails. Observed live on 2026-07-20 when the SQL host was powered off: marker trust passed, then todo_list returned a raw SqlClient "Named Pipes Provider, error: 40" string, sessionlog_query returned a misleading "transient failure, consider EnableRetryOnFailure" hint, triage_report returned a bare "an error occurred", and the plugin wrapper returned an opaque 30-second timeout, so no caller could tell that storage was simply down. The server SHALL expose storage reachability on the health path, either by degrading the status or by an explicit storage field, WITHOUT breaking the nonce echo that marker trust bootstrap depends on. Backend-unavailable conditions SHALL surface as one typed error consistently across REST and the MCP tools, distinguishable from a malformed request. Coverage SHALL simulate an unreachable store and assert the misleading Healthy result before the fix.
-**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
@@ -2034,21 +2034,21 @@ Scope: layer-1+
 ## TR-MCP-REPL-018
 
 **Turn upsert accepts a deliberately empty title** — Implements FR-MCP-143 and closes BUG-TRIAGE-087, 089, 091, 098, the PowerShell half of 090 and 094, and the PowerShell half of 101. plugins/core/lib-ps/repl-invoke.ps1 declares the turn-upsert Title parameter as [Parameter(Mandatory)][string] with no [AllowEmptyString()] at line 944, while callers deliberately pass an empty string per TR-MCP-REPL-015 so a stale cached title is not resubmitted. PowerShell rejects the bind before any request is made, so appendDialog without a queryTitle, appendActions, completeTurn, and the supersede path all fail with a mandatory-parameter binding error rather than persisting. The parameter SHALL accept an empty string, and every call path that legitimately passes one SHALL persist. Any other mandatory string parameter on the same path that would reject a legitimate empty value SHALL be corrected the same way. Pester coverage SHALL prove the binding failure before the fix and the successful persist after, using a temporary cache directory so no test touches the real workspace state.
-**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-REPL-019
 
 **Supersede preserves a server-refined turn title** — Implements FR-MCP-143 and closes BUG-TRIAGE-086. Invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 reads queryTitle only from the local current-turn.yaml and then re-persists the canceled turn, so a title the agent refined server-side is overwritten by the stale local value and the session title is clobbered on every prompt. The hook cannot summarize, so it writes the prompt first line or the literal placeholder, which means the local copy is frequently the worse of the two. The supersede path SHALL prefer the server-side title when the local cache holds no title or holds only the hook's raw default, and SHALL never replace a refined title with raw prompt text. Coverage SHALL prove that a refined title survives a supersede and that a genuinely absent title still results in a persisted turn.
-**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-REPL-020
 
 **failTurn resolves the active turn from the plugin cache** — Implements FR-MCP-143 and closes BUG-TRIAGE-099. Plugin Status reports hasSession and hasCurrentTurn from the local cache (session-state.yaml carrying verified plus a non-empty sessionId, and the presence of current-turn.yaml), and the beginTurn path writes those files, but failTurn requires an empty in-process REPL state and otherwise returns "No active session exists". The result is that a turn the plugin reports as active cannot be closed as failed, so a wrap-up cannot truthfully record a validation failure and the turn is left in progress forever. failTurn SHALL resolve the active session and turn the same way the rest of the plugin does, falling back to the cache when the in-process state is empty, and SHALL close the turn as failed when the cache identifies one. Coverage SHALL prove the current refusal before the fix and a successful fail-close afterwards, using a temporary cache directory.
-**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-REPL-040
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
@@ -2353,6 +2353,13 @@ Scope: layer-1+
 
 **Executable resolution skips WindowsApps App-Execution-Alias stubs** — Implements FR-MCP-141. IProcessEnvironmentService.ResolveExecutable in src/McpServer.Common.AgentCli/ProcessEnvironmentService.cs SHALL skip any PATH directory whose path contains Microsoft\WindowsApps when probing for an executable, because those entries are zero-byte App-Execution-Alias reparse points that a service account cannot launch, failing with Win32Exception 1920. The guard SHALL be an exact containment test on Microsoft\WindowsApps and SHALL NOT match the genuine C:\Program Files\WindowsApps MSIX install root, which holds real executables such as the packaged PowerShell. This affects every ResolveExecutable caller including the Agent CLI client, the Codex, Grok, and OneShot execution strategies, and ProcessRunner, not only tunnel providers. Recovered from origin/claude/busy-dubinsky, where the file lived at src/McpServer.Common.Copilot/ProcessEnvironmentService.cs before that project was renamed to McpServer.Common.AgentCli.
 **Covered by:** FR: FR-MCP-141; TEST: TEST-MCP-190, TEST-MCP-191
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-SYNC-001
+
+**Node core vendor package uses a version-less stable file name** — SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name sharpninja-mcpserver-plugin-core.tgz, and SHALL NOT embed a package version in any vendored tarball file name or in the constant that names it. Rationale, from triage-report-52e8098cd299475d9922098f00d818b6: Build.SyncAgentPlugins.cs:465 hard-coded sharpninja-mcpserver-plugin-core-0.1.0.tgz while package.json had moved to 0.2.0 after a breaking-change bump, so the three Node plugin repositories held tarballs whose file name claimed the pre-breaking-change surface while their content was the new package; the versioned name is also why the constant existed at all, since consumer package.json files reference the tarball path and a version bump would break the reference. The vendor step SHALL discover consumer vendor directories by matching any sharpninja-mcpserver-plugin-core*.tgz variant so first-run migration finds the legacy versioned files, copy the packed artifact to the stable name, delete superseded variants from the vendor directory, and rewrite the consumer package.json dependency reference file:vendor/sharpninja-mcpserver-plugin-core*.tgz to the stable name via a targeted in-place replacement that preserves the file's formatting. The step SHALL also assert that npm pack produced a tarball whose embedded version matches plugins/core/lib-node/package.json, so a silent pack-versus-manifest drift fails the sync instead of shipping.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
