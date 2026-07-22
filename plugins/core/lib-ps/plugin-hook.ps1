@@ -29,6 +29,7 @@ $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
 . (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
+. (Join-Path $script:ScriptDir 'agent-runtime-header.ps1')
 Import-McpYamlSerializer
 
 function ConvertTo-PluginParamsYaml {
@@ -251,6 +252,12 @@ function Start-PluginSession {
     }
 
     $sessionId = New-PluginSessionId -AgentName $env:MCP_AGENT_NAME
+    $agentHeaders = Resolve-McpPluginAgentHeaderFields -SessionId $sessionId -CacheDir $cacheDir -AgentName $env:MCP_AGENT_NAME -HostName $env:MCP_PLUGIN_HOST
+    $env:MCP_AGENT_SESSION_ID = [string]$agentHeaders.agentSessionId
+    $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE = [string]$agentHeaders.agentSessionTranscriptFile
+    $env:MCP_AGENT_EXECUTABLE_PATH = [string]$agentHeaders.agentExecutablePath
+    $env:MCP_AGENT_EXECUTABLE_VERSION = [string]$agentHeaders.agentExecutableVersion
+
     $now = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     $sessionState = [ordered]@{
         status = 'verified'
@@ -260,6 +267,10 @@ function Start-PluginSession {
         lastUpdated = $now
         markerFilePath = $markerSnapshot.markerFilePath
         markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
+        agentSessionId = [string]$agentHeaders.agentSessionId
+        agentSessionTranscriptFile = [string]$agentHeaders.agentSessionTranscriptFile
+        agentExecutablePath = [string]$agentHeaders.agentExecutablePath
+        agentExecutableVersion = [string]$agentHeaders.agentExecutableVersion
     }
     Write-McpYamlObject -Path $sessionFile -Document $sessionState
     Write-PluginJson ([ordered]@{})

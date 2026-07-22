@@ -85,6 +85,27 @@ acceptanceCriteria:
         $parsed.response | Should -Be "line one`nline two`n"
     }
 
+    It 'TEST-MCP-PLUGIN-PSONLY-001 resolves default agent runtime header fields' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
+        $previousPluginVersion = $env:MCP_PLUGIN_VERSION
+
+        try {
+            $env:MCP_PLUGIN_VERSION = '1.82.0'
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'Codex-20260722T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'Codex' -HostName 'codex' -ExecutableCandidates @($pwshPath)
+
+            $headers.agentSessionId | Should -Be 'Codex-20260722T000000Z-plugin-session'
+            $headers.agentSessionTranscriptFile | Should -Be (Join-Path $cacheDir 'session.jsonl')
+            $headers.agentExecutablePath | Should -Be $pwshPath
+            [string]$headers.agentExecutableVersion | Should -Not -BeNullOrEmpty
+        } finally {
+            if ($null -ne $previousPluginVersion) { $env:MCP_PLUGIN_VERSION = $previousPluginVersion } else { Remove-Item Env:\MCP_PLUGIN_VERSION -ErrorAction SilentlyContinue }
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 preserves agent runtime header fields in session submit bodies' {
         $builder = Join-Path $script:RepoRoot 'plugins\core\lib-sh\sessionlog-submit-body.js'
         $node = (Get-Command node -ErrorAction Stop).Source
@@ -3811,6 +3832,17 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
             return @(Get-ReplObjectValue -InputObject $sessionLog -Name 'turns')[0]
         }
 
+        function Get-TurnShimSubmittedSessionLog {
+            <#
+            .SYNOPSIS
+                Parses one captured SubmitAsync payload back into its session log map.
+            #>
+            param([Parameter(Mandatory)][string]$ParamsYaml)
+
+            $submit = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+            return (Get-ReplObjectValue -InputObject $submit -Name 'sessionLog')
+        }
+
         function Remove-TurnShimState {
             <#
             .SYNOPSIS
@@ -3854,6 +3886,61 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
             if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
             if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
             if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 populates agent runtime headers from session-state when env vars are absent' {
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousAgentSessionId = $env:MCP_AGENT_SESSION_ID
+        $previousTranscript = $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE
+        $previousExecutablePath = $env:MCP_AGENT_EXECUTABLE_PATH
+        $previousExecutableVersion = $env:MCP_AGENT_EXECUTABLE_VERSION
+        $previousFresh = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            Remove-Item Env:\MCP_AGENT_SESSION_ID -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_AGENT_SESSION_TRANSCRIPT_FILE -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_AGENT_EXECUTABLE_PATH -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_AGENT_EXECUTABLE_VERSION -ErrorAction SilentlyContinue
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000004Z-agent-runtime'
+            $state = Read-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml')
+            $state['agentSessionId'] = 'codex-root-session-001'
+            $state['agentSessionTranscriptFile'] = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+            $state['agentExecutablePath'] = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+            $state['agentExecutableVersion'] = '1.82.0'
+            Write-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml') -Document $state
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n- type: note`n  description: runtime header enforcement`n  status: completed"
+
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40Submits.Count | Should -Be 1
+            $sessionLog = Get-TurnShimSubmittedSessionLog -ParamsYaml $script:t40Submits[0]
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentSessionId') | Should -Be 'codex-root-session-001'
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentSessionTranscriptFile') | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentExecutablePath') | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentExecutableVersion') | Should -Be '1.82.0'
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            if ($null -ne $previousAgentSessionId) { $env:MCP_AGENT_SESSION_ID = $previousAgentSessionId } else { Remove-Item Env:\MCP_AGENT_SESSION_ID -ErrorAction SilentlyContinue }
+            if ($null -ne $previousTranscript) { $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE = $previousTranscript } else { Remove-Item Env:\MCP_AGENT_SESSION_TRANSCRIPT_FILE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousExecutablePath) { $env:MCP_AGENT_EXECUTABLE_PATH = $previousExecutablePath } else { Remove-Item Env:\MCP_AGENT_EXECUTABLE_PATH -ErrorAction SilentlyContinue }
+            if ($null -ne $previousExecutableVersion) { $env:MCP_AGENT_EXECUTABLE_VERSION = $previousExecutableVersion } else { Remove-Item Env:\MCP_AGENT_EXECUTABLE_VERSION -ErrorAction SilentlyContinue }
             Remove-TurnShimState
             Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
         }
