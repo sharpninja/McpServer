@@ -24,6 +24,12 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $script:ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+# TR-MCP-PLUGIN-HEADER-001: Read-HookInput is memoized because reading stdin
+# consumes it and the session bootstrap now also needs the payload. These MUST be
+# initialized here: Set-StrictMode -Version Latest makes referencing an unset
+# variable a terminating error.
+$script:HookInputCached = $false
+$script:CachedHookInput = ''
 $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'plugin-env.ps1')
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
@@ -146,31 +152,32 @@ function Set-YamlScalar {
 }
 
 function Read-HookInput {
-    if ($Params) {
-        return $Params
+    if ($script:HookInputCached) {
+        return $script:CachedHookInput
     }
 
-    if ($ParamsPath) {
+    $value = ''
+    if ($Params) {
+        $value = $Params
+    } elseif ($ParamsPath) {
         if (-not (Test-Path -LiteralPath $ParamsPath)) {
             throw "Hook params file was not found: $ParamsPath"
         }
 
-        return [System.IO.File]::ReadAllText($ParamsPath)
-    }
-
-    if ($null -ne $InputObject) {
+        $value = [System.IO.File]::ReadAllText($ParamsPath)
+    } elseif ($null -ne $InputObject) {
         if ($InputObject -is [string]) {
-            return [string]$InputObject
+            $value = [string]$InputObject
+        } else {
+            $value = ($InputObject | ConvertTo-Json -Depth 20 -Compress)
         }
-
-        return ($InputObject | ConvertTo-Json -Depth 20 -Compress)
+    } elseif ([Console]::IsInputRedirected) {
+        $value = [Console]::In.ReadToEnd()
     }
 
-    if ([Console]::IsInputRedirected) {
-        return [Console]::In.ReadToEnd()
-    }
-
-    return ''
+    $script:CachedHookInput = $value
+    $script:HookInputCached = $true
+    return $value
 }
 
 function Get-HookPayloadValue {
@@ -252,7 +259,14 @@ function Start-PluginSession {
     }
 
     $sessionId = New-PluginSessionId -AgentName $env:MCP_AGENT_NAME
-    $agentHeaders = Resolve-McpPluginAgentHeaderFields -SessionId $sessionId -CacheDir $cacheDir -AgentName $env:MCP_AGENT_NAME -HostName $env:MCP_PLUGIN_HOST
+    # TR-MCP-PLUGIN-HEADER-001: capture the host's real session id and transcript
+    # path from the hook payload so the header records observed values instead of
+    # the MCP session id and a fabricated cache path.
+    $bootstrapPayload = ''
+    try { $bootstrapPayload = Read-HookInput } catch { $bootstrapPayload = '' }
+    $providerSessionId = Get-HookPayloadValue -Payload $bootstrapPayload -Name 'session_id'
+    $providerTranscript = Get-HookPayloadValue -Payload $bootstrapPayload -Name 'transcript_path'
+    $agentHeaders = Resolve-McpPluginAgentHeaderFields -SessionId $sessionId -CacheDir $cacheDir -AgentName $env:MCP_AGENT_NAME -HostName $env:MCP_PLUGIN_HOST -ProviderSessionId $providerSessionId -TranscriptPath $providerTranscript
     $env:MCP_AGENT_SESSION_ID = [string]$agentHeaders.agentSessionId
     $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE = [string]$agentHeaders.agentSessionTranscriptFile
     $env:MCP_AGENT_EXECUTABLE_PATH = [string]$agentHeaders.agentExecutablePath

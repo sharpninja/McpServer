@@ -112,7 +112,31 @@ function Resolve-McpPluginAgentExecutableVersion {
         }
     }
 
-    return Get-McpPluginFirstText @($env:MCP_PLUGIN_VERSION, 'unknown')
+    # TR-MCP-PLUGIN-HEADER-001: the plugin version is NOT the agent executable
+    # version. When live discovery fails the honest answer is 'unknown'; reporting
+    # MCP_PLUGIN_VERSION here put a false version on every session header.
+    return 'unknown'
+}
+
+function Get-McpPluginFirstExistingFile {
+    # TR-MCP-PLUGIN-HEADER-001: return the first candidate that is an existing file.
+    # A transcript path is only accurate if the file is actually there.
+    param([AllowNull()][object[]]$Values)
+
+    foreach ($value in $Values) {
+        if ($null -eq $value) { continue }
+        $candidate = [string]$value
+        if ([string]::IsNullOrWhiteSpace($candidate)) { continue }
+        try {
+            if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+                return (Resolve-Path -LiteralPath $candidate).ProviderPath
+            }
+        } catch {
+            continue
+        }
+    }
+
+    return ''
 }
 
 function Resolve-McpPluginAgentHeaderFields {
@@ -121,15 +145,25 @@ function Resolve-McpPluginAgentHeaderFields {
         [Parameter(Mandatory)][string]$CacheDir,
         [string]$AgentName,
         [string]$HostName,
+        [string]$ProviderSessionId,
+        [string]$TranscriptPath,
         [string[]]$ExecutableCandidates = @())
 
+    # TR-MCP-PLUGIN-HEADER-001: this field is defined as the PROVIDER-NATIVE session
+    # id, so it carries only an observed provider value (hook payload or host env).
+    # It is deliberately left empty when the provider id is unknown: echoing the MCP
+    # session id here made the field never-empty but frequently wrong.
     $agentSessionId = Get-McpPluginFirstText @(
+        $ProviderSessionId,
         $env:MCP_AGENT_SESSION_ID,
         $env:CODEX_SESSION_ID,
         $env:CLAUDE_SESSION_ID,
-        $env:GROK_SESSION_ID,
-        $SessionId)
-    $transcriptFile = Get-McpPluginFirstText @(
+        $env:GROK_SESSION_ID)
+    # TR-MCP-PLUGIN-HEADER-001: only ever report a transcript file that exists on
+    # disk. Previously this fell through to <CacheDir>/session.jsonl unconditionally,
+    # writing a path to a file the plugin never creates.
+    $transcriptFile = Get-McpPluginFirstExistingFile @(
+        $TranscriptPath,
         $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE,
         $env:CODEX_SESSION_FILE,
         $env:CODEX_ROLLOUT_FILE,

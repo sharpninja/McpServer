@@ -96,12 +96,69 @@ acceptanceCriteria:
             $env:MCP_PLUGIN_VERSION = '1.82.0'
             $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'Codex-20260722T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'Codex' -HostName 'codex' -ExecutableCandidates @($pwshPath)
 
-            $headers.agentSessionId | Should -Be 'Codex-20260722T000000Z-plugin-session'
-            $headers.agentSessionTranscriptFile | Should -Be (Join-Path $cacheDir 'session.jsonl')
+            # TR-MCP-PLUGIN-HEADER-001: agentSessionId is the PROVIDER-NATIVE id. With
+            # no provider id available it stays empty rather than echoing the MCP id.
+            $headers.agentSessionId | Should -BeNullOrEmpty
+            # TR-MCP-PLUGIN-HEADER-001: never emit a transcript path for a file that
+            # does not exist. The cache session.jsonl was never created here.
+            $headers.agentSessionTranscriptFile | Should -BeNullOrEmpty
             $headers.agentExecutablePath | Should -Be $pwshPath
             [string]$headers.agentExecutableVersion | Should -Not -BeNullOrEmpty
         } finally {
             if ($null -ne $previousPluginVersion) { $env:MCP_PLUGIN_VERSION = $previousPluginVersion } else { Remove-Item Env:\MCP_PLUGIN_VERSION -ErrorAction SilentlyContinue }
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-HEADER-002 emits the cache transcript path only when that file exists' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
+        $transcript = Join-Path $cacheDir 'session.jsonl'
+        try {
+            [System.IO.File]::WriteAllText($transcript, '{"t":1}')
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'Codex-20260722T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'Codex' -HostName 'codex' -ExecutableCandidates @($pwshPath)
+            $headers.agentSessionTranscriptFile | Should -Be $transcript
+        } finally {
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-HEADER-003 prefers the verified provider session id and transcript from the host payload' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
+        $providerTranscript = Join-Path $cacheDir 'provider-real.jsonl'
+        try {
+            [System.IO.File]::WriteAllText($providerTranscript, '{"t":1}')
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'ClaudeCode-20260723T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'ClaudeCode' -HostName 'claude' -ExecutableCandidates @($pwshPath) -ProviderSessionId '45f1b597-40a2-4f1c-983c-1be5b16ab5b9' -TranscriptPath $providerTranscript
+            $headers.agentSessionId | Should -Be '45f1b597-40a2-4f1c-983c-1be5b16ab5b9'
+            $headers.agentSessionTranscriptFile | Should -Be $providerTranscript
+        } finally {
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-HEADER-004 never reports the plugin version as the agent executable version' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $saved = @{}
+        foreach ($n in @('MCP_PLUGIN_VERSION','MCP_AGENT_EXECUTABLE_PATH','MCP_AGENT_EXECUTABLE_VERSION','CODEX_EXECUTABLE_VERSION','CLAUDE_EXECUTABLE_VERSION','GROK_EXECUTABLE_VERSION','COPILOT_EXECUTABLE_VERSION','CLINE_EXECUTABLE_VERSION','OPENCODE_EXECUTABLE_VERSION','CODEX_EXECUTABLE_PATH','CLAUDE_EXECUTABLE_PATH','GROK_EXECUTABLE_PATH','COPILOT_EXECUTABLE_PATH','CLINE_EXECUTABLE_PATH','OPENCODE_EXECUTABLE_PATH')) {
+            $saved[$n] = [Environment]::GetEnvironmentVariable($n)
+            Remove-Item "Env:\$n" -ErrorAction SilentlyContinue
+        }
+        try {
+            $env:MCP_PLUGIN_VERSION = '1.82.0'
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'NoSuch-20260723T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'NoSuchAgent' -HostName 'nosuchagent'
+            $headers.agentExecutableVersion | Should -Not -Be '1.82.0'
+            $headers.agentExecutableVersion | Should -Be 'unknown'
+        } finally {
+            foreach ($n in $saved.Keys) {
+                if ($null -ne $saved[$n]) { Set-Item -Path "Env:\$n" -Value $saved[$n] } else { Remove-Item "Env:\$n" -ErrorAction SilentlyContinue }
+            }
             Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
