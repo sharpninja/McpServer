@@ -1053,9 +1053,18 @@ function Invoke-ReplPersistTurn {
     $resolvedAgentHeaders = Resolve-McpPluginAgentHeaderFields -SessionId $meta.SessionId -CacheDir (Get-ReplInvokeCacheDir) -AgentName $meta.SourceType -HostName $env:MCP_PLUGIN_HOST
     $agentHeaderFields = [ordered]@{
         agentSessionId = Get-McpPluginFirstText @($env:MCP_AGENT_SESSION_ID, (Get-ReplSessionStateValue -Key 'agentSessionId'), $resolvedAgentHeaders.agentSessionId)
-        agentSessionTranscriptFile = Get-McpPluginFirstText @($env:MCP_AGENT_SESSION_TRANSCRIPT_FILE, (Get-ReplSessionStateValue -Key 'agentSessionTranscriptFile'), $resolvedAgentHeaders.agentSessionTranscriptFile)
+        # TR-MCP-PLUGIN-HEADER-001: existence-validated. A pre-fix session-state cache
+        # or env var can still hold a fabricated <cache>/session.jsonl path; that value
+        # must never be re-submitted just because it was cached earlier.
+        agentSessionTranscriptFile = Get-McpPluginFirstExistingFile @($env:MCP_AGENT_SESSION_TRANSCRIPT_FILE, (Get-ReplSessionStateValue -Key 'agentSessionTranscriptFile'), $resolvedAgentHeaders.agentSessionTranscriptFile)
         agentExecutablePath = Get-McpPluginFirstText @($env:MCP_AGENT_EXECUTABLE_PATH, (Get-ReplSessionStateValue -Key 'agentExecutablePath'), $resolvedAgentHeaders.agentExecutablePath)
         agentExecutableVersion = Get-McpPluginFirstText @($env:MCP_AGENT_EXECUTABLE_VERSION, (Get-ReplSessionStateValue -Key 'agentExecutableVersion'), $resolvedAgentHeaders.agentExecutableVersion)
+    }
+    # TR-MCP-PLUGIN-HEADER-001: agentSessionId is the PROVIDER-NATIVE id. A pre-fix
+    # cache may echo the MCP session id there; drop it rather than submit a value
+    # that is mislabeled by definition.
+    if ([string]$agentHeaderFields.agentSessionId -eq [string]$meta.SessionId) {
+        $agentHeaderFields.agentSessionId = ''
     }
     foreach ($entry in $agentHeaderFields.GetEnumerator()) {
         if (-not [string]::IsNullOrWhiteSpace([string]$entry.Value)) {

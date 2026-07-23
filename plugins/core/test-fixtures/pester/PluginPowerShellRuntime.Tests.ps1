@@ -110,6 +110,57 @@ acceptanceCriteria:
         }
     }
 
+    It 'TEST-MCP-PLUGIN-HEADER-005 never re-submits a stale fabricated transcript path or echoed session id from cache' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $sessionId = 'Codex-20260722T000000Z-plugin-session'
+        $fabricated = Join-Path $cacheDir 'session.jsonl'   # deliberately NOT created
+        $saved = @{}
+        foreach ($n in @('MCP_AGENT_SESSION_ID','MCP_AGENT_SESSION_TRANSCRIPT_FILE')) {
+            $saved[$n] = [Environment]::GetEnvironmentVariable($n)
+            Remove-Item "Env:\$n" -ErrorAction SilentlyContinue
+        }
+        $script:hdr005Yaml = ''
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Invoke-ReplRaw {
+                param([Parameter(Mandatory)][string]$Method, [string]$ParamsYaml = '')
+                $script:hdr005Yaml = $ParamsYaml
+                return [pscustomobject]@{ Success = $true; Output = "type: result`npayload:`n  result:`n    persisted: true"; Error = '' }
+            }
+
+            # Stale cache written by the pre-fix plugin: a transcript path for a file
+            # that does not exist, and agentSessionId echoing the MCP session id.
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = $sessionId
+                agent = 'Codex'
+                agentSessionId = $sessionId
+                agentSessionTranscriptFile = $fabricated
+            })
+
+            $null = Invoke-ReplPersistTurn -RequestId 'req-20260722T000001Z-hdr005' -Title 'hdr005' -Status 'in_progress' -ResponseText 'x'
+
+            $script:hdr005Yaml | Should -Not -BeNullOrEmpty
+            # TR-MCP-PLUGIN-HEADER-001: the fabricated path must never reach the server.
+            $script:hdr005Yaml | Should -Not -Match ([regex]::Escape('session.jsonl'))
+            # agentSessionId must not echo the MCP session id.
+            $script:hdr005Yaml | Should -Not -Match ([regex]::Escape("agentSessionId: $sessionId"))
+        } finally {
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            foreach ($n in $saved.Keys) {
+                if ($null -ne $saved[$n]) { Set-Item -Path "Env:\$n" -Value $saved[$n] } else { Remove-Item "Env:\$n" -ErrorAction SilentlyContinue }
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            Remove-Variable -Name hdr005Yaml -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-HEADER-002 emits the cache transcript path only when that file exists' {
         . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
         $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
@@ -3973,9 +4024,14 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
             Initialize-TurnShimCapture -SessionId $sandbox.SessionId
             Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
             Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000004Z-agent-runtime'
+            # TR-MCP-PLUGIN-HEADER-001: the transcript fixture must be a REAL file.
+            # A session-state path pointing at a missing file is a fabrication and is
+            # deliberately dropped (covered by TEST-MCP-PLUGIN-HEADER-005).
+            $realTranscript = Join-Path $sandbox.CacheDir 'codex-rollout.jsonl'
+            [System.IO.File]::WriteAllText($realTranscript, '{"t":1}')
             $state = Read-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml')
             $state['agentSessionId'] = 'codex-root-session-001'
-            $state['agentSessionTranscriptFile'] = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+            $state['agentSessionTranscriptFile'] = $realTranscript
             $state['agentExecutablePath'] = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
             $state['agentExecutableVersion'] = '1.82.0'
             Write-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml') -Document $state
@@ -3986,7 +4042,7 @@ Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
             $script:t40Submits.Count | Should -Be 1
             $sessionLog = Get-TurnShimSubmittedSessionLog -ParamsYaml $script:t40Submits[0]
             [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentSessionId') | Should -Be 'codex-root-session-001'
-            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentSessionTranscriptFile') | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentSessionTranscriptFile') | Should -Be $realTranscript
             [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentExecutablePath') | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
             [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentExecutableVersion') | Should -Be '1.82.0'
         } finally {
