@@ -57,11 +57,11 @@ Runtime state tracking for the active session and turn:
 - Invalid: `Copilot-2026-03-04-namingconv` (wrong date format)
 
 ### Agent Runtime Header Fields
-- `agentSessionId`: provider-native root session identifier, when the agent exposes one.
-- `agentSessionTranscriptFile`: provider-native transcript file path, when the host exposes one.
-- `agentExecutablePath`: executable path for the agent host that produced the session.
-- `agentExecutableVersion`: executable version for the agent host that produced the session.
-- These fields are optional, session-level header metadata. They must be preserved during recovery and complete-turn submits when an incoming payload omits them.
+- `agentSessionId`: provider-native root session identifier. Plugin-created sessions use the host-provided value when available and otherwise fall back to the MCP plugin session ID.
+- `agentSessionTranscriptFile`: provider-native transcript file path. Plugin-created sessions use the host-provided transcript path when available and otherwise fall back to the workspace cache transcript path.
+- `agentExecutablePath`: executable path for the agent host that produced the session. Plugin-created sessions resolve the host executable or plugin wrapper path.
+- `agentExecutableVersion`: executable version for the agent host that produced the session. Plugin-created sessions resolve the host version or record `unknown` when it cannot be discovered.
+- These fields remain optional for external callers, but plugin enforcement must submit non-empty values for new plugin-created sessions. They must be preserved during recovery and complete-turn submits when an incoming payload omits them.
 
 ### Request ID
 - Format: `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`
