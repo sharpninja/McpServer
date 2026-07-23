@@ -972,7 +972,7 @@ Scope: layer-1+
 
 ## FR-MCP-129 Durable external brain-slot registry and live invocation
 
-The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for Creativity, Logic, CuriosityEngine, and ArbiterOfTruth, including CRUD, readiness status projection, and individually gated live model invocation.
+The MCP runtime SHALL provide durable workspace-scoped external brain-slot definitions for LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth, including CRUD, readiness status projection, and individually gated live model invocation.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Brain-slot definitions are durable CRUD records scoped by workspace and role.
@@ -982,7 +982,6 @@ Scope: layer-1+
 - [x] REST, client, and STDIO/MCP surfaces expose list/get/upsert/delete/enable/disable/status/invoke parity.
 - [x] Invocation is rejected unless brain-slot execution is enabled, the slot is enabled, endpoint policy passes, credentials resolve, and required turn transactions are enabled.
 - [x] No implicit fallback model is used; fallback behavior remains fail-closed with structured reason codes unless a configured slot is invoked and committed.
-- [ ] Each role (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) MAY be configured with its own independent provider, model, and endpoint (best-of-breed per function); no single shared model is required across roles.
 
 ## FR-MCP-130 Transaction-gated Curiosity external result admission
 
@@ -992,7 +991,7 @@ Scope: layer-1+
 - [x] No model output is returned to the caller until the subscriber commit succeeds.
 - [x] If commit fails, times out, or degrades, output is discarded from the response and is not injected into cache or GraphRAG.
 - [x] Only CuriosityEngine may request GraphRAG/context admission.
-- [x] Creativity, Logic, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
+- [x] Left, Right, and Arbiter invocations may return committed results but never mutate cache or GraphRAG.
 - [x] Curiosity admission records the committed transaction and admission metadata for audit.
 
 ## FR-MCP-131 Quad containment and authorization boundary
@@ -1027,11 +1026,11 @@ Scope: layer-1+
 
 ## FR-MCP-134 Full Quad-Brain orchestration and AoT reconciliation
 
-The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including Creativity, Logic, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
+The MCP runtime SHALL execute the full four-role Quad-Brain decision loop when the workspace is quad-ready, including LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth invocation, transaction-gated AoT reconciliation, committed final output return, and fail-closed rejection when any required slot, transaction, endpoint, credential, or party gate is unavailable.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Orchestration rejects before provider calls unless all four roles have exactly one enabled, valid, trusted, transaction-ready slot.
-- [x] Creativity, Logic, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
+- [x] LeftHemisphere, RightHemisphere, and CuriosityEngine outputs are collected through existing transaction-gated slot invocation before ArbiterOfTruth reconciliation runs.
 - [x] AoT reconciliation returns the final committed decision only after subscriber commit; failed or degraded commits discard model output from the caller response.
 - [x] No implicit fallback model is used; fallback remains explicit fail-closed unless a configured slot is invoked and committed.
 
@@ -1057,7 +1056,7 @@ Scope: layer-1+
 
 ## FR-MCP-137 Quad Brain coding agent execution
 
-Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes coding tasks through QuadBrain orchestration, never bypassing the Quad Brain transaction/admission contract. ACID profile includes Quad Brain coding tool while excluding generic passthrough and other uncontrolled tools.
+RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified a hosted coding agent that reached QuadBrain orchestration through the mcp_quadbrain_coding_execute tool in the shared McpServer.McpAgent catalog. That tool is removed, because it advertised a QuadBrain capability to every hosted-agent host rather than to QBAgent alone, and it was already non-functional for QBAgent: QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail. Retired alongside TR-MCP-AGENT-016 and TEST-MCP-187. Replacement coverage is the absence suite under TEST-MCP-193. QuadBrain coding work continues server-side through POST /v1/chat/completions, the OpenAI-compatible endpoint QBAgent binds to with model id QuadBrain; that path is unchanged and separately covered. Corrected 2026-07-20 after an audit found this FR still describing removed behavior when its TR and TEST had already been retired.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
@@ -1090,6 +1089,26 @@ Scope: layer-1+
 - [x] Unapproved diagnostics and broad warning bypasses remain remediation work until code, configuration, package metadata, or dependency changes remove the warning source. (evidence: .editorconfig CA1848 severity override removed; CA1848 and CS8602 approval entries removed; CS8602 pragmas removed; Storage migration obsolete pragmas removed.)
 - [x] PLAN-WARNREMEDIATION-001 stays current with approved suppressions separated from required fixes and marks only validated work as done. (evidence: PLAN-WARNREMEDIATION-001 W15/W18/W21-W24 evidence updated in TODO state; approved suppressions remain in config/warning-suppression-approvals.json.)
 - [x] Requirements exports and traceability mappings include the suppression governance FR, TR, and aiUnit TEST records. (evidence: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md, docs/Project/Requirements-Matrix.md, docs/Project/requirements-wiki-documents.zip)
+
+## FR-MCP-140 Self-describing marker signature canonicalization
+
+The generated AGENTS-README-FIRST.yaml marker file shall embed the complete marker-v1 canonical field list and encoding contract inside the signature block so that any agent can reconstruct and verify the HMAC-SHA256 signature without consulting server source code, documentation, or a helper module. Recovered from origin/claude/dreamy-brahmagupta (commit ccda0a4e, 2026-04-09) where it was authored as FR-MCP-081; that id has since been reused on develop for Byrd Iteration Phase and TODO Execution Persistence, so this work is renumbered. Extends FR-MCP-076 (marker trust bootstrap) and TR-MCP-SEC-003 (signed marker bootstrap), neither of which states that the payload field list is emitted or that it is table-driven. Motivation: the marker-v1 field order is currently hand-reimplemented in at least six independent verifiers (McpSession.psm1, plugins lib-ps and lib-sh marker resolvers, the lib-node and mcp-repl-ts TypeScript resolvers, mcpserver-agent-core marker-trust.ts, MarkerFileClientOptionsResolver.cs) plus a prose spec in REPL-AGENT-GUIDE.md, with no test binding them together; a missed update makes a verifier compute a different HMAC and log MCP_UNTRUSTED.
+Scope: layer-1+
+
+## FR-MCP-141 Service-account process environment fidelity
+
+When the server runs as a Windows service under a non-interactive account, child processes it launches shall resolve executables and environment the same way an interactive user session would. Executable resolution shall skip Microsoft\WindowsApps App-Execution-Alias stubs, which are zero-byte reparse points that fail with Win32Exception 1920 for service accounts. Tunnel providers shall apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the child process so provider configuration files resolve, and shall resolve the provider binary against that enriched PATH. A missing provider binary shall be reported at Warning with a message naming the service-account and Store-alias causes and the available remedies, not as an unexplained error. Recovered from origin/claude/busy-dubinsky (2026-04-04 to 2026-04-05), which registered no requirement of any kind.
+Scope: layer-1+
+
+## FR-MCP-142 QuadBrain is absent from every general agent surface
+
+No QuadBrain capability shall be exposed to general agents or to the agent plugins in any form. Absent, not gated: no brain-slot tool descriptors in the shared plugin cores, none advertised over the server MCP transports, no named client-passthrough route reaching BrainSlotClient, no QuadBrain-named tool in the shared hosted-agent catalog, and no brain-slot descriptor files in the shared mcps registry. QuadBrain remains reachable only as the OpenAI-compatible model at POST /v1/chat/completions, workspace-token authorized, which is the sole path QBAgent uses. Everything behind that endpoint stays server-side: QuadBrainOpenAiController, QuadBrainOpenAiChatService, QuadBrainOrchestrationService, the BrainSlot registry, invocation, credential, chat-client-factory and startup-seeder services, the BrainSlot storage entities and migrations, the QuadBrain tool interceptor, and config/brain-slots/quad-brain-slot-assignments.yaml. Evidence that motivated this requirement: the ClaudeCode session of 2026-07-20 could enumerate all eleven brain_slot tools from a general agent tool list, and plugins/core/lib-node/src/runtime/host-context.ts spread brainSlotTools into the ungated allToolDescriptors catalog advertised to every Node host plugin.
+Scope: layer-1+
+
+## FR-MCP-143 Session-log turns persist without a title and never lose a refined one
+
+A session-log turn shall persist end to end when its title is deliberately omitted, and a title the agent has refined shall never be overwritten by a stale local copy. Thirteen open triage reports (BUG-TRIAGE-086 through 101, excluding the already-closed 097) collapse into five root causes, of which two account for eleven of the reports. First, the plugin PowerShell core rejects an empty title at parameter binding even though TR-MCP-REPL-015 requires callers to omit the title so a stale cached one is not resubmitted, so appendDialog, appendActions, completeTurn and the supersede path all fail. Second, the typed client posts anonymous request bodies through a source-generated JSON context that has no metadata for compiler-generated types, so the dedicated retitle endpoints throw before reaching the server. The remaining three are the supersede path clobbering a server-refined title from the local cache, failTurn refusing to close a turn the plugin cache shows as active, and a storage outage leaving health reporting Healthy while every persistence call fails behind inconsistent error shapes.
+Scope: layer-1+
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
 
@@ -1195,6 +1214,11 @@ Scope: layer-1+
 ## FR-MCP-LIVE-CODEX-20260603T2015Z Live Codex plugin acceptanceCriteria verification
 
 Temporary live verification for plugin acceptanceCriteria rollout.
+Scope: layer-1+
+
+## FR-MCP-MARKER-004 Marker removal deletes the marker and leaves no tombstone
+
+Removing the AGENTS-README-FIRST.yaml workspace marker must delete the file. It must not rename the marker to an AGENTS-README-FIRST.yaml.deleted-{timestamp} archive copy that is never reclaimed. The marker is regenerated in full on every server start and carries the per-workspace API key that rotates on each restart, so an archived copy preserves no recoverable state of value while leaving an expired credential on disk. Each graceful shutdown currently leaves one tombstone permanently: as of 2026-07-20 the McpServer workspace held 19 of them, 587,033 bytes, dated 2026-07-08 through 2026-07-16, every one containing the apiKey that was live when it was written. TR-MCP-DB-003 (soft deletes for persistent MCP data) governs persistent MCP domain rows and their relationships; it does not extend to regenerated filesystem artifacts, and applying it to the marker was an over-generalization. The same rule applies to the legacy .mcp-server.yaml and .mcp-server.json markers removed alongside it.
 Scope: layer-1+
 
 ## FR-MCP-MEMORY-001 Global and workspace memory storage
@@ -1316,6 +1340,11 @@ Scope: layer-1+
 - [ ] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.
 - [ ] The canonical parsing fix propagates to every official plugin distribution without checksum drift.
 
+## FR-MCP-PLUGIN-HEADER-001 Agent runtime header fields record only observed values
+
+Plugin-created session logs SHALL record the four agent runtime header fields (agentSessionId, agentSessionTranscriptFile, agentExecutablePath, agentExecutableVersion) only from observed runtime facts. A value SHALL NOT be synthesized, and a field SHALL be left empty rather than populated with a placeholder, a substitute identifier, or a path that does not exist. Scope: layer-1+. Acceptance Criteria: (1) a transcript path is recorded only when that file exists on disk; (2) the agent executable version is never taken from the plugin version, and is 'unknown' when live discovery fails; (3) agentSessionId carries only a provider-native identifier and is never the MCP session id; (4) a stale cached or environment-supplied value that fails these rules is dropped rather than re-submitted.
+Scope: layer-1+
+
 ## FR-MCP-PLUGININT-001 End-to-end Session Log validation for every agent plugin
 
 The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real MCP Server.
@@ -1365,13 +1394,18 @@ Scope: layer-1+
 
 ## FR-MCP-QBEXEC-003 Full-fidelity inter-brain session logging
 
-QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
+QuadBrain SHALL log all interaction between the brains in full. Every brain-slot invocation (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) and the AoT reconciliation SHALL write its full prompt and full output text to the session log, correlated by the turn's TurnId, in addition to the existing durable hashed audit row (BrainSlotInvocationEntity). Internal-tool execution outcomes and internal-tool failure notes SHALL also be recorded to the session log. Secrets SHALL be redacted. This is a primary reason the model runs inside the MCP Server.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Each brain-slot invocation writes full prompt + full output text to the session log (not only SHA-256 hashes), under the correct TurnId.
 - [ ] AoT reconciliation input and output are logged in full to the session log.
 - [ ] Internal-tool executed and failed outcomes (interception Executed/Failed) are recorded to the session log as the turn proceeds.
 - [ ] Secret values (api keys, bearer tokens) are redacted before logging; the existing hashed BrainSlotInvocationEntity audit row is retained as the durable index.
+
+## FR-MCP-QBOLLAMA-002 Ollama integration tests provision and release their own server
+
+The QuadBrain Ollama integration tests must not require an operator to have started Ollama beforehand. At startup the test fixture probes http://localhost:11434/api/tags. If a server already answers, the fixture uses it and must leave it running after the tests finish. If no server answers, the fixture starts one from a discovered ollama executable, waits until the endpoint answers, and records that it owns the process. At teardown the fixture stops only a server it started itself, and never stops a pre-existing server. If no ollama executable can be discovered, the fixture fails with an actionable message naming the InstallOllama Nuke target rather than a bare connection-refused error. A server the fixture started must not survive the test run even when the run fails or the endpoint never becomes reachable.
+Scope: layer-1+
 
 ## FR-MCP-QBOPENAI-001 QuadBrain OpenAI-compatible chat-completions endpoint
 
@@ -1385,7 +1419,7 @@ Scope: layer-1+
 
 ## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
 
-The server provisions the four GLOBAL Quad-Brain roles (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, as a single global set. The /v1 OpenAI-compatible endpoint resolves the caller workspace from its token to scope server-side internal-tool mutations, not brain-slot visibility (brains are global).
+The server provisions the four GLOBAL Quad-Brain roles (LeftHemisphere, RightHemisphere, CuriosityEngine, ArbiterOfTruth) into the durable brain-slot registry from configuration at startup, without manual API calls, as a single global set. The /v1 OpenAI-compatible endpoint resolves the caller workspace from its token to scope server-side internal-tool mutations, not brain-slot visibility (brains are global).
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] When Mcp:BrainSlots:ExecutionEnabled is true and Slots is populated, the startup seeder upserts and enables each configured slot as a single global set and the quad becomes ready in every workspace context.
@@ -1583,6 +1617,11 @@ Scope: layer-1+
 The MCP REPL plugin SHALL expose setTurnTitle and setSessionTitle workflow methods that durably update the active turn's title and the session title through explicit server title-update paths, so an agent-refined title survives the whole-session re-submit the plugin issues on every subsequent persist. Scope: layer-1+. Acceptance Criteria: (1) workflow.sessionlog.setTurnTitle updates current-turn.yaml queryTitle and persists the new title to the server for the active turn; (2) workflow.sessionlog.setSessionTitle writes session-state.yaml title and persists the new session title to the server; (3) a subsequent supersede/complete/append whole-session re-submit does not revert either title.
 Scope: layer-1+
 
+## FR-MCP-REPL-011 Plugin failsafe queue drains instead of accumulating
+
+BUG-TRIAGE-097. The MCP plugin PowerShell runtime writes every session-log submit to a failsafe queue on disk before calling the backend, so a crash or an unreachable server cannot lose the turn. Until now nothing ever replayed those records: the queue only grew, and plugin Status reported pendingCount 0 while captured turns sat undrained (33 records in F:/GitHub/McpServer as of 2026-07-20, oldest 2026-07-14, eight added in a single session). An agent or operator MUST be able to get queued turns into the session log once the backend is reachable again, automatically on the first proven-reachable call and on demand through an explicit drain verb, without ever losing a record: a record leaves the queue only after its submission is confirmed, a record the backend rejects does not block the newer records behind it, and a record that cannot be replayed at all is set aside for inspection rather than deleted or retried forever. Plugin Status MUST report the real queue depth.
+Scope: layer-1+
+
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
 FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
@@ -1732,6 +1771,11 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Cline paired JSON/JSONL, Copilot event folders, and OpenCode JSONL/SQLite snapshots normalize into canonical Session Log YAML. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestionService_NormalizesRealTranscriptFixtures, OpenCodeSqliteTranscriptTests, and real manifest coverage for Cline, Copilot, and OpenCode.)
 - [x] Secondary sources can emit optional Claude, Codex, or Grok compatibility JSONL without reparsing it for canonical YAML. (evidence: Current validation 2026-07-10 21:33-21:37 CDT: Support.Mcp transcript unit 60 passed/0 failed/0 skipped; Support.Mcp transcript integration+McpTransport 22/0/0; Repl.Core transcript 4/0/0; Client IngestTranscript 2/0/0; clean plugin Pester 47/0/0. Covered by IngestionService_EmitsCompatibilityJsonlWhenProfileRequested and Repl.Core normalization profile tests.)
+
+## FR-MCP-TRANSCRIPT-009 Transcript ingestion size ceilings raised to Int32.MaxValue
+
+Transcript ingestion must accept transcript sources whose per-file size, per-JSONL-line size, record count, upload request size, and expanded archive size are bounded only by Int32.MaxValue (2,147,483,647). Operators ingesting large agent transcripts (notably Claude Code JSONL, where a single line can carry a full tool result) must not be rejected by the previous 256 MiB per-file, 8 MiB per-line, 2,000,000-record, 512 MiB request, or 2 GiB expanded-content ceilings. Guards that defend against hostile archives rather than large transcripts are retained unchanged: archive entry count, compression ratio, ZIP symlink rejection, and path-traversal rejection. Supersedes the ceiling values asserted by FR-MCP-TRANSCRIPT-002 and TR-MCP-TRANSCRIPT-001; the bounded-reader obligation itself is unchanged, only the bound values move.
+Scope: layer-1+
 
 ## FR-MCP-TRIAGE-001 Fire-and-forget triage intake
 

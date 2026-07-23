@@ -993,14 +993,14 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-142 | Tracked | Functional-Requirements.md |
 | FR-MCP-143 | Tracked | Functional-Requirements.md |
 | FR-MCP-MARKER-004 | Tracked | Functional-Requirements.md |
+| FR-MCP-PLUGIN-HEADER-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-QBOLLAMA-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-REPL-011 | Tracked | Functional-Requirements.md |
 | FR-MCP-TRANSCRIPT-009 | Tracked | Functional-Requirements.md |
-| [] | Tracked | Technical-Requirements.md |
-| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TR-MCP-CLIENT-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-HEALTH-003 | Tracked | Technical-Requirements.md |
 | TR-MCP-MARKER-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-HEADER-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-QB-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-QBOLLAMA-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-REPL-016 | Tracked | Technical-Requirements.md |
@@ -1022,6 +1022,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-193 | Tracked | Testing-Requirements.md |
 | TEST-MCP-194 | Tracked | Testing-Requirements.md |
 | TEST-MCP-MARKER-004 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGIN-HEADER-002 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGIN-HEADER-003 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGIN-HEADER-004 | Tracked | Testing-Requirements.md |
+| TEST-MCP-PLUGIN-HEADER-005 | Tracked | Testing-Requirements.md |
 | TEST-MCP-QBOLLAMA-002 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-031 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-032 | Tracked | Testing-Requirements.md |
@@ -1034,3 +1038,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REPL-039 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-040 | Tracked | Testing-Requirements.md |
 | TEST-MCP-TRANSCRIPT-013 | Tracked | Testing-Requirements.md |
+| [] | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

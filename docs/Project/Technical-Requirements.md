@@ -244,7 +244,7 @@ Scope: layer-1+
 
 ## TR-MCP-AGENT-016
 
-**Hosted-agent Quad Brain coding adapter** — The McpServer.McpAgent package provides public DTOs, hosted-agent adapter functions, ACID allowlist membership, and typed runtime helpers that route coding requests to McpServerClient.BrainSlots.OrchestrateAsync with deterministic metadata and cancellation support.
+**Hosted-agent Quad Brain coding adapter** — RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified the mcp_quadbrain_coding_execute hosted-agent tool routing to POST mcpserver/brain-slots/orchestrate through McpQuadBrainCodingAgentRouter. Both the tool and the router are removed: the tool was registered into the shared McpServer.McpAgent catalog for every host, which violates the rule that no QuadBrain capability is exposed outside QBAgent, and it was already non-functional for QBAgent because QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail. Removed artifacts: McpHostedAgentToolAdapter tool registration and ExecuteQuadBrainCodingTaskAsync, IMcpHostedAgent.ExecuteQuadBrainCodingTaskAsync, McpHostedAgent.ExecuteQuadBrainCodingTaskAsync, QBAgentRuntime.ExecuteCodingTaskAsync and its codingTaskExecutor parameter, QBAgentDefinition allow-list entry, McpQuadBrainCodingAgentRouter.cs, and the McpQuadBrainCodingAgentRequest DTO. Server-side QuadBrain orchestration is unchanged and remains reachable only through POST /v1/chat/completions. Note that this is a public API break in the shared McpServer.McpAgent assembly, accepted deliberately as the intended consequence of the ruling.
 **Covered by:** FR: FR-MCP-137; TEST: TEST-MCP-187
 **Status:** pending
 Scope: layer-1+
@@ -560,6 +560,13 @@ Scope: layer-1+
 
 **clear-session skill content contract** — The clear-session SKILL.md SHALL satisfy: AC1 - end the session by finalizing the open turn via workflow.sessionlog.completeTurn and closing the session through the plugin wrapper (lib/repl-invoke.ps1 / Invoke-McpPlugin.ps1 or hooks/scripts/session-end.ps1 where present), never raw REST. AC2 - clear context best-effort programmatically (plugin cache/session-state flush), then fall back to a per-host manual clear command (/clear for Claude, /new for Codex/OpenCode, New Task for Cline, new chat for Copilot) and pause for user confirmation; never claim context cleared when only the user can do it. AC3 - reload the agent instruction file selected by host: CLAUDE.md for claude/claude-cowork, AGENTS.md otherwise, always after re-reading AGENTS-README-FIRST.yaml, carried verbatim. AC4 - execute the add-profile skill. AC5 - report a readiness summary stating whether context was actually cleared or awaits user action. The skill SHALL be PowerShell-only (no bash/node/.sh references) and present byte-identical in all 8 agent plugin repositories.
 **Covered by:** FR: FR-MCP-CLEARSESSION-001; TEST: TEST-MCP-CLEARSESSION-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-CLIENT-001
+
+**Typed client request bodies are registered for source-generated JSON** — Implements FR-MCP-143 and closes BUG-TRIAGE-088, 093, 095, and the client half of 090, 094, and 101. McpClientBase serializes every request through the source-generated McpClientJsonContext, whose TypeInfoResolver has no JsonTypeInfo for compiler-generated anonymous types. src/McpServer.Client/SessionLogClient.cs nevertheless posts anonymous bodies at line 160 (session lifecycle open, new { title, model }) and lines 236 and 247 (SetSessionTitleAsync and SetTurnTitleAsync, new { title }), so GetTypeInfo throws NotSupportedException and those endpoints never execute. Every request body in the typed client SHALL be a declared type carrying JsonPropertyName attributes and XML documentation, and SHALL be registered in McpClientJsonContext with JsonSerializable. The whole client SHALL be audited for the same pattern rather than only the three known sites, because this defect class was reported five separate times, and the audit result SHALL be reported. Coverage SHALL exercise the real McpClientJsonContext serialization path rather than a hand-rolled JsonSerializer call, so the test fails for the same reason production did.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
@@ -961,6 +968,13 @@ Scope: layer-1+
 - [x] WorkspaceReadinessHealthCheck is registered as AddCheck with "workspace-ready" tag on /ready endpoint.
 - [x] Returns Unhealthy when !WorkspaceTokenService.IsInitialized, when no enabled workspace is registered, or when primary workspace has no seeded token.
 
+## TR-MCP-HEALTH-003
+
+**Health reflects storage reachability and backend errors are typed** — Implements FR-MCP-143 and closes BUG-TRIAGE-096. GET /health is liveness-only (tags live: self plus FederationUpstreamHealthCheck) with no storage connectivity check, so when the database backend is unreachable the server still answers Healthy and echoes the trust nonce correctly while every persistence call fails. Observed live on 2026-07-20 when the SQL host was powered off: marker trust passed, then todo_list returned a raw SqlClient "Named Pipes Provider, error: 40" string, sessionlog_query returned a misleading "transient failure, consider EnableRetryOnFailure" hint, triage_report returned a bare "an error occurred", and the plugin wrapper returned an opaque 30-second timeout, so no caller could tell that storage was simply down. The server SHALL expose storage reachability on the health path, either by degrading the status or by an explicit storage field, WITHOUT breaking the nonce echo that marker trust bootstrap depends on. Backend-unavailable conditions SHALL surface as one typed error consistently across REST and the MCP tools, distinguishable from a malformed request. Coverage SHALL simulate an unreachable store and assert the misleading Healthy result before the fix.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-HELP-001
 
 **Agent Help options and startup validation** — AgentHelpOptions binds from the AgentHelp configuration section; AgentHelpOptionsValidator rejects unsupported execution strategies, missing transcript or incident directories, and incomplete API key wiring.
@@ -1095,6 +1109,13 @@ Scope: layer-1+
 **Status:** ✅ Complete
 
 **Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
+Scope: layer-1+
+
+## TR-MCP-MARKER-004
+
+**RemoveSingleFile deletes rather than archives; tombstone builder removed** — Implements FR-MCP-MARKER-004. MarkerFileService.RemoveSingleFile calls File.Delete on the marker path instead of File.Move to a BuildArchivedMarkerPath candidate, and BuildArchivedMarkerPath is deleted. The IOException and UnauthorizedAccessException handling and the existing log line are retained, with the message restated as a delete rather than an archive. Callers are unchanged: Program.cs registers MarkerFileService.RemoveMarker on ApplicationStopping, which is the path that produced one tombstone per graceful shutdown. The existing unit test MarkerFileServiceTests.RemoveMarker_ArchivesMarkerFileInsteadOfDeletingIt is retargeted to assert the inverse, since it encoded the defect as intended behavior and cites TR-MCP-DB-003, a requirement scoped to persistent MCP domain rows rather than filesystem artifacts. Existing tombstones in the workspace are moved to the Windows Recycle Bin rather than hard-deleted, so the cleanup itself stays reversible.
+**Covered by:** FR: FR-MCP-MARKER-004; TEST: TEST-MCP-MARKER-004
+**Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-MEMORY-001
@@ -1343,6 +1364,13 @@ Scope: layer-1+
 
 **PowerShell.MCP cross-volume text-edit workaround documented** — Operator guidance SHALL document the PowerShell.MCP cross-volume text-edit workaround in the PowerShell.Mcp Command Routing block: the text-edit cmdlets (Add-LinesToFile/Update-LinesInFile/Update-MatchInFile/Remove-LinesFromFile) stage a replacement file and move it into place, and that move fails when TEMP/TMP are on a different volume than the target; the fix is to set TEMP/TMP to a directory on the same volume as the edit target and to verify the edit landed afterward, since a failed move can leave the edit unapplied while still previewing the diff. Acceptance Criteria: (AC1) templates/prompt-templates.yaml and its graphrag canonical mirror both contain the same-volume TEMP/TMP + verify-after-edit note and both parse as YAML; (AC2) the added guidance contains no em-dashes. Origin: BUG-TRIAGE-084 (third-party PowerShell.MCP module cross-volume replacement-move failure; prior art 054/056 resolved as an undocumented operational workaround). The module is unpinned in Confirm-PowerShellMcpRuntime; a version pin is a future option. Validated by TEST-MCP-PLUGINCORE-005.
 **Covered by:** FR: FR-MCP-PLUGINCORE-004; TEST: TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PLUGIN-HEADER-001
+
+**Observed-only resolution of agent runtime header fields** — agent-runtime-header.ps1 MUST resolve agentSessionTranscriptFile through Get-McpPluginFirstExistingFile so only an existing file is reported and the previous unconditional fallback to (Join-Path CacheDir 'session.jsonl') is removed. Resolve-McpPluginAgentExecutableVersion MUST NOT fall back to MCP_PLUGIN_VERSION and MUST return 'unknown' when live discovery fails. agentSessionId MUST come only from a provider-native source (hook payload session_id or host env) and MUST NOT fall back to the MCP SessionId. Resolve-McpPluginAgentHeaderFields MUST accept ProviderSessionId and TranscriptPath, and plugin-hook.ps1 MUST supply the host hook payload session_id and transcript_path (Read-HookInput memoized with StrictMode-safe initialization). Invoke-ReplPersistTurn in repl-invoke.ps1 MUST apply the same existence rule at the submit layer and MUST clear agentSessionId when it equals the MCP session id, so a pre-fix session-state cache cannot re-submit a fabricated value. Validated by TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005. Covered by FR: FR-MCP-PLUGIN-HEADER-001. Status: implemented. Scope: layer-1+.
+**Covered by:** FR: FR-MCP-PLUGIN-HEADER-001; TEST: TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005
 **Status:** pending
 Scope: layer-1+
 
@@ -1620,6 +1648,13 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-QB-001
+
+**Remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog** — Implements FR-MCP-142. Four independent exposures were identified and all four SHALL be removed; removing only the first leaves QuadBrain reachable. (1) Shared Node plugin core: delete plugins/core/lib-node/src/tools/brain-slots.ts and tests/brain-slots.test.ts, remove the import at runtime/host-context.ts:15, the brainSlotTools spread at :40, the dispatch branch at :290, the public re-export at index.ts:49, and the brain_slot_status assertion at tests/host-context.test.ts:127, then rebuild dist because dist is gitignored and stale compiled output keeps exporting the tools. (2) Server MCP transports: delete src/McpServer.Support.Mcp/McpStdio/FwhMcpTools.BrainSlots.cs, which declares all eleven brain_slot tools and is registered by assembly scan at Program.cs:706 WithToolsFromAssembly and by McpStdioHost, with zero identity filtering anywhere in the project, so every MCP client sees them; prune the brain-slot entries from docs/stdio-tool-contract.json and retire tests/McpServer.Support.Mcp.Tests/McpStdio/BrainSlotContractArtifactTests.cs, keeping the artifact for MemoryContractArtifactTests. (3) Named client passthrough: remove the BRAINSLOTS mapping at src/McpServer.Repl.Core/GenericClientPassthrough.cs:168 and its BrainSlot result-unwrapping cases, closing the client-invoke back door that survives tool removal. (4) Shared hosted-agent catalog: remove mcp_quadbrain_coding_execute from McpHostedAgentToolAdapter, IMcpHostedAgent, QBAgentDefinition, and McpQuadBrainCodingAgentRouter; it is advertised to every McpServer.McpAgent host and is already dead for QBAgent because QuadBrainInternalToolExecutor has no case for it. Also delete the eleven mcps/mcpserver/tools/brain_slot_*.json descriptors, which have no in-repo consumer. BrainSlotClient itself remains, because the server-side orchestration path and its tests use it; only the agent-reachable routes to it are removed.
+**Covered by:** FR: FR-MCP-142; TEST: TEST-MCP-193
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-QBAGENT-001
 
 **QBAgent marker bootstrap and graceful no-marker exit** — QBAgent startup resolves baseUrl and apiKey from the AGENTS-README-FIRST.yaml marker in the working directory (not from defaulted McpAgentOptions); binds the QuadBrain coding route to that endpoint with X-Api-Key auth; rejects/omits all non-QuadBrain surfaces; and when no marker file is found performs a clean graceful shutdown (defined exit, informational log, no endpoint contact).
@@ -1645,6 +1680,13 @@ Scope: layer-1+
 
 **Full-text inter-brain session-log capture** — Brain-slot invocations and AoT reconciliation write full prompt+output text to the session log via ISessionLogService correlated by TurnId, retaining the hashed BrainSlotInvocationEntity audit row; internal-tool executed/failed outcomes are logged; secrets are redacted.
 **Covered by:** FR: FR-MCP-QBEXEC-003; TEST: TEST-MCP-QBEXEC-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-QBOLLAMA-002
+
+**OllamaServerController with injectable probe, launcher, and ownership-scoped teardown** — Implements FR-MCP-QBOLLAMA-002. OllamaServerController lives in tests/TestSupport.Shared with no xunit dependency; its probe delegate, executable resolver, process launcher, poll interval, timeout, delay, and clock are injected so the policy is unit-testable without a real Ollama binary. It is linked into McpServer.Support.Mcp.Tests and McpServer.Support.Mcp.IntegrationTests through tests/Directory.Build.targets following the Validation.Shared linked-source idiom. EnsureRunningAsync probes first, launches only when the probe fails, then polls until the probe succeeds or the timeout elapses; on timeout it terminates any process it started before throwing. A resolver returning no executable throws an InvalidOperationException naming the InstallOllama Nuke target without attempting a launch. StopAsync terminates only a controller-started process and is idempotent. OllamaServerFixture implements IAsyncLifetime over the controller with a real HttpClient probe on /api/tags, a resolver covering PATH, LocalAppData/Programs/Ollama, and the Nuke test-tools ollama directory, and a launcher running 'ollama serve' that kills the whole process tree; QuadBrainOllamaEndpointIntegrationTests consumes it through IClassFixture. IMPLEMENTED 2026-07-20. Evidence: red gate was a compile failure (CS0234/CS0246, controller type absent); green gate OllamaServerControllerTests 6/0/0 and Support.Mcp.Tests 1692/0/0. Live proof on PAYTON-LEGION2 with no Ollama running and none on PATH: QuadBrainOllamaEndpointIntegrationTests went from 3 failed to 4 passed in 3m35s using the portable binary at LocalAppData/McpServer/test-tools/ollama, and after the run zero ollama processes remained with port 11434 not listening.
+**Covered by:** FR: FR-MCP-QBOLLAMA-002; TEST: TEST-MCP-QBOLLAMA-002
 **Status:** pending
 Scope: layer-1+
 
@@ -1806,7 +1848,7 @@ Scope: layer-1+
 **Status:** completed
 Scope: layer-1+
 **Acceptance Criteria:**
-- [x] Full orchestration invokes Creativity, Logic, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
+- [x] Full orchestration invokes LeftHemisphere, RightHemisphere, CuriosityEngine, and ArbiterOfTruth through transaction-gated slots and returns final committed Arbiter output. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenQuadReady_ReturnsCommittedAotDecision)
 - [x] Orchestration rejects non-ready workspaces before any role invocation. (evidence: QuadBrainOrchestrationServiceTests.ExecuteFullOrchestrationAsync_WhenNotQuadReady_DoesNotInvokeAnySlot)
 
 ## TR-MCP-QUAD-007
@@ -1979,6 +2021,41 @@ Scope: layer-1+
 
 **Plugin omits titles on incidental whole-session re-submit** — Invoke-ReplPersistTurn MUST omit the turn QueryTitle and the session Title on incidental re-submits (supersede, appendActions, appendDialog, updateTurn, completeTurn) unless a title is explicitly supplied in that operation. Because the server preserves omitted fields (FR-SUPPORT-015), an agent-set or server-preserved title then survives the whole-session re-submit instead of being clobbered by the stale local cache value. beginTurn still seeds the new turn's provisional QueryTitle, and seeds the session Title only on the first turn (when session-state has no title yet); an explicit queryTitle param on appendActions/appendDialog/updateTurn/completeTurn still updates the turn title. Validated by TEST-MCP-REPL-030. Covered by FR: FR-MCP-REPL-010. Status: pending. Scope: layer-1+.
 **Covered by:** FR: FR-MCP-REPL-010; TEST: TEST-MCP-REPL-029, TEST-MCP-REPL-030
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-016
+
+**Failsafe queue drains oldest-first after a proven-reachable backend call** — BUG-TRIAGE-097. The plugin PowerShell runtime captures every session-log submit into the failsafe queue before the remote call but never replays it, so records accumulate forever (33 on disk in F:/GitHub/McpServer, oldest 2026-07-14). plugins/core/lib-ps/repl-invoke.ps1 MUST expose Invoke-ReplFailsafeDrain, which walks the failsafe directory oldest-first (the file name is prefixed with the UTC capture stamp, so a name sort is a chronological sort) and re-issues each record's captured method and params through Invoke-ReplRaw. A record MUST be deleted only after its submission succeeds; a record whose submission fails MUST stay on disk. client.SessionLog.SubmitAsync is an upsert keyed by sessionId plus requestId, so a replay is idempotent. A record rejected by the backend MUST NOT block the newer records behind it: the drain increments that record's drainAttempts counter and continues the walk. A transport-level failure (MCP_UNTRUSTED, mcpserver-repl not on PATH, timeout, refused connection) MUST abort the pass without consuming any attempt budget, because the backend and not the record is at fault. The drain MUST skip the record belonging to the submit currently in flight, so a drain triggered inside an active submit cannot double-submit or delete the live turn. The drain MUST be wired to the first successful Invoke-ReplRaw in the process (Invoke-ReplFailsafeDrainOnFirstSuccess, latched to run at most once and disabled by MCP_FAILSAFE_DRAIN_DISABLED=1) rather than to bootstrap: bootstrap only proves the marker file is fresh, does not prove the backend answers, and runs inside Invoke-ReplRaw, so draining there would recurse. Operators MUST be able to force a full pass with the plugin-local verb workflow.failsafe.drain (optional maxRecords and maxAttempts params), which prints the drain summary as YAML and exits non-zero only when the pass aborted.
+**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-017
+
+**Failsafe quarantine and truthful pending queue depth in plugin status** — BUG-TRIAGE-097. A failsafe record that cannot be replayed MUST be quarantined rather than retried forever or deleted, because a captured record can be the only copy of a turn. plugins/core/lib-ps/repl-invoke.ps1 MUST move a record to a quarantine subdirectory of the failsafe directory, next to a sibling .reason.txt naming the quarantine timestamp, the original path, and the reason, when the record is not readable YAML, when its root is not a mapping, when it has no method or no params, or when its drainAttempts counter has reached the attempt budget (default 5). Quarantined records MUST NOT be counted as live queue depth. plugins/core/lib-ps/resolve-cache-dir.ps1 MUST own the single resolution of the queue location (Get-McpFailsafeDir and Get-McpFailsafeQuarantineDir, honouring MCPSERVER_FAILSAFE_DIR then MCP_FAILSAFE_DIR then the workspace cache) so the writer, the drain, and the status reporter cannot disagree. plugins/core/lib-ps/mcp-status.ps1 MUST count the failsafe directory: pendingCount previously counted only the cache pending directory and therefore reported 0 while 33 captured submits sat undrained, so pendingCount MUST be the sum of pending turn records and queued failsafe records, and the status document MUST additionally expose pendingTurnCount, failsafeDir, failsafeCount, and failsafeQuarantineCount. A read-only workflow.failsafe.status verb MUST report the same depth without replaying anything.
+**Covered by:** FR: FR-MCP-REPL-011; TEST: TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-018
+
+**Turn upsert accepts a deliberately empty title** — Implements FR-MCP-143 and closes BUG-TRIAGE-087, 089, 091, 098, the PowerShell half of 090 and 094, and the PowerShell half of 101. plugins/core/lib-ps/repl-invoke.ps1 declares the turn-upsert Title parameter as [Parameter(Mandatory)][string] with no [AllowEmptyString()] at line 944, while callers deliberately pass an empty string per TR-MCP-REPL-015 so a stale cached title is not resubmitted. PowerShell rejects the bind before any request is made, so appendDialog without a queryTitle, appendActions, completeTurn, and the supersede path all fail with a mandatory-parameter binding error rather than persisting. The parameter SHALL accept an empty string, and every call path that legitimately passes one SHALL persist. Any other mandatory string parameter on the same path that would reject a legitimate empty value SHALL be corrected the same way. Pester coverage SHALL prove the binding failure before the fix and the successful persist after, using a temporary cache directory so no test touches the real workspace state.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-019
+
+**Supersede preserves a server-refined turn title** — Implements FR-MCP-143 and closes BUG-TRIAGE-086. Invoke-ReplSupersedeCurrentTurnIfInProgress in plugins/core/lib-ps/repl-invoke.ps1 reads queryTitle only from the local current-turn.yaml and then re-persists the canceled turn, so a title the agent refined server-side is overwritten by the stale local value and the session title is clobbered on every prompt. The hook cannot summarize, so it writes the prompt first line or the literal placeholder, which means the local copy is frequently the worse of the two. The supersede path SHALL prefer the server-side title when the local cache holds no title or holds only the hook's raw default, and SHALL never replace a refined title with raw prompt text. Coverage SHALL prove that a refined title survives a supersede and that a genuinely absent title still results in a persisted turn.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-REPL-020
+
+**failTurn resolves the active turn from the plugin cache** — Implements FR-MCP-143 and closes BUG-TRIAGE-099. Plugin Status reports hasSession and hasCurrentTurn from the local cache (session-state.yaml carrying verified plus a non-empty sessionId, and the presence of current-turn.yaml), and the beginTurn path writes those files, but failTurn requires an empty in-process REPL state and otherwise returns "No active session exists". The result is that a turn the plugin reports as active cannot be closed as failed, so a wrap-up cannot truthfully record a validation failure and the turn is left in progress forever. failTurn SHALL resolve the active session and turn the same way the rest of the plugin does, falling back to the cache when the in-process state is empty, and SHALL close the turn as failed when the cache identifies one. Coverage SHALL prove the current refusal before the fix and a successful fail-close afterwards, using a temporary cache directory.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
@@ -2167,6 +2244,19 @@ Scope: layer-1+
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`
 Scope: layer-1+
 
+## TR-MCP-SEC-005
+
+**Self-describing marker signature payload** — Implements FR-MCP-140. MarkerFileService SHALL declare an ordered SignaturePayloadFields array naming every canonical field used to build the marker-v1 HMAC-SHA256 payload, and BuildSignaturePayload SHALL derive its output order from that same array so the emitted list and the computed payload cannot diverge. The MarkerSignature model SHALL carry a fields array and a format string describing the key=value newline per-field encoding, the trailing LF on the final line, and UTF-8 encoding, and both SHALL be written into the signature block of AGENTS-README-FIRST.yaml. The conditional agentPlugins.policy and agentPlugins.contractDigest tail SHALL be represented faithfully: the fields array SHALL reflect the same conditional the payload builder applies for the marker being written. A test SHALL bind the documented field order in docs/REPL-AGENT-GUIDE.md to SignaturePayloadFields so the prose spec cannot drift from the code. Recovered from origin/claude/dreamy-brahmagupta; the CLAUDE.md session-start rewrite in that commit is deliberately NOT re-landed because it directs agents to PowerShell-module or hand-rolled verification, contradicting the current plugin-first trust contract.
+**Covered by:** FR: FR-MCP-140; TEST: TEST-MCP-189
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-SEC-006
+
+**Brain-slot signing keys follow a renamed party id** — CORRECTED 2026-07-20 after the original specification was proven wrong by test. Context unchanged: trusted parties and their keys live in the TransactionSecurity key store (KeyServerPartyEntity, KeyServerPartyKeyEntity), a separate SQLite database created with EnsureCreated, so the McpDbContext Creativity/Logic rename migration cannot reach them; BrainSlotRegistryService.RegisterPartyAsync registers the party only and never a key, while ValidateReadinessAsync requires an active signing key at "{partyId}:signing:1". On any migrated installation the renamed party therefore starts with no key and the quad reports NotReady. WHAT WAS WRONG: the first version of this requirement said to COPY the legacy party's signing key material forward. That is impossible and harmful. PartyKeyDescriptor and KeyServerPartyKeyEntity expose only PublicKeyPem, so only the public half can ever be read; InMemoryKeyServerService retains a private ECDsa handle only for a pair it generated itself, and CreateSigningKey given a public PEM with no private PEM stores an empty private-key set. The result passed every readiness gate and could never sign: turn transactions were rejected with TransactionFailureReason.UnknownKey after the model provider had already been invoked and billed, and persisting that row also suppressed TurnTransactionCoordinator.EnsureDefaultPartiesAsync, which mints a working pair only when no key row exists. CORRECT BEHAVIOR: when a brain slot's party has no active signing key and a legacy party id exists (brain-slot:left-hemisphere for Creativity, brain-slot:right-hemisphere for Logic), the runtime SHALL register the renamed party with NO key material so the keyserver mints a fresh pair and retains its private half, and SHALL leave the legacy party and key rows untouched. Historical verification is unaffected because a manifest carries its own PublisherPartyId and VerifyManifestAsync resolves the public key from that legacy party. Reconciliation remains idempotent, is a no-op when the new key already exists or no legacy party is found, and never rotates an existing key. Proven by TEST-MCP-192 and by BrainSlotAdoptedPartyKeySigningTests, which now assert a committed turn transaction under the renamed party and continued verification of a legacy-signed manifest.
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-SESSIONLOG-001
 
 **Session-log lifecycle tools return structured errors** — The session-log lifecycle MCP tools (sessionlog_complete_turn, sessionlog_fail_turn) SHALL return a structured {error} result for every failure mode, including a malformed turnJson payload and a workspace-resolution failure; no failure may surface as the ModelContextProtocol SDK's opaque "An error occurred invoking sessionlog_complete_turn" message. Acceptance Criteria: (AC1) sessionlog_complete_turn/sessionlog_fail_turn with a malformed turnJson return {error} carrying the exception message and no success field; (AC2) a workspace-resolution failure during ApplyWorkspaceOverride returns {error} rather than escaping uncaught; (AC3) a valid or null turnJson still returns {success:true}. Origin: BUG-TRIAGE-070/075 (JsonSerializer.Deserialize and ApplyWorkspaceOverride were outside the try in FinalizeLifecycleTurnToolAsync/UpsertLifecycleTurnToolAsync, FwhMcpTools.SessionLog.cs). Validated by TEST-MCP-SESSIONLOG-001.
@@ -2263,6 +2353,20 @@ Scope: layer-1+
 
 **Windows Service Configuration** — `UseWindowsService(options => { options.ServiceName = "McpServer"; })` in `Program.cs` enables Windows Service hosting. The service is published as a self-contained single-file executable to `C:\ProgramData\McpServer`. The `Manage-McpService.ps1` script handles Install, Uninstall, Start, Stop, Restart, Status, and Publish operations with gsudo elevation. Recovery policy restarts the service on failure with a 60 s delay.
 **Covered by:** FR: FR-MCP-017
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-SVC-002
+
+**Executable resolution skips WindowsApps App-Execution-Alias stubs** — Implements FR-MCP-141. IProcessEnvironmentService.ResolveExecutable in src/McpServer.Common.AgentCli/ProcessEnvironmentService.cs SHALL skip any PATH directory whose path contains Microsoft\WindowsApps when probing for an executable, because those entries are zero-byte App-Execution-Alias reparse points that a service account cannot launch, failing with Win32Exception 1920. The guard SHALL be an exact containment test on Microsoft\WindowsApps and SHALL NOT match the genuine C:\Program Files\WindowsApps MSIX install root, which holds real executables such as the packaged PowerShell. This affects every ResolveExecutable caller including the Agent CLI client, the Codex, Grok, and OneShot execution strategies, and ProcessRunner, not only tunnel providers. Recovered from origin/claude/busy-dubinsky, where the file lived at src/McpServer.Common.Copilot/ProcessEnvironmentService.cs before that project was renamed to McpServer.Common.AgentCli.
+**Covered by:** FR: FR-MCP-141; TEST: TEST-MCP-190, TEST-MCP-191
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-SYNC-001
+
+**Node core vendor package uses a version-less stable file name** — SyncAgentPlugins SHALL vendor the packed Node plugin core into consumer repositories under the version-less stable file name sharpninja-mcpserver-plugin-core.tgz, and SHALL NOT embed a package version in any vendored tarball file name or in the constant that names it. Rationale, from triage-report-52e8098cd299475d9922098f00d818b6: Build.SyncAgentPlugins.cs:465 hard-coded sharpninja-mcpserver-plugin-core-0.1.0.tgz while package.json had moved to 0.2.0 after a breaking-change bump, so the three Node plugin repositories held tarballs whose file name claimed the pre-breaking-change surface while their content was the new package; the versioned name is also why the constant existed at all, since consumer package.json files reference the tarball path and a version bump would break the reference. The vendor step SHALL discover consumer vendor directories by matching any sharpninja-mcpserver-plugin-core*.tgz variant so first-run migration finds the legacy versioned files, copy the packed artifact to the stable name, delete superseded variants from the vendor directory, and rewrite the consumer package.json dependency reference file:vendor/sharpninja-mcpserver-plugin-core*.tgz to the stable name via a targeted in-place replacement that preserves the file's formatting. The step SHALL also assert that npm pack produced a tarball whose embedded version matches plugins/core/lib-node/package.json, so a silent pack-versus-manifest drift fails the sync instead of shipping.
+**Covered by:** FR: FR-MCP-143; TEST: TEST-MCP-194, TEST-MCP-REPL-040
 **Status:** pending
 Scope: layer-1+
 
@@ -2521,6 +2625,13 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-TRANSCRIPT-010
+
+**Int32.MaxValue transcript ceilings with streaming JSONL reader** — Implements FR-MCP-TRANSCRIPT-009. (1) TranscriptUtilities.ReadJsonLinesAsync raises maxSourceFileBytes from 256 MiB, maxLineBytes from 8 MiB, and maxRecords from 2,000,000 to int.MaxValue. (2) SessionLogTranscriptIngestionController raises MaxUploadRequestBytes from 512 MiB, MaxSourceFileBytes from 256 MiB, and MaxExpandedUploadBytes from 2 GiB to int.MaxValue; MaxArchiveEntries (10,000) and MaxCompressionRatio (20.0) are unchanged. RequestSizeLimit remains a compile-time constant attribute and continues to work because int.MaxValue is a constant. (3) ReadJsonLinesAsync streams lines through a StreamReader instead of calling File.ReadAllLinesAsync, so a ceiling of int.MaxValue does not convert a rejection into an out-of-memory kill. IMPLEMENTED 2026-07-20. Evidence: red gate IngestionService_AcceptsJsonlLineAboveFormerCeiling failed with "Transcript JSONL line exceeds the 8 MiB limit" at TranscriptUtilities.cs:104 (1 failed, 1 passed); green gate Support.Mcp.Tests 1692/0/0, Repl.Core.Tests 810/0/0, Client.Tests 259/0/0, transcript integration subset 10/0/0. Deployed to the McpServer Windows service (1.4.20, pid 39404) and verified live: sessionlog_ingest_path accepted a 9,437,285-byte single-line JSONL returning totalSessions 1 with zero diagnostics.
+**Covered by:** FR: FR-MCP-TRANSCRIPT-009; TEST: TEST-MCP-TRANSCRIPT-013
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-TRIAGE-001
 
 **Durable triage storage** — Durable EF entities store reports, groups, research runs, statuses, idempotency keys, and workspace filters.
@@ -2583,6 +2694,13 @@ Scope: layer-1+
 
 **Ngrok Auth Token Security** — The ngrok auth token is passed via the `NGROK_AUTHTOKEN` environment variable on the child process, rather than as a CLI argument, to prevent exposure in process listings and shell history.
 **Covered by:** FR: FR-MCP-015
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-TUN-004
+
+**Tunnel provider inherits the interactive user environment** — Implements FR-MCP-141 and extends TR-MCP-TUN-003, which already establishes that NgrokTunnelProvider manipulates child-process environment variables. NgrokTunnelProvider SHALL take IProcessEnvironmentService and apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the ProcessStartInfo of the ngrok child process, so ngrok.yml resolves when the server runs under LocalSystem instead of the provider silently starting with the service account profile. The provider SHALL resolve the ngrok binary through ResolveExecutable against that enriched PATH rather than relying on the literal string ngrok. When the binary cannot be found the provider SHALL log at Warning rather than Error, and the message SHALL name the Windows-service and Store-alias causes and the available remedies. Recovered from origin/claude/busy-dubinsky. Note that develop ships Tunnel Provider empty and Ngrok.Enabled false, so this path is dormant under stock configuration.
+**Covered by:** FR: FR-MCP-141; TEST: TEST-MCP-190, TEST-MCP-191
 **Status:** pending
 Scope: layer-1+
 

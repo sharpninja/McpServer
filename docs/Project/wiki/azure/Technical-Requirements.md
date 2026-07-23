@@ -1367,6 +1367,13 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-PLUGIN-HEADER-001
+
+**Observed-only resolution of agent runtime header fields** — agent-runtime-header.ps1 MUST resolve agentSessionTranscriptFile through Get-McpPluginFirstExistingFile so only an existing file is reported and the previous unconditional fallback to (Join-Path CacheDir 'session.jsonl') is removed. Resolve-McpPluginAgentExecutableVersion MUST NOT fall back to MCP_PLUGIN_VERSION and MUST return 'unknown' when live discovery fails. agentSessionId MUST come only from a provider-native source (hook payload session_id or host env) and MUST NOT fall back to the MCP SessionId. Resolve-McpPluginAgentHeaderFields MUST accept ProviderSessionId and TranscriptPath, and plugin-hook.ps1 MUST supply the host hook payload session_id and transcript_path (Read-HookInput memoized with StrictMode-safe initialization). Invoke-ReplPersistTurn in repl-invoke.ps1 MUST apply the same existence rule at the submit layer and MUST clear agentSessionId when it equals the MCP session id, so a pre-fix session-state cache cannot re-submit a fabricated value. Validated by TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005. Covered by FR: FR-MCP-PLUGIN-HEADER-001. Status: implemented. Scope: layer-1+.
+**Covered by:** FR: FR-MCP-PLUGIN-HEADER-001; TEST: TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-PLUGININT-001
 
 **Shared multi-plugin Session Log integration harness** — A central integration test harness must drive each plugin repository through its supported entrypoint against one disposable real MCP Server workspace, use a shared scenario catalog, and add aiUnit semantic validation without replacing deterministic assertions.

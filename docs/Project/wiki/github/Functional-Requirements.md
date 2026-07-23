@@ -1340,6 +1340,11 @@ Scope: layer-1+
 - [ ] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.
 - [ ] The canonical parsing fix propagates to every official plugin distribution without checksum drift.
 
+## FR-MCP-PLUGIN-HEADER-001 Agent runtime header fields record only observed values
+
+Plugin-created session logs SHALL record the four agent runtime header fields (agentSessionId, agentSessionTranscriptFile, agentExecutablePath, agentExecutableVersion) only from observed runtime facts. A value SHALL NOT be synthesized, and a field SHALL be left empty rather than populated with a placeholder, a substitute identifier, or a path that does not exist. Scope: layer-1+. Acceptance Criteria: (1) a transcript path is recorded only when that file exists on disk; (2) the agent executable version is never taken from the plugin version, and is 'unknown' when live discovery fails; (3) agentSessionId carries only a provider-native identifier and is never the MCP session id; (4) a stale cached or environment-supplied value that fails these rules is dropped rather than re-submitted.
+Scope: layer-1+
+
 ## FR-MCP-PLUGININT-001 End-to-end Session Log validation for every agent plugin
 
 The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real MCP Server.

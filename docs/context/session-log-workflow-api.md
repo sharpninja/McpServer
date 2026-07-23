@@ -57,11 +57,27 @@ Runtime state tracking for the active session and turn:
 - Invalid: `Copilot-2026-03-04-namingconv` (wrong date format)
 
 ### Agent Runtime Header Fields
-- `agentSessionId`: provider-native root session identifier. Plugin-created sessions use the host-provided value when available and otherwise fall back to the MCP plugin session ID.
-- `agentSessionTranscriptFile`: provider-native transcript file path. Plugin-created sessions use the host-provided transcript path when available and otherwise fall back to the workspace cache transcript path.
-- `agentExecutablePath`: executable path for the agent host that produced the session. Plugin-created sessions resolve the host executable or plugin wrapper path.
-- `agentExecutableVersion`: executable version for the agent host that produced the session. Plugin-created sessions resolve the host version or record `unknown` when it cannot be discovered.
-- These fields remain optional for external callers, but plugin enforcement must submit non-empty values for new plugin-created sessions. They must be preserved during recovery and complete-turn submits when an incoming payload omits them.
+These fields record OBSERVED runtime facts. A value is never synthesized: when it
+cannot be observed the field is left empty rather than filled with a placeholder
+or a path that does not exist (TR-MCP-PLUGIN-HEADER-001).
+
+- `agentSessionId`: provider-native root session identifier, taken from the host
+  hook payload (`session_id`) or a host environment variable. Left empty when no
+  provider value is available. The MCP session ID is never echoed into this
+  field, because that would be a mislabeled value by definition.
+- `agentSessionTranscriptFile`: provider-native transcript file path, taken from
+  the host hook payload (`transcript_path`) or a host environment variable. Only
+  recorded when the path resolves to a file that exists on disk; left empty
+  otherwise. A cache path is never synthesized, and a cached or environment value
+  that no longer exists is dropped rather than re-submitted.
+- `agentExecutablePath`: executable path for the agent host that produced the
+  session. Plugin-created sessions resolve the host executable or plugin wrapper
+  path.
+- `agentExecutableVersion`: executable version for the agent host, resolved live
+  from the executable. Records `unknown` when discovery is not possible. The
+  plugin version is never reported as the agent executable version.
+- These fields are optional for external callers. They must be preserved during
+  recovery and complete-turn submits when an incoming payload omits them.
 
 ### Request ID
 - Format: `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`
