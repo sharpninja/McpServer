@@ -1,0 +1,131 @@
+[
+  {
+    "Path": "F:\\GitHub\\aiUnit",
+    "Name": "aiUnit",
+    "Action": "failed",
+    "ProjectId": [
+      "Projects-1",
+      "Projects-2",
+      "Projects-21",
+      "Projects-3",
+      "Projects-4",
+      "Projects-5",
+      "Projects-6",
+      "Projects-7"
+    ],
+    "Detail": "\r\n{\r\n  \"ErrorMessage\": \"Resource is not found or it doesn\\u0027t exist in the current space context. Please contact your administrator for more information.\"\r\n}",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\Avalonia.RemoteControl",
+    "Name": "Avalonia.RemoteControl",
+    "Action": "failed",
+    "ProjectId": [
+      "Projects-1",
+      "Projects-2",
+      "Projects-21",
+      "Projects-22",
+      "Projects-3",
+      "Projects-4",
+      "Projects-5",
+      "Projects-6",
+      "Projects-7"
+    ],
+    "Detail": "\r\nBad Request\r\n\r\nBad Request - Invalid URL\r\nHTTP Error 400. The request URL is invalid.\r\n\r\n",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\bitnet-b1.58-sharp",
+    "Name": "BitNet-b1.58-Sharp",
+    "Action": "failed",
+    "ProjectId": [
+      "Projects-1",
+      "Projects-2",
+      "Projects-21",
+      "Projects-22",
+      "Projects-23",
+      "Projects-3",
+      "Projects-4",
+      "Projects-5",
+      "Projects-6",
+      "Projects-7"
+    ],
+    "Detail": "\r\nBad Request\r\n\r\nBad Request - Invalid URL\r\nHTTP Error 400. The request URL is invalid.\r\n\r\n",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\BodyAndBrain.Engine",
+    "Name": "BodyAndBrain.Engine",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: BodyAndBrain.Engine",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\LlamaDeck",
+    "Name": "LlamaDeck",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: LlamaDeck",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer",
+    "Name": "McpServer",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: McpServer",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\MouseKeyProxy",
+    "Name": "MouseKeyProxy",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: MouseKeyProxy",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\SharpNinjaHome",
+    "Name": "SharpNinjaHome",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: SharpNinjaHome",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\TruckMate",
+    "Name": "TruckMate",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: TruckMate",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\valhalla-dotnet",
+    "Name": "valhalla-dotnet",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: valhalla-dotnet",
+    "Ok": false,
+    "Steps": ""
+  },
+  {
+    "Path": "F:\\GitHub\\vice-sharp",
+    "Name": "vice-sharp",
+    "Action": "failed",
+    "ProjectId": "",
+    "Detail": "Project created but not found: vice-sharp",
+    "Ok": false,
+    "Steps": ""
+  }
+]

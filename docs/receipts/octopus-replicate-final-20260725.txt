@@ -1,0 +1,5 @@
+Octopus replication receipt 2026-07-25
+License limit: 10 projects max. Created 3 new; 7 existing untouched; 8 blocked by license.
+NEW: aiUnit Projects-21, Avalonia.RemoteControl Projects-22, BitNet-b1.58-Sharp Projects-23 (each 1 step)
+EXISTING unchanged: Projects-1..7 with 1 step each
+NOT CREATED: BodyAndBrain.Engine, LlamaDeck, McpServer, MouseKeyProxy, SharpNinjaHome, TruckMate, valhalla-dotnet, vice-sharp

@@ -1475,7 +1475,7 @@ Scope: layer-1+
 
 ## FR-MCP-QBTOOLS-004 QBAgent git tool (full, push to origin)
 
-QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing Azure DevOps origin remote only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
+QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing origin remote name only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Read subcommands (status/diff/log/branch) run against the workspace repo and return output.

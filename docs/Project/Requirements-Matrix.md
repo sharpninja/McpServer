@@ -997,8 +997,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-QBOLLAMA-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-REPL-011 | Tracked | Functional-Requirements.md |
 | FR-MCP-TRANSCRIPT-009 | Tracked | Functional-Requirements.md |
-| [] | Tracked | Technical-Requirements.md |
-| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TR-MCP-CLIENT-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-HEALTH-003 | Tracked | Technical-Requirements.md |
 | TR-MCP-MARKER-004 | Tracked | Technical-Requirements.md |
@@ -1040,3 +1038,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REPL-039 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-040 | Tracked | Testing-Requirements.md |
 | TEST-MCP-TRANSCRIPT-013 | Tracked | Testing-Requirements.md |
+| [] | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |

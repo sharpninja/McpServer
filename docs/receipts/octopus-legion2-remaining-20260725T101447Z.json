@@ -1,0 +1,58 @@
+[
+  {
+    "Name": "BodyAndBrain.Engine",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  },
+  {
+    "Name": "LlamaDeck",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  },
+  {
+    "Name": "McpServer",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  },
+  {
+    "Name": "MouseKeyProxy",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  },
+  {
+    "Name": "SharpNinjaHome",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  },
+  {
+    "Name": "TruckMate",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  },
+  {
+    "Name": "valhalla-dotnet",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  },
+  {
+    "Name": "vice-sharp",
+    "Action": "failed",
+    "Id": "",
+    "Detail": "project create failed exit 1",
+    "Ok": false
+  }
+]

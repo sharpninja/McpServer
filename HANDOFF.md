@@ -54,7 +54,7 @@
 1. Sync the fixed shims:
    - Run plugins/core/sync/sync-plugin-core.ps1 (or .sh) with -PluginRoot pointing to F:\GitHub\mcpserver-claude-code-plugin, mcpserver-codex-plugin, etc. (include PS if needed).
    - Update CORE-MANIFEST.yaml in those repos.
-2. Commit + push (primary = origin / Azure DevOps; github only on explicit ask):
+2. Commit + push (use the repo's configured remotes; push only when asked):
    - Stage: .gitattributes, plugins/core/lib-sh/repl-invoke.sh, docs/prompts/*, docs/failure-reports/repl-invoke-sh-quoting-defect-2026-06-23.md
    - Message example: fix(shims): resolve bash quoting boundary for node heredoc/JS parsers in repl-invoke.sh (BUG-6); add eol=lf; add reload validation prompts
 3. Re-test end-to-end (use the prompt files in docs/prompts/):

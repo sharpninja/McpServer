@@ -40,7 +40,7 @@
 
 ## Release Steps
 
-1. **Version bump**: `./build.ps1 BumpVersion` or update `.version` file
+1. **Version bump**: `./build.ps1 BumpVersion` (updates `GitVersion.yml` next-version). Plugin packaging may also use a root `.version` file where applicable; do not treat a stale alpha `.version` as the product line if `GitVersion.yml` is ahead.
 2. **Final test run**: `./build.ps1 Test`
 3. **Docker build**: `docker build -t mcp-server:$(cat .version) -t mcp-server:latest .`
 4. **Tag release**: `git tag v$(cat .version) && git push origin v$(cat .version)`

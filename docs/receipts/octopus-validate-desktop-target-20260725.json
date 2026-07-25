@@ -1,0 +1,163 @@
+{
+  "Server": "http://localhost:8066",
+  "ValidatedAtUtc": "2026-07-25T16:15:57.8872758Z",
+  "OverallOk": true,
+  "Machine": {
+    "Name": "PAYTON-DESKTOP",
+    "Id": "Machines-1",
+    "HealthStatus": "HasWarnings",
+    "StatusSummary": "Octopus was able to successfully establish a connection with this machine on Saturday, 25 July 2026 3:29:48 PM +00:00",
+    "Roles": [
+      "app-server",
+      "default",
+      "web-server"
+    ],
+    "EnvironmentIds": [
+      "Environments-1",
+      "Environments-2",
+      "Environments-3"
+    ],
+    "CommunicationStyle": "TentacleActive",
+    "IsDisabled": false,
+    "Thumbprint": "12B781FF30B267025BE321D936953F6275F3D20E"
+  },
+  "ProjectCount": 8,
+  "ProjectsPass": 8,
+  "Projects": [
+    {
+      "Project": "BodyAndBrain.Engine",
+      "ProjectId": "Projects-1",
+      "StepCount": 1,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.yml",
+          "Action": "Run azure-pipelines.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    },
+    {
+      "Project": "LlamaDeck",
+      "ProjectId": "Projects-2",
+      "StepCount": 1,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.yml",
+          "Action": "Run azure-pipelines.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    },
+    {
+      "Project": "McpServer",
+      "ProjectId": "Projects-3",
+      "StepCount": 1,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.yml",
+          "Action": "Run azure-pipelines.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    },
+    {
+      "Project": "MouseKeyProxy",
+      "ProjectId": "Projects-4",
+      "StepCount": 1,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.yml",
+          "Action": "Run azure-pipelines.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    },
+    {
+      "Project": "SharpNinjaHome",
+      "ProjectId": "Projects-5",
+      "StepCount": 1,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.yml",
+          "Action": "Run azure-pipelines.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    },
+    {
+      "Project": "TruckMate",
+      "ProjectId": "Projects-6",
+      "StepCount": 1,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.yml",
+          "Action": "Run azure-pipelines.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    },
+    {
+      "Project": "valhalla-dotnet",
+      "ProjectId": "Projects-7",
+      "StepCount": 1,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.yml",
+          "Action": "Run azure-pipelines.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    },
+    {
+      "Project": "vice-sharp",
+      "ProjectId": "Projects-8",
+      "StepCount": 2,
+      "AllTargetAppServer": true,
+      "AllRunOnTentacle": true,
+      "Steps": [
+        {
+          "Step": "Run azure-pipelines.ci.yml",
+          "Action": "Run azure-pipelines.ci.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        },
+        {
+          "Step": "Run azure-pipelines.release.yml",
+          "Action": "Run azure-pipelines.release.yml",
+          "Type": "Octopus.Script",
+          "TargetRoles": "app-server",
+          "RunOnServer": "false"
+        }
+      ]
+    }
+  ]
+}

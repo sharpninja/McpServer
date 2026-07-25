@@ -1,6 +1,8 @@
 # MCP Server
 
-Workspace-scoped AI agent infrastructure for .NET - context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, and agent orchestration over HTTP and MCP STDIO transports.
+Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, and agent orchestration over HTTP and MCP STDIO transports.
+
+**Current line:** GitVersion `next-version` **1.4.25** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits.
 
 ## Key Features
 
@@ -179,8 +181,10 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 
 | Platform | File | Jobs |
 |---|---|---|
-| **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish |
+| **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish; optional Octopus LEGION2 release when `OCTOPUS_API_KEY` is set |
 | **GitHub Actions** | `.github/workflows/build.yml` | Build & test, validate, package, MSIX, publish |
+
+Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.25` at last docs refresh). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
 
 ## Client Library
 

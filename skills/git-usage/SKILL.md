@@ -1,24 +1,23 @@
 ---
 name: git-usage
-description: Use this skill whenever an agent runs the QBAgent git tool in the McpServer workspace so version-control actions stay safe, push only to the Azure DevOps origin when explicitly asked, and commit messages keep the required Co-Authored-By trailer.
+description: Use this skill whenever an agent runs the QBAgent git tool in the McpServer workspace so version-control actions stay safe, push only when explicitly asked, and commit messages keep the required Co-Authored-By trailer.
 license: MIT
 ---
 
 # Git Usage (QBAgent git tool)
 
-Guidance for driving the QBAgent git tool safely inside the McpServer repository. The tool exposes a fixed set of subcommands. This skill defines which are read-only, which mutate the working tree, and which touch a remote, plus the project-specific source-control rules that override default git habits.
+Guidance for driving the QBAgent git tool safely inside the McpServer repository. The tool exposes a fixed set of subcommands. This skill defines which are read-only, which mutate the working tree, and which touch a remote, plus project-specific safety rules that override default git habits.
 
 ## When to Use
 
 - You are about to inspect repository state (status, diff, log, branch).
 - You are staging, committing, switching branches, or resetting work via the QBAgent git tool.
-- You need to push committed work and want to do it correctly (origin only, opt-in).
+- You need to push committed work and want to do it correctly (opt-in push).
 - You are unsure whether an action is read-only or destructive.
 
 ## When Not to Use
 
 - You only need MCP TODO or session-log operations: use the MCP Server plugin/workflow methods, not git.
-- You are asked to operate on GitHub (PRs, issues, the `github` remote) without explicit, specific instruction to do so. Stop and confirm first.
 - You want to bypass the QBAgent git tool with raw shell git for a destructive action. Prefer the tool's subcommands so the action is auditable.
 
 ## Inputs
@@ -49,16 +48,15 @@ Remote action (network, opt-in):
 
 ## Critical Rules
 
-1. Azure DevOps `origin` is the single source of truth. Every `push` targets `origin` only. GitHub is a downstream mirror that is synced on demand, never by you by default.
-2. Never `push` to the `github` remote, and never invoke GitHub PR tooling, unless the user explicitly and specifically asks for it. When the user says "sync", "push", or "create PR" without naming a target, that means Azure DevOps `origin`.
-3. `push` is opt-in. Do not push as a side effect of committing. Push only when the user asked to push, sync, or checkpoint. Commit locally otherwise and report that work is committed but unpushed.
-4. Prefer a new commit over amending. Do not rewrite published history. Avoid amend and history-rewriting resets unless the user explicitly requests them.
-5. Every commit message must end with this trailer as its final line:
+1. `push` targets the remote name `origin` only (QBAgent rejects non-origin remotes/refspecs). Inspect `git remote -v` when you need the host behind that name.
+2. `push` is opt-in. Do not push as a side effect of committing. Push only when the user asked to push, sync, or checkpoint. Commit locally otherwise and report that work is committed but unpushed.
+3. Prefer a new commit over amending. Do not rewrite published history. Avoid amend and history-rewriting resets unless the user explicitly requests them.
+4. Every commit message must end with this trailer as its final line:
    `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`
-6. Do not skip hooks or signing. Do not pass `--no-verify`, `--no-gpg-sign`, or equivalent bypasses unless the user explicitly asks. If a hook fails, fix the root cause instead of bypassing it.
-7. Branch before committing on a protected branch. The default branch is `main`. If you are on `main` and the user has not said to commit directly to it, create or switch to a working branch first.
-8. No em-dashes anywhere in commit messages, branch names, or any text this tool writes.
-9. The McpServer tree may be edited by other agents concurrently. Re-run `status` (and re-check file modification times) immediately before staging or committing so you do not capture or clobber another agent's changes.
+5. Do not skip hooks or signing. Do not pass `--no-verify`, `--no-gpg-sign`, or equivalent bypasses unless the user explicitly asks. If a hook fails, fix the root cause instead of bypassing it.
+6. Branch before committing on a protected branch. The default branch is `main`. If you are on `main` and the user has not said to commit directly to it, create or switch to a working branch first.
+7. No em-dashes anywhere in commit messages, branch names, or any text this tool writes.
+8. The McpServer tree may be edited by other agents concurrently. Re-run `status` (and re-check file modification times) immediately before staging or committing so you do not capture or clobber another agent's changes.
 
 ## Workflow
 
@@ -68,7 +66,7 @@ Remote action (network, opt-in):
 4. Re-verify staged content: run `diff` on the staged set to make sure only intended changes are included.
 5. Commit: run `commit` with a clear, present-tense message. End the message with the exact Co-Authored-By trailer from Critical Rules. Create a new commit; do not amend.
 6. Decide on push: only if the user explicitly asked to push, sync, or checkpoint, run `push` to `origin`. Otherwise stop and report that the commit is local and unpushed.
-7. Push correctly when authorized: `push` to `origin` (Azure DevOps). Never substitute the `github` remote. If the user named a different target, confirm it is what they want before pushing.
+7. Push correctly when authorized: `push` to `origin`. If the user named a different remote, confirm it is what they want (QBAgent may still reject non-origin remotes).
 8. Report: state the branch, the new commit, which files were committed, and whether the work was pushed.
 
 ## Validation Checklist
@@ -79,14 +77,11 @@ Remote action (network, opt-in):
 - Does the commit message end with the exact `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>` trailer?
 - Is the commit a new commit (not an amend or a history rewrite)?
 - If you pushed, did you push to `origin` only, and did the user explicitly ask for a push?
-- Did you avoid the `github` remote and GitHub PR tooling unless explicitly requested?
 - Are there any em-dashes in the message or branch name? There must be none.
 
 ## Common Pitfalls
 
 - Pushing automatically after a commit. Push is a separate, opt-in step; committing never implies pushing.
-- Pushing to `github` because a default remote or muscle memory points there. Always target `origin`.
-- Treating "sync" or "create PR" as a GitHub action. Without an explicit target, these mean Azure DevOps `origin`.
 - Forgetting the Co-Authored-By trailer, or placing it above other text instead of on the final line.
 - Amending or hard-resetting to "tidy up" and silently dropping work. Prefer additive new commits; confirm before any destructive reset.
 - Staging everything (`add` with no paths or a broad glob) and committing another concurrent agent's in-flight edits.
