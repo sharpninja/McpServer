@@ -1815,6 +1815,83 @@ Scope: layer-1+
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
 
+## FR-MCP-USECASE-001 CRUD workspace-scoped use cases
+
+The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.
+Scope: layer-1+
+
+## FR-MCP-USECASE-002 Actors, flows, and ordered steps
+
+Use cases support actors (Primary, Secondary, System, External), flows (Basic, Alternative, Exception) with sequence numbers, and ordered steps with action text and optional system response and data entities.
+Scope: layer-1+
+
+## FR-MCP-USECASE-003 Bidirectional UC to FR links with Realizes default
+
+Use cases link bidirectionally to functional requirements using string FR ids. Default link type is Realizes. Active links are unique per workspace, use case, and FR. Unlink is soft-delete of the link row.
+Scope: layer-1+
+
+## FR-MCP-USECASE-004 Create use case from FR
+
+Operators and agents can create a shell use case from an existing FR title/body with an automatic Realizes link.
+Scope: layer-1+
+
+## FR-MCP-USECASE-005 Diagram generation Mermaid primary
+
+Two diagram kinds: (a) sequence from flows/steps; (b) UML use-case from persisted graph. Mermaid primary; PlantUML supported. Sequence is not a substitute for the use-case canvas editor.
+Scope: layer-1+
+
+## FR-MCP-USECASE-006 UC FR Realizes coverage API
+
+A runtime coverage API reports use cases without Realizes FR links and FRs without Realizes use case links for the active workspace.
+Scope: layer-1+
+
+## FR-MCP-USECASE-007 First-party Use Case UI
+
+First-party UI via REST. Primary diagram UI is UML use-case drag-and-drop canvas (FR-011). Structure forms secondary. Sequence render separate.
+Scope: layer-1+
+
+## FR-MCP-USECASE-008 Use case versioning and approval
+
+Draft/Submitted/Approved/Rejected; version increments on Approve.
+Scope: layer-1+
+Acceptance: Approve increments VersionNumber; invalid status rejected.
+Scope: layer-1+
+
+## FR-MCP-USECASE-009 Product membership hooks
+
+Optional ProductKey and list-by-product (hooks only).
+Scope: layer-1+
+Acceptance: set/clear ProductKey; list-by-product returns matches.
+Scope: layer-1+
+
+## FR-MCP-USECASE-010 Traceability integration for UC-FR Realizes
+
+Shared Realizes algorithm; USECASE FR/TR/TEST IDs in docs matrix.
+Scope: layer-1+
+Acceptance: Shared algorithm tests; ValidateTraceability green for USECASE IDs.
+Scope: layer-1+
+
+## FR-MCP-USECASE-011 UML use-case canvas editor
+
+Palette + free canvas + drag-and-drop UML use-case diagram editor (actors, use-case ovals, system boundary, association, include, extend). Classic UML editor interaction; not form-only.
+ACs: AC-011-1 palette; AC-011-2 place shapes; AC-011-3 association; AC-011-4 include/extend; AC-011-5 rename; AC-011-6 move+layout persist; AC-011-7 boundary; AC-011-8 canvas primary UI; AC-011-9 REST only.
+Scope: layer-1+
+
+## FR-MCP-USECASE-012 Persist use-case diagram graph
+
+Workspace-scoped graph (nodes, edges, layout) saved and loaded for a use case; soft-delete and validation. ACs AC-012-1 through AC-012-6 including audit on put.
+Scope: layer-1+
+
+## FR-MCP-USECASE-013 Export diagram to Mermaid
+
+Persisted graph exports deterministic Mermaid per mcp-usecase-diagram-schema:1. ACs AC-013-1 through AC-013-4.
+Scope: layer-1+
+
+## FR-MCP-USECASE-014 Export diagram to PlantUML
+
+Same graph exports PlantUML use-case syntax. ACs AC-014-1 through AC-014-3.
+Scope: layer-1+
+
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 
 Requirements wiki export must optionally discover docs/wiki.yaml in the active workspace and use it as the authoritative wiki document tree, navigation tree, optional home template, and flattened document list for GitHub and Azure wiki exports while preserving current output when the file is absent.

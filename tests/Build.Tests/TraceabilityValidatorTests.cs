@@ -193,4 +193,54 @@ public sealed class TraceabilityValidatorTests
         };
         Assert.True(result.HasFrErrors);
     }
+
+    /// <summary>
+    /// FR-MCP-USECASE-010: Validate accepts UseCaseFr findings and surfaces HasUseCaseFrErrors
+    /// (same wording as UseCaseTraceabilityGate / UseCaseFrCoverageCore).
+    /// </summary>
+    [Fact]
+    public void Validate_WithUseCaseFrFindings_ReportsHasUseCaseFrErrors()
+    {
+        string[] fr = ["## FR-MCP-001 Feature"];
+        string[] tr = ["## TR-MCP-ARCH-001 Arch"];
+        string[] test = ["TEST-MCP-001 test"];
+        string[] mapping = ["| FR-MCP-001 | TR-MCP-ARCH-001 |"];
+        string[] matrix = ["| FR-MCP-001 | Done |", "| TR-MCP-ARCH-001 | Done |", "| TEST-MCP-001 | Done |"];
+        var findings = new[] { "UseCase 1 'Login' has no Realizes FR link." };
+
+        var result = TraceabilityValidator.Validate(fr, tr, test, mapping, matrix, findings);
+
+        Assert.Empty(result.MissingFrInMapping);
+        Assert.True(result.HasUseCaseFrErrors);
+        Assert.Single(result.UseCaseFrFindings);
+        Assert.Contains("Login", result.UseCaseFrFindings[0], StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// FR-MCP-USECASE-010: BuildUseCaseFrFindings uses shared Realizes gap wording for UC and FR sides.
+    /// </summary>
+    [Fact]
+    public void BuildUseCaseFrFindings_ReportsUcAndFrGaps()
+    {
+        var findings = TraceabilityValidator.BuildUseCaseFrFindings(
+            useCases: [(1, "Login"), (2, "Logout")],
+            frIds: ["FR-A", "FR-B"],
+            realizesLinks: [(1, "FR-A")]);
+
+        Assert.Contains(findings, f => f.Contains("UseCase 2", StringComparison.Ordinal) && f.Contains("Logout", StringComparison.Ordinal));
+        Assert.Contains(findings, f => f.Contains("FR FR-B", StringComparison.Ordinal));
+        Assert.DoesNotContain(findings, f => f.Contains("UseCase 1", StringComparison.Ordinal));
+        Assert.DoesNotContain(findings, f => f.Contains("FR FR-A", StringComparison.Ordinal));
+    }
+
+    /// <summary>
+    /// FR-MCP-USECASE-010: Sqlite loader returns empty when DB file is missing (docs-only path).
+    /// </summary>
+    [Fact]
+    public void UseCaseFrTraceabilityLoader_MissingDb_ReturnsEmpty()
+    {
+        var findings = UseCaseFrTraceabilityLoader.LoadFindingsFromSqlite(
+            Path.Combine(Path.GetTempPath(), "no-such-usecase-" + Guid.NewGuid().ToString("N") + ".db"));
+        Assert.Empty(findings);
+    }
 }

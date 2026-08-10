@@ -868,6 +868,41 @@ Queue one-shot example:
 - do not run `scripts\Update-McpService.ps1` directly for service redeployments
 - do not manually overwrite `C:\ProgramData\McpServer`
 
+## 7b) Use cases (FR/TR traceability modeling)
+
+Use cases are workspace-scoped domain records with actors, flows, steps, FR links (default `Realizes`), approval/product hooks, and diagrams.
+
+### REST
+
+- Base: `GET/POST /mcpserver/usecases` (requires `X-Api-Key`, optional `X-Workspace-Path`)
+- Aggregate: `GET/PUT/DELETE /mcpserver/usecases/{id}`
+- Structure: `POST .../flows`, `POST .../flows/{flowId}/steps`, `POST .../actors`, `POST/DELETE .../links`
+- Diagrams:
+  - Sequence (from flows/steps): `GET .../diagram?kind=sequence&format=mermaid|plantuml`
+  - UML use-case graph export: `GET .../diagram?kind=usecase&format=mermaid|plantuml`
+  - Canvas graph: `GET/PUT .../diagram-graph` (JSON schema v1; see `docs/context/usecase-diagram-mermaid-schema-v1.md`)
+- Coverage: `GET /mcpserver/usecases/coverage`
+- Approval / product: `POST .../approval`, `POST .../product`, `GET .../by-product/{productKey}`
+
+### First-party UI
+
+- Served at `http://localhost:7147/usecases/` after deploy via Nuke `UpdateService`
+- **Primary diagram UI:** UML use-case canvas (palette + free canvas + drag/move/rename + Save/Load graph)
+- Secondary: structure forms (actors/flows/steps/FR links) and sequence diagram render
+- UI uses REST only; provide API key and workspace path in the form fields
+
+### MCP tools
+
+Tools such as `usecase_list`, `usecase_create`, `usecase_diagram`, `usecase_coverage`, and graph-related tools are registered on Streamable HTTP / STDIO when the use-case surface is enabled. Prefer plugin/REPL `client.UseCases.*` when available.
+
+### Deploy note
+
+Canvas and graph persistence require a service build that includes the latest `wwwroot/usecases/*` and the `DiagramGraphJson` migration. Redeploy only with elevated:
+
+```powershell
+.\build.ps1 UpdateService --SkipVersionBump true
+```
+
 ## 8) Wire docs into README index and docs folder
 
 This user guide is wired into:

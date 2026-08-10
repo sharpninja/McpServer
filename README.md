@@ -11,6 +11,7 @@ Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orche
 - **Agent orchestration** - process-isolated agent pool with branch strategies, PowerShell sessions, and desktop automation
 - **Semantic search** - ONNX-based vector embeddings with HNSW indexing, optional GraphRAG enhancement
 - **Requirements traceability** - FR/TR/TEST document management with validation and Markdown/ZIP export
+- **Use cases** - workspace-scoped use-case modeling with FR Realizes links, coverage, UML canvas graph (schema v1), sequence diagrams, first-party UI at `/usecases/`, REST + MCP + typed client
 - **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with automatic migrations
 - **REPL CLI tool** - `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
 - **Typed .NET client** - `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
@@ -85,6 +86,8 @@ Direct `--agent-stdio` callers send one single-line JSON request envelope per st
 | `/mcpserver/agent-pool` | Pool lifecycle, health monitoring, process isolation |
 | `/mcpserver/repo` | Repository read/list/write with allowlist enforcement |
 | `/mcpserver/requirements` | FR/TR/TEST documents, validation, Markdown/ZIP export |
+| `/mcpserver/usecases` | Use case CRUD, flows/steps/actors/FR links, diagram-graph, coverage, approval/product |
+| `/usecases/` | First-party Use Case Manager UI (REST-only; UML canvas + secondary forms) |
 | `/mcpserver/workspace` | Multi-tenant workspace resolution and management |
 | `/mcpserver/gh` | GitHub issues, PRs, workflows, repository metadata |
 | `/mcpserver/tools` | Tool capability registration, discovery, schema validation |

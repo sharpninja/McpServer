@@ -29,6 +29,10 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 {
   "sourceType": "string — YOUR agent name (e.g. 'Copilot', 'Cline', 'Cursor')",
   "sessionId": "string — required format <Agent>-<yyyyMMddTHHmmssZ>-<suffix> (e.g. 'Copilot-20260304T113901Z-feature-audit')",
+  "agentSessionId": "string|null — provider-native root session identifier from the host payload; empty when unknown (the MCP sessionId is never echoed here)",
+  "agentSessionTranscriptFile": "string|null — provider-native transcript path; only set when the file exists on disk, empty otherwise (never synthesized)",
+  "agentExecutablePath": "string|null — resolved executable path for the agent host",
+  "agentExecutableVersion": "string|null — executable version resolved from the agent host, or 'unknown' when discovery fails (never the plugin version)",
   "title": "string — brief session summary, keep updated",
   "model": "string — AI model name (e.g. 'claude-sonnet-4-20250514')",
   "started": "string — ISO 8601 timestamp when session began",

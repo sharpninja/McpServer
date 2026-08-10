@@ -83,6 +83,62 @@ public sealed class RequirementsDatabaseDocumentServiceTests
             service.UpsertMappingAsync(new FrTrMapping("FR-MCP-901", [], ["TEST-MCP-MISSING"]), ct: TestContext.Current.CancellationToken));
     }
 
+    /// <summary>
+    /// FR-MCP-USECASE-003: GetFr returns linkedUseCases for Realizes (and other) links via UseCaseFrLinks.
+    /// </summary>
+    [Fact]
+    public async Task GetFrAsync_IncludesLinkedUseCases_FromUseCaseFrLinks()
+    {
+        using var fixture = new RequirementsDbFixture();
+        var workspace = fixture.CreateWorkspace("uc-fr-link");
+        fixture.SetWorkspace(workspace);
+        var service = fixture.CreateService();
+
+        await service.AddFrAsync(new FrEntry("FR-MCP-UC-LINK-001", "FR for link", "body"), ct: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        using (var scope = fixture.CreateRawScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            db.OverrideWorkspaceId(workspace);
+            var now = DateTimeOffset.UtcNow;
+            // Ensure workspace row for FKs.
+            if (!await db.Workspaces.IgnoreQueryFilters().AnyAsync(w => w.WorkspaceId == workspace, TestContext.Current.CancellationToken).ConfigureAwait(true))
+            {
+                db.Workspaces.Add(new WorkspaceEntity { WorkspaceId = workspace, WorkspacePath = workspace, Name = "uc" });
+            }
+
+            var uc = new UseCaseEntity
+            {
+                WorkspaceId = workspace,
+                Title = "Linked Use Case",
+                Priority = 1,
+                CreatedAtUtc = now,
+                UpdatedAtUtc = now,
+            };
+            db.UseCases.Add(uc);
+            await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+            db.UseCaseFrLinks.Add(new UseCaseFrLinkEntity
+            {
+                WorkspaceId = workspace,
+                UseCaseId = uc.UseCaseId,
+                FrId = "FR-MCP-UC-LINK-001",
+                FrKind = "fr",
+                LinkType = "Realizes",
+                LinkOrder = 0,
+                CreatedAtUtc = now,
+            });
+            await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+
+        var fr = await service.GetFrAsync("FR-MCP-UC-LINK-001", TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(fr);
+        Assert.NotNull(fr!.LinkedUseCases);
+        var link = Assert.Single(fr.LinkedUseCases!);
+        Assert.Equal("Linked Use Case", link.Title);
+        Assert.Equal("Realizes", link.LinkType);
+        Assert.True(link.UseCaseId > 0);
+    }
+
     /// <summary>Requirement metadata survives create, update, list, and get through DB storage.</summary>
     [Fact]
     public async Task RequirementMetadata_RoundTripsThroughDatabaseStorage()
@@ -678,6 +734,9 @@ public sealed class RequirementsDatabaseDocumentServiceTests
             ctx.WorkspacePath = workspacePath;
             ctx.WorkspaceName = Path.GetFileName(workspacePath);
         }
+
+        /// <summary>Creates a DI scope for direct DbContext seeding in tests.</summary>
+        public IServiceScope CreateRawScope() => _provider.CreateScope();
 
         public void Dispose()
         {

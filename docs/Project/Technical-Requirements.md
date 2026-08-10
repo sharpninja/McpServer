@@ -3022,3 +3022,161 @@ Scope: layer-1+
 - [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
 - [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 
+
+## TR-MCP-USECASE-001
+
+**Use Case storage multi-provider** - EF 4NF entities, soft-delete, workspace FK/filter, multi-provider migrations that apply on empty and production-shaped DBs without re-adding unrelated columns.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-002, FR-MCP-USECASE-003; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-006
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Sqlite/Postgres/SqlServer migrations create Use Case tables only
+- [ ] Migration apply tests green on empty and SessionLogs-agent-columns-present DBs
+- [ ] Soft-delete and workspace filters hide rows from default queries
+
+## TR-MCP-USECASE-002
+
+**Use Case CQRS registration** - Commands/queries/handlers with Dispatcher on HTTP and STDIO hosts.
+**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AddCqrsDispatcher and AddUseCaseCqrs registered on both hosts
+- [ ] Handler unit tests green 0 skip
+
+## TR-MCP-USECASE-003
+
+**Use Case REST controller** - Thin /mcpserver/usecases dispatching CQRS.
+**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Controller unit tests map Result failures to HTTP status codes
+
+## TR-MCP-USECASE-004
+
+**Use Case diagram service** - DI-owned pure generator; mermaid + one extra format.
+**Covered by:** FR: FR-MCP-USECASE-005; TEST: TEST-MCP-USECASE-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Mermaid and plantuml golden tests; unknown format validation
+
+## TR-MCP-USECASE-005
+
+**Use Case MCP tools, client, plugins** - usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-004, TEST-MCP-USECASE-010
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Client coverage DTO matches live server JSON
+- [ ] Plugin-core usecase tests green; REPL allow-lists UseCases
+
+## TR-MCP-USECASE-006
+
+**FR projection, coverage, audit** - linkedUseCases on FR get/list; coverage API; TR-MCP-DB-004 audit on mutable UC ops.
+**Covered by:** FR: FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST: TEST-MCP-USECASE-005, TEST-MCP-USECASE-007
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] FR projection test green
+- [ ] Coverage test green
+- [ ] Audit emission test green for create/update/delete/link
+
+## TR-MCP-USECASE-007
+
+**Use Case UI hosting** - Static /usecases/ assets REST-only.
+**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-008
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] UI asset tests green; live /usecases/ after UpdateService
+
+## TR-MCP-USECASE-008
+
+**Approval and product API** - CQRS + REST for approval and ProductKey.
+**Covered by:** FR: FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST: TEST-MCP-USECASE-009
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Approval version increment and list-by-product tests green
+
+## TR-MCP-USECASE-009
+
+**Validation seams** - Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings.
+**Covered by:** FR: FR-MCP-USECASE-010; TEST: TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] ValidateTraceability green for USECASE IDs
+- [ ] Shared algorithm unit tests green
+
+## TR-MCP-USECASE-010
+
+**Use Case service deploy** - Nuke UpdateService only; config backup/restore; live health and routes.
+**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-011
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] UpdateService succeeds; /health and /usecases/ return 200; REST smoke green
+
+## TR-MCP-USECASE-011 Graph storage
+
+**Use-case diagram graph storage** - JSON column (default) or equivalent on use case; multi-provider migrations; soft-delete and workspace filters.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-016
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-T11-1 Multi-provider migrations create graph storage
+- [ ] AC-T11-2 Migration apply empty + production-shaped green; no SessionLogs drift
+- [ ] AC-T11-3 Soft-delete and workspace filters apply
+
+## TR-MCP-USECASE-012 Diagram graph CQRS
+
+**GetGraph / PutGraph / Export** handlers registered; controller thin dispatch only.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-T12-1 Handlers registered on HTTP host
+- [ ] AC-T12-2 Controllers only dispatch CQRS
+
+## TR-MCP-USECASE-013 Diagram graph REST
+
+**REST** GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains available.
+**Covered by:** FR: FR-MCP-USECASE-012, FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-014
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-T13-1 GET/PUT /mcpserver/usecases/{id}/diagram-graph
+- [ ] AC-T13-2 GET diagram?kind=usecase&format=mermaid|plantuml
+- [ ] AC-T13-3 Sequence path remains (kind=sequence or documented default)
+
+## TR-MCP-USECASE-014 UML serialization service
+
+**Pure DI service** graph to Mermaid and PlantUML; no DbContext.
+**Covered by:** FR: FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-012
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-T14-1 Pure service (no DbContext)
+- [ ] AC-T14-2 Mermaid and PlantUML pure unit goldens
+
+## TR-MCP-USECASE-015 Canvas UI hosting
+
+**Static /usecases/** canvas assets; palette + umlCanvas; REST-only.
+**Covered by:** FR: FR-MCP-USECASE-011, FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-015
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-T15-1 #umlCanvas (or equivalent) + palette + editor module in wwwroot
+- [ ] AC-T15-2 Engine assets self-hosted or pinned; REST-only mutations
+
+## TR-MCP-USECASE-016 Graph put audit
+
+**Put graph** emits TR-MCP-DB-004 DataAuditLog rows.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-T16-1 Put graph writes DataAuditLog create/update

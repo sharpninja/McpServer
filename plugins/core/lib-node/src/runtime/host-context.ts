@@ -23,6 +23,11 @@ import {
   canHandleWorkspaceTool,
   handleWorkspaceTool,
 } from '../tools/workspace.js';
+import {
+  usecaseTools,
+  canHandleUseCaseTool,
+  handleUseCaseTool,
+} from '../tools/usecase.js';
 import { validateToolArguments } from '../tools/schema-validation.js';
 import type { ToolDescriptor, ToolResult } from '../tools/tool-descriptor.js';
 import {
@@ -38,6 +43,7 @@ export const allToolDescriptors: ToolDescriptor[] = [
   ...memoryTools,
   ...requirementsTools,
   ...graphragTools,
+  ...usecaseTools,
 ];
 
 export function utcStamp(date = new Date()): string {
@@ -287,6 +293,7 @@ export class HostContext {
     if (canHandleMemoryTool(name)) return handleMemoryTool(name, args, this.bridge);
     if (canHandleRequirementsTool(name)) return handleRequirementsTool(name, args, this.bridge);
     if (canHandleGraphragTool(name)) return handleGraphragTool(name, args, this.bridge);
+    if (canHandleUseCaseTool(name)) return handleUseCaseTool(name, args, this.bridge);
     throw new Error(`Unknown tool: ${name}`);
   }
 

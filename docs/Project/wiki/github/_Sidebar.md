@@ -20,6 +20,8 @@
   - [QBAgent](QBAgent)
   - [Agent Plugin Availability](Agent-Plugin-Availability)
   - [Agent Plugin Feature Matrix](Agent-Plugin-Feature-Matrix)
+  - [Use Case Extension Design v3](Use-Case-Extension-Design-v3)
+  - [Use Case Diagram Mermaid Schema v1](Use-Case-Diagram-Mermaid-Schema-v1)
 - Process
   - [Byrd Development Process v4](Byrd-Development-Process)
   - [Release Checklist](Release-Checklist)

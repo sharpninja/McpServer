@@ -9,7 +9,9 @@ using System.Text;
 using System.Text.Json;
 using McpServer.Common.AgentCli;
 using McpServer.Common.AgentCli.Extensions;
+using McpServer.Cqrs;
 using McpServer.GraphRag;
+using McpServer.Support.Mcp.UseCases;
 using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.DatabaseMaintenance;
 using McpServer.Support.Mcp.Ingestion;
@@ -440,6 +442,9 @@ builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemor
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
+// TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by UseCasesController and handlers.
+builder.Services.AddCqrsDispatcher();
+builder.Services.AddUseCaseCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
@@ -828,6 +833,11 @@ if (!app.Environment.IsEnvironment("Test"))
 
 app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
+
+// FR-MCP-USECASE-007: serve first-party Use Case UI from wwwroot (/usecases/, /usecases/index.html).
+// Static assets are not under /mcpserver/* so WorkspaceAuthMiddleware leaves them open; API stays protected.
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseMcpIdentityServer();
 app.UseAuthentication();

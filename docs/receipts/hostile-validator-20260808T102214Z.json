@@ -1,0 +1,142 @@
+{
+  "timestampUtc": "2026-08-08T10:22:14Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workspace": "F:\\GitHub\\McpServer",
+  "scope": "S0-uml-canvas-plan-requirements-authority",
+  "liveBase": "http://PAYTON-LEGION2:7147",
+  "overallVerdict": "AGREE",
+  "claims": {
+    "A": {
+      "description": "Functional-Requirements.md FR-MCP-USECASE-011..014 with AC-011/012/013/014 text",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/Project/Functional-Requirements.md headings FR-MCP-USECASE-011..014",
+        "AC-011-1..9, AC-012-1..6, AC-013-1..4, AC-014-1..3 present"
+      ]
+    },
+    "B": {
+      "description": "FR-MCP-USECASE-005 and 007 revised: sequence vs use-case graph; canvas-primary UI",
+      "verdict": "PASS",
+      "evidence": [
+        "FR-005: two diagram kinds sequence vs UML use-case graph; schema header AC",
+        "FR-007: primary diagram UI is UML canvas FR-011; forms secondary"
+      ]
+    },
+    "C": {
+      "description": "Technical-Requirements.md TR-MCP-USECASE-011..016",
+      "verdict": "PASS",
+      "evidence": [
+        "TR-MCP-USECASE-011 Graph storage",
+        "TR-MCP-USECASE-012 Diagram graph CQRS",
+        "TR-MCP-USECASE-013 Diagram graph REST",
+        "TR-MCP-USECASE-014 UML serialization service",
+        "TR-MCP-USECASE-015 Canvas UI hosting",
+        "TR-MCP-USECASE-016 Graph put audit"
+      ]
+    },
+    "D": {
+      "description": "Testing-Requirements.md TEST-MCP-USECASE-012..017",
+      "verdict": "PASS",
+      "evidence": [
+        "TEST-MCP-USECASE-012..017 entries with acceptance criteria"
+      ]
+    },
+    "E": {
+      "description": "TR-per-FR-Mapping and Requirements-Matrix include new IDs",
+      "verdict": "PASS",
+      "evidence": [
+        "TR-per-FR-Mapping.md FR-011..014 rows",
+        "Requirements-Matrix.md FR-011..014 TR-011..016 TEST-012..017 Tracked"
+      ]
+    },
+    "F": {
+      "description": "usecase-diagram-mermaid-schema-v1.md exists with schemaVersion 1 and header",
+      "verdict": "PASS",
+      "evidence": [
+        "docs/context/usecase-diagram-mermaid-schema-v1.md",
+        "schemaVersion: 1 in graph JSON example",
+        "header %% mcp-usecase-diagram-schema:1"
+      ]
+    },
+    "G": {
+      "description": "./build.ps1 ValidateTraceability passes findings=0",
+      "verdict": "PASS",
+      "evidence": [
+        "UseCaseFrLinks findings=0",
+        "Traceability validation passed",
+        "ValidateTraceability Succeeded exit 0"
+      ]
+    },
+    "H": {
+      "description": "MCP store has FR-011..014 TR-011..016 TEST-012..017 live",
+      "verdict": "PASS",
+      "evidence": [
+        "GET /health nonce echo ok",
+        "GET /mcpserver/requirements/fr includes FR-MCP-USECASE-011..014",
+        "GET /mcpserver/requirements/tr includes TR-MCP-USECASE-011..016",
+        "GET /mcpserver/requirements/test includes TEST-MCP-USECASE-012..017",
+        "FOUND=16 MISSING=0"
+      ],
+      "liveIdsFound": [
+        "FR-MCP-USECASE-011",
+        "FR-MCP-USECASE-012",
+        "FR-MCP-USECASE-013",
+        "FR-MCP-USECASE-014",
+        "TR-MCP-USECASE-011",
+        "TR-MCP-USECASE-012",
+        "TR-MCP-USECASE-013",
+        "TR-MCP-USECASE-014",
+        "TR-MCP-USECASE-015",
+        "TR-MCP-USECASE-016",
+        "TEST-MCP-USECASE-012",
+        "TEST-MCP-USECASE-013",
+        "TEST-MCP-USECASE-014",
+        "TEST-MCP-USECASE-015",
+        "TEST-MCP-USECASE-016",
+        "TEST-MCP-USECASE-017"
+      ],
+      "missingIds": []
+    },
+    "I": {
+      "description": "Canvas product is NOT complete (PASS when incompleteness proven)",
+      "verdict": "PASS",
+      "evidence": [
+        "wwwroot/usecases form+structure+mermaid diagramView only",
+        "grep umlCanvas|palette|drag in wwwroot/usecases: 0 matches",
+        "live GET /usecases/ hasCanvasHint=false hasFormish=true",
+        "MermaidUseCaseDiagramService still sequenceDiagram only",
+        "live GET .../diagram-graph => 404",
+        "UseCaseDiagramGraphDto/IUseCaseUmlSerializationService stubs only; not canvas editor"
+      ],
+      "canvasComplete": false,
+      "uiModeObserved": "form-and-sequence-diagram-view"
+    }
+  },
+  "build": {
+    "validateTraceability": {
+      "command": "./build.ps1 ValidateTraceability",
+      "exitCode": 0,
+      "findings": 0,
+      "status": "Succeeded"
+    }
+  },
+  "httpProbes": {
+    "healthNonce": {
+      "nonce": "hv-8ccdf49d",
+      "echoMatch": true
+    },
+    "usecasesUi": {
+      "status": 200,
+      "contentLength": 9187,
+      "hasCanvasHint": false,
+      "hasFormish": true
+    },
+    "diagramGraph": {
+      "status": 404
+    }
+  },
+  "receipts": {
+    "markdown": "docs/receipts/hostile-validator-20260808T102214Z.md",
+    "json": "docs/receipts/hostile-validator-20260808T102214Z.json"
+  }
+}

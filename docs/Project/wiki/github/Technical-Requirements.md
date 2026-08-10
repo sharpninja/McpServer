@@ -2768,6 +2768,118 @@ Scope: layer-1+
 **Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
 Scope: layer-1+
 
+## TR-MCP-USECASE-001
+
+**Use case EF storage multi-provider soft-delete** — Implement Use Case 4NF entities on McpDbContext with WorkspaceId max 1024, FK to Workspaces, soft-delete columns, Restrict/NoAction relationships, string FrId to RequirementEntity Kind=fr, global workspace query filters, and migrations for SQLite, PostgreSQL, and SQL Server named AddUseCaseSupport (timestamped). Audit emission for mutable entities per TR-MCP-DB-004.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-002, FR-MCP-USECASE-003; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-002
+
+**Use case CQRS commands and queries** — All use case domain mutations and reads go through McpServer.Cqrs ICommand/IQuery handlers registered with Dispatcher. Controllers and MCP tools only dispatch; they do not open DbContext for domain logic.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-002, FR-MCP-USECASE-003, FR-MCP-USECASE-004; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-003
+
+**Use Case REST controller** — Thin /mcpserver/usecases dispatching CQRS. Covered by FR-MCP-USECASE-001; TEST-MCP-USECASE-002. Controller unit tests map Result failures to HTTP status codes.
+**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-004
+
+**Use Case diagram service** — DI-owned pure generator; mermaid + one extra format. Covered by FR-MCP-USECASE-005; TEST-MCP-USECASE-003.
+**Covered by:** FR: FR-MCP-USECASE-005; TEST: TEST-MCP-USECASE-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-005
+
+**Use Case MCP tools, client, plugins** — usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases. Covered by FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST-MCP-USECASE-004, TEST-MCP-USECASE-010.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-006
+
+**FR projection, coverage, audit** — linkedUseCases on FR get/list; coverage API; TR-MCP-DB-004 audit on mutable UC ops. Covered by FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST-MCP-USECASE-005, TEST-MCP-USECASE-007.
+**Covered by:** FR: FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-007
+
+**Use Case UI hosting** — Static /usecases/ assets REST-only. Covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-008.
+**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-008
+
+**Approval and product API** — CQRS + REST for approval and ProductKey. Covered by FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST-MCP-USECASE-009.
+**Covered by:** FR: FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST: TEST-MCP-USECASE-009
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-009
+
+**Validation seams** — Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings. Covered by FR-MCP-USECASE-010; TEST-MCP-USECASE-005.
+**Covered by:** FR: FR-MCP-USECASE-010; TEST: TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-010
+
+**Use Case service deploy** — Nuke UpdateService only; config backup/restore; live health and routes. Covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-011.
+**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-011
+
+**Graph storage** — JSON column graph storage; multi-provider migrations; soft-delete and workspace filters. ACs AC-T11-1..3.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-012
+
+**Diagram graph CQRS** — GetGraph/PutGraph/Export handlers; thin controller. ACs AC-T12-1..2.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-013
+
+**Diagram graph REST** — GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains. ACs AC-T13-1..3.
+**Covered by:** FR: FR-MCP-USECASE-012, FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016, TEST-MCP-USECASE-012
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-014
+
+**UML serialization service** — Pure DI service graph to Mermaid and PlantUML. ACs AC-T14-1..2.
+**Covered by:** FR: FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-012, TEST-MCP-USECASE-014
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-015
+
+**Canvas UI hosting** — Static /usecases/ canvas assets; palette; umlCanvas; REST-only. ACs AC-T15-1..2.
+**Covered by:** FR: FR-MCP-USECASE-011; TEST: TEST-MCP-USECASE-015, TEST-MCP-USECASE-017
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-016
+
+**Graph put audit** — Put graph emits DataAuditLog. AC-T16-1.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-VOICE-001
 
 **Voice Conversation Service** — `VoiceConversationService` manages the full voice session lifecycle: session creation with `CopilotInteractiveSession` spawned via `DesktopProcessLauncher` (or standard `Process.Start`), turn processing with tool-call loop (max `MaxToolSteps` iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via `VoiceConversationOptions` bound from `Mcp:Voice` configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).

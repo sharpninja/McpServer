@@ -1148,3 +1148,77 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
   - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
   - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
+
+- TEST-MCP-USECASE-001: Handler unit tests cover UC CRUD, isolation, soft-delete, FR link.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Support FullyQualifiedName~UseCase filter 0 fail 0 skip for storage/handler cases
+- TEST-MCP-USECASE-002: Controller unit tests for UseCasesController.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Controller tests green 0 skip
+- TEST-MCP-USECASE-003: Diagram golden tests mermaid and plantuml.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Mermaid sequenceDiagram; plantuml @startuml
+- TEST-MCP-USECASE-004: Client unit tests with live JSON shapes.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Client UseCase filter green including coverage DTO
+- TEST-MCP-USECASE-005: Coverage query tests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Coverage gap tests green
+- TEST-MCP-USECASE-006: Migration apply empty and production-shaped.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] UseCaseMigrationApplyTests green 0 skip
+- TEST-MCP-USECASE-007: Audit emission on UC mutations.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Audit tests green for create/update/delete/link
+- TEST-MCP-USECASE-008: UI asset REST-only tests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] UseCaseUiAssetTests green
+- TEST-MCP-USECASE-009: Approval and product hooks tests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Expanded scope approval/product tests green
+- TEST-MCP-USECASE-010: Plugin-core usecase jest tests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] usecase.test.ts green
+- TEST-MCP-USECASE-011: Deploy smoke after UpdateService.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] health, /usecases/, create/link/diagram/coverage smoke log green
+- TEST-MCP-USECASE-012: UML graph serialization goldens (Mermaid schema v1 + PlantUML). Covers AC-013-*, AC-014-*, AC-T14-*.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] All Mermaid export ACs green via pure unit tests
+  - [ ] All PlantUML export ACs green via pure unit tests
+  - [ ] Service has no DbContext dependency (AC-T14-1)
+- TEST-MCP-USECASE-013: Diagram graph CQRS/storage (get/put, isolation, soft-delete, invalid, audit). Covers AC-012-*, AC-T11-3, AC-T12-1, AC-T16-1.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Get empty/saved and put round-trip green
+  - [ ] Workspace isolation and soft-delete green
+  - [ ] Invalid graph rejected; audit on put green
+- TEST-MCP-USECASE-014: Controller/client for diagram-graph and kind=usecase export. Covers AC-T13-*, HTTP AC-012-5.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] REST routes green; client parity green; 0 skip
+- TEST-MCP-USECASE-015: Canvas UI asset/contract tests for palette, canvas, drag hooks, REST-only. Covers AC-011-*, AC-T15-*.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Structural tests for palette, umlCanvas, editor APIs, REST graph paths
+  - [ ] No McpDbContext in UI assets
+- TEST-MCP-USECASE-016: Migration apply for graph storage. Covers AC-T11-1, AC-T11-2.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Empty and production-shaped migrate green; no SessionLogs ops in new migration
+- TEST-MCP-USECASE-017: Adversarial Grok hostile validator + live canvas smoke claim pack.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] HV receipt OverallVerdict AGREE for canvas claims (not form-only)

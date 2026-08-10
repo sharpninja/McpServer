@@ -1,0 +1,131 @@
+{
+  "TimestampUtc": "2026-08-08T09:50:26Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Plan": "docs/McpServer-UseCase-Extension-Design-v3.0.md#6.1",
+  "UntrustedImplementerReceipt": "docs/receipts/usecase-r0-r7-execution-20260808.md",
+  "LiveBase": "http://localhost:7147",
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 7,
+    "FAIL": 3,
+    "UNKNOWN": 0
+  },
+  "FailList": [
+    "G/R6: No built-in diagram view/edit UI; only pre#diagram textContent dump of mermaid/plantuml",
+    "G/R6: No first-party actors/flows/steps/FR-link management UI",
+    "G/R6: No usecase agent skills (plugin tools present only)",
+    "H/R7: Program done false; UpdateService not independently re-run this session",
+    "J: Program acceptance criteria not fully met (esp. diagram editor, skills, AGREE gate)"
+  ],
+  "Claims": [
+    {
+      "Id": "A",
+      "Summary": "R0: Project docs full FR/TR/TEST USECASE set through FR-010, TR-010, TEST-011; MCP store ingested",
+      "Verdict": "PASS",
+      "Evidence": [
+        "docs/Project/Functional-Requirements.md headings FR-MCP-USECASE-001..010",
+        "docs/Project/Technical-Requirements.md headings TR-MCP-USECASE-001..010",
+        "docs/Project/Testing-Requirements.md TEST-MCP-USECASE-001..011",
+        "docs/Project/Requirements-Matrix.md and TR-per-FR-Mapping.md USECASE rows",
+        "GET /mcpserver/requirements/fr => 10 USECASE FRs",
+        "GET /mcpserver/requirements/tr => 10 USECASE TRs",
+        "GET /mcpserver/requirements/test => 11 USECASE TESTs"
+      ]
+    },
+    {
+      "Id": "B",
+      "Summary": "R1: UseCaseMigrationApplyTests green; AddUseCaseSupport migrations do not alter SessionLogs",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test FullyQualifiedName~UseCaseMigrationApply => Passed 3 Failed 0 Skipped 0",
+        "AddUseCaseSupport.cs (Sqlite/SqlServer/PostgreSql) Up(): SessionLogs op matches=0; CreateTable=8",
+        "Comment-only SessionLogs notes; no AlterTable/AddColumn on SessionLogs in Up()"
+      ]
+    },
+    {
+      "Id": "C",
+      "Summary": "R2: UseCaseAuditEmissionTests green; UC mutations emit DataAuditLog rows",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test FullyQualifiedName~UseCaseAuditEmission => Passed 1 Failed 0 Skipped 0",
+        "tests/McpServer.Support.Mcp.Tests/Services/UseCaseAuditEmissionTests.cs asserts DataAuditLog create/update/delete"
+      ]
+    },
+    {
+      "Id": "D",
+      "Summary": "R3: FullyQualifiedName~UseCase unit tests Support.Mcp.Tests green 0 fail 0 skip",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test tests/McpServer.Support.Mcp.Tests --filter FullyQualifiedName~UseCase => Passed 35 Failed 0 Skipped 0"
+      ]
+    },
+    {
+      "Id": "E",
+      "Summary": "R4: Client UseCase tests green; REST controller exists",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test tests/McpServer.Client.Tests --filter FullyQualifiedName~UseCase => Passed 12 Failed 0 Skipped 0",
+        "src/McpServer.Support.Mcp/Controllers/UseCasesController.cs exists"
+      ]
+    },
+    {
+      "Id": "F",
+      "Summary": "R5: Coverage API and ValidateTraceability green for USECASE IDs",
+      "Verdict": "PASS",
+      "Evidence": [
+        "./build.ps1 ValidateTraceability => Succeeded; Traceability validation passed; findings=0",
+        "GET /mcpserver/usecases/coverage => 200 with totals and gap list keys"
+      ]
+    },
+    {
+      "Id": "G",
+      "Summary": "R6: First-party UI complete including built-in diagram view/edit; plugins/skills present",
+      "Verdict": "FAIL",
+      "Evidence": [
+        "Live GET /usecases/ 200 but pre#diagram only; no mermaid render/CDN; no contenteditable/editor",
+        "index.html: <pre id=\"diagram\"></pre>",
+        "app.js loadDiagram: textContent = diagram.content; GET diagram only",
+        "No actor/flow/step/FR link UI controls in HTML or app.js",
+        "plugins/core/lib-node usecase tools + jest 10 passed",
+        "No usecase agent skill under plugins/core/.staged-plugin/skills, skills/, or .grok/skills"
+      ]
+    },
+    {
+      "Id": "H",
+      "Summary": "R7: Nuke UpdateService succeeded; live health Healthy; /usecases/ 200; program done",
+      "Verdict": "FAIL",
+      "Evidence": [
+        "GET /health 200 Healthy version 1.4.25+28f56515ca1a806f60a6617d3b742e8e3b58b854",
+        "GET /usecases/ 200",
+        "UpdateService not re-executed by validator (sub-claim UNKNOWN standalone)",
+        "Program done false because G and J fail"
+      ]
+    },
+    {
+      "Id": "I",
+      "Summary": "Plan section 6.1 correctly requires adversarial Grok sub-agent hostile validator",
+      "Verdict": "PASS",
+      "Evidence": [
+        "docs/McpServer-UseCase-Extension-Design-v3.0.md §6.1 defines adversarial Grok sub-agent only",
+        "Forbids implementer self-review and PowerShell-as-validator (collector only)",
+        "Requires GrokSubagentHostile receipts md+json"
+      ]
+    },
+    {
+      "Id": "J",
+      "Summary": "Program acceptance criteria fully met including operator diagram editor scope",
+      "Verdict": "FAIL",
+      "Evidence": [
+        "§8 criterion 6 fails: no built-in diagram view/edit (pre dump only)",
+        "§8 criterion 8 fails: usecase agent skills not present",
+        "§8 criterion 10 fails: this receipt OverallVerdict=DISAGREE",
+        "Plan checklist §10 still marks R6 incomplete text dump only"
+      ]
+    }
+  ],
+  "ReceiptPaths": {
+    "Markdown": "docs/receipts/hostile-validator-20260808T095026Z.md",
+    "Json": "docs/receipts/hostile-validator-20260808T095026Z.json"
+  }
+}

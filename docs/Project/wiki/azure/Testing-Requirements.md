@@ -2317,6 +2317,94 @@ Every new FR/TR/TEST acceptance criterion is referenced by at least one test and
 - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
 
 
+## TEST-MCP-USECASE
+
+### TEST-MCP-USECASE-001
+
+Unit tests cover schema creation, workspace isolation, soft-delete hide, FR string FK link uniqueness, and handler CRUD/link behaviors with zero skips in the executed gate scope.
+
+
+### TEST-MCP-USECASE-002
+
+Controller unit tests for UseCasesController. Acceptance: Controller tests green 0 skip.
+
+
+### TEST-MCP-USECASE-003
+
+Diagram golden tests mermaid and plantuml. Acceptance: Mermaid sequenceDiagram; plantuml @startuml.
+
+
+### TEST-MCP-USECASE-004
+
+Client unit tests with live JSON shapes. Acceptance: Client UseCase filter green including coverage DTO.
+
+
+### TEST-MCP-USECASE-005
+
+Coverage query tests. Acceptance: Coverage gap tests green.
+
+
+### TEST-MCP-USECASE-006
+
+Migration apply empty and production-shaped. Acceptance: UseCaseMigrationApplyTests green 0 skip.
+
+
+### TEST-MCP-USECASE-007
+
+Audit emission on UC mutations. Acceptance: Audit tests green for create/update/delete/link.
+
+
+### TEST-MCP-USECASE-008
+
+UI asset REST-only tests. Acceptance: UseCaseUiAssetTests green.
+
+
+### TEST-MCP-USECASE-009
+
+Approval and product hooks tests. Acceptance: Expanded scope approval/product tests green.
+
+
+### TEST-MCP-USECASE-010
+
+Plugin-core usecase jest tests. Acceptance: usecase.test.ts green.
+
+
+### TEST-MCP-USECASE-011
+
+Deploy smoke after UpdateService. Acceptance: health, /usecases/, create/link/diagram/coverage smoke log green.
+
+
+### TEST-MCP-USECASE-012
+
+UML graph serialization goldens Mermaid schema v1 + PlantUML. Covers AC-013-*, AC-014-*, AC-T14-*.
+
+
+### TEST-MCP-USECASE-013
+
+Diagram graph CQRS/storage get put isolation soft-delete invalid audit. Covers AC-012-*, AC-T11-3, AC-T12-1, AC-T16-1.
+
+
+### TEST-MCP-USECASE-014
+
+Controller/client diagram-graph and kind=usecase export. Covers AC-T13-*, HTTP AC-012-5.
+
+
+### TEST-MCP-USECASE-015
+
+Canvas UI asset/contract tests palette canvas drag hooks REST-only. Covers AC-011-*, AC-T15-*.
+
+
+### TEST-MCP-USECASE-016
+
+Migration apply for graph storage. Covers AC-T11-1, AC-T11-2.
+
+
+### TEST-MCP-USECASE-017
+
+Adversarial Grok hostile validator + live canvas smoke claim pack.
+
+
+
 ## TEST-MCP-WIKIEXPORT
 
 ### TEST-MCP-WIKIEXPORT-001

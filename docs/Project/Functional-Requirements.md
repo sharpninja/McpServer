@@ -1952,3 +1952,130 @@ Scope: layer-1+
 - [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 
+## FR-MCP-USECASE-001 Use case header CRUD
+
+Workspace-scoped create, get, list, update, and soft-delete for use case headers.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Create/get/list/update succeed in a workspace
+- [ ] Soft-delete hides use case from default get/list
+- [ ] Cross-workspace id does not leak
+
+## FR-MCP-USECASE-002 Actors, flows, and ordered steps
+
+Actors and flows (Basic/Alternative/Exception) with ordered steps.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Attach actor; add flow; add ordered steps
+- [ ] Invalid actor/flow type rejected
+
+## FR-MCP-USECASE-003 Bidirectional UC-FR links with default Realizes
+
+Link/unlink use cases to string FrId requirements; default LinkType Realizes.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Link defaults to Realizes; unlink soft-deletes link
+- [ ] Duplicate active link conflicts; missing FR rejected
+
+## FR-MCP-USECASE-004 Create use case from FR
+
+Shell use case from FR with automatic Realizes link.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] from-fr creates UC and Realizes link
+- [ ] FR get shows linked use case
+
+## FR-MCP-USECASE-005 Use case diagrams
+
+Two diagram kinds: (a) **sequence** generated from flows/steps; (b) **UML use-case** from persisted graph. Mermaid primary export; PlantUML also supported. Sequence is not a substitute for the use-case canvas editor.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] kind=sequence mermaid contains sequenceDiagram
+- [ ] kind=usecase mermaid uses mcp-usecase-diagram-schema:1 header
+- [ ] plantuml for usecase kind contains @startuml
+- [ ] unknown format fails validation
+
+## FR-MCP-USECASE-006 Realizes coverage report
+
+Runtime report of UC/FR Realizes gaps.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Coverage payload includes totals and gap lists with live DTO names
+
+## FR-MCP-USECASE-007 First-party Use Case UI
+
+First-party UI via REST `/mcpserver/usecases` only. **Primary diagram UI is the UML use-case drag-and-drop canvas** (FR-MCP-USECASE-011). Structure forms (actors/flows/steps/FR links) are secondary. Sequence render remains available separately.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] UI assets call live REST; served at /usecases/ after deploy
+- [ ] Canvas is primary diagram surface (not forms-only)
+- [ ] Structure panels remain available as secondary
+- [ ] No direct DB access from UI
+
+## FR-MCP-USECASE-008 Use case versioning and approval
+
+Draft/Submitted/Approved/Rejected; version increments on Approve.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Approve increments VersionNumber; invalid status rejected
+
+## FR-MCP-USECASE-009 Product membership hooks
+
+Optional ProductKey and list-by-product (hooks only).
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] set/clear ProductKey; list-by-product returns matches
+
+## FR-MCP-USECASE-010 Traceability integration for UC-FR Realizes
+
+Shared Realizes algorithm; USECASE FR/TR/TEST IDs in docs matrix.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Shared algorithm tests; ValidateTraceability green for USECASE IDs
+
+## FR-MCP-USECASE-011 UML use-case canvas editor
+
+Palette + free canvas + drag-and-drop UML use-case diagram editor (actors, use-case ovals, system boundary, association, include, extend). Classic UML editor interaction; not form-only.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-011-1 Palette offers Actor, UseCase, SystemBoundary, Association, Include, Extend
+- [ ] AC-011-2 User can place Actor and UseCase on free canvas
+- [ ] AC-011-3 User can draw Association between Actor and UseCase
+- [ ] AC-011-4 User can create Include and Extend between use cases
+- [ ] AC-011-5 User can rename a selected shape
+- [ ] AC-011-6 User can move shapes; layout coordinates persist with graph
+- [ ] AC-011-7 System boundary contains use cases (visual nesting or membership)
+- [ ] AC-011-8 Canvas is primary diagram UI at /usecases/
+- [ ] AC-011-9 UI mutates diagram graph only via REST
+
+## FR-MCP-USECASE-012 Persist use-case diagram graph
+
+Workspace-scoped graph (nodes, edges, layout) saved and loaded for a use case; soft-delete and validation.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-012-1 GET returns empty or last-saved graph
+- [ ] AC-012-2 PUT then GET round-trips the same graph
+- [ ] AC-012-3 Graph is workspace-scoped; no cross-workspace leak
+- [ ] AC-012-4 Soft-delete of use case hides graph from default get
+- [ ] AC-012-5 Invalid graph rejected with validation error
+- [ ] AC-012-6 Put emits append-only audit row (TR-MCP-DB-004)
+
+## FR-MCP-USECASE-013 Export diagram to Mermaid
+
+Persisted graph exports deterministic Mermaid per mcp-usecase-diagram-schema:1.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-013-1 Export includes %% mcp-usecase-diagram-schema:1 header
+- [ ] AC-013-2 Golden fixture: actors, use cases, boundary, edge types
+- [ ] AC-013-3 Same graph yields same Mermaid (deterministic)
+- [ ] AC-013-4 Empty graph yields documented minimal Mermaid
+
+## FR-MCP-USECASE-014 Export diagram to PlantUML
+
+Same graph exports PlantUML use-case syntax.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AC-014-1 Export contains @startuml and @enduml
+- [ ] AC-014-2 Golden fixture matches actors/use cases/include/extend
+- [ ] AC-014-3 Deterministic for same graph
+

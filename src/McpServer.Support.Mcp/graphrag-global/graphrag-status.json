@@ -1,12 +1,12 @@
 {
   "isIndexed": true,
-  "lastIndexedAtUtc": "2026-07-11T23:26:49.4804341+00:00",
-  "lastSuccessAtUtc": "2026-07-11T23:26:49.4805144+00:00",
+  "lastIndexedAtUtc": "2026-08-08T07:34:53.9882559+00:00",
+  "lastSuccessAtUtc": "2026-08-08T07:34:53.9882573+00:00",
   "lastFailureAtUtc": null,
   "failureCode": null,
   "lastError": null,
   "artifactVersion": "v1",
-  "lastIndexDurationMs": 8,
+  "lastIndexDurationMs": 10,
   "lastIndexedDocumentCount": 7,
   "backend": "internal-fallback"
 }

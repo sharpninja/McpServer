@@ -198,6 +198,7 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             "TURNTRANSACTIONS" => typeof(TurnTransactionsClient),
             "TRIAGE" => typeof(TriageClient),
             "AGENTHELP" => typeof(AgentHelpClient),
+            "USECASES" => typeof(UseCaseClient),
             _ => null,
         };
     }
@@ -574,6 +575,22 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             case Task<TurnTransactionStatusResponse> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<UpdateTodoStatusResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UseCaseActor> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UseCaseDetail> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UseCaseDiagram> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UseCaseFlow> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UseCaseFrCoverage> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UseCaseFrLink> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<IReadOnlyList<UseCaseSummary>> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<UseCaseStep> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<VoiceEscapeResponse> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
