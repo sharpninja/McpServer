@@ -27,6 +27,7 @@ public sealed class SessionLogService : ISessionLogService
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<SessionLogService> _logger;
     private readonly WorkspaceContext? _workspaceContext;
+    private readonly SessionLogTurnContextExtractor _turnContextExtractor;
 
     /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
     /// <remarks>
@@ -44,6 +45,7 @@ public sealed class SessionLogService : ISessionLogService
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _eventBus = eventBus;
         _workspaceContext = workspaceContext;
+        _turnContextExtractor = new SessionLogTurnContextExtractor();
     }
 
     private string ResolveWorkspaceId() => _workspaceContext?.WorkspacePath ?? string.Empty;
@@ -126,6 +128,7 @@ public sealed class SessionLogService : ISessionLogService
             }
         }
 
+        var isImport = !string.IsNullOrWhiteSpace(sourceFilePath);
         var existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
 
         // Sessions are soft-delete only; resubmission is the recovery path. When the live
@@ -136,6 +139,29 @@ public sealed class SessionLogService : ISessionLogService
             && await TryReviveTombstonedSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false))
         {
             existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (dto.Turns is { Count: > 0 })
+        {
+            var existingIds = existing?.Turns
+                .Select(t => t.RequestId)
+                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .ToHashSet(StringComparer.Ordinal) ?? [];
+            foreach (var turn in dto.Turns)
+            {
+                var isNewTurn = existing is null || !existingIds.Contains(turn.RequestId);
+                if (isNewTurn)
+                {
+                    ApplyTurnContext(turn, isImport, dto, existing);
+                    continue;
+                }
+
+                SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);
+                if (turn.PlanFile is not null)
+                    turn.PlanFile = SessionLogTurnContextValidator.ValidatePlanFile(turn.PlanFile, required: true);
+                if (turn.TodoId is not null)
+                    turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);
+            }
         }
 
         var wasCreated = existing is null;
@@ -358,6 +384,18 @@ public sealed class SessionLogService : ISessionLogService
             filtered = filtered.Where(s => s.Turns.Any(e => matcher(BuildSearchText(e))));
         }
 
+        if (!string.IsNullOrWhiteSpace(request.PlanFile))
+        {
+            var planFilter = SessionLogTurnContextValidator.NormalizePlanFile(request.PlanFile);
+            filtered = filtered.Where(s => s.Turns.Any(e => string.Equals(e.PlanFile, planFilter, StringComparison.Ordinal)));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.TodoId))
+        {
+            var todoFilter = request.TodoId;
+            filtered = filtered.Where(s => s.Turns.Any(e => string.Equals(e.TodoId, todoFilter, StringComparison.Ordinal)));
+        }
+
         var filteredList = filtered.ToList();
         var totalCount = filteredList.Count;
 
@@ -521,11 +559,17 @@ public sealed class SessionLogService : ISessionLogService
 
         if (existingTurn is null)
         {
+            ApplyTurnContext(turn, isImport: false, sessionDto: null, session);
             persistedTurn = MapSingleEntry(turn);
             session.Turns.Add(persistedTurn);
         }
         else
         {
+            SessionLogTurnContextValidator.ValidateIfSupplied(turn.PlanFile, turn.TodoId);
+            if (turn.PlanFile is not null)
+                turn.PlanFile = SessionLogTurnContextValidator.ValidatePlanFile(turn.PlanFile, required: true);
+            if (turn.TodoId is not null)
+                turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);
             UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: true);
             persistedTurn = existingTurn;
         }
@@ -592,11 +636,15 @@ public sealed class SessionLogService : ISessionLogService
 
         if (existingTurn is null)
         {
+            ApplyTurnContext(turn, isImport: false, sessionDto: null, session);
             persistedTurn = MapSingleEntry(turn);
             session.Turns.Add(persistedTurn);
         }
         else
         {
+            var normalized = SessionLogTurnContextValidator.ValidateForNewEntry(turn.PlanFile, turn.TodoId);
+            turn.PlanFile = normalized.PlanFile;
+            turn.TodoId = normalized.TodoId;
             // FR-SUPPORT-010G: PUT replace - omitted scalars reset, collections
             // become exactly the payload (omitted/empty cleared).
             UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: false);
@@ -1088,6 +1136,7 @@ public sealed class SessionLogService : ISessionLogService
         var parts = new List<string?>
         {
             turn.QueryText, turn.QueryTitle, turn.Response, turn.Interpretation, turn.FailureNote,
+            turn.PlanFile, turn.TodoId,
         };
 
         foreach (var dialog in turn.ProcessingDialog)
@@ -1139,6 +1188,79 @@ public sealed class SessionLogService : ISessionLogService
             entity.AgentDefinitionId = linkedAgentId;
             dto.AgentDefinitionId = linkedAgentId;
         }
+    }
+
+    private void ApplyTurnContext(
+        UnifiedRequestEntryDto turn,
+        bool isImport,
+        UnifiedSessionLogDto? sessionDto = null,
+        SessionLogEntity? session = null)
+    {
+        if (isImport)
+        {
+            var temp = MapSingleEntryRaw(turn);
+            var extracted = _turnContextExtractor.Extract(
+                temp,
+                ResolveWorkspaceId(),
+                userProfilePath: null,
+                agentSessionId: session?.AgentSessionId ?? sessionDto?.AgentSessionId,
+                agentSessionTranscriptFile: session?.AgentSessionTranscriptFile ?? sessionDto?.AgentSessionTranscriptFile);
+
+            if (!IsUsablePlanFile(turn.PlanFile))
+                turn.PlanFile = extracted.PlanFile;
+            if (!IsUsableTodoId(turn.TodoId))
+                turn.TodoId = extracted.TodoId;
+        }
+
+        var normalized = SessionLogTurnContextValidator.ValidateForNewEntry(turn.PlanFile, turn.TodoId);
+        turn.PlanFile = normalized.PlanFile;
+        turn.TodoId = normalized.TodoId;
+    }
+
+    private static bool IsUsablePlanFile(string? planFile)
+    {
+        try
+        {
+            SessionLogTurnContextValidator.ValidatePlanFile(planFile, required: true);
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    private static bool IsUsableTodoId(string? todoId)
+    {
+        try
+        {
+            SessionLogTurnContextValidator.ValidateTodoId(todoId, required: true);
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    private static SessionLogTurnEntity MapSingleEntryRaw(UnifiedRequestEntryDto e)
+    {
+        var entity = new SessionLogTurnEntity
+        {
+            RequestId = e.RequestId,
+            QueryText = e.QueryText,
+            QueryTitle = e.QueryTitle,
+            Response = e.Response,
+            Interpretation = e.Interpretation,
+            PlanFile = e.PlanFile ?? SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = e.TodoId ?? SessionLogTurnContextValidator.NoneSentinel,
+        };
+        AddRange(entity.Actions, MapActions(e.Actions));
+        AddRange(entity.Tags, MapTags(e.Tags));
+        AddRange(entity.ContextItems, MapContextItems(e.ContextList));
+        AddRange(entity.ProcessingDialog, MapProcessingDialog(e.ProcessingDialog));
+        AddRange(entity.StringListItems, MapStringListItems(e));
+        return entity;
     }
 
     private static void MapDtoToEntity(UnifiedSessionLogDto dto, SessionLogEntity entity)
@@ -1260,6 +1382,8 @@ public sealed class SessionLogService : ISessionLogService
         entity.IsPremium = ApplyValue(entity.IsPremium, dto.IsPremium, dto.IsPremium.HasValue, mergeOmittedFields);
         entity.RawContextJson = ApplyValue(entity.RawContextJson, SerializeJson(dto.RawContext), dto.RawContext is not null, mergeOmittedFields);
         entity.OriginalEntryJson = ApplyValue(entity.OriginalEntryJson, SerializeJson(dto.OriginalEntry), dto.OriginalEntry is not null, mergeOmittedFields);
+        entity.PlanFile = ApplyValue(entity.PlanFile, dto.PlanFile ?? entity.PlanFile, dto.PlanFile is not null, mergeOmittedFields);
+        entity.TodoId = ApplyValue(entity.TodoId, dto.TodoId ?? entity.TodoId, dto.TodoId is not null, mergeOmittedFields);
 
         if (mergeOmittedFields)
         {
@@ -1397,6 +1521,8 @@ public sealed class SessionLogService : ISessionLogService
             IsPremium = e.IsPremium,
             RawContextJson = SerializeJson(e.RawContext),
             OriginalEntryJson = SerializeJson(e.OriginalEntry),
+            PlanFile = e.PlanFile ?? SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = e.TodoId ?? SessionLogTurnContextValidator.NoneSentinel,
         };
 
         AddRange(entity.Actions, MapActions(e.Actions));
@@ -1606,6 +1732,8 @@ public sealed class SessionLogService : ISessionLogService
         FailureNote = e.FailureNote,
         Score = e.Score,
         IsPremium = e.IsPremium,
+        PlanFile = e.PlanFile,
+        TodoId = e.TodoId,
         RawContext = DeserializeJson(e.RawContextJson),
         OriginalEntry = DeserializeJson(e.OriginalEntryJson),
         Tags = e.Tags.Count > 0 ? e.Tags.Select(t => t.Tag).ToList() : null,

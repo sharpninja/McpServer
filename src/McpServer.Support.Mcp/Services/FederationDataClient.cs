@@ -222,6 +222,8 @@ public sealed class FederationDataClient : IFederationDataClient, IGraphRagFeder
         if (request.To is not null) parts.Add($"to={Uri.EscapeDataString(request.To.Value.ToString("O"))}");
         parts.Add($"limit={request.Limit}");
         parts.Add($"offset={request.Offset}");
+        if (request.PlanFile is not null) parts.Add($"planFile={Uri.EscapeDataString(request.PlanFile)}");
+        if (request.TodoId is not null) parts.Add($"todoId={Uri.EscapeDataString(request.TodoId)}");
         return "?" + string.Join("&", parts);
     }
 }

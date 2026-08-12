@@ -236,6 +236,9 @@ builder.Services.PostConfigure<IngestionOptions>(options =>
 builder.Services.PostConfigure<TodoStorageOptions>(options =>
 {
     options.Provider = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:Provider") ?? options.Provider;
+    // Normalize deprecated TodoStorage.Provider=sqlite alias to canonical database.
+    if (string.Equals(options.Provider, TodoStorageOptions.LegacySqliteAlias, StringComparison.OrdinalIgnoreCase))
+        options.Provider = TodoStorageOptions.DatabaseProvider;
     options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
     options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
 });
@@ -436,6 +439,8 @@ builder.Services.AddSingleton<IAgentCliClient>(sp =>
         sp.GetRequiredService<IOptions<IngestionOptions>>(),
         sp.GetRequiredService<ILogger<AuditedAgentCliClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
+builder.Services.AddSingleton<SessionLogTurnContextExtractor>();
+builder.Services.AddScoped<ISessionLogTurnContextBackfill, SessionLogTurnContextBackfill>();
 builder.Services.AddScoped<ISessionLogSanitizer, SessionLogSanitizer>();
 builder.Services.AddScoped<IMemoryService, MemoryService>();
 builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
@@ -754,6 +759,10 @@ if (!app.Environment.IsEnvironment("Test"))
         var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
         await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions).ConfigureAwait(false);
         await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
+        await SessionLogTurnContextBackfillStartup.TryRunAsync(
+            db,
+            scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
+            scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>()).ConfigureAwait(false);
     }
 
     using (var scope = app.Services.CreateScope())

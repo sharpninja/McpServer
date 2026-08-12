@@ -80,6 +80,8 @@ public sealed class SessionLogWorkflowTests
             QueryText = "Implement the built-in session-log workflow end-to-end.",
             Tags = ["session-log"],
             ContextList = ["plan.md"],
+            PlanFile = "None",
+            TodoId = "None",
         }, cancellationToken: TestContext.Current.CancellationToken);
 
         await workflow.AppendDialogAsync(new SessionLogDialogAppendRequest
@@ -173,6 +175,34 @@ public sealed class SessionLogWorkflowTests
         Assert.Equal(
             "Mirror appended dialog items locally so later full-session submits preserve in-host continuation state.",
             finalTurn.GetProperty("designDecisions")[0].GetString());
+    }
+
+    /// <summary>
+    /// AC-TR-MCP-SESSIONLOG-006-007 / TEST-MCP-SESSIONLOG-006:
+    /// BeginTurnAsync persists supplied planFile and todoId on the submitted turn.
+    /// </summary>
+    [Fact]
+    public async Task BeginTurnAsync_PersistsPlanFileAndTodoId()
+    {
+        var (_, workflow, handler) = CreateSut();
+        await workflow.BootstrapAsync(new SessionLogBootstrapRequest
+        {
+            Title = "Plan fields",
+            Model = "gpt-5.4",
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        await workflow.BeginTurnAsync(new SessionLogTurnCreateRequest
+        {
+            QueryTitle = "Work a plan",
+            QueryText = "Use the required turn fields.",
+            PlanFile = "docs/plans/foo.md",
+            TodoId = "MCP-SESSIONLOG-002",
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        using var body = JsonDocument.Parse(handler.Requests[^1].Body!);
+        var submitted = body.RootElement.GetProperty("turns")[0];
+        Assert.Equal("docs/plans/foo.md", submitted.GetProperty("planFile").GetString());
+        Assert.Equal("MCP-SESSIONLOG-002", submitted.GetProperty("todoId").GetString());
     }
 
     /// <summary>

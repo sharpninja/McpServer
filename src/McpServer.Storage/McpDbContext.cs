@@ -310,6 +310,8 @@ public sealed class McpDbContext : DbContext
         {
             e.HasIndex(x => new { x.SessionLogId, x.RequestId }).IsUnique();
             e.HasIndex(x => x.Timestamp);
+            e.HasIndex(x => x.PlanFile);
+            e.HasIndex(x => x.TodoId);
             e.HasOne(x => x.SessionLog)
                 .WithMany(x => x.Turns)
                 .HasForeignKey(x => x.SessionLogId)

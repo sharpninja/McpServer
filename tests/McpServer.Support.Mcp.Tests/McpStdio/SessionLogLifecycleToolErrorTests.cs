@@ -76,6 +76,68 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
         Assert.True(document.RootElement.TryGetProperty("error", out _), json);
     }
 
+    /// <summary>AC-TR-MCP-SESSIONLOG-006-006: empty planFile on begin returns structured error.</summary>
+    [Fact]
+    public async Task SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError()
+    {
+        using var real = CreateRealServiceTools();
+        await real.Service.OpenSessionAsync(
+            "ClaudeCode",
+            "ClaudeCode-20260716T000000Z-plugin-session",
+            "begin",
+            "model",
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var json = await real.Tools.SessionLogBeginTurn(
+            "ClaudeCode",
+            "ClaudeCode-20260716T000000Z-plugin-session",
+            "req-20260716T000000Z-prompt-plan-miss",
+            Path.GetTempPath(),
+            planFile: "",
+            todoId: "None",
+            queryTitle: "missing plan",
+            queryText: "missing plan",
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        using var document = JsonDocument.Parse(json);
+        Assert.True(document.RootElement.TryGetProperty("error", out var error), json);
+        Assert.Contains("planFile", error.GetString(), StringComparison.Ordinal);
+    }
+
+    /// <summary>AC-TR-MCP-SESSIONLOG-006-006: None/None begin succeeds through the real persist path.</summary>
+    [Fact]
+    public async Task SessionLogBeginTurn_NoneNone_ReturnsSuccess()
+    {
+        using var real = CreateRealServiceTools();
+        await real.Service.OpenSessionAsync(
+            "ClaudeCode",
+            "ClaudeCode-20260716T000000Z-plugin-session",
+            "begin",
+            "model",
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var json = await real.Tools.SessionLogBeginTurn(
+            "ClaudeCode",
+            "ClaudeCode-20260716T000000Z-plugin-session",
+            "req-20260716T000000Z-prompt-none",
+            Path.GetTempPath(),
+            planFile: "None",
+            todoId: "None",
+            queryTitle: "none pair",
+            queryText: "none pair",
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        using var document = JsonDocument.Parse(json);
+        Assert.True(document.RootElement.TryGetProperty("success", out var success) && success.GetBoolean(), json);
+        var stored = await real.Service.GetAsync(
+            "ClaudeCode",
+            "ClaudeCode-20260716T000000Z-plugin-session",
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var turn = Assert.Single(stored!.Turns!);
+        Assert.Equal("None", turn.PlanFile);
+        Assert.Equal("None", turn.TodoId);
+    }
+
     /// <summary>AC3: a null turnJson (no payload) still completes successfully through the service.</summary>
     [Fact]
     public async Task SessionLogCompleteTurn_NullTurnJson_ReturnsSuccess()
@@ -98,6 +160,27 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
 
     /// <inheritdoc />
     public void Dispose() => _db.Dispose();
+
+    private sealed record RealServiceTools(FwhMcpTools Tools, SessionLogService Service, McpDbContext Db) : IDisposable
+    {
+        public void Dispose() => Db.Dispose();
+    }
+
+    private static RealServiceTools CreateRealServiceTools()
+    {
+        var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogLifecycleReal_{Guid.NewGuid():N}")
+            .Options;
+        var db = new McpDbContext(dbOptions);
+        db.Database.EnsureCreated();
+        var workspace = Path.GetTempPath();
+        db.OverrideWorkspaceId(workspace);
+        var service = new SessionLogService(
+            db,
+            NullLogger<SessionLogService>.Instance,
+            workspaceContext: new WorkspaceContext { WorkspacePath = workspace });
+        return new RealServiceTools(CreateTools(db, service), service, db);
+    }
 
     private static FwhMcpTools CreateTools(McpDbContext db, ISessionLogService sessionLogService)
     {

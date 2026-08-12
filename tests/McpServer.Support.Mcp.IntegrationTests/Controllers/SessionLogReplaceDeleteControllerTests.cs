@@ -32,6 +32,8 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
         {
             RequestId = SeedRequestId,
             Status = "completed",
+            PlanFile = "None",
+            TodoId = "None",
             Actions = [new UnifiedActionDto { Order = 0, Description = "kept", Status = "completed" }],
         }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, put.StatusCode);
@@ -169,6 +171,8 @@ public sealed class SessionLogReplaceDeleteControllerTests : IClassFixture<Custo
                     Timestamp = "2026-06-13T12:00:00Z",
                     QueryText = "seed query",
                     Status = "in_progress",
+                    PlanFile = "None",
+                    TodoId = "None",
                     Tags = ["t-a", "t-b"],
                     Commits = [new SessionLogCommitDto { Sha = "sha-1", Message = "m", Author = "p" }],
                     Actions = [new UnifiedActionDto { Order = 0, Description = "a", Status = "completed" }],

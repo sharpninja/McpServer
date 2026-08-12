@@ -61,6 +61,7 @@ public sealed class SessionLogClientRequestBodyTests
         var result = await client.BeginTurnAsync(
             "ClaudeCode", "s1", "r1",
             queryTitle: "Fix anonymous bodies", queryText: "audit the client", model: "opus-4-8",
+            planFile: "None", todoId: "MCP-SESSIONLOG-002",
             cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
@@ -68,7 +69,30 @@ public sealed class SessionLogClientRequestBodyTests
         Assert.Contains("\"queryTitle\":\"Fix anonymous bodies\"", handler.LastRequestBody, StringComparison.Ordinal);
         Assert.Contains("\"queryText\":\"audit the client\"", handler.LastRequestBody, StringComparison.Ordinal);
         Assert.Contains("\"model\":\"opus-4-8\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"planFile\":\"None\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"todoId\":\"MCP-SESSIONLOG-002\"", handler.LastRequestBody, StringComparison.Ordinal);
         Assert.Equal(11, result.TurnId);
+    }
+
+    /// <summary>
+    /// AC-TR-MCP-SESSIONLOG-006-007 / TEST-MCP-SESSIONLOG-006:
+    /// <see cref="SessionLogClient.BeginTurnAsync"/> serializes planFile and todoId.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task BeginTurnAsync_SerializesPlanFileAndTodoId()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.Created, """{"turnId":12,"agent":"ClaudeCode","sessionId":"s1","requestId":"r2"}""");
+        using var http = new HttpClient(handler);
+        var client = new SessionLogClient(http, DefaultOptions);
+
+        await client.BeginTurnAsync(
+            "ClaudeCode", "s1", "r2",
+            queryTitle: "Plan fields", queryText: "serialize",
+            planFile: "docs/plans/foo.md", todoId: "MCP-SESSIONLOG-002",
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Contains("\"planFile\":\"docs/plans/foo.md\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"todoId\":\"MCP-SESSIONLOG-002\"", handler.LastRequestBody, StringComparison.Ordinal);
     }
 
     /// <summary>

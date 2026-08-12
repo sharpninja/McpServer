@@ -215,6 +215,40 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         Assert.Equal(1, second.Skipped);
     }
 
+    /// <summary>
+    /// AC-FR-MCP-SESSIONLOGCTX-001-007 / TEST-MCP-SESSIONLOG-006:
+    /// ingest of omitted planFile/todoId persists extractor result or None, never null.
+    /// </summary>
+    [Fact]
+    public async Task Ingest_OmittedFields_PersistsExtractorResultOrNone()
+    {
+        WriteSessionFile("omit-fields.json", new UnifiedSessionLogDto
+        {
+            SourceType = "Copilot",
+            SessionId = "Copilot-20260304T113901Z-omit",
+            Title = "Omitted fields",
+            TurnCount = 1,
+            Turns =
+            [
+                new UnifiedRequestEntryDto
+                {
+                    RequestId = "req-20260304T113901Z-omit",
+                    QueryText = "working MCP-IMPORT-001 on docs/plans/imported.md",
+                    Status = "completed",
+                },
+            ],
+        });
+
+        var ingestor = CreateIngestor();
+        var result = await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(1, result.Imported);
+        var stored = await _db.SessionLogTurns.SingleAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.False(string.IsNullOrWhiteSpace(stored.PlanFile));
+        Assert.False(string.IsNullOrWhiteSpace(stored.TodoId));
+        Assert.True(stored.PlanFile == "None" || stored.PlanFile.Contains("docs/plans/imported.md", StringComparison.Ordinal));
+        Assert.True(stored.TodoId == "None" || stored.TodoId == "MCP-IMPORT-001");
+    }
+
     [Fact]
     public async Task WhenFileChangedThenImportUpdatesIt()
     {

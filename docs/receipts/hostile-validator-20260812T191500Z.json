@@ -1,0 +1,157 @@
+{
+  "TimestampUtc": "2026-08-12T19:15:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "ReviewSessionId": "GrokCode-20260812T191500Z-hostile-sessionlog-002",
+  "ReviewRequestId": "req-20260812T191500Z-001-hostile-sessionlog-002",
+  "ServerTurnId": null,
+  "ServerTurnIdStatus": "UNKNOWN",
+  "AgentIdentity": "GrokCode",
+  "PlanFile": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\019ff6a0-c5fb-7162-8a7b-c7c1234385d1\\plan.md",
+  "TodoId": "MCP-SESSIONLOG-002",
+  "OverallVerdict": "DISAGREE",
+  "DefaultPosture": "FAIL until independently re-verified",
+  "AccuracyRating": 5,
+  "AccuracyRatingScale": 5,
+  "AccuracyJustification": "Claims 1-4 were re-read on disk and re-run in tests or queried from the requirements store. Claim 5 fails on the plan Slice 9 Integration SessionLog gate (13 failed) and on treating the three Support.Mcp filters as the full approved verification.",
+  "CompletenessRating": 5,
+  "CompletenessRatingScale": 5,
+  "CompletenessJustification": "All five assigned claims have PASS or FAIL plus command/path evidence. Native sessionlog tools are explicitly UNKNOWN. Live swagger was not used to fail claim 5.",
+  "ClaimsReviewed": [
+    "Plan-named Slice 6-9 tests now exist in-repo, including Invoke-WorkflowBeginTurn_* Pester and/or C# tests.",
+    "Support.Mcp gating logs on disk are true if re-run: persist-query 42/0/0, backfill-import 10/0/0, SessionLog excluding TranscriptMcpStdioHostTests 243/0/0.",
+    "FR-MCP-SESSIONLOGCTX-001 store record has children AC-FR-MCP-SESSIONLOGCTX-001-001 through 007. TEST-MCP-SESSIONLOG-006 lists those FR/TR AC ids.",
+    "First persist still rejects omitted/empty planFile/todoId; None/None persists; additive omit preserves; import/federation omitted persist None or extracted values, never null.",
+    "The approved plan verification steps (not live Nuke deploy) are satisfied: persist/query, backfill/import, and in-repo tests 0 fail 0 skip."
+  ],
+  "ExplicitFailList": [
+    "Claim 5 FAIL: plan Slice 9 Integration SessionLog filter Failed 13 Passed 41 Skipped 0 EXIT=1. Seed/create without planFile/todoId returns InternalServerError or BadRequest.",
+    "Claim 5 FAIL: persist-query 42 is Support.Mcp.Tests only; Integration BeginTurn_NoneNone and Query_FilterByTodoId were not in that 42.",
+    "Claim 5 FAIL: in-repo 243 excludes TranscriptMcpStdioHostTests and is not ./build.ps1 Test / ValidateConfig / ValidateTraceability."
+  ],
+  "TrustBootstrap": {
+    "markerPath": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+    "testMarkerSignature": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "healthNonce": "6c3be059e3d641d2a81c9b56d88289bc",
+    "healthNonceMatch": true,
+    "pluginStatus": "available",
+    "pluginBootstrapInitialized": true,
+    "pluginCacheDir": "F:\\GitHub\\McpServer\\.mcpServer\\grok",
+    "pluginSessionId": "GrokCode-20260812T191500Z-hostile-sessionlog-002",
+    "pluginTurnRequestId": "req-20260812T191500Z-001-hostile-sessionlog-002",
+    "nativeSessionlogTools": "UNKNOWN-not-in-subagent-function-list",
+    "rawRestSessionlogUsed": false
+  },
+  "RerunResults": {
+    "persistQuery": { "passed": 42, "failed": 0, "skipped": 0, "exit": 0, "listCount": 42, "project": "McpServer.Support.Mcp.Tests" },
+    "backfillImport": { "passed": 10, "failed": 0, "skipped": 0, "exit": 0, "listCount": 10, "project": "McpServer.Support.Mcp.Tests" },
+    "sessionLogExclTranscriptHost": { "passed": 243, "failed": 0, "skipped": 0, "exit": 0, "listCount": 243, "project": "McpServer.Support.Mcp.Tests" },
+    "namedSupportSlice69": { "passed": 9, "failed": 0, "skipped": 0, "exit": 0 },
+    "namedClient": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0 },
+    "namedAgent": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0 },
+    "namedRepl": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0 },
+    "namedIntegration": { "passed": 3, "failed": 0, "skipped": 0, "exit": 0 },
+    "integrationSessionLog": { "passed": 41, "failed": 13, "skipped": 0, "exit": 1 },
+    "pesterInvokeWorkflowBeginTurn": { "passed": 3, "failed": 0, "skipped": 0, "exit": 0 }
+  },
+  "RequirementsStore": {
+    "frId": "FR-MCP-SESSIONLOGCTX-001",
+    "frAcceptanceCriteriaIds": [
+      "AC-FR-MCP-SESSIONLOGCTX-001-001",
+      "AC-FR-MCP-SESSIONLOGCTX-001-002",
+      "AC-FR-MCP-SESSIONLOGCTX-001-003",
+      "AC-FR-MCP-SESSIONLOGCTX-001-004",
+      "AC-FR-MCP-SESSIONLOGCTX-001-005",
+      "AC-FR-MCP-SESSIONLOGCTX-001-006",
+      "AC-FR-MCP-SESSIONLOGCTX-001-007"
+    ],
+    "trId": "TR-MCP-SESSIONLOG-006",
+    "trAcceptanceCriteriaIds": [
+      "AC-TR-MCP-SESSIONLOG-006-001",
+      "AC-TR-MCP-SESSIONLOG-006-002",
+      "AC-TR-MCP-SESSIONLOG-006-003",
+      "AC-TR-MCP-SESSIONLOG-006-004",
+      "AC-TR-MCP-SESSIONLOG-006-005",
+      "AC-TR-MCP-SESSIONLOG-006-006",
+      "AC-TR-MCP-SESSIONLOG-006-007",
+      "AC-TR-MCP-SESSIONLOG-006-008"
+    ],
+    "testId": "TEST-MCP-SESSIONLOG-006",
+    "testListsFrAndTrAcIds": true,
+    "docsProjectHasFrAcIds": false
+  },
+  "Claims": [
+    {
+      "id": 1,
+      "verdict": "PASS",
+      "claim": "Plan-named Slice 6-9 tests now exist in-repo.",
+      "evidence": {
+        "namedIntegration": "3/3 EXIT=0",
+        "namedSupport": "9/9 EXIT=0",
+        "namedClientAgentRepl": "1+1+1 EXIT=0",
+        "pester": "3/3 EXIT=0",
+        "note": "Pester MissingFields_FailsValidation is a source grep; wrapper defaults omitted fields to None."
+      }
+    },
+    {
+      "id": 2,
+      "verdict": "PASS",
+      "claim": "Support.Mcp gating logs are true if re-run: 42/0/0, 10/0/0, 243/0/0.",
+      "evidence": {
+        "implementerLogs": [
+          "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\implementer\\sessionlog-002-persist-query.log",
+          "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\implementer\\sessionlog-002-backfill-import.log",
+          "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\implementer\\sessionlog-002-tests.log"
+        ],
+        "independentLogs": [
+          "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-191500Z\\persist-query.log",
+          "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-191500Z\\backfill-import.log",
+          "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-191500Z\\sessionlog-excl-transcript-host.log"
+        ],
+        "persistQuery": "Passed 42 Failed 0 Skipped 0 EXIT=0",
+        "backfillImport": "Passed 10 Failed 0 Skipped 0 EXIT=0",
+        "sessionLogExclHost": "Passed 243 Failed 0 Skipped 0 EXIT=0"
+      }
+    },
+    {
+      "id": 3,
+      "verdict": "PASS",
+      "claim": "FR-MCP-SESSIONLOGCTX-001 store record has children AC-FR-MCP-SESSIONLOGCTX-001-001 through 007. TEST-MCP-SESSIONLOG-006 lists those FR/TR AC ids.",
+      "evidence": {
+        "method": "workflow.requirements.getFr/getTr/getTest via Invoke-McpPlugin.ps1",
+        "frChildren": 7,
+        "testListsFr001to007": true,
+        "testListsTr001to008": true
+      }
+    },
+    {
+      "id": 4,
+      "verdict": "PASS",
+      "claim": "First persist still rejects omitted/empty planFile/todoId; None/None persists; additive omit preserves; import/federation omitted persist None or extracted values, never null.",
+      "evidence": {
+        "servicePath": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\SessionLogService.cs",
+        "validatorPath": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\SessionLogTurnContextValidator.cs",
+        "rerun": "persist-query 42/42 and named support 9/9 plus named integration 3/3"
+      }
+    },
+    {
+      "id": 5,
+      "verdict": "FAIL",
+      "claim": "The approved plan verification steps (not live Nuke deploy) are satisfied: persist/query, backfill/import, and in-repo tests 0 fail 0 skip.",
+      "evidence": {
+        "planFinalGate": "plan.md lines 708-715",
+        "integrationSessionLog": "Failed 13 Passed 41 Skipped 0 EXIT=1",
+        "integrationLog": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-191500Z\\integration-sessionlog.log",
+        "liveSwaggerUsedToFail": false,
+        "threeLogSubsetGreen": true
+      }
+    }
+  ],
+  "Receipts": {
+    "markdown": "docs/receipts/hostile-validator-20260812T191500Z.md",
+    "json": "docs/receipts/hostile-validator-20260812T191500Z.json"
+  }
+}

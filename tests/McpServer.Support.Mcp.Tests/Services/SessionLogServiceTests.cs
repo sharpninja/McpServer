@@ -541,6 +541,8 @@ public sealed class SessionLogServiceTests : IDisposable
         {
             RequestId = "req-20260304T113901Z-gate-standard",
             Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
         };
         var turnId = await _sut.UpsertTurnAsync("ClaudeCode", claudeSession, claudeTurn, TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.True(turnId > 0);
@@ -551,6 +553,8 @@ public sealed class SessionLogServiceTests : IDisposable
         {
             RequestId = "req-20260304T113901Z-gate-acid",
             Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
         };
         await Assert.ThrowsAsync<ArgumentException>(
             () => _sut.UpsertTurnAsync("QBAgent", qbSession, qbTurn, TestContext.Current.CancellationToken)).ConfigureAwait(true);
@@ -646,7 +650,9 @@ public sealed class SessionLogServiceTests : IDisposable
         {
             RequestId = "req-20260211T100200Z-entry-002",
             QueryText = "New entry",
-            Status = "completed"
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
         });
         dto2.TurnCount = 2;
         var id = await _sut.SubmitAsync(dto2, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -683,7 +689,9 @@ public sealed class SessionLogServiceTests : IDisposable
         {
             RequestId = "req-20260211T100200Z-entry-002",
             QueryText = "Will be removed",
-            Status = "completed"
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
         });
         dto1.TurnCount = 2;
         var id = await _sut.SubmitAsync(dto1, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -947,6 +955,8 @@ public sealed class SessionLogServiceTests : IDisposable
             Timestamp = "2026-05-27T01:40:00Z",
             QueryText = "append through stale db context",
             Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
             Actions =
             [
                 new UnifiedActionDto
@@ -1035,6 +1045,8 @@ public sealed class SessionLogServiceTests : IDisposable
             Timestamp = "2026-05-16T12:00:00Z",
             QueryText = "second turn",
             Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
             Actions =
             [
                 new UnifiedActionDto
@@ -1081,6 +1093,8 @@ public sealed class SessionLogServiceTests : IDisposable
             Interpretation = "structured DTO sub-field repro",
             Status = "in_progress",
             TokenCount = 123,
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
             Tags = ["repro"],
             ContextList = ["src/McpServer.Repl.Core/GenericClientPassthrough.cs"],
             Actions =
@@ -1223,7 +1237,9 @@ public sealed class SessionLogServiceTests : IDisposable
             RequestId = "req-20260516T120100Z-no-evidence",
             Timestamp = "2026-05-16T12:01:00Z",
             QueryText = "terminal turn without audit evidence",
-            Status = "completed"
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
         };
 
         var ex = await Assert.ThrowsAsync<ArgumentException>(
@@ -1251,7 +1267,9 @@ public sealed class SessionLogServiceTests : IDisposable
             RequestId = "req-20260516T120200Z-no-evidence-ok",
             Timestamp = "2026-05-16T12:02:00Z",
             QueryText = "standard terminal turn without audit evidence",
-            Status = "completed"
+            Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel
         };
 
         var id = await sut.UpsertTurnAsync("Cursor", sessionId, turn, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
@@ -1385,6 +1403,8 @@ public sealed class SessionLogServiceTests : IDisposable
                 Timestamp = "2026-02-11T11:00:00Z",
                 QueryText = "second turn",
                 Status = "completed",
+                PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                TodoId = SessionLogTurnContextValidator.NoneSentinel,
                 DesignDecisions = ["Decision: second turn keeps invariant."],
                 Commits = [new SessionLogCommitDto { Sha = "def456", Branch = "main", Message = "m2" }]
             };
@@ -1434,6 +1454,8 @@ public sealed class SessionLogServiceTests : IDisposable
                 Timestamp = "2026-02-11T12:00:00Z",
                 QueryText = "work",
                 Status = "completed",
+                PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                TodoId = SessionLogTurnContextValidator.NoneSentinel,
                 DesignDecisions = ["Decision: ship it."],
                 Commits = [new SessionLogCommitDto { Sha = "554ab3d", Branch = "main", Message = "fix(plugin): drop .mcp.json" }]
             };
@@ -1873,7 +1895,9 @@ public sealed class SessionLogServiceTests : IDisposable
                     QueryText = "How do I configure EF Core?",
                     QueryTitle = "EF Core Config",
                     Response = "Use AddDbContext in Program.cs",
-                    Status = "completed"
+                    Status = "completed",
+                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+                    TodoId = SessionLogTurnContextValidator.NoneSentinel
                 }
             ]
         };
@@ -1889,6 +1913,8 @@ public sealed class SessionLogServiceTests : IDisposable
             QueryText = response,
             Response = response,
             Status = "completed",
+            PlanFile = SessionLogTurnContextValidator.NoneSentinel,
+            TodoId = SessionLogTurnContextValidator.NoneSentinel,
             Tags = [tag],
             ContextList = [$"docs/{tag}.md"],
             Actions =

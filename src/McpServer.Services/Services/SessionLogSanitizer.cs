@@ -200,6 +200,8 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
             Tags = SanitizeStringCollection(turn.Tags),
             ContextList = SanitizeStringCollection(turn.ContextList),
             FailureNote = SanitizeString(turn.FailureNote),
+            PlanFile = SanitizeString(turn.PlanFile),
+            TodoId = SanitizeString(turn.TodoId),
             Score = turn.Score,
             IsPremium = turn.IsPremium,
             RawContext = SanitizePayload(turn.RawContext, 0, []),

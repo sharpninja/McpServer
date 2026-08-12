@@ -955,7 +955,9 @@ function Invoke-ReplTurnUpsertParams {
         [string]$Interpretation = '',
         [int]$TokenCount = 0,
         [string[]]$Tags = @(),
-        [string[]]$ContextList = @()
+        [string[]]$ContextList = @(),
+        [string]$PlanFile = '',
+        [string]$TodoId = ''
     )
 
     $queryText = Get-ReplCurrentTurnQueryText
@@ -1003,7 +1005,9 @@ function Invoke-ReplTurnUpsertParams {
         -ContextList $ContextList `
         -FilesModified $filePaths `
         -Actions $actions `
-        -ProcessingDialog $ProcessingDialog
+        -ProcessingDialog $ProcessingDialog `
+        -PlanFile $PlanFile `
+        -TodoId $TodoId
 
     return $request.ToParamsObject()
 }
@@ -1022,13 +1026,28 @@ function Invoke-ReplPersistTurn {
         [string]$Interpretation = '',
         [int]$TokenCount = 0,
         [string[]]$Tags = @(),
-        [string[]]$ContextList = @()
+        [string[]]$ContextList = @(),
+        [string]$PlanFile = '',
+        [string]$TodoId = ''
     )
     $script:LastReplPersistenceDetails = $null
+    if ($env:MCP_PLUGIN_PERSIST_LOG) {
+        $persistRecord = [ordered]@{
+            requestId = $RequestId
+            planFile = $PlanFile
+            todoId = $TodoId
+            status = $Status
+            boundPlanFile = [bool]$PSBoundParameters.ContainsKey('PlanFile')
+            boundTodoId = [bool]$PSBoundParameters.ContainsKey('TodoId')
+        }
+        Add-Content -LiteralPath $env:MCP_PLUGIN_PERSIST_LOG -Value ($persistRecord | ConvertTo-Json -Compress)
+        return $true
+    }
+
     $meta = Get-ReplSessionMeta
     if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
-    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList
+    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList -PlanFile $PlanFile -TodoId $TodoId
 
     # TR-MCP-REPL-015: send the session title only when the caller explicitly seeds
     # or sets it (IncludeSessionTitle). Otherwise omit it so an incidental re-submit
@@ -1429,6 +1448,14 @@ function Invoke-WorkflowBeginTurn {
     if ([string]::IsNullOrWhiteSpace($queryTitle)) { $queryTitle = 'User prompt' }
     $queryText = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'queryText'
     if ([string]::IsNullOrWhiteSpace($queryText)) { $queryText = $queryTitle }
+    $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
+    $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
+    $currentTurnId = Get-ReplCurrentTurnValue -Key 'turnRequestId'
+    $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
+    if (-not $isReopen) {
+        if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = 'None' }
+        if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
+    }
 
     $openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     $turnState = [ordered]@{
@@ -1445,6 +1472,10 @@ function Invoke-WorkflowBeginTurn {
         auditFiles = 0
         auditCommits = 0
         queryText = $queryText
+    }
+    if (-not $isReopen) {
+        $turnState['planFile'] = $planFile
+        $turnState['todoId'] = $todoId
     }
 
     try {
@@ -1465,7 +1496,11 @@ function Invoke-WorkflowBeginTurn {
         if ($seedSessionTitle) {
             Set-ReplSessionStateValue -Key 'title' -Value $queryTitle | Out-Null
         }
-        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
+        if ($isReopen) {
+            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
+        } else {
+            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
+        }
         if (-not $persisted) {
             [Console]::Error.WriteLine("workflow.sessionlog.beginTurn did not confirm durable persistence for '$requestId'.")
             return $false

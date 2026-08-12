@@ -424,6 +424,8 @@ public interface ICurrentSessionResult
 ///     requestId: req-20260304T113901Z-add-jwt-001
 ///     queryTitle: Add JWT authentication
 ///     queryText: Implement JWT token generation and validation for the API
+///     planFile: None
+///     todoId: None
 /// </code>
 /// </remarks>
 public interface IBeginTurnParams
@@ -443,6 +445,16 @@ public interface IBeginTurnParams
     /// Gets the full user query or task description.
     /// </summary>
     string QueryText { get; }
+
+    /// <summary>
+    /// Gets the current plan file, or the sentinel <c>None</c>.
+    /// </summary>
+    string PlanFile { get; }
+
+    /// <summary>
+    /// Gets the current MCP TODO id, or the sentinel <c>None</c>.
+    /// </summary>
+    string TodoId { get; }
 }
 
 /// <summary>

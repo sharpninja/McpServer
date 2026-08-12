@@ -135,6 +135,8 @@ public sealed class TransactionGatedSessionLogServiceTests
                         {
                             RequestId = RequestId,
                             Status = "completed",
+                            PlanFile = "None",
+                            TodoId = "None",
                             Actions =
                             [
                                 new UnifiedActionDto
@@ -351,6 +353,8 @@ public sealed class TransactionGatedSessionLogServiceTests
                     QueryTitle = "seed",
                     Response = "seed response",
                     Status = "in_progress",
+                    PlanFile = "None",
+                    TodoId = "None",
                     Tags = ["seed-tag-a", "seed-tag-b"],
                     ContextList = ["docs/a.md", "docs/b.md"],
                     Actions =

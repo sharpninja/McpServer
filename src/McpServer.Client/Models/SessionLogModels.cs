@@ -131,6 +131,14 @@ public sealed class UnifiedRequestEntryDto
     [JsonPropertyName("status")]
     public string? Status { get; set; }
 
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current plan file or <c>None</c>.</summary>
+    [JsonPropertyName("planFile")]
+    public string? PlanFile { get; set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current MCP TODO id or <c>None</c>.</summary>
+    [JsonPropertyName("todoId")]
+    public string? TodoId { get; set; }
+
     /// <summary>Actions taken.</summary>
     [JsonPropertyName("actions")]
     public List<UnifiedActionDto>? Actions { get; set; }
@@ -326,6 +334,14 @@ public sealed class SessionLogQueryRequest
     /// <summary>Page size limit.</summary>
     [JsonPropertyName("limit")]
     public int Limit { get; set; } = 100;
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact planFile filter after normalize/expand.</summary>
+    [JsonPropertyName("planFile")]
+    public string? PlanFile { get; set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact todoId filter.</summary>
+    [JsonPropertyName("todoId")]
+    public string? TodoId { get; set; }
 
     /// <summary>Page offset.</summary>
     [JsonPropertyName("offset")]

@@ -296,6 +296,8 @@ public class InteractiveHandler
             Interpretation = interpretation,
             Response = response,
             Status = "in_progress",
+            PlanFile = "None",
+            TodoId = "None",
             Actions = new List<UnifiedActionDto>
             {
                 new UnifiedActionDto

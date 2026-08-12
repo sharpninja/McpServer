@@ -213,7 +213,7 @@ All commands use the `workflow.sessionlog.*` namespace.
 - `workflow.sessionlog.bootstrap`
 - `workflow.sessionlog.openSession`
 - `workflow.sessionlog.currentSession`
-- `workflow.sessionlog.beginTurn`
+- `workflow.sessionlog.beginTurn` (first persist requires `planFile` and `todoId`; omitted values default to `None` at the plugin adapter; same-requestId reopen omits both so stored values are not overwritten)
 - `workflow.sessionlog.updateTurn`
 - `workflow.sessionlog.completeTurn`
 - `workflow.sessionlog.failTurn`
@@ -316,6 +316,8 @@ payload:
     requestId: req-20260304T113901Z-add-jwt-001
     queryTitle: Add JWT authentication
     queryText: Implement JWT token generation and validation for the API
+    planFile: None
+    todoId: None
 ---
 type: result
 payload:

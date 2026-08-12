@@ -237,6 +237,12 @@ public sealed record SessionLogQueryRequest
 
     /// <summary>Number of sessions to skip (default 0).</summary>
     public int Offset { get; init; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact filter on turn planFile after normalize/expand.</summary>
+    public string? PlanFile { get; init; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact filter on turn todoId.</summary>
+    public string? TodoId { get; init; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: Paginated result of a session log query.</summary>

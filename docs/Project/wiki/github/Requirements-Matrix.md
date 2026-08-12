@@ -1085,5 +1085,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-USECASE-015 | Tracked | Testing-Requirements.md |
 | TEST-MCP-USECASE-016 | Tracked | Testing-Requirements.md |
 | TEST-MCP-USECASE-017 | Tracked | Testing-Requirements.md |
+| FR-MCP-SESSIONLOGCTX-001 | Tracked | Functional-Requirements.md |
 | [] | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TR-MCP-SESSIONLOG-006 | Tracked | Technical-Requirements.md |
+| TEST-MCP-SESSIONLOG-006 | Tracked | Testing-Requirements.md |

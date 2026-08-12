@@ -1,0 +1,87 @@
+{
+  "TimestampUtc": "2026-08-12T19:13:50Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Plugin": "F:\\GitHub\\mcpserver-grok-plugin",
+  "PluginVersion": "1.85.0",
+  "ReviewSessionId": "GrokCode-20260812T191115Z-hostile-sessionlog-002-gates",
+  "ReviewRequestId": "req-20260812T191115Z-001-hostile-validate-sessionlog-002",
+  "TodoId": "MCP-SESSIONLOG-002",
+  "PriorReceiptIgnoredAsProof": "docs/receipts/hostile-validator-20260812T185650Z.md",
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "Claims": [
+    {
+      "Id": 1,
+      "Claim": "Skeptic bugs are gone in plugins/core: Open-PluginTurn uses Resolve-PluginTurnPlanContext; Invoke-WorkflowBeginTurn reopen omits PlanFile/TodoId.",
+      "Verdict": "PASS",
+      "Evidence": [
+        "plugins/core/lib-ps/plugin-hook.ps1:715 Open-PluginTurn calls Resolve-PluginTurnPlanContext",
+        "plugins/core/lib-ps/plugin-hook.ps1:1007-1024 Resolve-PluginTurnPlanContext fallback None only when no plan",
+        "plugins/core/lib-ps/repl-invoke.ps1:1451-1458 isReopen skips None default",
+        "plugins/core/lib-ps/repl-invoke.ps1:1499-1503 reopen Invoke-ReplPersistTurn omits PlanFile/TodoId"
+      ]
+    },
+    {
+      "Id": 2,
+      "Claim": "Slice 8 tests drive persist: InvokeWorkflowBeginTurnTests uses SessionLogService.UpsertTurnAsync; Pester SessionLogTurnContextBeginTurn.Tests.ps1 uses real hook + persist log. Independent re-run should be 4/0/0 each.",
+      "Verdict": "PASS",
+      "Evidence": [
+        "tests/McpServer.Support.Mcp.Tests/Plugins/InvokeWorkflowBeginTurnTests.cs calls SessionLogService.UpsertTurnAsync",
+        "plugins/core/test-fixtures/pester/SessionLogTurnContextBeginTurn.Tests.ps1 uses plugin-hook.ps1 user-prompt-submit and MCP_PLUGIN_PERSIST_LOG",
+        "dotnet test filter FullyQualifiedName~InvokeWorkflowBeginTurnTests: Passed 4 Failed 0 Skipped 0 EXIT=0",
+        "Pester 5.7.1 SessionLogTurnContextBeginTurn.Tests.ps1: Passed 4 Failed 0 Skipped 0"
+      ]
+    },
+    {
+      "Id": 3,
+      "Claim": "Three gating logs under implementer scratch were refreshed this turn: persist-query 46/0/0, backfill-import 10/0/0, tests 247/0/0.",
+      "Verdict": "PASS",
+      "Evidence": [
+        "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\implementer\\sessionlog-002-persist-query.log LastWriteTimeUtc 2026-08-12T19:06:06.4110717Z body 46/0/0",
+        "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\implementer\\sessionlog-002-backfill-import.log LastWriteTimeUtc 2026-08-12T19:06:20.1032046Z body 10/0/0",
+        "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\implementer\\sessionlog-002-tests.log LastWriteTimeUtc 2026-08-12T19:06:41.4484323Z body 247/0/0",
+        "Independent persist-query re-run 46/0/0 EXIT=0",
+        "Independent backfill-import re-run 10/0/0 EXIT=0",
+        "Independent tests-247 re-run 247/0/0 EXIT=0"
+      ]
+    },
+    {
+      "Id": 4,
+      "Claim": "FR-MCP-SESSIONLOGCTX-001 has AC 001-007, TR-MCP-SESSIONLOG-006 has AC 001-008, TEST-MCP-SESSIONLOG-006 lists them. Via MCP requirements, not markdown.",
+      "Verdict": "PASS",
+      "Evidence": [
+        "workflow.requirements.getFr id=FR-MCP-SESSIONLOGCTX-001: seven AC-FR-MCP-SESSIONLOGCTX-001-001 through 007",
+        "workflow.requirements.getTr id=TR-MCP-SESSIONLOG-006: eight AC-TR-MCP-SESSIONLOG-006-001 through 008",
+        "workflow.requirements.getTest id=TEST-MCP-SESSIONLOG-006: lists those fifteen FR/TR AC ids",
+        "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-gates\\get-fr.txt",
+        "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-gates\\get-tr.txt",
+        "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-gates\\get-test.txt"
+      ]
+    },
+    {
+      "Id": 5,
+      "Claim": "MCP-SESSIONLOG-002 description names exact absolute and ~/ paths plus ~ history. All seven ImplementationTasks are Done=true. Remaining says in-repo complete and UpdateService is a non-goal.",
+      "Verdict": "PASS",
+      "Evidence": [
+        "workflow.todo.get id=MCP-SESSIONLOG-002 done=false (allowed)",
+        "description includes exact absolute path, ~/ home-relative path, and agent history under ~/.grok ~/.claude ~/.codex ~/.cursor",
+        "implementationTasks count 7 all done=true",
+        "remaining: In-repo slices complete. Live UpdateService is a plan non-goal and was not run.",
+        "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-gates\\get-todo.txt"
+      ]
+    }
+  ],
+  "TrustBootstrap": {
+    "MarkerSignature": true,
+    "HealthNonceMatch": true,
+    "HealthVersion": "1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "PluginStatus": "available",
+    "Agent": "GrokCode"
+  },
+  "NonGoalsNotUsedAsFail": [
+    "Live UpdateService/deploy",
+    "MCP-SESSIONLOG-002 Done=false",
+    "Use-case UI claims"
+  ]
+}

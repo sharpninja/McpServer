@@ -2068,6 +2068,11 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.Property<string>("OriginalEntryJson")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PlanFile")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("QueryText")
                         .HasColumnType("TEXT");
 
@@ -2098,6 +2103,11 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.Property<DateTime?>("Timestamp")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("TokenCount")
                         .HasColumnType("INTEGER");
 
@@ -2107,7 +2117,11 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlanFile");
+
                     b.HasIndex("Timestamp");
+
+                    b.HasIndex("TodoId");
 
                     b.HasIndex("WorkspaceId");
 

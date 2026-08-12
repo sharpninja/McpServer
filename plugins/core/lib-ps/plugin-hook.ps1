@@ -712,10 +712,13 @@ function Open-PluginTurn {
     $sessionId = if ($sessionState.Contains('sessionId')) { [string]$sessionState['sessionId'] } else { '' }
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
+    $turnContext = Resolve-PluginTurnPlanContext
     $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
         requestId = $turnRequestId
         queryTitle = $title
         queryText = $prompt
+        planFile = $turnContext.planFile
+        todoId = $turnContext.todoId
     })
     $beginOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml
     if ($script:LastPluginReplExitCode -ne 0) {
@@ -977,6 +980,48 @@ function Get-PlanTitle {
 
 function Get-PlanTodoMapPath {
     Join-Path (Get-PluginCacheDir) 'plan-todo-map.yaml'
+}
+
+function Get-LastPlanTodoMapEntry {
+    $mapPath = Get-PlanTodoMapPath
+    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
+    $lines = [System.IO.File]::ReadAllLines($mapPath)
+    $planFile = $null
+    $todoId = $null
+    for ($i = 0; $i -lt $lines.Length; $i++) {
+        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$') {
+            $planFile = $Matches[1].Trim().Trim('"')
+            $todoId = $null
+            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
+                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
+                    $todoId = $Matches[1].Trim().Trim('"')
+                    break
+                }
+            }
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($planFile)) { return $null }
+    return [ordered]@{ planFile = $planFile; todoId = $todoId }
+}
+
+function Resolve-PluginTurnPlanContext {
+    $planFile = Get-PlanFilePathFromInput
+    if (-not $planFile -or -not (Test-Path -LiteralPath $planFile -PathType Leaf)) {
+        $mapped = Get-LastPlanTodoMapEntry
+        if ($mapped -and $mapped.planFile -and (Test-Path -LiteralPath $mapped.planFile -PathType Leaf)) {
+            $planFile = [string]$mapped.planFile
+        } else {
+            $planFile = $null
+        }
+    }
+
+    if (-not $planFile) {
+        return [ordered]@{ planFile = 'None'; todoId = 'None' }
+    }
+
+    $todoId = Find-PlanTodoId -PlanFile $planFile
+    if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
+    return [ordered]@{ planFile = $planFile; todoId = $todoId }
 }
 
 function Get-TodoIdFromReplOutput {

@@ -103,10 +103,12 @@ public interface ISessionLogWorkflow
     /// <param name="queryTitle">A short summary of the user query.</param>
     /// <param name="queryText">The full user query or task description.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <param name="planFile">Current plan file or the sentinel <c>None</c>. Required for a first persist of the turn.</param>
+    /// <param name="todoId">Current MCP TODO id or the sentinel <c>None</c>. Required for a first persist of the turn.</param>
     /// <returns>A task representing the asynchronous turn creation operation.</returns>
     /// <exception cref="ArgumentException">Thrown if requestId, queryTitle, or queryText is null, empty, or violates identifier rules.</exception>
     /// <exception cref="InvalidOperationException">Thrown if no session is active or a turn with the same requestId already exists in the session.</exception>
-    Task BeginTurnAsync(string requestId, string queryTitle, string queryText, CancellationToken cancellationToken = default);
+    Task BeginTurnAsync(string requestId, string queryTitle, string queryText, CancellationToken cancellationToken = default, string? planFile = null, string? todoId = null);
 
     /// <summary>
     /// Updates the current active turn with response text, interpretation, and optional metadata.

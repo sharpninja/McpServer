@@ -269,6 +269,8 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             QueryText = "appended turn",
             Interpretation = "per-turn route preserves structured fields",
             Status = "completed",
+            PlanFile = "None",
+            TodoId = "None",
             Tags = ["rest"],
             ContextList = ["tests/McpServer.Support.Mcp.IntegrationTests/Controllers/SessionLogControllerTests.cs"],
             Actions =
@@ -323,7 +325,9 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             RequestId = "req-20260516T120100Z-empty-close",
             Timestamp = "2026-05-16T12:01:00Z",
             QueryText = "close without compliance items",
-            Status = "completed"
+            Status = "completed",
+            PlanFile = "None",
+            TodoId = "None"
         };
 
         var response = await _client.PostAsJsonAsync(
@@ -354,7 +358,9 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             RequestId = "req-20260516T120200Z-empty-close-ok",
             Timestamp = "2026-05-16T12:02:00Z",
             QueryText = "standard close without compliance items",
-            Status = "completed"
+            Status = "completed",
+            PlanFile = "None",
+            TodoId = "None"
         };
 
         var response = await _client.PostAsJsonAsync(
@@ -382,6 +388,8 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         {
             RequestId = requestId,
             Status = "completed",
+            PlanFile = "None",
+            TodoId = "None",
             Actions = [new UnifiedActionDto { Order = 0, Description = "replace", Status = "completed" }],
         });
         using var request = new HttpRequestMessage(HttpMethod.Put,
@@ -528,7 +536,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
 
         var response = await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
-            new { queryTitle = "Begin turn", queryText = "lifecycle begin" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            new { queryTitle = "Begin turn", queryText = "lifecycle begin", planFile = "None", todoId = "None" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         var fetched = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
@@ -536,6 +544,64 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         var turn = Assert.Single(fetched!.Turns!);
         Assert.Equal(requestId, turn.RequestId);
         Assert.Equal("in_progress", turn.Status);
+        Assert.Equal("None", turn.PlanFile);
+        Assert.Equal("None", turn.TodoId);
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-002 / AC-TR-MCP-SESSIONLOG-006-006: None/None begin round-trips.</summary>
+    [Fact]
+    public async Task BeginTurn_NoneNone_Returns201_AndGetReturnsNone()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"begin-none-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId).ConfigureAwait(true);
+        var requestId = NewRequestId("begin-none");
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
+            new { queryTitle = "None pair", queryText = "none", planFile = "None", todoId = "None" },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var fetched = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
+            new Uri($"/mcpserver/sessionlog/ClaudeCode/{sessionId}", UriKind.Relative),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var turn = Assert.Single(fetched!.Turns!);
+        Assert.Equal("None", turn.PlanFile);
+        Assert.Equal("None", turn.TodoId);
+    }
+
+    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: query todoId filter is exact.</summary>
+    [Fact]
+    public async Task Query_FilterByTodoId_ReturnsOnlyMatches()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"q-todo-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId).ConfigureAwait(true);
+        var requestId = NewRequestId("q-todo");
+        var begin = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
+            new { queryTitle = "filter", planFile = "None", todoId = "MCP-SESSIONLOG-002" },
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Created, begin.StatusCode);
+
+        var hit = await _client.GetFromJsonAsync<SessionLogQueryResult>(
+            new Uri("/mcpserver/sessionlog?todoId=MCP-SESSIONLOG-002&limit=50", UriKind.Relative),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Contains(hit!.Items, item => item.SessionId == sessionId);
+
+        var miss = await _client.GetFromJsonAsync<SessionLogQueryResult>(
+            new Uri("/mcpserver/sessionlog?todoId=PLAN-MISS-001&limit=50", UriKind.Relative),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.DoesNotContain(miss!.Items, item => item.SessionId == sessionId);
+    }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: begin without planFile/todoId is 400.</summary>
+    [Fact]
+    public async Task BeginTurn_MissingFields_Returns400()
+    {
+        var sessionId = BuildSessionId("ClaudeCode", $"begin-miss-{Guid.NewGuid():N}");
+        await OpenSessionAsync(sessionId).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(
+            LifecycleUri($"ClaudeCode/{sessionId}/{NewRequestId("begin-miss")}/begin"),
+            new { queryTitle = "Begin turn", queryText = "lifecycle begin" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     /// <summary>FR-SUPPORT-014: begin on a missing session maps to 404.</summary>
@@ -563,7 +629,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         var requestId = NewRequestId("complete");
         await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
-            new { queryTitle = "Work", queryText = "do work" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            new { queryTitle = "Work", queryText = "do work", planFile = "None", todoId = "None" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var response = await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/complete"),
@@ -595,7 +661,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         var requestId = NewRequestId("noevidence");
         await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
-            new { queryTitle = "Work" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            new { queryTitle = "Work", planFile = "None", todoId = "None" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var response = await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/complete"),
@@ -618,7 +684,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         var requestId = NewRequestId("noevidence");
         await _client.PostAsJsonAsync(
             LifecycleUri($"{qbAgentSourceType}/{sessionId}/{requestId}/begin"),
-            new { queryTitle = "Work" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            new { queryTitle = "Work", planFile = "None", todoId = "None" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var response = await _client.PostAsJsonAsync(
             LifecycleUri($"{qbAgentSourceType}/{sessionId}/{requestId}/complete"),
@@ -639,7 +705,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         var requestId = NewRequestId("fail");
         await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
-            new { queryTitle = "Doomed work" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            new { queryTitle = "Doomed work", planFile = "None", todoId = "None" }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var response = await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/fail"),
@@ -693,7 +759,9 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
                     Timestamp = "2026-02-12T10:01:00Z",
                     QueryText = "Test query",
                     Response = "Test response",
-                    Status = "completed"
+                    Status = "completed",
+                    PlanFile = "None",
+                    TodoId = "None"
                 }
             ]
         };

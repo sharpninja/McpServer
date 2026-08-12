@@ -117,6 +117,8 @@ public sealed class SessionLogResubmissionReviveTests
                 QueryText = "revive query",
                 Response = response,
                 Status = "completed",
+                PlanFile = "None",
+                TodoId = "None",
             },
         ],
     };
@@ -138,6 +140,8 @@ public sealed class SessionLogResubmissionReviveTests
                 QueryTitle = "shell_command",
                 Response = output,
                 Status = "completed",
+                PlanFile = "None",
+                TodoId = "None",
             },
         ],
     };

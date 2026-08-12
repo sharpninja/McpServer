@@ -233,6 +233,20 @@ public sealed class UnifiedRequestEntryDto
     [JsonPropertyName("blockers")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
     public ICollection<string>? Blockers { get; set; }
+
+    /// <summary>
+    /// FR-MCP-SESSIONLOGCTX-001: Current plan file being worked, or the sentinel <c>None</c>.
+    /// Required on new entries. Omitted on additive updates preserves the stored value.
+    /// </summary>
+    [JsonPropertyName("planFile")]
+    public string? PlanFile { get; set; }
+
+    /// <summary>
+    /// FR-MCP-SESSIONLOGCTX-001: Current MCP TODO id being worked, or the sentinel <c>None</c>.
+    /// Required on new entries. Omitted on additive updates preserves the stored value.
+    /// </summary>
+    [JsonPropertyName("todoId")]
+    public string? TodoId { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: Single processing dialog entry recording model reasoning during request execution.</summary>

@@ -2285,6 +2285,22 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-SESSIONLOG-006
+
+**Required planFile and todoId scalars with None sentinel and backfill** — Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.
+**Covered by:** FR: FR-MCP-SESSIONLOGCTX-001; TEST: TEST-MCP-SESSIONLOG-006
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] todoId is None, canonical TODO id, or ISSUE-N. FR/TR/TEST ids fail. planFile is None or a normalized relative/exact/~/ path, max 2048, no .. .
+- [ ] Additive upsert/complete omits preserve stored values. Supplied values are validated. ReplaceTurnAsync requires both fields.
+- [ ] Extractor scans turn text, tags, context, files, actions, dialog, and agent history under ~. Tag TODO ids win. Ties and FR/TR/TEST ids yield None.
+- [ ] SessionLogTurns.PlanFile required string max 2048 default None. TodoId required string max 128 default None. Three provider migrations add both columns.
+- [ ] Backfill writes extractor hits onto None columns only. Non-None is not overwritten. Rerun is a no-op.
+- [ ] POST begin and sessionlog_begin_turn require planFile and todoId. Missing is 400/error. None/None succeeds.
+- [ ] SessionLogClient.BeginTurnAsync, McpAgent BeginTurnAsync, and REPL beginTurn serialize and persist the supplied values.
+- [ ] Read projection copies planFile and todoId onto a clone. Source is unchanged. None is not rewritten.
+
 ## TR-MCP-SESSIONLOGSAN-001
 
 **Bounded outbound session-log sanitizer** — A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and wrap the final local or federated ISessionLogService read result.

@@ -41,6 +41,14 @@ public sealed record SessionLifecycleBeginRequest
     /// <summary>Optional model identifier recorded on the turn.</summary>
     [JsonPropertyName("model")]
     public string? Model { get; init; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current plan file or <c>None</c>. Required on first persist.</summary>
+    [JsonPropertyName("planFile")]
+    public string? PlanFile { get; init; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current MCP TODO id or <c>None</c>. Required on first persist.</summary>
+    [JsonPropertyName("todoId")]
+    public string? TodoId { get; init; }
 }
 
 /// <summary>

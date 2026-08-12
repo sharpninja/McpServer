@@ -76,6 +76,8 @@ public sealed class SessionLogClient : McpClientBase
         if (request.To.HasValue) parts.Add($"to={Uri.EscapeDataString(request.To.Value.ToString("o"))}");
         if (request.Limit != 100) parts.Add($"limit={request.Limit}");
         if (request.Offset != 0) parts.Add($"offset={request.Offset}");
+        if (request.PlanFile is not null) parts.Add($"planFile={Uri.EscapeDataString(request.PlanFile)}");
+        if (request.TodoId is not null) parts.Add($"todoId={Uri.EscapeDataString(request.TodoId)}");
         var qs = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
         return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken);
     }
@@ -170,12 +172,20 @@ public sealed class SessionLogClient : McpClientBase
     public async Task<SessionLogTurnSubmitResult> BeginTurnAsync(
         string agent, string sessionId, string requestId,
         string? queryTitle = null, string? queryText = null, string? model = null,
+        string? planFile = null, string? todoId = null,
         CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/begin";
         return await PostAsync<SessionLogTurnSubmitResult>(
             path,
-            new SessionLifecycleBeginRequest { QueryTitle = queryTitle, QueryText = queryText, Model = model },
+            new SessionLifecycleBeginRequest
+            {
+                QueryTitle = queryTitle,
+                QueryText = queryText,
+                Model = model,
+                PlanFile = planFile,
+                TodoId = todoId,
+            },
             cancellationToken);
     }
 

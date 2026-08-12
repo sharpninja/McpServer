@@ -219,6 +219,30 @@ public class SessionLogWorkflowProductionTests
 
     #region Turn Lifecycle Tests
 
+    /// <summary>
+    /// AC-TR-MCP-SESSIONLOG-006-007 / TEST-MCP-SESSIONLOG-006:
+    /// REPL BeginTurnAsync forwards planFile and todoId onto the submitted turn.
+    /// </summary>
+    [Fact]
+    public async Task BeginTurnAsync_ForwardsPlanFileAndTodoId()
+    {
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync(
+            "req-20260304T113901Z-task-001",
+            "Task Title",
+            "Task Description",
+            cancellationToken: TestContext.Current.CancellationToken,
+            planFile: "docs/plans/foo.md",
+            todoId: "MCP-SESSIONLOG-002");
+
+        var submitted = _stubClient.LastSubmitted;
+        Assert.NotNull(submitted);
+        var turn = Assert.Single(submitted!.Turns!);
+        Assert.Equal("docs/plans/foo.md", turn.PlanFile);
+        Assert.Equal("MCP-SESSIONLOG-002", turn.TodoId);
+    }
+
     [Fact]
     public async Task BeginTurnAsync_ValidParameters_CreatesTurn()
     {
