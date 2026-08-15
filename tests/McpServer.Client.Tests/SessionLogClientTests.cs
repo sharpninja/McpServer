@@ -26,10 +26,18 @@ public sealed class SessionLogClientTests
         {
             SourceType = "Copilot",
             SessionId = "s1",
+            AgentSessionId = "agent-session-1",
+            AgentSessionTranscriptFile = "F:/workspace/.mcpServer/copilot/transcript.jsonl",
+            AgentExecutablePath = "C:/Program Files/Copilot/copilot.exe",
+            AgentExecutableVersion = "1.2.3",
             Title = "Test"
         }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("\"agentSessionId\":\"agent-session-1\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"agentSessionTranscriptFile\":\"F:/workspace/.mcpServer/copilot/transcript.jsonl\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"agentExecutablePath\":\"C:/Program Files/Copilot/copilot.exe\"", handler.LastRequestBody, StringComparison.Ordinal);
+        Assert.Contains("\"agentExecutableVersion\":\"1.2.3\"", handler.LastRequestBody, StringComparison.Ordinal);
         Assert.Equal("Copilot", result.SourceType);
     }
 

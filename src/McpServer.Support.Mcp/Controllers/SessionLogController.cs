@@ -81,6 +81,8 @@ public sealed class SessionLogController : ControllerBase
     /// <param name="to">Sessions last updated on or before this date (ISO 8601).</param>
     /// <param name="limit">Page size (default 100, max 1000).</param>
     /// <param name="offset">Number of sessions to skip (default 0).</param>
+    /// <param name="planFile">Exact planFile filter (None or a path; <c>~/</c> is expanded).</param>
+    /// <param name="todoId">Exact todoId filter (None or a canonical TODO id).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>200 OK with paginated session logs.</returns>
     [HttpGet]
@@ -94,6 +96,8 @@ public sealed class SessionLogController : ControllerBase
         [FromQuery] DateTimeOffset? to,
         [FromQuery] int limit = 100,
         [FromQuery] int offset = 0,
+        [FromQuery] string? planFile = null,
+        [FromQuery] string? todoId = null,
         CancellationToken cancellationToken = default)
     {
         var request = new SessionLogQueryRequest
@@ -105,7 +109,9 @@ public sealed class SessionLogController : ControllerBase
             From = from,
             To = to,
             Limit = limit,
-            Offset = offset
+            Offset = offset,
+            PlanFile = planFile,
+            TodoId = todoId
         };
 
         var result = await _service.QueryAsync(request, cancellationToken).ConfigureAwait(false);
@@ -359,6 +365,8 @@ public sealed class SessionLogController : ControllerBase
             QueryTitle = body?.QueryTitle,
             QueryText = body?.QueryText,
             Model = body?.Model,
+            PlanFile = body?.PlanFile,
+            TodoId = body?.TodoId,
             Status = "in_progress",
         };
         return UpsertLifecycleTurnAsync(agent, sessionId, turn, StatusCodes.Status201Created, cancellationToken);
@@ -675,12 +683,20 @@ public sealed class SessionLogController : ControllerBase
 /// <param name="Model">AI model identifier.</param>
 public sealed record SessionLifecycleOpenRequest(string? Title, string? Model);
 
-/// <summary>FR-SUPPORT-014: Optional body for the stateless begin-turn endpoint.</summary>
+/// <summary>FR-SUPPORT-014 / FR-MCP-SESSIONLOGCTX-001: Optional body for the stateless begin-turn endpoint.</summary>
 /// <param name="QueryTitle">Short turn title.</param>
 /// <param name="QueryText">Full user query text.</param>
 /// <param name="Timestamp">ISO 8601 turn timestamp; defaults to now.</param>
 /// <param name="Model">AI model identifier.</param>
-public sealed record SessionLifecycleBeginRequest(string? QueryTitle, string? QueryText, string? Timestamp, string? Model);
+/// <param name="PlanFile">Current plan file or the sentinel <c>None</c>. Required on first persist.</param>
+/// <param name="TodoId">Current MCP TODO id or the sentinel <c>None</c>. Required on first persist.</param>
+public sealed record SessionLifecycleBeginRequest(
+    string? QueryTitle,
+    string? QueryText,
+    string? Timestamp,
+    string? Model,
+    string? PlanFile,
+    string? TodoId);
 
 /// <summary>TR-MCP-SESSIONLOG-005: Body for the explicit session/turn title-set endpoints.</summary>
 /// <param name="Title">New title to set on the session or turn.</param>

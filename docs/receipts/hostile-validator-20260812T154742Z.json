@@ -1,0 +1,180 @@
+{
+  "TimestampUtc": "2026-08-12T15:47:42Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "ReviewSessionId": "GrokCode-20260812T154657Z-hostile-new-session",
+  "ReviewRequestId": "req-20260812T154657Z-001-hostile-new-session",
+  "AgentIdentity": "GrokCode",
+  "OverallVerdict": "DISAGREE",
+  "ClaimsReviewed": [
+    "Operator profile loaded: 14 markdown files from C:\\Users\\kingd\\.claude\\profile, excluding add-profile skill ports.",
+    "Marker signature verified True via plugin marker-resolver Test-MarkerSignature / Invoke-FullBootstrap against F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml.",
+    "Health nonce verified as part of Invoke-FullBootstrap=True; health hook returned Healthy, version 1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e.",
+    "Plugin identity: sourceType GrokCode, plugin mcpserver-grok-plugin version 1.85.0 from F:\\GitHub\\mcpserver-grok-plugin\\.version and .grok-plugin\\plugin.json, git HEAD 6742f77, official tool-registry exact name match, git pull --ff-only already up to date.",
+    "New session opened: GrokCode-20260812T154057Z-plugin-session.",
+    "Turn req-20260812T154200Z-001-new-session exists server-side with status completed, queryTitle \"Open new MCP session\".",
+    "Open TODO query (done=false) returned 50 items.",
+    "Required MCP memories (MEMORY-REQ-*) are none; effective memories include MEMORY-LAB-001 and MEMORY-LAB-002."
+  ],
+  "ExplicitFailList": [
+    "Claim 5 FAIL: session GrokCode-20260812T154057Z-plugin-session is not a new session. Server started=2026-08-11T18:43:20Z, status=in_progress, leftover canceled turn req-20260811T184319Z-prompt-6c0b, later turnCount=3 after hook turn req-20260812T154310Z-prompt-a197."
+  ],
+  "Claims": [
+    {
+      "id": 1,
+      "verdict": "PASS",
+      "claim": "Operator profile loaded: 14 markdown files from C:\\Users\\kingd\\.claude\\profile, excluding add-profile skill ports.",
+      "evidence": {
+        "command": "Get-ChildItem -LiteralPath C:\\Users\\kingd\\.claude\\profile -File -Force | Where-Object Extension -eq .md",
+        "allMarkdownCount": 15,
+        "excluded": ["add-profile.grok.md"],
+        "includedCount": 14,
+        "included": [
+          "accuracy-first-verify-sources.md",
+          "adversarial-review-global.md",
+          "approve-before-execute.md",
+          "bring-the-receipts.md",
+          "lab-authorization.md",
+          "log-decisions-as-conclusions.md",
+          "never-skip-explicit-actions.md",
+          "no-attitude-honesty-tell.md",
+          "no-python-lab.md",
+          "no-shortcuts-precision-over-convenience.md",
+          "philosophical-dialogue-mode.md",
+          "PROFILE.md",
+          "session-turn-title-summary.md",
+          "user-payton-byrd.md"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "verdict": "PASS",
+      "claim": "Marker signature verified True via plugin marker-resolver Test-MarkerSignature / Invoke-FullBootstrap.",
+      "evidence": {
+        "command": "dot-source F:\\GitHub\\mcpserver-grok-plugin\\lib\\marker-resolver.ps1; Test-MarkerSignature; Invoke-FullBootstrap -StartDir F:\\GitHub\\McpServer",
+        "markerPath": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+        "testMarkerSignature": true,
+        "invokeFullBootstrap": true
+      }
+    },
+    {
+      "id": 3,
+      "verdict": "PASS",
+      "claim": "Health nonce verified as part of Invoke-FullBootstrap=True; health hook returned Healthy, version 1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e.",
+      "evidence": {
+        "invokeFullBootstrap": true,
+        "directHealthUrl": "http://PAYTON-LEGION2:7147/health?nonce=hostile-294e5cb8fc1c45afb20b060cc3375dc9",
+        "healthStatus": "Healthy",
+        "healthVersion": "1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+        "nonceMatch": true,
+        "healthHookScript": "F:\\GitHub\\mcpserver-grok-plugin\\hooks\\scripts\\health-check.ps1",
+        "healthHookExit": 0,
+        "healthHookStatus": "Healthy",
+        "healthHookVersion": "1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+        "healthHookExtraNoise": "Failsafe queue drain failed: mcpserver-repl timed out after 30s"
+      }
+    },
+    {
+      "id": 4,
+      "verdict": "PASS",
+      "claim": "Plugin identity sourceType GrokCode, mcpserver-grok-plugin 1.85.0, git HEAD 6742f77, official tool-registry exact name match, git pull --ff-only already up to date.",
+      "evidence": {
+        "markerSourceType": "GrokCode",
+        "markerPluginName": "mcpserver-grok-plugin",
+        "dotVersion": "1.85.0",
+        "pluginJsonName": "mcpserver",
+        "pluginJsonVersion": "1.85.0",
+        "gitHead": "6742f771f2a00fb65d8cfc856534012b7a5dabbd",
+        "gitHeadShort": "6742f77",
+        "gitPull": "Already up to date.",
+        "toolRegistryExactName": "mcpserver-grok-plugin",
+        "toolRegistryExactId": 7,
+        "dirtyTreeNote": "M .grok-plugin/plugin.json; M CORE-MANIFEST.yaml; M GROK-USAGE.md; ?? skills/usecase/"
+      }
+    },
+    {
+      "id": 5,
+      "verdict": "FAIL",
+      "claim": "New session opened: GrokCode-20260812T154057Z-plugin-session.",
+      "evidence": {
+        "tool": "mcpserver__sessionlog_query",
+        "query": { "agent": "GrokCode", "text": "GrokCode-20260812T154057Z-plugin-session", "workspacePath": "F:\\GitHub\\McpServer" },
+        "sessionId": "GrokCode-20260812T154057Z-plugin-session",
+        "serverStarted": "2026-08-11T18:43:20.0000000+00:00",
+        "status": "in_progress",
+        "title": "Open new MCP session",
+        "leftoverTurn": "req-20260811T184319Z-prompt-6c0b",
+        "leftoverTurnStatus": "canceled",
+        "laterTurnCount": 3,
+        "laterExtraTurn": "req-20260812T154310Z-prompt-a197",
+        "cachePath": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\session-state.yaml",
+        "cacheStarted": "2026-08-12T15:40:57Z",
+        "reason": "Session ID exists but the server aggregate is reused from 2026-08-11, not a new session."
+      }
+    },
+    {
+      "id": 6,
+      "verdict": "PASS",
+      "claim": "Turn req-20260812T154200Z-001-new-session exists server-side with status completed, queryTitle Open new MCP session.",
+      "evidence": {
+        "tool": "mcpserver__sessionlog_query",
+        "requestId": "req-20260812T154200Z-001-new-session",
+        "status": "completed",
+        "queryTitle": "Open new MCP session",
+        "queryText": "new session",
+        "timestamp": "2026-08-12T15:41:30.0000000+00:00"
+      }
+    },
+    {
+      "id": 7,
+      "verdict": "PASS",
+      "claim": "Open TODO query (done=false) returned 50 items.",
+      "evidence": {
+        "tool": "mcpserver__todo_list",
+        "done": false,
+        "itemCount": 50,
+        "totalCount": 50,
+        "uniqueIds": 50,
+        "doneFalse": 50,
+        "doneTrue": 0,
+        "restUrl": "http://PAYTON-LEGION2:7147/mcpserver/todo?done=false",
+        "restItemCount": 50
+      }
+    },
+    {
+      "id": 8,
+      "verdict": "PASS",
+      "claim": "Required MCP memories (MEMORY-REQ-*) are none; effective memories include MEMORY-LAB-001 and MEMORY-LAB-002.",
+      "evidence": {
+        "memoryListKeywordMemoryReq": { "totalCount": 0, "items": [] },
+        "memoryListScopeEffective": {
+          "totalCount": 2,
+          "ids": ["MEMORY-LAB-001", "MEMORY-LAB-002"]
+        }
+      }
+    }
+  ],
+  "ReviewSessionPersistence": {
+    "plugin": "F:\\GitHub\\mcpserver-grok-plugin\\lib\\repl-invoke.ps1",
+    "methods": [
+      { "method": "workflow.sessionlog.bootstrap", "exit": 0, "initialized": true },
+      { "method": "workflow.sessionlog.openSession", "exit": 0, "sessionId": "GrokCode-20260812T154657Z-hostile-new-session" },
+      { "method": "workflow.sessionlog.beginTurn", "exit": 0, "requestId": "req-20260812T154657Z-001-hostile-new-session" },
+      { "method": "workflow.sessionlog.appendDialog", "exit": 0, "dialogItems": 2 },
+      { "method": "workflow.sessionlog.appendActions", "exit": 0, "orders": [1, 2, 3] },
+      { "method": "workflow.sessionlog.completeTurn", "exit": 0 }
+    ],
+    "sessionlogQueryProof": {
+      "tool": "mcpserver__sessionlog_query",
+      "query": { "agent": "GrokCode", "text": "hostile-new-session", "workspacePath": "F:\\GitHub\\McpServer" },
+      "matchedSessionId": "GrokCode-20260812T154657Z-hostile-new-session",
+      "matchedRequestId": "req-20260812T154657Z-001-hostile-new-session",
+      "matchedStatus": "completed",
+      "matchedQueryTitle": "Hostile review of new-session claims",
+      "matchedActionOrders": [1, 2, 3],
+      "matchedDialogCount": 2
+    }
+  }
+}

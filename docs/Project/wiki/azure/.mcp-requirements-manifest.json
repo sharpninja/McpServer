@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-07-20T19:11:56.4148806+00:00",
+  "generatedAtUtc": "2026-08-12T22:29:07.3883998+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -24,6 +24,9 @@
     "Byrd-Development-Process.md",
     "Azure-Pipelines.md",
     "Release-Checklist.md",
-    "Onboarding-Human-AI-Partnership.md"
+    "Onboarding-Human-AI-Partnership.md",
+    "Use-Case-Extension-Design-v3.md",
+    "Use-Case-Diagram-Mermaid-Schema-v1.md",
+    "Session-Log-Schema.md"
   ]
 }

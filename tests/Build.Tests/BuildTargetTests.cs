@@ -108,7 +108,7 @@ public sealed class BuildTargetTests
         const string cacheCall = "RefreshKnownPluginCaches(pluginRoots, nextVersion);";
 
         Assert.Contains(refreshCall, source, StringComparison.Ordinal);
-        Assert.Contains("sharpninja-mcpserver-plugin-core-0.1.0.tgz", source, StringComparison.Ordinal);
+        Assert.Contains("sharpninja-mcpserver-plugin-core.tgz", source, StringComparison.Ordinal);
         Assert.True(
             source.IndexOf(refreshCall, StringComparison.Ordinal) < source.IndexOf(cacheCall, StringComparison.Ordinal),
             "Node plugin core vendor packages must be refreshed before installed plugin caches are copied.");

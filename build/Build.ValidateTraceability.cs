@@ -6,7 +6,13 @@ partial class Build
     [Parameter("Fail on missing TR/TEST coverage (default false)")]
     readonly bool StrictTrAndTestCoverage = false;
 
-    /// <summary>Validate requirements traceability across FR/TR/TEST documents.</summary>
+    [Parameter("Optional path to workspace SQLite DB for UseCaseFrLinks Realizes coverage (FR-MCP-USECASE-010)")]
+    readonly string UseCaseSqlitePath = string.Empty;
+
+    [Parameter("Fail when UseCaseFrLinks Realizes coverage findings are non-empty (default false)")]
+    readonly bool StrictUseCaseFrCoverage = false;
+
+    /// <summary>Validate requirements traceability across FR/TR/TEST documents and UseCaseFrLinks.</summary>
     public Target ValidateTraceability => _ => _
         .Executes(() =>
         {
@@ -17,8 +23,18 @@ partial class Build
             var mappingLines = File.ReadAllLines(docsPath / "TR-per-FR-Mapping.md");
             var matrixLines = File.ReadAllLines(docsPath / "Requirements-Matrix.md");
 
+            // FR-MCP-USECASE-010: load UseCaseFrLinks via shared Realizes algorithm (same wording as UseCaseTraceabilityGate).
+            var sqlitePath = string.IsNullOrWhiteSpace(UseCaseSqlitePath)
+                ? UseCaseFrTraceabilityLoader.ResolveDefaultSqlitePath(RootDirectory)
+                : UseCaseSqlitePath;
+            var useCaseFindings = UseCaseFrTraceabilityLoader.LoadFindingsFromSqlite(sqlitePath);
+            if (!string.IsNullOrWhiteSpace(sqlitePath))
+                Log.Information("UseCaseFrLinks coverage source: {Path} (findings={Count})", sqlitePath, useCaseFindings.Count);
+            else
+                Log.Information("UseCaseFrLinks coverage source: none (no SQLite path resolved)");
+
             var result = TraceabilityValidator.Validate(
-                functionalLines, technicalLines, testingLines, mappingLines, matrixLines);
+                functionalLines, technicalLines, testingLines, mappingLines, matrixLines, useCaseFindings);
 
             if (result.MissingFrInMapping.Count > 0)
             {
@@ -44,14 +60,21 @@ partial class Build
                 result.MissingTestInMatrix.ForEach(id => Log.Warning("  - {Id}", id));
             }
 
+            if (result.UseCaseFrFindings.Count > 0)
+            {
+                Log.Warning("UseCaseFrLinks Realizes coverage findings:");
+                result.UseCaseFrFindings.ForEach(f => Log.Warning("  - {Finding}", f));
+            }
+
             var fail = result.HasFrErrors ||
-                       (StrictTrAndTestCoverage && (result.HasTrErrors || result.HasTestErrors));
+                       (StrictTrAndTestCoverage && (result.HasTrErrors || result.HasTestErrors)) ||
+                       (StrictUseCaseFrCoverage && result.HasUseCaseFrErrors);
 
             if (fail)
                 throw new InvalidOperationException("Traceability validation failed.");
 
-            if (result.HasTrErrors || result.HasTestErrors)
-                Log.Information("Traceability validation passed with TR/TEST coverage warnings.");
+            if (result.HasTrErrors || result.HasTestErrors || result.HasUseCaseFrErrors)
+                Log.Information("Traceability validation passed with TR/TEST/UseCaseFr coverage warnings.");
             else
                 Log.Information("Traceability validation passed.");
         });

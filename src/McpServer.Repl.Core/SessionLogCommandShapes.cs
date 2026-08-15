@@ -205,6 +205,10 @@ public interface IBootstrapResult
 ///     sessionId: Copilot-20260304T113901Z-feature-auth
 ///     title: Implementing JWT authentication
 ///     model: claude-sonnet-4-20250514
+///     agentSessionId: ClaudeCode-20260722T000000Z
+///     agentSessionTranscriptFile: C:\Users\kingd\.claude\projects\session.jsonl
+///     agentExecutablePath: C:\Users\kingd\AppData\Roaming\npm\claude.cmd
+///     agentExecutableVersion: 1.81.0
 /// </code>
 /// </remarks>
 public interface IOpenSessionParams
@@ -229,6 +233,26 @@ public interface IOpenSessionParams
     /// Gets the AI model name (e.g., "claude-sonnet-4-20250514").
     /// </summary>
     string Model { get; }
+
+    /// <summary>
+    /// Gets the native agent session identifier when the agent exposes a provider-specific root session ID.
+    /// </summary>
+    string AgentSessionId { get; }
+
+    /// <summary>
+    /// Gets the native agent transcript file path when the host exposes one.
+    /// </summary>
+    string AgentSessionTranscriptFile { get; }
+
+    /// <summary>
+    /// Gets the executable path of the agent host that produced the session.
+    /// </summary>
+    string AgentExecutablePath { get; }
+
+    /// <summary>
+    /// Gets the executable version of the agent host that produced the session.
+    /// </summary>
+    string AgentExecutableVersion { get; }
 }
 
 /// <summary>
@@ -292,6 +316,10 @@ public interface ICurrentSessionParams
 ///     sessionId: Copilot-20260304T113901Z-feature-auth
 ///     title: Implementing JWT authentication
 ///     model: claude-sonnet-4-20250514
+///     agentSessionId: ClaudeCode-20260722T000000Z
+///     agentSessionTranscriptFile: C:\Users\kingd\.claude\projects\session.jsonl
+///     agentExecutablePath: C:\Users\kingd\AppData\Roaming\npm\claude.cmd
+///     agentExecutableVersion: 1.81.0
 ///     started: 2026-03-04T11:39:01Z
 ///     lastUpdated: 2026-03-04T11:45:23Z
 ///     status: in_progress
@@ -328,6 +356,26 @@ public interface ICurrentSessionResult
     /// Gets the AI model name, or null if no session is active.
     /// </summary>
     string? Model { get; }
+
+    /// <summary>
+    /// Gets the native agent session identifier, or null if no session is active or the host did not expose one.
+    /// </summary>
+    string? AgentSessionId { get; }
+
+    /// <summary>
+    /// Gets the native agent transcript file path, or null if no session is active or the host did not expose one.
+    /// </summary>
+    string? AgentSessionTranscriptFile { get; }
+
+    /// <summary>
+    /// Gets the executable path of the agent host, or null if no session is active or the host did not expose one.
+    /// </summary>
+    string? AgentExecutablePath { get; }
+
+    /// <summary>
+    /// Gets the executable version of the agent host, or null if no session is active or the host did not expose one.
+    /// </summary>
+    string? AgentExecutableVersion { get; }
 
     /// <summary>
     /// Gets the session start timestamp, or null if no session is active.
@@ -376,6 +424,8 @@ public interface ICurrentSessionResult
 ///     requestId: req-20260304T113901Z-add-jwt-001
 ///     queryTitle: Add JWT authentication
 ///     queryText: Implement JWT token generation and validation for the API
+///     planFile: None
+///     todoId: None
 /// </code>
 /// </remarks>
 public interface IBeginTurnParams
@@ -395,6 +445,16 @@ public interface IBeginTurnParams
     /// Gets the full user query or task description.
     /// </summary>
     string QueryText { get; }
+
+    /// <summary>
+    /// Gets the current plan file, or the sentinel <c>None</c>.
+    /// </summary>
+    string PlanFile { get; }
+
+    /// <summary>
+    /// Gets the current MCP TODO id, or the sentinel <c>None</c>.
+    /// </summary>
+    string TodoId { get; }
 }
 
 /// <summary>

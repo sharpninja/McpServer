@@ -7,7 +7,7 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 - HTTP API with Swagger UI
 - MCP over STDIO transport (`--transport stdio`)
 - Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
-- Per-workspace todo storage backend (`yaml` file-backed or `sqlite` table-backed)
+- Database-backed TODO storage following `Mcp:Database:Provider`; `docs/Project/TODO.yaml` is a read-only projection (TR-MCP-CFG-007)
 - Three-tier workspace resolution: header → API key reverse lookup → default
 - Optional interaction logging and Parseable sink support
 
@@ -73,9 +73,10 @@ Important keys:
 - `Mcp:RepoRoot`
 - `Mcp:DataSource`
 - `Mcp:TodoFilePath`
-- `Mcp:TodoStorage:Provider` (`yaml` or `sqlite`)
+- `Mcp:TodoStorage:Provider` (`database`; `sqlite` is a deprecated alias for `database`, and the removed `yaml` value fails fast per TR-MCP-CFG-007)
 - `Mcp:TodoStorage:SqliteDataSource`
 - `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
+- `Mcp:Triage:*` (asynchronous triage research runner: `AgentPath`, `ExecutionStrategy`, quiet period, fallback tiers). `AgentModel: auto` is a sentinel meaning "let the agent CLI pick its default model"; the Grok strategy omits `--model` for it and pins effort to `high` (current Grok CLIs reject `max`)
 - `Mcp:Instances:{name}:*` (per-instance overrides)
 
 Environment overrides:
@@ -96,7 +97,7 @@ Environment overrides:
         "DataSource": "mcp.db",
         "TodoFilePath": "docs/Project/TODO.yaml",
         "TodoStorage": {
-          "Provider": "yaml",
+          "Provider": "database",
           "SqliteDataSource": "mcp.db"
         }
       },
@@ -106,7 +107,7 @@ Environment overrides:
         "DataSource": "mcp-alt.db",
         "TodoFilePath": "docs/Project/TODO.yaml",
         "TodoStorage": {
-          "Provider": "sqlite",
+          "Provider": "database",
           "SqliteDataSource": "mcp-alt.db"
         }
       }
@@ -227,8 +228,58 @@ Main endpoints:
 - `/mcpserver/gh`
 - `/mcpserver/sync`
 - `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
+- `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` — provider transcript import
 - `/health`
 - `/swagger`
+
+### Transcript Ingestion Limits
+
+Transcript size ceilings are `Int32.MaxValue` (2,147,483,647) for the upload request body, expanded archive
+content, per source file, per JSONL line, and records per bundle. JSONL sources stream line by line rather than
+being read whole, so a large transcript does not have to fit in memory at once. Agent transcripts that carry a
+full tool result on a single line therefore import without special handling.
+
+Guards against hostile archives keep their original values and are not affected by those ceilings: a maximum of
+10,000 archive entries, a decompression ratio ceiling of 20:1, rejection of ZIP symlink entries, and rejection of
+paths that escape the upload root. Exceeded limits return 413; malformed or unsafe inputs return 400.
+
+## Requirements Wiki Export
+
+`docs/wiki.yaml` uses schema `mcp-wiki-export/v1` to define the requirements wiki document tree for GitHub and Azure exports. When the file is absent, wiki generation falls back to the canonical generated Home, requirements, traceability, matrix, GitHub sidebar/footer, Azure order files, and manifests.
+
+The optional `docfx` section is disabled by default with an empty workflow list:
+
+```yaml
+docfx:
+  workflows: []
+```
+
+A workflow entry enables DocFX content for the export:
+
+```yaml
+docfx:
+  workflows:
+    - id: api
+      executable: dotnet
+      arguments:
+        - tool
+        - run
+        - docfx
+        - docfx.json
+      workingDirectory: docs/docfx
+      outputRoot: docs/docfx/_site
+      targetRoot: api
+      platforms:
+        - github
+        - azure
+      timeoutSeconds: 120
+```
+
+Workflow paths are workspace-relative and must stay inside the active workspace. `workingDirectory` is where the process runs. `outputRoot` is a staging directory that is deleted before and after the workflow. `targetRoot` is the folder under each selected platform root where generated DocFX artifacts are published. `platforms` may contain `github`, `azure`, or both.
+
+DocFX processes run through structured executable plus argument lists with `UseShellExecute=false`; command strings are not passed through a shell. All configured workflows must complete successfully before the requirements wiki writer receives any files. The writer then publishes one merged file set atomically and removes stale files under the managed `github` and `azure` roots.
+
+Failure behavior is fail-closed: invalid YAML, invalid schema, duplicate workflow IDs, duplicate target roots for a platform, path traversal, absolute external paths, reparse-point escapes, timeout, non-zero process exit, missing output, duplicate publication paths, or unsupported arbitrary binary artifacts abort the export before partial wiki output is published. Built-in DocFX template binary assets that cannot be represented by the text-only writer, such as `favicon.ico` and default font files under `styles/`, are ignored; text artifacts such as HTML, Markdown, CSS, JavaScript, JSON, XML, YAML, SVG, and source maps are eligible for publication.
 
 ## CI/CD
 
@@ -240,7 +291,6 @@ Pipeline jobs include:
 - restore/build/test
 - publish artifact upload
 - Windows MSIX packaging
-- markdown lint and link checking for docs
 - DocFX docs artifact build
 - client NuGet pack and branch-conditional feed publish
 

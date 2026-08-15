@@ -44,6 +44,12 @@ public sealed class SessionLogTurnContext
     /// </summary>
     public string? QueryTitle { get; internal set; }
 
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current plan file or <c>None</c>.</summary>
+    public string? PlanFile { get; internal set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current MCP TODO id or <c>None</c>.</summary>
+    public string? TodoId { get; internal set; }
+
     /// <summary>
     /// Gets the most recent response text recorded for the turn.
     /// </summary>
@@ -200,6 +206,8 @@ public sealed class SessionLogTurnContext
         RequirementsDiscovered = _requirementsDiscovered.Count > 0 ? [.. _requirementsDiscovered] : null,
         FilesModified = _filesModified.Count > 0 ? [.. _filesModified] : null,
         Blockers = _blockers.Count > 0 ? [.. _blockers] : null,
+        PlanFile = PlanFile,
+        TodoId = TodoId,
     };
 
     private static void ReplaceStringList(List<string> target, IEnumerable<string>? values)

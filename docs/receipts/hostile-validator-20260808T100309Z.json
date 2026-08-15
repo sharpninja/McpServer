@@ -1,0 +1,118 @@
+{
+  "TimestampUtc": "2026-08-08T10:03:09Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "LiveBase": "http://localhost:7147",
+  "PriorImplementerReceipt": "docs/receipts/usecase-r0-r7-execution-20260808.md",
+  "PriorHostileReceipt": "docs/receipts/hostile-validator-20260808T095026Z.md",
+  "OverallVerdict": "AGREE",
+  "Claims": [
+    {
+      "Id": "A",
+      "Summary": "R0: Project docs FR/TR/TEST USECASE 001-010/010/011; MCP store has them",
+      "Verdict": "PASS",
+      "Evidence": [
+        "docs/Project Functional/Technical/Testing Requirements headings USECASE 001-010/011",
+        "GET /mcpserver/requirements/fr count=10 FR-MCP-USECASE-*",
+        "GET /mcpserver/requirements/tr count=10 TR-MCP-USECASE-*",
+        "GET /mcpserver/requirements/test count=11 TEST-MCP-USECASE-*"
+      ]
+    },
+    {
+      "Id": "B",
+      "Summary": "R1: UseCaseMigrationApplyTests green; AddUseCaseSupport Up no SessionLogs alter",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test UseCaseMigrationApply|UseCaseAuditEmission => 4 passed 0 fail 0 skip",
+        "Sqlite/SqlServer/PostgreSql AddUseCaseSupport.cs table: SessionLogs ops=0 CreateTable=8 each"
+      ]
+    },
+    {
+      "Id": "C",
+      "Summary": "R2: UseCaseAuditEmissionTests green",
+      "Verdict": "PASS",
+      "Evidence": [
+        "Included in 4-test migration|audit filter run; 0 fail 0 skip",
+        "tests/McpServer.Support.Mcp.Tests/Services/UseCaseAuditEmissionTests.cs"
+      ]
+    },
+    {
+      "Id": "D",
+      "Summary": "R3: Support.Mcp.Tests FullyQualifiedName~UseCase 0 fail 0 skip ~37",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test Support.Mcp.Tests FullyQualifiedName~UseCase => Passed 37 Failed 0 Skipped 0"
+      ]
+    },
+    {
+      "Id": "E",
+      "Summary": "R4: Client UseCase tests green; controller flows/steps/actors/links/diagram",
+      "Verdict": "PASS",
+      "Evidence": [
+        "dotnet test Client.Tests FullyQualifiedName~UseCase => Passed 12 Failed 0 Skipped 0",
+        "UseCasesController routes: coverage, flows, steps, actors, links, diagram"
+      ]
+    },
+    {
+      "Id": "F",
+      "Summary": "R5: Coverage API + ValidateTraceability green",
+      "Verdict": "PASS",
+      "Evidence": [
+        "./build.ps1 ValidateTraceability Succeeded findings=0",
+        "GET /mcpserver/usecases/coverage 200 with DTO keys totalUseCases=1"
+      ]
+    },
+    {
+      "Id": "G",
+      "Summary": "R6 FIXED: diagramView, structure editor, REST wiring, UI tests, usecase skills",
+      "Verdict": "PASS",
+      "Evidence": [
+        "Live /usecases/ HTML_LEN=9187 HAS diagramView panels buttons mermaid CDN; NO pre#diagram",
+        "Live /usecases/app.js renderDiagram mermaid.run refreshStructure /actors /flows /steps /links",
+        "Source wwwroot/usecases index.html+app.js match",
+        "ProgramData deploy wwwroot/usecases matches",
+        "UseCaseUiAssetTests 4/0/0",
+        "Skills: ~/.grok/skills/mcpserver-usecase and installed-plugins .../skills/usecase"
+      ]
+    },
+    {
+      "Id": "H",
+      "Summary": "R7: UpdateService re-ran; health Healthy; live UI new; program closer to done",
+      "Verdict": "PASS",
+      "Evidence": [
+        "ProgramData .mcpservice-deployment.json generatedBy Build.UpdateService.cs generatedUtc 2026-08-08T09:58:41Z",
+        "GET /health Healthy nonce echo version 1.4.25+28f56515...",
+        "GET /usecases/ 200 with diagramView; diagram API sequenceDiagram for UC 1"
+      ]
+    },
+    {
+      "Id": "I",
+      "Summary": "Plan 6.1 requires adversarial Grok sub-agent hostile validator",
+      "Verdict": "PASS",
+      "Evidence": [
+        "docs/McpServer-UseCase-Extension-Design-v3.0.md section 6.1",
+        "This receipt authored by GrokSubagentHostile"
+      ]
+    },
+    {
+      "Id": "J",
+      "Summary": "Program acceptance: diagram view/edit operator scope met (model-driven)",
+      "Verdict": "PASS",
+      "Evidence": [
+        "Built-in rendered view surface #diagramView + mermaid.run present live+source+deploy",
+        "Structure edit actors/flows/steps/FR links via REST present",
+        "Freehand canvas not required by operator claim or FR-007"
+      ]
+    }
+  ],
+  "FailList": [],
+  "PassCount": 10,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "ReceiptMarkdown": "docs/receipts/hostile-validator-20260808T100309Z.md",
+  "ReceiptJson": "docs/receipts/hostile-validator-20260808T100309Z.json",
+  "ResidualNotes": [
+    "No browser E2E mermaid SVG proof; CDN-offline falls back to source in diagramView",
+    "Plan section 10 checklist text still says R6 text dump only (stale vs product)"
+  ]
+}

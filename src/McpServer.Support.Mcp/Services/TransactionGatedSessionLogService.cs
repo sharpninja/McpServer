@@ -615,6 +615,10 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         target.SourceType = source.SourceType;
         target.SessionId = source.SessionId;
         target.AgentDefinitionId = source.AgentDefinitionId;
+        target.AgentSessionId = source.AgentSessionId;
+        target.AgentSessionTranscriptFile = source.AgentSessionTranscriptFile;
+        target.AgentExecutablePath = source.AgentExecutablePath;
+        target.AgentExecutableVersion = source.AgentExecutableVersion;
         target.Title = source.Title;
         target.Model = source.Model;
         target.Started = source.Started;

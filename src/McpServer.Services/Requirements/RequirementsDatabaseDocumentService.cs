@@ -137,6 +137,61 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static FrEntry MapFr(RequirementEntity x) =>
         new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
 
+    /// <summary>
+    /// FR-MCP-USECASE-003: Loads UC links for the given FR ids using the same join as GetUseCasesForFrQuery
+    /// (UseCaseFrLinks × UseCases), batched to avoid N+1.
+    /// </summary>
+    private static async Task<IReadOnlyDictionary<string, IReadOnlyList<LinkedUseCaseRef>>> LoadLinkedUseCasesByFrIdAsync(
+        McpDbContext db,
+        IReadOnlyCollection<string> frIds,
+        CancellationToken ct)
+    {
+        if (frIds.Count == 0)
+            return new Dictionary<string, IReadOnlyList<LinkedUseCaseRef>>(StringComparer.OrdinalIgnoreCase);
+
+        var idSet = frIds.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var rows = await db.UseCaseFrLinks
+            .AsNoTracking()
+            .Where(l => idSet.Contains(l.FrId))
+            .Join(
+                db.UseCases.AsNoTracking(),
+                l => l.UseCaseId,
+                u => u.UseCaseId,
+                (l, u) => new { l.FrId, u.UseCaseId, u.Title, l.LinkType, l.LinkOrder })
+            .OrderBy(x => x.FrId)
+            .ThenBy(x => x.LinkOrder)
+            .ThenBy(x => x.UseCaseId)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        return rows
+            .GroupBy(x => x.FrId, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(
+                g => g.Key,
+                g => (IReadOnlyList<LinkedUseCaseRef>)g
+                    .Select(x => new LinkedUseCaseRef(x.UseCaseId, x.Title, x.LinkType, x.LinkOrder))
+                    .ToArray(),
+                StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>Attaches linked use case projections onto FR entries.</summary>
+    private static async Task<IReadOnlyList<FrEntry>> WithLinkedUseCasesAsync(
+        McpDbContext db,
+        IReadOnlyList<FrEntry> entries,
+        CancellationToken ct)
+    {
+        if (entries.Count == 0)
+            return entries;
+
+        var map = await LoadLinkedUseCasesByFrIdAsync(db, entries.Select(e => e.Id).ToArray(), ct).ConfigureAwait(false);
+        return entries
+            .Select(e => e with
+            {
+                LinkedUseCases = map.TryGetValue(e.Id, out var links) ? links : Array.Empty<LinkedUseCaseRef>(),
+            })
+            .ToArray();
+    }
+
     /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
     private static TrEntry MapTr(RequirementEntity x) =>
         new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
@@ -441,7 +496,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .ToListAsync(ct)
             .ConfigureAwait(false);
         await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
-        return rows.Select(MapFr).ToArray();
+        return await WithLinkedUseCasesAsync(scope.Context, rows.Select(MapFr).ToArray(), ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -459,7 +514,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .ToListAsync(ct)
             .ConfigureAwait(false);
         await AttachCriteriaAsync(scope.Context, rows, ct).ConfigureAwait(false);
-        return rows.Select(MapFr).ToArray();
+        return await WithLinkedUseCasesAsync(scope.Context, rows.Select(MapFr).ToArray(), ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -516,7 +571,15 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, FrKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : MapFr(row);
+        if (row is null)
+            return null;
+
+        var entry = MapFr(row);
+        var map = await LoadLinkedUseCasesByFrIdAsync(scope.Context, [id], ct).ConfigureAwait(false);
+        return entry with
+        {
+            LinkedUseCases = map.TryGetValue(id, out var links) ? links : Array.Empty<LinkedUseCaseRef>(),
+        };
     }
 
     /// <inheritdoc />

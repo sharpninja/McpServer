@@ -146,6 +146,30 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-MEMORY-001: Authoritative raw-text MCP memories.</summary>
     public DbSet<MemoryEntity> Memories => Set<MemoryEntity>();
 
+    /// <summary>FR-MCP-USECASE-001 / TR-MCP-USECASE-001: Use case headers.</summary>
+    public DbSet<UseCaseEntity> UseCases => Set<UseCaseEntity>();
+
+    /// <summary>FR-MCP-USECASE-002 / TR-MCP-USECASE-001: Use case actors.</summary>
+    public DbSet<ActorEntity> Actors => Set<ActorEntity>();
+
+    /// <summary>FR-MCP-USECASE-002 / TR-MCP-USECASE-001: Use case to actor joins.</summary>
+    public DbSet<UseCaseActorEntity> UseCaseActors => Set<UseCaseActorEntity>();
+
+    /// <summary>FR-MCP-USECASE-002 / TR-MCP-USECASE-001: Use case flows.</summary>
+    public DbSet<UseCaseFlowEntity> UseCaseFlows => Set<UseCaseFlowEntity>();
+
+    /// <summary>FR-MCP-USECASE-002 / TR-MCP-USECASE-001: Use case steps.</summary>
+    public DbSet<UseCaseStepEntity> UseCaseSteps => Set<UseCaseStepEntity>();
+
+    /// <summary>FR-MCP-USECASE-001 / TR-MCP-USECASE-001: Use case special requirements.</summary>
+    public DbSet<UseCaseSpecialRequirementEntity> UseCaseSpecialRequirements => Set<UseCaseSpecialRequirementEntity>();
+
+    /// <summary>FR-MCP-USECASE-001 / TR-MCP-USECASE-001: Use case extension points.</summary>
+    public DbSet<UseCaseExtensionPointEntity> UseCaseExtensionPoints => Set<UseCaseExtensionPointEntity>();
+
+    /// <summary>FR-MCP-USECASE-003 / TR-MCP-USECASE-001: Use case to FR links.</summary>
+    public DbSet<UseCaseFrLinkEntity> UseCaseFrLinks => Set<UseCaseFrLinkEntity>();
+
     /// <summary>TR-MCP-QUAD-001: Durable external brain-slot definitions.</summary>
     public DbSet<BrainSlotDefinitionEntity> BrainSlotDefinitions => Set<BrainSlotDefinitionEntity>();
 
@@ -286,6 +310,8 @@ public sealed class McpDbContext : DbContext
         {
             e.HasIndex(x => new { x.SessionLogId, x.RequestId }).IsUnique();
             e.HasIndex(x => x.Timestamp);
+            e.HasIndex(x => x.PlanFile);
+            e.HasIndex(x => x.TodoId);
             e.HasOne(x => x.SessionLog)
                 .WithMany(x => x.Turns)
                 .HasForeignKey(x => x.SessionLogId)
@@ -602,6 +628,129 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<UseCaseEntity>(e =>
+        {
+            e.HasKey(x => x.UseCaseId);
+            e.HasIndex(x => x.WorkspaceId);
+            e.HasIndex(x => new { x.WorkspaceId, x.Title });
+            e.HasIndex(x => new { x.WorkspaceId, x.ProductKey });
+            e.Property(x => x.VersionNumber).HasDefaultValue(1);
+            e.Property(x => x.ApprovalStatus).HasDefaultValue("Draft");
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ActorEntity>(e =>
+        {
+            e.HasKey(x => x.ActorId);
+            e.HasIndex(x => x.WorkspaceId);
+            e.HasIndex(x => new { x.WorkspaceId, x.Name });
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<UseCaseActorEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.UseCaseId, x.ActorId });
+            e.HasOne(x => x.UseCase)
+                .WithMany(x => x.UseCaseActors)
+                .HasForeignKey(x => x.UseCaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.Actor)
+                .WithMany(x => x.UseCaseActors)
+                .HasForeignKey(x => x.ActorId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<UseCaseFlowEntity>(e =>
+        {
+            e.HasKey(x => x.FlowId);
+            e.HasIndex(x => new { x.WorkspaceId, x.UseCaseId, x.SequenceNumber });
+            e.HasOne(x => x.UseCase)
+                .WithMany(x => x.Flows)
+                .HasForeignKey(x => x.UseCaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<UseCaseStepEntity>(e =>
+        {
+            e.HasKey(x => x.StepId);
+            e.HasIndex(x => new { x.WorkspaceId, x.FlowId, x.StepNumber });
+            e.HasOne(x => x.Flow)
+                .WithMany(x => x.Steps)
+                .HasForeignKey(x => x.FlowId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.Actor)
+                .WithMany()
+                .HasForeignKey(x => x.ActorId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<UseCaseSpecialRequirementEntity>(e =>
+        {
+            e.HasKey(x => x.SpecialReqId);
+            e.HasIndex(x => new { x.WorkspaceId, x.UseCaseId });
+            e.HasOne(x => x.UseCase)
+                .WithMany(x => x.SpecialRequirements)
+                .HasForeignKey(x => x.UseCaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<UseCaseExtensionPointEntity>(e =>
+        {
+            e.HasKey(x => x.ExtensionPointId);
+            e.HasIndex(x => new { x.WorkspaceId, x.UseCaseId });
+            e.HasOne(x => x.UseCase)
+                .WithMany(x => x.ExtensionPoints)
+                .HasForeignKey(x => x.UseCaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<UseCaseFrLinkEntity>(e =>
+        {
+            e.HasKey(x => x.LinkId);
+            e.HasIndex(x => new { x.WorkspaceId, x.UseCaseId, x.FrId }).IsUnique();
+            e.Property(x => x.FrKind).HasDefaultValue("fr");
+            e.Property(x => x.LinkType).HasDefaultValue("Realizes");
+            e.HasOne(x => x.UseCase)
+                .WithMany(x => x.FrLinks)
+                .HasForeignKey(x => x.UseCaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.FunctionalRequirement)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.FrKind, x.FrId })
+                .HasPrincipalKey(x => new { x.WorkspaceId, x.Kind, x.Id })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne<WorkspaceEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
         modelBuilder.Entity<BrainSlotDefinitionEntity>(e =>
         {
             e.HasKey(x => new { x.WorkspaceId, x.SlotId });
@@ -759,6 +908,14 @@ public sealed class McpDbContext : DbContext
             || (!string.IsNullOrEmpty(_workspaceId)
                 && e.Scope == MemoryEntity.WorkspaceScope
                 && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<UseCaseEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ActorEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<UseCaseActorEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<UseCaseFlowEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<UseCaseStepEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<UseCaseSpecialRequirementEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<UseCaseExtensionPointEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<UseCaseFrLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TriageReportEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TriageGroupEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TriageResearchRunEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);

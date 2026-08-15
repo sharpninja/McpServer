@@ -120,6 +120,8 @@ internal sealed class StubSessionLogClient : ISessionLogClientAdapter
     private int _dialogCount = 0;
     private readonly List<UnifiedSessionLogDto> _sessions = new();
 
+    public UnifiedSessionLogDto? LastSubmitted => _sessions.Count == 0 ? null : _sessions[^1];
+
     public Task<SessionLogSubmitResult> SubmitAsync(
         UnifiedSessionLogDto sessionLog,
         CancellationToken cancellationToken = default)

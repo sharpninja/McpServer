@@ -8,6 +8,7 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 - MCP over STDIO transport (`--transport stdio`)
 - Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
 - Database-backed TODO storage following `Mcp:Database:Provider`; `docs/Project/TODO.yaml` is a read-only projection (TR-MCP-CFG-007)
+- Use case domain: `/mcpserver/usecases` (CRUD, structure, FR Realizes links, coverage, diagram-graph, approval/product) and first-party UI at `/usecases/`
 - Three-tier workspace resolution: header → API key reverse lookup → default
 - Optional interaction logging and Parseable sink support
 
@@ -227,6 +228,8 @@ Main endpoints:
 - `/mcpserver/repo`
 - `/mcpserver/gh`
 - `/mcpserver/sync`
+- `/mcpserver/usecases` — use case aggregates, structure, FR links, coverage, diagram-graph (UML canvas schema v1), sequence/UML diagram export, approval/product
+- `/usecases/` — first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
 - `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
 - `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` — provider transcript import
 - `/health`

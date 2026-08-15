@@ -54,7 +54,8 @@ public class SessionLogDeprecationTests
             Arg.Any<CancellationToken>());
         // Mirror to local workflow state even for ids path so appendActions after begin(ids) succeeds.
         await legacyWorkflow.Received(1).BeginTurnAsync(
-            Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+            Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>(),
+            Arg.Any<string?>(), Arg.Any<string?>());
         AssertDeprecated(response);
     }
 

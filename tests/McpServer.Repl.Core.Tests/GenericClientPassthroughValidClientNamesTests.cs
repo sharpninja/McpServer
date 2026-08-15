@@ -54,6 +54,7 @@ public sealed class GenericClientPassthroughValidClientNamesTests
         Assert.Contains("SessionLog", names);
         Assert.Contains("Requirements", names);
         Assert.Contains("Triage", names);
+        Assert.Contains("UseCases", names);
     }
 
     /// <summary>

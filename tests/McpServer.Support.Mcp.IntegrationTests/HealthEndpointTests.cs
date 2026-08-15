@@ -49,4 +49,20 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
         var payload = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(nonce, payload.RootElement.GetProperty("nonce").GetString());
     }
+
+    /// <summary>GET /swagger/v1/swagger.json returns a generated OpenAPI document.</summary>
+    [Fact]
+    public async Task SwaggerJson_ReturnsOpenApiDocument()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync(new Uri("/swagger/v1/swagger.json", UriKind.Relative), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        using var payload = await JsonDocument.ParseAsync(stream, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal("3.0.4", payload.RootElement.GetProperty("openapi").GetString());
+        Assert.True(payload.RootElement.TryGetProperty("paths", out var paths));
+        Assert.NotEmpty(paths.EnumerateObject());
+    }
 }

@@ -103,4 +103,10 @@ public sealed class SessionLogTurnCreateRequest
     /// Gets or sets blockers recorded when the turn is created from pre-existing state.
     /// </summary>
     public List<string>? Blockers { get; set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current plan file or <c>None</c>.</summary>
+    public string? PlanFile { get; set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current MCP TODO id or <c>None</c>.</summary>
+    public string? TodoId { get; set; }
 }

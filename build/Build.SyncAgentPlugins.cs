@@ -458,23 +458,33 @@ partial class Build
             RegexOptions.IgnoreCase);
     }
 
+    /// <summary>
+    /// TR-MCP-SYNC-001: version-less stable vendor file name, so consumer package.json references
+    /// never break on a version bump and a hard-coded version can never drift from package.json again.
+    /// </summary>
+    const string NodeCoreStableVendorFileName = "sharpninja-mcpserver-plugin-core.tgz";
+
     private static void RefreshNodePluginCoreVendorPackages(
         AbsolutePath rootDirectory,
         IReadOnlyList<AbsolutePath> pluginRoots)
     {
-        const string packageFileName = "sharpninja-mcpserver-plugin-core-0.1.0.tgz";
-        var vendorTargets = pluginRoots
-            .Select(root => root / "vendor" / packageFileName)
-            .Where(path => File.Exists(path.ToString()))
+        // TR-MCP-SYNC-001: discover consumers by ANY tarball variant so first-run migration finds
+        // the legacy version-suffixed files as well as the stable name.
+        var vendorDirectories = pluginRoots
+            .Select(root => root / "vendor")
+            .Where(dir => Directory.Exists(dir.ToString())
+                && Directory.GetFiles(dir.ToString(), "sharpninja-mcpserver-plugin-core*.tgz").Length > 0)
             .ToArray();
-        if (vendorTargets.Length == 0)
+        if (vendorDirectories.Length == 0)
             return;
 
         var nodeCoreRoot = rootDirectory / "plugins" / "core" / "lib-node";
         if (!Directory.Exists(nodeCoreRoot.ToString()))
             throw new DirectoryNotFoundException($"Node plugin core source was not found at {nodeCoreRoot}.");
 
-        Log.Information("Building Node plugin core package for {Count} plugin vendor target(s)", vendorTargets.Length);
+        var manifestVersion = ReadNodeCorePackageVersion(nodeCoreRoot);
+
+        Log.Information("Building Node plugin core package for {Count} plugin vendor target(s)", vendorDirectories.Length);
         ProcessTasks.StartProcess("npm", "run build", workingDirectory: nodeCoreRoot.ToString())
             .AssertZeroExitCode();
 
@@ -490,19 +500,75 @@ partial class Build
             .Select(static output => output.Text.Trim())
             .LastOrDefault(static text => text.EndsWith(".tgz", StringComparison.OrdinalIgnoreCase));
         if (string.IsNullOrWhiteSpace(packedFileName))
-            packedFileName = packageFileName;
+            throw new FileNotFoundException("npm pack did not report a packed Node plugin core tarball name.");
+
+        // TR-MCP-SYNC-001: npm pack derives the tarball name from package.json, so a mismatch here
+        // means the pack ran against a different manifest than the one this sync read. Fail loudly.
+        var expectedPackedFileName = $"sharpninja-mcpserver-plugin-core-{manifestVersion}.tgz";
+        if (!string.Equals(packedFileName, expectedPackedFileName, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"npm pack produced '{packedFileName}' but plugins/core/lib-node/package.json declares version {manifestVersion} (expected '{expectedPackedFileName}').");
+        }
 
         var packedPath = nodeCoreRoot / packedFileName;
         if (!File.Exists(packedPath.ToString()))
             throw new FileNotFoundException("npm pack did not produce the expected Node plugin core package.", packedPath.ToString());
 
-        foreach (var target in vendorTargets)
+        foreach (var vendorDirectory in vendorDirectories)
         {
-            File.Copy(packedPath.ToString(), target.ToString(), overwrite: true);
-            Log.Information("Refreshed Node plugin core vendor package {Target}", target);
+            var stableTarget = vendorDirectory / NodeCoreStableVendorFileName;
+            File.Copy(packedPath.ToString(), stableTarget.ToString(), overwrite: true);
+
+            // Remove superseded variants (the legacy versioned names) so exactly one tarball remains.
+            foreach (var variant in Directory.GetFiles(vendorDirectory.ToString(), "sharpninja-mcpserver-plugin-core*.tgz"))
+            {
+                if (!string.Equals(Path.GetFileName(variant), NodeCoreStableVendorFileName, StringComparison.OrdinalIgnoreCase))
+                    File.Delete(variant);
+            }
+
+            RewriteVendorDependencyReference(vendorDirectory.Parent);
+            Log.Information("Refreshed Node plugin core vendor package {Target} (content {Version})", stableTarget, manifestVersion);
         }
 
         File.Delete(packedPath.ToString());
+    }
+
+    /// <summary>Reads the version declared by plugins/core/lib-node/package.json.</summary>
+    /// <param name="nodeCoreRoot">Node plugin core source directory.</param>
+    /// <returns>The manifest version string.</returns>
+    private static string ReadNodeCorePackageVersion(AbsolutePath nodeCoreRoot)
+    {
+        var manifestPath = nodeCoreRoot / "package.json";
+        using var manifest = System.Text.Json.JsonDocument.Parse(File.ReadAllText(manifestPath.ToString()));
+        var version = manifest.RootElement.TryGetProperty("version", out var value) ? value.GetString() : null;
+        if (string.IsNullOrWhiteSpace(version))
+            throw new InvalidOperationException($"package.json at {manifestPath} declares no version.");
+        return version;
+    }
+
+    /// <summary>
+    /// TR-MCP-SYNC-001: rewrites a consumer's package.json dependency reference from any versioned
+    /// vendor tarball path to the stable version-less name, preserving the file's formatting via a
+    /// targeted in-place replacement.
+    /// </summary>
+    /// <param name="pluginRoot">Consumer plugin repository root containing package.json.</param>
+    private static void RewriteVendorDependencyReference(AbsolutePath pluginRoot)
+    {
+        var packageJsonPath = pluginRoot / "package.json";
+        if (!File.Exists(packageJsonPath.ToString()))
+            return;
+
+        var content = File.ReadAllText(packageJsonPath.ToString());
+        var rewritten = Regex.Replace(
+            content,
+            @"file:vendor/sharpninja-mcpserver-plugin-core[^""]*\.tgz",
+            $"file:vendor/{NodeCoreStableVendorFileName}");
+        if (!string.Equals(content, rewritten, StringComparison.Ordinal))
+        {
+            File.WriteAllText(packageJsonPath.ToString(), rewritten);
+            Log.Information("Rewrote Node core vendor dependency reference in {PackageJson}", packageJsonPath);
+        }
     }
 
     private static void RefreshKnownPluginCaches(IReadOnlyList<AbsolutePath> pluginRoots, string version)

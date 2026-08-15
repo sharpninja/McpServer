@@ -157,7 +157,16 @@ describe('SessionShim', () => {
 
     test('emits sessionLog envelope with all completed + in-progress turns', () => {
       const shim = freshShim();
-      shim.open({ agent: 'Cline', sessionId: 'Cline-x-001', title: 'demo', model: 'claude-opus' });
+      shim.open({
+        agent: 'Cline',
+        sessionId: 'Cline-x-001',
+        title: 'demo',
+        model: 'claude-opus',
+        agentSessionId: 'cline-native-session-001',
+        agentSessionTranscriptFile: 'F:\\GitHub\\McpServer\\.mcpServer\\cline\\session.jsonl',
+        agentExecutablePath: 'C:\\Users\\kingd\\AppData\\Roaming\\npm\\cline.cmd',
+        agentExecutableVersion: '1.2.3',
+      });
       shim.beginTurn({ requestId: 'req-1', queryTitle: 't1', queryText: 'q1' });
       shim.completeTurn({ response: 'r1' });
       shim.beginTurn({ requestId: 'req-2', queryTitle: 't2', queryText: 'q2' });
@@ -173,6 +182,10 @@ describe('SessionShim', () => {
         sessionId: 'Cline-x-001',
         title: 'demo',
         model: 'claude-opus',
+        agentSessionId: 'cline-native-session-001',
+        agentSessionTranscriptFile: 'F:\\GitHub\\McpServer\\.mcpServer\\cline\\session.jsonl',
+        agentExecutablePath: 'C:\\Users\\kingd\\AppData\\Roaming\\npm\\cline.cmd',
+        agentExecutableVersion: '1.2.3',
         status: 'in_progress',
       });
       const turns = payload.sessionLog.turns as Array<Record<string, unknown>>;

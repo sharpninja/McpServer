@@ -1,0 +1,103 @@
+{
+  "AtUtc": "2026-07-25T16:20:41.6149121Z",
+  "Host": "PAYTON-DESKTOP",
+  "OverallOk": false,
+  "Actions": [
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-C-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-C-Agent)",
+      "BeforeStatus": "Running",
+      "BeforeStartType": "Automatic",
+      "AfterStatus": "Stopped",
+      "AfterStartType": "Disabled",
+      "Ok": true,
+      "Error": null
+    },
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-E-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-E-Agent)",
+      "BeforeStatus": "Running",
+      "BeforeStartType": "Automatic",
+      "AfterStatus": "Stopped",
+      "AfterStartType": "Disabled",
+      "Ok": true,
+      "Error": null
+    },
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-F-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-F-Agent)",
+      "BeforeStatus": "Running",
+      "BeforeStartType": "Automatic",
+      "AfterStatus": "Stopped",
+      "AfterStartType": "Disabled",
+      "Ok": true,
+      "Error": null
+    },
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-G-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-G-Agent)",
+      "BeforeStatus": "Running",
+      "BeforeStartType": "Automatic",
+      "AfterStatus": "Stopped",
+      "AfterStartType": "Disabled",
+      "Ok": true,
+      "Error": null
+    }
+  ],
+  "FinalServices": [
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-C-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-C-Agent)",
+      "Status": {
+        "value": 1,
+        "Value": "Stopped"
+      },
+      "StartType": {
+        "value": 4,
+        "Value": "Disabled"
+      }
+    },
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-E-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-E-Agent)",
+      "Status": {
+        "value": 1,
+        "Value": "Stopped"
+      },
+      "StartType": {
+        "value": 4,
+        "Value": "Disabled"
+      }
+    },
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-F-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-F-Agent)",
+      "Status": {
+        "value": 1,
+        "Value": "Stopped"
+      },
+      "StartType": {
+        "value": 4,
+        "Value": "Disabled"
+      }
+    },
+    {
+      "Name": "vstsagent.McpServer.Default.PAYTON-DESKTOP-G-Agent",
+      "DisplayName": "Azure Pipelines Agent (vstsagent.McpServer.Default.PAYTON-DESKTOP-G-Agent)",
+      "Status": {
+        "value": 1,
+        "Value": "Stopped"
+      },
+      "StartType": {
+        "value": 4,
+        "Value": "Disabled"
+      }
+    }
+  ],
+  "AgentProcessesRemaining": [
+    {
+      "ProcessId": null,
+      "Name": null
+    }
+  ]
+}

@@ -68,6 +68,27 @@ Key tool categories:
 - **Session Logs (replace/remove)**: `sessionlog_replace_turn`, `sessionlog_replace_section`, `sessionlog_clear_section`, `sessionlog_delete_item`, `sessionlog_delete_turn`, `sessionlog_delete_session` (PUT=replace, DELETE=remove; see [session-log-workflow-api.md](context/session-log-workflow-api.md#replacing-and-removing-data-patch--put--delete))
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
 - **Agent Help**: `agent_help_create_session`, `agent_help_submit_turn`, `agent_help_get_status` (see marker `## Agent Help (MCP Server issues)`)
+- **Use cases**: `usecase_list`, `usecase_get`, `usecase_create`, `usecase_update`, `usecase_delete`, `usecase_link`, `usecase_diagram`, `usecase_coverage`, approval/product tools (see Swagger and plugin `usecase` skill)
+
+## Typed client: Use Cases
+
+`McpServerClient.UseCases` (`UseCaseClient`) covers `/mcpserver/usecases`:
+
+```csharp
+var uc = await client.UseCases.CreateAsync(new CreateUseCaseRequest
+{
+    Title = "Sign in",
+    CreateBasicFlow = true,
+});
+var graph = await client.UseCases.GetDiagramGraphAsync(uc.UseCaseId);
+// graph.SchemaVersion == 1; nodes/edges for UML canvas
+await client.UseCases.PutDiagramGraphAsync(uc.UseCaseId, graph);
+var umlMermaid = await client.UseCases.GetDiagramAsync(uc.UseCaseId, format: "mermaid", kind: "usecase");
+var sequence = await client.UseCases.GetDiagramAsync(uc.UseCaseId, format: "mermaid", kind: "sequence");
+var coverage = await client.UseCases.GetCoverageAsync();
+```
+
+Mermaid UML export uses project schema `%% mcp-usecase-diagram-schema:1` (see `docs/context/usecase-diagram-mermaid-schema-v1.md`). Sequence diagrams remain separate (`kind=sequence` from flows/steps).
 
 ## Workspace Targeting
 

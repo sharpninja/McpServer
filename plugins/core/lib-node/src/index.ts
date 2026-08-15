@@ -53,6 +53,7 @@ export {
 } from './tools/requirements.js';
 export { graphragTools, canHandleGraphragTool, handleGraphragTool } from './tools/graphrag.js';
 export { workspaceTools, canHandleWorkspaceTool, handleWorkspaceTool } from './tools/workspace.js';
+export { usecaseTools, canHandleUseCaseTool, handleUseCaseTool } from './tools/usecase.js';
 export { validateToolArguments } from './tools/schema-validation.js';
 
 import { HostContext } from './runtime/host-context.js';

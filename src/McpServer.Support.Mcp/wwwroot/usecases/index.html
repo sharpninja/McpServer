@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Use Case Manager</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #fff;
+      --border: #d8dee6;
+      --text: #1a1f2c;
+      --muted: #5b6472;
+      --accent: #1f6feb;
+      --accent-soft: #e8f0fe;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, Segoe UI, sans-serif;
+      margin: 0;
+      padding: 1rem 1.25rem 2rem;
+      color: var(--text);
+      background: var(--bg);
+    }
+    h1 { margin: 0 0 0.25rem; font-size: 1.6rem; }
+    h2 { margin: 1.25rem 0 0.5rem; font-size: 1.15rem; }
+    h3 { margin: 0.75rem 0 0.35rem; font-size: 1rem; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(240px, 280px) 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+    }
+    label { display: block; margin-top: 0.45rem; font-weight: 600; font-size: 0.85rem; }
+    input, textarea, select, button {
+      margin-top: 0.2rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      font: inherit;
+    }
+    input, textarea, select {
+      padding: 0.4rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+    }
+    button {
+      width: auto;
+      margin-right: 0.4rem;
+      margin-top: 0.55rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    button:hover { filter: brightness(0.98); }
+    .row { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+    #list { list-style: none; padding: 0; margin: 0.4rem 0 0; max-height: 320px; overflow: auto; }
+    #list li {
+      padding: 0.4rem 0.45rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    #list li:hover, #list li.active { background: var(--accent-soft); }
+    .panel-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+    }
+    .panel-list li {
+      padding: 0.3rem 0.35rem;
+      border-bottom: 1px solid #eee;
+    }
+    #diagramView {
+      min-height: 220px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      background: #fff;
+      overflow: auto;
+    }
+    #diagramView .mermaid { text-align: center; }
+    #diagramSource {
+      width: 100%;
+      min-height: 120px;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.85rem;
+      background: #f4f6f8;
+    }
+    #status {
+      white-space: pre-wrap;
+      background: #f4f6f8;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.6rem;
+      max-height: 220px;
+      overflow: auto;
+      font-size: 0.82rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 700px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    .editor-hint {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 0.5rem 0.65rem;
+      margin: 0.5rem 0;
+      font-size: 0.88rem;
+    }
+    #umlCanvas {
+      width: 100%;
+      height: 520px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      display: block;
+      touch-action: none;
+    }
+    .palette button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    details.secondary > summary {
+      cursor: pointer;
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+  </style>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: false, securityLevel: "strict", theme: "neutral" });
+    window.__mermaid = mermaid;
+  </script>
+</head>
+<body>
+  <h1>Use Case Manager</h1>
+  <p class="muted">
+    First-party UI: <strong>UML use-case canvas</strong> (drag-and-drop primary),
+    header CRUD, secondary structure forms, sequence export.
+    Calls live <code>/mcpserver/usecases</code> REST only (no direct DB).
+  </p>
+
+  <div class="card">
+    <label>API base URL</label>
+    <input id="baseUrl" value="" placeholder="http://localhost:7147" />
+    <label>API key (X-Api-Key)</label>
+    <input id="apiKey" type="password" autocomplete="off" />
+    <label>Workspace path (X-Workspace-Path)</label>
+    <input id="workspace" />
+    <div class="row">
+      <button type="button" id="btnList" class="primary">List use cases</button>
+      <button type="button" id="btnCoverage">Coverage</button>
+    </div>
+  </div>
+
+  <div class="layout" style="margin-top: 1rem;">
+    <div class="card">
+      <h2>Use cases</h2>
+      <ul id="list"></ul>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>Create / edit header</h2>
+        <label>Id (read-only when editing)</label>
+        <input id="ucId" readonly />
+        <label>Title</label>
+        <input id="title" />
+        <label>Brief description</label>
+        <textarea id="brief" rows="2"></textarea>
+        <div class="grid-2">
+          <div>
+            <label>Approval status</label>
+            <select id="approval">
+              <option>Draft</option>
+              <option>Submitted</option>
+              <option>Approved</option>
+              <option>Rejected</option>
+            </select>
+          </div>
+          <div>
+            <label>Product key</label>
+            <input id="productKey" />
+          </div>
+        </div>
+        <div class="row">
+          <button type="button" id="btnCreate" class="primary">Create</button>
+          <button type="button" id="btnSave">Save header</button>
+          <button type="button" id="btnApproval">Set approval</button>
+          <button type="button" id="btnProduct">Set product</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1rem;">
+        <h2>UML use-case canvas</h2>
+        <p class="editor-hint">
+          Primary diagram editor: palette + free canvas. Place actors/use cases, draw associations,
+          include/extend, rename (double-click), drag to move. Save graph via REST; export Mermaid/PlantUML from graph.
+        </p>
+        <div class="row palette">
+          <button type="button" id="palette-actor" data-mode="place-actor">Actor</button>
+          <button type="button" id="palette-usecase" data-mode="place-usecase">Use Case</button>
+          <button type="button" id="palette-boundary" data-mode="place-boundary">SystemBoundary</button>
+          <button type="button" id="palette-association" data-mode="connect" data-edge="association">Association</button>
+          <button type="button" id="palette-include" data-mode="connect-include" data-edge="include">Include</button>
+          <button type="button" id="palette-extend" data-mode="connect-extend" data-edge="extend">Extend</button>
+          <button type="button" id="palette-select" data-mode="select">Select / move</button>
+        </div>
+        <svg id="umlCanvas" aria-label="UML use-case canvas" viewBox="0 0 900 520"></svg>
+        <div class="row">
+          <button type="button" id="btnSaveGraph" class="primary">Save graph</button>
+          <button type="button" id="btnLoadGraph">Load graph</button>
+          <button type="button" id="btnExportUmlMermaid">Export Mermaid (usecase)</button>
+          <button type="button" id="btnExportUmlPlantuml">Export PlantUML</button>
+        </div>
+        <h3>Export / sequence preview</h3>
+        <label>Sequence format (flows/steps, separate from canvas)</label>
+        <select id="diagramFormat">
+          <option value="mermaid">mermaid</option>
+          <option value="plantuml">plantuml</option>
+        </select>
+        <div class="row">
+          <button type="button" id="btnDiagram">Load sequence diagram</button>
+          <button type="button" id="btnRefreshStructure">Refresh structure</button>
+        </div>
+        <div id="diagramView" aria-label="Diagram view"></div>
+        <textarea id="diagramSource" readonly rows="6"></textarea>
+      </div>
+
+      <details class="card secondary" style="margin-top: 1rem;">
+        <summary>Secondary: structure forms (actors / flows / steps / FR links)</summary>
+        <div class="grid-2">
+          <div>
+            <h3>Actors</h3>
+            <ul id="actorsPanel" class="panel-list"></ul>
+            <label>Actor name</label>
+            <input id="actorName" placeholder="Primary User" />
+            <label>Actor type</label>
+            <select id="actorType">
+              <option>Primary</option>
+              <option>Secondary</option>
+              <option>System</option>
+              <option>External</option>
+            </select>
+            <button type="button" id="btnAttachActor">Attach actor</button>
+          </div>
+          <div>
+            <h3>FR links</h3>
+            <ul id="linksPanel" class="panel-list"></ul>
+            <label>FR id</label>
+            <input id="frId" placeholder="FR-MCP-USECASE-001" />
+            <label>Link type</label>
+            <input id="linkType" value="Realizes" />
+            <button type="button" id="btnLinkFr">Link FR</button>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top: 0.75rem;">
+          <div>
+            <h3>Flows</h3>
+            <ul id="flowsPanel" class="panel-list"></ul>
+            <label>Flow type</label>
+            <select id="flowType">
+              <option>Basic</option>
+              <option>Alternative</option>
+              <option>Exception</option>
+            </select>
+            <label>Flow name</label>
+            <input id="flowName" placeholder="Basic" />
+            <button type="button" id="btnAddFlow">Add flow</button>
+          </div>
+          <div>
+            <h3>Steps</h3>
+            <ul id="stepsPanel" class="panel-list"></ul>
+            <label>Target flow id</label>
+            <input id="targetFlowId" placeholder="from flows list" />
+            <label>Step action</label>
+            <input id="stepAction" placeholder="User submits credentials" />
+            <label>System response</label>
+            <input id="stepResponse" placeholder="System issues token" />
+            <button type="button" id="btnAddStep">Add step</button>
+          </div>
+        </div>
+      </details>
+
+      <div class="card" style="margin-top: 1rem;">
+        <h2>Status</h2>
+        <pre id="status"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="canvas-editor.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

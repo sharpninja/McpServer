@@ -1,6 +1,8 @@
 using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
+using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using Xunit;
 
@@ -82,5 +84,65 @@ public sealed class TranscriptSessionLogPersisterTests
         Assert.Equal("Run the tests", capturedDto.Turns!.ElementAt(0).QueryText);
         Assert.Equal("Tests passed", capturedDto.Turns!.ElementAt(1).Response);
         Assert.Contains("transcript-import", capturedDto.Turns!.ElementAt(0).Tags ?? []);
+    }
+
+    /// <summary>
+    /// AC-FR-MCP-SESSIONLOGCTX-001-007: omitted import fields persist extractor result or None
+    /// through the real SessionLogService import path.
+    /// </summary>
+    [Fact]
+    public async Task Import_OmittedFields_PersistsExtractorResultOrNone()
+    {
+        var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<McpServer.Support.Mcp.Storage.McpDbContext>()
+            .UseInMemoryDatabase("import-omit-" + Guid.NewGuid().ToString("N"))
+            .Options;
+        await using var db = new McpServer.Support.Mcp.Storage.McpDbContext(options);
+        db.Database.EnsureCreated();
+        var workspace = Path.Combine(Path.GetTempPath(), "import-omit-" + Guid.NewGuid().ToString("N"));
+        db.OverrideWorkspaceId(workspace);
+        var service = new SessionLogService(db, Microsoft.Extensions.Logging.Abstractions.NullLogger<SessionLogService>.Instance, workspaceContext: new WorkspaceContext { WorkspacePath = workspace });
+        var persister = new TranscriptSessionLogPersister(service);
+        var sourcePath = Path.Combine(Path.GetTempPath(), "omit.jsonl");
+        var yamlPath = Path.Combine(Path.GetTempPath(), "omit.hash.sessionlog.yaml");
+        var request = new TranscriptIngestionRequest(sourcePath)
+        {
+            Agent = "Codex",
+            WorkspacePath = workspace,
+            Persist = true
+        };
+        var session = new TranscriptSession(
+            TranscriptSourceKind.Codex,
+            "Codex-20260710T010203Z-omit",
+            [
+                new TranscriptEvent(
+                    "event-user",
+                    1,
+                    "user",
+                    "response_item",
+                    [new TranscriptContentBlock("text", "working MCP-IMPORT-001 on docs/plans/imported.md")],
+                    DateTimeOffset.Parse("2026-07-10T01:02:03Z")),
+            ],
+            "sourceType: Codex\n",
+            nativeSessionId: "native-omit",
+            model: "gpt-5",
+            workspacePath: workspace,
+            sourceFiles: [sourcePath]);
+        var receipt = new TranscriptSessionReceipt(
+            TranscriptSourceKind.Codex,
+            "native-omit",
+            session.SessionId,
+            "hash-omit",
+            "pending",
+            yamlPath,
+            Path.Combine(Path.GetTempPath(), "omit.recovery.yaml"));
+
+        await persister.PersistAsync(request, session, receipt, TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var stored = Assert.Single(db.SessionLogTurns);
+        Assert.False(string.IsNullOrWhiteSpace(stored.PlanFile));
+        Assert.False(string.IsNullOrWhiteSpace(stored.TodoId));
+        Assert.NotEqual((string?)null, stored.PlanFile);
+        Assert.True(stored.PlanFile == "None" || stored.PlanFile.Contains("docs/plans/imported.md", StringComparison.Ordinal));
+        Assert.True(stored.TodoId == "None" || stored.TodoId == "MCP-IMPORT-001");
     }
 }

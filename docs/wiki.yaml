@@ -156,6 +156,27 @@ documents:
     platforms:
       - github
       - azure
+  - id: usecase-extension-design-v3
+    title: Use Case Extension Design v3
+    source: docs/McpServer-UseCase-Extension-Design-v3.0.md
+    target: Use-Case-Extension-Design-v3.md
+    platforms:
+      - github
+      - azure
+  - id: usecase-diagram-mermaid-schema-v1
+    title: Use Case Diagram Mermaid Schema v1
+    source: docs/context/usecase-diagram-mermaid-schema-v1.md
+    target: Use-Case-Diagram-Mermaid-Schema-v1.md
+    platforms:
+      - github
+      - azure
+  - id: session-log-schema
+    title: Session Log Schema
+    source: docs/context/session-log-schema.md
+    target: Session-Log-Schema.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -187,6 +208,9 @@ navigation:
       - document: qbagent
       - document: agent-plugin-availability
       - document: agent-plugin-feature-matrix
+      - document: usecase-extension-design-v3
+      - document: usecase-diagram-mermaid-schema-v1
+      - document: session-log-schema
   - title: Process
     path: Process
     children:

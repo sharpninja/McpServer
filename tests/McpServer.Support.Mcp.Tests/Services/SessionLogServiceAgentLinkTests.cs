@@ -121,6 +121,8 @@ public sealed class SessionLogServiceAgentLinkTests : IDisposable
                     QueryText = "Test prompt",
                     Response = "Test response",
                     Status = "completed",
+                    PlanFile = "None",
+                    TodoId = "None",
                 }
             ]
         };

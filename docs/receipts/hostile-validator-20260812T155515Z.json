@@ -1,0 +1,150 @@
+{
+  "TimestampUtc": "2026-08-12T15:55:15Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "ReviewSessionId": "GrokCode-20260812T155231Z-hostile-sessionlog-002",
+  "ReviewRequestId": "req-20260812T155231Z-001-hostile-sessionlog-002",
+  "ServerTurnId": 40570,
+  "AgentIdentity": "GrokCode",
+  "OverallVerdict": "AGREE",
+  "DefaultPosture": "FAIL until independently re-verified",
+  "ClaimsReviewed": [
+    "TODO MCP-SESSIONLOG-002 exists, priority high, done false.",
+    "Its title/description require session-turn fields planFile and todoId, sentinel None, and backfill from existing turn contents.",
+    "FR-MCP-SESSIONLOGCTX-001 title is \"Session turns track active plan file and MCP TODO id\" (not a placeholder).",
+    "TR-MCP-SESSIONLOG-006 title is \"Required planFile and todoId scalars with None sentinel and backfill\" (not a placeholder).",
+    "TEST-MCP-SESSIONLOG-006 exists with backfill and required-field acceptance criteria.",
+    "Mapping exists: FR-MCP-SESSIONLOGCTX-001 -> TR-MCP-SESSIONLOG-006 + TEST-MCP-SESSIONLOG-006."
+  ],
+  "ExplicitFailList": [],
+  "TrustBootstrap": {
+    "markerPath": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+    "testMarkerSignature": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "healthNonceMatch": true,
+    "pluginCacheSessionState": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\session-state.yaml",
+    "pluginCacheCurrentTurn": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\current-turn.yaml",
+    "sessionlogOpenCreated": false,
+    "beginTurnId": 40570,
+    "beginTurnStatus": "in_progress"
+  },
+  "Claims": [
+    {
+      "id": 1,
+      "verdict": "PASS",
+      "claim": "TODO MCP-SESSIONLOG-002 exists, priority high, done false.",
+      "evidence": {
+        "tool": "mcpserver__todo_get",
+        "id": "MCP-SESSIONLOG-002",
+        "priority": "high",
+        "done": false,
+        "section": "Session Logging",
+        "estimate": "multi-slice"
+      }
+    },
+    {
+      "id": 2,
+      "verdict": "PASS",
+      "claim": "Its title/description require session-turn fields planFile and todoId, sentinel None, and backfill from existing turn contents.",
+      "evidence": {
+        "tool": "mcpserver__todo_get",
+        "title": "Add required session-turn planFile and todoId fields with None sentinel and backfill",
+        "description": [
+          "Add two required scalar fields on every session-log turn: planFile (current plan file being worked) and todoId (MCP TODO id being worked).",
+          "New turn creates, submits, beginTurn, and replace-turn payloads MUST include both fields. Use the literal sentinel None when there is no active plan file or no active MCP TODO. Null, empty string, and omitted fields are invalid for new entries.",
+          "Attempt a best-effort backfill of existing turns from turn contents (queryText, queryTitle, response, interpretation, tags, contextList, filesModified, actions.filePath/description, processingDialog.content). Extract workspace-relative plan file paths and canonical MCP TODO ids. If no confident value is found, persist None. Do not invent ids or paths."
+        ],
+        "containsPlanFile": true,
+        "containsTodoId": true,
+        "containsNoneSentinel": true,
+        "containsBackfillFromTurnContents": true
+      }
+    },
+    {
+      "id": 3,
+      "verdict": "PASS",
+      "claim": "FR-MCP-SESSIONLOGCTX-001 title is \"Session turns track active plan file and MCP TODO id\" (not a placeholder).",
+      "evidence": {
+        "tool": "mcpserver__requirements_list",
+        "type": "fr",
+        "id": "FR-MCP-SESSIONLOGCTX-001",
+        "title": "Session turns track active plan file and MCP TODO id",
+        "exactTitleMatch": true,
+        "isPlaceholder": false,
+        "status": "pending",
+        "acceptanceCriteriaCount": 0
+      }
+    },
+    {
+      "id": 4,
+      "verdict": "PASS",
+      "claim": "TR-MCP-SESSIONLOG-006 title is \"Required planFile and todoId scalars with None sentinel and backfill\" (not a placeholder).",
+      "evidence": {
+        "tool": "mcpserver__requirements_list",
+        "type": "tr",
+        "id": "TR-MCP-SESSIONLOG-006",
+        "title": "Required planFile and todoId scalars with None sentinel and backfill",
+        "exactTitleMatch": true,
+        "isPlaceholder": false,
+        "status": "pending",
+        "acceptanceCriteriaCount": 0
+      }
+    },
+    {
+      "id": 5,
+      "verdict": "PASS",
+      "claim": "TEST-MCP-SESSIONLOG-006 exists with backfill and required-field acceptance criteria.",
+      "evidence": {
+        "tool": "mcpserver__requirements_list",
+        "type": "test",
+        "id": "TEST-MCP-SESSIONLOG-006",
+        "exists": true,
+        "title": "",
+        "structuredAcceptanceCriteriaCount": 0,
+        "conditionContainsRequiredFieldCriteria": true,
+        "conditionContainsBackfillCriteria": true,
+        "condition": "Unit and integration tests SHALL prove: (1) new turn create/submit/beginTurn without planFile or todoId fails with a structured error; (2) None is accepted and persisted; (3) a valid plan path and TODO id round-trip on query/get; (4) empty string and whitespace are rejected for new entries; (5) existing rows after migration have non-empty planFile and todoId; (6) a fixture turn whose contents mention a plan file and TODO id is backfilled to those values; (7) a fixture turn with no extractable values is backfilled to None. Validated by tests in tests/McpServer.Support.Mcp.Tests covering SessionLogService and turn DTO validation."
+      }
+    },
+    {
+      "id": 6,
+      "verdict": "PASS",
+      "claim": "Mapping exists: FR-MCP-SESSIONLOGCTX-001 -> TR-MCP-SESSIONLOG-006 + TEST-MCP-SESSIONLOG-006.",
+      "evidence": {
+        "tool": "mcpserver__requirements_list",
+        "type": "mapping",
+        "frId": "FR-MCP-SESSIONLOGCTX-001",
+        "trIds": ["TR-MCP-SESSIONLOG-006"],
+        "testIds": ["TEST-MCP-SESSIONLOG-006"],
+        "workspaceId": "F:\\GitHub\\McpServer",
+        "exactMappingMatch": true
+      }
+    }
+  ],
+  "ReceiptPaths": {
+    "markdown": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260812T155515Z.md",
+    "json": "F:\\GitHub\\McpServer\\docs\\receipts\\hostile-validator-20260812T155515Z.json"
+  },
+  "SessionLogQueryProof": {
+    "tool": "mcpserver__sessionlog_query",
+    "filters": {
+      "agent": "GrokCode",
+      "text": "hostile-sessionlog-002",
+      "limit": 10
+    },
+    "sessionId": "GrokCode-20260812T155231Z-hostile-sessionlog-002",
+    "requestId": "req-20260812T155231Z-001-hostile-sessionlog-002",
+    "turnStatus": "completed",
+    "queryTitle": "Hostile validate MCP-SESSIONLOG-002",
+    "actionOrders": [1, 2, 3, 4, 5, 6],
+    "dialogItemCount": 4,
+    "filesModified": [
+      "docs/receipts/hostile-validator-20260812T155515Z.md",
+      "docs/receipts/hostile-validator-20260812T155515Z.json"
+    ],
+    "sessionLevelStatus": "in_progress",
+    "turnCount": 2
+  }
+}

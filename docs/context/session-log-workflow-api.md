@@ -56,6 +56,29 @@ Runtime state tracking for the active session and turn:
 - Invalid: `copilot-20260304T113901Z-namingconv` (lowercase prefix)
 - Invalid: `Copilot-2026-03-04-namingconv` (wrong date format)
 
+### Agent Runtime Header Fields
+These fields record OBSERVED runtime facts. A value is never synthesized: when it
+cannot be observed the field is left empty rather than filled with a placeholder
+or a path that does not exist (TR-MCP-PLUGIN-HEADER-001).
+
+- `agentSessionId`: provider-native root session identifier, taken from the host
+  hook payload (`session_id`) or a host environment variable. Left empty when no
+  provider value is available. The MCP session ID is never echoed into this
+  field, because that would be a mislabeled value by definition.
+- `agentSessionTranscriptFile`: provider-native transcript file path, taken from
+  the host hook payload (`transcript_path`) or a host environment variable. Only
+  recorded when the path resolves to a file that exists on disk; left empty
+  otherwise. A cache path is never synthesized, and a cached or environment value
+  that no longer exists is dropped rather than re-submitted.
+- `agentExecutablePath`: executable path for the agent host that produced the
+  session. Plugin-created sessions resolve the host executable or plugin wrapper
+  path.
+- `agentExecutableVersion`: executable version for the agent host, resolved live
+  from the executable. Records `unknown` when discovery is not possible. The
+  plugin version is never reported as the agent executable version.
+- These fields are optional for external callers. They must be preserved during
+  recovery and complete-turn submits when an incoming payload omits them.
+
 ### Request ID
 - Format: `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`
 - Regex: `^req-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$`
@@ -190,7 +213,7 @@ All commands use the `workflow.sessionlog.*` namespace.
 - `workflow.sessionlog.bootstrap`
 - `workflow.sessionlog.openSession`
 - `workflow.sessionlog.currentSession`
-- `workflow.sessionlog.beginTurn`
+- `workflow.sessionlog.beginTurn` (first persist requires `planFile` and `todoId`; omitted values default to `None` at the plugin adapter; same-requestId reopen omits both so stored values are not overwritten)
 - `workflow.sessionlog.updateTurn`
 - `workflow.sessionlog.completeTurn`
 - `workflow.sessionlog.failTurn`
@@ -293,6 +316,8 @@ payload:
     requestId: req-20260304T113901Z-add-jwt-001
     queryTitle: Add JWT authentication
     queryText: Implement JWT token generation and validation for the API
+    planFile: None
+    todoId: None
 ---
 type: result
 payload:

@@ -861,9 +861,12 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
                     ? "TODO.yaml matches authoritative database state."
                     : $"TODO.yaml matches authoritative database state. {historicalFailureMessage}");
 
+        // Report the configured Mcp database engine (sqlserver/postgresql/sqlite), not the
+        // TodoStorage transport label. Legacy TodoStorage.Provider=sqlite is only an alias for
+        // database mode and must not be surfaced as the authoritative data source.
         return new TodoProjectionStatusResult(
             AuthoritativeStore: "database",
-            AuthoritativeDataSource: _storageOptions.Value.Provider ?? TodoStorageOptions.DatabaseProvider,
+            AuthoritativeDataSource: ResolveAuthoritativeDatabaseEngine(ctx),
             ProjectionTargetPath: todoPath,
             ProjectionTargetExists: projectionTargetExists,
             ProjectionConsistent: projectionConsistent,
@@ -874,6 +877,22 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             LastProjectionFailureUtc: metadata.LastProjectionFailureUtc,
             LastProjectionFailure: metadata.LastProjectionFailureMessage,
             Message: message);
+    }
+
+    /// <summary>
+    /// Maps the active EF Core provider to the canonical Mcp:Database:Provider name.
+    /// </summary>
+    private static string ResolveAuthoritativeDatabaseEngine(McpDbContext ctx)
+    {
+        var efName = ctx.Database.ProviderName ?? string.Empty;
+        if (efName.Contains("SqlServer", StringComparison.OrdinalIgnoreCase))
+            return "sqlserver";
+        if (efName.Contains("Npgsql", StringComparison.OrdinalIgnoreCase) ||
+            efName.Contains("Postgre", StringComparison.OrdinalIgnoreCase))
+            return "postgresql";
+        if (efName.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            return "sqlite";
+        return string.IsNullOrWhiteSpace(efName) ? TodoStorageOptions.DatabaseProvider : efName;
     }
 
     private async Task TryRecordProjectionFailureAsync(Exception ex)

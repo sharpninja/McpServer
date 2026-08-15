@@ -37,6 +37,7 @@ if (-not $shimCommand.Parameters.ContainsKey('ProcessingDialog')) {
     }
 }
 . (Join-Path $PSScriptRoot 'yaml-object-mutation.ps1')
+. (Join-Path $PSScriptRoot 'agent-runtime-header.ps1')
 Import-McpYamlSerializer
 . (Join-Path $PSScriptRoot 'marker-resolver.ps1')
 
@@ -941,7 +942,12 @@ function Invoke-ReplTurnUpsertParams {
         [Parameter(Mandatory)][string]$SourceType,
         [Parameter(Mandatory)][string]$SessionId,
         [Parameter(Mandatory)][string]$RequestId,
-        [Parameter(Mandatory)][string]$Title,
+        # TR-MCP-REPL-018: '' is a deliberate value meaning "omit the title so
+        # the server preserves it" (TR-MCP-REPL-015). Mandatory alone rejects an
+        # empty string at bind time, which killed every title-omitting persist
+        # (appendDialog/appendActions/completeTurn/supersede) with
+        # ParameterBindingValidationException (BUG-TRIAGE-087/089/091/098).
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Title,
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
         [string]$ActionsYaml = '',
@@ -949,7 +955,9 @@ function Invoke-ReplTurnUpsertParams {
         [string]$Interpretation = '',
         [int]$TokenCount = 0,
         [string[]]$Tags = @(),
-        [string[]]$ContextList = @()
+        [string[]]$ContextList = @(),
+        [string]$PlanFile = '',
+        [string]$TodoId = ''
     )
 
     $queryText = Get-ReplCurrentTurnQueryText
@@ -997,7 +1005,9 @@ function Invoke-ReplTurnUpsertParams {
         -ContextList $ContextList `
         -FilesModified $filePaths `
         -Actions $actions `
-        -ProcessingDialog $ProcessingDialog
+        -ProcessingDialog $ProcessingDialog `
+        -PlanFile $PlanFile `
+        -TodoId $TodoId
 
     return $request.ToParamsObject()
 }
@@ -1016,13 +1026,28 @@ function Invoke-ReplPersistTurn {
         [string]$Interpretation = '',
         [int]$TokenCount = 0,
         [string[]]$Tags = @(),
-        [string[]]$ContextList = @()
+        [string[]]$ContextList = @(),
+        [string]$PlanFile = '',
+        [string]$TodoId = ''
     )
     $script:LastReplPersistenceDetails = $null
+    if ($env:MCP_PLUGIN_PERSIST_LOG) {
+        $persistRecord = [ordered]@{
+            requestId = $RequestId
+            planFile = $PlanFile
+            todoId = $TodoId
+            status = $Status
+            boundPlanFile = [bool]$PSBoundParameters.ContainsKey('PlanFile')
+            boundTodoId = [bool]$PSBoundParameters.ContainsKey('TodoId')
+        }
+        Add-Content -LiteralPath $env:MCP_PLUGIN_PERSIST_LOG -Value ($persistRecord | ConvertTo-Json -Compress)
+        return $true
+    }
+
     $meta = Get-ReplSessionMeta
     if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
-    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList
+    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList -PlanFile $PlanFile -TodoId $TodoId
 
     # TR-MCP-REPL-015: send the session title only when the caller explicitly seeds
     # or sets it (IncludeSessionTitle). Otherwise omit it so an incidental re-submit
@@ -1043,6 +1068,29 @@ function Invoke-ReplPersistTurn {
     if ($IncludeSessionTitle -and -not [string]::IsNullOrWhiteSpace($sessionTitle)) {
         $sessionLog.title = $sessionTitle
     }
+
+    $resolvedAgentHeaders = Resolve-McpPluginAgentHeaderFields -SessionId $meta.SessionId -CacheDir (Get-ReplInvokeCacheDir) -AgentName $meta.SourceType -HostName $env:MCP_PLUGIN_HOST
+    $agentHeaderFields = [ordered]@{
+        agentSessionId = Get-McpPluginFirstText @($env:MCP_AGENT_SESSION_ID, (Get-ReplSessionStateValue -Key 'agentSessionId'), $resolvedAgentHeaders.agentSessionId)
+        # TR-MCP-PLUGIN-HEADER-001: existence-validated. A pre-fix session-state cache
+        # or env var can still hold a fabricated <cache>/session.jsonl path; that value
+        # must never be re-submitted just because it was cached earlier.
+        agentSessionTranscriptFile = Get-McpPluginFirstExistingFile @($env:MCP_AGENT_SESSION_TRANSCRIPT_FILE, (Get-ReplSessionStateValue -Key 'agentSessionTranscriptFile'), $resolvedAgentHeaders.agentSessionTranscriptFile)
+        agentExecutablePath = Get-McpPluginFirstText @($env:MCP_AGENT_EXECUTABLE_PATH, (Get-ReplSessionStateValue -Key 'agentExecutablePath'), $resolvedAgentHeaders.agentExecutablePath)
+        agentExecutableVersion = Get-McpPluginFirstText @($env:MCP_AGENT_EXECUTABLE_VERSION, (Get-ReplSessionStateValue -Key 'agentExecutableVersion'), $resolvedAgentHeaders.agentExecutableVersion)
+    }
+    # TR-MCP-PLUGIN-HEADER-001: agentSessionId is the PROVIDER-NATIVE id. A pre-fix
+    # cache may echo the MCP session id there; drop it rather than submit a value
+    # that is mislabeled by definition.
+    if ([string]$agentHeaderFields.agentSessionId -eq [string]$meta.SessionId) {
+        $agentHeaderFields.agentSessionId = ''
+    }
+    foreach ($entry in $agentHeaderFields.GetEnumerator()) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$entry.Value)) {
+            $sessionLog[$entry.Key] = [string]$entry.Value
+        }
+    }
+
     $payloadObject = [ordered]@{
         sessionLog = $sessionLog
     }
@@ -1291,6 +1339,79 @@ function New-ReplBeginTurnRequestId {
     return ('req-{0}-turn-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff))
 }
 
+function Get-ReplServerTurnTitle {
+    # TR-MCP-REPL-019: read the server-side title of one turn through the
+    # existing client passthrough (client.SessionLog.QueryAsync). Returns ''
+    # when the session, the turn, or its title cannot be resolved; callers
+    # treat '' as "omit the title" (TR-MCP-REPL-015).
+    param([Parameter(Mandatory)][string]$RequestId)
+
+    $meta = Get-ReplSessionMeta
+    if (-not $meta) { return '' }
+
+    try {
+        $callParams = [ordered]@{
+            agent = $meta.SourceType
+            limit = 25
+        }
+        $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+        $result = Invoke-ReplRaw -Method 'client.SessionLog.QueryAsync' -ParamsYaml $callYaml
+        if (-not $result.Success) { return '' }
+
+        $response = Convert-ReplParamsYamlToObject -ParamsYaml $result.Output
+        $payload = Get-ReplObjectValue -InputObject $response -Name 'payload'
+        $details = Get-ReplObjectValue -InputObject $payload -Name 'result'
+        if ($null -eq $details) { $details = $payload }
+        $items = Get-ReplObjectValue -InputObject $details -Name 'items'
+        foreach ($session in @($items)) {
+            if ([string](Get-ReplObjectValue -InputObject $session -Name 'sessionId') -ne $meta.SessionId) { continue }
+            foreach ($turn in @((Get-ReplObjectValue -InputObject $session -Name 'turns'))) {
+                if ([string](Get-ReplObjectValue -InputObject $turn -Name 'requestId') -eq $RequestId) {
+                    return [string](Get-ReplObjectValue -InputObject $turn -Name 'queryTitle')
+                }
+            }
+        }
+    } catch {
+        # An unreadable query response must never block the supersede persist;
+        # fall through to '' so the title is simply omitted.
+    }
+    return ''
+}
+
+function Resolve-ReplSupersedeTitle {
+    # TR-MCP-REPL-019: choose the title persisted with a superseded turn.
+    # Rules (BUG-TRIAGE-086):
+    #   - A locally refined title (non-empty and different from the hook's raw
+    #     default: the prompt first line or the literal 'User prompt') wins and
+    #     costs no server round trip.
+    #   - An empty or raw-default local title defers to the server-side title,
+    #     fetched through the existing client passthrough.
+    #   - Raw prompt text is NEVER re-sent as a title; when no refined title
+    #     exists anywhere the title is omitted ('') per TR-MCP-REPL-015.
+    param(
+        [Parameter(Mandatory)]$State,
+        [Parameter(Mandatory)][string]$RequestId
+    )
+
+    $localTitle = if ($State.Contains('queryTitle')) { [string]$State['queryTitle'] } else { '' }
+    $queryText = if ($State.Contains('queryText')) { [string]$State['queryText'] } else { '' }
+    $rawDefaults = @('User prompt')
+    $promptFirstLine = @(($queryText -replace "`r`n", "`n" -replace "`r", "") -split "`n")[0].Trim()
+    if ($promptFirstLine) { $rawDefaults += $promptFirstLine }
+
+    $trimmedLocal = $localTitle.Trim()
+    if ($trimmedLocal -and ($rawDefaults -notcontains $trimmedLocal)) {
+        return $localTitle
+    }
+
+    $serverTitle = Get-ReplServerTurnTitle -RequestId $RequestId
+    $trimmedServer = $serverTitle.Trim()
+    if ($trimmedServer -and ($rawDefaults -notcontains $trimmedServer)) {
+        return $serverTitle
+    }
+    return ''
+}
+
 function Invoke-ReplSupersedeCurrentTurnIfInProgress {
     param([Parameter(Mandatory)][string]$NextRequestId)
 
@@ -1301,9 +1422,12 @@ function Invoke-ReplSupersedeCurrentTurnIfInProgress {
     $oldRequestId = if ($state.Contains('turnRequestId')) { [string]$state['turnRequestId'] } else { '' }
     if (-not $oldRequestId -or $oldRequestId -eq $NextRequestId) { return }
     try {
-        # TR-MCP-REPL-015: omit the title so superseding a turn preserves any
-        # agent-refined or server-side title instead of re-sending the stale cache.
-        [void](Invoke-ReplPersistTurn -RequestId $oldRequestId -Title '' -Status 'canceled' -ResponseText "Superseded by $NextRequestId before it was completed.")
+        # TR-MCP-REPL-019: persist the superseded turn with a title that can
+        # never clobber a refined title: a locally refined title is kept, a raw
+        # or empty local title defers to the server-side title, and raw prompt
+        # text is never re-sent (TR-MCP-REPL-015 omission is the fallback).
+        $title = Resolve-ReplSupersedeTitle -State $state -RequestId $oldRequestId
+        [void](Invoke-ReplPersistTurn -RequestId $oldRequestId -Title $title -Status 'canceled' -ResponseText "Superseded by $NextRequestId before it was completed.")
     } catch {
         [Console]::Error.WriteLine("workflow.sessionlog.beginTurn could not persist superseded turn '$oldRequestId': $_")
     }
@@ -1324,6 +1448,14 @@ function Invoke-WorkflowBeginTurn {
     if ([string]::IsNullOrWhiteSpace($queryTitle)) { $queryTitle = 'User prompt' }
     $queryText = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'queryText'
     if ([string]::IsNullOrWhiteSpace($queryText)) { $queryText = $queryTitle }
+    $planFile = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'planFile'
+    $todoId = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'todoId'
+    $currentTurnId = Get-ReplCurrentTurnValue -Key 'turnRequestId'
+    $isReopen = (-not [string]::IsNullOrWhiteSpace($currentTurnId) -and $currentTurnId -eq $requestId)
+    if (-not $isReopen) {
+        if ([string]::IsNullOrWhiteSpace($planFile)) { $planFile = 'None' }
+        if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
+    }
 
     $openedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     $turnState = [ordered]@{
@@ -1340,6 +1472,10 @@ function Invoke-WorkflowBeginTurn {
         auditFiles = 0
         auditCommits = 0
         queryText = $queryText
+    }
+    if (-not $isReopen) {
+        $turnState['planFile'] = $planFile
+        $turnState['todoId'] = $todoId
     }
 
     try {
@@ -1360,7 +1496,11 @@ function Invoke-WorkflowBeginTurn {
         if ($seedSessionTitle) {
             Set-ReplSessionStateValue -Key 'title' -Value $queryTitle | Out-Null
         }
-        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
+        if ($isReopen) {
+            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle)
+        } else {
+            $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
+        }
         if (-not $persisted) {
             [Console]::Error.WriteLine("workflow.sessionlog.beginTurn did not confirm durable persistence for '$requestId'.")
             return $false
@@ -1592,6 +1732,57 @@ function Invoke-WorkflowCompleteTurn {
 
 }
 
+function Invoke-WorkflowFailTurn {
+    # TR-MCP-REPL-020: close the active turn as failed from plugin cache state
+    # (BUG-TRIAGE-099). workflow.sessionlog.failTurn cannot be dispatched to the
+    # REPL for plugin-shim turns: the in-process SessionLogWorkflow throws
+    # 'No active session exists' because the PowerShell shim's beginTurn never
+    # creates REPL-native state (that in-process contract is correct for
+    # REPL-native sessions and stays untouched). Following the
+    # appendDialog/appendActions pattern, the session and turn are resolved from
+    # session-state.yaml + current-turn.yaml, the turn is persisted with status
+    # 'failed' and the failure note, and current-turn.yaml is cleared so the
+    # Stop hook sees a closed turn.
+    param([string]$ParamsYaml)
+    $turnFile = Get-ReplCurrentTurnFile
+    if (-not (Test-Path $turnFile)) {
+        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.failTurn')
+    }
+    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.failTurn')) {
+        return $false
+    }
+
+    # errorMessage is the canonical REPL contract parameter (IFailTurnParams);
+    # failureNote is accepted as an alias for symmetry with the persisted field.
+    $errorMessage = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'errorMessage'
+    if ([string]::IsNullOrWhiteSpace($errorMessage)) {
+        $errorMessage = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'failureNote'
+    }
+    if ([string]::IsNullOrWhiteSpace($errorMessage)) {
+        [Console]::Error.WriteLine('workflow.sessionlog.failTurn requires a non-empty errorMessage (or failureNote).')
+        return $false
+    }
+    $errorCode = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'errorCode'
+    $failureNote = if ([string]::IsNullOrWhiteSpace($errorCode)) { $errorMessage } else { "$errorMessage (errorCode: $errorCode)" }
+
+    $reqId = Get-ReplTurnCacheField -Field 'turnRequestId'
+    $persisted = $false
+    try {
+        # TR-MCP-REPL-015: omit the title so failing a turn never retitles it.
+        $persisted = [bool](Invoke-ReplPersistTurn -RequestId $reqId -Title '' `
+            -Status 'failed' -ResponseText $failureNote)
+    } catch {
+        [Console]::Error.WriteLine("workflow.sessionlog.failTurn failed for '$reqId': $_")
+        return $false
+    }
+    if (-not $persisted) {
+        return $false
+    }
+
+    Remove-Item -LiteralPath $turnFile -Force -ErrorAction SilentlyContinue
+    return $true
+}
+
 function Invoke-WorkflowFailsafeDrain {
     # TR-MCP-REPL-016: operator-facing drain. Runs a full pass regardless of the
     # once-per-process latch used by the automatic trigger, and prints the summary
@@ -1741,6 +1932,7 @@ function Invoke-ReplMethod {
         'workflow.sessionlog.appendActions'   { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendActions -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.appendDialog'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowAppendDialog -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.completeTurn'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowCompleteTurn -ParamsYaml $ParamsYaml); return }
+        'workflow.sessionlog.failTurn'        { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowFailTurn -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.setTurnTitle'    { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowSetTurnTitle -ParamsYaml $ParamsYaml); return }
         'workflow.sessionlog.setSessionTitle' { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowSetSessionTitle -ParamsYaml $ParamsYaml); return }
         'workflow.failsafe.drain' {

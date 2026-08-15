@@ -15,12 +15,63 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
-
+#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ActorEntity", b =>
+                {
+                    b.Property<long>("ActorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("ActorId"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("ActorId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "Name");
+
+                    b.ToTable("Actors");
+                });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
                 {
@@ -1769,6 +1820,22 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
+                    b.Property<string>("AgentExecutablePath")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<string>("AgentExecutableVersion")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("AgentSessionId")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("AgentSessionTranscriptFile")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
                     b.Property<string>("Branch")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -2036,6 +2103,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("OriginalEntryJson")
                         .HasColumnType("text");
 
+                    b.Property<string>("PlanFile")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
                     b.Property<string>("QueryText")
                         .HasColumnType("text");
 
@@ -2066,6 +2138,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<DateTime?>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
                     b.Property<int?>("TokenCount")
                         .HasColumnType("integer");
 
@@ -2075,7 +2152,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlanFile");
+
                     b.HasIndex("Timestamp");
+
+                    b.HasIndex("TodoId");
 
                     b.HasIndex("WorkspaceId");
 
@@ -3247,6 +3328,417 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.ToTable("TriageResearchRuns");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseActorEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<long>("UseCaseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("WorkspaceId", "UseCaseId", "ActorId");
+
+                    b.HasIndex("ActorId");
+
+                    b.HasIndex("UseCaseId");
+
+                    b.ToTable("UseCaseActors");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", b =>
+                {
+                    b.Property<long>("UseCaseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("UseCaseId"));
+
+                    b.Property<string>("ApprovalStatus")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasDefaultValue("Draft");
+
+                    b.Property<string>("BriefDescription")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("DiagramGraphJson")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Postcondition")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Precondition")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ProductKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Scope")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("VersionNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("UseCaseId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "ProductKey");
+
+                    b.HasIndex("WorkspaceId", "Title");
+
+                    b.ToTable("UseCases");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseExtensionPointEntity", b =>
+                {
+                    b.Property<long>("ExtensionPointId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("ExtensionPointId"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long>("UseCaseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("ExtensionPointId");
+
+                    b.HasIndex("UseCaseId");
+
+                    b.HasIndex("WorkspaceId", "UseCaseId");
+
+                    b.ToTable("UseCaseExtensionPoints");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseFlowEntity", b =>
+                {
+                    b.Property<long>("FlowId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("FlowId"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("FlowType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("UseCaseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("FlowId");
+
+                    b.HasIndex("UseCaseId");
+
+                    b.HasIndex("WorkspaceId", "UseCaseId", "SequenceNumber");
+
+                    b.ToTable("UseCaseFlows");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseFrLinkEntity", b =>
+                {
+                    b.Property<long>("LinkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("LinkId"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("FrId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("FrKind")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasDefaultValue("fr");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("LinkOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LinkType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasDefaultValue("Realizes");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<long>("UseCaseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("LinkId");
+
+                    b.HasIndex("UseCaseId");
+
+                    b.HasIndex("WorkspaceId", "FrKind", "FrId");
+
+                    b.HasIndex("WorkspaceId", "UseCaseId", "FrId")
+                        .IsUnique();
+
+                    b.ToTable("UseCaseFrLinks");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseSpecialRequirementEntity", b =>
+                {
+                    b.Property<long>("SpecialReqId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("SpecialReqId"));
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int?>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RequirementText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("UseCaseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("SpecialReqId");
+
+                    b.HasIndex("UseCaseId");
+
+                    b.HasIndex("WorkspaceId", "UseCaseId");
+
+                    b.ToTable("UseCaseSpecialRequirements");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseStepEntity", b =>
+                {
+                    b.Property<long>("StepId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("StepId"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("ActorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("DataEntities")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<long>("FlowId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("StepNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SystemResponse")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("StepId");
+
+                    b.HasIndex("ActorId");
+
+                    b.HasIndex("FlowId");
+
+                    b.HasIndex("WorkspaceId", "FlowId", "StepNumber");
+
+                    b.ToTable("UseCaseSteps");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceBannedItemEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -3404,6 +3896,15 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                             TodoPath = "docs/todo.yaml",
                             WorkspacePath = ""
                         });
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ActorEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
@@ -4078,6 +4579,140 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseActorEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.ActorEntity", "Actor")
+                        .WithMany("UseCaseActors")
+                        .HasForeignKey("ActorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", "UseCase")
+                        .WithMany("UseCaseActors")
+                        .HasForeignKey("UseCaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Actor");
+
+                    b.Navigation("UseCase");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseExtensionPointEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", "UseCase")
+                        .WithMany("ExtensionPoints")
+                        .HasForeignKey("UseCaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UseCase");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseFlowEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", "UseCase")
+                        .WithMany("Flows")
+                        .HasForeignKey("UseCaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UseCase");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseFrLinkEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", "UseCase")
+                        .WithMany("FrLinks")
+                        .HasForeignKey("UseCaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", "FunctionalRequirement")
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId", "FrKind", "FrId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("FunctionalRequirement");
+
+                    b.Navigation("UseCase");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseSpecialRequirementEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", "UseCase")
+                        .WithMany("SpecialRequirements")
+                        .HasForeignKey("UseCaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UseCase");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseStepEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.ActorEntity", "Actor")
+                        .WithMany()
+                        .HasForeignKey("ActorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.UseCaseFlowEntity", "Flow")
+                        .WithMany("Steps")
+                        .HasForeignKey("FlowId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Actor");
+
+                    b.Navigation("Flow");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceBannedItemEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", "Workspace")
@@ -4087,6 +4722,11 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired();
 
                     b.Navigation("Workspace");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ActorEntity", b =>
+                {
+                    b.Navigation("UseCaseActors");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
@@ -4153,11 +4793,29 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Navigation("ListItems");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseEntity", b =>
+                {
+                    b.Navigation("ExtensionPoints");
+
+                    b.Navigation("Flows");
+
+                    b.Navigation("FrLinks");
+
+                    b.Navigation("SpecialRequirements");
+
+                    b.Navigation("UseCaseActors");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.UseCaseFlowEntity", b =>
+                {
+                    b.Navigation("Steps");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
                 {
                     b.Navigation("BannedItems");
                 });
-
+#pragma warning restore 612, 618
         }
     }
 }

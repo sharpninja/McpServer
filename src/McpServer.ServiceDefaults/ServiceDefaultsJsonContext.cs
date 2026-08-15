@@ -12,7 +12,8 @@ internal sealed record HealthCheckResponse(
     string Status,
     string Version,
     HealthCheckEntryResponse[] Checks,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Nonce = null);
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Nonce = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Storage = null);
 
 internal sealed record HealthCheckEntryResponse(
     string Name,

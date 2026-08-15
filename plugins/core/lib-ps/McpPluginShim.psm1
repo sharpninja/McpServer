@@ -391,7 +391,9 @@ function New-McpPluginTurnUpsertRequest {
         [string[]]$ContextList = @(),
         [string[]]$FilesModified = @(),
         [object[]]$Actions = @(),
-        [object[]]$ProcessingDialog = @()
+        [object[]]$ProcessingDialog = @(),
+        [string]$PlanFile = '',
+        [string]$TodoId = ''
     )
 
     $turn = [ordered]@{
@@ -434,6 +436,14 @@ function New-McpPluginTurnUpsertRequest {
 
     if ($ProcessingDialog.Count -gt 0) {
         $turn.processingDialog = @($ProcessingDialog)
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($PlanFile)) {
+        $turn.planFile = $PlanFile
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($TodoId)) {
+        $turn.todoId = $TodoId
     }
 
     return [McpPluginTurnUpsertRequest]::new($Agent, $SessionId, $turn)

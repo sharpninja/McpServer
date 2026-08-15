@@ -160,6 +160,10 @@ public class SessionLogWorkflowProductionTests
             SessionId = "Codex-20260514T000000Z-recovery",
             Title = "Recovered Session",
             Model = "gpt-5",
+            AgentSessionId = "Codex-20260514T000000Z-agent",
+            AgentSessionTranscriptFile = "F:/GitHub/McpServer/.mcpServer/codex/transcripts/recovery.jsonl",
+            AgentExecutablePath = "C:/Users/kingd/AppData/Roaming/npm/codex.cmd",
+            AgentExecutableVersion = "1.2.3",
             Started = "2026-05-14T00:00:00Z",
             LastUpdated = "2026-05-14T00:05:00Z",
             Status = "completed",
@@ -199,6 +203,10 @@ public class SessionLogWorkflowProductionTests
         Assert.Equal(2, submitted!.Turns!.Count);
         Assert.Equal(2, submitted.TurnCount);
         Assert.Equal("completed", submitted.Status);
+        Assert.Equal("Codex-20260514T000000Z-agent", submitted.AgentSessionId);
+        Assert.Equal("F:/GitHub/McpServer/.mcpServer/codex/transcripts/recovery.jsonl", submitted.AgentSessionTranscriptFile);
+        Assert.Equal("C:/Users/kingd/AppData/Roaming/npm/codex.cmd", submitted.AgentExecutablePath);
+        Assert.Equal("1.2.3", submitted.AgentExecutableVersion);
         Assert.Contains(submitted.Turns, turn =>
             turn.RequestId == "req-20260514T000100Z-existing" &&
             turn.Actions is { Count: 2 });
@@ -210,6 +218,30 @@ public class SessionLogWorkflowProductionTests
     #endregion
 
     #region Turn Lifecycle Tests
+
+    /// <summary>
+    /// AC-TR-MCP-SESSIONLOG-006-007 / TEST-MCP-SESSIONLOG-006:
+    /// REPL BeginTurnAsync forwards planFile and todoId onto the submitted turn.
+    /// </summary>
+    [Fact]
+    public async Task BeginTurnAsync_ForwardsPlanFileAndTodoId()
+    {
+        await _workflow.BootstrapAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.OpenSessionAsync("Copilot", "Copilot-20260304T113901Z-test", "Test", "model", cancellationToken: TestContext.Current.CancellationToken);
+        await _workflow.BeginTurnAsync(
+            "req-20260304T113901Z-task-001",
+            "Task Title",
+            "Task Description",
+            cancellationToken: TestContext.Current.CancellationToken,
+            planFile: "docs/plans/foo.md",
+            todoId: "MCP-SESSIONLOG-002");
+
+        var submitted = _stubClient.LastSubmitted;
+        Assert.NotNull(submitted);
+        var turn = Assert.Single(submitted!.Turns!);
+        Assert.Equal("docs/plans/foo.md", turn.PlanFile);
+        Assert.Equal("MCP-SESSIONLOG-002", turn.TodoId);
+    }
 
     [Fact]
     public async Task BeginTurnAsync_ValidParameters_CreatesTurn()

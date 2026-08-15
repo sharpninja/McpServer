@@ -1,6 +1,8 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -188,6 +190,54 @@ public sealed class FederatedSessionLogServiceTests
         var result = await sut.AppendProcessingDialogAsync("ClaudeCode", "S-001", "req-1", [], cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(5, result);
+    }
+
+    /// <summary>
+    /// AC-FR-MCP-SESSIONLOGCTX-001-007: federation apply/submit with omitted fields
+    /// persists a validated pair (None if extraction finds nothing).
+    /// </summary>
+    [Fact]
+    public async Task Apply_OmittedFields_PersistsProperValue()
+    {
+        var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<McpServer.Support.Mcp.Storage.McpDbContext>()
+            .UseInMemoryDatabase("fed-omit-" + Guid.NewGuid().ToString("N"))
+            .Options;
+        await using var db = new McpServer.Support.Mcp.Storage.McpDbContext(options);
+        db.Database.EnsureCreated();
+        var workspace = Path.Combine(Path.GetTempPath(), "fed-omit");
+        db.OverrideWorkspaceId(workspace);
+        var inner = new SessionLogService(
+            db,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<SessionLogService>.Instance,
+            workspaceContext: new WorkspaceContext { WorkspacePath = workspace });
+        var sut = new FederatedSessionLogService(
+            inner,
+            CreateRegistry(enabled: false),
+            _client,
+            NullLogger<FederatedSessionLogService>.Instance);
+
+        await sut.SubmitAsync(
+            new UnifiedSessionLogDto
+            {
+                SourceType = "Cursor",
+                SessionId = "Cursor-20260304T113901Z-fed",
+                Title = "fed",
+                Turns =
+                [
+                    new UnifiedRequestEntryDto
+                    {
+                        RequestId = "req-20260304T113901Z-fed",
+                        QueryText = "plain text with no identifiers",
+                        Status = "completed",
+                    },
+                ],
+            },
+            sourceFilePath: Path.Combine(workspace, "import.json"),
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        var stored = Assert.Single(db.SessionLogTurns);
+        Assert.Equal("None", stored.PlanFile);
+        Assert.Equal("None", stored.TodoId);
     }
 
     // --- Helpers ---

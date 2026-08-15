@@ -366,7 +366,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         RequireString(args, "requestId"),
                         RequireString(args, "queryTitle"),
                         RequireString(args, "queryText"),
-                        cancellationToken).ConfigureAwait(false);
+                        cancellationToken,
+                        GetString(args, "planFile") ?? "None",
+                        GetString(args, "todoId") ?? "None").ConfigureAwait(false);
                 }
                 clientMethod = "BeginTurnAsync";
                 clientArgs = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
@@ -377,6 +379,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     ["queryTitle"] = GetString(args, "queryTitle"),
                     ["queryText"] = GetString(args, "queryText"),
                     ["model"] = GetString(args, "model"),
+                    ["planFile"] = GetString(args, "planFile") ?? "None",
+                    ["todoId"] = GetString(args, "todoId") ?? "None",
                 };
                 resultShape = new Dictionary<string, object?> { ["requestId"] = GetString(args, "requestId"), ["status"] = "in_progress" };
                 break;
@@ -580,7 +584,9 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         RequireString(args, "requestId"),
                         RequireString(args, "queryTitle"),
                         RequireString(args, "queryText"),
-                        cancellationToken).ConfigureAwait(false);
+                        cancellationToken,
+                        GetString(args, "planFile") ?? "None",
+                        GetString(args, "todoId") ?? "None").ConfigureAwait(false);
                     result = new Dictionary<string, object?>
                     {
                         ["requestId"] = RequireString(args, "requestId"),

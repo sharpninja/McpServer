@@ -106,20 +106,32 @@ static partial class TraceabilityValidator
         public List<string> MissingTrInMatrix { get; init; } = [];
         public List<string> MissingTestInMatrix { get; init; } = [];
 
+        /// <summary>
+        /// FR-MCP-USECASE-010: Human-readable UC↔FR Realizes findings from UseCaseFrLinks
+        /// (shared algorithm with runtime coverage / UseCaseTraceabilityGate).
+        /// </summary>
+        public List<string> UseCaseFrFindings { get; init; } = [];
+
         public bool HasFrErrors => MissingFrInMapping.Count > 0 || MissingFrInMatrix.Count > 0;
         public bool HasTrErrors => MissingTrInMatrix.Count > 0;
         public bool HasTestErrors => MissingTestInMatrix.Count > 0;
+        public bool HasUseCaseFrErrors => UseCaseFrFindings.Count > 0;
     }
 
     /// <summary>
     /// Validates traceability across all requirements documents.
     /// </summary>
+    /// <param name="useCaseFrFindings">
+    /// Optional UC↔FR Realizes findings (from UseCaseFrCoverageCore / UseCaseTraceabilityGate).
+    /// When provided, they are stored on the result for reporting and failure gates.
+    /// </param>
     public static ValidationResult Validate(
         string[] functionalLines,
         string[] technicalLines,
         string[] testingLines,
         string[] mappingLines,
-        string[] matrixLines)
+        string[] matrixLines,
+        IReadOnlyList<string>? useCaseFrFindings = null)
     {
         var frIds = GetIdsFromHeadings(functionalLines, FrHeadingRegex());
         var trIds = GetIdsFromHeadings(technicalLines, TrHeadingRegex());
@@ -133,6 +145,30 @@ static partial class TraceabilityValidator
             MissingFrInMatrix = frIds.Where(id => !matrixIds.Contains(id)).ToList(),
             MissingTrInMatrix = trIds.Where(id => !matrixIds.Contains(id)).ToList(),
             MissingTestInMatrix = testIds.Where(id => !matrixIds.Contains(id)).ToList(),
+            UseCaseFrFindings = useCaseFrFindings is null
+                ? []
+                : useCaseFrFindings.ToList(),
         };
+    }
+
+    /// <summary>
+    /// FR-MCP-USECASE-010: Builds Realizes findings from in-memory UseCaseFrLinks data using the
+    /// same pure algorithm as runtime coverage (<c>UseCaseFrCoverageCore</c>).
+    /// </summary>
+    public static IReadOnlyList<string> BuildUseCaseFrFindings(
+        IReadOnlyList<(long UseCaseId, string Title)> useCases,
+        IReadOnlyList<string> frIds,
+        IReadOnlyList<(long UseCaseId, string FrId)> realizesLinks)
+    {
+        // Keep wording identical to UseCaseFrCoverageCore.FormatFindings / UseCaseTraceabilityGate.
+        var linkedUseCaseIds = realizesLinks.Select(l => l.UseCaseId).ToHashSet();
+        var linkedFrIds = realizesLinks.Select(l => l.FrId).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var findings = new List<string>();
+        foreach (var uc in useCases.Where(u => !linkedUseCaseIds.Contains(u.UseCaseId)))
+            findings.Add($"UseCase {uc.UseCaseId} '{uc.Title}' has no Realizes FR link.");
+        foreach (var frId in frIds.Where(id => !linkedFrIds.Contains(id)).OrderBy(id => id, StringComparer.OrdinalIgnoreCase))
+            findings.Add($"FR {frId} has no Realizes use case link.");
+        return findings;
     }
 }

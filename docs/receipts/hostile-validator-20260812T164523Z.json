@@ -1,0 +1,185 @@
+{
+  "TimestampUtc": "2026-08-12T16:45:23Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "ReviewSessionId": "GrokCode-20260812T164435Z-hostile-plan-sessionlog-002",
+  "ReviewRequestId": "req-20260812T164435Z-001-hostile-plan-sessionlog-002",
+  "ServerTurnId": 40595,
+  "AgentIdentity": "GrokCode",
+  "PlanFile": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\019ff6a0-c5fb-7162-8a7b-c7c1234385d1\\plan.md",
+  "OverallVerdict": "DISAGREE",
+  "DefaultPosture": "FAIL until independently re-verified",
+  "AccuracyRating": 4,
+  "AccuracyRatingScale": 5,
+  "AccuracyJustification": "Verdicts are pinned to live MCP payloads, plan.md line ranges, and read SessionLogService/begin_turn/entity/DTO code. Claim 6 PASS is the only claim that survived that check.",
+  "CompletenessRating": 5,
+  "CompletenessRatingScale": 5,
+  "CompletenessJustification": "All six assigned claims have PASS|FAIL|UNKNOWN plus evidence. TODO, FR, TR, TEST, AC naming, and write paths were re-queried. No claim left UNKNOWN.",
+  "ClaimsReviewed": [
+    "Plan AC ids follow existing workspace naming (AC-FR119-008 style), not FR-AC-1 / TR-AC-1 / ac-1.",
+    "ACs are children of the FR and TR; TEST-MCP-SESSIONLOG-006 lists those child ids and the tests that prove them.",
+    "Plan is decision-complete for MCP-SESSIONLOG-002: field names, None sentinel, new-entry vs update, exact/~/ paths, backfill including agent history under ~, import requires a proper value, Byrd slices with named red tests.",
+    "Plan matches current code write paths (UpsertTurnAsync, MapSingleEntry, begin_turn, three-provider migrations) well enough that an implementer need not invent remaining product decisions.",
+    "Every FR/TR child AC is covered by at least one named test method in a named file.",
+    "Plan does not contradict FR-SUPPORT-015 additive merge or TR-MCP-SESSIONLOG-001 structured errors."
+  ],
+  "ExplicitFailList": [
+    "Claim 1 FAIL: invented hyphen-stripped IDs do not match live TR children AC-TR-MCP-AGENT-015-001 or mechanical AC-FR119-008 remainder.",
+    "Claim 2 FAIL: live TEST-MCP-SESSIONLOG-006 AcceptanceCriteria count is 0; Condition uses (1)-(7); plan Validates headers omit AC-FRSESSIONLOGCTX001-004.",
+    "Claim 3 FAIL: remaining product decisions include TR-body workspace-relative vs plan exact/~ paths, begin_turn required vs re-open preserve vs hook None overwrite, SubmitAsync import branch, query-filter normalization, backfill guard OR, import partial-field merge.",
+    "Claim 4 FAIL: plan misses SubmitAsync sourceFilePath import branch, dual SessionLogQueryRequest types, FederationDataClient query string, SessionLogIngestor.cs, and REPL/McpAgent throw-on-duplicate vs service re-open.",
+    "Claim 5 FAIL: no named exact planFile filter test; no SessionLogIngestor test; no three-provider migration Up/Down test; Slice 8 has no named methods."
+  ],
+  "TrustBootstrap": {
+    "markerPath": "F:\\GitHub\\McpServer\\AGENTS-README-FIRST.yaml",
+    "testMarkerSignature": true,
+    "healthStatus": "Healthy",
+    "healthVersion": "1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "healthNonce": "2be0452a600a4480b1c398473de18520",
+    "healthNonceMatch": true,
+    "pluginBootstrapInitialized": true,
+    "pluginOpenSessionExitCode": 1,
+    "pluginCacheSessionState": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\session-state.yaml",
+    "pluginCacheStillOnPriorSession": "GrokCode-20260812T155231Z-hostile-sessionlog-002",
+    "sessionlogOpenCreated": true,
+    "beginTurnId": 40595,
+    "beginTurnStatus": "in_progress"
+  },
+  "ProfileFilesRead": 14,
+  "Claims": [
+    {
+      "id": 1,
+      "verdict": "FAIL",
+      "claim": "Plan AC ids follow existing workspace naming (AC-FR119-008 style), not FR-AC-1 / TR-AC-1 / ac-1.",
+      "evidence": {
+        "planIds": ["AC-FRSESSIONLOGCTX001-001", "AC-TRSESSIONLOG006-001"],
+        "planForbids": ["FR-AC-1", "TR-AC-1", "ac-1"],
+        "existingRepoExample": "docs/Project/TurnTransactions-Requirements-Batch.yaml:60 AC-FR119-008 for FR-MCP-119",
+        "liveTrChildren": "TR-MCP-AGENT-015 => AC-TR-MCP-AGENT-015-001..004",
+        "liveCommonPattern": "TR-SUPPORT-CORE-015 => ac-1..ac-4",
+        "otherRepoIds": ["AC-MCP-901", "AC-CODEXBIND-001"],
+        "hyphenStripMatchesInRepoOrStore": 0
+      }
+    },
+    {
+      "id": 2,
+      "verdict": "FAIL",
+      "claim": "ACs are children of the FR and TR; TEST-MCP-SESSIONLOG-006 lists those child ids and the tests that prove them.",
+      "evidence": {
+        "tool": "mcpserver__requirements_list",
+        "frId": "FR-MCP-SESSIONLOGCTX-001",
+        "frTitle": "Session turns track active plan file and MCP TODO id",
+        "frAcceptanceCriteriaCount": 0,
+        "trId": "TR-MCP-SESSIONLOG-006",
+        "trTitle": "Required planFile and todoId scalars with None sentinel and backfill",
+        "trAcceptanceCriteriaCount": 0,
+        "testId": "TEST-MCP-SESSIONLOG-006",
+        "testAcceptanceCriteriaCount": 0,
+        "testConditionUses": "(1)-(7) numbered criteria, no AC-FRSESSIONLOGCTX001 or AC-TRSESSIONLOG006 ids, no named test methods",
+        "planOmitsFromValidatesHeaders": ["AC-FRSESSIONLOGCTX001-004"]
+      }
+    },
+    {
+      "id": 3,
+      "verdict": "FAIL",
+      "claim": "Plan is decision-complete for MCP-SESSIONLOG-002.",
+      "evidence": {
+        "todoId": "MCP-SESSIONLOG-002",
+        "todoPriority": "high",
+        "todoDone": false,
+        "locked": ["planFile/todoId names", "None sentinel", "new-entry vs update vs replace", "named Byrd slices"],
+        "unlocked": [
+          "TR body workspace-relative only vs plan exact/~/",
+          "begin_turn required vs second-begin omit-preserve vs hook None/None overwrite",
+          "SubmitAsync sourceFilePath import branch extractor placement",
+          "dual SessionLogQueryRequest plus federation query string",
+          "query filter normalization of ~/",
+          "backfill completed-flag OR predicate",
+          "import partial-valid field merge vs extract-both",
+          "extractor looks-like-plan-files predicate",
+          "agent-history match algorithm"
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "verdict": "FAIL",
+      "claim": "Plan matches current code write paths well enough that an implementer need not invent remaining product decisions.",
+      "evidence": {
+        "matches": [
+          "UpsertTurnAsync insert=MapSingleEntry update=UpdateEntryFromDto mergeOmittedFields true",
+          "ReplaceTurnAsync update mergeOmittedFields false",
+          "begin_turn mutator on SessionLifecycleBeginRequest",
+          "three provider migration assemblies exist",
+          "REST Problem title Invalid turn payload. already used"
+        ],
+        "gaps": [
+          "SubmitAsync import vs interactive via sourceFilePath; MapNewTurns has no extractor",
+          "SessionLogIngestor.cs not in plan section 8 files list",
+          "SessionLogQueryRequest exists twice (Services record + Client class)",
+          "FederationDataClient.BuildSessionLogQueryString has no planFile/todoId",
+          "Storage/Migrations still exists and lags provider assemblies",
+          "McpAgent and REPL throw on duplicate request id; service re-opens"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "verdict": "FAIL",
+      "claim": "Every FR/TR child AC is covered by at least one named test method in a named file.",
+      "evidence": {
+        "missingNamedTests": [
+          "QueryAsync_FilterByPlanFile for AC-FRSESSIONLOGCTX001-005",
+          "SessionLogIngestorImportTests for AC-FRSESSIONLOGCTX001-007",
+          "three-provider migration Up/Down for AC-TRSESSIONLOG006-004",
+          "Slice 8 plugin/docs named methods"
+        ],
+        "partial": "AC-FRSESSIONLOGCTX001-004 has validator tests but is omitted from TEST Validates headers"
+      }
+    },
+    {
+      "id": 6,
+      "verdict": "PASS",
+      "claim": "Plan does not contradict FR-SUPPORT-015 additive merge or TR-MCP-SESSIONLOG-001 structured errors.",
+      "evidence": {
+        "frSupport015": "omitted turn fields never overwrite; plan uses ApplyValue on additive upsert/complete; replace is PUT FR-SUPPORT-010G",
+        "trSessionlog001": "complete/fail malformed turnJson already return McpToolErrors.Serialize {error}; plan reuses that path and forbids raw EF/JsonException",
+        "restTitle": "Invalid turn payload. already exists on SessionLogController ArgumentException handlers"
+      }
+    }
+  ],
+  "TodoSnapshot": {
+    "Id": "MCP-SESSIONLOG-002",
+    "Title": "Add required session-turn planFile and todoId fields with None sentinel and backfill",
+    "Priority": "high",
+    "Done": false,
+    "Section": "Session Logging",
+    "FunctionalRequirements": ["FR-MCP-SESSIONLOGCTX-001"],
+    "TechnicalRequirements": ["TR-MCP-SESSIONLOG-006"]
+  },
+  "FilesModified": [
+    "docs/receipts/hostile-validator-20260812T164523Z.md",
+    "docs/receipts/hostile-validator-20260812T164523Z.json"
+  ],
+  "SessionLogProof": {
+    "tool": "mcpserver__sessionlog_query",
+    "agent": "GrokCode",
+    "text": "hostile-validator-20260812T164523Z",
+    "totalCount": 1,
+    "sessionId": "GrokCode-20260812T164435Z-hostile-plan-sessionlog-002",
+    "requestId": "req-20260812T164435Z-001-hostile-plan-sessionlog-002",
+    "turnId": 40595,
+    "turnStatus": "completed",
+    "sessionStatus": "in_progress",
+    "turnCount": 1,
+    "queryTitle": "Hostile validate MCP-SESSIONLOG-002 plan",
+    "responseContainsOverallVerdictDisagree": true,
+    "actionOrders": [1, 2, 3, 4, 5, 6],
+    "dialogCount": 2,
+    "filesModified": [
+      "docs/receipts/hostile-validator-20260812T164523Z.md",
+      "docs/receipts/hostile-validator-20260812T164523Z.json"
+    ]
+  }
+}

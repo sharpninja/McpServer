@@ -1,0 +1,83 @@
+{
+  "TimestampUtc": "2026-08-12T22:10:41Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Plugin": "F:\\GitHub\\mcpserver-grok-plugin",
+  "SessionId": "GrokCode-20260812T220750Z-hostile-nuke-deploy",
+  "RequestId": "req-20260812T220750Z-001-hostile-nuke-deploy",
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "SessionLogProof": {
+    "pluginStatus": "available",
+    "pluginAgent": "GrokCode",
+    "bootstrapInitialized": true,
+    "openSessionExit": 0,
+    "queryHistoryFoundSession": true,
+    "nativeGetQuery": "GET http://PAYTON-LEGION2:7147/mcpserver/sessionlog?agent=GrokCode&sessionId=GrokCode-20260812T220750Z-hostile-nuke-deploy",
+    "nativeGetStatus": 200,
+    "nativeGetByPath": "GET http://PAYTON-LEGION2:7147/mcpserver/sessionlog/GrokCode/GrokCode-20260812T220750Z-hostile-nuke-deploy",
+    "nativeGetByPathStatus": 200,
+    "turnRequestId": "req-20260812T220750Z-001-hostile-nuke-deploy",
+    "turnStatus": "completed",
+    "planFile": "None",
+    "todoId": "None",
+    "actionCount": 2,
+    "dialogCount": 2
+  },
+  "Claims": [
+    {
+      "id": 1,
+      "text": "Nuke UpdateService succeeded for McpServer 1.4.26. Live GET /health is Healthy, version starts with 1.4.26, nonce echo works. Service is Running. First UpdateService attempt crashed on SessionLogTurnContextBackfill empty connection string; a fail-soft TryRunAsync fix was deployed on the second UpdateService --SkipVersionBump true.",
+      "verdict": "PASS",
+      "evidence": [
+        "GET /health?nonce=6fd65b9ca4bb4bada00cfdb294398c1b HTTP 200 status=Healthy version=1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e nonce echoed exactly at 2026-08-12T22:10:41Z",
+        "Prior independent nonce 5b47c989e9514c60a43ed1362d333b23 also echoed",
+        "Get-Service McpServer Status=Running PathName=C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+        "Deployed exe FileVersion=1.4.26.0 ProductVersion=1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e LastWriteTimeUtc=2026-08-12T21:55:30.4271605Z",
+        "C:\\ProgramData\\McpServer\\.mcpservice-deployment.json generatedUtc=2026-08-12T21:55:34.9310547Z generatedBy=build/Build.UpdateService.cs operation=update",
+        "Nuke log build.2026-08-12_16-48-30.log: bump 1.4.25->1.4.26 then health check failed after 10 attempts; service status Unknown",
+        "mcp-20260812.log 16:49:44.339 -05:00: connection to database '' on server ''; ConnectionString property has not been initialized",
+        "Nuke log build.2026-08-12_16-54-58.log: no version bump step (SkipVersionBump), service was not running, republish 1.4.26, Service Running, Health HTTP 200, Update complete",
+        "mcp-20260812.log 16:55:43.018 -05:00: backfill failed; continuing startup. InvalidOperationException ConnectionString not initialized at SessionLogTurnContextBackfill.RunAsync then TryRunAsync",
+        "Application started 16:55:58.251 -05:00 PID 29412"
+      ]
+    },
+    {
+      "id": 2,
+      "text": "Nuke InstallReplTool installed SharpNinja.McpServer.Repl 1.4.26. mcpserver-repl --version reports 1.4.26.",
+      "verdict": "PASS",
+      "evidence": [
+        "Nuke log build.2026-08-12_16-56-41.log PackReplTool created SharpNinja.McpServer.Repl.1.4.26.nupkg",
+        "InstallReplTool uninstalled 1.4.24, installed 1.4.26, verified 1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e, OnTargetSucceeded",
+        "Live mcpserver-repl --version = 1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e EXIT=0",
+        "dotnet tool list -g: sharpninja.mcpserver.repl 1.4.26",
+        "Tool exe LastWriteTimeUtc=2026-08-12T21:58:41Z FileVersion=1.4.26.0"
+      ]
+    },
+    {
+      "id": 3,
+      "text": "Nuke SyncAgentPlugins succeeded. Grok plugin .version is 1.86.0. plugins/core lib was synced (core bd8a8d9e). F:\\GitHub\\mcpserver-grok-plugin\\lib\\plugin-hook.ps1 Open-PluginTurn calls Resolve-PluginTurnPlanContext.",
+      "verdict": "PASS",
+      "evidence": [
+        "Retry Nuke log build.2026-08-12_17-00-14.log OnTargetSucceeded",
+        "synced 13 core files into F:\\GitHub\\mcpserver-grok-plugin/lib (core bd8a8d9e); core integrity OK: 13 files match",
+        "Updated F:/GitHub/mcpserver-grok-plugin/.version to 1.86.0",
+        "Live .version file = 1.86.0; plugin.json version 1.86.0",
+        "CORE-MANIFEST.yaml coreVersion=bd8a8d9e syncedAtUtc=2026-08-12T22:00:50Z",
+        "Workspace HEAD bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+        "All 13 lib-ps files LF-normalized SHA256 match plugin lib; raw mismatches are CRLF vs LF only",
+        "plugin-hook.ps1:631 Open-PluginTurn; :715 Resolve-PluginTurnPlanContext"
+      ]
+    },
+    {
+      "id": 4,
+      "text": "Live swagger SessionLifecycleBeginRequest includes planFile and todoId (the SESSIONLOG-002 fields).",
+      "verdict": "PASS",
+      "evidence": [
+        "GET http://PAYTON-LEGION2:7147/swagger/v1/swagger.json HTTP 200 length 652826",
+        "components.schemas.SessionLifecycleBeginRequest.properties.planFile type=string nullable=true",
+        "components.schemas.SessionLifecycleBeginRequest.properties.todoId type=string nullable=true"
+      ]
+    }
+  ]
+}

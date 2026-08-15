@@ -27,6 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="SharpNinja.aiUnit" />
     <PackageReference Include="System.Security.Cryptography.Xml" />
+    <PackageReference Include="Microsoft.Data.Sqlite" />
   </ItemGroup>
 
 </Project>

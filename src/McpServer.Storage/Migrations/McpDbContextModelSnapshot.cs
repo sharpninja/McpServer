@@ -1197,6 +1197,22 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AgentExecutablePath")
+                        .HasMaxLength(2048)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentExecutableVersion")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentSessionId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentSessionTranscriptFile")
+                        .HasMaxLength(2048)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Branch")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");

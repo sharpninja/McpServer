@@ -1,0 +1,1282 @@
+# MCP requirements_list summary
+Workspace: F:\GitHub\McpServer
+Tool: mcpserver__requirements_list type=all
+CapturedUtc: 20260807T140215Z
+SourcePayload: C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5CMcpServer\019fdc74-8449-78f0-a2e3-75c36e736036\mcp\call-5a4fe548-070a-4751-bc1c-63269a81978e-92.json
+
+Counts: FR=250 TR=376 TEST=391 mapping=250
+
+## Functional (Id - Title - Status)
+- FR-LOC-001 - Localization Support - pending
+- FR-MCP-001 - Configurable workspace root and paths - pending
+- FR-MCP-002 - TODO management API - pending
+- FR-MCP-003 - Session log ingestion and query - pending
+- FR-MCP-004 - Hybrid context search - pending
+- FR-MCP-005 - GitHub issue sync - pending
+- FR-MCP-006 - Multi-source ingestion - pending
+- FR-MCP-007 - Dual transport - pending
+- FR-MCP-008 - Containerized deployment - pending
+- FR-MCP-009 - Workspace Management - pending
+- FR-MCP-011 - Workspace Process Orchestration - pending
+- FR-MCP-012 - Tool Registry - pending
+- FR-MCP-013 - Per-Workspace Auth Tokens - pending
+- FR-MCP-014 - Pairing Web UI - pending
+- FR-MCP-015 - Tunnel Providers - pending
+- FR-MCP-016 - MCP Streamable HTTP Transport - pending
+- FR-MCP-017 - Windows Service - pending
+- FR-MCP-018 - Marker File Agent Discovery - pending
+- FR-MCP-019 - Workspace Host Controller Isolation - pending
+- FR-MCP-020 - Workspace Auto-Start on Service Startup - pending
+- FR-MCP-021 - Workspace Auto-Init and Auto-Start on Creation - pending
+- FR-MCP-022 - Tool Registry Default Bucket Seeding - pending
+- FR-MCP-023 - AI-Assisted Requirements Analysis - pending
+- FR-MCP-024 - Markdown Session Log Ingestion - pending
+- FR-MCP-025 - Primary Workspace Detection and Deduplication - pending
+- FR-MCP-026 - OIDC Authentication - pending
+- FR-MCP-027 - Agent Definition Management - pending
+- FR-MCP-028 - Per-Workspace Agent Configuration - pending
+- FR-MCP-029 - CQRS Framework - pending
+- FR-MCP-030 - Director CLI - pending
+- FR-MCP-031 - McpServer Management Web UI - pending
+- FR-MCP-032 - Enhanced GitHub Integration - pending
+- FR-MCP-033 - Natural Language Policy Management - pending
+- FR-MCP-034 - Workspace Compliance Configuration - pending
+- FR-MCP-035 - Agent Values and Conduct Enforcement - pending
+- FR-MCP-036 - Audited Copilot Interactions - pending
+- FR-MCP-037 - Director CLI Exec Command - pending
+- FR-MCP-038 - Session Continuity Protocol - pending
+- FR-MCP-039 - MCP Context Indexing for New Projects - pending
+- FR-MCP-040 - Requirements Document CRUD Management - pending
+- FR-MCP-041 - Requirements Document Generation - pending
+- FR-MCP-042 - Requirements Management MCP Tools - pending
+- FR-MCP-043 - Multi-Tenant Workspace Resolution - pending
+- FR-MCP-044 - Shared Database Multi-Tenancy - pending
+- FR-MCP-045 - Cross-Workspace TODO Move - pending
+- FR-MCP-046 - Voice Conversation Sessions - pending
+- FR-MCP-047 - Desktop Process Launch - pending
+- FR-MCP-048 - YAML Configuration Support - pending
+- FR-MCP-049 - Prompt Template Registry - pending
+- FR-MCP-050 - Per-Agent Workspace Runtime Management - pending
+- FR-MCP-051 - System-Wide Default Copilot Model - pending
+- FR-MCP-052 - Agent Pool Runtime Orchestration - pending
+- FR-MCP-053 - One-Shot Queueing and Deferred Attachment - pending
+- FR-MCP-054 - Agent Pool Availability and Control Endpoints - pending
+- FR-MCP-055 - Default Agent Selection by Request Intent - pending
+- FR-MCP-056 - Template-Aware One-Shot Prompt Resolution - pending
+- FR-MCP-057 - Director Agent Pool Management UI - pending
+- FR-MCP-058 - Interactive Presence Signaling - pending
+- FR-MCP-059 - DI-Centered Single Source of Truth State Flow - pending
+- FR-MCP-060 - Director MVVM/CQRS Full Endpoint Coverage - pending
+- FR-MCP-061 - Canonical TODO and Session Identifier Conventions - pending
+- FR-MCP-062 - Workspace Change Notifications - pending
+- FR-MCP-063 - Workspace GitHub OAuth Bootstrap, Token Lifecycle, and Actions Control - pending
+- FR-MCP-064 - Marketing and Adoption Documentation - pending
+- FR-MCP-065 - Direct Website URL Ingestion - pending
+- FR-MCP-066 - Hosted Microsoft Agent Framework Library - pending
+- FR-MCP-067 - Detailed Internal Server Error Responses - pending
+- FR-MCP-068 - Administrative Configuration Management API - pending
+- FR-MCP-069 - Immediate GitHub-Backed TODO Creation - pending
+- FR-MCP-070 - Authoritative ISSUE-* Update Sync and Immutable Descriptions - pending
+- FR-MCP-071 - ISSUE Comment Round-Trip and GitHub-Driven Closure Reconciliation - pending
+- FR-MCP-072 - Database-Authoritative TODO Storage with YAML Projection and Audit History - pending
+- FR-MCP-073 - Parseable Log Event Field Cap - pending
+- FR-MCP-074 - Azure DevOps Repository Pipeline Migration - pending
+- FR-MCP-075 - PowerShell Session Cache Discovery from `.mcpSession` - pending
+- FR-MCP-076 - Marker File Trust Bootstrap and Session Authenticity Validation - pending
+- FR-MCP-077 - Server Federation and Request Proxying - pending
+- FR-MCP-078 - GraphRAG Ad-Hoc Document Ingestion - pending
+- FR-MCP-079 - GraphRAG Entity and Relationship CRUD - pending
+- FR-MCP-080 - GraphRAG Document Management - pending
+- FR-MCP-081 - Byrd Iteration Phase and TODO Execution Persistence - pending
+- FR-MCP-082 - Bounded Byrd Execution Context Hydration - pending
+- FR-MCP-083 - Structured Android Validation for Byrd TODOs - pending
+- FR-MCP-084 - Requirements Wiki Workspace Export/Import - pending
+- FR-MCP-085 - QA Workspace Question CRUD - pending
+- FR-MCP-086 - QA Workspace Answer CRUD - pending
+- FR-MCP-087 - QA Accepted Answer Invariant - pending
+- FR-MCP-088 - QA Question Tag Filtering - pending
+- FR-MCP-089 - QA Per User Voting - pending
+- FR-MCP-090 - QA Threaded Comments - pending
+- FR-MCP-091 - QA FAQ Projection - pending
+- FR-MCP-092 - QA Author Resolution - pending
+- FR-MCP-093 - QA Workspace Isolation - pending
+- FR-MCP-094 - QA REST MCP STDIO and Client Parity - pending
+- FR-MCP-095 - QA REPL and PowerShell Parity - pending
+- FR-MCP-096 - QA User and Agent Documentation - pending
+- FR-MCP-097 - QA Plugin Skill - pending
+- FR-MCP-098 - QA Append Only Audit - pending
+- FR-MCP-099 - QA Web Research Capture - pending
+- FR-MCP-100 - QA Close and Duplicate Flags - pending
+- FR-MCP-101 - QA Markdown Rendering and Sanitization - pending
+- FR-MCP-102 - QA Generated FAQ Wiki Page - pending
+- FR-MCP-103 - Hub-and-Spoke Federation - pending
+- FR-MCP-104 - Decision-complete agent plans - pending
+- FR-MCP-105 - Database integrity and durable audit enforcement - pending
+- FR-MCP-106 - Reliable plugin requirement updates - pending
+- FR-MCP-107 - Outstanding session work consolidation - pending
+- FR-MCP-108 - TODO Markdown description preservation - pending
+- FR-MCP-109 - Batch requirements mutation - pending
+- FR-MCP-110 - Deterministic Nuke PowerShell execution - pending
+- FR-MCP-111 - Package workflow closeout skills across McpServer plugins - pending
+- FR-MCP-112 - Requirements export description and AC formatting - pending
+- FR-MCP-113 - Plugin requirement batch payload parsing - pending
+- FR-MCP-114 - Parent TODO completion isolation - pending
+- FR-MCP-115 - Session and compaction hook output schema compliance - pending
+- FR-MCP-116 - GitHub CLI service-account ownership resilience - pending
+- FR-MCP-117 - Codex plugin wrapper bounded execution - pending
+- FR-MCP-118 - Keyserver trust service - pending
+- FR-MCP-119 - Subscriber diffgram commit service - pending
+- FR-MCP-120 - MCP Server transaction gating - pending
+- FR-MCP-121 - Degraded mode and rollback - pending
+- FR-MCP-122 - Byrd v4 execution control - pending
+- FR-MCP-123 - Quad-model future scaffolding - pending
+- FR-MCP-124 - Imported document and diagram preservation - pending
+- FR-MCP-125 - Federation and compatibility preservation - pending
+- FR-MCP-126 - aiUnit plan review - pending
+- FR-MCP-127 - Diagram-derived implementation tests - pending
+- FR-MCP-128 - Two-round architecture and design review - pending
+- FR-MCP-129 - Durable external brain-slot registry and live invocation - completed
+- FR-MCP-130 - Transaction-gated Curiosity external result admission - completed
+- FR-MCP-131 - Quad containment and authorization boundary - completed
+- FR-MCP-132 - Accurate HTTP semantics for /mcpserver/* credential failures - pending
+- FR-MCP-133 - Readiness reflects the workspace/token subsystem - pending
+- FR-MCP-134 - Full Quad-Brain orchestration and AoT reconciliation - completed
+- FR-MCP-135 - Quad-Brain weight update controls - completed
+- FR-MCP-136 - ACID-coupled Microsoft Agent Framework agent definition - completed
+- FR-MCP-137 - Quad Brain coding agent execution - pending
+- FR-MCP-138 - AiCodeReview and AiProjectReview Nuke targets trigger aiUnit via library - pending
+- FR-MCP-139 - Warning suppression governance - pending
+- FR-MCP-140 - Self-describing marker signature canonicalization - pending
+- FR-MCP-141 - Service-account process environment fidelity - pending
+- FR-MCP-142 - QuadBrain is absent from every general agent surface - pending
+- FR-MCP-143 - Session-log turns persist without a title and never lose a refined one - pending
+- FR-MCP-AGENT-PARITY-001 - FR-MCP-AGENT-PARITY-001 - deferred
+- FR-MCP-AGENT-PARITY-002 - FR-MCP-AGENT-PARITY-002 - deferred
+- FR-MCP-BATCH-001 - Plugin requirement batch payload parsing - pending
+- FR-MCP-CLEARSESSION-001 - Shared clear-session reset skill for all agent plugins - pending
+- FR-MCP-DOCFXWIKI-001 - Optional DocFX content in requirements wiki exports - pending
+- FR-MCP-FILETOOLS-001 - Global repository discovery tools - pending
+- FR-MCP-HELP-001 - Agent Help conversation API - completed
+- FR-MCP-HELP-002 - Inbound guardrails - completed
+- FR-MCP-HELP-003 - Transcript persistence - completed
+- FR-MCP-HELP-004 - Guard incident logging - completed
+- FR-MCP-HELP-005 - Corpus bootstrap and outcome analysis - completed
+- FR-MCP-HELP-006 - MCP STDIO tool parity - completed
+- FR-MCP-HELP-007 - Typed client library - completed
+- FR-MCP-HELP-008 - Marker prompt guidance - completed
+- FR-MCP-HELP-009 - REPL workflow parity - completed
+- FR-MCP-HELP-010 - Agent Help configuration - completed
+- FR-MCP-HELP-011 - Agent Help grok-cli execution strategy and default - pending
+- FR-MCP-LIVE-CODEX-20260603T2014Z - Live Codex plugin acceptanceCriteria verification - pending
+- FR-MCP-LIVE-CODEX-20260603T2015Z - Live Codex plugin acceptanceCriteria verification - pending
+- FR-MCP-MARKER-004 - Marker removal deletes the marker and leaves no tombstone - pending
+- FR-MCP-MEMORY-001 - Global and workspace memory storage - pending
+- FR-MCP-MEMORY-002 - Memory CRUD tools - pending
+- FR-MCP-MEMORY-003 - Required memories injection format - pending
+- FR-MCP-MEMORY-004 - Marker template memory guidance - pending
+- FR-MCP-MEMORY-005 - REPL memory namespace - pending
+- FR-MCP-MEMORY-006 - Memory scope management and ordering - pending
+- FR-MCP-MEMORY-007 - Agent plugin memory integration - pending
+- FR-MCP-MEMORY-008 - Federated Memory State - pending
+- FR-MCP-PLUGIN-BATCH-001 - Plugin requirement batch payload parsing - pending
+- FR-MCP-PLUGIN-HEADER-001 - Agent runtime header fields record only observed values - pending
+- FR-MCP-PLUGIN-SKILLS-001 - Package workflow closeout skills across McpServer plugins - pending
+- FR-MCP-PLUGINCORE-001 - Canonical plugin core with sync and checksum guard - pending
+- FR-MCP-PLUGINCORE-002 - No-duplication CI guard for plugin lib files - pending
+- FR-MCP-PLUGINCORE-003 - Persistent REPL daemon - pending
+- FR-MCP-PLUGINCORE-004 - Reliable plugin session-log dialog parsing - pending
+- FR-MCP-PLUGININT-001 - End-to-end Session Log validation for every agent plugin - pending
+- FR-MCP-QBAGENT-001 - QBAgent marker-driven QuadBrain-only bootstrap - pending
+- FR-MCP-QBEXEC-001 - QuadBrain server-side MCP-tool execution with AoT transaction interception - pending
+- FR-MCP-QBEXEC-002 - Concrete QuadBrain internal-tool executor - pending
+- FR-MCP-QBEXEC-003 - Full-fidelity inter-brain session logging - pending
+- FR-MCP-QBOLLAMA-002 - Ollama integration tests provision and release their own server - pending
+- FR-MCP-QBOPENAI-001 - QuadBrain OpenAI-compatible chat-completions endpoint - pending
+- FR-MCP-QBSEED-001 - Config-driven Quad-Brain provisioning and live-loop readiness - pending
+- FR-MCP-QBSKILLS-001 - Agent Skills registry and progressive disclosure - pending
+- FR-MCP-QBSKILLS-002 - Skill tool (list_skills / load_skill) - pending
+- FR-MCP-QBSKILLS-003 - Vendor dotnet/skills and author workspace skills - pending
+- FR-MCP-QBTOOLS-001 - QBAgent external file tools - pending
+- FR-MCP-QBTOOLS-002 - QBAgent run_powershell tool - pending
+- FR-MCP-QBTOOLS-003 - QBAgent run_bash tool (optional Git Bash) - pending
+- FR-MCP-QBTOOLS-004 - QBAgent git tool (full, push to origin) - pending
+- FR-MCP-QBTOOLS-005 - Server-side mcp_repo_edit, mcp_bash, mcp_git tools - pending
+- FR-MCP-QBTOOLS-006 - RepoFileService targeted edit - pending
+- FR-MCP-QBTOOLS-007 - QBAgent registers full tool and skill surface - pending
+- FR-MCP-QUAD-SESSION-001 - Per-session QuadBrain instances over global brains - pending
+- FR-MCP-REPL-001 - YAML Protocol STDIO REPL Host - pending
+- FR-MCP-REPL-002 - REPL Lifecycle Management - pending
+- FR-MCP-REPL-003 - Command Namespace Parity - pending
+- FR-MCP-REPL-004 - Trust Bootstrap and Auth Rotation - pending
+- FR-MCP-REPL-005 - Orchestration State Visibility - pending
+- FR-MCP-REPL-006 - Deprecate workflow.* REPL namespaces in favor of client.* passthrough - pending
+- FR-MCP-REPL-007 - REPL Credential Discovery Diagnostics - pending
+- FR-MCP-REPL-008 - Per-agent REPL isolation - pending
+- FR-MCP-REPL-009 - Degraded session-log persistence isolation - pending
+- FR-MCP-REPL-010 - Plugin session-log title refinement surfaces - pending
+- FR-MCP-REPL-011 - Plugin failsafe queue drains instead of accumulating - pending
+- FR-MCP-REQAC-001 - Structured acceptance criteria on requirements - pending
+- FR-MCP-REQAC-002 - Copy acceptance criteria from a TODO to a requirement - pending
+- FR-MCP-REQAC-PLUGIN-001 - Plugin acceptanceCriteria rollout - pending
+- FR-MCP-REQACPLUGIN-001 - Plugins expose AcceptanceCriteria on requirements surface - pending
+- FR-MCP-REQACPLUGIN-002 - Plugins fail on proven AcceptanceCriteria loss - pending
+- FR-MCP-REQSCOPE-001 - FR-MCP-REQSCOPE-001 - pending
+- FR-MCP-REQSCOPE-002 - FR-MCP-REQSCOPE-002 - pending
+- FR-MCP-REQSCOPE-003 - FR-MCP-REQSCOPE-003 - pending
+- FR-MCP-REQSCOPE-004 - FR-MCP-REQSCOPE-004 - pending
+- FR-MCP-SESSIONLOGSAN-001 - Sanitized session-log read responses - pending
+- FR-MCP-SUBLOG-001 - Subscriber high-performance message logging - pending
+- FR-MCP-TODO-CLOSE-001 - Close TODO item by ID - pending
+- FR-MCP-TRANSCRIPT-001 - Transcript source ingestion - completed
+- FR-MCP-TRANSCRIPT-002 - Faithful loss-aware normalization - completed
+- FR-MCP-TRANSCRIPT-003 - Canonical session log projection - completed
+- FR-MCP-TRANSCRIPT-004 - Idempotent import and recovery - completed
+- FR-MCP-TRANSCRIPT-005 - Model-owned session log writing for Claude Codex Grok - completed
+- FR-MCP-TRANSCRIPT-006 - HTTP path and upload ingestion - completed
+- FR-MCP-TRANSCRIPT-007 - REPL and MCP ingestion parity - completed
+- FR-MCP-TRANSCRIPT-008 - Secondary provider normalization - completed
+- FR-MCP-TRANSCRIPT-009 - Transcript ingestion size ceilings raised to Int32.MaxValue - pending
+- FR-MCP-TRIAGE-001 - Fire-and-forget triage intake - planned
+- FR-MCP-TRIAGE-002 - Async triage grouping and research - pending
+- FR-MCP-TRIAGE-003 - REPL triage parity - planned
+- FR-MCP-TRIAGE-004 - Plugin triage skills - planned
+- FR-MCP-WIKIEXPORT-001 - Configurable requirements wiki export tree - completed
+- FR-MCP-WIKIEXPORT-002 - Default wiki export configuration during marker generation - completed
+- FR-MCP-WORKSPACE-LAYER-001 - FR-MCP-WORKSPACE-LAYER-001 - pending
+- FR-SUPPORT-010 - MCP Context Unification - pending
+- FR-SUPPORT-010A - SessionLog Workspace Stamping - pending
+- FR-SUPPORT-010B - SessionLog ProblemDetails Errors - pending
+- FR-SUPPORT-010C - SessionLog REST Surface Completion - pending
+- FR-SUPPORT-010E - Stateless session lifecycle endpoints - pending
+- FR-SUPPORT-010F - Additive partial session-log submits - pending
+- FR-SUPPORT-011 - SessionLog Workspace Stamping - pending
+- FR-SUPPORT-012 - SessionLog ProblemDetails Errors - pending
+- FR-SUPPORT-013 - SessionLog REST Surface Completion - pending
+- FR-SUPPORT-014 - Stateless session lifecycle endpoints - pending
+- FR-SUPPORT-015 - Additive partial session-log submits - pending
+- FR-TEST-002 - FR-TEST-002 - pending
+- FR-TRIAGE-001 - Triage dashboard inspection - pending
+- FR-TRIAGE-002 - Triage-created TODO index - completed
+
+## Technical (Id - Title - Status)
+- [] - [] - pending
+- TR-01 - TR-01 - deferred
+- TR-02 - TR-02 - pending
+- TR-03 - TR-03 - pending
+- TR-04 - TR-04 - pending
+- TR-05 - TR-05 - pending
+- TR-06 - TR-06 - pending
+- TR-07 - TR-07 - pending
+- TR-08 - TR-08 - pending
+- TR-09 - TR-09 - pending
+- TR-10 - TR-10 - pending
+- TR-11 - TR-11 - pending
+- TR-12 - TR-12 - pending
+- TR-13 - TR-13 - pending
+- TR-14 - TR-14 - pending
+- TR-GRAPHRAG-ADHOC-001 - Ad-hoc text ingestion pipeline - pending
+- TR-GRAPHRAG-ADHOC-002 - Explicit graph entity and relationship storage - pending
+- TR-GRAPHRAG-ADHOC-003 - Document lifecycle with cascade delete and vector cleanup - pending
+- TR-LOC-001 - Localization Infrastructure - pending
+- TR-MCP-AGENT-001 - Agent EF Core Entities - pending
+- TR-MCP-AGENT-002 - Built-in Agent Type Defaults - pending
+- TR-MCP-AGENT-003 - Agent REST API - pending
+- TR-MCP-AGENT-004 - Agent Pool Configuration Contract - pending
+- TR-MCP-AGENT-005 - Pooled Runtime and Queue Dispatcher - pending
+- TR-MCP-AGENT-006 - Hosted .NET 9 Microsoft Agent Framework Library - pending
+- TR-MCP-AGENT-007 - Built-In MCP Session Log, TODO, Repository, Desktop-Launch, and PowerShell Workflow for Hosted Agents - pending
+- TR-MCP-AGENT-008 - Agent Pool Orchestration - pending
+- TR-MCP-AGENT-009 - Agent Plugin Discovery - pending
+- TR-MCP-AGENT-010 - Agent Process Lifecycle - pending
+- TR-MCP-AGENT-011 - Agent State Synchronization - pending
+- TR-MCP-AGENT-012 - Agent Notification Bus - pending
+- TR-MCP-AGENT-013 - PowerShell McpSession Dual-Path Session Cache Resolution - pending
+- TR-MCP-AGENT-014 - PowerShell McpSession Trust Bootstrap Parity - pending
+- TR-MCP-AGENT-015 - ACID hosted-agent profile and sealed run contract - completed
+- TR-MCP-AGENT-016 - Hosted-agent Quad Brain coding adapter - pending
+- TR-MCP-AGENT-PARITY-010 - TR-MCP-AGENT-PARITY-010 - deferred
+- TR-MCP-AGENT-PARITY-011 - TR-MCP-AGENT-PARITY-011 - deferred
+- TR-MCP-AGENT-PARITY-012 - TR-MCP-AGENT-PARITY-012 - deferred
+- TR-MCP-AGENT-PARITY-013 - TR-MCP-AGENT-PARITY-013 - deferred
+- TR-MCP-AGENT-PARITY-020 - TR-MCP-AGENT-PARITY-020 - deferred
+- TR-MCP-AGENT-PARITY-020-027 - TR-MCP-AGENT-PARITY-020-027 - deferred
+- TR-MCP-AGENT-PARITY-020..027 - TR-MCP-AGENT-PARITY-020..027 - deferred
+- TR-MCP-AGENT-PARITY-030 - TR-MCP-AGENT-PARITY-030 - deferred
+- TR-MCP-AIUNIT-001 - Implement CreateAiUnitClient and library-triggered Send in Nuke build for reviews - pending
+- TR-MCP-API-001 -  - pending
+- TR-MCP-API-002 - One-Shot Submission Contract and Intent Routing - pending
+- TR-MCP-API-003 - Agent Pool Monitoring and Control APIs - pending
+- TR-MCP-ARCH-001 -  - pending
+- TR-MCP-ARCH-002 - DI Single Source of Truth and Pull-Based Change Notification - pending
+- TR-MCP-AUDIT-001 - Audited Copilot Client - pending
+- TR-MCP-AUTH-001 - OIDC JWT Bearer Authentication - pending
+- TR-MCP-AUTH-002 - GitHub Federation via OIDC Provider - pending
+- TR-MCP-AUTH-003 - Device Authorization Flow for CLI Clients - pending
+- TR-MCP-AUTH-010 - WorkspaceAuthMiddleware 503/401 gating - pending
+- TR-MCP-AUTH-011 - WorkspaceTokenService.IsInitialized - pending
+- TR-MCP-BATCH-001 - Robust Bash plugin batch records normalization - pending
+- TR-MCP-BATCH-109 - Requirements batch endpoint and workflow support - pending
+- TR-MCP-BATCHTS-001 - Robust TypeScript plugin batch records normalization - pending
+- TR-MCP-BYRD-001 - Workspace-Scoped Byrd Execution Store - pending
+- TR-MCP-BYRD-002 - Bounded Hydration and Delta Queries - pending
+- TR-MCP-BYRD-003 - Byrd Progression Enforcement - pending
+- TR-MCP-BYRD-004 - Structured TODO Execution Surfaces - pending
+- TR-MCP-BYRD-005 - Byrd process plan creation requirements - pending
+- TR-MCP-CFG-001 -  - pending
+- TR-MCP-CFG-002 -  - pending
+- TR-MCP-CFG-003 - Workspace Configuration Schema - pending
+- TR-MCP-CFG-004 - YAML Configuration Support - pending
+- TR-MCP-CFG-005 - System-Wide Default Copilot Model Propagation - pending
+- TR-MCP-CFG-006 - Administrative Configuration Snapshot and YAML Patch API - pending
+- TR-MCP-CFG-007 - Encryption Configuration and Provider Settings Surface - pending
+- TR-MCP-CI-001 - Azure DevOps Repository Pipeline Definition - pending
+- TR-MCP-CLEARSESSION-001 - clear-session skill content contract - pending
+- TR-MCP-CLIENT-001 - Typed client request bodies are registered for source-generated JSON - pending
+- TR-MCP-COMP-001 - Workspace Compliance Ban Lists - pending
+- TR-MCP-COMP-002 - Agent Values Prompt Sections - pending
+- TR-MCP-COMP-003 - Session Continuity Protocol - pending
+- TR-MCP-CQRS-001 - Standalone CQRS Library - pending
+- TR-MCP-CQRS-002 - Decimal Correlation IDs - pending
+- TR-MCP-CQRS-003 - Dispatcher as ILoggerProvider with Context Registry - pending
+- TR-MCP-CQRS-004 - Automatic Result Monad Logging - pending
+- TR-MCP-CQRS-005 - Pipeline Behaviors - pending
+- TR-MCP-CRYPTO-001 - Transactional Diffgram Cryptography - pending
+- TR-MCP-CTX-001 - New Project Context Indexing - pending
+- TR-MCP-DATA-001 -  - pending
+- TR-MCP-DATA-002 -  - pending
+- TR-MCP-DATA-003 -  - pending
+- TR-MCP-DB-001 - Database-authoritative workspace registry - pending
+- TR-MCP-DB-002 - Workspace foreign-key integrity - pending
+- TR-MCP-DB-003 - Soft deletes for persistent MCP data - pending
+- TR-MCP-DB-004 - Generic audit ledger for mutable data - pending
+- TR-MCP-DB-005 - TODO and requirement relational links - pending
+- TR-MCP-DB-006 - Concurrent turn deletes serialized per session - pending
+- TR-MCP-DESKTOP-001 - Desktop Process Launcher - pending
+- TR-MCP-DIR-001 -  - pending
+- TR-MCP-DIR-002 -  - pending
+- TR-MCP-DIR-003 -  - pending
+- TR-MCP-DIR-004 -  - pending
+- TR-MCP-DIR-005 -  - pending
+- TR-MCP-DIR-006 -  - pending
+- TR-MCP-DIR-007 -  - pending
+- TR-MCP-DIR-008 -  - pending
+- TR-MCP-DOC-001 - Marketing documentation coverage - pending
+- TR-MCP-DOC-002 -  - pending
+- TR-MCP-DOCFXWIKI-001 - Typed and isolated DocFX wiki workflow execution - pending
+- TR-MCP-DRY-001 -  - pending
+- TR-MCP-DTO-001 - Extended Session Log Entry Fields - pending
+- TR-MCP-EVT-001 - In-Process Change Event Bus - pending
+- TR-MCP-EVT-002 - Service-Layer Mutation Publishing - pending
+- TR-MCP-EVT-003 - SSE Delivery Endpoint - pending
+- TR-MCP-EVT-004 - Change Event Contract - pending
+- TR-MCP-EVT-005 - Workspace Notification Category Coverage - pending
+- TR-MCP-FED-001 - Hub Proxy Federation Contract - pending
+- TR-MCP-FED-MEMORY-001 - Memory Federation Adapter Contract - pending
+- TR-MCP-FILETOOLS-001 - Server-owned repository discovery core - pending
+- TR-MCP-GH-001 - GitHub OAuth Bootstrap Configuration Contract - pending
+- TR-MCP-GH-002 - Encrypted Workspace GitHub Token Persistence - pending
+- TR-MCP-GH-003 - Authenticated GitHub CLI Execution Path with Policy-Governed Fallback - pending
+- TR-MCP-GH-004 - GitHub Actions Workflow Run API Surface - pending
+- TR-MCP-GH-005 - Workspace-Scoped gh Repository Execution - pending
+- TR-MCP-GH-006 - Canonical GitHub Priority Labels, MCP-Authoritative Priority Sync, and ISSUE Change Comments - pending
+- TR-MCP-GH-007 - Generated GitHub Comment Note Sections and TODO Comment Round-Trip - pending
+- TR-MCP-GH-008 - Ownership-safe GitHub CLI repository selection - pending
+- TR-MCP-HEALTH-002 - WorkspaceReadinessHealthCheck - pending
+- TR-MCP-HEALTH-003 - Health reflects storage reachability and backend errors are typed - pending
+- TR-MCP-HELP-001 - Agent Help options and startup validation - completed
+- TR-MCP-HELP-002 - Agent Help HTTP and WebSocket API surface - completed
+- TR-MCP-HELP-003 - Help transcript JSONL writer - completed
+- TR-MCP-HELP-004 - Deterministic inbound guard - completed
+- TR-MCP-HELP-005 - Guard incident JSON logger - completed
+- TR-MCP-HELP-006 - Stub corpus bootstrap - completed
+- TR-MCP-HELP-007 - In-memory conversation orchestration - completed
+- TR-MCP-HELP-008 - Outcome analysis recommendations - completed
+- TR-MCP-HELP-009 - MCP STDIO and typed client adapters - completed
+- TR-MCP-HELP-010 - GrokCliAgentExecutionStrategy one-shot grok invocation - pending
+- TR-MCP-HTTP-001 - MCP Streamable HTTP Endpoint - pending
+- TR-MCP-HTTP-002 - Detailed and Sanitized HTTP 500 Error Contract - pending
+- TR-MCP-INGEST-001 -  - pending
+- TR-MCP-INGEST-002 - Markdown Session Log Parser - pending
+- TR-MCP-INGEST-003 - Direct Website URL Ingestion - pending
+- TR-MCP-KEYSERVER-001 - Transaction Keyserver Service - pending
+- TR-MCP-LOG-001 -  - pending
+- TR-MCP-LOG-002 - Identifier Naming Validation - pending
+- TR-MCP-LOG-003 - Parseable Event Field-Cap Enforcement - pending
+- TR-MCP-MARKER-004 - RemoveSingleFile deletes rather than archives; tombstone builder removed - pending
+- TR-MCP-MEMORY-001 - EF memory storage model - pending
+- TR-MCP-MEMORY-002 - Provider memory migrations - pending
+- TR-MCP-MEMORY-003 - Memory service layer - pending
+- TR-MCP-MEMORY-004 - Memory REST and typed client contract - pending
+- TR-MCP-MEMORY-005 - MCP stdio and REPL memory tools - pending
+- TR-MCP-MEMORY-006 - Memory schema and contract coverage - pending
+- TR-MCP-MEMORY-007 - Scope-aware effective memory querying - pending
+- TR-MCP-MEMORY-008 - Agent plugin memory integration - pending
+- TR-MCP-MT-001 - WorkspaceContext Scoped Per-Request Service - pending
+- TR-MCP-MT-002 - WorkspaceResolutionMiddleware - pending
+- TR-MCP-MT-003 - EF Core Global Query Filter for WorkspaceId - pending
+- TR-MCP-MT-003A -  - pending
+- TR-MCP-MT-004 - WorkspaceId stamping in SessionLogService - pending
+- TR-MCP-NUKE-001 - Non-interactive PowerShell hosts for Nuke automation - pending
+- TR-MCP-OPS-001 -  - pending
+- TR-MCP-PLAN-001 - Safe session wrap-up and deploy sequencing - pending
+- TR-MCP-PLUGIN-008 - Codex requirements update command fallback parity - pending
+- TR-MCP-PLUGIN-009 - Session and compaction hook output contract - pending
+- TR-MCP-PLUGIN-010 - PowerShell wrapper process timeout control - pending
+- TR-MCP-PLUGIN-011 - Stop gate no-ops phantom turns and counts commits - pending
+- TR-MCP-PLUGIN-012 - Session rotation re-binds current-turn cache - pending
+- TR-MCP-PLUGIN-013 - UserPromptSubmit hook opens exactly one turn per prompt - pending
+- TR-MCP-PLUGIN-HEADER-001 - Observed-only resolution of agent runtime header fields - pending
+- TR-MCP-PLUGIN-SKILLS-001 - Probe TR id pattern - pending
+- TR-MCP-PLUGIN-TRIAGE-001 - Triage plugin guidance - planned
+- TR-MCP-PLUGINCORE-001 - sync-plugin-core + check-core-integrity (sh+ps1) - pending
+- TR-MCP-PLUGINCORE-002 - core-guard.yml no-duplication job - pending
+- TR-MCP-PLUGINCORE-003 - repl-daemon.js TCP broker + repl-persistent.sh wrapper - pending
+- TR-MCP-PLUGINCORE-004 - Dictionary-safe plugin dialog parsing - pending
+- TR-MCP-PLUGINCORE-005 - PowerShell.MCP cross-volume text-edit workaround documented - pending
+- TR-MCP-PLUGININT-001 - Shared multi-plugin Session Log integration harness - pending
+- TR-MCP-POL-001 - Natural Language Policy Management - pending
+- TR-MCP-QA-001 - QA Entity Tenancy - pending
+- TR-MCP-QA-002 - QA Question Tags JSON - pending
+- TR-MCP-QA-003 - QA Provider Migrations - pending
+- TR-MCP-QA-004 - QA Denormalized Vote Counters - pending
+- TR-MCP-QA-005 - QA Accepted Answer Storage - pending
+- TR-MCP-QA-006 - QA Service Shape - pending
+- TR-MCP-QA-007 - QA REST Surface - pending
+- TR-MCP-QA-008 - QA Search Indexing - pending
+- TR-MCP-QA-009 - QA Author Resolver - pending
+- TR-MCP-QA-010 - QA MCP STDIO Tools - pending
+- TR-MCP-QA-011 - QA FAQ Query Projection - pending
+- TR-MCP-QA-012 - QA Typed Client - pending
+- TR-MCP-QA-013 - QA XML Documentation - pending
+- TR-MCP-QA-014 - QA REPL Workflow - pending
+- TR-MCP-QA-015 - QA PowerShell Module - pending
+- TR-MCP-QA-016 - QA Plugin Skill - pending
+- TR-MCP-QA-017 - QA Documentation Surface - pending
+- TR-MCP-QA-018 - QA Audit Storage - pending
+- TR-MCP-QA-019 - QA Audit Emission - pending
+- TR-MCP-QA-020 - QA Audit Query - pending
+- TR-MCP-QA-021 - QA Audit Surfaces - pending
+- TR-MCP-QA-022 - QA Answer Sources JSON - pending
+- TR-MCP-QA-023 - QA Mandatory Web Capture Skill Rule - pending
+- TR-MCP-QA-024 - QA Companion Web Skill Cross References - pending
+- TR-MCP-QA-025 - QA Close and Duplicate Storage - pending
+- TR-MCP-QA-026 - QA Close and Duplicate Surfaces - pending
+- TR-MCP-QA-027 - QA Body Rendering - pending
+- TR-MCP-QA-028 - QA Sanitization Tests - pending
+- TR-MCP-QA-029 - QA FAQ Wiki Generation Target - pending
+- TR-MCP-QA-030 - QA FAQ Wiki Snapshot Tests - pending
+- TR-MCP-QA-031 - QA Voter History - pending
+- TR-MCP-QA-032 - QA Vote State Storage - pending
+- TR-MCP-QA-033 - QA Vote State Machine - pending
+- TR-MCP-QA-034 - QA Vote Audit Actions - pending
+- TR-MCP-QB-001 - Remove the QuadBrain tool surface from plugins, MCP transports, passthrough, and the shared agent catalog - pending
+- TR-MCP-QBAGENT-001 - QBAgent marker bootstrap and graceful no-marker exit - pending
+- TR-MCP-QBEXEC-001 - QuadBrain internal-tool interception - pending
+- TR-MCP-QBEXEC-002 - Internal-tool executor dispatch - pending
+- TR-MCP-QBEXEC-003 - Full-text inter-brain session-log capture - pending
+- TR-MCP-QBOLLAMA-002 - OllamaServerController with injectable probe, launcher, and ownership-scoped teardown - pending
+- TR-MCP-QBOPENAI-001 - OpenAI chat-completions surface over QuadBrain orchestration - pending
+- TR-MCP-QBSEED-002 - Gated idempotent Quad-Brain startup provisioning and /v1 workspace scoping - pending
+- TR-MCP-QBSKILLS-001 - SKILL.md manifest model and parser - pending
+- TR-MCP-QBSKILLS-002 - Skill storage layout and dotnet/skills vendoring - pending
+- TR-MCP-QBSKILLS-003 - Discovery-list injection - pending
+- TR-MCP-QBTOOLS-000 - Single core per capability (anti-duplication) - pending
+- TR-MCP-QBTOOLS-001 - External tool surface project and registration - pending
+- TR-MCP-QBTOOLS-002 - run_powershell backed by HostedPowerShellSessionManager - pending
+- TR-MCP-QBTOOLS-003 - run_bash via ProcessRunner with PATH resolution - pending
+- TR-MCP-QBTOOLS-004 - git tool via ProcessRunner with push guard - pending
+- TR-MCP-QBTOOLS-005 - Server-side adapter tools mcp_repo_edit/mcp_bash/mcp_git - pending
+- TR-MCP-QBTOOLS-006 - RepoFileService.EditAsync semantics - pending
+- TR-MCP-QBTOOLS-007 - Transaction-gated EditAsync compensation - pending
+- TR-MCP-QBTOOLS-008 - QBAgent tool/skill DI wiring - pending
+- TR-MCP-QUAD-001 - Brain-slot storage, DTOs, CRUD, and validation - completed
+- TR-MCP-QUAD-002 - External model provider adapter, credentials, endpoint allowlist, timeout, and redaction - completed
+- TR-MCP-QUAD-003 - Keyserver party mapping and transaction diffgram admission - completed
+- TR-MCP-QUAD-004 - Quad branch containment and authorization - completed
+- TR-MCP-QUAD-005 - Quad orchestration service and contracts - completed
+- TR-MCP-QUAD-006 - AoT reconciliation decision loop - completed
+- TR-MCP-QUAD-007 - Durable weight versioning and safety gates - completed
+- TR-MCP-QUAD-SESSION-001 - Per-session QuadBrain instance attachment over global brains - pending
+- TR-MCP-QUALITY-001 - Warning suppression decision register and aiUnit audit - pending
+- TR-MCP-REPL-001 - YAML Envelope Protocol - pending
+- TR-MCP-REPL-002 - DI-Integrated REPL Host - pending
+- TR-MCP-REPL-003 - Command Loop Lifecycle - pending
+- TR-MCP-REPL-004 - Command Registry and Dispatcher - pending
+- TR-MCP-REPL-005 - Namespace Organization and Handler Parity - pending
+- TR-MCP-REPL-006 - Trust Bootstrap and Token Validation - pending
+- TR-MCP-REPL-007 - State Query Commands - pending
+- TR-MCP-REPL-008 -  - pending
+- TR-MCP-REPL-009 - Explicit agent identity propagation - pending
+- TR-MCP-REPL-010 - Independent REPL session-log persistence strategies - pending
+- TR-MCP-REPL-011 - PascalCase session-id agent + openSession persistence - pending
+- TR-MCP-REPL-012 - Per-method REPL invocation timeout - pending
+- TR-MCP-REPL-013 - Marker-bearing current directory outranks inherited workspace env for repl resolution - pending
+- TR-MCP-REPL-014 - Plugin setTurnTitle and setSessionTitle handlers - pending
+- TR-MCP-REPL-015 - Plugin omits titles on incidental whole-session re-submit - pending
+- TR-MCP-REPL-016 - Failsafe queue drains oldest-first after a proven-reachable backend call - pending
+- TR-MCP-REPL-017 - Failsafe quarantine and truthful pending queue depth in plugin status - pending
+- TR-MCP-REPL-018 - Turn upsert accepts a deliberately empty title - pending
+- TR-MCP-REPL-019 - Supersede preserves a server-refined turn title - pending
+- TR-MCP-REPL-020 - failTurn resolves the active turn from the plugin cache - pending
+- TR-MCP-REPL-TRIAGE-001 - Triage REPL surface - planned
+- TR-MCP-REQ-001 - AI Requirements Analysis Service - pending
+- TR-MCP-REQ-002 - Requirements Document Management Service - pending
+- TR-MCP-REQ-003 - Requirements REST + STDIO Tool Integration - pending
+- TR-MCP-REQ-004 - Dual Wiki Workspace Renderer - pending
+- TR-MCP-REQ-005 - Wiki Import Selection and Authoritative Sync - pending
+- TR-MCP-REQAC-001 - Acceptance criteria persistence - completed
+- TR-MCP-REQAC-002 - Acceptance criteria markdown rendering - pending
+- TR-MCP-REQAC-PLUGIN-001 - Plugin typed request shaping preserves acceptanceCriteria - pending
+- TR-MCP-REQACPLUGIN-001 - Plugin-side schema + shaper changes for AcceptanceCriteria - pending
+- TR-MCP-REQACPLUGIN-002 - Plugin-side AcceptanceCriteria capture verification - pending
+- TR-MCP-REQEXPORT-001 - Wiki requirement document renderer emits Markdown sections for TEST descriptions and AC - pending
+- TR-MCP-REQEXPORT-002 - Wiki generate surfaces real exception, never opaque 500 - pending
+- TR-MCP-REQEXPORT-003 - Requirements generateDocument accepts markdown for all non-wiki docTypes - pending
+- TR-MCP-REQEXPORT-004 - Requirements generateDocument honors explicit workspacePath override end-to-end - pending
+- TR-MCP-REQSCOPE-001 - TR-MCP-REQSCOPE-001 - pending
+- TR-MCP-REQSCOPE-002 - TR-MCP-REQSCOPE-002 - pending
+- TR-MCP-REQSCOPE-003 - TR-MCP-REQSCOPE-003 - pending
+- TR-MCP-REQSCOPE-004 - TR-MCP-REQSCOPE-004 - pending
+- TR-MCP-SCHEMA-109 - REPL request schema enforcement - pending
+- TR-MCP-SEC-001 - Per-Workspace Auth Tokens - pending
+- TR-MCP-SEC-002 - Pairing Session Security - pending
+- TR-MCP-SEC-003 - Signed Marker Bootstrap and Health Nonce Verification - pending
+- TR-MCP-SEC-004 - Provider-Native At-Rest Encryption with No-Loss Transition Procedures - pending
+- TR-MCP-SEC-005 - Self-describing marker signature payload - pending
+- TR-MCP-SEC-006 - Brain-slot signing keys follow a renamed party id - pending
+- TR-MCP-SESSIONLOG-001 - Session-log lifecycle tools return structured errors - pending
+- TR-MCP-SESSIONLOG-002 - Session-log text search covers dialog and child collections - pending
+- TR-MCP-SESSIONLOG-003 - Terminal-turn compliance gate is QBAgent-only - pending
+- TR-MCP-SESSIONLOG-005 - Dedicated session and turn title-update service, endpoints, and client - pending
+- TR-MCP-SESSIONLOGSAN-001 - Bounded outbound session-log sanitizer - pending
+- TR-MCP-SESSIONLOGSAN-002 - Sanitizer timeout fail-open is deterministically testable - pending
+- TR-MCP-SKILLS-001 - Use supported plugin MCP bridge paths - pending
+- TR-MCP-SKILLS-002 - Preserve commit-sync pause acknowledgement contract - pending
+- TR-MCP-SKILLS-003 - Package skills through existing plugin distribution metadata - pending
+- TR-MCP-STDIO-109 - Plugin stdio JSON request envelopes - pending
+- TR-MCP-SUBLOG-001 - Subscriber message-log sink - pending
+- TR-MCP-SUBSCRIBER-001 - Transaction Subscriber Service - pending
+- TR-MCP-SVC-001 - Windows Service Configuration - pending
+- TR-MCP-SVC-002 - Executable resolution skips WindowsApps App-Execution-Alias stubs - pending
+- TR-MCP-SYNC-001 - Node core vendor package uses a version-less stable file name - pending
+- TR-MCP-TODO-002 - Cross-Workspace TODO Move - pending
+- TR-MCP-TODO-003 - GitHub-Backed TODO Creation Alias - pending
+- TR-MCP-TODO-004 - Shared ISSUE-* TODO Update Orchestration - pending
+- TR-MCP-TODO-005 - Provider-Agnostic Database-Authoritative TODO Storage with Deterministic YAML Projection - pending
+- TR-MCP-TODO-006 - Append-Only TODO Audit History, Projection Failure Classification, and Repair Contract - pending
+- TR-MCP-TODO-007 - Legacy SQLite TODO Storage One-Shot Migration - pending
+- TR-MCP-TODO-008 - Workspace-Scoped Database-Backed TODO Storage with Per-Workspace YAML Bootstrap - pending
+- TR-MCP-TODO-009 - Preserve TODO description Markdown - pending
+- TR-MCP-TODO-010 - Root-scoped TODO done serialization - pending
+- TR-MCP-TODO-CLOSE-001 - TODO close operation surfaces - pending
+- TR-MCP-TPL-001 - Prompt Template YAML Storage - pending
+- TR-MCP-TPL-002 - Prompt Template Rendering - pending
+- TR-MCP-TPL-003 - Prompt Template REST + MCP Endpoints - pending
+- TR-MCP-TPL-004 - Prompt Template CQRS + Director UI - pending
+- TR-MCP-TPL-005 - System Template Externalization - pending
+- TR-MCP-TPL-006 - Template Resolution for One-Shot Requests - pending
+- TR-MCP-TPL-007 - Marker template requires actionable requirements-backed plans - pending
+- TR-MCP-TR-001 - Tool Registry Service - pending
+- TR-MCP-TR-002 - Tool Bucket Service - pending
+- TR-MCP-TR-003 - Tool Registry Default Bucket Seeding - pending
+- TR-MCP-TRANSCRIPT-001 - Bounded transcript reader and parser registry - completed
+- TR-MCP-TRANSCRIPT-002 - Source adapters and bundle detection - completed
+- TR-MCP-TRANSCRIPT-003 - Neutral event model and projectors - completed
+- TR-MCP-TRANSCRIPT-004 - Canonical YAML and write-ahead persistence - completed
+- TR-MCP-TRANSCRIPT-005 - REPL import and model-owned session logging - completed
+- TR-MCP-TRANSCRIPT-006 - Recursive discovery upload extraction and path security - completed
+- TR-MCP-TRANSCRIPT-007 - HTTP client MCP and REPL contracts - completed
+- TR-MCP-TRANSCRIPT-008 - Provider normalization and native stores - completed
+- TR-MCP-TRANSCRIPT-009 - Codex transcript ingestion normalizes tool-call, reasoning, and turn_context records - pending
+- TR-MCP-TRANSCRIPT-010 - Int32.MaxValue transcript ceilings with streaming JSONL reader - pending
+- TR-MCP-TRIAGE-001 - Durable triage storage - planned
+- TR-MCP-TRIAGE-002 - Deterministic triage grouping - pending
+- TR-MCP-TRIAGE-003 - Async triage worker - planned
+- TR-MCP-TRIAGE-004 - Triage schema and TODO creation - planned
+- TR-MCP-TRIAGE-005 - Triage Grok runner omits CLI-rejected flags - pending
+- TR-MCP-TUN-001 - Tunnel Strategy Pattern - pending
+- TR-MCP-TUN-002 - Tunnel Process Lifecycle - pending
+- TR-MCP-TUN-003 - Ngrok Auth Token Security - pending
+- TR-MCP-TUN-004 - Tunnel provider inherits the interactive user environment - pending
+- TR-MCP-TXN-001 - Turn Transaction Coordinator - pending
+- TR-MCP-TXNAIUNIT-001 - aiUnit Plan Review Gate - pending
+- TR-MCP-TXNARCH-001 - Transaction Architecture Rounds - pending
+- TR-MCP-TXNAUDIT-001 - Transaction Audit Actions - pending
+- TR-MCP-TXNBYRD-001 - Byrd v4 Transaction Gates - pending
+- TR-MCP-TXNCOMPAT-001 - Federation Compatibility - pending
+- TR-MCP-TXNDESIGN-001 - Implementable Transaction Design Contracts - pending
+- TR-MCP-TXNDIAGRAMS-001 - Imported Diagram Traceability - pending
+- TR-MCP-VOICE-001 - Voice Conversation Service - pending
+- TR-MCP-VOICE-002 - Voice Controller REST API - pending
+- TR-MCP-VOICE-003 - Voice Session Lifecycle Management - pending
+- TR-MCP-VOICE-004 - Interactive Presence Signals on Stream State Changes - pending
+- TR-MCP-WEB-001 - Web UI Ownership Boundary - deferred
+- TR-MCP-WEB-002 - Web UI API Compatibility Contract - deferred
+- TR-MCP-WEB-003 - Web UI Authentication And Workspace Boundary - deferred
+- TR-MCP-WEB-004 - Web UI Deployment And Handoff Documentation - deferred
+- TR-MCP-WIKIEXPORT-001 - docs/wiki.yaml export configuration loader and renderer integration - completed
+- TR-MCP-WIKIEXPORT-002 - Marker writer default wiki.yaml serializer - completed
+- TR-MCP-WS-002 - Workspace Service - pending
+- TR-MCP-WS-003 - Workspace Process Manager - pending
+- TR-MCP-WS-004 - Workspace Controller - pending
+- TR-MCP-WS-005 - Marker File Service - pending
+- TR-MCP-WS-006 - Workspace Host Controller Isolation - pending
+- TR-MCP-WS-007 - Workspace Auto-Start on Service Startup - pending
+- TR-MCP-WS-008 - Workspace Auto-Init and Auto-Start on Creation - pending
+- TR-MCP-WS-009 - Primary Workspace Detection and IsEnabled Gating - pending
+- TR-MCP-WS-UI-001 - McpServer Management Web UI - pending
+- TR-PLANNED-013A -  - pending
+- TR-PLANNED-CORE-014 - Problem+JSON response factory for model binding failures - pending
+- TR-SUPPORT-010E - Stateless lifecycle controller + client + tool adapters - pending
+- TR-SUPPORT-010F - Merge-on-null mapping for partial submits - pending
+- TR-SUPPORT-CORE-014 - Stateless lifecycle controller with client and tool adapters - pending
+- TR-SUPPORT-CORE-015 - Merge-on-null mapping for partial submits - pending
+- TR-SUPPORT-LOG-010 - Session-log ProblemDetails contract - completed
+- TR-TEST-001 - TR-TEST-001 - pending
+- TR-TRIAGE-CLIENT-001 - Typed triage dashboard client endpoints - pending
+- TR-TRIAGE-CLIENT-002 - Typed triage TODO client endpoint - completed
+
+## Testing (Id - Title - Status)
+- TEST-GRAPHRAG-ADHOC-001 - (no title) - pending
+- TEST-GRAPHRAG-ADHOC-002 - (no title) - pending
+- TEST-GRAPHRAG-ADHOC-003 - (no title) - pending
+- TEST-GRAPHRAG-ADHOC-004 - (no title) - pending
+- TEST-GRAPHRAG-ADHOC-005 - (no title) - pending
+- TEST-GRAPHRAG-ADHOC-006 - (no title) - pending
+- TEST-GRAPHRAG-ADHOC-007 - (no title) - pending
+- TEST-MCP-001 - (no title) - pending
+- TEST-MCP-002 - (no title) - pending
+- TEST-MCP-003 - (no title) - pending
+- TEST-MCP-004 - (no title) - pending
+- TEST-MCP-005 - (no title) - pending
+- TEST-MCP-006 - (no title) - pending
+- TEST-MCP-007 - (no title) - pending
+- TEST-MCP-008 - (no title) - pending
+- TEST-MCP-009 - (no title) - pending
+- TEST-MCP-010 - (no title) - pending
+- TEST-MCP-011 - (no title) - pending
+- TEST-MCP-012 - (no title) - pending
+- TEST-MCP-013 - (no title) - pending
+- TEST-MCP-014 - (no title) - pending
+- TEST-MCP-015 - (no title) - pending
+- TEST-MCP-026 - (no title) - pending
+- TEST-MCP-027 - (no title) - pending
+- TEST-MCP-028 - (no title) - pending
+- TEST-MCP-029 - (no title) - pending
+- TEST-MCP-030 - (no title) - pending
+- TEST-MCP-031 - (no title) - pending
+- TEST-MCP-032 - (no title) - pending
+- TEST-MCP-033 - (no title) - pending
+- TEST-MCP-034 - (no title) - pending
+- TEST-MCP-035 - (no title) - pending
+- TEST-MCP-036 - (no title) - pending
+- TEST-MCP-037 - (no title) - pending
+- TEST-MCP-038 - (no title) - pending
+- TEST-MCP-039 - (no title) - pending
+- TEST-MCP-040 - (no title) - pending
+- TEST-MCP-041 - (no title) - pending
+- TEST-MCP-042 - (no title) - pending
+- TEST-MCP-043 - (no title) - pending
+- TEST-MCP-044 - (no title) - pending
+- TEST-MCP-045 - (no title) - pending
+- TEST-MCP-046 - (no title) - pending
+- TEST-MCP-047 - (no title) - pending
+- TEST-MCP-048 - (no title) - pending
+- TEST-MCP-049 - (no title) - pending
+- TEST-MCP-050 - (no title) - pending
+- TEST-MCP-051 - (no title) - pending
+- TEST-MCP-052 - (no title) - pending
+- TEST-MCP-053 - (no title) - pending
+- TEST-MCP-054 - (no title) - pending
+- TEST-MCP-055 - (no title) - pending
+- TEST-MCP-056 - (no title) - pending
+- TEST-MCP-057 - (no title) - pending
+- TEST-MCP-058 - (no title) - pending
+- TEST-MCP-059 - (no title) - pending
+- TEST-MCP-060 - (no title) - pending
+- TEST-MCP-061 - (no title) - pending
+- TEST-MCP-062 - (no title) - pending
+- TEST-MCP-063 - (no title) - pending
+- TEST-MCP-064 - (no title) - pending
+- TEST-MCP-065 - (no title) - pending
+- TEST-MCP-066 - (no title) - pending
+- TEST-MCP-067 - (no title) - pending
+- TEST-MCP-068 - (no title) - pending
+- TEST-MCP-069 - (no title) - pending
+- TEST-MCP-070 - (no title) - pending
+- TEST-MCP-071 - (no title) - pending
+- TEST-MCP-072 - (no title) - pending
+- TEST-MCP-073 - (no title) - pending
+- TEST-MCP-074 - (no title) - pending
+- TEST-MCP-075 - (no title) - pending
+- TEST-MCP-076 - (no title) - pending
+- TEST-MCP-077 - (no title) - pending
+- TEST-MCP-078 - (no title) - pending
+- TEST-MCP-079 - (no title) - pending
+- TEST-MCP-080 - (no title) - pending
+- TEST-MCP-081 - (no title) - pending
+- TEST-MCP-082 - (no title) - pending
+- TEST-MCP-083 - (no title) - pending
+- TEST-MCP-084 - (no title) - pending
+- TEST-MCP-085 - (no title) - pending
+- TEST-MCP-086 - (no title) - pending
+- TEST-MCP-087 - (no title) - pending
+- TEST-MCP-088 - (no title) - pending
+- TEST-MCP-089 - (no title) - pending
+- TEST-MCP-090 - (no title) - pending
+- TEST-MCP-091 - (no title) - pending
+- TEST-MCP-092 - (no title) - pending
+- TEST-MCP-093 - (no title) - pending
+- TEST-MCP-094 - (no title) - pending
+- TEST-MCP-095 - (no title) - pending
+- TEST-MCP-096 - (no title) - pending
+- TEST-MCP-097 - (no title) - pending
+- TEST-MCP-098 - (no title) - pending
+- TEST-MCP-099 - (no title) - pending
+- TEST-MCP-100 - (no title) - pending
+- TEST-MCP-101 - (no title) - pending
+- TEST-MCP-102 - (no title) - pending
+- TEST-MCP-103 - (no title) - pending
+- TEST-MCP-104 - (no title) - pending
+- TEST-MCP-105 - (no title) - pending
+- TEST-MCP-106 - (no title) - pending
+- TEST-MCP-107 - (no title) - pending
+- TEST-MCP-108 - (no title) - pending
+- TEST-MCP-109 - (no title) - pending
+- TEST-MCP-110 - (no title) - pending
+- TEST-MCP-111 - (no title) - pending
+- TEST-MCP-112 - (no title) - pending
+- TEST-MCP-113 - (no title) - pending
+- TEST-MCP-114 - (no title) - pending
+- TEST-MCP-115 - (no title) - pending
+- TEST-MCP-116 - (no title) - pending
+- TEST-MCP-117 - (no title) - pending
+- TEST-MCP-118 - (no title) - pending
+- TEST-MCP-119 - (no title) - pending
+- TEST-MCP-120 - (no title) - pending
+- TEST-MCP-121 - (no title) - pending
+- TEST-MCP-122 - (no title) - pending
+- TEST-MCP-123 - (no title) - pending
+- TEST-MCP-124 - (no title) - pending
+- TEST-MCP-125 - (no title) - pending
+- TEST-MCP-126 - (no title) - pending
+- TEST-MCP-127 - (no title) - pending
+- TEST-MCP-128 - (no title) - pending
+- TEST-MCP-129 - (no title) - pending
+- TEST-MCP-130 - (no title) - pending
+- TEST-MCP-131 - (no title) - pending
+- TEST-MCP-132 - (no title) - pending
+- TEST-MCP-133 - (no title) - pending
+- TEST-MCP-134 - (no title) - pending
+- TEST-MCP-135 - (no title) - pending
+- TEST-MCP-136 - (no title) - pending
+- TEST-MCP-137 - (no title) - pending
+- TEST-MCP-138 - (no title) - pending
+- TEST-MCP-139 - (no title) - pending
+- TEST-MCP-140 - (no title) - pending
+- TEST-MCP-141 - (no title) - pending
+- TEST-MCP-142 - (no title) - pending
+- TEST-MCP-143 - (no title) - pending
+- TEST-MCP-144 - (no title) - pending
+- TEST-MCP-145 - (no title) - pending
+- TEST-MCP-146 - (no title) - pending
+- TEST-MCP-147 - (no title) - pending
+- TEST-MCP-148 - (no title) - pending
+- TEST-MCP-149 - (no title) - pending
+- TEST-MCP-150 - (no title) - pending
+- TEST-MCP-151 - (no title) - pending
+- TEST-MCP-152 - (no title) - pending
+- TEST-MCP-153 - (no title) - pending
+- TEST-MCP-154 - (no title) - pending
+- TEST-MCP-155 - (no title) - pending
+- TEST-MCP-156 - (no title) - pending
+- TEST-MCP-157 - (no title) - pending
+- TEST-MCP-158 - (no title) - pending
+- TEST-MCP-159 - (no title) - pending
+- TEST-MCP-160 - (no title) - pending
+- TEST-MCP-161 - (no title) - pending
+- TEST-MCP-162 - (no title) - pending
+- TEST-MCP-163 - Deferred-scope documentation - completed
+- TEST-MCP-164 - (no title) - pending
+- TEST-MCP-165 - (no title) - pending
+- TEST-MCP-166 - (no title) - pending
+- TEST-MCP-167 - (no title) - pending
+- TEST-MCP-168 - (no title) - pending
+- TEST-MCP-169 - Degraded rollback reconciliation - completed
+- TEST-MCP-170 - Quad scope enforcement - completed
+- TEST-MCP-171 - Quad architecture conformance - completed
+- TEST-MCP-172 - (no title) - pending
+- TEST-MCP-173 - (no title) - pending
+- TEST-MCP-174 - Brain slot documentation and plan artifacts - completed
+- TEST-MCP-175 - Brain slot durable registry - completed
+- TEST-MCP-176 - Brain slot public contracts - completed
+- TEST-MCP-177 - Brain slot provider and credentials - completed
+- TEST-MCP-178 - Brain slot transaction admission - completed
+- TEST-MCP-179 - Curiosity admission - completed
+- TEST-MCP-180 - Quad containment - completed
+- TEST-MCP-181 - Quad orchestration service - completed
+- TEST-MCP-182 - AoT reconciliation execution - completed
+- TEST-MCP-183 - Quad weight update - completed
+- TEST-MCP-184 - Quad public contract parity - completed
+- TEST-MCP-185 - Quad traceability closure - completed
+- TEST-MCP-186 - ACID hosted-agent profile tests - completed
+- TEST-MCP-187 - Quad Brain coding-agent prompt integration tests - pending
+- TEST-MCP-188 - (no title) - pending
+- TEST-MCP-189 - (no title) - pending
+- TEST-MCP-190 - (no title) - pending
+- TEST-MCP-191 - (no title) - pending
+- TEST-MCP-192 - (no title) - pending
+- TEST-MCP-193 - (no title) - pending
+- TEST-MCP-194 - (no title) - pending
+- TEST-MCP-ACID-001 - ACID full lifecycle baseline (all mocked) - pending
+- TEST-MCP-ACID-002 - ACID lifecycle against running instances - pending
+- TEST-MCP-ACID-003 - Key server SignManifest outcome matrix - pending
+- TEST-MCP-ACID-004 - Key server VerifyManifest outcome matrix - pending
+- TEST-MCP-ACID-005 - Subscriber CommitDiffgram outcome matrix - pending
+- TEST-MCP-ACID-006 - Coordinator transaction outcome matrix - pending
+- TEST-MCP-AIUNIT-001 - (no title) - pending
+- TEST-MCP-AIUNIT-002 - aiUnit warning suppression governance review - pending
+- TEST-MCP-AUTH-010 - Auth-token subsystem initialization and workspace-independent routing - pending
+- TEST-MCP-AUTH-011 - WorkspaceAuthMiddleware uninitialized subsystem response - pending
+- TEST-MCP-AUTH-012 - WorkspaceTokenService initialization state - pending
+- TEST-MCP-BATCH-001 - (no title) - pending
+- TEST-MCP-BUGTRIAGE-042 - (no title) - pending
+- TEST-MCP-BUGTRIAGE-043 - (no title) - pending
+- TEST-MCP-CLEARSESSION-001 - (no title) - pending
+- TEST-MCP-DB-006 - (no title) - pending
+- TEST-MCP-DOCFXWIKI-001 - DocFX wiki workflow unit and integration validation - pending
+- TEST-MCP-FILETOOLS-001 - Global file-tool unit coverage - pending
+- TEST-MCP-FILETOOLSINT-001 - Global file-tool integration coverage - pending
+- TEST-MCP-HEALTH-002 - WorkspaceReadinessHealthCheck healthy/unhealthy states - pending
+- TEST-MCP-HEALTH-003 - Integration test for todo endpoint and readiness health check - pending
+- TEST-MCP-HELP-001 - TEST-MCP-HELP-001 - completed
+- TEST-MCP-HELP-002 - TEST-MCP-HELP-002 - completed
+- TEST-MCP-HELP-003 - TEST-MCP-HELP-003 - completed
+- TEST-MCP-HELP-004 - TEST-MCP-HELP-004 - completed
+- TEST-MCP-HELP-005 - TEST-MCP-HELP-005 - completed
+- TEST-MCP-HELP-006 - TEST-MCP-HELP-006 - completed
+- TEST-MCP-HELP-007 - TEST-MCP-HELP-007 - completed
+- TEST-MCP-HELP-008 - TEST-MCP-HELP-008 - completed
+- TEST-MCP-HELP-SEC-001 - TEST-MCP-HELP-SEC-001 - completed
+- TEST-MCP-HELP-SEC-002 - TEST-MCP-HELP-SEC-002 - completed
+- TEST-MCP-HELP-SEC-003 - TEST-MCP-HELP-SEC-003 - completed
+- TEST-MCP-HELP-SEC-004 - TEST-MCP-HELP-SEC-004 - completed
+- TEST-MCP-HELP-SEC-005 - TEST-MCP-HELP-SEC-005 - completed
+- TEST-MCP-HELP-SEC-006 - TEST-MCP-HELP-SEC-006 - completed
+- TEST-MCP-HELP-SEC-007 - TEST-MCP-HELP-SEC-007 - completed
+- TEST-MCP-MARKER-004 - (no title) - pending
+- TEST-MCP-MEMORY-001 - (no title) - pending
+- TEST-MCP-MEMORY-002 - (no title) - pending
+- TEST-MCP-MEMORY-003 - (no title) - pending
+- TEST-MCP-MEMORY-004 - (no title) - pending
+- TEST-MCP-MEMORY-005 - (no title) - pending
+- TEST-MCP-MEMORY-006 - (no title) - pending
+- TEST-MCP-MEMORY-007 - (no title) - pending
+- TEST-MCP-MEMORY-008 - (no title) - pending
+- TEST-MCP-MEMORY-009 - (no title) - pending
+- TEST-MCP-MEMORY-FED-001 - (no title) - pending
+- TEST-MCP-PLUGIN-011 - (no title) - pending
+- TEST-MCP-PLUGIN-012 - (no title) - pending
+- TEST-MCP-PLUGIN-013 - (no title) - pending
+- TEST-MCP-PLUGIN-HEADER-002 - (no title) - pending
+- TEST-MCP-PLUGIN-HEADER-003 - (no title) - pending
+- TEST-MCP-PLUGIN-HEADER-004 - (no title) - pending
+- TEST-MCP-PLUGIN-HEADER-005 - (no title) - pending
+- TEST-MCP-PLUGIN-TRIAGE-001 - Triage plugin skill coverage - planned
+- TEST-MCP-PLUGINCORE-001 - (no title) - pending
+- TEST-MCP-PLUGINCORE-002 - (no title) - pending
+- TEST-MCP-PLUGINCORE-003 - (no title) - pending
+- TEST-MCP-PLUGINCORE-004 - Plugin session-log dialog parsing regression coverage - pending
+- TEST-MCP-PLUGINCORE-005 - (no title) - pending
+- TEST-MCP-PLUGININT-001 - Eight-agent Session Log plugin integration matrix - pending
+- TEST-MCP-QBAGENT-001 - QBAgent marker bootstrap + graceful no-marker exit tests - pending
+- TEST-MCP-QBAGENTINT-001 - QBAgent sending and tool-execution integration tests - satisfied
+- TEST-MCP-QBEXEC-001 - QuadBrain tool interception/execution tests - pending
+- TEST-MCP-QBEXEC-002 - Concrete internal-tool executor routing tests - pending
+- TEST-MCP-QBEXEC-003 - Full-fidelity inter-brain session-log tests - pending
+- TEST-MCP-QBINT-001 - QuadBrain OpenAI endpoint integration tests - pending
+- TEST-MCP-QBLIVE-001 - Service-composition coverage of Quad-Brain loop - pending
+- TEST-MCP-QBLIVEINT-001 - Integration coverage of orchestration through POST /v1/chat/completions - pending
+- TEST-MCP-QBOLLAMA-002 - (no title) - pending
+- TEST-MCP-QBOPENAI-001 - QuadBrain OpenAI chat-completions endpoint tests - pending
+- TEST-MCP-QBSEED-001 - Unit coverage for BrainSlotStartupSeeder - pending
+- TEST-MCP-QBSKILLS-001 - SKILL.md manifest parser tests - pending
+- TEST-MCP-QBSKILLS-002 - Skill registry discovery/load tests - pending
+- TEST-MCP-QBSKILLS-003 - Skill tool list/load tests - pending
+- TEST-MCP-QBTOOLS-001 - QBAgent external file tool surface - pending
+- TEST-MCP-QBTOOLS-002 - git tool argument and push-guard tests - pending
+- TEST-MCP-QBTOOLS-003 - run_bash availability tests - pending
+- TEST-MCP-QBTOOLS-004 - RepoFileService EditAsync semantics tests - pending
+- TEST-MCP-QBTOOLS-005 - Transaction-gated EditAsync tests - pending
+- TEST-MCP-QBTOOLS-006 - Server-side adapter tool presence tests - pending
+- TEST-MCP-QBTOOLS-007 - QBAgent run_powershell tool tests - pending
+- TEST-MCP-QBTOOLSINT-001 - QBAgent tools + skills end-to-end integration - pending
+- TEST-MCP-QUAD-SESSION-001 - Per-session QuadBrain instance attachment over global brains - pending
+- TEST-MCP-REPL-001 - (no title) - pending
+- TEST-MCP-REPL-002 - (no title) - pending
+- TEST-MCP-REPL-003 - (no title) - pending
+- TEST-MCP-REPL-004 - (no title) - pending
+- TEST-MCP-REPL-005 - (no title) - pending
+- TEST-MCP-REPL-006 - (no title) - pending
+- TEST-MCP-REPL-007 - (no title) - pending
+- TEST-MCP-REPL-007-1 - (no title) - pending
+- TEST-MCP-REPL-007-2 - (no title) - pending
+- TEST-MCP-REPL-007-3 - (no title) - pending
+- TEST-MCP-REPL-007-4 - (no title) - pending
+- TEST-MCP-REPL-008 - (no title) - pending
+- TEST-MCP-REPL-009 - (no title) - pending
+- TEST-MCP-REPL-010 - (no title) - pending
+- TEST-MCP-REPL-011 - (no title) - pending
+- TEST-MCP-REPL-012 - (no title) - pending
+- TEST-MCP-REPL-013 - (no title) - pending
+- TEST-MCP-REPL-014 - (no title) - pending
+- TEST-MCP-REPL-015 - (no title) - pending
+- TEST-MCP-REPL-016 - (no title) - pending
+- TEST-MCP-REPL-017 - (no title) - pending
+- TEST-MCP-REPL-018 - Named-agent REPL isolation tests - pending
+- TEST-MCP-REPL-019 - (no title) - pending
+- TEST-MCP-REPL-020 - (no title) - pending
+- TEST-MCP-REPL-021 - TryResolveWithDiagnostics with missing marker file - pending
+- TEST-MCP-REPL-022 - TryResolveWithDiagnostics with explicit workspace override - pending
+- TEST-MCP-REPL-023 - TryResolveWithDiagnostics with tampered marker signature - pending
+- TEST-MCP-REPL-024 - TryResolveWithDiagnostics with LF line-ending marker signature - pending
+- TEST-MCP-REPL-025 - REPL session-log degraded persistence tests - pending
+- TEST-MCP-REPL-026 - (no title) - pending
+- TEST-MCP-REPL-027 - (no title) - pending
+- TEST-MCP-REPL-028 - (no title) - pending
+- TEST-MCP-REPL-029 - (no title) - pending
+- TEST-MCP-REPL-030 - (no title) - pending
+- TEST-MCP-REPL-031 - (no title) - pending
+- TEST-MCP-REPL-032 - (no title) - pending
+- TEST-MCP-REPL-033 - (no title) - pending
+- TEST-MCP-REPL-034 - (no title) - pending
+- TEST-MCP-REPL-035 - (no title) - pending
+- TEST-MCP-REPL-036 - (no title) - pending
+- TEST-MCP-REPL-037 - (no title) - pending
+- TEST-MCP-REPL-038 - (no title) - pending
+- TEST-MCP-REPL-039 - (no title) - pending
+- TEST-MCP-REPL-040 - (no title) - pending
+- TEST-MCP-REPL-TRIAGE-001 - Triage REPL parity - planned
+- TEST-MCP-REQAC-001 - (no title) - pending
+- TEST-MCP-REQAC-002 - (no title) - pending
+- TEST-MCP-REQAC-003 - (no title) - pending
+- TEST-MCP-REQAC-004 - (no title) - pending
+- TEST-MCP-REQAC-PLUGIN-BASH - (no title) - pending
+- TEST-MCP-REQAC-PLUGIN-TS - (no title) - pending
+- TEST-MCP-REQACPLUGIN-001 - (no title) - pending
+- TEST-MCP-REQACPLUGIN-002 - (no title) - pending
+- TEST-MCP-REQACPLUGIN-BASH - (no title) - pending
+- TEST-MCP-REQACPLUGIN-CAPTURE - (no title) - pending
+- TEST-MCP-REQACPLUGIN-LIVE - (no title) - pending
+- TEST-MCP-REQACPLUGIN-TS - (no title) - pending
+- TEST-MCP-REQEXPORT-002 - (no title) - pending
+- TEST-MCP-REQEXPORT-003 - (no title) - pending
+- TEST-MCP-REQWS-001 - (no title) - pending
+- TEST-MCP-SESSIONLOG-001 - (no title) - pending
+- TEST-MCP-SESSIONLOG-002 - (no title) - pending
+- TEST-MCP-SESSIONLOG-003 - (no title) - pending
+- TEST-MCP-SESSIONLOG-005 - (no title) - pending
+- TEST-MCP-SESSIONLOGSAN-001 - Session-log sanitization unit and transport validation - pending
+- TEST-MCP-SESSIONLOGSAN-002 - (no title) - pending
+- TEST-MCP-SUBLOG-001 - Subscriber Parseable message-log tests - pending
+- TEST-MCP-TODO-CLOSE-001 - TODO close by ID regression coverage - pending
+- TEST-MCP-TRACE-LEGACY-001 - Legacy baseline traceability audit coverage - completed
+- TEST-MCP-TRACE-LEGACY-002 - Legacy auth and agent traceability audit coverage - completed
+- TEST-MCP-TRACE-LEGACY-003 - Legacy agent-pool and process traceability audit coverage - completed
+- TEST-MCP-TRACE-REPL-001 - REPL traceability audit coverage - completed
+- TEST-MCP-TRANSCRIPT-001 - Source parser fixtures - completed
+- TEST-MCP-TRANSCRIPT-002 - Canonical mapping and no-fabrication rules - completed
+- TEST-MCP-TRANSCRIPT-003 - Malformed bounded partial and security behavior - completed
+- TEST-MCP-TRANSCRIPT-004 - Deterministic YAML round trip - completed
+- TEST-MCP-TRANSCRIPT-005 - Import idempotency and failsafe semantics - completed
+- TEST-MCP-TRANSCRIPT-006 - Transcript conversion has no plugin parser forks - completed
+- TEST-MCP-TRANSCRIPT-007 - HTTP path upload and security contracts - completed
+- TEST-MCP-TRANSCRIPT-008 - REPL and MCP inventory invocation - completed
+- TEST-MCP-TRANSCRIPT-009 - Secondary provider and native-store normalization - completed
+- TEST-MCP-TRANSCRIPT-010 - Models write logs without plugin transcript endpoints - completed
+- TEST-MCP-TRANSCRIPT-011 - (no title) - pending
+- TEST-MCP-TRANSCRIPT-012 - (no title) - pending
+- TEST-MCP-TRANSCRIPT-013 - (no title) - pending
+- TEST-MCP-TRIAGE-001 - Triage intake acceptance - planned
+- TEST-MCP-TRIAGE-002 - Triage grouping acceptance - pending
+- TEST-MCP-TRIAGE-003 - Triage research worker dispatch - planned
+- TEST-MCP-TRIAGE-004 - Triage TODO creation - planned
+- TEST-MCP-TRIAGE-005 - Triage research failure handling - planned
+- TEST-MCP-TRIAGE-006 - Triage workspace isolation - planned
+- TEST-MCP-TRIAGE-REQAC-001 - Triage requirement acceptance criteria traceability - planned
+- TEST-MCP-WIKIEXPORT-001 - Configured requirements wiki export coverage - completed
+- TEST-MCP-WIKIEXPORT-002 - Default wiki.yaml marker generation coverage - completed
+- TEST-REQAC-LIVE-001 - (no title) - pending
+- TEST-SUPPORT-010 - Support parent traceability audit coverage - completed
+- TEST-SUPPORT-010A-1 - (no title) - pending
+- TEST-SUPPORT-010A-2 - (no title) - pending
+- TEST-SUPPORT-010B-1 - (no title) - pending
+- TEST-SUPPORT-010B-2 - (no title) - pending
+- TEST-SUPPORT-010C-1 - (no title) - pending
+- TEST-SUPPORT-010C-2 - (no title) - pending
+- TEST-SUPPORT-010C-3 - (no title) - pending
+- TEST-SUPPORT-010E - (no title) - pending
+- TEST-SUPPORT-010F - (no title) - pending
+- TEST-SUPPORT-014 - Session log lifecycle integration tests - pending
+- TEST-SUPPORT-015 - Session log SQLite backend preservation tests - pending
+- TEST-SUPPORT-016 - SessionLogService stamps workspace ID on entities - pending
+- TEST-SUPPORT-017 - SessionLogService with null workspace context - pending
+- TEST-SUPPORT-018 - Malformed POST body error response format - pending
+- TEST-SUPPORT-019 - Missing sourceType field validation response - pending
+- TEST-SUPPORT-020 - Session log round-trip POST and GET - pending
+- TEST-SUPPORT-021 - Session log turn append via REST - pending
+- TEST-SUPPORT-022 - Turn-append route HTTP method validation - pending
+- TEST-TRIAGE-001 - Triage dashboard endpoint and client coverage - pending
+- TEST-TRIAGE-002 - Triage-created TODO endpoint coverage - completed
+
+## Mappings (FrId -> TrIds / TestIds)
+- FR-LOC-001 -> TR:[TR-LOC-001] TEST:[]
+- FR-MCP-001 -> TR:[TR-MCP-CFG-001, TR-MCP-CFG-002] TEST:[]
+- FR-MCP-002 -> TR:[TR-MCP-API-001, TR-MCP-DATA-001] TEST:[]
+- FR-MCP-003 -> TR:[TR-MCP-DATA-001, TR-MCP-INGEST-001] TEST:[]
+- FR-MCP-004 -> TR:[TR-MCP-DATA-002, TR-MCP-DATA-003] TEST:[]
+- FR-MCP-005 -> TR:[TR-MCP-API-001, TR-MCP-INGEST-001] TEST:[]
+- FR-MCP-006 -> TR:[TR-MCP-INGEST-001, TR-MCP-INGEST-002] TEST:[]
+- FR-MCP-007 -> TR:[TR-MCP-ARCH-001] TEST:[]
+- FR-MCP-008 -> TR:[TR-MCP-OPS-001] TEST:[]
+- FR-MCP-009 -> TR:[TR-MCP-MT-001, TR-MCP-WS-002, TR-MCP-WS-004] TEST:[]
+- FR-MCP-011 -> TR:[TR-MCP-WS-003, TR-MCP-WS-007] TEST:[]
+- FR-MCP-012 -> TR:[TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003] TEST:[]
+- FR-MCP-013 -> TR:[TR-MCP-MT-002, TR-MCP-SEC-001] TEST:[]
+- FR-MCP-014 -> TR:[TR-MCP-SEC-002] TEST:[]
+- FR-MCP-015 -> TR:[TR-MCP-TUN-001, TR-MCP-TUN-002, TR-MCP-TUN-003] TEST:[]
+- FR-MCP-016 -> TR:[TR-MCP-HTTP-001] TEST:[]
+- FR-MCP-017 -> TR:[TR-MCP-SVC-001] TEST:[]
+- FR-MCP-018 -> TR:[TR-MCP-WS-005] TEST:[]
+- FR-MCP-019 -> TR:[TR-MCP-WS-006] TEST:[]
+- FR-MCP-020 -> TR:[TR-MCP-WS-007] TEST:[]
+- FR-MCP-021 -> TR:[TR-MCP-WS-008] TEST:[]
+- FR-MCP-022 -> TR:[TR-MCP-TR-003] TEST:[]
+- FR-MCP-023 -> TR:[TR-MCP-REQ-001] TEST:[]
+- FR-MCP-024 -> TR:[TR-MCP-INGEST-002] TEST:[]
+- FR-MCP-025 -> TR:[TR-MCP-WS-009] TEST:[]
+- FR-MCP-026 -> TR:[TR-MCP-AUTH-001, TR-MCP-AUTH-002, TR-MCP-AUTH-003] TEST:[]
+- FR-MCP-027 -> TR:[TR-MCP-AGENT-001, TR-MCP-AGENT-002, TR-MCP-AGENT-003] TEST:[]
+- FR-MCP-028 -> TR:[TR-MCP-AGENT-001, TR-MCP-AGENT-003, TR-MCP-AGENT-008] TEST:[]
+- FR-MCP-029 -> TR:[TR-MCP-CQRS-001, TR-MCP-CQRS-002, TR-MCP-CQRS-003, TR-MCP-CQRS-004, TR-MCP-CQRS-005] TEST:[]
+- FR-MCP-030 -> TR:[TR-MCP-DIR-001, TR-MCP-DIR-002, TR-MCP-DIR-003] TEST:[]
+- FR-MCP-031 -> TR:[TR-MCP-WS-UI-001] TEST:[]
+- FR-MCP-032 -> TR:[TR-MCP-GH-005] TEST:[]
+- FR-MCP-033 -> TR:[TR-MCP-POL-001] TEST:[]
+- FR-MCP-034 -> TR:[TR-MCP-COMP-001] TEST:[]
+- FR-MCP-035 -> TR:[TR-MCP-COMP-002] TEST:[]
+- FR-MCP-036 -> TR:[TR-MCP-AUDIT-001] TEST:[]
+- FR-MCP-037 -> TR:[TR-MCP-DIR-003] TEST:[]
+- FR-MCP-038 -> TR:[TR-MCP-COMP-003, TR-MCP-DTO-001] TEST:[]
+- FR-MCP-039 -> TR:[TR-MCP-CTX-001] TEST:[]
+- FR-MCP-040 -> TR:[TR-MCP-REQ-002, TR-MCP-REQ-003] TEST:[]
+- FR-MCP-041 -> TR:[TR-MCP-REQ-002, TR-MCP-REQ-003] TEST:[]
+- FR-MCP-042 -> TR:[TR-MCP-HTTP-001, TR-MCP-REQ-003] TEST:[]
+- FR-MCP-043 -> TR:[TR-MCP-MT-001, TR-MCP-MT-002, TR-MCP-SEC-001] TEST:[]
+- FR-MCP-044 -> TR:[TR-MCP-MT-003] TEST:[]
+- FR-MCP-045 -> TR:[TR-MCP-TODO-002] TEST:[]
+- FR-MCP-046 -> TR:[TR-MCP-AGENT-005, TR-MCP-VOICE-001, TR-MCP-VOICE-002, TR-MCP-VOICE-003] TEST:[]
+- FR-MCP-047 -> TR:[TR-MCP-DESKTOP-001] TEST:[]
+- FR-MCP-048 -> TR:[TR-MCP-CFG-004] TEST:[]
+- FR-MCP-049 -> TR:[TR-MCP-TPL-001, TR-MCP-TPL-002, TR-MCP-TPL-003, TR-MCP-TPL-004] TEST:[]
+- FR-MCP-050 -> TR:[TR-MCP-AGENT-008, TR-MCP-AGENT-009, TR-MCP-AGENT-010, TR-MCP-AGENT-011, TR-MCP-AGENT-012] TEST:[]
+- FR-MCP-051 -> TR:[TR-MCP-CFG-005] TEST:[]
+- FR-MCP-052 -> TR:[TR-MCP-AGENT-004, TR-MCP-AGENT-005] TEST:[]
+- FR-MCP-053 -> TR:[TR-MCP-AGENT-005, TR-MCP-API-002, TR-MCP-API-003] TEST:[]
+- FR-MCP-054 -> TR:[TR-MCP-AGENT-005, TR-MCP-API-003] TEST:[]
+- FR-MCP-055 -> TR:[TR-MCP-AGENT-004, TR-MCP-API-002] TEST:[]
+- FR-MCP-056 -> TR:[TR-MCP-API-002, TR-MCP-TPL-006] TEST:[]
+- FR-MCP-057 -> TR:[TR-MCP-API-003, TR-MCP-DIR-004] TEST:[]
+- FR-MCP-058 -> TR:[TR-MCP-API-003, TR-MCP-VOICE-004] TEST:[]
+- FR-MCP-059 -> TR:[TR-MCP-ARCH-002, TR-MCP-MT-001, TR-MCP-TUN-001] TEST:[]
+- FR-MCP-060 -> TR:[TR-MCP-DIR-005, TR-MCP-DIR-006, TR-MCP-DIR-007, TR-MCP-DIR-008] TEST:[]
+- FR-MCP-061 -> TR:[TR-MCP-LOG-002, TR-MCP-TODO-003] TEST:[]
+- FR-MCP-062 -> TR:[TR-MCP-EVT-001, TR-MCP-EVT-002, TR-MCP-EVT-003, TR-MCP-EVT-004, TR-MCP-EVT-005] TEST:[]
+- FR-MCP-063 -> TR:[TR-MCP-GH-001, TR-MCP-GH-002, TR-MCP-GH-003, TR-MCP-GH-004] TEST:[]
+- FR-MCP-064 -> TR:[TR-MCP-DOC-001] TEST:[TEST-MCP-147]
+- FR-MCP-065 -> TR:[TR-MCP-API-001, TR-MCP-INGEST-003] TEST:[]
+- FR-MCP-066 -> TR:[TR-MCP-AGENT-006, TR-MCP-AGENT-007] TEST:[]
+- FR-MCP-067 -> TR:[TR-MCP-HTTP-002] TEST:[]
+- FR-MCP-068 -> TR:[TR-MCP-CFG-006] TEST:[]
+- FR-MCP-069 -> TR:[TR-MCP-GH-005, TR-MCP-TODO-003] TEST:[]
+- FR-MCP-070 -> TR:[TR-MCP-GH-006, TR-MCP-TODO-004] TEST:[]
+- FR-MCP-071 -> TR:[TR-MCP-GH-007] TEST:[]
+- FR-MCP-072 -> TR:[TR-MCP-TODO-005, TR-MCP-TODO-006] TEST:[]
+- FR-MCP-073 -> TR:[TR-MCP-LOG-003] TEST:[]
+- FR-MCP-074 -> TR:[TR-MCP-CI-001] TEST:[]
+- FR-MCP-075 -> TR:[TR-MCP-AGENT-013] TEST:[]
+- FR-MCP-076 -> TR:[TR-MCP-AGENT-014, TR-MCP-SEC-003] TEST:[]
+- FR-MCP-077 -> TR:[TR-MCP-CFG-007, TR-MCP-SEC-004] TEST:[]
+- FR-MCP-078 -> TR:[TR-GRAPHRAG-ADHOC-001] TEST:[]
+- FR-MCP-079 -> TR:[TR-GRAPHRAG-ADHOC-002] TEST:[]
+- FR-MCP-080 -> TR:[TR-GRAPHRAG-ADHOC-003] TEST:[]
+- FR-MCP-081 -> TR:[TR-MCP-BYRD-001, TR-MCP-BYRD-003] TEST:[]
+- FR-MCP-082 -> TR:[TR-MCP-BYRD-001, TR-MCP-BYRD-002, TR-MCP-BYRD-003] TEST:[]
+- FR-MCP-083 -> TR:[TR-MCP-BYRD-004] TEST:[]
+- FR-MCP-084 -> TR:[TR-MCP-REQ-004, TR-MCP-REQ-005] TEST:[TEST-MCP-106, TEST-MCP-107, TEST-MCP-108, TEST-MCP-109]
+- FR-MCP-085 -> TR:[TR-MCP-QA-001, TR-MCP-QA-002, TR-MCP-QA-003, TR-MCP-QA-006, TR-MCP-QA-007, TR-MCP-QA-008] TEST:[TEST-MCP-110, TEST-MCP-117, TEST-MCP-119]
+- FR-MCP-086 -> TR:[TR-MCP-QA-001, TR-MCP-QA-003, TR-MCP-QA-006, TR-MCP-QA-007, TR-MCP-QA-008, TR-MCP-QA-022] TEST:[TEST-MCP-111, TEST-MCP-117, TEST-MCP-128]
+- FR-MCP-087 -> TR:[TR-MCP-QA-005, TR-MCP-QA-006, TR-MCP-QA-011] TEST:[TEST-MCP-112, TEST-MCP-116]
+- FR-MCP-088 -> TR:[TR-MCP-QA-002, TR-MCP-QA-007] TEST:[TEST-MCP-113]
+- FR-MCP-089 -> TR:[TR-MCP-QA-004, TR-MCP-QA-018, TR-MCP-QA-019, TR-MCP-QA-031, TR-MCP-QA-032, TR-MCP-QA-033, TR-MCP-QA-034] TEST:[TEST-MCP-114, TEST-MCP-127, TEST-MCP-133, TEST-MCP-134, TEST-MCP-135]
+- FR-MCP-090 -> TR:[TR-MCP-QA-001, TR-MCP-QA-006, TR-MCP-QA-018, TR-MCP-QA-019] TEST:[TEST-MCP-115, TEST-MCP-125]
+- FR-MCP-091 -> TR:[TR-MCP-QA-011, TR-MCP-QA-022] TEST:[TEST-MCP-116, TEST-MCP-128]
+- FR-MCP-092 -> TR:[TR-MCP-QA-009] TEST:[TEST-MCP-118]
+- FR-MCP-093 -> TR:[TR-MCP-QA-001, TR-MCP-QA-003] TEST:[TEST-MCP-119]
+- FR-MCP-094 -> TR:[TR-MCP-QA-007, TR-MCP-QA-010, TR-MCP-QA-012] TEST:[TEST-MCP-120, TEST-MCP-121]
+- FR-MCP-095 -> TR:[TR-MCP-QA-014, TR-MCP-QA-015] TEST:[TEST-MCP-122, TEST-MCP-123]
+- FR-MCP-096 -> TR:[TR-MCP-QA-017] TEST:[TEST-MCP-132]
+- FR-MCP-097 -> TR:[TR-MCP-QA-016, TR-MCP-QA-023, TR-MCP-QA-024] TEST:[TEST-MCP-124, TEST-MCP-129]
+- FR-MCP-098 -> TR:[TR-MCP-QA-018, TR-MCP-QA-019, TR-MCP-QA-020, TR-MCP-QA-021] TEST:[TEST-MCP-125, TEST-MCP-126, TEST-MCP-127]
+- FR-MCP-099 -> TR:[TR-MCP-QA-022, TR-MCP-QA-023, TR-MCP-QA-024] TEST:[TEST-MCP-129]
+- FR-MCP-100 -> TR:[TR-MCP-QA-025, TR-MCP-QA-026] TEST:[TEST-MCP-130]
+- FR-MCP-101 -> TR:[TR-MCP-QA-027, TR-MCP-QA-028] TEST:[TEST-MCP-131]
+- FR-MCP-102 -> TR:[TR-MCP-QA-029, TR-MCP-QA-030] TEST:[TEST-MCP-132]
+- FR-MCP-103 -> TR:[TR-MCP-FED-001, TR-MCP-FED-MEMORY-001] TEST:[TEST-MCP-136, TEST-MCP-MEMORY-FED-001]
+- FR-MCP-104 -> TR:[TR-MCP-BYRD-005, TR-MCP-TPL-007] TEST:[TEST-MCP-137, TEST-MCP-141]
+- FR-MCP-105 -> TR:[TR-MCP-DB-001, TR-MCP-DB-002, TR-MCP-DB-003, TR-MCP-DB-004, TR-MCP-DB-005, TR-MCP-DB-006] TEST:[TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006]
+- FR-MCP-106 -> TR:[TR-MCP-PLUGIN-008, TR-MCP-PLUGIN-011, TR-MCP-PLUGIN-012, TR-MCP-PLUGIN-013] TEST:[TEST-MCP-142, TEST-MCP-PLUGIN-011, TEST-MCP-PLUGIN-012, TEST-MCP-PLUGIN-013]
+- FR-MCP-107 -> TR:[TR-MCP-PLAN-001] TEST:[TEST-MCP-143]
+- FR-MCP-108 -> TR:[TR-MCP-TODO-009] TEST:[TEST-MCP-144]
+- FR-MCP-109 -> TR:[TR-MCP-BATCH-109, TR-MCP-SCHEMA-109, TR-MCP-STDIO-109] TEST:[TEST-MCP-145, TEST-MCP-146]
+- FR-MCP-110 -> TR:[TR-MCP-NUKE-001] TEST:[TEST-MCP-148]
+- FR-MCP-111 -> TR:[TR-MCP-SKILLS-001, TR-MCP-SKILLS-002, TR-MCP-SKILLS-003] TEST:[TEST-MCP-149, TEST-MCP-150, TEST-MCP-151]
+- FR-MCP-112 -> TR:[TR-MCP-REQEXPORT-001, TR-MCP-REQEXPORT-002, TR-MCP-REQEXPORT-003, TR-MCP-REQEXPORT-004] TEST:[TEST-MCP-152, TEST-MCP-REQEXPORT-002, TEST-MCP-REQEXPORT-003, TEST-MCP-REQWS-001]
+- FR-MCP-113 -> TR:[TR-MCP-BATCH-001, TR-MCP-BATCHTS-001] TEST:[TEST-MCP-153]
+- FR-MCP-114 -> TR:[TR-MCP-TODO-010] TEST:[TEST-MCP-154]
+- FR-MCP-115 -> TR:[TR-MCP-PLUGIN-009] TEST:[TEST-MCP-155]
+- FR-MCP-116 -> TR:[TR-MCP-GH-008] TEST:[TEST-MCP-156]
+- FR-MCP-117 -> TR:[TR-MCP-PLUGIN-010] TEST:[TEST-MCP-157]
+- FR-MCP-118 -> TR:[TR-MCP-CRYPTO-001, TR-MCP-KEYSERVER-001] TEST:[TEST-MCP-158, TEST-MCP-160, TEST-MCP-166]
+- FR-MCP-119 -> TR:[TR-MCP-CRYPTO-001, TR-MCP-SUBSCRIBER-001] TEST:[TEST-MCP-159, TEST-MCP-160, TEST-MCP-167]
+- FR-MCP-120 -> TR:[TR-MCP-TXN-001] TEST:[TEST-MCP-161, TEST-MCP-168]
+- FR-MCP-121 -> TR:[TR-MCP-TXN-001, TR-MCP-TXNAUDIT-001] TEST:[TEST-MCP-161, TEST-MCP-169]
+- FR-MCP-122 -> TR:[TR-MCP-TXNBYRD-001] TEST:[TEST-MCP-164]
+- FR-MCP-123 -> TR:[TR-MCP-QUAD-001] TEST:[TEST-MCP-163, TEST-MCP-170, TEST-MCP-171]
+- FR-MCP-124 -> TR:[TR-MCP-TXNDIAGRAMS-001] TEST:[TEST-MCP-162, TEST-MCP-165]
+- FR-MCP-125 -> TR:[TR-MCP-TXNCOMPAT-001] TEST:[TEST-MCP-163]
+- FR-MCP-126 -> TR:[TR-MCP-TXNAIUNIT-001] TEST:[TEST-MCP-164]
+- FR-MCP-127 -> TR:[TR-MCP-TXNDIAGRAMS-001] TEST:[TEST-MCP-166, TEST-MCP-167, TEST-MCP-168]
+- FR-MCP-128 -> TR:[TR-MCP-TXNARCH-001, TR-MCP-TXNDESIGN-001] TEST:[TEST-MCP-172, TEST-MCP-173]
+- FR-MCP-129 -> TR:[TR-MCP-QUAD-001, TR-MCP-QUAD-002, TR-MCP-QUAD-003] TEST:[TEST-MCP-174, TEST-MCP-175, TEST-MCP-176, TEST-MCP-177, TEST-MCP-178]
+- FR-MCP-130 -> TR:[TR-MCP-QUAD-003] TEST:[TEST-MCP-178, TEST-MCP-179]
+- FR-MCP-131 -> TR:[TR-MCP-QUAD-004, TR-MCP-QUAD-005, TR-MCP-QUAD-007] TEST:[TEST-MCP-174, TEST-MCP-180, TEST-MCP-181, TEST-MCP-183]
+- FR-MCP-132 -> TR:[TR-MCP-AUTH-010, TR-MCP-AUTH-011] TEST:[TEST-MCP-AUTH-010, TEST-MCP-AUTH-011, TEST-MCP-AUTH-012]
+- FR-MCP-133 -> TR:[TR-MCP-HEALTH-002] TEST:[TEST-MCP-HEALTH-002, TEST-MCP-HEALTH-003]
+- FR-MCP-134 -> TR:[TR-MCP-QUAD-003, TR-MCP-QUAD-005, TR-MCP-QUAD-006] TEST:[TEST-MCP-181, TEST-MCP-182, TEST-MCP-184, TEST-MCP-185]
+- FR-MCP-135 -> TR:[TR-MCP-QUAD-005, TR-MCP-QUAD-007] TEST:[TEST-MCP-183, TEST-MCP-184, TEST-MCP-185]
+- FR-MCP-136 -> TR:[TR-MCP-AGENT-015, TR-MCP-TXN-001, TR-MCP-TXNAUDIT-001] TEST:[TEST-MCP-186]
+- FR-MCP-137 -> TR:[TR-MCP-AGENT-016] TEST:[TEST-MCP-187]
+- FR-MCP-138 -> TR:[TR-MCP-AIUNIT-001] TEST:[TEST-MCP-AIUNIT-001]
+- FR-MCP-139 -> TR:[TR-MCP-QUALITY-001] TEST:[TEST-MCP-AIUNIT-002]
+- FR-MCP-140 -> TR:[TR-MCP-SEC-005] TEST:[TEST-MCP-189]
+- FR-MCP-141 -> TR:[TR-MCP-SVC-002, TR-MCP-TUN-004] TEST:[TEST-MCP-190, TEST-MCP-191]
+- FR-MCP-142 -> TR:[TR-MCP-QB-001] TEST:[TEST-MCP-193]
+- FR-MCP-143 -> TR:[TR-MCP-CLIENT-001, TR-MCP-HEALTH-003, TR-MCP-REPL-018, TR-MCP-REPL-019, TR-MCP-REPL-020, TR-MCP-SYNC-001] TEST:[TEST-MCP-194, TEST-MCP-REPL-040]
+- FR-MCP-AGENT-PARITY-001 -> TR:[TR-MCP-AGENT-PARITY-010] TEST:[]
+- FR-MCP-AGENT-PARITY-002 -> TR:[TR-MCP-AGENT-PARITY-011] TEST:[]
+- FR-MCP-BATCH-001 -> TR:[TR-MCP-BATCH-001] TEST:[TEST-MCP-BATCH-001]
+- FR-MCP-CLEARSESSION-001 -> TR:[TR-MCP-CLEARSESSION-001] TEST:[TEST-MCP-CLEARSESSION-001]
+- FR-MCP-DOCFXWIKI-001 -> TR:[TR-MCP-DOCFXWIKI-001] TEST:[TEST-MCP-DOCFXWIKI-001]
+- FR-MCP-FILETOOLS-001 -> TR:[TR-MCP-FILETOOLS-001] TEST:[TEST-MCP-FILETOOLS-001, TEST-MCP-FILETOOLSINT-001]
+- FR-MCP-HELP-001 -> TR:[TR-MCP-HELP-002, TR-MCP-HELP-007] TEST:[TEST-MCP-HELP-004, TEST-MCP-HELP-005]
+- FR-MCP-HELP-002 -> TR:[TR-MCP-HELP-004] TEST:[TEST-MCP-HELP-002, TEST-MCP-HELP-SEC-001, TEST-MCP-HELP-SEC-002, TEST-MCP-HELP-SEC-003, TEST-MCP-HELP-SEC-004, TEST-MCP-HELP-SEC-005, TEST-MCP-HELP-SEC-006]
+- FR-MCP-HELP-003 -> TR:[TR-MCP-HELP-003] TEST:[TEST-MCP-HELP-001, TEST-MCP-HELP-005]
+- FR-MCP-HELP-004 -> TR:[TR-MCP-HELP-005] TEST:[TEST-MCP-HELP-003, TEST-MCP-HELP-SEC-006]
+- FR-MCP-HELP-005 -> TR:[TR-MCP-HELP-006, TR-MCP-HELP-008] TEST:[TEST-MCP-HELP-004]
+- FR-MCP-HELP-006 -> TR:[TR-MCP-HELP-009] TEST:[TEST-MCP-HELP-006]
+- FR-MCP-HELP-007 -> TR:[TR-MCP-HELP-009] TEST:[TEST-MCP-HELP-007]
+- FR-MCP-HELP-008 -> TR:[TR-MCP-HELP-002] TEST:[TEST-MCP-HELP-SEC-007]
+- FR-MCP-HELP-009 -> TR:[TR-MCP-HELP-009] TEST:[TEST-MCP-HELP-008]
+- FR-MCP-HELP-010 -> TR:[TR-MCP-HELP-001] TEST:[TEST-MCP-HELP-004]
+- FR-MCP-HELP-011 -> TR:[TR-MCP-HELP-010] TEST:[TEST-MCP-HELP-008]
+- FR-MCP-LIVE-CODEX-20260603T2014Z -> TR:[TR-MCP-REQ-005] TEST:[TEST-MCP-REQACPLUGIN-LIVE]
+- FR-MCP-LIVE-CODEX-20260603T2015Z -> TR:[TR-MCP-REQ-005] TEST:[TEST-MCP-REQACPLUGIN-LIVE]
+- FR-MCP-MARKER-004 -> TR:[TR-MCP-MARKER-004] TEST:[TEST-MCP-MARKER-004]
+- FR-MCP-MEMORY-001 -> TR:[TR-MCP-MEMORY-001] TEST:[TEST-MCP-MEMORY-001]
+- FR-MCP-MEMORY-002 -> TR:[TR-MCP-MEMORY-002] TEST:[TEST-MCP-MEMORY-002]
+- FR-MCP-MEMORY-003 -> TR:[TR-MCP-MEMORY-003] TEST:[TEST-MCP-MEMORY-003]
+- FR-MCP-MEMORY-004 -> TR:[TR-MCP-MEMORY-004] TEST:[TEST-MCP-MEMORY-004, TEST-MCP-MEMORY-006]
+- FR-MCP-MEMORY-005 -> TR:[TR-MCP-MEMORY-005] TEST:[TEST-MCP-MEMORY-005]
+- FR-MCP-MEMORY-006 -> TR:[TR-MCP-MEMORY-006, TR-MCP-MEMORY-007] TEST:[TEST-MCP-MEMORY-008]
+- FR-MCP-MEMORY-007 -> TR:[TR-MCP-MEMORY-007] TEST:[TEST-MCP-MEMORY-007, TEST-MCP-MEMORY-009]
+- FR-MCP-MEMORY-008 -> TR:[TR-MCP-FED-MEMORY-001] TEST:[TEST-MCP-MEMORY-FED-001]
+- FR-MCP-PLUGIN-BATCH-001 -> TR:[TR-MCP-BATCH-001] TEST:[TEST-MCP-BATCH-001]
+- FR-MCP-PLUGIN-HEADER-001 -> TR:[TR-MCP-PLUGIN-HEADER-001] TEST:[TEST-MCP-PLUGIN-HEADER-002, TEST-MCP-PLUGIN-HEADER-003, TEST-MCP-PLUGIN-HEADER-004, TEST-MCP-PLUGIN-HEADER-005]
+- FR-MCP-PLUGIN-SKILLS-001 -> TR:[TR-MCP-PLUGIN-SKILLS-001] TEST:[]
+- FR-MCP-PLUGINCORE-001 -> TR:[TR-MCP-PLUGINCORE-001] TEST:[TEST-MCP-PLUGINCORE-001]
+- FR-MCP-PLUGINCORE-002 -> TR:[TR-MCP-PLUGINCORE-002] TEST:[TEST-MCP-PLUGINCORE-002]
+- FR-MCP-PLUGINCORE-003 -> TR:[TR-MCP-PLUGINCORE-003] TEST:[TEST-MCP-PLUGINCORE-003]
+- FR-MCP-PLUGINCORE-004 -> TR:[TR-MCP-PLUGINCORE-004, TR-MCP-PLUGINCORE-005] TEST:[TEST-MCP-PLUGINCORE-004, TEST-MCP-PLUGINCORE-005]
+- FR-MCP-PLUGININT-001 -> TR:[TR-MCP-PLUGININT-001] TEST:[TEST-MCP-PLUGININT-001]
+- FR-MCP-QBAGENT-001 -> TR:[TR-MCP-QBAGENT-001] TEST:[TEST-MCP-QBAGENT-001, TEST-MCP-QBAGENTINT-001]
+- FR-MCP-QBEXEC-001 -> TR:[TR-MCP-QBEXEC-001] TEST:[TEST-MCP-QBEXEC-001]
+- FR-MCP-QBEXEC-002 -> TR:[TR-MCP-QBEXEC-002] TEST:[TEST-MCP-QBEXEC-002]
+- FR-MCP-QBEXEC-003 -> TR:[TR-MCP-QBEXEC-003] TEST:[TEST-MCP-QBEXEC-003]
+- FR-MCP-QBOLLAMA-002 -> TR:[TR-MCP-QBOLLAMA-002] TEST:[TEST-MCP-QBOLLAMA-002]
+- FR-MCP-QBOPENAI-001 -> TR:[TR-MCP-QBOPENAI-001] TEST:[TEST-MCP-QBINT-001, TEST-MCP-QBOPENAI-001]
+- FR-MCP-QBSEED-001 -> TR:[TR-MCP-QBSEED-002] TEST:[TEST-MCP-QBSEED-001]
+- FR-MCP-QBSKILLS-001 -> TR:[TR-MCP-QBSKILLS-001] TEST:[TEST-MCP-QBSKILLS-001, TEST-MCP-QBSKILLS-002]
+- FR-MCP-QBSKILLS-002 -> TR:[TR-MCP-QBSKILLS-003] TEST:[TEST-MCP-QBSKILLS-003]
+- FR-MCP-QBSKILLS-003 -> TR:[TR-MCP-QBSKILLS-002] TEST:[TEST-MCP-QBSKILLS-002]
+- FR-MCP-QBTOOLS-001 -> TR:[TR-MCP-QBTOOLS-001] TEST:[TEST-MCP-QBTOOLS-001, TEST-MCP-QBTOOLSINT-001]
+- FR-MCP-QBTOOLS-002 -> TR:[TR-MCP-QBTOOLS-002] TEST:[TEST-MCP-QBTOOLS-007]
+- FR-MCP-QBTOOLS-003 -> TR:[TR-MCP-QBTOOLS-003] TEST:[TEST-MCP-QBTOOLS-003]
+- FR-MCP-QBTOOLS-004 -> TR:[TR-MCP-QBTOOLS-004] TEST:[TEST-MCP-QBTOOLS-002]
+- FR-MCP-QBTOOLS-005 -> TR:[TR-MCP-QBTOOLS-005] TEST:[TEST-MCP-QBTOOLS-006]
+- FR-MCP-QBTOOLS-006 -> TR:[TR-MCP-QBTOOLS-006, TR-MCP-QBTOOLS-007] TEST:[TEST-MCP-QBTOOLS-004, TEST-MCP-QBTOOLS-005]
+- FR-MCP-QBTOOLS-007 -> TR:[TR-MCP-QBTOOLS-008] TEST:[TEST-MCP-QBTOOLSINT-001]
+- FR-MCP-QUAD-SESSION-001 -> TR:[TR-MCP-QUAD-SESSION-001] TEST:[TEST-MCP-QUAD-SESSION-001]
+- FR-MCP-REPL-001 -> TR:[TR-MCP-REPL-001, TR-MCP-REPL-002] TEST:[]
+- FR-MCP-REPL-002 -> TR:[TR-MCP-REPL-003] TEST:[]
+- FR-MCP-REPL-003 -> TR:[TR-MCP-REPL-004, TR-MCP-REPL-005] TEST:[]
+- FR-MCP-REPL-004 -> TR:[TR-MCP-REPL-006] TEST:[]
+- FR-MCP-REPL-005 -> TR:[TR-MCP-REPL-007] TEST:[]
+- FR-MCP-REPL-006 -> TR:[TR-MCP-REPL-006] TEST:[TEST-MCP-REPL-006]
+- FR-MCP-REPL-007 -> TR:[TR-MCP-REPL-008] TEST:[TEST-MCP-REPL-007-1, TEST-MCP-REPL-007-2, TEST-MCP-REPL-007-3]
+- FR-MCP-REPL-008 -> TR:[TR-MCP-REPL-009] TEST:[TEST-MCP-REPL-018]
+- FR-MCP-REPL-009 -> TR:[TR-MCP-REPL-010, TR-MCP-REPL-011, TR-MCP-REPL-012, TR-MCP-REPL-013] TEST:[TEST-MCP-REPL-025, TEST-MCP-REPL-026, TEST-MCP-REPL-027, TEST-MCP-REPL-028]
+- FR-MCP-REPL-010 -> TR:[TR-MCP-REPL-014, TR-MCP-REPL-015] TEST:[TEST-MCP-REPL-029, TEST-MCP-REPL-030]
+- FR-MCP-REPL-011 -> TR:[TR-MCP-REPL-016, TR-MCP-REPL-017] TEST:[TEST-MCP-REPL-031, TEST-MCP-REPL-032, TEST-MCP-REPL-033, TEST-MCP-REPL-034, TEST-MCP-REPL-035, TEST-MCP-REPL-036, TEST-MCP-REPL-037, TEST-MCP-REPL-038, TEST-MCP-REPL-039]
+- FR-MCP-REQAC-001 -> TR:[TR-MCP-REQAC-001, TR-MCP-REQAC-002] TEST:[TEST-MCP-REQAC-001, TEST-MCP-REQAC-002, TEST-MCP-REQAC-003]
+- FR-MCP-REQAC-002 -> TR:[TR-MCP-REQAC-001] TEST:[TEST-MCP-REQAC-004]
+- FR-MCP-REQAC-PLUGIN-001 -> TR:[TR-MCP-REQAC-PLUGIN-001] TEST:[TEST-MCP-REQAC-PLUGIN-BASH, TEST-MCP-REQAC-PLUGIN-TS]
+- FR-MCP-REQACPLUGIN-001 -> TR:[TR-MCP-REQACPLUGIN-001] TEST:[TEST-MCP-REQACPLUGIN-BASH, TEST-MCP-REQACPLUGIN-LIVE, TEST-MCP-REQACPLUGIN-TS]
+- FR-MCP-REQACPLUGIN-002 -> TR:[TR-MCP-REQACPLUGIN-002] TEST:[TEST-MCP-REQACPLUGIN-002]
+- FR-MCP-REQSCOPE-001 -> TR:[TR-MCP-REQSCOPE-001] TEST:[]
+- FR-MCP-REQSCOPE-002 -> TR:[TR-MCP-REQSCOPE-002] TEST:[]
+- FR-MCP-REQSCOPE-003 -> TR:[TR-MCP-REQSCOPE-003] TEST:[]
+- FR-MCP-REQSCOPE-004 -> TR:[TR-MCP-REQSCOPE-004] TEST:[]
+- FR-MCP-SESSIONLOGSAN-001 -> TR:[TR-MCP-SESSIONLOGSAN-001, TR-MCP-SESSIONLOGSAN-002] TEST:[TEST-MCP-SESSIONLOGSAN-001, TEST-MCP-SESSIONLOGSAN-002]
+- FR-MCP-SUBLOG-001 -> TR:[TR-MCP-SUBLOG-001] TEST:[TEST-MCP-SUBLOG-001]
+- FR-MCP-TODO-CLOSE-001 -> TR:[TR-MCP-TODO-CLOSE-001] TEST:[TEST-MCP-TODO-CLOSE-001]
+- FR-MCP-TRANSCRIPT-001 -> TR:[TR-MCP-TRANSCRIPT-001, TR-MCP-TRANSCRIPT-002, TR-MCP-TRANSCRIPT-006] TEST:[TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-007]
+- FR-MCP-TRANSCRIPT-002 -> TR:[TR-MCP-TRANSCRIPT-001, TR-MCP-TRANSCRIPT-002, TR-MCP-TRANSCRIPT-003] TEST:[TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-003, TEST-MCP-TRANSCRIPT-009]
+- FR-MCP-TRANSCRIPT-003 -> TR:[TR-MCP-TRANSCRIPT-003, TR-MCP-TRANSCRIPT-004] TEST:[TEST-MCP-TRANSCRIPT-002, TEST-MCP-TRANSCRIPT-004]
+- FR-MCP-TRANSCRIPT-004 -> TR:[TR-MCP-TRANSCRIPT-004] TEST:[TEST-MCP-TRANSCRIPT-005]
+- FR-MCP-TRANSCRIPT-005 -> TR:[TR-MCP-TRANSCRIPT-005] TEST:[TEST-MCP-TRANSCRIPT-006, TEST-MCP-TRANSCRIPT-010]
+- FR-MCP-TRANSCRIPT-006 -> TR:[TR-MCP-TRANSCRIPT-006, TR-MCP-TRANSCRIPT-007] TEST:[TEST-MCP-TRANSCRIPT-007, TEST-MCP-TRANSCRIPT-008]
+- FR-MCP-TRANSCRIPT-007 -> TR:[TR-MCP-TRANSCRIPT-007] TEST:[TEST-MCP-TRANSCRIPT-008]
+- FR-MCP-TRANSCRIPT-008 -> TR:[TR-MCP-TRANSCRIPT-002, TR-MCP-TRANSCRIPT-003, TR-MCP-TRANSCRIPT-008, TR-MCP-TRANSCRIPT-009] TEST:[TEST-MCP-TRANSCRIPT-001, TEST-MCP-TRANSCRIPT-009, TEST-MCP-TRANSCRIPT-010, TEST-MCP-TRANSCRIPT-011, TEST-MCP-TRANSCRIPT-012]
+- FR-MCP-TRANSCRIPT-009 -> TR:[TR-MCP-TRANSCRIPT-010] TEST:[TEST-MCP-TRANSCRIPT-013]
+- FR-MCP-TRIAGE-001 -> TR:[TR-MCP-TRIAGE-001] TEST:[TEST-MCP-TRIAGE-001]
+- FR-MCP-TRIAGE-002 -> TR:[TR-MCP-TRIAGE-002] TEST:[TEST-MCP-TRIAGE-002]
+- FR-MCP-TRIAGE-003 -> TR:[TR-MCP-TRIAGE-003] TEST:[TEST-MCP-TRIAGE-003]
+- FR-MCP-TRIAGE-004 -> TR:[TR-MCP-TRIAGE-004, TR-MCP-TRIAGE-005] TEST:[TEST-MCP-BUGTRIAGE-043, TEST-MCP-TRIAGE-004, TEST-MCP-TRIAGE-005, TEST-MCP-TRIAGE-006]
+- FR-MCP-WIKIEXPORT-001 -> TR:[TR-MCP-WIKIEXPORT-001] TEST:[TEST-MCP-WIKIEXPORT-001]
+- FR-MCP-WIKIEXPORT-002 -> TR:[TR-MCP-WIKIEXPORT-002] TEST:[TEST-MCP-WIKIEXPORT-002]
+- FR-MCP-WORKSPACE-LAYER-001 -> TR:[TR-MCP-MT-003] TEST:[]
+- FR-SUPPORT-010 -> TR:[TR-MCP-API-001, TR-MCP-ARCH-001, TR-MCP-DATA-001, TR-MCP-INGEST-001] TEST:[]
+- FR-SUPPORT-010A -> TR:[TR-MCP-MT-003A] TEST:[TEST-SUPPORT-010A-1, TEST-SUPPORT-010A-2]
+- FR-SUPPORT-010B -> TR:[] TEST:[TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2]
+- FR-SUPPORT-010C -> TR:[TR-MCP-MT-003A] TEST:[TEST-SUPPORT-010C-1, TEST-SUPPORT-010C-2, TEST-SUPPORT-010C-3]
+- FR-SUPPORT-010E -> TR:[TR-SUPPORT-010E] TEST:[TEST-SUPPORT-010E]
+- FR-SUPPORT-010F -> TR:[TR-SUPPORT-010F] TEST:[TEST-SUPPORT-010F]
+- FR-SUPPORT-011 -> TR:[TR-MCP-MT-003A, TR-MCP-MT-004] TEST:[TEST-SUPPORT-010A-1, TEST-SUPPORT-010A-2]
+- FR-SUPPORT-012 -> TR:[TR-MCP-SESSIONLOG-001, TR-MCP-SESSIONLOG-002, TR-MCP-SESSIONLOG-003, TR-MCP-SESSIONLOG-005, TR-SUPPORT-LOG-010] TEST:[TEST-MCP-SESSIONLOG-001, TEST-MCP-SESSIONLOG-002, TEST-MCP-SESSIONLOG-003, TEST-MCP-SESSIONLOG-005, TEST-SUPPORT-010B-1, TEST-SUPPORT-010B-2]
+- FR-SUPPORT-013 -> TR:[TR-MCP-HTTP-002] TEST:[TEST-SUPPORT-010C-1, TEST-SUPPORT-010C-2, TEST-SUPPORT-010C-3]
+- FR-SUPPORT-014 -> TR:[TR-SUPPORT-CORE-014] TEST:[TEST-SUPPORT-014]
+- FR-SUPPORT-015 -> TR:[TR-SUPPORT-010F, TR-SUPPORT-CORE-015] TEST:[TEST-SUPPORT-015]
+- FR-TEST-002 -> TR:[TR-TEST-001] TEST:[]
+- FR-TRIAGE-001 -> TR:[TR-TRIAGE-CLIENT-001] TEST:[TEST-TRIAGE-001]
+- FR-TRIAGE-002 -> TR:[TR-TRIAGE-CLIENT-002] TEST:[TEST-TRIAGE-002]

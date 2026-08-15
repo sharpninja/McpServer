@@ -6,7 +6,9 @@ using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Common.AgentCli;
 using McpServer.Common.AgentCli.Extensions;
+using McpServer.Cqrs;
 using McpServer.GraphRag;
+using McpServer.Support.Mcp.UseCases;
 using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Requirements;
@@ -111,6 +113,8 @@ public static class McpStdioHost
         builder.Services.PostConfigure<TodoStorageOptions>(options =>
         {
             options.Provider = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:Provider") ?? options.Provider;
+            if (string.Equals(options.Provider, TodoStorageOptions.LegacySqliteAlias, StringComparison.OrdinalIgnoreCase))
+                options.Provider = TodoStorageOptions.DatabaseProvider;
             options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
             options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
         });
@@ -249,6 +253,8 @@ public static class McpStdioHost
         });
         builder.Services.AddScoped<DesktopLaunchService>();
         builder.Services.AddScoped<ISessionLogSanitizer, SessionLogSanitizer>();
+        builder.Services.AddSingleton<SessionLogTurnContextExtractor>();
+        builder.Services.AddScoped<ISessionLogTurnContextBackfill, SessionLogTurnContextBackfill>();
         builder.Services.AddScoped<ISessionLogService>(sp =>
         {
             var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
@@ -273,6 +279,9 @@ public static class McpStdioHost
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
         builder.Services.AddMcpGraphRag();
+        // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by usecase_* tools and handlers.
+        builder.Services.AddCqrsDispatcher();
+        builder.Services.AddUseCaseCqrs();
         DecorateGraphRagService(builder.Services);
         builder.Services.AddScoped<WorkspaceContext>();
         builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
@@ -293,6 +302,11 @@ public static class McpStdioHost
             var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
             await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, cancellationToken).ConfigureAwait(false);
             await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, cancellationToken).ConfigureAwait(false);
+            await SessionLogTurnContextBackfillStartup.TryRunAsync(
+                db,
+                scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
+                scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>(),
+                cancellationToken).ConfigureAwait(false);
         }
 
         await host.RunAsync(cancellationToken).ConfigureAwait(false);

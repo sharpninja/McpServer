@@ -15,6 +15,26 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("sessionId")]
     public string? SessionId { get; set; }
 
+    /// <summary>Optional linked agent definition identifier resolved from the source type.</summary>
+    [JsonPropertyName("agentDefinitionId")]
+    public string? AgentDefinitionId { get; set; }
+
+    /// <summary>Provider-native agent session identifier for the session header.</summary>
+    [JsonPropertyName("agentSessionId")]
+    public string? AgentSessionId { get; set; }
+
+    /// <summary>Provider-native transcript file path for the session header.</summary>
+    [JsonPropertyName("agentSessionTranscriptFile")]
+    public string? AgentSessionTranscriptFile { get; set; }
+
+    /// <summary>Agent executable path captured in the session header.</summary>
+    [JsonPropertyName("agentExecutablePath")]
+    public string? AgentExecutablePath { get; set; }
+
+    /// <summary>Agent executable version captured in the session header.</summary>
+    [JsonPropertyName("agentExecutableVersion")]
+    public string? AgentExecutableVersion { get; set; }
+
     /// <summary>Session title.</summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }
@@ -110,6 +130,14 @@ public sealed class UnifiedRequestEntryDto
     /// <summary>Entry status (completed, in_progress).</summary>
     [JsonPropertyName("status")]
     public string? Status { get; set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current plan file or <c>None</c>.</summary>
+    [JsonPropertyName("planFile")]
+    public string? PlanFile { get; set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Current MCP TODO id or <c>None</c>.</summary>
+    [JsonPropertyName("todoId")]
+    public string? TodoId { get; set; }
 
     /// <summary>Actions taken.</summary>
     [JsonPropertyName("actions")]
@@ -306,6 +334,14 @@ public sealed class SessionLogQueryRequest
     /// <summary>Page size limit.</summary>
     [JsonPropertyName("limit")]
     public int Limit { get; set; } = 100;
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact planFile filter after normalize/expand.</summary>
+    [JsonPropertyName("planFile")]
+    public string? PlanFile { get; set; }
+
+    /// <summary>FR-MCP-SESSIONLOGCTX-001: Exact todoId filter.</summary>
+    [JsonPropertyName("todoId")]
+    public string? TodoId { get; set; }
 
     /// <summary>Page offset.</summary>
     [JsonPropertyName("offset")]

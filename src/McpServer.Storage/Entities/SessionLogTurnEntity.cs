@@ -68,6 +68,22 @@ public sealed class SessionLogTurnEntity
     /// <summary>TR-PLANNED-CORE-013: Original turn before normalization serialized as JSON text.</summary>
     public string? OriginalEntryJson { get; set; }
 
+    /// <summary>
+    /// FR-MCP-SESSIONLOGCTX-001 / TR-MCP-SESSIONLOG-006:
+    /// Current plan file for this turn, or the sentinel <c>None</c>.
+    /// </summary>
+    [Required]
+    [StringLength(2048)]
+    public string PlanFile { get; set; } = "None";
+
+    /// <summary>
+    /// FR-MCP-SESSIONLOGCTX-001 / TR-MCP-SESSIONLOG-006:
+    /// Current MCP TODO id for this turn, or the sentinel <c>None</c>.
+    /// </summary>
+    [Required]
+    [StringLength(128)]
+    public string TodoId { get; set; } = "None";
+
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent session.</summary>
     public SessionLogEntity? SessionLog { get; set; }
 

@@ -1,0 +1,130 @@
+[
+  {
+    "id": "R0-docs-usecase-fr",
+    "kind": "file_contains",
+    "path": "docs/Project/Functional-Requirements.md",
+    "pattern": "FR-MCP-USECASE-010",
+    "claim": "Project docs include FR-MCP-USECASE through 010",
+    "whyHostile": "Docs may list partial IDs; require highest FR id present."
+  },
+  {
+    "id": "R0-docs-usecase-test",
+    "kind": "file_contains",
+    "path": "docs/Project/Testing-Requirements.md",
+    "pattern": "TEST-MCP-USECASE-011",
+    "claim": "Project docs include TEST-MCP-USECASE through 011",
+    "whyHostile": "Testing IDs must not stop at original Claude subset."
+  },
+  {
+    "id": "R1-migration-apply-tests",
+    "kind": "dotnet_test",
+    "project": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj",
+    "filter": "FullyQualifiedName~UseCaseMigrationApplyTests",
+    "claim": "UseCaseMigrationApplyTests green 0 fail 0 skip",
+    "whyHostile": "Re-run tests; do not trust prior agent log."
+  },
+  {
+    "id": "R1-migration-no-sessionlogs",
+    "kind": "file_not_contains",
+    "path": "src/McpServer.Storage.SqliteMigrations/Migrations/20260807143850_AddUseCaseSupport.cs",
+    "pattern": "table:\\s*\\\"SessionLogs\\\"",
+    "claim": "AddUseCaseSupport Sqlite migration does not alter SessionLogs table",
+    "whyHostile": "Production crash root cause; must not reappear."
+  },
+  {
+    "id": "R2-audit-tests",
+    "kind": "dotnet_test",
+    "project": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj",
+    "filter": "FullyQualifiedName~UseCaseAuditEmissionTests",
+    "claim": "UseCaseAuditEmissionTests green 0 fail 0 skip",
+    "whyHostile": "Re-run audit suite; prior PASS is not evidence."
+  },
+  {
+    "id": "R3-usecase-unit",
+    "kind": "dotnet_test",
+    "project": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj",
+    "filter": "FullyQualifiedName~UseCase",
+    "claim": "Support.Mcp UseCase filter green 0 fail 0 skip",
+    "whyHostile": "Re-run full filter; count must be current."
+  },
+  {
+    "id": "R4-client",
+    "kind": "dotnet_test",
+    "project": "tests/McpServer.Client.Tests/McpServer.Client.Tests.csproj",
+    "filter": "FullyQualifiedName~UseCase",
+    "claim": "Client UseCase tests green 0 fail 0 skip",
+    "whyHostile": "Re-run client suite."
+  },
+  {
+    "id": "R6-ui-served",
+    "kind": "http_get",
+    "path": "usecases/",
+    "expectStatus": 200,
+    "bodyPattern": "Use Case Manager",
+    "claim": "Live /usecases/ returns 200 Use Case Manager",
+    "whyHostile": "Service may be down or static files missing after restart."
+  },
+  {
+    "id": "R6-health",
+    "kind": "http_get",
+    "path": "health",
+    "expectStatus": 200,
+    "bodyPattern": "Healthy",
+    "claim": "Live /health is Healthy",
+    "whyHostile": "Deploy claims require live health, not memory of UpdateService."
+  },
+  {
+    "id": "R6-diagram-editor-missing",
+    "kind": "file_contains",
+    "path": "src/McpServer.Support.Mcp/wwwroot/usecases/index.html",
+    "pattern": "<pre id=\"diagram\"></pre>",
+    "claim": "UI still only dumps diagram text into pre#diagram (no drawing surface)",
+    "whyHostile": "Operator required built-in diagram view/edit UI. Presence of pre-only diagram proves editor is NOT done."
+  },
+  {
+    "id": "R6-no-mermaid-render",
+    "kind": "file_not_contains",
+    "path": "src/McpServer.Support.Mcp/wwwroot/usecases/index.html",
+    "pattern": "mermaid(\\.min)?\\.js|mermaid\\.initialize",
+    "claim": "UI does not include mermaid renderer library",
+    "whyHostile": "Even view-only rendering is absent; drawing tool is farther."
+  },
+  {
+    "id": "R6-no-canvas-draw",
+    "kind": "file_not_contains",
+    "path": "src/McpServer.Support.Mcp/wwwroot/usecases/app.js",
+    "pattern": "canvas|drag|drawDiagram|diagramEditor|jointjs|gojs|cytoscape",
+    "claim": "UI JS has no diagram drawing/editor implementation",
+    "whyHostile": "Operator-in-scope diagram editor must exist in code, not only in agent prose."
+  },
+  {
+    "id": "PROGRAM-complete-FALSE",
+    "kind": "manual_require_fail",
+    "claim": "Program acceptance (section 8) is fully complete including built-in diagram view/edit UI",
+    "evidence": "Operator scope requires built-in diagram view/edit. Current UI is REST form + pre text dump only. Plan checkboxes claiming R6/R7 complete for full operator UI are invalid without diagram editor.",
+    "whyHostile": "Any overall DONE claim must fail until diagram editor ACs are proven."
+  },
+  {
+    "id": "CHECKLIST-r6-honest",
+    "kind": "file_contains",
+    "path": "docs/McpServer-UseCase-Extension-Design-v3.0.md",
+    "pattern": "\\- \\[ \\] R6 UI/plugins",
+    "claim": "Plan R6 is unchecked while diagram editor remains incomplete",
+    "whyHostile": "R6 must not be [x] until diagram view/edit exists. Honest incomplete state is PASS; false complete is FAIL."
+  },
+  {
+    "id": "HV-tooling",
+    "kind": "file_exists",
+    "path": "tools/powershell/Invoke-HostileValidator.ps1",
+    "claim": "Hostile validator script exists",
+    "whyHostile": "Tooling must exist on disk, not only in chat."
+  },
+  {
+    "id": "HV-plan-section",
+    "kind": "file_contains",
+    "path": "docs/McpServer-UseCase-Extension-Design-v3.0.md",
+    "pattern": "### 6\\.1 Hostile validator",
+    "claim": "Plan section 6.1 mandates hostile validator on every step",
+    "whyHostile": "Operator required this in the plan; prose without the section is FAIL."
+  }
+]

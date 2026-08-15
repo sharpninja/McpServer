@@ -13,6 +13,7 @@ namespace McpServer.Support.Mcp.Requirements.Models;
 /// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</param>
 /// <param name="ScopeStartLayerKey">FR-MCP-REQSCOPE-002: first requirement layer where this FR applies.</param>
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</param>
+/// <param name="LinkedUseCases">FR-MCP-USECASE-003: use cases linked to this FR (including Realizes), for reverse navigation.</param>
 public sealed record FrEntry(
     string Id,
     string Title,
@@ -23,7 +24,21 @@ public sealed record FrEntry(
     string? Notes = null,
     IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null,
     string ScopeStartLayerKey = RequirementScopeLayerDefaults.DefaultLayerKey,
-    string? ScopeEndLayerKey = null);
+    string? ScopeEndLayerKey = null,
+    IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases = null);
+
+/// <summary>
+/// FR-MCP-USECASE-003: Projection of a use case linked to an FR (id, title, link type, order).
+/// </summary>
+/// <param name="UseCaseId">Use case surrogate id.</param>
+/// <param name="Title">Use case title.</param>
+/// <param name="LinkType">Link type (default Realizes).</param>
+/// <param name="LinkOrder">Ordering among links.</param>
+public sealed record LinkedUseCaseRef(
+    long UseCaseId,
+    string Title,
+    string LinkType,
+    int LinkOrder);
 
 /// <summary>FR-MCP-026: Technical Requirement entry parsed from Technical-Requirements.md.</summary>
 /// <param name="Id">The TR identifier (e.g. TR-MCP-ARCH-001).</param>

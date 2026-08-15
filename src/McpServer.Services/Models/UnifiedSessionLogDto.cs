@@ -20,6 +20,22 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("agentDefinitionId")]
     public string? AgentDefinitionId { get; set; }
 
+    /// <summary>Provider-native agent session identifier for the session header.</summary>
+    [JsonPropertyName("agentSessionId")]
+    public string? AgentSessionId { get; set; }
+
+    /// <summary>Provider-native transcript file path for the session header.</summary>
+    [JsonPropertyName("agentSessionTranscriptFile")]
+    public string? AgentSessionTranscriptFile { get; set; }
+
+    /// <summary>Agent executable path captured in the session header.</summary>
+    [JsonPropertyName("agentExecutablePath")]
+    public string? AgentExecutablePath { get; set; }
+
+    /// <summary>Agent executable version captured in the session header.</summary>
+    [JsonPropertyName("agentExecutableVersion")]
+    public string? AgentExecutableVersion { get; set; }
+
     /// <summary>Human-readable session title.</summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }
@@ -217,6 +233,20 @@ public sealed class UnifiedRequestEntryDto
     [JsonPropertyName("blockers")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
     public ICollection<string>? Blockers { get; set; }
+
+    /// <summary>
+    /// FR-MCP-SESSIONLOGCTX-001: Current plan file being worked, or the sentinel <c>None</c>.
+    /// Required on new entries. Omitted on additive updates preserves the stored value.
+    /// </summary>
+    [JsonPropertyName("planFile")]
+    public string? PlanFile { get; set; }
+
+    /// <summary>
+    /// FR-MCP-SESSIONLOGCTX-001: Current MCP TODO id being worked, or the sentinel <c>None</c>.
+    /// Required on new entries. Omitted on additive updates preserves the stored value.
+    /// </summary>
+    [JsonPropertyName("todoId")]
+    public string? TodoId { get; set; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: Single processing dialog entry recording model reasoning during request execution.</summary>

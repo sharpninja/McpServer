@@ -134,7 +134,7 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
     }
 
     /// <inheritdoc />
-    public async Task BeginTurnAsync(string requestId, string queryTitle, string queryText, CancellationToken cancellationToken = default)
+    public async Task BeginTurnAsync(string requestId, string queryTitle, string queryText, CancellationToken cancellationToken = default, string? planFile = null, string? todoId = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(requestId, nameof(requestId));
         ArgumentException.ThrowIfNullOrWhiteSpace(queryTitle, nameof(queryTitle));
@@ -146,7 +146,7 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
         try
         {
             var state = EnsureSessionActive();
-            state.BeginTurn(requestId, queryTitle, queryText, _timeProvider.GetUtcNow());
+            state.BeginTurn(requestId, queryTitle, queryText, _timeProvider.GetUtcNow(), planFile, todoId);
 
             await SubmitCurrentStateAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -436,6 +436,10 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
         target.LastUpdated = LatestTimestamp(target.LastUpdated, incoming.LastUpdated);
         target.Status = PreferSessionStatus(target.Status, incoming.Status);
         target.Workspace ??= incoming.Workspace;
+        target.AgentSessionId ??= incoming.AgentSessionId;
+        target.AgentSessionTranscriptFile ??= incoming.AgentSessionTranscriptFile;
+        target.AgentExecutablePath ??= incoming.AgentExecutablePath;
+        target.AgentExecutableVersion ??= incoming.AgentExecutableVersion;
         target.CursorSessionLabel ??= incoming.CursorSessionLabel;
         target.CopilotStatistics ??= incoming.CopilotStatistics;
         target.TotalTokens ??= incoming.TotalTokens;
@@ -827,7 +831,7 @@ internal sealed class SessionLogState : ISessionLogState
     public string? CurrentTurnStatus => _activeTurn?.Status;
     public int TurnCount => _turns.Count;
 
-    public void BeginTurn(string requestId, string queryTitle, string queryText, DateTimeOffset timestamp)
+    public void BeginTurn(string requestId, string queryTitle, string queryText, DateTimeOffset timestamp, string? planFile = null, string? todoId = null)
     {
         // Check for duplicate turn
         if (_turns.Any(t => t.RequestId == requestId))
@@ -846,7 +850,7 @@ internal sealed class SessionLogState : ISessionLogState
             _activeTurn = null;
         }
 
-        _activeTurn = new TurnState(requestId, queryTitle, queryText, timestamp);
+        _activeTurn = new TurnState(requestId, queryTitle, queryText, timestamp, planFile, todoId);
         LastUpdated = timestamp;
     }
 
@@ -963,7 +967,7 @@ internal sealed class SessionLogState : ISessionLogState
 /// </summary>
 internal sealed class TurnState
 {
-    public TurnState(string requestId, string queryTitle, string queryText, DateTimeOffset timestamp)
+    public TurnState(string requestId, string queryTitle, string queryText, DateTimeOffset timestamp, string? planFile = null, string? todoId = null)
     {
         RequestId = requestId;
         QueryTitle = queryTitle;
@@ -974,6 +978,8 @@ internal sealed class TurnState
         Actions = new List<ISessionAction>();
         Tags = new List<string>();
         ContextList = new List<string>();
+        PlanFile = string.IsNullOrWhiteSpace(planFile) ? "None" : planFile;
+        TodoId = string.IsNullOrWhiteSpace(todoId) ? "None" : todoId;
     }
 
     public string RequestId { get; }
@@ -989,6 +995,8 @@ internal sealed class TurnState
     public List<string> ContextList { get; set; }
     public List<IDialogItem> ProcessingDialog { get; }
     public List<ISessionAction> Actions { get; }
+    public string? PlanFile { get; set; }
+    public string? TodoId { get; set; }
 
     public UnifiedRequestEntryDto ToDto()
     {
@@ -1003,6 +1011,8 @@ internal sealed class TurnState
             Status = Status,
             TokenCount = TokenCount,
             FailureNote = FailureNote,
+            PlanFile = PlanFile,
+            TodoId = TodoId,
             Tags = Tags.Count > 0 ? Tags : null,
             ContextList = ContextList.Count > 0 ? ContextList : null,
             ProcessingDialog = ProcessingDialog.Count > 0 

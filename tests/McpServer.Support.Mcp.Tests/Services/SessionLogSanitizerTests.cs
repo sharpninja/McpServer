@@ -1,3 +1,4 @@
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Options;
@@ -111,6 +112,83 @@ public sealed class SessionLogSanitizerTests
         var twice = sanitizer.SanitizeString(once);
 
         Assert.Equal(once, twice);
+    }
+
+    /// <summary>AC-TR-MCP-SESSIONLOG-006-008: clone copies planFile and todoId.</summary>
+    [Fact]
+    public void SanitizeTurn_CopiesPlanFileAndTodoId()
+    {
+        var sanitizer = CreateSanitizer();
+        var source = new UnifiedSessionLogDto
+        {
+            SourceType = "Cursor",
+            SessionId = "Cursor-20260304T113901Z-san",
+            Turns =
+            [
+                new UnifiedRequestEntryDto
+                {
+                    RequestId = "req-20260304T113901Z-san",
+                    PlanFile = "docs/plans/foo.md",
+                    TodoId = "MCP-SESSIONLOG-002",
+                },
+            ],
+        };
+
+        var sanitized = sanitizer.SanitizeSessionLog(source);
+        var turn = Assert.Single(sanitized!.Turns!);
+        Assert.Equal("docs/plans/foo.md", turn.PlanFile);
+        Assert.Equal("MCP-SESSIONLOG-002", turn.TodoId);
+    }
+
+    /// <summary>AC-TR-MCP-SESSIONLOG-006-008: sanitizer does not mutate the source turn.</summary>
+    [Fact]
+    public void SanitizeTurn_DoesNotMutateSource()
+    {
+        var sanitizer = CreateSanitizer();
+        var sourceTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260304T113901Z-src",
+            PlanFile = "docs/plans/foo.md",
+            TodoId = "MCP-SESSIONLOG-002",
+            Response = "password=hunter2",
+        };
+        var source = new UnifiedSessionLogDto
+        {
+            SourceType = "Cursor",
+            SessionId = "Cursor-20260304T113901Z-src",
+            Turns = [sourceTurn],
+        };
+
+        _ = sanitizer.SanitizeSessionLog(source);
+        Assert.Equal("docs/plans/foo.md", sourceTurn.PlanFile);
+        Assert.Equal("MCP-SESSIONLOG-002", sourceTurn.TodoId);
+        Assert.Equal("password=hunter2", sourceTurn.Response);
+    }
+
+    /// <summary>AC-TR-MCP-SESSIONLOG-006-008: None is not rewritten.</summary>
+    [Fact]
+    public void SanitizeTurn_LeavesNoneUnchanged()
+    {
+        var sanitizer = CreateSanitizer();
+        var source = new UnifiedSessionLogDto
+        {
+            SourceType = "Cursor",
+            SessionId = "Cursor-20260304T113901Z-none",
+            Turns =
+            [
+                new UnifiedRequestEntryDto
+                {
+                    RequestId = "req-20260304T113901Z-none",
+                    PlanFile = "None",
+                    TodoId = "None",
+                },
+            ],
+        };
+
+        var sanitized = sanitizer.SanitizeSessionLog(source);
+        var turn = Assert.Single(sanitized!.Turns!);
+        Assert.Equal("None", turn.PlanFile);
+        Assert.Equal("None", turn.TodoId);
     }
 
     private static SessionLogSanitizer CreateSanitizer(SessionLogSanitizationOptions? options = null)

@@ -1014,13 +1014,18 @@ Tests SHALL verify the ACID tightly coupled Microsoft Agent Framework profile me
 
 ### TEST-MCP-187
 
-Verifies that the hosted MCP coding agent executes coding prompts through the Quad Brain orchestration client surface without live external model calls. Integration test invokes mcp_quadbrain_coding_execute for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape. Tests use in-memory MCP HTTP handler without live external model credentials or network calls.
+RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This test covered the hosted coding agent reaching QuadBrain orchestration through the mcp_quadbrain_coding_execute tool. That tool has been removed from the shared hosted-agent catalog because it exposed a QuadBrain capability to every McpServer.McpAgent host rather than to QBAgent alone, and it was already dead for QBAgent since QuadBrainInternalToolExecutor had no case for it. Its coverage is replaced by absence assertions under TEST-MCP-193: McpHostedAgentAdapterTests.AcidRuntime_ExposesNoQuadBrainSurface, HostedAgentQuadBrainAbsenceTests (registration functions, attached run-option tools, and QBAgentDefinition tool-name lists), and HostedAgentWorkflowIntegrationTests.AddMcpServerMcpAgent_SharedToolCatalog_ContainsNoQuadBrainTool. QuadBrain coding work continues to run server-side through POST /v1/chat/completions, which QBAgent invokes as an OpenAI-compatible model; that path keeps its own integration coverage.
 
 **Acceptance Criteria:**
 - [x] A prompt-array integration test invokes `mcp_quadbrain_coding_execute` for multiple coding-task prompts and asserts the request path, payload, metadata, and committed response shape.
 - [x] An ACID profile test proves the Quad Brain coding tool is exposed while unsafe tools remain blocked.
 - [x] Tests use an in-memory MCP HTTP handler and do not require live external model credentials or network calls.
 - [x] Executed ACID profile tests finish with zero failed and zero skipped tests.
+
+### TEST-MCP-188
+
+Registered 2026-07-20 to close a pre-existing traceability drift: this id was cited at tests/Build.Tests/DocumentationGuidanceTests.cs:35 but existed in neither the MCP requirements store nor docs/Project/Testing-Requirements.md, so a naive next-free-id calculation would have collided with live code. The test verifies that the workspace marker template pins the PowerShell and Node runtime guidance agents depend on: DocumentationGuidanceTests asserts the generated marker prompt instructs agents to invoke PowerShell as pwsh.exe from PATH rather than hard-coding an absolute install path, and that Node usage guidance is present, so that agents on hosts with WindowsApps or MSIX PowerShell layouts still resolve a working runtime. Fixture: the rendered marker prompt template read from the repository. This entry documents existing coverage; no behavior changed when it was registered.
+
 
 ### TEST-MCP-189
 
@@ -1040,6 +1045,16 @@ Validates FR-MCP-141 and TR-MCP-TUN-004. Unit: NgrokTunnelProvider constructed w
 ### TEST-MCP-192
 
 Validates TR-MCP-SEC-006 under FR-MCP-129 and FR-MCP-134. Unit: a brain slot whose party id was renamed to brain-slot:creativity, with an active signing key still registered only under the legacy brain-slot:left-hemisphere party, becomes ready after reconciliation, and the key material under the new key id brain-slot:creativity:signing:1 is byte-identical to the legacy key material. Unit, preservation: the legacy party row and legacy key row still exist and remain active after reconciliation, so historical diffgram signatures that reference the legacy key id stay verifiable; the operation is a copy, never a move. Unit, idempotence: running reconciliation twice performs no second write and leaves exactly one key per party id. Unit, no-op paths: reconciliation does nothing when the new party already has an active signing key, and does nothing when no legacy party or key exists, and it never generates new key material in either case. Unit: the same mapping holds for Logic from the legacy brain-slot:right-hemisphere party, while CuriosityEngine and ArbiterOfTruth are untouched.
+
+
+### TEST-MCP-193
+
+Validates FR-MCP-142 and TR-MCP-QB-001. Absence tests, each written to fail if the surface returns. Node: the shared plugin core exports no brainSlotTools symbol and allToolDescriptors contains no descriptor whose name starts with brain_slot, asserted over the built package rather than the source. Node: dispatching a brain_slot name through the host context throws Unknown tool. Server: the MCP tool surface assembled from the Support.Mcp assembly contains no tool named brain_slot_ anything, asserted by scanning the registered McpServerTool names so the test survives a future file reappearing under a different name. Repl: resolving the client passthrough name BRAINSLOTS fails to resolve rather than returning BrainSlotClient. Agent framework: the shared hosted-agent tool catalog contains no tool name containing quadbrain. Registry: no file matching brain_slot_*.json exists under mcps. Positive control that the server path survives: POST /v1/chat/completions still reaches QuadBrain orchestration and QBAgentChatClientFactory still targets model id QuadBrain at the marker baseUrl, so the removal cannot be satisfied by breaking QBAgent.
+
+
+### TEST-MCP-194
+
+Validates TR-MCP-SYNC-001. Build.Tests source-convention checks over build/Build.SyncAgentPlugins.cs, following the existing BuildTargetTests read-the-source idiom: (1) the source names the version-less stable vendor file sharpninja-mcpserver-plugin-core.tgz; (2) the source contains no versioned tarball literal matching sharpninja-mcpserver-plugin-core-digits.digits.digits.tgz, so a future hard-coded version cannot return; (3) the source asserts the packed tarball version against plugins/core/lib-node/package.json, pinned by requiring the assertion code to reference the package.json version read. Red state before the fix: the versioned constant sharpninja-mcpserver-plugin-core-0.1.0.tgz is present and the stable name is absent.
 
 
 
@@ -1395,6 +1410,29 @@ Validates TR-MCP-PLUGIN-012. mcpserver-claude-code-plugin/tests/CurrentTurnSessi
 ### TEST-MCP-PLUGIN-013
 
 HookTurnDedupe.Tests.ps1: the UserPromptSubmit hook reuses the open turn on a duplicate prompt (returns turn-already-open, does not call beginTurn) and opens a new turn for a differing prompt. Hermetic via a self-contained marker plus the forced host identity. Validates TR-MCP-PLUGIN-013 / BUG-TRIAGE-077.
+
+
+
+## TEST-MCP-PLUGIN-HEADER
+
+### TEST-MCP-PLUGIN-HEADER-002
+
+Validates TR-MCP-PLUGIN-HEADER-001. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 'TEST-MCP-PLUGIN-HEADER-002 emits the cache transcript path only when that file exists': with the cache session.jsonl actually created, the resolver reports it; the companion assertion in 'TEST-MCP-PLUGIN-PSONLY-001 resolves default agent runtime header fields' proves it is empty when the file was never created. Scope: layer-1+.
+
+
+### TEST-MCP-PLUGIN-HEADER-003
+
+Validates TR-MCP-PLUGIN-HEADER-001. PluginPowerShellRuntime.Tests.ps1 'TEST-MCP-PLUGIN-HEADER-003 prefers the verified provider session id and transcript from the host payload': ProviderSessionId and an existing TranscriptPath supplied from the host hook payload win over the MCP session id and cache path. Scope: layer-1+.
+
+
+### TEST-MCP-PLUGIN-HEADER-004
+
+Validates TR-MCP-PLUGIN-HEADER-001. PluginPowerShellRuntime.Tests.ps1 'TEST-MCP-PLUGIN-HEADER-004 never reports the plugin version as the agent executable version': with MCP_PLUGIN_VERSION set to 1.82.0 and executable discovery impossible, agentExecutableVersion is 'unknown' and never 1.82.0. Red before the fallback removal, green after. Scope: layer-1+.
+
+
+### TEST-MCP-PLUGIN-HEADER-005
+
+Validates TR-MCP-PLUGIN-HEADER-001. PluginPowerShellRuntime.Tests.ps1 'TEST-MCP-PLUGIN-HEADER-005 never re-submits a stale fabricated transcript path or echoed session id from cache': seeds session-state.yaml with a non-existent transcript path and an agentSessionId equal to the MCP session id, then asserts the SubmitAsync payload contains neither. Red before the submit-layer guard in Invoke-ReplPersistTurn, green after. Scope: layer-1+.
 
 
 
@@ -1870,6 +1908,56 @@ Validates TR-MCP-REPL-014. plugins/core/test-fixtures/pester/PluginPowerShellRun
 Validates TR-MCP-REPL-015. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1 (Example-B override pattern capturing Invoke-ReplPersistTurn args): an incidental re-submit (appendActions/appendDialog/completeTurn/supersede) with no explicit queryTitle param omits the turn title (and session title) from the persisted payload so a server-preserved title is not clobbered; an explicit queryTitle param still sends and updates the turn title; beginTurn seeds the turn title and seeds the session title only when session-state has none. Red before the omit change, green after. Scope: layer-1+.
 
 
+### TEST-MCP-REPL-031
+
+Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1, Describe "TEST-MCP-REPL-031 failsafe queue drain". Fixture: a throwaway queue supplied through MCPSERVER_FAILSAFE_DIR plus MCP_CACHE_DIR_OVERRIDE, seeded with three synthetic client.SessionLog.SubmitAsync records stamped 20260714T154733Z, 20260716T112949Z, 20260720T230559Z; Invoke-ReplRaw is overridden to record the replay order and report success, so no backend and no real queue is touched. Asserts Invoke-ReplFailsafeDrain returns scanned 3, replayed 3, failed 0, quarantined 0, aborted false; that the three replays arrive in ascending timestamp order carrying the original requestIds; and that the queue directory is empty afterwards. Red before Invoke-ReplFailsafeDrain existed (CommandNotFoundException), green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-032
+
+Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: three synthetic records in a MCPSERVER_FAILSAFE_DIR sandbox; the overridden Invoke-ReplRaw returns a server-level "type: error / code: validation_failed" result for the middle record and success for the other two. Asserts all three records are attempted (the rejected one does not dam the queue), the summary reports replayed 2 and failed 1 and aborted false, the rejected record is still on disk while the other two are gone, and the retained record now carries drainAttempts 1. Red before the drain existed, green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-033
+
+Validates TR-MCP-REPL-017. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a MCPSERVER_FAILSAFE_DIR sandbox holding one deliberately unparseable YAML file plus one well-formed record; Invoke-ReplRaw is overridden to count submissions and report success. Asserts exactly one submission happens (the malformed record is never replayed), the summary reports quarantined 1 and replayed 1, the malformed file is gone from the queue root, the quarantine directory holds one .yaml plus one non-empty .reason.txt sidecar, and the queue root is empty. Red before the quarantine path existed, green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-034
+
+Validates TR-MCP-REPL-017. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a single synthetic record seeded with drainAttempts 5 in a MCPSERVER_FAILSAFE_DIR sandbox; Invoke-ReplRaw is overridden to count submissions. Asserts Invoke-ReplFailsafeDrain -MaxAttempts 5 makes zero submissions, reports quarantined 1 and replayed 0, removes the record from the queue root, and leaves exactly one record in the quarantine directory: an attempt-exhausted record is set aside, never retried forever and never deleted. Red before the attempt budget existed, green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-035
+
+Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: two synthetic records in a MCPSERVER_FAILSAFE_DIR sandbox; the overridden Invoke-ReplRaw returns Success false with the transport error "MCP_UNTRUSTED: marker refresh failed before REPL request". Asserts the drain stops after the first attempt rather than hammering the whole queue, reports aborted true with a non-empty abortReason and replayed 0 and quarantined 0, leaves both records on disk, and does not add a drainAttempts counter to the first record, so an outage cannot burn the attempt budget of good turns. Red before the drain existed, green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-036
+
+Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a record written through the production Write-ReplFailsafe into a MCPSERVER_FAILSAFE_DIR sandbox, so it is registered as in flight; Invoke-ReplRaw is overridden to count submissions. Asserts the drain makes zero submissions, reports skipped 1 and replayed 0, and leaves the in-flight record on disk so the owning submit still controls it; then asserts Clear-ReplFailsafe removes it, proving the in-flight registration is released on completion. Red before in-flight tracking existed, green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-037
+
+Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: Invoke-ReplFailsafeDrain overridden with a call counter. Asserts three consecutive Invoke-ReplFailsafeDrainOnFirstSuccess calls produce exactly one drain (the once-per-process latch holds even after the first pass), and asserts by source inspection that the body of Invoke-ReplRaw in plugins/core/lib-ps/repl-invoke.ps1 calls Invoke-ReplFailsafeDrainOnFirstSuccess, which is the wiring point that proves backend reachability before any replay. Red before the hook existed (CommandNotFoundException), green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-038
+
+Validates TR-MCP-REPL-016. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: Invoke-ReplFailsafeDrain and Invoke-ReplRaw both overridden with counters. Asserts Invoke-ReplMethod -Method workflow.failsafe.drain -ParamsYaml "maxRecords: 7" dispatches locally: the drain runs exactly once, receives MaxRecords 7 from the params, Invoke-ReplRaw is never called (no server round trip for a plugin-local verb), and the returned text contains the YAML drain summary an operator reads. Red before the verb existed (drain call count 0), green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-039
+
+Validates TR-MCP-REPL-017. plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1. Fixture: a sandbox failsafe directory holding two queued records plus one record already in the quarantine subdirectory; plugins/core/lib-ps/mcp-status.ps1 is run as a child pwsh process with MCPSERVER_FAILSAFE_DIR and MCP_CACHE_DIR_OVERRIDE pointed at the sandbox. Asserts the emitted JSON reports failsafeDir equal to the sandbox queue, failsafeCount 2, failsafeQuarantineCount 1, and pendingCount 2, so queue depth is truthful and quarantined records are excluded. Red before the status change (failsafeDir null), green after. Scope: layer-1+.
+
+
+### TEST-MCP-REPL-040
+
+Validates FR-MCP-143 with TR-MCP-REPL-018, TR-MCP-REPL-019, TR-MCP-REPL-020, TR-MCP-CLIENT-001, and TR-MCP-HEALTH-003. Pester, plugin core: a turn upsert invoked with an empty title binds and persists, covering appendDialog without a queryTitle, appendActions, completeTurn, and the supersede path; before the fix each case fails at parameter binding with a mandatory-parameter error, which the red run quotes. Pester: a supersede where the server holds a refined title and the local cache holds only the hook's raw first line preserves the refined title, and a supersede with no local title still persists. Pester: failTurn closes a turn that exists only in the plugin cache with an empty in-process REPL state, where it previously returned "No active session exists". Unit, client: serializing each session-log request body through the real McpClientJsonContext resolver succeeds, and the audit-driven cases cover every request body found in the typed client rather than only the three known sites; before the fix the anonymous bodies throw NotSupportedException from GetTypeInfo. Unit, server: with an unreachable store the health path no longer reports plain Healthy while persistence is dead, the trust nonce still echoes exactly, and a backend-unavailable condition surfaces as one typed error across REST and the MCP tools instead of four different shapes.
+
+
 
 ## TEST-MCP-REPL-TRIAGE
 
@@ -2015,6 +2103,27 @@ Validates TR-MCP-SESSIONLOG-003. tests/McpServer.Support.Mcp.Tests/Services/Sess
 
 Validates TR-MCP-SESSIONLOG-005. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: SetSessionTitleAsync unconditionally changes an existing session Title; SetTurnTitleAsync unconditionally changes an existing turn QueryTitle; both throw InvalidOperationException when the session or turn does not exist. Red before the methods exist, green after. Scope: layer-1+.
 
+
+### TEST-MCP-SESSIONLOG-006
+
+Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-006-001 through 008. Tests: SessionLogTurnContextValidatorTests, SessionLogServiceTurnContextTests, SessionLogTurnContextExtractorTests, SessionLogTurnContextBackfillTests, SessionLogTurnPlanFileTodoIdModelTests, AddSessionLogTurnPlanFileAndTodoIdMigrationTests, SessionLogControllerTests.BeginTurn_MissingFields_Returns400, BeginTurn_NoneNone_Returns201_AndGetReturnsNone, Query_FilterByTodoId_ReturnsOnlyMatches, SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError, SessionLogBeginTurn_NoneNone_ReturnsSuccess, BeginTurnAsync_SerializesPlanFileAndTodoId, BeginTurnAsync_PersistsPlanFileAndTodoId, BeginTurnAsync_ForwardsPlanFileAndTodoId, SanitizeTurn_CopiesPlanFileAndTodoId, SanitizeTurn_DoesNotMutateSource, SanitizeTurn_LeavesNoneUnchanged, Import_OmittedFields_PersistsExtractorResultOrNone, Ingest_OmittedFields_PersistsExtractorResultOrNone, Apply_OmittedFields_PersistsProperValue, SqliteMigration_UpAddsColumns_DownDropsThem, Invoke-WorkflowBeginTurn_* plugin contract tests.
+
+**Acceptance Criteria:**
+- [ ] Round-trip planFile/todoId on persist and get.
+- [ ] None sentinel persists and is never rewritten to null.
+- [ ] New persist without fields is rejected.
+- [ ] Relative, exact, and ~/ plan paths are accepted; .. is rejected.
+- [ ] Query filter and text search match planFile and todoId.
+- [ ] Backfill upgrades None from turn contents and ~ history.
+- [ ] Import/ingest/federation persist a validated pair, never null.
+- [ ] Validator rules covered by SessionLogTurnContextValidatorTests.
+- [ ] Additive omit-preserve and replace-required covered by SessionLogServiceTurnContextTests.
+- [ ] Extractor ranking covered by SessionLogTurnContextExtractorTests.
+- [ ] Schema/migration covered by model and provider migration tests.
+- [ ] Backfill None-only upgrades covered by SessionLogTurnContextBackfillTests.
+- [ ] REST/MCP begin required fields covered by controller and tool tests.
+- [ ] Client/agent/REPL carry fields covered by their session-log tests.
+- [ ] Sanitizer clones new fields covered by SessionLogSanitizerTests.
 
 
 ## TEST-MCP-SESSIONLOGSAN
@@ -2227,6 +2336,94 @@ Every new FR/TR/TEST acceptance criterion is referenced by at least one test and
 
 **Acceptance Criteria:**
 - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
+
+
+## TEST-MCP-USECASE
+
+### TEST-MCP-USECASE-001
+
+Unit tests cover schema creation, workspace isolation, soft-delete hide, FR string FK link uniqueness, and handler CRUD/link behaviors with zero skips in the executed gate scope.
+
+
+### TEST-MCP-USECASE-002
+
+Controller unit tests for UseCasesController. Acceptance: Controller tests green 0 skip.
+
+
+### TEST-MCP-USECASE-003
+
+Diagram golden tests mermaid and plantuml. Acceptance: Mermaid sequenceDiagram; plantuml @startuml.
+
+
+### TEST-MCP-USECASE-004
+
+Client unit tests with live JSON shapes. Acceptance: Client UseCase filter green including coverage DTO.
+
+
+### TEST-MCP-USECASE-005
+
+Coverage query tests. Acceptance: Coverage gap tests green.
+
+
+### TEST-MCP-USECASE-006
+
+Migration apply empty and production-shaped. Acceptance: UseCaseMigrationApplyTests green 0 skip.
+
+
+### TEST-MCP-USECASE-007
+
+Audit emission on UC mutations. Acceptance: Audit tests green for create/update/delete/link.
+
+
+### TEST-MCP-USECASE-008
+
+UI asset REST-only tests. Acceptance: UseCaseUiAssetTests green.
+
+
+### TEST-MCP-USECASE-009
+
+Approval and product hooks tests. Acceptance: Expanded scope approval/product tests green.
+
+
+### TEST-MCP-USECASE-010
+
+Plugin-core usecase jest tests. Acceptance: usecase.test.ts green.
+
+
+### TEST-MCP-USECASE-011
+
+Deploy smoke after UpdateService. Acceptance: health, /usecases/, create/link/diagram/coverage smoke log green.
+
+
+### TEST-MCP-USECASE-012
+
+UML graph serialization goldens Mermaid schema v1 + PlantUML. Covers AC-013-*, AC-014-*, AC-T14-*.
+
+
+### TEST-MCP-USECASE-013
+
+Diagram graph CQRS/storage get put isolation soft-delete invalid audit. Covers AC-012-*, AC-T11-3, AC-T12-1, AC-T16-1.
+
+
+### TEST-MCP-USECASE-014
+
+Controller/client diagram-graph and kind=usecase export. Covers AC-T13-*, HTTP AC-012-5.
+
+
+### TEST-MCP-USECASE-015
+
+Canvas UI asset/contract tests palette canvas drag hooks REST-only. Covers AC-011-*, AC-T15-*.
+
+
+### TEST-MCP-USECASE-016
+
+Migration apply for graph storage. Covers AC-T11-1, AC-T11-2.
+
+
+### TEST-MCP-USECASE-017
+
+Adversarial Grok hostile validator + live canvas smoke claim pack.
+
 
 
 ## TEST-MCP-WIKIEXPORT

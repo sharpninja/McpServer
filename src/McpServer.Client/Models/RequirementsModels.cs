@@ -46,6 +46,30 @@ public sealed class FrEntry
     /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this FR applies.</summary>
     [JsonPropertyName("scopeEndLayerKey")]
     public string? ScopeEndLayerKey { get; set; }
+
+    /// <summary>FR-MCP-USECASE-003: use cases linked to this FR (including Realizes).</summary>
+    [JsonPropertyName("linkedUseCases")]
+    public IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases { get; set; }
+}
+
+/// <summary>FR-MCP-USECASE-003: Use case linked to an FR.</summary>
+public sealed class LinkedUseCaseRef
+{
+    /// <summary>Use case id.</summary>
+    [JsonPropertyName("useCaseId")]
+    public long UseCaseId { get; set; }
+
+    /// <summary>Use case title.</summary>
+    [JsonPropertyName("title")]
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>Link type (e.g. Realizes).</summary>
+    [JsonPropertyName("linkType")]
+    public string LinkType { get; set; } = "Realizes";
+
+    /// <summary>Link order.</summary>
+    [JsonPropertyName("linkOrder")]
+    public int LinkOrder { get; set; }
 }
 
 /// <summary>A technical requirement entry.</summary>

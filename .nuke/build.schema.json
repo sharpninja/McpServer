@@ -219,6 +219,10 @@
           "type": "boolean",
           "description": "Fail on missing TR/TEST coverage (default false)"
         },
+        "StrictUseCaseFrCoverage": {
+          "type": "boolean",
+          "description": "Fail when UseCaseFrLinks Realizes coverage findings are non-empty (default false)"
+        },
         "TimeoutSeconds": {
           "type": "integer",
           "description": "Health check timeout in seconds",
@@ -248,6 +252,10 @@
         "UpdateTool": {
           "type": "boolean",
           "description": "Update existing tool installation instead of fresh install"
+        },
+        "UseCaseSqlitePath": {
+          "type": "string",
+          "description": "Optional path to workspace SQLite DB for UseCaseFrLinks Realizes coverage (FR-MCP-USECASE-010)"
         },
         "WorkspacePath": {
           "type": "string",

@@ -1,0 +1,59 @@
+schema: mcp-wiki-export/v1
+home:
+  document: home
+documents:
+- id: home
+  title: Home
+  source: generated:home
+  target: Home.md
+  platforms:
+  - github
+  - azure
+- id: functional
+  title: Functional Requirements
+  source: generated:functional
+  target: Functional-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: technical
+  title: Technical Requirements
+  source: generated:technical
+  target: Technical-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: testing
+  title: Testing Requirements
+  source: generated:testing
+  target: Testing-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: mapping
+  title: TR per FR Mapping
+  source: generated:mapping
+  target: TR-per-FR-Mapping.md
+  platforms:
+  - github
+  - azure
+- id: matrix
+  title: Requirements Matrix
+  source: generated:matrix
+  target: Requirements-Matrix.md
+  platforms:
+  - github
+  - azure
+navigation:
+- document: home
+  children: &o0 []
+- document: functional
+  children: *o0
+- document: technical
+  children: *o0
+- document: testing
+  children: *o0
+- document: mapping
+  children: *o0
+- document: matrix
+  children: *o0

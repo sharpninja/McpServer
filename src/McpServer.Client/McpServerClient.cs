@@ -110,12 +110,13 @@ public sealed class McpServerClient
         BrainSlots = new BrainSlotClient(http, options, holder);
         Triage = new TriageClient(http, options, holder);
         AgentHelp = new AgentHelpClient(http, options, holder);
+        UseCases = new UseCaseClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, GraphRag, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
-            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage, AgentHelp
+            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage, AgentHelp, UseCases
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -444,4 +445,11 @@ public sealed class McpServerClient
     /// <para>See <see cref="AgentHelpClient"/> for the full method list.</para>
     /// </summary>
     public AgentHelpClient AgentHelp { get; }
+
+    /// <summary>
+    /// Use case endpoints - CRUD, flows/steps/actors, FR links, diagram, and coverage.
+    /// <para>See <see cref="UseCaseClient"/> for the full method list.</para>
+    /// </summary>
+    public UseCaseClient UseCases { get; }
+
 }

@@ -1,0 +1,274 @@
+[
+  {
+    "Path": "C:\\ProgramData\\McpServer",
+    "Action": "skip",
+    "Before": "",
+    "After": "",
+    "Detail": "no_git",
+    "Ok": true
+  },
+  {
+    "Path": "C:\\Users\\kingd\\Downloads\\think-coach",
+    "Action": "azure_only_rename",
+    "Before": "origin=https://dev.azure.com/MCPServer/think-coach/_git/think-coach",
+    "After": "azure=https://dev.azure.com/MCPServer/think-coach/_git/think-coach",
+    "Detail": "origin_renamed_to_azure_no_github",
+    "Ok": true
+  },
+  {
+    "Path": "C:\\Users\\kingd\\OneDrive\\Documents\\PowerShell\\Snippets",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/PS-Services/Snippets.git",
+    "After": "origin=https://github.com/PS-Services/Snippets.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\aiUnit",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/aiUnit.git | origin=https://McpServer@dev.azure.com/McpServer/aiUnit/_git/aiUnit",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/aiUnit/_git/aiUnit | origin=https://github.com/sharpninja/aiUnit.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\Avalonia.RemoteControl",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/Avalonia.RemoteControl.git | origin=https://McpServer@dev.azure.com/McpServer/Avalonia.RemoteControl/_git/Avalonia.RemoteControl",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/Avalonia.RemoteControl/_git/Avalonia.RemoteControl | origin=https://github.com/sharpninja/Avalonia.RemoteControl.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\BBCrawler",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/BBCrawler.git | origin=https://McpServer@dev.azure.com/McpServer/BBCrawler/_git/BBCrawler",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/BBCrawler/_git/BBCrawler | origin=https://github.com/sharpninja/BBCrawler.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\bitnet-b1.58-sharp",
+    "Action": "azure_only_rename",
+    "Before": "origin=https://McpServer@dev.azure.com/McpServer/McpServer/_git/BitNet-b1.58-Sharp",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/McpServer/_git/BitNet-b1.58-Sharp",
+    "Detail": "origin_renamed_to_azure_no_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\BodyAndBrain.Engine",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/BodyAndBrain.Engine.git | origin=https://McpServer@dev.azure.com/McpServer/BodyAndBrain.Engine/_git/BodyAndBrain.Engine",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/BodyAndBrain.Engine/_git/BodyAndBrain.Engine | origin=https://github.com/sharpninja/BodyAndBrain.Engine.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\CbmEngine",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/CbmEngine.git",
+    "After": "origin=https://github.com/sharpninja/CbmEngine.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\EternalDiscord",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/EternalDiscord.git",
+    "After": "origin=https://github.com/sharpninja/EternalDiscord.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\EternalReddit",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/EternalReddit.git",
+    "After": "origin=https://github.com/sharpninja/EternalReddit.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\EternalSocial",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/EternalSocial.git",
+    "After": "origin=https://github.com/sharpninja/EternalSocial.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\EternalX.Blazor",
+    "Action": "already_ok",
+    "Before": "azure=https://dev.azure.com/McpServer/McpServer/_git/EternalX.Blazor | origin=https://github.com/sharpninja/EternalX.Blazor.git",
+    "After": "azure=https://dev.azure.com/McpServer/McpServer/_git/EternalX.Blazor | origin=https://github.com/sharpninja/EternalX.Blazor.git",
+    "Detail": "origin_github_azure_present",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\FeatureFlags",
+    "Action": "azure_only_rename",
+    "Before": "origin=https://McpServer@dev.azure.com/McpServer/McpServer/_git/FeatureFlags",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/McpServer/_git/FeatureFlags",
+    "Detail": "origin_renamed_to_azure_no_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\FunWasHad",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/FunWasHad.git | origin=https://McpServer@dev.azure.com/McpServer/McpServer/_git/FunWasHad",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/McpServer/_git/FunWasHad | origin=https://github.com/sharpninja/FunWasHad.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\ImageArchive",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/ImageArchive.git",
+    "After": "origin=https://github.com/sharpninja/ImageArchive.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\LlamaDeck",
+    "Action": "azure_only_rename",
+    "Before": "origin=https://McpServer@dev.azure.com/McpServer/LlamaNinja/_git/LlamaDeck",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/LlamaNinja/_git/LlamaDeck",
+    "Detail": "origin_renamed_to_azure_no_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\MarkdownServer\\AspNetServices",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/gatewayprogrammingschool/AspNetServices.git",
+    "After": "origin=https://github.com/gatewayprogrammingschool/AspNetServices.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/McpServer.git | origin=https://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/McpServer/_git/McpServer | origin=https://github.com/sharpninja/McpServer.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\mcpserver-opencode-plugin",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/mcpserver-opencode-plugin.git",
+    "After": "origin=https://github.com/sharpninja/mcpserver-opencode-plugin.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\McpServerManager",
+    "Action": "cleanup_dup_github",
+    "Before": "github=https://github.com/sharpninja/McpServerManager.git | origin=https://github.com/sharpninja/McpServerManager.git",
+    "After": "origin=https://github.com/sharpninja/McpServerManager.git",
+    "Detail": "removed_duplicate_github_remote",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\MouseKeyProxy",
+    "Action": "already_ok",
+    "Before": "azure=https://McpServer@dev.azure.com/McpServer/McpServer/_git/MouseKeyProxy | origin=https://github.com/sharpninja/MouseKeyProxy.git",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/McpServer/_git/MouseKeyProxy | origin=https://github.com/sharpninja/MouseKeyProxy.git",
+    "Detail": "origin_github_azure_present",
+    "Ok": true
+  },
+  {
+    "Path": "f:\\github\\MouseKeyProxy-Fresh",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/MouseKeyProxy.git",
+    "After": "origin=https://github.com/sharpninja/MouseKeyProxy.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\RedditPublish",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/RedditPublish.git",
+    "After": "origin=https://github.com/sharpninja/RedditPublish.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\repairs",
+    "Action": "already_ok",
+    "Before": "azure=https://dev.azure.com/McpServer/McpServer/_git/repairs | origin=https://github.com/sharpninja/repairs.git",
+    "After": "azure=https://dev.azure.com/McpServer/McpServer/_git/repairs | origin=https://github.com/sharpninja/repairs.git",
+    "Detail": "origin_github_azure_present",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\RiskyStars",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/RiskyStars.git",
+    "After": "origin=https://github.com/sharpninja/RiskyStars.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\RomM",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/RomM-GB64.git | origin=https://McpServer@dev.azure.com/McpServer/RomM/_git/RomM",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/RomM/_git/RomM | origin=https://github.com/sharpninja/RomM-GB64.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\SharpNinja.Valhalla",
+    "Action": "skip",
+    "Before": "",
+    "After": "",
+    "Detail": "no_git",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\SharpNinja.Valhalla.Avalonia",
+    "Action": "github_only_ok",
+    "Before": "origin=https://github.com/sharpninja/SharpNinja.Valhalla.Avalonia.git",
+    "After": "origin=https://github.com/sharpninja/SharpNinja.Valhalla.Avalonia.git",
+    "Detail": "origin_github_no_azure",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\SharpNinjaHome",
+    "Action": "skip",
+    "Before": "",
+    "After": "",
+    "Detail": "no_remotes",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\TCS2",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/tcs2.git | origin=https://McpServer@dev.azure.com/McpServer/TCS2/_git/TCS2",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/TCS2/_git/TCS2 | origin=https://github.com/sharpninja/tcs2.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\TruckMate",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/TruckMate.git | origin=https://McpServer@dev.azure.com/McpServer/TruckMate/_git/TruckMate",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/TruckMate/_git/TruckMate | origin=https://github.com/sharpninja/TruckMate.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\github\\valhalla-dotnet",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/valhalla-dotnet.git | origin=https://McpServer@dev.azure.com/McpServer/McpServer/_git/valhalla-dotnet",
+    "After": "azure=https://McpServer@dev.azure.com/McpServer/McpServer/_git/valhalla-dotnet | origin=https://github.com/sharpninja/valhalla-dotnet.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  },
+  {
+    "Path": "F:\\GitHub\\vice-sharp",
+    "Action": "swap",
+    "Before": "github=https://github.com/sharpninja/vice-sharp.git | origin=https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp",
+    "After": "azure=https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp | origin=https://github.com/sharpninja/vice-sharp.git",
+    "Detail": "origin_was_azure_now_github",
+    "Ok": true
+  }
+]

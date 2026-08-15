@@ -38,7 +38,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -52,6 +52,8 @@ public sealed partial class FwhMcpTools
         [Description("From date (ISO 8601)")] string? from = null,
         [Description("To date (ISO 8601)")] string? to = null,
         [Description("Max results (default 100)")] int? limit = null,
+        [Description("Exact planFile filter (None or path; ~/ is expanded)")] string? planFile = null,
+        [Description("Exact todoId filter (None or canonical TODO id)")] string? todoId = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -64,7 +66,9 @@ public sealed partial class FwhMcpTools
                 Text = text,
                 From = from != null ? DateTimeOffset.Parse(from, System.Globalization.CultureInfo.InvariantCulture) : null,
                 To = to != null ? DateTimeOffset.Parse(to, System.Globalization.CultureInfo.InvariantCulture) : null,
-                Limit = limit ?? 100
+                Limit = limit ?? 100,
+                PlanFile = planFile,
+                TodoId = todoId,
             };
             var result = await _sessionLogService.QueryAsync(req, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { totalCount = result.TotalCount, items = result.Items });
@@ -72,7 +76,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -97,7 +101,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -120,7 +124,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -131,6 +135,8 @@ public sealed partial class FwhMcpTools
         [Description("Session id")] string sessionId,
         [Description("Request id (req-yyyyMMddTHHmmssZ-slug)")] string requestId,
         [Description("Workspace path (required)")] string workspacePath,
+        [Description("Current plan file or None")] string planFile,
+        [Description("Current MCP TODO id or None")] string todoId,
         [Description("Short turn title")] string? queryTitle = null,
         [Description("Full user query text")] string? queryText = null,
         CancellationToken cancellationToken = default)
@@ -138,6 +144,8 @@ public sealed partial class FwhMcpTools
         {
             turn.QueryTitle = queryTitle;
             turn.QueryText = queryText;
+            turn.PlanFile = planFile;
+            turn.TodoId = todoId;
         }, cancellationToken);
 
     /// <summary>FR-SUPPORT-014: Stateless complete-turn with additive merge.</summary>
@@ -183,7 +191,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -211,7 +219,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -236,7 +244,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -262,7 +270,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -286,7 +294,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -309,7 +317,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 
@@ -330,7 +338,7 @@ public sealed partial class FwhMcpTools
             catch (JsonException ex)
             {
                 _logger.LogError("{ExceptionDetail}", ex.ToString());
-                return Task.FromResult(JsonSerializer.Serialize(new { error = ex.Message }));
+                return Task.FromResult(McpToolErrors.Serialize(ex));
             }
         }
 
@@ -379,7 +387,7 @@ public sealed partial class FwhMcpTools
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return McpToolErrors.Serialize(ex);
         }
     }
 }

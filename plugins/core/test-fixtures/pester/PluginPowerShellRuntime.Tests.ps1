@@ -85,6 +85,196 @@ acceptanceCriteria:
         $parsed.response | Should -Be "line one`nline two`n"
     }
 
+    It 'TEST-MCP-PLUGIN-PSONLY-001 resolves default agent runtime header fields' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
+        $previousPluginVersion = $env:MCP_PLUGIN_VERSION
+
+        try {
+            $env:MCP_PLUGIN_VERSION = '1.82.0'
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'Codex-20260722T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'Codex' -HostName 'codex' -ExecutableCandidates @($pwshPath)
+
+            # TR-MCP-PLUGIN-HEADER-001: agentSessionId is the PROVIDER-NATIVE id. With
+            # no provider id available it stays empty rather than echoing the MCP id.
+            $headers.agentSessionId | Should -BeNullOrEmpty
+            # TR-MCP-PLUGIN-HEADER-001: never emit a transcript path for a file that
+            # does not exist. The cache session.jsonl was never created here.
+            $headers.agentSessionTranscriptFile | Should -BeNullOrEmpty
+            $headers.agentExecutablePath | Should -Be $pwshPath
+            [string]$headers.agentExecutableVersion | Should -Not -BeNullOrEmpty
+        } finally {
+            if ($null -ne $previousPluginVersion) { $env:MCP_PLUGIN_VERSION = $previousPluginVersion } else { Remove-Item Env:\MCP_PLUGIN_VERSION -ErrorAction SilentlyContinue }
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-HEADER-005 never re-submits a stale fabricated transcript path or echoed session id from cache' {
+        $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        $cacheDir = Join-Path $pluginRoot 'cache'
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $sessionId = 'Codex-20260722T000000Z-plugin-session'
+        $fabricated = Join-Path $cacheDir 'session.jsonl'   # deliberately NOT created
+        $saved = @{}
+        foreach ($n in @('MCP_AGENT_SESSION_ID','MCP_AGENT_SESSION_TRANSCRIPT_FILE')) {
+            $saved[$n] = [Environment]::GetEnvironmentVariable($n)
+            Remove-Item "Env:\$n" -ErrorAction SilentlyContinue
+        }
+        $script:hdr005Yaml = ''
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            function Invoke-ReplRaw {
+                param([Parameter(Mandatory)][string]$Method, [string]$ParamsYaml = '')
+                $script:hdr005Yaml = $ParamsYaml
+                return [pscustomobject]@{ Success = $true; Output = "type: result`npayload:`n  result:`n    persisted: true"; Error = '' }
+            }
+
+            # Stale cache written by the pre-fix plugin: a transcript path for a file
+            # that does not exist, and agentSessionId echoing the MCP session id.
+            Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = $sessionId
+                agent = 'Codex'
+                agentSessionId = $sessionId
+                agentSessionTranscriptFile = $fabricated
+            })
+
+            $null = Invoke-ReplPersistTurn -RequestId 'req-20260722T000001Z-hdr005' -Title 'hdr005' -Status 'in_progress' -ResponseText 'x'
+
+            $script:hdr005Yaml | Should -Not -BeNullOrEmpty
+            # TR-MCP-PLUGIN-HEADER-001: the fabricated path must never reach the server.
+            $script:hdr005Yaml | Should -Not -Match ([regex]::Escape('session.jsonl'))
+            # agentSessionId must not echo the MCP session id.
+            $script:hdr005Yaml | Should -Not -Match ([regex]::Escape("agentSessionId: $sessionId"))
+        } finally {
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            foreach ($n in $saved.Keys) {
+                if ($null -ne $saved[$n]) { Set-Item -Path "Env:\$n" -Value $saved[$n] } else { Remove-Item "Env:\$n" -ErrorAction SilentlyContinue }
+            }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            Remove-Variable -Name hdr005Yaml -Scope Script -ErrorAction SilentlyContinue
+            Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-HEADER-002 emits the cache transcript path only when that file exists' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
+        $transcript = Join-Path $cacheDir 'session.jsonl'
+        try {
+            [System.IO.File]::WriteAllText($transcript, '{"t":1}')
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'Codex-20260722T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'Codex' -HostName 'codex' -ExecutableCandidates @($pwshPath)
+            $headers.agentSessionTranscriptFile | Should -Be $transcript
+        } finally {
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-HEADER-003 prefers the verified provider session id and transcript from the host payload' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $pwshPath = (Get-Command pwsh -ErrorAction Stop).Source
+        $providerTranscript = Join-Path $cacheDir 'provider-real.jsonl'
+        try {
+            [System.IO.File]::WriteAllText($providerTranscript, '{"t":1}')
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'ClaudeCode-20260723T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'ClaudeCode' -HostName 'claude' -ExecutableCandidates @($pwshPath) -ProviderSessionId '45f1b597-40a2-4f1c-983c-1be5b16ab5b9' -TranscriptPath $providerTranscript
+            $headers.agentSessionId | Should -Be '45f1b597-40a2-4f1c-983c-1be5b16ab5b9'
+            $headers.agentSessionTranscriptFile | Should -Be $providerTranscript
+        } finally {
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-HEADER-004 never reports the plugin version as the agent executable version' {
+        . (Join-Path $script:LibRoot 'agent-runtime-header.ps1')
+        $cacheDir = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
+        [void][System.IO.Directory]::CreateDirectory($cacheDir)
+        $saved = @{}
+        foreach ($n in @('MCP_PLUGIN_VERSION','MCP_AGENT_EXECUTABLE_PATH','MCP_AGENT_EXECUTABLE_VERSION','CODEX_EXECUTABLE_VERSION','CLAUDE_EXECUTABLE_VERSION','GROK_EXECUTABLE_VERSION','COPILOT_EXECUTABLE_VERSION','CLINE_EXECUTABLE_VERSION','OPENCODE_EXECUTABLE_VERSION','CODEX_EXECUTABLE_PATH','CLAUDE_EXECUTABLE_PATH','GROK_EXECUTABLE_PATH','COPILOT_EXECUTABLE_PATH','CLINE_EXECUTABLE_PATH','OPENCODE_EXECUTABLE_PATH')) {
+            $saved[$n] = [Environment]::GetEnvironmentVariable($n)
+            Remove-Item "Env:\$n" -ErrorAction SilentlyContinue
+        }
+        try {
+            $env:MCP_PLUGIN_VERSION = '1.82.0'
+            $headers = Resolve-McpPluginAgentHeaderFields -SessionId 'NoSuch-20260723T000000Z-plugin-session' -CacheDir $cacheDir -AgentName 'NoSuchAgent' -HostName 'nosuchagent'
+            $headers.agentExecutableVersion | Should -Not -Be '1.82.0'
+            $headers.agentExecutableVersion | Should -Be 'unknown'
+        } finally {
+            foreach ($n in $saved.Keys) {
+                if ($null -ne $saved[$n]) { Set-Item -Path "Env:\$n" -Value $saved[$n] } else { Remove-Item "Env:\$n" -ErrorAction SilentlyContinue }
+            }
+            Remove-Item -LiteralPath $cacheDir -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-PLUGIN-PSONLY-001 preserves agent runtime header fields in session submit bodies' {
+        $builder = Join-Path $script:RepoRoot 'plugins\core\lib-sh\sessionlog-submit-body.js'
+        $node = (Get-Command node -ErrorAction Stop).Source
+        $psi = [System.Diagnostics.ProcessStartInfo]::new()
+        $psi.FileName = $node
+        $psi.ArgumentList.Add($builder)
+        $psi.ArgumentList.Add('build')
+        $psi.UseShellExecute = $false
+        $psi.RedirectStandardOutput = $true
+        $psi.RedirectStandardError = $true
+        $psi.Environment['SESSION_SOURCE_TYPE'] = 'Codex'
+        $psi.Environment['SESSION_ID'] = 'Codex-20260722T000000Z-runtime-header'
+        $psi.Environment['SESSION_AGENT_SESSION_ID'] = 'codex-root-session-001'
+        $psi.Environment['SESSION_AGENT_SESSION_TRANSCRIPT_FILE'] = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+        $psi.Environment['SESSION_AGENT_EXECUTABLE_PATH'] = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+        $psi.Environment['SESSION_AGENT_EXECUTABLE_VERSION'] = '1.81.0'
+
+        $process = [System.Diagnostics.Process]::Start($psi)
+        $stdout = $process.StandardOutput.ReadToEndAsync()
+        $stderr = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit(30000) | Should -BeTrue
+        $process.ExitCode | Should -Be 0 -Because $stderr.Result
+
+        $session = $stdout.Result | ConvertFrom-Json
+        $session.agentSessionId | Should -Be 'codex-root-session-001'
+        $session.agentSessionTranscriptFile | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+        $session.agentExecutablePath | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+        $session.agentExecutableVersion | Should -Be '1.81.0'
+
+        $existingPath = Join-Path ([System.IO.Path]::GetTempPath()) "mcp-existing-$([guid]::NewGuid().ToString('N')).json"
+        $incomingPath = Join-Path ([System.IO.Path]::GetTempPath()) "mcp-incoming-$([guid]::NewGuid().ToString('N')).json"
+        try {
+            [System.IO.File]::WriteAllText($existingPath, (@{
+                items = @(
+                    [ordered]@{
+                        sourceType = 'Codex'
+                        sessionId = 'Codex-20260722T000000Z-runtime-header'
+                        agentSessionId = 'codex-root-session-001'
+                        agentSessionTranscriptFile = 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+                        agentExecutablePath = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+                        agentExecutableVersion = '1.81.0'
+                        turns = @()
+                    }
+                )
+            } | ConvertTo-Json -Depth 10 -Compress))
+            [System.IO.File]::WriteAllText($incomingPath, (@{
+                sourceType = 'Codex'
+                sessionId = 'Codex-20260722T000000Z-runtime-header'
+                turns = @()
+            } | ConvertTo-Json -Depth 10 -Compress))
+
+            $merge = & $node $builder merge $existingPath $incomingPath | ConvertFrom-Json
+            $merge.agentSessionId | Should -Be 'codex-root-session-001'
+            $merge.agentSessionTranscriptFile | Should -Be 'F:\GitHub\McpServer\.mcpServer\codex\session.jsonl'
+            $merge.agentExecutablePath | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+            $merge.agentExecutableVersion | Should -Be '1.81.0'
+        } finally {
+            Remove-Item -LiteralPath $existingPath, $incomingPath -Force -ErrorAction SilentlyContinue
+        }
+    }
+
     It 'TEST-MCP-PLUGIN-PSONLY-001 rejects append and complete calls when no active turn cache exists' {
         $pluginRoot = Join-Path $script:SmokeCache ([guid]::NewGuid().ToString('N'))
         [void][System.IO.Directory]::CreateDirectory($pluginRoot)
@@ -803,12 +993,14 @@ contextList:
         $previousAgent = $env:MCP_AGENT_NAME
         $previousBootstrap = $null
         $previousPersist = $null
+        $oldLocation = (Get-Location).ProviderPath
         $script:capturedActionsYaml = $null
 
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
             $env:MCP_WORKSPACE_PATH = $workspace
             $env:MCP_AGENT_NAME = 'Codex'
+            Set-Location -LiteralPath $workspace
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
@@ -865,6 +1057,7 @@ contextList:
             $turnState['auditActions'] | Should -Be 1
             $script:capturedActionsYaml | Should -Match 'append after marker drift'
         } finally {
+            Set-Location -LiteralPath $oldLocation
             if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
             if ($previousBootstrap) { Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock }
             if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
@@ -945,12 +1138,14 @@ contextList:
         $previousAgent = $env:MCP_AGENT_NAME
         $previousBootstrap = $null
         $previousPersist = $null
+        $oldLocation = (Get-Location).ProviderPath
         $script:capturedCompleteStatus = $null
 
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
             $env:MCP_WORKSPACE_PATH = $workspace
             $env:MCP_AGENT_NAME = 'Codex'
+            Set-Location -LiteralPath $workspace
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             $previousBootstrap = Get-Command Invoke-FullBootstrap -CommandType Function -ErrorAction Stop
             $previousPersist = Get-Command Invoke-ReplPersistTurn -CommandType Function -ErrorAction Stop
@@ -997,6 +1192,7 @@ contextList:
             $turnState['markerLastWriteUtc'] | Should -Be $snapshotB.markerLastWriteUtc
             $script:capturedCompleteStatus | Should -Be 'completed'
         } finally {
+            Set-Location -LiteralPath $oldLocation
             if ($previousPersist) { Set-Item -Path Function:\Invoke-ReplPersistTurn -Value $previousPersist.ScriptBlock }
             if ($previousBootstrap) { Set-Item -Path Function:\Invoke-FullBootstrap -Value $previousBootstrap.ScriptBlock }
             if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
@@ -2922,10 +3118,15 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
         $cacheDir = Join-Path $pluginRoot 'cache'
         [void][System.IO.Directory]::CreateDirectory($cacheDir)
         $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
         $previousRaw = $null
 
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            # Hermetic failsafe dir: the plugin hooks export MCPSERVER_FAILSAFE_DIR
+            # for the live workspace queue, and an inherited value would make this
+            # test count (and pollute) live records instead of its own sandbox.
+            $env:MCPSERVER_FAILSAFE_DIR = Join-Path $pluginRoot 'failsafe'
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'Codex-20260709T220000Z-plugin-session'
@@ -2958,6 +3159,11 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
             } else {
                 Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
             }
+            if ($null -ne $previousFailsafeOverride) {
+                $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride
+            } else {
+                Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue
+            }
             Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
             Remove-Variable -Name rawMethod, failsafeAtSubmit, rawYaml -Scope Script -ErrorAction SilentlyContinue
         }
@@ -2968,10 +3174,15 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
         $cacheDir = Join-Path $pluginRoot 'cache'
         [void][System.IO.Directory]::CreateDirectory($cacheDir)
         $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
         $previousRaw = $null
 
         try {
             $env:MCP_CACHE_DIR_OVERRIDE = $cacheDir
+            # Hermetic failsafe dir: an inherited live MCPSERVER_FAILSAFE_DIR would
+            # strand this test's deliberately retained record in the live queue,
+            # where the plugin drain would replay the synthetic turn.
+            $env:MCPSERVER_FAILSAFE_DIR = Join-Path $pluginRoot 'failsafe'
             . (Join-Path $script:LibRoot 'repl-invoke.ps1')
             Write-McpYamlObject -Path (Join-Path $cacheDir 'session-state.yaml') -Document ([ordered]@{
                 sessionId = 'Codex-20260709T220000Z-plugin-session'
@@ -2997,6 +3208,11 @@ Describe 'TEST-MCP-REPL-025 PowerShell REPL persistence boundary' {
                 $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride
             } else {
                 Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue
+            }
+            if ($null -ne $previousFailsafeOverride) {
+                $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride
+            } else {
+                Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue
             }
             Remove-Item -LiteralPath $pluginRoot -Recurse -Force -ErrorAction SilentlyContinue
         }
@@ -3555,6 +3771,559 @@ Describe 'TEST-MCP-REPL-031 failsafe queue drain' {
             $status.failsafeQuarantineCount | Should -Be 1
             $status.pendingCount | Should -Be 2
         } finally {
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+Describe 'TEST-MCP-REPL-040 session-log turn persistence hardening' {
+    <#
+    .SYNOPSIS
+        Covers BUG-TRIAGE-086/087/089/091/098/099: deliberately empty turn titles
+        fail parameter binding, superseding a turn can clobber a refined title,
+        and workflow.sessionlog.failTurn falls through to the REPL where the
+        in-process workflow throws 'No active session exists'.
+    .DESCRIPTION
+        Validates TR-MCP-REPL-018 (an empty Title is a deliberate "omit the
+        title" value accepted end to end through the real Invoke-ReplPersistTurn
+        and Invoke-ReplTurnUpsertParams), TR-MCP-REPL-019 (a supersede keeps a
+        locally refined title without a server round trip, defers a raw or empty
+        local title to the server-side title fetched through the existing
+        client.SessionLog.QueryAsync passthrough, and never re-sends raw prompt
+        text as a title), and TR-MCP-REPL-020 (workflow.sessionlog.failTurn is
+        handled locally against cache-only state: it persists status failed with
+        the failure note and clears current-turn.yaml instead of dispatching to
+        the REPL).
+
+        Fixtures: throwaway cache and failsafe directories supplied through
+        MCP_CACHE_DIR_OVERRIDE and MCPSERVER_FAILSAFE_DIR (the same temp-dir
+        idiom as the TEST-MCP-REPL-031..039 failsafe-drain tests), seeded
+        session-state.yaml and current-turn.yaml documents, a stubbed
+        Assert-ReplCurrentTurnFresh, and a stubbed Invoke-ReplRaw that captures
+        client.SessionLog.SubmitAsync payloads, answers
+        client.SessionLog.QueryAsync with a canned server title, and answers any
+        unexpected fall-through with the live REPL error envelope
+        (method_invocation_error: No active session exists). The real
+        Invoke-ReplPersistTurn and Invoke-ReplTurnUpsertParams run unstubbed so
+        the parameter-binding path under test is exercised.
+    #>
+
+    BeforeAll {
+        function New-TurnShimSandbox {
+            <#
+            .SYNOPSIS
+                Creates an isolated cache plus failsafe directory pair for one test.
+            #>
+            $root = Join-Path $script:SmokeCache ("turnshim-" + [guid]::NewGuid().ToString('N'))
+            $cacheDir = Join-Path $root 'cache'
+            $failsafeDir = Join-Path $root 'failsafe'
+            [void][System.IO.Directory]::CreateDirectory($cacheDir)
+            [void][System.IO.Directory]::CreateDirectory($failsafeDir)
+            [pscustomobject]@{
+                Root = $root
+                CacheDir = $cacheDir
+                FailsafeDir = $failsafeDir
+                SessionId = 'ClaudeCode-20260721T000000Z-plugin-session'
+            }
+        }
+
+        function Initialize-TurnShimCache {
+            <#
+            .SYNOPSIS
+                Seeds session-state.yaml plus current-turn.yaml for one test.
+            #>
+            param(
+                [Parameter(Mandatory)][string]$CacheDir,
+                [Parameter(Mandatory)][string]$RequestId,
+                [AllowEmptyString()][string]$QueryTitle = 'User prompt',
+                [string]$QueryText = 'Prompt text'
+            )
+
+            Write-McpYamlObject -Path (Join-Path $CacheDir 'session-state.yaml') -Document ([ordered]@{
+                status = 'verified'
+                sessionId = 'ClaudeCode-20260721T000000Z-plugin-session'
+                agent = 'ClaudeCode'
+            })
+            Write-McpYamlObject -Path (Join-Path $CacheDir 'current-turn.yaml') -Document ([ordered]@{
+                turnRequestId = $RequestId
+                queryTitle = $QueryTitle
+                openedAt = '2026-07-21T00:00:01Z'
+                status = 'in_progress'
+                sessionId = 'ClaudeCode-20260721T000000Z-plugin-session'
+                codeEdits = 0
+                queryText = $QueryText
+            })
+        }
+
+        function Initialize-TurnShimCapture {
+            <#
+            .SYNOPSIS
+                Resets the script-scoped capture state consumed by the stub.
+            #>
+            param([Parameter(Mandatory)][string]$SessionId)
+
+            $script:t40Submits = [System.Collections.Generic.List[string]]::new()
+            $script:t40QueryCalls = [System.Collections.Generic.List[string]]::new()
+            $script:t40FallThrough = [System.Collections.Generic.List[string]]::new()
+            $script:t40SessionId = $SessionId
+            $script:t40ServerRequestId = ''
+            $script:t40ServerTitle = ''
+        }
+
+        # Shared Invoke-ReplRaw stub body. Applied per test with
+        # Set-Item Function:\Invoke-ReplRaw so it replaces the dot-sourced real
+        # function in the It scope (same idiom as the finally-block restores).
+        # SubmitAsync payloads are captured into $script:t40Submits and
+        # confirmed as persisted. QueryAsync answers with
+        # $script:t40ServerTitle for $script:t40ServerRequestId inside the
+        # seeded session. Every other method is recorded as a fall-through in
+        # $script:t40FallThrough and answered with the live REPL error envelope
+        # observed for cache-only failTurn calls.
+        $script:TurnShimReplRawStub = {
+            param([string]$Method, [string]$ParamsYaml = '')
+
+            if ($Method -eq 'client.SessionLog.SubmitAsync') {
+                $script:t40Submits.Add($ParamsYaml)
+                $ok = [ordered]@{
+                    type = 'result'
+                    payload = [ordered]@{
+                        result = [ordered]@{
+                            persisted = $true
+                            degraded = $false
+                            persistenceStrategy = 'mcp-service'
+                        }
+                    }
+                }
+                return New-McpPluginReplResult -Success $true -Output (ConvertTo-Yaml -Data $ok -Options WithIndentedSequences) -ExitCode 0
+            }
+
+            if ($Method -eq 'client.SessionLog.QueryAsync') {
+                $script:t40QueryCalls.Add($ParamsYaml)
+                $turn = [ordered]@{ requestId = $script:t40ServerRequestId }
+                if (-not [string]::IsNullOrWhiteSpace($script:t40ServerTitle)) {
+                    $turn.queryTitle = $script:t40ServerTitle
+                }
+                $queryResult = [ordered]@{
+                    type = 'result'
+                    payload = [ordered]@{
+                        result = [ordered]@{
+                            totalCount = 1
+                            items = @(
+                                [ordered]@{
+                                    sessionId = $script:t40SessionId
+                                    turns = @($turn)
+                                }
+                            )
+                        }
+                    }
+                }
+                return New-McpPluginReplResult -Success $true -Output (ConvertTo-Yaml -Data $queryResult -Options WithIndentedSequences) -ExitCode 0
+            }
+
+            $script:t40FallThrough.Add($Method)
+            return New-McpPluginReplResult -Success $false -Output "type: error`npayload:`n  code: method_invocation_error`n  message: No active session exists" -ExitCode 1
+        }
+
+        # Freshness stub body applied with Set-Item in tests that exercise the
+        # appendDialog/appendActions/completeTurn/failTurn freshness gate.
+        $script:TurnShimFreshStub = { return $true }
+
+        function Get-TurnShimSubmittedTurn {
+            <#
+            .SYNOPSIS
+                Parses one captured SubmitAsync payload back into its turn map.
+            #>
+            param([Parameter(Mandatory)][string]$ParamsYaml)
+
+            $submit = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+            $sessionLog = Get-ReplObjectValue -InputObject $submit -Name 'sessionLog'
+            return @(Get-ReplObjectValue -InputObject $sessionLog -Name 'turns')[0]
+        }
+
+        function Get-TurnShimSubmittedSessionLog {
+            <#
+            .SYNOPSIS
+                Parses one captured SubmitAsync payload back into its session log map.
+            #>
+            param([Parameter(Mandatory)][string]$ParamsYaml)
+
+            $submit = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+            return (Get-ReplObjectValue -InputObject $submit -Name 'sessionLog')
+        }
+
+        function Remove-TurnShimState {
+            <#
+            .SYNOPSIS
+                Clears the script-scoped capture variables between tests.
+            #>
+            Remove-Variable -Name t40Submits, t40QueryCalls, t40FallThrough, t40SessionId, t40ServerTitle, t40ServerRequestId -Scope Script -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 persists an appendDialog without queryTitle instead of failing the empty-title bind' {
+        # TR-MCP-REPL-018 (BUG-TRIAGE-087/089/091/098): the deliberate empty
+        # Title must flow through the real Invoke-ReplPersistTurn into
+        # Invoke-ReplTurnUpsertParams and reach SubmitAsync with the title
+        # omitted, instead of dying on ParameterBindingValidationException.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousFresh = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000002Z-dialog'
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.appendDialog' -ParamsYaml "dialogItems:`n- role: assistant`n  content: probing the failure`n  category: diagnostic"
+
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40Submits.Count | Should -Be 1
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            (Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -BeNullOrEmpty
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'in_progress'
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 populates agent runtime headers from session-state when env vars are absent' {
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousAgentSessionId = $env:MCP_AGENT_SESSION_ID
+        $previousTranscript = $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE
+        $previousExecutablePath = $env:MCP_AGENT_EXECUTABLE_PATH
+        $previousExecutableVersion = $env:MCP_AGENT_EXECUTABLE_VERSION
+        $previousFresh = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            Remove-Item Env:\MCP_AGENT_SESSION_ID -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_AGENT_SESSION_TRANSCRIPT_FILE -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_AGENT_EXECUTABLE_PATH -ErrorAction SilentlyContinue
+            Remove-Item Env:\MCP_AGENT_EXECUTABLE_VERSION -ErrorAction SilentlyContinue
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000004Z-agent-runtime'
+            # TR-MCP-PLUGIN-HEADER-001: the transcript fixture must be a REAL file.
+            # A session-state path pointing at a missing file is a fabrication and is
+            # deliberately dropped (covered by TEST-MCP-PLUGIN-HEADER-005).
+            $realTranscript = Join-Path $sandbox.CacheDir 'codex-rollout.jsonl'
+            [System.IO.File]::WriteAllText($realTranscript, '{"t":1}')
+            $state = Read-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml')
+            $state['agentSessionId'] = 'codex-root-session-001'
+            $state['agentSessionTranscriptFile'] = $realTranscript
+            $state['agentExecutablePath'] = 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+            $state['agentExecutableVersion'] = '1.82.0'
+            Write-McpYamlObject -Path (Join-Path $sandbox.CacheDir 'session-state.yaml') -Document $state
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n- type: note`n  description: runtime header enforcement`n  status: completed"
+
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40Submits.Count | Should -Be 1
+            $sessionLog = Get-TurnShimSubmittedSessionLog -ParamsYaml $script:t40Submits[0]
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentSessionId') | Should -Be 'codex-root-session-001'
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentSessionTranscriptFile') | Should -Be $realTranscript
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentExecutablePath') | Should -Be 'C:\Users\kingd\AppData\Roaming\npm\codex.cmd'
+            [string](Get-ReplObjectValue -InputObject $sessionLog -Name 'agentExecutableVersion') | Should -Be '1.82.0'
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            if ($null -ne $previousAgentSessionId) { $env:MCP_AGENT_SESSION_ID = $previousAgentSessionId } else { Remove-Item Env:\MCP_AGENT_SESSION_ID -ErrorAction SilentlyContinue }
+            if ($null -ne $previousTranscript) { $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE = $previousTranscript } else { Remove-Item Env:\MCP_AGENT_SESSION_TRANSCRIPT_FILE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousExecutablePath) { $env:MCP_AGENT_EXECUTABLE_PATH = $previousExecutablePath } else { Remove-Item Env:\MCP_AGENT_EXECUTABLE_PATH -ErrorAction SilentlyContinue }
+            if ($null -ne $previousExecutableVersion) { $env:MCP_AGENT_EXECUTABLE_VERSION = $previousExecutableVersion } else { Remove-Item Env:\MCP_AGENT_EXECUTABLE_VERSION -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 persists an incidental appendActions with the turn title omitted' {
+        # TR-MCP-REPL-018: an appendActions call without queryTitle persists
+        # through the real code path with the title omitted from the payload.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousFresh = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000003Z-actions'
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.appendActions' -ParamsYaml "actions:`n- type: note`n  description: incidental work`n  status: completed"
+
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40Submits.Count | Should -Be 1
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            (Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -BeNullOrEmpty
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'in_progress'
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 completes a turn without queryTitle instead of reporting a failed persist' {
+        # TR-MCP-REPL-018 (BUG-TRIAGE-098): completeTurn without queryTitle must
+        # persist status completed; today the binding failure is swallowed by
+        # the completeTurn catch and the call reports failure.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousFresh = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000004Z-complete'
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.completeTurn' -ParamsYaml 'response: All acceptance criteria satisfied.'
+
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40Submits.Count | Should -Be 1
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            (Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -BeNullOrEmpty
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'completed'
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'response') | Should -Be 'All acceptance criteria satisfied.'
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 supersede keeps a locally refined title without a server round trip' {
+        # TR-MCP-REPL-018 + TR-MCP-REPL-019 (BUG-TRIAGE-086): the superseded
+        # turn is persisted as canceled; a locally refined title (differs from
+        # the raw prompt default) is kept verbatim and no QueryAsync fetch runs.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            $script:t40ServerRequestId = 'req-20260721T000005Z-old'
+            $script:t40ServerTitle = 'SERVER TITLE MUST NOT BE FETCHED'
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000005Z-old' `
+                -QueryTitle 'Refined: harden the login retry path' -QueryText "Fix the login flow`nIt fails on retry."
+
+            Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId 'req-20260721T000006Z-next'
+
+            $script:t40Submits.Count | Should -Be 1
+            $script:t40QueryCalls.Count | Should -Be 0
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'requestId') | Should -Be 'req-20260721T000005Z-old'
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'canceled'
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -Be 'Refined: harden the login retry path'
+        } finally {
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 supersede prefers the refined server title over a raw prompt-derived local title' {
+        # TR-MCP-REPL-019 (BUG-TRIAGE-086): when the local title equals the
+        # hook's raw default (prompt first line), the supersede fetches the
+        # server-side title through the client passthrough and persists it, so
+        # an agent-refined title survives the supersede.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            $script:t40ServerRequestId = 'req-20260721T000007Z-old'
+            $script:t40ServerTitle = 'Refined: login flow retry hardening'
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000007Z-old' `
+                -QueryTitle 'Fix the login flow' -QueryText "Fix the login flow`nIt fails on retry."
+
+            Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId 'req-20260721T000008Z-next'
+
+            $script:t40Submits.Count | Should -Be 1
+            $script:t40QueryCalls.Count | Should -Be 1
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'canceled'
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -Be 'Refined: login flow retry hardening'
+        } finally {
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 supersede omits the title when the local default is raw and the server has none' {
+        # TR-MCP-REPL-019: with the literal 'User prompt' local default and no
+        # server-side title, the canceled persist omits the title entirely; raw
+        # prompt text is never re-sent as a title.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            $script:t40ServerRequestId = 'req-20260721T000009Z-old'
+            $script:t40ServerTitle = ''
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000009Z-old' `
+                -QueryTitle 'User prompt' -QueryText 'User prompt'
+
+            Invoke-ReplSupersedeCurrentTurnIfInProgress -NextRequestId 'req-20260721T000010Z-next'
+
+            $script:t40Submits.Count | Should -Be 1
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'canceled'
+            (Get-ReplObjectValue -InputObject $turn -Name 'queryTitle') | Should -BeNullOrEmpty
+        } finally {
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 handles failTurn locally against cache-only state instead of falling through to the REPL' {
+        # TR-MCP-REPL-020 (BUG-TRIAGE-099): workflow.sessionlog.failTurn must be
+        # intercepted like appendDialog/appendActions, persist status failed
+        # with the failure note, and clear current-turn.yaml. Today it falls
+        # through to the REPL, which answers method_invocation_error
+        # 'No active session exists' for plugin cache-only sessions.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousFresh = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000011Z-fail'
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.failTurn' -ParamsYaml "errorMessage: Build failed with CS1591 missing XML docs`nerrorCode: build_failed"
+
+            $script:LastInvokeReplMethodSuccess | Should -BeTrue
+            $script:t40FallThrough.Count | Should -Be 0
+            $script:t40Submits.Count | Should -Be 1
+            $turn = Get-TurnShimSubmittedTurn -ParamsYaml $script:t40Submits[0]
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'requestId') | Should -Be 'req-20260721T000011Z-fail'
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'status') | Should -Be 'failed'
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'response') | Should -Match 'Build failed with CS1591 missing XML docs'
+            [string](Get-ReplObjectValue -InputObject $turn -Name 'response') | Should -Match 'build_failed'
+            Test-Path -LiteralPath (Join-Path $sandbox.CacheDir 'current-turn.yaml') | Should -BeFalse
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
+            Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    It 'TEST-MCP-REPL-040 rejects a failTurn without errorMessage locally and keeps the turn cache' {
+        # TR-MCP-REPL-020: the shim enforces the REPL contract (errorMessage is
+        # required) locally: no submit, no REPL fall-through, and the
+        # current-turn cache stays so the turn can still be closed truthfully.
+        $sandbox = New-TurnShimSandbox
+        $previousCacheOverride = $env:MCP_CACHE_DIR_OVERRIDE
+        $previousFailsafeOverride = $env:MCPSERVER_FAILSAFE_DIR
+        $previousFresh = $null
+        $previousRaw = $null
+
+        try {
+            $env:MCP_CACHE_DIR_OVERRIDE = $sandbox.CacheDir
+            $env:MCPSERVER_FAILSAFE_DIR = $sandbox.FailsafeDir
+            . (Join-Path $script:LibRoot 'repl-invoke.ps1')
+            $previousFresh = Get-Command Assert-ReplCurrentTurnFresh -CommandType Function -ErrorAction Stop
+            $previousRaw = Get-Command Invoke-ReplRaw -CommandType Function -ErrorAction SilentlyContinue
+            Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $script:TurnShimFreshStub
+            Initialize-TurnShimCapture -SessionId $sandbox.SessionId
+            Set-Item -Path Function:\Invoke-ReplRaw -Value $script:TurnShimReplRawStub
+            Initialize-TurnShimCache -CacheDir $sandbox.CacheDir -RequestId 'req-20260721T000012Z-fail-noreason'
+
+            Invoke-ReplMethod -Method 'workflow.sessionlog.failTurn' -ParamsYaml ''
+
+            $script:LastInvokeReplMethodSuccess | Should -BeFalse
+            $script:t40FallThrough.Count | Should -Be 0
+            $script:t40Submits.Count | Should -Be 0
+            Test-Path -LiteralPath (Join-Path $sandbox.CacheDir 'current-turn.yaml') | Should -BeTrue
+        } finally {
+            if ($previousFresh) { Set-Item -Path Function:\Assert-ReplCurrentTurnFresh -Value $previousFresh.ScriptBlock }
+            if ($previousRaw) { Set-Item -Path Function:\Invoke-ReplRaw -Value $previousRaw.ScriptBlock } else { Remove-Item Function:\Invoke-ReplRaw -ErrorAction SilentlyContinue }
+            if ($null -ne $previousCacheOverride) { $env:MCP_CACHE_DIR_OVERRIDE = $previousCacheOverride } else { Remove-Item Env:\MCP_CACHE_DIR_OVERRIDE -ErrorAction SilentlyContinue }
+            if ($null -ne $previousFailsafeOverride) { $env:MCPSERVER_FAILSAFE_DIR = $previousFailsafeOverride } else { Remove-Item Env:\MCPSERVER_FAILSAFE_DIR -ErrorAction SilentlyContinue }
+            Remove-TurnShimState
             Remove-Item -LiteralPath $sandbox.Root -Recurse -Force -ErrorAction SilentlyContinue
         }
     }

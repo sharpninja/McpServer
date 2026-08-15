@@ -1,0 +1,171 @@
+{
+  "agent": "GrokSubagentHostile",
+  "utc": "20260808T105331Z",
+  "workspace": "F:\\GitHub\\McpServer",
+  "posture": "adversarial-default-FAIL",
+  "OverallVerdict": "DISAGREE",
+  "overallReason": "LIVE-DEPLOY fail on F: live /usecases/ lacks umlCanvas. Source and unit tests A-E PASS.",
+  "claims": {
+    "A": {
+      "title": "Source has #umlCanvas, palette-actor..extend, canvas-editor.js placeNode/startConnect/toGraph/fromGraph",
+      "verdict": "PASS",
+      "scope": "source",
+      "evidence": [
+        {
+          "path": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\wwwroot\\usecases\\index.html",
+          "facts": [
+            "CSS #umlCanvas line 134",
+            "palette-actor line 226",
+            "palette-extend line 231",
+            "svg id=umlCanvas line 234",
+            "script canvas-editor.js line 317",
+            "SRC_LEN=11005 SRC_umlCanvas=true"
+          ]
+        },
+        {
+          "path": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\wwwroot\\usecases\\canvas-editor.js",
+          "facts": [
+            "placeNode line 138",
+            "startConnect line 166",
+            "toGraph line 281",
+            "fromGraph line 313"
+          ]
+        }
+      ]
+    },
+    "B": {
+      "title": "app.js has diagram-graph PUT/GET, saveDiagramGraph, loadDiagramGraph",
+      "verdict": "PASS",
+      "scope": "source",
+      "evidence": [
+        {
+          "path": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\wwwroot\\usecases\\app.js",
+          "facts": [
+            "loadDiagramGraph GET /mcpserver/usecases/{id}/diagram-graph lines 324-329",
+            "saveDiagramGraph PUT diagram-graph lines 332-339",
+            "wire btnSaveGraph/btnLoadGraph lines 400-401",
+            "UseCaseUi export loadDiagramGraph/saveDiagramGraph lines 413-414"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "UseCaseCanvasUiAssetTests exist; FullyQualifiedName~UseCase green 0 fail 0 skip",
+      "verdict": "PASS",
+      "scope": "tests",
+      "commands": [
+        {
+          "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~UseCase --no-restore",
+          "result": "Passed: 58, Failed: 0, Skipped: 0, EXIT=0"
+        },
+        {
+          "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~UseCaseCanvasUiAssetTests --no-build -v n",
+          "result": "Total tests: 6, Passed: 6, Failed: 0, Skipped: 0, EXIT=0"
+        }
+      ],
+      "testClass": "tests/McpServer.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs"
+    },
+    "D": {
+      "title": "Graph CQRS + serialization still green",
+      "verdict": "PASS",
+      "scope": "tests",
+      "commands": [
+        {
+          "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~UseCaseDiagramGraphCqrsTests|FullyQualifiedName~UseCaseUmlSerializationTests --no-build -v n",
+          "result": "Total tests: 15, Failed: 0, Skipped: 0, EXIT=0"
+        }
+      ],
+      "classes": [
+        "UseCaseDiagramGraphCqrsTests",
+        "UseCaseUmlSerializationTests"
+      ]
+    },
+    "E": {
+      "title": "REST controller has diagram-graph routes in source",
+      "verdict": "PASS",
+      "scope": "source",
+      "evidence": [
+        {
+          "path": "F:\\GitHub\\McpServer\\src\\McpServer.Support.Mcp\\Controllers\\UseCasesController.cs",
+          "facts": [
+            "Route mcpserver/usecases line 18",
+            "HttpGet {id}/diagram-graph line 389 GetDiagramGraphAsync",
+            "HttpPut {id}/diagram-graph line 406 PutDiagramGraphAsync"
+          ]
+        }
+      ]
+    },
+    "F": {
+      "title": "LIVE deploy after UpdateService: live /usecases/ has umlCanvas",
+      "verdict": "FAIL",
+      "failClass": "LIVE-DEPLOY",
+      "notSourceFailure": true,
+      "scope": "live",
+      "probes": [
+        {
+          "url": "http://localhost:7147/usecases/",
+          "status": 200,
+          "len": 9187,
+          "has_umlCanvas": false
+        },
+        {
+          "url": "http://localhost:7147/usecases/index.html",
+          "status": 200,
+          "len": 9187,
+          "has_umlCanvas": false
+        },
+        {
+          "url": "http://PAYTON-LEGION2:7147/usecases/",
+          "status": 200,
+          "len": 9187,
+          "has_umlCanvas": false
+        },
+        {
+          "url": "http://PAYTON-LEGION2:7147/usecases/index.html",
+          "status": 200,
+          "len": 9187,
+          "has_umlCanvas": false
+        },
+        {
+          "url": "http://localhost:7147/usecases/canvas-editor.js",
+          "status": 404
+        },
+        {
+          "url": "http://localhost:7147/usecases/app.js",
+          "status": 200,
+          "len": 11132,
+          "has_saveDiagramGraph": false,
+          "has_diagram_graph": false
+        },
+        {
+          "url": "http://localhost:7147/health",
+          "status": 200,
+          "note": "Healthy; server up serving stale usecases UI"
+        }
+      ],
+      "liveMarkers": {
+        "palette_actor": false,
+        "canvas_editor_script": false,
+        "diagram_graph_in_app_js": false,
+        "mermaid_present": true,
+        "live_index_len": 9187,
+        "source_index_len": 11005
+      }
+    },
+    "G": {
+      "title": "Engine: JointJS library vs custom SVG",
+      "verdict": "DOCUMENT",
+      "engine": "custom-svg",
+      "jointJsLibraryLoaded": false,
+      "notes": [
+        "canvas-editor.js uses document.createElementNS SVG DOM (line 35)",
+        "JointJS mentioned only as interaction inspiration in comment (line 2)",
+        "Spike docs preferred JointJS; custom SVG acceptable when A/B UX contracts met",
+        "A/B met in source; not FAIL solely for custom SVG"
+      ]
+    }
+  },
+  "sourcePassClaims": ["A", "B", "C", "D", "E"],
+  "liveFailClaims": ["F"],
+  "OverallVerdict": "DISAGREE"
+}

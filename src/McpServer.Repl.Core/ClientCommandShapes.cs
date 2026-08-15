@@ -34,6 +34,7 @@ namespace McpServer.Repl.Core;
 /// <item><c>client.memory.*</c> — Agent memory management</item>
 /// <item><c>client.sessionlog.*</c> — Session log operations</item>
 /// <item><c>client.requirements.*</c> — Requirements management</item>
+/// <item><c>client.UseCases.*</c> — Use case management (CRUD, FR links, diagram, coverage, approval, product)</item>
 /// <item><c>client.voice.*</c> — Voice conversation endpoints</item>
 /// <item><c>client.events.*</c> — Change-event SSE endpoints</item>
 /// <item><c>client.repo.*</c> — Repository file operations</item>

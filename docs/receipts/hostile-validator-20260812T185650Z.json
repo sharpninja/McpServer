@@ -1,0 +1,94 @@
+{
+  "TimestampUtc": "2026-08-12T18:56:50Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "Plugin": "F:\\GitHub\\mcpserver-grok-plugin",
+  "PluginVersion": "1.85.0",
+  "ReviewSessionId": "GrokCode-20260812T185650Z-hostile-sessionlog-002-skeptic",
+  "ReviewRequestId": "req-20260812T185650Z-001-hostile-sessionlog-002-skeptic",
+  "TodoId": "MCP-SESSIONLOG-002",
+  "OverallVerdict": "AGREE",
+  "ExplicitFailList": [],
+  "PriorStaleReceiptIgnored": "docs/receipts/hostile-validator-20260812T193000Z.md",
+  "TrustBootstrap": {
+    "MarkerSignature": true,
+    "HealthNonceMatch": true,
+    "HealthVersion": "1.4.25+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "PluginStatus": "available",
+    "Agent": "GrokCode"
+  },
+  "Claims": [
+    {
+      "id": 1,
+      "summary": "Open-PluginTurn uses Resolve-PluginTurnPlanContext instead of hardcoded None/None",
+      "verdict": "PASS",
+      "evidence": [
+        "plugins/core/lib-ps/plugin-hook.ps1 lines 715-721 call Resolve-PluginTurnPlanContext",
+        "Resolve-PluginTurnPlanContext lines 1007-1024: Get-PlanFilePathFromInput, else last existing plan-todo-map.yaml entry, else None/None, then Find-PlanTodoId"
+      ]
+    },
+    {
+      "id": 2,
+      "summary": "Invoke-WorkflowBeginTurn reopen omits planFile/todoId and does not overwrite stored values",
+      "verdict": "PASS",
+      "evidence": [
+        "plugins/core/lib-ps/repl-invoke.ps1 lines 1451-1458, 1499-1503",
+        "New-McpPluginTurnUpsertRequest omits empty PlanFile/TodoId (McpPluginShim.psm1 441-447)",
+        "Independent Pester reopen case BoundPlanFile/BoundTodoId false",
+        "Independent C# UpsertTurnAsync reopen omit-preserve stores mapped pair"
+      ]
+    },
+    {
+      "id": 3,
+      "summary": "Slice 8 tests drive persist/hook paths, not source grep",
+      "verdict": "PASS",
+      "evidence": [
+        "tests/McpServer.Support.Mcp.Tests/Plugins/InvokeWorkflowBeginTurnTests.cs calls SessionLogService.UpsertTurnAsync for four cases",
+        "plugins/core/test-fixtures/pester/SessionLogTurnContextBeginTurn.Tests.ps1 uses MCP_PLUGIN_REPL_LOG and MCP_PLUGIN_PERSIST_LOG",
+        "Independent Pester 4/0/0 and InvokeWorkflowBeginTurnTests 4/0/0 EXIT=0"
+      ]
+    },
+    {
+      "id": 4,
+      "summary": "FR/TR/TEST AC children exist in MCP store via requirements list/get",
+      "verdict": "PASS",
+      "evidence": [
+        "workflow.requirements.listFr/listTr/listTest and getFr/getTr/getTest via grok plugin wrapper",
+        "FR-MCP-SESSIONLOGCTX-001 has AC-FR-MCP-SESSIONLOGCTX-001-001 through 007",
+        "TR-MCP-SESSIONLOG-006 has AC-TR-MCP-SESSIONLOG-006-001 through 008",
+        "TEST-MCP-SESSIONLOG-006 lists those 15 FR/TR AC ids",
+        "Artifacts: C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-skeptic\\get-fr.txt get-tr.txt get-test.txt list-fr.txt list-tr.txt list-test.txt"
+      ]
+    },
+    {
+      "id": 5,
+      "summary": "Independent re-run of implementer gating filters matches claimed counts",
+      "verdict": "PASS",
+      "evidence": [
+        "persist-query 46/0/0 EXIT=0",
+        "backfill-import 10/0/0 EXIT=0",
+        "SessionLog excl Transcript plus InvokeWorkflowBeginTurnTests 247/0/0 EXIT=0",
+        "integration SessionLog 54/0/0 EXIT=0",
+        "Pester SessionLogTurnContextBeginTurn.Tests.ps1 4/0/0",
+        "Logs under C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-f5bc2686e8c7\\hostile-validator-skeptic"
+      ]
+    },
+    {
+      "id": 6,
+      "summary": "Get-PlanFilePathFromInput still accepts TOOL_INPUT",
+      "verdict": "PASS",
+      "evidence": [
+        "plugin-hook.ps1 line 953: if (-not $filePath -and $env:TOOL_INPUT) { $filePath = $env:TOOL_INPUT }",
+        "Pester mapped case sets TOOL_INPUT and passed independently"
+      ]
+    }
+  ],
+  "IndependentTestRuns": {
+    "pesterBeginTurn": { "passed": 4, "failed": 0, "skipped": 0, "exit": 0 },
+    "invokeWorkflowBeginTurnTests": { "passed": 4, "failed": 0, "skipped": 0, "exit": 0 },
+    "persistQuery": { "passed": 46, "failed": 0, "skipped": 0, "exit": 0 },
+    "backfillImport": { "passed": 10, "failed": 0, "skipped": 0, "exit": 0 },
+    "sessionLogExclTranscriptPlusBegin": { "passed": 247, "failed": 0, "skipped": 0, "exit": 0 },
+    "integrationSessionLog": { "passed": 54, "failed": 0, "skipped": 0, "exit": 0 }
+  }
+}

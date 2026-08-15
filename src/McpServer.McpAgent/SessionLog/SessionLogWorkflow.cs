@@ -157,6 +157,8 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
                 FailureNote = request.FailureNote,
                 Score = request.Score,
                 IsPremium = request.IsPremium,
+                PlanFile = request.PlanFile,
+                TodoId = request.TodoId,
             };
 
             turn.ReplaceTags(request.Tags);

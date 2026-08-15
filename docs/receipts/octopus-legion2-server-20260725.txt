@@ -1,0 +1,57 @@
+Octopus Deploy SERVER on LEGION2 - 2026-07-25
+==============================================
+
+SERVER
+- Host: PAYTON-LEGION2
+- UI: http://PAYTON-LEGION2:8066 (localhost:8066)
+- Compose: C:\Octopus\legion2-server (project octopus-legion2)
+- Images: octopusdeploy/octopusdeploy:latest + mcr.microsoft.com/mssql/server:2022-latest
+- Ports: 8066 (web), 11112 (comms), 8444 (grpc tls), 1402 (sql)
+- Version verified: Octopus Deploy 2026.2.13260 API 200 on /api
+- Secrets file (local): C:\Octopus\legion2-server\secrets.local.json
+
+LICENSE
+- Applied free-tier license (projects limit 10). IsInitialisationLicense cleared.
+- Note: desktop Octopus at payton-desktop:8065 also used free serial; consolidate long-term.
+
+ENVIRONMENTS CREATED
+- Development, Staging, Production
+
+PROJECTS (remaining Azure pipelines; full script clone of azure-pipelines steps)
+- BodyAndBrain.Engine Projects-1 steps=1
+- LlamaDeck Projects-2 steps=1
+- McpServer Projects-3 steps=1
+- MouseKeyProxy Projects-4 steps=1
+- SharpNinjaHome Projects-5 steps=1
+- TruckMate Projects-6 steps=1
+- valhalla-dotnet Projects-7 steps=1
+- vice-sharp Projects-8 steps=2 (ci + release yml)
+
+AZURE PIPELINES PATCHED (Octopus LEGION2 release step)
+- BodyAndBrain.Engine/azure-pipelines.yml
+- LlamaDeck/azure-pipelines.yml
+- McpServer/azure-pipelines.yml
+- MouseKeyProxy/azure-pipelines.yml
+- SharpNinjaHome/azure-pipelines.yml
+- TruckMate/azure-pipelines.yml
+- valhalla-dotnet/azure-pipelines.yml
+- vice-sharp/azure-pipelines.ci.yml
+- vice-sharp/azure-pipelines.release.yml
+
+PIPELINE REQUIREMENTS
+- Set secret variable OCTOPUS_API_KEY (and optional OCTOPUS_URL=http://PAYTON-LEGION2:8066) on each Azure DevOps pipeline or a shared variable group.
+- Without OCTOPUS_API_KEY the step no-ops successfully.
+- Set SkipOctopus=true to force skip.
+
+DEFAULT TARGET (added same day)
+- PAYTON-DESKTOP registered on LEGION2 as Machines-1 (TentacleActive / polling).
+- DESKTOP instance name: Tentacle-LEGION2 (does not replace desktop Octopus Tentacle).
+- Roles: app-server, web-server, default; all three environments.
+- All 8 project processes: TargetRoles=app-server, RunOnServer=false.
+- Health check Success; machine HealthStatus=HasWarnings (connection established).
+
+NOT DONE / FOLLOW-UPS
+- Azure DevOps variable group population (needs portal or az pipelines variable-group; secret paste).
+- Committing pipeline YAML changes in each repo (local dirty until user commits).
+- Dual free-license policy decision for desktop vs LEGION2.
+- Investigate HasWarnings on PAYTON-DESKTOP if deploys fail.

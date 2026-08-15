@@ -24,11 +24,18 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $script:ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+# TR-MCP-PLUGIN-HEADER-001: Read-HookInput is memoized because reading stdin
+# consumes it and the session bootstrap now also needs the payload. These MUST be
+# initialized here: Set-StrictMode -Version Latest makes referencing an unset
+# variable a terminating error.
+$script:HookInputCached = $false
+$script:CachedHookInput = ''
 $env:MCP_PLUGIN_HOST = $HostName
 . (Join-Path $script:ScriptDir 'plugin-env.ps1')
 . (Join-Path $script:ScriptDir 'resolve-cache-dir.ps1')
 . (Join-Path $script:ScriptDir 'marker-resolver.ps1')
 . (Join-Path $script:ScriptDir 'yaml-object-mutation.ps1')
+. (Join-Path $script:ScriptDir 'agent-runtime-header.ps1')
 Import-McpYamlSerializer
 
 function ConvertTo-PluginParamsYaml {
@@ -145,31 +152,32 @@ function Set-YamlScalar {
 }
 
 function Read-HookInput {
-    if ($Params) {
-        return $Params
+    if ($script:HookInputCached) {
+        return $script:CachedHookInput
     }
 
-    if ($ParamsPath) {
+    $value = ''
+    if ($Params) {
+        $value = $Params
+    } elseif ($ParamsPath) {
         if (-not (Test-Path -LiteralPath $ParamsPath)) {
             throw "Hook params file was not found: $ParamsPath"
         }
 
-        return [System.IO.File]::ReadAllText($ParamsPath)
-    }
-
-    if ($null -ne $InputObject) {
+        $value = [System.IO.File]::ReadAllText($ParamsPath)
+    } elseif ($null -ne $InputObject) {
         if ($InputObject -is [string]) {
-            return [string]$InputObject
+            $value = [string]$InputObject
+        } else {
+            $value = ($InputObject | ConvertTo-Json -Depth 20 -Compress)
         }
-
-        return ($InputObject | ConvertTo-Json -Depth 20 -Compress)
+    } elseif ([Console]::IsInputRedirected) {
+        $value = [Console]::In.ReadToEnd()
     }
 
-    if ([Console]::IsInputRedirected) {
-        return [Console]::In.ReadToEnd()
-    }
-
-    return ''
+    $script:CachedHookInput = $value
+    $script:HookInputCached = $true
+    return $value
 }
 
 function Get-HookPayloadValue {
@@ -251,6 +259,19 @@ function Start-PluginSession {
     }
 
     $sessionId = New-PluginSessionId -AgentName $env:MCP_AGENT_NAME
+    # TR-MCP-PLUGIN-HEADER-001: capture the host's real session id and transcript
+    # path from the hook payload so the header records observed values instead of
+    # the MCP session id and a fabricated cache path.
+    $bootstrapPayload = ''
+    try { $bootstrapPayload = Read-HookInput } catch { $bootstrapPayload = '' }
+    $providerSessionId = Get-HookPayloadValue -Payload $bootstrapPayload -Name 'session_id'
+    $providerTranscript = Get-HookPayloadValue -Payload $bootstrapPayload -Name 'transcript_path'
+    $agentHeaders = Resolve-McpPluginAgentHeaderFields -SessionId $sessionId -CacheDir $cacheDir -AgentName $env:MCP_AGENT_NAME -HostName $env:MCP_PLUGIN_HOST -ProviderSessionId $providerSessionId -TranscriptPath $providerTranscript
+    $env:MCP_AGENT_SESSION_ID = [string]$agentHeaders.agentSessionId
+    $env:MCP_AGENT_SESSION_TRANSCRIPT_FILE = [string]$agentHeaders.agentSessionTranscriptFile
+    $env:MCP_AGENT_EXECUTABLE_PATH = [string]$agentHeaders.agentExecutablePath
+    $env:MCP_AGENT_EXECUTABLE_VERSION = [string]$agentHeaders.agentExecutableVersion
+
     $now = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     $sessionState = [ordered]@{
         status = 'verified'
@@ -260,6 +281,10 @@ function Start-PluginSession {
         lastUpdated = $now
         markerFilePath = $markerSnapshot.markerFilePath
         markerLastWriteUtc = $markerSnapshot.markerLastWriteUtc
+        agentSessionId = [string]$agentHeaders.agentSessionId
+        agentSessionTranscriptFile = [string]$agentHeaders.agentSessionTranscriptFile
+        agentExecutablePath = [string]$agentHeaders.agentExecutablePath
+        agentExecutableVersion = [string]$agentHeaders.agentExecutableVersion
     }
     Write-McpYamlObject -Path $sessionFile -Document $sessionState
     Write-PluginJson ([ordered]@{})
@@ -687,10 +712,13 @@ function Open-PluginTurn {
     $sessionId = if ($sessionState.Contains('sessionId')) { [string]$sessionState['sessionId'] } else { '' }
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
+    $turnContext = Resolve-PluginTurnPlanContext
     $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
         requestId = $turnRequestId
         queryTitle = $title
         queryText = $prompt
+        planFile = $turnContext.planFile
+        todoId = $turnContext.todoId
     })
     $beginOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.beginTurn' -ParamsYaml $paramsYaml
     if ($script:LastPluginReplExitCode -ne 0) {
@@ -952,6 +980,48 @@ function Get-PlanTitle {
 
 function Get-PlanTodoMapPath {
     Join-Path (Get-PluginCacheDir) 'plan-todo-map.yaml'
+}
+
+function Get-LastPlanTodoMapEntry {
+    $mapPath = Get-PlanTodoMapPath
+    if (-not (Test-Path -LiteralPath $mapPath)) { return $null }
+    $lines = [System.IO.File]::ReadAllLines($mapPath)
+    $planFile = $null
+    $todoId = $null
+    for ($i = 0; $i -lt $lines.Length; $i++) {
+        if ($lines[$i] -match '^\s*-\s*planFile:\s*(.+)$') {
+            $planFile = $Matches[1].Trim().Trim('"')
+            $todoId = $null
+            for ($j = $i + 1; $j -lt [Math]::Min($lines.Length, $i + 4); $j++) {
+                if ($lines[$j] -match '^\s*todoId:\s*(.+)$') {
+                    $todoId = $Matches[1].Trim().Trim('"')
+                    break
+                }
+            }
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($planFile)) { return $null }
+    return [ordered]@{ planFile = $planFile; todoId = $todoId }
+}
+
+function Resolve-PluginTurnPlanContext {
+    $planFile = Get-PlanFilePathFromInput
+    if (-not $planFile -or -not (Test-Path -LiteralPath $planFile -PathType Leaf)) {
+        $mapped = Get-LastPlanTodoMapEntry
+        if ($mapped -and $mapped.planFile -and (Test-Path -LiteralPath $mapped.planFile -PathType Leaf)) {
+            $planFile = [string]$mapped.planFile
+        } else {
+            $planFile = $null
+        }
+    }
+
+    if (-not $planFile) {
+        return [ordered]@{ planFile = 'None'; todoId = 'None' }
+    }
+
+    $todoId = Find-PlanTodoId -PlanFile $planFile
+    if ([string]::IsNullOrWhiteSpace($todoId)) { $todoId = 'None' }
+    return [ordered]@{ planFile = $planFile; todoId = $todoId }
 }
 
 function Get-TodoIdFromReplOutput {

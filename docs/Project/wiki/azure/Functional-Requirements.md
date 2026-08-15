@@ -1056,7 +1056,7 @@ Scope: layer-1+
 
 ## FR-MCP-137 Quad Brain coding agent execution
 
-Hosted MCP coding agent exposes mcp_quadbrain_coding_execute tool that executes coding tasks through QuadBrain orchestration, never bypassing the Quad Brain transaction/admission contract. ACID profile includes Quad Brain coding tool while excluding generic passthrough and other uncontrolled tools.
+RETIRED 2026-07-20 by FR-MCP-142 and TR-MCP-QB-001. This requirement specified a hosted coding agent that reached QuadBrain orchestration through the mcp_quadbrain_coding_execute tool in the shared McpServer.McpAgent catalog. That tool is removed, because it advertised a QuadBrain capability to every hosted-agent host rather than to QBAgent alone, and it was already non-functional for QBAgent: QuadBrainInternalToolExecutor never had a case for it, so the interceptor classified it internal and returned Fail. Retired alongside TR-MCP-AGENT-016 and TEST-MCP-187. Replacement coverage is the absence suite under TEST-MCP-193. QuadBrain coding work continues server-side through POST /v1/chat/completions, the OpenAI-compatible endpoint QBAgent binds to with model id QuadBrain; that path is unchanged and separately covered. Corrected 2026-07-20 after an audit found this FR still describing removed behavior when its TR and TEST had already been retired.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] Hosted agent exposes model-visible mcp_quadbrain_coding_execute tool
@@ -1098,6 +1098,16 @@ Scope: layer-1+
 ## FR-MCP-141 Service-account process environment fidelity
 
 When the server runs as a Windows service under a non-interactive account, child processes it launches shall resolve executables and environment the same way an interactive user session would. Executable resolution shall skip Microsoft\WindowsApps App-Execution-Alias stubs, which are zero-byte reparse points that fail with Win32Exception 1920 for service accounts. Tunnel providers shall apply the interactive user's USERPROFILE, HOME, APPDATA, and PATH to the child process so provider configuration files resolve, and shall resolve the provider binary against that enriched PATH. A missing provider binary shall be reported at Warning with a message naming the service-account and Store-alias causes and the available remedies, not as an unexplained error. Recovered from origin/claude/busy-dubinsky (2026-04-04 to 2026-04-05), which registered no requirement of any kind.
+Scope: layer-1+
+
+## FR-MCP-142 QuadBrain is absent from every general agent surface
+
+No QuadBrain capability shall be exposed to general agents or to the agent plugins in any form. Absent, not gated: no brain-slot tool descriptors in the shared plugin cores, none advertised over the server MCP transports, no named client-passthrough route reaching BrainSlotClient, no QuadBrain-named tool in the shared hosted-agent catalog, and no brain-slot descriptor files in the shared mcps registry. QuadBrain remains reachable only as the OpenAI-compatible model at POST /v1/chat/completions, workspace-token authorized, which is the sole path QBAgent uses. Everything behind that endpoint stays server-side: QuadBrainOpenAiController, QuadBrainOpenAiChatService, QuadBrainOrchestrationService, the BrainSlot registry, invocation, credential, chat-client-factory and startup-seeder services, the BrainSlot storage entities and migrations, the QuadBrain tool interceptor, and config/brain-slots/quad-brain-slot-assignments.yaml. Evidence that motivated this requirement: the ClaudeCode session of 2026-07-20 could enumerate all eleven brain_slot tools from a general agent tool list, and plugins/core/lib-node/src/runtime/host-context.ts spread brainSlotTools into the ungated allToolDescriptors catalog advertised to every Node host plugin.
+Scope: layer-1+
+
+## FR-MCP-143 Session-log turns persist without a title and never lose a refined one
+
+A session-log turn shall persist end to end when its title is deliberately omitted, and a title the agent has refined shall never be overwritten by a stale local copy. Thirteen open triage reports (BUG-TRIAGE-086 through 101, excluding the already-closed 097) collapse into five root causes, of which two account for eleven of the reports. First, the plugin PowerShell core rejects an empty title at parameter binding even though TR-MCP-REPL-015 requires callers to omit the title so a stale cached one is not resubmitted, so appendDialog, appendActions, completeTurn and the supersede path all fail. Second, the typed client posts anonymous request bodies through a source-generated JSON context that has no metadata for compiler-generated types, so the dedicated retitle endpoints throw before reaching the server. The remaining three are the supersede path clobbering a server-refined title from the local cache, failTurn refusing to close a turn the plugin cache shows as active, and a storage outage leaving health reporting Healthy while every persistence call fails behind inconsistent error shapes.
 Scope: layer-1+
 
 ## FR-MCP-AGENT-PARITY-001 FR-MCP-AGENT-PARITY-001
@@ -1330,6 +1340,11 @@ Scope: layer-1+
 - [ ] Empty or unparseable appendDialog payloads return failure with an actionable error instead of a silent successful no-op.
 - [ ] The canonical parsing fix propagates to every official plugin distribution without checksum drift.
 
+## FR-MCP-PLUGIN-HEADER-001 Agent runtime header fields record only observed values
+
+Plugin-created session logs SHALL record the four agent runtime header fields (agentSessionId, agentSessionTranscriptFile, agentExecutablePath, agentExecutableVersion) only from observed runtime facts. A value SHALL NOT be synthesized, and a field SHALL be left empty rather than populated with a placeholder, a substitute identifier, or a path that does not exist. Scope: layer-1+. Acceptance Criteria: (1) a transcript path is recorded only when that file exists on disk; (2) the agent executable version is never taken from the plugin version, and is 'unknown' when live discovery fails; (3) agentSessionId carries only a provider-native identifier and is never the MCP session id; (4) a stale cached or environment-supplied value that fails these rules is dropped rather than re-submitted.
+Scope: layer-1+
+
 ## FR-MCP-PLUGININT-001 End-to-end Session Log validation for every agent plugin
 
 The repository family must provide repeatable integration coverage proving that Codex, Claude Code, Claude Cowork, Copilot, Grok, Cline, Cline v2, and OpenCode plugin surfaces complete the canonical Session Log workflow against a real MCP Server.
@@ -1460,7 +1475,7 @@ Scope: layer-1+
 
 ## FR-MCP-QBTOOLS-004 QBAgent git tool (full, push to origin)
 
-QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing Azure DevOps origin remote only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
+QBAgent exposes a git external tool supporting status, diff, log, branch, add, commit, checkout, push, and reset via ProcessRunner. Push targets the existing origin remote name only; arbitrary remotes/refspecs from the model are rejected. Mutating git on the internal plane is transaction-gated.
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Read subcommands (status/diff/log/branch) run against the workspace repo and return output.
@@ -1602,6 +1617,11 @@ Scope: layer-1+
 The MCP REPL plugin SHALL expose setTurnTitle and setSessionTitle workflow methods that durably update the active turn's title and the session title through explicit server title-update paths, so an agent-refined title survives the whole-session re-submit the plugin issues on every subsequent persist. Scope: layer-1+. Acceptance Criteria: (1) workflow.sessionlog.setTurnTitle updates current-turn.yaml queryTitle and persists the new title to the server for the active turn; (2) workflow.sessionlog.setSessionTitle writes session-state.yaml title and persists the new session title to the server; (3) a subsequent supersede/complete/append whole-session re-submit does not revert either title.
 Scope: layer-1+
 
+## FR-MCP-REPL-011 Plugin failsafe queue drains instead of accumulating
+
+BUG-TRIAGE-097. The MCP plugin PowerShell runtime writes every session-log submit to a failsafe queue on disk before calling the backend, so a crash or an unreachable server cannot lose the turn. Until now nothing ever replayed those records: the queue only grew, and plugin Status reported pendingCount 0 while captured turns sat undrained (33 records in F:/GitHub/McpServer as of 2026-07-20, oldest 2026-07-14, eight added in a single session). An agent or operator MUST be able to get queued turns into the session log once the backend is reachable again, automatically on the first proven-reachable call and on demand through an explicit drain verb, without ever losing a record: a record leaves the queue only after its submission is confirmed, a record the backend rejects does not block the newer records behind it, and a record that cannot be replayed at all is set aside for inspection rather than deleted or retried forever. Plugin Status MUST report the real queue depth.
+Scope: layer-1+
+
 ## FR-MCP-REQAC-001 Structured acceptance criteria on requirements
 
 FR/TR/TEST requirements support structured acceptance criteria using the same {id,text,isSatisfied,evidence} shape as TODO acceptance criteria, settable on create/update and returned on get.
@@ -1656,6 +1676,19 @@ Scope: layer-1+
 
 Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-004.
 Scope: layer-1+
+
+## FR-MCP-SESSIONLOGCTX-001 Session turns record current plan file and MCP TODO id
+
+Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.
+- [ ] When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).
+- [ ] The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. No turn row is inserted.
+- [ ] planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.
+- [ ] Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.
+- [ ] Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.
+- [ ] Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.
 
 ## FR-MCP-SESSIONLOGSAN-001 Sanitized session-log read responses
 
@@ -1794,6 +1827,83 @@ Scope: layer-1+
 - [ ] Each plugin skill bundle includes triage guidance.
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
+
+## FR-MCP-USECASE-001 CRUD workspace-scoped use cases
+
+The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.
+Scope: layer-1+
+
+## FR-MCP-USECASE-002 Actors, flows, and ordered steps
+
+Use cases support actors (Primary, Secondary, System, External), flows (Basic, Alternative, Exception) with sequence numbers, and ordered steps with action text and optional system response and data entities.
+Scope: layer-1+
+
+## FR-MCP-USECASE-003 Bidirectional UC to FR links with Realizes default
+
+Use cases link bidirectionally to functional requirements using string FR ids. Default link type is Realizes. Active links are unique per workspace, use case, and FR. Unlink is soft-delete of the link row.
+Scope: layer-1+
+
+## FR-MCP-USECASE-004 Create use case from FR
+
+Operators and agents can create a shell use case from an existing FR title/body with an automatic Realizes link.
+Scope: layer-1+
+
+## FR-MCP-USECASE-005 Diagram generation Mermaid primary
+
+Two diagram kinds: (a) sequence from flows/steps; (b) UML use-case from persisted graph. Mermaid primary; PlantUML supported. Sequence is not a substitute for the use-case canvas editor.
+Scope: layer-1+
+
+## FR-MCP-USECASE-006 UC FR Realizes coverage API
+
+A runtime coverage API reports use cases without Realizes FR links and FRs without Realizes use case links for the active workspace.
+Scope: layer-1+
+
+## FR-MCP-USECASE-007 First-party Use Case UI
+
+First-party UI via REST. Primary diagram UI is UML use-case drag-and-drop canvas (FR-011). Structure forms secondary. Sequence render separate.
+Scope: layer-1+
+
+## FR-MCP-USECASE-008 Use case versioning and approval
+
+Draft/Submitted/Approved/Rejected; version increments on Approve.
+Scope: layer-1+
+Acceptance: Approve increments VersionNumber; invalid status rejected.
+Scope: layer-1+
+
+## FR-MCP-USECASE-009 Product membership hooks
+
+Optional ProductKey and list-by-product (hooks only).
+Scope: layer-1+
+Acceptance: set/clear ProductKey; list-by-product returns matches.
+Scope: layer-1+
+
+## FR-MCP-USECASE-010 Traceability integration for UC-FR Realizes
+
+Shared Realizes algorithm; USECASE FR/TR/TEST IDs in docs matrix.
+Scope: layer-1+
+Acceptance: Shared algorithm tests; ValidateTraceability green for USECASE IDs.
+Scope: layer-1+
+
+## FR-MCP-USECASE-011 UML use-case canvas editor
+
+Palette + free canvas + drag-and-drop UML use-case diagram editor (actors, use-case ovals, system boundary, association, include, extend). Classic UML editor interaction; not form-only.
+ACs: AC-011-1 palette; AC-011-2 place shapes; AC-011-3 association; AC-011-4 include/extend; AC-011-5 rename; AC-011-6 move+layout persist; AC-011-7 boundary; AC-011-8 canvas primary UI; AC-011-9 REST only.
+Scope: layer-1+
+
+## FR-MCP-USECASE-012 Persist use-case diagram graph
+
+Workspace-scoped graph (nodes, edges, layout) saved and loaded for a use case; soft-delete and validation. ACs AC-012-1 through AC-012-6 including audit on put.
+Scope: layer-1+
+
+## FR-MCP-USECASE-013 Export diagram to Mermaid
+
+Persisted graph exports deterministic Mermaid per mcp-usecase-diagram-schema:1. ACs AC-013-1 through AC-013-4.
+Scope: layer-1+
+
+## FR-MCP-USECASE-014 Export diagram to PlantUML
+
+Same graph exports PlantUML use-case syntax. ACs AC-014-1 through AC-014-3.
+Scope: layer-1+
 
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 

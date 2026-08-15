@@ -802,7 +802,9 @@ public sealed class TodoControllerTests : IDisposable
                     timestamp = "2026-05-27T12:00:00Z",
                     queryText = "workspace visibility",
                     response = "ok",
-                    status = "completed"
+                    status = "completed",
+                    planFile = "None",
+                    todoId = "None"
                 }
             }
         };

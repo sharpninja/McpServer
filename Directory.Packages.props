@@ -67,7 +67,7 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageVersion Include="Serilog.Sinks.Http" Version="9.2.1" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.1.2" />
-    <PackageVersion Include="Microsoft.OpenApi" Version="3.8.0" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.11.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.4" />
     <PackageVersion Include="Microsoft.Agents.AI" Version="1.13.0" />
@@ -88,7 +88,7 @@
     <PackageVersion Include="Microsoft.ML.OnnxRuntime" Version="1.24.1" />
     <PackageVersion Include="HnswIndex" Version="1.6.0" />
     <PackageVersion Include="System.Text.Json" Version="9.0.5" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.9" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.10" />
     <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.2" />
     <PackageVersion Include="Reqnroll" Version="3.0.0" />

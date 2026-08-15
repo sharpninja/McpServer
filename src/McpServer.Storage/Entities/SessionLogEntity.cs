@@ -34,6 +34,22 @@ public sealed class SessionLogEntity
     [ForeignKey(nameof(AgentDefinitionId))]
     public AgentDefinitionEntity? AgentDefinition { get; set; }
 
+    /// <summary>Provider-native agent session identifier captured in the session header.</summary>
+    [StringLength(256)]
+    public string? AgentSessionId { get; set; }
+
+    /// <summary>Provider-native transcript file path captured in the session header.</summary>
+    [StringLength(2048)]
+    public string? AgentSessionTranscriptFile { get; set; }
+
+    /// <summary>Agent executable path captured in the session header.</summary>
+    [StringLength(2048)]
+    public string? AgentExecutablePath { get; set; }
+
+    /// <summary>Agent executable version captured in the session header.</summary>
+    [StringLength(128)]
+    public string? AgentExecutableVersion { get; set; }
+
     /// <summary>TR-PLANNED-CORE-013: Human-readable session title.</summary>
     [StringLength(1024)]
     public string? Title { get; set; }

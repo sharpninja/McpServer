@@ -57,7 +57,9 @@ public sealed class UnifiedSessionLogDtoContractTests
                   "designDecisions": [ "decision" ],
                   "requirementsDiscovered": [ "FR-MCP-139" ],
                   "filesModified": [ "src/File.cs" ],
-                  "blockers": [ "none" ]
+                  "blockers": [ "none" ],
+                  "planFile": "docs/plans/foo.md",
+                  "todoId": "MCP-SESSIONLOG-002"
                 }
               ]
             }
@@ -78,9 +80,43 @@ public sealed class UnifiedSessionLogDtoContractTests
         Assert.Contains("FR-MCP-139", turn.RequirementsDiscovered ?? []);
         Assert.Contains("src/File.cs", turn.FilesModified ?? []);
         Assert.Contains("none", turn.Blockers ?? []);
+        Assert.Equal("docs/plans/foo.md", turn.PlanFile);
+        Assert.Equal("MCP-SESSIONLOG-002", turn.TodoId);
 
         var roundTripped = JsonSerializer.Serialize(dto);
         Assert.Contains("\"turns\"", roundTripped, StringComparison.Ordinal);
         Assert.Contains("\"filesChanged\"", roundTripped, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Session headers include agent runtime identity fields required by MCP session consumers.
+    /// </summary>
+    [Fact]
+    public void UnifiedSessionLogDto_RoundTripsAgentRuntimeHeaderFields()
+    {
+        const string json = """
+            {
+              "sourceType": "Codex",
+              "sessionId": "Mcp-20260722T213000Z-test",
+              "agentSessionId": "Codex-20260722T213000Z-agent",
+              "agentSessionTranscriptFile": "F:/GitHub/McpServer/.mcpServer/codex/transcripts/session.jsonl",
+              "agentExecutablePath": "C:/Users/kingd/AppData/Roaming/npm/codex.cmd",
+              "agentExecutableVersion": "1.2.3"
+            }
+            """;
+
+        var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json);
+
+        Assert.NotNull(dto);
+        Assert.Equal("Codex-20260722T213000Z-agent", dto!.AgentSessionId);
+        Assert.Equal("F:/GitHub/McpServer/.mcpServer/codex/transcripts/session.jsonl", dto.AgentSessionTranscriptFile);
+        Assert.Equal("C:/Users/kingd/AppData/Roaming/npm/codex.cmd", dto.AgentExecutablePath);
+        Assert.Equal("1.2.3", dto.AgentExecutableVersion);
+
+        var roundTripped = JsonSerializer.Serialize(dto);
+        Assert.Contains("\"agentSessionId\"", roundTripped, StringComparison.Ordinal);
+        Assert.Contains("\"agentSessionTranscriptFile\"", roundTripped, StringComparison.Ordinal);
+        Assert.Contains("\"agentExecutablePath\"", roundTripped, StringComparison.Ordinal);
+        Assert.Contains("\"agentExecutableVersion\"", roundTripped, StringComparison.Ordinal);
     }
 }

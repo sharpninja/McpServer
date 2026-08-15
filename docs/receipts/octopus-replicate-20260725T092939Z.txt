@@ -1,0 +1,105 @@
+
+Path      : F:\GitHub\aiUnit
+Name      : aiUnit
+Action    : failed
+ProjectId : {Projects-1, Projects-2, Projects-21, Projects-3…}
+Detail    : 
+            {
+              "ErrorMessage": "Resource is not found or it doesn\u0027t exist in the current space context. Please contact your administrator for more information."
+            }
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\Avalonia.RemoteControl
+Name      : Avalonia.RemoteControl
+Action    : failed
+ProjectId : {Projects-1, Projects-2, Projects-21, Projects-22…}
+Detail    : 
+            Bad Request
+            
+            Bad Request - Invalid URL
+            HTTP Error 400. The request URL is invalid.
+            
+            
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\bitnet-b1.58-sharp
+Name      : BitNet-b1.58-Sharp
+Action    : failed
+ProjectId : {Projects-1, Projects-2, Projects-21, Projects-22…}
+Detail    : 
+            Bad Request
+            
+            Bad Request - Invalid URL
+            HTTP Error 400. The request URL is invalid.
+            
+            
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\BodyAndBrain.Engine
+Name      : BodyAndBrain.Engine
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: BodyAndBrain.Engine
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\LlamaDeck
+Name      : LlamaDeck
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: LlamaDeck
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\McpServer
+Name      : McpServer
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: McpServer
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\MouseKeyProxy
+Name      : MouseKeyProxy
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: MouseKeyProxy
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\SharpNinjaHome
+Name      : SharpNinjaHome
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: SharpNinjaHome
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\TruckMate
+Name      : TruckMate
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: TruckMate
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\valhalla-dotnet
+Name      : valhalla-dotnet
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: valhalla-dotnet
+Ok        : False
+Steps     : 
+
+Path      : F:\GitHub\vice-sharp
+Name      : vice-sharp
+Action    : failed
+ProjectId : 
+Detail    : Project created but not found: vice-sharp
+Ok        : False
+Steps     : 
+
+

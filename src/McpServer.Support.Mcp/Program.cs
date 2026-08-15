@@ -9,7 +9,9 @@ using System.Text;
 using System.Text.Json;
 using McpServer.Common.AgentCli;
 using McpServer.Common.AgentCli.Extensions;
+using McpServer.Cqrs;
 using McpServer.GraphRag;
+using McpServer.Support.Mcp.UseCases;
 using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.DatabaseMaintenance;
 using McpServer.Support.Mcp.Ingestion;
@@ -234,6 +236,9 @@ builder.Services.PostConfigure<IngestionOptions>(options =>
 builder.Services.PostConfigure<TodoStorageOptions>(options =>
 {
     options.Provider = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:Provider") ?? options.Provider;
+    // Normalize deprecated TodoStorage.Provider=sqlite alias to canonical database.
+    if (string.Equals(options.Provider, TodoStorageOptions.LegacySqliteAlias, StringComparison.OrdinalIgnoreCase))
+        options.Provider = TodoStorageOptions.DatabaseProvider;
     options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
     options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
 });
@@ -434,12 +439,17 @@ builder.Services.AddSingleton<IAgentCliClient>(sp =>
         sp.GetRequiredService<IOptions<IngestionOptions>>(),
         sp.GetRequiredService<ILogger<AuditedAgentCliClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
+builder.Services.AddSingleton<SessionLogTurnContextExtractor>();
+builder.Services.AddScoped<ISessionLogTurnContextBackfill, SessionLogTurnContextBackfill>();
 builder.Services.AddScoped<ISessionLogSanitizer, SessionLogSanitizer>();
 builder.Services.AddScoped<IMemoryService, MemoryService>();
 builder.Services.AddScoped<ITransactionGatedMemoryService, TransactionGatedMemoryService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
+// TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by UseCasesController and handlers.
+builder.Services.AddCqrsDispatcher();
+builder.Services.AddUseCaseCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
@@ -550,7 +560,18 @@ builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
     });
 builder.Services.AddHealthChecks()
     .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"])
-    .AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"]);
+    .AddCheck<WorkspaceReadinessHealthCheck>("workspace-ready", tags: ["ready"])
+    // TR-MCP-HEALTH-003 (BUG-TRIAGE-096): storage reachability is a ready-tagged check surfaced
+    // as the explicit "storage" field on the health payload. NOT tagged "live": /health keeps
+    // liveness semantics (Healthy + exact nonce echo) during a storage-only outage so marker
+    // trust bootstrap never flips agents to MCP_UNTRUSTED when the server itself is up.
+    .AddCheck<StorageConnectivityHealthCheck>(
+        StorageConnectivityHealthCheck.Name,
+        tags: ["ready", StorageConnectivityHealthCheck.StorageTag]);
+
+// TR-MCP-HEALTH-003: single typed backend-unavailable mapping used by the shared
+// GlobalExceptionHandlerMiddleware (HTTP 503 {"error":"backend_unavailable"}).
+builder.Services.AddSingleton<IBackendUnavailabilityDetector, StorageBackendUnavailabilityDetector>();
 
 // FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
 // Register the HTTP client and data client used by federation decorators.
@@ -738,6 +759,10 @@ if (!app.Environment.IsEnvironment("Test"))
         var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
         await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions).ConfigureAwait(false);
         await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
+        await SessionLogTurnContextBackfillStartup.TryRunAsync(
+            db,
+            scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
+            scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>()).ConfigureAwait(false);
     }
 
     using (var scope = app.Services.CreateScope())
@@ -817,6 +842,11 @@ if (!app.Environment.IsEnvironment("Test"))
 
 app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
+
+// FR-MCP-USECASE-007: serve first-party Use Case UI from wwwroot (/usecases/, /usecases/index.html).
+// Static assets are not under /mcpserver/* so WorkspaceAuthMiddleware leaves them open; API stays protected.
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseMcpIdentityServer();
 app.UseAuthentication();

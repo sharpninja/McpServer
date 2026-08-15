@@ -1,6 +1,8 @@
 # MCP Server
 
-Workspace-scoped AI agent infrastructure for .NET - context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, and agent orchestration over HTTP and MCP STDIO transports.
+Workspace-scoped AI agent infrastructure for .NET: context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, and agent orchestration over HTTP and MCP STDIO transports.
+
+**Current line:** GitVersion `next-version` **1.4.26** (see `GitVersion.yml`). Live `/health` reports the build informational version from the deployed bits.
 
 ## Key Features
 
@@ -9,6 +11,7 @@ Workspace-scoped AI agent infrastructure for .NET - context retrieval, TODO orch
 - **Agent orchestration** - process-isolated agent pool with branch strategies, PowerShell sessions, and desktop automation
 - **Semantic search** - ONNX-based vector embeddings with HNSW indexing, optional GraphRAG enhancement
 - **Requirements traceability** - FR/TR/TEST document management with validation and Markdown/ZIP export
+- **Use cases** - workspace-scoped use-case modeling with FR Realizes links, coverage, UML canvas graph (schema v1), sequence diagrams, first-party UI at `/usecases/`, REST + MCP + typed client
 - **Multi-provider storage** - SQLite, SQL Server, and PostgreSQL with automatic migrations
 - **REPL CLI tool** - `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
 - **Typed .NET client** - `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
@@ -83,6 +86,8 @@ Direct `--agent-stdio` callers send one single-line JSON request envelope per st
 | `/mcpserver/agent-pool` | Pool lifecycle, health monitoring, process isolation |
 | `/mcpserver/repo` | Repository read/list/write with allowlist enforcement |
 | `/mcpserver/requirements` | FR/TR/TEST documents, validation, Markdown/ZIP export |
+| `/mcpserver/usecases` | Use case CRUD, flows/steps/actors/FR links, diagram-graph, coverage, approval/product |
+| `/usecases/` | First-party Use Case Manager UI (REST-only; UML canvas + secondary forms) |
 | `/mcpserver/workspace` | Multi-tenant workspace resolution and management |
 | `/mcpserver/gh` | GitHub issues, PRs, workflows, repository metadata |
 | `/mcpserver/tools` | Tool capability registration, discovery, schema validation |
@@ -179,8 +184,10 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 
 | Platform | File | Jobs |
 |---|---|---|
-| **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish |
+| **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish; optional Octopus LEGION2 release when `OCTOPUS_API_KEY` is set |
 | **GitHub Actions** | `.github/workflows/build.yml` | Build & test, validate, package, MSIX, publish |
+
+Versioning uses GitVersion (`GitVersion.yml`, `next-version: 1.4.26` at last docs refresh). See `docs/AZURE-PIPELINES.md` for pipeline variables and the optional Octopus Deploy integration.
 
 ## Client Library
 
