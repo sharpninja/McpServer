@@ -91,7 +91,7 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         using var app = BuildFactory(chatFactory, coordinator);
         using var seedClient = SeedClient(app);
         await SeedQuadAsync(seedClient, BrainSlotRoles.All).ConfigureAwait(true);
-        await SeedSessionAsync(seedClient, "QBAgent-20260627T011500Z-aot-logger-reject").ConfigureAwait(true);
+        await SeedSessionAsync(seedClient, "QBAgent-20260627T011500Z-aot-logger-reject", "req-20260627T011500Z-aot-logger-reject").ConfigureAwait(true);
         using var client = Authorized(app);
         client.DefaultRequestHeaders.Add("X-Session-Id", "QBAgent-20260627T011500Z-aot-logger-reject");
         client.DefaultRequestHeaders.Add("X-Turn-Id", "req-20260627T011500Z-aot-logger-reject");
@@ -146,13 +146,22 @@ public sealed class QuadBrainLiveEndpointIntegrationTests
         }
     }
 
-    private static async Task SeedSessionAsync(HttpClient client, string sessionId)
+    private static async Task SeedSessionAsync(HttpClient client, string sessionId, string? turnId = null)
     {
         var response = await client.PostAsJsonAsync(
             new Uri($"mcpserver/sessionlog/{SourceType}/{sessionId}/open", UriKind.Relative),
             new { Title = "AoT logger rejection", Model = "qbagent" }).ConfigureAwait(true);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.True(response.StatusCode == HttpStatusCode.OK, $"Expected session open OK, got {response.StatusCode}: {json}");
+
+        if (string.IsNullOrWhiteSpace(turnId))
+            return;
+
+        var begin = await client.PostAsJsonAsync(
+            new Uri($"mcpserver/sessionlog/{SourceType}/{sessionId}/{turnId}/begin", UriKind.Relative),
+            new { queryTitle = "AoT logger rejection", queryText = "do it", model = "qbagent", planFile = "None", todoId = "None" }).ConfigureAwait(true);
+        var beginJson = await begin.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(begin.StatusCode == HttpStatusCode.Created, $"Expected begin Created, got {begin.StatusCode}: {beginJson}");
     }
 
     private static HttpClient SeedClient(CustomWebApplicationFactory factory)

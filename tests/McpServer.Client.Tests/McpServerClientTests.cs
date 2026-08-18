@@ -39,6 +39,7 @@ public sealed class McpServerClientTests
         Assert.NotNull(client.TurnTransactions);
         Assert.NotNull(client.BrainSlots);
         Assert.NotNull(client.Triage);
+        Assert.NotNull(client.Handoff);
     }
 
     [Fact]

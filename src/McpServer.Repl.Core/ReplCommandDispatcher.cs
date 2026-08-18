@@ -80,6 +80,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly ITriageWorkflow? _triageWorkflow;
     private readonly IAgentHelpWorkflow? _agentHelpWorkflow;
     private readonly ITranscriptIngestionWorkflow? _transcriptIngestionWorkflow;
+    private readonly IHandoffWorkflow? _handoffWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
 
     /// <summary>
@@ -96,6 +97,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="triageWorkflow">The optional triage workflow used to invoke <c>workflow.triage.*</c> methods.</param>
     /// <param name="agentHelpWorkflow">The optional Agent Help workflow used to invoke <c>workflow.agenthelp.*</c> methods.</param>
     /// <param name="transcriptIngestionWorkflow">The optional transcript ingestion workflow used to invoke <c>repl.sessionlog.*Transcripts</c> methods.</param>
+    /// <param name="handoffWorkflow">The optional handoff workflow used to invoke <c>workflow.handoff.*</c> methods.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
@@ -107,7 +109,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         ITriageWorkflow? triageWorkflow = null,
         IAgentHelpWorkflow? agentHelpWorkflow = null,
         ISessionLogPersistenceStrategy? sessionLogPersistenceStrategy = null,
-        ITranscriptIngestionWorkflow? transcriptIngestionWorkflow = null)
+        ITranscriptIngestionWorkflow? transcriptIngestionWorkflow = null,
+        IHandoffWorkflow? handoffWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
@@ -119,6 +122,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _triageWorkflow = triageWorkflow;
         _agentHelpWorkflow = agentHelpWorkflow;
         _transcriptIngestionWorkflow = transcriptIngestionWorkflow;
+        _handoffWorkflow = handoffWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
     }
 
@@ -235,12 +239,17 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             return MarkWorkflowDeprecated(await DispatchGraphRagRequestAsync(request, cancellationToken).ConfigureAwait(false));
         }
 
+        if (method.StartsWith(HandoffCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return MarkWorkflowDeprecated(await DispatchHandoffRequestAsync(request, cancellationToken).ConfigureAwait(false));
+        }
+
         return BuildError(
             requestId: request.RequestId,
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
                      $"Primary namespace: client.<clientName>.<methodName>. " +
-                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {AgentHelpCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*.");
+                     $"Deprecated namespaces (migrate to client.*): {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*, {MemoryCommandShapes.MethodNamespace}.*, {TriageCommandShapes.MethodNamespace}.*, {AgentHelpCommandShapes.MethodNamespace}.*, {GraphRagCommandShapes.MethodNamespace}.*, {HandoffCommandShapes.MethodNamespace}.*.");
     }
 
     private async Task<IYamlEnvelope> DispatchSessionLogPersistenceRequestAsync(
@@ -1144,6 +1153,107 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
     }
 
+    private async Task<IYamlEnvelope> DispatchHandoffRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_handoffWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Handoff workflow is not registered.");
+        }
+
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+        var requestArgs = GetRequestArgs(args);
+
+        try
+        {
+            object? result = request.Method switch
+            {
+                HandoffCommandShapes.IngestMethod =>
+                    await _handoffWorkflow.IngestAsync(BuildHandoffIngestionRequest(requestArgs), cancellationToken).ConfigureAwait(false),
+                HandoffCommandShapes.GetMethod =>
+                    await _handoffWorkflow.GetAsync(RequireString(args, requestArgs, "runId"), cancellationToken).ConfigureAwait(false),
+                HandoffCommandShapes.ApproveMethod =>
+                    await _handoffWorkflow.ApproveAsync(
+                        RequireString(args, requestArgs, "runId"),
+                        new McpServer.Client.Models.HandoffApprovalRequest
+                        {
+                            Approved = GetBool(requestArgs, "approved") ?? false,
+                            Reviewer = GetString(requestArgs, "reviewer"),
+                            Notes = GetString(requestArgs, "notes"),
+                        },
+                        cancellationToken).ConfigureAwait(false),
+                _ => null,
+            };
+
+            if (result is null)
+            {
+                return BuildError(
+                    requestId: request.RequestId,
+                    code: "method_not_found",
+                    message: $"Method '{request.Method}' is not routed by the handoff workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private static McpServer.Client.Models.HandoffIngestionRequest BuildHandoffIngestionRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        if (!Enum.TryParse<McpServer.Client.Models.HandoffSourceKind>(GetString(args, "sourceKind"), ignoreCase: true, out var sourceKind)
+            || !Enum.IsDefined(sourceKind))
+        {
+            throw new ArgumentException("sourceKind must be Path, Content, or Artifact.");
+        }
+
+        var modeText = GetString(args, "mode");
+        var mode = McpServer.Client.Models.HandoffIngestionMode.DraftOnly;
+        if (!string.IsNullOrWhiteSpace(modeText)
+            && (!Enum.TryParse(modeText, ignoreCase: true, out mode) || !Enum.IsDefined(mode)))
+        {
+            throw new ArgumentException("mode must be DraftOnly, RequireReview, or CreateWhenConfident.");
+        }
+
+        return new McpServer.Client.Models.HandoffIngestionRequest
+        {
+            SourceKind = sourceKind,
+            Path = GetString(args, "path"),
+            Content = GetString(args, "content"),
+            ArtifactId = GetString(args, "artifactId"),
+            Mode = mode,
+            Force = GetBool(args, "force") ?? false,
+            AgentName = GetString(args, "agentName"),
+            PromptTemplateId = GetString(args, "promptTemplateId"),
+        };
+    }
+
     private async Task<IYamlEnvelope> DispatchAgentHelpRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
     {
         if (_agentHelpWorkflow is null)
@@ -1579,7 +1689,10 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         ScopeEndLayerKey = GetString(args, "scopeEndLayerKey"),
                     }, cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.EffectiveMethod =>
-                    await _requirementsWorkflow.GetEffectiveRequirementsAsync(GetString(args, "layerKey"), cancellationToken).ConfigureAwait(false),
+                    await _requirementsWorkflow.GetEffectiveRequirementsAsync(
+                        GetString(args, "layerKey"),
+                        GetString(args, "productScope") ?? "product",
+                        cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CurrentSelectionMethod => _requirementsWorkflow.CurrentSelection(),
                 _ => null,
             };

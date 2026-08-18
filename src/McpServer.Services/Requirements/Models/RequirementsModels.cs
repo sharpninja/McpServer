@@ -147,13 +147,20 @@ public sealed class RequirementScopeLayerUpdateRequest
     public string? ScopeEndLayerKey { get; set; }
 }
 
-/// <summary>FR-MCP-REQSCOPE-003: effective requirements resolved for a workspace layer.</summary>
+/// <summary>FR-MCP-REQSCOPE-003 / FR-MCP-PRODUCT-003: effective requirements resolved for a workspace layer.</summary>
+/// <param name="CurrentLayer">Resolved layer used for the effective set.</param>
+/// <param name="Functional">Effective functional requirements.</param>
+/// <param name="Technical">Effective technical requirements.</param>
+/// <param name="Testing">Effective testing requirements.</param>
+/// <param name="Mappings">Effective FR-to-TR/TEST mappings.</param>
+/// <param name="ProductKeys">Optional product keys that contributed sibling rows.</param>
 public sealed record EffectiveRequirementsResult(
     RequirementScopeLayerEntry CurrentLayer,
     IReadOnlyList<FrEntry> Functional,
     IReadOnlyList<TrEntry> Technical,
     IReadOnlyList<TestEntry> Testing,
-    IReadOnlyList<FrTrMapping> Mappings);
+    IReadOnlyList<FrTrMapping> Mappings,
+    IReadOnlyList<string>? ProductKeys = null);
 
 /// <summary>FR-MCP-026: FR-to-TR mapping row from TR-per-FR-Mapping.md.</summary>
 public sealed record FrTrMapping

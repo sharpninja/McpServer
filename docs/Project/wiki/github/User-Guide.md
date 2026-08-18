@@ -744,6 +744,7 @@ Current surface area: 42 tools.
 
 - `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`, `todo_move`
 - `todo_plan`, `todo_implement`, `todo_status`
+- `handoff_ingest`, `handoff_get`, `handoff_approve` (see `docs/Handoff-Ingestion.md`)
 
 ### Requirements
 
@@ -902,6 +903,27 @@ Canvas and graph persistence require a service build that includes the latest `w
 ```powershell
 .\build.ps1 UpdateService --SkipVersionBump true
 ```
+
+## 7c) Products (shared requirements across workspaces)
+
+A Product groups workspaces on the same host so members can read each other's FR/TR/TEST/layers without copying rows. Keys look like `PROD-MCPSERVER` (uppercase `PROD-` prefix). TODOs, session logs, and sibling source files are not shared.
+
+### REST
+
+- `POST /mcpserver/products` body `{ "key": "PROD-MCPSERVER", "name": "McpServer" }` (caller becomes owner)
+- `GET /mcpserver/products` and `GET /mcpserver/products/{key}`
+- `PATCH /mcpserver/products/{key}` (owner) and `DELETE /mcpserver/products/{key}` (owner soft-delete)
+- Members: `GET/PUT/DELETE /mcpserver/products/{key}/members/{workspaceId}`
+- Effective requirements: `GET /mcpserver/requirements/effective?productScope=product|local` (default `product`)
+
+All routes require `X-Api-Key`. Invalid keys are 400; duplicate keys 409; non-owner mutate 403; outsider get 404.
+
+### MCP and REPL
+
+- Tools: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
+- Effective union: `requirements_effective` with `productScope=product` (default) or `local`
+- Typed client: `client.Products`
+- Context source `product-requirements` returns sibling FR/TR/TEST text tagged with `originWorkspaceId`, not sibling `.cs` files
 
 ## 8) Wire docs into README index and docs folder
 

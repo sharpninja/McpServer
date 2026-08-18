@@ -125,7 +125,10 @@ public sealed class SessionLogSanitizerProjectionTests
 
     private static ISessionLogSanitizer CreateSanitizer()
     {
-        return new SessionLogSanitizer(Microsoft.Extensions.Options.Options.Create(new SessionLogSanitizationOptions()));
+        return new SessionLogSanitizer(Microsoft.Extensions.Options.Options.Create(new SessionLogSanitizationOptions
+        {
+            RegexTimeoutMilliseconds = 5000,
+        }));
     }
 
     private static UnifiedSessionLogDto CreateSessionLog()

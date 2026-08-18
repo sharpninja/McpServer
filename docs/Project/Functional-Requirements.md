@@ -1,5 +1,64 @@
 # Functional Requirements (MCP Server)
 
+## FR-HANDOFF-001 Ingest workspace-scoped handoff documents
+
+Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Supports Markdown, text, JSON, and YAML inputs.
+- [ ] Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths.
+- [ ] Maximum decoded input is 8 MiB.
+
+## FR-HANDOFF-002 Extract structured MCP TODO drafts via one-shot agents
+
+Use the existing one-shot agent system to extract a structured MCP TODO draft.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Extraction uses a versioned prompt and strict JSON contract.
+- [ ] Malformed output produces diagnostics and never creates a TODO.
+- [ ] Unknown or missing source information is not silently discarded.
+
+## FR-HANDOFF-003 Validate and normalize generated TODO drafts
+
+Validate and normalize generated TODO drafts.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links.
+- [ ] Invalid or conflicting values produce field-specific diagnostics.
+
+## FR-HANDOFF-004 Support DraftOnly, RequireReview, and CreateWhenConfident modes
+
+Support DraftOnly, RequireReview, and CreateWhenConfident modes.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] DraftOnly is the default and never mutates TODO state.
+- [ ] RequireReview persists an approvable run without creating a TODO.
+- [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+
+## FR-HANDOFF-005 Persist approved TODOs exclusively through the TODO service
+
+Persist approved TODOs exclusively through the existing TODO service.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Successful creation produces exactly one TODO.
+- [ ] Replay of the same workspace, content hash, and prompt version returns the existing receipt.
+- [ ] ID collisions require review and are never silently renamed.
+
+## FR-HANDOFF-006 Preserve auditable provenance and diagnostics
+
+Preserve auditable provenance and diagnostics for every run.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+- [ ] Raw credentials or source content are not copied into logs.
+
+## FR-HANDOFF-007 Provide equivalent public handoff surfaces
+
+Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows.
+
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -1361,6 +1420,54 @@ Scope: layer-1+
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
 Scope: layer-1+
 
+## FR-MCP-PRODUCT-001 Product CRUD
+
+A registered workspace can create, get, list (visible), update, and soft-delete products it owns. Key is a PROD-* string matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ (examples PROD-MCPSERVER, PROD-MCP-PLUGIN), unique among non-deleted products. Application API is CQRS only; REST/MCP/REPL/client only dispatch handlers. AC: create returns key + ownerWorkspaceId; invalid key is 400; duplicate key is 409; non-owner update/delete is 403; soft-delete hides from default list.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] create returns key and ownerWorkspaceId
+- [ ] invalid key is 400
+- [ ] duplicate key is 409
+- [ ] non-owner update or delete is 403
+- [ ] soft-delete hides product from default list
+
+## FR-MCP-PRODUCT-002 Workspace product membership
+
+A workspace maps to zero or more products. The owner workspace adds and removes members by workspace id. A member may leave itself. Adding a workspace requires that workspace to be registered, enabled, and not soft-deleted. AC: add requires registered enabled workspace; list members returns owner + members; leave removes only the caller; removed member loses product reads.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] add requires registered enabled workspace
+- [ ] list members returns owner and members
+- [ ] leave removes only the caller
+- [ ] removed member loses product reads
+
+## FR-MCP-PRODUCT-003 Shared effective requirements
+
+Member GetEffectiveRequirements unions local effective rows with sibling members' effective rows, provenance-tagged with originWorkspaceId, layer-matched using the origin workspace layer catalog. productScope=local hides siblings; default productScope is product. AC: two workspaces in one product see each other's in-scope FR/TR/TEST/mappings; productScope=local hides siblings; id collision returns two rows with different originWorkspaceId.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] two member workspaces see each others in-scope FR TR TEST and mappings
+- [ ] productScope local hides siblings
+- [ ] id collision returns two rows with different originWorkspaceId
+
+## FR-MCP-PRODUCT-004 Product isolation
+
+Non-members cannot read product membership or sibling requirements. Local requirement mutations never write sibling rows. A leaked workspace API key cannot list all products or dump non-member workspaces. AC: outsider get-product is 404; outsider effective is local-only; update-fr on sibling id does not change the sibling row.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] outsider get-product is 404
+- [ ] outsider effective is local-only
+- [ ] update-fr on sibling id does not change the sibling row
+
+## FR-MCP-PRODUCT-005 Product requirement context
+
+Context search/pack can retrieve product-visible requirement text with origin tags. It must not pull sibling source files. Source type product-requirements filters to those chunks. AC: pack for a member includes sibling FR body; pack does not include sibling .cs chunks; source type product-requirements filters to those chunks.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] pack for a member includes sibling FR body
+- [ ] pack does not include sibling source file chunks
+- [ ] source type product-requirements filters to those chunks
+
 ## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
 
 QBAgent SHALL communicate exclusively with the MCP Server QuadBrain service. On startup it SHALL read the marker file (AGENTS-README-FIRST.yaml) in its start directory and use that marker's apiKey and baseUrl to reach the QuadBrain service - with no other endpoints and no fallback. If no marker file is present in the start directory, QBAgent SHALL exit gracefully without error spew and without contacting any endpoint.
@@ -1677,6 +1784,19 @@ Scope: layer-1+
 Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-004.
 Scope: layer-1+
 
+## FR-MCP-SESSIONLOGCTX-001 Session turns record current plan file and MCP TODO id
+
+Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.
+- [ ] When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).
+- [ ] The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. No turn row is inserted.
+- [ ] planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.
+- [ ] Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.
+- [ ] Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.
+- [ ] Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.
+
 ## FR-MCP-SESSIONLOGSAN-001 Sanitized session-log read responses
 
 Session-log query and single-session read responses must redact built-in credential forms and workspace-configured regular-expression matches before data leaves the server while preserving the raw persisted session log.
@@ -1815,6 +1935,83 @@ Scope: layer-1+
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
 
+## FR-MCP-USECASE-001 CRUD workspace-scoped use cases
+
+The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.
+Scope: layer-1+
+
+## FR-MCP-USECASE-002 Actors, flows, and ordered steps
+
+Use cases support actors (Primary, Secondary, System, External), flows (Basic, Alternative, Exception) with sequence numbers, and ordered steps with action text and optional system response and data entities.
+Scope: layer-1+
+
+## FR-MCP-USECASE-003 Bidirectional UC to FR links with Realizes default
+
+Use cases link bidirectionally to functional requirements using string FR ids. Default link type is Realizes. Active links are unique per workspace, use case, and FR. Unlink is soft-delete of the link row.
+Scope: layer-1+
+
+## FR-MCP-USECASE-004 Create use case from FR
+
+Operators and agents can create a shell use case from an existing FR title/body with an automatic Realizes link.
+Scope: layer-1+
+
+## FR-MCP-USECASE-005 Diagram generation Mermaid primary
+
+Two diagram kinds: (a) sequence from flows/steps; (b) UML use-case from persisted graph. Mermaid primary; PlantUML supported. Sequence is not a substitute for the use-case canvas editor.
+Scope: layer-1+
+
+## FR-MCP-USECASE-006 UC FR Realizes coverage API
+
+A runtime coverage API reports use cases without Realizes FR links and FRs without Realizes use case links for the active workspace.
+Scope: layer-1+
+
+## FR-MCP-USECASE-007 First-party Use Case UI
+
+First-party UI via REST. Primary diagram UI is UML use-case drag-and-drop canvas (FR-011). Structure forms secondary. Sequence render separate.
+Scope: layer-1+
+
+## FR-MCP-USECASE-008 Use case versioning and approval
+
+Draft/Submitted/Approved/Rejected; version increments on Approve.
+Scope: layer-1+
+Acceptance: Approve increments VersionNumber; invalid status rejected.
+Scope: layer-1+
+
+## FR-MCP-USECASE-009 Product membership hooks
+
+Optional ProductKey and list-by-product (hooks only).
+Scope: layer-1+
+Acceptance: set/clear ProductKey; list-by-product returns matches.
+Scope: layer-1+
+
+## FR-MCP-USECASE-010 Traceability integration for UC-FR Realizes
+
+Shared Realizes algorithm; USECASE FR/TR/TEST IDs in docs matrix.
+Scope: layer-1+
+Acceptance: Shared algorithm tests; ValidateTraceability green for USECASE IDs.
+Scope: layer-1+
+
+## FR-MCP-USECASE-011 UML use-case canvas editor
+
+Palette + free canvas + drag-and-drop UML use-case diagram editor (actors, use-case ovals, system boundary, association, include, extend). Classic UML editor interaction; not form-only.
+ACs: AC-011-1 palette; AC-011-2 place shapes; AC-011-3 association; AC-011-4 include/extend; AC-011-5 rename; AC-011-6 move+layout persist; AC-011-7 boundary; AC-011-8 canvas primary UI; AC-011-9 REST only.
+Scope: layer-1+
+
+## FR-MCP-USECASE-012 Persist use-case diagram graph
+
+Workspace-scoped graph (nodes, edges, layout) saved and loaded for a use case; soft-delete and validation. ACs AC-012-1 through AC-012-6 including audit on put.
+Scope: layer-1+
+
+## FR-MCP-USECASE-013 Export diagram to Mermaid
+
+Persisted graph exports deterministic Mermaid per mcp-usecase-diagram-schema:1. ACs AC-013-1 through AC-013-4.
+Scope: layer-1+
+
+## FR-MCP-USECASE-014 Export diagram to PlantUML
+
+Same graph exports PlantUML use-case syntax. ACs AC-014-1 through AC-014-3.
+Scope: layer-1+
+
 ## FR-MCP-WIKIEXPORT-001 Configurable requirements wiki export tree
 
 Requirements wiki export must optionally discover docs/wiki.yaml in the active workspace and use it as the authoritative wiki document tree, navigation tree, optional home template, and flattened document list for GitHub and Azure wiki exports while preserving current output when the file is absent.
@@ -1951,131 +2148,4 @@ Scope: layer-1+
 - [x] A read-only triage endpoint returns TODO IDs produced by triage and the TODO creation datetime. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint supports workspace-scoped queries and does not leak TODO IDs across workspaces. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
 - [x] The endpoint includes enough triage context to connect each TODO ID back to its group and research run when available. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
-
-## FR-MCP-USECASE-001 Use case header CRUD
-
-Workspace-scoped create, get, list, update, and soft-delete for use case headers.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Create/get/list/update succeed in a workspace
-- [ ] Soft-delete hides use case from default get/list
-- [ ] Cross-workspace id does not leak
-
-## FR-MCP-USECASE-002 Actors, flows, and ordered steps
-
-Actors and flows (Basic/Alternative/Exception) with ordered steps.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Attach actor; add flow; add ordered steps
-- [ ] Invalid actor/flow type rejected
-
-## FR-MCP-USECASE-003 Bidirectional UC-FR links with default Realizes
-
-Link/unlink use cases to string FrId requirements; default LinkType Realizes.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Link defaults to Realizes; unlink soft-deletes link
-- [ ] Duplicate active link conflicts; missing FR rejected
-
-## FR-MCP-USECASE-004 Create use case from FR
-
-Shell use case from FR with automatic Realizes link.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] from-fr creates UC and Realizes link
-- [ ] FR get shows linked use case
-
-## FR-MCP-USECASE-005 Use case diagrams
-
-Two diagram kinds: (a) **sequence** generated from flows/steps; (b) **UML use-case** from persisted graph. Mermaid primary export; PlantUML also supported. Sequence is not a substitute for the use-case canvas editor.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] kind=sequence mermaid contains sequenceDiagram
-- [ ] kind=usecase mermaid uses mcp-usecase-diagram-schema:1 header
-- [ ] plantuml for usecase kind contains @startuml
-- [ ] unknown format fails validation
-
-## FR-MCP-USECASE-006 Realizes coverage report
-
-Runtime report of UC/FR Realizes gaps.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Coverage payload includes totals and gap lists with live DTO names
-
-## FR-MCP-USECASE-007 First-party Use Case UI
-
-First-party UI via REST `/mcpserver/usecases` only. **Primary diagram UI is the UML use-case drag-and-drop canvas** (FR-MCP-USECASE-011). Structure forms (actors/flows/steps/FR links) are secondary. Sequence render remains available separately.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] UI assets call live REST; served at /usecases/ after deploy
-- [ ] Canvas is primary diagram surface (not forms-only)
-- [ ] Structure panels remain available as secondary
-- [ ] No direct DB access from UI
-
-## FR-MCP-USECASE-008 Use case versioning and approval
-
-Draft/Submitted/Approved/Rejected; version increments on Approve.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Approve increments VersionNumber; invalid status rejected
-
-## FR-MCP-USECASE-009 Product membership hooks
-
-Optional ProductKey and list-by-product (hooks only).
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] set/clear ProductKey; list-by-product returns matches
-
-## FR-MCP-USECASE-010 Traceability integration for UC-FR Realizes
-
-Shared Realizes algorithm; USECASE FR/TR/TEST IDs in docs matrix.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Shared algorithm tests; ValidateTraceability green for USECASE IDs
-
-## FR-MCP-USECASE-011 UML use-case canvas editor
-
-Palette + free canvas + drag-and-drop UML use-case diagram editor (actors, use-case ovals, system boundary, association, include, extend). Classic UML editor interaction; not form-only.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-011-1 Palette offers Actor, UseCase, SystemBoundary, Association, Include, Extend
-- [ ] AC-011-2 User can place Actor and UseCase on free canvas
-- [ ] AC-011-3 User can draw Association between Actor and UseCase
-- [ ] AC-011-4 User can create Include and Extend between use cases
-- [ ] AC-011-5 User can rename a selected shape
-- [ ] AC-011-6 User can move shapes; layout coordinates persist with graph
-- [ ] AC-011-7 System boundary contains use cases (visual nesting or membership)
-- [ ] AC-011-8 Canvas is primary diagram UI at /usecases/
-- [ ] AC-011-9 UI mutates diagram graph only via REST
-
-## FR-MCP-USECASE-012 Persist use-case diagram graph
-
-Workspace-scoped graph (nodes, edges, layout) saved and loaded for a use case; soft-delete and validation.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-012-1 GET returns empty or last-saved graph
-- [ ] AC-012-2 PUT then GET round-trips the same graph
-- [ ] AC-012-3 Graph is workspace-scoped; no cross-workspace leak
-- [ ] AC-012-4 Soft-delete of use case hides graph from default get
-- [ ] AC-012-5 Invalid graph rejected with validation error
-- [ ] AC-012-6 Put emits append-only audit row (TR-MCP-DB-004)
-
-## FR-MCP-USECASE-013 Export diagram to Mermaid
-
-Persisted graph exports deterministic Mermaid per mcp-usecase-diagram-schema:1.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-013-1 Export includes %% mcp-usecase-diagram-schema:1 header
-- [ ] AC-013-2 Golden fixture: actors, use cases, boundary, edge types
-- [ ] AC-013-3 Same graph yields same Mermaid (deterministic)
-- [ ] AC-013-4 Empty graph yields documented minimal Mermaid
-
-## FR-MCP-USECASE-014 Export diagram to PlantUML
-
-Same graph exports PlantUML use-case syntax.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-014-1 Export contains @startuml and @enduml
-- [ ] AC-014-2 Golden fixture matches actors/use cases/include/extend
-- [ ] AC-014-3 Deterministic for same graph
 

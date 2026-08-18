@@ -18,6 +18,9 @@ public enum AgentPoolOneShotContext
 
     /// <summary>Ad-hoc prompt context.</summary>
     AdHoc,
+
+    /// <summary>TR-HANDOFF-AGENT-001: Extract a structured MCP TODO draft from a handoff document.</summary>
+    HandoffTodoDraft,
 }
 
 /// <summary>Request payload for one-shot queue and resolve operations.</summary>

@@ -300,6 +300,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             if (activeCount >= maxQueueSize)
                 return new AgentPoolEnqueueResult { Success = false, Error = $"Queue is full (max {maxQueueSize})." };
 
+            var publishedPrompt = OneShotSensitivePromptPolicy.Publish(effectiveContext, resolution.PromptText);
             var state = new QueueJobState
             {
                 JobId = jobId,
@@ -308,7 +309,8 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 Status = "queued",
                 Context = effectiveContext,
                 PromptTemplateId = resolution.TemplateId,
-                RenderedPrompt = resolution.PromptText,
+                RenderedPrompt = publishedPrompt,
+                ExecutionPrompt = resolution.PromptText,
                 CreatedUtc = DateTimeOffset.UtcNow,
             };
             _jobs[jobId] = state;
@@ -334,12 +336,14 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
         _ = TryDispatchAsync();
 
+        _definitions.TryGetValue(resolvedAgentName, out var resolvedDefinition);
         return new AgentPoolEnqueueResult
         {
             Success = true,
             JobId = snapshot.JobId,
             AgentName = snapshot.AgentName,
             RenderedPrompt = snapshot.RenderedPrompt,
+            Model = resolvedDefinition?.AgentModel,
         };
     }
 
@@ -838,7 +842,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                     {
                         response = await _voiceService.SubmitTurnAsync(
                             sessionId,
-                            new VoiceTurnRequest { UserTranscriptText = job.RenderedPrompt ?? string.Empty },
+                            new VoiceTurnRequest { UserTranscriptText = job.ExecutionPrompt ?? job.RenderedPrompt ?? string.Empty },
                             CancellationToken.None).ConfigureAwait(false);
                     }
                     catch (Exception ex)
@@ -948,6 +952,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                     AgentPoolOneShotContext.Status => _definitions.Values.FirstOrDefault(x => x.IsTodoStatusDefault),
                     AgentPoolOneShotContext.Implement => _definitions.Values.FirstOrDefault(x => x.IsTodoImplementDefault),
                     AgentPoolOneShotContext.AdHoc => _definitions.Values.FirstOrDefault(x => x.IsInteractiveDefault),
+                    AgentPoolOneShotContext.HandoffTodoDraft => _definitions.Values.FirstOrDefault(x => x.IsTodoPlanDefault) ?? _definitions.Values.FirstOrDefault(x => x.IsInteractiveDefault),
                     null when interactiveFallback => _definitions.Values.FirstOrDefault(x => x.IsInteractiveDefault),
                     _ => null,
                 };
@@ -966,6 +971,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 AgentPoolOneShotContext.Status => workspaceAgents.FirstOrDefault(x => x.Definition.IsTodoStatusDefault),
                 AgentPoolOneShotContext.Implement => workspaceAgents.FirstOrDefault(x => x.Definition.IsTodoImplementDefault),
                 AgentPoolOneShotContext.AdHoc => workspaceAgents.FirstOrDefault(x => x.Definition.IsInteractiveDefault),
+                AgentPoolOneShotContext.HandoffTodoDraft => workspaceAgents.FirstOrDefault(x => x.Definition.IsTodoPlanDefault) ?? workspaceAgents.FirstOrDefault(x => x.Definition.IsInteractiveDefault),
                 null when interactiveFallback => workspaceAgents.FirstOrDefault(x => x.Definition.IsInteractiveDefault),
                 _ => null,
             };
@@ -1046,6 +1052,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             AgentPoolOneShotContext.Plan => await _todoPromptProvider.GetPlanPromptAsync(cancellationToken).ConfigureAwait(false),
             AgentPoolOneShotContext.Status => await _todoPromptProvider.GetStatusPromptAsync(cancellationToken).ConfigureAwait(false),
             AgentPoolOneShotContext.Implement => await _todoPromptProvider.GetImplementPromptAsync(cancellationToken).ConfigureAwait(false),
+            AgentPoolOneShotContext.HandoffTodoDraft => HandoffPromptDefaults.Prompt,
             _ => throw new InvalidOperationException("AdHoc context does not use context-template resolution."),
         };
     }
@@ -1197,6 +1204,9 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         public string? PromptTemplateId { get; init; }
 
         public string? RenderedPrompt { get; init; }
+
+        /// <summary>Raw prompt used only by the in-process executor. Never copied to DTOs.</summary>
+        public string? ExecutionPrompt { get; init; }
 
         public string? ResponseText { get; set; }
 

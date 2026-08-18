@@ -1,0 +1,214 @@
+{
+  "TimestampUtc": "2026-08-18T16:08:33Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project requirement work; MCP-PRODUCTS-001 Phase 4 / H4-green only",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ],
+    "files": [
+      "PROFILE.md",
+      "user-payton-byrd.md",
+      "accuracy-first-verify-sources.md",
+      "approve-before-execute.md",
+      "philosophical-dialogue-mode.md",
+      "log-decisions-as-conclusions.md",
+      "session-turn-title-summary.md",
+      "never-skip-explicit-actions.md",
+      "adversarial-review-global.md",
+      "bring-the-receipts.md",
+      "hostile-on-goal-state.md",
+      "hostile-ops-vs-requirements.md",
+      "hostile-phase-gates.md",
+      "lab-authorization.md",
+      "no-attitude-honesty-tell.md",
+      "no-python-lab.md",
+      "no-shortcuts-precision-over-convenience.md",
+      "requirement-change-plan-first.md"
+    ]
+  },
+  "OverallVerdict": "AGREE",
+  "accuracyRating": 95,
+  "completenessRating": 94,
+  "sessionId": "GrokCode-20260818T160502Z-h4-green-products",
+  "requestId": "req-20260818T160502Z-001-hostile-h4-green-products",
+  "turnId": 41784,
+  "planFile": "docs/plans/mcp-products-001.md",
+  "todoId": "MCP-PRODUCTS-001",
+  "plugin": {
+    "root": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginJsonVersion": "1.93.0",
+    "versionFile": "1.93.0",
+    "registryExactName": "mcpserver-grok-plugin"
+  },
+  "markerSignature": true,
+  "healthNonceThisReview": "h4grn4309c0464ea04cddae2ee23f1e0",
+  "healthNonceEchoed": true,
+  "healthStatus": "Healthy",
+  "healthStorageThisReview": "reachable",
+  "healthVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "contextFilter": {
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~ProductRequirementContextTests",
+    "listUtcStart": "2026-08-18T16:02:49.945317Z",
+    "listUtcEnd": "2026-08-18T16:03:00.3507278Z",
+    "listExitCode": 0,
+    "listNamedCount": 4,
+    "utcStart": "2026-08-18T16:03:00.4121615Z",
+    "utcEnd": "2026-08-18T16:03:14.2922543Z",
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 4,
+    "skipped": 0,
+    "total": 4,
+    "compiled": true,
+    "compileErrorLineCount": 0,
+    "notImplementedLineCount": 0,
+    "rerunUtcStart": "2026-08-18T16:05:02.9858782Z",
+    "rerunUtcEnd": "2026-08-18T16:05:15.4525527Z",
+    "rerunExitCode": 0,
+    "rerunSummary": "Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 2 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "namedCases": [
+      "HandleAsync_Member_IncludesSiblingFrBodyAndOrigin",
+      "HandleAsync_Member_DoesNotIncludeSiblingSourceFiles",
+      "HandleAsync_Outsider_DoesNotIncludeSiblingFr",
+      "HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks"
+    ]
+  },
+  "productFilter": {
+    "command": "dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter FullyQualifiedName~Product",
+    "utcStart": "2026-08-18T16:03:25.2395743Z",
+    "utcEnd": "2026-08-18T16:03:42.790876Z",
+    "exitCode": 0,
+    "failed": 0,
+    "passed": 43,
+    "skipped": 0,
+    "total": 43,
+    "rerunUtcStart": "2026-08-18T16:05:15.4990348Z",
+    "rerunUtcEnd": "2026-08-18T16:05:31.0060279Z",
+    "rerunExitCode": 0,
+    "rerunSummary": "Passed!  - Failed:     0, Passed:    43, Skipped:     0, Total:    43, Duration: 5 s - McpServer.Support.Mcp.Tests.dll (net10.0)",
+    "implementerClaimedPassed": 42,
+    "extraCase": "UseCaseExpandedScopeTests.ProductKey_AssignAndListByProduct"
+  },
+  "testFile": {
+    "path": "tests/McpServer.Support.Mcp.Tests/Products/ProductRequirementContextTests.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-18T15:56:28.589079Z",
+    "bytes": 7155,
+    "skipAttrCount": 0,
+    "staleRedCommentCount": 1
+  },
+  "handlerImpl": {
+    "path": "src/McpServer.Support.Mcp/Products/Queries/GetProductRequirementContextQuery.cs",
+    "exists": true,
+    "lastWriteUtc": "2026-08-18T15:56:04.611247Z",
+    "bytes": 3993,
+    "failureNotImplementedCount": 0,
+    "productShareHelperCount": 1,
+    "ctorMcpDbContextCount": 1,
+    "readsContextDocumentOrChunkRows": false
+  },
+  "controllerHook": {
+    "path": "src/McpServer.Support.Mcp/Controllers/ContextController.cs",
+    "lastWriteUtc": "2026-08-18T15:58:17.4107222Z",
+    "bytes": 17407,
+    "searchDispatchesWhenSourceTypeAndDispatcher": true,
+    "packAppendsViaSameHelper": true,
+    "dispatcherRegistered": true,
+    "addCqrsDispatcherLine": "src/McpServer.Support.Mcp/Program.cs:453"
+  },
+  "iProductServiceCsCount": 0,
+  "todo": {
+    "id": "MCP-PRODUCTS-001",
+    "done": false,
+    "completedDate": null,
+    "doneSummary": null,
+    "implementationTaskCount": 5,
+    "implementationTasksAllDoneFalse": true,
+    "remaining": "Phase 0 requirements created in store and exported. H0 hostile required before Phase 1. No product implementation started."
+  },
+  "requirements": {
+    "frTotal": 277,
+    "trTotal": 406,
+    "testTotal": 422,
+    "mappingTotal": 277,
+    "fr005Status": "pending",
+    "fr005AcSatisfied": false,
+    "trCtx001Status": "pending",
+    "test006Status": "pending",
+    "mappingFr005": {
+      "trIds": [
+        "TR-MCP-PRODUCT-CTX-001"
+      ],
+      "testIds": [
+        "TEST-MCP-PRODUCT-006"
+      ]
+    }
+  },
+  "planSha256": "E233F9E34BCA0A7176284FB0DE0E11BF2A186D04F479CF7C8E2CC089F72FB805",
+  "goalPlanSha256": "0D73B5C6B754DEC494F4EAB445AD2A6EEB73D2F2923260366E07D4A9351FD92C",
+  "priorAgree": {
+    "h4Red": "docs/receipts/hostile-validator-20260818T155200Z.md",
+    "h4RedSha256": "A3DB79140D7DB9FD45F0C8807D4E2BB54F921BCD85711951E41E0895C13929F6"
+  },
+  "surfaces": {
+    "A": {
+      "A1": "PASS",
+      "A2": "PASS",
+      "A3": "PASS",
+      "A4": "PASS",
+      "A5": "PASS"
+    },
+    "B": {
+      "B1": "PASS",
+      "B2": "PASS",
+      "B3": "PASS",
+      "B4": "PASS",
+      "B5": "PASS",
+      "B6": "PASS"
+    },
+    "C": {
+      "C1": "PASS",
+      "C2": "PASS",
+      "C3": "PASS",
+      "C4": "PASS",
+      "C5": "PASS"
+    },
+    "D": {
+      "D1": "PASS",
+      "D2": "PASS"
+    }
+  },
+  "failList": [],
+  "unknownList": [
+    "Full ./build.ps1 Test not run. Not required to exit H4-green.",
+    "Phase 5 integration/docs/deploy not claimed and not evaluated as complete."
+  ],
+  "passCount": 18,
+  "failCount": 0,
+  "unknownCount": 2,
+  "sessionProof": {
+    "transport": "POST http://PAYTON-LEGION2:7147/mcp-transport",
+    "toolsUnique": 106,
+    "initializeHttp": 200,
+    "openCreated": true,
+    "sessionId": "GrokCode-20260818T160502Z-h4-green-products",
+    "requestId": "req-20260818T160502Z-001-hostile-h4-green-products",
+    "turnId": 41784,
+    "beginStatus": "in_progress",
+    "dialogSuccess": true,
+    "dialogItems": 4,
+    "actionsReplaced": true,
+    "actionCount": 7,
+    "completeStatus": "completed",
+    "queryTotalCount": 1,
+    "querySourceType": "GrokCode",
+    "queryTurnStatus": "completed",
+    "queryResponseStartsWith": "OverallVerdict AGREE",
+    "sessionStatusRemains": "in_progress"
+  }
+}

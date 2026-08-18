@@ -29,7 +29,7 @@ public sealed partial class FwhMcpTools
         [Description("Done filter (true/false)")] bool? done = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _workspaceAccessor.GetTodoService().QueryAsync(new TodoQueryRequest { Section = section, Priority = priority, Done = done }, cancellationToken).ConfigureAwait(false);
@@ -49,7 +49,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var item = await _workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
@@ -72,7 +72,7 @@ public sealed partial class FwhMcpTools
         [Description("Entries to skip before returning results (default 0)")] int offset = 0,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _workspaceAccessor.GetTodoService().GetAuditAsync(id, limit, offset, cancellationToken).ConfigureAwait(false);
@@ -98,7 +98,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _workspaceAccessor.GetTodoService().GetProjectionStatusAsync(cancellationToken).ConfigureAwait(false);
@@ -121,7 +121,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = _todoMutations is null
@@ -152,7 +152,7 @@ public sealed partial class FwhMcpTools
         [Description("Description text")] string? description = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var req = new TodoCreateRequest
@@ -188,7 +188,7 @@ public sealed partial class FwhMcpTools
         [Description("Updated note")] string? note = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var req = new TodoUpdateRequest { Title = title, Priority = priority, Done = done, Note = note };
@@ -212,7 +212,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = _todoMutations is null
@@ -236,7 +236,7 @@ public sealed partial class FwhMcpTools
         [Description("Target workspace path to move the item to")] string targetWorkspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (_todoMutations is not null)
@@ -296,7 +296,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             return await CollectStreamAsync(_todoPromptService.StreamStatusAsync(id, cancellationToken)).ConfigureAwait(false);
@@ -315,7 +315,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             return await CollectStreamAsync(_todoPromptService.StreamImplementAsync(id, cancellationToken)).ConfigureAwait(false);
@@ -334,7 +334,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             return await CollectStreamAsync(_todoPromptService.StreamPlanAsync(id, null, cancellationToken)).ConfigureAwait(false);
@@ -359,7 +359,7 @@ public sealed partial class FwhMcpTools
         [Description("Branch associated with the phase")] string? branch = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.CreateIterationPhaseAsync(workspacePath, new CreateIterationPhaseRequest
@@ -390,7 +390,7 @@ public sealed partial class FwhMcpTools
         [Description("Planned TODO definitions")] PlanTodoInput[]? todos = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.CreateTodosFromPlanAsync(workspacePath, new CreateTodosFromPlanRequest
@@ -414,7 +414,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.GetActiveTodoAsync(workspacePath, cancellationToken).ConfigureAwait(false);
@@ -438,7 +438,7 @@ public sealed partial class FwhMcpTools
         [Description("Maximum recent turn summaries to return (default 5)")] int sessionTurnSummaryLimit = 5,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.GetExecutionContextAsync(
@@ -466,7 +466,7 @@ public sealed partial class FwhMcpTools
         [Description("Checkpoint ID to diff from")] string? sinceCheckpointId = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.GetDeltaContextAsync(workspacePath, todoId, sinceCheckpointId, cancellationToken).ConfigureAwait(false);
@@ -494,7 +494,7 @@ public sealed partial class FwhMcpTools
         [Description("Whether integration tests are already passing")] bool? integrationTestsPassing = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.SetTestPlanAsync(workspacePath, todoId, new SetTodoTestPlanRequest
@@ -524,7 +524,7 @@ public sealed partial class FwhMcpTools
         [Description("Optional transition reason")] string? reason = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.UpdateStatusAsync(workspacePath, todoId, new UpdateTodoStatusRequest
@@ -555,7 +555,7 @@ public sealed partial class FwhMcpTools
         [Description("Commit SHAs")] string[]? commitShas = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.AppendCheckpointAsync(workspacePath, todoId, new AppendTodoCheckpointRequest
@@ -590,7 +590,7 @@ public sealed partial class FwhMcpTools
         [Description("Whether integration tests are passing")] bool? integrationTestsPassing = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var payload = await _todoExecutionService.RecordValidationResultAsync(workspacePath, todoId, new RecordTodoValidationResultRequest
@@ -617,7 +617,7 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.GetNextReadyTodoAsync(workspacePath, cancellationToken).ConfigureAwait(false);
@@ -640,7 +640,7 @@ public sealed partial class FwhMcpTools
         [Description("Session turn IDs")] string[]? sessionTurnIds = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.LinkTodoToSessionTurnsAsync(workspacePath, todoId, new LinkTodoToSessionTurnsRequest
@@ -678,7 +678,7 @@ public sealed partial class FwhMcpTools
         [Description("Wait duration in milliseconds")] int? waitMilliseconds = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _todoExecutionService.AdbStepAsync(workspacePath, new AdbStepRequest

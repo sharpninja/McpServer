@@ -246,6 +246,10 @@ Guards against hostile archives keep their original values and are not affected 
 10,000 archive entries, a decompression ratio ceiling of 20:1, rejection of ZIP symlink entries, and rejection of
 paths that escape the upload root. Exceeded limits return 413; malformed or unsafe inputs return 400.
 
+## Products
+
+Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces together so members can union FR/TR/TEST/layers into `GET /mcpserver/requirements/effective` (default `productScope=product`). Rows stay in the origin workspace and are tagged with `originWorkspaceId`. Context source `product-requirements` synthesizes those texts; sibling source files are never included. REST lives at `/mcpserver/products`. MCP tools are `product_*` plus `requirements_effective`. Typed client is `McpServerClient.Products`. Acceptance criteria travel with the effective union. `ProductClient.RemoveMemberAsync` deserializes the DELETE body (self-leave is 404 on a later GET).
+
 ## Requirements Wiki Export
 
 `docs/wiki.yaml` uses schema `mcp-wiki-export/v1` to define the requirements wiki document tree for GitHub and Azure exports. When the file is absent, wiki generation falls back to the canonical generated Home, requirements, traceability, matrix, GitHub sidebar/footer, Azure order files, and manifests.

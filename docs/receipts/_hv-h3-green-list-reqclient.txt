@@ -1,0 +1,35 @@
+NAME=reqclient
+PROJECT=tests/McpServer.Client.Tests
+FILTER=FullyQualifiedName~RequirementsClient
+START=2026-08-18T15:37:37.0537832Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Client.Tests -> F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll (.NETCoreApp,Version=v10.0)
+The following Tests are available:
+    McpServer.Client.Tests.RequirementsClientTests.ListFrAsync_GetsFrCollection
+    McpServer.Client.Tests.RequirementsClientTests.ListRequirementsAsync_EncodesFilters
+    McpServer.Client.Tests.RequirementsClientTests.GetFrAsync_EncodesIdAndDeserializes
+    McpServer.Client.Tests.RequirementsClientTests.GenerateAsync_WorkspacePathOverride_ReplacesWorkspaceHeader
+    McpServer.Client.Tests.RequirementsClientTests.GenerateAsync_NoOverride_KeepsBoundWorkspaceHeader
+    McpServer.Client.Tests.RequirementsClientTests.CreateTrAsync_PostsBody
+    McpServer.Client.Tests.RequirementsClientTests.CreateFrBatchAsync_PostsRecordsArray
+    McpServer.Client.Tests.RequirementsClientTests.UpdateBatchAsync_PostsMixedRecordsArray
+    McpServer.Client.Tests.RequirementsClientTests.UpdateBatchRequests_PostAcceptanceCriteriaArrays
+    McpServer.Client.Tests.RequirementsClientTests.UpdateTestAsync_PutsBody
+    McpServer.Client.Tests.RequirementsClientTests.UpdateFrAsync_PutsMetadataBody
+    McpServer.Client.Tests.RequirementsClientTests.UpdateTrAndTestAsync_PutMetadataBody
+    McpServer.Client.Tests.RequirementsClientTests.DeleteTestAsync_UsesDeleteEndpoint
+    McpServer.Client.Tests.RequirementsClientTests.CopyFrAcceptanceCriteriaFromTodoAsync_PostsCopyEndpoint
+    McpServer.Client.Tests.RequirementsClientTests.CopyTrAndTestAcceptanceCriteriaFromTodoAsync_PostExpectedKindRoutes
+    McpServer.Client.Tests.RequirementsClientTests.UpsertMappingAsync_PutsMappingPayload
+    McpServer.Client.Tests.RequirementsClientTests.GenerateAsync_ReturnsWorkspaceExportMetadata
+    McpServer.Client.Tests.RequirementsClientTests.GenerateAsync_WikiError_IncludesStructuredStage
+    McpServer.Client.Tests.RequirementsClientTests.IngestAsync_PostsMarkdownPayload
+    McpServer.Client.Tests.RequirementsClientTests.IngestAsync_PostsWikiDocumentMap
+    McpServer.Client.Tests.RequirementsClientTests.RepairFrPlaceholdersAsync_PostsToRepairEndpointAndReturnsPurgedCount
+    McpServer.Client.Tests.RequirementsClientTests.RequirementLayersAsync_UseTypedEndpointsAndScopeDtoFields
+    McpServer.Client.Tests.RequirementsClientTests.GetEffectiveRequirementsAsync_UsesLayerPreviewAndDeserializesScopeFields
+EXIT=0
+END=2026-08-18T15:37:39.9458642Z

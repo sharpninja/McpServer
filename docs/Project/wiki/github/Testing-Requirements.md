@@ -38,6 +38,66 @@ MCP tools serialize correctly, REPL workflow delegates to ContextClient, McpAgen
 
 
 
+## TEST-HANDOFF
+
+### TEST-HANDOFF-001
+
+Cover documented request, result, draft, provenance, and diagnostic contracts, including typed-client serialization.
+
+**Acceptance Criteria:**
+- [ ] All public handoff contract types round-trip through the typed client JSON context.
+- [ ] Required contract types exist with complete XMLDocs and the documented enum values.
+
+### TEST-HANDOFF-002
+
+Cover bounded readers, workspace containment, and rejection of missing, unsupported, oversized, traversal, external, and reparse-escaping sources.
+
+**Acceptance Criteria:**
+- [ ] Missing, unsupported, oversized, traversal, external, and reparse-escaping paths fail with diagnostics and no TODO.
+- [ ] Markdown, text, JSON, and YAML inputs are accepted when contained and within 8 MiB.
+
+### TEST-HANDOFF-003
+
+Cover versioned HandoffTodoDraft extraction and strict JSON parsing, including malformed AI output.
+
+**Acceptance Criteria:**
+- [ ] Extraction is invoked with AgentPoolOneShotContext.HandoffTodoDraft and a versioned prompt.
+- [ ] Malformed or compatibility JSON produces diagnostics and never creates a TODO.
+
+### TEST-HANDOFF-004
+
+Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.
+
+**Acceptance Criteria:**
+- [ ] Invalid or conflicting draft fields produce field-specific diagnostics.
+- [ ] DraftOnly never mutates TODOs, RequireReview persists an approvable run, and CreateWhenConfident honors the 0.75 confidence and no-error gates.
+
+### TEST-HANDOFF-005
+
+Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.
+
+**Acceptance Criteria:**
+- [ ] Successful creation produces exactly one TODO through ITodoService.
+- [ ] Replay of the same workspace, content hash, and prompt version returns the existing receipt unless force=true.
+- [ ] ID collisions require review and are never silently renamed.
+
+### TEST-HANDOFF-006
+
+Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.
+
+**Acceptance Criteria:**
+- [ ] Ingest, get, and approve exist on API, client, REPL, Director, MCP tools, and plugin skill.
+- [ ] Every surface delegates to IHandoffIngestionService and applies workspace isolation.
+
+### TEST-HANDOFF-007
+
+Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.
+
+**Acceptance Criteria:**
+- [ ] Persisted runs retain run ID, source kind and locator, SHA-256 hash, extraction time, prompt version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+- [ ] Persisted runs and logs do not contain raw credentials or source content.
+
+
 ## TEST-MCP
 
 ### TEST-MCP-001
@@ -1490,6 +1550,39 @@ A shared deterministic Theory and companion AiTheory matrix must exercise the re
 - [ ] Every AiTheory row receives the persisted receipt/artifact and returns a strict semantic completeness result that is asserted by the test.
 - [ ] A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path.
 - [ ] The focused target and each plugin native suite complete with zero failures and zero skips.
+
+
+## TEST-MCP-PRODUCT
+
+### TEST-MCP-PRODUCT-001
+
+Unit tests for ProductEntity/membership CQRS handlers: isolation, PROD-* key accept (PROD-MCPSERVER) and reject (mcpserver, empty, missing prefix), unique key, soft-delete, owner add/remove, self-leave, unknown workspace rejected. Files: ProductEntityTests, CreateProductCommandHandlerTests, AddProductMemberCommandHandlerTests.
+
+
+### TEST-MCP-PRODUCT-002
+
+Unit tests for product effective-requirements share: union, productScope=local, id collision two origins, origin layer miss excludes, leave drops sibling, outsider cannot share. File: GetProductEffectiveRequirementsQueryHandlerTests.
+
+
+### TEST-MCP-PRODUCT-003
+
+Controller/API unit tests: 400 invalid key, 409 duplicate, 403 non-owner, 404 outsider get. File: ProductsControllerTests.
+
+
+### TEST-MCP-PRODUCT-004
+
+Client and MCP/REPL contract tests prove adapters dispatch CQRS only. File: ProductClientTests plus MCP/REPL allow-list tests.
+
+
+### TEST-MCP-PRODUCT-005
+
+Migration apply on empty and production-shaped DBs for SQLite, PostgreSQL, and SQL Server harnesses. Must not re-add unrelated SessionLogs agent-header columns. File: ProductMigrationApplyTests.
+
+
+### TEST-MCP-PRODUCT-006
+
+Context pack/search: member includes sibling FR body with origin; does not include sibling .cs chunks; source type product-requirements filters to those chunks. File: ProductRequirementContextTests.
+
 
 
 ## TEST-MCP-QBAGENT

@@ -111,12 +111,14 @@ public sealed class McpServerClient
         Triage = new TriageClient(http, options, holder);
         AgentHelp = new AgentHelpClient(http, options, holder);
         UseCases = new UseCaseClient(http, options, holder);
+        Handoff = new HandoffClient(http, options, holder);
+        Products = new ProductClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, GraphRag, SessionLog, Memory, GitHub, Requirements, Voice, Events,
             Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health,
-            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage, AgentHelp, UseCases
+            Federation, KeyServer, Subscriber, TurnTransactions, BrainSlots, Triage, AgentHelp, UseCases, Handoff, Products
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -451,5 +453,17 @@ public sealed class McpServerClient
     /// <para>See <see cref="UseCaseClient"/> for the full method list.</para>
     /// </summary>
     public UseCaseClient UseCases { get; }
+
+    /// <summary>
+    /// TR-HANDOFF-SURFACE-001: Handoff ingestion, run inspection, and approval endpoints.
+    /// <para>See <see cref="HandoffClient"/> for the full method list.</para>
+    /// </summary>
+    public HandoffClient Handoff { get; }
+
+    /// <summary>
+    /// TR-MCP-PRODUCT-API-001: Product CRUD and membership endpoints.
+    /// <para>See <see cref="ProductClient"/> for the full method list.</para>
+    /// </summary>
+    public ProductClient Products { get; }
 
 }

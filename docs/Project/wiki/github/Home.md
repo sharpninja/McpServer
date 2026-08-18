@@ -16,6 +16,7 @@
   - [REPL User Guide](REPL-User-Guide)
   - [REPL Agent Guide](REPL-Agent-Guide)
   - [REPL Migration Guide](REPL-Migration-Guide)
+  - [Handoff Ingestion](Handoff-Ingestion)
 - Architecture
   - [MCP Server Operations Guide](MCP-Server-Operations)
   - [QuadBrain Architecture](QuadBrain)

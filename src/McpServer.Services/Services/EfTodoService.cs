@@ -293,8 +293,20 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             await using var scope = CreateScope();
             var ctx = scope.Context;
 
-            if (await ctx.TodoItems.AnyAsync(i => i.Id == request.Id, cancellationToken).ConfigureAwait(false))
+            var existingItem = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken).ConfigureAwait(false);
+            if (existingItem is not null)
+            {
+                await AttachTodoChildrenAsync(ctx, [existingItem], cancellationToken).ConfigureAwait(false);
+                var existingFlat = ToFlatItem(existingItem);
+                if (!string.IsNullOrWhiteSpace(request.IdempotencyKey)
+                    && string.Equals(existingItem.IdempotencyKey, request.IdempotencyKey, StringComparison.Ordinal)
+                    && TodoPayloadFingerprint.AreEquivalent(request, existingFlat))
+                {
+                    return new TodoMutationResult(true, Item: existingFlat);
+                }
+
                 return new TodoMutationResult(false, $"Item with id '{request.Id}' already exists.", FailureKind: TodoMutationFailureKind.Conflict);
+            }
 
             var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
             await AttachTodoChildrenAsync(ctx, allEntities, cancellationToken).ConfigureAwait(false);
@@ -326,6 +338,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
                 SectionOrder = sectionOrder,
                 ItemOrder = itemOrder,
                 PhaseLabel = itemKind == CodeReviewPhaseItemKind ? request.Phase ?? request.Title : null,
+                IdempotencyKey = request.IdempotencyKey,
             };
 
             ctx.TodoItems.Add(entity);
@@ -1464,6 +1477,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             PriorityNote = e.PriorityNote,
             Reference = e.Reference,
             Phase = e.PhaseLabel,
+            IdempotencyKey = e.IdempotencyKey,
         };
 
     /// <summary>Builds the 4NF string-list child rows (explicit composite keys, fresh ordinals) for a TODO.</summary>
@@ -1619,6 +1633,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
         DependsOn = ListValues(e, DependsOnListType),
         FunctionalRequirements = ListValues(e, FunctionalRequirementListType),
         TechnicalRequirements = ListValues(e, TechnicalRequirementListType),
+        IdempotencyKey = e.IdempotencyKey,
     };
 
     private static string? SerializeList(IReadOnlyList<string>? value)

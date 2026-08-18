@@ -27,7 +27,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.QueryAsync(
@@ -53,7 +53,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.QueryAsync(
@@ -87,7 +87,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.SendAsync(
@@ -132,7 +132,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.SendAsync(
@@ -169,7 +169,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.SendAsync(
@@ -199,7 +199,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.SendAsync(
@@ -227,7 +227,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             // Title/briefDescription overrides are reserved for a future command expansion;
@@ -258,7 +258,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.QueryAsync(
@@ -283,7 +283,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.QueryAsync(
@@ -310,7 +310,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.SendAsync(
@@ -337,7 +337,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.SendAsync(
@@ -363,7 +363,7 @@ public sealed partial class FwhMcpTools
         if (_dispatcher is null)
             return JsonSerializer.Serialize(new { error = "CQRS dispatcher is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _dispatcher.QueryAsync(

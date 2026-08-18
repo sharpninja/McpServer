@@ -1,0 +1,83 @@
+{
+  "TimestampUtc": "2026-08-18T13:23:41Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project requirement work; MCP-PRODUCTS-001 Phase 0 / H0 only",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "OverallVerdict": "AGREE",
+  "accuracyRating": 94,
+  "completenessRating": 93,
+  "sessionId": "GrokCode-20260818T131955Z-h0-products",
+  "requestId": "req-20260818T131955Z-001-hostile-h0-products-phase0",
+  "turnId": 41689,
+  "planFile": "docs/plans/mcp-products-001.md",
+  "todoId": "MCP-PRODUCTS-001",
+  "markerSignature": true,
+  "healthNonceThisReview": "a87fb17e57b8495684b8eb0e1dc822d0",
+  "healthNonceEchoed": true,
+  "healthStatus": "Healthy",
+  "healthStorageThisReview": "reachable",
+  "healthVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+  "validateTraceability": {
+    "command": ".\\build.ps1 ValidateTraceability",
+    "utcStart": "2026-08-18T13:22:16.6506606Z",
+    "utcEnd": "2026-08-18T13:22:22.8093633Z",
+    "status": "Succeeded",
+    "exitCode": 0
+  },
+  "storeCounts": {
+    "frTotal": 277,
+    "trTotal": 406,
+    "testTotal": 422,
+    "mapTotal": 277,
+    "productFr": 5,
+    "productTr": 5,
+    "productTest": 6,
+    "productMap": 5
+  },
+  "planSha256": "E233F9E34BCA0A7176284FB0DE0E11BF2A186D04F479CF7C8E2CC089F72FB805",
+  "claims": [
+    {"id": "A1", "surface": "A", "verdict": "PASS", "summary": "FR-MCP-PRODUCT-001..005, five PRODUCT TRs, TEST-MCP-PRODUCT-001..006 exist in the MCP store (list + get)."},
+    {"id": "A2", "surface": "A", "verdict": "PASS", "summary": "18 structured FR AC rows, all isSatisfied=false."},
+    {"id": "A3", "surface": "A", "verdict": "PASS", "summary": "Five mappings match the plan sets (TR order on some rows differs)."},
+    {"id": "A4", "surface": "A", "verdict": "PASS", "summary": "docs/Project markdown 13:17:28Z and wiki manifests 13:16:25Z. Wiki has inline AC; omits checklist block."},
+    {"id": "A5", "surface": "A", "verdict": "PASS", "summary": "Independent ValidateTraceability Succeeded EXIT=0 at 13:22:22Z."},
+    {"id": "A6", "surface": "A", "verdict": "PASS", "summary": "todo_get MCP-PRODUCTS-001 Done=false; Remaining names H0; FR and TR IDs attached."},
+    {"id": "A7", "surface": "A", "verdict": "PASS", "summary": "No ProductEntity, IProductService, Products/ handlers, or ProductsController. Use-case ProductKey files pre-exist."},
+    {"id": "A8", "surface": "A", "verdict": "PASS", "summary": "Plan copies identical SHA256. CQRS-only and PROD-* regex in FR/TR text."},
+    {"id": "B1-honesty", "surface": "B", "verdict": "PASS", "summary": "Claims match store, disk, and Nuke output."},
+    {"id": "B2-receipts", "surface": "B", "verdict": "PASS", "summary": "Re-ran store queries, greps, and ValidateTraceability."},
+    {"id": "B3-mcp-only", "surface": "B", "verdict": "PASS", "summary": "Requirements and TODO read via MCP/plugin only."},
+    {"id": "B4-no-python", "surface": "B", "verdict": "PASS", "summary": "pwsh and MCP tools only."},
+    {"id": "B5-look-before-delete", "surface": "B", "verdict": "PASS", "summary": "No deletes in Phase 0 review scope."},
+    {"id": "B6-byrd", "surface": "B", "verdict": "PASS", "summary": "H0 state is requirements-only; Phase 1 tests and impl absent as required."},
+    {"id": "C1-exist", "surface": "C", "verdict": "PASS", "summary": "FR/TR/TEST exist."},
+    {"id": "C2-structured-ac", "surface": "C", "verdict": "PASS", "summary": "Structured AC on FR-001..005."},
+    {"id": "C3-ac-quality", "surface": "C", "verdict": "PASS", "summary": "AC are testable and cover plan Phase 0 AC."},
+    {"id": "C4-mappings", "surface": "C", "verdict": "PASS", "summary": "FR to TR/TEST mappings complete. Unit methods belong to Phase 1."},
+    {"id": "C5-created", "surface": "C", "verdict": "PASS", "summary": "New product behavior has FR/TR/TEST."},
+    {"id": "D1-phase0", "surface": "D", "verdict": "PASS", "summary": "Phase 0 DoD met; full plan not claimed done; TODO still false."},
+    {"id": "D2-plan-copy", "surface": "D", "verdict": "PASS", "summary": "Approved plan and docs/plans copy are byte-identical."}
+  ],
+  "h0Attacks": [
+    {"id": "H0-store", "verdict": "PASS", "summary": "FR/TR/TEST/AC exist in the MCP store."},
+    {"id": "H0-mappings", "verdict": "PASS", "summary": "Mappings complete per plan sets."},
+    {"id": "H0-text", "verdict": "PASS", "summary": "PROD-* regex and CQRS-only are in FR/TR text."},
+    {"id": "H0-no-impl", "verdict": "PASS", "summary": "No ProductEntity, Products/ handlers, or IProductService."}
+  ],
+  "failList": [],
+  "unknownList": [
+    "getFr createdAt/updatedAt matched the get-call window; records already existed in list.",
+    "Grok plugin failsafe drain failed=1 then quarantined=1 during getFr; get still succeeded.",
+    "Implementer-time ValidateTraceability process was not replayed; independent Succeeded run used instead."
+  ],
+  "filesWritten": [
+    "docs/receipts/hostile-validator-20260818T132341Z.md",
+    "docs/receipts/hostile-validator-20260818T132341Z.json"
+  ]
+}

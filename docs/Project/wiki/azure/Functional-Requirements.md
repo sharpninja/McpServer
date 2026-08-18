@@ -1,5 +1,64 @@
 # Functional Requirements (MCP Server)
 
+## FR-HANDOFF-001 Ingest workspace-scoped handoff documents
+
+Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Supports Markdown, text, JSON, and YAML inputs.
+- [ ] Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths.
+- [ ] Maximum decoded input is 8 MiB.
+
+## FR-HANDOFF-002 Extract structured MCP TODO drafts via one-shot agents
+
+Use the existing one-shot agent system to extract a structured MCP TODO draft.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Extraction uses a versioned prompt and strict JSON contract.
+- [ ] Malformed output produces diagnostics and never creates a TODO.
+- [ ] Unknown or missing source information is not silently discarded.
+
+## FR-HANDOFF-003 Validate and normalize generated TODO drafts
+
+Validate and normalize generated TODO drafts.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Validate ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, and requirement links.
+- [ ] Invalid or conflicting values produce field-specific diagnostics.
+
+## FR-HANDOFF-004 Support DraftOnly, RequireReview, and CreateWhenConfident modes
+
+Support DraftOnly, RequireReview, and CreateWhenConfident modes.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] DraftOnly is the default and never mutates TODO state.
+- [ ] RequireReview persists an approvable run without creating a TODO.
+- [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+
+## FR-HANDOFF-005 Persist approved TODOs exclusively through the TODO service
+
+Persist approved TODOs exclusively through the existing TODO service.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Successful creation produces exactly one TODO.
+- [ ] Replay of the same workspace, content hash, and prompt version returns the existing receipt.
+- [ ] ID collisions require review and are never silently renamed.
+
+## FR-HANDOFF-006 Preserve auditable provenance and diagnostics
+
+Preserve auditable provenance and diagnostics for every run.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Retain run ID, source kind and locator, SHA-256 content hash, extraction time, prompt/template version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+- [ ] Raw credentials or source content are not copied into logs.
+
+## FR-HANDOFF-007 Provide equivalent public handoff surfaces
+
+Provide behaviorally equivalent API, client, REPL, Director, MCP-tool, and plugin-skill entrypoints.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every surface delegates to the same service, returns the same result contract, applies workspace isolation, and exposes ingest, inspect, and approval workflows.
+
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -1360,6 +1419,54 @@ Scope: layer-1+
 
 All McpServer plugin distributions expose sync-logs, commit-sync, and wrap-up as packaged skills so agents can synchronize logs, commit/push interrupted work, and close out MCP-backed work consistently across plugin families.
 Scope: layer-1+
+
+## FR-MCP-PRODUCT-001 Product CRUD
+
+A registered workspace can create, get, list (visible), update, and soft-delete products it owns. Key is a PROD-* string matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ (examples PROD-MCPSERVER, PROD-MCP-PLUGIN), unique among non-deleted products. Application API is CQRS only; REST/MCP/REPL/client only dispatch handlers. AC: create returns key + ownerWorkspaceId; invalid key is 400; duplicate key is 409; non-owner update/delete is 403; soft-delete hides from default list.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] create returns key and ownerWorkspaceId
+- [ ] invalid key is 400
+- [ ] duplicate key is 409
+- [ ] non-owner update or delete is 403
+- [ ] soft-delete hides product from default list
+
+## FR-MCP-PRODUCT-002 Workspace product membership
+
+A workspace maps to zero or more products. The owner workspace adds and removes members by workspace id. A member may leave itself. Adding a workspace requires that workspace to be registered, enabled, and not soft-deleted. AC: add requires registered enabled workspace; list members returns owner + members; leave removes only the caller; removed member loses product reads.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] add requires registered enabled workspace
+- [ ] list members returns owner and members
+- [ ] leave removes only the caller
+- [ ] removed member loses product reads
+
+## FR-MCP-PRODUCT-003 Shared effective requirements
+
+Member GetEffectiveRequirements unions local effective rows with sibling members' effective rows, provenance-tagged with originWorkspaceId, layer-matched using the origin workspace layer catalog. productScope=local hides siblings; default productScope is product. AC: two workspaces in one product see each other's in-scope FR/TR/TEST/mappings; productScope=local hides siblings; id collision returns two rows with different originWorkspaceId.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] two member workspaces see each others in-scope FR TR TEST and mappings
+- [ ] productScope local hides siblings
+- [ ] id collision returns two rows with different originWorkspaceId
+
+## FR-MCP-PRODUCT-004 Product isolation
+
+Non-members cannot read product membership or sibling requirements. Local requirement mutations never write sibling rows. A leaked workspace API key cannot list all products or dump non-member workspaces. AC: outsider get-product is 404; outsider effective is local-only; update-fr on sibling id does not change the sibling row.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] outsider get-product is 404
+- [ ] outsider effective is local-only
+- [ ] update-fr on sibling id does not change the sibling row
+
+## FR-MCP-PRODUCT-005 Product requirement context
+
+Context search/pack can retrieve product-visible requirement text with origin tags. It must not pull sibling source files. Source type product-requirements filters to those chunks. AC: pack for a member includes sibling FR body; pack does not include sibling .cs chunks; source type product-requirements filters to those chunks.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] pack for a member includes sibling FR body
+- [ ] pack does not include sibling source file chunks
+- [ ] source type product-requirements filters to those chunks
 
 ## FR-MCP-QBAGENT-001 QBAgent marker-driven QuadBrain-only bootstrap
 

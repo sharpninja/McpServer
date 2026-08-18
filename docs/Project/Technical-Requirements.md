@@ -111,6 +111,87 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-HANDOFF-AGENT-001
+
+**Versioned HandoffTodoDraft one-shot extraction** — Use AgentPoolOneShotContext.HandoffTodoDraft and a versioned strict-JSON extraction prompt.
+**Covered by:** FR: FR-HANDOFF-002; TEST: TEST-HANDOFF-003
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft.
+- [ ] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO.
+
+## TR-HANDOFF-AUDIT-001
+
+**Normalized ingestion-run and diagnostic persistence** — Persist normalized ingestion-run and diagnostic records separately from TODO records, without raw credentials or source content.
+**Covered by:** FR: FR-HANDOFF-006; TEST: TEST-HANDOFF-007
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every run stores normalized provenance and diagnostics independently of TODO rows.
+- [ ] Persisted records omit raw credentials and raw source content.
+
+## TR-HANDOFF-CONTRACT-001
+
+**Documented handoff contracts** — Document request, result, draft, provenance, and diagnostic contracts for handoff ingestion.
+**Covered by:** FR: FR-HANDOFF-001, FR-HANDOFF-002; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002, TEST-HANDOFF-003
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs.
+- [ ] Contracts serialize and deserialize with the shared client JSON context without silent field loss.
+
+## TR-HANDOFF-MODES-001
+
+**Confidence gating, review approval, and idempotent replay** — Implement DraftOnly, RequireReview, and CreateWhenConfident with confidence gating, approval revalidation, and deterministic replay unless force=true.
+**Covered by:** FR: FR-HANDOFF-004, FR-HANDOFF-005; TEST: TEST-HANDOFF-004, TEST-HANDOFF-005
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+- [ ] Approval revalidates the stored draft before TODO creation.
+- [ ] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true.
+
+## TR-HANDOFF-SECURITY-001
+
+**Bounded workspace-contained handoff readers** — Use bounded readers, workspace containment, and reparse-point protection for handoff source resolution.
+**Covered by:** FR: FR-HANDOFF-001; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Readers refuse more than 8 MiB of decoded input and unsupported formats.
+- [ ] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes.
+
+## TR-HANDOFF-SURFACE-001
+
+**Shared API, client, REPL, Director, MCP, and plugin delegation** — Every public surface delegates to the same IHandoffIngestionService and exposes ingest, inspect, and approval workflows.
+**Covered by:** FR: FR-HANDOFF-007; TEST: TEST-HANDOFF-006
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService.
+- [ ] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation.
+
+## TR-HANDOFF-TODO-001
+
+**Exclusive TODO-service persistence** — Persist approved TODOs exclusively through the existing TODO service. AI output never writes TODO storage directly.
+**Covered by:** FR: FR-HANDOFF-005; TEST: TEST-HANDOFF-005
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The only TODO mutation path is ITodoService.CreateAsync.
+- [ ] Existing TODO IDs require review and are never silently renamed.
+
+## TR-HANDOFF-VALIDATE-001
+
+**Pure draft validation and normalization** — Provide a pure draft validator and normalizer that emits field-specific diagnostics.
+**Covered by:** FR: FR-HANDOFF-003, FR-HANDOFF-004; TEST: TEST-HANDOFF-004
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Validation and normalization have no TODO or run-store side effects.
+- [ ] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics.
+
 ## TR-LOC-001
 
 **Localization Infrastructure** — Multi-language support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -1411,6 +1492,41 @@ Scope: layer-1+
 **Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
 Scope: layer-1+
 
+## TR-MCP-PRODUCT-API-001
+
+**Product CQRS and adapters** — Commands/queries live under McpServer.Support.Mcp/Products/. REST /mcpserver/products, MCP product_*, ProductClient, REPL client.Products, and plugin descriptors dispatch those handlers only. No public IProductService facade. GET /mcpserver/requirements/effective gains productScope=product|local (default product). AC: controller/MCP/REPL tests prove dispatch-only; invalid key 400; duplicate 409.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-003; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-AUTH-001
+
+**Product authorization and transaction gating** — Authorization lives in CQRS handlers (or a helper used only by those handlers). Owner-only mutate except self-leave. Non-member get is 404. Mutating product commands fail closed when turn transactions are required and degraded. AC: non-owner update 403; outsider get 404; degraded transactions reject create/add-member.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-002, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-CTX-001
+
+**Product requirement context source** — Context indexer/search path for source type product-requirements derives chunks from the CQRS share helper, not from sibling ContextDocument rows. Chunks are tagged with origin workspace. AC: member pack includes sibling FR text; sibling .cs files are absent; product-requirements filter returns only those chunks.
+**Covered by:** FR: FR-MCP-PRODUCT-005; TEST: TEST-MCP-PRODUCT-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-MODEL-001
+
+**Product storage model** — Entities ProductEntity and ProductWorkspaceMembershipEntity are host-global (no workspace EF query filter). Soft-delete. Unique Key matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ among non-deleted rows. FK to Workspaces. Audit rows on mutations (TR-MCP-DB-004). Migrations apply on SQLite, PostgreSQL, and SQL Server without re-adding unrelated columns. AC: unique filtered index on Key; membership composite PK ProductId+WorkspaceId; apply migrations on empty and production-shaped DBs.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-002; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-SHARE-001
+
+**Product requirement share query** — CQRS query path (private helper only, called from handlers) ignores the workspace query filter only for member WorkspaceIds of the caller's products. Layer filter uses the origin workspace catalog. Results include originWorkspaceId. Never merge two rows that share an id across origins. AC: union includes sibling in-scope rows; missing origin layer key excludes sibling; productScope=local is local-only.
+**Covered by:** FR: FR-MCP-PRODUCT-003, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-002, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-003
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-QA-001
 
 **QA Entity Tenancy** — `QuestionEntity`, `AnswerEntity`, `CommentEntity` use composite PK `(WorkspaceId, Id)` plus global query filter (mirrors TR-MCP-MT-003).
@@ -2285,6 +2401,22 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-SESSIONLOG-006
+
+**Required planFile and todoId scalars with None sentinel and backfill** — Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.
+**Covered by:** FR: FR-MCP-SESSIONLOGCTX-001; TEST: TEST-MCP-SESSIONLOG-006
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] todoId is None, canonical TODO id, or ISSUE-N. FR/TR/TEST ids fail. planFile is None or a normalized relative/exact/~/ path, max 2048, no .. .
+- [ ] Additive upsert/complete omits preserve stored values. Supplied values are validated. ReplaceTurnAsync requires both fields.
+- [ ] Extractor scans turn text, tags, context, files, actions, dialog, and agent history under ~. Tag TODO ids win. Ties and FR/TR/TEST ids yield None.
+- [ ] SessionLogTurns.PlanFile required string max 2048 default None. TodoId required string max 128 default None. Three provider migrations add both columns.
+- [ ] Backfill writes extractor hits onto None columns only. Non-None is not overwritten. Rerun is a no-op.
+- [ ] POST begin and sessionlog_begin_turn require planFile and todoId. Missing is 400/error. None/None succeeds.
+- [ ] SessionLogClient.BeginTurnAsync, McpAgent BeginTurnAsync, and REPL beginTurn serialize and persist the supplied values.
+- [ ] Read projection copies planFile and todoId onto a clone. Source is unchanged. None is not rewritten.
+
 ## TR-MCP-SESSIONLOGSAN-001
 
 **Bounded outbound session-log sanitizer** — A single sanitizer decorator must clone session-log DTO graphs, apply validated default and configured regex rules with deterministic replacement tokens and finite timeouts, and wrap the final local or federated ISessionLogService read result.
@@ -2768,6 +2900,118 @@ Scope: layer-1+
 **Covered by:** `Quad-Model-Transactional-Diffgram-Plan.md`, `TurnTransactions-Architecture-Round1.md`, `TurnTransactions-Design-Round2.md`, `Testing-Requirements.md`, `TurnTransactionPlanArtifactTests`
 Scope: layer-1+
 
+## TR-MCP-USECASE-001
+
+**Use case EF storage multi-provider soft-delete** — Implement Use Case 4NF entities on McpDbContext with WorkspaceId max 1024, FK to Workspaces, soft-delete columns, Restrict/NoAction relationships, string FrId to RequirementEntity Kind=fr, global workspace query filters, and migrations for SQLite, PostgreSQL, and SQL Server named AddUseCaseSupport (timestamped). Audit emission for mutable entities per TR-MCP-DB-004.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-002, FR-MCP-USECASE-003; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-002
+
+**Use case CQRS commands and queries** — All use case domain mutations and reads go through McpServer.Cqrs ICommand/IQuery handlers registered with Dispatcher. Controllers and MCP tools only dispatch; they do not open DbContext for domain logic.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-002, FR-MCP-USECASE-003, FR-MCP-USECASE-004; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-003
+
+**Use Case REST controller** — Thin /mcpserver/usecases dispatching CQRS. Covered by FR-MCP-USECASE-001; TEST-MCP-USECASE-002. Controller unit tests map Result failures to HTTP status codes.
+**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-004
+
+**Use Case diagram service** — DI-owned pure generator; mermaid + one extra format. Covered by FR-MCP-USECASE-005; TEST-MCP-USECASE-003.
+**Covered by:** FR: FR-MCP-USECASE-005; TEST: TEST-MCP-USECASE-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-005
+
+**Use Case MCP tools, client, plugins** — usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases. Covered by FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST-MCP-USECASE-004, TEST-MCP-USECASE-010.
+**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-002, TEST-MCP-USECASE-004, TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-006
+
+**FR projection, coverage, audit** — linkedUseCases on FR get/list; coverage API; TR-MCP-DB-004 audit on mutable UC ops. Covered by FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST-MCP-USECASE-005, TEST-MCP-USECASE-007.
+**Covered by:** FR: FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-007
+
+**Use Case UI hosting** — Static /usecases/ assets REST-only. Covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-008.
+**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-008
+
+**Approval and product API** — CQRS + REST for approval and ProductKey. Covered by FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST-MCP-USECASE-009.
+**Covered by:** FR: FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST: TEST-MCP-USECASE-009
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-009
+
+**Validation seams** — Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings. Covered by FR-MCP-USECASE-010; TEST-MCP-USECASE-005.
+**Covered by:** FR: FR-MCP-USECASE-010; TEST: TEST-MCP-USECASE-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-010
+
+**Use Case service deploy** — Nuke UpdateService only; config backup/restore; live health and routes. Covered by FR-MCP-USECASE-007; TEST-MCP-USECASE-011.
+**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-008, TEST-MCP-USECASE-010, TEST-MCP-USECASE-011
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-011
+
+**Graph storage** — JSON column graph storage; multi-provider migrations; soft-delete and workspace filters. ACs AC-T11-1..3.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-012
+
+**Diagram graph CQRS** — GetGraph/PutGraph/Export handlers; thin controller. ACs AC-T12-1..2.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-013
+
+**Diagram graph REST** — GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains. ACs AC-T13-1..3.
+**Covered by:** FR: FR-MCP-USECASE-012, FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016, TEST-MCP-USECASE-012
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-014
+
+**UML serialization service** — Pure DI service graph to Mermaid and PlantUML. ACs AC-T14-1..2.
+**Covered by:** FR: FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-012, TEST-MCP-USECASE-014
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-015
+
+**Canvas UI hosting** — Static /usecases/ canvas assets; palette; umlCanvas; REST-only. ACs AC-T15-1..2.
+**Covered by:** FR: FR-MCP-USECASE-011; TEST: TEST-MCP-USECASE-015, TEST-MCP-USECASE-017
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-USECASE-016
+
+**Graph put audit** — Put graph emits DataAuditLog. AC-T16-1.
+**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014, TEST-MCP-USECASE-016
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-VOICE-001
 
 **Voice Conversation Service** — `VoiceConversationService` manages the full voice session lifecycle: session creation with `CopilotInteractiveSession` spawned via `DesktopProcessLauncher` (or standard `Process.Start`), turn processing with tool-call loop (max `MaxToolSteps` iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via `VoiceConversationOptions` bound from `Mcp:Voice` configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
@@ -3021,162 +3265,3 @@ Scope: layer-1+
 - [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
 - [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
 - [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
-
-
-## TR-MCP-USECASE-001
-
-**Use Case storage multi-provider** - EF 4NF entities, soft-delete, workspace FK/filter, multi-provider migrations that apply on empty and production-shaped DBs without re-adding unrelated columns.
-**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-002, FR-MCP-USECASE-003; TEST: TEST-MCP-USECASE-001, TEST-MCP-USECASE-006
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Sqlite/Postgres/SqlServer migrations create Use Case tables only
-- [ ] Migration apply tests green on empty and SessionLogs-agent-columns-present DBs
-- [ ] Soft-delete and workspace filters hide rows from default queries
-
-## TR-MCP-USECASE-002
-
-**Use Case CQRS registration** - Commands/queries/handlers with Dispatcher on HTTP and STDIO hosts.
-**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-001
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AddCqrsDispatcher and AddUseCaseCqrs registered on both hosts
-- [ ] Handler unit tests green 0 skip
-
-## TR-MCP-USECASE-003
-
-**Use Case REST controller** - Thin /mcpserver/usecases dispatching CQRS.
-**Covered by:** FR: FR-MCP-USECASE-001; TEST: TEST-MCP-USECASE-002
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Controller unit tests map Result failures to HTTP status codes
-
-## TR-MCP-USECASE-004
-
-**Use Case diagram service** - DI-owned pure generator; mermaid + one extra format.
-**Covered by:** FR: FR-MCP-USECASE-005; TEST: TEST-MCP-USECASE-003
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Mermaid and plantuml golden tests; unknown format validation
-
-## TR-MCP-USECASE-005
-
-**Use Case MCP tools, client, plugins** - usecase_* tools; UseCaseClient live JSON parity; plugin-core + skills; REPL client.UseCases.
-**Covered by:** FR: FR-MCP-USECASE-001, FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-004, TEST-MCP-USECASE-010
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Client coverage DTO matches live server JSON
-- [ ] Plugin-core usecase tests green; REPL allow-lists UseCases
-
-## TR-MCP-USECASE-006
-
-**FR projection, coverage, audit** - linkedUseCases on FR get/list; coverage API; TR-MCP-DB-004 audit on mutable UC ops.
-**Covered by:** FR: FR-MCP-USECASE-003, FR-MCP-USECASE-006; TEST: TEST-MCP-USECASE-005, TEST-MCP-USECASE-007
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] FR projection test green
-- [ ] Coverage test green
-- [ ] Audit emission test green for create/update/delete/link
-
-## TR-MCP-USECASE-007
-
-**Use Case UI hosting** - Static /usecases/ assets REST-only.
-**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-008
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] UI asset tests green; live /usecases/ after UpdateService
-
-## TR-MCP-USECASE-008
-
-**Approval and product API** - CQRS + REST for approval and ProductKey.
-**Covered by:** FR: FR-MCP-USECASE-008, FR-MCP-USECASE-009; TEST: TEST-MCP-USECASE-009
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Approval version increment and list-by-product tests green
-
-## TR-MCP-USECASE-009
-
-**Validation seams** - Docs matrix includes USECASE IDs; shared Realizes algorithm for DB findings.
-**Covered by:** FR: FR-MCP-USECASE-010; TEST: TEST-MCP-USECASE-005
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] ValidateTraceability green for USECASE IDs
-- [ ] Shared algorithm unit tests green
-
-## TR-MCP-USECASE-010
-
-**Use Case service deploy** - Nuke UpdateService only; config backup/restore; live health and routes.
-**Covered by:** FR: FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-011
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] UpdateService succeeds; /health and /usecases/ return 200; REST smoke green
-
-## TR-MCP-USECASE-011 Graph storage
-
-**Use-case diagram graph storage** - JSON column (default) or equivalent on use case; multi-provider migrations; soft-delete and workspace filters.
-**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-016
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-T11-1 Multi-provider migrations create graph storage
-- [ ] AC-T11-2 Migration apply empty + production-shaped green; no SessionLogs drift
-- [ ] AC-T11-3 Soft-delete and workspace filters apply
-
-## TR-MCP-USECASE-012 Diagram graph CQRS
-
-**GetGraph / PutGraph / Export** handlers registered; controller thin dispatch only.
-**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013, TEST-MCP-USECASE-014
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-T12-1 Handlers registered on HTTP host
-- [ ] AC-T12-2 Controllers only dispatch CQRS
-
-## TR-MCP-USECASE-013 Diagram graph REST
-
-**REST** GET/PUT diagram-graph; GET diagram kind=usecase format mermaid|plantuml; sequence remains available.
-**Covered by:** FR: FR-MCP-USECASE-012, FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-014
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-T13-1 GET/PUT /mcpserver/usecases/{id}/diagram-graph
-- [ ] AC-T13-2 GET diagram?kind=usecase&format=mermaid|plantuml
-- [ ] AC-T13-3 Sequence path remains (kind=sequence or documented default)
-
-## TR-MCP-USECASE-014 UML serialization service
-
-**Pure DI service** graph to Mermaid and PlantUML; no DbContext.
-**Covered by:** FR: FR-MCP-USECASE-013, FR-MCP-USECASE-014; TEST: TEST-MCP-USECASE-012
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-T14-1 Pure service (no DbContext)
-- [ ] AC-T14-2 Mermaid and PlantUML pure unit goldens
-
-## TR-MCP-USECASE-015 Canvas UI hosting
-
-**Static /usecases/** canvas assets; palette + umlCanvas; REST-only.
-**Covered by:** FR: FR-MCP-USECASE-011, FR-MCP-USECASE-007; TEST: TEST-MCP-USECASE-015
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-T15-1 #umlCanvas (or equivalent) + palette + editor module in wwwroot
-- [ ] AC-T15-2 Engine assets self-hosted or pinned; REST-only mutations
-
-## TR-MCP-USECASE-016 Graph put audit
-
-**Put graph** emits TR-MCP-DB-004 DataAuditLog rows.
-**Covered by:** FR: FR-MCP-USECASE-012; TEST: TEST-MCP-USECASE-013
-**Status:** pending
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] AC-T16-1 Put graph writes DataAuditLog create/update

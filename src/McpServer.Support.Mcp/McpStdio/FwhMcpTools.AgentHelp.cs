@@ -20,7 +20,7 @@ public sealed partial class FwhMcpTools
         [Description("Optional execution strategy override")] string? executionStrategy = null,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var request = new AgentHelpSessionCreateRequest
@@ -55,7 +55,7 @@ public sealed partial class FwhMcpTools
         [Description("User message for this help turn")] string userMessage,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _agentHelpService
@@ -81,7 +81,7 @@ public sealed partial class FwhMcpTools
         [Description("Agent Help session id")] string sessionId,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _agentHelpService.GetStatusAsync(sessionId, cancellationToken).ConfigureAwait(false);
@@ -104,7 +104,7 @@ public sealed partial class FwhMcpTools
         [Description("Agent Help session id")] string sessionId,
         CancellationToken cancellationToken = default)
     {
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _agentHelpService.GetTranscriptAsync(sessionId, cancellationToken).ConfigureAwait(false);

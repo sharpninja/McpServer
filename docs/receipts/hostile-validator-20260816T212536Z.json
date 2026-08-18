@@ -1,0 +1,72 @@
+{
+  "TimestampUtc": "2026-08-16T21:25:36Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "project-implementation",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": ["add-profile.grok.md"]
+  },
+  "SessionId": "GrokCode-20260816T205728Z-hostile-handoffplan",
+  "RequestId": "req-20260816T205728Z-002-hostile-validate-handoff",
+  "PlanFile": "None",
+  "TodoId": "MCP-HANDOFFPLAN-001",
+  "OverallVerdict": "DISAGREE",
+  "MarkerSignatureVerified": true,
+  "HealthNonceMatch": true,
+  "HealthNonce": "6c2fc84a5b6149708ba2fb0717e5b67d",
+  "UnevaluatedMandatorySurfaces": [],
+  "FailList": [
+    "A1: not complete enough; unfiltered Support.Mcp.Tests is red",
+    "A2: claimed 1890/1890/0 is actually 5/1888/0 total 1893; cited 202042Z log contains two suite failures",
+    "B1: no inter-phase hostile AGREE for claimed implementation complete",
+    "B2/B5: cited validation log does not support Failed 0 / Skipped 0",
+    "C1: AC coverage gaps on description/technicalDetails tests and plugin-skill IHandoffIngestionService call",
+    "D1: PLAN required unfiltered Support.Mcp.Tests is red; no inter-phase AGREE"
+  ],
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "FAIL", "text": "Implementation complete enough; surfaces exist and delegate to IHandoffIngestionService" },
+    { "id": "A2", "surface": "A", "verdict": "FAIL", "text": "Required test commands Failed 0 / Skipped 0 at claimed counts" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "text": "Compile/Test/ValidateTraceability/SyncAgentPlugins EXIT=0" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "text": "tmp-*.ps1 deleted" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "text": "FR/TR/TEST/mappings exist with structured AC" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "text": "MCP-HANDOFF-001 done false; no commit" },
+    { "id": "A7", "surface": "A", "verdict": "PASS", "text": "Named receipts exist" },
+    { "id": "B1", "surface": "B", "verdict": "FAIL", "text": "Byrd v4 inter-phase hostile AGREE missing" },
+    { "id": "B2", "surface": "B", "verdict": "FAIL", "text": "Receipts/honesty: cited log contradicts Failed 0 claim" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "text": "MCP-only storage observed" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "text": "No Python; pwsh only" },
+    { "id": "B5", "surface": "B", "verdict": "FAIL", "text": "Honesty: named validation log is not green" },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "text": "Look-before-delete" },
+    { "id": "B7", "surface": "B", "verdict": "PASS", "text": "Compile EXIT=0 under TreatWarningsAsErrors" },
+    { "id": "C1", "surface": "C", "verdict": "FAIL", "text": "AC coverage gaps" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "text": "FR/TR/TEST/mappings exist" },
+    { "id": "D1", "surface": "D", "verdict": "FAIL", "text": "PLAN DoD not met" }
+  ],
+  "IndependentResults": {
+    "ClientTests": { "failed": 0, "passed": 281, "skipped": 0, "total": 281, "exit": 0 },
+    "SupportMcpTestsUnfiltered": { "failed": 5, "passed": 1888, "skipped": 0, "total": 1893, "exit": 1 },
+    "SupportMcpTestsFiltered": { "failed": 0, "passed": 1853, "skipped": 0, "total": 1853, "exit": 0 },
+    "ReplCoreTests": { "failed": 0, "passed": 823, "skipped": 0, "total": 823, "exit": 0 },
+    "SupportMcpIntegrationTests": { "failed": 0, "passed": 264, "skipped": 0, "total": 264, "exit": 0 },
+    "ReplIntegrationTests": { "failed": 0, "passed": 181, "skipped": 0, "total": 181, "exit": 0 },
+    "Compile": { "exit": 0 },
+    "NukeTest": { "exit": 0 },
+    "ValidateTraceability": { "exit": 0 },
+    "SyncAgentPlugins": { "exit": 0 }
+  },
+  "EvidenceLogs": [
+    "docs/receipts/_hv-testrun-20260816T210000Z.log",
+    "docs/receipts/_hv-testrun-20260816T210200Z.log",
+    "docs/receipts/mcp-handoffplan-001-validation-20260816T202042Z.log",
+    "docs/receipts/mcp-handoffplan-001-bdpv4-20260816T203535Z.log",
+    "docs/receipts/mcp-handoffplan-001-final-20260816T205400Z.md"
+  ],
+  "Accuracy": 4,
+  "Completeness": 4,
+  "AccuracyScale": "1-5",
+  "DidNotMarkTodosDone": true,
+  "DidNotCommit": true,
+  "DidNotEditProductCode": true
+}

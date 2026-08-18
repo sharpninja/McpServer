@@ -16,6 +16,9 @@ public enum AgentPoolOneShotContext
 
     /// <summary>Ad-hoc non-template context.</summary>
     AdHoc,
+
+    /// <summary>TR-HANDOFF-AGENT-001: Extract a structured MCP TODO draft from a handoff document.</summary>
+    HandoffTodoDraft,
 }
 
 /// <summary>
@@ -176,6 +179,9 @@ public sealed record AgentPoolEnqueueResult : AgentPoolMutationResult
 
     /// <summary>Resolved prompt text.</summary>
     public string? RenderedPrompt { get; init; }
+
+    /// <summary>Resolved agent model identifier when known.</summary>
+    public string? Model { get; init; }
 }
 
 /// <summary>
@@ -239,6 +245,9 @@ public sealed record AgentPoolJobStreamEventDto
 
     /// <summary>Error payload for failure events.</summary>
     public string? Error { get; init; }
+
+    /// <summary>Resolved model identifier when the job completed with evidence.</summary>
+    public string? Model { get; init; }
 
     /// <summary>Timestamp in UTC.</summary>
     public DateTimeOffset TimestampUtc { get; init; } = DateTimeOffset.UtcNow;

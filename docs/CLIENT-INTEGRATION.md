@@ -69,6 +69,24 @@ Key tool categories:
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
 - **Agent Help**: `agent_help_create_session`, `agent_help_submit_turn`, `agent_help_get_status` (see marker `## Agent Help (MCP Server issues)`)
 - **Use cases**: `usecase_list`, `usecase_get`, `usecase_create`, `usecase_update`, `usecase_delete`, `usecase_link`, `usecase_diagram`, `usecase_coverage`, approval/product tools (see Swagger and plugin `usecase` skill)
+- **Products**: `product_create`, `product_list`, `product_get`, `product_update`, `product_delete`, `product_list_members`, `product_add_member`, `product_remove_member`
+- **Requirements (effective)**: `requirements_effective` (`productScope=product|local`)
+
+## Typed client: Products
+
+`McpServerClient.Products` (`ProductClient`) covers `/mcpserver/products`:
+
+```csharp
+var product = await client.Products.CreateAsync(new CreateProductRequest
+{
+    Key = "PROD-MCPSERVER",
+    Name = "McpServer",
+});
+await client.Products.AddMemberAsync(product.Key, memberWorkspaceId);
+var effective = await client.Requirements.GetEffectiveRequirementsAsync(layerKey: null, productScope: "product");
+```
+
+`RemoveMemberAsync` returns the DELETE response body. Do not follow a self-leave with GET (that is 404).
 
 ## Typed client: Use Cases
 

@@ -24,7 +24,7 @@ public sealed partial class FwhMcpTools
         if (_triageService is null)
             return JsonSerializer.Serialize(new { error = "Triage service is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         var request = new TriageReportRequest
         {
             WorkspacePath = workspacePath,
@@ -53,7 +53,7 @@ public sealed partial class FwhMcpTools
         if (_triageService is null)
             return JsonSerializer.Serialize(new { error = "Triage service is not registered." });
 
-        ApplyWorkspaceOverride(workspacePath);
+        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!string.IsNullOrWhiteSpace(reportId))

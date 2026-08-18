@@ -1,5 +1,7 @@
 - name: User Documentation
   href: USER-GUIDE.md
+- name: Handoff Ingestion
+  href: Handoff-Ingestion.md
 - name: MCP Server Guide
   href: MCP-SERVER.md
 - name: FAQ

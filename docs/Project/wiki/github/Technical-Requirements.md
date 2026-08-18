@@ -111,6 +111,87 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-HANDOFF-AGENT-001
+
+**Versioned HandoffTodoDraft one-shot extraction** — Use AgentPoolOneShotContext.HandoffTodoDraft and a versioned strict-JSON extraction prompt.
+**Covered by:** FR: FR-HANDOFF-002; TEST: TEST-HANDOFF-003
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Extraction is invoked through AgentPoolOneShotContext.HandoffTodoDraft.
+- [ ] Only strict JSON matching the versioned contract is accepted; malformed output yields diagnostics and no TODO.
+
+## TR-HANDOFF-AUDIT-001
+
+**Normalized ingestion-run and diagnostic persistence** — Persist normalized ingestion-run and diagnostic records separately from TODO records, without raw credentials or source content.
+**Covered by:** FR: FR-HANDOFF-006; TEST: TEST-HANDOFF-007
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every run stores normalized provenance and diagnostics independently of TODO rows.
+- [ ] Persisted records omit raw credentials and raw source content.
+
+## TR-HANDOFF-CONTRACT-001
+
+**Documented handoff contracts** — Document request, result, draft, provenance, and diagnostic contracts for handoff ingestion.
+**Covered by:** FR: FR-HANDOFF-001, FR-HANDOFF-002; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002, TEST-HANDOFF-003
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] HandoffSourceKind, HandoffIngestionMode, HandoffIngestionRequest, HandoffIngestionResult, HandoffTodoDraft, HandoffProvenance, HandoffDiagnostic, and HandoffApprovalRequest exist with complete XMLDocs.
+- [ ] Contracts serialize and deserialize with the shared client JSON context without silent field loss.
+
+## TR-HANDOFF-MODES-001
+
+**Confidence gating, review approval, and idempotent replay** — Implement DraftOnly, RequireReview, and CreateWhenConfident with confidence gating, approval revalidation, and deterministic replay unless force=true.
+**Covered by:** FR: FR-HANDOFF-004, FR-HANDOFF-005; TEST: TEST-HANDOFF-004, TEST-HANDOFF-005
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] CreateWhenConfident creates only when confidence is at least 0.75 and no error diagnostic exists.
+- [ ] Approval revalidates the stored draft before TODO creation.
+- [ ] Replays of the same workspace, content hash, and prompt version are deterministic unless force=true.
+
+## TR-HANDOFF-SECURITY-001
+
+**Bounded workspace-contained handoff readers** — Use bounded readers, workspace containment, and reparse-point protection for handoff source resolution.
+**Covered by:** FR: FR-HANDOFF-001; TEST: TEST-HANDOFF-001, TEST-HANDOFF-002
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Readers refuse more than 8 MiB of decoded input and unsupported formats.
+- [ ] Path and artifact locators stay inside the workspace and fail closed on reparse-point escapes.
+
+## TR-HANDOFF-SURFACE-001
+
+**Shared API, client, REPL, Director, MCP, and plugin delegation** — Every public surface delegates to the same IHandoffIngestionService and exposes ingest, inspect, and approval workflows.
+**Covered by:** FR: FR-HANDOFF-007; TEST: TEST-HANDOFF-006
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] API, client, REPL, Director, MCP tools, and plugin skill all call IHandoffIngestionService.
+- [ ] Ingest, get-run, and approve operations exist on every public surface and apply workspace isolation.
+
+## TR-HANDOFF-TODO-001
+
+**Exclusive TODO-service persistence** — Persist approved TODOs exclusively through the existing TODO service. AI output never writes TODO storage directly.
+**Covered by:** FR: FR-HANDOFF-005; TEST: TEST-HANDOFF-005
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The only TODO mutation path is ITodoService.CreateAsync.
+- [ ] Existing TODO IDs require review and are never silently renamed.
+
+## TR-HANDOFF-VALIDATE-001
+
+**Pure draft validation and normalization** — Provide a pure draft validator and normalizer that emits field-specific diagnostics.
+**Covered by:** FR: FR-HANDOFF-003, FR-HANDOFF-004; TEST: TEST-HANDOFF-004
+**Status:** in_progress
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Validation and normalization have no TODO or run-store side effects.
+- [ ] Invalid ID, title, section, priority, estimate, description, technical details, implementation tasks, dependencies, or requirement links produce field-specific diagnostics.
+
 ## TR-LOC-001
 
 **Localization Infrastructure** — Multi-language support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -1409,6 +1490,41 @@ Scope: layer-1+
 **Status:** ✅ Complete
 
 **Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-API-001
+
+**Product CQRS and adapters** — Commands/queries live under McpServer.Support.Mcp/Products/. REST /mcpserver/products, MCP product_*, ProductClient, REPL client.Products, and plugin descriptors dispatch those handlers only. No public IProductService facade. GET /mcpserver/requirements/effective gains productScope=product|local (default product). AC: controller/MCP/REPL tests prove dispatch-only; invalid key 400; duplicate 409.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-003; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-AUTH-001
+
+**Product authorization and transaction gating** — Authorization lives in CQRS handlers (or a helper used only by those handlers). Owner-only mutate except self-leave. Non-member get is 404. Mutating product commands fail closed when turn transactions are required and degraded. AC: non-owner update 403; outsider get 404; degraded transactions reject create/add-member.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-002, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005, TEST-MCP-PRODUCT-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-CTX-001
+
+**Product requirement context source** — Context indexer/search path for source type product-requirements derives chunks from the CQRS share helper, not from sibling ContextDocument rows. Chunks are tagged with origin workspace. AC: member pack includes sibling FR text; sibling .cs files are absent; product-requirements filter returns only those chunks.
+**Covered by:** FR: FR-MCP-PRODUCT-005; TEST: TEST-MCP-PRODUCT-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-MODEL-001
+
+**Product storage model** — Entities ProductEntity and ProductWorkspaceMembershipEntity are host-global (no workspace EF query filter). Soft-delete. Unique Key matching ^PROD-[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)*$ among non-deleted rows. FK to Workspaces. Audit rows on mutations (TR-MCP-DB-004). Migrations apply on SQLite, PostgreSQL, and SQL Server without re-adding unrelated columns. AC: unique filtered index on Key; membership composite PK ProductId+WorkspaceId; apply migrations on empty and production-shaped DBs.
+**Covered by:** FR: FR-MCP-PRODUCT-001, FR-MCP-PRODUCT-002; TEST: TEST-MCP-PRODUCT-001, TEST-MCP-PRODUCT-003, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-005
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-PRODUCT-SHARE-001
+
+**Product requirement share query** — CQRS query path (private helper only, called from handlers) ignores the workspace query filter only for member WorkspaceIds of the caller's products. Layer filter uses the origin workspace catalog. Results include originWorkspaceId. Never merge two rows that share an id across origins. AC: union includes sibling in-scope rows; missing origin layer key excludes sibling; productScope=local is local-only.
+**Covered by:** FR: FR-MCP-PRODUCT-003, FR-MCP-PRODUCT-004; TEST: TEST-MCP-PRODUCT-002, TEST-MCP-PRODUCT-004, TEST-MCP-PRODUCT-003
+**Status:** pending
 Scope: layer-1+
 
 ## TR-MCP-QA-001
@@ -3149,4 +3265,3 @@ Scope: layer-1+
 - [x] McpServerClient.Triage exposes a typed method for querying triage-created TODOs. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
 - [x] The REST endpoint returns a stable JSON contract with total count and item collection fields. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
 - [x] The implementation uses persisted TODO creation timestamps instead of inferring creation time from triage run completion. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
-

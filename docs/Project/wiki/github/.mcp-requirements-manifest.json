@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-08-16T17:20:58.4510264+00:00",
+  "generatedAtUtc": "2026-08-18T18:31:58.9771316+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -27,6 +27,7 @@
     "Onboarding-Human-AI-Partnership.md",
     "Use-Case-Extension-Design-v3.md",
     "Use-Case-Diagram-Mermaid-Schema-v1.md",
-    "Session-Log-Schema.md"
+    "Session-Log-Schema.md",
+    "Handoff-Ingestion.md"
   ]
 }

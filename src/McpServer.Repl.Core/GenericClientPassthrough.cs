@@ -199,6 +199,8 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             "TRIAGE" => typeof(TriageClient),
             "AGENTHELP" => typeof(AgentHelpClient),
             "USECASES" => typeof(UseCaseClient),
+            "HANDOFF" => typeof(HandoffClient),
+            "PRODUCTS" => typeof(ProductClient),
             _ => null,
         };
     }

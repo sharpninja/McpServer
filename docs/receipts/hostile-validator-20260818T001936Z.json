@@ -1,0 +1,124 @@
+{
+  "TimestampUtc": "2026-08-18T00:19:37Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": "user-directed-general-action-class-2",
+  "AddProfileExecuted": true,
+  "ProfileFilesRead": 18,
+  "PluginRoot": "F:\\GitHub\\mcpserver-grok-plugin",
+  "PluginVersion": "1.93.0",
+  "MarkerSignature": true,
+  "HealthNonce": "1b881e6140984ed884726b15a66c4831",
+  "HealthNonceEchoed": true,
+  "HealthStorage": "reachable",
+  "ReadyStatus": 200,
+  "ReadyStorage": "reachable",
+  "FullBootstrap": true,
+  "SessionId": "GrokCode-20260818T001536Z-hostile-help-smoke",
+  "RequestId": "req-20260818T001536Z-001-hostile-validate-help-smoke",
+  "ServerTurnId": 41588,
+  "PlanFile": "None",
+  "TodoId": "None",
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "SurfacesNotEvaluated": [],
+  "Accuracy": 98,
+  "Completeness": 97,
+  "SessionLogQuery": {
+    "TextEqualsSessionIdTotalCount": 0,
+    "TextHostileHelpSmokeHit": "GrokCode-20260818T001225Z-plugin-session",
+    "AgentFromTotalCount": 1,
+    "AgentFromSessionId": "GrokCode-20260818T001536Z-hostile-help-smoke",
+    "AgentFromTurnRequestId": "req-20260818T001536Z-001-hostile-validate-help-smoke",
+    "AgentFromTurnStatus": "completed",
+    "AgentFromTurnId": 41588,
+    "DialogCount": 6,
+    "ActionCount": 6
+  },
+  "Service": {
+    "Name": "McpServer",
+    "State": "Running",
+    "StartMode": "Auto",
+    "StartName": "LocalSystem",
+    "PathName": "C:\\ProgramData\\McpServer\\McpServer.Support.Mcp.exe --urls http://+:7147",
+    "ProcessId": 57744,
+    "ProcessCreationDateUtc": "2026-08-17T23:38:29.5863800Z"
+  },
+  "Marker": {
+    "Pid": 57744,
+    "PidMatchService": true,
+    "LastWriteTimeUtc": "2026-08-17T23:38:48.7976227Z",
+    "Version": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e"
+  },
+  "Health": {
+    "IndependentNonce": "1b881e6140984ed884726b15a66c4831",
+    "IndependentStorage": "reachable",
+    "IndependentReadyStatus": 200
+  },
+  "LiveYaml": {
+    "Path": "C:\\ProgramData\\McpServer\\appsettings.yaml",
+    "LastWriteTimeUtc": "2026-08-17T23:30:09.0404870Z",
+    "Length": 58975,
+    "Sha256": "B42E2462D67EADE136EC3BF64A1224BF1253ADB73EA6596CFED1BC7C7A4E3D46",
+    "DefaultExecutionStrategy": "grok-cli",
+    "HelperModel": "grok-4.5",
+    "Enabled": true
+  },
+  "Exe": {
+    "LastWriteTimeUtc": "2026-08-12T21:55:30.4271605Z",
+    "FileVersion": "1.4.26.0",
+    "ProductVersion": "1.4.26+bd8a8d9e8cc3221bd25e7ce29479b460bc21b19e",
+    "Sha256": "A95B178712D30BE73CB55AEC8DF98127F44DDDEE4A62C932E52C1D3B09AF5529"
+  },
+  "ClaimedHelpSession": {
+    "SessionId": "help-20260818001213-0aa9f6de59d2403296130363aa94bb75",
+    "Status": "idle",
+    "LastTurnId": "turn-0001",
+    "TurnCounter": 1,
+    "ExecutionStrategy": "grok-cli",
+    "Topic": "live-agent-help-smoke",
+    "Terminated": false,
+    "TranscriptItemCount": 3,
+    "AssistantText": "Agent Help is responding and available for MCP Server diagnosis on this workspace.",
+    "CreateSessionModelRequested": "grok-4.5",
+    "CreateSessionModelResolved": "grok-4.5",
+    "SubmitTurnLatencyMs": 55827,
+    "SubmitTurnHttpMs": 55909.97,
+    "GuardAllowed": true,
+    "LogLines": [
+      "L354279",
+      "L354282",
+      "L356856",
+      "L356857",
+      "L356893",
+      "L356894",
+      "L356930",
+      "L356931"
+    ]
+  },
+  "IndependentCreateSession": {
+    "SessionId": "help-20260818001542-2266fbba1cbb4d669ae2a7d125ae54a0",
+    "ModelRequested": "grok-4.5",
+    "ModelResolved": "grok-4.5",
+    "ExecutionStrategy": "grok-cli"
+  },
+  "Git": {
+    "DirtySrcTestsCount": 118,
+    "RecentSrcTestsAfter0011Z": 0
+  },
+  "Claims": {
+    "A1": "PASS",
+    "A2": "PASS",
+    "A3": "PASS",
+    "A4": "PASS",
+    "A5": "PASS",
+    "A6": "PASS",
+    "B1": "PASS",
+    "B2": "PASS",
+    "B3": "PASS",
+    "B4": "PASS",
+    "B5": "PASS",
+    "C": "N/A",
+    "D": "N/A"
+  }
+}

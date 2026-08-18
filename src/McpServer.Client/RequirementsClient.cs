@@ -43,9 +43,24 @@ public sealed class RequirementsClient : McpClientBase
     }
 
     /// <summary>Gets requirements effective at the workspace current layer or an explicit preview layer.</summary>
-    public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken cancellationToken = default)
+    public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(
+        string? layerKey = null,
+        CancellationToken cancellationToken = default)
+        => await GetEffectiveRequirementsAsync(layerKey, productScope: "product", cancellationToken).ConfigureAwait(true);
+
+    /// <summary>Gets effective requirements with an explicit product scope.</summary>
+    /// <param name="layerKey">Optional layer preview.</param>
+    /// <param name="productScope"><c>product</c> (default) or <c>local</c>.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(
+        string? layerKey,
+        string? productScope,
+        CancellationToken cancellationToken = default)
     {
-        var url = BuildQueryUrl("mcpserver/requirements/effective", ("layerKey", layerKey));
+        var url = BuildQueryUrl(
+            "mcpserver/requirements/effective",
+            ("layerKey", layerKey),
+            ("productScope", productScope));
         return await GetAsync<EffectiveRequirementsResult>(url, cancellationToken);
     }
 

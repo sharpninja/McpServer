@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj" />
     <ProjectReference Include="..\..\src\McpServer.SessionLog.Transcripts\McpServer.SessionLog.Transcripts.csproj" />
   </ItemGroup>
   <ItemGroup>

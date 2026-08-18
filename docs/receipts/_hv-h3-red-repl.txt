@@ -1,0 +1,25 @@
+NAME=repl
+PROJECT=tests/McpServer.Repl.Core.Tests
+FILTER=FullyQualifiedName~GenericClientPassthroughValidClientNamesTests.InvokeAsync_UnknownClient_ErrorTextStillListsResolvableClients
+START=2026-08-18T15:19:34.4236054Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Todo.Validation -> F:\GitHub\McpServer\tests\McpServer.Todo.Validation\bin\Debug\net10.0\McpServer.Todo.Validation.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Repl.Core.Tests -> F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\bin\Debug\net10.0\McpServer.Repl.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.29]     McpServer.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_UnknownClient_ErrorTextStillListsResolvableClients [FAIL]
+  Failed McpServer.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_UnknownClient_ErrorTextStillListsResolvableClients [66 ms]
+  Error Message:
+   Assert.Contains() Failure: Item not found in collection
+Collection: ["Agent", "AgentHelp", "AgentPool", "AuthConfig", "Configuration", ┬╖┬╖┬╖]
+Not found:  "Products"
+  Stack Trace:
+     at McpServer.Repl.Core.Tests.GenericClientPassthroughValidClientNamesTests.InvokeAsync_UnknownClient_ErrorTextStillListsResolvableClients() in F:\GitHub\McpServer\tests\McpServer.Repl.Core.Tests\GenericClientPassthroughValidClientNamesTests.cs:line 58
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 94 ms - McpServer.Repl.Core.Tests.dll (net10.0)
+EXIT=1
+END=2026-08-18T15:19:39.5080216Z

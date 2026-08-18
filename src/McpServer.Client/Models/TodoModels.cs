@@ -81,6 +81,10 @@ public sealed class TodoFlatItem
     /// <summary>Associated technical requirement IDs.</summary>
     [JsonPropertyName("technicalRequirements")]
     public IReadOnlyList<string>? TechnicalRequirements { get; set; }
+
+    /// <summary>Optional request identity used to heal an exact retry of the same create.</summary>
+    [JsonPropertyName("idempotencyKey")]
+    public string? IdempotencyKey { get; set; }
 }
 
 /// <summary>A sub-task within a TODO item.</summary>
@@ -153,6 +157,10 @@ public sealed class TodoCreateRequest
     /// <summary>Associated technical requirement IDs.</summary>
     [JsonPropertyName("technicalRequirements")]
     public IReadOnlyList<string>? TechnicalRequirements { get; set; }
+
+    /// <summary>Optional request identity used to heal an exact retry of the same create.</summary>
+    [JsonPropertyName("idempotencyKey")]
+    public string? IdempotencyKey { get; set; }
 }
 
 /// <summary>Request to update a TODO item.</summary>

@@ -1,0 +1,83 @@
+NAME=ctrl
+PROJECT=tests/McpServer.Support.Mcp.Tests
+FILTER=FullyQualifiedName~ProductsControllerTests
+START=2026-08-18T15:19:10.6195371Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.98]     McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenConflict_ReturnsConflict [FAIL]
+[xUnit.net 00:00:01.99]     McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.DeleteAsync_WhenForbidden_ReturnsForbid [FAIL]
+[xUnit.net 00:00:01.99]     McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.RequirementsEffective_AcceptsProductScopeQuery [FAIL]
+[xUnit.net 00:00:01.99]     McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenSuccess_ReturnsCreated [FAIL]
+[xUnit.net 00:00:02.00]     McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenInvalidKey_ReturnsBadRequest [FAIL]
+[xUnit.net 00:00:02.00]     McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.GetAsync_WhenNotFound_ReturnsNotFound [FAIL]
+  Failed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenConflict_ReturnsConflict [112 ms]
+  Error Message:
+   Assert.IsType() Failure: Value is not the exact type
+Expected: typeof(Microsoft.AspNetCore.Mvc.ConflictObjectResult)
+Actual:   typeof(Microsoft.AspNetCore.Mvc.StatusCodeResult)
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenConflict_ReturnsConflict() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Controllers\ProductsControllerTests.cs:line 84
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.DeleteAsync_WhenForbidden_ReturnsForbid [3 ms]
+  Error Message:
+   Assert.IsType() Failure: Value is not the exact type
+Expected: typeof(Microsoft.AspNetCore.Mvc.ObjectResult)
+Actual:   typeof(Microsoft.AspNetCore.Mvc.StatusCodeResult)
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.DeleteAsync_WhenForbidden_ReturnsForbid() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Controllers\ProductsControllerTests.cs:line 112
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.RequirementsEffective_AcceptsProductScopeQuery [8 ms]
+  Error Message:
+   Assert.Contains() Failure: Item not found in collection
+Collection: ["layerKey", "cancellationToken"]
+Not found:  "productScope"
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.RequirementsEffective_AcceptsProductScopeQuery() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Controllers\ProductsControllerTests.cs:line 126
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenSuccess_ReturnsCreated [2 ms]
+  Error Message:
+   Assert.IsType() Failure: Value is not the exact type
+Expected: typeof(Microsoft.AspNetCore.Mvc.CreatedResult)
+Actual:   typeof(Microsoft.AspNetCore.Mvc.StatusCodeResult)
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenSuccess_ReturnsCreated() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Controllers\ProductsControllerTests.cs:line 42
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenInvalidKey_ReturnsBadRequest [1 ms]
+  Error Message:
+   Assert.IsType() Failure: Value is not the exact type
+Expected: typeof(Microsoft.AspNetCore.Mvc.BadRequestObjectResult)
+Actual:   typeof(Microsoft.AspNetCore.Mvc.StatusCodeResult)
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenInvalidKey_ReturnsBadRequest() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Controllers\ProductsControllerTests.cs:line 68
+--- End of stack trace from previous location ---
+  Failed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.GetAsync_WhenNotFound_ReturnsNotFound [1 ms]
+  Error Message:
+   Assert.IsType() Failure: Value is not the exact type
+Expected: typeof(Microsoft.AspNetCore.Mvc.NotFoundObjectResult)
+Actual:   typeof(Microsoft.AspNetCore.Mvc.StatusCodeResult)
+  Stack Trace:
+     at McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.GetAsync_WhenNotFound_ReturnsNotFound() in F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\Controllers\ProductsControllerTests.cs:line 98
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     6, Passed:     0, Skipped:     0, Total:     6, Duration: 169 ms - McpServer.Support.Mcp.Tests.dll (net10.0)
+EXIT=1
+END=2026-08-18T15:19:23.4329620Z

@@ -573,18 +573,24 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     public async Task Query_FilterByTodoId_ReturnsOnlyMatches()
     {
         var sessionId = BuildSessionId("ClaudeCode", $"q-todo-{Guid.NewGuid():N}");
+        var todoId = $"ISSUE-{Random.Shared.Next(100000, 999999)}";
         await OpenSessionAsync(sessionId).ConfigureAwait(true);
         var requestId = NewRequestId("q-todo");
         var begin = await _client.PostAsJsonAsync(
             LifecycleUri($"ClaudeCode/{sessionId}/{requestId}/begin"),
-            new { queryTitle = "filter", planFile = "None", todoId = "MCP-SESSIONLOG-002" },
+            new { queryTitle = "filter", planFile = "None", todoId },
             cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, begin.StatusCode);
+        var stored = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
+            new Uri($"/mcpserver/sessionlog/ClaudeCode/{sessionId}", UriKind.Relative),
+            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.Equal(todoId, Assert.Single(stored!.Turns!).TodoId);
 
         var hit = await _client.GetFromJsonAsync<SessionLogQueryResult>(
-            new Uri("/mcpserver/sessionlog?todoId=MCP-SESSIONLOG-002&limit=50", UriKind.Relative),
+            new Uri($"/mcpserver/sessionlog?todoId={Uri.EscapeDataString(todoId)}&limit=200", UriKind.Relative),
             cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Contains(hit!.Items, item => item.SessionId == sessionId);
+        Assert.All(hit.Items, item => Assert.Contains(item.Turns ?? [], turn => turn.TodoId == todoId));
 
         var miss = await _client.GetFromJsonAsync<SessionLogQueryResult>(
             new Uri("/mcpserver/sessionlog?todoId=PLAN-MISS-001&limit=50", UriKind.Relative),

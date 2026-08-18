@@ -32,6 +32,7 @@ public sealed class ProviderDatabaseIntegrationTests
             _ = client;
 
             await ProviderIntegrationTestSupport.AssertDatabaseRoundTripAsync(factory, "Sqlite", string.Empty).ConfigureAwait(true);
+            await ProviderIntegrationTestSupport.AssertHandoffIngestionStorageAsync(factory).ConfigureAwait(true);
 
             Assert.True(File.Exists(databasePath), "The SQLite provider should materialize a clean on-disk database file.");
         }
@@ -56,7 +57,7 @@ public sealed class ProviderDatabaseIntegrationTests
             new Dictionary<string, string?>
             {
                 ["Mcp:DatabaseProvider"] = "sqlserver",
-                ["Mcp:SqlServerConnectionString"] = $"{localDb.ConnectionString}Database={databaseName};",
+                ["Mcp:SqlServerConnectionString"] = $"{localDb.ConnectionString}Database={databaseName};Command Timeout=180;",
             });
 
         try
@@ -65,10 +66,46 @@ public sealed class ProviderDatabaseIntegrationTests
             _ = client;
 
             await ProviderIntegrationTestSupport.AssertDatabaseRoundTripAsync(factory, "SqlServer", string.Empty).ConfigureAwait(true);
+            await ProviderIntegrationTestSupport.AssertHandoffIngestionStorageAsync(factory).ConfigureAwait(true);
         }
         finally
         {
             factory.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// Verifies that the PostgreSQL provider can migrate a clean database to current head and
+    /// persist HandoffIngestionRuns/HandoffDiagnostics. Uses the repository ephemeral cluster
+    /// or MCP_TEST_POSTGRES_CONNECTION. No skip.
+    /// </summary>
+    [Fact]
+    public async Task PostgreSql_CleanDatabase_AppliesHandoffMigrationAndPersistsEntity()
+    {
+        await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
+        await using var postgres = new EphemeralPostgresSandbox();
+        var databaseName = $"mcp_handoff_{Guid.NewGuid():N}";
+        postgres.CreateDatabase(databaseName);
+        var factory = ProviderIntegrationTestSupport.CreateFactory(
+            workspace,
+            new Dictionary<string, string?>
+            {
+                ["Mcp:DatabaseProvider"] = "postgresql",
+                ["Mcp:PostgresConnectionString"] = postgres.GetDatabaseConnectionString(databaseName),
+            });
+
+        try
+        {
+            using var client = factory.CreateClient();
+            _ = client;
+
+            await ProviderIntegrationTestSupport.AssertDatabaseRoundTripAsync(factory, "Npgsql", string.Empty).ConfigureAwait(true);
+            await ProviderIntegrationTestSupport.AssertHandoffIngestionStorageAsync(factory).ConfigureAwait(true);
+        }
+        finally
+        {
+            factory.Dispose();
+            postgres.DropDatabase(databaseName);
         }
     }
 

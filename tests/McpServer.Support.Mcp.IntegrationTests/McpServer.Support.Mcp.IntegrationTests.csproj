@@ -20,6 +20,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.TransactionSecurity\McpServer.TransactionSecurity.csproj" />
@@ -30,8 +33,12 @@
     <ProjectReference Include="..\..\src\McpServer.QBAgent\McpServer.QBAgent.csproj" />
     <ProjectReference Include="..\..\src\McpServer.QBAgent.Tools\McpServer.QBAgent.Tools.csproj" />
     <ProjectReference Include="..\..\src\McpServer.McpAgent\McpServer.McpAgent.csproj" />
+    <ProjectReference Include="..\..\src\McpServer.Storage.SqliteMigrations\McpServer.Storage.SqliteMigrations.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\McpServer.Support.Mcp.Tests\Storage\EphemeralPostgresFixture.cs" Link="Storage\EphemeralPostgresFixture.cs" />
   </ItemGroup>
 </Project>

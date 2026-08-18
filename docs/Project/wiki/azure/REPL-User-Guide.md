@@ -328,7 +328,8 @@ Generic passthrough to all `McpServerClient` sub-clients. Enables dynamic invoca
 - `client.github.*` — GitHub integration (issues, PRs, comments)
 - `client.todo.*` — Direct TODO API access
 - `client.sessionlog.*` — Direct session log API access
-- `client.requirements.*` — Direct requirements API access
+- `client.requirements.*` — Direct requirements API access (`GetEffectiveRequirementsAsync` accepts `productScope`)
+- `client.Products.*` — Product CRUD and workspace membership (`PROD-*` keys)
 - `client.voice.*` — Voice conversation endpoints
 - `client.events.*` — Change-event SSE endpoints
 - `client.repo.*` — Repository file operations

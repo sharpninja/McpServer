@@ -1,0 +1,131 @@
+ΓÇï
+ΓûêΓûêΓûêΓòù┬á┬á┬áΓûêΓûêΓòùΓûêΓûêΓòù┬á┬á┬áΓûêΓûêΓòùΓûêΓûêΓòù┬á┬áΓûêΓûêΓòùΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓòù
+ΓûêΓûêΓûêΓûêΓòù┬á┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬áΓûêΓûêΓòöΓò¥ΓûêΓûêΓòöΓòÉΓòÉΓòÉΓòÉΓò¥
+ΓûêΓûêΓòöΓûêΓûêΓòù┬áΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓûêΓûêΓûêΓòöΓò¥┬áΓûêΓûêΓûêΓûêΓûêΓòù┬á┬á
+ΓûêΓûêΓòæΓòÜΓûêΓûêΓòùΓûêΓûêΓòæΓûêΓûêΓòæ┬á┬á┬áΓûêΓûêΓòæΓûêΓûêΓòöΓòÉΓûêΓûêΓòù┬áΓûêΓûêΓòöΓòÉΓòÉΓò¥┬á┬á
+ΓûêΓûêΓòæ┬áΓòÜΓûêΓûêΓûêΓûêΓòæΓòÜΓûêΓûêΓûêΓûêΓûêΓûêΓòöΓò¥ΓûêΓûêΓòæ┬á┬áΓûêΓûêΓòùΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓòù
+ΓòÜΓòÉΓò¥┬á┬áΓòÜΓòÉΓòÉΓòÉΓò¥┬áΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥┬áΓòÜΓòÉΓò¥┬á┬áΓòÜΓòÉΓò¥ΓòÜΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓò¥
+ΓÇï
+NUKE Execution Engine version 9.0.4 (Windows,.NETCoreApp,Version=v10.0)
+ΓÇï
+ΓÇï
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Γòæ SyncAgentPlugins
+Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+13:06:07 [INF] Syncing plugin core into F:\GitHub\McpServer\plugins\core\.staged-plugin
+13:06:07 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\McpServer\plugins\core\.staged-plugin"
+13:06:11 [DBG] synced 14 core files into F:\GitHub\McpServer\plugins\core\.staged-plugin/lib (core 298c5fde)
+13:06:11 [INF] Generating claude-code PowerShell wrappers in F:\GitHub\McpServer\plugins\core\.staged-plugin
+13:06:11 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "claude-code" -PluginRoot "F:\GitHub\McpServer\plugins\core\.staged-plugin"
+13:06:12 [DBG] generated claude-code PowerShell wrappers in F:\GitHub\McpServer\plugins\core\.staged-plugin\hooks\scripts
+13:06:12 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\McpServer\plugins\core\.staged-plugin"
+13:06:14 [DBG] core integrity OK: 13 files match
+13:06:14 [INF] Syncing plugin core into F:\GitHub\mcpserver-claude-code-plugin
+13:06:14 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-claude-code-plugin"
+13:06:16 [DBG] synced 14 core files into F:\GitHub\mcpserver-claude-code-plugin/lib (core 298c5fde)
+13:06:16 [INF] Generating claude-code PowerShell wrappers in F:\GitHub\mcpserver-claude-code-plugin
+13:06:16 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "claude-code" -PluginRoot "F:\GitHub\mcpserver-claude-code-plugin"
+13:06:17 [DBG] generated claude-code PowerShell wrappers in F:\GitHub\mcpserver-claude-code-plugin\hooks\scripts
+13:06:17 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-claude-code-plugin"
+13:06:18 [DBG] core integrity OK: 13 files match
+13:06:18 [INF] Syncing plugin core into F:\GitHub\mcpserver-claude-cowork-plugin
+13:06:19 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-claude-cowork-plugin"
+13:06:21 [DBG] synced 14 core files into F:\GitHub\mcpserver-claude-cowork-plugin/lib (core 298c5fde)
+13:06:22 [INF] Generating claude-cowork PowerShell wrappers in F:\GitHub\mcpserver-claude-cowork-plugin
+13:06:22 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "claude-cowork" -PluginRoot "F:\GitHub\mcpserver-claude-cowork-plugin"
+13:06:22 [DBG] generated claude-cowork PowerShell wrappers in F:\GitHub\mcpserver-claude-cowork-plugin\hooks\scripts
+13:06:23 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-claude-cowork-plugin"
+13:06:23 [DBG] core integrity OK: 13 files match
+13:06:23 [INF] Syncing plugin core into F:\GitHub\mcpserver-cline-plugin
+13:06:23 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-cline-plugin"
+13:06:25 [DBG] synced 14 core files into F:\GitHub\mcpserver-cline-plugin/lib (core 298c5fde)
+13:06:25 [INF] No hook wrappers are generated for F:\GitHub\mcpserver-cline-plugin
+13:06:25 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-cline-plugin"
+13:06:25 [DBG] core integrity OK: 13 files match
+13:06:26 [INF] Syncing plugin core into F:\GitHub\mcpserver-cline-v2-plugin
+13:06:26 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-cline-v2-plugin"
+13:06:27 [DBG] synced 14 core files into F:\GitHub\mcpserver-cline-v2-plugin/lib (core 298c5fde)
+13:06:27 [INF] No hook wrappers are generated for F:\GitHub\mcpserver-cline-v2-plugin
+13:06:27 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-cline-v2-plugin"
+13:06:27 [DBG] core integrity OK: 13 files match
+13:06:29 [INF] Syncing plugin core into F:\GitHub\mcpserver-codex-plugin
+13:06:29 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-codex-plugin"
+13:06:30 [DBG] synced 14 core files into F:\GitHub\mcpserver-codex-plugin/lib (core 298c5fde)
+13:06:30 [INF] Generating codex PowerShell wrappers in F:\GitHub\mcpserver-codex-plugin
+13:06:30 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "codex" -PluginRoot "F:\GitHub\mcpserver-codex-plugin"
+13:06:31 [DBG] generated codex PowerShell wrappers in F:\GitHub\mcpserver-codex-plugin\lib
+13:06:31 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-codex-plugin"
+13:06:31 [DBG] core integrity OK: 13 files match
+13:06:31 [INF] Syncing plugin core into F:\GitHub\mcpserver-copilot-plugin
+13:06:32 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-copilot-plugin"
+13:06:33 [DBG] synced 14 core files into F:\GitHub\mcpserver-copilot-plugin/lib (core 298c5fde)
+13:06:33 [INF] Generating copilot PowerShell wrappers in F:\GitHub\mcpserver-copilot-plugin
+13:06:34 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "copilot" -PluginRoot "F:\GitHub\mcpserver-copilot-plugin"
+13:06:34 [DBG] generated copilot PowerShell wrappers in F:\GitHub\mcpserver-copilot-plugin\hooks\scripts
+13:06:35 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-copilot-plugin"
+13:06:35 [DBG] core integrity OK: 13 files match
+13:06:35 [INF] Syncing plugin core into F:\GitHub\mcpserver-grok-plugin
+13:06:36 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-grok-plugin"
+13:06:37 [DBG] synced 14 core files into F:\GitHub\mcpserver-grok-plugin/lib (core 298c5fde)
+13:06:37 [INF] Generating grok PowerShell wrappers in F:\GitHub\mcpserver-grok-plugin
+13:06:37 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\hooks-templates\generate-wrappers.ps1" -HostName "grok" -PluginRoot "F:\GitHub\mcpserver-grok-plugin"
+13:06:38 [DBG] generated grok PowerShell wrappers in F:\GitHub\mcpserver-grok-plugin\hooks\scripts
+13:06:38 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-grok-plugin"
+13:06:39 [DBG] core integrity OK: 13 files match
+13:06:39 [INF] Syncing plugin core into F:\GitHub\mcpserver-opencode-plugin
+13:06:39 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\sync-plugin-core.ps1" -PluginRoot "F:\GitHub\mcpserver-opencode-plugin"
+13:06:40 [DBG] synced 14 core files into F:\GitHub\mcpserver-opencode-plugin/lib (core 298c5fde)
+13:06:40 [INF] No hook wrappers are generated for F:\GitHub\mcpserver-opencode-plugin
+13:06:40 [INF] > "C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.4.0_x64__8wekyb3d8bbwe\pwsh.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "F:\GitHub\McpServer\plugins\core\sync\check-core-integrity.ps1" -PluginRoot "F:\GitHub\mcpserver-opencode-plugin"
+13:06:41 [DBG] core integrity OK: 13 files match
+13:06:41 [INF] Building Node plugin core package for 3 plugin vendor target(s)
+13:06:41 [INF] > C:\nvm4w\nodejs\npm.cmd run build
+13:06:41 [INF] @ F:\GitHub\McpServer\plugins\core\lib-node
+13:06:45 [DBG] 
+13:06:45 [DBG] > @sharpninja/mcpserver-plugin-core@0.2.0 build
+13:06:45 [DBG] > tsc -p tsconfig.json
+13:06:45 [DBG] 
+13:06:46 [INF] > C:\nvm4w\nodejs\npm.cmd pack --silent
+13:06:46 [INF] @ F:\GitHub\McpServer\plugins\core\lib-node
+13:07:00 [INF] Refreshed Node plugin core vendor package F:\GitHub\mcpserver-cline-plugin\vendor\sharpninja-mcpserver-plugin-core.tgz (content 0.2.0)
+13:07:00 [INF] Refreshed Node plugin core vendor package F:\GitHub\mcpserver-cline-v2-plugin\vendor\sharpninja-mcpserver-plugin-core.tgz (content 0.2.0)
+13:07:00 [INF] Refreshed Node plugin core vendor package F:\GitHub\mcpserver-opencode-plugin\vendor\sharpninja-mcpserver-plugin-core.tgz (content 0.2.0)
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-claude-code-plugin/.claude-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-claude-code-plugin/.codex-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-claude-code-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-claude-cowork-plugin/.claude-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-claude-cowork-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-cline-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-cline-plugin/package-lock.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-cline-plugin/package.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-cline-v2-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-cline-v2-plugin/package-lock.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-cline-v2-plugin/package.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-codex-plugin/.codex-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-codex-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-copilot-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-copilot-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-grok-plugin/.claude-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-grok-plugin/.codex-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-grok-plugin/.grok-plugin/plugin.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-grok-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-opencode-plugin/.version to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-opencode-plugin/package-lock.json to 1.94.0
+13:07:02 [INF] Updated plugin version in F:/GitHub/mcpserver-opencode-plugin/package.json to 1.94.0
+13:07:02 [INF] Refreshed plugin cache C:\Users\kingd\.claude\plugins\cache\mcpserver-local\mcpserver\1.94.0
+13:07:02 [INF] Refreshed plugin cache C:\Users\kingd\.claude\plugins\cache\mcpserver-cowork\mcpserver-cowork\1.94.0
+13:07:03 [INF] Refreshed plugin cache C:\Users\kingd\.cline\plugins\_installed\local\mcpserver-cline-v2-plugin-3c1e3e547a6c\package
+13:07:03 [INF] Refreshed plugin cache C:\Users\kingd\.codex\plugins\cache\mcpserver-codex-plugin\mcpserver\1.94.0
+13:07:03 [INF] Refreshed plugin cache C:\Users\kingd\.codex\plugins\cache\mcpserver-local\mcpserver\1.94.0
+13:07:03 [INF] Refreshed plugin cache C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f
+ΓÇï
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+Target┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áStatus┬á┬á┬á┬á┬á┬áDuration
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+SyncAgentPlugins┬á┬á┬á┬áSucceeded┬á┬á┬á┬á┬á┬á┬á0:56
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Total┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á0:56
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ΓÇï
+Build succeeded on 8/18/2026 1:07:03 PM. ∩╝╝∩╝ê∩╝╛ß┤ù∩╝╛∩╝ë∩╝Å

@@ -177,6 +177,13 @@ documents:
     platforms:
       - github
       - azure
+  - id: handoff-ingestion
+    title: Handoff Ingestion
+    source: docs/Handoff-Ingestion.md
+    target: Handoff-Ingestion.md
+    platforms:
+      - github
+      - azure
 navigation:
   - document: home
   - title: Requirements
@@ -200,6 +207,7 @@ navigation:
       - document: repl-user-guide
       - document: repl-agent-guide
       - document: repl-migration-guide
+      - document: handoff-ingestion
   - title: Architecture
     path: Architecture
     children:

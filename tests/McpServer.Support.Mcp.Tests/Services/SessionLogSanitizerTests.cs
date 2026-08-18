@@ -30,6 +30,38 @@ public sealed class SessionLogSanitizerTests
         Assert.Contains("[REDACTED:jwt]", output, StringComparison.Ordinal);
         Assert.Contains("[REDACTED:provider-token]", output, StringComparison.Ordinal);
         Assert.Contains("[REDACTED:pem-private-key]", output, StringComparison.Ordinal);
+        Assert.DoesNotContain(":timeout]", output, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Default-rule redaction is deterministic across repeated passes of the same short input.
+    /// A 5-second regex timeout isolates this from wall-clock load that previously renamed a
+    /// correct secret-assignment token to [REDACTED:secret-assignment:timeout].
+    /// </summary>
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    public void SanitizeString_RedactsDefaultTokenAndKeyPatterns_Repeated(int iteration)
+    {
+        _ = iteration;
+        var sanitizer = CreateSanitizer();
+        const string jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        const string providerToken = "sk-1234567890abcdef1234567890abcdef";
+        const string bearerSecret = "abcdefghijklmnopqrstuvwxyz123456";
+        var input = $"Authorization: Bearer {bearerSecret}\nJWT: {jwt}\nProvider: {providerToken}\npassword=hunter2";
+
+        var output = sanitizer.SanitizeString(input);
+
+        Assert.Equal(sanitizer.SanitizeString(input), output);
+        Assert.Contains("[REDACTED:bearer-token]", output, StringComparison.Ordinal);
+        Assert.Contains("[REDACTED:jwt]", output, StringComparison.Ordinal);
+        Assert.Contains("[REDACTED:provider-token]", output, StringComparison.Ordinal);
+        Assert.Contains("[REDACTED:secret-assignment]", output, StringComparison.Ordinal);
+        Assert.DoesNotContain("[REDACTED:secret-assignment:timeout]", output, StringComparison.Ordinal);
+        Assert.DoesNotContain("hunter2", output, StringComparison.Ordinal);
     }
 
     /// <summary>Default rules redact password, secret, API-key assignments, and connection-string passwords.</summary>
@@ -193,6 +225,9 @@ public sealed class SessionLogSanitizerTests
 
     private static SessionLogSanitizer CreateSanitizer(SessionLogSanitizationOptions? options = null)
     {
-        return new SessionLogSanitizer(Microsoft.Extensions.Options.Options.Create(options ?? new SessionLogSanitizationOptions()));
+        options ??= new SessionLogSanitizationOptions();
+        if (options.RegexTimeoutMilliseconds <= 250)
+            options.RegexTimeoutMilliseconds = 5000;
+        return new SessionLogSanitizer(Microsoft.Extensions.Options.Options.Create(options));
     }
 }

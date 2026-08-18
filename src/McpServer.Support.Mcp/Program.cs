@@ -12,6 +12,7 @@ using McpServer.Common.AgentCli.Extensions;
 using McpServer.Cqrs;
 using McpServer.GraphRag;
 using McpServer.Support.Mcp.UseCases;
+using McpServer.Support.Mcp.Products;
 using McpServer.SessionLog.Transcripts;
 using McpServer.Support.Mcp.DatabaseMaintenance;
 using McpServer.Support.Mcp.Ingestion;
@@ -385,6 +386,7 @@ builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddAgentHelpServices(builder.Configuration);
 builder.Services.AddTriageServices();
+builder.Services.AddHandoffServices();
 builder.Services.AddSingleton<VoiceConversationService>();
 builder.Services.AddSingleton<IVoiceConversationService>(sp =>
     new TransactionGatedVoiceConversationService(
@@ -450,6 +452,7 @@ builder.Services.AddMcpGraphRag();
 // TR-MCP-USECASE-002 / TR-MCP-CQRS-001: Dispatcher required by UseCasesController and handlers.
 builder.Services.AddCqrsDispatcher();
 builder.Services.AddUseCaseCqrs();
+builder.Services.AddProductCqrs();
 builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
@@ -681,7 +684,12 @@ builder.Services.AddHostedService<TodoBootstrapImporter>();
 builder.Services.AddHostedService<BrainSlotStartupSeeder>();
 builder.Services.AddHostedService<GraphRagGlobalCorpusStartupSeeder>();
 
-var mvcBuilder = builder.Services.AddControllers();
+var mvcBuilder = builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Insert(
+        0,
+        new System.Text.Json.Serialization.JsonStringEnumConverter(JsonNamingPolicy.CamelCase, allowIntegerValues: false));
+});
 #if !DEBUG
 if (!builder.Environment.IsStaging())
     mvcBuilder.ConfigureApplicationPartManager(mgr =>

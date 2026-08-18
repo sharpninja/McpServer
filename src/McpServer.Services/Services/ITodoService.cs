@@ -166,6 +166,9 @@ public sealed record TodoFlatItem
 
     /// <summary>Associated technical requirement IDs (e.g. TR-LOC-001).</summary>
     public IReadOnlyList<string>? TechnicalRequirements { get; init; }
+
+    /// <summary>Optional request identity used to heal an exact retry of the same create.</summary>
+    public string? IdempotencyKey { get; init; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: Flattened implementation task.</summary>
@@ -215,6 +218,9 @@ public sealed record TodoCreateRequest
 
     /// <summary>Associated technical requirement IDs.</summary>
     public IReadOnlyList<string>? TechnicalRequirements { get; init; }
+
+    /// <summary>Optional request identity used to heal an exact retry of the same create.</summary>
+    public string? IdempotencyKey { get; init; }
 }
 
 /// <summary>TR-PLANNED-CORE-013: Request to update an existing TODO item.</summary>

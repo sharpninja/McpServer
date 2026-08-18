@@ -1,0 +1,22 @@
+NAME=client
+PROJECT=tests/McpServer.Client.Tests
+FILTER=FullyQualifiedName~ProductClientTests
+START=2026-08-18T15:19:26.4679266Z
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.Client.Tests -> F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Client.Tests\bin\Debug\net10.0\McpServer.Client.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.91]     McpServer.Client.Tests.ProductClientTests.CreateAsync_PostsProductsEndpoint [FAIL]
+  Failed McpServer.Client.Tests.ProductClientTests.CreateAsync_PostsProductsEndpoint [26 ms]
+  Error Message:
+   System.NotImplementedException : product client not implemented
+  Stack Trace:
+     at McpServer.Client.ProductClient.CreateAsync(CreateProductRequest request, CancellationToken cancellationToken) in F:\GitHub\McpServer\src\McpServer.Client\ProductClient.cs:line 26
+   at McpServer.Client.Tests.ProductClientTests.CreateAsync_PostsProductsEndpoint() in F:\GitHub\McpServer\tests\McpServer.Client.Tests\ProductClientTests.cs:line 30
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 52 ms - McpServer.Client.Tests.dll (net10.0)
+EXIT=1
+END=2026-08-18T15:19:30.0377233Z

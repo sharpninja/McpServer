@@ -217,6 +217,42 @@ public sealed class AgentPoolServiceTests
         Assert.Single(agents);
     }
 
+    /// <summary>P1-5: HandoffTodoDraft executor receives the raw prompt while queue/DTOs/notifications stay redacted.</summary>
+    [Fact]
+    public async Task EnqueueOneShotAsync_HandoffContext_ExecutorGetsRawPromptAndSurfacesStayRedacted()
+    {
+        using var service = CreateService(out var voiceService);
+        const string raw = "RAW-HANDOFF-SOURCE-SHOULD-NOT-LEAK";
+        VoiceTurnRequest? captured = null;
+        voiceService.SubmitTurnAsync(Arg.Any<string>(), Arg.Any<VoiceTurnRequest>(), Arg.Any<CancellationToken>())
+            .Returns(ci =>
+            {
+                captured = ci.Arg<VoiceTurnRequest>();
+                return Task.FromResult<VoiceTurnResponse?>(CreateCompletedTurn(ci.ArgAt<string>(0)));
+            });
+
+        var enqueue = await service.EnqueueOneShotAsync(new AgentPoolOneShotRequest
+        {
+            Context = AgentPoolOneShotContext.HandoffTodoDraft,
+            PromptText = raw,
+            UseWorkspaceContext = true,
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(enqueue.Success, enqueue.Error);
+        Assert.DoesNotContain(raw, enqueue.RenderedPrompt ?? string.Empty, StringComparison.Ordinal);
+        Assert.StartsWith(OneShotSensitivePromptPolicy.RedactedPrefix, enqueue.RenderedPrompt, StringComparison.Ordinal);
+
+        var completed = await WaitForJobStatusAsync(service, enqueue.JobId!, "completed").ConfigureAwait(true);
+        Assert.DoesNotContain(raw, completed.RenderedPrompt ?? string.Empty, StringComparison.Ordinal);
+        Assert.StartsWith(OneShotSensitivePromptPolicy.RedactedPrefix, completed.RenderedPrompt, StringComparison.Ordinal);
+
+        var agents = await service.GetAgentsAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.All(agents, agent => Assert.DoesNotContain(raw, agent.LastRequestPrompt ?? string.Empty, StringComparison.Ordinal));
+
+        Assert.NotNull(captured);
+        Assert.Equal(raw, captured!.UserTranscriptText);
+    }
+
     [Fact]
     public async Task EnqueueOneShotAsync_IncludesWorkspaceInQueueItem()
     {

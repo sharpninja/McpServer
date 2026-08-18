@@ -1,0 +1,75 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  McpServer.SessionLog.Transcripts -> F:\GitHub\McpServer\src\McpServer.SessionLog.Transcripts\bin\Debug\net10.0\McpServer.SessionLog.Transcripts.dll
+  McpServer.ServiceDefaults -> F:\GitHub\McpServer\src\McpServer.ServiceDefaults\bin\Debug\net10.0\McpServer.ServiceDefaults.dll
+  McpServer.Cqrs -> F:\GitHub\McpServer\src\McpServer.Cqrs\bin\Debug\net10.0\McpServer.Cqrs.dll
+  McpServer.Common.AgentCli -> F:\GitHub\McpServer\src\McpServer.Common.AgentCli\bin\Debug\net10.0\McpServer.Common.AgentCli.dll
+  McpServer.Client -> F:\GitHub\McpServer\src\McpServer.Client\bin\Debug\net10.0\McpServer.Client.dll
+  McpServer.TransactionSecurity -> F:\GitHub\McpServer\src\McpServer.TransactionSecurity\bin\Debug\net10.0\McpServer.TransactionSecurity.dll
+  McpServer.Cqrs.Mvvm -> F:\GitHub\McpServer\src\McpServer.Cqrs.Mvvm\bin\Debug\net10.0\McpServer.Cqrs.Mvvm.dll
+  McpServer.Repl.Core -> F:\GitHub\McpServer\src\McpServer.Repl.Core\bin\Debug\net10.0\McpServer.Repl.Core.dll
+  McpServer.Storage -> F:\GitHub\McpServer\src\McpServer.Storage\bin\Debug\net10.0\McpServer.Storage.dll
+  McpServer.McpAgent -> F:\GitHub\McpServer\src\McpServer.McpAgent\bin\Debug\net10.0\McpServer.McpAgent.dll
+  McpServer.Storage.SqlServerMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqlServerMigrations\bin\Debug\net10.0\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Storage.SqliteMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.SqliteMigrations\bin\Debug\net10.0\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> F:\GitHub\McpServer\src\McpServer.Storage.PostgreSqlMigrations\bin\Debug\net10.0\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Services -> F:\GitHub\McpServer\src\McpServer.Services\bin\Debug\net10.0\McpServer.Services.dll
+  McpServer.GraphRag -> F:\GitHub\McpServer\src\McpServer.GraphRag\bin\Debug\net10.0\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> F:\GitHub\McpServer\src\McpServer.Support.Mcp\bin\Debug\net10.0\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+Test run for F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\McpServer\tests\McpServer.Support.Mcp.Tests\bin\Debug\net10.0\McpServer.Support.Mcp.Tests.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)
+[xUnit.net 00:00:00.31]   Discovering: McpServer.Support.Mcp.Tests
+[xUnit.net 00:00:01.32]   Discovered:  McpServer.Support.Mcp.Tests
+[xUnit.net 00:00:01.55]   Starting:    McpServer.Support.Mcp.Tests
+  Passed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenConflict_ReturnsConflict [126 ms]
+  Passed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.DeleteAsync_WhenForbidden_ReturnsForbid [8 ms]
+  Passed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.RequirementsEffective_AcceptsProductScopeQuery [9 ms]
+  Passed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenSuccess_ReturnsCreated [20 ms]
+  Passed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.CreateAsync_WhenInvalidKey_ReturnsBadRequest [1 ms]
+  Passed McpServer.Support.Mcp.Tests.Controllers.ProductsControllerTests.GetAsync_WhenNotFound_ReturnsNotFound [1 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_ZeroProductWorkspace_StaysLocal [2 s]
+  Passed McpServer.Support.Mcp.Tests.Storage.ProductEntityTests.Create_DuplicateProdMcpserverKey_FailsConflict [2 s]
+  Passed McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_NonOwner_FailsForbidden [2 s]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_NonOwnerDelete_FailsForbidden [2 s]
+  Passed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Outsider_DoesNotIncludeSiblingFr [2 s]
+  Passed McpServer.Support.Mcp.Tests.Services.UseCaseExpandedScopeTests.ProductKey_AssignAndListByProduct [2 s]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_LocalDeleteSiblingOnlyId_LeavesSiblingRow [252 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "") [197 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_ProductRequirementsSource_ReturnsOnlyRequirementChunks [213 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_RemovedMember_LosesProductReads [232 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "MCP-SERVER") [191 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_ProductScope_UnionsSiblingRows [211 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_DoesNotIncludeSiblingSourceFiles [213 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_OwnerRemovesMember_DropsMember [209 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "mcpserver") [256 ms]
+  Passed McpServer.Support.Mcp.Tests.Storage.ProductEntityTests.ProductEntities_DoNotHaveWorkspaceQueryFilters [699 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_LocalScope_HidesSiblings [274 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_UnknownWorkspace_Fails [275 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.ProductRequirementContextTests.HandleAsync_Member_IncludesSiblingFrBodyAndOrigin [297 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_InvalidKey_Fails(key: "prod-mcpserver") [233 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_Collision_ReturnsTwoOrigins [232 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_MemberLeavesSelf_RemovesOnlyCaller [202 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_Outsider_IsLocalOnly [293 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_SoftDelete_HidesFromDefaultList [333 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_MemberRemovesOther_FailsForbidden [339 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_OriginLayerMiss_ExcludesSiblingRow [316 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_OwnerUpdate_ChangesName [300 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.AddProductMemberCommandHandlerTests.HandleAsync_OwnerAddsRegisteredWorkspace_IncludesMember [299 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_SoftDelete_StopsMembershipReads [290 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.GetProductEffectiveRequirementsQueryHandlerTests.HandleAsync_AfterLeave_DropsSibling [298 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_OutsiderGet_IsNotFound [209 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_SoftDelete_HidesFromGet [217 ms]
+  Passed McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.Migrate_FromPredecessor_WithSessionLogsAgentColumns_CreatesProductTables [4 s]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_NonOwnerUpdate_FailsForbidden [219 ms]
+  Passed McpServer.Support.Mcp.Tests.Products.CreateProductCommandHandlerTests.HandleAsync_ValidProdMcpserverKey_ReturnsOwnerAndKey [212 ms]
+[xUnit.net 00:00:07.81]   Finished:    McpServer.Support.Mcp.Tests (ID = 'fb6b7ca1b59a739774a8a8668e88283949ecc0192ba18c822eead5027e319992')
+  Passed McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.Migrate_FromEmpty_CreatesProductTables [1 s]
+  Passed McpServer.Support.Mcp.Tests.Storage.ProductMigrationApplyTests.AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps [3 ms]
+
+Test Run Successful.
+Total tests: 43
+     Passed: 43
+ Total time: 8.3505 Seconds

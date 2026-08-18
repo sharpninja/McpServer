@@ -658,4 +658,64 @@ public sealed class EfTodoServiceTests : IDisposable
         Assert.Contains("dependsOn contains invalid TODO id", result.Error ?? string.Empty, StringComparison.Ordinal);
     }
 
+    /// <summary>P1-3: same idempotency key and exact normalized payload heals.</summary>
+    [Fact]
+    public async Task CreateAsync_SameKeyExactPayload_Heals()
+    {
+        var request = new TodoCreateRequest
+        {
+            Id = "MCP-HEAL-001",
+            Title = "Heal me",
+            Section = "mcp-server",
+            Priority = "high",
+            Estimate = "2h",
+            Description = ["Do the work"],
+            TechnicalDetails = ["Use the service"],
+            ImplementationTasks = [new TodoFlatTask("Write tests", false)],
+            DependsOn = [],
+            FunctionalRequirements = [],
+            TechnicalRequirements = [],
+            IdempotencyKey = "handoff-todo:heal",
+        };
+        var first = await _sut.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var second = await _sut.CreateAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(first.Success, first.Error);
+        Assert.True(second.Success, second.Error);
+        Assert.Equal(first.Item!.Id, second.Item!.Id);
+    }
+
+    /// <summary>P1-3: same idempotency key with a changed payload is a conflict.</summary>
+    [Fact]
+    public async Task CreateAsync_SameKeyChangedPayload_Conflicts()
+    {
+        var first = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "MCP-HEAL-002",
+            Title = "Original",
+            Section = "mcp-server",
+            Priority = "high",
+            Description = ["one"],
+            TechnicalDetails = ["tech"],
+            ImplementationTasks = [new TodoFlatTask("task", false)],
+            IdempotencyKey = "handoff-todo:collide",
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(first.Success, first.Error);
+
+        var second = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "MCP-HEAL-002",
+            Title = "Changed",
+            Section = "mcp-server",
+            Priority = "high",
+            Description = ["one"],
+            TechnicalDetails = ["tech"],
+            ImplementationTasks = [new TodoFlatTask("task", false)],
+            IdempotencyKey = "handoff-todo:collide",
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.False(second.Success);
+        Assert.Equal(TodoMutationFailureKind.Conflict, second.FailureKind);
+    }
+
 }

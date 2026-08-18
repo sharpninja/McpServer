@@ -14,6 +14,42 @@
   Scope: layer-1+
 - TEST-GRAPHRAG-ADHOC-007: MCP tools serialize correctly, REPL workflow delegates to ContextClient, McpAgent tool adapter exposes all 14 tools.
   Scope: layer-1+
+- TEST-HANDOFF-001: Cover documented request, result, draft, provenance, and diagnostic contracts, including typed-client serialization.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] All public handoff contract types round-trip through the typed client JSON context.
+  - [ ] Required contract types exist with complete XMLDocs and the documented enum values.
+- TEST-HANDOFF-002: Cover bounded readers, workspace containment, and rejection of missing, unsupported, oversized, traversal, external, and reparse-escaping sources.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Missing, unsupported, oversized, traversal, external, and reparse-escaping paths fail with diagnostics and no TODO.
+  - [ ] Markdown, text, JSON, and YAML inputs are accepted when contained and within 8 MiB.
+- TEST-HANDOFF-003: Cover versioned HandoffTodoDraft extraction and strict JSON parsing, including malformed AI output.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Extraction is invoked with AgentPoolOneShotContext.HandoffTodoDraft and a versioned prompt.
+  - [ ] Malformed or compatibility JSON produces diagnostics and never creates a TODO.
+- TEST-HANDOFF-004: Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Invalid or conflicting draft fields produce field-specific diagnostics.
+  - [ ] DraftOnly never mutates TODOs, RequireReview persists an approvable run, and CreateWhenConfident honors the 0.75 confidence and no-error gates.
+- TEST-HANDOFF-005: Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Successful creation produces exactly one TODO through ITodoService.
+  - [ ] Replay of the same workspace, content hash, and prompt version returns the existing receipt unless force=true.
+  - [ ] ID collisions require review and are never silently renamed.
+- TEST-HANDOFF-006: Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Ingest, get, and approve exist on API, client, REPL, Director, MCP tools, and plugin skill.
+  - [ ] Every surface delegates to IHandoffIngestionService and applies workspace isolation.
+- TEST-HANDOFF-007: Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Persisted runs retain run ID, source kind and locator, SHA-256 hash, extraction time, prompt version, agent, model, confidence, mode, review state, diagnostics, and created TODO ID.
+  - [ ] Persisted runs and logs do not contain raw credentials or source content.
 - TEST-MCP-001: Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.
   Scope: layer-1+
 - TEST-MCP-002: Given TODO API operations, when create/update/delete/query run, then contracts remain stable.
@@ -667,6 +703,18 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Skill tests or repository checks verify every plugin bundle includes triage guidance.
+- TEST-MCP-PRODUCT-001: Unit tests for ProductEntity/membership CQRS handlers: isolation, PROD-* key accept (PROD-MCPSERVER) and reject (mcpserver, empty, missing prefix), unique key, soft-delete, owner add/remove, self-leave, unknown workspace rejected. Files: ProductEntityTests, CreateProductCommandHandlerTests, AddProductMemberCommandHandlerTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-002: Unit tests for product effective-requirements share: union, productScope=local, id collision two origins, origin layer miss excludes, leave drops sibling, outsider cannot share. File: GetProductEffectiveRequirementsQueryHandlerTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-003: Controller/API unit tests: 400 invalid key, 409 duplicate, 403 non-owner, 404 outsider get. File: ProductsControllerTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-004: Client and MCP/REPL contract tests prove adapters dispatch CQRS only. File: ProductClientTests plus MCP/REPL allow-list tests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-005: Migration apply on empty and production-shaped DBs for SQLite, PostgreSQL, and SQL Server harnesses. Must not re-add unrelated SessionLogs agent-header columns. File: ProductMigrationApplyTests.
+  Scope: layer-1+
+- TEST-MCP-PRODUCT-006: Context pack/search: member includes sibling FR body with origin; does not include sibling .cs chunks; source type product-requirements filters to those chunks. File: ProductRequirementContextTests.
+  Scope: layer-1+
 - TEST-MCP-QBAGENT-001: Marker present - QBAgent binds baseUrl/apiKey from the marker and reaches QuadBrain; only the QuadBrain route is exposed. Marker absent - QBAgent exits gracefully (defined exit, no endpoint contact, no unhandled exception).
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -941,6 +989,24 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
 - TEST-MCP-SESSIONLOG-005: Validates TR-MCP-SESSIONLOG-005. tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs: SetSessionTitleAsync unconditionally changes an existing session Title; SetTurnTitleAsync unconditionally changes an existing turn QueryTitle; both throw InvalidOperationException when the session or turn does not exist. Red before the methods exist, green after. Scope: layer-1+.
   Scope: layer-1+
+- TEST-MCP-SESSIONLOG-006: Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-006-001 through 008. Tests: SessionLogTurnContextValidatorTests, SessionLogServiceTurnContextTests, SessionLogTurnContextExtractorTests, SessionLogTurnContextBackfillTests, SessionLogTurnPlanFileTodoIdModelTests, AddSessionLogTurnPlanFileAndTodoIdMigrationTests, SessionLogControllerTests.BeginTurn_MissingFields_Returns400, BeginTurn_NoneNone_Returns201_AndGetReturnsNone, Query_FilterByTodoId_ReturnsOnlyMatches, SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError, SessionLogBeginTurn_NoneNone_ReturnsSuccess, BeginTurnAsync_SerializesPlanFileAndTodoId, BeginTurnAsync_PersistsPlanFileAndTodoId, BeginTurnAsync_ForwardsPlanFileAndTodoId, SanitizeTurn_CopiesPlanFileAndTodoId, SanitizeTurn_DoesNotMutateSource, SanitizeTurn_LeavesNoneUnchanged, Import_OmittedFields_PersistsExtractorResultOrNone, Ingest_OmittedFields_PersistsExtractorResultOrNone, Apply_OmittedFields_PersistsProperValue, SqliteMigration_UpAddsColumns_DownDropsThem, Invoke-WorkflowBeginTurn_* plugin contract tests.
+  Scope: layer-1+
+  **Acceptance Criteria:**
+  - [ ] Round-trip planFile/todoId on persist and get.
+  - [ ] None sentinel persists and is never rewritten to null.
+  - [ ] New persist without fields is rejected.
+  - [ ] Relative, exact, and ~/ plan paths are accepted; .. is rejected.
+  - [ ] Query filter and text search match planFile and todoId.
+  - [ ] Backfill upgrades None from turn contents and ~ history.
+  - [ ] Import/ingest/federation persist a validated pair, never null.
+  - [ ] Validator rules covered by SessionLogTurnContextValidatorTests.
+  - [ ] Additive omit-preserve and replace-required covered by SessionLogServiceTurnContextTests.
+  - [ ] Extractor ranking covered by SessionLogTurnContextExtractorTests.
+  - [ ] Schema/migration covered by model and provider migration tests.
+  - [ ] Backfill None-only upgrades covered by SessionLogTurnContextBackfillTests.
+  - [ ] REST/MCP begin required fields covered by controller and tool tests.
+  - [ ] Client/agent/REPL carry fields covered by their session-log tests.
+  - [ ] Sanitizer clones new fields covered by SessionLogSanitizerTests.
 - TEST-MCP-SESSIONLOGSAN-001: Tests must prove default and configured redaction across the complete session-log DTO graph and all supported read transports without changing persisted raw data or query semantics.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1045,6 +1111,40 @@ These tests must pass with mocks before the real client construction logic is fi
   Scope: layer-1+
   **Acceptance Criteria:**
   - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
+- TEST-MCP-USECASE-001: Unit tests cover schema creation, workspace isolation, soft-delete hide, FR string FK link uniqueness, and handler CRUD/link behaviors with zero skips in the executed gate scope.
+  Scope: layer-1+
+- TEST-MCP-USECASE-002: Controller unit tests for UseCasesController. Acceptance: Controller tests green 0 skip.
+  Scope: layer-1+
+- TEST-MCP-USECASE-003: Diagram golden tests mermaid and plantuml. Acceptance: Mermaid sequenceDiagram; plantuml @startuml.
+  Scope: layer-1+
+- TEST-MCP-USECASE-004: Client unit tests with live JSON shapes. Acceptance: Client UseCase filter green including coverage DTO.
+  Scope: layer-1+
+- TEST-MCP-USECASE-005: Coverage query tests. Acceptance: Coverage gap tests green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-006: Migration apply empty and production-shaped. Acceptance: UseCaseMigrationApplyTests green 0 skip.
+  Scope: layer-1+
+- TEST-MCP-USECASE-007: Audit emission on UC mutations. Acceptance: Audit tests green for create/update/delete/link.
+  Scope: layer-1+
+- TEST-MCP-USECASE-008: UI asset REST-only tests. Acceptance: UseCaseUiAssetTests green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-009: Approval and product hooks tests. Acceptance: Expanded scope approval/product tests green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-010: Plugin-core usecase jest tests. Acceptance: usecase.test.ts green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-011: Deploy smoke after UpdateService. Acceptance: health, /usecases/, create/link/diagram/coverage smoke log green.
+  Scope: layer-1+
+- TEST-MCP-USECASE-012: UML graph serialization goldens Mermaid schema v1 + PlantUML. Covers AC-013-*, AC-014-*, AC-T14-*.
+  Scope: layer-1+
+- TEST-MCP-USECASE-013: Diagram graph CQRS/storage get put isolation soft-delete invalid audit. Covers AC-012-*, AC-T11-3, AC-T12-1, AC-T16-1.
+  Scope: layer-1+
+- TEST-MCP-USECASE-014: Controller/client diagram-graph and kind=usecase export. Covers AC-T13-*, HTTP AC-012-5.
+  Scope: layer-1+
+- TEST-MCP-USECASE-015: Canvas UI asset/contract tests palette canvas drag hooks REST-only. Covers AC-011-*, AC-T15-*.
+  Scope: layer-1+
+- TEST-MCP-USECASE-016: Migration apply for graph storage. Covers AC-T11-1, AC-T11-2.
+  Scope: layer-1+
+- TEST-MCP-USECASE-017: Adversarial Grok hostile validator + live canvas smoke claim pack.
+  Scope: layer-1+
 - TEST-MCP-WIKIEXPORT-001: Tests must cover docs/wiki.yaml loading, validation, renderer output, service integration, unchanged default behavior, and BDPv4 traceability for configured GitHub and Azure wiki exports.
   Scope: layer-1+
   **Acceptance Criteria:**
@@ -1148,77 +1248,3 @@ These tests must pass with mocks before the real client construction logic is fi
   - [x] Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. (evidence: TriageServiceTests.QueryCreatedTodosAsync_ReturnsTodoIdsCreatedAtUtcAndTriageContext)
   - [x] Controller tests verify the read-only endpoint returns the service result. (evidence: TriageControllerTests.QueryCreatedTodosAsync_ReturnsCreatedTodoIndex)
   - [x] Client tests verify the typed triage TODO method calls the expected URL with workspace filters. (evidence: TriageClientTests.QueryCreatedTodosAsync_SendsWorkspaceFilter)
-
-- TEST-MCP-USECASE-001: Handler unit tests cover UC CRUD, isolation, soft-delete, FR link.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Support FullyQualifiedName~UseCase filter 0 fail 0 skip for storage/handler cases
-- TEST-MCP-USECASE-002: Controller unit tests for UseCasesController.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Controller tests green 0 skip
-- TEST-MCP-USECASE-003: Diagram golden tests mermaid and plantuml.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Mermaid sequenceDiagram; plantuml @startuml
-- TEST-MCP-USECASE-004: Client unit tests with live JSON shapes.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Client UseCase filter green including coverage DTO
-- TEST-MCP-USECASE-005: Coverage query tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Coverage gap tests green
-- TEST-MCP-USECASE-006: Migration apply empty and production-shaped.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] UseCaseMigrationApplyTests green 0 skip
-- TEST-MCP-USECASE-007: Audit emission on UC mutations.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Audit tests green for create/update/delete/link
-- TEST-MCP-USECASE-008: UI asset REST-only tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] UseCaseUiAssetTests green
-- TEST-MCP-USECASE-009: Approval and product hooks tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Expanded scope approval/product tests green
-- TEST-MCP-USECASE-010: Plugin-core usecase jest tests.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] usecase.test.ts green
-- TEST-MCP-USECASE-011: Deploy smoke after UpdateService.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] health, /usecases/, create/link/diagram/coverage smoke log green
-- TEST-MCP-USECASE-012: UML graph serialization goldens (Mermaid schema v1 + PlantUML). Covers AC-013-*, AC-014-*, AC-T14-*.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] All Mermaid export ACs green via pure unit tests
-  - [ ] All PlantUML export ACs green via pure unit tests
-  - [ ] Service has no DbContext dependency (AC-T14-1)
-- TEST-MCP-USECASE-013: Diagram graph CQRS/storage (get/put, isolation, soft-delete, invalid, audit). Covers AC-012-*, AC-T11-3, AC-T12-1, AC-T16-1.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Get empty/saved and put round-trip green
-  - [ ] Workspace isolation and soft-delete green
-  - [ ] Invalid graph rejected; audit on put green
-- TEST-MCP-USECASE-014: Controller/client for diagram-graph and kind=usecase export. Covers AC-T13-*, HTTP AC-012-5.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] REST routes green; client parity green; 0 skip
-- TEST-MCP-USECASE-015: Canvas UI asset/contract tests for palette, canvas, drag hooks, REST-only. Covers AC-011-*, AC-T15-*.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Structural tests for palette, umlCanvas, editor APIs, REST graph paths
-  - [ ] No McpDbContext in UI assets
-- TEST-MCP-USECASE-016: Migration apply for graph storage. Covers AC-T11-1, AC-T11-2.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] Empty and production-shaped migrate green; no SessionLogs ops in new migration
-- TEST-MCP-USECASE-017: Adversarial Grok hostile validator + live canvas smoke claim pack.
-  Scope: layer-1+
-  **Acceptance Criteria:**
-  - [ ] HV receipt OverallVerdict AGREE for canvas claims (not form-only)

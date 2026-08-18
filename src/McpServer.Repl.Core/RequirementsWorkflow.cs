@@ -83,7 +83,11 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
     /// <inheritdoc />
     public Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken cancellationToken = default) =>
-        _client.GetEffectiveRequirementsAsync(layerKey, cancellationToken);
+        GetEffectiveRequirementsAsync(layerKey, productScope: "product", cancellationToken);
+
+    /// <inheritdoc />
+    public Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey, string? productScope, CancellationToken cancellationToken = default) =>
+        _client.GetEffectiveRequirementsAsync(layerKey, productScope, cancellationToken);
 
     /// <inheritdoc />
     public async Task<IFrQueryResult> ListFrAsync(string? area = null, string? status = null, CancellationToken cancellationToken = default)
