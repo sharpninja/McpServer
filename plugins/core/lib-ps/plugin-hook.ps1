@@ -976,10 +976,142 @@ function Close-PluginTurnIfNeeded {
     Write-PluginJson ([ordered]@{})
 }
 
+function Test-PluginDiskFullException {
+    <#
+    .SYNOPSIS
+        TR-MCP-VERIFYWRAP-001: true when the exception is a disk-capacity IOException.
+    #>
+    param($Exception)
+
+    $ex = $Exception
+    while ($null -ne $ex) {
+        if ($ex -is [System.IO.IOException]) {
+            $message = [string]$ex.Message
+            if ($message -match 'not enough space|disk full|There is not enough space on the disk') {
+                return $true
+            }
+            # ERROR_DISK_FULL (0x70) as HRESULT 0x80070070.
+            if ($ex.HResult -eq -2147024784) {
+                return $true
+            }
+        }
+        $ex = $ex.InnerException
+    }
+
+    return $false
+}
+
+function Invoke-PluginCodeVerifyHandleDiskFull {
+    <#
+    .SYNOPSIS
+        TR-MCP-VERIFYWRAP-001: typed disk_full that does not mutate current-turn audit.
+    #>
+    param(
+        [string]$TurnFile = '',
+        $Exception
+    )
+
+    if (-not (Test-PluginDiskFullException -Exception $Exception)) {
+        throw $Exception
+    }
+
+    return (Get-PluginCodeVerifyFailureStatus -Exception $Exception)
+}
+
+function Get-PluginCodeVerifyFailureStatus {
+    <#
+    .SYNOPSIS
+        Maps a code-verify exception to a typed JSON status object.
+    #>
+    param($Exception)
+
+    if (Test-PluginDiskFullException -Exception $Exception) {
+        return [ordered]@{
+            status = 'failed'
+            code = 'disk_full'
+            message = [string]$Exception.Message
+        }
+    }
+
+    return [ordered]@{
+        status = 'failed'
+        code = 'io_error'
+        message = [string]$Exception.Message
+    }
+}
+
+function Get-PluginCodeVerifyTimeoutSeconds {
+    <#
+    .SYNOPSIS
+        Documented code-verify timeout. MCP_CODE_VERIFY_TIMEOUT_SECONDS or 60.
+    #>
+    $parsed = 60
+    if ($env:MCP_CODE_VERIFY_TIMEOUT_SECONDS) {
+        $value = 0
+        if ([int]::TryParse([string]$env:MCP_CODE_VERIFY_TIMEOUT_SECONDS, [ref]$value) -and $value -gt 0) {
+            $parsed = $value
+        }
+    }
+    return $parsed
+}
+
+function Invoke-PluginBoundedProcess {
+    <#
+    .SYNOPSIS
+        Starts a child process and kills the process tree when the timeout elapses.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$FileName,
+        [string[]]$Arguments = @(),
+        [int]$TimeoutSeconds = 60,
+        [string]$WorkingDirectory = ''
+    )
+
+    $psi = [System.Diagnostics.ProcessStartInfo]::new()
+    $psi.FileName = $FileName
+    foreach ($argument in $Arguments) {
+        $psi.ArgumentList.Add($argument)
+    }
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.CreateNoWindow = $true
+    if (-not [string]::IsNullOrWhiteSpace($WorkingDirectory)) {
+        $psi.WorkingDirectory = $WorkingDirectory
+    }
+
+    $process = [System.Diagnostics.Process]::Start($psi)
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    $timedOut = $false
+    $waitMs = [Math]::Max(1, $TimeoutSeconds) * 1000
+    if (-not $process.WaitForExit($waitMs)) {
+        $timedOut = $true
+        try { $process.Kill($true) } catch { }
+        try { [void]$process.WaitForExit(2000) } catch { }
+    }
+
+    $output = ''
+    try { $output = [string]$stdoutTask.Result } catch { }
+    try { $output += [string]$stderrTask.Result } catch { }
+
+    return [pscustomobject]@{
+        exitCode = $(if ($timedOut) { -1 } else { $process.ExitCode })
+        output = $output
+        timedOut = $timedOut
+    }
+}
+
 function Invoke-CodeVerify {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
-    $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    $cacheDir = $null
+    try {
+        $cacheDir = Get-PluginCacheDir -StartPath $startPath
+    } catch {
+        Write-PluginJson ([ordered]@{ status = 'skipped'; reason = 'no-cache' })
+        return
+    }
     $turnFile = Join-Path $cacheDir 'current-turn.yaml'
     $payload = Read-HookInput
     $filePath = Get-HookPayloadValue -Payload $payload -Name 'file_path'
@@ -1007,27 +1139,98 @@ function Invoke-CodeVerify {
     }
 
     $buildStatus = 'succeeded'
-    if ($project) {
-        $buildLog = Join-Path $cacheDir 'last-build.log'
-        $output = & dotnet build $project.FullName --nologo -clp:NoSummary 2>&1
-        $exitCode = $LASTEXITCODE
-        [System.IO.File]::WriteAllText($buildLog, ($output | Out-String))
-        if ($exitCode -ne 0) { $buildStatus = 'failed' }
-    }
+    try {
+        if ($project) {
+            $buildLog = Join-Path $cacheDir 'last-build.log'
+            $bounded = Invoke-PluginBoundedProcess `
+                -FileName 'dotnet' `
+                -Arguments @('build', $project.FullName, '--nologo', '-clp:NoSummary') `
+                -TimeoutSeconds (Get-PluginCodeVerifyTimeoutSeconds) `
+                -WorkingDirectory $project.DirectoryName
+            $output = $bounded.output
+            try {
+                [System.IO.File]::WriteAllText($buildLog, $output)
+            } catch {
+                if (Test-PluginDiskFullException -Exception $_.Exception) {
+                    Write-PluginJson (Invoke-PluginCodeVerifyHandleDiskFull -TurnFile $turnFile -Exception $_.Exception)
+                    return
+                }
+                throw
+            }
+            if ($bounded.timedOut) {
+                $buildStatus = 'failed'
+            } elseif ($bounded.exitCode -ne 0) {
+                $buildStatus = 'failed'
+            }
+        }
 
-    if (Test-Path -LiteralPath $turnFile) {
-        Set-YamlScalar -Path $turnFile -Key 'lastBuildStatus' -Value $buildStatus
-    }
+        if (Test-Path -LiteralPath $turnFile) {
+            Set-YamlScalar -Path $turnFile -Key 'lastBuildStatus' -Value $buildStatus
+        }
 
-    Write-PluginJson ([ordered]@{ status = $buildStatus })
+        Write-PluginJson ([ordered]@{ status = $buildStatus })
+    } catch {
+        if (Test-PluginDiskFullException -Exception $_.Exception) {
+            Write-PluginJson (Invoke-PluginCodeVerifyHandleDiskFull -TurnFile $turnFile -Exception $_.Exception)
+            return
+        }
+        throw
+    }
 }
 
 function Invoke-CacheFlushHook {
-    $result = & (Join-Path $script:ScriptDir 'cache-manager.ps1') -Action flush
-    if ($HookName -eq 'cache-flush') {
-        Write-Output $result
-    } else {
+    $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
+    $identified = $false
+    try {
+        if (-not [string]::IsNullOrWhiteSpace($startPath)) {
+            Set-PluginWorkspaceIdentity -ResolvedPath $startPath
+            $null = Resolve-McpCacheDir -StartPath $startPath
+            $identified = $true
+        }
+    } catch {
+        $identified = $false
+    }
+
+    if (-not $identified) {
         Write-PluginJson ([ordered]@{})
+        return
+    }
+
+    try {
+        $result = & (Join-Path $script:ScriptDir 'cache-manager.ps1') -Action flush
+        $text = [string]($result | Out-String)
+        $flushed = 0
+        $failed = 0
+        $pending = 0
+        if ($text -match 'flushed=(\d+)') { $flushed = [int]$Matches[1] }
+        if ($text -match 'failed=(\d+)') { $failed = [int]$Matches[1] }
+        if ($text -match 'pending=(\d+)') { $pending = [int]$Matches[1] }
+        if ($failed -gt 0) {
+            Write-PluginJson ([ordered]@{
+                status = 'flush-failed'
+                flushed = $flushed
+                failed = $failed
+                pending = $pending
+            })
+            if ($HookName -eq 'session-end' -or $HookName -eq 'pre-compact') {
+                exit 1
+            }
+            return
+        }
+        if ($HookName -eq 'cache-flush') {
+            Write-Output $result
+        } else {
+            Write-PluginJson ([ordered]@{})
+        }
+    } catch {
+        if ($HookName -eq 'session-end' -or $HookName -eq 'pre-compact') {
+            Write-PluginJson ([ordered]@{
+                status = 'flush-failed'
+                message = [string]$_.Exception.Message
+            })
+            exit 1
+        }
+        throw
     }
 }
 

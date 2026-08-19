@@ -357,6 +357,32 @@ function New-McpPluginActionRecord {
     return [McpPluginActionRecord]::new($Values)
 }
 
+function ConvertTo-McpPluginStringList {
+    <#
+    .SYNOPSIS
+        Normalizes omitted, empty, null, or scalar string collections under StrictMode.
+    .DESCRIPTION
+        TR-MCP-STRICTCOUNT-001 / BUG-TRIAGE-158: Set-StrictMode Latest throws
+        "Count cannot be found" on $null and on a single string. Always return
+        a string[] so callers can use .Count safely.
+    #>
+    [CmdletBinding()]
+    param($Value)
+
+    if ($null -eq $Value) { return , [string[]]@() }
+
+    $items = [System.Collections.Generic.List[string]]::new()
+    foreach ($entry in @($Value)) {
+        if ($null -eq $entry) { continue }
+        $text = [string]$entry
+        if ([string]::IsNullOrWhiteSpace($text)) { continue }
+        $items.Add($text)
+    }
+
+    # Unary comma prevents PowerShell from unrolling empty or single-element arrays.
+    return , [string[]]$items.ToArray()
+}
+
 function New-McpPluginTurnUpsertRequest {
     <#
     .SYNOPSIS
@@ -418,24 +444,31 @@ function New-McpPluginTurnUpsertRequest {
         $turn.interpretation = $Interpretation
     }
 
-    if ($Tags.Count -gt 0) {
-        $turn.tags = @($Tags)
+    $tagItems = ConvertTo-McpPluginStringList -Value $Tags
+    if ($tagItems.Count -gt 0) {
+        $turn.tags = $tagItems
     }
 
-    if ($ContextList.Count -gt 0) {
-        $turn.contextList = @($ContextList)
+    $contextItems = ConvertTo-McpPluginStringList -Value $ContextList
+    if ($contextItems.Count -gt 0) {
+        $turn.contextList = $contextItems
     }
 
-    if ($FilesModified.Count -gt 0) {
-        $turn.filesModified = @($FilesModified)
+    $fileItems = ConvertTo-McpPluginStringList -Value $FilesModified
+    if ($fileItems.Count -gt 0) {
+        $turn.filesModified = $fileItems
     }
 
-    if ($Actions.Count -gt 0) {
-        $turn.actions = @($Actions)
+    $actionItems = @()
+    if ($null -ne $Actions) { $actionItems = @($Actions) }
+    if ($actionItems.Count -gt 0) {
+        $turn.actions = @($actionItems)
     }
 
-    if ($ProcessingDialog.Count -gt 0) {
-        $turn.processingDialog = @($ProcessingDialog)
+    $dialogItems = @()
+    if ($null -ne $ProcessingDialog) { $dialogItems = @($ProcessingDialog) }
+    if ($dialogItems.Count -gt 0) {
+        $turn.processingDialog = @($dialogItems)
     }
 
     if (-not [string]::IsNullOrWhiteSpace($PlanFile)) {
@@ -657,6 +690,7 @@ Export-ModuleMember -Function @(
     'New-McpPluginSessionMeta',
     'New-McpPluginActionRecord',
     'New-McpPluginTurnUpsertRequest',
+    'ConvertTo-McpPluginStringList',
     'New-McpPluginFailsafeRecord',
     'New-McpTriageReportParams',
     'New-McpTriageGetReportParams',

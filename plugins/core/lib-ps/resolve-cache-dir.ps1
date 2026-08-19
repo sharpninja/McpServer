@@ -64,6 +64,7 @@ function Get-McpWorkspaceFromEnvironment {
     $configured = @(
         $env:MCPSERVER_WORKSPACE_PATH,
         $env:MCP_WORKSPACE_PATH,
+        $env:CLAUDE_PROJECT_DIR,
         $env:CODEX_WORKSPACE_PATH,
         $env:CODEX_PROJECT_DIR,
         $env:COWORK_WORKSPACE_PATH,

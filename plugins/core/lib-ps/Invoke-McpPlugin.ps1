@@ -286,7 +286,23 @@ function Invoke-PluginPowerShellScript {
             $process.Kill($true)
         } catch {
         }
-        throw "Plugin command timed out after ${boundedTimeout}s."
+        try { [void]$process.WaitForExit(2000) } catch { }
+        # TR-MCP-TRIAGEPLUGIN-004 / BUG-TRIAGE-120: never throw an unclassified
+        # timeout. Session-log callers treat command_timeout as retryable
+        # degraded/queued and keep failsafe on disk.
+        $envelope = @(
+            'type: error'
+            'payload:'
+            '  code: command_timeout'
+            "  message: Plugin command timed out after ${boundedTimeout}s."
+            '  retryable: true'
+            '  details:'
+            '    degraded: true'
+            '    queued: true'
+        ) -join [Environment]::NewLine
+        Write-Output $envelope
+        [Console]::Error.WriteLine($envelope)
+        return
     }
 
     $stdout = $stdoutTask.Result
