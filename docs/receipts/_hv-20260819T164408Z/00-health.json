@@ -1,0 +1,10 @@
+{
+  "url": "http://PAYTON-LEGION2:7147/health?nonce=nonce-hv-20260819T164408Z-wrapup",
+  "nonceSent": "nonce-hv-20260819T164408Z-wrapup",
+  "nonceEchoed": "nonce-hv-20260819T164408Z-wrapup",
+  "nonceMatch": true,
+  "status": "Healthy",
+  "version": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+  "storage": "reachable",
+  "rawType": "System.Management.Automation.PSCustomObject"
+}

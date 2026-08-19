@@ -1,0 +1,78 @@
+requestId: req-20260819T162200Z-020-refresh-docs-wrap-up-push
+        timestamp: 2026-08-19T16:38:49.2742908+00:00
+        queryText: /refresh-docs then /mcpserver:wrap-up then push to github and github wiki
+        queryTitle: Refresh docs, wrap-up, push GitHub and wiki
+        response: Refresh-docs and wrap-up complete. Commit c81abaf0 on develop pushed to origin. GitHub wiki published 763c838. Isolation documented. ValidateTraceability findings=0. git diff --check 0. No PLAN TODO flipped. Azure wiki not updated.
+        status: completed
+        planFile: None
+        todoId: None
+        actions:
+        - order: 1
+          description: 'Refresh-docs: isolation notes in AGENT-PLUGIN-AVAILABILITY and REPL-AGENT-GUIDE. wiki.yaml 34 docs.'
+          type: edit
+          status: completed
+          filePath: docs/wiki.yaml
+        - order: 2
+          description: generateDocument wiki/all ZIP 954459 sha256 C666EBD12134F452C9722247F3343F82D01653DA06E2328CD2C6E47CEB438D2E entries 79.
+          type: create
+          status: completed
+          filePath: docs/requirements/requirements-wiki-documents.zip
+        - order: 3
+          description: git diff --check 0. ValidateTraceability findings=0.
+          type: tool_call
+          status: completed
+          filePath: docs/receipts/wrap-up-20260819T163000Z.md
+        - order: 4
+          description: 'Commit c81abaf0 feat(triage): unified errors, session-log persist, hook isolation. 514 files.'
+          type: commit
+          status: completed
+          filePath: ''
+        - order: 5
+          description: Push origin develop f4060f03..c81abaf0. GitHub wiki 5764ee7..763c838. Grok plugin e3a9506 on main.
+          type: commit
+          status: completed
+          filePath: ''
+        - order: 6
+          description: Operator push to github and github wiki is commit-sync ack. Do not push azure or merge main.
+          type: design_decision
+          status: completed
+          filePath: ''
+        processingDialog:
+        - timestamp: 2026-08-19T16:30:00.0000000+00:00
+          role: model
+          content: Trust True. Refresh-docs isolation notes. Wiki ZIP 954459 sha256 C666EBD12134F452C9722247F3343F82D01653DA06E2328CD2C6E47CEB438D2E entries 79. diff --check 0. ValidateTraceability findings=0. Operator authorized push to GitHub and GitHub wiki.
+          category: observation
+        - timestamp: 2026-08-19T16:30:10.0000000+00:00
+          role: model
+          content: >-
+            Decision: treat then push to github and github wiki as commit-sync acknowledgement. Push origin develop and McpServer.wiki.git. Do not push azure develop or merge to main. Do not flip PLAN TODOs.
+
+            Alternatives rejected: another commit-sync pause; pushing Azure wiki as a missing git remote.
+          category: decision
+        designDecisions:
+        - 'Treat then push to github and github wiki as commit-sync acknowledgement. Push origin/develop and McpServer.wiki.git master. Do not push azure develop or merge to main. Consequence: GitHub code and wiki update; Azure published wiki stays on main.'
+    - sourceType: GrokCode
+      sessionId: GrokCode-20260819T161322Z-hostile-triageplugin
+      agentSessionId: 01a01abb-a0fa-7a72-9dd0-8ebb6d2a3422
+      agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+      agentExecutableVersion: grok 1.0.5 (5115b46bc9) [stable]
+      model: grok
+      started: 2026-08-19T16:14:38.0000000+00:00
+      lastUpdated: 2026-08-19T16:14:49.0000000+00:00
+      status: in_progress
+      turnCount: 1
+      turns:
+      - requestId: req-20260819T161322Z-001-hostile-validate-isolation
+        timestamp: 2026-08-19T16:14:38.0000000+00:00
+        queryText: Hostile validation of FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation remediATION claims.
+        queryTitle: Hostile validate TRIAGEPLUGIN isolation remediATION
+        response: >-
+          Hostile validation of TRIAGEPLUGIN isolation remediATION.
+
+          OverallVerdict: AGREE
+
+          Receipt: docs/receipts/hostile-validator-20260819T161322Z.md
+
+          add-profile: 18 non-skill profile files
+
+          P

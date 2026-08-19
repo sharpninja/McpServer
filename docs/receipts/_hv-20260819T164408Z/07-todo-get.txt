@@ -1,0 +1,57 @@
+type: result
+payload:
+  requestId: req-20260819T164759Z-e190
+  result:
+    id: PLAN-TRIAGECLUSTER-001
+    title: Remediate 16 high BUG-TRIAGE items as gated slices
+    section: MCP Server
+    priority: high
+    done: true
+    note: Full-goal AGREE docs/receipts/hostile-validator-20260819T013000Z.md FAIL 0 FailList empty. Test TEST_EXIT=0 VT findings=0 on restored first-persist tree.
+    description:
+    - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+    - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+    - S0 requirements first. Do not start S1+ until H0 AGREE.
+    technicalDetails: []
+    implementationTasks: []
+    doneSummary: Closed after full-goal hostile OverallVerdict AGREE (FAIL 0, FailList empty) at docs/receipts/hostile-validator-20260819T013000Z.md. Sixteen BUG-TRIAGE items remain Done=true citing H-done docs/receipts/hostile-validator-20260819T000500Z.md. Restored first-persist reject (AC-003 / decision 5); STORE-006 canceled hook still stamps None. ./build.ps1 Test TEST_EXIT=0 Failed 0 Skipped 0 at 2026-08-19T01:29:13Z. ValidateTraceability findings=0 at 2026-08-19T01:25:49Z.
+    remaining: None. Full-goal AGREE 013000Z. Sixteen children closed under H-done 000500Z.
+    dependsOn:
+    - BUG-TRIAGE-110
+    - BUG-TRIAGE-111
+    - BUG-TRIAGE-112
+    - BUG-TRIAGE-114
+    - BUG-TRIAGE-115
+    - BUG-TRIAGE-119
+    - BUG-TRIAGE-123
+    - BUG-TRIAGE-124
+    - BUG-TRIAGE-126
+    - BUG-TRIAGE-128
+    - BUG-TRIAGE-131
+    - BUG-TRIAGE-132
+    - BUG-TRIAGE-139
+    - BUG-TRIAGE-143
+    - BUG-TRIAGE-148
+    - BUG-TRIAGE-149
+    functionalRequirements:
+    - FR-MCP-TRIAGEERR-001
+    - FR-MCP-TRIAGESTORE-001
+    - FR-MCP-TRIAGESTORE-002
+    - FR-MCP-TRIAGESCHEMA-001
+    - FR-MCP-TRIAGEPLUGIN-001
+    - FR-MCP-TRIAGETODO-001
+    - FR-MCP-TRIAGEREQ-001
+    - FR-MCP-TRIAGEHELP-001
+    technicalRequirements:
+    - TR-MCP-TRIAGEERR-001
+    - TR-MCP-TRIAGESTORE-001
+    - TR-MCP-TRIAGESTORE-002
+    - TR-MCP-TRIAGESCHEMA-001
+    - TR-MCP-TRIAGEPLUGIN-001
+    - TR-MCP-TRIAGETODO-001
+    - TR-MCP-TRIAGEREQ-001
+    - TR-MCP-TRIAGEHELP-001
+  deprecated: true
+
+---
+

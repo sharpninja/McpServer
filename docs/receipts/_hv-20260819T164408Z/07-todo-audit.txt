@@ -1,0 +1,659 @@
+type: result
+payload:
+  requestId: req-20260819T164801Z-14c1
+  result:
+    entries:
+    - auditId: 14060
+      todoId: PLAN-TRIAGECLUSTER-001
+      version: 1
+      action: created
+      recordedAtUtc: 2026-08-18T19:19:17.3448577Z
+      snapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'S0: create FR/TR/TEST/mappings and H0. Then S2 normalized errors, S1/S3, S4, S5+S6, S7, S8, S9 139 closeout, S10 H-done.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      source: api
+    - auditId: 14068
+      todoId: PLAN-TRIAGECLUSTER-001
+      version: 2
+      action: updated
+      recordedAtUtc: 2026-08-18T19:42:20.7456728Z
+      snapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'H0 AGREE docs/receipts/hostile-validator-20260818T193842Z.md (PASS=23 FAIL=0). Next: S2 red tests for unified error envelope, then implement. Do not mark BUG-TRIAGE ids done until slice hostile AGREE.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      previousSnapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'S0: create FR/TR/TEST/mappings and H0. Then S2 normalized errors, S1/S3, S4, S5+S6, S7, S8, S9 139 closeout, S10 H-done.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      source: api
+    - auditId: 14099
+      todoId: PLAN-TRIAGECLUSTER-001
+      version: 3
+      action: updated
+      recordedAtUtc: 2026-08-18T21:37:19.1103329Z
+      snapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: S1-S8 product+tests landed. Nuke Test Failed 0 Skipped 0 (2027+828+others). ValidateTraceability findings=0. Hostile H-done DISAGREE docs/receipts/hostile-validator-20260818T211500Z.md (PASS=20 FAIL=13). 16 BUG-TRIAGE ids remain done=false. 139 AC3/AC4 UseCase envelope patched after review; inter-phase H-red/H-green still missing.
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'H0 AGREE docs/receipts/hostile-validator-20260818T193842Z.md (PASS=23 FAIL=0). Next: S2 red tests for unified error envelope, then implement. Do not mark BUG-TRIAGE ids done until slice hostile AGREE.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      previousSnapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'H0 AGREE docs/receipts/hostile-validator-20260818T193842Z.md (PASS=23 FAIL=0). Next: S2 red tests for unified error envelope, then implement. Do not mark BUG-TRIAGE ids done until slice hostile AGREE.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      source: api
+    - auditId: 14135
+      todoId: PLAN-TRIAGECLUSTER-001
+      version: 4
+      action: updated
+      recordedAtUtc: 2026-08-19T00:41:25.0647730Z
+      snapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: 'H-done AGREE docs/receipts/hostile-validator-20260819T000500Z.md. 16 BUG-TRIAGE ids closed with doneSummary. VT findings=0. PLAN left open: full ./build.ps1 Test not green after leftover None-sentinel test alignment.'
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'Sixteen BUG-TRIAGE items are Done=true with DoneSummary citing docs/receipts/hostile-validator-20260819T000500Z.md (H-done OverallVerdict AGREE, FAIL 0, FailList empty). ValidateTraceability Succeeded findings=0 at 2026-08-19T00:30:06Z. ./build.ps1 Test compiled then failed 5 leftover throw-on-omitted-planFile tests; those tests now assert the 148 None-sentinel contract (TEST-MCP-TRIAGESTORE-006). Equivalent unit suite --no-build after the test alignment: Support.Mcp 2037, Client 283, Cqrs 33, Launcher 20, McpAgent 63, Repl.Core 840, QBAgent 50; Failed 0 Skipped 0. Full ./build.ps1 Test was not re-run after the test alignment (F: ~527 MB). Live UpdateService/SyncAgentPlugins still waiting on gsudo with no deploy log. Do not treat PLAN as done until a full Nuke Test green receipt exists.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      previousSnapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: S1-S8 product+tests landed. Nuke Test Failed 0 Skipped 0 (2027+828+others). ValidateTraceability findings=0. Hostile H-done DISAGREE docs/receipts/hostile-validator-20260818T211500Z.md (PASS=20 FAIL=13). 16 BUG-TRIAGE ids remain done=false. 139 AC3/AC4 UseCase envelope patched after review; inter-phase H-red/H-green still missing.
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'H0 AGREE docs/receipts/hostile-validator-20260818T193842Z.md (PASS=23 FAIL=0). Next: S2 red tests for unified error envelope, then implement. Do not mark BUG-TRIAGE ids done until slice hostile AGREE.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      source: api
+    - auditId: 14136
+      todoId: PLAN-TRIAGECLUSTER-001
+      version: 5
+      action: updated
+      recordedAtUtc: 2026-08-19T01:07:03.2963526Z
+      snapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: Do not mark done. H-done AGREE covers the 16 items. H-goal 005100Z DISAGREE. Restore first-persist reject in working tree. Restore-gate hostile spawned 20260819T010800Z.
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: H-goal hostile DISAGREE docs/receipts/hostile-validator-20260819T005100Z.md (FAIL 6). Full ./build.ps1 Test was green TEST_EXIT=0 at 2026-08-19T00:50:34Z then leftover invert was rejected. First-persist reject restored (AC-003 / decision 5); None only on canceled superseded hook (STORE-006). Focused 19/0/0 and Support.Mcp 2037/0/0 after restore. PLAN stays done=false pending restore-gate hostile AGREE.
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      previousSnapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: 'H-done AGREE docs/receipts/hostile-validator-20260819T000500Z.md. 16 BUG-TRIAGE ids closed with doneSummary. VT findings=0. PLAN left open: full ./build.ps1 Test not green after leftover None-sentinel test alignment.'
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: 'Sixteen BUG-TRIAGE items are Done=true with DoneSummary citing docs/receipts/hostile-validator-20260819T000500Z.md (H-done OverallVerdict AGREE, FAIL 0, FailList empty). ValidateTraceability Succeeded findings=0 at 2026-08-19T00:30:06Z. ./build.ps1 Test compiled then failed 5 leftover throw-on-omitted-planFile tests; those tests now assert the 148 None-sentinel contract (TEST-MCP-TRIAGESTORE-006). Equivalent unit suite --no-build after the test alignment: Support.Mcp 2037, Client 283, Cqrs 33, Launcher 20, McpAgent 63, Repl.Core 840, QBAgent 50; Failed 0 Skipped 0. Full ./build.ps1 Test was not re-run after the test alignment (F: ~527 MB). Live UpdateService/SyncAgentPlugins still waiting on gsudo with no deploy log. Do not treat PLAN as done until a full Nuke Test green receipt exists.'
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      source: api
+    - auditId: 14137
+      todoId: PLAN-TRIAGECLUSTER-001
+      version: 6
+      action: updated
+      recordedAtUtc: 2026-08-19T01:30:10.2936872Z
+      snapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: H-done AGREE 000500Z covers the 16 items. Restore-gate 010800Z AGREE. H-goal 005100Z DISAGREE was on leftover invert (restored). Full-goal hostile 013000Z in flight. Do not mark PLAN done yet.
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: Restored first-persist tree. ValidateTraceability findings=0 at 2026-08-19T01:25:49Z. ./build.ps1 Test TEST_EXIT=0 Failed 0 Skipped 0 at 2026-08-19T01:29:13Z (2037+283+33+20+63+840+50). Full-goal hostile spawned (not restore-gate). PLAN stays done=false until that receipt OverallVerdict AGREE and FailList empty.
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      previousSnapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: Do not mark done. H-done AGREE covers the 16 items. H-goal 005100Z DISAGREE. Restore first-persist reject in working tree. Restore-gate hostile spawned 20260819T010800Z.
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: H-goal hostile DISAGREE docs/receipts/hostile-validator-20260819T005100Z.md (FAIL 6). Full ./build.ps1 Test was green TEST_EXIT=0 at 2026-08-19T00:50:34Z then leftover invert was rejected. First-persist reject restored (AC-003 / decision 5); None only on canceled superseded hook (STORE-006). Focused 19/0/0 and Support.Mcp 2037/0/0 after restore. PLAN stays done=false pending restore-gate hostile AGREE.
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      source: api
+    - auditId: 14138
+      todoId: PLAN-TRIAGECLUSTER-001
+      version: 7
+      action: updated
+      recordedAtUtc: 2026-08-19T01:41:53.1708697Z
+      snapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: true
+        note: Full-goal AGREE docs/receipts/hostile-validator-20260819T013000Z.md FAIL 0 FailList empty. Test TEST_EXIT=0 VT findings=0 on restored first-persist tree.
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        doneSummary: Closed after full-goal hostile OverallVerdict AGREE (FAIL 0, FailList empty) at docs/receipts/hostile-validator-20260819T013000Z.md. Sixteen BUG-TRIAGE items remain Done=true citing H-done docs/receipts/hostile-validator-20260819T000500Z.md. Restored first-persist reject (AC-003 / decision 5); STORE-006 canceled hook still stamps None. ./build.ps1 Test TEST_EXIT=0 Failed 0 Skipped 0 at 2026-08-19T01:29:13Z. ValidateTraceability findings=0 at 2026-08-19T01:25:49Z.
+        remaining: None. Full-goal AGREE 013000Z. Sixteen children closed under H-done 000500Z.
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      previousSnapshot:
+        id: PLAN-TRIAGECLUSTER-001
+        title: Remediate 16 high BUG-TRIAGE items as gated slices
+        section: MCP Server
+        priority: high
+        done: false
+        note: H-done AGREE 000500Z covers the 16 items. Restore-gate 010800Z AGREE. H-goal 005100Z DISAGREE was on leftover invert (restored). Full-goal hostile 013000Z in flight. Do not mark PLAN done yet.
+        description:
+        - 'Approved plan docs/plans/triage-cluster-001.md (2026-08-18) with operator amendment: normalize error reporting across REST, MCP tools, REPL, and plugins.'
+        - Closes BUG-TRIAGE-110, 111, 112, 114, 115, 119, 123, 124, 126, 128, 131, 132, 139, 143, 148, 149 after per-slice hostile AGREE.
+        - S0 requirements first. Do not start S1+ until H0 AGREE.
+        remaining: Restored first-persist tree. ValidateTraceability findings=0 at 2026-08-19T01:25:49Z. ./build.ps1 Test TEST_EXIT=0 Failed 0 Skipped 0 at 2026-08-19T01:29:13Z (2037+283+33+20+63+840+50). Full-goal hostile spawned (not restore-gate). PLAN stays done=false until that receipt OverallVerdict AGREE and FailList empty.
+        dependsOn:
+        - BUG-TRIAGE-110
+        - BUG-TRIAGE-111
+        - BUG-TRIAGE-112
+        - BUG-TRIAGE-114
+        - BUG-TRIAGE-115
+        - BUG-TRIAGE-119
+        - BUG-TRIAGE-123
+        - BUG-TRIAGE-124
+        - BUG-TRIAGE-126
+        - BUG-TRIAGE-128
+        - BUG-TRIAGE-131
+        - BUG-TRIAGE-132
+        - BUG-TRIAGE-139
+        - BUG-TRIAGE-143
+        - BUG-TRIAGE-148
+        - BUG-TRIAGE-149
+        functionalRequirements:
+        - FR-MCP-TRIAGEERR-001
+        - FR-MCP-TRIAGESTORE-001
+        - FR-MCP-TRIAGESTORE-002
+        - FR-MCP-TRIAGESCHEMA-001
+        - FR-MCP-TRIAGEPLUGIN-001
+        - FR-MCP-TRIAGETODO-001
+        - FR-MCP-TRIAGEREQ-001
+        - FR-MCP-TRIAGEHELP-001
+        technicalRequirements:
+        - TR-MCP-TRIAGEERR-001
+        - TR-MCP-TRIAGESTORE-001
+        - TR-MCP-TRIAGESTORE-002
+        - TR-MCP-TRIAGESCHEMA-001
+        - TR-MCP-TRIAGEPLUGIN-001
+        - TR-MCP-TRIAGETODO-001
+        - TR-MCP-TRIAGEREQ-001
+        - TR-MCP-TRIAGEHELP-001
+      source: api
+    totalCount: 7
+
+---
+

@@ -1,0 +1,3 @@
+From https://github.com/sharpninja/McpServer
+ * branch              main       -> FETCH_HEAD
+   b1615e9a..d14a2330  main       -> origin/main

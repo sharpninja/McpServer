@@ -1,0 +1,240 @@
+{
+  "schema": "mcp-wiki-export/v1",
+  "documentCount": 34,
+  "generatedCount": 6,
+  "fileBackedCount": 28,
+  "missingCount": 0,
+  "ids": [
+    "home",
+    "functional",
+    "technical",
+    "testing",
+    "mapping",
+    "matrix",
+    "triage-plugin-code-quality-case-study",
+    "user-guide",
+    "faq",
+    "client-integration",
+    "repl-user-guide",
+    "repl-agent-guide",
+    "repl-migration-guide",
+    "mcp-server-guide",
+    "quadbrain",
+    "qbagent",
+    "agent-plugin-availability",
+    "agent-plugin-feature-matrix",
+    "byrd-development-process",
+    "azure-pipelines",
+    "release-checklist",
+    "onboarding-human-ai-partnership",
+    "usecase-extension-design-v3",
+    "usecase-diagram-mermaid-schema-v1",
+    "session-log-schema",
+    "handoff-ingestion",
+    "byrd-todo-execution-spec",
+    "ops-tunnel-cloudflare",
+    "ops-tunnel-frp-railway",
+    "ops-tunnel-ngrok",
+    "context-todo-schema",
+    "context-action-types",
+    "context-memory",
+    "context-federation"
+  ],
+  "fileBacked": [
+    {
+      "id": "triage-plugin-code-quality-case-study",
+      "source": "docs/case-studies/Triage-Plugin-Code-Quality-Case-Study.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\case-studies\\Triage-Plugin-Code-Quality-Case-Study.md",
+      "exists": true
+    },
+    {
+      "id": "user-guide",
+      "source": "docs/USER-GUIDE.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\USER-GUIDE.md",
+      "exists": true
+    },
+    {
+      "id": "faq",
+      "source": "docs/FAQ.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\FAQ.md",
+      "exists": true
+    },
+    {
+      "id": "client-integration",
+      "source": "docs/CLIENT-INTEGRATION.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\CLIENT-INTEGRATION.md",
+      "exists": true
+    },
+    {
+      "id": "repl-user-guide",
+      "source": "docs/REPL-USER-GUIDE.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\REPL-USER-GUIDE.md",
+      "exists": true
+    },
+    {
+      "id": "repl-agent-guide",
+      "source": "docs/REPL-AGENT-GUIDE.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\REPL-AGENT-GUIDE.md",
+      "exists": true
+    },
+    {
+      "id": "repl-migration-guide",
+      "source": "docs/REPL-MIGRATION-GUIDE.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\REPL-MIGRATION-GUIDE.md",
+      "exists": true
+    },
+    {
+      "id": "mcp-server-guide",
+      "source": "docs/MCP-SERVER.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\MCP-SERVER.md",
+      "exists": true
+    },
+    {
+      "id": "quadbrain",
+      "source": "docs/QUADBRAIN.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\QUADBRAIN.md",
+      "exists": true
+    },
+    {
+      "id": "qbagent",
+      "source": "docs/QBAGENT.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\QBAGENT.md",
+      "exists": true
+    },
+    {
+      "id": "agent-plugin-availability",
+      "source": "docs/AGENT-PLUGIN-AVAILABILITY.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\AGENT-PLUGIN-AVAILABILITY.md",
+      "exists": true
+    },
+    {
+      "id": "agent-plugin-feature-matrix",
+      "source": "docs/AGENT-PLUGIN-FEATURE-MATRIX.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\AGENT-PLUGIN-FEATURE-MATRIX.md",
+      "exists": true
+    },
+    {
+      "id": "byrd-development-process",
+      "source": "docs/Development-Process-draft-v4.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\Development-Process-draft-v4.md",
+      "exists": true
+    },
+    {
+      "id": "azure-pipelines",
+      "source": "docs/AZURE-PIPELINES.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\AZURE-PIPELINES.md",
+      "exists": true
+    },
+    {
+      "id": "release-checklist",
+      "source": "docs/RELEASE-CHECKLIST.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\RELEASE-CHECKLIST.md",
+      "exists": true
+    },
+    {
+      "id": "onboarding-human-ai-partnership",
+      "source": "docs/Onboarding-Human-AI-Partnership.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\Onboarding-Human-AI-Partnership.md",
+      "exists": true
+    },
+    {
+      "id": "usecase-extension-design-v3",
+      "source": "docs/McpServer-UseCase-Extension-Design-v3.0.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\McpServer-UseCase-Extension-Design-v3.0.md",
+      "exists": true
+    },
+    {
+      "id": "usecase-diagram-mermaid-schema-v1",
+      "source": "docs/context/usecase-diagram-mermaid-schema-v1.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\context\\usecase-diagram-mermaid-schema-v1.md",
+      "exists": true
+    },
+    {
+      "id": "session-log-schema",
+      "source": "docs/context/session-log-schema.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\context\\session-log-schema.md",
+      "exists": true
+    },
+    {
+      "id": "handoff-ingestion",
+      "source": "docs/Handoff-Ingestion.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\Handoff-Ingestion.md",
+      "exists": true
+    },
+    {
+      "id": "byrd-todo-execution-spec",
+      "source": "docs/byrd-todo-execution-spec.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\byrd-todo-execution-spec.md",
+      "exists": true
+    },
+    {
+      "id": "ops-tunnel-cloudflare",
+      "source": "docs/Operations/Tunnel-Cloudflare.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\Operations\\Tunnel-Cloudflare.md",
+      "exists": true
+    },
+    {
+      "id": "ops-tunnel-frp-railway",
+      "source": "docs/Operations/Tunnel-FRP-Railway.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\Operations\\Tunnel-FRP-Railway.md",
+      "exists": true
+    },
+    {
+      "id": "ops-tunnel-ngrok",
+      "source": "docs/Operations/Tunnel-Ngrok.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\Operations\\Tunnel-Ngrok.md",
+      "exists": true
+    },
+    {
+      "id": "context-todo-schema",
+      "source": "docs/context/todo-schema.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\context\\todo-schema.md",
+      "exists": true
+    },
+    {
+      "id": "context-action-types",
+      "source": "docs/context/action-types.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\context\\action-types.md",
+      "exists": true
+    },
+    {
+      "id": "context-memory",
+      "source": "docs/context/memory.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\context\\memory.md",
+      "exists": true
+    },
+    {
+      "id": "context-federation",
+      "source": "docs/context/federation.md",
+      "full": "F:\\GitHub\\McpServer\\docs\\context\\federation.md",
+      "exists": true
+    }
+  ],
+  "generated": [
+    {
+      "id": "home",
+      "source": "generated:home"
+    },
+    {
+      "id": "functional",
+      "source": "generated:functional"
+    },
+    {
+      "id": "technical",
+      "source": "generated:technical"
+    },
+    {
+      "id": "testing",
+      "source": "generated:testing"
+    },
+    {
+      "id": "mapping",
+      "source": "generated:mapping"
+    },
+    {
+      "id": "matrix",
+      "source": "generated:matrix"
+    }
+  ],
+  "missing": []
+}
