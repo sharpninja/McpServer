@@ -206,9 +206,9 @@ public sealed partial class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
-        using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
         try
         {
+            using var workspaceScope = ApplyWorkspaceOverride(workspacePath);
             var payload = JsonSerializer.Deserialize<UnifiedRequestEntryDto>(sectionJson, s_caseInsensitiveOptions) ?? new UnifiedRequestEntryDto();
             payload.RequestId = requestId;
             var found = await _sessionLogService.ReplaceTurnSectionAsync(agent, sessionId, requestId, section, payload, cancellationToken).ConfigureAwait(false);

@@ -119,4 +119,38 @@ public sealed class SessionLogControllerErrorTests
         Assert.False(document.RootElement.GetProperty("retryable").GetBoolean());
         Assert.Equal("not_found", document.RootElement.GetProperty("details").GetProperty("reason").GetString());
     }
+
+    /// <summary>
+    /// BUG-TRIAGE-144: HTTP replace_section storage outage returns 503 backend_unavailable
+    /// with retryable true so Streamable HTTP clients can retry.
+    /// </summary>
+    [Fact]
+    public async Task ReplaceTurnSectionAsync_StorageUnreachable_Returns503Retryable()
+    {
+        var service = Substitute.For<ISessionLogService>();
+        service.ReplaceTurnSectionAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<UnifiedRequestEntryDto>(),
+                Arg.Any<CancellationToken>())
+            .Throws(new SqliteException("unable to open database file", 14));
+        var controller = new SessionLogController(service, NullLogger<SessionLogController>.Instance);
+
+        var result = await controller.ReplaceTurnSectionAsync(
+            "Cursor",
+            "Cursor-20260819T220000Z-replace-503",
+            "req-20260819T220000Z-entry-001",
+            "tags",
+            new UnifiedRequestEntryDto { Tags = ["retry"] },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(503, objectResult.StatusCode);
+        var json = JsonSerializer.Serialize(objectResult.Value);
+        using var document = JsonDocument.Parse(json);
+        Assert.Equal("backend_unavailable", document.RootElement.GetProperty("code").GetString());
+        Assert.True(document.RootElement.GetProperty("retryable").GetBoolean());
+    }
 }

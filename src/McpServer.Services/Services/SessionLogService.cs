@@ -166,6 +166,12 @@ public sealed class SessionLogService : ISessionLogService
                 if (turn.TodoId is not null)
                     turn.TodoId = SessionLogTurnContextValidator.ValidateTodoId(turn.TodoId, required: true);
             }
+
+            if (!isImport)
+            {
+                foreach (var turn in dto.Turns)
+                    ValidateWorkspaceAttribution(turn);
+            }
         }
 
         var wasCreated = existing is null;
@@ -573,6 +579,8 @@ public sealed class SessionLogService : ISessionLogService
         var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);
         SessionLogTurnEntity persistedTurn;
 
+        ValidateWorkspaceAttribution(turn, existingTurn);
+
         if (existingTurn is null)
         {
             ApplyTurnContext(turn, isImport: false, sessionDto: null, session);
@@ -661,6 +669,7 @@ public sealed class SessionLogService : ISessionLogService
         var normalized = SessionLogTurnContextValidator.ValidateForNewEntry(turn.PlanFile, turn.TodoId);
         turn.PlanFile = normalized.PlanFile;
         turn.TodoId = normalized.TodoId;
+        ValidateWorkspaceAttribution(turn);
         // FR-SUPPORT-010G: PUT replace - omitted scalars reset, collections
         // become exactly the payload (omitted/empty cleared).
         UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: false);
@@ -765,10 +774,20 @@ public sealed class SessionLogService : ISessionLogService
         if (session is null || turnEntity is null)
             return false;
 
+        ValidateSectionAttribution(turnEntity, parsed, payload);
+
         ApplySectionReplace(turnEntity, parsed, payload);
         StampTurnChildren(turnEntity, session.WorkspaceId);
 
-        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await SaveChangesBudgetedAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch
+        {
+            _db.ChangeTracker.Clear();
+            throw;
+        }
         await PublishChangeSafeAsync(
             ChangeEventActions.Updated,
             $"{sourceType}/{sessionId}",
@@ -1610,6 +1629,41 @@ public sealed class SessionLogService : ISessionLogService
 
     private Task SaveChangesBudgetedAsync(CancellationToken cancellationToken)
         => StorageCommandBudget.ExecuteAsync(ct => _db.SaveChangesAsync(ct), cancellationToken);
+
+    /// <summary>
+    /// FR-MCP-SESSIONATTR-001: reject unmarked filesModified/commit paths outside the workspace.
+    /// </summary>
+    private void ValidateWorkspaceAttribution(UnifiedRequestEntryDto turn, SessionLogTurnEntity? existingTurn = null)
+    {
+        var workspace = ResolveWorkspaceId();
+        if (string.IsNullOrWhiteSpace(workspace))
+            return;
+
+        var tags = turn.Tags ?? existingTurn?.Tags.Select(t => t.Tag);
+        SessionLogWorkspaceAttributionValidator.ValidatePaths(turn.FilesModified, tags, workspace, "filesModified");
+        SessionLogWorkspaceAttributionValidator.ValidateCommits(turn.Commits, tags, workspace);
+    }
+
+    /// <summary>
+    /// FR-MCP-SESSIONATTR-001: validate only the section being replaced.
+    /// </summary>
+    private void ValidateSectionAttribution(SessionLogTurnEntity turnEntity, TurnSection section, UnifiedRequestEntryDto payload)
+    {
+        var workspace = ResolveWorkspaceId();
+        if (string.IsNullOrWhiteSpace(workspace))
+            return;
+
+        var tags = payload.Tags ?? turnEntity.Tags.Select(t => t.Tag);
+        switch (section)
+        {
+            case TurnSection.FilesModified:
+                SessionLogWorkspaceAttributionValidator.ValidatePaths(payload.FilesModified, tags, workspace, "filesModified");
+                break;
+            case TurnSection.Commits:
+                SessionLogWorkspaceAttributionValidator.ValidateCommits(payload.Commits, tags, workspace);
+                break;
+        }
+    }
 
     private static bool IsMissingAgentSessionColumn(Exception exception)
     {
