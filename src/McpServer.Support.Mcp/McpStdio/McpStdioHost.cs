@@ -314,18 +314,22 @@ public static class McpStdioHost
 
         var host = builder.Build();
 
-        using (var scope = host.Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
-            await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, cancellationToken).ConfigureAwait(false);
-            await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, cancellationToken).ConfigureAwait(false);
-            await SessionLogTurnContextBackfillStartup.TryRunAsync(
-                db,
-                scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
-                scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>(),
-                cancellationToken).ConfigureAwait(false);
-        }
+        await StartupStorageBootstrap.TryInitializeAsync(
+            async ct =>
+            {
+                using var scope = host.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+                var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
+                await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, ct).ConfigureAwait(false);
+                await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, ct).ConfigureAwait(false);
+                await SessionLogTurnContextBackfillStartup.TryRunAsync(
+                    db,
+                    scope.ServiceProvider.GetRequiredService<SessionLogTurnContextExtractor>(),
+                    scope.ServiceProvider.GetRequiredService<ILogger<SessionLogTurnContextBackfill>>(),
+                    ct).ConfigureAwait(false);
+            },
+            host.Services.GetRequiredService<ILoggerFactory>().CreateLogger("McpStdioHost"),
+            cancellationToken).ConfigureAwait(false);
 
         await host.RunAsync(cancellationToken).ConfigureAwait(false);
     }

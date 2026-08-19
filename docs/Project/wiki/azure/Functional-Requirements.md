@@ -1935,6 +1935,62 @@ Scope: layer-1+
 - [ ] Skills say to use triage for incidental bugs, not for the user active requested fix.
 - [ ] Skills explicitly say not to expect immediate resolution and to continue the current task after submission.
 
+## FR-MCP-TRIAGEERR-001 Normalized error envelope for REST, MCP, REPL, and plugins
+
+Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+
+## FR-MCP-TRIAGEHELP-001 Agent Help is diagnosis or incomplete never completed echo
+
+Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.
+
+## FR-MCP-TRIAGEPLUGIN-001 Plugin root session, cache, console, and persist identity
+
+Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.
+
+## FR-MCP-TRIAGEREQ-001 listTr ids are getTr updateTr deleteTr able
+
+Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+
+## FR-MCP-TRIAGESCHEMA-001 SessionLogs missing AgentSession columns fail closed
+
+After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722214500_AddAgentSessionHeaderFields applies on every host workspace database.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722214500_AddAgentSessionHeaderFields applies on every host workspace database.
+
+## FR-MCP-TRIAGESTORE-001 Session-log persist is diagnosable and idempotent
+
+Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.
+
+## FR-MCP-TRIAGESTORE-002 Storage-only outages fail fast without flipping health liveness
+
+Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+
+## FR-MCP-TRIAGETODO-001 EXEC dual-store rehydrate and retry-clean plan create
+
+set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message.
+
 ## FR-MCP-USECASE-001 CRUD workspace-scoped use cases
 
 The server shall support create, read, update, and soft-delete of workspace-scoped use cases with header fields: title, brief description, precondition, postcondition, scope, and priority. Default queries exclude soft-deleted rows. Multi-tenant isolation via WorkspaceId is required.

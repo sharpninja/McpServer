@@ -222,7 +222,7 @@ Do not send formatted YAML or a single `type: batch` envelope; unsupported batch
 **Error Format:**
 
 ```json
-{"type":"error","payload":{"requestId":"req-20260304T113901Z-example","code":"invalid_request","message":"Request envelope failed validation","details":{"field":"payload.method"}}}
+{"type":"error","payload":{"requestId":"req-20260304T113901Z-example","code":"invalid_request","message":"Request envelope failed validation","retryable":false,"details":{"field":"payload.method"}}}
 ```
 
 **Event Format (streaming):**
@@ -251,6 +251,8 @@ Do not send formatted YAML or a single `type: batch` envelope; unsupported batch
 3. As files change, call `workflow.sessionlog.appendActions` with file operations
 4. When complete, call `workflow.sessionlog.completeTurn` with final response
 5. Persist session log immediately after turn completion
+
+Root `UserPromptSubmit` does not open a new root turn, cancel an in-progress root work turn, or rewrite `current-turn.yaml` after a completed root turn when the incoming prompt is a background or hostile-validator brief (FR-MCP-TRIAGEPLUGIN-001). A distinct operator prompt still opens a new root turn.
 
 **At regular intervals during long sessions (~10 interactions):**
 

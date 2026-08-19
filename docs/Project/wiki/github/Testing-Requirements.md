@@ -2431,6 +2431,153 @@ Every new FR/TR/TEST acceptance criterion is referenced by at least one test and
 - [ ] Traceability validation covers all triage requirement IDs and acceptance criteria.
 
 
+## TEST-MCP-TRIAGEERR
+
+### TEST-MCP-TRIAGEERR-001
+
+Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+
+**Acceptance Criteria:**
+- [ ] Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+
+
+## TEST-MCP-TRIAGEHELP
+
+### TEST-MCP-TRIAGEHELP-001
+
+Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+
+**Acceptance Criteria:**
+- [ ] Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+
+
+## TEST-MCP-TRIAGEPLUGIN
+
+### TEST-MCP-TRIAGEPLUGIN-001
+
+Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+
+**Acceptance Criteria:**
+- [ ] Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+
+### TEST-MCP-TRIAGEPLUGIN-002
+
+ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
+
+**Acceptance Criteria:**
+- [ ] ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.
+
+### TEST-MCP-TRIAGEPLUGIN-003
+
+Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.
+
+**Acceptance Criteria:**
+- [ ] Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.
+
+### TEST-MCP-TRIAGEPLUGIN-004
+
+beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.
+
+**Acceptance Criteria:**
+- [ ] beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.
+
+### TEST-MCP-TRIAGEPLUGIN-005
+
+completeTurn persist identity prefers current-turn sessionId after sessionId rebind.
+
+**Acceptance Criteria:**
+- [ ] completeTurn persist identity prefers current-turn sessionId after sessionId rebind.
+
+
+## TEST-MCP-TRIAGEREQ
+
+### TEST-MCP-TRIAGEREQ-001
+
+Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+
+**Acceptance Criteria:**
+- [ ] Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+
+
+## TEST-MCP-TRIAGESCHEMA
+
+### TEST-MCP-TRIAGESCHEMA-001
+
+A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+
+**Acceptance Criteria:**
+- [ ] A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+
+
+## TEST-MCP-TRIAGESTORE
+
+### TEST-MCP-TRIAGESTORE-001
+
+SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+
+**Acceptance Criteria:**
+- [ ] SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+
+### TEST-MCP-TRIAGESTORE-002
+
+TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+
+**Acceptance Criteria:**
+- [ ] TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+
+### TEST-MCP-TRIAGESTORE-003
+
+ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.
+
+**Acceptance Criteria:**
+- [ ] ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.
+
+### TEST-MCP-TRIAGESTORE-004
+
+Turn status canceled and cancelled persist via submit and re-query with the same status.
+
+**Acceptance Criteria:**
+- [ ] Turn status canceled and cancelled persist via submit and re-query with the same status.
+
+### TEST-MCP-TRIAGESTORE-005
+
+SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.
+
+**Acceptance Criteria:**
+- [ ] SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.
+
+### TEST-MCP-TRIAGESTORE-006
+
+Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
+
+**Acceptance Criteria:**
+- [ ] Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.
+
+### TEST-MCP-TRIAGESTORE-007
+
+Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+
+**Acceptance Criteria:**
+- [ ] Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.
+
+
+## TEST-MCP-TRIAGETODO
+
+### TEST-MCP-TRIAGETODO-001
+
+TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+
+**Acceptance Criteria:**
+- [ ] TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+
+### TEST-MCP-TRIAGETODO-002
+
+GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
+
+**Acceptance Criteria:**
+- [ ] GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
+
+
 ## TEST-MCP-USECASE
 
 ### TEST-MCP-USECASE-001

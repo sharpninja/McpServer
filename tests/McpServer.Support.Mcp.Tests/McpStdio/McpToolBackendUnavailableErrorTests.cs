@@ -70,6 +70,10 @@ public sealed class McpToolBackendUnavailableErrorTests : IDisposable
         Assert.True(
             error == "backend_unavailable",
             $"Expected the typed backend_unavailable error; actual tool payload: {json}");
+        Assert.Equal("backend_unavailable", document.RootElement.GetProperty("code").GetString());
+        Assert.True(document.RootElement.GetProperty("retryable").GetBoolean());
+        Assert.False(string.IsNullOrWhiteSpace(document.RootElement.GetProperty("message").GetString()));
+        Assert.Equal("backend_unavailable", document.RootElement.GetProperty("details").GetProperty("reason").GetString());
         Assert.DoesNotContain("SQLite Error", json, StringComparison.Ordinal);
     }
 
@@ -93,7 +97,9 @@ public sealed class McpToolBackendUnavailableErrorTests : IDisposable
             cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         using var document = JsonDocument.Parse(json);
-        Assert.Equal("turn validation failed", document.RootElement.GetProperty("error").GetString());
+        Assert.Equal("internal_server_error", document.RootElement.GetProperty("code").GetString());
+        Assert.Equal("turn validation failed", document.RootElement.GetProperty("message").GetString());
+        Assert.False(document.RootElement.GetProperty("retryable").GetBoolean());
     }
 
     /// <inheritdoc />

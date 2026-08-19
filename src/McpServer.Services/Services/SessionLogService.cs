@@ -90,6 +90,9 @@ public sealed class SessionLogService : ISessionLogService
         if (string.IsNullOrEmpty(workspaceId))
             return;
 
+        foreach (var sessionTag in session.Tags)
+            sessionTag.WorkspaceId = workspaceId;
+
         foreach (var turn in session.Turns)
         {
             turn.WorkspaceId = workspaceId;
@@ -107,6 +110,7 @@ public sealed class SessionLogService : ISessionLogService
     {
         ArgumentNullException.ThrowIfNull(dto);
         SyncDbWorkspaceFromContext();
+        SessionLogSchemaGuard.EnsureAgentSessionHeaderColumns(_db);
 
         if (string.IsNullOrWhiteSpace(dto.SourceType))
             throw new ArgumentException("SourceType is required.", nameof(dto));
@@ -196,7 +200,7 @@ public sealed class SessionLogService : ISessionLogService
 
         try
         {
-            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await SaveChangesBudgetedAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true)
         {
@@ -214,7 +218,7 @@ public sealed class SessionLogService : ISessionLogService
             await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
             StampWorkspaceId(existing);
 
-            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            await SaveChangesBudgetedAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id}) after retry", dto.SourceType, dto.SessionId, existing.Id);
             wasCreated = false;
         }
@@ -245,6 +249,7 @@ public sealed class SessionLogService : ISessionLogService
                     .ThenInclude(c => c.Files)
             .Include(s => s.Turns)
                 .ThenInclude(e => e.StringListItems)
+            .Include(s => s.Tags)
             .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken);
 
     /// <inheritdoc />
@@ -332,6 +337,7 @@ public sealed class SessionLogService : ISessionLogService
     {
         ArgumentNullException.ThrowIfNull(request);
         SyncDbWorkspaceFromContext();
+        SessionLogSchemaGuard.EnsureAgentSessionHeaderColumns(_db);
 
         var limit = Math.Clamp(request.Limit, 1, MaxLimit);
         var offset = Math.Max(request.Offset, 0);
@@ -357,24 +363,33 @@ public sealed class SessionLogService : ISessionLogService
         if (request.To.HasValue)
             query = query.Where(s => s.LastUpdated.HasValue && s.LastUpdated.Value <= request.To.Value);
 
-        var allSessions = await query
-            .Include(s => s.Turns.OrderBy(e => e.Id))
-                .ThenInclude(e => e.Actions.OrderBy(a => a.Order))
-            .Include(s => s.Turns)
-                .ThenInclude(e => e.Tags)
-            .Include(s => s.Turns)
-                .ThenInclude(e => e.ContextItems.OrderBy(c => c.Ordinal))
-            .Include(s => s.Turns)
-                .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
-            .Include(s => s.Turns)
-                .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
-                    .ThenInclude(c => c.Files.OrderBy(f => f.Ordinal))
-            .Include(s => s.Turns)
-                .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
-            .AsSplitQuery()
-            .AsNoTracking()
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
+        List<SessionLogEntity> allSessions;
+        try
+        {
+            allSessions = await query
+                .Include(s => s.Turns.OrderBy(e => e.Id))
+                    .ThenInclude(e => e.Actions.OrderBy(a => a.Order))
+                .Include(s => s.Turns)
+                    .ThenInclude(e => e.Tags)
+                .Include(s => s.Turns)
+                    .ThenInclude(e => e.ContextItems.OrderBy(c => c.Ordinal))
+                .Include(s => s.Turns)
+                    .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
+                .Include(s => s.Turns)
+                    .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
+                        .ThenInclude(c => c.Files.OrderBy(f => f.Ordinal))
+                .Include(s => s.Turns)
+                    .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
+                .Include(s => s.Tags)
+                .AsSplitQuery()
+                .AsNoTracking()
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+        }
+        catch (Exception ex) when (IsMissingAgentSessionColumn(ex))
+        {
+            throw new SessionLogSchemaPendingMigrationException();
+        }
 
         IEnumerable<SessionLogEntity> filtered = allSessions;
 
@@ -527,6 +542,7 @@ public sealed class SessionLogService : ISessionLogService
                     .ThenInclude(c => c.Files.OrderBy(f => f.Ordinal))
             .Include(s => s.Turns)
                 .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
+            .Include(s => s.Tags)
             .AsSplitQuery()
             .AsNoTracking()
             .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken)
@@ -631,31 +647,30 @@ public sealed class SessionLogService : ISessionLogService
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
             ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
 
-        var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);
-        SessionLogTurnEntity persistedTurn;
+        var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId)
+            ?? throw new KeyNotFoundException($"Turn not found: {sourceType}/{sessionId}/{turn.RequestId}");
 
-        if (existingTurn is null)
+        if (IsSupersededHookPersist(turn))
         {
-            ApplyTurnContext(turn, isImport: false, sessionDto: null, session);
-            persistedTurn = MapSingleEntry(turn);
-            session.Turns.Add(persistedTurn);
+            if (string.IsNullOrWhiteSpace(turn.PlanFile))
+                turn.PlanFile = SessionLogTurnContextValidator.NoneSentinel;
+            if (string.IsNullOrWhiteSpace(turn.TodoId))
+                turn.TodoId = SessionLogTurnContextValidator.NoneSentinel;
         }
-        else
-        {
-            var normalized = SessionLogTurnContextValidator.ValidateForNewEntry(turn.PlanFile, turn.TodoId);
-            turn.PlanFile = normalized.PlanFile;
-            turn.TodoId = normalized.TodoId;
-            // FR-SUPPORT-010G: PUT replace - omitted scalars reset, collections
-            // become exactly the payload (omitted/empty cleared).
-            UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: false);
-            persistedTurn = existingTurn;
-        }
+
+        var normalized = SessionLogTurnContextValidator.ValidateForNewEntry(turn.PlanFile, turn.TodoId);
+        turn.PlanFile = normalized.PlanFile;
+        turn.TodoId = normalized.TodoId;
+        // FR-SUPPORT-010G: PUT replace - omitted scalars reset, collections
+        // become exactly the payload (omitted/empty cleared).
+        UpdateEntryFromDto(existingTurn, turn, mergeOmittedFields: false);
+        var persistedTurn = existingTurn;
 
         ValidateTerminalTurnCompliance(MapTurnEntityToDto(persistedTurn), session.SourceType);
         StampTurnChildren(persistedTurn, session.WorkspaceId);
         RefreshSessionSummaryFromTurns(session);
 
-        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await SaveChangesBudgetedAsync(cancellationToken).ConfigureAwait(false);
         await PublishChangeSafeAsync(
             ChangeEventActions.Updated,
             $"{sourceType}/{sessionId}",
@@ -1212,9 +1227,29 @@ public sealed class SessionLogService : ISessionLogService
                 turn.TodoId = extracted.TodoId;
         }
 
+        // FR-MCP-SESSIONLOGCTX-001 AC-003: first persist rejects omitted/empty.
+        // TEST-MCP-TRIAGESTORE-006: superseded hook persist (canceled) may stamp None.
+        if (IsSupersededHookPersist(turn))
+        {
+            if (string.IsNullOrWhiteSpace(turn.PlanFile))
+                turn.PlanFile = SessionLogTurnContextValidator.NoneSentinel;
+            if (string.IsNullOrWhiteSpace(turn.TodoId))
+                turn.TodoId = SessionLogTurnContextValidator.NoneSentinel;
+        }
+
         var normalized = SessionLogTurnContextValidator.ValidateForNewEntry(turn.PlanFile, turn.TodoId);
         turn.PlanFile = normalized.PlanFile;
         turn.TodoId = normalized.TodoId;
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGESTORE-006 / plan decision 5: only canceled/cancelled first persist
+    /// may stamp None when planFile or todoId was omitted.
+    /// </summary>
+    private static bool IsSupersededHookPersist(UnifiedRequestEntryDto turn)
+    {
+        return string.Equals(turn.Status, "canceled", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(turn.Status, "cancelled", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsUsablePlanFile(string? planFile)
@@ -1299,6 +1334,9 @@ public sealed class SessionLogService : ISessionLogService
             entity.Repository = ws.Repository;
             entity.Branch = ws.Branch;
         }
+
+        if (dto.Tags is not null)
+            MergeCollection(entity.Tags, dto.Tags, MapSessionTags, SameSessionTag, mergeOmittedFields: true);
     }
 
     private static void RefreshSessionSummaryFromTurns(SessionLogEntity session)
@@ -1559,6 +1597,34 @@ public sealed class SessionLogService : ISessionLogService
         return tags?.Select(t => new SessionLogTurnTagEntity { Tag = t }).ToList() ?? [];
     }
 
+    private static List<SessionLogTagEntity> MapSessionTags(IEnumerable<string>? tags)
+    {
+        return tags?
+            .Where(static tag => !string.IsNullOrWhiteSpace(tag))
+            .Select(tag => new SessionLogTagEntity { Tag = tag.Trim() })
+            .ToList() ?? [];
+    }
+
+    private static bool SameSessionTag(SessionLogTagEntity left, SessionLogTagEntity right) =>
+        string.Equals(left.Tag, right.Tag, StringComparison.Ordinal);
+
+    private Task SaveChangesBudgetedAsync(CancellationToken cancellationToken)
+        => StorageCommandBudget.ExecuteAsync(ct => _db.SaveChangesAsync(ct), cancellationToken);
+
+    private static bool IsMissingAgentSessionColumn(Exception exception)
+    {
+        for (var current = exception; current is not null; current = current.InnerException)
+        {
+            if (current.Message.Contains("Invalid column name", StringComparison.OrdinalIgnoreCase)
+                || current.Message.Contains("no such column", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static List<SessionLogTurnContextEntity> MapContextItems(IEnumerable<string>? contextList)
     {
         return contextList?.Select((c, i) => new SessionLogTurnContextEntity
@@ -1602,7 +1668,6 @@ public sealed class SessionLogService : ISessionLogService
         left.Order == right.Order
         && string.Equals(left.Description, right.Description, StringComparison.Ordinal)
         && string.Equals(left.Type, right.Type, StringComparison.Ordinal)
-        && string.Equals(left.Status, right.Status, StringComparison.Ordinal)
         && string.Equals(left.FilePath, right.FilePath, StringComparison.Ordinal);
 
     private static bool SameTag(SessionLogTurnTagEntity left, SessionLogTurnTagEntity right) =>
@@ -1713,7 +1778,8 @@ public sealed class SessionLogService : ISessionLogService
                     Branch = entity.Branch
                 }
                 : null,
-            Turns = turns.Select(MapTurnEntityToDto).ToList()
+            Turns = turns.Select(MapTurnEntityToDto).ToList(),
+            Tags = entity.Tags.Count > 0 ? entity.Tags.Select(t => t.Tag).ToList() : null,
         };
     }
 

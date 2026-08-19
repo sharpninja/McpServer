@@ -1,0 +1,231 @@
+=== upfr-FR-MCP-TRIAGEERR-001 ===
+type: result
+payload:
+  requestId: req-20260818T192253Z-c76b
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGEERR-001
+      title: Normalized error envelope for REST, MCP, REPL, and plugins
+      description: Every failure on REST /mcpserver/*, MCP tools, REPL workflow errors, and plugin shims returns a machine-readable envelope with code, message, retryable, and optional details so plugins and Agent Help can branch on code without scraping prose. Innermost EF or provider text lives in details.inner.
+      status: pending
+      priority: high
+      area: MCP
+      notes
+=== upfr-FR-MCP-TRIAGESTORE-001 ===
+type: result
+payload:
+  requestId: req-20260818T192257Z-1d1d
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGESTORE-001
+      title: Session-log persist is diagnosable and idempotent
+      description: Session-log persist is diagnosable and idempotent on identical action resubmit. Session tags persist and round-trip on query. replace_turn for a missing turn is 404. canceled and cancelled are queryable terminal statuses. Superseded hook turns persist canceled with planFile and todoId None sentinels and no opaque 500.
+      status: pending
+      priority: high
+      area: 
+=== upfr-FR-MCP-TRIAGESTORE-002 ===
+type: result
+payload:
+  requestId: req-20260818T192301Z-20d3
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGESTORE-002
+      title: Storage-only outages fail fast without flipping health liveness
+      description: Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+      status: pending
+      priority: high
+      area: MCP
+      notes: Closes BUG-TRIAGE-110. Do not change TR
+=== upfr-FR-MCP-TRIAGESCHEMA-001 ===
+type: result
+payload:
+  requestId: req-20260818T192304Z-941c
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGESCHEMA-001
+      title: SessionLogs missing AgentSession columns fail closed
+      description: After host start, sessionlog query never fails with SQL Invalid column name for AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, or AgentExecutableVersion. Missing schema fails closed as pending-migration. Migration 20260722214500_AddAgentSessionHeaderFields applies on every host workspace database.
+      status: pending
+      priority: high
+      area:
+=== upfr-FR-MCP-TRIAGEPLUGIN-001 ===
+type: result
+payload:
+  requestId: req-20260818T192307Z-239c
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGEPLUGIN-001
+      title: Plugin root session, cache, console, and persist identity
+      description: Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsaf
+=== upfr-FR-MCP-TRIAGETODO-001 ===
+type: result
+payload:
+  requestId: req-20260818T192310Z-c822
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGETODO-001
+      title: EXEC dual-store rehydrate and retry-clean plan create
+      description: set_todo_test_plan rehydrates from a durable EXEC-TODO when execution-state is missing that row. create_todos_from_plan is retry-clean, accounts for soft-deleted ids, and never returns only the bare EF outer DbUpdateException message.
+      status: pending
+      priority: high
+      area: MCP
+      notes: Closes BUG-TRIAGE-123 and 132.
+      acceptanceCriteria:
+     
+=== upfr-FR-MCP-TRIAGEREQ-001 ===
+type: result
+payload:
+  requestId: req-20260818T192314Z-6cc4
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGEREQ-001
+      title: listTr ids are getTr updateTr deleteTr able
+      description: Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+      status: pending
+      priority: high
+      area: MCP
+      notes: Closes BUG-TRIAGE-128.
+      acceptanceCriteria:
+      - id: ac-1
+        text: Every TR id returned by listTr is retrievable and mutable via getTr, upda
+=== upfr-FR-MCP-TRIAGEHELP-001 ===
+type: result
+payload:
+  requestId: req-20260818T192317Z-6147
+  result:
+    success: true
+    item:
+      id: FR-MCP-TRIAGEHELP-001
+      title: Agent Help is diagnosis or incomplete never completed echo
+      description: Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.
+      status: pending
+      priority: high
+      area: MCP
+      notes: Clo
+=== uptr-TR-MCP-TRIAGEERR-001 ===
+type: result
+payload:
+  requestId: req-20260818T192320Z-cc71
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGEERR-001
+      title: Shared error classifier and envelope
+      description: One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
+      status: pending
+      priority: high
+      area: MCP
+   
+=== uptr-TR-MCP-TRIAGESTORE-001 ===
+type: result
+payload:
+  requestId: req-20260818T192323Z-42c3
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGESTORE-001
+      title: Session-log merge tags replace supersede
+      description: SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+      status: pending
+      priority: high
+      area: MCP
+      subarea: TRIAGESTORE
+      ac
+=== uptr-TR-MCP-TRIAGESTORE-002 ===
+type: result
+payload:
+  requestId: req-20260818T192326Z-9e8c
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGESTORE-002
+      title: Five second intake and submit storage budget
+      description: TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+      status: pending
+      priority: high
+      area: MCP
+      subarea: TRIAGESTORE
+      acceptanceCriteria:
+      - id: ac-1
+        text: TriageService.SubmitReportAsync and session
+=== uptr-TR-MCP-TRIAGESCHEMA-001 ===
+type: result
+payload:
+  requestId: req-20260818T192329Z-9708
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGESCHEMA-001
+      title: Startup probe for AgentSession header columns
+      description: Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply 20260722214500_AddAgentSessionHeaderFields on all host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+      status: pending
+      priority: high
+      area: MCP
+      subarea: TR
+=== uptr-TR-MCP-TRIAGEPLUGIN-001 ===
+type: result
+payload:
+  requestId: req-20260818T192332Z-e725
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGEPLUGIN-001
+      title: Sticky root session cache rebind and degraded persist
+      description: plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in repl-invoke.ps1.
+      
+=== uptr-TR-MCP-TRIAGETODO-001 ===
+type: result
+payload:
+  requestId: req-20260818T192336Z-487a
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGETODO-001
+      title: Durable EXEC fallback and soft-delete id allocate
+      description: TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
+      status: pending
+      priority: high
+      area: MCP
+      subarea: TRIAGETODO
+      accepta
+=== uptr-TR-MCP-TRIAGEREQ-001 ===
+type: result
+payload:
+  requestId: req-20260818T192339Z-8383
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGEREQ-001
+      title: ValidateTrId create only
+      description: RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+      status: pending
+      priority: high
+      area: MCP
+      subarea: TRIAGEREQ
+      acceptanceCriteria:
+      - id: ac-1
+        text: RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr update
+=== uptr-TR-MCP-TRIAGEHELP-001 ===
+type: result
+payload:
+  requestId: req-20260818T192342Z-a1b6
+  result:
+    success: true
+    item:
+      id: TR-MCP-TRIAGEHELP-001
+      title: Agent Help no completed echo and long timeout
+      description: AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+      status: pending
+      priority: high
+      area: MCP
+      subarea: TRIAGEHELP
+      acceptanceCriteria:
+      - id: ac-1
+  

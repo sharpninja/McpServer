@@ -9,6 +9,25 @@
 #>
 
 $script:PluginEnvScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+function Get-PluginCacheVersionDriftMessage {
+    param([string]$ConfiguredRoot)
+    return "MCP plugin version-drift: configured plugin root '$ConfiguredRoot' is missing and no replacement cache was found."
+}
+
+function Resolve-PluginCacheOrVersionDrift {
+    param(
+        [string]$ConfiguredRoot,
+        [string]$ReplacementRoot
+    )
+    if ($ConfiguredRoot -and (Test-Path -LiteralPath $ConfiguredRoot -PathType Container)) {
+        return $ConfiguredRoot
+    }
+    if ($ReplacementRoot -and (Test-Path -LiteralPath $ReplacementRoot -PathType Container)) {
+        return $ReplacementRoot
+    }
+    throw (Get-PluginCacheVersionDriftMessage -ConfiguredRoot $ConfiguredRoot)
+}
 $host_ = if ($env:MCP_PLUGIN_HOST) { $env:MCP_PLUGIN_HOST } else { 'claude-code' }
 $env:MCP_PLUGIN_HOST = $host_
 
@@ -69,10 +88,19 @@ $env:PLUGIN_MODEL_DEFAULT = $model
 $env:PLUGIN_TAG = $tag
 $env:MCP_HOOK_OUTPUT_MODE = $outputMode
 
-if (-not $env:MCP_PLUGIN_ROOT) {
-    $resolvedRoot = $rootChain | Where-Object { $_ } | Select-Object -First 1
+if (-not $env:MCP_PLUGIN_ROOT -or -not (Test-Path -LiteralPath $env:MCP_PLUGIN_ROOT -PathType Container)) {
+    $resolvedRoot = $rootChain | Where-Object { $_ -and (Test-Path -LiteralPath $_ -PathType Container) } | Select-Object -First 1
+    if (-not $resolvedRoot) {
+        $cacheHome = Join-Path $env:USERPROFILE '.claude\plugins\cache'
+        if (Test-Path -LiteralPath $cacheHome -PathType Container) {
+            $resolvedRoot = Get-ChildItem -LiteralPath $cacheHome -Directory -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -like 'mcpserver*' -or $_.Name -like 'f--github-mcpserver*' } |
+                Sort-Object LastWriteTime -Descending |
+                Select-Object -First 1 -ExpandProperty FullName
+        }
+    }
     if (-not $resolvedRoot) { $resolvedRoot = Split-Path -Parent $script:PluginEnvScriptDir }
-    $env:MCP_PLUGIN_ROOT = $resolvedRoot
+    $env:MCP_PLUGIN_ROOT = Resolve-PluginCacheOrVersionDrift -ConfiguredRoot $env:MCP_PLUGIN_ROOT -ReplacementRoot $resolvedRoot
 }
 
 if (-not $env:MCP_WORKSPACE_START_DIR) {

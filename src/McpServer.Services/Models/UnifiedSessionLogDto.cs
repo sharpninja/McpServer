@@ -69,6 +69,11 @@ public sealed class UnifiedSessionLogDto
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
     public ICollection<UnifiedRequestEntryDto>? Turns { get; set; }
 
+    /// <summary>FR-MCP-TRIAGESTORE-001: session-scoped tags persisted and returned on query.</summary>
+    [JsonPropertyName("tags")]
+    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
+    public ICollection<string>? Tags { get; set; }
+
     /// <summary>TR-PLANNED-CORE-013: Total token count across all turns.</summary>
     [JsonPropertyName("totalTokens")]
     public int? TotalTokens { get; set; }

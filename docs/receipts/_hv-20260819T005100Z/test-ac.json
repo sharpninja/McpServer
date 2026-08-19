@@ -1,0 +1,200 @@
+[
+  {
+    "Id": "TEST-MCP-TRIAGEERR-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Unified error envelope on tool REST and REPL",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.",
+    "Ac1Len": 229,
+    "Condition": "Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Session-log store AC for merge tags replace canceled supersede",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.",
+    "Ac1Len": 207,
+    "Condition": "SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-002",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Triage intake fail-fast when SQL unreachable",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.",
+    "Ac1Len": 156,
+    "Condition": "TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-003",
+    "Found": true,
+    "Status": "pending",
+    "Title": "ReplaceTurn missing requestId is classified not-found",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.",
+    "Ac1Len": 148,
+    "Condition": "ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-004",
+    "Found": true,
+    "Status": "pending",
+    "Title": "canceled and cancelled persist and re-query",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Turn status canceled and cancelled persist via submit and re-query with the same status.",
+    "Ac1Len": 88,
+    "Condition": "Turn status canceled and cancelled persist via submit and re-query with the same status."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-005",
+    "Found": true,
+    "Status": "pending",
+    "Title": "SQLITE_BUSY classifies as retryable persistence_error",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.",
+    "Ac1Len": 110,
+    "Condition": "SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-006",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Superseded hook persist writes None sentinels",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.",
+    "Ac1Len": 95,
+    "Condition": "Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-007",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Storage-unreachable mutate fails in about 5s",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.",
+    "Ac1Len": 121,
+    "Condition": "Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESCHEMA-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Missing AgentSession columns fail closed",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.",
+    "Ac1Len": 162,
+    "Condition": "A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Pester for root session cache console timeout and rebind",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.",
+    "Ac1Len": 230,
+    "Condition": "Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-002",
+    "Found": true,
+    "Status": "pending",
+    "Title": "ReplacePluginCache retain-or-rebind or named version-drift",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.",
+    "Ac1Len": 136,
+    "Condition": "ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-003",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Resolve-McpCacheDir uses hook workspace path",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.",
+    "Ac1Len": 104,
+    "Condition": "Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-004",
+    "Found": true,
+    "Status": "pending",
+    "Title": "beginTurn persist timeout is degraded/queued",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.",
+    "Ac1Len": 86,
+    "Condition": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-005",
+    "Found": true,
+    "Status": "pending",
+    "Title": "completeTurn persist identity uses current-turn sessionId",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "completeTurn persist identity prefers current-turn sessionId after sessionId rebind.",
+    "Ac1Len": 84,
+    "Condition": "completeTurn persist identity prefers current-turn sessionId after sessionId rebind."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGETODO-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Durable EXEC rehydrate and retry-clean create",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.",
+    "Ac1Len": 235,
+    "Condition": "TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGETODO-002",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Soft-deleted EXEC ids revive or skip; invalid dependsOn fails first",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.",
+    "Ac1Len": 177,
+    "Condition": "GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEREQ-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Legacy TR-066 get update delete and create reject",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.",
+    "Ac1Len": 96,
+    "Condition": "Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEHELP-001",
+    "Found": true,
+    "Status": "pending",
+    "Title": "Agent Help progress-only and echo are not completed",
+    "AcCount": 1,
+    "Ac1Id": "ac-1",
+    "Ac1Text": "Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.",
+    "Ac1Len": 170,
+    "Condition": "Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout."
+  }
+]

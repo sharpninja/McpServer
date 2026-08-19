@@ -1,0 +1,10 @@
+id: FR-MCP-TRIAGEREQ-001
+title: listTr ids are getTr updateTr deleteTr able
+description: Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+priority: high
+area: MCP
+notes: Closes BUG-TRIAGE-128.
+acceptanceCriteria:
+  - id: ac-1
+    text: Every TR id returned by listTr is retrievable and mutable via getTr, updateTr, and deleteTr. createTr and batch create still reject non-canonical TR ids.
+    isSatisfied: false

@@ -44,7 +44,7 @@ Get-Service McpServer
 
 ### Verify startup
 
-- `GET /health` returns healthy status
+- `GET /health` returns liveness Healthy, echoes a caller nonce when one is supplied, and reports `storage` as `reachable` or `unreachable` (storage outage does not flip liveness off Healthy)
 - `GET /swagger` loads the API UI
 - `GET /swagger/v1/swagger.json` returns OpenAPI metadata
 - marker file `AGENTS-README-FIRST.yaml` exists at workspace root

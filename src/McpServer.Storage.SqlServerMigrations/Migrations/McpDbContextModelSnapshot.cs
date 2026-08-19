@@ -2326,6 +2326,52 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.ToTable("SessionLogProcessingDialogs");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTagEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<long>("SessionLogId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogId", "Tag")
+                        .IsUnique();
+
+                    b.ToTable("SessionLogTags");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnContextEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -4656,6 +4702,23 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Navigation("SessionLogTurn");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTagEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", "SessionLog")
+                        .WithMany("Tags")
+                        .HasForeignKey("SessionLogId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SessionLog");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnContextEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", "SessionLogTurn")
@@ -5143,6 +5206,8 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
                 {
+                    b.Navigation("Tags");
+
                     b.Navigation("Turns");
                 });
 

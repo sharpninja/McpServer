@@ -189,6 +189,7 @@ public sealed class YamlSerializer : IYamlSerializer
                 RequestId = normalized.GetValueOrDefault("requestId")?.ToString() ?? "",
                 Code = normalized.GetValueOrDefault("code")?.ToString() ?? "",
                 Message = normalized.GetValueOrDefault("message")?.ToString() ?? "",
+                Retryable = ParseRetryable(normalized.GetValueOrDefault("retryable")),
                 Details = ToParamsDict(normalized.GetValueOrDefault("details")),
             },
             "event" => new EventPayload
@@ -262,6 +263,15 @@ public sealed class YamlSerializer : IYamlSerializer
         return null;
     }
 
+    private static bool ParseRetryable(object? value)
+    {
+        if (value is bool flag)
+            return flag;
+        if (value is string text && bool.TryParse(text, out var parsed))
+            return parsed;
+        return false;
+    }
+
     private static IReadOnlyDictionary<string, object?>? ToParamsDict(object? value)
     {
         if (value is null)
@@ -322,6 +332,7 @@ public sealed class YamlSerializer : IYamlSerializer
                 ["requestId"] = e.RequestId,
                 ["code"] = e.Code,
                 ["message"] = e.Message,
+                ["retryable"] = e.Retryable,
                 ["details"] = e.Details,
             },
             IEventPayload ev => new Dictionary<string, object?>

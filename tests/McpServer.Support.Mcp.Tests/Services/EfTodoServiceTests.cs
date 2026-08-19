@@ -241,6 +241,45 @@ public sealed class EfTodoServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-TRIAGETODO-002: CreateAsync of a same-workspace soft-deleted id
+    /// revives the row instead of returning an opaque UNIQUE/already-exists error.
+    /// </summary>
+    [Fact]
+    public async Task CreateAsync_SoftDeletedId_RevivesOrSkips()
+    {
+        var first = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EXEC-TODO-077",
+            Title = "Original exec",
+            Section = "execution-phase",
+            Priority = "medium",
+            Note = "Byrd phase: Execution",
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(first.Success, first.Error);
+
+        var deleted = await _sut.DeleteAsync("EXEC-TODO-077", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.True(deleted.Success, deleted.Error);
+        Assert.Null(await _sut.GetByIdAsync("EXEC-TODO-077", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+
+        var revived = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "EXEC-TODO-077",
+            Title = "Revived exec",
+            Section = "execution-phase",
+            Priority = "high",
+            Note = "Byrd phase: Execution revived",
+        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.True(revived.Success, revived.Error);
+        Assert.DoesNotContain("already exists", revived.Error ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+        var item = await _sut.GetByIdAsync("EXEC-TODO-077", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        Assert.NotNull(item);
+        Assert.Equal("Revived exec", item!.Title);
+        Assert.Equal("high", item.Priority);
+        Assert.False(item.Done);
+    }
+
+    /// <summary>
     /// Phase-3 acceptance: <see cref="EfTodoService.DeleteAsync"/> removes the row
     /// and appends a <c>deleted</c> audit entry, making the TODO unfindable.
     /// </summary>

@@ -66,14 +66,36 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
             // {"error":"backend_unavailable", ...} instead of a generic 500 echoing raw
             // provider text (raw SqlClient messages, the EnableRetryOnFailure hint).
             HttpErrorResponse payload;
-            if (IsBackendUnavailable(context, ex))
+            var classified = Classify(context, ex);
+            if (classified is not null)
+            {
+                context.Response.StatusCode = classified.StatusCode;
+                payload = new HttpErrorResponse
+                {
+                    Status = classified.StatusCode,
+                    Error = classified.Code,
+                    Code = classified.Code,
+                    Message = classified.Message,
+                    Retryable = classified.Retryable,
+                    Details = ToStringDetails(classified.Details),
+                    Detail = classified.Code == "backend_unavailable"
+                        ? $"Operation '{operation}' failed because the storage backend is unreachable."
+                        : BuildSanitizedDetail(ex, operation),
+                    Operation = operation,
+                    TraceId = traceId,
+                    TimestampUtc = DateTimeOffset.UtcNow,
+                };
+            }
+            else if (IsBackendUnavailable(context, ex))
             {
                 context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
                 payload = new HttpErrorResponse
                 {
                     Status = StatusCodes.Status503ServiceUnavailable,
                     Error = "backend_unavailable",
+                    Code = "backend_unavailable",
                     Message = "The storage backend is currently unreachable. Retry the request once connectivity is restored.",
+                    Retryable = true,
                     Detail = $"Operation '{operation}' failed because the storage backend is unreachable.",
                     Operation = operation,
                     TraceId = traceId,
@@ -87,7 +109,9 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
                 {
                     Status = StatusCodes.Status500InternalServerError,
                     Error = "internal_server_error",
+                    Code = "internal_server_error",
                     Message = "The server encountered an unexpected error while processing the request.",
+                    Retryable = false,
                     Detail = BuildSanitizedDetail(ex, operation),
                     Operation = operation,
                     TraceId = traceId,
@@ -112,6 +136,31 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
 
         var detector = requestServices.GetService<IBackendUnavailabilityDetector>();
         return detector?.IsBackendUnavailable(exception) == true;
+    }
+
+    private static McpErrorClassification? Classify(HttpContext context, Exception exception)
+    {
+        if (context.RequestServices is not { } requestServices)
+            return null;
+
+        var classifier = requestServices.GetService<IMcpErrorClassifier>();
+        return classifier?.Classify(exception);
+    }
+
+    private static Dictionary<string, string>? ToStringDetails(IReadOnlyDictionary<string, object?>? details)
+    {
+        if (details is null || details.Count == 0)
+            return null;
+
+        var mapped = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var pair in details)
+        {
+            if (pair.Value is null)
+                continue;
+            mapped[pair.Key] = pair.Value.ToString() ?? string.Empty;
+        }
+
+        return mapped.Count == 0 ? null : mapped;
     }
 
     private static string GetOperation(HttpContext context)

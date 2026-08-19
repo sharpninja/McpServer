@@ -15,7 +15,7 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 - First persist and replace of a turn require both `planFile` and `todoId`.
 - Accepted `planFile`: workspace-relative path, exact absolute path, `~/` home-relative path, or the exact sentinel `None` (case-sensitive). `..` is rejected.
 - Accepted `todoId`: canonical MCP TODO id (`PHASE-AREA-###` or `ISSUE-N`) or `None`. FR/TR/TEST ids are rejected.
-- Additive updates that omit either field keep the stored value. Replace that omits either field is rejected.
+- Additive updates that omit either field keep the stored value. Replace that omits either field is rejected, except the canceled/cancelled hook-supersede persist: when the incoming turn status is `canceled` or `cancelled` and either field is omitted or blank, the server stamps `None` then validates. That is the only first-persist omission path (FR-MCP-SESSIONLOGCTX-001 AC-003 plus STORE-006).
 - Reads never return null for these fields. Import, ingest, and federation persist a validated pair (`None` if extraction finds nothing).
 
 ## Naming Conventions (Normative)
@@ -46,7 +46,8 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
   "model": "string — AI model name (e.g. 'claude-sonnet-4-20250514')",
   "started": "string — ISO 8601 timestamp when session began",
   "lastUpdated": "string — ISO 8601 timestamp of latest activity",
-  "status": "string — 'in_progress' or 'completed'",
+  "status": "string — 'in_progress', 'completed', 'failed', 'canceled', or 'cancelled'",
+  "tags": ["string array — session-scoped tags; persist and return on query (not silently dropped)"],
   "turns": [ "array of RequestTurn objects (see below)" ]
 }
 ```
@@ -61,7 +62,7 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
   "queryTitle": "string — short summary of the query",
   "response": "string — your response text",
   "interpretation": "string — your understanding of what was asked",
-  "status": "string — 'completed' or 'in_progress'",
+  "status": "string — 'completed', 'in_progress', 'failed', 'canceled', or 'cancelled' (canceled/cancelled are first-class terminal statuses)",
   "model": "string — model used for this turn",
   "tokenCount": "integer|null — approximate token count",
   "tags": ["string array — e.g. 'refactor', 'bugfix', 'feature'"],

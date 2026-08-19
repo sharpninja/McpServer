@@ -1,0 +1,164 @@
+[
+  {
+    "id": "TEST-MCP-TRIAGEERR-001",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 229,
+    "ac1Text": "Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.",
+    "title": "Unified error envelope on tool REST and REPL",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESCHEMA-001",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 162,
+    "ac1Text": "A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.",
+    "title": "Missing AgentSession columns fail closed",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-001",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 207,
+    "ac1Text": "SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.",
+    "title": "Session-log store AC for merge tags replace canceled supersede",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-002",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 156,
+    "ac1Text": "TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.",
+    "title": "Triage intake fail-fast when SQL unreachable",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-003",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 148,
+    "ac1Text": "ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.",
+    "title": "ReplaceTurn missing requestId is classified not-found",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-004",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 88,
+    "ac1Text": "Turn status canceled and cancelled persist via submit and re-query with the same status.",
+    "title": "canceled and cancelled persist and re-query",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-005",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 110,
+    "ac1Text": "SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.",
+    "title": "SQLITE_BUSY classifies as retryable persistence_error",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-006",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 95,
+    "ac1Text": "Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.",
+    "title": "Superseded hook persist writes None sentinels",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGESTORE-007",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 121,
+    "ac1Text": "Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.",
+    "title": "Storage-unreachable mutate fails in about 5s",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-001",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 230,
+    "ac1Text": "Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.",
+    "title": "Pester for root session cache console timeout and rebind",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-002",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 136,
+    "ac1Text": "ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.",
+    "title": "ReplacePluginCache retain-or-rebind or named version-drift",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-003",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 104,
+    "ac1Text": "Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.",
+    "title": "Resolve-McpCacheDir uses hook workspace path",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-004",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 86,
+    "ac1Text": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.",
+    "title": "beginTurn persist timeout is degraded/queued",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEPLUGIN-005",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 84,
+    "ac1Text": "completeTurn persist identity prefers current-turn sessionId after sessionId rebind.",
+    "title": "completeTurn persist identity uses current-turn sessionId",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGETODO-001",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 235,
+    "ac1Text": "TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.",
+    "title": "Durable EXEC rehydrate and retry-clean create",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGETODO-002",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 177,
+    "ac1Text": "GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.",
+    "title": "Soft-deleted EXEC ids revive or skip; invalid dependsOn fails first",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEREQ-001",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 96,
+    "ac1Text": "Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.",
+    "title": "Legacy TR-066 get update delete and create reject",
+    "status": "pending"
+  },
+  {
+    "id": "TEST-MCP-TRIAGEHELP-001",
+    "found": true,
+    "acCount": 1,
+    "ac1Len": 170,
+    "ac1Text": "Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.",
+    "title": "Agent Help progress-only and echo are not completed",
+    "status": "pending"
+  }
+]

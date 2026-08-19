@@ -482,6 +482,8 @@ partial class Build
         if (!Directory.Exists(nodeCoreRoot.ToString()))
             throw new DirectoryNotFoundException($"Node plugin core source was not found at {nodeCoreRoot}.");
 
+        EnsureNodePluginCoreDependencies(nodeCoreRoot.ToString());
+
         var manifestVersion = ReadNodeCorePackageVersion(nodeCoreRoot);
 
         Log.Information("Building Node plugin core package for {Count} plugin vendor target(s)", vendorDirectories.Length);
@@ -532,6 +534,41 @@ partial class Build
         }
 
         File.Delete(packedPath.ToString());
+    }
+
+    /// <summary>Path to the TypeScript compiler inside plugins/core/lib-node.</summary>
+    /// <param name="nodeCoreRoot">Node plugin core source directory.</param>
+    /// <returns>Expected tsc path under node_modules.</returns>
+    internal static string GetNodePluginCoreTscPath(string nodeCoreRoot)
+        => Path.Combine(nodeCoreRoot, "node_modules", "typescript", "bin", "tsc");
+
+    /// <summary>True when plugins/core/lib-node can run <c>tsc</c> from its local TypeScript package.</summary>
+    /// <param name="nodeCoreRoot">Node plugin core source directory.</param>
+    /// <returns>True when typescript/bin/tsc exists.</returns>
+    internal static bool NodePluginCoreHasTsc(string nodeCoreRoot)
+        => File.Exists(GetNodePluginCoreTscPath(nodeCoreRoot));
+
+    /// <summary>
+    /// Restores lib-node dependencies with <c>npm ci</c> when typescript/bin/tsc is missing
+    /// so <c>npm run build</c> does not fail with MODULE_NOT_FOUND.
+    /// </summary>
+    /// <param name="nodeCoreRoot">Node plugin core source directory.</param>
+    internal static void EnsureNodePluginCoreDependencies(string nodeCoreRoot)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(nodeCoreRoot);
+        if (NodePluginCoreHasTsc(nodeCoreRoot))
+            return;
+
+        Log.Information("Node plugin core is missing typescript/bin/tsc; running npm ci in {Root}", nodeCoreRoot);
+        ProcessTasks.StartProcess("npm", "ci", workingDirectory: nodeCoreRoot)
+            .AssertZeroExitCode();
+
+        if (!NodePluginCoreHasTsc(nodeCoreRoot))
+        {
+            throw new FileNotFoundException(
+                "npm ci completed but plugins/core/lib-node/node_modules/typescript/bin/tsc is still missing.",
+                GetNodePluginCoreTscPath(nodeCoreRoot));
+        }
     }
 
     /// <summary>Reads the version declared by plugins/core/lib-node/package.json.</summary>
@@ -585,6 +622,14 @@ partial class Build
 
     internal static void ReplacePluginCache(string sourceRoot, string cacheRoot)
     {
+        if (HasOpenPluginTurn(cacheRoot))
+        {
+            Log.Information(
+                "Retaining plugin cache {CacheRoot} because an in-progress turn still references it.",
+                cacheRoot);
+            return;
+        }
+
         if (Directory.Exists(cacheRoot))
         {
             var parent = Path.GetDirectoryName(cacheRoot)
@@ -601,6 +646,42 @@ partial class Build
         }
 
         CopyDirectory(sourceRoot, cacheRoot);
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGEPLUGIN-002: true when cacheRoot (or a child session folder)
+    /// still has a current-turn.yaml with status in_progress.
+    /// </summary>
+    internal static bool HasOpenPluginTurn(string cacheRoot)
+    {
+        if (string.IsNullOrWhiteSpace(cacheRoot) || !Directory.Exists(cacheRoot))
+            return false;
+
+        var turnFiles = new List<string>();
+        var rootTurn = Path.Combine(cacheRoot, "current-turn.yaml");
+        if (File.Exists(rootTurn))
+            turnFiles.Add(rootTurn);
+
+        var sessionsDir = Path.Combine(cacheRoot, "sessions");
+        if (Directory.Exists(sessionsDir))
+        {
+            turnFiles.AddRange(Directory.EnumerateFiles(
+                sessionsDir,
+                "current-turn.yaml",
+                SearchOption.AllDirectories));
+        }
+
+        foreach (var turnFile in turnFiles)
+        {
+            var text = File.ReadAllText(turnFile);
+            if (text.Contains("status: in_progress", StringComparison.Ordinal)
+                || text.Contains("status:in_progress", StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     internal static bool TryDeletePluginCacheDirectory(string cacheRoot, out Exception? error)

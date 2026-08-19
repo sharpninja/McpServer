@@ -98,6 +98,42 @@ public sealed class BuildTargetTests
         Assert.Equal(typeof(string), field!.FieldType);
     }
 
+    /// <summary>Sync restores lib-node with npm ci when typescript/bin/tsc is missing, before npm run build.</summary>
+    [Fact]
+    public void SyncAgentPlugins_EnsuresNodeCoreNpmCiBeforeNpmRunBuild()
+    {
+        var repoRoot = FindRepositoryRoot();
+        var source = File.ReadAllText(Path.Combine(repoRoot, "build", "Build.SyncAgentPlugins.cs"));
+        const string ensureCall = "EnsureNodePluginCoreDependencies(nodeCoreRoot.ToString());";
+        const string buildCall = "ProcessTasks.StartProcess(\"npm\", \"run build\", workingDirectory: nodeCoreRoot.ToString())";
+
+        Assert.Contains(ensureCall, source, StringComparison.Ordinal);
+        Assert.Contains("npm\", \"ci\"", source, StringComparison.Ordinal);
+        Assert.True(
+            source.IndexOf(ensureCall, StringComparison.Ordinal) < source.IndexOf(buildCall, StringComparison.Ordinal),
+            "npm ci must restore typescript/bin/tsc before npm run build.");
+    }
+
+    /// <summary>HasTsc is true only when node_modules/typescript/bin/tsc exists.</summary>
+    [Fact]
+    public void NodePluginCoreHasTsc_RequiresLocalTscFile()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcpserver-node-core-tsc-{Guid.NewGuid():N}");
+        try
+        {
+            Assert.False(Build.NodePluginCoreHasTsc(root));
+            var tsc = Build.GetNodePluginCoreTscPath(root);
+            Directory.CreateDirectory(Path.GetDirectoryName(tsc)!);
+            File.WriteAllText(tsc, "#!/usr/bin/env node");
+            Assert.True(Build.NodePluginCoreHasTsc(root));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
+        }
+    }
+
     /// <summary>TEST-MCP-PLUGIN-PSONLY-001: Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>
     [Fact]
     public void SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches()
@@ -501,6 +537,38 @@ public sealed class BuildTargetTests
         {
             if (Directory.Exists(home))
                 Directory.Delete(home, true);
+        }
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGEPLUGIN-002: an in-progress current-turn.yaml retains cache N.
+    /// </summary>
+    [Fact]
+    public void ReplacePluginCache_OpenTurn_RetainsExistingCache()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"mcpserver-plugin-cache-retain-test-{Guid.NewGuid():N}");
+        try
+        {
+            var sourceRoot = Path.Combine(root, "source");
+            var cacheRoot = Path.Combine(root, "cache");
+            Directory.CreateDirectory(Path.Combine(sourceRoot, "lib"));
+            Directory.CreateDirectory(cacheRoot);
+            File.WriteAllText(Path.Combine(sourceRoot, "lib", "plugin-hook.ps1"), "new cache content");
+            File.WriteAllText(Path.Combine(cacheRoot, "kept.txt"), "retain me");
+            File.WriteAllText(
+                Path.Combine(cacheRoot, "current-turn.yaml"),
+                "status: in_progress" + Environment.NewLine + "requestId: req-keep" + Environment.NewLine);
+
+            Build.ReplacePluginCache(sourceRoot, cacheRoot);
+
+            Assert.True(File.Exists(Path.Combine(cacheRoot, "kept.txt")));
+            Assert.Equal("retain me", File.ReadAllText(Path.Combine(cacheRoot, "kept.txt")));
+            Assert.False(File.Exists(Path.Combine(cacheRoot, "lib", "plugin-hook.ps1")));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+                Directory.Delete(root, true);
         }
     }
 

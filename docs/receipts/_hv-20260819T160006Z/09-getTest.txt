@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260819T160818Z-f964
+  result:
+    id: TEST-MCP-TRIAGEPLUGIN-001
+    title: Pester for root session cache console timeout and rebind
+    description: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+    status: pending
+    priority: high
+    area: MCP
+    testType: unit
+    acceptanceCriteria:
+    - id: ac-1
+      text: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-19T16:08:19.5398578+00:00
+    updatedAt: 2026-08-19T16:08:19.5399755+00:00
+  deprecated: true
+
+---

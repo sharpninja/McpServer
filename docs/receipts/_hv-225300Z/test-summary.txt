@@ -1,0 +1,7 @@
+supportExit=0
+replExit=0
+buildExit=0
+pesterPassed=
+pesterFailed=
+pesterSkipped=
+pesterTotal=

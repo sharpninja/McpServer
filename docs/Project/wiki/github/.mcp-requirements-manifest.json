@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "github",
-  "generatedAtUtc": "2026-08-18T18:31:58.9771316+00:00",
+  "generatedAtUtc": "2026-08-19T16:27:56.3306442+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -28,6 +28,14 @@
     "Use-Case-Extension-Design-v3.md",
     "Use-Case-Diagram-Mermaid-Schema-v1.md",
     "Session-Log-Schema.md",
-    "Handoff-Ingestion.md"
+    "Handoff-Ingestion.md",
+    "Byrd-Todo-Execution-Spec.md",
+    "Operations/Tunnel-Cloudflare.md",
+    "Operations/Tunnel-FRP-Railway.md",
+    "Operations/Tunnel-Ngrok.md",
+    "TODO-Schema.md",
+    "Action-Types.md",
+    "MCP-Memories.md",
+    "Federation.md"
   ]
 }

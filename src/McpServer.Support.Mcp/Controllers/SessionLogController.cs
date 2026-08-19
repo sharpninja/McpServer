@@ -1,6 +1,8 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Controllers;
@@ -41,10 +43,10 @@ public sealed class SessionLogController : ControllerBase
             return ValidationProblem(detail: "Request body is required.", title: "Invalid session log body.");
 
         if (string.IsNullOrWhiteSpace(dto.SourceType))
-            return ValidationProblem(detail: "sourceType is required.", title: "Invalid session log body.");
+            return ClassifiedError(new ArgumentException("sourceType is required."));
 
         if (string.IsNullOrWhiteSpace(dto.SessionId))
-            return ValidationProblem(detail: "sessionId is required.", title: "Invalid session log body.");
+            return ClassifiedError(new ArgumentException("sessionId is required."));
 
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(dto.SessionId, dto.SourceType);
         if (sessionIdError is not null)
@@ -63,11 +65,18 @@ public sealed class SessionLogController : ControllerBase
         if (dto.Turns is { Count: > MaxTurnCount })
             return ValidationProblem(detail: $"Turn count exceeds maximum of {MaxTurnCount}.", title: "Too many turns.");
 
-        var id = await _service.SubmitAsync(dto, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            var id = await _service.SubmitAsync(dto, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
 
-        return Created(
-            new Uri($"/mcpserver/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
-            new { id, sourceType = dto.SourceType, sessionId = dto.SessionId });
+            return Created(
+                new Uri($"/mcpserver/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
+                new { id, sourceType = dto.SourceType, sessionId = dto.SessionId });
+        }
+        catch (Exception ex) when (ex is DbUpdateException or ArgumentException or InvalidOperationException or StorageCommandBudgetExceededException)
+        {
+            return ClassifiedError(ex);
+        }
     }
 
     /// <summary>
@@ -87,7 +96,7 @@ public sealed class SessionLogController : ControllerBase
     /// <returns>200 OK with paginated session logs.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(SessionLogQueryResult), StatusCodes.Status200OK)]
-    public async Task<ActionResult<SessionLogQueryResult>> QueryAsync(
+    public async Task<IActionResult> QueryAsync(
         [FromQuery] string? agent,
         [FromQuery] string? agentDefinitionId,
         [FromQuery] string? model,
@@ -114,8 +123,15 @@ public sealed class SessionLogController : ControllerBase
             TodoId = todoId
         };
 
-        var result = await _service.QueryAsync(request, cancellationToken).ConfigureAwait(false);
-        return Ok(result);
+        try
+        {
+            var result = await _service.QueryAsync(request, cancellationToken).ConfigureAwait(false);
+            return Ok(result);
+        }
+        catch (Exception ex) when (ex is SessionLogSchemaPendingMigrationException or InvalidOperationException)
+        {
+            return ClassifiedError(ex);
+        }
     }
 
     /// <summary>
@@ -182,7 +198,7 @@ public sealed class SessionLogController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return NotFound(new { error = ex.Message });
+            return ClassifiedError(ex);
         }
     }
 
@@ -227,7 +243,7 @@ public sealed class SessionLogController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return NotFound(new { error = ex.Message });
+            return ClassifiedError(ex);
         }
     }
 
@@ -294,7 +310,7 @@ public sealed class SessionLogController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return NotFound(new { error = ex.Message });
+            return ClassifiedError(ex);
         }
     }
 
@@ -332,7 +348,7 @@ public sealed class SessionLogController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return NotFound(new { error = ex.Message });
+            return ClassifiedError(ex);
         }
     }
 
@@ -458,7 +474,7 @@ public sealed class SessionLogController : ControllerBase
         catch (InvalidOperationException ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return NotFound(new { error = ex.Message });
+            return ClassifiedError(ex);
         }
     }
 
@@ -523,14 +539,9 @@ public sealed class SessionLogController : ControllerBase
             var turnId = await _service.ReplaceTurnAsync(agent, sessionId, turn, cancellationToken).ConfigureAwait(false);
             return Ok(new { turnId, agent, sessionId, requestId, replaced = true });
         }
-        catch (ArgumentException ex)
+        catch (Exception ex)
         {
-            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid turn payload.");
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return NotFound(new { error = ex.Message });
+            return ClassifiedError(ex);
         }
     }
 
@@ -559,7 +570,7 @@ public sealed class SessionLogController : ControllerBase
             var found = await _service.ReplaceTurnSectionAsync(agent, sessionId, requestId, section, payload, cancellationToken).ConfigureAwait(false);
             return found
                 ? Ok(new { agent, sessionId, requestId, section, replaced = true })
-                : NotFound(new { error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+                : ClassifiedError(new KeyNotFoundException($"Turn not found: {agent}/{sessionId}/{requestId}"));
         }
         catch (ArgumentException ex)
         {
@@ -586,7 +597,7 @@ public sealed class SessionLogController : ControllerBase
             var found = await _service.ClearTurnSectionAsync(agent, sessionId, requestId, section, cancellationToken).ConfigureAwait(false);
             return found
                 ? Ok(new { agent, sessionId, requestId, section, cleared = true })
-                : NotFound(new { error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+                : ClassifiedError(new KeyNotFoundException($"Turn not found: {agent}/{sessionId}/{requestId}"));
         }
         catch (ArgumentException ex)
         {
@@ -616,7 +627,7 @@ public sealed class SessionLogController : ControllerBase
             var found = await _service.DeleteTurnItemAsync(agent, sessionId, requestId, section, itemKey, cancellationToken).ConfigureAwait(false);
             return found
                 ? Ok(new { agent, sessionId, requestId, section, itemKey, deleted = true })
-                : NotFound(new { error = $"Item not found in section '{section}' of turn {agent}/{sessionId}/{requestId}." });
+                : ClassifiedError(new KeyNotFoundException($"Item not found in section '{section}' of turn {agent}/{sessionId}/{requestId}."));
         }
         catch (ArgumentException ex)
         {
@@ -643,7 +654,7 @@ public sealed class SessionLogController : ControllerBase
             var found = await _service.DeleteTurnAsync(agent, sessionId, requestId, cancellationToken).ConfigureAwait(false);
             return found
                 ? Ok(new { agent, sessionId, requestId, deleted = true })
-                : NotFound(new { error = $"Turn not found: {agent}/{sessionId}/{requestId}" });
+                : ClassifiedError(new KeyNotFoundException($"Turn not found: {agent}/{sessionId}/{requestId}"));
         }
         catch (ArgumentException ex)
         {
@@ -669,12 +680,34 @@ public sealed class SessionLogController : ControllerBase
             var found = await _service.DeleteSessionAsync(agent, sessionId, cancellationToken).ConfigureAwait(false);
             return found
                 ? Ok(new { agent, sessionId, deleted = true })
-                : NotFound(new { error = $"Session not found: {agent}/{sessionId}" });
+                : ClassifiedError(new KeyNotFoundException($"Session not found: {agent}/{sessionId}"));
         }
         catch (ArgumentException ex)
         {
             return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid identifier.");
         }
+    }
+
+    /// <summary>FR-MCP-TRIAGEERR-001: maps persistence and validation failures to the shared envelope.</summary>
+    private IActionResult ClassifiedError(Exception exception)
+    {
+        _logger.LogError("{ExceptionDetail}", exception.ToString());
+        var classified = McpErrorClassifier.Classify(exception);
+        return new ObjectResult(new
+        {
+            type = "https://httpstatuses.io/" + classified.StatusCode,
+            title = classified.Code,
+            status = classified.StatusCode,
+            detail = classified.Message,
+            code = classified.Code,
+            message = classified.Message,
+            retryable = classified.Retryable,
+            details = classified.Details,
+        })
+        {
+            StatusCode = classified.StatusCode,
+            ContentTypes = { "application/problem+json" },
+        };
     }
 }
 

@@ -24,9 +24,17 @@
   - [Use Case Extension Design v3](Use-Case-Extension-Design-v3)
   - [Use Case Diagram Mermaid Schema v1](Use-Case-Diagram-Mermaid-Schema-v1)
   - [Session Log Schema](Session-Log-Schema)
+  - [TODO Schema](TODO-Schema)
+  - [Session Log Action Types](Action-Types)
+  - [MCP Memories](MCP-Memories)
+  - [Federation](Federation)
 - Process
   - [Byrd Development Process v4](Byrd-Development-Process)
   - [Release Checklist](Release-Checklist)
   - [Onboarding: Human and AI Partnership](Onboarding-Human-AI-Partnership)
+  - [TODO-Centered Byrd Execution Spec](Byrd-Todo-Execution-Spec)
 - Operations
   - [Azure Pipelines](Azure-Pipelines)
+  - [Cloudflare Tunnel](Operations/Tunnel-Cloudflare)
+  - [FRP Railway Tunnel](Operations/Tunnel-FRP-Railway)
+  - [Ngrok Tunnel](Operations/Tunnel-Ngrok)

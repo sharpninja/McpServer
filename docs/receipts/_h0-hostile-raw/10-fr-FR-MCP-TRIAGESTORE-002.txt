@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260818T193217Z-4d33
+  result:
+    id: FR-MCP-TRIAGESTORE-002
+    title: Storage-only outages fail fast without flipping health liveness
+    description: Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+    status: pending
+    priority: high
+    area: MCP
+    notes: Closes BUG-TRIAGE-110. Do not change TR-MCP-HEALTH-003 liveness split.
+    acceptanceCriteria:
+    - id: ac-1
+      text: Session-log and triage mutating calls fail within about 5 seconds with a classified storage-unavailable error when SQL is unreachable. GET /health remains process-live and echoes nonce. Failsafe stays queued. After restore the next mutate succeeds.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-18T19:32:18.0806151+00:00
+    updatedAt: 2026-08-18T19:32:18.0807178+00:00
+  deprecated: true
+
+---

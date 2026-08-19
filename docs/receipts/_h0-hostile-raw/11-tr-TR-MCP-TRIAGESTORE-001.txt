@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260818T193229Z-e97f
+  result:
+    id: TR-MCP-TRIAGESTORE-001
+    title: Session-log merge tags replace supersede
+    description: SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: TRIAGESTORE
+    acceptanceCriteria:
+    - id: ac-1
+      text: SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-18T19:32:29.7678701+00:00
+    updatedAt: 2026-08-18T19:32:29.7679931+00:00
+  deprecated: true
+
+---

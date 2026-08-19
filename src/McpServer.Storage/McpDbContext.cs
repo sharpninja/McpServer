@@ -92,6 +92,9 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-PLANNED-CORE-013: Session log turn tags (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnTagEntity> SessionLogTurnTags => Set<SessionLogTurnTagEntity>();
 
+    /// <summary>FR-MCP-TRIAGESTORE-001: Session-scoped tags.</summary>
+    public DbSet<SessionLogTagEntity> SessionLogTags => Set<SessionLogTagEntity>();
+
     /// <summary>TR-PLANNED-CORE-013: Session log turn context items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnContextEntity> SessionLogTurnContexts => Set<SessionLogTurnContextEntity>();
 
@@ -377,6 +380,15 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Tags)
                 .HasForeignKey(x => x.SessionLogTurnId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<SessionLogTagEntity>(e =>
+        {
+            e.HasIndex(x => new { x.SessionLogId, x.Tag }).IsUnique();
+            e.HasOne(x => x.SessionLog)
+                .WithMany(x => x.Tags)
+                .HasForeignKey(x => x.SessionLogId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
@@ -1021,6 +1033,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<SessionLogTurnEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogActionEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogTurnTagEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogTagEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogTurnContextEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ToolDefinitionEntity>().HasIndex(e => e.WorkspaceId);
@@ -1471,6 +1484,7 @@ public sealed class McpDbContext : DbContext
             SessionLogTurnEntity turn => FirstNonEmpty(turn.SessionLog?.WorkspaceId),
             SessionLogActionEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogTurnTagEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
+            SessionLogTagEntity child => FirstNonEmpty(child.SessionLog?.WorkspaceId),
             SessionLogTurnContextEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogProcessingDialogEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),
             SessionLogCommitEntity child => FirstNonEmpty(child.SessionLogTurn?.WorkspaceId, child.SessionLogTurn?.SessionLog?.WorkspaceId),

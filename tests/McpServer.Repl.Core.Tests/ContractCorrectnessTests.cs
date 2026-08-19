@@ -189,8 +189,9 @@ public class ContractCorrectnessTests
         Assert.Contains(properties, p => p.Name == nameof(IErrorPayload.Code));
         Assert.Contains(properties, p => p.Name == nameof(IErrorPayload.Message));
         Assert.Contains(properties, p => p.Name == nameof(IErrorPayload.Details));
+        Assert.Contains(properties, p => p.Name == nameof(IErrorPayload.Retryable));
 
-        Assert.Equal(4, properties.Length);
+        Assert.Equal(5, properties.Length);
     }
 
     [Fact]

@@ -97,10 +97,12 @@ function Resolve-McpCacheDir {
         @($StartPath)
     } else {
         @(
-            (Get-Location).Path,
             $env:MCP_WORKSPACE_START_DIR,
+            $env:MCP_WORKSPACE_PATH,
+            $env:MCPSERVER_WORKSPACE_PATH,
             $env:CLAUDE_PROJECT_DIR,
-            $env:CODEX_CWD
+            $env:CODEX_CWD,
+            (Get-Location).Path
         ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
     }
 

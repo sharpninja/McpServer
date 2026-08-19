@@ -1,0 +1,281 @@
+[
+  {
+    "Id": "TEST-MCP-BUGTRIAGE-042",
+    "Title": "",
+    "Status": "pending",
+    "AcCount": 0,
+    "AcEmpty": true,
+    "Ac": "",
+    "Condition": "Grok CLI one-shot argument construction forwards an explicitly configured model. GrokCliAgentExecutionStrategyTests.BuildGrokArgumentList_ConfiguredModel_IncludesModelFlag verifies a real model name (for example grok-4.3) emits --model before --output-format in the one-shot argument list (validates TR-MCP-TRIAGE-003 runner invocation construction)."
+  },
+  {
+    "Id": "TEST-MCP-BUGTRIAGE-043",
+    "Title": "",
+    "Status": "pending",
+    "AcCount": 0,
+    "AcEmpty": true,
+    "Ac": "",
+    "Condition": "Grok CLI startup-rejection guards for the triage research runner (validates TR-MCP-TRIAGE-003). GrokCliAgentExecutionStrategyTests verify: the sentinel model value auto (any casing) or an empty model omits --model entirely so the CLI picks its default, because current Grok CLIs reject --model auto with \"unknown model id\" and the runner substitutes auto for unset tier models (BuildGrokArgumentList_AutoOrEmptyModel_OmitsModelFlag, 5 cases); effort flags are pinned to high because current Grok CLIs reject max with \"unknown effort level\" (BuildGrokArgumentList_ContainsExpectedFlagsInOrder). Evidence 2026-07-14: both rejections reproduced from captured run stderr; fixes deployed in 1.4.15/1.4.16; live research run for triage-group-27f5ecfe4c926fde completed exit 0 at 20:08Z, first successful run since 2026-07-07."
+  },
+  {
+    "Id": "TEST-MCP-PLUGIN-TRIAGE-001",
+    "Title": "Triage plugin skill coverage",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-PLUGIN-TRIAGE-001-AC001:Skill tests or repository checks verify every plugin bundle includes triage guidance.",
+    "Condition": "Every plugin skill bundle documents when and how to submit triage reports and the async expectation."
+  },
+  {
+    "Id": "TEST-MCP-REPL-TRIAGE-001",
+    "Title": "Triage REPL parity",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-REPL-TRIAGE-001-AC001:REPL tests cover passthrough, typed workflow routing, deprecated metadata, and errors.",
+    "Condition": "Full client.triage.* and workflow.triage.* REPL surface works with correct envelopes."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGE-001",
+    "Title": "Triage intake acceptance",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-TRIAGE-001-AC001:Unit and integration tests cover valid and invalid report submission through public surfaces.",
+    "Condition": "Intake accepts valid reports and rejects invalid reports across REST, client, and REPL."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGE-002",
+    "Title": "Triage grouping acceptance",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-TRIAGE-002-AC001:Tests prove grouping keys, workspace isolation, quiet deadline resets, and McpServer core/plugin routing fallback behavior.",
+    "Condition": "Deterministic grouping, McpServer workspace routing for core and plugin bugs, and 15-minute quiet-window behavior are verified."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Title": "Triage research worker dispatch",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-TRIAGE-003-AC001:Tests verify dispatch input and configured prompt rendering.",
+    "Condition": "Research worker invokes configured direct agent with group JSON and prompt."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGE-004",
+    "Title": "Triage TODO creation",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-TRIAGE-004-AC001:Tests verify idempotent TODO creation from valid research output.",
+    "Condition": "Schema-valid research output creates exactly one BUG-TRIAGE-### TODO."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGE-005",
+    "Title": "Triage research failure handling",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-TRIAGE-005-AC001:Tests verify failed runs preserve output or errors and do not create TODOs.",
+    "Condition": "Invalid agent output or failed agent run creates no TODO and leaves inspectable failure state."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGE-006",
+    "Title": "Triage workspace isolation",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-TRIAGE-006-AC001:Tests verify query filters and grouping scope never cross workspace boundaries.",
+    "Condition": "Multi-workspace isolation prevents cross-workspace grouping and status leakage."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEERR-001",
+    "Title": "Unified error envelope on tool REST and REPL",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.",
+    "Condition": "Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEHELP-001",
+    "Title": "Agent Help progress-only and echo are not completed",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.",
+    "Condition": "Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-001",
+    "Title": "Pester for root session cache console timeout and rebind",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.",
+    "Condition": "Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-002",
+    "Title": "ReplacePluginCache retain-or-rebind or named version-drift",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error.",
+    "Condition": "ReplacePluginCache retains the current cache or rebinds to a replacement. If no replacement exists it emits a named version-drift error."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-003",
+    "Title": "Resolve-McpCacheDir uses hook workspace path",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty.",
+    "Condition": "Resolve-McpCacheDir with the hook workspace path succeeds when cwd is the user profile and env is empty."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-004",
+    "Title": "beginTurn persist timeout is degraded/queued",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe.",
+    "Condition": "beginTurn persist timeout after failsafe returns degraded/queued and retains failsafe."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEPLUGIN-005",
+    "Title": "completeTurn persist identity uses current-turn sessionId",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:completeTurn persist identity prefers current-turn sessionId after sessionId rebind.",
+    "Condition": "completeTurn persist identity prefers current-turn sessionId after sessionId rebind."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGEREQ-001",
+    "Title": "Legacy TR-066 get update delete and create reject",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.",
+    "Condition": "Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGE-REQAC-001",
+    "Title": "Triage requirement acceptance criteria traceability",
+    "Status": "planned",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "TEST-MCP-TRIAGE-REQAC-001-AC001:Traceability validation covers all triage requirement IDs and acceptance criteria.",
+    "Condition": "Every new FR/TR/TEST acceptance criterion is referenced by at least one test and passes ValidateTraceability."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESCHEMA-001",
+    "Title": "Missing AgentSession columns fail closed",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.",
+    "Condition": "A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-001",
+    "Title": "Session-log store AC for merge tags replace canceled supersede",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.",
+    "Condition": "SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-002",
+    "Title": "Triage intake fail-fast when SQL unreachable",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.",
+    "Condition": "TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-003",
+    "Title": "ReplaceTurn missing requestId is classified not-found",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save.",
+    "Condition": "ReplaceTurn of a missing requestId throws KeyNotFoundException / classified 404. It does not upsert a new turn and does not emit an untyped EF save."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-004",
+    "Title": "canceled and cancelled persist and re-query",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Turn status canceled and cancelled persist via submit and re-query with the same status.",
+    "Condition": "Turn status canceled and cancelled persist via submit and re-query with the same status."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-005",
+    "Title": "SQLITE_BUSY classifies as retryable persistence_error",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner.",
+    "Condition": "SQLITE_BUSY and deadlock persistence failures classify as persistence_error retryable true with details.inner."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-006",
+    "Title": "Superseded hook persist writes None sentinels",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled.",
+    "Condition": "Superseded hook persist with omitted planFile/todoId writes None sentinels and status canceled."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGESTORE-007",
+    "Title": "Storage-unreachable mutate fails in about 5s",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable.",
+    "Condition": "Session-log SaveChanges and triage intake fail within about 5 seconds as backend_unavailable when storage is unreachable."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGETODO-001",
+    "Title": "Durable EXEC rehydrate and retry-clean create",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.",
+    "Condition": "TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert."
+  },
+  {
+    "Id": "TEST-MCP-TRIAGETODO-002",
+    "Title": "Soft-deleted EXEC ids revive or skip; invalid dependsOn fails first",
+    "Status": "pending",
+    "AcCount": 1,
+    "AcEmpty": false,
+    "Ac": "ac-1:GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.",
+    "Condition": "GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert."
+  },
+  {
+    "Id": "TEST-TRIAGE-001",
+    "Title": "Triage dashboard endpoint and client coverage",
+    "Status": "pending",
+    "AcCount": 3,
+    "AcEmpty": false,
+    "Ac": "ac-1:Service tests cover dashboard queue composition, run history/result mapping, workspace isolation, and empty data. | ac-2:Controller tests cover dashboard, run query, run detail, and not-found/error envelopes. | ac-3:Client tests cover new typed triage methods and query-string dispatch.",
+    "Condition": "Unit and contract tests cover triage dashboard bucketing data, group/report/result rendering inputs, empty/error states, workspace filtering, and typed client dispatch for Director and MCP Web consumers."
+  },
+  {
+    "Id": "TEST-TRIAGE-002",
+    "Title": "Triage-created TODO endpoint coverage",
+    "Status": "completed",
+    "AcCount": 3,
+    "AcEmpty": false,
+    "Ac": "ac-1:Service tests verify TODO ID and CreatedAtUtc values come from TodoRecordEntity and remain workspace-scoped. | ac-2:Controller tests verify the read-only endpoint returns the service result. | ac-3:Client tests verify the typed triage TODO method calls the expected URL with workspace filters.",
+    "Condition": "Unit and client tests cover triage-created TODO listing, workspace filtering, missing TODO anchors, group/run context mapping, and typed client dispatch."
+  }
+]

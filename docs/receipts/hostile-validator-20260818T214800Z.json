@@ -1,0 +1,123 @@
+{
+  "timestampUtc": "2026-08-18T21:48:00Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workspace": "F:\\GitHub\\McpServer",
+  "workClass": "class 1 project implementation",
+  "activePlan": "docs/plans/triage-cluster-001.md",
+  "goalPlan": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5CMcpServer\\01a01290-749a-7271-8c76-d04be7e683d7\\goal\\plan.md",
+  "sessionId": "GrokCode-20260818T202910Z-plugin-session",
+  "turnRequestId": "req-20260818T214800Z-001-hostile-validate-triage-closeout",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "trustBootstrap": {
+    "pluginPath": "F:\\GitHub\\mcpserver-grok-plugin",
+    "pluginVersion": "1.94.0",
+    "markerSignatureOk": true,
+    "healthNonce": "277def2b6faa4c30a3e6293c51ffaffb",
+    "healthNonceOk": true,
+    "healthStatus": "Healthy",
+    "liveVersion": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e",
+    "storage": "reachable",
+    "sessionBootstrapInitialized": true,
+    "pythonUsed": false
+  },
+  "sessionPersistence": {
+    "submitId": 13699,
+    "sessionId": "GrokCode-20260818T202910Z-plugin-session",
+    "requestId": "req-20260818T214800Z-001-hostile-validate-triage-closeout",
+    "status": "completed",
+    "planFile": "docs/plans/triage-cluster-001.md",
+    "todoId": "PLAN-TRIAGECLUSTER-001",
+    "proofFile": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-hostile-20260818T214800Z\\persist-prove-agent.txt"
+  },
+  "claims": [
+    {"id": "A1", "surface": "A", "title": "Store TESTs mappings export ValidateTraceability", "verdict": "PASS"},
+    {"id": "A2", "surface": "A", "title": "Named allocate/revive/legacy/busy tests and focused reruns", "verdict": "PASS"},
+    {"id": "A3", "surface": "A", "title": "UseCase SerializeResult MapFailure 58 and no dedicated 139 test", "verdict": "PASS"},
+    {"id": "A4", "surface": "A", "title": "Nuke Test Failed 0 Skipped 0 newer log", "verdict": "PASS"},
+    {"id": "A5", "surface": "A", "title": "Live host 1.4.26 undeployed no live AC claim", "verdict": "PASS"},
+    {"id": "A6", "surface": "A", "title": "16 BUG-TRIAGE and PLAN still done false", "verdict": "PASS"},
+    {"id": "A7", "surface": "A", "title": "Pester TriagePluginIdentity 7/0/0", "verdict": "PASS"},
+    {"id": "B1", "surface": "B", "title": "Byrd inter-phase H-red/H-green gates", "verdict": "FAIL"},
+    {"id": "B2", "surface": "B", "title": "Receipts re-verified", "verdict": "PASS"},
+    {"id": "B3", "surface": "B", "title": "MCP-only storage", "verdict": "PASS"},
+    {"id": "B4", "surface": "B", "title": "PowerShell no Python", "verdict": "PASS"},
+    {"id": "B5", "surface": "B", "title": "Honesty", "verdict": "PASS"},
+    {"id": "C1", "surface": "C", "title": "Applicable FR/TR/TEST IDs exist", "verdict": "PASS"},
+    {"id": "C2", "surface": "C", "title": "Structured AC on new TEST records", "verdict": "FAIL"},
+    {"id": "C3", "surface": "C", "title": "Plan-required TEST records exist", "verdict": "PASS"},
+    {"id": "C4", "surface": "C", "title": "AC coverage by real tests", "verdict": "FAIL"},
+    {"id": "C5", "surface": "C", "title": "Requirement satisfaction", "verdict": "FAIL"},
+    {"id": "D1", "surface": "D", "title": "Closeout of all 16 BUG-TRIAGE items", "verdict": "FAIL"},
+    {"id": "D2", "surface": "D", "title": "Plan S10 definition of done", "verdict": "FAIL"},
+    {"id": "D3", "surface": "D", "title": "Inter-phase H-red/H-green receipts", "verdict": "FAIL"},
+    {"id": "D4", "surface": "D", "title": "S9 139 original AC", "verdict": "FAIL"},
+    {"id": "D5", "surface": "D", "title": "Deploy and live AC", "verdict": "FAIL"},
+    {"id": "D6", "surface": "D", "title": "Goal plan checkboxes", "verdict": "N/A"}
+  ],
+  "counts": {
+    "pass": 13,
+    "fail": 9,
+    "unknown": 0,
+    "na": 1
+  },
+  "failList": [
+    "B1 No inter-phase H-red/H-green AGREE after H0 for this plan",
+    "C2 New store TESTs STORE-003-007, PLUGIN-002-005, TODO-002 have empty acceptanceCriteria",
+    "C4 Incomplete AC-to-test coverage (139 AC4 missing; plugin regex-only; UseCase REST envelope untested; live schema AC unproven)",
+    "C5 S0 FRs remain unsatisfied",
+    "D1 Closeout of all 16 BUG-TRIAGE items is not justified",
+    "D2 S10 / plan DoD not met",
+    "D3 Missing per-slice hostile AGREE",
+    "D4 S9 139 original AC4 (and REST AC3) not closed",
+    "D5 Live host undeployed; live envelope and schema AC unproven; SyncAgentPlugins after S5 unproven"
+  ],
+  "unknownList": [],
+  "closeout": {
+    "sufficientToCloseSixteen": false,
+    "doNotMarkDone": [
+      "BUG-TRIAGE-110",
+      "BUG-TRIAGE-111",
+      "BUG-TRIAGE-112",
+      "BUG-TRIAGE-114",
+      "BUG-TRIAGE-115",
+      "BUG-TRIAGE-119",
+      "BUG-TRIAGE-123",
+      "BUG-TRIAGE-124",
+      "BUG-TRIAGE-126",
+      "BUG-TRIAGE-128",
+      "BUG-TRIAGE-131",
+      "BUG-TRIAGE-132",
+      "BUG-TRIAGE-139",
+      "BUG-TRIAGE-143",
+      "BUG-TRIAGE-148",
+      "BUG-TRIAGE-149",
+      "PLAN-TRIAGECLUSTER-001"
+    ]
+  },
+  "evidence": {
+    "focusedSupport": "Passed 22 Failed 0 Skipped 0",
+    "focusedRepl": "Passed 8 Failed 0 Skipped 0",
+    "useCaseController": "Passed 10 Failed 0 Skipped 0",
+    "useCaseFilter": "Passed 58 Failed 0 Skipped 0",
+    "pester": "Passed 7 Failed 0 Skipped 0",
+    "validateTraceability": "Succeeded findings=0",
+    "nukeTestNewer": {
+      "supportMcp": 2030,
+      "client": 283,
+      "cqrs": 33,
+      "launcher": 20,
+      "mcpAgent": 63,
+      "replCore": 830,
+      "qbAgent": 50,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "overallVerdict": "DISAGREE",
+  "accuracyRating": 92,
+  "completenessRating": 48
+}

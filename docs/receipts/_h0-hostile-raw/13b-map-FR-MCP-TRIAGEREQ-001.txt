@@ -1,0 +1,15 @@
+type: result
+payload:
+  requestId: req-20260818T193451Z-f4bc
+  result:
+    items:
+    - frId: FR-MCP-TRIAGEREQ-001
+      trId: TR-MCP-TRIAGEREQ-001
+      createdAt: 2026-08-18T19:34:52.5758009+00:00
+    - frId: FR-MCP-TRIAGEREQ-001
+      testId: TEST-MCP-TRIAGEREQ-001
+      createdAt: 2026-08-18T19:34:52.5761912+00:00
+    totalCount: 2
+  deprecated: true
+
+---

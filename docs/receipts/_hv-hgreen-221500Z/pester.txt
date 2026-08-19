@@ -1,0 +1,7 @@
+TEST=Resolve-McpCacheDir uses hook workspace path when cwd is the user profile and env is empty RESULT=Passed
+TEST=Get-ReplMethodTimeoutSeconds treats workflow.agenthelp.submitTurn as a long helper timeout RESULT=Passed
+TEST=Get-ReplMethodTimeoutSeconds keeps sessionlog methods on the short default RESULT=Passed
+TEST=openSession writes child sessions under sessions/ when a root session already exists RESULT=Passed
+TEST=beginTurn persist timeout is degraded/queued and failsafe is retained RESULT=Passed
+TEST=completeTurn persist identity prefers current-turn sessionId RESULT=Passed
+TEST=plugin hook re-asserts workspace identity from hook payload RESULT=Passed

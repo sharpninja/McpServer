@@ -41,6 +41,47 @@ public sealed class UseCaseCqrsTests : IDisposable
     /// <summary>Releases the shared SQLite connection.</summary>
     public void Dispose() => _connection.Dispose();
 
+    /// <summary>
+    /// BUG-TRIAGE-139 AC1/AC4: create without a pre-seeded Workspaces row auto-creates the parent
+    /// and returns a positive useCaseId that list can see.
+    /// </summary>
+    [Fact]
+    public async Task CreateUseCase_WithoutPreSeededWorkspace_AutoCreatesParentAndPersists()
+    {
+        var isolated = Path.Combine(Path.GetTempPath(), "mcp-uc-noseed-" + Guid.NewGuid().ToString("N"));
+        await using var db = new McpDbContext(_options, new WorkspaceContext
+        {
+            WorkspacePath = isolated,
+            WorkspaceName = "uc-noseed",
+            DataDirectory = isolated,
+            TodoFilePath = Path.Combine(isolated, "docs", "todo.yaml"),
+            SessionsPath = Path.Combine(isolated, "docs", "sessions"),
+            ExternalDocsPath = Path.Combine(isolated, "docs", "external"),
+        });
+
+        Assert.False(await db.Workspaces.IgnoreQueryFilters().AnyAsync(
+            w => w.WorkspaceId == isolated,
+            TestContext.Current.CancellationToken).ConfigureAwait(true));
+
+        var result = await new CreateUseCaseCommandHandler(db, new WorkspaceContext
+        {
+            WorkspacePath = isolated,
+            WorkspaceName = "uc-noseed",
+            DataDirectory = isolated,
+        }).HandleAsync(
+            new CreateUseCaseCommand(isolated, new CreateUseCaseRequest { Title = "No seed parent" }),
+            _ctx).ConfigureAwait(true);
+
+        Assert.True(result.IsSuccess, result.Error);
+        Assert.NotNull(result.Value);
+        Assert.True(result.Value!.UseCaseId > 0);
+        Assert.Equal("No seed parent", result.Value.Title);
+        Assert.True(await db.Workspaces.IgnoreQueryFilters().AnyAsync(
+            w => w.WorkspaceId == isolated,
+            TestContext.Current.CancellationToken).ConfigureAwait(true));
+        Assert.Equal(1, await db.UseCases.CountAsync(TestContext.Current.CancellationToken).ConfigureAwait(true));
+    }
+
     /// <summary>FR-MCP-USECASE-001: CreateUseCaseCommand persists header and returns detail DTO.</summary>
     [Fact]
     public async Task CreateUseCase_PersistsHeader_AndReturnsDetail()

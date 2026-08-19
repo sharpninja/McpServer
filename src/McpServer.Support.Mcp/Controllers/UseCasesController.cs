@@ -41,13 +41,13 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest(new { error = "Request body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new CreateUseCaseCommand(GetWorkspacePath(), request),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
 
         return Created(
             new Uri($"/mcpserver/usecases/{result.Value!.UseCaseId}", UriKind.Relative),
@@ -66,7 +66,7 @@ public sealed class UseCasesController : ControllerBase
             new ListUseCasesQuery(GetWorkspacePath(), title),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -80,7 +80,7 @@ public sealed class UseCasesController : ControllerBase
             new GetUseCaseFrCoverageQuery(GetWorkspacePath()),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -96,7 +96,7 @@ public sealed class UseCasesController : ControllerBase
             new ListUseCasesByProductQuery(GetWorkspacePath(), productKey),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -110,13 +110,13 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null || string.IsNullOrWhiteSpace(request.Status))
-            return BadRequest(new { error = "Status is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Status is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new SetUseCaseApprovalStatusCommand(GetWorkspacePath(), id, request.Status),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -133,7 +133,7 @@ public sealed class UseCasesController : ControllerBase
             new SetUseCaseProductKeyCommand(GetWorkspacePath(), id, request?.ProductKey),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -151,7 +151,7 @@ public sealed class UseCasesController : ControllerBase
             new CreateUseCaseFromFrCommand(GetWorkspacePath(), frId),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
 
         return Created(
             new Uri($"/mcpserver/usecases/{result.Value!.UseCaseId}", UriKind.Relative),
@@ -169,7 +169,7 @@ public sealed class UseCasesController : ControllerBase
             new GetUseCaseQuery(GetWorkspacePath(), id),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -185,13 +185,13 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest(new { error = "Request body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new UpdateUseCaseCommand(GetWorkspacePath(), id, request),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -206,7 +206,7 @@ public sealed class UseCasesController : ControllerBase
             new DeleteUseCaseCommand(GetWorkspacePath(), id),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return NoContent();
     }
 
@@ -222,13 +222,13 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest(new { error = "Request body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new AddUseCaseFlowCommand(GetWorkspacePath(), id, request),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
 
         return Created(
             new Uri($"/mcpserver/usecases/{id}/flows/{result.Value!.FlowId}", UriKind.Relative),
@@ -248,13 +248,13 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest(new { error = "Request body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new AddUseCaseStepCommand(GetWorkspacePath(), id, flowId, request),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
 
         return Created(
             new Uri($"/mcpserver/usecases/{id}/flows/{flowId}/steps/{result.Value!.StepId}", UriKind.Relative),
@@ -273,13 +273,13 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest(new { error = "Request body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new AttachUseCaseActorCommand(GetWorkspacePath(), id, request),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
 
         return Created(
             new Uri($"/mcpserver/usecases/{id}/actors/{result.Value!.ActorId}", UriKind.Relative),
@@ -299,7 +299,7 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest(new { error = "Request body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Request body is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new LinkUseCaseToFrCommand(
@@ -311,7 +311,7 @@ public sealed class UseCasesController : ControllerBase
                 request.Notes),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
 
         return Created(
             new Uri($"/mcpserver/usecases/{id}/links/{Uri.EscapeDataString(result.Value!.FrId)}", UriKind.Relative),
@@ -329,7 +329,7 @@ public sealed class UseCasesController : ControllerBase
             new UnlinkUseCaseFromFrCommand(GetWorkspacePath(), id, frId),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return NoContent();
     }
 
@@ -352,7 +352,7 @@ public sealed class UseCasesController : ControllerBase
                 new GetUseCaseDiagramGraphQuery(GetWorkspacePath(), id),
                 cancellationToken).ConfigureAwait(false);
             if (graphResult.IsFailure)
-                return MapFailure(graphResult.Error);
+                return MapFailure(graphResult);
 
             var serializer = HttpContext.RequestServices.GetRequiredService<IUseCaseUmlSerializationService>();
             string content;
@@ -366,7 +366,10 @@ public sealed class UseCasesController : ControllerBase
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = ex.Message });
+                var classified = McpErrorClassifier.Classify(ex);
+                return StatusCode(
+                    classified.StatusCode,
+                    ClassifiedPayload(classified.Code, classified.Message, classified.StatusCode, classified.Retryable, classified.Details));
             }
 
             return Ok(new UseCaseDiagramDto
@@ -381,7 +384,7 @@ public sealed class UseCasesController : ControllerBase
             new GetUseCaseDiagramQuery(GetWorkspacePath(), id, format),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -398,7 +401,7 @@ public sealed class UseCasesController : ControllerBase
             new GetUseCaseDiagramGraphQuery(GetWorkspacePath(), id),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
@@ -414,41 +417,79 @@ public sealed class UseCasesController : ControllerBase
         CancellationToken cancellationToken)
     {
         if (graph is null)
-            return BadRequest(new { error = "Graph body is required." });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, "Graph body is required.", 400));
 
         var result = await _dispatcher.SendAsync(
             new PutUseCaseDiagramGraphCommand(GetWorkspacePath(), id, graph),
             cancellationToken).ConfigureAwait(false);
         if (result.IsFailure)
-            return MapFailure(result.Error);
+            return MapFailure(result);
         return Ok(result.Value);
     }
 
     private string GetWorkspacePath()
         => _workspaceContext.WorkspacePath ?? string.Empty;
 
-    private ActionResult MapFailure(string? error)
+    private ActionResult MapFailure(Result result)
+        => MapFailureCore(result.Error, result.Exception);
+
+    private ActionResult MapFailure<T>(Result<T> result)
+        => MapFailureCore(result.Error, result.Exception);
+
+    private ActionResult MapFailureCore(string? error, Exception? exception)
     {
         var message = string.IsNullOrWhiteSpace(error) ? "Unexpected use case operation failure." : error;
         if (message.StartsWith(UseCaseResultCodes.NotFound, StringComparison.Ordinal))
-            return NotFound(new { error = StripPrefix(message, UseCaseResultCodes.NotFound) });
+            return NotFound(ClassifiedPayload(McpErrorClassifier.NotFound, StripPrefix(message, UseCaseResultCodes.NotFound), 404));
         if (message.StartsWith(UseCaseResultCodes.Validation, StringComparison.Ordinal))
-            return BadRequest(new { error = StripPrefix(message, UseCaseResultCodes.Validation) });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, StripPrefix(message, UseCaseResultCodes.Validation), 400));
         if (message.StartsWith(UseCaseResultCodes.Conflict, StringComparison.Ordinal))
-            return Conflict(new { error = StripPrefix(message, UseCaseResultCodes.Conflict) });
+            return Conflict(ClassifiedPayload(McpErrorClassifier.Conflict, StripPrefix(message, UseCaseResultCodes.Conflict), 409));
 
-        // Heuristic fallbacks when handlers omit prefixes.
+        if (exception is not null)
+        {
+            var classifiedFromException = McpErrorClassifier.Classify(exception);
+            return StatusCode(
+                classifiedFromException.StatusCode,
+                ClassifiedPayload(
+                    classifiedFromException.Code,
+                    classifiedFromException.Message,
+                    classifiedFromException.StatusCode,
+                    classifiedFromException.Retryable,
+                    classifiedFromException.Details));
+        }
+
         if (message.Contains("not found", StringComparison.OrdinalIgnoreCase))
-            return NotFound(new { error = message });
+            return NotFound(ClassifiedPayload(McpErrorClassifier.NotFound, message, 404));
         if (message.Contains("already exists", StringComparison.OrdinalIgnoreCase) ||
             message.Contains("conflict", StringComparison.OrdinalIgnoreCase))
-            return Conflict(new { error = message });
+            return Conflict(ClassifiedPayload(McpErrorClassifier.Conflict, message, 409));
         if (message.Contains("required", StringComparison.OrdinalIgnoreCase) ||
             message.Contains("invalid", StringComparison.OrdinalIgnoreCase))
-            return BadRequest(new { error = message });
+            return BadRequest(ClassifiedPayload(McpErrorClassifier.ValidationError, message, 400));
 
-        return StatusCode(StatusCodes.Status500InternalServerError, new { error = message });
+        var classified = McpErrorClassifier.Classify(new InvalidOperationException(message));
+        return StatusCode(classified.StatusCode, ClassifiedPayload(classified.Code, classified.Message, classified.StatusCode, classified.Retryable, classified.Details));
     }
+
+    private static object ClassifiedPayload(
+        string code,
+        string message,
+        int status,
+        bool retryable = false,
+        IReadOnlyDictionary<string, object?>? details = null)
+        => new
+        {
+            type = "https://httpstatuses.io/" + status,
+            title = code,
+            status,
+            detail = message,
+            code,
+            message,
+            retryable,
+            details,
+            error = code,
+        };
 
     private static string StripPrefix(string message, string prefix)
         => message.Length > prefix.Length ? message[prefix.Length..].TrimStart() : message;

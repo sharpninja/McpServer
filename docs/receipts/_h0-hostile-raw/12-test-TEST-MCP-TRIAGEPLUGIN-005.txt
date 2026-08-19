@@ -1,0 +1,13 @@
+Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20260818T193433Z-ec0d
+  code: method_invocation_error
+  message: TEST 'TEST-MCP-TRIAGEPLUGIN-005' not found.
+  details:
+    methodName: workflow.requirements.getTest
+    exceptionType: McpServer.Client.McpNotFoundException
+
+---
+
+

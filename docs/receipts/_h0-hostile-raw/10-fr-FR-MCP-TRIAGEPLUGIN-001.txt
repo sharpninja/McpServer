@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260818T193220Z-605f
+  result:
+    id: FR-MCP-TRIAGEPLUGIN-001
+    title: Plugin root session, cache, console, and persist identity
+    description: Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.
+    status: pending
+    priority: high
+    area: MCP
+    notes: Closes BUG-TRIAGE-111, 124, 126, 131, 143.
+    acceptanceCriteria:
+    - id: ac-1
+      text: Root UserPromptSubmit stays on the root session while background agents run. Plugin cache replacement does not break in-flight hooks or reports named version-drift. New PowerShell consoles inherit workspace identity from hook payload. beginTurn Submit timeout is degraded or queued with failsafe retained. completeTurn survives sessionId rebind without leftover failsafe.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-18T19:32:21.4408635+00:00
+    updatedAt: 2026-08-18T19:32:21.4409637+00:00
+  deprecated: true
+
+---

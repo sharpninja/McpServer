@@ -1,0 +1,152 @@
+{
+  "TimestampUtc": "2026-08-19T16:13:22Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\McpServer",
+  "WorkClass": 1,
+  "WorkClassLabel": "project implementation of existing FR-MCP-TRIAGEPLUGIN-001; surfaces A-D apply",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ]
+  },
+  "OverallVerdict": "AGREE",
+  "PassCount": 15,
+  "FailCount": 0,
+  "UnknownCount": 0,
+  "AccuracyRating": 93,
+  "CompletenessRating": 90,
+  "FailList": [],
+  "AdversarialSessionId": "GrokCode-20260819T161322Z-hostile-triageplugin",
+  "AdversarialRequestId": "req-20260819T161322Z-001-hostile-validate-isolation",
+  "PlanFile": "None",
+  "TodoId": "None",
+  "SessionProofFile": "docs/receipts/_hv-20260819T160006Z/iso2-client-SessionLog-QueryAsync.txt",
+  "Trust": {
+    "signatureOk": true,
+    "nonceOk": true,
+    "healthStatus": "Healthy",
+    "version": "1.4.28+f4060f037e62e64974026aff9d24e11b2f481952",
+    "evidence": "docs/receipts/_hv-20260819T160006Z/00-trust.json"
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Pester TriagePluginIdentity 10/0/0 including UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn",
+      "evidence": "docs/receipts/_hv-20260819T160006Z/pester-TriagePluginIdentity.txt"
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "Both plugin-hook.ps1 define isolation functions; reuse/isolate-skip/open-new",
+      "evidence": "docs/receipts/_hv-20260819T160006Z/hook-hashes.json; isolation-eval.json; SHA256 602316F539C8D641900890AC8DA54F2C624F7F932BD82DF5135E9F9C3ED1F3C3"
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "After this hostile UserPromptSubmit, 019 still in_progress and current-turn.yaml still names 019",
+      "evidence": "F:\\GitHub\\McpServer\\.mcpServer\\grok\\current-turn.yaml LastWriteUtc 2026-08-19T15:54:40.4249271Z; QueryAsync text=Remediate hook cache isolation; 019-turn-block.txt status in_progress"
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "PLAN-TRIAGECLUSTER-001 not marked done in this remediATION",
+      "evidence": "docs/receipts/_hv-20260819T160006Z/07-todo-plan.txt doneSummary cites 013000Z"
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "verdict": "PASS",
+      "claim": "No commit/push; HEAD f4060f037e62e64974026aff9d24e11b2f481952",
+      "evidence": "git rev-parse HEAD and origin/develop both f4060f037e62e64974026aff9d24e11b2f481952; staged empty"
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Receipts re-verified independently"
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Byrd phase-order not failed from FR createdAt vs mtime; tests-first not proven false"
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "MCP-only storage via plugin wrapper; isolated CacheRoot for review turn"
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "PowerShell only; no Python"
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "verdict": "PASS",
+      "claim": "Honesty: live artifacts match numbered claims"
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "verdict": "PASS",
+      "claim": "FR-MCP-TRIAGEPLUGIN-001 ac-1 covers root UserPromptSubmit isolation",
+      "evidence": "docs/receipts/_hv-20260819T160006Z/08-getFr.txt"
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "verdict": "PASS",
+      "claim": "TEST-MCP-TRIAGEPLUGIN-001..005 mapping exists"
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "verdict": "PASS",
+      "claim": "New Pester It covers the remediATED FR AC sentence and passed independently"
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "verdict": "PASS",
+      "claim": "No PLAN-TRIAGECLUSTER-001 done flip this remediATION"
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "verdict": "PASS",
+      "claim": "Whole plan DoD not claimed complete here"
+    }
+  ],
+  "Live019": {
+    "sessionId": "GrokCode-20260818T182741Z-plugin-session",
+    "requestId": "req-20260819T153500Z-019-remediate-hook-cache-isolation",
+    "status": "in_progress",
+    "planFile": "None",
+    "todoId": "None",
+    "currentTurnLastWriteUtc": "2026-08-19T15:54:40.4249271Z"
+  },
+  "Pester": {
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "includesBackgroundPromptTest": true
+  },
+  "Git": {
+    "head": "f4060f037e62e64974026aff9d24e11b2f481952",
+    "upstream": "f4060f037e62e64974026aff9d24e11b2f481952",
+    "branch": "develop",
+    "stagedEmpty": true,
+    "committedOrPushed": false
+  }
+}

@@ -190,19 +190,23 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
                     RequestId = (envelope.Payload as IRequestPayload)?.RequestId ?? "unknown",
                     Code = "command_timeout",
                     Message = $"Command timed out after {ResolveCommandTimeout().TotalSeconds:0} seconds.",
+                    Retryable = true,
                 },
             };
         }
         catch (Exception ex)
         {
+            var classified = ReplMcpErrorClassifier.FromException(ex);
             response = new YamlEnvelope
             {
                 Type = "error",
                 Payload = new ErrorPayload
                 {
                     RequestId = (envelope.Payload as IRequestPayload)?.RequestId ?? "unknown",
-                    Code = "dispatch_error",
-                    Message = ex.Message,
+                    Code = classified.Code,
+                    Message = classified.Message,
+                    Retryable = classified.Retryable,
+                    Details = classified.Details,
                 },
             };
         }

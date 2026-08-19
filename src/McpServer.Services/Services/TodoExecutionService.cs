@@ -285,6 +285,26 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
                 ValidateRequired(input.Title, nameof(input.Title));
                 ValidateRequired(input.Goal, nameof(input.Goal));
                 ValidateRequired(input.Summary, nameof(input.Summary));
+            }
+
+            var knownIds = new HashSet<string>(
+                state.Todos.Select(static todo => todo.TodoId),
+                StringComparer.OrdinalIgnoreCase);
+            foreach (var input in request.Todos)
+            {
+                foreach (var dependency in NormalizeStringList(input.DependsOnTodoIds))
+                {
+                    if (!knownIds.Contains(dependency))
+                    {
+                        throw new ArgumentException(
+                            $"dependsOn TODO '{dependency}' was not found.",
+                            nameof(request));
+                    }
+                }
+            }
+
+            foreach (var input in request.Todos)
+            {
 
                 var todoId = await GenerateNextTodoIdAsync(state, todoService, cancellationToken).ConfigureAwait(false);
                 var requirementIds = NormalizeStringList(input.RequirementIds);
@@ -306,7 +326,7 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
                     createdTodoIds.Add(todoId);
 
                 if (!createResult.Success)
-                    throw new InvalidOperationException(createResult.Error ?? $"Failed to create legacy TODO '{todoId}'.");
+                    throw new InvalidOperationException(InnermostCreateError(createResult, todoId));
 
                 var acceptanceCriteria = NormalizeStringList(input.AcceptanceCriteria)
                     .Select((text, index) => new AcceptanceCriterion
@@ -528,7 +548,7 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
         try
         {
             var state = await LoadStateAsync(statePath, cancellationToken).ConfigureAwait(false);
-            var todo = FindTodo(state, normalizedWorkspacePath, todoId)
+            var todo = await FindTodoOrRehydrateAsync(state, normalizedWorkspacePath, todoId, cancellationToken).ConfigureAwait(false)
                 ?? throw new KeyNotFoundException($"Execution TODO '{todoId}' was not found.");
 
             var updatedStatus = request.UnitTestsDefined
@@ -955,8 +975,108 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
 
     private static TodoExecutionRecord? FindTodo(TodoExecutionStateDocument state, string workspacePath, string todoId)
         => state.Todos.FirstOrDefault(todo =>
-            string.Equals(todo.WorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase)
+            PathsEqual(todo.WorkspacePath, workspacePath)
             && string.Equals(todo.TodoId, todoId, StringComparison.OrdinalIgnoreCase));
+
+    private async Task<TodoExecutionRecord?> FindTodoOrRehydrateAsync(
+        TodoExecutionStateDocument state,
+        string workspacePath,
+        string todoId,
+        CancellationToken cancellationToken)
+    {
+        var existing = FindTodo(state, workspacePath, todoId);
+        if (existing is not null)
+            return existing;
+
+        var todoService = await ResolveTodoServiceAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+        var durable = await todoService.GetByIdAsync(todoId, cancellationToken).ConfigureAwait(false);
+        if (durable is null)
+            return null;
+
+        if (!IsExecOrByrdShaped(durable))
+        {
+            throw new KeyNotFoundException(
+                $"Execution TODO '{todoId}' was not found in execution state and the durable TODO is not EXEC/Byrd-shaped.");
+        }
+
+        var record = RehydrateExecutionRecord(durable, workspacePath);
+        state.Todos.Add(record);
+        return record;
+    }
+
+    private static bool IsExecOrByrdShaped(TodoFlatItem item)
+    {
+        if (item.Id.StartsWith(GeneratedTodoIdPrefix, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (!string.IsNullOrWhiteSpace(item.Note)
+            && item.Note.Contains("Byrd", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return item.Section.Contains("phase", StringComparison.OrdinalIgnoreCase)
+            || item.Section.Contains("execution", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static TodoExecutionRecord RehydrateExecutionRecord(TodoFlatItem item, string workspacePath)
+    {
+        var now = UtcNow();
+        return new TodoExecutionRecord
+        {
+            TodoId = item.Id,
+            WorkspacePath = workspacePath,
+            Title = item.Title,
+            Goal = item.Description?.FirstOrDefault() ?? item.Title,
+            Summary = item.Remaining ?? item.Title,
+            Status = item.Done ? TodoExecutionStatus.Complete : TodoExecutionStatus.Planned,
+            Priority = TodoExecutionPriority.Medium,
+            IterationPhaseId = item.Section,
+            DependsOn = [],
+            AcceptanceCriteria = [],
+            Constraints = [],
+            RequirementIds = (item.FunctionalRequirements ?? [])
+                .Concat(item.TechnicalRequirements ?? [])
+                .ToList(),
+            RelevantFiles = [],
+            ArtifactIds = [],
+            SessionTurnIds = [],
+            NextAction = $"Define unit tests for {item.Title}",
+            TestPlan = new TodoTestPlan
+            {
+                UnitTestsDefined = false,
+                UnitTestsPassing = false,
+                IntegrationTestsDefined = false,
+                IntegrationTestsPassing = false,
+                TestFilePaths = [],
+                TestCommands = [],
+            },
+            Validation = new TodoValidationState
+            {
+                LastResult = "not_run",
+                LastValidatedAtUtc = null,
+                ValidationArtifactIds = [],
+                Summary = null,
+            },
+            Pointers = new TodoExecutionPointers(),
+            CreatedAtUtc = now,
+            UpdatedAtUtc = now,
+        };
+    }
+
+    private static bool PathsEqual(string? left, string right)
+        => string.Equals(
+            NormalizeWorkspacePath(left ?? string.Empty),
+            NormalizeWorkspacePath(right),
+            StringComparison.OrdinalIgnoreCase);
+
+    private static string InnermostCreateError(TodoMutationResult result, string todoId)
+    {
+        var error = result.Error ?? $"Failed to create legacy TODO '{todoId}'.";
+        var marker = "See the inner exception for details.";
+        return error.Contains(marker, StringComparison.Ordinal)
+            ? $"Failed to create legacy TODO '{todoId}'."
+            : error;
+    }
 
     private static void ReplacePhase(TodoExecutionStateDocument state, TodoIterationPhase updatedPhase)
     {
@@ -1246,8 +1366,19 @@ public sealed class TodoExecutionService : ITodoExecutionService, ITodoExecution
                 continue;
 
             var existing = await todoService.GetByIdAsync(todoId, cancellationToken).ConfigureAwait(false);
-            if (existing is null)
-                return todoId;
+            if (existing is not null)
+                continue;
+
+            var deleted = await _db.TodoItems
+                .IgnoreQueryFilters()
+                .AnyAsync(
+                    item => item.Id == todoId && item.WorkspaceId == _db.CurrentWorkspaceId,
+                    cancellationToken)
+                .ConfigureAwait(false);
+            if (deleted)
+                continue;
+
+            return todoId;
         }
     }
 

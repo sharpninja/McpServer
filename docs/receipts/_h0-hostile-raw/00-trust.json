@@ -1,0 +1,28 @@
+{
+  "timestampUtc": "2026-08-18T19:29:08.8157106Z",
+  "pluginVersionFile": "{\n  \"name\": \"mcpserver\",\n  \"version\": \"1.94.0\",\n  \"description\": \"Connect Grok to McpServer for TODO management, session logging, requirements tracking, use case management, GraphRAG knowledge graph operations, and per-turn \\u002B build-verification enforcement hooks.\",\n  \"author\": {\n    \"name\": \"Payton Byrd (The Sharp Ninja)\",\n    \"url\": \"https://github.com/sharpninja\"\n  },\n  \"homepage\": \"https://github.com/sharpninja/McpServer\",\n  \"repository\": \"https://github.com/sharpninja/mcpserver-grok-plugin\",\n  \"license\": \"MIT\",\n  \"keywords\": [\n    \"mcp\",\n    \"todo\",\n    \"session-log\",\n    \"requirements\",\n    \"graphrag\",\n    \"knowledge-graph\",\n    \"workspace\",\n    \"use-case\",\n    \"usecase\"\n  ],\n  \"skills\": \"./skills/\",\n  \"hooks\": \"./hooks/hooks.json\",\n  \"mcpServers\": \"./.mcp.json\"\n}\n",
+  "signatureOk": true,
+  "nonce": "nonce-20260818142908-26972",
+  "nonceOk": true,
+  "health": {
+    "status": "Healthy",
+    "version": "1.4.26+298c5fde3d1438ff7741ebec82ced796b207433e",
+    "checks": [
+      {
+        "name": "self",
+        "status": "Healthy",
+        "description": null,
+        "duration": 0.0033
+      },
+      {
+        "name": "upstream",
+        "status": "Healthy",
+        "description": "Federation disabled.",
+        "duration": 0.0037
+      }
+    ],
+    "nonce": "nonce-20260818142908-26972",
+    "storage": "reachable"
+  },
+  "cwd": "F:\\GitHub\\McpServer"
+}

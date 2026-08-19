@@ -4,34 +4,33 @@ using McpServer.Support.Mcp.Services;
 namespace McpServer.Support.Mcp.McpStdio;
 
 /// <summary>
-/// TR-MCP-HEALTH-003 (BUG-TRIAGE-096): the single mapping point for MCP tool error payloads.
-/// Connection-class storage failures serialize as the stable machine-readable payload
-/// <c>{"error":"backend_unavailable","message":...,"retryable":true}</c> instead of echoing raw
-/// provider text (raw SqlClient messages, the EnableRetryOnFailure hint); every other exception
-/// keeps the existing untyped <c>{"error": message}</c> shape.
+/// FR-MCP-TRIAGEERR-001 / TR-MCP-HEALTH-003: the single mapping point for MCP tool error payloads.
+/// Every failure emits <c>code</c>, <c>message</c>, <c>retryable</c>, and optional <c>details</c>.
+/// <c>error</c> is kept as an alias of <c>code</c> for existing backend_unavailable clients.
 /// </summary>
 internal static class McpToolErrors
 {
     /// <summary>TR-MCP-HEALTH-003: stable error code for storage-connectivity failures.</summary>
-    internal const string BackendUnavailableError = "backend_unavailable";
+    internal const string BackendUnavailableError = McpErrorClassifier.BackendUnavailable;
 
     /// <summary>TR-MCP-HEALTH-003: stable client-facing message for storage-connectivity failures.</summary>
-    internal const string BackendUnavailableMessage =
-        "The storage backend is currently unreachable. Retry the operation once connectivity is restored.";
+    internal const string BackendUnavailableMessage = McpErrorClassifier.BackendUnavailableMessage;
 
     /// <summary>
-    /// TR-MCP-HEALTH-003: serializes the tool error payload for the given exception, applying the
-    /// backend-unavailable classification from <see cref="StorageBackendUnavailability"/>.
+    /// FR-MCP-TRIAGEERR-001: serializes the classified tool error payload.
     /// </summary>
     /// <param name="exception">The caught tool exception.</param>
     /// <returns>The JSON error payload for the MCP tool response.</returns>
     internal static string Serialize(Exception exception)
-        => StorageBackendUnavailability.IsBackendUnavailable(exception)
-            ? JsonSerializer.Serialize(new
-            {
-                error = BackendUnavailableError,
-                message = BackendUnavailableMessage,
-                retryable = true,
-            })
-            : JsonSerializer.Serialize(new { error = exception.Message });
+    {
+        var classified = McpErrorClassifier.Classify(exception);
+        return JsonSerializer.Serialize(new
+        {
+            code = classified.Code,
+            error = classified.Code,
+            message = classified.Message,
+            retryable = classified.Retryable,
+            details = classified.Details,
+        });
+    }
 }

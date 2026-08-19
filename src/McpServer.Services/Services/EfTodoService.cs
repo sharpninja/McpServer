@@ -293,11 +293,30 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, ITodoCompensatio
             await using var scope = CreateScope();
             var ctx = scope.Context;
 
-            var existingItem = await ctx.TodoItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken).ConfigureAwait(false);
+            var existingItem = await ctx.TodoItems
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(
+                    i => i.Id == request.Id && i.WorkspaceId == ctx.CurrentWorkspaceId,
+                    cancellationToken)
+                .ConfigureAwait(false);
             if (existingItem is not null)
             {
                 await AttachTodoChildrenAsync(ctx, [existingItem], cancellationToken).ConfigureAwait(false);
                 var existingFlat = ToFlatItem(existingItem);
+                if (ReadSoftDeleteState(ctx.Entry(existingItem)).IsDeleted)
+                {
+                    SetSoftDeleteState(ctx.Entry(existingItem), isDeleted: false, reason: null);
+                    existingItem.Title = request.Title;
+                    existingItem.Section = normalizedSection;
+                    existingItem.Priority = normalizedPriority;
+                    existingItem.Done = false;
+                    existingItem.Note = request.Note;
+                    existingItem.Remaining = request.Remaining;
+                    await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                    await AttachTodoChildrenAsync(ctx, [existingItem], cancellationToken).ConfigureAwait(false);
+                    return new TodoMutationResult(true, Item: ToFlatItem(existingItem));
+                }
+
                 if (!string.IsNullOrWhiteSpace(request.IdempotencyKey)
                     && string.Equals(existingItem.IdempotencyKey, request.IdempotencyKey, StringComparison.Ordinal)
                     && TodoPayloadFingerprint.AreEquivalent(request, existingFlat))

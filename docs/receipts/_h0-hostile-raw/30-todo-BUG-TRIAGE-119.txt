@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20260818T193823Z-5153
+  result:
+    id: BUG-TRIAGE-119
+    title: Surface EF inner exception on sessionlog_submit/replace_turn insert failures
+    section: Backlog
+    priority: high
+    done: false
+    description:
+    - "Confirmed: sessionlog_submit and sessionlog_replace_turn both catch exceptions and return McpToolErrors.Serialize(ex), which emits only exception.Message. For EF Core DbUpdateException that message is the opaque 'An error occurred while saving the entity changes. See the inner exception for details.' with no InnerException chain. Both paths insert new turns into an existing session aggregate (SubmitAsync -> UpsertTurns -> MapSingleEntry + Turns.Add; ReplaceTurnAsync when RequestId is absent -> MapSingleEntry + Turns.Add) then SaveChangesAsync without rethrowing a diagnostic-rich error. SubmitAsync only special-cases UNIQUE on the session key for retry; other constraint failures (including unique IX_SessionLogTurns_SessionLogId_RequestId) bubble as the opaque DbUpdateException. Tools do log ex.ToString() server-side, so the gap is client-facing diagnostics, not total silence. Underlying insert failure for req-20260716T122454Z-prompt-af9d / req-20260716T123150Z-prompt-a5a3 into ClaudeCode-20260716T120052Z-plugin-session is still undiagnosed without the inner message (likely UNIQUE, NOT NULL WorkspaceId/FK, or schema constraint on new turn rows)."
+    - 'Triage group: triage-group-416e11650b374fdb'
+    - 'Reports: 1'
+    technicalDetails:
+    - 'Acceptance criteria:'
+    - '- When sessionlog_submit or sessionlog_replace_turn fails during SaveChangesAsync, the tool JSON error includes the DbUpdateException inner (or deepest) exception message, not only the outer EF wrapper text.'
+    - '- Inserting a new RequestId into an existing multi-turn session via sessionlog_submit (single-turn or multi-turn payload) either succeeds and is visible on subsequent sessionlog_query/get, or fails with a message that names the concrete constraint or validation failure.'
+    - '- sessionlog_replace_turn for a RequestId not currently present in the session either creates the turn and returns success with turnId, or fails with the same concrete inner-detail error shape as submit.'
+    - '- Existing turns on the target session remain readable and unchanged after a failed insert attempt (no partial corruption).'
+    - '- Regression coverage: a forced DbUpdateException (or SQLite constraint failure) on the submit/replace_turn path asserts the returned error JSON contains InnerException content; happy-path insert of a new requestId into a session that already has turns still succeeds.'
+    - 'Implementation notes:'
+    - '- Primary client-facing fix: McpServer.Support.Mcp/McpStdio/McpToolErrors.cs Serialize currently returns { error = exception.Message } for non-backend-unavailable failures; for DbUpdateException (and preferably AggregateException), append or prefer the innermost Message so agents see SQLite UNIQUE/NOT NULL/FK detail.'
+    - '- Optional service-layer hardening: SessionLogService.SubmitAsync (SaveChanges try around L171-194) and ReplaceTurnAsync (SaveChanges at L610) can catch DbUpdateException and rethrow InvalidOperationException with InnerException.Message for all non-retry cases, not only the session-level UNIQUE race.'
+    - '- Investigate root insert cause after diagnostics land: unique index IX_SessionLogTurns_SessionLogId_RequestId; WorkspaceId stamping via StampTurnChildren / StampWorkspaceId on new turn rows; soft-deleted or orphaned turn rows retaining the same RequestId after mistaken deletes.'
+    - '- Related but distinct from BUG-TRIAGE-075 / TR-MCP-SESSIONLOG-001 (malformed turnJson outside try for complete/fail); this is observability of EF save failures on submit/replace_turn after catch.'
+    - '- Do not change DELETE semantics or invent client workarounds; fix error surfacing first, then re-attempt the two requestIds against ClaudeCode-20260716T120052Z-plugin-session with the new message as evidence.'
+    implementationTasks: []
+    dependsOn: []
+    functionalRequirements:
+    - FR-MCP-TRIAGE-002
+    technicalRequirements:
+    - TR-MCP-TRIAGE-004
+  deprecated: true
+
+---

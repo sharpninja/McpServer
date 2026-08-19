@@ -1,0 +1,42 @@
+[
+  {
+    "Path": "F:\\GitHub\\McpServer\\src\\McpServer.Services\\Services\\SessionLogService.cs",
+    "LastWriteTimeUtc": "2026-08-19T01:03:19.0408575Z",
+    "Length": 89162
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogServiceTurnContextTests.cs",
+    "LastWriteTimeUtc": "2026-08-19T01:04:03.8492466Z",
+    "Length": 11657
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Plugins\\InvokeWorkflowBeginTurnTests.cs",
+    "LastWriteTimeUtc": "2026-08-19T01:04:03.8436244Z",
+    "Length": 5939
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\McpStdio\\SessionLogLifecycleToolErrorTests.cs",
+    "LastWriteTimeUtc": "2026-08-19T01:04:03.8436244Z",
+    "Length": 11903
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTriageStoreTests.cs",
+    "LastWriteTimeUtc": "2026-08-18T22:51:04.1145595Z",
+    "Length": 9383
+  },
+  {
+    "Path": "F:\\GitHub\\McpServer\\tests\\McpServer.Support.Mcp.Tests\\Services\\SessionLogTurnContextValidatorTests.cs",
+    "LastWriteTimeUtc": "2026-08-12T17:12:42.1417349Z",
+    "Length": 5031
+  },
+  {
+    "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-01353e344a72\\implementer\\nuke-test.log",
+    "LastWriteTimeUtc": "2026-08-19T01:29:13.4368782Z",
+    "Length": 54776
+  },
+  {
+    "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-01353e344a72\\implementer\\validate-traceability.log",
+    "LastWriteTimeUtc": "2026-08-19T01:25:49.3741898Z",
+    "Length": 3385
+  }
+]

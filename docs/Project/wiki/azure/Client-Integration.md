@@ -220,7 +220,9 @@ Reference implementations:
 All clients should verify connectivity before making API calls:
 
 ```text
-GET /health → { "status": "Healthy" }
+GET /health → { "status": "Healthy", "version": "...", "nonce": "<echo>", "storage": "reachable|unreachable" }
+
+`/health` stays liveness-Healthy with an exact nonce echo during a storage-only outage. Treat `storage: unreachable` as a ready failure, not as MCP_UNTRUSTED. Mutating API errors use `{ code, message, retryable, details }`.
 ```
 
 ## Swagger / OpenAPI

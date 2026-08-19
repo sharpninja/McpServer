@@ -1,0 +1,97 @@
+type: result
+payload:
+  requestId: req-20260819T160634Z-d44b
+  result:
+  - agent: GrokCode
+    sessionId: GrokCode-20260818T182741Z-plugin-session
+    title: You are the HOSTILE VALIDATOR for workspace F:\GitHub\McpSer
+    model: grok
+    started:
+      dateTime: 2026-08-18T18:41:12.1791647
+      utcDateTime: 2026-08-18T18:41:12.1791647Z
+      localDateTime: 2026-08-18T13:41:12.1791647-05:00
+      date: 2026-08-18T00:00:00.0000000
+      day: 18
+      dayOfWeek: Tuesday
+      dayOfYear: 230
+      hour: 18
+      millisecond: 179
+      microsecond: 164
+      nanosecond: 700
+      minute: 41
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 12
+      ticks: 639226752721791647
+      utcTicks: 639226752721791647
+      timeOfDay: 18:41:12.1791647
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-19T15:48:30.6867485
+      utcDateTime: 2026-08-19T15:48:30.6867485Z
+      localDateTime: 2026-08-19T10:48:30.6867485-05:00
+      date: 2026-08-19T00:00:00.0000000
+      day: 19
+      dayOfWeek: Wednesday
+      dayOfYear: 231
+      hour: 15
+      millisecond: 686
+      microsecond: 748
+      nanosecond: 500
+      minute: 48
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 30
+      ticks: 639227513106867485
+      utcTicks: 639227513106867485
+      timeOfDay: 15:48:30.6867485
+      year: 2026
+    status: in_progress
+    turnCount: 21
+    tags:
+    - refresh-docs
+    - wrap-up
+    - wiki
+    - products
+    - handoff
+    - todo
+    - list
+    - PLAN-TRIAGECLUSTER-001
+    - FR-MCP-TRIAGEERR-001
+    - H0
+    - BUG-TRIAGE-139
+    - hostile-disagree
+    - H-red
+    - AGREE
+    - evaluator-closeout
+    - H-done
+    - doneSummary
+    - BUG-TRIAGE-110
+    - 1.4.28
+    - TR-MCP-HEALTH-003
+    - commit-sync-pause
+    filesModifiedCount: 42
+  - agent: GrokCode
+    sessionId: GrokCode-20260819T151600Z-hostile-018
+    title: Hostile review of 018 cache-align resolve
+    model: grok
+    started:
+      dateTime: 2026-08-19T15:21:50.9635651
+      utcDateTime: 2026-08-19T15:21:50.9635651Z
+      localDateTime: 2026-08-19T10:21:50.9635651-05:00
+      date: 2026-08-19T00:00:00.0000000
+      day: 19
+      dayOfWeek: Wednesday
+      dayOfYear: 231
+      hour: 15
+      millisecond: 963
+      microsecond: 565
+      nanosecond: 100
+      minute: 21
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 50
+      tic

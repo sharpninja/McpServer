@@ -186,7 +186,7 @@ Passwords are stored as SHA-256 hashes and verified with constant-time compariso
 |------------|------------------|
 | Workspace | `GET /mcpserver/workspace`, `GET /mcpserver/workspace/{key}`, `GET /mcpserver/workspace/{key}/status` |
 | Tool Registry | `GET /mcpserver/tools/search`, `GET /mcpserver/tools`, `GET /mcpserver/tools/{id}` |
-| Health | `GET /health`, `GET /alive` |
+| Health | `GET /health`, `GET /alive` (`/health` is liveness plus `storage` reachable/unreachable; storage outage does not flip liveness) |
 
 ---
 

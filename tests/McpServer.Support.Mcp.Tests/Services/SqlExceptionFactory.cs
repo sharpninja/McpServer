@@ -7,7 +7,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 internal static class SqlExceptionFactory
 {
     /// <summary>Creates a SqlException whose Number is the supplied SQL Server error number.</summary>
-    public static SqlException Create(int number)
+    public static SqlException Create(int number, string? message = null)
     {
         var errorCtor = typeof(SqlError).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)
             .OrderByDescending(ctor => ctor.GetParameters().Length)
@@ -24,7 +24,7 @@ internal static class SqlExceptionFactory
                     : type == typeof(byte)
                         ? (byte)0
                         : type == typeof(string)
-                            ? string.Empty
+                            ? (message ?? string.Empty)
                             : type == typeof(bool)
                                 ? false
                                 : type.IsValueType
@@ -44,7 +44,7 @@ internal static class SqlExceptionFactory
             .Select(p => p.ParameterType == typeof(SqlErrorCollection)
                 ? errors
                 : p.ParameterType == typeof(string)
-                    ? string.Empty
+                    ? (message ?? string.Empty)
                     : p.ParameterType.IsValueType
                         ? Activator.CreateInstance(p.ParameterType)
                         : null)

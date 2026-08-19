@@ -16,6 +16,67 @@ public sealed class RequirementsWorkflowMetadataTests
         ApiKey = "test-key"
     };
 
+    /// <summary>TEST-MCP-TRIAGEREQ-001: list-shaped legacy TR ids are get-able.</summary>
+    [Fact]
+    public async Task GetTrAsync_LegacyId_DoesNotRejectCanonicalFormat()
+    {
+        var handler = new CapturingHttpHandler("""{"id":"TR-066","title":"Legacy","body":"Body"}""");
+        using var http = new HttpClient(handler);
+        var workflow = new RequirementsWorkflow(new RequirementsClient(http, Options));
+
+        var item = await workflow.GetTrAsync("TR-066", TestContext.Current.CancellationToken);
+
+        Assert.Equal("TR-066", item.Id);
+        Assert.Contains("/tr/TR-066", handler.LastRequestUri, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>TEST-MCP-TRIAGEREQ-001: update of a listed legacy TR id is accepted.</summary>
+    [Fact]
+    public async Task UpdateTrAsync_LegacyId_DoesNotRejectCanonicalFormat()
+    {
+        var handler = new CapturingHttpHandler("""{"id":"TR-066","title":"Updated","body":"Body"}""");
+        using var http = new HttpClient(handler);
+        var workflow = new RequirementsWorkflow(new RequirementsClient(http, Options));
+        var request = Substitute.For<ITrUpdateRequest>();
+        request.Id.Returns("TR-066");
+        request.Title.Returns("Updated");
+        request.Description.Returns("Body");
+
+        var result = await workflow.UpdateTrAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal("TR-066", result.Item.Id);
+        Assert.Contains("/tr/TR-066", handler.LastRequestUri, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>TEST-MCP-TRIAGEREQ-001: delete of a listed legacy TR id is accepted.</summary>
+    [Fact]
+    public async Task DeleteTrAsync_LegacyId_DoesNotRejectCanonicalFormat()
+    {
+        var handler = new CapturingHttpHandler("""{"ok":true}""");
+        using var http = new HttpClient(handler);
+        var workflow = new RequirementsWorkflow(new RequirementsClient(http, Options));
+
+        await workflow.DeleteTrAsync("TR-066", TestContext.Current.CancellationToken);
+
+        Assert.Contains("/tr/TR-066", handler.LastRequestUri, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>TEST-MCP-TRIAGEREQ-001: create still rejects non-canonical TR ids.</summary>
+    [Fact]
+    public async Task CreateTrAsync_LegacyId_StillRejected()
+    {
+        var handler = new CapturingHttpHandler("""{"id":"TR-066"}""");
+        using var http = new HttpClient(handler);
+        var workflow = new RequirementsWorkflow(new RequirementsClient(http, Options));
+        var request = Substitute.For<ITrCreateRequest>();
+        request.Id.Returns("TR-066");
+        request.Title.Returns("Legacy");
+        request.Description.Returns("Body");
+
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            workflow.CreateTrAsync(request, TestContext.Current.CancellationToken));
+    }
+
     [Fact]
     public async Task UpdateFrAsync_SendsAndReturnsPriorityStatusAndNotes()
     {
@@ -191,8 +252,11 @@ public sealed class RequirementsWorkflowMetadataTests
 
         public string LastRequestBody { get; private set; } = string.Empty;
 
+        public string LastRequestUri { get; private set; } = string.Empty;
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            LastRequestUri = request.RequestUri?.ToString() ?? string.Empty;
             if (request.Content is not null)
                 LastRequestBody = await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 

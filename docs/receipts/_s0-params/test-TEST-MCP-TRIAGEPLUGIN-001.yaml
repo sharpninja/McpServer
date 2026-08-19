@@ -1,0 +1,9 @@
+id: TEST-MCP-TRIAGEPLUGIN-001
+title: Pester for root session cache console timeout and rebind
+description: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+priority: high
+area: MCP
+acceptanceCriteria:
+  - id: ac-1
+    text: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+    isSatisfied: false

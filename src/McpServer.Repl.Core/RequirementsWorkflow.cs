@@ -187,7 +187,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task<ITrItem> GetTrAsync(string id, CancellationToken cancellationToken = default)
     {
-        ValidateTrId(id);
+        ValidateTrIdPresent(id);
         var entry = await _client.GetTrAsync(id, cancellationToken);
         return new TrItemAdapter(entry);
     }
@@ -232,7 +232,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             throw new InvalidOperationException("No TR is currently selected");
         }
 
-        ValidateTrId(trId);
+        ValidateTrIdPresent(trId);
         var clientRequest = new UpdateTrRequest
         {
             Title = request.Title,
@@ -252,7 +252,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     /// <inheritdoc />
     public async Task DeleteTrAsync(string id, CancellationToken cancellationToken = default)
     {
-        ValidateTrId(id);
+        ValidateTrIdPresent(id);
         await _client.DeleteTrAsync(id, cancellationToken);
     }
 
@@ -371,7 +371,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
         foreach (var record in RequireRecords(request.Records))
-            ValidateTrId(record.Id ?? string.Empty);
+            ValidateTrIdPresent(record.Id ?? string.Empty);
 
         return await _client.UpdateTrBatchAsync(request, cancellationToken);
     }
@@ -783,14 +783,19 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
     private static void ValidateTrId(string id)
     {
-        if (string.IsNullOrWhiteSpace(id))
-        {
-            throw new ArgumentException("TR ID cannot be null or empty", nameof(id));
-        }
+        ValidateTrIdPresent(id);
 
         if (!TrIdPattern.IsMatch(id))
         {
             throw new ArgumentException($"Invalid TR ID format: {id}. Expected format: TR-<AREA>-<SUBAREA>[-<QUALIFIER>]-###");
+        }
+    }
+
+    private static void ValidateTrIdPresent(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            throw new ArgumentException("TR ID cannot be null or empty", nameof(id));
         }
     }
 

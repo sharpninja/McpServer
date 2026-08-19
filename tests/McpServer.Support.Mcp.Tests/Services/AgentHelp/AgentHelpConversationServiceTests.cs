@@ -96,9 +96,21 @@ public sealed class AgentHelpConversationServiceTests
     public async Task SubmitTurnStreamingAsync_BenignMessage_YieldsChunkAndDone()
     {
         var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
-        var service = CreateService();
+        var service = CreateService(
+            new FakeAgentExecutionStrategy(
+                "test-strategy",
+                new AgentCliResult
+                {
+                    State = AgentCliResultState.Success,
+                    Body = "FINAL ANSWER: use the documented session-log workflow.",
+                }),
+            useEchoHelperFallback: false);
         var created = await service.CreateSessionAsync(
-            new AgentHelpSessionCreateRequest { WorkspacePath = workspaceRoot },
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
             TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var benign = File.ReadAllText(
@@ -242,6 +254,38 @@ public sealed class AgentHelpConversationServiceTests
         Assert.NotNull(result);
         Assert.Equal("incomplete", result!.Status);
         Assert.Null(result.AssistantDisplayText);
+    }
+
+    /// <summary>TEST-MCP-TRIAGEHELP-001: echo fallback never completes a diagnosis.</summary>
+    [Fact]
+    public async Task SubmitTurnAsync_StrategyFailureWithEchoFallback_IsNotCompleted()
+    {
+        var workspaceRoot = AgentHelpTestPaths.CreateTempWorkspaceRoot();
+        var service = CreateService(
+            new FakeAgentExecutionStrategy(
+                "test-strategy",
+                new AgentCliResult
+                {
+                    State = AgentCliResultState.Error,
+                    Stderr = "helper unavailable",
+                }),
+            useEchoHelperFallback: true);
+        var created = await service.CreateSessionAsync(
+            new AgentHelpSessionCreateRequest
+            {
+                WorkspacePath = workspaceRoot,
+                ExecutionStrategy = "test-strategy",
+            },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        var result = await service.SubmitTurnAsync(
+            created.SessionId,
+            new AgentHelpTurnRequest { UserMessage = "Diagnose this." },
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+        Assert.NotNull(result);
+        Assert.NotEqual("completed", result!.Status);
+        Assert.Contains("FINAL ANSWER", result.Error ?? string.Empty, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

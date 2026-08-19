@@ -1,0 +1,586 @@
+=== fr-FR-MCP-TRIAGEERR-001 ===
+type: error
+payload:
+  requestId: req-20260818T192013Z-9f30
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGEERR-001 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192013Z-9f30   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGEERR-001 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== fr-FR-MCP-TRIAGESTORE-001 ===
+type: error
+payload:
+  requestId: req-20260818T192016Z-073c
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGESTORE-001 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192016Z-073c   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGESTORE-001 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== fr-FR-MCP-TRIAGESTORE-002 ===
+type: error
+payload:
+  requestId: req-20260818T192019Z-d4ac
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGESTORE-002 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192019Z-d4ac   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGESTORE-002 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== fr-FR-MCP-TRIAGESCHEMA-001 ===
+type: error
+payload:
+  requestId: req-20260818T192022Z-ec59
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGESCHEMA-001 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192022Z-ec59   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGESCHEMA-001 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== fr-FR-MCP-TRIAGEPLUGIN-001 ===
+type: error
+payload:
+  requestId: req-20260818T192025Z-1711
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGEPLUGIN-001 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192025Z-1711   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGEPLUGIN-001 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== fr-FR-MCP-TRIAGETODO-001 ===
+type: error
+payload:
+  requestId: req-20260818T192028Z-26de
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGETODO-001 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192028Z-26de   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGETODO-001 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== fr-FR-MCP-TRIAGEREQ-001 ===
+type: error
+payload:
+  requestId: req-20260818T192031Z-9264
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGEREQ-001 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192031Z-9264   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGEREQ-001 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== fr-FR-MCP-TRIAGEHELP-001 ===
+type: error
+payload:
+  requestId: req-20260818T192034Z-e7f7
+  code: method_invocation_error
+  message: FR item with ID FR-MCP-TRIAGEHELP-001 already exists
+  details:
+    methodName: workflow.requirements.createFr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192034Z-e7f7   code:
+     | method_invocation_error   message: FR item with ID FR-MCP-TRIAGEHELP-001 already exists   details:    
+     | methodName: workflow.requirements.createFr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGEERR-001 ===
+type: error
+payload:
+  requestId: req-20260818T192037Z-4cf1
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGEERR-001 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192037Z-4cf1   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGEERR-001 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGESTORE-001 ===
+type: error
+payload:
+  requestId: req-20260818T192040Z-e095
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGESTORE-001 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192040Z-e095   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGESTORE-001 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGESTORE-002 ===
+type: error
+payload:
+  requestId: req-20260818T192043Z-e005
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGESTORE-002 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192043Z-e005   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGESTORE-002 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGESCHEMA-001 ===
+type: error
+payload:
+  requestId: req-20260818T192046Z-69b2
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGESCHEMA-001 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192046Z-69b2   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGESCHEMA-001 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGEPLUGIN-001 ===
+type: error
+payload:
+  requestId: req-20260818T192049Z-99a5
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGEPLUGIN-001 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192049Z-99a5   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGEPLUGIN-001 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGETODO-001 ===
+type: error
+payload:
+  requestId: req-20260818T192052Z-3234
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGETODO-001 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192052Z-3234   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGETODO-001 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGEREQ-001 ===
+type: error
+payload:
+  requestId: req-20260818T192055Z-ff7a
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGEREQ-001 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192055Z-ff7a   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGEREQ-001 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== tr-TR-MCP-TRIAGEHELP-001 ===
+type: error
+payload:
+  requestId: req-20260818T192058Z-9c45
+  code: method_invocation_error
+  message: TR item with ID TR-MCP-TRIAGEHELP-001 already exists
+  details:
+    methodName: workflow.requirements.createTr
+    exceptionType: System.InvalidOperationException
+
+---
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:   requestId: req-20260818T192058Z-9c45   code:
+     | method_invocation_error   message: TR item with ID TR-MCP-TRIAGEHELP-001 already exists   details:    
+     | methodName: workflow.requirements.createTr     exceptionType: System.InvalidOperationException  ---
+
+=== test-TEST-MCP-TRIAGEERR-001 ===
+Failsafe queue drain: replayed=0 failed=2 quarantined=0 skipped=0 dir='F:\GitHub\McpServer\.mcpServer\grok\failsafe'.
+type: result
+payload:
+  requestId: req-20260818T192101Z-0134
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGEERR-001
+      title: Unified error envelope on tool REST and REPL
+      description: Unit and controller tests prove validation, not-found, persistence with inner, and backend_unavailable each emit code, message, retryable, and details on MCP tool JSON, REST ProblemDetails extensions, and REPL type error payload.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Unit and controller tests prove validation, not-found, persistence with inner, and backend
+=== test-TEST-MCP-TRIAGESTORE-001 ===
+Failsafe queue drain: replayed=0 failed=1 quarantined=1 skipped=0 dir='F:\GitHub\McpServer\.mcpServer\grok\failsafe'.
+type: result
+payload:
+  requestId: req-20260818T192109Z-d2e6
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGESTORE-001
+      title: Session-log store AC for merge tags replace canceled supersede
+      description: SessionLogService tests cover identical actions no duplicate, session tags round-trip, replace missing requestId not found, canceled status round-trip, and superseded persist with None sentinels without 500.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: SessionLogService tests cover identical actions no duplicate, session tags round-trip, repla
+=== test-TEST-MCP-TRIAGESTORE-002 ===
+Failsafe queue drain: replayed=0 failed=0 quarantined=1 skipped=0 dir='F:\GitHub\McpServer\.mcpServer\grok\failsafe'.
+type: result
+payload:
+  requestId: req-20260818T192113Z-9b5e
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGESTORE-002
+      title: Triage intake fail-fast when SQL unreachable
+      description: TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: TriageService tests prove unreachable SQL fails within about 5 seconds with storage-unavailable, health liveness unchanged in contract, and no partial rows.
+   
+=== test-TEST-MCP-TRIAGESCHEMA-001 ===
+type: result
+payload:
+  requestId: req-20260818T192116Z-b774
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGESCHEMA-001
+      title: Missing AgentSession columns fail closed
+      description: A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: A fixture database missing the four agent header columns fails closed with pending-migration. After apply, sessionlog query with and without text filter succeeds.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-18T19:21:17.6969832+00:00
+=== test-TEST-MCP-TRIAGEPLUGIN-001 ===
+type: result
+payload:
+  requestId: req-20260818T192119Z-0ef9
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGEPLUGIN-001
+      title: Pester for root session cache console timeout and rebind
+      description: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn after sessionId rebind clears failsafe.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Pester proves background openSession does not rebind root, cache replace resolves or named drift, profile cwd uses hook workspace path, beginTurn timeout is degraded queued, and completeTurn af
+=== test-TEST-MCP-TRIAGETODO-001 ===
+type: result
+payload:
+  requestId: req-20260818T192122Z-ebe5
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGETODO-001
+      title: Durable EXEC rehydrate and retry-clean create
+      description: TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Invalid dependsOn fails before insert.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: TodoExecutionService SetTestPlanAsync succeeds when durable EXEC exists and execution-state row is missing. EfTodoService CreateAsync soft-deleted id revives or skips. Failed batch is retry-clean. Inva
+=== test-TEST-MCP-TRIAGEREQ-001 ===
+type: result
+payload:
+  requestId: req-20260818T192125Z-6ee7
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGEREQ-001
+      title: Legacy TR-066 get update delete and create reject
+      description: Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Seed TR-066, listTr returns it, getTr updateTr deleteTr succeed, createTr of TR-066 is rejected.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-18T19:21:26.8498954+00:00
+      updatedAt: 2026-08-18T19:21:26.8499920+00:00
+  deprecated: true
+
+---
+
+=== test-TEST-MCP-TRIAGEHELP-001 ===
+type: result
+payload:
+  requestId: req-20260818T192128Z-d24e
+  result:
+    success: true
+    item:
+      id: TEST-MCP-TRIAGEHELP-001
+      title: Agent Help progress-only and echo are not completed
+      description: Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+      status: pending
+      priority: high
+      area: MCP
+      testType: unit
+      acceptanceCriteria:
+      - id: ac-1
+        text: Progress-only grok-cli body is incomplete and names FINAL ANSWER. CLI failure with fallback flag on is not status completed. submitTurn timeout is at least HelperTimeout.
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-
+=== map-FR-MCP-TRIAGEERR-001 ===
+type: result
+payload:
+  requestId: req-20260818T192131Z-e6e1
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGEERR-001
+      trId: TR-MCP-TRIAGEERR-001
+      testId: TEST-MCP-TRIAGEERR-001
+      createdAt: 2026-08-18T19:21:32.9421167+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+
+=== map-FR-MCP-TRIAGESTORE-001 ===
+type: result
+payload:
+  requestId: req-20260818T192134Z-3f1d
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGESTORE-001
+      trId: TR-MCP-TRIAGESTORE-001
+      testId: TEST-MCP-TRIAGESTORE-001
+      createdAt: 2026-08-18T19:21:36.1785621+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+
+=== map-FR-MCP-TRIAGESTORE-002 ===
+type: result
+payload:
+  requestId: req-20260818T192137Z-989d
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGESTORE-002
+      trId: TR-MCP-TRIAGESTORE-002
+      testId: TEST-MCP-TRIAGESTORE-002
+      createdAt: 2026-08-18T19:21:39.5358973+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+
+=== map-FR-MCP-TRIAGESCHEMA-001 ===
+type: result
+payload:
+  requestId: req-20260818T192141Z-5d5b
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGESCHEMA-001
+      trId: TR-MCP-TRIAGESCHEMA-001
+      testId: TEST-MCP-TRIAGESCHEMA-001
+      createdAt: 2026-08-18T19:21:42.7101001+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+
+=== map-FR-MCP-TRIAGEPLUGIN-001 ===
+type: result
+payload:
+  requestId: req-20260818T192144Z-0425
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGEPLUGIN-001
+      trId: TR-MCP-TRIAGEPLUGIN-001
+      testId: TEST-MCP-TRIAGEPLUGIN-001
+      createdAt: 2026-08-18T19:21:45.9679259+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+
+=== map-FR-MCP-TRIAGETODO-001 ===
+type: result
+payload:
+  requestId: req-20260818T192147Z-7a3e
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGETODO-001
+      trId: TR-MCP-TRIAGETODO-001
+      testId: TEST-MCP-TRIAGETODO-001
+      createdAt: 2026-08-18T19:21:49.1639104+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+
+=== map-FR-MCP-TRIAGEREQ-001 ===
+type: result
+payload:
+  requestId: req-20260818T192150Z-39ca
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGEREQ-001
+      trId: TR-MCP-TRIAGEREQ-001
+      testId: TEST-MCP-TRIAGEREQ-001
+      createdAt: 2026-08-18T19:21:52.2678094+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+
+=== map-FR-MCP-TRIAGEHELP-001 ===
+type: result
+payload:
+  requestId: req-20260818T192153Z-a07d
+  result:
+    success: true
+    item:
+      frId: FR-MCP-TRIAGEHELP-001
+      trId: TR-MCP-TRIAGEHELP-001
+      testId: TEST-MCP-TRIAGEHELP-001
+      createdAt: 2026-08-18T19:21:55.5427291+00:00
+      notes: PLAN-TRIAGECLUSTER-001 S0
+  deprecated: true
+
+---
+

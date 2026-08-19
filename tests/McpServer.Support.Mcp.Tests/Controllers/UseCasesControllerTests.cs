@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Cqrs;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
@@ -6,6 +7,8 @@ using McpServer.Support.Mcp.UseCases.Commands;
 using McpServer.Support.Mcp.UseCases.Models;
 using McpServer.Support.Mcp.UseCases.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using Xunit;
 
@@ -221,6 +224,36 @@ public sealed class UseCasesControllerTests
 
     private static bool MatchesFromFr(CreateUseCaseFromFrCommand? command, string frId)
         => command is not null && command.FrId == frId;
+
+    /// <summary>
+    /// BUG-TRIAGE-139 AC3/AC4: REST create maps a typed DbUpdateException to code/retryable/details.inner.
+    /// </summary>
+    [Fact]
+    public async Task CreateAsync_DbUpdateException_ReturnsClassifiedEnvelope()
+    {
+        var inner = new SqliteException("FOREIGN KEY constraint failed", 19);
+        var dispatcher = Substitute.For<IDispatcher>();
+        dispatcher.SendAsync(Arg.Any<CreateUseCaseCommand>(), Arg.Any<CancellationToken>())
+            .Returns(Result<UseCaseDetailDto>.Failure(
+                "An error occurred while saving the entity changes. See the inner exception for details.",
+                new DbUpdateException(
+                    "An error occurred while saving the entity changes. See the inner exception for details.",
+                    inner)));
+
+        var controller = CreateController(dispatcher);
+        var action = await controller.CreateAsync(
+            new CreateUseCaseRequest { Title = "Persist fail" },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(action.Result);
+        Assert.Equal(500, objectResult.StatusCode);
+        var json = JsonSerializer.Serialize(objectResult.Value);
+        using var document = JsonDocument.Parse(json);
+        Assert.Equal("persistence_error", document.RootElement.GetProperty("code").GetString());
+        Assert.False(document.RootElement.GetProperty("retryable").GetBoolean());
+        Assert.Equal(inner.Message, document.RootElement.GetProperty("details").GetProperty("inner").GetString());
+        Assert.DoesNotContain("See the inner exception", json, StringComparison.Ordinal);
+    }
 
     /// <summary>
     /// TEST-MCP-USECASE-002: Null create body short-circuits to 400 without dispatch.

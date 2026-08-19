@@ -232,7 +232,7 @@ Main endpoints:
 - `/usecases/` — first-party Use Case Manager static UI (REST-only; deploy via Nuke `UpdateService`)
 - `/mcpserver/agent-help` — Agent Help sessions for MCP Server issue diagnosis (create session, submit turn, status, transcript, SSE/WebSocket streaming)
 - `/mcpserver/sessionlog/ingest/path` and `/mcpserver/sessionlog/ingest/upload` — provider transcript import
-- `/health`
+- `/health` — liveness only (`status`, `version`, `nonce` echo, `checks`). The payload `storage` field is `reachable` or `unreachable`. A storage-only outage does not flip `/health` off Healthy and does not change the nonce echo (TR-MCP-HEALTH-003). Startup migrate/probe failures that classify as backend-unavailable leave the process up for `/health`; mutating `/mcpserver/*` work then returns `backend_unavailable`.
 - `/swagger`
 
 ### Transcript Ingestion Limits
@@ -336,6 +336,12 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
 Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
+
+## Health, storage, and errors
+
+`GET /health` is liveness. Observed live payload keys on 1.4.28: `status`, `version`, `checks`, `nonce`, `storage`. Marker trust uses HTTP 200 plus an exact nonce echo. `storage` is a separate ready probe (`reachable` or `unreachable`). Storage handshake or migrate failure at startup is classified and skipped so the process stays up for `/health`; seed and bucket work is skipped until storage is ready.
+
+Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, and plugin shim failures share the machine-readable envelope `{ code, message, retryable, details }` (FR-MCP-TRIAGEERR-001). REST also carries those four fields as ProblemDetails extensions. `backend_unavailable` is retryable true. Persistence, validation, not-found, and conflict are retryable false unless the classifier maps SQLITE_BUSY or deadlock. Innermost EF or provider text lives in `details.inner`.
 
 ## Additional Documentation
 

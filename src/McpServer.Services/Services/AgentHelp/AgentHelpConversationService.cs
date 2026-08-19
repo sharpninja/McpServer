@@ -680,7 +680,11 @@ public sealed class AgentHelpConversationService : IAgentHelpConversationService
         }
 
         if (_options.CurrentValue.UseEchoHelperFallback)
-            return AgentHelpHelperResult.Completed(BuildEchoHelperResponse(state, userMessage));
+        {
+            return AgentHelpHelperResult.Incomplete(
+                $"Agent Help helper failed. Echo fallback is diagnostic-only and is not a completed answer. Expected output containing '{AgentHelpPromptBuilder.FinalAnswerMarker}'.",
+                BuildEchoHelperResponse(state, userMessage));
+        }
 
         return AgentHelpHelperResult.Failed("No Agent Help execution strategy is available and echo fallback is disabled.");
     }

@@ -2808,6 +2808,78 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-TRIAGEERR-001
+
+**Shared error classifier and envelope** — One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
+**Covered by:** FR: FR-MCP-TRIAGEERR-001; TEST: TEST-MCP-TRIAGEERR-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] One shared classifier produces code, message, retryable, and details. McpToolErrors, the /mcpserver exception filter, the REPL error envelope, and the plugin shim consume it. backend_unavailable is retryable true. persistence_error, validation_error, not_found, and conflict are retryable false unless SQLITE_BUSY or deadlock.
+
+## TR-MCP-TRIAGEHELP-001
+
+**Agent Help no completed echo and long timeout** — AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+**Covered by:** FR: FR-MCP-TRIAGEHELP-001; TEST: TEST-MCP-TRIAGEHELP-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] AgentHelpConversationService and GrokCliAgentExecutionStrategy do not mark echo-fallback or progress-only output as completed. UseEchoHelperFallback default false or never sets completed. Plugin long timeout covers workflow.agenthelp.submitTurn.
+
+## TR-MCP-TRIAGEPLUGIN-001
+
+**Sticky root session cache rebind and degraded persist** — plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in repl-invoke.ps1.
+**Covered by:** FR: FR-MCP-TRIAGEPLUGIN-001; TEST: TEST-MCP-TRIAGEPLUGIN-001, TEST-MCP-TRIAGEPLUGIN-002, TEST-MCP-TRIAGEPLUGIN-003, TEST-MCP-TRIAGEPLUGIN-004, TEST-MCP-TRIAGEPLUGIN-005
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] plugins/core cache-scope keeps root session-state for UserPromptSubmit. ReplacePluginCache retains or rebinds. Resolve-McpCacheDir uses hook workspace path when env and profile cwd would fail. Get-ReplMethodTimeoutSeconds long list includes workflow.agenthelp.submitTurn. beginTurn degraded path and completeTurn persist identity are implemented in repl-invoke.ps1.
+
+## TR-MCP-TRIAGEREQ-001
+
+**ValidateTrId create only** — RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+**Covered by:** FR: FR-MCP-TRIAGEREQ-001; TEST: TEST-MCP-TRIAGEREQ-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+
+## TR-MCP-TRIAGESCHEMA-001
+
+**Startup probe for AgentSession header columns** — Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply 20260722214500_AddAgentSessionHeaderFields on all host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+**Covered by:** FR: FR-MCP-TRIAGESCHEMA-001; TEST: TEST-MCP-TRIAGESCHEMA-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply 20260722214500_AddAgentSessionHeaderFields on all host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+
+## TR-MCP-TRIAGESTORE-001
+
+**Session-log merge tags replace supersede** — SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+**Covered by:** FR: FR-MCP-TRIAGESTORE-001; TEST: TEST-MCP-TRIAGESTORE-001, TEST-MCP-TRIAGESTORE-002, TEST-MCP-TRIAGESTORE-003, TEST-MCP-TRIAGESTORE-004, TEST-MCP-TRIAGESTORE-005, TEST-MCP-TRIAGESTORE-006, TEST-MCP-TRIAGESTORE-007
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] SessionLogService SameAction identity is order plus type plus filePath plus description. SessionLogEntity stores session tags. ReplaceTurn missing requestId is 404. Plugin superseded persist stamps planFile and todoId None and uses UpsertTurn. Canceled status persists and is documented.
+
+## TR-MCP-TRIAGESTORE-002
+
+**Five second intake and submit storage budget** — TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+**Covered by:** FR: FR-MCP-TRIAGESTORE-002; TEST: TEST-MCP-TRIAGESTORE-007
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+
+## TR-MCP-TRIAGETODO-001
+
+**Durable EXEC fallback and soft-delete id allocate** — TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
+**Covered by:** FR: FR-MCP-TRIAGETODO-001; TEST: TEST-MCP-TRIAGETODO-001, TEST-MCP-TRIAGETODO-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] TodoExecutionService FindTodo falls back to ITodoService.GetByIdAsync with path normalization and rehydrates EXEC records. EfTodoService CreateAsync and GenerateNextTodoIdAsync use IgnoreQueryFilters for soft-deleted collisions. Batch create is transactional or compensating.
+
 ## TR-MCP-TUN-001
 
 **Tunnel Strategy Pattern** — DI registration in `Program.cs` reads `Mcp:Tunnel:Provider`, normalizes to uppercase, and uses `ActivatorUtilities.CreateInstance<T>` to instantiate the matching provider (`NgrokTunnelProvider`, `CloudflareTunnelProvider`, or `FrpTunnelProvider`). The provider is registered as both a singleton and an `IHostedService`, conditionally on the provider name being non-empty.

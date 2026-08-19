@@ -1,0 +1,15 @@
+type: result
+payload:
+  requestId: req-20260818T193450Z-9b88
+  result:
+    items:
+    - frId: FR-MCP-TRIAGETODO-001
+      trId: TR-MCP-TRIAGETODO-001
+      createdAt: 2026-08-18T19:34:50.7997634+00:00
+    - frId: FR-MCP-TRIAGETODO-001
+      testId: TEST-MCP-TRIAGETODO-001
+      createdAt: 2026-08-18T19:34:50.8001389+00:00
+    totalCount: 2
+  deprecated: true
+
+---

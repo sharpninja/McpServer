@@ -38,6 +38,7 @@ if (-not $shimCommand.Parameters.ContainsKey('ProcessingDialog')) {
 }
 . (Join-Path $PSScriptRoot 'yaml-object-mutation.ps1')
 . (Join-Path $PSScriptRoot 'agent-runtime-header.ps1')
+. (Join-Path $PSScriptRoot 'classified-error.ps1')
 Import-McpYamlSerializer
 . (Join-Path $PSScriptRoot 'marker-resolver.ps1')
 
@@ -100,11 +101,108 @@ function New-ReplPluginSessionId {
     return '{0}-{1}-{2}' -f (Get-ReplCanonicalAgentName $script:AgentName), $timestamp, $suffix
 }
 
+function Write-ReplStickySessionState {
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        [string]$RootSessionId = '',
+        [Parameter(Mandatory)][string]$SessionId,
+        [switch]$Child
+    )
+    $sessionDir = Get-ReplOpenSessionStatePath -CacheDir $CacheDir -RootSessionId $RootSessionId -SessionId $SessionId -Child:$Child
+    $isChild = $sessionDir -ne $CacheDir
+    if ($isChild) {
+        New-Item -ItemType Directory -Path $sessionDir -Force | Out-Null
+    }
+    $sessionFile = Join-Path $sessionDir 'session-state.yaml'
+    $state = [ordered]@{
+        status = 'verified'
+        sessionId = $SessionId
+        lastUpdated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    }
+    $yaml = @(
+        "status: verified"
+        "sessionId: $SessionId"
+        "lastUpdated: $($state.lastUpdated)"
+    ) -join [Environment]::NewLine
+    Set-Content -LiteralPath $sessionFile -Value $yaml -Encoding utf8
+    return $sessionFile
+}
+
+function Complete-ReplBeginTurnAfterPersist {
+    param(
+        [bool]$Persisted,
+        [bool]$Degraded,
+        [string]$FailsafePath = '',
+        [string]$CurrentTurnFile = '',
+        [hashtable]$TurnState = $null
+    )
+    if (Test-ReplBeginTurnDegradedQueued -Persisted $Persisted -Degraded $Degraded) {
+        if ($CurrentTurnFile -and $TurnState) {
+            $lines = @(
+                "turnRequestId: $($TurnState.turnRequestId)"
+                "sessionId: $($TurnState.sessionId)"
+                "status: in_progress"
+            )
+            Set-Content -LiteralPath $CurrentTurnFile -Value ($lines -join [Environment]::NewLine) -Encoding utf8
+        }
+        return @{ ok = $true; degraded = $true; failsafeRetained = (Test-Path -LiteralPath $FailsafePath) }
+    }
+    if (-not $Persisted) {
+        return @{ ok = $false; degraded = $false; failsafeRetained = (Test-Path -LiteralPath $FailsafePath) }
+    }
+    if ($FailsafePath -and (Test-Path -LiteralPath $FailsafePath)) {
+        Remove-Item -LiteralPath $FailsafePath -Force -ErrorAction SilentlyContinue
+    }
+    return @{ ok = $true; degraded = $false; failsafeRetained = $false }
+}
+
+function Get-ReplOpenSessionStatePath {
+    param(
+        [Parameter(Mandatory)][string]$CacheDir,
+        [string]$RootSessionId = '',
+        [Parameter(Mandatory)][string]$SessionId,
+        [switch]$Child
+    )
+    $isChild = [bool]$Child
+    if (-not $isChild -and -not [string]::IsNullOrWhiteSpace($RootSessionId) -and $RootSessionId -ne $SessionId) {
+        $isChild = $true
+    }
+    if ($isChild) {
+        return (Join-Path (Join-Path $CacheDir 'sessions') $SessionId)
+    }
+    return $CacheDir
+}
+
+function Get-ReplCompleteTurnPersistSessionId {
+    param(
+        [string]$CurrentTurnSessionId,
+        [string]$ActiveSessionId
+    )
+    if (-not [string]::IsNullOrWhiteSpace($CurrentTurnSessionId)) {
+        return $CurrentTurnSessionId
+    }
+    return $ActiveSessionId
+}
+
+function Test-ReplBeginTurnDegradedQueued {
+    param([bool]$Persisted, [bool]$Degraded)
+    return (-not $Persisted) -and $Degraded
+}
+
 function Invoke-WorkflowOpenSession {
     # TR-MCP-REPL-011: persist an explicit valid sessionId into session-state.yaml instead of the
     # historical no-op, so an explicit openSession can recover a bad/rotated local session id
     # (BUG-TRIAGE-085; previously documented as a gap in GAPS.md).
-    param([string]$ParamsYaml)
+    param(
+        [string]$ParamsYaml,
+        [string]$CacheDir = '',
+        [string]$SessionId = '',
+        [string]$RootSessionId = ''
+    )
+    if (-not [string]::IsNullOrWhiteSpace($CacheDir) -and -not [string]::IsNullOrWhiteSpace($SessionId)) {
+        Write-ReplStickySessionState -CacheDir $CacheDir -RootSessionId $RootSessionId -SessionId $SessionId | Out-Null
+        return $true
+    }
 
     $params = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
     $sessionId = ''
@@ -116,7 +214,21 @@ function Invoke-WorkflowOpenSession {
     if ([string]::IsNullOrWhiteSpace($sessionId)) { return $false }
 
     $sessionId = ConvertTo-ReplCanonicalSessionId -SessionId $sessionId.Trim()
-    $sessionFile = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
+    $cacheDir = Get-ReplInvokeCacheDir
+    $rootSessionFile = Join-Path $cacheDir 'session-state.yaml'
+    $rootState = if (Test-Path -LiteralPath $rootSessionFile) { Read-McpYamlObject -Path $rootSessionFile } else { $null }
+    $rootSessionId = ''
+    if ($rootState -is [System.Collections.IDictionary] -and $rootState.Contains('sessionId')) {
+        $rootSessionId = [string]$rootState['sessionId']
+    }
+    $isChild = $false
+    if ($params -is [System.Collections.IDictionary]) {
+        $isChild = [bool]($params['background'] -or $params['child'] -or $params['sessionKey'])
+    }
+    if (-not $isChild -and -not [string]::IsNullOrWhiteSpace($rootSessionId) -and $rootSessionId -ne $sessionId) {
+        $isChild = $true
+    }
+    $sessionFile = Write-ReplStickySessionState -CacheDir $cacheDir -RootSessionId $rootSessionId -SessionId $sessionId -Child:$isChild
     $state = Read-McpYamlObject -Path $sessionFile -Create
     if ($state -isnot [System.Collections.IDictionary]) { $state = [ordered]@{} }
     $state['status'] = 'verified'
@@ -435,6 +547,7 @@ function Get-ReplSessionMeta {
         Select-Object -First 1
     if (-not $line) { return $null }
     $sid = ($line.Line -replace '^sessionId:\s*', '').Trim()
+    $sid = Get-ReplCompleteTurnPersistSessionId -CurrentTurnSessionId (Get-ReplCurrentTurnValue -Key 'sessionId') -ActiveSessionId $sid
     if (-not $sid) { return $null }
     $canonicalSessionId = ConvertTo-ReplCanonicalSessionId -SessionId $sid
     if ($canonicalSessionId -ne $sid) {
@@ -458,6 +571,7 @@ function Get-ReplMethodTimeoutSeconds {
 
     $default = if ($env:REPL_TIMEOUT) { [int]$env:REPL_TIMEOUT } else { 30 }
     $long = if ($env:REPL_LONG_TIMEOUT) { [int]$env:REPL_LONG_TIMEOUT } else { 300 }
+    $helper = if ($env:REPL_HELPER_TIMEOUT) { [int]$env:REPL_HELPER_TIMEOUT } else { 120 }
 
     switch -Wildcard ($Method) {
         'workflow.todo.analyzeRequirements'       { return $long }
@@ -465,6 +579,7 @@ function Get-ReplMethodTimeoutSeconds {
         'workflow.requirements.ingestDocument'    { return $long }
         'workflow.requirements.analyze*'          { return $long }
         'client.Requirements.Analyze*'            { return $long }
+        'workflow.agenthelp.submitTurn'           { return $helper }
         default                                   { return $default }
     }
 }
@@ -556,6 +671,14 @@ function Invoke-ReplRaw {
     }
     catch {
         Write-Error "mcpserver-repl invocation failed for method ${Method}: $_"
+        $caughtOutput = ''
+        if (Get-Variable -Name output -Scope Local -ErrorAction SilentlyContinue) {
+            $caughtOutput = [string]$output
+        }
+        $classified = ConvertTo-McpPluginClassifiedError -Output $caughtOutput -ErrorText $_.ToString()
+        if ($classified.preserved) {
+            return (New-McpPluginReplResult -Success $false -Output $caughtOutput -Error $classified.message)
+        }
         return (New-McpPluginReplResult -Success $false -Output '' -Error $_.ToString())
     }
 }
@@ -1102,6 +1225,18 @@ function Invoke-ReplPersistTurn {
 
     $result = Invoke-ReplRaw -Method 'client.SessionLog.SubmitAsync' -ParamsYaml $paramsYaml
     if (-not $result.Success) {
+        $combined = "$($result.Output) $($result.Error)"
+        if ($combined -match 'timeout|timed out|command_timeout') {
+            $script:LastReplPersistenceDetails = [ordered]@{
+                persisted = $false
+                degraded = $true
+                queued = $true
+                persistenceStrategy = 'failsafe-queue'
+                failsafePath = $failsafePath
+                message = 'beginTurn persist timed out; failsafe retained and current-turn stays active.'
+            }
+            return $false
+        }
         throw "Session log persistence failed for request '$RequestId'. FailsafePath='$failsafePath'. Output=$($result.Output) Error=$($result.Error)"
     }
 
@@ -1324,8 +1459,11 @@ function Assert-ReplCurrentTurnFresh {
         }
     }
 
-    # TR-MCP-PLUGIN-012: adopt the active session id (rotation re-bind, or fill when the turn has none).
-    if ($activeSessionId -and $turnSessionId -ne $activeSessionId) { $turnState['sessionId'] = $activeSessionId }
+    # TR-MCP-PLUGIN-012 / BUG-TRIAGE-143: persist identity stays the sessionId
+    # captured on the turn at open. Do not overwrite it with the rotated active
+    # session before completeTurn persist. Get-ReplCompleteTurnPersistSessionId
+    # prefers this original value.
+    if (-not $turnSessionId -and $activeSessionId) { $turnState['sessionId'] = $activeSessionId }
     if ($snapshot) {
         $turnState['markerFilePath'] = $snapshot.markerFilePath
         $turnState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
@@ -1502,6 +1640,23 @@ function Invoke-WorkflowBeginTurn {
             $persisted = [bool](Invoke-ReplPersistTurn -RequestId $requestId -Title $queryTitle -Status 'in_progress' -ResponseText '(turn opened)' -IncludeSessionTitle:$seedSessionTitle -PlanFile $planFile -TodoId $todoId)
         }
         if (-not $persisted) {
+            $degraded = $false
+            if ($script:LastReplPersistenceDetails) {
+                $degraded = [bool](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'degraded')
+            }
+            $failsafePath = ''
+            if ($script:LastReplPersistenceDetails) {
+                $failsafePath = [string](Get-ReplObjectValue -InputObject $script:LastReplPersistenceDetails -Name 'failsafePath')
+            }
+            $turnFile = Get-ReplCurrentTurnFile
+            $beginResult = Complete-ReplBeginTurnAfterPersist -Persisted $persisted -Degraded $degraded -FailsafePath $failsafePath -CurrentTurnFile $turnFile -TurnState @{
+                turnRequestId = $requestId
+                sessionId = $sessionId
+            }
+            if ($beginResult.degraded) {
+                [Console]::Error.WriteLine("workflow.sessionlog.beginTurn queued/degraded for '$requestId'. Failsafe retained; current-turn remains active.")
+                return $true
+            }
             [Console]::Error.WriteLine("workflow.sessionlog.beginTurn did not confirm durable persistence for '$requestId'.")
             return $false
         }

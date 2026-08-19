@@ -1,0 +1,8 @@
+id: TR-MCP-TRIAGESCHEMA-001
+title: Startup probe for AgentSession header columns
+description: Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply 20260722214500_AddAgentSessionHeaderFields on all host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+priority: high
+acceptanceCriteria:
+  - id: ac-1
+    text: Startup schema probe requires SessionLogs AgentSessionId, AgentSessionTranscriptFile, AgentExecutablePath, and AgentExecutableVersion. Apply 20260722214500_AddAgentSessionHeaderFields on all host databases. Missing columns fail closed with pending-migration, not raw SQL Invalid column name on query.
+    isSatisfied: false

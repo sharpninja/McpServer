@@ -1,0 +1,8 @@
+id: TR-MCP-TRIAGEREQ-001
+title: ValidateTrId create only
+description: RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+priority: high
+acceptanceCriteria:
+  - id: ac-1
+    text: RequirementsWorkflow applies TrIdPattern only on create and batch create. getTr updateTr deleteTr accept any non-empty id and resolve the store, returning 404 if missing.
+    isSatisfied: false

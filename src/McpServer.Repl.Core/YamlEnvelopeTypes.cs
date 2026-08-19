@@ -81,6 +81,9 @@ public sealed class ErrorPayload : IErrorPayload
     public string Message { get; init; } = "";
 
     /// <inheritdoc />
+    public bool Retryable { get; init; }
+
+    /// <inheritdoc />
     public IReadOnlyDictionary<string, object?>? Details { get; init; }
 }
 

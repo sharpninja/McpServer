@@ -75,6 +75,15 @@ public sealed class TriageService : ITriageService
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
+        return await StorageCommandBudget.ExecuteAsync(
+            ct => SubmitReportCoreAsync(request, ct),
+            cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<TriageReportSubmitResult> SubmitReportCoreAsync(
+        TriageReportRequest request,
+        CancellationToken cancellationToken)
+    {
         var validationError = ValidateReport(request);
         if (validationError is not null)
         {

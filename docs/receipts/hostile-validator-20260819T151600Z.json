@@ -1,0 +1,132 @@
+{
+  "TimestampUtc": "2026-08-19T15:16:00Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "WorkClass": "class-2-operator-directed-ops",
+  "WorkClassDetail": "resolve problems after wrap-up hostile DISAGREE; commit-sync still paused",
+  "addProfile": {
+    "executed": true,
+    "profileFileCountRead": 18,
+    "excluded": [
+      "add-profile.grok.md"
+    ],
+    "directory": "C:\\Users\\kingd\\.claude\\profile"
+  },
+  "ImplementerReceipt": "docs/receipts/wrap-up-20260819T134500Z.md",
+  "ReviewSession": {
+    "agent": "GrokCode",
+    "sessionId": "GrokCode-20260819T151600Z-hostile-018",
+    "requestId": "req-20260819T151600Z-001-hostile-018-cache-review",
+    "planFile": "None",
+    "todoId": "None",
+    "transport": "POST http://PAYTON-LEGION2:7147/mcp-transport tools/call",
+    "turnId": 42035,
+    "turnStatus": "completed",
+    "persistenceProof": "sessionlog_query agent=GrokCode from=2026-08-19T15:16:00Z totalCount=1 hit sessionId GrokCode-20260819T151600Z-hostile-018 turn status=completed dialog=4 actions=8 designDecisions=2 planFile=None todoId=None response starts OverallVerdict DISAGREE"
+  },
+  "OverallVerdict": "DISAGREE",
+  "Counts": {
+    "PASS": 10,
+    "FAIL": 1,
+    "UNKNOWN": 0,
+    "NA": 2
+  },
+  "AccuracyRating": 93,
+  "CompletenessRating": 90,
+  "FailList": [
+    "A3: live current-turn.yaml is req-20260819T150654Z-prompt-41a3 in_progress, not req-20260819T150100Z-018-complete-resolve-after-hook-cancel completed. 018 is completed on the server and was not hook-canceled. 018 logged no current-turn.yaml edit. session-state.yaml lastUpdated remains 2026-08-19T14:39:33Z."
+  ],
+  "UnknownList": [],
+  "Claims": [
+    {
+      "id": "A1",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "git diff --cached --name-only empty; GitVersion.yml working tree next-version 1.4.28; git status --short -- GitVersion.yml is unstaged M; HEAD f4060f037e62e64974026aff9d24e11b2f481952 on develop equals origin/develop; no new commit or push",
+      "evidence": "CachedCount=0. Status ' M GitVersion.yml'. next-version 1.4.28. HEAD equals origin/develop. left-right 0 0. log-1 still wrap-up and hostile AGREE for refresh-docs push."
+    },
+    {
+      "id": "A2",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "Session GrokCode-20260818T182741Z-plugin-session: 015 canceled, 016 completed, 017 canceled, 018 completed with persisted dialog/actions",
+      "evidence": "sessionlog_query plugin-session turnCount 20: 015 canceled dlg3 act8; 016 completed dlg2 act4; 017 canceled dlg2 act5 superseded by prompt-9cc5; 018 completed dlg2 act3 decisions 1 planFile None todoId None. Exact-id and 018-slug text filters totalCount=0."
+    },
+    {
+      "id": "A3",
+      "group": "A Requested",
+      "verdict": "FAIL",
+      "claim": "Plugin cache current-turn.yaml names 018 completed",
+      "evidence": "Live file turnRequestId req-20260819T150654Z-prompt-41a3 status in_progress openedAt 2026-08-19T15:06:55Z. 018 actions do not edit current-turn.yaml. session-state lastUpdated 2026-08-19T14:39:33Z."
+    },
+    {
+      "id": "A4",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "Wrap-up receipt includes second hostile DISAGREE and 018 complete note; implementer does not claim 017 is still in_progress",
+      "evidence": "docs/receipts/wrap-up-20260819T134500Z.md LastWriteTimeUtc 2026-08-19T15:01:13.2685007Z length 6094. Second hostile section cites 145533Z DISAGREE. Closing note names 018. Latest claim list says 017 canceled."
+    },
+    {
+      "id": "A5",
+      "group": "A Requested",
+      "verdict": "PASS",
+      "claim": "Implementer did not mark PLAN-TRIAGECLUSTER-001 done in this resolve",
+      "evidence": "todo_get Done=true citing 013000Z. todo_audit totalCount 7 last Version 7 RecordedAtUtc 2026-08-19T01:41:53.1708697Z. 018 has no TODO mutation. TODO.yaml mtime 2026-07-10T00:56:30Z."
+    },
+    {
+      "id": "B-Byrd",
+      "group": "B Workspace rules",
+      "verdict": "N/A",
+      "claim": "Byrd v4 phase-order",
+      "evidence": "Class 2 ops. Not project implementation."
+    },
+    {
+      "id": "B-receipts",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "Always bring the receipts",
+      "evidence": "Wrap-up receipt exists. This review re-ran git and sessionlog_query."
+    },
+    {
+      "id": "B-mcp",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "MCP-only storage",
+      "evidence": "No direct TODO/session/requirements store edit. TODO.yaml mtime unchanged."
+    },
+    {
+      "id": "B-pwsh",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "PowerShell only / no Python",
+      "evidence": "This review used pwsh.exe. No Python observed."
+    },
+    {
+      "id": "B-honesty",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "Honesty / no fabricated git or live turn statuses",
+      "evidence": "Git and 015-018 live statuses match. Cache mismatch scored on A3."
+    },
+    {
+      "id": "B-delete",
+      "group": "B Workspace rules",
+      "verdict": "PASS",
+      "claim": "Look-before-delete",
+      "evidence": "015 failsafe files remain. GitVersion.yml not deleted. Plan file remains."
+    },
+    {
+      "id": "C",
+      "group": "C Requirements",
+      "verdict": "N/A",
+      "claim": "FR/TR/TEST/AC for product work",
+      "evidence": "Class 2 ops. No product-plan/FR complete claim."
+    },
+    {
+      "id": "D",
+      "group": "D Plan",
+      "verdict": "PASS",
+      "claim": "Did not falsely claim PLAN-TRIAGECLUSTER-001 done in this resolve",
+      "evidence": "018 planFile None todoId None. PLAN Done=true from 01:41:53Z audit v7, not this resolve."
+    }
+  ]
+}

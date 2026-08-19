@@ -76,7 +76,7 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
         Assert.True(document.RootElement.TryGetProperty("error", out _), json);
     }
 
-    /// <summary>AC-TR-MCP-SESSIONLOG-006-006: empty planFile on begin returns structured error.</summary>
+    /// <summary>AC-TR-MCP-SESSIONLOG-006-006 / FR-MCP-SESSIONLOGCTX-001 AC-003: empty planFile on begin returns structured error.</summary>
     [Fact]
     public async Task SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError()
     {
@@ -100,8 +100,9 @@ public sealed class SessionLogLifecycleToolErrorTests : IDisposable
             cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         using var document = JsonDocument.Parse(json);
-        Assert.True(document.RootElement.TryGetProperty("error", out var error), json);
-        Assert.Contains("planFile", error.GetString(), StringComparison.Ordinal);
+        Assert.True(document.RootElement.TryGetProperty("code", out var code), json);
+        Assert.Equal("validation_error", code.GetString());
+        Assert.Contains("planFile", document.RootElement.GetProperty("message").GetString(), StringComparison.Ordinal);
     }
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-006: None/None begin succeeds through the real persist path.</summary>

@@ -1,0 +1,9 @@
+{
+  "hostileIsBackground": true,
+  "remediateIsBackground": false,
+  "thisHostileIsBackground": true,
+  "hostileInProgress": "reuse",
+  "hostileCompleted": "isolate-skip",
+  "remediateInProgress": "open-new",
+  "thisHostileVs019": "reuse"
+}

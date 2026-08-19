@@ -1,0 +1,21 @@
+type: result
+payload:
+  requestId: req-20260818T193230Z-a2d1
+  result:
+    id: TR-MCP-TRIAGESTORE-002
+    title: Five second intake and submit storage budget
+    description: TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: TRIAGESTORE
+    acceptanceCriteria:
+    - id: ac-1
+      text: TriageService.SubmitReportAsync and session-log SaveChanges used by beginTurn persist use a 5 second connect and command budget. Timeouts map to backend_unavailable. No partial triage rows.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-08-18T19:32:31.6195782+00:00
+    updatedAt: 2026-08-18T19:32:31.6196926+00:00
+  deprecated: true
+
+---

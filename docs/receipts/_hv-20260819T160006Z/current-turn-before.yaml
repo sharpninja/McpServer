@@ -1,0 +1,17 @@
+turnRequestId: req-20260819T153500Z-019-remediate-hook-cache-isolation
+queryTitle: Remediate hook cache isolation FAILs
+openedAt: 2026-08-19T15:54:40Z
+status: in_progress
+sessionId: GrokCode-20260818T182741Z-plugin-session
+codeEdits: 0
+lastBuildStatus: unknown
+auditActions: 0
+auditDialog: 0
+auditDecisions: 0
+auditFiles: 0
+auditCommits: 0
+queryText: 'Please remediATE the hostile FAILs: hook-canceled 017 and hook-owned current-turn.yaml. Implement FR-MCP-TRIAGEPLUGIN-001 root UserPromptSubmit isolation for background agents.'
+planFile: None
+todoId: None
+markerFilePath: F:\GitHub\McpServer\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-19T13:05:36.9456178Z

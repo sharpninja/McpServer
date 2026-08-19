@@ -1,0 +1,20 @@
+Passed=10
+Failed=0
+Skipped=0
+Total=10
+Duration=00:00:03.1682719
+Result=Passed
+Tests:
+Passed Resolve-McpCacheDir uses hook workspace path when cwd is the user profile and env is empty
+Passed Get-ReplMethodTimeoutSeconds treats workflow.agenthelp.submitTurn as a long helper timeout
+Passed Get-ReplMethodTimeoutSeconds keeps sessionlog methods on the short default
+Passed CacheScope.BackgroundOpenSession_DoesNotRebindRootActiveSession
+Passed PluginCache.ReplaceWhileTurnOpen_ResolvesOrNamedDrift
+Passed BeginTurn.SubmitTimeoutAfterFailsafe_ReturnsDegradedQueued
+Passed CompleteTurn.SessionIdRebind_PersistsAndClearsFailsafe
+Passed plugin hook re-asserts workspace identity from hook payload
+Passed plugin shim preserves classified retryable instead of collapsing to internal_server_error
+Passed UserPromptSubmit.BackgroundPrompt_DoesNotSupersedeRootInProgressTurn
+
+FailedTests:
+

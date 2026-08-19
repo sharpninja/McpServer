@@ -1,0 +1,10 @@
+id: FR-MCP-TRIAGEHELP-001
+title: Agent Help is diagnosis or incomplete never completed echo
+description: Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.
+priority: high
+area: MCP
+notes: Closes BUG-TRIAGE-149.
+acceptanceCriteria:
+  - id: ac-1
+    text: Agent Help turns are either a FINAL ANSWER diagnosis or an incomplete or error status. Progress-only plan narration is not a completed diagnosis. CLI failure, timeout, or unavailability does not complete via UseEchoHelperFallback. workflow.agenthelp.submitTurn waits at least HelperTimeout.
+    isSatisfied: false
