@@ -572,9 +572,9 @@ public sealed class SessionLogController : ControllerBase
                 ? Ok(new { agent, sessionId, requestId, section, replaced = true })
                 : ClassifiedError(new KeyNotFoundException($"Turn not found: {agent}/{sessionId}/{requestId}"));
         }
-        catch (ArgumentException ex)
+        catch (Exception ex)
         {
-            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid section or identifier.");
+            return ClassifiedError(ex);
         }
     }
 

@@ -69,14 +69,25 @@ For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
   "contextList": ["string array — files or resources referenced"],
   "designDecisions": ["string array — decisions made during this turn"],
   "requirementsDiscovered": ["string array — requirement IDs e.g. 'TR-MCP-001'"],
-  "filesModified": ["string array — file paths changed"],
+  "filesModified": ["string array - file paths changed. Paths that resolve outside the workspace root require a foreign: / foreign-repo: / cross-workspace: prefix or a turn tag foreign-repo / cross-workspace / foreign-workspace (FR-MCP-SESSIONATTR-001). Completeness audits can filter those prefixes and tags. Forward-only: historical turns are not rewritten."],
   "blockers": ["string array — issues preventing progress"],
   "actions": [ "array of Action objects (see below)" ],
   "processingDialog": [ "array of DialogItem objects (see below)" ],
   "planFile": "string — required on new persist and replace: current plan file path (workspace-relative, exact, or ~/...) or the exact sentinel None",
-  "todoId": "string — required on new persist and replace: canonical MCP TODO id (PHASE-AREA-### or ISSUE-N) or the exact sentinel None"
+  "todoId": "string - required on new persist and replace: canonical MCP TODO id (PHASE-AREA-### or ISSUE-N) or the exact sentinel None"
 }
 ```
+
+## Foreign filesModified and commits (FR-MCP-SESSIONATTR-001)
+
+A session-log turn for workspace W must not list `filesModified` or commit `filesChanged` paths that resolve outside W unless the turn explicitly marks them:
+
+- Item prefix on the path: `foreign:`, `foreign-repo:`, or `cross-workspace:`
+- Turn tags: `foreign-repo`, `cross-workspace`, or `foreign-workspace`
+
+Unmarked foreign paths are rejected with `validation_error`. Relative paths are resolved against the workspace root (`..` that escapes is foreign). Empty workspace context (import/ingest) skips this check. Forward-only: existing rows are not rewritten. Completeness audits filter the prefixes and tags above.
+
+Commit SHA/message without `filesChanged` cannot be proven foreign; mark the turn with `foreign-repo` when attributing another repository's commit.
 
 ## Action (each element in `actions`)
 
